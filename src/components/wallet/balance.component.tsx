@@ -1,0 +1,100 @@
+import React from 'react';
+import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
+interface StyledTabProps {
+  label: string;
+}
+
+interface StyledTabsProps {
+  value: number;
+  onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
+}
+
+const StyledTabs = withStyles({
+  flexContainer: {
+    justifyContent: 'flex-end'
+  },
+  indicator: {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: '#A942E9',
+    '& > span': {
+      maxWidth: 40,
+      width: '100%'
+      // backgroundColor: '#616161'
+    }
+  }
+})((props: StyledTabsProps) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
+
+const StyledTab = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      textTransform: 'uppercase',
+      color: theme.palette.common.white,
+      minWidth: 40,
+      fontWeight: theme.typography.fontWeightRegular,
+      fontSize: theme.typography.pxToRem(15),
+      marginRight: theme.spacing(1),
+      '&:focus': {
+        opacity: 1
+      }
+    }
+  })
+)((props: StyledTabProps) => <Tab disableRipple {...props} />);
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      backgroundColor: '#424242',
+      marginBottom: theme.spacing(2),
+      color: '#E0E0E0'
+    },
+    title: {
+      paddingTop: theme.spacing(3),
+      paddingLeft: theme.spacing(2),
+      paddingBottom: theme.spacing(1),
+      paddingRight: theme.spacing(2),
+      fontSize: 24
+    },
+    subtitle: {
+      textTransform: 'uppercase',
+      fontSize: 12
+    }
+  })
+);
+
+export const BalanceComponent = React.memo(function Wallet() {
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    event.preventDefault();
+    setValue(newValue);
+  };
+
+  return (
+    <div className={classes.root}>
+      <Grid container direction="row" justify="space-between" alignItems="center">
+        <Grid item>
+          <Typography className={classes.title} variant="h5">
+            Total Balance
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Typography className={classes.title} variant="h5">
+            357 <span className={classes.subtitle}>Myria</span>
+          </Typography>
+        </Grid>
+      </Grid>
+      <StyledTabs value={value} onChange={handleChange}>
+        <StyledTab label="All" />
+        <StyledTab label="In" />
+        <StyledTab label="Out" />
+      </StyledTabs>
+    </div>
+  );
+});
