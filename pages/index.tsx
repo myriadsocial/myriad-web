@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
       background: 'rgba(255, 255, 255, 0.41)',
       borderRadius: 15,
       padding: theme.spacing(2),
-      color: '#000000',
+      color: '#000000'
     },
     login: {
       marginTop: 140,
@@ -35,14 +35,40 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundImage: 'url(/images/timeline.svg)',
       backgroundSize: 'cover',
       '& > div': {
-        marginBottom: 10,
+        marginBottom: 10
       }
-    },
+    }
   })
 );
 
 export default function About() {
   const style = useStyles();
+
+  const posts = [
+    {
+      text: 'I am going to post something very controversial...',
+      user: {
+        avatar: 'JD',
+        name: 'John Doe'
+      },
+      replies: [
+        {
+          text: 'people will be like “idk i’m on the fence about this issue” and the issue will be a genocide.',
+          user: {
+            avatar: 'R',
+            name: 'Test'
+          }
+        }
+      ]
+    },
+    {
+      text: 'I am going to post something very controversial...',
+      user: {
+        avatar: 'JD',
+        name: 'Eduard Rudd'
+      }
+    }
+  ];
 
   return (
     <div className={style.root}>
@@ -58,8 +84,9 @@ export default function About() {
             </Paper>
           </Grid>
           <Grid item className={style.timeline}>
-            <PostComponent open={true} disable/>
-            <PostComponent open={false}/>
+            {posts.map(post => (
+              <PostComponent post={post} open={true} disable />
+            ))}
           </Grid>
         </Grid>
         <Grid item>

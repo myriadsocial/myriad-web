@@ -4,13 +4,32 @@
 //
 // import { User } from 'path/to/interfaces';
 
-export type User = {
-  id: number;
-  name: string;
-};
-
 export enum SocialsEnum {
   FACEBOOK = 'facebook',
   TWITTER = 'twitter',
   REDDIT = 'reddit'
 }
+
+export type User = {
+  name: string;
+  avatar: string;
+};
+
+export type Replies = {
+  text: string;
+  user: User;
+};
+
+export type Post = {
+  text: string;
+  user: User;
+  images?: ImageData[];
+  videos?: string[];
+  replies?: Replies[];
+};
+
+export type ImageData = {
+  url: string;
+  title: string;
+  cols: number;
+};

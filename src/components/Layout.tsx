@@ -20,7 +20,7 @@ const useStyles = makeStyles(() =>
     experience: {
       width: 296
     },
-    wallet: {
+    user: {
       width: 360,
       marginRight: 0
     }
@@ -58,7 +58,7 @@ const Layout = ({ children, loggedIn }: Props) => {
       </Head>
 
       <Grid container direction="row" justify="space-between" alignItems="flex-start">
-        <Grid container item className={style.wallet} direction="column" justify="space-around" alignItems="stretch" spacing={3}>
+        <Grid container item className={style.user} direction="column" justify="space-around" alignItems="stretch" spacing={3}>
           <Grid item>
             <UserDetail loggedIn={isLoggedIn} changeSetting={changeSetting} settings={settings} />
           </Grid>

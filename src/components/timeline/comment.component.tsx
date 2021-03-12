@@ -72,7 +72,7 @@ export default function CommentComponent() {
         subheader="September 14, 2016"
       />
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
+        <Typography variant="body1" color="textSecondary" component="p">
           people will be like “idk i’m on the fence about this issue” and the issue will be a genocide.
         </Typography>
       </CardContent>

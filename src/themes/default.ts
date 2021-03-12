@@ -116,7 +116,8 @@ const theme = createMuiTheme({
     MuiCardHeader: {
       root: {
         borderBottom: `1px solid #171717`,
-        padding: '8px 16px'
+        padding: '8px 16px',
+        fontSize: 14
       }
     },
     MuiTypography: {

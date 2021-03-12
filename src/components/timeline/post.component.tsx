@@ -20,11 +20,15 @@ import LoginOverlayComponent from '../login/overlay.component';
 import StyledBadge from '../common/Badge.component';
 import ShowIf from '../common/show-if.component';
 import ReplyCommentComponent from './reply.component';
+import PostImage from './image-post.component';
+import PostVideo from './video-post.component';
+import { Post } from '../../interfaces';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
+      fontSize: 14
     },
     media: {
       height: 0,
@@ -39,6 +43,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     expandOpen: {
       transform: 'rotate(180deg)'
+    },
+    content: {
+      '& > *': {
+        marginBottom: theme.spacing(1)
+      }
     },
     reply: {
       backgroundColor: lighten(theme.palette.primary.main, 0.15)
@@ -58,9 +67,10 @@ const useStyles = makeStyles((theme: Theme) =>
 type Props = {
   open?: boolean;
   disable?: boolean;
+  post: Post;
 };
 
-export default function PostComponent({ open = false, disable = false }: Props) {
+export default function PostComponent({ post, open = false, disable = false }: Props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(open);
 
@@ -72,7 +82,7 @@ export default function PostComponent({ open = false, disable = false }: Props) 
     <IconButton aria-label="avatar-icon">
       <StyledBadge badgeContent={<FacebookIcon />} color="default">
         <Avatar className={classes.avatar} aria-label="avatar">
-          R
+          {post.user.avatar}
         </Avatar>
       </StyledBadge>
     </IconButton>
@@ -86,12 +96,15 @@ export default function PostComponent({ open = false, disable = false }: Props) 
 
   return (
     <Card className={classes.root}>
-      <CardHeader avatar={PostAvatar} action={PostAction} title="John Doe" subheader="September 14, 2016" />
+      <CardHeader avatar={PostAvatar} action={PostAction} title="John Doe" subheader="February 14, 2021" />
 
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          I am going to post something very controversial...
+      <CardContent className={classes.content}>
+        <Typography variant="body1" color="textSecondary" component="p">
+          {post.text}
         </Typography>
+
+        {post.images && post.images.length > 0 && <PostImage images={post.images} />}
+        {post.videos && post.videos.length > 0 && <PostVideo url={post.videos[0]} />}
       </CardContent>
 
       <CardActions disableSpacing>
@@ -101,6 +114,7 @@ export default function PostComponent({ open = false, disable = false }: Props) 
         <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>
+
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded
@@ -110,26 +124,29 @@ export default function PostComponent({ open = false, disable = false }: Props) 
           aria-label="show more">
           <CommentIcon />
         </IconButton>
+
         <Typography component="span">2 Comments</Typography>
       </CardActions>
 
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent className={classes.reply}>
-          <Grid container spacing={2} direction="column" className={classes.comment}>
-            <Grid item>
-              <CommentComponent />
+      <ShowIf condition={!!post.replies}>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent className={classes.reply}>
+            <Grid container spacing={2} direction="column" className={classes.comment}>
+              <Grid item>
+                <CommentComponent />
+              </Grid>
             </Grid>
-          </Grid>
 
-          <ShowIf condition={!disable}>
-            <ReplyCommentComponent close={handleExpandClick} />
-          </ShowIf>
+            <ShowIf condition={!disable}>
+              <ReplyCommentComponent close={handleExpandClick} />
+            </ShowIf>
 
-          <ShowIf condition={false}>
-            <LoginOverlayComponent toggleLogin={handleExpandClick} />
-          </ShowIf>
-        </CardContent>
-      </Collapse>
+            <ShowIf condition={false}>
+              <LoginOverlayComponent toggleLogin={handleExpandClick} />
+            </ShowIf>
+          </CardContent>
+        </Collapse>
+      </ShowIf>
     </Card>
   );
 }
