@@ -29,7 +29,8 @@ export type Post = {
 };
 
 export type ImageData = {
-  url: string;
+  src: string;
   title: string;
-  cols: number;
+  width: number;
+  height: number;
 };

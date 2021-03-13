@@ -1,5 +1,4 @@
 import React from 'react';
-import useAxios from 'axios-hooks';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -36,9 +35,15 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Timeline() {
   const classes = useStyles();
 
-  const [{ data, loading }] = useAxios('https://picsum.photos/v2/list?limit=6');
-
   const posts: Post[] = [
+    {
+      text: 'I am sharing on facebook...',
+      user: {
+        avatar: 'JD',
+        name: 'John Doe'
+      },
+      videos: ['https://www.facebook.com/facebook/videos/10153231379946729/']
+    },
     {
       text: 'I am going to post something very controversial...',
       user: {
@@ -61,13 +66,26 @@ export default function Timeline() {
         avatar: 'R',
         name: 'Eduard Rudd'
       },
-      images: loading
-        ? []
-        : data.map(item => ({
-            url: item.download_url,
-            title: item.author,
-            cols: Math.round(item.height / item.width)
-          }))
+      images: [
+        {
+          title: 'image',
+          src: 'https://source.unsplash.com/2ShvY8Lf6l0/800x599',
+          width: 2,
+          height: 1
+        },
+        {
+          title: 'image',
+          src: 'https://source.unsplash.com/Dm-qxdynoEc/800x799',
+          width: 1,
+          height: 1
+        },
+        {
+          title: 'image',
+          src: 'https://source.unsplash.com/qDkso9nvCg0/600x799',
+          width: 3,
+          height: 4
+        }
+      ]
     },
     {
       text: 'Trump at CPAC: Says might run again...',
@@ -92,8 +110,8 @@ export default function Timeline() {
           next={fetchData}
           hasMore={true}
           loader={<CircularProgress disableShrink />}>
-          {posts.map(post => (
-            <PostComponent post={post} open={true} />
+          {posts.map((post, i) => (
+            <PostComponent post={post} open={true} key={`${post.user.name}-${i}`} />
           ))}
         </InfiniteScroll>
       </div>
