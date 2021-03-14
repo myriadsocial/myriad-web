@@ -27,7 +27,6 @@ import { Post } from '../../interfaces';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: '100%',
       fontSize: 14
     },
     media: {

@@ -45,17 +45,17 @@ export default function ImageListComponent({ images }: Props) {
   return (
     <div className={classes.root}>
       <NoSsr>
-      <Galery photos={images} onClick={openLightbox} />
+        <Galery photos={images} onClick={openLightbox} />
 
-      <Dialog open={viewerIsOpen} fullScreen={fullScreen} >
-        <MuiDialogTitle>
-          <IconButton color="secondary" aria-label="close" size="small" onClick={closeLightbox}>
-            <CloseIcon />
-          </IconButton>
-        </MuiDialogTitle>
+        <Dialog open={viewerIsOpen} fullScreen={fullScreen}>
+          <MuiDialogTitle>
+            <IconButton color="secondary" aria-label="close" size="small" onClick={closeLightbox}>
+              <CloseIcon />
+            </IconButton>
+          </MuiDialogTitle>
 
-        <Carousel views={images.map((image, i) => ({ source: image.src, key:i} ))} />
-      </Dialog>
+          <Carousel views={images.map((image, i) => ({ source: image.src, key: i }))} />
+        </Dialog>
       </NoSsr>
     </div>
   );

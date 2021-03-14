@@ -14,6 +14,9 @@ import LayoutOptions from './layout-options.component';
 import TopicComponent from './topic.component';
 import theme from '../../themes/default';
 import MyriadIcon from '../../images/myriad-alternative.svg';
+import uniqid from 'uniqid';
+import { uniqueNamesGenerator, starWars } from 'unique-names-generator';
+import ShowIf from '../common/show-if.component';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -33,56 +36,64 @@ const useStyles = makeStyles(() =>
 
 export const ExperienceComponent = React.memo(function Wallet() {
   const classes = useStyles();
+  const [next, setNext] = React.useState(true);
+  const [experiences, setExperience] = React.useState([
+    {
+      id: uniqid(),
+      title: 'Comedy'
+    },
+    {
+      id: uniqid(),
+      title: 'Cat Pictures'
+    },
+    {
+      id: uniqid(),
+      title: 'Food'
+    }
+  ]);
+
+  const loadMore = () => {
+    setExperience([
+      ...experiences,
+      ...Array(5)
+        .fill(null)
+        .map(() => ({
+          id: uniqid(),
+          title: uniqueNamesGenerator({
+            dictionaries: [starWars]
+          })
+        }))
+    ]);
+    setNext(false);
+  };
 
   return (
     <Panel title="Experiences">
       <List className={classes.root}>
-        <ListItem>
-          <ListItemIcon>
-            <MyriadIcon />
-          </ListItemIcon>
-          <ListItemText id="switch-list-label-wifi" primary="Comedy" />
-          <ListItemSecondaryAction>
-            <Typography className={classes.root}>
-              <Link underline="none" href="#" color="secondary">
-                Delete
-              </Link>
-            </Typography>
-          </ListItemSecondaryAction>
-        </ListItem>
-
-        <ListItem>
-          <ListItemIcon>
-            <MyriadIcon />
-          </ListItemIcon>
-          <ListItemText id="switch-list-label-bluetooth" primary="Cat Pictures" />
-          <ListItemSecondaryAction>
-            <Typography className={classes.root}>
-              <Link underline="none" href="#" color="secondary">
-                Delete
-              </Link>
-            </Typography>
-          </ListItemSecondaryAction>
-        </ListItem>
-
-        <ListItem>
-          <ListItemIcon>
-            <MyriadIcon />
-          </ListItemIcon>
-          <ListItemText id="switch-list-label-bluetooth" primary="Food" />
-          <ListItemSecondaryAction>
-            <Typography className={classes.root}>
-              <Link underline="none" href="#" color="secondary">
-                Delete
-              </Link>
-            </Typography>
-          </ListItemSecondaryAction>
-        </ListItem>
+        {experiences.map(experience => (
+          <ListItem key={experience.id}>
+            <ListItemIcon>
+              <MyriadIcon />
+            </ListItemIcon>
+            <ListItemText id={experience.id} primary={experience.title} />
+            <ListItemSecondaryAction>
+              <Typography className={classes.root}>
+                <Link underline="none" href="#" color="secondary">
+                  Delete
+                </Link>
+              </Typography>
+            </ListItemSecondaryAction>
+          </ListItem>
+        ))}
       </List>
 
-      <Box className={classes.more}>
-        <Button color="secondary">More...</Button>
-      </Box>
+      <ShowIf condition={next}>
+        <Box className={classes.more}>
+          <Button color="secondary" onClick={loadMore}>
+            More...
+          </Button>
+        </Box>
+      </ShowIf>
 
       <LayoutOptions />
 

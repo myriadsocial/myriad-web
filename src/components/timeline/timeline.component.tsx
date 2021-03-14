@@ -13,16 +13,16 @@ const useStyles = makeStyles((theme: Theme) =>
       overflow: 'hidden',
       scrollbarWidth: 'none',
       msOverflowStyle: 'none',
+      scrollbarColor: 'transparent transparent',
       '& ::-webkit-scrollbar': {
-        display: 'none'
+        display: 'none',
+        width: '0 !important'
       }
     },
     scroll: {
       height: '100%',
       width: '100%',
-      overflowY: 'auto',
-      display: 'flex',
-      flexDirection: 'column-reverse'
+      overflowY: 'auto'
     },
     child: {
       '& > *': {
@@ -34,6 +34,23 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Timeline() {
   const classes = useStyles();
+  const scrollRoot = React.createRef<HTMLDivElement>();
+
+  React.useEffect(() => {
+    window.addEventListener('scroll', handleScroll, true);
+  }, []);
+
+  const handleScroll =  React.useCallback(() => {
+    const distance =  window.scrollY;
+
+    if ( distance <= 0 ) return;
+
+    window.requestAnimationFrame(() => {
+      if (scrollRoot.current) {
+        scrollRoot.current.scroll(0, distance)
+      }
+    });
+  }, []);
 
   const posts: Post[] = [
     {
@@ -102,8 +119,8 @@ export default function Timeline() {
   };
 
   return (
-    <div className={classes.root}>
-      <div className={classes.scroll}>
+    <div className={classes.root} >
+      <div className={classes.scroll} ref={scrollRoot}>
         <InfiniteScroll
           className={classes.child}
           dataLength={100}
