@@ -9,7 +9,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       height: '100vh',
-      width: '100%',
       overflow: 'hidden',
       scrollbarWidth: 'none',
       msOverflowStyle: 'none',

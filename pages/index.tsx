@@ -73,7 +73,7 @@ export default function About() {
   return (
     <div className={style.root}>
       <Grid container spacing={3} justify="space-around">
-        <Grid container item lg={6} direction="column" spacing={3}>
+        <Grid container item md={6} lg={6} direction="column" spacing={3}>
           <Grid container item direction="row">
             <Logo className={style.logo} />
             <Paper className={style.info}>
