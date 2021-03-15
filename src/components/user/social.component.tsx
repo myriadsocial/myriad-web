@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(3),
       position: 'relative'
+      // flexGrow: 1,
     },
     button: {
       height: 24,

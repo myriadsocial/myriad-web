@@ -1,5 +1,5 @@
 import React from 'react';
-import { Theme, withStyles, createStyles } from '@material-ui/core/styles';
+import { Theme, makeStyles, withStyles, createStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Dialog from '@material-ui/core/Dialog';
@@ -23,6 +23,14 @@ type Props = {
   changeSetting: (key, value) => void;
 };
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      marginBottom: theme.spacing(3)
+    }
+  })
+);
+
 const StyledBadge = withStyles((theme: Theme) =>
   createStyles({
     badge: {
@@ -35,6 +43,7 @@ const StyledBadge = withStyles((theme: Theme) =>
 )(Badge);
 
 const User = ({ loggedIn = true, settings, changeSetting }: Props) => {
+  const classes = useStyles();
   const [loginOpened, openLogin] = React.useState(false);
 
   const handleClose = () => {
@@ -46,17 +55,18 @@ const User = ({ loggedIn = true, settings, changeSetting }: Props) => {
   };
 
   return (
-    <Box p={1} bgcolor="primary.light">
+    <Box p={1} bgcolor="primary.light" className={classes.root}>
       <Grid container direction="row" justify="space-between" alignItems="flex-start">
         <Grid item>
           <Profile loggedIn={loggedIn} toggleLogin={toggleLogin} />
           <Social loggedIn={loggedIn} toggleLogin={toggleLogin} />
         </Grid>
-        <ShowIf condition={loggedIn}>
-          <Grid item>
+
+        <Grid item>
+          <ShowIf condition={loggedIn}>
             <Setting onChange={changeSetting} settings={settings} />
-          </Grid>
-        </ShowIf>
+          </ShowIf>
+        </Grid>
       </Grid>
 
       <ShowIf condition={loggedIn}>

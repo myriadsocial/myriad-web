@@ -40,14 +40,14 @@ export default function Timeline() {
     window.addEventListener('scroll', handleScroll, true);
   }, []);
 
-  const handleScroll =  React.useCallback(() => {
-    const distance =  window.scrollY;
+  const handleScroll = React.useCallback(() => {
+    const distance = window.scrollY;
 
-    if ( distance <= 0 ) return;
+    if (distance <= 0) return;
 
     window.requestAnimationFrame(() => {
       if (scrollRoot.current) {
-        scrollRoot.current.scroll(0, distance)
+        scrollRoot.current.scroll(0, distance);
       }
     });
   }, []);
@@ -119,7 +119,7 @@ export default function Timeline() {
   };
 
   return (
-    <div className={classes.root} >
+    <div className={classes.root}>
       <div className={classes.scroll} ref={scrollRoot}>
         <InfiniteScroll
           className={classes.child}

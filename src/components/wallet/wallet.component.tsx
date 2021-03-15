@@ -9,7 +9,7 @@ import Divider from '../common/divider.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
+    button: {
       backgroundColor: theme.palette.secondary.light,
       color: theme.palette.common.white,
       borderRadius: 15
@@ -21,7 +21,7 @@ export const Wallet = React.memo(function Wallet() {
   const classes = useStyles();
 
   const WalletAction = (
-    <Button variant="contained" className={classes.root}>
+    <Button variant="contained" className={classes.button}>
       Get Myria Token
     </Button>
   );

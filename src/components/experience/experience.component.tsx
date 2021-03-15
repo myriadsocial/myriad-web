@@ -21,10 +21,6 @@ import ShowIf from '../common/show-if.component';
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      width: '100%',
-      display: 'block',
-      backgroundColor: '#424242',
-      color: '#E0E0E0',
       marginBottom: theme.spacing(2)
     },
     more: {

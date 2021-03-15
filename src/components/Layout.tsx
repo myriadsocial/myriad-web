@@ -15,14 +15,26 @@ type Props = {
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      minHeight: '100vh'
+      maxHeight: '100vh',
+      overflow: 'auto'
     },
     experience: {
-      width: 296
+      width: 296,
+      height: '100vh',
+      overflowY: 'scroll',
+      'scrollbar-color': '#171717 #A942E9',
+      'scrollbar-width': 'thin !important'
     },
     user: {
       width: 360,
-      marginRight: 0
+      marginRight: 0,
+      height: '100vh',
+      overflowY: 'scroll',
+      'scrollbar-color': '#171717 #A942E9',
+      'scrollbar-width': 'thin !important'
+    },
+    content: {
+      flexGrow: 1
     }
   })
 );
@@ -58,18 +70,15 @@ const Layout = ({ children, loggedIn }: Props) => {
       </Head>
 
       <Grid container direction="row" justify="space-between" alignItems="flex-start">
-        <Grid container item className={style.user} direction="column" justify="space-around" alignItems="stretch" spacing={3}>
-          <Grid item>
-            <UserDetail loggedIn={isLoggedIn} changeSetting={changeSetting} settings={settings} />
-          </Grid>
+        <Grid item className={style.user}>
+          <UserDetail loggedIn={isLoggedIn} changeSetting={changeSetting} settings={settings} />
+
           <ShowIf condition={isLoggedIn}>
-            <Grid item>
-              <Wallet />
-            </Grid>
+            <Wallet />
           </ShowIf>
         </Grid>
 
-        <Grid item lg={5}>
+        <Grid item lg={5} className={style.content}>
           {children}
         </Grid>
 

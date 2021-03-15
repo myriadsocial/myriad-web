@@ -32,6 +32,23 @@ const theme = createMuiTheme({
     }
   },
   overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        a: {
+          textDecoration: 'none'
+        },
+        '*::-webkit-scrollbar': {
+          width: '0.4em'
+        },
+        '*::-webkit-scrollbar-track': {
+          '-webkit-box-shadow': 'inset 0 0 6px #171717'
+        },
+        '*::-webkit-scrollbar-thumb': {
+          backgroundColor: '#A942E9',
+          outline: '1px solid #424242'
+        }
+      }
+    },
     MuiAvatar: {
       root: {
         width: 32,
