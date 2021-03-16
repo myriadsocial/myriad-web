@@ -1,7 +1,7 @@
 import React from 'react';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import Galery from 'react-photo-gallery';
-import { ImageData } from '../../interfaces';
+import { ImageData } from '../../interfaces/post';
 import Carousel from 'react-images';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';

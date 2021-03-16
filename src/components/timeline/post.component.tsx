@@ -7,22 +7,20 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
 import CommentIcon from '@material-ui/icons/Comment';
-import FacebookIcon from '@material-ui/icons/Facebook';
 import CommentComponent from './comment.component';
 import LoginOverlayComponent from '../login/overlay.component';
-import StyledBadge from '../common/Badge.component';
 import ShowIf from '../common/show-if.component';
 import ReplyCommentComponent from './reply.component';
 import PostImage from './image-post.component';
 import PostVideo from './video-post.component';
-import { Post } from '../../interfaces';
+import { Post } from '../../interfaces/post';
+import FacebookReactionComponent from './reactions/facebook.component';
+import TwitterReactionComponent from './reactions/twitter.component';
+import PostAvatar from './post-avatar.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -77,16 +75,6 @@ export default function PostComponent({ post, open = false, disable = false }: P
     setExpanded(!expanded);
   };
 
-  const PostAvatar = (
-    <IconButton aria-label="avatar-icon">
-      <StyledBadge badgeContent={<FacebookIcon />} color="default">
-        <Avatar className={classes.avatar} aria-label="avatar">
-          {post.user.avatar}
-        </Avatar>
-      </StyledBadge>
-    </IconButton>
-  );
-
   const PostAction = (
     <Button className={classes.action} aria-label="settings" color="primary" variant="contained" size="small">
       Send Tip
@@ -95,7 +83,12 @@ export default function PostComponent({ post, open = false, disable = false }: P
 
   return (
     <Card className={classes.root}>
-      <CardHeader avatar={PostAvatar} action={PostAction} title="John Doe" subheader="February 14, 2021" />
+      <CardHeader
+        avatar={<PostAvatar origin={post.origin} avatar={post.user.avatar} />}
+        action={PostAction}
+        title="John Doe"
+        subheader="February 14, 2021"
+      />
 
       <CardContent className={classes.content}>
         <Typography variant="body1" color="textSecondary" component="p">
@@ -107,12 +100,13 @@ export default function PostComponent({ post, open = false, disable = false }: P
       </CardContent>
 
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
+        <ShowIf condition={post.origin === 'facebook'}>
+          <FacebookReactionComponent />
+        </ShowIf>
+
+        <ShowIf condition={post.origin === 'twitter'}>
+          <TwitterReactionComponent />
+        </ShowIf>
 
         <IconButton
           className={clsx(classes.expand, {

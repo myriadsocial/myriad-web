@@ -1,4 +1,5 @@
 import React from 'react';
+import uniqid from 'uniqid';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -6,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import LoginForm from '../src/components/login/login.component';
 import PostComponent from '../src/components/timeline/post.component';
 import Logo from '../src/images/logo.svg';
+import { Post } from '../src/interfaces/post';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,17 +46,20 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function About() {
   const style = useStyles();
 
-  const posts = [
+  const posts: Post[] = [
     {
       text: 'I am going to post something very controversial...',
       user: {
+        id: uniqid(),
         avatar: 'JD',
         name: 'John Doe'
       },
+      origin: 'facebook',
       replies: [
         {
           text: 'people will be like “idk i’m on the fence about this issue” and the issue will be a genocide.',
           user: {
+            id: uniqid(),
             avatar: 'R',
             name: 'Test'
           }
@@ -64,9 +69,11 @@ export default function About() {
     {
       text: 'I am going to post something very controversial...',
       user: {
+        id: uniqid(),
         avatar: 'JD',
         name: 'Eduard Rudd'
-      }
+      },
+      origin: 'facebook'
     }
   ];
 

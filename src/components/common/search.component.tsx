@@ -13,11 +13,11 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: fade(theme.palette.common.white, 0.25)
       },
       marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(2),
+      marginBottom: theme.spacing(0),
       marginLeft: 0,
       width: '100%',
       [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(1),
+        margin: theme.spacing(1),
         width: 'auto'
       }
     },

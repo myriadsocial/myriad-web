@@ -22,7 +22,7 @@ const useStyles = makeStyles(() =>
       width: 296,
       height: '100vh',
       overflowY: 'scroll',
-      'scrollbar-color': '#171717 #A942E9',
+      'scrollbar-color': '#A942E9 #171717 ',
       'scrollbar-width': 'thin !important'
     },
     user: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles(() =>
       marginRight: 0,
       height: '100vh',
       overflowY: 'scroll',
-      'scrollbar-color': '#171717 #A942E9',
+      'scrollbar-color': '#A942E9 #171717',
       'scrollbar-width': 'thin !important'
     },
     content: {

@@ -4,7 +4,7 @@ import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-export default function FixedTags() {
+export default function AutocompleComponent() {
   const fixedOptions = [top100Films[6]];
   const [value, setValue] = React.useState([...fixedOptions, top100Films[13]]);
 

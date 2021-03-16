@@ -8,7 +8,10 @@ import Chip from '@material-ui/core/Chip';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SearchComponent from '../common/search.component';
+import { Topic } from '../../interfaces/experience';
+import { User } from '../../interfaces/user';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,27 +51,44 @@ const useStyles = makeStyles((theme: Theme) =>
     more: {
       display: 'flex',
       justifyContent: 'flex-end'
+    },
+    show: {
+      color: '#E849BD'
     }
   })
 );
 
-export default function TopicComponent() {
+type Props = {
+  topics: Topic[];
+  people: User[];
+  createExperience?: (topics: Topic[], user: User[]) => void;
+};
+
+export default function TopicComponent({ topics, people, createExperience }: Props) {
   const classes = useStyles();
 
-  const [topics, addTopic] = React.useState<string[]>([]);
+  const [selectedTopics, setSelectedTopics] = React.useState(topics);
+  const [selectedPeople] = React.useState(people);
   const [experienceChanged, setExperienceChanged] = React.useState(false);
-
-  React.useEffect(() => {
-    addTopic(['fun', 'funny', 'lol', 'comedy', 'blockchain', 'cursed']);
-  }, []);
 
   const handleDelete = () => {
     console.info('You clicked the delete icon.');
   };
 
-  const searchExprerience = value => {
+  const searchExprerience = (name: string) => {
+    setSelectedTopics([
+      ...selectedTopics,
+      {
+        id: 'string',
+        name,
+        active: false
+      }
+    ]);
     setExperienceChanged(true);
-    addTopic([...topics, value]);
+  };
+
+  const saveExperience = () => {
+    createExperience && createExperience(selectedTopics, selectedPeople);
   };
 
   return (
@@ -78,23 +98,31 @@ export default function TopicComponent() {
         <SearchComponent onSubmit={searchExprerience} />
 
         <div className={classes.chip}>
-          {topics.map(topic => (
-            <Chip key={topic} size="small" label={topic} onDelete={handleDelete} color="primary" />
+          {selectedTopics.map(topic => (
+            <Chip key={topic.id} size="small" label={topic.name} onDelete={handleDelete} color="primary" />
           ))}
         </div>
 
         <Box className={classes.avatar}>
-          <Avatar alt="Remy Sharp" src="/images/avatar/1.jpg" />
-          <Avatar alt="Travis Howard" src="/images/avatar/2.jpg" />
-          <Avatar alt="Cindy Baker" src="" />
-          <Avatar alt="Lauren Philip" src="" />
+          {selectedPeople.map(item => (
+            <Avatar key={item.id} alt={item.name} src={item.avatar} />
+          ))}
         </Box>
 
         <Box className={classes.more}>
-          <Button color="secondary">More...</Button>
+          <Button color="primary" className={classes.show}>
+            Show All
+            <ExpandMoreIcon />
+          </Button>
         </Box>
 
-        <Button disabled={!experienceChanged} className={classes.action} color="primary" size="large" variant="contained">
+        <Button
+          onClick={saveExperience}
+          disabled={!experienceChanged}
+          className={classes.action}
+          color="primary"
+          size="large"
+          variant="contained">
           Make It An Experience
         </Button>
       </CardContent>

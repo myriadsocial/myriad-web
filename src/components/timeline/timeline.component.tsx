@@ -3,7 +3,8 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import PostComponent from './post.component';
-import { Post } from '../../interfaces';
+import { Post } from '../../interfaces/post';
+import { postData } from './data';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,9 +35,11 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Timeline() {
   const classes = useStyles();
   const scrollRoot = React.createRef<HTMLDivElement>();
+  const [posts, setPost] = React.useState<Post[]>([]);
 
   React.useEffect(() => {
     window.addEventListener('scroll', handleScroll, true);
+    setPost(postData);
   }, []);
 
   const handleScroll = React.useCallback(() => {
@@ -50,68 +53,6 @@ export default function Timeline() {
       }
     });
   }, []);
-
-  const posts: Post[] = [
-    {
-      text: 'I am sharing on facebook...',
-      user: {
-        avatar: 'JD',
-        name: 'John Doe'
-      },
-      videos: ['https://www.facebook.com/facebook/videos/10153231379946729/']
-    },
-    {
-      text: 'I am going to post something very controversial...',
-      user: {
-        avatar: 'JD',
-        name: 'John Doe'
-      },
-      replies: [
-        {
-          text: 'people will be like “idk i’m on the fence about this issue” and the issue will be a genocide.',
-          user: {
-            avatar: 'R',
-            name: 'Test'
-          }
-        }
-      ]
-    },
-    {
-      text: 'I am going to post something very controversial...',
-      user: {
-        avatar: 'R',
-        name: 'Eduard Rudd'
-      },
-      images: [
-        {
-          title: 'image',
-          src: 'https://source.unsplash.com/2ShvY8Lf6l0/800x599',
-          width: 2,
-          height: 1
-        },
-        {
-          title: 'image',
-          src: 'https://source.unsplash.com/Dm-qxdynoEc/800x799',
-          width: 1,
-          height: 1
-        },
-        {
-          title: 'image',
-          src: 'https://source.unsplash.com/qDkso9nvCg0/600x799',
-          width: 3,
-          height: 4
-        }
-      ]
-    },
-    {
-      text: 'Trump at CPAC: Says might run again...',
-      user: {
-        avatar: 'R',
-        name: 'Eduard Rudd'
-      },
-      videos: ['https://youtu.be/KJTlo4bQL5c']
-    }
-  ];
 
   const fetchData = () => {
     console.log('Fetch data');

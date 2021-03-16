@@ -4,13 +4,12 @@ import Badge from '@material-ui/core/Badge';
 const StyledBadge = withStyles((theme: Theme) =>
   createStyles({
     badge: {
-      right: 40,
-      top: 24,
-      width: 28,
-      height: 28,
+      right: 32,
+      top: 22,
+      width: 22,
+      height: 22,
       border: `1px solid ${theme.palette.background.paper}`,
-      padding: '0 4px',
-      backgroundColor: '#3b5998'
+      padding: '0 4px'
     }
   })
 )(Badge);
