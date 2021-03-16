@@ -67,9 +67,14 @@ type Props = {
 export default function TopicComponent({ topics, people, createExperience }: Props) {
   const classes = useStyles();
 
-  const [selectedTopics, setSelectedTopics] = React.useState(topics);
-  const [selectedPeople] = React.useState(people);
+  const [selectedTopics, setSelectedTopics] = React.useState<Topic[]>([]);
+  const [selectedPeople, setSelectedPeople] = React.useState<User[]>([]);
   const [experienceChanged, setExperienceChanged] = React.useState(false);
+
+  React.useEffect(() => {
+    setSelectedTopics(topics);
+    setSelectedPeople(people)
+  }, [topics, people]);
 
   const handleDelete = () => {
     console.info('You clicked the delete icon.');
