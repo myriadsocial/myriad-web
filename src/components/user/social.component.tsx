@@ -1,16 +1,18 @@
 import React from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import FacebookIcon from '@material-ui/icons/Facebook';
-import TwitterIcon from '@material-ui/icons/Twitter';
 import RedditIcon from '@material-ui/icons/Reddit';
-import ConnectComponent from '../connect/connect.component';
+import TwitterIcon from '@material-ui/icons/Twitter';
+
 import { SocialsEnum } from '../../interfaces';
-import LoginOverlayComponent from '../login/overlay.component';
 import ShowIf from '../common/show-if.component';
+import ConnectComponent from '../connect/connect.component';
+import LoginOverlayComponent from '../login/overlay.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -1,29 +1,30 @@
 import React from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Link from '@material-ui/core/Link';
-import Button from '@material-ui/core/Button';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import Panel from '../common/panel.component';
-import LayoutOptions from './layout-options.component';
-import TopicComponent from './topic.component';
-import theme from '../../themes/default';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import SearchComponent from '../../components/common/search.component';
 import MyriadIcon from '../../images/myriad-alternative.svg';
 import { Experience } from '../../interfaces/experience';
 import DialogTitle from '../common/DialogTitle.component';
+import Panel from '../common/panel.component';
 import { experiencesData, generateExperience } from './data';
 import ExperienceDetail from './experience-detail.component';
-import SearchComponent from '../../components/common/search.component';
+import LayoutOptions from './layout-options.component';
+import TopicComponent from './topic.component';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       marginBottom: theme.spacing(2)

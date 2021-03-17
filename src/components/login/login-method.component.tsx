@@ -1,12 +1,13 @@
 import React from 'react';
+
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
 
 import ShowIf from '../common/show-if.component';
-import PassphraseForm from './method-passphrase.component';
-import KeyForm from './method-key.component';
 import JSONForm from './method-json.component';
+import KeyForm from './method-key.component';
+import PassphraseForm from './method-passphrase.component';
 
 export type s = 'json' | 'passphrase' | 'key';
 

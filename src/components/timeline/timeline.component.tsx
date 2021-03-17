@@ -1,10 +1,12 @@
 import React from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import PostComponent from './post.component';
+
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+
 import { Post } from '../../interfaces/post';
 import { postData } from './data';
+import PostComponent from './post.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

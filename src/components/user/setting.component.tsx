@@ -1,8 +1,10 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import FormGroup from '@material-ui/core/FormGroup';
+
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
 import Switch from '@material-ui/core/Switch';
+import { makeStyles } from '@material-ui/core/styles';
+
 import theme from '../../themes/default';
 
 const useStyles = makeStyles({

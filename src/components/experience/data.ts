@@ -1,5 +1,6 @@
 import uniqid from 'uniqid';
 import { uniqueNamesGenerator, starWars, animals } from 'unique-names-generator';
+
 import { Experience } from '../../interfaces/experience';
 
 export const experiencesData: Experience[] = [

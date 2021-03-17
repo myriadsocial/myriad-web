@@ -1,9 +1,11 @@
 import React from 'react';
-import { makeStyles, createStyles, Theme, lighten } from '@material-ui/core/styles';
+
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import RetweetIcon from '../../../images/twitter/retweet.svg';
+import { makeStyles, createStyles, Theme, lighten } from '@material-ui/core/styles';
+
 import LikeIcon from '../../../images/twitter/like.svg';
+import RetweetIcon from '../../../images/twitter/retweet.svg';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

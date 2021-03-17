@@ -1,17 +1,19 @@
 import React from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+
+import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import SearchComponent from '../common/search.component';
+
 import { Topic } from '../../interfaces/experience';
 import { User } from '../../interfaces/user';
+import SearchComponent from '../common/search.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,7 +75,7 @@ export default function TopicComponent({ topics, people, createExperience }: Pro
 
   React.useEffect(() => {
     setSelectedTopics(topics);
-    setSelectedPeople(people)
+    setSelectedPeople(people);
   }, [topics, people]);
 
   const handleDelete = () => {

@@ -1,12 +1,14 @@
 import React from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import FacebookIcon from '@material-ui/icons/Facebook';
-import TwitterIcon from '@material-ui/icons/Twitter';
 import RedditIcon from '@material-ui/icons/Reddit';
-import StyledBadge from '../common/Badge.component';
+import TwitterIcon from '@material-ui/icons/Twitter';
+
 import { PostOrigin } from '../../interfaces/post';
+import StyledBadge from '../common/Badge.component';
 
 const useStyles = makeStyles(() =>
   createStyles({

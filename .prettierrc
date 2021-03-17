@@ -6,5 +6,7 @@
     "trailingComma": "none",
     "arrowParens": "avoid",
     "jsxBracketSameLine": true,
+    "importOrder": ["^next/(.*)$", "^@material-ui/(.*)$", "^[./]"],
+    "importOrderSeparation": true,
     "endOfLine": "auto"
 }

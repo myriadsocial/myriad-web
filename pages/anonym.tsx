@@ -1,5 +1,4 @@
 import Layout from '../src/components/Layout';
-
 import Timeline from '../src/components/timeline/timeline.component';
 
 const IndexPage = () => (

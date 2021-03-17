@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -8,9 +8,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
-import TimelineLayoutIcon from '../../images/timeline-layout-light.svg';
 import PhotoLayoutIcon from '../../images/photo-layout-light.svg';
+import TimelineLayoutIcon from '../../images/timeline-layout-light.svg';
 
 const useStyles = makeStyles({
   root: {

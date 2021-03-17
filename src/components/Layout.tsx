@@ -1,11 +1,14 @@
 import React, { ReactNode, useState, useEffect } from 'react';
+
 import Head from 'next/head';
+
 import Grid from '@material-ui/core/Grid';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+
+import ShowIf from './common/show-if.component';
+import { ExperienceComponent } from './experience/experience.component';
 import UserDetail from './user/user.component';
 import { Wallet } from './wallet/wallet.component';
-import { ExperienceComponent } from './experience/experience.component';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import ShowIf from './common/show-if.component';
 
 type Props = {
   children: ReactNode;
@@ -35,6 +38,9 @@ const useStyles = makeStyles(() =>
     },
     content: {
       flexGrow: 1
+    },
+    fullheight: {
+      height: '100%'
     }
   })
 );
@@ -71,14 +77,18 @@ const Layout = ({ children, loggedIn }: Props) => {
 
       <Grid container direction="row" justify="space-between" alignItems="flex-start">
         <Grid item className={style.user}>
-          <UserDetail loggedIn={isLoggedIn} changeSetting={changeSetting} settings={settings} />
-
-          <ShowIf condition={isLoggedIn}>
-            <Wallet />
-          </ShowIf>
+          <Grid className={style.fullheight} container direction="row" justify="flex-start" alignItems="stretch">
+            <Grid item>
+              <UserDetail loggedIn={isLoggedIn} changeSetting={changeSetting} settings={settings} />
+            </Grid>
+            <Grid item className={style.content}>
+              <ShowIf condition={isLoggedIn}>
+                <Wallet />
+              </ShowIf>
+            </Grid>
+          </Grid>
         </Grid>
-
-        <Grid item md={5} lg={5} className={style.content}>
+        <Grid item md={5} className={style.content}>
           {children}
         </Grid>
 

@@ -1,21 +1,22 @@
 import React from 'react';
-import { Theme, makeStyles, withStyles, createStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import Dialog from '@material-ui/core/Dialog';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreRounded from '@material-ui/icons/ExpandMoreRounded';
-import Badge from '@material-ui/core/Badge';
 
-import Profile from './profile.component';
-import Social from './social.component';
-import Setting from './setting.component';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import Badge from '@material-ui/core/Badge';
+import Box from '@material-ui/core/Box';
+import Dialog from '@material-ui/core/Dialog';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import { Theme, makeStyles, withStyles, createStyles } from '@material-ui/core/styles';
+import ExpandMoreRounded from '@material-ui/icons/ExpandMoreRounded';
+
+import ShowIf from '../common/show-if.component';
 import NotificationListComponent from '../conversation/notification.component';
 import LoginComponent from '../login/login.component';
-import ShowIf from '../common/show-if.component';
+import Profile from './profile.component';
+import Setting from './setting.component';
+import Social from './social.component';
 
 type Props = {
   loggedIn?: boolean;

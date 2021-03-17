@@ -1,9 +1,10 @@
 import React from 'react';
-import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
+
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import Typography from '@material-ui/core/Typography';
+import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 
 interface StyledTabProps {
   label: string;

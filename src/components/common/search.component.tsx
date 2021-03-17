@@ -1,6 +1,7 @@
 import React from 'react';
-import { makeStyles, createStyles, fade, Theme } from '@material-ui/core/styles';
+
 import InputBase from '@material-ui/core/InputBase';
+import { makeStyles, createStyles, fade, Theme } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme: Theme) =>

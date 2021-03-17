@@ -1,6 +1,8 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+
 import DialogContent from '@material-ui/core/DialogContent';
+import TextField from '@material-ui/core/TextField';
+
 import DialogTitle from '../common/DialogTitle.component';
 
 type Props = {

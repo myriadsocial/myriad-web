@@ -1,11 +1,12 @@
 import React from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
+
 import Chip from '@material-ui/core/Chip';
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 import AngryIcon from '../../../images/facebook/angry.svg';
-import SadIcon from '../../../images/facebook/sad.svg';
 import HahaIcon from '../../../images/facebook/haha.svg';
+import SadIcon from '../../../images/facebook/sad.svg';
 import WowIcon from '../../../images/facebook/wow.svg';
 
 const useStyles = makeStyles((theme: Theme) =>

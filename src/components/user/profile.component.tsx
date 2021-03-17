@@ -1,9 +1,11 @@
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
 import { uniqueNamesGenerator, adjectives, colors } from 'unique-names-generator';
+
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+
 import ShowIf from '../common/show-if.component';
 
 const useStyles = makeStyles({

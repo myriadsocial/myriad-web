@@ -1,26 +1,28 @@
-import React from 'react';
-import { makeStyles, Theme, createStyles, lighten } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
+import React from 'react';
+
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Collapse from '@material-ui/core/Collapse';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles, Theme, createStyles, lighten } from '@material-ui/core/styles';
 import CommentIcon from '@material-ui/icons/Comment';
-import CommentComponent from './comment.component';
-import LoginOverlayComponent from '../login/overlay.component';
-import ShowIf from '../common/show-if.component';
-import ReplyCommentComponent from './reply.component';
-import PostImage from './image-post.component';
-import PostVideo from './video-post.component';
+
 import { Post } from '../../interfaces/post';
+import ShowIf from '../common/show-if.component';
+import LoginOverlayComponent from '../login/overlay.component';
+import CommentComponent from './comment.component';
+import PostImage from './image-post.component';
+import PostAvatar from './post-avatar.component';
 import FacebookReactionComponent from './reactions/facebook.component';
 import TwitterReactionComponent from './reactions/twitter.component';
-import PostAvatar from './post-avatar.component';
+import ReplyCommentComponent from './reply.component';
+import PostVideo from './video-post.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

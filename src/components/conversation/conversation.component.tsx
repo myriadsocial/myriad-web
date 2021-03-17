@@ -1,5 +1,5 @@
-import React from 'react';
 import ChatMsg from '@mui-treasury/components/chatMsg/ChatMsg';
+import React from 'react';
 
 const Conversation = () => (
   <div>

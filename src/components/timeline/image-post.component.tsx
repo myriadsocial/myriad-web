@@ -1,15 +1,17 @@
 import React from 'react';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import Galery from 'react-photo-gallery';
-import { ImageData } from '../../interfaces/post';
 import Carousel from 'react-images';
+import Galery from 'react-photo-gallery';
+
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
 import NoSsr from '@material-ui/core/NoSsr';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import CloseIcon from '@material-ui/icons/Close';
+
+import { ImageData } from '../../interfaces/post';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -1,6 +1,8 @@
 import React from 'react';
+
 import Button from '@material-ui/core/Button';
 import DialogContent from '@material-ui/core/DialogContent';
+
 import DialogTitle from '../common/DialogTitle.component';
 
 type Props = {

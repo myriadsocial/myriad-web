@@ -1,18 +1,19 @@
 import React from 'react';
-import { useRouter } from 'next/router';
+
 import Link from 'next/link';
-import { createStyles, Theme, makeStyles, lighten } from '@material-ui/core/styles';
+import { useRouter } from 'next/router';
+
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-
-import LoginMethod from './login-method.component';
+import { createStyles, Theme, makeStyles, lighten } from '@material-ui/core/styles';
 
 import JsonIcon from '../../images/json-icon.svg';
 import KeyIcon from '../../images/key-icon.svg';
 import PassPhraseIcon from '../../images/passphrase-icon.svg';
+import LoginMethod from './login-method.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

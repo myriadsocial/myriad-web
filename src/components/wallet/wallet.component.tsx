@@ -1,14 +1,18 @@
 import React from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 
+import Button from '@material-ui/core/Button';
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+
+import Divider from '../common/divider.component';
+import Panel from '../common/panel.component';
 import { BalanceComponent } from './balance.component';
 import { TransactionComponent } from './transaction.component';
-import Panel from '../common/panel.component';
-import Divider from '../common/divider.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    root: {
+      height: '100%'
+    },
     button: {
       backgroundColor: theme.palette.secondary.light,
       color: theme.palette.common.white,

@@ -1,4 +1,5 @@
 import uniqid from 'uniqid';
+
 import { Post } from '../../interfaces/post';
 
 export const postData: Post[] = [
