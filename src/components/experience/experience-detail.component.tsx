@@ -127,7 +127,7 @@ export default function ExperienceDetail({ topics, people, onSave }: Props) {
               <Typography>People</Typography>
               <Box className={classes.avatar}>
                 {experience.setting.people.map(item => (
-                  <Avatar key={item.id} alt={item.name} src={item.avatar} className={classes.inline}/>
+                  <Avatar key={item.id} alt={item.name} src={item.avatar} className={classes.inline} />
                 ))}
               </Box>
             </Grid>
@@ -135,7 +135,7 @@ export default function ExperienceDetail({ topics, people, onSave }: Props) {
             <Grid item md={6}>
               <form className={classes.form} noValidate autoComplete="off">
                 <TextField onChange={setTitle} value={experience.title} variant="filled" color="secondary" label="Experience Name" />
-                <TextField onChange={setDescription} multiline rows={6} variant="filled" color="secondary" label="Description"/>
+                <TextField onChange={setDescription} multiline rows={6} variant="filled" color="secondary" label="Description" />
                 <Typography>Choose Layout</Typography>
                 <div className={classes.layout}>
                   <FormControlLabel

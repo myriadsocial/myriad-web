@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
+import Badge from '@material-ui/core/Badge';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -26,6 +27,9 @@ const useStyles = makeStyles((theme: Theme) =>
       background: 'linear-gradient(180deg, rgba(160, 31, 171, 0.41) 0%, rgba(25, 26, 29, 0) 100%)',
       borderRadius: 16,
       marginBottom: 16
+    },
+    notificationBadge: {
+      top: 6
     }
   })
 );
@@ -50,6 +54,7 @@ export default function NotificationListComponent() {
             </React.Fragment>
           }
         />
+        <Badge className={classes.notificationBadge} color="secondary" hidden={false} badgeContent={4} />
       </ListItem>
 
       <ListItem alignItems="flex-start" component="nav" className={classes.notification}>
