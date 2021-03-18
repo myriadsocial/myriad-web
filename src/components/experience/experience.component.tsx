@@ -151,7 +151,7 @@ export const ExperienceComponent = () => {
         createExperience={createExperience}
       />
 
-      <Dialog open={modalOpened} onClose={toggleModal} maxWidth="sm">
+      <Dialog open={modalOpened} onClose={toggleModal} maxWidth="md">
         <DialogTitle id="connect-social" onClose={toggleModal}>
           {' '}
           This is what you are going to see

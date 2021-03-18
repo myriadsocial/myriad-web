@@ -56,6 +56,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     active: {
       backgroundColor: '#E849BD'
+    },
+    inline: {
+      display: 'inline-flex'
     }
   })
 );
@@ -120,19 +123,19 @@ export default function ExperienceDetail({ topics, people, onSave }: Props) {
                 ))}
               </Box>
             </Grid>
-            <Grid item md={4}>
+            <Grid item md={3}>
               <Typography>People</Typography>
               <Box className={classes.avatar}>
                 {experience.setting.people.map(item => (
-                  <Avatar key={item.id} alt={item.name} src={item.avatar} />
+                  <Avatar key={item.id} alt={item.name} src={item.avatar} className={classes.inline}/>
                 ))}
               </Box>
             </Grid>
 
-            <Grid item md={5}>
+            <Grid item md={6}>
               <form className={classes.form} noValidate autoComplete="off">
-                <TextField id="standard-basic" onChange={setTitle} value={experience.title} variant="filled" label="Experience Name" />
-                <TextField id="filled-basic" onChange={setDescription} multiline rows={6} label="Description" variant="filled" />
+                <TextField onChange={setTitle} value={experience.title} variant="filled" color="secondary" label="Experience Name" />
+                <TextField onChange={setDescription} multiline rows={6} variant="filled" color="secondary" label="Description"/>
                 <Typography>Choose Layout</Typography>
                 <div className={classes.layout}>
                   <FormControlLabel
