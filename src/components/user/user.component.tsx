@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useSession } from 'next-auth/client';
+
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -21,14 +23,18 @@ import Social from './social.component';
 type Props = {
   loggedIn?: boolean;
   settings: any;
-  changeSetting: (key, value) => void;
+  changeSetting: (key: string, value: boolean) => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       marginBottom: theme.spacing(3)
-    }
+    },
+    grow: {
+      flexGrow: 1
+    },
+    normal: {}
   })
 );
 
@@ -43,34 +49,31 @@ const StyledBadge = withStyles((theme: Theme) =>
   })
 )(Badge);
 
-const User = ({ loggedIn = true, settings, changeSetting }: Props) => {
-  const classes = useStyles();
+const User = ({ settings, changeSetting }: Props) => {
+  const style = useStyles();
+  const [session] = useSession();
   const [loginOpened, openLogin] = React.useState(false);
 
-  const handleClose = () => {
-    openLogin(false);
-  };
-
-  const toggleLogin = open => {
-    openLogin(open);
+  const toggleLogin = () => {
+    openLogin(!loginOpened);
   };
 
   return (
-    <Box p={1} bgcolor="primary.light" className={classes.root}>
+    <Box p={1} bgcolor="primary.light" className={style.root}>
       <Grid container direction="row" justify="space-between" alignItems="flex-start">
-        <Grid item>
-          <Profile loggedIn={loggedIn} toggleLogin={toggleLogin} />
-          <Social loggedIn={loggedIn} toggleLogin={toggleLogin} />
+        <Grid item className={!!session?.user.anonymous ? style.grow : style.normal}>
+          <Profile toggleLogin={toggleLogin} />
+          <Social toggleLogin={toggleLogin} />
         </Grid>
 
-        <Grid item>
-          <ShowIf condition={loggedIn}>
+        <ShowIf condition={!session?.user.anonymous}>
+          <Grid item>
             <Setting onChange={changeSetting} settings={settings} />
-          </ShowIf>
-        </Grid>
+          </Grid>
+        </ShowIf>
       </Grid>
 
-      <ShowIf condition={loggedIn}>
+      <ShowIf condition={!session?.user.anonymous}>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreRounded color="secondary" />}>
             <StyledBadge badgeContent={4} color="secondary">
@@ -83,8 +86,8 @@ const User = ({ loggedIn = true, settings, changeSetting }: Props) => {
         </Accordion>
       </ShowIf>
 
-      <Dialog open={loginOpened} onClose={handleClose} maxWidth="xs">
-        <LoginComponent />
+      <Dialog open={loginOpened} onClose={toggleLogin} maxWidth="xs">
+        <LoginComponent allowAnonymous={false} />
       </Dialog>
     </Box>
   );

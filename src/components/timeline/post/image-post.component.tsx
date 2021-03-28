@@ -11,7 +11,7 @@ import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { ImageData } from '../../interfaces/post';
+import { ImageData } from 'src/interfaces/post';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,7 +31,7 @@ type Props = {
 };
 
 export default function ImageListComponent({ images }: Props) {
-  const classes = useStyles();
+  const style = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('lg'));
   const [viewerIsOpen, setViewerIsOpen] = React.useState(false);
@@ -45,7 +45,7 @@ export default function ImageListComponent({ images }: Props) {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={style.root}>
       <NoSsr>
         <Galery photos={images} onClick={openLightbox} />
 

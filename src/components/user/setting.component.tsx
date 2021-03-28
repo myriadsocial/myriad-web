@@ -20,7 +20,7 @@ const useStyles = makeStyles({
 
 type Props = {
   settings: any;
-  onChange: (key, value) => void;
+  onChange: (key: string, value: boolean) => void;
 };
 
 const SettingComponent = ({ onChange, settings }: Props) => {

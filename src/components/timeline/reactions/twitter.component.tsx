@@ -4,8 +4,9 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, createStyles, Theme, lighten } from '@material-ui/core/styles';
 
-import LikeIcon from '../../../images/twitter/like.svg';
-import RetweetIcon from '../../../images/twitter/retweet.svg';
+import LikeIcon from 'src/images/twitter/like.svg';
+import RetweetIcon from 'src/images/twitter/retweet.svg';
+import { SocialMetric } from 'src/interfaces/post';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,19 +28,23 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function TwitterReactionComponent() {
-  const classes = useStyles();
+type Props = {
+  metric: SocialMetric;
+};
+
+export default function TwitterReactionComponent({ metric }: Props) {
+  const style = useStyles();
 
   return (
-    <div className={classes.root}>
-      <IconButton aria-label="retweet" className={classes.wrapper} disableRipple={true} disableFocusRipple={true}>
-        <RetweetIcon className={classes.icon} />
-        <Typography variant="subtitle1">126</Typography>
+    <div className={style.root}>
+      <IconButton aria-label="retweet" className={style.wrapper} disableRipple={true} disableFocusRipple={true}>
+        <RetweetIcon className={style.icon} />
+        <Typography variant="subtitle1">{metric.retweet}</Typography>
       </IconButton>
 
-      <IconButton aria-label="like" className={classes.wrapper} disableRipple disableFocusRipple>
-        <LikeIcon className={classes.icon} />
-        <Typography variant="subtitle1">12</Typography>
+      <IconButton aria-label="like" className={style.wrapper} disableRipple disableFocusRipple>
+        <LikeIcon className={style.icon} />
+        <Typography variant="subtitle1">{metric.like}</Typography>
       </IconButton>
     </div>
   );

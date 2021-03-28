@@ -1,50 +1,26 @@
-import React from 'react';
+import React, { createRef, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
-import { Post } from '../../interfaces/post';
-import { postData } from './data';
-import PostComponent from './post.component';
+import PostComponent from './post/post.component';
+import { useStyles } from './timeline.style';
+import { usePost } from './use-post.hooks';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      height: '100vh',
-      overflow: 'hidden',
-      scrollbarWidth: 'none',
-      msOverflowStyle: 'none',
-      scrollbarColor: 'transparent transparent',
-      '& ::-webkit-scrollbar': {
-        display: 'none',
-        width: '0 !important'
-      }
-    },
-    scroll: {
-      height: '100%',
-      width: '100%',
-      overflowY: 'auto'
-    },
-    child: {
-      '& > *': {
-        margin: theme.spacing(1)
-      }
-    }
-  })
-);
+import { Post, Comment } from 'src/interfaces/post';
 
-export default function Timeline() {
-  const classes = useStyles();
-  const scrollRoot = React.createRef<HTMLDivElement>();
-  const [posts, setPost] = React.useState<Post[]>([]);
+const Timeline = () => {
+  const { loading, posts, loadMorePost, loadInitPost, reply, loadComments } = usePost();
+  const style = useStyles();
+  const scrollRoot = createRef<HTMLDivElement>();
 
   React.useEffect(() => {
     window.addEventListener('scroll', handleScroll, true);
-    setPost(postData);
+
+    loadInitPost();
   }, []);
 
-  const handleScroll = React.useCallback(() => {
+  const handleScroll = useCallback(() => {
     const distance = window.scrollY;
 
     if (distance <= 0) return;
@@ -56,24 +32,28 @@ export default function Timeline() {
     });
   }, []);
 
-  const fetchData = () => {
-    console.log('Fetch data');
+  const handleReply = (comment: Comment) => {
+    reply(comment.postId, comment);
   };
 
+  if (loading) return null;
+
   return (
-    <div className={classes.root}>
-      <div className={classes.scroll} ref={scrollRoot}>
+    <div className={style.root}>
+      <div className={style.scroll} ref={scrollRoot}>
         <InfiniteScroll
-          className={classes.child}
-          dataLength={100}
-          next={fetchData}
+          className={style.child}
+          dataLength={posts.length + 100}
+          next={loadMorePost}
           hasMore={true}
-          loader={<CircularProgress disableShrink />}>
-          {posts.map((post, i) => (
-            <PostComponent post={post} open={true} key={`${post.user.name}-${i}`} />
+          loader={<CircularProgress className={style.loading} disableShrink />}>
+          {posts.map((post: Post, i: number) => (
+            <PostComponent post={post} open={false} key={i} reply={handleReply} loadComments={loadComments} />
           ))}
         </InfiniteScroll>
       </div>
     </div>
   );
-}
+};
+
+export default Timeline;

@@ -49,33 +49,33 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const TransactionComponent = React.memo(function Wallet() {
-  const classes = useStyles();
+  const style = useStyles();
 
   return (
-    <List className={classes.root}>
+    <List className={style.root}>
       <ListItem>
-        <ListItemAvatar className={classes.avatar}>
+        <ListItemAvatar className={style.avatar}>
           <Avatar>
             <ImageIcon />
           </Avatar>
         </ListItemAvatar>
         <ListItemText
-          className={classes.textSecondary}
+          className={style.textSecondary}
           secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
           primary="Klara Velez"
           secondary="Tx: 0XEFJ5D4J8HF8D2281R8E5G"
         />
         <ListItemSecondaryAction>
-          <div className={classes.badge}>
+          <div className={style.badge}>
             <Chip color="default" size="small" label="Pending" />
-            <Chip className={classes.red} color="default" size="small" label="Out" />
+            <Chip className={style.red} color="default" size="small" label="Out" />
             <Typography>20 Myria</Typography>
           </div>
         </ListItemSecondaryAction>
       </ListItem>
 
       <ListItem>
-        <ListItemAvatar className={classes.avatar}>
+        <ListItemAvatar className={style.avatar}>
           <Avatar alt="Travis Howard" src="/images/avatar/2.jpg" />
         </ListItemAvatar>
         <ListItemText
@@ -84,15 +84,15 @@ export const TransactionComponent = React.memo(function Wallet() {
           secondary="Tx: 0XE5E9F55T7T9D5S59R9F75"
         />
         <ListItemSecondaryAction>
-          <div className={classes.badge}>
-            <Chip className={classes.green} color="default" size="small" label="In" />
+          <div className={style.badge}>
+            <Chip className={style.green} color="default" size="small" label="In" />
             <Typography>14 Myria</Typography>
           </div>
         </ListItemSecondaryAction>
       </ListItem>
 
       <ListItem>
-        <ListItemAvatar className={classes.avatar}>
+        <ListItemAvatar className={style.avatar}>
           <Avatar alt="Remy Sharp" src="/images/avatar/3.jpg" />
         </ListItemAvatar>
         <ListItemText
@@ -101,15 +101,15 @@ export const TransactionComponent = React.memo(function Wallet() {
           secondary="Tx: 0XEK8E49U5U7J5E7F66G484"
         />
         <ListItemSecondaryAction>
-          <div className={classes.badge}>
-            <Chip className={classes.green} color="default" size="small" label="In" />
+          <div className={style.badge}>
+            <Chip className={style.green} color="default" size="small" label="In" />
             <Typography>14 Myria</Typography>
           </div>
         </ListItemSecondaryAction>
       </ListItem>
 
       <ListItem>
-        <ListItemAvatar className={classes.avatar}>
+        <ListItemAvatar className={style.avatar}>
           <Avatar>
             <ImageIcon />
           </Avatar>
@@ -120,9 +120,9 @@ export const TransactionComponent = React.memo(function Wallet() {
           secondary="Tx: 0XEK8E49U5U7J5E7F66G484"
         />
         <ListItemSecondaryAction>
-          <div className={classes.badge}>
-            <Chip className={classes.green} color="default" size="small" label="In" />
-            <Chip className={classes.red} color="default" size="small" label="Out" />
+          <div className={style.badge}>
+            <Chip className={style.green} color="default" size="small" label="In" />
+            <Chip className={style.red} color="default" size="small" label="Out" />
             <Typography>14 Myria</Typography>
           </div>
         </ListItemSecondaryAction>

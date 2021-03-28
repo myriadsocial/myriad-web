@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const BalanceComponent = React.memo(function Wallet() {
-  const classes = useStyles();
+  const style = useStyles();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -78,16 +78,16 @@ export const BalanceComponent = React.memo(function Wallet() {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={style.root}>
       <Grid container direction="row" justify="space-between" alignItems="center">
         <Grid item>
-          <Typography className={classes.title} variant="h5">
+          <Typography className={style.title} variant="h5">
             Total Balance
           </Typography>
         </Grid>
         <Grid item>
-          <Typography className={classes.title} variant="h5">
-            357 <span className={classes.subtitle}>Myria</span>
+          <Typography className={style.title} variant="h5">
+            357 <span className={style.subtitle}>Myria</span>
           </Typography>
         </Grid>
       </Grid>

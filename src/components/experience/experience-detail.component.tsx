@@ -1,5 +1,4 @@
 import React from 'react';
-import uniqid from 'uniqid';
 
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
@@ -12,94 +11,38 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 
-import PhotoLayoutIcon from '../../images/photo-layout-light.svg';
-import TimelineLayoutIcon from '../../images/timeline-layout-light.svg';
-import { Topic, Experience, LayoutType } from '../../interfaces/experience';
-import { User } from '../../interfaces/user';
+import { useStyles } from './experience-detail.style';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex'
-    },
-    details: {
-      display: 'flex',
-      flexDirection: 'column'
-    },
-    content: {
-      flex: '1 0 auto'
-    },
-    cover: {
-      width: 151
-    },
-    layout: {
-      display: 'flex',
-      justifyContent: 'space-around'
-    },
-    check: {
-      margin: 0
-    },
-    avatar: {
-      '& > *': {
-        margin: theme.spacing(1)
-      },
-      marginBottom: theme.spacing(2)
-    },
-    form: {
-      display: 'flex',
-      flexDirection: 'column',
-      '& >*': {
-        marginBottom: theme.spacing(1.5)
-      }
-    },
-    active: {
-      backgroundColor: '#E849BD'
-    },
-    inline: {
-      display: 'inline-flex'
-    }
-  })
-);
+import PhotoLayoutIcon from 'src/images/photo-layout-light.svg';
+import TimelineLayoutIcon from 'src/images/timeline-layout-light.svg';
+import { Experience, LayoutType } from 'src/interfaces/experience';
 
 type Props = {
-  topics: Topic[];
-  people: User[];
+  data: Experience;
   onSave?: (experience: Experience) => void;
 };
-export default function ExperienceDetail({ topics, people, onSave }: Props) {
-  const classes = useStyles();
-  const [experience, setExperience] = React.useState<Experience>({
-    id: uniqid(),
-    title: '',
-    description: '',
-    selected: false,
-    setting: {
-      layout: 'timeline',
-      topics,
-      people
-    }
-  });
+
+export default function ExperienceDetail({ data, onSave }: Props) {
+  const style = useStyles();
+
+  const [experience, setExperience] = React.useState<Experience>(data);
 
   const setLayout = (layout: LayoutType) => {
     setExperience({
       ...experience,
-      setting: {
-        ...experience.setting,
-        layout
-      }
+      layout
     });
   };
 
-  const setTitle = e => {
+  const setTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setExperience({
       ...experience,
-      title: e.target.value
+      name: e.target.value
     });
   };
 
-  const setDescription = e => {
+  const setDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
     setExperience({
       ...experience,
       description: e.target.value
@@ -111,41 +54,41 @@ export default function ExperienceDetail({ topics, people, onSave }: Props) {
   };
 
   return (
-    <Card className={classes.root}>
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
+    <Card className={style.root}>
+      <div className={style.details}>
+        <CardContent className={style.content}>
           <Grid container spacing={2}>
             <Grid item md={3}>
               <Typography>Topics</Typography>
-              <Box className={classes.avatar}>
-                {experience.setting.topics.map(topic => (
-                  <Chip key={topic.id} size="small" label={topic.name} color="primary" />
+              <Box className={style.avatar}>
+                {experience.tags.map((tag, i) => (
+                  <Chip key={i} size="small" label={tag} color="primary" />
                 ))}
               </Box>
             </Grid>
             <Grid item md={3}>
               <Typography>People</Typography>
-              <Box className={classes.avatar}>
-                {experience.setting.people.map(item => (
-                  <Avatar key={item.id} alt={item.name} src={item.avatar} className={classes.inline} />
+              <Box className={style.avatar}>
+                {experience.people.map((people, i) => (
+                  <Avatar key={i} alt={people} src={''} className={style.inline} />
                 ))}
               </Box>
             </Grid>
 
             <Grid item md={6}>
-              <form className={classes.form} noValidate autoComplete="off">
-                <TextField onChange={setTitle} value={experience.title} variant="filled" color="secondary" label="Experience Name" />
+              <form className={style.form} noValidate autoComplete="off">
+                <TextField onChange={setTitle} value={experience.name} variant="filled" color="secondary" label="Experience Name" />
                 <TextField onChange={setDescription} multiline rows={6} variant="filled" color="secondary" label="Description" />
                 <Typography>Choose Layout</Typography>
-                <div className={classes.layout}>
+                <div className={style.layout}>
                   <FormControlLabel
-                    className={classes.check}
-                    checked={experience.setting.layout === 'timeline'}
+                    className={style.check}
+                    checked={experience.layout === 'timeline'}
                     onChange={() => setLayout('timeline')}
                     control={
                       <Checkbox
                         icon={<TimelineLayoutIcon />}
-                        checkedIcon={<TimelineLayoutIcon className={classes.active} />}
+                        checkedIcon={<TimelineLayoutIcon className={style.active} />}
                         name="checkedH"
                       />
                     }
@@ -153,11 +96,11 @@ export default function ExperienceDetail({ topics, people, onSave }: Props) {
                   />
 
                   <FormControlLabel
-                    className={classes.check}
-                    checked={experience.setting.layout === 'photo'}
+                    className={style.check}
+                    checked={experience.layout === 'photo'}
                     onChange={() => setLayout('photo')}
                     control={
-                      <Checkbox icon={<PhotoLayoutIcon />} checkedIcon={<PhotoLayoutIcon className={classes.active} />} name="checkedH" />
+                      <Checkbox icon={<PhotoLayoutIcon />} checkedIcon={<PhotoLayoutIcon className={style.active} />} name="checkedH" />
                     }
                     label=""
                   />

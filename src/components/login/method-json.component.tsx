@@ -3,14 +3,50 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import DialogContent from '@material-ui/core/DialogContent';
 
+import { encodeAddress, decodeAddress } from '@polkadot/keyring';
+import type { KeyringPair$Json } from '@polkadot/keyring/types';
+import { isHex, hexToU8a } from '@polkadot/util';
+
 import DialogTitle from '../common/DialogTitle.component';
 
 type Props = {
   onClose: () => void;
-  onSave: (data) => void;
+  onSave: (data: string) => void;
 };
 
 export default function JsonForm(props: Props) {
+  const [pair, setPair] = React.useState<KeyringPair$Json | undefined>(undefined);
+
+  React.useEffect(() => {
+    if (pair && isValidAddressPolkadotAddress(pair.address)) {
+      console.log('should logged in');
+    }
+  }, [pair]);
+
+  const isValidAddressPolkadotAddress = (address: string) => {
+    try {
+      encodeAddress(isHex(address) ? hexToU8a(address) : decodeAddress(address));
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleFileChosen = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileReader = new FileReader();
+
+    if (e.target.files?.length) {
+      fileReader.onloadend = (e: ProgressEvent<FileReader>) => {
+        const result = e.target?.result;
+        if (result) {
+          setPair(JSON.parse(result.toString()));
+        }
+      };
+      fileReader.readAsText(e.target.files[0]);
+    }
+  };
+
   return (
     <>
       <DialogTitle id="json-title" onClose={props.onClose}>
@@ -18,9 +54,9 @@ export default function JsonForm(props: Props) {
       </DialogTitle>
       <DialogContent>
         <label htmlFor="btn-upload">
-          <input id="btn-upload" name="btn-upload" style={{ display: 'none' }} type="file" />
+          <input id="btn-upload" name="btn-upload" style={{ display: 'none' }} type="file" onChange={handleFileChosen} />
           <Button className="btn-choose" variant="contained" color="secondary" fullWidth={true} component="span">
-            Choose Files
+            Choose File
           </Button>
         </label>
       </DialogContent>

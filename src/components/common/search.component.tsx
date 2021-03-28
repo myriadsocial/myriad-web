@@ -63,7 +63,7 @@ export default function SearchComponent({ value = '', placeholder = 'Search', on
     setSearch(event.target.value);
   };
 
-  const submitSearch = event => {
+  const submitSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.keyCode === 13) {
       setSearch('');
       onSubmit(search);

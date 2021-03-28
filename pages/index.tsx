@@ -1,15 +1,17 @@
 import React from 'react';
-import uniqid from 'uniqid';
+
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import LoginForm from '../src/components/login/login.component';
-import PostComponent from '../src/components/timeline/post.component';
-import Logo from '../src/images/logo.svg';
-import { Post } from '../src/interfaces/post';
+import LoginForm from 'src/components/login/login.component';
+import PostComponent from 'src/components/timeline/post/post.component';
+import Logo from 'src/images/logo.svg';
+import { Post, Comment } from 'src/interfaces/post';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,39 +47,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function About() {
+export default function Index() {
   const style = useStyles();
 
-  const posts: Post[] = [
-    {
-      text: 'I am going to post something very controversial...',
-      user: {
-        id: uniqid(),
-        avatar: 'JD',
-        name: 'John Doe'
-      },
-      origin: 'facebook',
-      replies: [
-        {
-          text: 'people will be like “idk i’m on the fence about this issue” and the issue will be a genocide.',
-          user: {
-            id: uniqid(),
-            avatar: 'R',
-            name: 'Test'
-          }
-        }
-      ]
-    },
-    {
-      text: 'I am going to post something very controversial...',
-      user: {
-        id: uniqid(),
-        avatar: 'JD',
-        name: 'Eduard Rudd'
-      },
-      origin: 'facebook'
-    }
-  ];
+  const reply = (comment: Comment) => {};
+
+  const loadComments = (postId: string) => {};
+
+  const posts: Post[] = [];
 
   return (
     <div className={style.root}>
@@ -94,7 +71,7 @@ export default function About() {
           </Grid>
           <Grid item className={style.timeline}>
             {posts.map(post => (
-              <PostComponent post={post} open={true} disable />
+              <PostComponent post={post} open={true} disable key={post.id} reply={reply} loadComments={loadComments} />
             ))}
           </Grid>
         </Grid>
@@ -107,3 +84,19 @@ export default function About() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async context => {
+  const { res } = context;
+  const session = await getSession(context);
+
+  if (session) {
+    res.writeHead(301, { location: `${process.env.NEXTAUTH_URL}/home` });
+    res.end();
+  }
+
+  return {
+    props: {
+      session
+    }
+  };
+};

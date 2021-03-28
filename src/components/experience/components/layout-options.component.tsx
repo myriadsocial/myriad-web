@@ -10,8 +10,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
-import PhotoLayoutIcon from '../../images/photo-layout-light.svg';
-import TimelineLayoutIcon from '../../images/timeline-layout-light.svg';
+import PhotoLayoutIcon from 'src/images/photo-layout-light.svg';
+import TimelineLayoutIcon from 'src/images/timeline-layout-light.svg';
 
 const useStyles = makeStyles({
   root: {
@@ -44,38 +44,38 @@ const useStyles = makeStyles({
 });
 
 export default function Layouts() {
-  const classes = useStyles();
+  const style = useStyles();
 
   return (
-    <Card className={classes.root}>
-      <CardHeader disableTypography className={classes.header} title={<Typography variant="h5">Look And Feel</Typography>} />
+    <Card className={style.root}>
+      <CardHeader disableTypography className={style.header} title={<Typography variant="h5">Look And Feel</Typography>} />
       <CardContent>
-        <List component="nav" className={classes.root}>
-          <ListItem button alignItems="flex-start" className={classes.item} selected={true}>
+        <List component="nav" className={style.root}>
+          <ListItem button alignItems="flex-start" className={style.item} selected={true}>
             <ListItemIcon>
-              <TimelineLayoutIcon className={classes.icon} />
+              <TimelineLayoutIcon className={style.icon} />
             </ListItemIcon>
             <ListItemText
               primary="Timeline Layout"
               secondary={
                 <React.Fragment>
-                  <Typography component="span" variant="body2" className={classes.inline}>
+                  <Typography component="span" variant="body2" className={style.inline}>
                     Better if you enjoy conversations and are looking for discussions
                   </Typography>
                 </React.Fragment>
               }
             />
           </ListItem>
-          <ListItem button alignItems="flex-start" className={classes.item}>
+          <ListItem button alignItems="flex-start" className={style.item}>
             <ListItemIcon>
-              <PhotoLayoutIcon className={classes.icon} />
+              <PhotoLayoutIcon className={style.icon} />
             </ListItemIcon>
 
             <ListItemText
               primary="Photo Layout"
               secondary={
                 <React.Fragment>
-                  <Typography component="span" variant="body2" className={classes.inline}>
+                  <Typography component="span" variant="body2" className={style.inline}>
                     Better if you enjoy visuals and are looking for multimedia content
                   </Typography>
                 </React.Fragment>

@@ -6,7 +6,7 @@
     "trailingComma": "none",
     "arrowParens": "avoid",
     "jsxBracketSameLine": true,
-    "importOrder": ["^next/(.*)$", "^@material-ui/(.*)$", "^[./]"],
+    "importOrder": ["^(react)([-a-zA-Z]+)?$", "^(next)([-a-zA-Z/]+)?$", "^@material-ui/(.*)$",  "^@polkadot/(.*)$", "^[./]", "^[-a-zA-Z/]+"],
     "importOrderSeparation": true,
     "endOfLine": "auto"
 }

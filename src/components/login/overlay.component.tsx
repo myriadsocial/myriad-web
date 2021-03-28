@@ -10,13 +10,17 @@ import { makeStyles, fade } from '@material-ui/core/styles';
 const useStyles = makeStyles({
   root: {
     position: 'absolute',
-    backgroundColor: fade('#FFF', 0.4),
-    width: 320,
+    backgroundColor: fade('#FFF', 0.3),
+    width: '100%',
     left: 0,
     top: 0,
+    height: '100%',
     display: 'flex',
-    textAlign: 'center'
+    alignItems: 'center',
+    textAlign: 'center',
+    justifyContent: 'center'
   },
+
   button: {
     padding: '4px 12px'
   },
@@ -27,23 +31,23 @@ const useStyles = makeStyles({
 });
 
 type Props = {
-  toggleLogin: (open) => void;
+  toggleLogin: (open: boolean) => void;
 };
 
 export default function Overlay({ toggleLogin }: Props) {
-  const classes = useStyles();
+  const style = useStyles();
 
   return (
     <Grid>
-      <Card className={classes.root}>
+      <Card className={style.root}>
         <CardContent>
-          <Typography className={classes.title} color="textSecondary" gutterBottom>
+          <Typography className={style.title} color="textSecondary" gutterBottom>
             You need to log-in or register before you can link your social media
           </Typography>
-          <Button className={classes.button} onClick={() => toggleLogin(true)} size="small" variant="contained" color="secondary">
+          <Button className={style.button} onClick={() => toggleLogin(true)} size="small" variant="contained" color="secondary">
             Login or Register Now
           </Button>
-          <Typography className={classes.title} color="textSecondary" gutterBottom>
+          <Typography className={style.title} color="textSecondary" gutterBottom>
             You can remain anonymous but will be able comment and send Myria tokens to other users
           </Typography>
         </CardContent>

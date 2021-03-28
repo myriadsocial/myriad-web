@@ -22,10 +22,10 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const Wallet = React.memo(function Wallet() {
-  const classes = useStyles();
+  const style = useStyles();
 
   const WalletAction = (
-    <Button variant="contained" className={classes.button}>
+    <Button variant="contained" className={style.button}>
       Get Myria Token
     </Button>
   );

@@ -1,76 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { signIn } from 'next-auth/client';
 
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles, lighten } from '@material-ui/core/styles';
 
-import JsonIcon from '../../images/json-icon.svg';
-import KeyIcon from '../../images/key-icon.svg';
-import PassPhraseIcon from '../../images/passphrase-icon.svg';
+import { Keyring } from '@polkadot/keyring';
+import type { KeyringPair } from '@polkadot/keyring/types';
+import { mnemonicGenerate } from '@polkadot/util-crypto';
+
+import DialogTitle from '../common/DialogTitle.component';
+import ShowIf from '../common/show-if.component';
 import LoginMethod from './login-method.component';
+import { useStyles } from './login.style';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      backgroundColor: theme.palette.primary.light,
-      padding: '15px 29px',
-      color: '#E0E0E0',
-      flex: '0 0 100%',
-      width: 320
-    },
-    title: {
-      paddingBottom: 10,
-      borderBottom: '5px solid',
-      borderBottomColor: theme.palette.secondary.main
-    },
-    action: {
-      marginTop: 25
-    },
-    button: {
-      marginBottom: theme.spacing(1.5),
-      borderRadius: 0,
-      textTransform: 'none'
-    },
-    buttonIcon: {
-      marginBottom: theme.spacing(1.5),
-      borderRadius: 0,
-      '&& .MuiButton-label': {
-        display: 'flex',
-        justifyContent: 'flex-start',
-        flexDirection: 'row',
-        width: '60%'
-      }
-    },
-    lightButton: {
-      marginBottom: 10,
-      backgroundColor: lighten('#E849BD', 0.3),
-      textAlign: 'left',
-      borderRadius: 20
-    }
-  })
-);
+import JsonIcon from 'src/images/json-icon.svg';
+import KeyIcon from 'src/images/key-icon.svg';
+import PassPhraseIcon from 'src/images/passphrase-icon.svg';
+import { uniqueNamesGenerator, adjectives, colors } from 'unique-names-generator';
 
-export default function LoginComponent() {
-  const classes = useStyles();
-  const router = useRouter();
+export type SeedType = 'json' | 'bip' | 'raw';
 
-  const [shouldShowLoginMethod, showLoginMethod] = React.useState(false);
-  const [credential, storeCredential] = React.useState({
-    method: '',
-    value: ''
+export interface AddressState {
+  seed: string;
+  seedType: SeedType;
+}
+
+type Props = {
+  allowAnonymous?: boolean;
+};
+
+export default function LoginComponent({ allowAnonymous = true }: Props) {
+  const style = useStyles();
+
+  const [shouldShowLoginMethod, showLoginMethod] = useState(false);
+  const [showCreateAccount, setShowCreateAccount] = useState(false);
+  const [accountName, setAccountName] = useState('');
+  const [address, storeAddress] = useState<AddressState>({
+    seed: '',
+    seedType: 'bip'
   });
 
-  const toggleLogin = (method: string | null) => {
+  const toggleLogin = (method: SeedType | null) => {
     if (method) {
-      storeCredential({
-        method,
-        value: ''
+      storeAddress({
+        seedType: method,
+        seed: ''
       });
       showLoginMethod(true);
     } else {
@@ -78,30 +60,66 @@ export default function LoginComponent() {
     }
   };
 
-  const saveData = data => {
+  const saveData = (data: string) => {
     showLoginMethod(false);
-    storeCredential({
-      method: credential.method,
-      value: data
+    storeAddress({
+      ...address,
+      seed: data
     });
   };
 
+  const createAccount = () => {
+    setShowCreateAccount(true);
+  };
+
+  const closeCreateAccount = () => {
+    setShowCreateAccount(false);
+  };
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+
+    setAccountName(value);
+  };
+
   const login = () => {
-    router.push('/home');
+    const keyring = new Keyring({ type: 'sr25519', ss58Format: 42 });
+    const seed = mnemonicGenerate();
+
+    const pair: KeyringPair = keyring.createFromUri(seed + '//hard', { name: accountName });
+
+    signIn('credentials', {
+      address: pair.address,
+      name: accountName,
+      anonymous: false
+    });
+  };
+
+  const loginAnonymous = () => {
+    const randomName: string = uniqueNamesGenerator({
+      dictionaries: [adjectives, colors],
+      separator: ' '
+    });
+
+    signIn('credentials', {
+      address: null,
+      name: randomName,
+      anonymous: true
+    });
   };
 
   return (
     <>
-      <Paper className={classes.paper} variant="elevation" elevation={2}>
+      <Paper className={style.paper} variant="elevation" elevation={2}>
         <Grid item>
-          <Typography className={classes.title} component="h1" variant="h4">
+          <Typography className={style.title} component="h1" variant="h4">
             Log in
           </Typography>
-          <div className={classes.action}>
+          <div className={style.action}>
             <ButtonGroup orientation="vertical" fullWidth>
               <Button
-                onClick={() => toggleLogin('passphrase')}
-                className={classes.buttonIcon}
+                onClick={() => toggleLogin('bip')}
+                className={style.buttonIcon}
                 color="default"
                 size="large"
                 fullWidth={true}
@@ -111,7 +129,7 @@ export default function LoginComponent() {
               </Button>
               <Button
                 onClick={() => toggleLogin('json')}
-                className={classes.buttonIcon}
+                className={style.buttonIcon}
                 color="default"
                 size="large"
                 fullWidth={true}
@@ -120,8 +138,8 @@ export default function LoginComponent() {
                 JSON
               </Button>
               <Button
-                onClick={() => toggleLogin('key')}
-                className={classes.buttonIcon}
+                onClick={() => toggleLogin('raw')}
+                className={style.buttonIcon}
                 color="default"
                 size="large"
                 fullWidth={true}
@@ -129,7 +147,7 @@ export default function LoginComponent() {
                 startIcon={<KeyIcon />}>
                 Private Key
               </Button>
-              <Button className={classes.button} color="default" size="large" variant="contained" fullWidth={true}>
+              <Button className={style.button} color="default" size="large" variant="contained" fullWidth={true}>
                 Remind me how this works again?
               </Button>
             </ButtonGroup>
@@ -137,20 +155,50 @@ export default function LoginComponent() {
         </Grid>
 
         <Grid item>
-          <div className={classes.action}>
-            <Button color="secondary" fullWidth={true} size="large" variant="contained" onClick={login}>
+          <div className={style.action}>
+            <Button color="secondary" fullWidth={true} size="large" variant="contained" onClick={createAccount}>
               Create A New Account
             </Button>
-            <Button className={classes.lightButton} fullWidth={true} size="large" variant="contained">
-              <Link href="/anonym">
-                <a> Get In Anonymously</a>
-              </Link>
-            </Button>
+            <ShowIf condition={allowAnonymous}>
+              <Button className={style.lightButton} fullWidth={true} size="large" variant="contained" onClick={loginAnonymous}>
+                Get In Anonymously
+              </Button>
+            </ShowIf>
           </div>
         </Grid>
       </Paper>
 
-      <LoginMethod show={shouldShowLoginMethod} method={credential.method} onSave={saveData} onCancel={() => toggleLogin(null)} />
+      <LoginMethod show={shouldShowLoginMethod} method={address.seedType} onSave={saveData} onCancel={() => toggleLogin(null)} />
+
+      <Dialog open={showCreateAccount} onClose={closeCreateAccount} aria-labelledby="form-dialog-title" maxWidth="md">
+        <DialogTitle id="name" onClose={closeCreateAccount}>
+          Create a new Account.
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            onChange={handleNameChange}
+            variant="filled"
+            color="secondary"
+            margin="dense"
+            id="name"
+            label="What's your name?"
+            type="text"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            disabled={accountName.length === 0}
+            onClick={login}
+            variant="contained"
+            color="secondary"
+            fullWidth
+            className={style.btnCreateAccount}>
+            Get in
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

@@ -1,6 +1,6 @@
-import { Provider } from 'next-auth/client';
 import React, { useEffect } from 'react';
 
+import { Provider } from 'next-auth/client';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 
@@ -16,6 +16,8 @@ const App = ({ Component, pageProps }: AppProps) => {
     if (jssStyles) {
       jssStyles.parentElement && jssStyles.parentElement.removeChild(jssStyles);
     }
+
+    // keyring.loadAll({ ss58Format: 42, type: 'sr25519' });
   }, []);
 
   return (

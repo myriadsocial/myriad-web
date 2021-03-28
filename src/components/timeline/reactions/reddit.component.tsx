@@ -9,6 +9,8 @@ import HahaIcon from '../../../images/facebook/haha.svg';
 import SadIcon from '../../../images/facebook/sad.svg';
 import WowIcon from '../../../images/facebook/wow.svg';
 
+import { SocialMetric } from 'src/interfaces/post';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -21,11 +23,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function RedditReactionComponent() {
-  const classes = useStyles();
+type Props = {
+  metric: SocialMetric;
+};
 
+export default function RedditReactionComponent({ metric }: Props) {
+  const style = useStyles();
+  console.log(metric);
   return (
-    <div className={classes.root}>
+    <div className={style.root}>
       <IconButton aria-label="angry">
         <AngryIcon />
       </IconButton>

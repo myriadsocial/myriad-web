@@ -16,8 +16,11 @@ export type ExperienceSetting = {
 
 export type Experience = {
   id: string;
-  title: string;
-  description: string;
-  selected: boolean;
-  setting: ExperienceSetting;
+  name: string;
+  description?: string;
+  layout?: LayoutType;
+  people: string[];
+  tags: string[];
+  userId: string;
+  createdAt: Date;
 };

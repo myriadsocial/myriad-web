@@ -1,22 +1,58 @@
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
 
+import Axios from 'axios';
+
+const axios = Axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL || ''
+});
+
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default NextAuth({
   // https://next-auth.js.org/configuration/providers
   providers: [
-    Providers.Facebook({
-      clientId: process.env.FACEBOOK_ID || '',
-      clientSecret: process.env.FACEBOOK_SECRET || ''
-    }),
-    Providers.Reddit({
-      clientId: process.env.REDDIT_CLIENT_ID || '',
-      clientSecret: process.env.REDDIT_CLIENT_SECRET || ''
-    }),
-    Providers.Twitter({
-      clientId: process.env.TWITTER_ID || '',
-      clientSecret: process.env.TWITTER_SECRET || ''
+    Providers.Credentials({
+      // The name to display on the sign in form (e.g. 'Sign in with...')
+      name: 'Address',
+      // The credentials is used to generate a suitable form on the sign in page.
+      // You can specify whatever fields you are expecting to be submitted.
+      // e.g. domain, username, password, 2FA token, etc.
+      credentials: {
+        name: { label: 'Name', type: 'text' },
+        address: { label: 'Address', type: 'text' }
+      },
+      async authorize(credentials: Record<string, string>) {
+        if (credentials.anonymous === 'false') {
+          try {
+            const { data } = await axios({
+              url: `users/${credentials.address}`,
+              method: 'GET'
+            });
+
+            console.log('user exist', data);
+          } catch (error) {
+            const { data } = await axios({
+              url: '/users',
+              method: 'POST',
+              data: {
+                id: credentials.address,
+                name: credentials.name,
+                profilePictureURL: '',
+                createdAt: new Date()
+              }
+            });
+
+            console.log('user create', data);
+          }
+        }
+
+        return {
+          name: credentials.name,
+          address: credentials.address,
+          anonymous: credentials.anonymous === 'true'
+        };
+      }
     })
   ],
   // Database optional. MySQL, Maria DB, Postgres and MongoDB are supported.
@@ -25,7 +61,7 @@ export default NextAuth({
   // Notes:
   // * You must to install an appropriate node_module for your database
   // * The Email provider requires a database (OAuth providers do not)
-  database: process.env.DATABASE_URL,
+  // database: process.env.DATABASE_URL,
 
   // The secret should be set to a reasonably long random string.
   // It is used to sign cookies and to sign and encrypt JSON Web Tokens, unless
@@ -67,7 +103,7 @@ export default NextAuth({
   // pages is not specified for that route.
   // https://next-auth.js.org/configuration/pages
   pages: {
-    // signIn: '/auth/signin',  // Displays signin buttons
+    signIn: '/' // Displays signin buttons
     // signOut: '/auth/signout', // Displays form with sign out button
     // error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // Used for check email page
@@ -80,8 +116,30 @@ export default NextAuth({
   callbacks: {
     // async signIn(user, account, profile) { return true },
     // async redirect(url, baseUrl) { return baseUrl },
-    // async session(session, user) { return session },
-    // async jwt(token, user, account, profile, isNewUser) { return token }
+    // @ts-ignore
+    async session(session, user: Record<string, string>) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          address: user.address,
+          anonymous: user.anonymous
+        }
+      };
+    },
+    async jwt(token, user, account, profile, isNewUser) {
+      const isSignIn = user ? true : false;
+
+      if (isSignIn) {
+        return {
+          ...token,
+          address: profile.address,
+          anonymous: profile.anonymous
+        };
+      }
+
+      return token;
+    }
   },
 
   // Events are useful for logging

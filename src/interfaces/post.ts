@@ -14,17 +14,27 @@ export type ImageData = {
   height: number;
 };
 
-export type Post = {
-  text: string;
-  user: User;
-  origin: PostOrigin;
-  reactions?: PostReaction[];
-  images?: ImageData[];
-  videos?: string[];
-  replies?: Replies[];
+export type SocialMetric = {
+  like: number;
+  retweet: number;
 };
 
-export type Replies = {
+export type Post = {
+  id: string;
+  url: string;
+  platformId: PostOrigin[];
+  tags: string[];
+  comments: Comment[];
+};
+
+export type Comment = {
   text: string;
+  postId: string;
+  userId: string;
+  createdAt: Date;
+};
+
+export type UserReplies = Comment & {
+  id: string;
   user: User;
 };

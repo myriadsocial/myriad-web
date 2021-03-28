@@ -21,10 +21,10 @@ type Props = {
 };
 
 export default function ImageListComponent({ url }: Props) {
-  const classes = useStyles();
+  const style = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div className={style.root}>
       <ReactPlayer url={url} />
     </div>
   );

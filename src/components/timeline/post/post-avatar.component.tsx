@@ -7,8 +7,8 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
-import { PostOrigin } from '../../interfaces/post';
-import StyledBadge from '../common/Badge.component';
+import { PostOrigin } from '../../../interfaces/post';
+import StyledBadge from '../../common/Badge.component';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -42,7 +42,7 @@ type Props = {
 };
 
 export default function PostComponent({ origin, avatar }: Props) {
-  const classes = useStyles();
+  const style = useStyles();
 
   const socials = React.useMemo(
     () => ({
@@ -55,10 +55,8 @@ export default function PostComponent({ origin, avatar }: Props) {
 
   return (
     <IconButton aria-label="avatar-icon">
-      <StyledBadge badgeContent={socials[origin]} className={classes[origin]} color="default">
-        <Avatar className={classes.avatar} aria-label="avatar">
-          {avatar}
-        </Avatar>
+      <StyledBadge badgeContent={socials[origin]} className={style[origin]} color="default">
+        <Avatar className={style.avatar} aria-label="avatar" src={avatar} />
       </StyledBadge>
     </IconButton>
   );

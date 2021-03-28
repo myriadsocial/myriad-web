@@ -1,4 +1,6 @@
+// @ts-nocheck
 import ChatMsg from '@mui-treasury/components/chatMsg/ChatMsg';
+
 import React from 'react';
 
 const Conversation = () => (

@@ -10,6 +10,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme, withStyles, createStyles, fade } from '@material-ui/core/styles';
 
+import { Comment } from 'src/interfaces/post';
+
 const StyledBadge = withStyles((theme: Theme) =>
   createStyles({
     badge: {
@@ -51,11 +53,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function CommentComponent() {
-  const classes = useStyles();
+type Props = {
+  data: Comment;
+};
+
+export default function CommentComponent({ data }: Props) {
+  const style = useStyles();
 
   return (
-    <Card className={classes.root}>
+    <Card className={style.root}>
       <CardHeader
         avatar={
           <IconButton aria-label="cart">
@@ -65,7 +71,7 @@ export default function CommentComponent() {
           </IconButton>
         }
         action={
-          <Button className={classes.action} aria-label="settings" color="primary" variant="contained" size="small">
+          <Button className={style.action} aria-label="settings" color="primary" variant="contained" size="small">
             Send Tip
           </Button>
         }
@@ -74,7 +80,7 @@ export default function CommentComponent() {
       />
       <CardContent>
         <Typography variant="body1" color="textSecondary" component="p">
-          people will be like “idk i’m on the fence about this issue” and the issue will be a genocide.
+          {data.text}
         </Typography>
       </CardContent>
     </Card>

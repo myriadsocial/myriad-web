@@ -11,100 +11,62 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import SearchComponent from '../../components/common/search.component';
-import MyriadIcon from '../../images/myriad-alternative.svg';
-import { Experience } from '../../interfaces/experience';
-import DialogTitle from '../common/DialogTitle.component';
-import Panel from '../common/panel.component';
-import { experiencesData, generateExperience } from './data';
+import LayoutOptions from './components/layout-options.component';
+import TopicComponent from './components/topic.component';
 import ExperienceDetail from './experience-detail.component';
-import LayoutOptions from './layout-options.component';
-import TopicComponent from './topic.component';
+import { useStyles } from './experience.style';
+import { useExperience } from './use-experience.hooks';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      marginBottom: theme.spacing(2)
-    },
-    item: {
-      '&.Mui-selected': {
-        backgroundImage: 'linear-gradient(to right, #E849BD, lightpink)',
-        color: '#171717'
-      }
-    },
-    action: {
-      textAlign: 'center'
-    },
-    more: {
-      display: 'flex',
-      justifyContent: 'flex-end'
-    },
-    show: {
-      color: '#E849BD'
-    },
-    normal: {},
-    expand: {
-      transform: 'rotate(180deg)'
-    }
-  })
-);
+import DialogTitle from 'src/components/common/DialogTitle.component';
+import Panel from 'src/components/common/panel.component';
+import SearchComponent from 'src/components/common/search.component';
+import MyriadIcon from 'src/images/myriad-alternative.svg';
+import { Experience } from 'src/interfaces/experience';
 
 export const ExperienceComponent = () => {
-  const classes = useStyles();
+  const style = useStyles();
+
+  const {
+    experiences,
+    selected,
+    edit,
+    loadInitExperience,
+    loadMoreExperience,
+    storeExperience,
+    selectExperience,
+    editExperience
+  } = useExperience();
   const [showMore, setShowMore] = React.useState(true);
-  const [experiences, setExperience] = React.useState<Experience[]>(experiencesData);
-  const [selectedExperience, setSelectedExperience] = React.useState<Experience>(experiences[0]);
   const [modalOpened, setModalOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    loadInitExperience();
+  }, []);
 
   const loadMore = () => {
     if (showMore) {
-      setExperience([...experiences, ...generateExperience(5)]);
-    } else {
-      setExperience(experiencesData);
+      loadMoreExperience();
     }
 
     setShowMore(!showMore);
-  };
-
-  const selectExperience = id => {
-    const experience = experiences.find(item => item.id === id);
-
-    if (experience) {
-      setExperience(
-        experiences.map(item => {
-          item.selected = item.id === id;
-
-          return item;
-        })
-      );
-
-      setSelectedExperience(experience);
-    }
   };
 
   const toggleModal = () => {
     setModalOpen(!modalOpened);
   };
 
-  const createExperience = (topics, people) => {
-    setSelectedExperience({
-      ...selectedExperience,
-      setting: {
-        ...selectedExperience.setting,
-        topics,
-        people
-      }
-    });
-    toggleModal();
+  const createExperience = (tags: string[], people: string[]) => {
+    if (selected) {
+      editExperience(selected, tags, people);
+
+      toggleModal();
+    }
   };
 
   const saveExperience = (experience: Experience) => {
-    setExperience([experience, ...experiences]);
-
-    setSelectedExperience(experience);
+    storeExperience(experience);
 
     toggleModal();
   };
@@ -114,20 +76,20 @@ export const ExperienceComponent = () => {
   return (
     <Panel title="Experiences">
       <SearchComponent onSubmit={addExperience} />
-      <List className={classes.root}>
+      <List className={style.root}>
         {experiences.map(experience => (
           <ListItem
             button
-            className={classes.item}
+            className={style.item}
             key={experience.id}
             onClick={() => selectExperience(experience.id)}
-            selected={experience.selected}>
+            selected={experience.id === selected?.id}>
             <ListItemIcon>
               <MyriadIcon />
             </ListItemIcon>
-            <ListItemText id={experience.id} primary={experience.title} />
+            <ListItemText id={experience.id} primary={experience.name} />
             <ListItemSecondaryAction>
-              <Typography className={classes.action}>
+              <Typography className={style.action}>
                 <Link underline="none" href="#" color="secondary">
                   Delete
                 </Link>
@@ -137,29 +99,27 @@ export const ExperienceComponent = () => {
         ))}
       </List>
 
-      <Box className={classes.more}>
-        <Button color="secondary" className={classes.show} onClick={loadMore}>
-          {showMore ? 'Show All' : 'Hide Some'} <ExpandMoreIcon className={showMore ? classes.normal : classes.expand} />
+      <Box className={style.more}>
+        <Button color="secondary" className={style.show} onClick={loadMore}>
+          {showMore ? 'Show All' : 'Show Less'} <ExpandMoreIcon className={showMore ? style.normal : style.expand} />
         </Button>
       </Box>
 
       <LayoutOptions />
 
-      <TopicComponent
-        topics={selectedExperience.setting.topics}
-        people={selectedExperience.setting.people}
-        createExperience={createExperience}
-      />
+      {selected && <TopicComponent topics={selected.tags} people={selected.people} createExperience={createExperience} />}
 
-      <Dialog open={modalOpened} onClose={toggleModal} maxWidth="md">
-        <DialogTitle id="connect-social" onClose={toggleModal}>
-          {' '}
-          This is what you are going to see
-        </DialogTitle>
-        <DialogContent dividers>
-          <ExperienceDetail topics={selectedExperience.setting.topics} people={selectedExperience.setting.people} onSave={saveExperience} />
-        </DialogContent>
-      </Dialog>
+      {edit && (
+        <Dialog open={modalOpened} onClose={toggleModal} maxWidth="md">
+          <DialogTitle id="connect-social" onClose={toggleModal}>
+            {' '}
+            This is what you are going to see
+          </DialogTitle>
+          <DialogContent dividers>
+            <ExperienceDetail data={edit} onSave={saveExperience} />
+          </DialogContent>
+        </Dialog>
+      )}
     </Panel>
   );
 };
