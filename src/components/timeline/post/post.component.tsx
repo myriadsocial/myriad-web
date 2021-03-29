@@ -63,7 +63,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
 
   const openContentSource = () => {
     window.open(post.url, '_blank');
-  }
+  };
 
   const PostAction = (
     <Button className={style.action} onClick={tipPostUser} aria-label="tip-post-user" color="primary" variant="contained" size="small">

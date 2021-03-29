@@ -54,7 +54,29 @@ export default function Index() {
 
   const loadComments = (postId: string) => {};
 
-  const posts: Post[] = [];
+  const posts: Post[] = [
+    {
+      id: '1',
+      url: 'https://twitter.com/DocumentingBTC/status/1376217381186457601',
+      platformId: ['twitter'],
+      tags: ['bitcoin'],
+      comments: [
+        {
+          text: 'hear! hear!',
+          postId: '1',
+          userId: '1',
+          createdAt: new Date()
+        }
+      ]
+    },
+    {
+      id: '2',
+      url: 'https://twitter.com/CharmaineSChua/status/1375868552129863681',
+      platformId: ['twitter'],
+      tags: ['politic', 'viral'],
+      comments: []
+    }
+  ];
 
   return (
     <div className={style.root}>
