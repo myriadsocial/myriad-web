@@ -71,7 +71,7 @@ export const usePost = () => {
       url: `/posts/${postId}/comments`,
       method: 'GET'
     });
-
+    console.log('loadComments', data);
     dispatch({
       type: TimelineActionType.LOAD_COMMENTS,
       postId,

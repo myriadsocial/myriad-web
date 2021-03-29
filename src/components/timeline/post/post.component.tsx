@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -37,7 +37,7 @@ type Props = {
 export default function PostComponent({ post, open = false, disable = false, reply, sendTip, loadComments }: Props) {
   const style = useStyles();
 
-  const [expanded, setExpanded] = React.useState(open);
+  const [expanded, setExpanded] = useState(open);
   const { detail } = useSocialDetail(post);
 
   React.useEffect(() => {

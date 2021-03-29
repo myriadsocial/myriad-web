@@ -39,7 +39,7 @@ interface AddExperience {
 
 interface RemoveExperience {
   type: ExperienceActionType.REMOVE_EXPERIENCE;
-  experience_id: number;
+  experience_id: string;
 }
 
 export type Action = InitExperience | ShowMoreExperience | SelectExperience | EditExperience | AddExperience | RemoveExperience;
@@ -87,6 +87,13 @@ function experienceReducer(state: State, action: Action) {
       return {
         ...state,
         edit: action.experience
+      };
+    }
+
+    case ExperienceActionType.REMOVE_EXPERIENCE: {
+      return {
+        ...state,
+        experiences: state.experiences.filter(item => item.id !== action.experience_id)
       };
     }
 

@@ -121,9 +121,22 @@ export const useExperience = () => {
     selectExperience(data.id);
   };
 
+  const removeExperience = async (id: string) => {
+    const { data } = await axios({
+      url: `/experiences/${id}`,
+      method: 'DELETE'
+    });
+
+    console.log('removeExperience', data);
+    dispatch({
+      type: ExperienceActionType.REMOVE_EXPERIENCE,
+      experience_id: id
+    });
+  };
+
   const searchExperience = async () => {
     const result = await axios({
-      url: '/experience',
+      url: '/experiences',
       method: 'POST',
       params: {
         query: {
@@ -146,6 +159,7 @@ export const useExperience = () => {
     storeExperience,
     searchExperience,
     selectExperience,
-    editExperience
+    editExperience,
+    removeExperience
   };
 };
