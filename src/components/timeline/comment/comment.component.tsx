@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { format } from 'date-fns';
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
@@ -60,6 +60,10 @@ type Props = {
 export default function CommentComponent({ data }: Props) {
   const style = useStyles();
 
+  const formatDate = (value: Date) => {
+    return format(new Date(value), 'dd MMMM yyyy')
+  }
+
   return (
     <Card className={style.root}>
       <CardHeader
@@ -76,7 +80,7 @@ export default function CommentComponent({ data }: Props) {
           </Button>
         }
         title="Eduard Rudd"
-        subheader="September 14, 2016"
+        subheader={formatDate(data.createdAt)}
       />
       <CardContent>
         <Typography variant="body1" color="textSecondary" component="p">
