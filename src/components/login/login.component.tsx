@@ -17,6 +17,7 @@ import type { KeyringPair } from '@polkadot/keyring/types';
 import { mnemonicGenerate } from '@polkadot/util-crypto';
 
 import DialogTitle from '../common/DialogTitle.component';
+import CaptchaComponent from '../common/captcha.component';
 import ShowIf from '../common/show-if.component';
 import LoginMethod from './login-method.component';
 import { useStyles } from './login.style';
@@ -186,6 +187,9 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
             type="text"
             fullWidth
           />
+        </DialogContent>
+        <DialogContent>
+          <CaptchaComponent />
         </DialogContent>
         <DialogActions>
           <Button
