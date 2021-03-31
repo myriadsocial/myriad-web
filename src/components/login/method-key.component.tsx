@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import { isHex } from '@polkadot/util';
 
 import DialogTitle from '../common/DialogTitle.component';
+import CaptchaComponent from '../common/captcha.component';
 
 type Props = {
   close: () => void;
@@ -58,6 +59,9 @@ export default function KeyForm({ close, save }: Props) {
           type="text"
           fullWidth
         />
+      </DialogContent>
+      <DialogContent>
+        <CaptchaComponent />
       </DialogContent>
     </>
   );

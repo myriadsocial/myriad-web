@@ -17,6 +17,7 @@ import type { KeyringPair } from '@polkadot/keyring/types';
 import { mnemonicGenerate } from '@polkadot/util-crypto';
 
 import DialogTitle from '../common/DialogTitle.component';
+import CaptchaComponent from '../common/captcha.component';
 import ShowIf from '../common/show-if.component';
 import LoginMethod from './login-method.component';
 import { useStyles } from './login.style';
@@ -42,6 +43,7 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
 
   const [shouldShowLoginMethod, showLoginMethod] = useState(false);
   const [showCreateAccount, setShowCreateAccount] = useState(false);
+  const [showLoginAnonymouslyDialog, setShowLoginAnonymouslyDialog] = useState(false);
   const [accountName, setAccountName] = useState('');
   const [address, storeAddress] = useState<AddressState>({
     seed: '',
@@ -93,6 +95,14 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
       name: accountName,
       anonymous: false
     });
+  };
+
+  const showLoginAnonymously = () => {
+    setShowLoginAnonymouslyDialog(true);
+  };
+
+  const closeLoginAnonymously = () => {
+    setShowLoginAnonymouslyDialog(false);
   };
 
   const loginAnonymous = () => {
@@ -160,7 +170,7 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
               Create A New Account
             </Button>
             <ShowIf condition={allowAnonymous}>
-              <Button className={style.lightButton} fullWidth={true} size="large" variant="contained" onClick={loginAnonymous}>
+              <Button className={style.lightButton} fullWidth={true} size="large" variant="contained" onClick={showLoginAnonymously}>
                 Get In Anonymously
               </Button>
             </ShowIf>
@@ -187,6 +197,9 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
             fullWidth
           />
         </DialogContent>
+        <DialogContent>
+          <CaptchaComponent />
+        </DialogContent>
         <DialogActions>
           <Button
             disabled={accountName.length === 0}
@@ -196,6 +209,26 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
             fullWidth
             className={style.btnCreateAccount}>
             Get in
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={showLoginAnonymouslyDialog} onClose={closeLoginAnonymously} aria-labelledby="form-dialog-title" maxWidth="md">
+        <DialogTitle id="name" onClose={closeLoginAnonymously}>
+          Please verify the reCAPTCHA first.
+        </DialogTitle>
+        <DialogContent>
+          <CaptchaComponent />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            //disabled={accountName.length === 0}
+            className={style.lightButton}
+            fullWidth={true}
+            size="large"
+            variant="contained"
+            onClick={loginAnonymous}>
+            Get in anonymously
           </Button>
         </DialogActions>
       </Dialog>
