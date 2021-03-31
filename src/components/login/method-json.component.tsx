@@ -8,6 +8,7 @@ import type { KeyringPair$Json } from '@polkadot/keyring/types';
 import { isHex, hexToU8a } from '@polkadot/util';
 
 import DialogTitle from '../common/DialogTitle.component';
+import CaptchaComponent from '../common/captcha.component';
 
 type Props = {
   onClose: () => void;
@@ -59,6 +60,9 @@ export default function JsonForm(props: Props) {
             Choose File
           </Button>
         </label>
+      </DialogContent>
+      <DialogContent>
+        <CaptchaComponent />
       </DialogContent>
     </>
   );
