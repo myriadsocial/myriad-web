@@ -40,10 +40,6 @@ export default function PostComponent({ post, open = false, disable = false, rep
   const [expanded, setExpanded] = useState(open);
   const { detail } = useSocialDetail(post);
 
-  React.useEffect(() => {
-    loadComments(post.id);
-  }, []);
-
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
