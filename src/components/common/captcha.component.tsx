@@ -1,7 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
+import { useStyles } from './captcha.style';
+
 export default function CaptchaComponent() {
+  const styles = useStyles();
   const recaptchaRef = useRef<HTMLInputElement>(null);
 
   const onReCAPTCHAChange = (captchaCode: string | null): void => {
@@ -20,7 +23,9 @@ export default function CaptchaComponent() {
 
   return (
     <>
-      <ReCAPTCHA ref={recaptchaRef} size="normal" sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY} onChange={onReCAPTCHAChange} />
+      <div className={styles.captcha}>
+        <ReCAPTCHA ref={recaptchaRef} size="normal" sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY} onChange={onReCAPTCHAChange} />
+      </div>
     </>
   );
 }
