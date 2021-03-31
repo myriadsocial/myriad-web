@@ -20,7 +20,7 @@ export default function Logout() {
   const styles = useStyles();
 
   return (
-    <Button className={styles.button} size="small" variant="contained" color="secondary">
+    <Button className={styles.button} size="small" variant="contained" color="secondary" onClick={() => signOut()}>
       Logout
     </Button>
   );
