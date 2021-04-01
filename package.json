@@ -27,7 +27,8 @@
     "migrate": "prisma migrate dev --preview-feature",
     "generate": "prisma generate",
     "postinstall": "husky install",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "echo \"No test specified\""
   },
   "husky": {
     "hooks": {
