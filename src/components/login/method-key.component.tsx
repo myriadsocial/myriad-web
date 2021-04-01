@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import DialogContent from '@material-ui/core/DialogContent';
 import TextField from '@material-ui/core/TextField';
@@ -16,6 +16,7 @@ type Props = {
 export default function KeyForm({ close, save }: Props) {
   const [value, setValue] = React.useState('');
   const [isValid, setValid] = React.useState(true);
+  const [_, setCaptchaVerified] = useState(false);
 
   const isHexSeed = (seed: string): boolean => {
     return isHex(seed) && seed.length === 66;
@@ -37,6 +38,10 @@ export default function KeyForm({ close, save }: Props) {
     } else {
       save('');
     }
+  };
+
+  const getCaptchaVerification = (isVerified: boolean) => {
+    setCaptchaVerified(isVerified);
   };
 
   return (
@@ -61,7 +66,7 @@ export default function KeyForm({ close, save }: Props) {
         />
       </DialogContent>
       <DialogContent>
-        <CaptchaComponent />
+        <CaptchaComponent getCaptchaVerification={getCaptchaVerification} />
       </DialogContent>
     </>
   );

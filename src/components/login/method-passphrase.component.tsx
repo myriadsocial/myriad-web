@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import Box from '@material-ui/core/Box';
 import DialogContent from '@material-ui/core/DialogContent';
 import TextField from '@material-ui/core/TextField';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import { mnemonicValidate } from '@polkadot/util-crypto';
 
@@ -15,20 +13,10 @@ type Props = {
   save: (value: string) => void;
 };
 
-//const useStyles = makeStyles(() =>
-//createStyles({
-//captcha: {
-//display: 'flex',
-//alignItems: 'center',
-//justifyContent: 'center'
-//}
-//})
-//);
-
 export default function PassphraseForm({ close, save }: Props) {
-  const [mnemonic, setMnemonic] = React.useState('');
-  const [isValidMnemonic, setValidMnemonic] = React.useState(true);
-  //const style = useStyles();
+  const [mnemonic, setMnemonic] = useState('');
+  const [isValidMnemonic, setValidMnemonic] = useState(true);
+  const [_, setCaptchaVerified] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -42,6 +30,10 @@ export default function PassphraseForm({ close, save }: Props) {
     } else {
       save('');
     }
+  };
+
+  const getCaptchaVerification = (isVerified: boolean) => {
+    setCaptchaVerified(isVerified);
   };
 
   return (
@@ -67,7 +59,7 @@ export default function PassphraseForm({ close, save }: Props) {
         />
       </DialogContent>
       <DialogContent>
-        <CaptchaComponent />
+        <CaptchaComponent getCaptchaVerification={getCaptchaVerification} />
       </DialogContent>
     </>
   );
