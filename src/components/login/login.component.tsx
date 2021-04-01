@@ -49,6 +49,7 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
     seed: '',
     seedType: 'bip'
   });
+  const [captchaVerified, setCaptchaVerified] = useState(false);
 
   const toggleLogin = (method: SeedType | null) => {
     if (method) {
@@ -76,6 +77,7 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
 
   const closeCreateAccount = () => {
     setShowCreateAccount(false);
+    setCaptchaVerified(false);
   };
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,6 +118,10 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
       name: randomName,
       anonymous: true
     });
+  };
+
+  const getCaptchaVerification = (isVerified: boolean) => {
+    setCaptchaVerified(isVerified);
   };
 
   return (
@@ -198,11 +204,11 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
           />
         </DialogContent>
         <DialogContent>
-          <CaptchaComponent />
+          <CaptchaComponent getCaptchaVerification={getCaptchaVerification} />
         </DialogContent>
         <DialogActions>
           <Button
-            disabled={accountName.length === 0}
+            disabled={accountName.length === 0 || !captchaVerified}
             onClick={login}
             variant="contained"
             color="secondary"
@@ -218,11 +224,11 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
           Please verify the reCAPTCHA first.
         </DialogTitle>
         <DialogContent>
-          <CaptchaComponent />
+          <CaptchaComponent getCaptchaVerification={getCaptchaVerification} />
         </DialogContent>
         <DialogActions>
           <Button
-            //disabled={accountName.length === 0}
+            disabled={!captchaVerified}
             className={style.lightButton}
             fullWidth={true}
             size="large"
