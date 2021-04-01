@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Button from '@material-ui/core/Button';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -17,6 +17,7 @@ type Props = {
 
 export default function JsonForm(props: Props) {
   const [pair, setPair] = React.useState<KeyringPair$Json | undefined>(undefined);
+  const [captchaVerified, setCaptchaVerified] = useState(false);
 
   React.useEffect(() => {
     if (pair && isValidAddressPolkadotAddress(pair.address)) {
@@ -48,6 +49,10 @@ export default function JsonForm(props: Props) {
     }
   };
 
+  const getCaptchaVerification = (isVerified: boolean) => {
+    setCaptchaVerified(isVerified);
+  };
+
   return (
     <>
       <DialogTitle id="json-title" onClose={props.onClose}>
@@ -56,13 +61,19 @@ export default function JsonForm(props: Props) {
       <DialogContent>
         <label htmlFor="btn-upload">
           <input id="btn-upload" name="btn-upload" style={{ display: 'none' }} type="file" onChange={handleFileChosen} />
-          <Button className="btn-choose" variant="contained" color="secondary" fullWidth={true} component="span">
+          <Button
+            disabled={!captchaVerified}
+            className="btn-choose"
+            variant="contained"
+            color="secondary"
+            fullWidth={true}
+            component="span">
             Choose File
           </Button>
         </label>
       </DialogContent>
       <DialogContent>
-        <CaptchaComponent />
+        <CaptchaComponent getCaptchaVerification={getCaptchaVerification} />
       </DialogContent>
     </>
   );

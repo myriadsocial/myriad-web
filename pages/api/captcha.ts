@@ -1,27 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import Axios from 'axios';
+import fetch from 'node-fetch';
 
-// Helper method to wait for a middleware to execute before continuing
-// And to throw an error when an error happens in a middleware
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, result => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-
-      return resolve(result);
-    });
-  });
-}
-
-const client = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_RECAPTCHA_API_URL,
-  headers: {
-    'Access-Control-Allow-Origin': '*'
-  }
-});
 const sleep = () => {
   new Promise<void>(resolve => {
     setTimeout(() => {
@@ -31,12 +11,8 @@ const sleep = () => {
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  await runMiddleware(req, res, cors);
-
   const { body, method } = req;
   const { captcha } = body;
-
-  console.log('>>> ini req-nya', body);
 
   // Only process the API call if the method is POST
   if (method === 'POST') {
@@ -46,12 +22,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
     try {
-      const response = await client({
-        url: `?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${captcha}`,
-        method: 'POST'
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_RECAPTCHA_API_URL}?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${captcha}`,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+          },
+          method: 'POST'
+        }
+      );
 
-      const captchaValidation = await response.data;
+      const captchaValidation = await response.json();
 
       /**
 * The structure of response from the verify API is
@@ -64,7 +45,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 */
 
       if (captchaValidation.success) {
-        //sleep();
+        sleep();
         return res.status(200).send('OK');
       }
 

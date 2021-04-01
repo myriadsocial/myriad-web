@@ -1,20 +1,24 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import { useStyles } from './captcha.style';
 
-import Axios from 'axios';
+type Props = {
+  getCaptchaVerification: (isVerified: boolean) => void;
+};
 
-const client = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_RECAPTCHA_API_URL,
-  headers: {
-    'Access-Control-Allow-Origin': '*'
-  }
-});
-
-export default function CaptchaComponent() {
+export default function CaptchaComponent({ getCaptchaVerification }: Props) {
+  const [captchaVerified, setCaptchaVerified] = useState(false);
   const styles = useStyles();
-  const recaptchaRef = useRef<HTMLInputElement>(null);
+
+  // 2nd component to make setCaptchaVerified works
+  useEffect(() => {
+    if (captchaVerified) {
+      getCaptchaVerification(captchaVerified);
+    }
+  }, [captchaVerified]);
+
+  const recaptchaRef = useRef(null);
 
   const onReCAPTCHAChange = async (captchaCode: string | null): Promise<void> => {
     // If the reCAPTCHA code is null or undefined indicating that
@@ -23,32 +27,45 @@ export default function CaptchaComponent() {
       return;
     }
     try {
-      const { data } = await client({
-        url: '/api/captcha',
+      const response = await fetch('/api/captcha', {
         method: 'POST',
-        data: {
-          captcha: captchaCode
+        body: JSON.stringify({ captcha: captchaCode }),
+        headers: {
+          'Content-Type': 'application/json'
         }
       });
 
-      console.log('this is the data:', data);
-      // Else reCAPTCHA was executed successfully so proceed with the
-      // alert
-      alert(`Recaptcha successfully submitted! the code: ${captchaCode}`);
+      if (response.ok) {
+        changeVerifiedStatus();
+        console.log(`Recaptcha successfully submitted!`);
+      } else {
+        const error = await response.json();
+        throw new Error(error?.message);
+      }
     } catch (error) {
-      console.log('this is the error object:', error);
       alert(`the message is: ${error?.message}` || 'Something went wrong');
-    } finally {
-      // Reset the reCAPTCHA so that it can be executed again if user
-      // submits another request
-      recaptchaRef.current.reset();
     }
+  };
+
+  // Recaptcha-nya di-reset kapan nih??
+  //const resetRecaptcha = () => {
+  //recaptchaRef.current.reset();
+  //};
+
+  // 1st component to make setCaptchaVerified works
+  const changeVerifiedStatus = () => {
+    setCaptchaVerified(true);
   };
 
   return (
     <>
       <div className={styles.captcha}>
-        <ReCAPTCHA ref={recaptchaRef} size="normal" sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY} onChange={onReCAPTCHAChange} />
+        <ReCAPTCHA
+          ref={recaptchaRef}
+          size="normal"
+          sitekey={`${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+          onChange={onReCAPTCHAChange}
+        />
       </div>
     </>
   );
