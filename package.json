@@ -24,8 +24,6 @@
     "type-check": "tsc",
     "lint": "eslint --fix .",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
-    "migrate": "prisma migrate dev --preview-feature",
-    "generate": "prisma generate",
     "prepare": "husky install",
     "test": "echo \"No test specified\""
   },
@@ -71,7 +69,6 @@
     "next-compose-plugins": "^2.2.0",
     "next-images": "^1.2.0",
     "prettier": "^2.2.1",
-    "prisma": "^2.19.0",
     "react-google-recaptcha": "^2.1.0",
     "styled-components": "^4.4.1",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
