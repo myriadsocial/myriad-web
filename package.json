@@ -20,7 +20,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p $PORT",
     "type-check": "tsc",
     "lint": "eslint --fix .",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
