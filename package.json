@@ -20,7 +20,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start -p $PORT",
+    "start": "next start",
     "type-check": "tsc",
     "lint": "eslint --fix .",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
@@ -47,6 +47,7 @@
     "@types/node": "^14.14.37",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
+    "@types/react-google-recaptcha": "^2.1.0",
     "@types/react-infinite-scroll-component": "^4.2.5",
     "@types/uniqid": "^5.3.0",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
@@ -91,6 +92,7 @@
     "lru-cache": "^6.0.0",
     "next": "9.5.4",
     "next-auth": "^3.13.1",
+    "node-fetch": "^2.6.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-hook-form": "^5.6.0",
