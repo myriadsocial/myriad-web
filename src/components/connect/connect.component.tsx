@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { Typography } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
@@ -15,6 +15,7 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 
 import { SocialsEnum } from '../../interfaces';
 import DialogTitle from '../common/DialogTitle.component';
+import LinkingTutorialComponent from '../common/LinkingTutorial.component';
 
 export type Props = {
   open: boolean;
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function ConnectComponent({ open, handleClose }: Props) {
   const classes = useStyles();
+  const childRef = useRef<any>();
 
   const config = React.useMemo(
     () => ({
@@ -65,37 +67,49 @@ export default function ConnectComponent({ open, handleClose }: Props) {
   const message = 'Saying hi to #MyriadNetwork\n\nPublic Key: 13N2NpDg6kU1vAGuPv9MkTj4YsaDmf7BKyr3TTxhV5sFmuhd';
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="xs">
-      <DialogTitle id="connect-social" onClose={handleClose}>
-        {' '}
-        Link Your Facebook Account
-      </DialogTitle>
-      <DialogContent dividers>
-        <Card className={classes.card}>
-          <CardHeader avatar={config.step1} title={config.copyTitle} />
-          <CardContent>
-            <TextField className={classes.dark} multiline variant="outlined" rows={6} fullWidth={true} value={message} />
-          </CardContent>
-        </Card>
-        <Card className={classes.card}>
-          <CardHeader avatar={config.step2} title={config.shareTitle} />
-          <CardContent className={classes.share}>
-            <Button variant="contained" size="large" startIcon={<FacebookIcon />} className={classes.facebook}>
-              Share
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Button color="default" size="large" variant="contained" className={classes.info} fullWidth>
-          Tell me more about linking my social media account
-        </Button>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} fullWidth={true} size="large" variant="contained" color="secondary">
+    <>
+      <Dialog open={open} onClose={handleClose} maxWidth="xs">
+        <DialogTitle id="connect-social" onClose={handleClose}>
           {' '}
-          I'm done, thanks
-        </Button>
-      </DialogActions>
-    </Dialog>
+          Link Your Facebook Account
+        </DialogTitle>
+        <DialogContent dividers>
+          <Card className={classes.card}>
+            <CardHeader avatar={config.step1} title={config.copyTitle} />
+            <CardContent>
+              <TextField className={classes.dark} multiline variant="outlined" rows={6} fullWidth={true} value={message} />
+            </CardContent>
+          </Card>
+          <Card className={classes.card}>
+            <CardHeader avatar={config.step2} title={config.shareTitle} />
+            <CardContent className={classes.share}>
+              <Button variant="contained" size="large" startIcon={<FacebookIcon />} className={classes.facebook}>
+                Share
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Button
+            onClick={() => {
+              childRef.current.triggerLinkingTutorial();
+            }}
+            color="default"
+            size="large"
+            variant="contained"
+            className={classes.info}
+            fullWidth>
+            Tell me more about linking my social media account
+          </Button>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} fullWidth={true} size="large" variant="contained" color="secondary">
+            {' '}
+            I'm done, thanks
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <LinkingTutorialComponent ref={childRef} />
+    </>
   );
 }
