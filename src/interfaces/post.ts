@@ -32,6 +32,7 @@ export type Comment = {
   postId: string;
   userId: string;
   createdAt: Date;
+  user?: User;
 };
 
 export type UserReplies = Comment & {

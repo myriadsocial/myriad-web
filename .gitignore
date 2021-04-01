@@ -47,3 +47,5 @@ yarn-error.log*
 .AppleDouble
 .LSOverride
 
+# hook script
+.husky
