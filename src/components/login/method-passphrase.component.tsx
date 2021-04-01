@@ -1,20 +1,34 @@
 import React from 'react';
 
+import Box from '@material-ui/core/Box';
 import DialogContent from '@material-ui/core/DialogContent';
 import TextField from '@material-ui/core/TextField';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import { mnemonicValidate } from '@polkadot/util-crypto';
 
 import DialogTitle from '../common/DialogTitle.component';
+import CaptchaComponent from '../common/captcha.component';
 
 type Props = {
   close: () => void;
   save: (value: string) => void;
 };
 
+//const useStyles = makeStyles(() =>
+//createStyles({
+//captcha: {
+//display: 'flex',
+//alignItems: 'center',
+//justifyContent: 'center'
+//}
+//})
+//);
+
 export default function PassphraseForm({ close, save }: Props) {
   const [mnemonic, setMnemonic] = React.useState('');
   const [isValidMnemonic, setValidMnemonic] = React.useState(true);
+  //const style = useStyles();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -51,6 +65,9 @@ export default function PassphraseForm({ close, save }: Props) {
           variant="filled"
           fullWidth
         />
+      </DialogContent>
+      <DialogContent>
+        <CaptchaComponent />
       </DialogContent>
     </>
   );
