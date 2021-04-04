@@ -1,9 +1,10 @@
 import React from 'react';
 import Carousel from 'react-images';
-import Galery from 'react-photo-gallery';
 
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
 import IconButton from '@material-ui/core/IconButton';
 import NoSsr from '@material-ui/core/NoSsr';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
@@ -47,7 +48,13 @@ export default function ImageListComponent({ images }: Props) {
   return (
     <div className={style.root}>
       <NoSsr>
-        <Galery photos={images} onClick={openLightbox} />
+        <GridList cellHeight="auto" cols={2} onClick={openLightbox}>
+          {images.map(image => (
+            <GridListTile key={image.src} cols={2}>
+              <img src={image.src} />
+            </GridListTile>
+          ))}
+        </GridList>
 
         <Dialog open={viewerIsOpen} fullScreen={fullScreen}>
           <MuiDialogTitle>
