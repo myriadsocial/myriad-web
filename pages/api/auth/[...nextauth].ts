@@ -1,17 +1,40 @@
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
 
+import APIAdapter from '../../../adapters/api';
+
 import Axios from 'axios';
 
 const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || ''
 });
 
+type Credentials = {
+  platform: string;
+  platformUserId: string;
+  username: string;
+  accessToken: string;
+};
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default NextAuth({
+  adapter: APIAdapter.Adapter(),
   // https://next-auth.js.org/configuration/providers
   providers: [
+    Providers.Twitter({
+      clientId: process.env.TWITTER_API_KEY || '',
+      clientSecret: process.env.TWITTER_API_KEY_SECRET || ''
+    }),
+    Providers.Facebook({
+      clientId: process.env.FACEBOKK_APP_ID || '',
+      clientSecret: process.env.FACEBOOK_APP_SECRET || '',
+      scope: 'user_posts,user_friends'
+    }),
+    Providers.Reddit({
+      clientId: process.env.REDDIT_APP_ID || '',
+      clientSecret: process.env.REDDIT_SECRET || '',
+      scope: 'identity mysubreddits read'
+    }),
     Providers.Credentials({
       // The name to display on the sign in form (e.g. 'Sign in with...')
       name: 'Address',
@@ -23,6 +46,7 @@ export default NextAuth({
         address: { label: 'Address', type: 'text' }
       },
       async authorize(credentials: Record<string, string>) {
+        console.log('authorize', credentials);
         if (credentials.anonymous === 'false') {
           try {
             const { data } = await axios({
@@ -47,11 +71,14 @@ export default NextAuth({
           }
         }
 
-        return {
+        const user = {
+          userId: credentials.address,
           name: credentials.name,
           address: credentials.address,
           anonymous: credentials.anonymous === 'true'
         };
+
+        return user;
       }
     })
   ],
@@ -67,7 +94,7 @@ export default NextAuth({
   // It is used to sign cookies and to sign and encrypt JSON Web Tokens, unless
   // a separate secret is defined explicitly for encrypting the JWT.
   secret: process.env.SECRET,
-
+  useJwtSession: true,
   session: {
     // Use JSON Web Tokens for session instead of database sessions.
     // This option can be used with or without a database for users/accounts.
@@ -103,9 +130,9 @@ export default NextAuth({
   // pages is not specified for that route.
   // https://next-auth.js.org/configuration/pages
   pages: {
-    signIn: '/' // Displays signin buttons
-    // signOut: '/auth/signout', // Displays form with sign out button
-    // error: '/auth/error', // Error code passed in query string as ?error=
+    signIn: '/', // Displays signin buttons
+    signOut: '/', // Displays form with sign out button
+    error: '/' // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // Used for check email page
     // newUser: null // If set, new users will be directed here on first sign in
   },
@@ -120,22 +147,32 @@ export default NextAuth({
     async session(session, user: Record<string, string>) {
       return {
         ...session,
-        user: {
-          ...session.user,
-          address: user.address,
-          anonymous: user.anonymous
-        }
+        user
       };
     },
     async jwt(token, user, account, profile, isNewUser) {
-      const isSignIn = user ? true : false;
+      if (account && account.type === 'credentials') {
+        token.userId = profile.address;
+        token.address = profile.address;
+        token.anonymous = profile.anonymous;
+      }
 
-      if (isSignIn) {
-        return {
-          ...token,
-          address: profile.address,
-          anonymous: profile.anonymous
+      if (account && account.type === 'oauth') {
+        token = { ...token, ...user };
+
+        const credentials = {
+          platform: account.provider,
+          platformUserId: account.id,
+          username: profile.username,
+          accessToken: account.accessToken,
+          refreshToken: account.refreshToken
         };
+
+        if (!token.userCredentials) {
+          token.userCredentials = [] as Credentials[];
+        }
+        //@ts-ignore
+        token.userCredentials.push(credentials);
       }
 
       return token;
@@ -144,8 +181,23 @@ export default NextAuth({
 
   // Events are useful for logging
   // https://next-auth.js.org/configuration/events
-  events: {},
+  events: {
+    async error(message) {
+      console.error(message);
+    }
+  },
 
   // Enable debug messages in the console if you are having problems
-  debug: false
+  debug: true,
+  logger: {
+    error(code, ...message) {
+      console.error(code, message);
+    },
+    warn(code, ...message) {
+      console.warn(code, message);
+    },
+    debug(code, ...message) {
+      console.log(code, message);
+    }
+  }
 });

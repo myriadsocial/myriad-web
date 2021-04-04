@@ -7,14 +7,14 @@ export const useStyles = makeStyles(() =>
       overflow: 'auto'
     },
     experience: {
-      width: 296,
+      width: 360,
       height: '100vh',
       overflowY: 'scroll',
       'scrollbar-color': '#A942E9 #171717 ',
       'scrollbar-width': 'thin !important'
     },
     user: {
-      width: 360,
+      width: 320,
       marginRight: 0,
       height: '100vh',
       overflowY: 'scroll',

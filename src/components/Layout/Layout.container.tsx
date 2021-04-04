@@ -27,6 +27,8 @@ const useStyles = makeStyles(() =>
 const Layout = ({ children, session }: Props) => {
   const style = useStyles();
 
+  if (!session) return null;
+
   return (
     <div className={style.root}>
       <Head>
@@ -37,7 +39,7 @@ const Layout = ({ children, session }: Props) => {
       <LayoutSettingProvider>
         <ExperienceProvider>
           <TimelineProvider>
-            <LayoutComponent user={session?.user}>{children}</LayoutComponent>
+            <LayoutComponent user={session.user}>{children}</LayoutComponent>
           </TimelineProvider>
         </ExperienceProvider>
       </LayoutSettingProvider>

@@ -16,7 +16,6 @@ import ExpandMoreRounded from '@material-ui/icons/ExpandMoreRounded';
 import ShowIf from '../common/show-if.component';
 import NotificationListComponent from '../conversation/notification.component';
 import LoginComponent from '../login/login.component';
-import Logout from '../logout/logout.component';
 import Profile from './profile.component';
 import Setting from './setting.component';
 import Social from './social.component';
@@ -55,6 +54,8 @@ const User = ({ settings, changeSetting }: Props) => {
   const [session] = useSession();
   const [loginOpened, openLogin] = React.useState(false);
 
+  if (!session || !session.user) return null;
+
   const toggleLogin = () => {
     openLogin(!loginOpened);
   };
@@ -64,8 +65,7 @@ const User = ({ settings, changeSetting }: Props) => {
       <Grid container direction="row" justify="space-between" alignItems="flex-start">
         <Grid item className={!!session?.user.anonymous ? style.grow : style.normal}>
           <Profile toggleLogin={toggleLogin} />
-          <Social toggleLogin={toggleLogin} />
-          <Logout />
+          <Social toggleLogin={toggleLogin} user={session.user} />
         </Grid>
 
         <ShowIf condition={!session?.user.anonymous}>

@@ -5,25 +5,23 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       marginBottom: theme.spacing(2)
     },
-    item: {
-      '&.Mui-selected': {
-        backgroundImage: 'linear-gradient(to right, #E849BD, lightpink)',
-        color: '#171717'
+    action: {
+      marginTop: theme.spacing(2),
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      background: theme.palette.background.paper,
+      alignItems: 'center',
+      '& button': {
+        textTransform: 'capitalize',
+        marginRight: theme.spacing(1),
+        '&:last-item': {
+          marginRight: 0
+        }
       }
     },
-    action: {
-      textAlign: 'center'
-    },
-    more: {
-      display: 'flex',
-      justifyContent: 'flex-end'
-    },
-    show: {
-      color: '#E849BD'
-    },
-    normal: {},
-    expand: {
-      transform: 'rotate(180deg)'
+    extendedIcon: {
+      marginRight: theme.spacing(1)
     }
   })
 );
