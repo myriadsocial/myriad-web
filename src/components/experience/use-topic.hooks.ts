@@ -35,7 +35,13 @@ export const useTopic = () => {
           }
         }
       });
-      setTopic(data.map(i => i.id));
+
+      setTopic(
+        data.map(i => ({
+          id: i.id,
+          hide: i.hide
+        }))
+      );
     } catch (error) {
       setError(error);
     } finally {
