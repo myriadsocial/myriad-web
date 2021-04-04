@@ -17,6 +17,7 @@ import type { KeyringPair } from '@polkadot/keyring/types';
 import { mnemonicGenerate } from '@polkadot/util-crypto';
 
 import DialogTitle from '../common/DialogTitle.component';
+import CaptchaComponent from '../common/captcha.component';
 import ShowIf from '../common/show-if.component';
 import LoginMethod from './login-method.component';
 import { useStyles } from './login.style';
@@ -42,11 +43,13 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
 
   const [shouldShowLoginMethod, showLoginMethod] = useState(false);
   const [showCreateAccount, setShowCreateAccount] = useState(false);
+  const [showLoginAnonymouslyDialog, setShowLoginAnonymouslyDialog] = useState(false);
   const [accountName, setAccountName] = useState('');
   const [address, storeAddress] = useState<AddressState>({
     seed: '',
     seedType: 'bip'
   });
+  const [captchaVerified, setCaptchaVerified] = useState(false);
 
   const toggleLogin = (method: SeedType | null) => {
     if (method) {
@@ -74,6 +77,7 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
 
   const closeCreateAccount = () => {
     setShowCreateAccount(false);
+    setCaptchaVerified(false);
   };
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +99,14 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
     });
   };
 
+  const showLoginAnonymously = () => {
+    setShowLoginAnonymouslyDialog(true);
+  };
+
+  const closeLoginAnonymously = () => {
+    setShowLoginAnonymouslyDialog(false);
+  };
+
   const loginAnonymous = () => {
     const randomName: string = uniqueNamesGenerator({
       dictionaries: [adjectives, colors],
@@ -106,6 +118,10 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
       name: randomName,
       anonymous: true
     });
+  };
+
+  const getCaptchaVerification = (isVerified: boolean) => {
+    setCaptchaVerified(isVerified);
   };
 
   return (
@@ -160,7 +176,7 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
               Create A New Account
             </Button>
             <ShowIf condition={allowAnonymous}>
-              <Button className={style.lightButton} fullWidth={true} size="large" variant="contained" onClick={loginAnonymous}>
+              <Button className={style.lightButton} fullWidth={true} size="large" variant="contained" onClick={showLoginAnonymously}>
                 Get In Anonymously
               </Button>
             </ShowIf>
@@ -187,15 +203,40 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
             fullWidth
           />
         </DialogContent>
+
+        <DialogContent>
+          <CaptchaComponent getCaptchaVerification={getCaptchaVerification} />
+        </DialogContent>
+
         <DialogActions>
           <Button
-            disabled={accountName.length === 0}
+            disabled={accountName.length === 0 || !captchaVerified}
             onClick={login}
             variant="contained"
             color="secondary"
             fullWidth
             className={style.btnCreateAccount}>
             Get in
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={showLoginAnonymouslyDialog} onClose={closeLoginAnonymously} aria-labelledby="form-dialog-title" maxWidth="md">
+        <DialogTitle id="name" onClose={closeLoginAnonymously}>
+          Please verify the reCAPTCHA first.
+        </DialogTitle>
+        <DialogContent>
+          <CaptchaComponent getCaptchaVerification={getCaptchaVerification} />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            disabled={!captchaVerified}
+            className={style.lightButton}
+            fullWidth={true}
+            size="large"
+            variant="contained"
+            onClick={loginAnonymous}>
+            Get in anonymously
           </Button>
         </DialogActions>
       </Dialog>
