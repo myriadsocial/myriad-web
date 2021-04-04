@@ -13,7 +13,11 @@ export const useComment = (content: number) => {
   const [params, setParams] = useState({
     limit: 20,
     skip: 0,
-    include: ['user'],
+    include: [
+      {
+        relation: 'user'
+      }
+    ],
     where: {
       contentId: content
     }

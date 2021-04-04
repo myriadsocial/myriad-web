@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { CookiesProvider } from 'react-cookie';
 
 import { Provider } from 'next-auth/client';
 import { AppProps } from 'next/app';
@@ -47,7 +48,9 @@ const App = ({ Component, pageProps }: AppProps) => {
             keepAlive: 0
           }}
           session={pageProps.session}>
-          <Component {...pageProps} />
+          <CookiesProvider>
+            <Component {...pageProps} />
+          </CookiesProvider>
         </Provider>
       </ThemeProvider>
     </React.Fragment>
