@@ -49,4 +49,4 @@ yarn-error.log*
 prisma
 
 # Developer
-.husky
+
