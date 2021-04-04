@@ -67,7 +67,6 @@ export default function SearchTopic({ title = 'Search..', data = [], search, onS
     }
   };
 
-  console.log('options', options);
   return (
     <Autocomplete
       className={style.root}
