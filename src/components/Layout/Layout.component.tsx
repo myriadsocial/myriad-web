@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { User } from 'next-auth';
-import { useSession } from 'next-auth/client';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -16,19 +15,19 @@ import { WithAdditionalParams } from 'next-auth/_utils';
 
 type Props = {
   children: React.ReactNode;
-  user?: WithAdditionalParams<User>;
+  user: WithAdditionalParams<User>;
 };
 
 const LayoutComponent = ({ children, user }: Props) => {
   const style = useStyles();
   const { state: setting, dispatch } = useLayoutSetting();
-  const [session] = useSession();
+  const userId = user.userId as string;
 
   React.useEffect(() => {
-    if (session?.user.anonymous) {
+    if (user.anonymous) {
       changeSetting('focus', true);
     }
-  }, [session]);
+  }, [user]);
 
   const changeSetting = (key: string, value: boolean) => {
     dispatch({
@@ -43,7 +42,7 @@ const LayoutComponent = ({ children, user }: Props) => {
       <Grid container direction="row" justify="space-between" alignItems="flex-start">
         <Grid item className={style.user}>
           <Grid className={style.fullheight} container direction="row" justify="flex-start" alignItems="stretch">
-            <Grid item className={!!session?.user.anonymous ? style.grow : style.normal}>
+            <Grid item className={!!user.anonymous ? style.grow : style.normal}>
               <UserDetail changeSetting={changeSetting} settings={setting} />
             </Grid>
             <Grid item className={style.content}>
@@ -59,7 +58,7 @@ const LayoutComponent = ({ children, user }: Props) => {
 
         <Grid item className={style.experience}>
           <ShowIf condition={!setting.focus || (!!user && user.anonymous === 'true')}>
-            <ExperienceComponent />
+            <ExperienceComponent userId={userId} />
           </ShowIf>
         </Grid>
       </Grid>

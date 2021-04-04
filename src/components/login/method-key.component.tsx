@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import DialogContent from '@material-ui/core/DialogContent';
 import TextField from '@material-ui/core/TextField';
@@ -6,7 +6,6 @@ import TextField from '@material-ui/core/TextField';
 import { isHex } from '@polkadot/util';
 
 import DialogTitle from '../common/DialogTitle.component';
-import CaptchaComponent from '../common/captcha.component';
 
 type Props = {
   close: () => void;
@@ -16,7 +15,6 @@ type Props = {
 export default function KeyForm({ close, save }: Props) {
   const [value, setValue] = React.useState('');
   const [isValid, setValid] = React.useState(true);
-  const [_, setCaptchaVerified] = useState(false);
 
   const isHexSeed = (seed: string): boolean => {
     return isHex(seed) && seed.length === 66;
@@ -40,10 +38,6 @@ export default function KeyForm({ close, save }: Props) {
     }
   };
 
-  const getCaptchaVerification = (isVerified: boolean) => {
-    setCaptchaVerified(isVerified);
-  };
-
   return (
     <>
       <DialogTitle id="key-title" onClose={close}>
@@ -64,9 +58,6 @@ export default function KeyForm({ close, save }: Props) {
           type="text"
           fullWidth
         />
-      </DialogContent>
-      <DialogContent>
-        <CaptchaComponent getCaptchaVerification={getCaptchaVerification} />
       </DialogContent>
     </>
   );
