@@ -35,7 +35,7 @@ import { useExperience } from './use-experience.hooks';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import Panel from 'src/components/common/panel.component';
-import { Experience, People } from 'src/interfaces/experience';
+import { Experience, People, Tag } from 'src/interfaces/experience';
 
 type Props = {
   userId: string;
@@ -91,14 +91,14 @@ export const ExperienceComponent = ({ userId }: Props) => {
     });
   };
 
-  const addTopicToExperience = (value: string) => {
+  const addTopicToExperience = (tag: Tag) => {
     if (!selectedExperience) {
       return;
     }
 
     setSelectedExperience({
       ...selectedExperience,
-      tags: [...selectedExperience.tags, { id: value, hide: false }]
+      tags: [...selectedExperience.tags, tag]
     });
   };
 
@@ -166,7 +166,6 @@ export const ExperienceComponent = ({ userId }: Props) => {
     setModalAlertOpen(!modalAlertOpened);
   };
 
-  console.log('selectedExperience', selectedExperience, userId);
   return (
     <Panel title="Experiences">
       <Card>
