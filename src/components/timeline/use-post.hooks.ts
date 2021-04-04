@@ -85,7 +85,6 @@ export const usePost = () => {
       },
       method: 'GET'
     });
-    console.log('loadComments', data);
     dispatch({
       type: TimelineActionType.LOAD_COMMENTS,
       postId,
