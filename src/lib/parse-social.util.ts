@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { random } from 'lodash';
 import { ImageData, SocialMetric } from 'src/interfaces/post';
 
 type PostUser = {
@@ -38,9 +39,8 @@ export const parseTwitter = (data: Record<string, any>) => {
       if (media.type === 'photo') {
         lookup.images.push({
           src: media.url,
-          height: 2,
-          width: 3,
-          title: ''
+          height: random(2, 4),
+          width: random(2, 4)
         });
       }
 
