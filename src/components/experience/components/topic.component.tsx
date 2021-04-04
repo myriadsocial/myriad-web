@@ -17,14 +17,14 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 import { useTopic } from '../use-topic.hooks';
+import SearchTopicComponent from './search-topic.component';
 import { useStyles } from './topic.style';
 
-import SearchComponent from 'src/components/common/autocomplete.component';
 import { Tag } from 'src/interfaces/experience';
 
 type Props = {
   topics: Tag[];
-  onAddItem: (topic: string) => void;
+  onAddItem: (topic: Tag) => void;
 };
 
 export default function TopicComponent({ topics, onAddItem }: Props) {
@@ -40,7 +40,7 @@ export default function TopicComponent({ topics, onAddItem }: Props) {
   const toggleVisible = (topic: Tag) => {
     setSelectedTopics([
       ...selectedTopics.map(item => {
-        if ((item.id = topic.id)) {
+        if (item.id === topic.id) {
           item.hide = !item.hide;
         }
 
@@ -57,7 +57,7 @@ export default function TopicComponent({ topics, onAddItem }: Props) {
     <Card className={style.root}>
       <CardHeader disableTypography className={style.header} title={<Typography variant="h5">Topic</Typography>} />
       <CardContent className={style.content}>
-        <SearchComponent title="Search Topics" data={options} search={searchTopic} onSelected={onAddItem} type="text" />
+        <SearchTopicComponent title="Search Topics" data={options} search={searchTopic} onSelected={onAddItem} />
 
         <List>
           {selectedTopics.map((topic, i) => {

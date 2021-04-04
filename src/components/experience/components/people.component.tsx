@@ -63,6 +63,18 @@ export default function PeopleComponent({ people, onAddItem }: Props) {
     }
   };
 
+  const toggleVisible = (people: People) => {
+    setSelectedPeople([
+      ...selectedPeople.map(item => {
+        if (item.id === people.id) {
+          item.hide = !item.hide;
+        }
+
+        return item;
+      })
+    ]);
+  };
+
   return (
     <Card className={style.root}>
       <CardHeader disableTypography className={style.header} title={<Typography variant="h5">People</Typography>} />
@@ -124,11 +136,11 @@ export default function PeopleComponent({ people, onAddItem }: Props) {
                 <ListItemText id={labelId} primary={people.username} />
                 <ListItemSecondaryAction>
                   {people.hide ? (
-                    <IconButton edge="end" aria-label="hide-from-experience">
+                    <IconButton edge="end" aria-label="hide-from-experience" onClick={() => toggleVisible(people)}>
                       <VisibilityOffIcon />
                     </IconButton>
                   ) : (
-                    <IconButton edge="end" aria-label="show-on-experience">
+                    <IconButton edge="end" aria-label="show-on-experience" onClick={() => toggleVisible(people)}>
                       <VisibilityIcon />
                     </IconButton>
                   )}
