@@ -25,6 +25,10 @@ export default function JsonForm(props: Props) {
     }
   }, [pair]);
 
+  const getCaptchaVerification = (isVerified: boolean) => {
+    setCaptchaVerified(isVerified);
+  };
+
   const isValidAddressPolkadotAddress = (address: string) => {
     try {
       encodeAddress(isHex(address) ? hexToU8a(address) : decodeAddress(address));
@@ -47,10 +51,6 @@ export default function JsonForm(props: Props) {
       };
       fileReader.readAsText(e.target.files[0]);
     }
-  };
-
-  const getCaptchaVerification = (isVerified: boolean) => {
-    setCaptchaVerified(isVerified);
   };
 
   return (

@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
+import { FacebookShareButton, RedditShareButton, TwitterShareButton } from 'react-share';
+
+import { User } from 'next-auth';
 
 import { Typography } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
@@ -12,13 +15,20 @@ import DialogContent from '@material-ui/core/DialogContent';
 import TextField from '@material-ui/core/TextField';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import FacebookIcon from '@material-ui/icons/Facebook';
+import RedditIcon from '@material-ui/icons/Reddit';
+import TwitterIcon from '@material-ui/icons/Twitter';
 
 import { SocialsEnum } from '../../interfaces';
 import DialogTitle from '../common/DialogTitle.component';
+import ShowIf from '../common/show-if.component';
+
+import { WithAdditionalParams } from 'next-auth/_utils';
+import { useShareSocial } from 'src/hooks/use-share-social';
 
 export type Props = {
   open: boolean;
   social: SocialsEnum;
+  user: WithAdditionalParams<User>;
   handleClose: () => void;
 };
 
@@ -45,22 +55,51 @@ const useStyles = makeStyles((theme: Theme) =>
     facebook: {
       color: '#3b5998',
       minWidth: 40
+    },
+    twitter: {
+      color: '#1DA1F2',
+      minWidth: 40
+    },
+    reddit: {
+      color: '#FF5700',
+      minWidth: 40
     }
   })
 );
 
-export default function ConnectComponent({ open, handleClose }: Props) {
-  const classes = useStyles();
+const copy: Record<SocialsEnum, string> = {
+  [SocialsEnum.TWITTER]: 'Say Hi, Copy the message below and post it on your Timeline.',
+  [SocialsEnum.FACEBOOK]: 'Say Hi, Copy the message below and post it on your Facebook status.',
+  [SocialsEnum.REDDIT]: 'Say Hi, Copy the message below and post it on Reddit.'
+};
 
-  const config = React.useMemo(
-    () => ({
+export default function ConnectComponent({ user, social, open, handleClose }: Props) {
+  const classes = useStyles();
+  const { shared, shareOnTwitter } = useShareSocial();
+
+  const share = useCallback(() => {
+    switch (social) {
+      case SocialsEnum.TWITTER:
+        shareOnTwitter();
+        break;
+
+      default:
+        break;
+    }
+  }, [social]);
+
+  const closeShare = () => {
+    share();
+    handleClose();
+  };
+  const config = useMemo(() => {
+    return {
       step1: <Avatar className={classes.purple}>1</Avatar>,
       step2: <Avatar className={classes.purple}>2</Avatar>,
-      copyTitle: <Typography variant="h6">Say Hi, Copy the message below and post it on your Facebook status.</Typography>,
-      shareTitle: <Typography variant="h6">Share it publicly on Facebook</Typography>
-    }),
-    []
-  );
+      copyTitle: <Typography variant="h6">{copy[social]}</Typography>,
+      shareTitle: <Typography variant="h6">Share it publicly on {social}</Typography>
+    };
+  }, []);
 
   const message = 'Saying hi to #MyriadNetwork\n\nPublic Key: 13N2NpDg6kU1vAGuPv9MkTj4YsaDmf7BKyr3TTxhV5sFmuhd';
 
@@ -68,7 +107,7 @@ export default function ConnectComponent({ open, handleClose }: Props) {
     <Dialog open={open} onClose={handleClose} maxWidth="xs">
       <DialogTitle id="connect-social" onClose={handleClose}>
         {' '}
-        Link Your Facebook Account
+        Link Your {social} Account
       </DialogTitle>
       <DialogContent dividers>
         <Card className={classes.card}>
@@ -80,9 +119,29 @@ export default function ConnectComponent({ open, handleClose }: Props) {
         <Card className={classes.card}>
           <CardHeader avatar={config.step2} title={config.shareTitle} />
           <CardContent className={classes.share}>
-            <Button variant="contained" size="large" startIcon={<FacebookIcon />} className={classes.facebook}>
-              Share
-            </Button>
+            <ShowIf condition={social === SocialsEnum.FACEBOOK}>
+              <FacebookShareButton url="https://myriad-fe.herokuapp.com" quote={message}>
+                <Button variant="contained" size="large" onClick={share} startIcon={<FacebookIcon />} className={classes.facebook}>
+                  Share
+                </Button>
+              </FacebookShareButton>
+            </ShowIf>
+
+            <ShowIf condition={social === SocialsEnum.TWITTER}>
+              <TwitterShareButton url="https://myriad-fe.herokuapp.com" title={message}>
+                <Button variant="contained" size="large" onClick={share} startIcon={<TwitterIcon />} className={classes.twitter}>
+                  Share
+                </Button>
+              </TwitterShareButton>
+            </ShowIf>
+
+            <ShowIf condition={social === SocialsEnum.REDDIT}>
+              <RedditShareButton url="https://myriad-fe.herokuapp.com" title={message}>
+                <Button variant="contained" size="large" onClick={share} startIcon={<RedditIcon />} className={classes.reddit}>
+                  Share
+                </Button>
+              </RedditShareButton>
+            </ShowIf>
           </CardContent>
         </Card>
 
@@ -91,7 +150,7 @@ export default function ConnectComponent({ open, handleClose }: Props) {
         </Button>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} fullWidth={true} size="large" variant="contained" color="secondary">
+        <Button onClick={closeShare} disabled={!shared} fullWidth={true} size="large" variant="contained" color="secondary">
           {' '}
           I'm done, thanks
         </Button>

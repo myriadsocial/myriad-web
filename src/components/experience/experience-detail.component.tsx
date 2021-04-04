@@ -70,7 +70,7 @@ export default function ExperienceDetail({ data, onSave }: Props) {
               <Typography>People</Typography>
               <Box className={style.avatar}>
                 {experience.people.map((people, i) => (
-                  <Avatar key={i} alt={people} src={''} className={style.inline} />
+                  <Avatar key={i} alt={people.username} src={''} className={style.inline} />
                 ))}
               </Box>
             </Grid>

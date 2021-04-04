@@ -29,6 +29,12 @@ export const useStyles = makeStyles((theme: Theme) =>
     header: {
       // padding: '0 16px'
     },
+    content: {
+      padding: '0 8px',
+      '&:last-child': {
+        paddingBottom: theme.spacing(1.5)
+      }
+    },
     action: {
       width: 265,
       marginBottom: 10,
@@ -41,6 +47,19 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     show: {
       color: '#E849BD'
+    },
+
+    search: {
+      margin: theme.spacing(1)
+    },
+    optionItem: {
+      position: 'relative',
+      flex: 1
+    },
+    addButton: {
+      position: 'absolute',
+      top: 0,
+      right: 0
     }
   })
 );

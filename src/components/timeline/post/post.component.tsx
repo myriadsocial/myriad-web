@@ -58,7 +58,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
   };
 
   const openContentSource = () => {
-    window.open(post.url, '_blank');
+    window.open(post.link, '_blank');
   };
 
   const PostAction = (
@@ -71,7 +71,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
   return (
     <Card className={style.root}>
       <CardHeader
-        avatar={<PostAvatar origin={post.platformId[0]} avatar={detail.user.avatar} />}
+        avatar={<PostAvatar origin={post.platform} avatar={detail.user.avatar} />}
         action={PostAction}
         title={detail.user.name}
         subheader={detail.createdOn}
@@ -87,11 +87,11 @@ export default function PostComponent({ post, open = false, disable = false, rep
       </CardContent>
 
       <CardActions disableSpacing>
-        <ShowIf condition={post.platformId[0] === 'facebook'}>
+        <ShowIf condition={post.platform === 'facebook'}>
           <FacebookReactionComponent metric={detail.metric} />
         </ShowIf>
 
-        <ShowIf condition={post.platformId[0] === 'twitter'}>
+        <ShowIf condition={post.platform === 'twitter'}>
           <TwitterReactionComponent metric={detail.metric} />
         </ShowIf>
 
