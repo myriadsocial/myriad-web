@@ -101,6 +101,8 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
     };
   }, []);
 
+  //adding comments to make build work
+
   const message = 'Saying hi to #MyriadNetwork\n\nPublic Key: 13N2NpDg6kU1vAGuPv9MkTj4YsaDmf7BKyr3TTxhV5sFmuhd';
 
   return (
