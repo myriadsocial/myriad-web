@@ -72,7 +72,7 @@ const SocialComponent = ({ user, toggleLogin }: Props) => {
       }
 
       if (facebookCredential) {
-        setFacebook(twitterCredential.username);
+        setFacebook(facebookCredential.username);
         setConnected({
           ...connected,
           [SocialsEnum.FACEBOOK]: true

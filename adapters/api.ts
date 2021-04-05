@@ -97,7 +97,9 @@ function Adapter() {
             accessTokenSecret: refreshToken
           });
 
-          const twitterProfile = await twitterClient.accountsAndUsers.usersShow();
+          const twitterProfile = await twitterClient.accountsAndUsers.accountVerifyCredentials({
+            include_entities: false
+          });
 
           username = twitterProfile.name;
           break;
