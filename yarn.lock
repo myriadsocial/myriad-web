@@ -2174,6 +2174,13 @@
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.1.tgz#18845205e86ff0038517aab7a18a62a6b9f71275"
   integrity sha512-EaCxbanVeyxDRTQBkdLb3Bvl/HK7PBK6UJjsSixB0iHKoWxE5uu2Q/DgtpOhPIojN0Zl1whvOd7PoHs2P0s5eA==
 
+"@types/snoowrap@^1.19.0":
+  version "1.19.0"
+  resolved "https://registry.yarnpkg.com/@types/snoowrap/-/snoowrap-1.19.0.tgz#2485f0437a65275028e58b99c90d409af13df447"
+  integrity sha512-zjzW/7BrgNi9w2lfByvlPaFz+c89HeVouWoxilpRJuDU2MNsTRW5aRDc/8Dgfn1CrFYX+7iN18+bSsw/lBiHCQ==
+  dependencies:
+    snoowrap "*"
+
 "@types/uniqid@^5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@types/uniqid/-/uniqid-5.3.0.tgz#085e406b2fe01eca81bf5c6e009aa641d6f069fe"
@@ -8701,7 +8708,7 @@ snapdragon@^0.8.1:
     source-map-resolve "^0.5.0"
     use "^3.1.0"
 
-snoowrap@^1.22.0:
+snoowrap@*, snoowrap@^1.22.0:
   version "1.22.0"
   resolved "https://registry.yarnpkg.com/snoowrap/-/snoowrap-1.22.0.tgz#d89fe3876d238da8697cf95f73ad67c1949cf66c"
   integrity sha512-eV1CnzWaAinucpOulyaz8ma/3sStPsxlE0sa0kjldKVrS4aQQc8rBJpwJk5cE67DcLSDMm6O1C6out4pPmrR6g==
