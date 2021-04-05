@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useRef, useMemo, useCallback } from 'react';
 import { FacebookShareButton, RedditShareButton, TwitterShareButton } from 'react-share';
 
 import { User } from 'next-auth';
@@ -75,6 +75,7 @@ const copy: Record<SocialsEnum, string> = {
 
 export default function ConnectComponent({ user, social, open, handleClose }: Props) {
   const classes = useStyles();
+  const childRef = useRef<any>();
   const { shared, shareOnTwitter } = useShareSocial();
 
   const share = useCallback(() => {
