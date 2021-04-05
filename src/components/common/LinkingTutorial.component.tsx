@@ -31,9 +31,11 @@ const LinkingTutorialComponent = forwardRef((_, ref) => {
           So what to do now?
         </DialogTitle>
         <DialogContent dividers>
-          <Typography>
-            Stay calm. We will provide tutorials on how you can link your social media account(s), so that you can focus on enjoying Myriad
-            instead. Stay tuned!
+          <Typography left>
+            Stay calm.
+            <br /> We will soon provide tutorials on how you can link your social media account(s),
+            <br /> so that you can focus on enjoying Myriad instead. <br />
+            Stay tuned!
           </Typography>
         </DialogContent>
         <DialogActions>
