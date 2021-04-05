@@ -167,12 +167,14 @@ export default NextAuth({
           accessToken: account.accessToken,
           refreshToken: account.refreshToken
         };
-
-        if (!token.userCredentials) {
+        //@ts-ignore
+        if (!token.userCredentials || token.userCredentials.length === 0) {
           token.userCredentials = [] as Credentials[];
         }
         //@ts-ignore
         token.userCredentials.push(credentials);
+
+        console.log('jwt token', token);
       }
 
       return token;
