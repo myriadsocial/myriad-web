@@ -20,7 +20,8 @@
   "scripts": {
     "dev": "nodemon",
     "build": "next build && tsc --project tsconfig.server.json",
-    "start": "node dist/index.js",
+    "start": "next start -p $PORT",
+    "start-custom-server": "node dist/index.js",
     "type-check": "tsc",
     "lint": "eslint --fix .",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
