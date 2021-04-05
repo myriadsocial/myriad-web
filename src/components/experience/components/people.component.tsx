@@ -31,9 +31,10 @@ import { People } from 'src/interfaces/experience';
 type Props = {
   people: People[];
   onAddItem: (people: People) => void;
+  onRemoveItem: (people: People) => void;
 };
 
-export default function PeopleComponent({ people, onAddItem }: Props) {
+export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Props) {
   const style = useStyles();
 
   const { people: options, search } = usePeople();
@@ -73,6 +74,10 @@ export default function PeopleComponent({ people, onAddItem }: Props) {
         return item;
       })
     ]);
+  };
+
+  const removeFromExperience = (people: People) => {
+    onRemoveItem(people);
   };
 
   return (
@@ -145,7 +150,7 @@ export default function PeopleComponent({ people, onAddItem }: Props) {
                     </IconButton>
                   )}
 
-                  <IconButton edge="end" aria-label="comments">
+                  <IconButton edge="end" aria-label="comments" onClick={() => removeFromExperience(people)}>
                     <DeleteForeverIcon />
                   </IconButton>
                 </ListItemSecondaryAction>

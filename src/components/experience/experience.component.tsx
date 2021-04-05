@@ -91,6 +91,17 @@ export const ExperienceComponent = ({ userId }: Props) => {
     });
   };
 
+  const removePeopleFromExperience = (people: People) => {
+    if (!selectedExperience) {
+      return;
+    }
+
+    setSelectedExperience({
+      ...selectedExperience,
+      people: selectedExperience.people.filter(item => item.id !== people.id)
+    });
+  };
+
   const addTopicToExperience = (tag: Tag) => {
     if (!selectedExperience) {
       return;
@@ -99,6 +110,17 @@ export const ExperienceComponent = ({ userId }: Props) => {
     setSelectedExperience({
       ...selectedExperience,
       tags: [...selectedExperience.tags, tag]
+    });
+  };
+
+  const removeTopicFromExperience = (tag: Tag) => {
+    if (!selectedExperience) {
+      return;
+    }
+
+    setSelectedExperience({
+      ...selectedExperience,
+      tags: selectedExperience.tags.filter(item => item.id !== tag.id)
     });
   };
 
@@ -249,8 +271,12 @@ export const ExperienceComponent = ({ userId }: Props) => {
 
       <ShowIf condition={isEditing}>
         <LayoutOptions />
-        <TopicComponent topics={selectedExperience?.tags || []} onAddItem={addTopicToExperience} />
-        <PeopleComponent people={selectedExperience?.people || []} onAddItem={addPeopleToExperience} />
+        <TopicComponent topics={selectedExperience?.tags || []} onAddItem={addTopicToExperience} onRemoveItem={removeTopicFromExperience} />
+        <PeopleComponent
+          people={selectedExperience?.people || []}
+          onAddItem={addPeopleToExperience}
+          onRemoveItem={removePeopleFromExperience}
+        />
         <Grid className={style.action}>
           <ShowIf condition={selectedExperience?.userId === userId}>
             <Fab
