@@ -80,7 +80,7 @@ const SocialComponent = ({ user, toggleLogin }: Props) => {
       }
 
       if (redditCredential) {
-        setReddit(twitterCredential.username);
+        setReddit(redditCredential.username);
         setConnected({
           ...connected,
           [SocialsEnum.REDDIT]: true
