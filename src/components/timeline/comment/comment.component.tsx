@@ -8,8 +8,11 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, Theme, withStyles, createStyles, fade } from '@material-ui/core/styles';
+import { withStyles, createStyles, Theme } from '@material-ui/core/styles';
 
+import { useStyles } from './comment.style';
+
+import DateFormat from 'src/components/common/DateFormat';
 import { Comment } from 'src/interfaces/post';
 
 const StyledBadge = withStyles((theme: Theme) =>
@@ -22,36 +25,6 @@ const StyledBadge = withStyles((theme: Theme) =>
     }
   })
 )(Badge);
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {},
-    media: {
-      height: 0,
-      paddingTop: '56.25%' // 16:9
-    },
-    expand: {
-      transform: 'rotate(0deg)',
-      marginLeft: 'auto',
-      transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest
-      })
-    },
-    expandOpen: {
-      transform: 'rotate(180deg)'
-    },
-    reply: {
-      backgroundColor: fade(theme.palette.primary.main, 0.5)
-    },
-    comment: {
-      backgroundColor: '#171717',
-      borderRadius: 8
-    },
-    action: {
-      marginTop: 16
-    }
-  })
-);
 
 type Props = {
   data: Comment;
@@ -66,7 +39,9 @@ export default function CommentComponent({ data }: Props) {
         avatar={
           <IconButton aria-label="cart">
             <StyledBadge color="secondary">
-              <Avatar aria-label="recipe">R</Avatar>
+              <Avatar aria-label={data.user?.name} src={data.user?.profilePictureURL}>
+                {data.user?.name}
+              </Avatar>
             </StyledBadge>
           </IconButton>
         }
@@ -75,8 +50,8 @@ export default function CommentComponent({ data }: Props) {
             Send Tip
           </Button>
         }
-        title="Eduard Rudd"
-        subheader="September 14, 2016"
+        title={data.user?.name}
+        subheader={<DateFormat date={data.createdAt} />}
       />
       <CardContent>
         <Typography variant="body1" color="textSecondary" component="p">

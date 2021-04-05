@@ -57,8 +57,9 @@ export default function Index() {
   const posts: Post[] = [
     {
       id: '1',
-      url: 'https://twitter.com/DocumentingBTC/status/1376217381186457601',
-      platformId: ['twitter'],
+      link: 'https://twitter.com/DocumentingBTC/status/1376217381186457601',
+      textId: '1376217381186457601',
+      platform: 'twitter',
       tags: ['bitcoin'],
       comments: [
         {
@@ -71,8 +72,9 @@ export default function Index() {
     },
     {
       id: '2',
-      url: 'https://twitter.com/CharmaineSChua/status/1375868552129863681',
-      platformId: ['twitter'],
+      link: 'https://twitter.com/CharmaineSChua/status/1375868552129863681',
+      textId: '1375868552129863681',
+      platform: 'twitter',
       tags: ['politic', 'viral'],
       comments: []
     }

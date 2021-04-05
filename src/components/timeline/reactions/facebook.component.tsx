@@ -28,7 +28,7 @@ type Props = {
 
 export default function FacebookReactionComponent({ metric }: Props) {
   const style = useStyles();
-  console.log(metric);
+
   return (
     <div className={style.root}>
       <IconButton aria-label="angry">
