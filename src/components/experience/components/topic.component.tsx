@@ -25,9 +25,10 @@ import { Tag } from 'src/interfaces/experience';
 type Props = {
   topics: Tag[];
   onAddItem: (topic: Tag) => void;
+  onRemoveItem: (topic: Tag) => void;
 };
 
-export default function TopicComponent({ topics, onAddItem }: Props) {
+export default function TopicComponent({ topics, onAddItem, onRemoveItem }: Props) {
   const style = useStyles();
 
   const { topics: options, search } = useTopic();
@@ -51,6 +52,10 @@ export default function TopicComponent({ topics, onAddItem }: Props) {
 
   const searchTopic = (text: string) => {
     search(text);
+  };
+
+  const removeFromExperience = (topic: Tag) => {
+    onRemoveItem(topic);
   };
 
   return (
@@ -77,7 +82,7 @@ export default function TopicComponent({ topics, onAddItem }: Props) {
                     </IconButton>
                   )}
 
-                  <IconButton edge="end" aria-label="comments">
+                  <IconButton edge="end" aria-label="comments" onClick={() => removeFromExperience(topic)}>
                     <DeleteForeverIcon />
                   </IconButton>
                 </ListItemSecondaryAction>
