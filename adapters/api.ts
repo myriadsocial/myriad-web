@@ -32,15 +32,44 @@ function Adapter() {
     async function getUser(id: string) {
       const { data } = await MyriadAPI({
         url: `users/${id}`,
-        method: 'GET'
+        method: 'GET',
+        params: {
+          filter: {
+            include: [
+              {
+                relation: 'userCredentials',
+                scope: {
+                  include: [
+                    {
+                      relation: 'people'
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
       });
 
       _debug('Adapter getUser', id, data);
 
       return {
-        ...data,
+        name: data.name,
+        profilePictureURL: data.profilePictureURL,
         userId: data.id,
-        anonymous: false
+        address: data.id,
+        anonymous: false,
+
+        //@ts-ignore
+        userCredentials: data.userCredentials.map(item => {
+          return {
+            platform: item.people.platform,
+            platformUserId: item.people.platform_account_id,
+            username: item.people.username,
+            accessToken: item.access_token,
+            refreshToken: item.refresh_token || null
+          };
+        })
       };
     }
 
