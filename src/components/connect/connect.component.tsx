@@ -20,6 +20,7 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 
 import { SocialsEnum } from '../../interfaces';
 import DialogTitle from '../common/DialogTitle.component';
+import LinkingTutorialComponent from '../common/LinkingTutorial.component';
 import ShowIf from '../common/show-if.component';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
@@ -105,65 +106,69 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
   const message = 'Saying hi to #MyriadNetwork\n\nPublic Key: 13N2NpDg6kU1vAGuPv9MkTj4YsaDmf7BKyr3TTxhV5sFmuhd';
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="xs">
-      <DialogTitle id="connect-social" onClose={handleClose}>
-        {' '}
-        Link Your {social} Account
-      </DialogTitle>
-      <DialogContent dividers>
-        <Card className={classes.card}>
-          <CardHeader avatar={config.step1} title={config.copyTitle} />
-          <CardContent>
-            <TextField className={classes.dark} multiline variant="outlined" rows={6} fullWidth={true} value={message} />
-          </CardContent>
-        </Card>
-        <Card className={classes.card}>
-          <CardHeader avatar={config.step2} title={config.shareTitle} />
-          <CardContent className={classes.share}>
-            <ShowIf condition={social === SocialsEnum.FACEBOOK}>
-              <FacebookShareButton url="https://myriad-fe.herokuapp.com" quote={message}>
-                <Button variant="contained" size="large" onClick={share} startIcon={<FacebookIcon />} className={classes.facebook}>
-                  Share
-                </Button>
-              </FacebookShareButton>
-            </ShowIf>
-
-            <ShowIf condition={social === SocialsEnum.TWITTER}>
-              <TwitterShareButton url="https://myriad-fe.herokuapp.com" title={message}>
-                <Button variant="contained" size="large" onClick={share} startIcon={<TwitterIcon />} className={classes.twitter}>
-                  Share
-                </Button>
-              </TwitterShareButton>
-            </ShowIf>
-
-            <ShowIf condition={social === SocialsEnum.REDDIT}>
-              <RedditShareButton url="https://myriad-fe.herokuapp.com" title={message}>
-                <Button variant="contained" size="large" onClick={share} startIcon={<RedditIcon />} className={classes.reddit}>
-                  Share
-                </Button>
-              </RedditShareButton>
-            </ShowIf>
-          </CardContent>
-        </Card>
-
-        <Button
-          onClick={() => {
-            childRef.current.triggerLinkingTutorial();
-          }}
-          color="default"
-          size="large"
-          variant="contained"
-          className={classes.info}
-          fullWidth>
-          Tell me more about linking my social media account
-        </Button>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={closeShare} disabled={!shared} fullWidth={true} size="large" variant="contained" color="secondary">
+    <>
+      <Dialog open={open} onClose={handleClose} maxWidth="xs">
+        <DialogTitle id="connect-social" onClose={handleClose}>
           {' '}
-          I'm done, thanks
-        </Button>
-      </DialogActions>
-    </Dialog>
+          Link Your {social} Account
+        </DialogTitle>
+        <DialogContent dividers>
+          <Card className={classes.card}>
+            <CardHeader avatar={config.step1} title={config.copyTitle} />
+            <CardContent>
+              <TextField className={classes.dark} multiline variant="outlined" rows={6} fullWidth={true} value={message} />
+            </CardContent>
+          </Card>
+          <Card className={classes.card}>
+            <CardHeader avatar={config.step2} title={config.shareTitle} />
+            <CardContent className={classes.share}>
+              <ShowIf condition={social === SocialsEnum.FACEBOOK}>
+                <FacebookShareButton url="https://myriad-fe.herokuapp.com" quote={message}>
+                  <Button variant="contained" size="large" onClick={share} startIcon={<FacebookIcon />} className={classes.facebook}>
+                    Share
+                  </Button>
+                </FacebookShareButton>
+              </ShowIf>
+
+              <ShowIf condition={social === SocialsEnum.TWITTER}>
+                <TwitterShareButton url="https://myriad-fe.herokuapp.com" title={message}>
+                  <Button variant="contained" size="large" onClick={share} startIcon={<TwitterIcon />} className={classes.twitter}>
+                    Share
+                  </Button>
+                </TwitterShareButton>
+              </ShowIf>
+
+              <ShowIf condition={social === SocialsEnum.REDDIT}>
+                <RedditShareButton url="https://myriad-fe.herokuapp.com" title={message}>
+                  <Button variant="contained" size="large" onClick={share} startIcon={<RedditIcon />} className={classes.reddit}>
+                    Share
+                  </Button>
+                </RedditShareButton>
+              </ShowIf>
+            </CardContent>
+          </Card>
+
+          <Button
+            onClick={() => {
+              childRef.current.triggerLinkingTutorial();
+            }}
+            color="default"
+            size="large"
+            variant="contained"
+            className={classes.info}
+            fullWidth>
+            Tell me more about linking my social media account
+          </Button>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeShare} disabled={!shared} fullWidth={true} size="large" variant="contained" color="secondary">
+            {' '}
+            I'm done, thanks
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <LinkingTutorialComponent ref={childRef} />
+    </>
   );
 }
