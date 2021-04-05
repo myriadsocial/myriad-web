@@ -29,9 +29,6 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
-# no conflict with yarn
-package-lock.json
-
 # vercel
 .vercel
 
@@ -46,4 +43,10 @@ yarn-error.log*
 .DS_Store
 .AppleDouble
 .LSOverride
+
+
+# Experiment
+prisma
+
+# Developer
 

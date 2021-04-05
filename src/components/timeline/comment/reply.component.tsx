@@ -25,7 +25,7 @@ export default function ReplyComponent({ close, onSubmit }: Props) {
   const [session] = useSession();
   const [loginOpened, openLogin] = React.useState(false);
 
-  const CHARACTER_LIMIT = 300;
+  const CHARACTER_LIMIT = 2000;
   const [comment, setValues] = React.useState({
     text: ''
   });

@@ -203,9 +203,11 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
             fullWidth
           />
         </DialogContent>
+
         <DialogContent>
           <CaptchaComponent getCaptchaVerification={getCaptchaVerification} />
         </DialogContent>
+
         <DialogActions>
           <Button
             disabled={accountName.length === 0 || !captchaVerified}

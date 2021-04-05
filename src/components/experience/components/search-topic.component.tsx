@@ -8,15 +8,14 @@ import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Autocomplete, { AutocompleteRenderOptionState } from '@material-ui/lab/Autocomplete';
 
-type SearchType = 'text' | 'card';
+import { Tag } from 'src/interfaces/experience';
 
 //@ts-ignore
 type Props = {
   title: string;
-  data: any[];
+  data: Tag[];
   search: (text: string) => void;
-  onSelected: (item: any) => void;
-  type: SearchType;
+  onSelected: (item: Tag) => void;
 };
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -36,11 +35,11 @@ export const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function AutoComplete({ title = 'Search..', data = [], search, onSelected, type = 'text' }: Props) {
+export default function SearchTopic({ title = 'Search..', data = [], search, onSelected }: Props) {
   const style = useStyles();
 
   const [open, setOpen] = React.useState(false);
-  const [options, setOptions] = React.useState<any[]>([]);
+  const [options, setOptions] = React.useState<Tag[]>([]);
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
@@ -54,9 +53,9 @@ export default function AutoComplete({ title = 'Search..', data = [], search, on
     setLoading(false);
   }, [data]);
 
-  const handleChange = (e: React.ChangeEvent<{}>, value: any | null) => {
-    if (value) {
-      onSelected(value.name);
+  const handleChange = (e: React.ChangeEvent<{}>, topic: Tag | null) => {
+    if (topic) {
+      onSelected(topic);
     }
   };
 
@@ -80,7 +79,7 @@ export default function AutoComplete({ title = 'Search..', data = [], search, on
         setOpen(false);
       }}
       getOptionSelected={(option, value) => option === value}
-      getOptionLabel={option => option.username || option}
+      getOptionLabel={option => option.id}
       options={options}
       loading={loading}
       onChange={handleChange}
@@ -103,18 +102,10 @@ export default function AutoComplete({ title = 'Search..', data = [], search, on
         />
       )}
       renderOption={(option, state: AutocompleteRenderOptionState) => {
-        return type === 'text' ? (
-          <Typography>{option}</Typography>
-        ) : (
+        return (
           <Grid className={style.optionItem}>
             <Typography variant="body1" color="textSecondary">
-              {option.username}
-            </Typography>
-            <Typography variant="body1" color="textSecondary">
-              by: {option.user.name}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {option.description}
+              {option.id}
             </Typography>
             <AddCircleOutlineIcon className={style.addButton} />
           </Grid>

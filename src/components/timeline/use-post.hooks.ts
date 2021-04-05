@@ -18,7 +18,18 @@ export const usePost = () => {
     offset: 0,
     limit: 10,
     skip: 0,
-    include: ['comments']
+    include: [
+      {
+        relation: 'comments',
+        scope: {
+          include: [
+            {
+              relation: 'user'
+            }
+          ]
+        }
+      }
+    ]
   });
 
   const load = async (type: TimelineActionType = TimelineActionType.INIT_POST, tags: string[] = []) => {
@@ -48,7 +59,7 @@ export const usePost = () => {
 
       dispatch({
         type,
-        posts: data.map((item: Post) => ({ ...item, comments: [] }))
+        posts: data.map((item: Post) => ({ ...item, comments: item.comments || [] }))
       });
     } catch (error) {
       setError(error);
@@ -69,9 +80,11 @@ export const usePost = () => {
   const loadComments = async (postId: string) => {
     const { data } = await axios({
       url: `/posts/${postId}/comments`,
+      params: {
+        include: ['user']
+      },
       method: 'GET'
     });
-
     dispatch({
       type: TimelineActionType.LOAD_COMMENTS,
       postId,
