@@ -145,7 +145,15 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
           </CardContent>
         </Card>
 
-        <Button color="default" size="large" variant="contained" className={classes.info} fullWidth>
+        <Button
+          onClick={() => {
+            childRef.current.triggerLinkingTutorial();
+          }}
+          color="default"
+          size="large"
+          variant="contained"
+          className={classes.info}
+          fullWidth>
           Tell me more about linking my social media account
         </Button>
       </DialogContent>
