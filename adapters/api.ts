@@ -3,9 +3,15 @@ import { Session, AdapterInstance } from 'next-auth/adapters';
 import jwt from 'next-auth/jwt';
 
 import Axios from 'axios';
+import snoowrap from 'snoowrap';
+import { TwitterClient } from 'twitter-api-client';
 
-const axios = Axios.create({
+const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || ''
+});
+
+const FacebookGraph = Axios.create({
+  baseURL: 'https://graph.facebook.com'
 });
 
 //@ts-ignore
@@ -24,17 +30,46 @@ function Adapter() {
     }
 
     async function getUser(id: string) {
-      const { data } = await axios({
+      const { data } = await MyriadAPI({
         url: `users/${id}`,
-        method: 'GET'
+        method: 'GET',
+        params: {
+          filter: {
+            include: [
+              {
+                relation: 'userCredentials',
+                scope: {
+                  include: [
+                    {
+                      relation: 'people'
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
       });
 
       _debug('Adapter getUser', id, data);
 
       return {
-        ...data,
+        name: data.name,
+        profilePictureURL: data.profilePictureURL,
         userId: data.id,
-        anonymous: false
+        address: data.id,
+        anonymous: false,
+
+        //@ts-ignore
+        userCredentials: data.userCredentials.map(item => {
+          return {
+            platform: item.people.platform,
+            platformUserId: item.people.platform_account_id,
+            username: item.people.username,
+            accessToken: item.access_token,
+            refreshToken: item.refresh_token || null
+          };
+        })
       };
     }
 
@@ -44,7 +79,7 @@ function Adapter() {
     }
 
     async function getUserByProviderAccountId(providerId: string, providerAccountId: string) {
-      const { data } = await axios({
+      const { data } = await MyriadAPI({
         url: `/people`,
         method: 'GET',
         params: {
@@ -63,7 +98,6 @@ function Adapter() {
       });
 
       _debug('Adapter getUserByProviderAccountId data', providerId, data);
-      _debug('Adapter getUserByProviderAccountId', providerId, providerAccountId);
       return null;
     }
 
@@ -81,25 +115,68 @@ function Adapter() {
       accessToken: string,
       accessTokenExpires: number
     ): Promise<void> {
-      //   const { data: people } = await axios({
-      //     url: `/people`,
-      //     method: 'POST',
-      //     data: {
-      //       id: providerId,
-      //       platform: providerType,
-      //       username: ''
-      //     }
-      //   });
+      let username = '';
 
-      //   await axios({
-      //     url: `/user/${userId}/user-credentials`,
-      //     method: 'POST',
-      //     data: {
-      //       token: accessToken,
-      //       people_id: people.id,
-      //       userId
-      //     }
-      //   });
+      switch (providerId) {
+        case 'twitter':
+          const twitterClient = new TwitterClient({
+            apiKey: process.env.TWITTER_API_KEY || '',
+            apiSecret: process.env.TWITTER_API_KEY_SECRET || '',
+            accessToken: accessToken,
+            accessTokenSecret: refreshToken
+          });
+
+          const twitterProfile = await twitterClient.accountsAndUsers.accountVerifyCredentials({
+            include_entities: false
+          });
+
+          username = twitterProfile.name;
+          break;
+        case 'facebook':
+          const { data: facebookProfile } = await FacebookGraph({
+            url: '/v10.0/me',
+            params: {
+              access_token: accessToken,
+              fields: 'id,name'
+            }
+          });
+
+          username = facebookProfile.name;
+          break;
+        case 'reddit':
+          const reddit = new snoowrap({
+            userAgent: 'myriad',
+            clientId: process.env.REDDIT_APP_ID,
+            clientSecret: process.env.REDDIT_SECRET,
+            accessToken
+          });
+
+          //@ts-ignore
+          const redditProfile = await reddit.getMe();
+
+          username = redditProfile.name;
+          break;
+      }
+
+      const { data: people } = await MyriadAPI({
+        url: `/people`,
+        method: 'POST',
+        data: {
+          platform: providerId,
+          platform_account_id: providerAccountId,
+          username
+        }
+      });
+
+      await MyriadAPI({
+        url: `/people/${people.id}/user-credential`,
+        method: 'POST',
+        data: {
+          access_token: accessToken,
+          refresh_token: refreshToken,
+          userId
+        }
+      });
 
       _debug('Adapter linkAccount', userId, providerId, providerType, providerAccountId, refreshToken, accessToken, accessTokenExpires);
     }
