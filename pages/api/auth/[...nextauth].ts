@@ -33,7 +33,7 @@ export default NextAuth({
     Providers.Reddit({
       clientId: process.env.REDDIT_APP_ID || '',
       clientSecret: process.env.REDDIT_SECRET || '',
-      scope: 'identity mysubreddits read'
+      scope: 'identity read'
     }),
     Providers.Credentials({
       // The name to display on the sign in form (e.g. 'Sign in with...')
@@ -163,16 +163,18 @@ export default NextAuth({
         const credentials = {
           platform: account.provider,
           platformUserId: account.id,
-          username: profile.username,
+          username: profile.username || profile.name,
           accessToken: account.accessToken,
           refreshToken: account.refreshToken
         };
-
-        if (!token.userCredentials) {
+        //@ts-ignore
+        if (!token.userCredentials || token.userCredentials.length === 0) {
           token.userCredentials = [] as Credentials[];
         }
         //@ts-ignore
         token.userCredentials.push(credentials);
+
+        console.log('jwt token', token);
       }
 
       return token;

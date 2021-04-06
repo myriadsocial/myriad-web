@@ -17,6 +17,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
@@ -65,6 +66,8 @@ export const ExperienceComponent = ({ userId }: Props) => {
   const [modalEditOpened, setModalEditOpen] = useState(false);
   const [modalAlertOpened, setModalAlertOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
 
   useEffect(() => {
     loadInitExperience();
@@ -91,6 +94,17 @@ export const ExperienceComponent = ({ userId }: Props) => {
     });
   };
 
+  const removePeopleFromExperience = (people: People) => {
+    if (!selectedExperience) {
+      return;
+    }
+
+    setSelectedExperience({
+      ...selectedExperience,
+      people: selectedExperience.people.filter(item => item.id !== people.id)
+    });
+  };
+
   const addTopicToExperience = (tag: Tag) => {
     if (!selectedExperience) {
       return;
@@ -99,6 +113,17 @@ export const ExperienceComponent = ({ userId }: Props) => {
     setSelectedExperience({
       ...selectedExperience,
       tags: [...selectedExperience.tags, tag]
+    });
+  };
+
+  const removeTopicFromExperience = (tag: Tag) => {
+    if (!selectedExperience) {
+      return;
+    }
+
+    setSelectedExperience({
+      ...selectedExperience,
+      tags: selectedExperience.tags.filter(item => item.id !== tag.id)
     });
   };
 
@@ -118,6 +143,7 @@ export const ExperienceComponent = ({ userId }: Props) => {
   const updateSelectedExperience = () => {
     if (selectedExperience) {
       updateExperience(selectedExperience);
+      notify('Experience updated');
     }
   };
 
@@ -125,6 +151,7 @@ export const ExperienceComponent = ({ userId }: Props) => {
     if (selectedExperience) {
       storeExperience(selectedExperience);
       discardChanges();
+      notify('Experience added to your list');
     }
   };
 
@@ -132,6 +159,7 @@ export const ExperienceComponent = ({ userId }: Props) => {
     if (addedExperience.length) {
       storeExperiences(addedExperience);
       discardChanges();
+      notify('Experience added to your list');
     }
   };
 
@@ -164,6 +192,16 @@ export const ExperienceComponent = ({ userId }: Props) => {
 
   const toggleAlertModal = () => {
     setModalAlertOpen(!modalAlertOpened);
+  };
+
+  const notify = (message: string) => {
+    setShowNotification(true);
+    setNotificationMessage(message);
+  };
+
+  const clearNotification = () => {
+    setShowNotification(false);
+    setNotificationMessage('');
   };
 
   return (
@@ -249,8 +287,12 @@ export const ExperienceComponent = ({ userId }: Props) => {
 
       <ShowIf condition={isEditing}>
         <LayoutOptions />
-        <TopicComponent topics={selectedExperience?.tags || []} onAddItem={addTopicToExperience} />
-        <PeopleComponent people={selectedExperience?.people || []} onAddItem={addPeopleToExperience} />
+        <TopicComponent topics={selectedExperience?.tags || []} onAddItem={addTopicToExperience} onRemoveItem={removeTopicFromExperience} />
+        <PeopleComponent
+          people={selectedExperience?.people || []}
+          onAddItem={addPeopleToExperience}
+          onRemoveItem={removePeopleFromExperience}
+        />
         <Grid className={style.action}>
           <ShowIf condition={selectedExperience?.userId === userId}>
             <Fab
@@ -311,6 +353,17 @@ export const ExperienceComponent = ({ userId }: Props) => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={showNotification}
+        autoHideDuration={2000}
+        onClose={clearNotification}
+        message={notificationMessage}
+      />
     </Panel>
   );
 };
