@@ -8,6 +8,9 @@ import Head from 'next/head';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 
+import { cryptoWaitReady } from '@polkadot/util-crypto';
+
+import { enableExtension } from '../extension';
 import theme from '../src/themes/default';
 
 const App = ({ Component, pageProps }: AppProps) => {
@@ -18,6 +21,12 @@ const App = ({ Component, pageProps }: AppProps) => {
       jssStyles.parentElement && jssStyles.parentElement.removeChild(jssStyles);
     }
 
+    (async () => {
+      //const { web3Enable } = await import('@polkadot/extension-dapp');
+      //web3Enable('localhost');
+      await cryptoWaitReady();
+      await enableExtension();
+    })();
     // keyring.loadAll({ ss58Format: 42, type: 'sr25519' });
   }, []);
 

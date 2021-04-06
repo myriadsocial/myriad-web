@@ -18,6 +18,7 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
+    "dev-basic": "next",
     "dev": "nodemon",
     "build": "next build && tsc --project tsconfig.server.json",
     "start": "next start -p $PORT",
@@ -90,6 +91,7 @@
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@mui-treasury/components": "^1.10.1",
     "@polkadot/api": "^4.1.1",
+    "@polkadot/extension-dapp": "^0.37.2",
     "@polkadot/keyring": "^2.8.1",
     "@polkadot/ui-keyring": "^0.72.1",
     "@polkadot/ui-settings": "^0.72.1",
