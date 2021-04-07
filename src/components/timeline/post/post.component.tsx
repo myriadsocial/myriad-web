@@ -11,6 +11,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CommentIcon from '@material-ui/icons/Comment';
 
+//import { ApiPromise, WsProvider } from '@polkadot/api';
+//import { web3FromAddress } from '@polkadot/extension-dapp';
 import CommentComponent from '../comment/comment.component';
 import ReplyCommentComponent from '../comment/reply.component';
 import FacebookReactionComponent from '../reactions/facebook.component';
@@ -34,6 +36,25 @@ type Props = {
   sendTip?: () => void;
 };
 
+// snippets to send transaction
+// finds an injector for an address
+//const injector = await web3FromAddress('5DTestUPts3kjeXSTMyerHihn1uwMfLj8vU8sqF7qYrFabHE');
+//const WS_PROVIDER = 'wss://dev-node.substrate.dev:9944';
+//// set provider
+//const provider = new WsProvider(WS_PROVIDER);
+//// create api to connect node
+//const api = await ApiPromise.create({ provider });
+
+//// sets the signer for the address on the @polkadot/api
+//api.setSigner(injector.signer);
+
+//// sign and send out transaction - notice here that the address of the account (as retrieved injected)
+//// is passed through as the param to the `signAndSend`, the API then calls the extension to present
+//// to the user and get it signed. Once completex, the api sends the tx + signature via the normal process
+//api.tx.balances
+//.transfer('5C5555yEXUcmEJ5kkcCMvdZjUo7NGJiQJMS7vZXEeoMhj3VQ', 123456)
+//.signAndSend('5DTestUPts3kjeXSTMyerHihn1uwMfLj8vU8sqF7qYrFabHE', (status) => { ... });
+
 export default function PostComponent({ post, open = false, disable = false, reply, sendTip, loadComments }: Props) {
   const style = useStyles();
 
@@ -45,7 +66,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
   };
 
   const tipPostUser = () => {
-    sendTip && sendTip();
+    //sendTip && sendTip();
   };
 
   const replyPost = (comment: string) => {
