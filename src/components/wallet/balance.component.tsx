@@ -73,21 +73,21 @@ const useStyles = makeStyles((theme: Theme) =>
 export const BalanceComponent = React.memo(function Wallet() {
   const style = useStyles();
   const [value, setValue] = React.useState(0);
-  //const [api, setApi] = React.useState(null);
+  const [api, setApi] = React.useState(null);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     event.preventDefault();
     setValue(newValue);
   };
 
-  //const connectToBlockchain = async () => {
-  //const wsProvider = new WsProvider('https://rpc.myriad.systems');
-  //const api = await ApiPromise.create({
-  //provider: wsProvider
-  ////types: types
-  //});
-  // bind api to state here
-  //};
+  const connectToBlockchain = async () => {
+    //const wsProvider = new WsProvider('https://rpc.myriad.systems');
+    //const api = await ApiPromise.create();
+    //{
+    //provider: wsProvider
+    //types: types
+    //}
+  };
 
   return (
     <div className={style.root}>
