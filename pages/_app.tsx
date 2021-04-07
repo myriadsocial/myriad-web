@@ -22,8 +22,6 @@ const App = ({ Component, pageProps }: AppProps) => {
     }
 
     (async () => {
-      //const { web3Enable } = await import('@polkadot/extension-dapp');
-      //web3Enable('localhost');
       await cryptoWaitReady();
       await enableExtension();
     })();
