@@ -6,7 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 
-//import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
+//import { ApiPromise, WsProvider } from '@polkadot/api';
 
 interface StyledTabProps {
   label: string;
@@ -71,38 +71,23 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const BalanceComponent = React.memo(function Wallet() {
-  //const modalRef = useRef();
-
-  //const showModal = () => {
-  //const modal = myRef.current;
-  //setTimeout(async () => {
-  //try {
-  //// Wait user to confirm !
-  //const result = await modal.show();
-  //const extensions = await web3Enable('my cool dapp');
-  //if (extensions.length === 0) {
-  //// no extension installed, or the user did not accept the authorization
-  //// in this case we should inform the use and give a link to the extension
-  //return;
-  //}
-
-  //// we are now informed that the user has at least one extension and that we
-  //// will be able to show and use accounts
-  //const allAccounts = await web3Accounts();
-  //} catch (err) {
-  //alert('CANCEL');
-  //}
-  //}, 100);
-  //console.log('Waiting user for confirmation ...');
-  //};
-
   const style = useStyles();
   const [value, setValue] = React.useState(0);
+  //const [api, setApi] = React.useState(null);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     event.preventDefault();
     setValue(newValue);
   };
+
+  //const connectToBlockchain = async () => {
+  //const wsProvider = new WsProvider('https://rpc.myriad.systems');
+  //const api = await ApiPromise.create({
+  //provider: wsProvider
+  ////types: types
+  //});
+  // bind api to state here
+  //};
 
   return (
     <div className={style.root}>
