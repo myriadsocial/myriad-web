@@ -89,7 +89,7 @@ function Adapter() {
               platform: {
                 eq: providerId
               },
-              id: {
+              platform_account_id: {
                 eq: providerAccountId
               }
             }
