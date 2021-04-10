@@ -139,7 +139,7 @@ function experienceReducer(state: State, action: Action) {
         ...state,
         selected: {
           ...state.selected,
-          ...action.experience,
+          ...action.experience
         }
       };
     }

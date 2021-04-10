@@ -139,7 +139,7 @@ export const useExperience = (userId: string) => {
 
     dispatch({
       type: ExperienceActionType.UPDATE_SELECTED_EXPERIENCE,
-      experience,
+      experience
     });
   };
 
