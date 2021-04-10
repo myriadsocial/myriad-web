@@ -40,9 +40,10 @@ import { Experience, People, Tag } from 'src/interfaces/experience';
 
 type Props = {
   userId: string;
+  anonymous: boolean;
 };
 
-export const ExperienceComponent = ({ userId }: Props) => {
+export const ExperienceComponent = ({ userId, anonymous }: Props) => {
   const style = useStyles();
 
   const {
@@ -57,7 +58,8 @@ export const ExperienceComponent = ({ userId }: Props) => {
     updateExperience,
     selectExperience,
     removeExperience,
-    searchExperience
+    searchExperience,
+    prependExperience
   } = useExperience(userId);
   const [isEditing, setEditing] = useState(false);
   const [isManagingExperience, setManageExperience] = useState(false);
@@ -165,7 +167,11 @@ export const ExperienceComponent = ({ userId }: Props) => {
 
   const addToMyExperience = (experience: Experience) => {
     if (experience) {
-      setAddedExperience([...addedExperience, experience]);
+      if (anonymous) {
+        prependExperience(experience);
+      } else {
+        setAddedExperience([...addedExperience, experience]);
+      }
     }
   };
 
@@ -217,18 +223,24 @@ export const ExperienceComponent = ({ userId }: Props) => {
             Sed vehicula.
           </Typography>
         </CardContent>
-        <CardActions>
-          <Button size="small" variant="contained" color="secondary" onClick={editCurrentExperience} disabled={isEditing}>
-            Customize
-          </Button>
-          <Button size="small" variant="contained" color="secondary" onClick={manageExperience} disabled={isManagingExperience}>
-            Manage Experiences
-          </Button>
-        </CardActions>
+        <ShowIf condition={!anonymous}>
+          <CardActions>
+            <Button size="small" variant="contained" color="secondary" onClick={editCurrentExperience} disabled={isEditing}>
+              Customize
+            </Button>
+            <Button size="small" variant="contained" color="secondary" onClick={manageExperience} disabled={isManagingExperience}>
+              Manage Experiences
+            </Button>
+          </CardActions>
+        </ShowIf>
       </Card>
 
       <ShowIf condition={!isEditing && !isManagingExperience}>
+        <ShowIf condition={anonymous}>
+          <SearchExperienceComponent title="Search Experience" data={searched} search={searchExperience} onSelected={addToMyExperience} />
+        </ShowIf>
         <ExperienceListComponent
+          title={anonymous ? 'Available Experiences' : 'My saved Experiences'}
           selected={selected}
           experiences={experiences}
           selectExperience={selectExperience}
