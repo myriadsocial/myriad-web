@@ -18,17 +18,21 @@ export const useExperience = (userId: string) => {
   const [params, setParams] = useState({
     offset: 0,
     limit: 10,
-    include: ['user'],
-    order: 'createdAt'
+    include: ['user']
   });
+
+  const experiencePath = userId ? '/experiences' : `/users/${userId}/experiences`;
 
   const load = async (type: ExperienceActionType = ExperienceActionType.INIT_EXPERIENCE) => {
     setLoading(true);
 
     try {
       const { data } = await axios.request<Experience[]>({
-        url: `/users/${userId}/experiences`,
-        method: 'GET'
+        url: experiencePath,
+        method: 'GET',
+        params: {
+          filter: params
+        }
       });
 
       dispatch({
@@ -167,7 +171,11 @@ export const useExperience = (userId: string) => {
           skip: 0,
           where: {
             name: {
-              like: query
+              like: `.*${query}*`,
+              options: 'i'
+            },
+            id: {
+              nin: state.experiences.map(i => i.id)
             }
           }
         }
@@ -178,6 +186,15 @@ export const useExperience = (userId: string) => {
       type: ExperienceActionType.SEARCH_EXPERIENCE,
       experiences: data
     });
+  };
+
+  const prependExperience = (experience: Experience) => {
+    dispatch({
+      type: ExperienceActionType.ADD_EXPERIENCE,
+      payload: experience
+    });
+
+    selectExperience(experience.id);
   };
 
   return {
@@ -195,6 +212,7 @@ export const useExperience = (userId: string) => {
     searchExperience,
     selectExperience,
     editExperience,
-    removeExperience
+    removeExperience,
+    prependExperience
   };
 };
