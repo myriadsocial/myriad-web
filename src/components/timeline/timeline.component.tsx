@@ -1,4 +1,4 @@
-import React, { createRef, useCallback } from 'react';
+import React, { createRef, useCallback, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -10,11 +10,12 @@ import { usePost } from './use-post.hooks';
 import { Post, Comment } from 'src/interfaces/post';
 
 const Timeline = () => {
-  const { loading, posts, loadMorePost, reply, loadComments } = usePost();
   const style = useStyles();
+
+  const { posts, loadMorePost, reply, loadComments } = usePost();
   const scrollRoot = createRef<HTMLDivElement>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener('scroll', handleScroll, true);
   }, []);
 
@@ -34,12 +35,11 @@ const Timeline = () => {
     reply(comment.postId, comment);
   };
 
-  if (loading) return null;
-
   return (
     <div className={style.root}>
-      <div className={style.scroll} ref={scrollRoot}>
+      <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
         <InfiniteScroll
+          scrollableTarget="scrollable-timeline"
           className={style.child}
           dataLength={posts.length + 100}
           next={loadMorePost}

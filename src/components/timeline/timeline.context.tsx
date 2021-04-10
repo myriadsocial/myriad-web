@@ -56,9 +56,7 @@ function timelineReducer(state: State, action: Action) {
     case TimelineActionType.LOAD_MORE_POST: {
       return {
         ...state,
-        posts: {
-          ...state.posts
-        }
+        posts: [...state.posts, ...action.posts]
       };
     }
     case TimelineActionType.LOAD_COMMENTS: {
