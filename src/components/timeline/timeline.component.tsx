@@ -10,14 +10,12 @@ import { usePost } from './use-post.hooks';
 import { Post, Comment } from 'src/interfaces/post';
 
 const Timeline = () => {
-  const { loading, posts, loadMorePost, loadInitPost, reply, loadComments } = usePost();
+  const { loading, posts, loadMorePost, reply, loadComments } = usePost();
   const style = useStyles();
   const scrollRoot = createRef<HTMLDivElement>();
 
   React.useEffect(() => {
     window.addEventListener('scroll', handleScroll, true);
-
-    loadInitPost();
   }, []);
 
   const handleScroll = useCallback(() => {

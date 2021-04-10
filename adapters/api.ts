@@ -62,16 +62,16 @@ function Adapter() {
 
         //@ts-ignore
         userCredentials: data.userCredentials
-          //@ts-ignore
-          ? data.userCredentials.map(item => {
-            return {
-              platform: item.people.platform,
-              platformUserId: item.people.platform_account_id,
-              username: item.people.username,
-              accessToken: item.access_token,
-              refreshToken: item.refresh_token || null
-            };
-          })
+          ? //@ts-ignore
+            data.userCredentials.map(item => {
+              return {
+                platform: item.people.platform,
+                platformUserId: item.people.platform_account_id,
+                username: item.people.username,
+                accessToken: item.access_token,
+                refreshToken: item.refresh_token || null
+              };
+            })
           : []
       };
     }
