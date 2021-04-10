@@ -36,7 +36,7 @@ import { useExperience } from './use-experience.hooks';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import Panel from 'src/components/common/panel.component';
-import { Experience, People, Tag } from 'src/interfaces/experience';
+import { Experience, People, Tag, LayoutType } from 'src/interfaces/experience';
 
 type Props = {
   userId: string;
@@ -83,6 +83,17 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
   const editCurrentExperience = () => {
     setEditing(true);
     setManageExperience(false);
+  };
+
+  const changeSelectedLayout = (type: LayoutType) => {
+    if (!selectedExperience) {
+      return;
+    }
+
+    setSelectedExperience({
+      ...selectedExperience,
+      layout: type
+    });
   };
 
   const addPeopleToExperience = (people: People) => {
@@ -225,7 +236,12 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
         </CardContent>
         <ShowIf condition={!anonymous}>
           <CardActions>
-            <Button size="small" variant="contained" color="secondary" onClick={editCurrentExperience} disabled={isEditing}>
+            <Button
+              size="small"
+              variant="contained"
+              color="secondary"
+              onClick={editCurrentExperience}
+              disabled={isEditing || selectedExperience?.userId !== userId}>
               Customize
             </Button>
             <Button size="small" variant="contained" color="secondary" onClick={manageExperience} disabled={isManagingExperience}>
@@ -298,7 +314,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
       </ShowIf>
 
       <ShowIf condition={isEditing}>
-        <LayoutOptions />
+        <LayoutOptions value={selectedExperience?.layout} onChanged={changeSelectedLayout} />
         <TopicComponent topics={selectedExperience?.tags || []} onAddItem={addTopicToExperience} onRemoveItem={removeTopicFromExperience} />
         <PeopleComponent
           people={selectedExperience?.people || []}
