@@ -26,7 +26,7 @@ export const useExperience = (userId: string) => {
     let filter = params;
 
     //TODO: update when applying address on anonymous
-    if (userId !== "null") {
+    if (userId !== 'null') {
       filter = {
         ...filter,
         where: {

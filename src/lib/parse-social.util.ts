@@ -19,33 +19,33 @@ export type PostDetail = {
 
 export const parseTwitter = (data: Record<string, any>) => {
   const lookup: PostDetail = {
-    text: data.data.text,
-    createdOn: format(new Date(data.data.created_at), 'dd MMMM yyyy'),
+    text: data.full_text,
+    createdOn: format(new Date(data.created_at), 'dd MMMM yyyy'),
     user: {
-      name: data.includes.users[0].name,
-      avatar: data.includes.users[0].profile_image_url,
-      username: `@${data.includes.users[0].username}`
+      name: data.user.name,
+      avatar: data.user.profile_image_url,
+      username: `@${data.user.screen_name}`
     },
     videos: [],
     images: [],
     metric: {
-      like: data.data.public_metrics.like_count,
-      retweet: data.data.public_metrics.retweet_count
+      like: data.favorite_count,
+      retweet: data.retweet_count
     }
   };
 
-  if (data.includes.media?.length) {
-    data.includes.media.forEach((media: { type: string; url: string }) => {
+  if (data.extended_entities.media?.length) {
+    data.extended_entities.media.forEach((media: { type: string; media_url_https: string; video_info: any }) => {
       if (media.type === 'photo') {
         lookup.images.push({
-          src: media.url,
+          src: media.media_url_https,
           height: random(2, 4),
           width: random(2, 4)
         });
       }
 
       if (media.type === 'video') {
-        lookup.videos.push(media.url);
+        lookup.videos.push(media.video_info.variants[0].url);
       }
     });
   }

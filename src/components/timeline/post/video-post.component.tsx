@@ -25,7 +25,7 @@ export default function ImageListComponent({ url }: Props) {
 
   return (
     <div className={style.root}>
-      <ReactPlayer url={url} />
+      <ReactPlayer url={url} controls={true} />
     </div>
   );
 }
