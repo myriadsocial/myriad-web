@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { useSession } from 'next-auth/client';
+
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -37,8 +39,11 @@ type Props = {
 export default function PostComponent({ post, open = false, disable = false, reply, sendTip, loadComments }: Props) {
   const style = useStyles();
 
+  const [session] = useSession();
   const [expanded, setExpanded] = useState(open);
   const { detail } = useSocialDetail(post);
+
+  const userId = session?.user.address as string;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -52,7 +57,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
     reply({
       text: comment,
       postId: post.id,
-      userId: '5EaA8LD2kmicJvJu3v3CJJErxCwWVrQjGi9UnwNCjP4ohriQ',
+      userId,
       createdAt: new Date()
     });
   };
