@@ -356,9 +356,10 @@ export const ExperienceComponent = ({ userId }: Props) => {
 
       <Snackbar
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left'
+          vertical: 'top',
+          horizontal: 'right'
         }}
+        color="secondary"
         open={showNotification}
         autoHideDuration={2000}
         onClose={clearNotification}
