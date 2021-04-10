@@ -25,7 +25,8 @@ export const useExperience = (userId: string) => {
   const load = async (type: ExperienceActionType = ExperienceActionType.INIT_EXPERIENCE) => {
     let filter = params;
 
-    if (userId) {
+    //TODO: update when applying address on anonymous
+    if (userId !== "null") {
       filter = {
         ...filter,
         where: {
