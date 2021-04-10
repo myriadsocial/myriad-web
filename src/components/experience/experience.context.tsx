@@ -7,6 +7,7 @@ export enum ExperienceActionType {
   SHOW_MORE_EXPERIENCE = 'SHOW_MORE_EXPERIENCE',
   SEARCH_EXPERIENCE = 'SEARCH_EXPERIENCE',
   SELECT_EXPERIENCE = 'SELECT_EXPERIENCE',
+  UPDATE_SELECTED_EXPERIENCE = 'UPDATE_SELECTED_EXPERIENCE',
   EDIT_EXPERIENCE = 'EDIT_EXPERIENCE',
   ADD_EXPERIENCE = 'ADD_EXPERIENCE',
   REMOVE_EXPERIENCE = 'REMOVE_EXPERIENCE',
@@ -31,6 +32,11 @@ export interface SearchExperience {
 
 export interface SelectExperience {
   type: ExperienceActionType.SELECT_EXPERIENCE;
+  experience: Experience;
+}
+
+export interface UpdateSelectedExperience {
+  type: ExperienceActionType.UPDATE_SELECTED_EXPERIENCE;
   experience: Experience;
 }
 
@@ -72,6 +78,7 @@ export type Action =
   | ShowMoreExperience
   | SearchExperience
   | SelectExperience
+  | UpdateSelectedExperience
   | EditExperience
   | AddExperience
   | RemoveExperience
@@ -80,6 +87,7 @@ export type Action =
 type Dispatch = (action: Action) => void;
 type ExperienceProviderProps = { children: React.ReactNode };
 type State = {
+  init: boolean;
   experiences: Experience[];
   selected: Experience | null;
   edit: Experience | null;
@@ -89,6 +97,7 @@ type State = {
 };
 
 const initalState = {
+  init: true,
   selected: null,
   edit: null,
   experiences: [],
@@ -105,7 +114,8 @@ function experienceReducer(state: State, action: Action) {
       return {
         ...state,
         experiences: action.experiences,
-        selected: action.experiences[0]
+        selected: action.experiences[0],
+        init: false
       };
     }
 
@@ -121,6 +131,16 @@ function experienceReducer(state: State, action: Action) {
       return {
         ...state,
         selected: action.experience
+      };
+    }
+
+    case ExperienceActionType.UPDATE_SELECTED_EXPERIENCE: {
+      return {
+        ...state,
+        selected: {
+          ...state.selected,
+          ...action.experience,
+        }
       };
     }
 

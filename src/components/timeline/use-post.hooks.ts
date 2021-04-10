@@ -1,9 +1,11 @@
 // @ts-nocheck
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
+import { useExperience } from '../experience/experience.context';
 import { useTimeline, TimelineActionType } from './timeline.context';
 
 import Axios from 'axios';
+import { People } from 'src/interfaces/experience';
 import { Comment, Post } from 'src/interfaces/post';
 
 const axios = Axios.create({
@@ -11,13 +13,16 @@ const axios = Axios.create({
 });
 
 export const usePost = () => {
+  const { state: experienceState } = useExperience();
   const { state, dispatch } = useTimeline();
-  const [loading, setLoading] = useState(false);
+  const [reload, setReload] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [params, setParams] = useState({
+  const [filter, setFilter] = useState({
     offset: 0,
     limit: 10,
     skip: 0,
+    where: {},
     include: [
       {
         relation: 'comments',
@@ -32,21 +37,45 @@ export const usePost = () => {
     ]
   });
 
-  const load = async (type: TimelineActionType = TimelineActionType.INIT_POST, tags: string[] = []) => {
-    setLoading(true);
+  // change post filter every selected experience changed
+  // each experience has people and tag attribute as filter parameter
+  useEffect(() => {
+    if (!experienceState.init && experienceState.selected) {
+      const { people, tags } = experienceState.selected;
 
-    let filter = params;
-
-    if (tags.length > 0) {
-      filter = {
+      setFilter({
         ...filter,
         where: {
-          tags: {
-            inq: tags
-          }
+          or: [
+            {
+              tags: {
+                inq: tags.filter(i => !i.hide).map(i => i.id)
+              }
+            },
+            {
+              'people.username': {
+                inq: people.filter(i => !i.hide).map(i => i.username)
+              }
+            }
+          ]
         }
-      };
+      });
+
+      setReload(true);
     }
+
+    return undefined;
+  }, [experienceState.selected]);
+
+  // fetch intial post every where filter changed
+  useEffect(() => {
+    if (reload) {
+      load();
+    }
+  }, [reload]);
+
+  const load = async (type: TimelineActionType = TimelineActionType.INIT_POST) => {
+    setLoading(true);
 
     try {
       const { data } = await axios({
@@ -65,13 +94,14 @@ export const usePost = () => {
       setError(error);
     } finally {
       setLoading(false);
+      setReload(false);
     }
   };
 
   const loadMorePost = () => {
-    setParams({
-      ...params,
-      skip: (params.skip + 1) * params.limit
+    setFilter({
+      ...filter,
+      skip: (filter.skip + 1) * filter.limit
     });
 
     load(TimelineActionType.LOAD_MORE_POST);
@@ -85,6 +115,7 @@ export const usePost = () => {
       },
       method: 'GET'
     });
+
     dispatch({
       type: TimelineActionType.LOAD_COMMENTS,
       postId,
@@ -110,7 +141,6 @@ export const usePost = () => {
     error,
     loading,
     posts: state.posts,
-    loadInitPost: load,
     loadMorePost,
     loadComments,
     reply
