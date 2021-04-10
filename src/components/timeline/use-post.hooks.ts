@@ -21,7 +21,6 @@ export const usePost = () => {
   const [filter, setFilter] = useState({
     offset: 0,
     limit: 10,
-    skip: 0,
     where: {},
     include: [
       {
@@ -41,24 +40,30 @@ export const usePost = () => {
   // each experience has people and tag attribute as filter parameter
   useEffect(() => {
     if (!experienceState.init && experienceState.selected) {
-      const { people, tags } = experienceState.selected;
+      const { people, tags, layout } = experienceState.selected;
+
+      let where = {
+        or: [
+          {
+            tags: {
+              inq: tags.filter(i => !i.hide).map(i => i.id)
+            }
+          },
+          {
+            'people.username': {
+              inq: people.filter(i => !i.hide).map(i => i.username)
+            }
+          }
+        ]
+      };
+
+      if (layout === 'photo') {
+        where['hasMedia'] = true;
+      }
 
       setFilter({
         ...filter,
-        where: {
-          or: [
-            {
-              tags: {
-                inq: tags.filter(i => !i.hide).map(i => i.id)
-              }
-            },
-            {
-              'people.username': {
-                inq: people.filter(i => !i.hide).map(i => i.username)
-              }
-            }
-          ]
-        }
+        where
       });
 
       setReload(true);
@@ -74,7 +79,7 @@ export const usePost = () => {
     }
   }, [reload]);
 
-  const load = async (type: TimelineActionType = TimelineActionType.INIT_POST) => {
+  const load = async () => {
     setLoading(true);
 
     try {
@@ -87,7 +92,7 @@ export const usePost = () => {
       });
 
       dispatch({
-        type,
+        type: TimelineActionType.INIT_POST,
         posts: data.map((item: Post) => ({ ...item, comments: item.comments || [] }))
       });
     } catch (error) {
@@ -98,13 +103,37 @@ export const usePost = () => {
     }
   };
 
-  const loadMorePost = () => {
-    setFilter({
-      ...filter,
-      skip: (filter.skip + 1) * filter.limit
-    });
+  const loadMorePost = async () => {
+    const offset = (filter.offset + 1) * filter.limit;
 
-    load(TimelineActionType.LOAD_MORE_POST);
+    setLoading(true);
+
+    try {
+      const { data } = await axios.request<Post[]>({
+        url: '/posts',
+        method: 'GET',
+        params: {
+          filter: {
+            ...filter,
+            offset
+          }
+        }
+      });
+
+      setFilter({
+        ...filter,
+        offset
+      });
+
+      dispatch({
+        type: TimelineActionType.LOAD_MORE_POST,
+        posts: data.map((item: Post) => ({ ...item, comments: item.comments || [] }))
+      });
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const loadComments = async (postId: string) => {

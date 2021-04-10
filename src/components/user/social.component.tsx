@@ -114,7 +114,7 @@ const SocialComponent = ({ user, toggleLogin }: Props) => {
           </ListItemIcon>
           <ListItemText primaryTypographyProps={typograpyProps} className={style.button}>
             <ShowIf condition={!user.anonymous}>
-              <Typography>{facebook}</Typography>
+              <Typography variant="body2">{facebook}</Typography>
             </ShowIf>
           </ListItemText>
         </ListItem>
@@ -124,7 +124,7 @@ const SocialComponent = ({ user, toggleLogin }: Props) => {
           </ListItemIcon>
           <ListItemText primaryTypographyProps={typograpyProps} className={style.button}>
             <ShowIf condition={!user.anonymous}>
-              <Typography>{twitter}</Typography>
+              <Typography variant="body2">{twitter}</Typography>
             </ShowIf>
           </ListItemText>
         </ListItem>
@@ -134,7 +134,7 @@ const SocialComponent = ({ user, toggleLogin }: Props) => {
           </ListItemIcon>
           <ListItemText primaryTypographyProps={typograpyProps} className={style.button}>
             <ShowIf condition={!user.anonymous}>
-              <Typography>{reddit}</Typography>
+              <Typography variant="body2">{reddit}</Typography>
             </ShowIf>
           </ListItemText>
         </ListItem>
