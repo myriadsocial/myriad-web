@@ -88,6 +88,7 @@
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@mui-treasury/components": "^1.10.1",
     "@polkadot/api": "^4.1.1",
+    "@polkadot/extension-dapp": "^0.37.2",
     "@prisma/client": "^2.19.0",
     "axios": "^0.18.0",
     "axios-hooks": "^2.5.0",
