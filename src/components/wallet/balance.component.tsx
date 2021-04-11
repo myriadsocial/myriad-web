@@ -73,8 +73,14 @@ const useStyles = makeStyles((theme: Theme) =>
 export const BalanceComponent = React.memo(function Wallet() {
   useEffect(() => {
     (async () => {
-      const api = connectToBlockchain();
-      console.log('api connected: ', api);
+      const api = await connectToBlockchain();
+      console.log('ApiPromise called: ', api);
+
+      const chain = await api.rpc.system.chain();
+
+      // Print out the chain to which we connected.
+
+      console.log(`You are connected to ${chain} !`);
     })();
   }, []);
 
