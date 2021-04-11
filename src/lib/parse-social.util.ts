@@ -34,7 +34,7 @@ export const parseTwitter = (data: Record<string, any>) => {
     }
   };
 
-  if (data.extended_entities.media?.length) {
+  if (data.extended_entities && data.extended_entities.media?.length) {
     data.extended_entities.media.forEach((media: { type: string; media_url_https: string; video_info: any }) => {
       if (media.type === 'photo') {
         lookup.images.push({
