@@ -62,7 +62,9 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
     prependExperience
   } = useExperience(userId);
   const [isEditing, setEditing] = useState(false);
+  const [isEdited, setEdited] = useState(false);
   const [isManagingExperience, setManageExperience] = useState(false);
+  const [isAdded, setAdded] = useState(false);
   const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
   const [addedExperience, setAddedExperience] = useState<Experience[]>([]);
   const [modalEditOpened, setModalEditOpen] = useState(false);
@@ -83,6 +85,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
   const editCurrentExperience = () => {
     setEditing(true);
     setManageExperience(false);
+    setEdited(false);
   };
 
   const changeSelectedLayout = (type: LayoutType) => {
@@ -94,6 +97,8 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
       ...selectedExperience,
       layout: type
     });
+
+    setEdited(true);
   };
 
   const addPeopleToExperience = (people: People) => {
@@ -105,6 +110,8 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
       ...selectedExperience,
       people: [...selectedExperience.people, people]
     });
+
+    setEdited(true);
   };
 
   const removePeopleFromExperience = (people: People) => {
@@ -116,6 +123,8 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
       ...selectedExperience,
       people: selectedExperience.people.filter(item => item.id !== people.id)
     });
+
+    setEdited(true);
   };
 
   const addTopicToExperience = (tag: Tag) => {
@@ -127,6 +136,8 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
       ...selectedExperience,
       tags: [...selectedExperience.tags, tag]
     });
+
+    setEdited(true);
   };
 
   const removeTopicFromExperience = (tag: Tag) => {
@@ -138,6 +149,8 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
       ...selectedExperience,
       tags: selectedExperience.tags.filter(item => item.id !== tag.id)
     });
+
+    setEdited(true);
   };
 
   const discardChanges = () => {
@@ -145,17 +158,21 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
     setEditing(false);
     setManageExperience(false);
     setAddedExperience([]);
+    setEdited(false);
+    setAdded(false);
   };
 
   // Managing Experience
   const manageExperience = () => {
     setEditing(false);
     setManageExperience(true);
+    setAdded(false);
   };
 
   const updateSelectedExperience = () => {
     if (selectedExperience) {
       updateExperience(selectedExperience);
+      discardChanges();
       notify('Experience updated');
     }
   };
@@ -183,11 +200,14 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
       } else {
         setAddedExperience([...addedExperience, experience]);
       }
+
+      setAdded(true);
     }
   };
 
   const removeFromAddedExperience = (id: string) => {
     setAddedExperience([...addedExperience.filter(experience => experience.id !== id)]);
+    setAdded(true);
   };
 
   const confirmRemove = (id: string) => {
@@ -299,7 +319,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
               className={style.extendedIcon}
               size="small"
               variant="extended"
-              color="secondary"
+              color={isAdded ? 'secondary' : 'primary'}
               aria-label="edit">
               <SaveIcon />
               Save
@@ -328,7 +348,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
               className={style.extendedIcon}
               size="small"
               variant="extended"
-              color="primary"
+              color={isEdited ? 'secondary' : 'primary'}
               aria-label="add">
               <UpdateIcon />
               Update
