@@ -12,7 +12,6 @@ export const enableExtension = async () => {
   // we are now informed that the user has at least one extension and that we
   // will be able to show and use accounts
   let allAccounts = await web3Accounts();
-  console.log('this is allAccounts: ', allAccounts);
 
   let unsubscribe; // this is the function of type `() => void` that should be called to unsubscribe
 
@@ -20,7 +19,7 @@ export const enableExtension = async () => {
   //// note that `web3AccountsSubscribe` returns the function to unsubscribe
   unsubscribe = await web3AccountsSubscribe(injectedAccounts => {
     injectedAccounts.map(accounts => {
-      console.log(">>>> this is all the accounts's object", accounts);
+      //console.log(">>>> this is all the accounts's object", accounts);
     });
   });
 

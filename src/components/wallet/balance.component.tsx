@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import Tab from '@material-ui/core/Tab';
@@ -71,22 +71,26 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const BalanceComponent = React.memo(function Wallet() {
-  useEffect(() => {
-    (async () => {
-      const api = await connectToBlockchain();
-      console.log('ApiPromise called: ', api);
+  const style = useStyles();
+  const [value, setValue] = useState(0);
+  const [api, setApi] = useState(null);
+  const [freeBalance, setFreeBalance] = useState(null);
 
-      const chain = await api.rpc.system.chain();
-
-      // Print out the chain to which we connected.
-
-      console.log(`You are connected to ${chain} !`);
-    })();
+  useEffect(async () => {
+    const balance = await getBalance();
+    setFreeBalance(`${balance}`);
   }, []);
 
-  const style = useStyles();
-  const [value, setValue] = React.useState(0);
-  const [api, setApi] = React.useState(null);
+  const getBalance = async () => {
+    const DECIMAL_PLACES = 10000000000;
+    const ADDR = '5CS8upU5c44NaPu7qiSXGwna7oeDGG3vifM5nZAbwx3nTGTm';
+    const api = await connectToBlockchain();
+    const {
+      data: { free: previousFree },
+      nonce: previousNonce
+    } = await api.query.system.account(ADDR);
+    return (previousFree / DECIMAL_PLACES).toFixed(3);
+  };
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     event.preventDefault();
@@ -103,7 +107,8 @@ export const BalanceComponent = React.memo(function Wallet() {
         </Grid>
         <Grid item>
           <Typography className={style.title} variant="h5">
-            357 <span className={style.subtitle}>Myria</span>
+            {freeBalance}
+            <span className={style.subtitle}>Myria</span>
           </Typography>
         </Grid>
       </Grid>
