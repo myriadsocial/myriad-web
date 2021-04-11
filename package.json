@@ -7,12 +7,6 @@
   },
   "homepage": ".",
   "resolutions": {
-    "@polkadot/api": "^1.28.1",
-    "@polkadot/keyring": "^2.8.1",
-    "@polkadot/types": "^1.28.1",
-    "**/@polkadot/types": "^1.28.1",
-    "@polkadot/util": "^2.8.1",
-    "@polkadot/util-crypto": "^2.8.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "typescript": "^3.8.3"
