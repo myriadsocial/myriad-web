@@ -14,15 +14,15 @@ export const enableExtension = async () => {
   let allAccounts = await web3Accounts();
   console.log('this is allAccounts: ', allAccounts);
 
-  //let unsubscribe; // this is the function of type `() => void` that should be called to unsubscribe
+  let unsubscribe; // this is the function of type `() => void` that should be called to unsubscribe
 
   //// we subscribe to any account change and log the new list.
   //// note that `web3AccountsSubscribe` returns the function to unsubscribe
-  //unsubscribe = await web3AccountsSubscribe(injectedAccounts => {
-  //injectedAccounts.map(accounts => {
-  //console.log(accounts.address);
-  //});
-  //});
+  unsubscribe = await web3AccountsSubscribe(injectedAccounts => {
+    injectedAccounts.map(accounts => {
+      console.log(">>>> this is all the accounts's object", accounts);
+    });
+  });
 
   //// don't forget to unsubscribe when needed, e.g when unmounting a component
   //unsubscribe && unsubscribe();

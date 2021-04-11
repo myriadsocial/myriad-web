@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import Tab from '@material-ui/core/Tab';
@@ -6,7 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 
-//import { ApiPromise, WsProvider } from '@polkadot/api';
+import { connectToBlockchain } from '../../helpers/polkadotApi';
 
 interface StyledTabProps {
   label: string;
@@ -71,6 +71,13 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const BalanceComponent = React.memo(function Wallet() {
+  useEffect(() => {
+    (async () => {
+      const api = connectToBlockchain();
+      console.log('api connected: ', api);
+    })();
+  }, []);
+
   const style = useStyles();
   const [value, setValue] = React.useState(0);
   const [api, setApi] = React.useState(null);
@@ -78,15 +85,6 @@ export const BalanceComponent = React.memo(function Wallet() {
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     event.preventDefault();
     setValue(newValue);
-  };
-
-  const connectToBlockchain = async () => {
-    //const wsProvider = new WsProvider('https://rpc.myriad.systems');
-    //const api = await ApiPromise.create();
-    //{
-    //provider: wsProvider
-    //types: types
-    //}
   };
 
   return (
