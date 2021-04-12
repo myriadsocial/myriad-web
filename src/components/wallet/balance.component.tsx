@@ -6,7 +6,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 
-import { connectToBlockchain } from '../../helpers/polkadotApi';
+//import { connectToBlockchain } from '../../helpers/polkadotApi';
+import { getBalance } from '../../helpers/polkadotApi';
 
 interface StyledTabProps {
   label: string;
@@ -73,24 +74,16 @@ const useStyles = makeStyles((theme: Theme) =>
 export const BalanceComponent = React.memo(function Wallet() {
   const style = useStyles();
   const [value, setValue] = useState(0);
-  const [api, setApi] = useState(null);
-  const [freeBalance, setFreeBalance] = useState(null);
+  //const [api, setApi] = useState(null);
+  const [freeBalance, setFreeBalance] = useState<number | null>(null);
 
-  useEffect(async () => {
-    const balance = await getBalance();
-    setFreeBalance(`${balance}`);
+  useEffect(() => {
+    (async () => {
+      let balance: number | string = await getBalance();
+      balance = Number(balance);
+      setFreeBalance(balance);
+    })();
   }, []);
-
-  const getBalance = async () => {
-    const DECIMAL_PLACES = 10000000000;
-    const ADDR = '5CS8upU5c44NaPu7qiSXGwna7oeDGG3vifM5nZAbwx3nTGTm';
-    const api = await connectToBlockchain();
-    const {
-      data: { free: previousFree },
-      nonce: previousNonce
-    } = await api.query.system.account(ADDR);
-    return (previousFree / DECIMAL_PLACES).toFixed(3);
-  };
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     event.preventDefault();
