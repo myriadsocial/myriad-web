@@ -34,10 +34,12 @@ export const sendTip = async () => {
 
   const api = await connectToBlockchain();
 
-  const RIZ_MYR = '5DJUPpC7C8CxiQ5ECNXQ8PR9ngydZ4hiDpHnMivgnC8yfYjc';
+  const ALICE = 'tkTptH5puVHn8VJ8NWMdsLa2fYGfYqV8QTyPRZRiQxAHBbCB4';
 
-  // here we use the api to create a balance transfer to some account of a value of 123
-  const transferExtrinsic = api.tx.balances.transfer(RIZ_MYR, 123);
+  //const RIZ_MYR = '5DJUPpC7C8CxiQ5ECNXQ8PR9ngydZ4hiDpHnMivgnC8yfYjc';
+
+  // here we use the api to create a balance transfer to some account of a value of 12345678
+  const transferExtrinsic = api.tx.balances.transfer(ALICE, 12345678);
 
   // to be able to retrieve the signer interface from this account
   // we can use web3FromSource which will return an InjectedExtension type

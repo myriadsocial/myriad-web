@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import Tab from '@material-ui/core/Tab';
@@ -84,7 +84,7 @@ export const BalanceComponent = React.memo(function Wallet() {
   const style = useStyles();
   const [value, setValue] = useState(0);
   const [isHidden, setIsHidden] = useState(true);
-  const { state: myriadAccount, dispatch } = useMyriadAccount();
+  const { state: myriadAccount } = useMyriadAccount();
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     event.preventDefault();
