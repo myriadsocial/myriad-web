@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
@@ -10,6 +10,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import ImageIcon from '@material-ui/icons/Image';
+
+import { getWalletHistory } from '../../helpers/polkadotApi';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -50,6 +52,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const TransactionComponent = React.memo(function Wallet() {
   const style = useStyles();
+
+  useEffect(() => {
+    (async () => {
+      await getWalletHistory();
+    })();
+  }, []);
 
   return (
     <List className={style.root}>

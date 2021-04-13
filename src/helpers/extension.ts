@@ -12,6 +12,7 @@ export const enableExtension = async () => {
   // we are now informed that the user has at least one extension and that we
   // will be able to show and use accounts
   let allAccounts = await web3Accounts();
+  return allAccounts;
 };
 
 export const unsubscribeFromAccounts = async () => {

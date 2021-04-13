@@ -6,8 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 
-//import { connectToBlockchain } from '../../helpers/polkadotApi';
-import { getBalance } from '../../helpers/polkadotApi';
+import { useMyriadAccount } from './wallet.context';
 
 interface StyledTabProps {
   label: string;
@@ -74,16 +73,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export const BalanceComponent = React.memo(function Wallet() {
   const style = useStyles();
   const [value, setValue] = useState(0);
-  //const [api, setApi] = useState(null);
-  const [freeBalance, setFreeBalance] = useState<number | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      let balance: number | string = await getBalance();
-      balance = Number(balance);
-      setFreeBalance(balance);
-    })();
-  }, []);
+  const { state: myriadAccount, dispatch } = useMyriadAccount();
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     event.preventDefault();
@@ -100,7 +90,7 @@ export const BalanceComponent = React.memo(function Wallet() {
         </Grid>
         <Grid item>
           <Typography className={style.title} variant="h5">
-            {freeBalance}
+            {myriadAccount.freeBalance.toFixed(3)}
             <span className={style.subtitle}>Myria</span>
           </Typography>
         </Grid>

@@ -1,35 +1,33 @@
 import React from 'react';
 
-export enum MyriadAccountActionType {
-  ADD_ADDRESS = 'ADD_ADDRESS'
-}
-
-interface StoreAddress {
-  type: MyriadAccountActionType.ADD_ADDRESS;
-  address: string;
-}
-
-export type Action = StoreAddress;
-
+type Action = { type: 'ADD_ADDRESS'; key: string; value: string } | { type: 'STORE_BALANCE'; key: string; value: number };
 type Dispatch = (action: Action) => void;
 type MyriadAccountProviderProps = { children: React.ReactNode };
 
 type State = {
   address: string;
+  freeBalance: number;
 };
 
 const initialMyriadAccountState: State = {
-  address: ''
+  address: '',
+  freeBalance: 0
 };
 
 const MyriadAccountContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
 
 function myriadAccountReducer(state: State, action: Action): State {
   switch (action.type) {
-    case MyriadAccountActionType.ADD_ADDRESS: {
+    case 'ADD_ADDRESS': {
       return {
         ...state,
-        address: action.address
+        [action.key]: action.value
+      };
+    }
+    case 'STORE_BALANCE': {
+      return {
+        ...state,
+        [action.key]: action.value
       };
     }
     default: {
