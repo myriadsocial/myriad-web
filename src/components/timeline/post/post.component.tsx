@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CommentIcon from '@material-ui/icons/Comment';
 
+import { sendTip } from '../../../helpers/polkadotApi';
 import CommentComponent from '../comment/comment.component';
 import ReplyCommentComponent from '../comment/reply.component';
 import FacebookReactionComponent from '../reactions/facebook.component';
@@ -36,7 +37,7 @@ type Props = {
   sendTip?: () => void;
 };
 
-export default function PostComponent({ post, open = false, disable = false, reply, sendTip, loadComments }: Props) {
+export default function PostComponent({ post, open = false, disable = false, reply, loadComments }: Props) {
   const style = useStyles();
 
   const [session] = useSession();
@@ -49,8 +50,10 @@ export default function PostComponent({ post, open = false, disable = false, rep
     setExpanded(!expanded);
   };
 
-  const tipPostUser = () => {
-    sendTip && sendTip();
+  const tipPostUser = async () => {
+    // sendTip will open a pop-up from polkadot.js extension,
+    // tx signing is done by supplying a password
+    await sendTip();
   };
 
   const replyPost = (comment: string) => {
@@ -66,7 +69,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
     window.open(post.link, '_blank');
   };
 
-  const PostAction = (
+  const PostActionTipUser = (
     <Button className={style.action} onClick={tipPostUser} aria-label="tip-post-user" color="primary" variant="contained" size="small">
       Send Tip
     </Button>
@@ -77,13 +80,14 @@ export default function PostComponent({ post, open = false, disable = false, rep
     <Card className={style.root}>
       <CardHeader
         avatar={<PostAvatar origin={post.platform} avatar={detail.user.avatar} />}
-        action={PostAction}
+        action={PostActionTipUser}
         title={detail.user.name}
         subheader={detail.createdOn}
-        onClick={openContentSource}
+        //onClick={openContentSource}
+        //onClick method moved to CardContent, overlapping with tipPostUser method
       />
 
-      <CardContent className={style.content}>
+      <CardContent className={style.content} onClick={openContentSource}>
         <Typography variant="body1" color="textSecondary" component="p">
           {detail.text}
         </Typography>

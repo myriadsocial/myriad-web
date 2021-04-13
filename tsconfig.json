@@ -24,6 +24,6 @@
     "isolatedModules": true
   },
   "typeRoots": ["./node_modules/@polkadot/ts", "./node_modules/@types", "./src/types"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "./src/helpers/polkadotApi.js"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }
