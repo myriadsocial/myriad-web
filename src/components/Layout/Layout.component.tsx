@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { User } from 'next-auth';
 
@@ -24,16 +24,18 @@ type Props = {
 };
 
 const LayoutComponent = ({ children, user }: Props) => {
-  const { state: myriadAccount, dispatch: myriadAccountDispatch } = useMyriadAccount();
-  const [loading, setLoading] = useState<boolean>(true);
-  const [address, setAddress] = useState<string>('');
+  const { dispatch: myriadAccountDispatch } = useMyriadAccount();
   useEffect(() => {
     // fetch for address
     (async () => {
       await cryptoWaitReady();
       const allAccounts = await enableExtension();
       // by default, only read the first account address
-      const currentAddress = allAccounts[0]!.address;
+      if (!allAccounts) {
+        console.log('no accounts retrieved!');
+        throw new Error('no extension/account detected on browser!');
+      }
+      const currentAddress = allAccounts[0]?.address;
       const freeBalance = await getBalance(currentAddress);
       addAddress('address', currentAddress);
       storeBalance('freeBalance', freeBalance);
