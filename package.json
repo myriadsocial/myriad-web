@@ -7,12 +7,6 @@
   },
   "homepage": ".",
   "resolutions": {
-    "@polkadot/api": "^1.28.1",
-    "@polkadot/keyring": "^2.8.1",
-    "@polkadot/types": "^1.28.1",
-    "**/@polkadot/types": "^1.28.1",
-    "@polkadot/util": "^2.8.1",
-    "@polkadot/util-crypto": "^2.8.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "typescript": "^3.8.3"
@@ -43,8 +37,6 @@
     ".next/cache"
   ],
   "devDependencies": {
-    "@polkadot/ts": "^0.2.3",
-    "@polkadot/types": "^1.28.1",
     "@svgr/webpack": "^5.5.0",
     "@trivago/prettier-plugin-sort-imports": "^2.0.1",
     "@types/file-saver": "^2.0.1",
@@ -90,9 +82,7 @@
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@mui-treasury/components": "^1.10.1",
     "@polkadot/api": "^4.1.1",
-    "@polkadot/keyring": "^2.8.1",
-    "@polkadot/ui-keyring": "^0.72.1",
-    "@polkadot/ui-settings": "^0.72.1",
+    "@polkadot/extension-dapp": "^0.37.2",
     "@prisma/client": "^2.19.0",
     "axios": "^0.18.0",
     "axios-hooks": "^2.5.0",
@@ -105,6 +95,7 @@
     "lru-cache": "^6.0.0",
     "next": "9.5.4",
     "next-auth": "^3.13.1",
+    "next-transpile-modules": "^6.4.0",
     "node-fetch": "^2.6.1",
     "react": "^17.0.0",
     "react-cookie": "^4.0.3",
