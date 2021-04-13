@@ -22,6 +22,43 @@ export const getBalance = async ADDR => {
   return Number(Number(previousFree) / DECIMAL_PLACES.toFixed(3));
 };
 
+// snippets to send transaction
+// finds an injector for an address
+export const sendTip = async () => {
+  const { enableExtension } = await import('../helpers/extension');
+  const { web3FromSource } = await import('@polkadot/extension-dapp');
+  const allAccounts = await enableExtension();
+  // We arbitraily select the first account returned from the above snippet
+  // `account` is of type InjectedAccountWithMeta
+  const account = allAccounts[0];
+
+  const api = await connectToBlockchain();
+
+  const RIZ_MYR = '5DJUPpC7C8CxiQ5ECNXQ8PR9ngydZ4hiDpHnMivgnC8yfYjc';
+
+  // here we use the api to create a balance transfer to some account of a value of 123
+  const transferExtrinsic = api.tx.balances.transfer(RIZ_MYR, 123);
+
+  // to be able to retrieve the signer interface from this account
+  // we can use web3FromSource which will return an InjectedExtension type
+  const injector = await web3FromSource(account.meta.source);
+
+  // passing the injected account address as the first argument of signAndSend
+  // will allow the api to retrieve the signer and the user will see the extension
+  // popup asking to sign the balance transfer transaction
+  transferExtrinsic
+    .signAndSend(account.address, { signer: injector.signer }, ({ status }) => {
+      if (status.isInBlock) {
+        console.log(`Completed at block hash #${status.asInBlock.toString()}`);
+      } else {
+        console.log(`Current status: ${status.type}`);
+      }
+    })
+    .catch(error => {
+      console.log(':( transaction failed', error);
+    });
+};
+
 export const getWalletHistory = async () => {
   const api = await connectToBlockchain();
   //Subscribe to system events via storage
