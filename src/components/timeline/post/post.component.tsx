@@ -76,18 +76,17 @@ export default function PostComponent({ post, open = false, disable = false, rep
   );
 
   if (!detail) return null;
+
   return (
     <Card className={style.root}>
       <CardHeader
-        avatar={<PostAvatar origin={post.platform} avatar={detail.user.avatar} />}
+        avatar={<PostAvatar origin={post.platform} avatar={detail.user.avatar} onClick={openContentSource} />}
         action={PostActionTipUser}
         title={detail.user.name}
         subheader={detail.createdOn}
-        //onClick={openContentSource}
-        //onClick method moved to CardContent, overlapping with tipPostUser method
       />
 
-      <CardContent className={style.content} onClick={openContentSource}>
+      <CardContent className={style.content}>
         <Typography variant="body1" color="textSecondary" component="p">
           {detail.text}
         </Typography>
