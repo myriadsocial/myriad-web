@@ -21,10 +21,16 @@ export type SocialMetric = {
 export interface Post {
   id: string;
   textId: string;
+  title?: string;
+  text?: string;
   link: string;
   platform: PostOrigin;
   tags: string[];
   comments: Comment[];
+  createdAt: Date;
+  platformUser?: {
+    username: string;
+  };
 }
 
 export interface Comment {
