@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { User } from 'next-auth';
 
 import Grid from '@material-ui/core/Grid';
 
+import { cryptoWaitReady } from '@polkadot/util-crypto';
+
+import { enableExtension } from '../../helpers/extension';
+import { getBalance } from '../../helpers/polkadotApi';
 import ShowIf from '../common/show-if.component';
 import { ExperienceComponent } from '../experience/experience.component';
 import UserDetail from '../user/user.component';
 import { Wallet } from '../wallet/wallet.component';
+import { useMyriadAccount } from '../wallet/wallet.context';
 import { useLayoutSetting } from './layout.context';
 import { useStyles } from './layout.style';
 
@@ -19,6 +24,40 @@ type Props = {
 };
 
 const LayoutComponent = ({ children, user }: Props) => {
+  const { dispatch: myriadAccountDispatch } = useMyriadAccount();
+  useEffect(() => {
+    // fetch for address
+    (async () => {
+      await cryptoWaitReady();
+      const allAccounts = await enableExtension();
+      // by default, only read the first account address
+      if (!allAccounts) {
+        console.log('no accounts retrieved!');
+        throw new Error('no extension/account detected on browser!');
+      }
+      const currentAddress = allAccounts[0]?.address;
+      const freeBalance = await getBalance(currentAddress);
+      addAddress('address', currentAddress);
+      storeBalance('freeBalance', freeBalance);
+    })();
+  }, []);
+
+  const storeBalance = (key: string, value: number) => {
+    myriadAccountDispatch({
+      type: 'STORE_BALANCE',
+      key,
+      value
+    });
+  };
+
+  const addAddress = (key: string, value: string) => {
+    myriadAccountDispatch({
+      type: 'ADD_ADDRESS',
+      key,
+      value
+    });
+  };
+
   const style = useStyles();
   const { state: setting, dispatch } = useLayoutSetting();
   const userId = user.userId as string;
