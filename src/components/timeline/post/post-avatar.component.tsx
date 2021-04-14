@@ -39,9 +39,10 @@ const useStyles = makeStyles(() =>
 type Props = {
   origin: PostOrigin;
   avatar: string;
+  onClick: () => void;
 };
 
-export default function PostComponent({ origin, avatar }: Props) {
+export default function PostComponent({ origin, avatar, onClick }: Props) {
   const style = useStyles();
 
   const socials = React.useMemo(
@@ -54,7 +55,7 @@ export default function PostComponent({ origin, avatar }: Props) {
   );
 
   return (
-    <IconButton aria-label="avatar-icon">
+    <IconButton aria-label="avatar-icon" onClick={onClick}>
       <StyledBadge badgeContent={socials[origin]} className={style[origin]} color="default">
         <Avatar className={style.avatar} aria-label="avatar" src={avatar} />
       </StyledBadge>
