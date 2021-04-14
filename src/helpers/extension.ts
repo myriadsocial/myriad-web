@@ -1,8 +1,8 @@
 export const enableExtension = async () => {
   const { web3Enable, web3Accounts } = await import('@polkadot/extension-dapp');
 
-  const extensions = await web3Enable('localhost');
-
+  const extensions = await web3Enable(process.env.NEXT_PUBLIC_APP_NAME || '');
+  console.log('extensions', extensions);
   if (extensions.length === 0) {
     // no extension installed, or the user did not accept the authorization
     // in this case we should inform the use and give a link to the extension
