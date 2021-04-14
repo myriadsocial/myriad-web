@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import ImageIcon from '@material-ui/icons/Image';
 
-import { getWalletHistory } from '../../helpers/polkadotApi';
+//import { getWalletHistory } from '../../helpers/polkadotApi';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -55,7 +55,7 @@ export const TransactionComponent = React.memo(function Wallet() {
 
   useEffect(() => {
     (async () => {
-      await getWalletHistory();
+      //await getWalletHistory();
     })();
   }, []);
 
