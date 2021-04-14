@@ -31,10 +31,6 @@ const Timeline = () => {
     });
   }, []);
 
-  const loadMore = useCallback(() => {
-    loadMorePost();
-  }, []);
-
   const handleReply = (comment: Comment) => {
     reply(comment.postId, comment);
   };
@@ -46,7 +42,7 @@ const Timeline = () => {
           scrollableTarget="scrollable-timeline"
           className={style.child}
           dataLength={posts.length + 100}
-          next={loadMore}
+          next={loadMorePost}
           hasMore={true}
           loader={<CircularProgress className={style.loading} disableShrink />}>
           {posts.map((post: Post, i: number) => (

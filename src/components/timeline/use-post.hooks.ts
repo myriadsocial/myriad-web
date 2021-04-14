@@ -14,6 +14,7 @@ const axios = Axios.create({
 
 export const usePost = () => {
   const { state: experienceState } = useExperience();
+  const [page, setPage] = useState(0);
   const { state, dispatch } = useTimeline();
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -104,7 +105,8 @@ export const usePost = () => {
   };
 
   const loadMorePost = async () => {
-    const offset = (filter.offset + 1) * filter.limit;
+    const nextPage = page + 1;
+    const offset = nextPage * filter.limit;
 
     setLoading(true);
 
@@ -118,11 +120,6 @@ export const usePost = () => {
             offset
           }
         }
-      });
-
-      setFilter({
-        ...filter,
-        offset
       });
 
       dispatch({
