@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
+
+import { useMyriadAccount } from './wallet.context';
 
 interface StyledTabProps {
   label: string;
@@ -61,6 +63,16 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingRight: theme.spacing(2),
       fontSize: 24
     },
+    titleHidden: {
+      paddingTop: theme.spacing(3),
+      paddingLeft: theme.spacing(2),
+      paddingBottom: theme.spacing(1),
+      paddingRight: theme.spacing(2),
+      fontSize: 24,
+      textShadowColor: 'rgba(0, 0, 0, 0.75)',
+      textShadowOffset: { width: -1, height: 1 },
+      textShadowRadius: 10
+    },
     subtitle: {
       textTransform: 'uppercase',
       fontSize: 12
@@ -70,11 +82,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const BalanceComponent = React.memo(function Wallet() {
   const style = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [isHidden, setIsHidden] = useState(true);
+  const { state: myriadAccount } = useMyriadAccount();
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     event.preventDefault();
     setValue(newValue);
+  };
+
+  const handleIsHidden = () => {
+    setIsHidden(!isHidden);
   };
 
   return (
@@ -86,8 +104,9 @@ export const BalanceComponent = React.memo(function Wallet() {
           </Typography>
         </Grid>
         <Grid item>
-          <Typography className={style.title} variant="h5">
-            357 <span className={style.subtitle}>Myria</span>
+          <Typography className={style.title} variant="h5" onClick={handleIsHidden}>
+            {isHidden ? 'Classified  ' : myriadAccount.freeBalance.toFixed(3)}
+            <span className={style.subtitle}>Myria</span>
           </Typography>
         </Grid>
       </Grid>
