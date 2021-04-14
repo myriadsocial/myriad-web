@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { signIn } from 'next-auth/client';
 
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import ImageIcon from '@material-ui/icons/Image';
 
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { Keyring } from '@polkadot/keyring';
 import type { KeyringPair } from '@polkadot/keyring/types';
 import { mnemonicGenerate } from '@polkadot/util-crypto';
@@ -22,9 +29,7 @@ import ShowIf from '../common/show-if.component';
 import LoginMethod from './login-method.component';
 import { useStyles } from './login.style';
 
-import JsonIcon from 'src/images/json-icon.svg';
-import KeyIcon from 'src/images/key-icon.svg';
-import PassPhraseIcon from 'src/images/passphrase-icon.svg';
+import { usePolkadotExtension } from 'src/hooks/use-polkadot-app.hook';
 import { uniqueNamesGenerator, adjectives, colors } from 'unique-names-generator';
 
 export type SeedType = 'json' | 'bip' | 'raw';
@@ -41,6 +46,8 @@ type Props = {
 export default function LoginComponent({ allowAnonymous = true }: Props) {
   const style = useStyles();
 
+  const { accountFetched, isExtensionInstalled, accounts, getPolkadotAccounts } = usePolkadotExtension();
+  const [isSignin, setSignin] = useState(false);
   const [shouldShowLoginMethod, showLoginMethod] = useState(false);
   const [showCreateAccount, setShowCreateAccount] = useState(false);
   const [showLoginAnonymouslyDialog, setShowLoginAnonymouslyDialog] = useState(false);
@@ -50,6 +57,17 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
     seedType: 'bip'
   });
   const [captchaVerified, setCaptchaVerified] = useState(false);
+
+  useEffect(() => {
+    // if on signin and only one accounts available, log in the available account
+    if (isSignin && accountFetched && accounts.length === 1) {
+      signIn('credentials', {
+        address: accounts[0].address,
+        name: accounts[0].meta.name,
+        anonymous: false
+      });
+    }
+  }, [isSignin, accountFetched, accounts]);
 
   const toggleLogin = (method: SeedType | null) => {
     if (method) {
@@ -120,8 +138,25 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
     });
   };
 
+  const signinWithAccount = (account: InjectedAccountWithMeta) => {
+    signIn('credentials', {
+      address: account.address,
+      name: account.meta.name,
+      anonymous: false
+    });
+  };
+
   const getCaptchaVerification = (isVerified: boolean) => {
     setCaptchaVerified(isVerified);
+  };
+
+  const getPolkadotAppAccounts = async () => {
+    setSignin(true);
+    getPolkadotAccounts();
+  };
+
+  const cancelSignin = () => {
+    setSignin(false);
   };
 
   return (
@@ -134,35 +169,15 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
           <div className={style.action}>
             <ButtonGroup orientation="vertical" fullWidth>
               <Button
-                onClick={() => toggleLogin('bip')}
-                className={style.buttonIcon}
+                onClick={getPolkadotAppAccounts}
+                className={style.button}
                 color="default"
                 size="large"
                 fullWidth={true}
-                variant="contained"
-                startIcon={<PassPhraseIcon />}>
-                Passphrase
+                variant="contained">
+                Sign In
               </Button>
-              <Button
-                onClick={() => toggleLogin('json')}
-                className={style.buttonIcon}
-                color="default"
-                size="large"
-                fullWidth={true}
-                variant="contained"
-                startIcon={<JsonIcon />}>
-                JSON
-              </Button>
-              <Button
-                onClick={() => toggleLogin('raw')}
-                className={style.buttonIcon}
-                color="default"
-                size="large"
-                fullWidth={true}
-                variant="contained"
-                startIcon={<KeyIcon />}>
-                Private Key
-              </Button>
+
               <Button className={style.button} color="default" size="large" variant="contained" fullWidth={true}>
                 Remind me how this works again?
               </Button>
@@ -239,6 +254,48 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
             Get in anonymously
           </Button>
         </DialogActions>
+      </Dialog>
+
+      <Dialog open={isSignin && accountFetched && accounts.length === 0} aria-labelledby="no-extension-account" maxWidth="xs">
+        <DialogTitle id="name" onClose={cancelSignin}>
+          Extension Account
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            No accounts found on your Polkadot Extension. Please create account on Myriad app then import the account to Polkadot Extension.
+          </Typography>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isSignin && !isExtensionInstalled} aria-labelledby="no-extension-installed" maxWidth="xs">
+        <DialogTitle id="name" onClose={cancelSignin}>
+          Extension Not Found
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">No polkadot extension found on your browser. .</Typography>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isSignin && accountFetched && accounts.length > 1} aria-labelledby="choose-account" maxWidth="sm">
+        <DialogTitle id="name" onClose={cancelSignin}>
+          Choose Account to signin
+        </DialogTitle>
+        <DialogContent>
+          <List>
+            {accounts.map(account => {
+              return (
+                <ListItem button onClick={() => signinWithAccount(account)}>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <ImageIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary={account.meta.name} secondary={account.address} />
+                </ListItem>
+              );
+            })}
+          </List>
+        </DialogContent>
       </Dialog>
     </>
   );
