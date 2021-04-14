@@ -69,7 +69,7 @@ export default function Index() {
           createdAt: new Date()
         }
       ],
-      createdAt: new Date(),
+      createdAt: new Date()
     },
     {
       id: '2',
