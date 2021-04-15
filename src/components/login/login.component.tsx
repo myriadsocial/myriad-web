@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
 
 import { signIn } from 'next-auth/client';
 
@@ -46,6 +47,7 @@ type Props = {
 
 export default function LoginComponent({ allowAnonymous = true }: Props) {
   const style = useStyles();
+  const [, setCookie] = useCookies(['seed']);
 
   const { accountFetched, isExtensionInstalled, accounts, getPolkadotAccounts } = usePolkadotExtension();
   const [isSignin, setSignin] = useState(false);
@@ -110,6 +112,8 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
     const seed = mnemonicGenerate();
 
     const pair: KeyringPair = keyring.createFromUri(seed + '//hard', { name: accountName });
+
+    setCookie('uri', seed);
 
     signIn('credentials', {
       address: pair.address,
@@ -290,7 +294,7 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
           Choose Account to signin
         </DialogTitle>
         <DialogContent>
-          <List>
+          <List className={style.info}>
             {accounts.map(account => {
               return (
                 <ListItem button onClick={() => signinWithAccount(account)}>

@@ -27,5 +27,31 @@ export const useStyles = makeStyles({
     paddingLeft: 8,
     paddingRight: 8,
     borderRadius: 5
+  },
+  detail: {
+    position: 'relative'
+  },
+  avatarBig: {
+    height: 90,
+    width: 90,
+    position: 'absolute',
+    top: 140
+  },
+  profileContent: {
+    marginTop: 40
+  },
+  media: {
+    height: 0,
+    paddingTop: '34.25%'
+  },
+  copy: {
+    cursor: 'pointer',
+    paddingTop: 4
+  },
+  actions: {
+    justifyContent: 'space-between'
+  },
+  logout: {
+    textAlign: 'center'
   }
 });
