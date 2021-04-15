@@ -36,13 +36,14 @@ import { useExperience } from './use-experience.hooks';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import Panel from 'src/components/common/panel.component';
-import { Experience, People, Tag } from 'src/interfaces/experience';
+import { Experience, People, Tag, LayoutType } from 'src/interfaces/experience';
 
 type Props = {
   userId: string;
+  anonymous: boolean;
 };
 
-export const ExperienceComponent = ({ userId }: Props) => {
+export const ExperienceComponent = ({ userId, anonymous }: Props) => {
   const style = useStyles();
 
   const {
@@ -57,10 +58,13 @@ export const ExperienceComponent = ({ userId }: Props) => {
     updateExperience,
     selectExperience,
     removeExperience,
-    searchExperience
+    searchExperience,
+    prependExperience
   } = useExperience(userId);
   const [isEditing, setEditing] = useState(false);
+  const [isEdited, setEdited] = useState(false);
   const [isManagingExperience, setManageExperience] = useState(false);
+  const [isAdded, setAdded] = useState(false);
   const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
   const [addedExperience, setAddedExperience] = useState<Experience[]>([]);
   const [modalEditOpened, setModalEditOpen] = useState(false);
@@ -81,6 +85,20 @@ export const ExperienceComponent = ({ userId }: Props) => {
   const editCurrentExperience = () => {
     setEditing(true);
     setManageExperience(false);
+    setEdited(false);
+  };
+
+  const changeSelectedLayout = (type: LayoutType) => {
+    if (!selectedExperience) {
+      return;
+    }
+
+    setSelectedExperience({
+      ...selectedExperience,
+      layout: type
+    });
+
+    setEdited(true);
   };
 
   const addPeopleToExperience = (people: People) => {
@@ -92,6 +110,8 @@ export const ExperienceComponent = ({ userId }: Props) => {
       ...selectedExperience,
       people: [...selectedExperience.people, people]
     });
+
+    setEdited(true);
   };
 
   const removePeopleFromExperience = (people: People) => {
@@ -103,6 +123,8 @@ export const ExperienceComponent = ({ userId }: Props) => {
       ...selectedExperience,
       people: selectedExperience.people.filter(item => item.id !== people.id)
     });
+
+    setEdited(true);
   };
 
   const addTopicToExperience = (tag: Tag) => {
@@ -114,6 +136,8 @@ export const ExperienceComponent = ({ userId }: Props) => {
       ...selectedExperience,
       tags: [...selectedExperience.tags, tag]
     });
+
+    setEdited(true);
   };
 
   const removeTopicFromExperience = (tag: Tag) => {
@@ -125,6 +149,8 @@ export const ExperienceComponent = ({ userId }: Props) => {
       ...selectedExperience,
       tags: selectedExperience.tags.filter(item => item.id !== tag.id)
     });
+
+    setEdited(true);
   };
 
   const discardChanges = () => {
@@ -132,17 +158,21 @@ export const ExperienceComponent = ({ userId }: Props) => {
     setEditing(false);
     setManageExperience(false);
     setAddedExperience([]);
+    setEdited(false);
+    setAdded(false);
   };
 
   // Managing Experience
   const manageExperience = () => {
     setEditing(false);
     setManageExperience(true);
+    setAdded(false);
   };
 
   const updateSelectedExperience = () => {
     if (selectedExperience) {
       updateExperience(selectedExperience);
+      discardChanges();
       notify('Experience updated');
     }
   };
@@ -165,12 +195,19 @@ export const ExperienceComponent = ({ userId }: Props) => {
 
   const addToMyExperience = (experience: Experience) => {
     if (experience) {
-      setAddedExperience([...addedExperience, experience]);
+      if (anonymous) {
+        prependExperience(experience);
+      } else {
+        setAddedExperience([...addedExperience, experience]);
+      }
+
+      setAdded(true);
     }
   };
 
   const removeFromAddedExperience = (id: string) => {
     setAddedExperience([...addedExperience.filter(experience => experience.id !== id)]);
+    setAdded(true);
   };
 
   const confirmRemove = (id: string) => {
@@ -217,18 +254,29 @@ export const ExperienceComponent = ({ userId }: Props) => {
             Sed vehicula.
           </Typography>
         </CardContent>
-        <CardActions>
-          <Button size="small" variant="contained" color="secondary" onClick={editCurrentExperience} disabled={isEditing}>
-            Customize
-          </Button>
-          <Button size="small" variant="contained" color="secondary" onClick={manageExperience} disabled={isManagingExperience}>
-            Manage Experiences
-          </Button>
-        </CardActions>
+        <ShowIf condition={!anonymous}>
+          <CardActions>
+            <Button
+              size="small"
+              variant="contained"
+              color="secondary"
+              onClick={editCurrentExperience}
+              disabled={isEditing || selectedExperience?.userId !== userId}>
+              Customize
+            </Button>
+            <Button size="small" variant="contained" color="secondary" onClick={manageExperience} disabled={isManagingExperience}>
+              Manage Experiences
+            </Button>
+          </CardActions>
+        </ShowIf>
       </Card>
 
       <ShowIf condition={!isEditing && !isManagingExperience}>
+        <ShowIf condition={anonymous}>
+          <SearchExperienceComponent title="Search Experience" data={searched} search={searchExperience} onSelected={addToMyExperience} />
+        </ShowIf>
         <ExperienceListComponent
+          title={anonymous ? 'Available Experiences' : 'My saved Experiences'}
           selected={selected}
           experiences={experiences}
           selectExperience={selectExperience}
@@ -271,7 +319,7 @@ export const ExperienceComponent = ({ userId }: Props) => {
               className={style.extendedIcon}
               size="small"
               variant="extended"
-              color="secondary"
+              color={isAdded ? 'secondary' : 'primary'}
               aria-label="edit">
               <SaveIcon />
               Save
@@ -286,7 +334,7 @@ export const ExperienceComponent = ({ userId }: Props) => {
       </ShowIf>
 
       <ShowIf condition={isEditing}>
-        <LayoutOptions />
+        <LayoutOptions value={selectedExperience?.layout} onChanged={changeSelectedLayout} />
         <TopicComponent topics={selectedExperience?.tags || []} onAddItem={addTopicToExperience} onRemoveItem={removeTopicFromExperience} />
         <PeopleComponent
           people={selectedExperience?.people || []}
@@ -300,7 +348,7 @@ export const ExperienceComponent = ({ userId }: Props) => {
               className={style.extendedIcon}
               size="small"
               variant="extended"
-              color="primary"
+              color={isEdited ? 'secondary' : 'primary'}
               aria-label="add">
               <UpdateIcon />
               Update
@@ -356,9 +404,10 @@ export const ExperienceComponent = ({ userId }: Props) => {
 
       <Snackbar
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left'
+          vertical: 'top',
+          horizontal: 'right'
         }}
+        color="secondary"
         open={showNotification}
         autoHideDuration={2000}
         onClose={clearNotification}

@@ -68,7 +68,8 @@ export default function Index() {
           userId: '1',
           createdAt: new Date()
         }
-      ]
+      ],
+      createdAt: new Date()
     },
     {
       id: '2',
@@ -76,7 +77,8 @@ export default function Index() {
       textId: '1375868552129863681',
       platform: 'twitter',
       tags: ['politic', 'viral'],
-      comments: []
+      comments: [],
+      createdAt: new Date()
     }
   ];
 

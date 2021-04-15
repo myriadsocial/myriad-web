@@ -12,6 +12,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import FacebookIcon from '@material-ui/icons/Facebook';
@@ -19,7 +20,6 @@ import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
 import { SocialsEnum } from '../../interfaces';
-import DialogTitle from '../common/DialogTitle.component';
 import LinkingTutorialComponent from '../common/LinkingTutorial.component';
 import ShowIf from '../common/show-if.component';
 
@@ -103,17 +103,12 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
     };
   }, []);
 
-  //adding comments to make build work
-
-  const message = 'Saying hi to #MyriadNetwork\n\nPublic Key: 13N2NpDg6kU1vAGuPv9MkTj4YsaDmf7BKyr3TTxhV5sFmuhd';
+  const message = `Saying hi to #MyriadNetwork\n\nPublic Key: ${user.address}`;
 
   return (
     <>
       <Dialog open={open} onClose={handleClose} maxWidth="xs">
-        <DialogTitle id="connect-social" onClose={handleClose}>
-          {' '}
-          Link Your {social} Account
-        </DialogTitle>
+        <DialogTitle id="connect-social">Link Your {social} Account</DialogTitle>
         <DialogContent dividers>
           <Card className={classes.card}>
             <CardHeader avatar={config.step1} title={config.copyTitle} />

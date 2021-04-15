@@ -61,15 +61,18 @@ function Adapter() {
         anonymous: false,
 
         //@ts-ignore
-        userCredentials: data.userCredentials.map(item => {
-          return {
-            platform: item.people.platform,
-            platformUserId: item.people.platform_account_id,
-            username: item.people.username,
-            accessToken: item.access_token,
-            refreshToken: item.refresh_token || null
-          };
-        })
+        userCredentials: data.userCredentials
+          ? //@ts-ignore
+            data.userCredentials.map(item => {
+              return {
+                platform: item.people.platform,
+                platformUserId: item.people.platform_account_id,
+                username: item.people.username,
+                accessToken: item.access_token,
+                refreshToken: item.refresh_token || null
+              };
+            })
+          : []
       };
     }
 
@@ -89,7 +92,7 @@ function Adapter() {
               platform: {
                 eq: providerId
               },
-              id: {
+              platform_account_id: {
                 eq: providerAccountId
               }
             }
