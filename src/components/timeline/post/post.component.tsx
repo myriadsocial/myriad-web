@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 import { useSession } from 'next-auth/client';
 
@@ -13,7 +13,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CommentIcon from '@material-ui/icons/Comment';
 
-import { sendTip } from '../../../helpers/polkadotApi';
 import CommentComponent from '../comment/comment.component';
 import ReplyCommentComponent from '../comment/reply.component';
 import FacebookReactionComponent from '../reactions/facebook.component';
@@ -24,6 +23,7 @@ import { useStyles } from './post.style';
 import PostVideo from './video-post.component';
 
 import clsx from 'clsx';
+import SendTipModal from 'src/components/common/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
 import { useSocialDetail } from 'src/hooks/use-social.hook';
 import { Post, Comment } from 'src/interfaces/post';
@@ -34,12 +34,12 @@ type Props = {
   post: Post;
   reply: (comment: Comment) => void;
   loadComments: (postId: string) => void;
-  sendTip?: () => void;
 };
 
 export default function PostComponent({ post, open = false, disable = false, reply, loadComments }: Props) {
   const style = useStyles();
-
+  
+  const childRef = useRef<any>();
   const [session] = useSession();
   const [expanded, setExpanded] = useState(open);
   const { detail } = useSocialDetail(post);
@@ -50,10 +50,8 @@ export default function PostComponent({ post, open = false, disable = false, rep
     setExpanded(!expanded);
   };
 
-  const tipPostUser = async () => {
-    // sendTip will open a pop-up from polkadot.js extension,
-    // tx signing is done by supplying a password
-    await sendTip();
+  const tipPostUser = () => {
+    childRef.current.triggerSendTipModal();
   };
 
   const replyPost = (comment: string) => {
@@ -78,6 +76,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
   if (!detail) return null;
 
   return (
+    <>
     <Card className={style.root}>
       <CardHeader
         avatar={<PostAvatar origin={post.platform} avatar={detail.user.avatar} onClick={openContentSource} />}
@@ -102,37 +101,10 @@ export default function PostComponent({ post, open = false, disable = false, rep
         <ShowIf condition={post.platform === 'twitter'}>
           <TwitterReactionComponent metric={detail.metric} />
         </ShowIf>
-
-        <IconButton
-          className={clsx(style.expand, {
-            [style.expandOpen]: expanded
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more">
-          <CommentIcon />
-        </IconButton>
-
-        <Typography component="span">{post.comments.length} Comments</Typography>
       </CardActions>
+      </Card>
 
-      <ShowIf condition={expanded}>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent className={style.reply}>
-            <Grid container spacing={2} direction="column" className={style.comment}>
-              {post.comments.map((comment, i) => (
-                <Grid item key={i}>
-                  <CommentComponent data={comment} />
-                </Grid>
-              ))}
-            </Grid>
-
-            <ShowIf condition={!disable}>
-              <ReplyCommentComponent close={handleExpandClick} onSubmit={replyPost} />
-            </ShowIf>
-          </CardContent>
-        </Collapse>
-      </ShowIf>
-    </Card>
+      <SendTipModal ref={childRef} />
+    </>
   );
 }
