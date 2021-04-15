@@ -16,20 +16,28 @@ import DialogTitle from '../common/DialogTitle.component';
 import { useStyles } from '../login/login.style';
 import { useMyriadAccount } from '../wallet/wallet.context';
 
+import Axios from 'axios';
+
+const client = Axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL
+});
+
 interface InputState {
   amount: string;
 }
 
 interface TxHistory {
-  txHash: String;
-  from: String;
-  to: String;
-  amount: Number;
+  trxHash: string;
+  from: string;
+  to: string;
+  amount: number;
 }
 
 interface InputErorState {
   isErrorInput: boolean;
   isTextChanged: boolean;
+  isInsufficientBalance: boolean;
+  errorMessage: string;
 }
 
 interface SendTipConfirmed {
@@ -37,10 +45,17 @@ interface SendTipConfirmed {
   message: string;
 }
 
+interface PostTxHistory {
+  from: string;
+  to: string;
+  amount: number;
+  trxHash: string;
+}
+
 const SendTipModal = forwardRef((_, ref) => {
   const { state: myriadAccount } = useMyriadAccount();
   const [TxHistory, setTxHistory] = useState<TxHistory>({
-    txHash: '',
+    trxHash: '',
     from: '',
     to: '',
     amount: 0
@@ -51,18 +66,51 @@ const SendTipModal = forwardRef((_, ref) => {
     message: ''
   });
   useEffect(() => {
-    console.log('the history is: ', TxHistory);
+    //console.log('the history is: ', TxHistory);
     // call myriad API to store TxHistory
-    setSendTipConfirmed({
-      isConfirmed: true,
-      message: 'Tip sent successfully!'
-    });
+    if (TxHistory.trxHash.length > 0) {
+      (async () => {
+        const { trxHash, from, to, amount } = TxHistory;
+        await postTxHistory({ trxHash, from, to, amount });
+      })();
+      setSendTipConfirmed({
+        isConfirmed: true,
+        message: 'Tip sent successfully!'
+      });
+    }
   }, [TxHistory]);
+
+  const postTxHistory = async ({ from, to, amount, trxHash }: PostTxHistory) => {
+    try {
+      const response = await client({
+        method: 'POST',
+        url: '/transactions',
+        data: {
+          from,
+          to,
+          trxHash,
+          value: Number(amount) / 10000000000,
+          state: 'verified',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          deletedAt: new Date()
+        }
+      });
+
+      if (response.status === 200) {
+        console.log(`TxHistory saved successfully!`);
+      }
+    } catch (error) {
+      console.log(`error from postTxHistory: ${error}`);
+    }
+  };
 
   const [showSendTipModal, setShowSendTipModal] = useState(false);
   const [inputError, setInputError] = useState<InputErorState>({
     isErrorInput: false,
-    isTextChanged: false
+    isTextChanged: false,
+    isInsufficientBalance: false,
+    errorMessage: 'Put digits bigger than zero'
   });
   const [values, setValues] = useState<InputState>({
     amount: ''
@@ -79,6 +127,7 @@ const SendTipModal = forwardRef((_, ref) => {
   const closeSendTipModal = () => {
     setShowSendTipModal(false);
     setInputError({
+      ...inputError,
       isTextChanged: false,
       isErrorInput: false
     });
@@ -88,50 +137,64 @@ const SendTipModal = forwardRef((_, ref) => {
     const regexValidDigits = /^(?:[1-9][0-9]*|0)$/;
     if (values.amount === '') {
       setInputError({
+        ...inputError,
         isErrorInput: false,
         isTextChanged: true
       });
     }
     if (regexValidDigits.test(values.amount)) {
       setInputError({
+        ...inputError,
         isErrorInput: false,
         isTextChanged: true
       });
-      const amountSent = Number(values.amount) * 10000000000;
-      // sendTip will open a pop-up from polkadot.js extension,
-      // tx signing is done by supplying a password
-      const ALICE = 'tkTptH5puVHn8VJ8NWMdsLa2fYGfYqV8QTyPRZRiQxAHBbCB4';
 
-      const response = await sendTip(ALICE, amountSent);
-      // handle if sendTip succeed
-      if (typeof response === 'object') {
-        setTxHistory({
-          txHash: response.txHash,
-          to: ALICE,
-          amount: amountSent,
-          from: response.from
+      if (Number(values.amount) >= myriadAccount.freeBalance) {
+        setInputError({
+          ...inputError,
+          isErrorInput: true,
+          isTextChanged: true,
+          isInsufficientBalance: true,
+          errorMessage: 'Insufficient balance'
         });
-        setOpen(true);
-        setShowSendTipModal(false);
+      } else {
+        // amount valid, reset InputError state
+        setInputError({
+          isErrorInput: false,
+          isTextChanged: true,
+          isInsufficientBalance: false,
+          errorMessage: ''
+        });
+        const amountSent = Number(values.amount) * 10000000000;
+        // sendTip will open a pop-up from polkadot.js extension,
+        // tx signing is done by supplying a password
+        const ALICE = 'tkTptH5puVHn8VJ8NWMdsLa2fYGfYqV8QTyPRZRiQxAHBbCB4';
+
+        const response = await sendTip(ALICE, amountSent);
+        // handle if sendTip succeed
+        if (typeof response === 'object') {
+          setTxHistory({
+            trxHash: response.trxHash,
+            to: ALICE,
+            amount: amountSent,
+            from: response.from
+          });
+          setOpen(true);
+          setShowSendTipModal(false);
+        }
       }
     } else {
       setInputError({
+        ...inputError,
         isErrorInput: true,
-        isTextChanged: true
+        isTextChanged: true,
+        isInsufficientBalance: false
       });
     }
   };
 
   const handleChange = (prop: keyof InputState) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleClose = (reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen(false);
   };
 
   return (
@@ -155,7 +218,13 @@ const SendTipModal = forwardRef((_, ref) => {
               error={inputError.isErrorInput ? true : false}
               id="sendTipAmount"
               label="How many MYRIA?"
-              helperText={inputError.isErrorInput ? 'Put digits bigger than zero!' : 'Please input valid digits'}
+              helperText={
+                inputError.isErrorInput
+                  ? inputError.isInsufficientBalance
+                    ? inputError.errorMessage
+                    : 'Put digits bigger than zero!'
+                  : 'Please input valid digits'
+              }
               variant="outlined"
             />
           </form>
