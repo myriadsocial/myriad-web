@@ -7,7 +7,6 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 import { ExperienceProvider } from '../experience/experience.context';
 import { TimelineProvider } from '../timeline/timeline.context';
-import { MyriadAccountProvider } from '../wallet/wallet.context';
 import LayoutComponent from './Layout.component';
 import { LayoutSettingProvider } from './layout.context';
 
