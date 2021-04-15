@@ -37,15 +37,13 @@ const Layout = ({ children, session }: Props) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <MyriadAccountProvider>
-        <LayoutSettingProvider>
-          <ExperienceProvider>
-            <TimelineProvider>
-              <LayoutComponent user={session.user}>{children}</LayoutComponent>
-            </TimelineProvider>
-          </ExperienceProvider>
-        </LayoutSettingProvider>
-      </MyriadAccountProvider>
+      <LayoutSettingProvider>
+        <ExperienceProvider>
+          <TimelineProvider>
+            <LayoutComponent user={session.user}>{children}</LayoutComponent>
+          </TimelineProvider>
+        </ExperienceProvider>
+      </LayoutSettingProvider>
     </div>
   );
 };
