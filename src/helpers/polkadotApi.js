@@ -50,7 +50,7 @@ export const sendTip = async (toAddress, amountSent) => {
   // popup asking to sign the balance transfer transaction
   const txInfo = await transferExtrinsic.signAndSend(account.address, { signer: injector.signer });
 
-  return { txHash: txInfo.toHex(), from: account.address };
+  return { trxHash: txInfo.toHex(), from: account.address };
 };
 
 export const getWalletHistory = async () => {
