@@ -16,7 +16,6 @@ import ExpandMoreRounded from '@material-ui/icons/ExpandMoreRounded';
 import ShowIf from '../common/show-if.component';
 import NotificationListComponent from '../conversation/notification.component';
 import LoginComponent from '../login/login.component';
-import Logout from '../logout/logout.component';
 import Profile from './profile.component';
 import Setting from './setting.component';
 import Social from './social.component';
@@ -67,7 +66,6 @@ const User = ({ settings, changeSetting }: Props) => {
         <Grid item className={!!session?.user.anonymous ? style.grow : style.normal}>
           <Profile toggleLogin={toggleLogin} />
           <Social toggleLogin={toggleLogin} user={session.user} />
-          <Logout />
         </Grid>
 
         <ShowIf condition={!session?.user.anonymous}>
