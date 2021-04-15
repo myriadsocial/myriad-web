@@ -42,7 +42,7 @@ type Props = {
   onClick: () => void;
 };
 
-export default function PostComponent({ origin, avatar, onClick }: Props) {
+export default function PostAvatar({ origin, avatar, onClick }: Props) {
   const style = useStyles();
 
   const socials = React.useMemo(

@@ -38,7 +38,7 @@ type Props = {
 
 export default function PostComponent({ post, open = false, disable = false, reply, loadComments }: Props) {
   const style = useStyles();
-  
+
   const childRef = useRef<any>();
   const [session] = useSession();
   const [expanded, setExpanded] = useState(open);
@@ -77,31 +77,61 @@ export default function PostComponent({ post, open = false, disable = false, rep
 
   return (
     <>
-    <Card className={style.root}>
-      <CardHeader
-        avatar={<PostAvatar origin={post.platform} avatar={detail.user.avatar} onClick={openContentSource} />}
-        action={PostActionTipUser}
-        title={detail.user.name}
-        subheader={detail.createdOn}
-      />
+      <Card className={style.root}>
+        <CardHeader
+          avatar={<PostAvatar origin={post.platform} avatar={detail.user.avatar} onClick={openContentSource} />}
+          action={PostActionTipUser}
+          title={detail.user.name}
+          subheader={detail.createdOn}
+        />
 
-      <CardContent className={style.content}>
-        <Typography variant="body1" color="textSecondary" component="p">
-          {detail.text}
-        </Typography>
-        {detail.images && detail.images.length > 0 && <PostImage images={detail.images} />}
-        {detail.videos && detail.videos.length > 0 && <PostVideo url={detail.videos[0]} />}
-      </CardContent>
+        <CardContent className={style.content}>
+          <Typography variant="body1" color="textSecondary" component="p">
+            {detail.text}
+          </Typography>
+          {detail.images && detail.images.length > 0 && <PostImage images={detail.images} />}
+          {detail.videos && detail.videos.length > 0 && <PostVideo url={detail.videos[0]} />}
+        </CardContent>
 
-      <CardActions disableSpacing>
-        <ShowIf condition={post.platform === 'facebook'}>
-          <FacebookReactionComponent metric={detail.metric} />
+        <CardActions disableSpacing>
+          <ShowIf condition={post.platform === 'facebook'}>
+            <FacebookReactionComponent metric={detail.metric} />
+          </ShowIf>
+
+          <ShowIf condition={post.platform === 'twitter'}>
+            <TwitterReactionComponent metric={detail.metric} />
+          </ShowIf>
+
+          <IconButton
+            className={clsx(style.expand, {
+              [style.expandOpen]: expanded
+            })}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more">
+            <CommentIcon />
+          </IconButton>
+
+          <Typography component="span">{post.comments.length} Comments</Typography>
+        </CardActions>
+
+        <ShowIf condition={expanded}>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent className={style.reply}>
+              <Grid container spacing={2} direction="column" className={style.comment}>
+                {post.comments.map((comment, i) => (
+                  <Grid item key={i}>
+                    <CommentComponent data={comment} />
+                  </Grid>
+                ))}
+              </Grid>
+
+              <ShowIf condition={!disable}>
+                <ReplyCommentComponent close={handleExpandClick} onSubmit={replyPost} />
+              </ShowIf>
+            </CardContent>
+          </Collapse>
         </ShowIf>
-
-        <ShowIf condition={post.platform === 'twitter'}>
-          <TwitterReactionComponent metric={detail.metric} />
-        </ShowIf>
-      </CardActions>
       </Card>
 
       <SendTipModal ref={childRef} />
