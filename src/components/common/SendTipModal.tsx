@@ -126,7 +126,7 @@ const SendTipModal = forwardRef((_, ref) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  const handleClose = (_, reason?: string) => {
+  const handleClose = (reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -176,7 +176,7 @@ const SendTipModal = forwardRef((_, ref) => {
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
+      <Snackbar open={open} autoHideDuration={4000}>
         <Alert severity="success">
           <AlertTitle>Success!</AlertTitle>
           {sendTipConfirmed.message}
