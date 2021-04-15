@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
 
 import { signIn } from 'next-auth/client';
 
@@ -9,6 +10,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -45,6 +47,7 @@ type Props = {
 
 export default function LoginComponent({ allowAnonymous = true }: Props) {
   const style = useStyles();
+  const [, setCookie] = useCookies(['seed']);
 
   const { accountFetched, isExtensionInstalled, accounts, getPolkadotAccounts } = usePolkadotExtension();
   const [isSignin, setSignin] = useState(false);
@@ -109,6 +112,8 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
     const seed = mnemonicGenerate();
 
     const pair: KeyringPair = keyring.createFromUri(seed + '//hard', { name: accountName });
+
+    setCookie('uri', seed);
 
     signIn('credentials', {
       address: pair.address,
@@ -272,7 +277,15 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
           Extension Not Found
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body1">No polkadot extension found on your browser. .</Typography>
+          <Typography variant="body1" className={style.info}>
+            {' '}
+            Polkadot Extension was not found or disabled. Please enable the extension or install it from the links below.
+          </Typography>
+          <Typography variant="body1" className={style.info}>
+            <Link href="https://polkadot.js.org/extension" variant="body1" color="textSecondary" className={style.polkadot}>
+              {'Polkadot{.js}'} Extension official site.
+            </Link>
+          </Typography>
         </DialogContent>
       </Dialog>
 
@@ -281,7 +294,7 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
           Choose Account to signin
         </DialogTitle>
         <DialogContent>
-          <List>
+          <List className={style.info}>
             {accounts.map(account => {
               return (
                 <ListItem button onClick={() => signinWithAccount(account)}>
