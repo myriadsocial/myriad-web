@@ -8,6 +8,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
@@ -111,25 +112,31 @@ const SocialComponent = ({ user, toggleLogin }: Props) => {
           <ListItemIcon className={style.icon}>
             <FacebookIcon className={style.facebook} />
           </ListItemIcon>
-          <ShowIf condition={true}>
-            <ListItemText primaryTypographyProps={typograpyProps} className={style.button} primary={facebook} />
-          </ShowIf>
+          <ListItemText primaryTypographyProps={typograpyProps} className={style.button}>
+            <ShowIf condition={!user.anonymous}>
+              <Typography variant="body2">{facebook}</Typography>
+            </ShowIf>
+          </ListItemText>
         </ListItem>
         <ListItem button className={style.gutters} onClick={() => handleOpenConnect(SocialsEnum.TWITTER)}>
           <ListItemIcon className={style.icon}>
             <TwitterIcon className={style.twitter} />
           </ListItemIcon>
-          <ShowIf condition={true}>
-            <ListItemText primaryTypographyProps={typograpyProps} className={style.button} primary={twitter} />
-          </ShowIf>
+          <ListItemText primaryTypographyProps={typograpyProps} className={style.button}>
+            <ShowIf condition={!user.anonymous}>
+              <Typography variant="body2">{twitter}</Typography>
+            </ShowIf>
+          </ListItemText>
         </ListItem>
         <ListItem button disabled={connected.reddit} className={style.gutters} onClick={() => handleOpenConnect(SocialsEnum.REDDIT)}>
           <ListItemIcon className={style.icon}>
             <RedditIcon className={style.reddit} />
           </ListItemIcon>
-          <ShowIf condition={true}>
-            <ListItemText primaryTypographyProps={typograpyProps} className={style.button} primary={reddit} />
-          </ShowIf>
+          <ListItemText primaryTypographyProps={typograpyProps} className={style.button}>
+            <ShowIf condition={!user.anonymous}>
+              <Typography variant="body2">{reddit}</Typography>
+            </ShowIf>
+          </ListItemText>
         </ListItem>
       </List>
 

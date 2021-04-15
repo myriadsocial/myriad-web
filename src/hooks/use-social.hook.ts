@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Axios from 'axios';
+import { format } from 'date-fns';
 import { Post } from 'src/interfaces/post';
 import { parseTwitter, PostDetail } from 'src/lib/parse-social.util';
 
@@ -29,8 +30,26 @@ export const useSocialDetail = (post: Post) => {
   };
 
   React.useEffect(() => {
-    loadPost();
-  }, []);
+    if (post.platform === 'twitter') {
+      loadPost();
+    } else {
+      setDetail({
+        text: post.text || '',
+        createdOn: format(new Date(post.createdAt), 'dd MMMM yyyy'),
+        videos: [],
+        images: [],
+        metric: {
+          like: 0,
+          retweet: 0
+        },
+        user: {
+          name: post.platformUser?.username || '',
+          avatar: '',
+          username: post.platformUser?.username || ''
+        }
+      });
+    }
+  }, [post]);
 
   return {
     detail

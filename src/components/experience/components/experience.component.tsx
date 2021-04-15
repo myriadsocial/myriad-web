@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -21,6 +20,7 @@ import MyriadIcon from 'src/images/myriad-alternative.svg';
 import { Experience } from 'src/interfaces/experience';
 
 type Props = {
+  title: string;
   selected: Experience | null;
   experiences: Experience[];
   selectExperience: (id: string) => void;
@@ -28,7 +28,7 @@ type Props = {
   loadMore: () => void;
 };
 
-export default function ExperienceComponent({ experiences, selected, selectExperience, removeExperience, loadMore }: Props) {
+export default function ExperienceComponent({ experiences, selected, selectExperience, removeExperience, title, loadMore }: Props) {
   const style = useStyles();
 
   const [showMore, setShowMore] = useState(false);
@@ -54,7 +54,7 @@ export default function ExperienceComponent({ experiences, selected, selectExper
 
   return (
     <Card className={style.root}>
-      <CardHeader disableTypography className={style.header} title={<Typography variant="caption">My Saved Experiences</Typography>} />
+      <CardHeader disableTypography className={style.header} title={<Typography variant="caption">{title}</Typography>} />
       <CardContent className={style.content}>
         <List>
           {showedExperience.map(experience => (
@@ -69,11 +69,7 @@ export default function ExperienceComponent({ experiences, selected, selectExper
               </ListItemIcon>
               <ListItemText id={experience.id} primary={experience.name} />
               <ListItemSecondaryAction>
-                <Typography className={style.action}>
-                  <Link underline="none" href="#" color="secondary" onClick={() => removeExperience(experience.id)}>
-                    Delete
-                  </Link>
-                </Typography>
+                <Typography className={style.action}>By {experience.user?.name}</Typography>
               </ListItemSecondaryAction>
             </ListItem>
           ))}
@@ -82,9 +78,9 @@ export default function ExperienceComponent({ experiences, selected, selectExper
         <ShowIf condition={remainingExist}>
           <Box className={style.more}>
             <Button color="secondary" className={style.show} onClick={loadMoreExperiance}>
-              {showMore ? 'Show All' : 'Show Less'}
+              {showMore ? 'Show Less' : 'Show All'}
 
-              <ExpandMoreIcon className={showMore ? style.normal : style.expand} />
+              <ExpandMoreIcon className={showMore ? style.expand : style.normal} />
             </Button>
           </Box>
         </ShowIf>

@@ -62,12 +62,6 @@ const LayoutComponent = ({ children, user }: Props) => {
   const { state: setting, dispatch } = useLayoutSetting();
   const userId = user.userId as string;
 
-  React.useEffect(() => {
-    if (user.anonymous) {
-      changeSetting('focus', true);
-    }
-  }, [user]);
-
   const changeSetting = (key: string, value: boolean) => {
     dispatch({
       type: 'CHANGE_SETTING',
@@ -85,7 +79,7 @@ const LayoutComponent = ({ children, user }: Props) => {
               <UserDetail changeSetting={changeSetting} settings={setting} />
             </Grid>
             <Grid item className={style.content}>
-              <ShowIf condition={!setting.focus}>
+              <ShowIf condition={!setting.focus && !user.anonymous}>
                 <Wallet />
               </ShowIf>
             </Grid>
@@ -96,8 +90,8 @@ const LayoutComponent = ({ children, user }: Props) => {
         </Grid>
 
         <Grid item className={style.experience}>
-          <ShowIf condition={!setting.focus || (!!user && user.anonymous === 'true')}>
-            <ExperienceComponent userId={userId} />
+          <ShowIf condition={!setting.focus}>
+            <ExperienceComponent anonymous={!!user.anonymous} userId={userId} />
           </ShowIf>
         </Grid>
       </Grid>
