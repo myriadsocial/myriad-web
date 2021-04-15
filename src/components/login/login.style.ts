@@ -46,6 +46,13 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     btnCreateAccount: {
       margin: '8px 16px'
+    },
+
+    info: {
+      marginBottom: theme.spacing(2)
+    },
+    polkadot: {
+      color: 'rgb(255, 140, 0)'
     }
   })
 );

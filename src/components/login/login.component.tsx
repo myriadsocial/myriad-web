@@ -9,6 +9,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -272,7 +273,15 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
           Extension Not Found
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body1">No polkadot extension found on your browser. .</Typography>
+          <Typography variant="body1" className={style.info}>
+            {' '}
+            Polkadot Extension was not found or disabled. Please enable the extension or install it from the links below.
+          </Typography>
+          <Typography variant="body1" className={style.info}>
+            <Link href="https://polkadot.js.org/extension" variant="body1" color="textSecondary" className={style.polkadot}>
+              {'Polkadot{.js}'} Extension official site.
+            </Link>
+          </Typography>
         </DialogContent>
       </Dialog>
 
