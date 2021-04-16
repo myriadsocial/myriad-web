@@ -50,39 +50,39 @@ export default async (req: NextApiRequest, res: NextApiResponse<ResponseReddit>)
     });
   });
 
-  const { data: submission } = await RedditAPI({
-    url: '/best',
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${credential.accessToken}`
-    }
-  });
+  // const { data: submission } = await RedditAPI({
+  //   url: '/best',
+  //   method: 'GET',
+  //   headers: {
+  //     Authorization: `Bearer ${credential.accessToken}`
+  //   }
+  // });
 
-  //@ts-ignore
-  submission.data.children.forEach(async post => {
-    try {
-      await MyriadAPI({
-        method: 'POST',
-        url: `/posts`,
-        data: {
-          tags: [],
-          platform: SocialsEnum.TWITTER,
-          text: post.selftext,
-          textId: post.id,
-          hasMedia: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          link: post.permalink
-        }
-      });
-    } catch (error) {
-      console.log('error create post', error);
-    }
-  });
+  // //@ts-ignore
+  // submission.data.children.forEach(async post => {
+  //   try {
+  //     await MyriadAPI({
+  //       method: 'POST',
+  //       url: `/posts`,
+  //       data: {
+  //         tags: [],
+  //         platform: SocialsEnum.TWITTER,
+  //         text: post.selftext,
+  //         textId: post.id,
+  //         hasMedia: false,
+  //         createdAt: new Date(),
+  //         updatedAt: new Date(),
+  //         link: post.permalink
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.log('error create post', error);
+  //   }
+  // });
 
-  console.log('REDDIT BEST', submission);
+  // console.log('REDDIT BEST', submission);
 
   res.status(200).json({
-    shared: submission
+    shared: friends
   });
 };
