@@ -9,7 +9,7 @@ type ResponeTwitter = {
   shared: boolean;
 };
 
-const axios = Axios.create({
+const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
 });
 
@@ -32,41 +32,31 @@ export default async (req: NextApiRequest, res: NextApiResponse<ResponeTwitter>)
     accessTokenSecret: credential.refreshToken
   });
 
-  // try {
-  //   const result = await twitterClient.tweets.statusesUpdate({
-  //     status: 'test'
-  //   });
+  // const tweets = await twitterClient.tweets.statusesUserTimeline({
+  //   include_rts: false,
+  //   count: 15
+  // });
 
-  //   console.log(result);
-  // } catch (error) {
-  //   console.error(error);
-  // }
-
-  const tweets = await twitterClient.tweets.statusesUserTimeline({
-    include_rts: false,
-    count: 15
-  });
-
-  tweets.forEach(async tweet => {
-    try {
-      await axios({
-        method: 'POST',
-        url: `/posts`,
-        data: {
-          tags: tweet.entities.hashtags,
-          platform: SocialsEnum.TWITTER,
-          text: tweet.text,
-          textId: tweet.id_str,
-          hasMedia: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          link: `https://twitter.com/${tweet.user.screen_name}/status/${tweet.id}`
-        }
-      });
-    } catch (error) {
-      console.log('error create post', error);
-    }
-  });
+  // tweets.forEach(async tweet => {
+  //   try {
+  //     await MyriadAPI({
+  //       method: 'POST',
+  //       url: `/posts`,
+  //       data: {
+  //         tags: tweet.entities.hashtags,
+  //         platform: SocialsEnum.TWITTER,
+  //         text: tweet.text,
+  //         textId: tweet.id_str,
+  //         hasMedia: false,
+  //         createdAt: new Date(),
+  //         updatedAt: new Date(),
+  //         link: `https://twitter.com/${tweet.user.screen_name}/status/${tweet.id}`
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.log('error create post', error);
+  //   }
+  // });
 
   const followers = await twitterClient.accountsAndUsers.followersList({
     count: 10
@@ -74,7 +64,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<ResponeTwitter>)
 
   for (const user of followers.users) {
     try {
-      await axios({
+      await MyriadAPI({
         url: '/people',
         method: 'POST',
         data: {
