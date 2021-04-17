@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import Axios from 'axios';
 
 const client = Axios.create({
-  baseURL: 'https://api.twitter.com/2',
+  baseURL: 'https://api.twitter.com',
   headers: {
     Authorization: `Bearer ${process.env.TWITTER_BEARER_TOKEN}`
   }
@@ -18,13 +18,12 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const tweetId = req.query.id || '841418541026877441';
 
   const response = await client({
-    url: `/tweets/${tweetId}`,
+    url: `/1.1/statuses/show.json`,
     method: 'GET',
     params: {
-      expansions: ['attachments.media_keys', 'author_id'].join(','),
-      'media.fields': ['url', 'type', 'preview_image_url'].join(','),
-      'tweet.fields': ['created_at', 'public_metrics', 'entities'].join(','),
-      'user.fields': ['name', 'profile_image_url'].join(',')
+      id: tweetId,
+      include_entities: true,
+      tweet_mode: 'extended'
     }
   });
 

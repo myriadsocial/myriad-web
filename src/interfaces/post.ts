@@ -9,7 +9,6 @@ export type PostReaction = {
 
 export type ImageData = {
   src: string;
-  title: string;
   width: number;
   height: number;
 };
@@ -19,20 +18,28 @@ export type SocialMetric = {
   retweet: number;
 };
 
-export type Post = {
+export interface Post {
   id: string;
-  url: string;
-  platformId: PostOrigin[];
+  textId: string;
+  title?: string;
+  text?: string;
+  link: string;
+  platform: PostOrigin;
   tags: string[];
   comments: Comment[];
-};
+  createdAt: Date;
+  platformUser?: {
+    username: string;
+  };
+}
 
-export type Comment = {
+export interface Comment {
   text: string;
   postId: string;
   userId: string;
   createdAt: Date;
-};
+  user?: User;
+}
 
 export type UserReplies = Comment & {
   id: string;

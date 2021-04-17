@@ -8,50 +8,36 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+
+import { useStyles } from './layout-options.style';
 
 import PhotoLayoutIcon from 'src/images/photo-layout-light.svg';
 import TimelineLayoutIcon from 'src/images/timeline-layout-light.svg';
+import { LayoutType } from 'src/interfaces/experience';
 
-const useStyles = makeStyles({
-  root: {
-    backgroundColor: '#424242',
-    color: '#E0E0E0'
-  },
-  item: {
-    padding: 0,
-    marginBottom: 4,
-    '&:last-child': {
-      marginBottom: 0
-    },
-    '&.Mui-selected,&:hover': {
-      backgroundColor: 'rgba(160, 31, 171, 0.41)'
-    }
-  },
-  inline: {
-    display: 'inline',
-    color: '#E0E0E0'
-  },
-  header: {
-    // padding: '0 16px'
-  },
-  icon: {
-    paddingTop: 4,
-    paddingLeft: 2,
-    width: 60,
-    height: 50
-  }
-});
+type Props = {
+  value?: LayoutType;
+  onChanged: (value: LayoutType) => void;
+};
 
-export default function Layouts() {
+export default function Layouts({ value, onChanged }: Props) {
   const style = useStyles();
+
+  const changeLayoutType = (type: LayoutType) => {
+    onChanged(type);
+  };
 
   return (
     <Card className={style.root}>
       <CardHeader disableTypography className={style.header} title={<Typography variant="h5">Look And Feel</Typography>} />
       <CardContent>
         <List component="nav" className={style.root}>
-          <ListItem button alignItems="flex-start" className={style.item} selected={true}>
+          <ListItem
+            button
+            alignItems="flex-start"
+            className={style.item}
+            selected={value === 'timeline'}
+            onClick={() => changeLayoutType('timeline')}>
             <ListItemIcon>
               <TimelineLayoutIcon className={style.icon} />
             </ListItemIcon>
@@ -66,7 +52,12 @@ export default function Layouts() {
               }
             />
           </ListItem>
-          <ListItem button alignItems="flex-start" className={style.item}>
+          <ListItem
+            button
+            alignItems="flex-start"
+            className={style.item}
+            selected={value === 'photo'}
+            onClick={() => changeLayoutType('photo')}>
             <ListItemIcon>
               <PhotoLayoutIcon className={style.icon} />
             </ListItemIcon>

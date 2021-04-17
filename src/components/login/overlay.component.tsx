@@ -10,7 +10,7 @@ import { makeStyles, fade } from '@material-ui/core/styles';
 const useStyles = makeStyles({
   root: {
     position: 'absolute',
-    backgroundColor: fade('#FFF', 0.3),
+    backgroundColor: fade('#FFF', 0.5),
     width: '100%',
     left: 0,
     top: 0,

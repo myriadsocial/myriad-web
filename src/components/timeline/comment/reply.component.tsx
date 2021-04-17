@@ -24,8 +24,8 @@ export default function ReplyComponent({ close, onSubmit }: Props) {
   const style = useStyles();
   const [session] = useSession();
   const [loginOpened, openLogin] = React.useState(false);
-
-  const CHARACTER_LIMIT = 300;
+  const anonymous = !!session?.user.anonymous;
+  const CHARACTER_LIMIT = 2000;
   const [comment, setValues] = React.useState({
     text: ''
   });
@@ -49,25 +49,29 @@ export default function ReplyComponent({ close, onSubmit }: Props) {
 
   return (
     <div className={style.root}>
-      <TextField
-        inputProps={{
-          maxLength: CHARACTER_LIMIT
-        }}
-        helperText={`${comment.text.length}/${CHARACTER_LIMIT}`}
-        value={comment.text}
-        multiline
-        variant="outlined"
-        className={style.write}
-        rows={4}
-        fullWidth={true}
-        onChange={handleChange('text')}
-        placeholder="Type your comment here"
-      />
-      <ShowIf condition={!!session && !!session?.user.anonymous}>
+      <ShowIf condition={!anonymous}>
+        <TextField
+          inputProps={{
+            maxLength: CHARACTER_LIMIT
+          }}
+          helperText={`${comment.text.length}/${CHARACTER_LIMIT}`}
+          value={comment.text}
+          multiline
+          variant="outlined"
+          className={style.write}
+          rows={4}
+          fullWidth={true}
+          onChange={handleChange('text')}
+          placeholder="Type your comment here"
+        />
+      </ShowIf>
+
+      <ShowIf condition={anonymous}>
+        <TextField multiline variant="outlined" className={style.write} rows={4} fullWidth={true} />
         <LoginOverlayComponent toggleLogin={toggleLogin} />
       </ShowIf>
 
-      <ShowIf condition={!session?.user.anonymous}>
+      <ShowIf condition={!anonymous}>
         <Grid className={style.postAction} container direction="row" justify="space-between" alignItems="center">
           <Grid item>
             <IconButton aria-label="hide" size="small" onClick={close} color="secondary">

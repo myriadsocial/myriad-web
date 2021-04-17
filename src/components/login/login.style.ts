@@ -32,6 +32,12 @@ export const useStyles = makeStyles((theme: Theme) =>
         width: '60%'
       }
     },
+    whiteLightButton: {
+      marginBottom: 10,
+      backgroundColor: lighten('#f4f5e2', 0.3),
+      textAlign: 'left',
+      borderRadius: 20
+    },
     lightButton: {
       marginBottom: 10,
       backgroundColor: lighten('#E849BD', 0.3),
@@ -40,6 +46,13 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     btnCreateAccount: {
       margin: '8px 16px'
+    },
+
+    info: {
+      marginBottom: theme.spacing(2)
+    },
+    polkadot: {
+      color: 'rgb(255, 140, 0)'
     }
   })
 );
