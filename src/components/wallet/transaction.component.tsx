@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -11,7 +14,11 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import ImageIcon from '@material-ui/icons/Image';
 
-//import { getWalletHistory } from '../../helpers/polkadotApi';
+import Axios from 'axios';
+
+const client = Axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL
+});
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,21 +53,88 @@ const useStyles = makeStyles((theme: Theme) =>
     red: {
       backgroundColor: '#f44336',
       color: '#FFF'
+    },
+    loading: {
+      color: '#A942E9'
     }
   })
 );
 
+interface GetTxHistory {
+  id: string;
+  trxHash: string;
+  from: string;
+  to: string;
+  value: number;
+  state: string;
+  createdAt: string;
+}
+
 export const TransactionComponent = React.memo(function Wallet() {
   const style = useStyles();
 
+  const [txHistory, setTxHistory] = useState<GetTxHistory[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
   useEffect(() => {
+    // put the async function below inside the setInterval function
+    // periodic calls every 10 s
+    //const id = setInterval(() => {
+    //}, 10000);
+
     (async () => {
-      //await getWalletHistory();
+      await getTxHistory();
     })();
+    //return () => clearInterval(id);
   }, []);
+
+  const getTxHistory = async () => {
+    try {
+      console.log('fetching data....');
+      setLoading(true);
+      const response = await client({
+        method: 'GET',
+        url: '/transactions'
+      });
+
+      if (response.data.length > 0) {
+        const { data } = response;
+        console.log('data fetched!');
+        console.log(data);
+        // get only the first three transactions
+        const tempData = data.slice(0, 4);
+        setTxHistory(tempData);
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log(`error from getTxHistory: ${error}`);
+    }
+  };
+
+  const handleClick = async () => {
+    await getTxHistory();
+  };
+
+  if (loading)
+    return (
+      <Grid container justify="center">
+        <CircularProgress className={style.loading} />
+      </Grid>
+    );
+
+  if (txHistory.length === 0)
+    return (
+      <Grid container justify="center">
+        <Typography>Data not available</Typography>
+      </Grid>
+    );
 
   return (
     <List className={style.root}>
+      <ListItem>
+        <Button onClick={handleClick}>Refresh history</Button>
+      </ListItem>
       <ListItem>
         <ListItemAvatar className={style.avatar}>
           <Avatar>
@@ -70,14 +144,14 @@ export const TransactionComponent = React.memo(function Wallet() {
         <ListItemText
           className={style.textSecondary}
           secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-          primary="Klara Velez"
-          secondary="Tx: 0XEFJ5D4J8HF8D2281R8E5G"
+          primary={txHistory[0]?.to}
+          secondary={`Tx: ${txHistory[0]?.trxHash}`}
         />
         <ListItemSecondaryAction>
           <div className={style.badge}>
             <Chip color="default" size="small" label="Pending" />
             <Chip className={style.red} color="default" size="small" label="Out" />
-            <Typography>20 Myria</Typography>
+            <Typography>{txHistory[0]?.value} Myria</Typography>
           </div>
         </ListItemSecondaryAction>
       </ListItem>
@@ -87,14 +161,14 @@ export const TransactionComponent = React.memo(function Wallet() {
           <Avatar alt="Travis Howard" src="/images/avatar/2.jpg" />
         </ListItemAvatar>
         <ListItemText
-          primary="Eduard Rudd"
+          primary={txHistory[1]?.to}
           secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-          secondary="Tx: 0XE5E9F55T7T9D5S59R9F75"
+          secondary={`Tx: ${txHistory[1]?.trxHash}`}
         />
         <ListItemSecondaryAction>
           <div className={style.badge}>
             <Chip className={style.green} color="default" size="small" label="In" />
-            <Typography>14 Myria</Typography>
+            <Typography>{txHistory[1]?.value} Myria</Typography>
           </div>
         </ListItemSecondaryAction>
       </ListItem>
@@ -104,14 +178,14 @@ export const TransactionComponent = React.memo(function Wallet() {
           <Avatar alt="Remy Sharp" src="/images/avatar/3.jpg" />
         </ListItemAvatar>
         <ListItemText
-          primary="Rimsha Mills"
+          primary={txHistory[2]?.to}
           secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-          secondary="Tx: 0XEK8E49U5U7J5E7F66G484"
+          secondary={`Tx: ${txHistory[2]?.trxHash}`}
         />
         <ListItemSecondaryAction>
           <div className={style.badge}>
             <Chip className={style.green} color="default" size="small" label="In" />
-            <Typography>14 Myria</Typography>
+            <Typography>{txHistory[2]?.value} Myria</Typography>
           </div>
         </ListItemSecondaryAction>
       </ListItem>
@@ -123,15 +197,15 @@ export const TransactionComponent = React.memo(function Wallet() {
           </Avatar>
         </ListItemAvatar>
         <ListItemText
-          primary="Rimsha Mills"
+          primary={txHistory[3]?.to}
           secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-          secondary="Tx: 0XEK8E49U5U7J5E7F66G484"
+          secondary={`Tx: ${txHistory[3]?.trxHash}`}
         />
         <ListItemSecondaryAction>
           <div className={style.badge}>
             <Chip className={style.green} color="default" size="small" label="In" />
             <Chip className={style.red} color="default" size="small" label="Out" />
-            <Typography>14 Myria</Typography>
+            <Typography>{txHistory[3]?.value} Myria</Typography>
           </div>
         </ListItemSecondaryAction>
       </ListItem>
