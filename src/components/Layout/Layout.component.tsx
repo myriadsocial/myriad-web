@@ -37,6 +37,8 @@ const LayoutComponent = ({ children, user }: Props) => {
       }
       const currentAddress = allAccounts[0]?.address;
       const freeBalance = await getBalance(currentAddress);
+      console.log(`the address is: ${currentAddress}`);
+      console.log(`the balance is: ${freeBalance}`);
       addAddress('address', currentAddress);
       storeBalance('freeBalance', freeBalance);
     })();
