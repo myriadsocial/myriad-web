@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Axios from 'axios';
-import { last } from 'lodash';
+import { format } from 'date-fns';
 import { Post } from 'src/interfaces/post';
 import { parseTwitter, PostDetail } from 'src/lib/parse-social.util';
 
@@ -10,17 +10,14 @@ const client = Axios.create({
 });
 
 export const useSocialDetail = (post: Post) => {
-  const url = new URL(post.url);
-  const params = url.pathname.split('/');
-
   const [detail, setDetail] = React.useState<PostDetail | null>(null);
 
   const loadPost = async () => {
     const { data } = await client({
       method: 'GET',
-      url: '/api/content/detail',
+      url: '/api/content/twitter',
       params: {
-        id: last(params),
+        id: post.textId,
         type: 'twitter'
       }
     });
@@ -33,8 +30,26 @@ export const useSocialDetail = (post: Post) => {
   };
 
   React.useEffect(() => {
-    loadPost();
-  }, []);
+    if (post.platform === 'twitter') {
+      loadPost();
+    } else {
+      setDetail({
+        text: post.text || '',
+        createdOn: format(new Date(post.createdAt), 'dd MMMM yyyy'),
+        videos: [],
+        images: [],
+        metric: {
+          like: 0,
+          retweet: 0
+        },
+        user: {
+          name: post.platformUser?.username || '',
+          avatar: '',
+          username: post.platformUser?.username || ''
+        }
+      });
+    }
+  }, [post]);
 
   return {
     detail

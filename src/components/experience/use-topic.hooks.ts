@@ -2,13 +2,14 @@
 import { useState } from 'react';
 
 import Axios from 'axios';
+import { Tag } from 'src/interfaces/experience';
 
 const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
 });
 
 export const useTopic = () => {
-  const [topics, setTopic] = useState([]);
+  const [topics, setTopic] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [params] = useState({
@@ -34,9 +35,14 @@ export const useTopic = () => {
           }
         }
       });
-      setTopic(data.map(i => i.id));
+
+      setTopic(
+        data.map(i => ({
+          id: i.id,
+          hide: i.hide
+        }))
+      );
     } catch (error) {
-      console.log('search error', error);
       setError(error);
     } finally {
       setLoading(false);

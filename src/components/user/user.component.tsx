@@ -54,6 +54,8 @@ const User = ({ settings, changeSetting }: Props) => {
   const [session] = useSession();
   const [loginOpened, openLogin] = React.useState(false);
 
+  if (!session || !session.user) return null;
+
   const toggleLogin = () => {
     openLogin(!loginOpened);
   };
@@ -63,7 +65,7 @@ const User = ({ settings, changeSetting }: Props) => {
       <Grid container direction="row" justify="space-between" alignItems="flex-start">
         <Grid item className={!!session?.user.anonymous ? style.grow : style.normal}>
           <Profile toggleLogin={toggleLogin} />
-          <Social toggleLogin={toggleLogin} />
+          <Social toggleLogin={toggleLogin} user={session.user} />
         </Grid>
 
         <ShowIf condition={!session?.user.anonymous}>
