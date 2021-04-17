@@ -48,7 +48,7 @@ export const usePolkadotExtension = () => {
 
     setLoading(true);
 
-    const extensions = await web3Enable('my cool dapp');
+    const extensions = await web3Enable(process.env.NEXT_PUBLIC_APP_NAME || 'myriad-dev');
 
     setIsInjected(true);
 
@@ -56,22 +56,21 @@ export const usePolkadotExtension = () => {
       setExtensionInstalled(false);
       // no extension installed, or the user did not accept the authorization
       // in this case we should inform the use and give a link to the extension
-      return;
+    } else {
+      setExtensionInstalled(true);
+
+      const allAccounts = await web3Accounts();
+
+      if (allAccounts.length) {
+        await getRegisteredAccounts(allAccounts);
+      }
     }
 
-    setExtensionInstalled(true);
-
-    const allAccounts = await web3Accounts();
-
-    if (allAccounts.length) {
-      await getRegisteredAccounts(allAccounts);
-
-      setLoading(false);
-    }
+    setLoading(false);
   };
 
   return {
-    isExtensionInstalled: isInjected && isExtensionInstalled,
+    isExtensionInstalled: !isLoading && isInjected && isExtensionInstalled,
     accountFetched: isInjected && !isLoading,
     accounts,
     getPolkadotAccounts
