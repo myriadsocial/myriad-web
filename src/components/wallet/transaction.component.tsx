@@ -10,6 +10,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import ImageIcon from '@material-ui/icons/Image';
@@ -73,7 +74,7 @@ interface GetTxHistory {
 export const TransactionComponent = React.memo(function Wallet() {
   const style = useStyles();
 
-  const [txHistory, setTxHistory] = useState<GetTxHistory[]>([]);
+  const [txHistories, setTxHistories] = useState<GetTxHistory[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -83,12 +84,12 @@ export const TransactionComponent = React.memo(function Wallet() {
     //}, 10000);
 
     (async () => {
-      await getTxHistory();
+      await getTxHistories();
     })();
     //return () => clearInterval(id);
   }, []);
 
-  const getTxHistory = async () => {
+  const getTxHistories = async () => {
     try {
       console.log('fetching data....');
       setLoading(true);
@@ -103,17 +104,17 @@ export const TransactionComponent = React.memo(function Wallet() {
         console.log(data);
         // get only the first three transactions
         const tempData = data.slice(0, 4);
-        setTxHistory(tempData);
+        setTxHistories(tempData);
         setLoading(false);
       }
     } catch (error) {
       setLoading(false);
-      console.log(`error from getTxHistory: ${error}`);
+      console.log(`error from getTxHistories: ${error}`);
     }
   };
 
   const handleClick = async () => {
-    await getTxHistory();
+    await getTxHistories();
   };
 
   if (loading)
@@ -123,7 +124,7 @@ export const TransactionComponent = React.memo(function Wallet() {
       </Grid>
     );
 
-  if (txHistory.length === 0)
+  if (txHistories.length === 0)
     return (
       <Grid container justify="center">
         <Typography>Data not available</Typography>
@@ -135,80 +136,40 @@ export const TransactionComponent = React.memo(function Wallet() {
       <ListItem>
         <Button onClick={handleClick}>Refresh history</Button>
       </ListItem>
-      <ListItem>
-        <ListItemAvatar className={style.avatar}>
-          <Avatar>
-            <ImageIcon />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          className={style.textSecondary}
-          secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-          primary={txHistory[0]?.to}
-          secondary={`Tx: ${txHistory[0]?.trxHash}`}
-        />
-        <ListItemSecondaryAction>
-          <div className={style.badge}>
-            <Chip color="default" size="small" label="Pending" />
-            <Chip className={style.red} color="default" size="small" label="Out" />
-            <Typography>{txHistory[0]?.value} Myria</Typography>
-          </div>
-        </ListItemSecondaryAction>
-      </ListItem>
-
-      <ListItem>
-        <ListItemAvatar className={style.avatar}>
-          <Avatar alt="Travis Howard" src="/images/avatar/2.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary={txHistory[1]?.to}
-          secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-          secondary={`Tx: ${txHistory[1]?.trxHash}`}
-        />
-        <ListItemSecondaryAction>
-          <div className={style.badge}>
-            <Chip className={style.green} color="default" size="small" label="In" />
-            <Typography>{txHistory[1]?.value} Myria</Typography>
-          </div>
-        </ListItemSecondaryAction>
-      </ListItem>
-
-      <ListItem>
-        <ListItemAvatar className={style.avatar}>
-          <Avatar alt="Remy Sharp" src="/images/avatar/3.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary={txHistory[2]?.to}
-          secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-          secondary={`Tx: ${txHistory[2]?.trxHash}`}
-        />
-        <ListItemSecondaryAction>
-          <div className={style.badge}>
-            <Chip className={style.green} color="default" size="small" label="In" />
-            <Typography>{txHistory[2]?.value} Myria</Typography>
-          </div>
-        </ListItemSecondaryAction>
-      </ListItem>
-
-      <ListItem>
-        <ListItemAvatar className={style.avatar}>
-          <Avatar>
-            <ImageIcon />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary={txHistory[3]?.to}
-          secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-          secondary={`Tx: ${txHistory[3]?.trxHash}`}
-        />
-        <ListItemSecondaryAction>
-          <div className={style.badge}>
-            <Chip className={style.green} color="default" size="small" label="In" />
-            <Chip className={style.red} color="default" size="small" label="Out" />
-            <Typography>{txHistory[3]?.value} Myria</Typography>
-          </div>
-        </ListItemSecondaryAction>
-      </ListItem>
+      {txHistories.map(txHistory => (
+        <ListItem key={txHistory?.id}>
+          <ListItemAvatar className={style.avatar}>
+            <Avatar>
+              <ImageIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            className={style.textSecondary}
+            secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
+            primary={
+              <Tooltip title={`${txHistory?.to}`} placement="top" leaveDelay={3000} interactive>
+                <Button>To: ...</Button>
+              </Tooltip>
+            }
+            secondary={
+              <Tooltip title={`${txHistory?.trxHash}`} placement="top" leaveDelay={3000} interactive>
+                <Button>Tx: ...</Button>
+              </Tooltip>
+            }
+          />
+          <ListItemSecondaryAction>
+            <div className={style.badge}>
+              <Chip
+                color="default"
+                size="small"
+                label={txHistory?.state === 'success' ? 'Success' : [txHistory.state === 'pending' ? 'Pending' : 'Failed']}
+              />
+              <Chip className={style.red} color="default" size="small" label="Out" />
+              <Typography>{txHistory?.value} Myria</Typography>
+            </div>
+          </ListItemSecondaryAction>
+        </ListItem>
+      ))}
     </List>
   );
 });
