@@ -10,9 +10,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 import ImageIcon from '@material-ui/icons/Image';
 
 import Axios from 'axios';
@@ -71,10 +73,52 @@ interface GetTxHistory {
   createdAt: string;
 }
 
+interface StyledTabProps {
+  label: string;
+}
+
+interface StyledTabsProps {
+  value: number;
+  onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
+}
+
+const StyledTabs = withStyles({
+  flexContainer: {
+    justifyContent: 'flex-end'
+  },
+  indicator: {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: '#A942E9',
+    '& > span': {
+      maxWidth: 40,
+      width: '100%'
+      // backgroundColor: '#616161'
+    }
+  }
+})((props: StyledTabsProps) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
+
+const StyledTab = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      textTransform: 'uppercase',
+      color: theme.palette.common.white,
+      minWidth: 40,
+      fontWeight: theme.typography.fontWeightRegular,
+      fontSize: theme.typography.pxToRem(15),
+      marginRight: theme.spacing(1),
+      '&:focus': {
+        opacity: 1
+      }
+    }
+  })
+)((props: StyledTabProps) => <Tab disableRipple {...props} />);
+
 export const TransactionComponent = React.memo(function Wallet() {
   const style = useStyles();
 
   const [txHistories, setTxHistories] = useState<GetTxHistory[]>([]);
+  const [value, setValue] = useState(0);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -113,6 +157,11 @@ export const TransactionComponent = React.memo(function Wallet() {
     }
   };
 
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    event.preventDefault();
+    setValue(newValue);
+  };
+
   const handleClick = async () => {
     await getTxHistories();
   };
@@ -132,44 +181,51 @@ export const TransactionComponent = React.memo(function Wallet() {
     );
 
   return (
-    <List className={style.root}>
-      <ListItem>
-        <Button onClick={handleClick}>Refresh history</Button>
-      </ListItem>
-      {txHistories.map(txHistory => (
-        <ListItem key={txHistory?.id}>
-          <ListItemAvatar className={style.avatar}>
-            <Avatar>
-              <ImageIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            className={style.textSecondary}
-            secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-            primary={
-              <Tooltip title={`${txHistory?.to}`} placement="top" leaveDelay={3000} interactive>
-                <Button>To: ...</Button>
-              </Tooltip>
-            }
-            secondary={
-              <Tooltip title={`${txHistory?.trxHash}`} placement="top" leaveDelay={3000} interactive>
-                <Button>Tx: ...</Button>
-              </Tooltip>
-            }
-          />
-          <ListItemSecondaryAction>
-            <div className={style.badge}>
-              <Chip
-                color="default"
-                size="small"
-                label={txHistory?.state === 'success' ? 'Success' : [txHistory.state === 'pending' ? 'Pending' : 'Failed']}
-              />
-              <Chip className={style.red} color="default" size="small" label="Out" />
-              <Typography>{txHistory?.value} Myria</Typography>
-            </div>
-          </ListItemSecondaryAction>
+    <>
+      <StyledTabs value={value} onChange={handleChange}>
+        <StyledTab label="All" />
+        <StyledTab label="In" />
+        <StyledTab label="Out" />
+      </StyledTabs>
+      <List className={style.root}>
+        <ListItem>
+          <Button onClick={handleClick}>Refresh history</Button>
         </ListItem>
-      ))}
-    </List>
+        {txHistories.map(txHistory => (
+          <ListItem key={txHistory?.id}>
+            <ListItemAvatar className={style.avatar}>
+              <Avatar>
+                <ImageIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              className={style.textSecondary}
+              secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
+              primary={
+                <Tooltip title={`${txHistory?.to}`} placement="top" leaveDelay={3000} interactive>
+                  <Button>To: ...</Button>
+                </Tooltip>
+              }
+              secondary={
+                <Tooltip title={`${txHistory?.trxHash}`} placement="top" leaveDelay={3000} interactive>
+                  <Button>Tx: ...</Button>
+                </Tooltip>
+              }
+            />
+            <ListItemSecondaryAction>
+              <div className={style.badge}>
+                <Chip
+                  color="default"
+                  size="small"
+                  label={txHistory?.state === 'success' ? 'Success' : [txHistory.state === 'pending' ? 'Pending' : 'Failed']}
+                />
+                <Chip className={style.red} color="default" size="small" label="Out" />
+                <Typography>{txHistory?.value} Myria</Typography>
+              </div>
+            </ListItemSecondaryAction>
+          </ListItem>
+        ))}
+      </List>
+    </>
   );
 });
