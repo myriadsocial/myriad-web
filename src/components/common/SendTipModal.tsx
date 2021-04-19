@@ -87,7 +87,6 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
         console.log('Error from get walletaddress:', error);
       }
     })();
-    console.log('the post id is: ', postId);
   }, [postId]);
 
   useEffect(() => {
@@ -226,6 +225,10 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <Dialog open={showSendTipModal} onClose={closeSendTipModal} aria-labelledby="form-dialog-title" maxWidth="md">
@@ -274,7 +277,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={open} autoHideDuration={4000}>
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
         <Alert severity="success">
           <AlertTitle>Success!</AlertTitle>
           {sendTipConfirmed.message}
