@@ -56,7 +56,7 @@ export const BalanceComponent = React.memo(function Wallet() {
         </Grid>
         <Grid item>
           <Typography className={style.title} variant="h5" onClick={handleIsHidden}>
-            {isHidden ? 'Classified  ' : myriadAccount.freeBalance.toFixed(3)}
+            {isHidden ? '... ' : myriadAccount.freeBalance.toFixed(3)}
             <span className={style.subtitle}>Myria</span>
           </Typography>
         </Grid>
