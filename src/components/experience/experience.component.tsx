@@ -55,6 +55,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
     loadMoreExperience,
     storeExperience,
     storeExperiences,
+    editExperience,
     updateExperience,
     selectExperience,
     removeExperience,
@@ -169,9 +170,17 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
     setAdded(false);
   };
 
-  const updateSelectedExperience = () => {
+  const showEditExperienceModal = () => {
     if (selectedExperience) {
-      updateExperience(selectedExperience);
+      editExperience(selectedExperience);
+      toggleEditModal();
+    }
+  };
+
+  const updateSelectedExperience = (experience: Experience) => {
+    if (selectedExperience && experience) {
+      updateExperience(experience);
+      toggleEditModal();
       discardChanges();
       notify('Experience updated');
     }
@@ -250,8 +259,10 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
           </Typography>
           <Typography color="textSecondary">By {selectedExperience?.user?.name}</Typography>
           <Typography variant="body2" component="p">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tortor justo, lobortis ut erat imperdiet, varius mollis nunc.
-            Sed vehicula.
+            {selectedExperience && selectedExperience.description
+              ? selectedExperience.description
+              : `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tortor justo, lobortis ut erat imperdiet, varius mollis nunc.
+            Sed vehicula.`}
           </Typography>
         </CardContent>
         <ShowIf condition={!anonymous}>
@@ -344,7 +355,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
         <Grid className={style.action}>
           <ShowIf condition={selectedExperience?.userId === userId}>
             <Fab
-              onClick={updateSelectedExperience}
+              onClick={showEditExperienceModal}
               className={style.extendedIcon}
               size="small"
               variant="extended"
@@ -380,7 +391,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
             This is what you are going to see
           </DialogTitle>
           <DialogContent dividers>
-            <ExperienceDetail data={edit} onSave={saveAsNewExperience} />
+            <ExperienceDetail data={edit} onSave={updateSelectedExperience} />
           </DialogContent>
         </Dialog>
       )}

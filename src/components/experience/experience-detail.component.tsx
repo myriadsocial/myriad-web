@@ -62,7 +62,7 @@ export default function ExperienceDetail({ data, onSave }: Props) {
               <Typography>Topics</Typography>
               <Box className={style.avatar}>
                 {experience.tags.map((tag, i) => (
-                  <Chip key={i} size="small" label={tag} color="primary" />
+                  <Chip key={i} size="small" label={tag.id} color="primary" />
                 ))}
               </Box>
             </Grid>
@@ -70,7 +70,7 @@ export default function ExperienceDetail({ data, onSave }: Props) {
               <Typography>People</Typography>
               <Box className={style.avatar}>
                 {experience.people.map((people, i) => (
-                  <Avatar key={i} alt={people.username} src={''} className={style.inline} />
+                  <Avatar key={i} alt={people.username} src={people.username} className={style.inline} />
                 ))}
               </Box>
             </Grid>
@@ -78,7 +78,16 @@ export default function ExperienceDetail({ data, onSave }: Props) {
             <Grid item md={6}>
               <form className={style.form} noValidate autoComplete="off">
                 <TextField onChange={setTitle} value={experience.name} variant="filled" color="secondary" label="Experience Name" />
-                <TextField onChange={setDescription} multiline rows={6} variant="filled" color="secondary" label="Description" />
+                <TextField
+                  onChange={setDescription}
+                  autoFocus
+                  value={experience.description}
+                  multiline
+                  rows={6}
+                  variant="filled"
+                  color="secondary"
+                  label="Description"
+                />
                 <Typography>Choose Layout</Typography>
                 <div className={style.layout}>
                   <FormControlLabel
