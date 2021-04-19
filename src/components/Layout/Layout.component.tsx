@@ -37,9 +37,7 @@ const LayoutComponent = ({ children, user }: Props) => {
         console.log('no accounts retrieved!');
         throw new Error('no extension/account detected on browser!');
       }
-      //const currentAddress = allAccounts[0]?.address;
       const currentAddress = session?.user.address;
-      console.log('the session contains: ', session.user);
       const freeBalance = await getBalance(currentAddress);
       // divide freeBalance by 100
       console.log(`the address is: ${currentAddress}`);
