@@ -1,5 +1,7 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
+import { useSession } from 'next-auth/client';
+
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -66,6 +68,8 @@ const SendTipModal = forwardRef((_, ref) => {
     message: ''
   });
   useEffect(() => {
+    const senderAddress = session?.user.address;
+    console.log('the sender address is:', senderAddress);
     //console.log('the history is: ', TxHistory);
     // call myriad API to store TxHistory
     if (TxHistory.trxHash.length > 0) {
@@ -116,6 +120,7 @@ const SendTipModal = forwardRef((_, ref) => {
     amount: ''
   });
   const [open, setOpen] = useState<boolean>(false);
+  const [session] = useSession();
   const styles = useStyles();
 
   useImperativeHandle(ref, () => ({
@@ -169,8 +174,10 @@ const SendTipModal = forwardRef((_, ref) => {
         // sendTip will open a pop-up from polkadot.js extension,
         // tx signing is done by supplying a password
         const ALICE = 'tkTptH5puVHn8VJ8NWMdsLa2fYGfYqV8QTyPRZRiQxAHBbCB4';
+        const senderAddress = session?.user.address;
+        console.log('the sender address is:', senderAddress);
 
-        const response = await sendTip(ALICE, amountSent);
+        const response = await sendTip(senderAddress, ALICE, amountSent);
         // handle if sendTip succeed
         if (typeof response === 'object') {
           setTxHistory({
