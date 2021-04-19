@@ -50,7 +50,7 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
   const style = useStyles();
   const [, setCookie] = useCookies(['seed']);
 
-  const { accountFetched, isExtensionInstalled, accounts, getPolkadotAccounts } = usePolkadotExtension();
+  const { accountFetched, isExtensionInstalled, accounts, getPolkadotAccounts, unsubscribeFromAccounts } = usePolkadotExtension();
   const [isSignin, setSignin] = useState(false);
   const [shouldShowLoginMethod, showLoginMethod] = useState(false);
   const [showCreateAccount, setShowCreateAccount] = useState(false);
@@ -71,6 +71,11 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
         anonymous: false
       });
     }
+
+    return () => {
+      // Clean up the subscription
+      unsubscribeFromAccounts();
+    };
   }, [isSignin, accountFetched, accounts]);
 
   const toggleLogin = (method: SeedType | null) => {
