@@ -24,6 +24,7 @@ import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { Keyring } from '@polkadot/keyring';
 import type { KeyringPair } from '@polkadot/keyring/types';
 import { mnemonicGenerate } from '@polkadot/util-crypto';
+import { KeypairType } from '@polkadot/util-crypto/types';
 
 import DialogTitle from '../common/DialogTitle.component';
 import CaptchaComponent from '../common/captcha.component';
@@ -108,11 +109,17 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
   };
 
   const login = () => {
-    const keyring = new Keyring({ type: 'sr25519', ss58Format: 42 });
+    const prefix = process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX ? Number(process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX) : 42;
+    const cyptoType: KeypairType = process.env.NEXT_PUBLIC_POLKADOT_CRYPTO_TYPE
+      ? (process.env.NEXT_PUBLIC_POLKADOT_CRYPTO_TYPE as KeypairType)
+      : 'sr25519';
+    const derivationPath = process.env.NEXT_PUBLIC_POLKADOT_DERIVATION_PATH || '';
+
+    const keyring = new Keyring({ type: cyptoType, ss58Format: prefix });
     const seed = mnemonicGenerate();
-
-    const pair: KeyringPair = keyring.createFromUri(seed + '//hard', { name: accountName });
-
+    console.log(seed);
+    const pair: KeyringPair = keyring.createFromUri(seed + derivationPath, { name: accountName });
+    console.log(pair);
     setCookie('uri', seed);
 
     signIn('credentials', {
