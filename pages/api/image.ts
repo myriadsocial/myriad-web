@@ -14,15 +14,17 @@ cloudinary.config({
 
 const uploadToCloudinary = (file: File) => {
   return new Promise((resolve, reject) => {
+    console.log('file', file);
     cloudinary.uploader.upload_stream({});
   });
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse<ResponseImageUpload>) => {
-  req.file;
-  const url = await uploadToCloudinary();
+  // req.file;
+  // const url = await uploadToCloudinary();
+  console.log('uploadToCloudinary', uploadToCloudinary);
 
   res.status(200).json({
-    url
+    url: ''
   });
 };
