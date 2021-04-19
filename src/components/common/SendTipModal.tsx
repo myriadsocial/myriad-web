@@ -91,8 +91,6 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
 
   useEffect(() => {
     const senderAddress = session?.user.address;
-    console.log('the sender address is:', senderAddress);
-    //console.log('the history is: ', TxHistory);
     // call myriad API to store TxHistory
     if (TxHistory.trxHash.length > 0) {
       (async () => {
@@ -116,7 +114,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
           to,
           trxHash,
           value: Number(amount) / 10000000000,
-          state: 'verified',
+          state: 'success',
           createdAt: new Date(),
           updatedAt: new Date(),
           deletedAt: new Date()
