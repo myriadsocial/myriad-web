@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import { useSession } from 'next-auth/client';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
@@ -120,6 +122,7 @@ export const TransactionComponent = React.memo(function Wallet() {
   const [txHistories, setTxHistories] = useState<GetTxHistory[]>([]);
   const [value, setValue] = useState(0);
   const [loading, setLoading] = useState<boolean>(true);
+  const [session] = useSession();
 
   useEffect(() => {
     // put the async function below inside the setInterval function
@@ -145,10 +148,12 @@ export const TransactionComponent = React.memo(function Wallet() {
       if (response.data.length > 0) {
         const { data } = response;
         console.log('data fetched!');
-        console.log(data);
-        // get only the first three transactions
-        const tempData = data.slice(0, 4);
-        setTxHistories(tempData);
+        const senderAddress = session?.user.address;
+        let tempData = data.filter(function (datum: any) {
+          return datum.from === senderAddress;
+        });
+        const sortedTempData = tempData.slice().sort((a: any, b: any) => b.createdAt - a.createdAt);
+        setTxHistories(sortedTempData);
         setLoading(false);
       }
     } catch (error) {
@@ -217,7 +222,11 @@ export const TransactionComponent = React.memo(function Wallet() {
                 <Chip
                   color="default"
                   size="small"
-                  label={txHistory?.state === 'success' ? 'Success' : [txHistory.state === 'pending' ? 'Pending' : 'Failed']}
+                  label={
+                    txHistory?.state === 'success' || txHistory?.state === 'verified'
+                      ? 'Success'
+                      : [txHistory.state === 'pending' ? 'Pending' : 'Failed']
+                  }
                 />
                 <Chip className={style.red} color="default" size="small" label="Out" />
                 <Typography>{txHistory?.value} Myria</Typography>
