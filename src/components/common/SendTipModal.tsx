@@ -54,7 +54,11 @@ interface PostTxHistory {
   trxHash: string;
 }
 
-const SendTipModal = forwardRef((_, ref) => {
+type Props = {
+  postId: string;
+};
+
+const SendTipModal = forwardRef(({ postId }: Props, ref) => {
   const { state: myriadAccount } = useMyriadAccount();
   const [TxHistory, setTxHistory] = useState<TxHistory>({
     trxHash: '',
@@ -67,6 +71,25 @@ const SendTipModal = forwardRef((_, ref) => {
     isConfirmed: false,
     message: ''
   });
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await client({
+          url: `/posts/${postId}/walletaddress`,
+          method: 'GET'
+        });
+        setTxHistory({
+          ...TxHistory,
+          to: data.walletAddress
+        });
+      } catch (error) {
+        console.log('Error from get walletaddress:', error);
+      }
+    })();
+    console.log('the post id is: ', postId);
+  }, [postId]);
+
   useEffect(() => {
     const senderAddress = session?.user.address;
     console.log('the sender address is:', senderAddress);
@@ -175,9 +198,8 @@ const SendTipModal = forwardRef((_, ref) => {
         // tx signing is done by supplying a password
         const ALICE = 'tkTptH5puVHn8VJ8NWMdsLa2fYGfYqV8QTyPRZRiQxAHBbCB4';
         const senderAddress = session?.user.address;
-        console.log('the sender address is:', senderAddress);
 
-        const response = await sendTip(senderAddress, ALICE, amountSent);
+        const response = await sendTip(senderAddress, TxHistory.to, amountSent);
         // handle if sendTip succeed
         if (typeof response === 'object') {
           setTxHistory({

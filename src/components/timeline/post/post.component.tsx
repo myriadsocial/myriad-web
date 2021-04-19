@@ -134,7 +134,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
         </ShowIf>
       </Card>
 
-      <SendTipModal ref={childRef} />
+      <SendTipModal postId={post.id} ref={childRef} />
     </>
   );
 }
