@@ -1,5 +1,7 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
+import { useSession } from 'next-auth/client';
+
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -52,7 +54,11 @@ interface PostTxHistory {
   trxHash: string;
 }
 
-const SendTipModal = forwardRef((_, ref) => {
+type Props = {
+  postId: string;
+};
+
+const SendTipModal = forwardRef(({ postId }: Props, ref) => {
   const { state: myriadAccount } = useMyriadAccount();
   const [TxHistory, setTxHistory] = useState<TxHistory>({
     trxHash: '',
@@ -65,7 +71,28 @@ const SendTipModal = forwardRef((_, ref) => {
     isConfirmed: false,
     message: ''
   });
+
   useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await client({
+          url: `/posts/${postId}/walletaddress`,
+          method: 'GET'
+        });
+        setTxHistory({
+          ...TxHistory,
+          to: data.walletAddress
+        });
+      } catch (error) {
+        console.log('Error from get walletaddress:', error);
+      }
+    })();
+    console.log('the post id is: ', postId);
+  }, [postId]);
+
+  useEffect(() => {
+    const senderAddress = session?.user.address;
+    console.log('the sender address is:', senderAddress);
     //console.log('the history is: ', TxHistory);
     // call myriad API to store TxHistory
     if (TxHistory.trxHash.length > 0) {
@@ -116,6 +143,7 @@ const SendTipModal = forwardRef((_, ref) => {
     amount: ''
   });
   const [open, setOpen] = useState<boolean>(false);
+  const [session] = useSession();
   const styles = useStyles();
 
   useImperativeHandle(ref, () => ({
@@ -169,8 +197,9 @@ const SendTipModal = forwardRef((_, ref) => {
         // sendTip will open a pop-up from polkadot.js extension,
         // tx signing is done by supplying a password
         const ALICE = 'tkTptH5puVHn8VJ8NWMdsLa2fYGfYqV8QTyPRZRiQxAHBbCB4';
+        const senderAddress = session?.user.address;
 
-        const response = await sendTip(ALICE, amountSent);
+        const response = await sendTip(senderAddress, TxHistory.to, amountSent);
         // handle if sendTip succeed
         if (typeof response === 'object') {
           setTxHistory({
