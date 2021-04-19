@@ -85,6 +85,7 @@
     "@polkadot/api": "^4.1.1",
     "@polkadot/extension-dapp": "^0.37.2",
     "axios": "^0.21.1",
+    "cloudinary": "^1.25.1",
     "copy-to-clipboard": "^3.3.1",
     "date-fns": "^2.19.0",
     "file-saver": "^2.0.5",

@@ -21,6 +21,9 @@ import DialogTitle from '../common/DialogTitle.component';
 import ShowIf from '../common/show-if.component';
 import { useStyles } from './profile.style';
 
+import { EditableTextField } from 'src/components/common/EditableTextField';
+import { ImageUpload } from 'src/components/common/ImageUpload.component';
+
 type Props = {
   loggedIn?: boolean;
   toggleLogin: (open: boolean) => void;
@@ -56,6 +59,11 @@ const Profile = ({ toggleLogin }: Props) => {
   const closeNotify = () => {
     setMnemonicCopied(false);
   };
+
+  const updateName = (value: string) => {};
+
+  const profileInfo =
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae nibh eu tellus tincidunt luctus hendrerit in orci. Phasellus vitae tristique nulla. Nam magna massa, sollicitudin sed turpis eros.';
 
   return (
     <div className={styles.root}>
@@ -97,18 +105,20 @@ const Profile = ({ toggleLogin }: Props) => {
             />
 
             <CardContent className={styles.profileContent}>
-              <Avatar className={styles.avatarBig} src="/images/avatar/3.jpg">
-                {session?.user.name}
-              </Avatar>
+              <ImageUpload value={'/images/avatar/3.jpg'} onSelected={() => console.log}>
+                <Avatar className={styles.avatarBig} src="/images/avatar/3.jpg">
+                  {session?.user.name}
+                </Avatar>
+              </ImageUpload>
+              <EditableTextField
+                name="profile.name"
+                value={session?.user.name || ''}
+                onChange={updateName}
+                fullWidth={true}
+                style={{ fontSize: 20 }}
+              />
 
-              <Typography gutterBottom variant="h5" component="h2">
-                {session?.user.name}
-              </Typography>
-
-              <Typography variant="body2" color="textSecondary" component="p">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae nibh eu tellus tincidunt luctus hendrerit in orci.
-                Phasellus vitae tristique nulla. Nam magna massa, sollicitudin sed turpis eros.
-              </Typography>
+              <EditableTextField name="profile.name" value={profileInfo} onChange={updateName} multiline={true} fullWidth={true} />
             </CardContent>
 
             <CardActions className={styles.actions}>

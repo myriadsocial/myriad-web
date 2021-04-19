@@ -38,6 +38,7 @@ export const useStyles = makeStyles({
     top: 140
   },
   profileContent: {
+    width: 500,
     marginTop: 40
   },
   media: {
