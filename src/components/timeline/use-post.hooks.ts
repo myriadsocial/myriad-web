@@ -93,11 +93,7 @@ export const usePost = () => {
       });
 
       dispatch({
-<<<<<<< HEAD
-        type,
-=======
         type: TimelineActionType.INIT_POST,
->>>>>>> 5ea73e4d94e20dbd1f849f67e307a7c6619900c2
         posts: data.map((item: Post) => ({ ...item, comments: item.comments || [] }))
       });
     } catch (error) {
