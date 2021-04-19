@@ -4,7 +4,7 @@ import { useExperience as baseUseExperience, ExperienceActionType } from './expe
 
 import Axios from 'axios';
 import { omit } from 'lodash';
-import { Experience, People, Tag } from 'src/interfaces/experience';
+import { Experience } from 'src/interfaces/experience';
 
 const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
@@ -112,15 +112,11 @@ export const useExperience = (userId: string) => {
     }
   };
 
-  const editExperience = async (data: Experience, tags: Tag[], people: People[]) => {
+  const editExperience = async (data: Experience) => {
     dispatch({
       type: ExperienceActionType.EDIT_EXPERIENCE,
       experience_id: data.id,
-      experience: {
-        ...data,
-        tags,
-        people
-      }
+      experience: data
     });
   };
 
@@ -160,7 +156,9 @@ export const useExperience = (userId: string) => {
       method: 'PATCH',
       data: {
         people: experience.people,
-        tags: experience.tags
+        tags: experience.tags,
+        layout: experience.layout,
+        description: experience.description
       }
     });
 
