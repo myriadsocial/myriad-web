@@ -149,10 +149,10 @@ export const TransactionComponent = React.memo(function Wallet() {
         const { data } = response;
         console.log('data fetched!');
         const senderAddress = session?.user.address;
-        let tempData = data.filter(function (datum) {
+        let tempData = data.filter(function (datum: any) {
           return datum.from === senderAddress;
         });
-        const sortedTempData = tempData.slice().sort((a, b) => b.createdAt - a.createdAt);
+        const sortedTempData = tempData.slice().sort((a: any, b: any) => b.createdAt - a.createdAt);
         setTxHistories(sortedTempData);
         setLoading(false);
       }
