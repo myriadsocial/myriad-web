@@ -87,13 +87,9 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
         console.log('Error from get walletaddress:', error);
       }
     })();
-    console.log('the post id is: ', postId);
   }, [postId]);
 
   useEffect(() => {
-    const senderAddress = session?.user.address;
-    console.log('the sender address is:', senderAddress);
-    //console.log('the history is: ', TxHistory);
     // call myriad API to store TxHistory
     if (TxHistory.trxHash.length > 0) {
       (async () => {
@@ -117,7 +113,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
           to,
           trxHash,
           value: Number(amount) / 10000000000,
-          state: 'verified',
+          state: 'success',
           createdAt: new Date(),
           updatedAt: new Date(),
           deletedAt: new Date()
@@ -226,6 +222,10 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <Dialog open={showSendTipModal} onClose={closeSendTipModal} aria-labelledby="form-dialog-title" maxWidth="md">
@@ -274,7 +274,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={open} autoHideDuration={4000}>
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
         <Alert severity="success">
           <AlertTitle>Success!</AlertTitle>
           {sendTipConfirmed.message}
