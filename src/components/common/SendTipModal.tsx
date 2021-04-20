@@ -218,7 +218,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
           setTxHistory({
             trxHash: response.trxHash,
             to: ALICE,
-            amount: amountSent,
+            amount: amountSent / 100,
             from: response.from
           });
           setOpen(true);
