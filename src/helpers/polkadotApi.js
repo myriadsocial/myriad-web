@@ -34,9 +34,6 @@ export const sendTip = async (fromAddress, toAddress, amountSent) => {
   const account = allAccounts.find(function (account) {
     return account.address === fromAddress;
   });
-
-  //console.log('found account:', found);
-
   const api = await connectToBlockchain();
 
   // here we use the api to create a balance transfer to some account of a value of 12345678
