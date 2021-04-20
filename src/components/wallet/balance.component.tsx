@@ -60,7 +60,9 @@ export const BalanceComponent = React.memo(function Wallet() {
     const currentAddress = session?.user.address;
     const freeBalance = await getBalance(currentAddress);
     //console.log('the freeBalance is: ', Number(freeBalance) / 100);
-    setBalance(Number((freeBalance / 100).toFixed(3)));
+    if (freeBalance) {
+      setBalance(Number((freeBalance / 100).toFixed(3)));
+    }
   };
 
   const handleIsHidden = () => {
