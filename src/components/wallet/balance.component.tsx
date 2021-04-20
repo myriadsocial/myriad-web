@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
+import { useSession } from 'next-auth/client';
+
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
-import { useMyriadAccount } from './wallet.context';
+import { getBalance } from '../../helpers/polkadotApi';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,17 +36,39 @@ const useStyles = makeStyles((theme: Theme) =>
     subtitle: {
       textTransform: 'uppercase',
       fontSize: 12
+    },
+    buttonText: {
+      marginLeft: theme.spacing(2),
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+      fontSize: 12
     }
   })
 );
 
 export const BalanceComponent = React.memo(function Wallet() {
   const style = useStyles();
+  const [session] = useSession();
   const [isHidden, setIsHidden] = useState(true);
-  const { state: myriadAccount } = useMyriadAccount();
+  const [balance, setBalance] = useState(0);
+
+  useEffect(() => {
+    getBalanceForComponent();
+  }, [balance]);
+
+  const getBalanceForComponent = async () => {
+    const currentAddress = session?.user.address;
+    const freeBalance = await getBalance(currentAddress);
+    //console.log('the freeBalance is: ', Number(freeBalance) / 100);
+    setBalance(Number((freeBalance / 100).toFixed(3)));
+  };
 
   const handleIsHidden = () => {
     setIsHidden(!isHidden);
+  };
+
+  const handleClick = () => {
+    getBalanceForComponent();
   };
 
   return (
@@ -56,9 +81,14 @@ export const BalanceComponent = React.memo(function Wallet() {
         </Grid>
         <Grid item>
           <Typography className={style.title} variant="h5" onClick={handleIsHidden}>
-            {isHidden ? '... ' : myriadAccount.freeBalance.toFixed(3)}
+            {isHidden ? '... ' : balance}
             <span className={style.subtitle}>Myria</span>
           </Typography>
+        </Grid>
+        <Grid item>
+          <Button className={style.buttonText} onClick={handleClick}>
+            Refresh
+          </Button>
         </Grid>
       </Grid>
     </div>
