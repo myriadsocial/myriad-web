@@ -74,7 +74,13 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
   });
 
   useEffect(() => {
-    getBalanceForComponent();
+    const id = setInterval(() => {
+      (async () => {
+        await getBalanceForComponent();
+      })();
+    }, 10000);
+
+    return () => clearInterval(id);
   }, []);
 
   useEffect(() => {

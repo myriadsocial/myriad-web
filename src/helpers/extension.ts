@@ -9,9 +9,14 @@ export const enableExtension = async () => {
     return;
   }
 
+  // Using proper prefix
+  const prefix = process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX ? Number(process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX) : 214;
+
   // we are now informed that the user has at least one extension and that we
   // will be able to show and use accounts
-  let allAccounts = await web3Accounts();
+  let allAccounts = await web3Accounts({
+    ss58Format: prefix
+  });
   return allAccounts;
 };
 
