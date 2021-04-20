@@ -105,6 +105,10 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
 
   const message = `Saying hi to #MyriadNetwork\n\nPublic Key: ${user.address}`;
 
+  const handleClickTutorial = () => {
+    childRef.current.triggerLinkingTutorial();
+  };
+
   return (
     <>
       <Dialog open={open} onClose={handleClose} maxWidth="xs">
@@ -145,15 +149,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
             </CardContent>
           </Card>
 
-          <Button
-            onClick={() => {
-              childRef.current.triggerLinkingTutorial();
-            }}
-            color="default"
-            size="large"
-            variant="contained"
-            className={classes.info}
-            fullWidth>
+          <Button onClick={handleClickTutorial} color="default" size="large" variant="contained" className={classes.info} fullWidth>
             Tell me more about linking my social media account
           </Button>
         </DialogContent>
