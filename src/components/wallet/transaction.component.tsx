@@ -125,15 +125,9 @@ export const TransactionComponent = React.memo(function Wallet() {
   const [session] = useSession();
 
   useEffect(() => {
-    // put the async function below inside the setInterval function
-    // periodic calls every 10 s
-    //const id = setInterval(() => {
-    //}, 10000);
-
     (async () => {
       await getTxHistories();
     })();
-    //return () => clearInterval(id);
   }, []);
 
   const getTxHistories = async () => {
