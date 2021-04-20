@@ -8,7 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
 import { getBalance } from '../../helpers/polkadotApi';
-import { useMyriadAccount } from './wallet.context';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,7 +50,6 @@ export const BalanceComponent = React.memo(function Wallet() {
   const style = useStyles();
   const [session] = useSession();
   const [isHidden, setIsHidden] = useState(true);
-  //const { state: myriadAccount } = useMyriadAccount();
   const [balance, setBalance] = useState(0);
 
   useEffect(() => {
