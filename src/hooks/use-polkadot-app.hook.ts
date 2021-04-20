@@ -16,6 +16,13 @@ export const usePolkadotExtension = () => {
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
 
   const getRegisteredAccounts = async (accounts: InjectedAccountWithMeta[]) => {
+    console.log(accounts);
+
+    console.log({
+      id: {
+        inq: accounts.map(account => account.address)
+      }
+    });
     try {
       const { data: users } = await MyriadAPI.request<User[]>({
         url: '/users',
@@ -58,8 +65,10 @@ export const usePolkadotExtension = () => {
       // in this case we should inform the use and give a link to the extension
     } else {
       setExtensionInstalled(true);
-
-      const allAccounts = await web3Accounts();
+      const prefix = process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX ? Number(process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX) : 214;
+      const allAccounts = await web3Accounts({
+        ss58Format: prefix
+      });
 
       if (allAccounts.length) {
         await getRegisteredAccounts(allAccounts);
@@ -69,10 +78,27 @@ export const usePolkadotExtension = () => {
     setLoading(false);
   };
 
+  const unsubscribeFromAccounts = async () => {
+    const { web3AccountsSubscribe } = await import('@polkadot/extension-dapp');
+    let unsubscribe; // this is the function of type `() => void` that should be called to unsubscribe
+
+    //// we subscribe to any account change and log the new list.
+    //// note that `web3AccountsSubscribe` returns the function to unsubscribe
+    unsubscribe = await web3AccountsSubscribe(injectedAccounts => {
+      injectedAccounts.map(accounts => {
+        console.log('detail about the unsubscribed accounts: ', accounts);
+      });
+    });
+
+    //// don't forget to unsubscribe when needed, e.g when unmounting a component
+    unsubscribe && unsubscribe();
+  };
+
   return {
     isExtensionInstalled: !isLoading && isInjected && isExtensionInstalled,
     accountFetched: isInjected && !isLoading,
     accounts,
-    getPolkadotAccounts
+    getPolkadotAccounts,
+    unsubscribeFromAccounts
   };
 };

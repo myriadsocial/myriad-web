@@ -21,7 +21,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<ResponseReddit>)
 
   //@ts-ignore
   const credential = session?.user.userCredentials.reverse().find(item => item.platform === SocialsEnum.REDDIT);
-
+  console.log('credential reddit', credential);
   if (!credential) {
     res.status(200).json({
       shared: false
@@ -81,6 +81,21 @@ export default async (req: NextApiRequest, res: NextApiResponse<ResponseReddit>)
   // });
 
   // console.log('REDDIT BEST', submission);
+
+  try {
+    await MyriadAPI.request({
+      method: 'POST',
+      url: '/user-credentials/verify',
+      data: {
+        userId: session?.user.id,
+        peopleId: credential.platformUserId
+      }
+    });
+
+    console.log('reddit user-credentials verify sent');
+  } catch (error) {
+    console.error('reddit user-credentials verify', error);
+  }
 
   res.status(200).json({
     shared: friends
