@@ -13,6 +13,7 @@ import SendIcon from '@material-ui/icons/Send';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
+import { getBalance } from '../../helpers/polkadotApi';
 import { sendTip } from '../../helpers/polkadotApi';
 import DialogTitle from '../common/DialogTitle.component';
 import { useStyles } from '../login/login.style';
@@ -59,7 +60,8 @@ type Props = {
 };
 
 const SendTipModal = forwardRef(({ postId }: Props, ref) => {
-  const { state: myriadAccount } = useMyriadAccount();
+  const { state: myriadAccount, dispatch: myriadAccountDispatch } = useMyriadAccount();
+  const [session] = useSession();
   const [TxHistory, setTxHistory] = useState<TxHistory>({
     trxHash: '',
     from: '',
@@ -103,6 +105,14 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
     }
   }, [TxHistory]);
 
+  const storeBalance = (key: string, value: number) => {
+    myriadAccountDispatch({
+      type: 'STORE_BALANCE',
+      key,
+      value
+    });
+  };
+
   const postTxHistory = async ({ from, to, amount, trxHash }: PostTxHistory) => {
     try {
       const response = await client({
@@ -139,7 +149,6 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
     amount: ''
   });
   const [open, setOpen] = useState<boolean>(false);
-  const [session] = useSession();
   const styles = useStyles();
 
   useImperativeHandle(ref, () => ({
@@ -189,7 +198,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
           isInsufficientBalance: false,
           errorMessage: ''
         });
-        const amountSent = Number(values.amount) * 10000000000;
+        const amountSent = Number(values.amount) * 1000000000000;
         // sendTip will open a pop-up from polkadot.js extension,
         // tx signing is done by supplying a password
         const ALICE = 'tkTptH5puVHn8VJ8NWMdsLa2fYGfYqV8QTyPRZRiQxAHBbCB4';
@@ -206,6 +215,10 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
           });
           setOpen(true);
           setShowSendTipModal(false);
+          const currentAddress = session?.user.address;
+          const freeBalance = await getBalance(currentAddress);
+          console.log('the freeBalance is: ', freeBalance / 100);
+          storeBalance('freeBalance', freeBalance / 100);
         }
       }
     } else {
