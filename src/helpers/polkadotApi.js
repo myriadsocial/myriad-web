@@ -24,19 +24,20 @@ export const getBalance = async ADDR => {
 
 // snippets to send transaction
 // finds an injector for an address
-export const sendTip = async (toAddress, amountSent) => {
+export const sendTip = async (fromAddress, toAddress, amountSent) => {
   const { enableExtension } = await import('../helpers/extension');
   const { web3FromSource } = await import('@polkadot/extension-dapp');
+
   const allAccounts = await enableExtension();
-  // We arbitraily select the first account returned from the above snippet
+  // We select the first account found by using fromAddress
   // `account` is of type InjectedAccountWithMeta
-  const account = allAccounts[0];
+  const account = allAccounts.find(function (account) {
+    return account.address === fromAddress;
+  });
+
+  //console.log('found account:', found);
 
   const api = await connectToBlockchain();
-
-  //const ALICE = 'tkTptH5puVHn8VJ8NWMdsLa2fYGfYqV8QTyPRZRiQxAHBbCB4';
-
-  //const RIZ_MYR = '5DJUPpC7C8CxiQ5ECNXQ8PR9ngydZ4hiDpHnMivgnC8yfYjc';
 
   // here we use the api to create a balance transfer to some account of a value of 12345678
   const transferExtrinsic = api.tx.balances.transfer(toAddress, amountSent);
@@ -48,9 +49,9 @@ export const sendTip = async (toAddress, amountSent) => {
   // passing the injected account address as the first argument of signAndSend
   // will allow the api to retrieve the signer and the user will see the extension
   // popup asking to sign the balance transfer transaction
-  const txInfo = await transferExtrinsic.signAndSend(account.address, { signer: injector.signer });
+  const txInfo = await transferExtrinsic.signAndSend(fromAddress, { signer: injector.signer });
 
-  return { trxHash: txInfo.toHex(), from: account.address };
+  return { trxHash: txInfo.toHex(), from: fromAddress };
 };
 
 export const getWalletHistory = async () => {

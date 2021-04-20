@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { User } from 'next-auth';
+import { useSession } from 'next-auth/client';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -25,6 +26,7 @@ type Props = {
 
 const LayoutComponent = ({ children, user }: Props) => {
   const { dispatch: myriadAccountDispatch } = useMyriadAccount();
+  const [session] = useSession();
   useEffect(() => {
     // fetch for address
     (async () => {
@@ -35,10 +37,13 @@ const LayoutComponent = ({ children, user }: Props) => {
         console.log('no accounts retrieved!');
         throw new Error('no extension/account detected on browser!');
       }
-      const currentAddress = allAccounts[0]?.address;
+      const currentAddress = session?.user.address;
       const freeBalance = await getBalance(currentAddress);
-      addAddress('address', currentAddress);
-      storeBalance('freeBalance', freeBalance);
+      // divide freeBalance by 100
+      console.log(`the address is: ${currentAddress}`);
+      console.log(`the balance is: ${freeBalance}`);
+      addAddress('address', String(currentAddress));
+      storeBalance('freeBalance', freeBalance / 100);
     })();
   }, []);
 

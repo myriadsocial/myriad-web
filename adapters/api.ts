@@ -54,6 +54,7 @@ function Adapter() {
       _debug('Adapter getUser', id, data);
 
       return {
+        id: data.id,
         name: data.name,
         profilePictureURL: data.profilePictureURL,
         userId: data.id,
@@ -119,7 +120,7 @@ function Adapter() {
       accessTokenExpires: number
     ): Promise<void> {
       let username = '';
-
+      console.log('userId', userId);
       switch (providerId) {
         case 'twitter':
           const twitterClient = new TwitterClient({
@@ -171,12 +172,24 @@ function Adapter() {
         }
       });
 
-      await MyriadAPI({
-        url: `/people/${people.id}/user-credential`,
+      console.log('link credential', {
+        url: `/users/${userId}/user-credentials`,
         method: 'POST',
         data: {
           access_token: accessToken,
           refresh_token: refreshToken,
+          peopleId: people.id,
+          userId
+        }
+      });
+
+      await MyriadAPI({
+        url: `/users/${userId}/user-credentials`,
+        method: 'POST',
+        data: {
+          access_token: accessToken,
+          refresh_token: refreshToken,
+          peopleId: people.id,
           userId
         }
       });

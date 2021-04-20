@@ -1,5 +1,7 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
+import { useSession } from 'next-auth/client';
+
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -52,7 +54,11 @@ interface PostTxHistory {
   trxHash: string;
 }
 
-const SendTipModal = forwardRef((_, ref) => {
+type Props = {
+  postId: string;
+};
+
+const SendTipModal = forwardRef(({ postId }: Props, ref) => {
   const { state: myriadAccount } = useMyriadAccount();
   const [TxHistory, setTxHistory] = useState<TxHistory>({
     trxHash: '',
@@ -65,8 +71,25 @@ const SendTipModal = forwardRef((_, ref) => {
     isConfirmed: false,
     message: ''
   });
+
   useEffect(() => {
-    //console.log('the history is: ', TxHistory);
+    (async () => {
+      try {
+        const { data } = await client({
+          url: `/posts/${postId}/walletaddress`,
+          method: 'GET'
+        });
+        setTxHistory({
+          ...TxHistory,
+          to: data.walletAddress
+        });
+      } catch (error) {
+        console.log('Error from get walletaddress:', error);
+      }
+    })();
+  }, [postId]);
+
+  useEffect(() => {
     // call myriad API to store TxHistory
     if (TxHistory.trxHash.length > 0) {
       (async () => {
@@ -90,7 +113,7 @@ const SendTipModal = forwardRef((_, ref) => {
           to,
           trxHash,
           value: Number(amount) / 10000000000,
-          state: 'verified',
+          state: 'success',
           createdAt: new Date(),
           updatedAt: new Date(),
           deletedAt: new Date()
@@ -116,6 +139,7 @@ const SendTipModal = forwardRef((_, ref) => {
     amount: ''
   });
   const [open, setOpen] = useState<boolean>(false);
+  const [session] = useSession();
   const styles = useStyles();
 
   useImperativeHandle(ref, () => ({
@@ -169,8 +193,9 @@ const SendTipModal = forwardRef((_, ref) => {
         // sendTip will open a pop-up from polkadot.js extension,
         // tx signing is done by supplying a password
         const ALICE = 'tkTptH5puVHn8VJ8NWMdsLa2fYGfYqV8QTyPRZRiQxAHBbCB4';
+        const senderAddress = session?.user.address;
 
-        const response = await sendTip(ALICE, amountSent);
+        const response = await sendTip(senderAddress, TxHistory.to, amountSent);
         // handle if sendTip succeed
         if (typeof response === 'object') {
           setTxHistory({
@@ -195,6 +220,10 @@ const SendTipModal = forwardRef((_, ref) => {
 
   const handleChange = (prop: keyof InputState) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -245,7 +274,7 @@ const SendTipModal = forwardRef((_, ref) => {
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={open} autoHideDuration={4000}>
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
         <Alert severity="success">
           <AlertTitle>Success!</AlertTitle>
           {sendTipConfirmed.message}
