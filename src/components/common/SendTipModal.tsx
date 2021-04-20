@@ -17,7 +17,6 @@ import { getBalance } from '../../helpers/polkadotApi';
 import { sendTip } from '../../helpers/polkadotApi';
 import DialogTitle from '../common/DialogTitle.component';
 import { useStyles } from '../login/login.style';
-import { useMyriadAccount } from '../wallet/wallet.context';
 
 import Axios from 'axios';
 
@@ -60,8 +59,8 @@ type Props = {
 };
 
 const SendTipModal = forwardRef(({ postId }: Props, ref) => {
-  const { state: myriadAccount, dispatch: myriadAccountDispatch } = useMyriadAccount();
   const [session] = useSession();
+  const [balance, setBalance] = useState(0);
   const [TxHistory, setTxHistory] = useState<TxHistory>({
     trxHash: '',
     from: '',
@@ -73,6 +72,10 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
     isConfirmed: false,
     message: ''
   });
+
+  useEffect(() => {
+    getBalanceForComponent();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -105,12 +108,11 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
     }
   }, [TxHistory]);
 
-  const storeBalance = (key: string, value: number) => {
-    myriadAccountDispatch({
-      type: 'STORE_BALANCE',
-      key,
-      value
-    });
+  const getBalanceForComponent = async () => {
+    const currentAddress = session?.user.address;
+    const freeBalance = await getBalance(currentAddress);
+    //console.log('the freeBalance is: ', Number(freeBalance) / 100);
+    setBalance(Number((freeBalance / 100).toFixed(3)));
   };
 
   const postTxHistory = async ({ from, to, amount, trxHash }: PostTxHistory) => {
@@ -182,7 +184,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
         isTextChanged: true
       });
 
-      if (Number(values.amount) >= myriadAccount.freeBalance) {
+      if (Number(values.amount) >= balance) {
         setInputError({
           ...inputError,
           isErrorInput: true,
@@ -215,10 +217,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
           });
           setOpen(true);
           setShowSendTipModal(false);
-          const currentAddress = session?.user.address;
-          const freeBalance = await getBalance(currentAddress);
-          console.log('the freeBalance is: ', freeBalance / 100);
-          storeBalance('freeBalance', freeBalance / 100);
+          getBalanceForComponent();
         }
       }
     } else {
@@ -248,7 +247,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
         </DialogTitle>
         <DialogContent dividers>
           <Typography gutterBottom={true} variant="body1">
-            Free balance: {myriadAccount.freeBalance.toFixed(3)} MYRIA
+            Free balance: {balance} MYRIA
           </Typography>
         </DialogContent>
         <DialogContent dividers>

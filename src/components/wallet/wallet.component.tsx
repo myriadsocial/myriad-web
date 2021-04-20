@@ -33,10 +33,6 @@ export const Wallet = React.memo(function Wallet() {
   const WalletAction = (
     <Button onClick={handleClickTutorial} variant="contained" className={style.button}>
       Get Myria Token
-      {
-        // Call a dialog, put text in it
-        // Click Edit Your Profile - Copy Mnemonic Seed - Open your Polkadot Extension - Click on + symbol - Import Account from Pre-existing seed - Paste the mnemonic seed - Choose Myriad on Network column - Next - Define your Account name (this is modifiable) - Define your password (don't forget this as you'd need this to sign a transaction!) - Done!
-      }
     </Button>
   );
 
