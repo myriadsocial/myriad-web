@@ -37,7 +37,7 @@ export const GetMyriaTutorial = forwardRef((_, ref) => {
             3. Click on it, then click on + symbol -- Import Account from Pre-existing seed -- Paste the mnemonic -- Select Myriad as
             Network -- Click Next. <br />
             4. Define your account name -- Define your password (don't forget this!) <br />
-            5. You're done! Wait for a moment and you'll see your 100 Myria on your wallet.
+            5. You're done! Wait for a moment and you'll see your 100 Myria on your wallet (click on Refresh to update wallet balance).
           </Typography>
         </DialogContent>
         <DialogActions>
