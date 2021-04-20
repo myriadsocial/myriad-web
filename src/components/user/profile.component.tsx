@@ -60,7 +60,7 @@ const Profile = ({ toggleLogin }: Props) => {
   return (
     <div className={styles.root}>
       <Avatar className={styles.avatar} src="/images/avatar/3.jpg">
-        Anonimous
+        Anonymous
       </Avatar>
       <div className={styles.info}>
         <Typography className={styles.name}>{session?.user.name}</Typography>
