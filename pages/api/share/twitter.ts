@@ -18,7 +18,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<ResponeTwitter>)
 
   //@ts-ignore
   const credential = session?.user.userCredentials.find(item => item.platform === SocialsEnum.TWITTER);
-
+  console.log('credential twitter', credential);
   if (!credential) {
     res.status(200).json({
       shared: false
@@ -77,6 +77,21 @@ export default async (req: NextApiRequest, res: NextApiResponse<ResponeTwitter>)
     } catch (error) {
       console.log('error create people', error);
     }
+  }
+
+  try {
+    await MyriadAPI.request({
+      method: 'POST',
+      url: '/user-credentials/verify',
+      data: {
+        userId: session?.user.id,
+        peopleId: credential.platformUserId
+      }
+    });
+
+    console.log('twitter user-credentials verify sent');
+  } catch (error) {
+    console.error('twitter user-credentials verify', error);
   }
 
   res.status(200).json({

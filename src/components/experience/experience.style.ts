@@ -6,7 +6,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2)
     },
     action: {
-      marginTop: theme.spacing(2),
+      paddingTop: theme.spacing(2),
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'center',

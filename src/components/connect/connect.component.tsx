@@ -77,14 +77,17 @@ const copy: Record<SocialsEnum, string> = {
 export default function ConnectComponent({ user, social, open, handleClose }: Props) {
   const classes = useStyles();
   const childRef = useRef<any>();
-  const { shared, shareOnTwitter } = useShareSocial();
+  const { shared, shareOnTwitter, shareOnReddit } = useShareSocial();
 
   const share = useCallback(() => {
     switch (social) {
       case SocialsEnum.TWITTER:
         shareOnTwitter();
         break;
-
+      case SocialsEnum.REDDIT:
+        shareOnReddit();
+        break;
+      case SocialsEnum.FACEBOOK:
       default:
         break;
     }
@@ -94,6 +97,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
     share();
     handleClose();
   };
+
   const config = useMemo(() => {
     return {
       step1: <Avatar className={classes.purple}>1</Avatar>,
