@@ -13,13 +13,17 @@ export const connectToBlockchain = async () => {
 };
 
 export const getBalance = async ADDR => {
-  const DECIMAL_PLACES = 10000000000;
-  //const ADDR = '5CS8upU5c44NaPu7qiSXGwna7oeDGG3vifM5nZAbwx3nTGTm';
-  const api = await connectToBlockchain();
-  const {
-    data: { free: previousFree }
-  } = await api.query.system.account(ADDR);
-  return Number(Number(previousFree) / DECIMAL_PLACES.toFixed(3));
+  try {
+    const DECIMAL_PLACES = 10000000000;
+    //const ADDR = '5CS8upU5c44NaPu7qiSXGwna7oeDGG3vifM5nZAbwx3nTGTm';
+    const api = await connectToBlockchain();
+    const {
+      data: { free: previousFree }
+    } = await api.query.system.account(ADDR);
+    return Number(Number(previousFree) / DECIMAL_PLACES.toFixed(3));
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 // snippets to send transaction
@@ -34,9 +38,6 @@ export const sendTip = async (fromAddress, toAddress, amountSent) => {
   const account = allAccounts.find(function (account) {
     return account.address === fromAddress;
   });
-
-  //console.log('found account:', found);
-
   const api = await connectToBlockchain();
 
   // here we use the api to create a balance transfer to some account of a value of 12345678

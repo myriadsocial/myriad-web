@@ -74,7 +74,13 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
   });
 
   useEffect(() => {
-    getBalanceForComponent();
+    const id = setInterval(() => {
+      (async () => {
+        await getBalanceForComponent();
+      })();
+    }, 10000);
+
+    return () => clearInterval(id);
   }, []);
 
   useEffect(() => {
@@ -112,7 +118,9 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
     const currentAddress = session?.user.address;
     const freeBalance = await getBalance(currentAddress);
     //console.log('the freeBalance is: ', Number(freeBalance) / 100);
-    setBalance(Number((freeBalance / 100).toFixed(3)));
+    if (freeBalance) {
+      setBalance(Number((freeBalance / 100).toFixed(3)));
+    }
   };
 
   const postTxHistory = async ({ from, to, amount, trxHash }: PostTxHistory) => {
@@ -212,7 +220,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
           setTxHistory({
             trxHash: response.trxHash,
             to: ALICE,
-            amount: amountSent,
+            amount: amountSent / 100,
             from: response.from
           });
           setOpen(true);

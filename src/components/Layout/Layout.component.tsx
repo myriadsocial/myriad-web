@@ -43,7 +43,9 @@ const LayoutComponent = ({ children, user }: Props) => {
       //console.log(`the balance is: ${freeBalance}`);
       addAddress('address', String(currentAddress));
       // divide freeBalance by 100
-      storeBalance('freeBalance', freeBalance / 100);
+      if (freeBalance) {
+        storeBalance('freeBalance', freeBalance / 100);
+      }
     })();
   }, []);
 
