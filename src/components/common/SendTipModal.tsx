@@ -132,7 +132,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
           from,
           to,
           trxHash,
-          value: Number(amount) / 10000000000,
+          value: Number(amount) * 100,
           state: 'success',
           createdAt: new Date(),
           updatedAt: new Date(),
