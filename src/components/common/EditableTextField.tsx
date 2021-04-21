@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
-import { InputProps } from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
