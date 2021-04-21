@@ -120,20 +120,31 @@ export const TransactionComponent = React.memo(function Wallet() {
   const style = useStyles();
 
   const [txHistories, setTxHistories] = useState<GetTxHistory[]>([]);
+  const [outboundTxs, setOutboundTxs] = useState<GetTxHistory[]>([]);
+  const [inboundTxs, setInboundTxs] = useState<GetTxHistory[]>([]);
   const [value, setValue] = useState(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [session] = useSession();
 
   useEffect(() => {
-    // put the async function below inside the setInterval function
-    // periodic calls every 10 s
-    //const id = setInterval(() => {
-    //}, 10000);
-
     (async () => {
       await getTxHistories();
     })();
-    //return () => clearInterval(id);
+    if (txHistories.length > 0) {
+      setLoading(true);
+      const inboundTxs = txHistories.filter(txHistory => {
+        return txHistory.to === session?.user.address;
+      });
+      const outboundTxs = txHistories.filter(txHistory => {
+        return txHistory.from === session?.user.address;
+      });
+
+      setInboundTxs(inboundTxs);
+      setInboundTxs.length > 0 ? setLoading(false) : setLoading(true);
+      setOutboundTxs(outboundTxs);
+      setOutboundTxs.length > 0 ? setLoading(false) : setLoading(true);
+      console.log('outboundTxs', outboundTxs);
+    }
   }, []);
 
   const getTxHistories = async () => {
@@ -150,10 +161,11 @@ export const TransactionComponent = React.memo(function Wallet() {
         console.log('data fetched!');
         const senderAddress = session?.user.address;
         let tempData = data.filter(function (datum: any) {
-          return datum.from === senderAddress;
+          return datum.from === senderAddress || datum.to === senderAddress;
         });
         const sortedTempData = tempData.slice().sort((a: any, b: any) => b.createdAt - a.createdAt);
         setTxHistories(sortedTempData);
+        console.log('sorted TxHistories: ', sortedTempData);
         setLoading(false);
       }
     } catch (error) {
@@ -185,6 +197,118 @@ export const TransactionComponent = React.memo(function Wallet() {
       </Grid>
     );
 
+  const StyledCustomTabs = () => {
+    return (
+      <StyledTabs value={value} onChange={handleChange}>
+        <StyledTab label="All" />
+        <StyledTab label="In" />
+        <StyledTab label="Out" />
+      </StyledTabs>
+    );
+  };
+
+  if (value === 1) {
+    return (
+      <>
+        <StyledCustomTabs />
+        <List className={style.root}>
+          <ListItem>
+            <Button onClick={handleClick}>Refresh history</Button>
+          </ListItem>
+          {inboundTxs.map(inboundTx => (
+            <ListItem key={inboundTx?.id}>
+              <ListItemAvatar className={style.avatar}>
+                <Avatar>
+                  <ImageIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                className={style.textSecondary}
+                secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
+                primary={
+                  <Tooltip title={`${inboundTx?.from}`} placement="top" leaveDelay={3000} interactive>
+                    <Button>From: ...</Button>
+                  </Tooltip>
+                }
+                secondary={
+                  <Tooltip title={`${inboundTx?.trxHash}`} placement="top" leaveDelay={3000} interactive>
+                    <Button>Tx: ...</Button>
+                  </Tooltip>
+                }
+              />
+              <ListItemSecondaryAction>
+                <div className={style.badge}>
+                  <Chip
+                    color="default"
+                    size="small"
+                    label={
+                      inboundTx?.state === 'success' || inboundTx?.state === 'verified'
+                        ? 'Success'
+                        : [inboundTx?.state === 'pending' ? 'Pending' : 'Failed']
+                    }
+                  />
+                  <Chip className={style.green} color="default" size="small" label="In" />
+                  <Typography>{inboundTx?.value / 1000000000000} Myria</Typography>
+                </div>
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
+        </List>
+      </>
+    );
+  }
+
+  if (value === 2) {
+    return (
+      <>
+        <StyledCustomTabs />
+        <List className={style.root}>
+          <ListItem>
+            <Button onClick={handleClick}>Refresh history</Button>
+          </ListItem>
+          {outboundTxs.map(outboundTx => (
+            <ListItem key={outboundTx?.id}>
+              <ListItemAvatar className={style.avatar}>
+                <Avatar>
+                  <ImageIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                className={style.textSecondary}
+                secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
+                primary={
+                  <Tooltip title={`${outboundTx?.to}`} placement="top" leaveDelay={3000} interactive>
+                    <Button>To: ...</Button>
+                  </Tooltip>
+                }
+                secondary={
+                  <Tooltip title={`${outboundTx?.trxHash}`} placement="top" leaveDelay={3000} interactive>
+                    <Button>Tx: ...</Button>
+                  </Tooltip>
+                }
+              />
+              <ListItemSecondaryAction>
+                <div className={style.badge}>
+                  <Chip
+                    color="default"
+                    size="small"
+                    label={
+                      outboundTx?.state === 'success' || outboundTx?.state === 'verified'
+                        ? 'Success'
+                        : [outboundTx?.state === 'pending' ? 'Pending' : 'Failed']
+                    }
+                  />
+                  <Chip className={style.red} color="default" size="small" label="Out" />
+                  <Typography>{outboundTx?.value / 1000000000000} Myria</Typography>
+                </div>
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
+        </List>
+      </>
+    );
+  }
+
   return (
     <>
       <StyledTabs value={value} onChange={handleChange}>
@@ -207,9 +331,15 @@ export const TransactionComponent = React.memo(function Wallet() {
               className={style.textSecondary}
               secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
               primary={
-                <Tooltip title={`${txHistory?.to}`} placement="top" leaveDelay={3000} interactive>
-                  <Button>To: ...</Button>
-                </Tooltip>
+                session?.user.address === txHistory?.from ? (
+                  <Tooltip title={`${txHistory?.to}`} placement="top" leaveDelay={3000} interactive>
+                    <Button>To: ...</Button>
+                  </Tooltip>
+                ) : (
+                  <Tooltip title={`${txHistory?.from}`} placement="top" leaveDelay={3000} interactive>
+                    <Button>From: ...</Button>
+                  </Tooltip>
+                )
               }
               secondary={
                 <Tooltip title={`${txHistory?.trxHash}`} placement="top" leaveDelay={3000} interactive>
@@ -228,8 +358,13 @@ export const TransactionComponent = React.memo(function Wallet() {
                       : [txHistory.state === 'pending' ? 'Pending' : 'Failed']
                   }
                 />
-                <Chip className={style.red} color="default" size="small" label="Out" />
-                <Typography>{txHistory?.value} Myria</Typography>
+                <Chip
+                  className={session?.user.address === txHistory?.from ? style.red : style.green}
+                  color="default"
+                  size="small"
+                  label={session?.user.address === txHistory?.from ? 'Out' : 'In'}
+                />
+                <Typography>{txHistory?.value / 1000000000000} Myria</Typography>
               </div>
             </ListItemSecondaryAction>
           </ListItem>

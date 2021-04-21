@@ -13,10 +13,10 @@ import SendIcon from '@material-ui/icons/Send';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
+import { getBalance } from '../../helpers/polkadotApi';
 import { sendTip } from '../../helpers/polkadotApi';
 import DialogTitle from '../common/DialogTitle.component';
 import { useStyles } from '../login/login.style';
-import { useMyriadAccount } from '../wallet/wallet.context';
 
 import Axios from 'axios';
 
@@ -59,7 +59,8 @@ type Props = {
 };
 
 const SendTipModal = forwardRef(({ postId }: Props, ref) => {
-  const { state: myriadAccount } = useMyriadAccount();
+  const [session] = useSession();
+  const [balance, setBalance] = useState(0);
   const [TxHistory, setTxHistory] = useState<TxHistory>({
     trxHash: '',
     from: '',
@@ -71,6 +72,16 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
     isConfirmed: false,
     message: ''
   });
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      (async () => {
+        await getBalanceForComponent();
+      })();
+    }, 10000);
+
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -103,6 +114,15 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
     }
   }, [TxHistory]);
 
+  const getBalanceForComponent = async () => {
+    const currentAddress = session?.user.address;
+    const freeBalance = await getBalance(currentAddress);
+    //console.log('the freeBalance is: ', Number(freeBalance) / 100);
+    if (freeBalance) {
+      setBalance(Number((freeBalance / 100).toFixed(3)));
+    }
+  };
+
   const postTxHistory = async ({ from, to, amount, trxHash }: PostTxHistory) => {
     try {
       const response = await client({
@@ -112,7 +132,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
           from,
           to,
           trxHash,
-          value: Number(amount) / 10000000000,
+          value: Number(amount) * 100,
           state: 'success',
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -139,7 +159,6 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
     amount: ''
   });
   const [open, setOpen] = useState<boolean>(false);
-  const [session] = useSession();
   const styles = useStyles();
 
   useImperativeHandle(ref, () => ({
@@ -173,7 +192,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
         isTextChanged: true
       });
 
-      if (Number(values.amount) >= myriadAccount.freeBalance) {
+      if (Number(values.amount) >= balance) {
         setInputError({
           ...inputError,
           isErrorInput: true,
@@ -189,7 +208,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
           isInsufficientBalance: false,
           errorMessage: ''
         });
-        const amountSent = Number(values.amount) * 10000000000;
+        const amountSent = Number(values.amount) * 1000000000000;
         // sendTip will open a pop-up from polkadot.js extension,
         // tx signing is done by supplying a password
         const ALICE = 'tkTptH5puVHn8VJ8NWMdsLa2fYGfYqV8QTyPRZRiQxAHBbCB4';
@@ -201,11 +220,12 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
           setTxHistory({
             trxHash: response.trxHash,
             to: ALICE,
-            amount: amountSent,
+            amount: amountSent / 100,
             from: response.from
           });
           setOpen(true);
           setShowSendTipModal(false);
+          getBalanceForComponent();
         }
       }
     } else {
@@ -235,7 +255,7 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
         </DialogTitle>
         <DialogContent dividers>
           <Typography gutterBottom={true} variant="body1">
-            Free balance: {myriadAccount.freeBalance.toFixed(3)} MYRIA
+            Free balance: {balance} MYRIA
           </Typography>
         </DialogContent>
         <DialogContent dividers>
