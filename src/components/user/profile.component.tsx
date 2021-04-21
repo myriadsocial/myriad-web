@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { useSession, signOut } from 'next-auth/client';
+import { User } from 'next-auth';
+import { signOut } from 'next-auth/client';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -20,12 +21,15 @@ import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import DialogTitle from '../common/DialogTitle.component';
 import ShowIf from '../common/show-if.component';
 import { useStyles } from './profile.style';
+import { useProfileHook } from './use-profile.hook';
 
+import { WithAdditionalParams } from 'next-auth/_utils';
 import { EditableTextField } from 'src/components/common/EditableTextField';
 import { ImageUpload } from 'src/components/common/ImageUpload.component';
+import { acronym } from 'src/helpers/string';
 
 type Props = {
-  loggedIn?: boolean;
+  user: WithAdditionalParams<User>;
   toggleLogin: (open: boolean) => void;
 };
 
@@ -33,13 +37,14 @@ function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const Profile = ({ toggleLogin }: Props) => {
+const Profile = ({ user, toggleLogin }: Props) => {
   const styles = useStyles();
-  const [session] = useSession();
   const [cookie] = useCookies(['seed']);
 
+  const { profile, updateProfile } = useProfileHook(user);
   const [isEditProfile, showEditProfile] = useState(false);
   const [isMnemonicCopied, setMnemonicCopied] = useState(false);
+
   const editProfile = () => {
     showEditProfile(true);
   };
@@ -60,26 +65,44 @@ const Profile = ({ toggleLogin }: Props) => {
     setMnemonicCopied(false);
   };
 
-  const updateName = (value: string) => {};
+  const getProfilePicture = (): string => {
+    const avatar = profile.profilePictureURL as string;
+
+    return avatar || '';
+  };
+
+  const updateName = (value: string) => {
+    updateProfile({
+      name: value
+    });
+  };
+
+  const updateProfilePicture = (preview: string) => {
+    updateProfile({
+      profilePictureURL: preview
+    });
+  };
+
+  const updateProfileDescription = (value: string) => {};
 
   const profileInfo =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae nibh eu tellus tincidunt luctus hendrerit in orci. Phasellus vitae tristique nulla. Nam magna massa, sollicitudin sed turpis eros.';
 
   return (
     <div className={styles.root}>
-      <Avatar className={styles.avatar} src="/images/avatar/3.jpg">
-        Anonimous
+      <Avatar className={styles.avatar} src={getProfilePicture()}>
+        {acronym(profile.name || '')}
       </Avatar>
       <div className={styles.info}>
-        <Typography className={styles.name}>{session?.user.name}</Typography>
+        <Typography className={styles.name}>{profile.name}</Typography>
 
-        <ShowIf condition={!session?.user.anonymous}>
+        <ShowIf condition={!profile.anonymous}>
           <Button className={styles.button} size="small" variant="contained" color="primary" onClick={editProfile}>
             Edit Your Profile
           </Button>
         </ShowIf>
 
-        <ShowIf condition={!!session?.user.anonymous}>
+        <ShowIf condition={!!profile.anonymous}>
           <Button
             className={styles.button}
             fullWidth={true}
@@ -101,24 +124,35 @@ const Profile = ({ toggleLogin }: Props) => {
             <CardMedia
               className={styles.media}
               image="https://images.pexels.com/photos/3394939/pexels-photo-3394939.jpeg"
-              title={session?.user.name || 'Avatar'}
+              title={profile.name || 'Avatar'}
             />
 
             <CardContent className={styles.profileContent}>
-              <ImageUpload value={'/images/avatar/3.jpg'} onSelected={() => console.log}>
-                <Avatar className={styles.avatarBig} src="/images/avatar/3.jpg">
-                  {session?.user.name}
-                </Avatar>
-              </ImageUpload>
+              <ImageUpload
+                value={getProfilePicture()}
+                preview={
+                  <Avatar className={styles.avatarBig} src={getProfilePicture()}>
+                    {acronym(profile.name || '')}
+                  </Avatar>
+                }
+                onSelected={updateProfilePicture}
+              />
+
               <EditableTextField
                 name="profile.name"
-                value={session?.user.name || ''}
+                value={profile.name || ''}
                 onChange={updateName}
                 fullWidth={true}
                 style={{ fontSize: 20 }}
               />
 
-              <EditableTextField name="profile.name" value={profileInfo} onChange={updateName} multiline={true} fullWidth={true} />
+              <EditableTextField
+                name="profile.name"
+                value={profileInfo}
+                onChange={updateProfileDescription}
+                multiline={true}
+                fullWidth={true}
+              />
             </CardContent>
 
             <CardActions className={styles.actions}>
