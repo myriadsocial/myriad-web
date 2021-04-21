@@ -39,11 +39,13 @@ const LayoutComponent = ({ children, user }: Props) => {
       }
       const currentAddress = session?.user.address;
       const freeBalance = await getBalance(currentAddress);
-      // divide freeBalance by 100
-      console.log(`the address is: ${currentAddress}`);
-      console.log(`the balance is: ${freeBalance}`);
+      //console.log(`the address is: ${currentAddress}`);
+      //console.log(`the balance is: ${freeBalance}`);
       addAddress('address', String(currentAddress));
-      storeBalance('freeBalance', freeBalance / 100);
+      // divide freeBalance by 100
+      if (freeBalance) {
+        storeBalance('freeBalance', freeBalance / 100);
+      }
     })();
   }, []);
 
