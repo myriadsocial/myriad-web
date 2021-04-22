@@ -64,7 +64,7 @@ const User = ({ settings, changeSetting }: Props) => {
     <Box p={1} bgcolor="primary.light" className={style.root}>
       <Grid container direction="row" justify="space-between" alignItems="flex-start">
         <Grid item className={!!session?.user.anonymous ? style.grow : style.normal}>
-          <Profile toggleLogin={toggleLogin} />
+          <Profile toggleLogin={toggleLogin} user={session.user} />
           <Social toggleLogin={toggleLogin} user={session.user} />
         </Grid>
 
