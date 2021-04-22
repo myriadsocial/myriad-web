@@ -25,6 +25,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <React.Fragment>
       <Head>
+        <link rel="shortcut icon" href="/images/favicon.svg" />
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <ThemeProvider theme={theme}>
