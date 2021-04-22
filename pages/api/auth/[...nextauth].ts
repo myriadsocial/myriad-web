@@ -56,18 +56,24 @@ export default NextAuth({
 
             console.log('user exist', data);
           } catch (error) {
-            const { data } = await axios({
-              url: '/users',
-              method: 'POST',
-              data: {
-                id: credentials.address,
-                name: credentials.name,
-                profilePictureURL: '',
-                createdAt: new Date()
-              }
-            });
+            try {
+              const { data } = await axios({
+                url: '/users',
+                method: 'POST',
+                data: {
+                  id: credentials.address,
+                  name: credentials.name,
+                  profilePictureURL: '',
+                  anonymous: false,
+                  bio: '',
+                  createdAt: new Date()
+                }
+              });
 
-            console.log('user create', data);
+              console.log('user create', data);
+            } catch (error) {
+              console.error('user create', error);
+            }
           }
         }
 
