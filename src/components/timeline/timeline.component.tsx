@@ -12,7 +12,7 @@ import { Post, Comment } from 'src/interfaces/post';
 const Timeline = () => {
   const style = useStyles();
 
-  const { posts, loadMorePost, reply, loadComments } = usePost();
+  const { hasMore, posts, loadMorePost, reply, loadComments } = usePost();
   const scrollRoot = createRef<HTMLDivElement>();
 
   useEffect(() => {
@@ -35,6 +35,8 @@ const Timeline = () => {
     reply(comment.postId, comment);
   };
 
+  console.log('TIMELINE COMPONENT LOAD');
+
   return (
     <div className={style.root}>
       <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
@@ -43,7 +45,7 @@ const Timeline = () => {
           className={style.child}
           dataLength={posts.length + 100}
           next={loadMorePost}
-          hasMore={true}
+          hasMore={hasMore}
           loader={<CircularProgress className={style.loading} disableShrink />}>
           {posts.map((post: Post, i: number) => (
             <PostComponent post={post} open={false} key={i} reply={handleReply} loadComments={loadComments} />
