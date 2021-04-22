@@ -18,6 +18,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 import ImageIcon from '@material-ui/icons/Image';
+import TabContext from '@material-ui/lab/TabContext';
+import TabPanel from '@material-ui/lab/TabPanel';
 
 import Axios from 'axios';
 
@@ -61,6 +63,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     loading: {
       color: '#A942E9'
+    },
+    panel: {
+      padding: '4px'
     }
   })
 );
@@ -77,11 +82,19 @@ interface GetTxHistory {
 
 interface StyledTabProps {
   label: string;
+  value: string;
 }
 
 interface StyledTabsProps {
-  value: number;
-  onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
+  value: string;
+  onChange: (event: React.ChangeEvent<{}>, newValue: string) => void;
+}
+
+function a11yProps(index: any) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`
+  };
 }
 
 const StyledTabs = withStyles({
@@ -122,7 +135,7 @@ export const TransactionComponent = React.memo(function Wallet() {
   const [txHistories, setTxHistories] = useState<GetTxHistory[]>([]);
   const [outboundTxs, setOutboundTxs] = useState<GetTxHistory[]>([]);
   const [inboundTxs, setInboundTxs] = useState<GetTxHistory[]>([]);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState('0');
   const [loading, setLoading] = useState<boolean>(true);
   const [session] = useSession();
 
@@ -130,21 +143,6 @@ export const TransactionComponent = React.memo(function Wallet() {
     (async () => {
       await getTxHistories();
     })();
-    if (txHistories.length > 0) {
-      setLoading(true);
-      const inboundTxs = txHistories.filter(txHistory => {
-        return txHistory.to === session?.user.address;
-      });
-      const outboundTxs = txHistories.filter(txHistory => {
-        return txHistory.from === session?.user.address;
-      });
-
-      setInboundTxs(inboundTxs);
-      setInboundTxs.length > 0 ? setLoading(false) : setLoading(true);
-      setOutboundTxs(outboundTxs);
-      setOutboundTxs.length > 0 ? setLoading(false) : setLoading(true);
-      console.log('outboundTxs', outboundTxs);
-    }
   }, []);
 
   const getTxHistories = async () => {
@@ -165,7 +163,15 @@ export const TransactionComponent = React.memo(function Wallet() {
         });
         const sortedTempData = tempData.slice().sort((a: any, b: any) => b.createdAt - a.createdAt);
         setTxHistories(sortedTempData);
-        console.log('sorted TxHistories: ', sortedTempData);
+        const inboundTxs = txHistories.filter(txHistory => {
+          return txHistory.to === session?.user.address;
+        });
+        const outboundTxs = txHistories.filter(txHistory => {
+          return txHistory.from === session?.user.address;
+        });
+
+        setInboundTxs(inboundTxs);
+        setOutboundTxs(outboundTxs);
         setLoading(false);
       }
     } catch (error) {
@@ -174,7 +180,7 @@ export const TransactionComponent = React.memo(function Wallet() {
     }
   };
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
     event.preventDefault();
     setValue(newValue);
   };
@@ -197,179 +203,165 @@ export const TransactionComponent = React.memo(function Wallet() {
       </Grid>
     );
 
-  const StyledCustomTabs = () => {
-    return (
-      <StyledTabs value={value} onChange={handleChange}>
-        <StyledTab label="All" />
-        <StyledTab label="In" />
-        <StyledTab label="Out" />
-      </StyledTabs>
-    );
-  };
-
-  if (value === 1) {
-    return (
-      <>
-        <StyledCustomTabs />
-        <List className={style.root}>
-          <ListItem>
-            <Button onClick={handleClick}>Refresh history</Button>
-          </ListItem>
-          {inboundTxs.map(inboundTx => (
-            <ListItem key={inboundTx?.id}>
-              <ListItemAvatar className={style.avatar}>
-                <Avatar>
-                  <ImageIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                className={style.textSecondary}
-                secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-                primary={
-                  <Tooltip title={`${inboundTx?.from}`} placement="top" leaveDelay={3000} interactive>
-                    <Button>From: ...</Button>
-                  </Tooltip>
-                }
-                secondary={
-                  <Tooltip title={`${inboundTx?.trxHash}`} placement="top" leaveDelay={3000} interactive>
-                    <Button>Tx: ...</Button>
-                  </Tooltip>
-                }
-              />
-              <ListItemSecondaryAction>
-                <div className={style.badge}>
-                  <Chip
-                    color="default"
-                    size="small"
-                    label={
-                      inboundTx?.state === 'success' || inboundTx?.state === 'verified'
-                        ? 'Success'
-                        : [inboundTx?.state === 'pending' ? 'Pending' : 'Failed']
-                    }
-                  />
-                  <Chip className={style.green} color="default" size="small" label="In" />
-                  <Typography>{inboundTx?.value / 1000000000000} Myria</Typography>
-                </div>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-      </>
-    );
-  }
-
-  if (value === 2) {
-    return (
-      <>
-        <StyledCustomTabs />
-        <List className={style.root}>
-          <ListItem>
-            <Button onClick={handleClick}>Refresh history</Button>
-          </ListItem>
-          {outboundTxs.map(outboundTx => (
-            <ListItem key={outboundTx?.id}>
-              <ListItemAvatar className={style.avatar}>
-                <Avatar>
-                  <ImageIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                className={style.textSecondary}
-                secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-                primary={
-                  <Tooltip title={`${outboundTx?.to}`} placement="top" leaveDelay={3000} interactive>
-                    <Button>To: ...</Button>
-                  </Tooltip>
-                }
-                secondary={
-                  <Tooltip title={`${outboundTx?.trxHash}`} placement="top" leaveDelay={3000} interactive>
-                    <Button>Tx: ...</Button>
-                  </Tooltip>
-                }
-              />
-              <ListItemSecondaryAction>
-                <div className={style.badge}>
-                  <Chip
-                    color="default"
-                    size="small"
-                    label={
-                      outboundTx?.state === 'success' || outboundTx?.state === 'verified'
-                        ? 'Success'
-                        : [outboundTx?.state === 'pending' ? 'Pending' : 'Failed']
-                    }
-                  />
-                  <Chip className={style.red} color="default" size="small" label="Out" />
-                  <Typography>{outboundTx?.value / 1000000000000} Myria</Typography>
-                </div>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-      </>
-    );
-  }
-
   return (
     <>
-      <StyledTabs value={value} onChange={handleChange}>
-        <StyledTab label="All" />
-        <StyledTab label="In" />
-        <StyledTab label="Out" />
-      </StyledTabs>
-      <List className={style.root}>
-        <ListItem>
-          <Button onClick={handleClick}>Refresh history</Button>
-        </ListItem>
-        {txHistories.map(txHistory => (
-          <ListItem key={txHistory?.id}>
-            <ListItemAvatar className={style.avatar}>
-              <Avatar>
-                <ImageIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              className={style.textSecondary}
-              secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-              primary={
-                session?.user.address === txHistory?.from ? (
-                  <Tooltip title={`${txHistory?.to}`} placement="top" leaveDelay={3000} interactive>
-                    <Button>To: ...</Button>
-                  </Tooltip>
-                ) : (
-                  <Tooltip title={`${txHistory?.from}`} placement="top" leaveDelay={3000} interactive>
-                    <Button>From: ...</Button>
-                  </Tooltip>
-                )
-              }
-              secondary={
-                <Tooltip title={`${txHistory?.trxHash}`} placement="top" leaveDelay={3000} interactive>
-                  <Button>Tx: ...</Button>
-                </Tooltip>
-              }
-            />
-            <ListItemSecondaryAction>
-              <div className={style.badge}>
-                <Chip
-                  color="default"
-                  size="small"
-                  label={
-                    txHistory?.state === 'success' || txHistory?.state === 'verified'
-                      ? 'Success'
-                      : [txHistory.state === 'pending' ? 'Pending' : 'Failed']
+      <TabContext value={value}>
+        <StyledTabs value={value} onChange={handleChange}>
+          <StyledTab value="0" label="All" {...a11yProps(0)} />
+          <StyledTab value="1" label="In" {...a11yProps(1)} />
+          <StyledTab value="2" label="Out" {...a11yProps(2)} />
+        </StyledTabs>
+        <TabPanel className={style.panel} value={'0'}>
+          <List className={style.root}>
+            <ListItem>
+              <Button onClick={handleClick}>Refresh history</Button>
+            </ListItem>
+            {txHistories.map(txHistory => (
+              <ListItem key={txHistory?.id}>
+                <ListItemAvatar className={style.avatar}>
+                  <Avatar>
+                    <ImageIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  className={style.textSecondary}
+                  secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
+                  primary={
+                    session?.user.address === txHistory?.from ? (
+                      <Tooltip title={`${txHistory?.to}`} placement="top" leaveDelay={3000} interactive>
+                        <Button>To: ...</Button>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title={`${txHistory?.from}`} placement="top" leaveDelay={3000} interactive>
+                        <Button>From: ...</Button>
+                      </Tooltip>
+                    )
+                  }
+                  secondary={
+                    <Tooltip title={`${txHistory?.trxHash}`} placement="top" leaveDelay={3000} interactive>
+                      <Button>Tx: ...</Button>
+                    </Tooltip>
                   }
                 />
-                <Chip
-                  className={session?.user.address === txHistory?.from ? style.red : style.green}
-                  color="default"
-                  size="small"
-                  label={session?.user.address === txHistory?.from ? 'Out' : 'In'}
-                />
-                <Typography>{txHistory?.value / 1000000000000} Myria</Typography>
-              </div>
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
-      </List>
+                <ListItemSecondaryAction>
+                  <div className={style.badge}>
+                    <Chip
+                      color="default"
+                      size="small"
+                      label={
+                        txHistory?.state === 'success' || txHistory?.state === 'verified'
+                          ? 'Success'
+                          : [txHistory.state === 'pending' ? 'Pending' : 'Failed']
+                      }
+                    />
+                    <Chip
+                      className={session?.user.address === txHistory?.from ? style.red : style.green}
+                      color="default"
+                      size="small"
+                      label={session?.user.address === txHistory?.from ? 'Out' : 'In'}
+                    />
+                    <Typography>{txHistory?.value / 1000000000000} Myria</Typography>
+                  </div>
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
+          </List>
+        </TabPanel>
+        <TabPanel className={style.panel} value={'1'}>
+          <>
+            <List className={style.root}>
+              <ListItem>
+                <Button onClick={handleClick}>Refresh history</Button>
+              </ListItem>
+              {inboundTxs.map(inboundTx => (
+                <ListItem key={inboundTx?.id}>
+                  <ListItemAvatar className={style.avatar}>
+                    <Avatar>
+                      <ImageIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    className={style.textSecondary}
+                    secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
+                    primary={
+                      <Tooltip title={`${inboundTx?.from}`} placement="top" leaveDelay={3000} interactive>
+                        <Button>From: ...</Button>
+                      </Tooltip>
+                    }
+                    secondary={
+                      <Tooltip title={`${inboundTx?.trxHash}`} placement="top" leaveDelay={3000} interactive>
+                        <Button>Tx: ...</Button>
+                      </Tooltip>
+                    }
+                  />
+                  <ListItemSecondaryAction>
+                    <div className={style.badge}>
+                      <Chip
+                        color="default"
+                        size="small"
+                        label={
+                          inboundTx?.state === 'success' || inboundTx?.state === 'verified'
+                            ? 'Success'
+                            : [inboundTx?.state === 'pending' ? 'Pending' : 'Failed']
+                        }
+                      />
+                      <Chip className={style.green} color="default" size="small" label="In" />
+                      <Typography>{inboundTx?.value / 1000000000000} Myria</Typography>
+                    </div>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+            </List>
+          </>
+        </TabPanel>
+        <TabPanel className={style.panel} value={'2'}>
+          <>
+            <List className={style.root}>
+              <ListItem>
+                <Button onClick={handleClick}>Refresh history</Button>
+              </ListItem>
+              {outboundTxs.map(outboundTx => (
+                <ListItem key={outboundTx?.id}>
+                  <ListItemAvatar className={style.avatar}>
+                    <Avatar>
+                      <ImageIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    className={style.textSecondary}
+                    secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
+                    primary={
+                      <Tooltip title={`${outboundTx?.to}`} placement="top" leaveDelay={3000} interactive>
+                        <Button>To: ...</Button>
+                      </Tooltip>
+                    }
+                    secondary={
+                      <Tooltip title={`${outboundTx?.trxHash}`} placement="top" leaveDelay={3000} interactive>
+                        <Button>Tx: ...</Button>
+                      </Tooltip>
+                    }
+                  />
+                  <ListItemSecondaryAction>
+                    <div className={style.badge}>
+                      <Chip
+                        color="default"
+                        size="small"
+                        label={
+                          outboundTx?.state === 'success' || outboundTx?.state === 'verified'
+                            ? 'Success'
+                            : [outboundTx?.state === 'pending' ? 'Pending' : 'Failed']
+                        }
+                      />
+                      <Chip className={style.red} color="default" size="small" label="Out" />
+                      <Typography>{outboundTx?.value / 1000000000000} Myria</Typography>
+                    </div>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+            </List>
+          </>
+        </TabPanel>
+      </TabContext>
     </>
   );
 });
