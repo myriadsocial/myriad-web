@@ -15,6 +15,7 @@ const axios = Axios.create({
 export const usePost = () => {
   const { state: experienceState } = useExperience();
   const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const { state, dispatch } = useTimeline();
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -92,6 +93,10 @@ export const usePost = () => {
         }
       });
 
+      if (data.length < filter.limit) {
+        setHasMore(false);
+      }
+
       dispatch({
         type: TimelineActionType.INIT_POST,
         posts: data.map((item: Post) => ({ ...item, comments: item.comments || [] }))
@@ -121,6 +126,10 @@ export const usePost = () => {
           }
         }
       });
+
+      if (data.length < filter.limit) {
+        setHasMore(false);
+      }
 
       dispatch({
         type: TimelineActionType.LOAD_MORE_POST,
@@ -166,6 +175,7 @@ export const usePost = () => {
   return {
     error,
     loading,
+    hasMore,
     posts: state.posts,
     loadMorePost,
     loadComments,
