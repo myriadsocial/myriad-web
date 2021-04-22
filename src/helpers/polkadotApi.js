@@ -5,10 +5,11 @@
 export const connectToBlockchain = async () => {
   const { ApiPromise, WsProvider } = await import('@polkadot/api');
   const wsProvider = new WsProvider('wss://rpc.myriad.systems/');
-  const api = await ApiPromise.create({
+  const api = await new ApiPromise({
     provider: wsProvider
     //types: types
-  });
+  }).isReadyOrError;
+  console.log('api is:', api);
   return api;
 };
 
@@ -22,37 +23,41 @@ export const getBalance = async ADDR => {
     } = await api.query.system.account(ADDR);
     return Number(Number(previousFree) / DECIMAL_PLACES.toFixed(3));
   } catch (error) {
-    console.log(error);
+    console.log('error from get balance: ', error);
   }
 };
 
 // snippets to send transaction
 // finds an injector for an address
 export const sendTip = async (fromAddress, toAddress, amountSent) => {
-  const { enableExtension } = await import('../helpers/extension');
-  const { web3FromSource } = await import('@polkadot/extension-dapp');
+  try {
+    const { enableExtension } = await import('../helpers/extension');
+    const { web3FromSource } = await import('@polkadot/extension-dapp');
 
-  const allAccounts = await enableExtension();
-  // We select the first account found by using fromAddress
-  // `account` is of type InjectedAccountWithMeta
-  const account = allAccounts.find(function (account) {
-    return account.address === fromAddress;
-  });
-  const api = await connectToBlockchain();
+    const allAccounts = await enableExtension();
+    // We select the first account found by using fromAddress
+    // `account` is of type InjectedAccountWithMeta
+    const account = allAccounts.find(function (account) {
+      return account.address === fromAddress;
+    });
+    const api = await connectToBlockchain();
 
-  // here we use the api to create a balance transfer to some account of a value of 12345678
-  const transferExtrinsic = api.tx.balances.transfer(toAddress, amountSent);
+    // here we use the api to create a balance transfer to some account of a value of 12345678
+    const transferExtrinsic = api.tx.balances.transfer(toAddress, amountSent);
 
-  // to be able to retrieve the signer interface from this account
-  // we can use web3FromSource which will return an InjectedExtension type
-  const injector = await web3FromSource(account.meta.source);
+    // to be able to retrieve the signer interface from this account
+    // we can use web3FromSource which will return an InjectedExtension type
+    const injector = await web3FromSource(account.meta.source);
 
-  // passing the injected account address as the first argument of signAndSend
-  // will allow the api to retrieve the signer and the user will see the extension
-  // popup asking to sign the balance transfer transaction
-  const txInfo = await transferExtrinsic.signAndSend(fromAddress, { signer: injector.signer });
+    // passing the injected account address as the first argument of signAndSend
+    // will allow the api to retrieve the signer and the user will see the extension
+    // popup asking to sign the balance transfer transaction
+    const txInfo = await transferExtrinsic.signAndSend(fromAddress, { signer: injector.signer });
 
-  return { trxHash: txInfo.toHex(), from: fromAddress };
+    return { trxHash: txInfo.toHex(), from: fromAddress };
+  } catch (error) {
+    console.log('error from sendtip:', error);
+  }
 };
 
 export const getWalletHistory = async () => {
