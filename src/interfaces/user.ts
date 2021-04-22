@@ -9,4 +9,5 @@ export interface User {
   name: string;
   profilePictureURL?: string;
   userCredentials: Credential[];
+  anonymous: boolean;
 }
