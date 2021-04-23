@@ -3,14 +3,18 @@
 // Don't know how to use the API? Visit https://polkadot.js.org/docs/api/start/basics
 
 export const connectToBlockchain = async () => {
-  const { ApiPromise, WsProvider } = await import('@polkadot/api');
-  const wsProvider = new WsProvider('wss://rpc.myriad.systems/');
-  const api = await new ApiPromise({
-    provider: wsProvider
-    //types: types
-  }).isReadyOrError;
-  console.log('api is:', api);
-  return api;
+  try {
+    const { ApiPromise, WsProvider } = await import('@polkadot/api');
+    const wsProvider = new WsProvider('wss://rpc.myriad.systems/');
+    const api = await new ApiPromise({
+      provider: wsProvider
+      //types: types
+    }).isReadyOrError;
+    console.log('api is:', api);
+    return api;
+  } catch (error) {
+    console.log('error from connectToBlockchain: ', error);
+  }
 };
 
 export const getBalance = async ADDR => {

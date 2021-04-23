@@ -6,6 +6,7 @@ interface Credential {
 
 export interface User {
   id: string;
+  bio?: string;
   name: string;
   profilePictureURL?: string;
   userCredentials: Credential[];
