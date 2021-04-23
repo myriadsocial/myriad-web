@@ -22,11 +22,19 @@ const App = ({ Component, pageProps }: AppProps) => {
     // keyring.loadAll({ ss58Format: 42, type: 'sr25519' });
   }, []);
 
+  const pageTitle = 'Myriad';
+  const description =
+    'A social platform that’s entirely under your control. Remain anonymous, look for your own topics, choose your interface and control what you see.';
+
   return (
     <React.Fragment>
       <Head>
         <link rel="shortcut icon" href="/images/favicon.svg" />
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+        <meta name="description" content={description}></meta>
+        <meta property="og:title" content={pageTitle} key="ogtitle" />
+        <meta property="og:description" content={description} key="ogdesc" />
+        <title>{pageTitle}</title>
       </Head>
       <ThemeProvider theme={theme}>
         <MyriadAccountProvider>
