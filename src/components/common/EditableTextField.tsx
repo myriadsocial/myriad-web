@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Clear from '@material-ui/icons/Clear';
 import Edit from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {},
+    root: {
+      flexDirection: 'row'
+    },
     textField: {
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
@@ -26,6 +30,19 @@ const useStyles = makeStyles((theme: Theme) =>
       '&:before': {
         borderBottom: 0
       }
+    },
+    inlineButtonsLayout: {
+      flexDirection: 'row',
+      marginBottom: '4px'
+    },
+    cancelButton: {
+      color: 'red',
+      justifyContent: 'space-around'
+    },
+    confirmButton: {
+      backgroundColor: '#A942E9',
+      color: 'white',
+      justifyContent: 'space-around'
     }
   })
 );
@@ -52,17 +69,22 @@ export const EditableTextField = ({ onChange, value, name, multiline, rows, full
     setMouseover(false);
   };
 
+  const cancelEditField = () => {
+    setEditMode(false);
+    setMouseover(true);
+  };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDefaultValue(event.target.value);
   };
 
-  const updateProfile = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.keyCode == 13) {
-      onChange(defaultValue);
+  const updateProfile = () => {
+    //if (event.keyCode == 13) {
+    onChange(defaultValue);
 
-      setEditMode(false);
-      setMouseover(false);
-    }
+    setEditMode(false);
+    setMouseover(false);
+    //}
   };
 
   const handleMouseOver = () => {
@@ -87,7 +109,7 @@ export const EditableTextField = ({ onChange, value, name, multiline, rows, full
         className={styles.textField}
         onMouseEnter={handleMouseOver}
         onMouseLeave={handleMouseOut}
-        onKeyDown={updateProfile}
+        //onKeyDown={updateProfile}
         InputProps={{
           style,
           classes: {
@@ -95,9 +117,21 @@ export const EditableTextField = ({ onChange, value, name, multiline, rows, full
           },
           endAdornment: isMouseOver ? (
             <InputAdornment position="start">
-              <IconButton onClick={editField}>
-                <Edit />
-              </IconButton>
+              {isEditMode === true ? (
+                <div className={styles.inlineButtonsLayout}>
+                  <Button onClick={updateProfile} className={styles.confirmButton}>
+                    {' '}
+                    Confirm{' '}
+                  </Button>
+                  <IconButton onClick={cancelEditField}>
+                    <Clear className={styles.cancelButton} />
+                  </IconButton>
+                </div>
+              ) : (
+                <IconButton onClick={editField}>
+                  <Edit />
+                </IconButton>
+              )}
             </InputAdornment>
           ) : (
             ''
