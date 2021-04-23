@@ -83,7 +83,11 @@ const Profile = ({ user, toggleLogin }: Props) => {
     });
   };
 
-  const updateProfileDescription = (value: string) => {};
+  const updateProfileBio = (value: string) => {
+    updateProfile({
+      bio: value
+    });
+  };
 
   const profileInfo =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae nibh eu tellus tincidunt luctus hendrerit in orci. Phasellus vitae tristique nulla. Nam magna massa, sollicitudin sed turpis eros.';
@@ -147,9 +151,9 @@ const Profile = ({ user, toggleLogin }: Props) => {
               />
 
               <EditableTextField
-                name="profile.name"
-                value={profileInfo}
-                onChange={updateProfileDescription}
+                name="profile.bio"
+                value={profile.bio || profileInfo}
+                onChange={updateProfileBio}
                 multiline={true}
                 fullWidth={true}
               />
