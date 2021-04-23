@@ -9,7 +9,7 @@ const MyriadAPI = Axios.create({
 });
 
 export const useProfileHook = user => {
-  console.log('useProfileHook', user)
+  console.log('useProfileHook', user);
   const [profile, setProfile] = useState<User>(user);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -33,7 +33,7 @@ export const useProfileHook = user => {
       console.log('setProfile', {
         ...profile,
         ...data
-      })
+      });
       setProfile({
         ...profile,
         ...data
@@ -59,6 +59,7 @@ export const useProfileHook = user => {
         ...profile,
         ...attributes
       });
+      console.log('>>>>', attributes);
     } catch (error) {
       setError(error);
     } finally {
