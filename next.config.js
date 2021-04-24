@@ -5,6 +5,7 @@ module.exports = {
       include: /node_modules/,
       type: 'javascript/auto'
     });
+
     config.module.rules.push({
       test: /\.svg$/,
       issuer: {
