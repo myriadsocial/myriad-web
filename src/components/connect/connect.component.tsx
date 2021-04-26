@@ -64,6 +64,13 @@ const useStyles = makeStyles((theme: Theme) =>
     reddit: {
       color: '#FF5700',
       minWidth: 40
+    },
+    done: {
+      flexDirection: 'column'
+    },
+    doneText: {
+      align: 'justify',
+      color: 'red'
     }
   })
 );
@@ -103,7 +110,8 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
       step1: <Avatar className={classes.purple}>1</Avatar>,
       step2: <Avatar className={classes.purple}>2</Avatar>,
       copyTitle: <Typography variant="h6">{copy[social]}</Typography>,
-      shareTitle: <Typography variant="h6">Share it publicly on {social}</Typography>
+      shareTitle: <Typography variant="h6">Share it publicly on {social}</Typography>,
+      helperTextDone: <Typography variant="h6">The button above is activated after importing account on {social} is done</Typography>
     };
   }, []);
 
@@ -157,11 +165,14 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
             Tell me more about linking my social media account
           </Button>
         </DialogContent>
-        <DialogActions>
+        <DialogActions className={classes.done}>
           <Button onClick={closeShare} disabled={!shared} fullWidth={true} size="large" variant="contained" color="secondary">
             {' '}
             I'm done, thanks
           </Button>
+          <ShowIf condition={!shared}>
+            <Typography className={classes.doneText}>{config.helperTextDone}</Typography>
+          </ShowIf>
         </DialogActions>
       </Dialog>
 
