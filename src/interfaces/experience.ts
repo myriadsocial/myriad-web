@@ -1,18 +1,10 @@
-import { SocialsEnum } from './';
+import { People } from './people';
 import { User } from './user';
 
 export type LayoutType = 'timeline' | 'photo';
 
 export interface Searchable {
   name: string;
-}
-
-export interface People {
-  id?: string;
-  platform: SocialsEnum;
-  username: string;
-  platform_account_id: string;
-  hide: boolean;
 }
 
 export interface Tag {

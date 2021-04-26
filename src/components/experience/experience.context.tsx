@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Experience, People } from 'src/interfaces/experience';
+import { Experience } from 'src/interfaces/experience';
+import { People } from 'src/interfaces/people';
 
 export enum ExperienceActionType {
   INIT_EXPERIENCE = 'INIT_EXPERIENCE',

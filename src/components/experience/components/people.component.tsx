@@ -26,7 +26,7 @@ import Autocomplete, { AutocompleteRenderOptionState } from '@material-ui/lab/Au
 import { usePeople } from '../use-people.hooks';
 import { useStyles } from './topic.style';
 
-import { People } from 'src/interfaces/experience';
+import { People } from 'src/interfaces/people';
 
 type Props = {
   people: People[];
