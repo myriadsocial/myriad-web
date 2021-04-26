@@ -5,7 +5,7 @@ import APIAdapter from '../../../adapters/api';
 
 import Axios from 'axios';
 
-const axios = Axios.create({
+const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || ''
 });
 
@@ -49,15 +49,54 @@ export default NextAuth({
         console.log('authorize', credentials);
         if (credentials.anonymous === 'false') {
           try {
-            const { data } = await axios({
+            const { data } = await MyriadAPI({
               url: `users/${credentials.address}`,
-              method: 'GET'
+              method: 'GET',
+              params: {
+                filter: {
+                  include: [
+                    {
+                      relation: 'userCredentials',
+                      scope: {
+                        include: [
+                          {
+                            relation: 'people'
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
             });
 
             console.log('user exist', data);
+
+            return {
+              id: data.id,
+              name: data.name,
+              profilePictureURL: data.profilePictureURL,
+              userId: data.id,
+              address: data.id,
+              anonymous: false,
+
+              //@ts-ignore
+              userCredentials: data.userCredentials
+                ? //@ts-ignore
+                  data.userCredentials.map(item => {
+                    return {
+                      platform: item.people.platform,
+                      platformUserId: item.people.platform_account_id,
+                      username: item.people.username,
+                      accessToken: item.access_token,
+                      refreshToken: item.refresh_token || null
+                    };
+                  })
+                : []
+            };
           } catch (error) {
             try {
-              const { data } = await axios({
+              const { data } = await MyriadAPI({
                 url: '/users',
                 method: 'POST',
                 data: {
@@ -157,6 +196,8 @@ export default NextAuth({
       };
     },
     async jwt(token, user, account, profile, isNewUser) {
+      token = { ...token, ...user };
+
       if (account && account.type === 'credentials') {
         token.userId = profile.address;
         token.address = profile.address;
@@ -164,8 +205,6 @@ export default NextAuth({
       }
 
       if (account && account.type === 'oauth') {
-        token = { ...token, ...user };
-
         const credentials = {
           platform: account.provider,
           platformUserId: account.id,

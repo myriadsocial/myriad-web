@@ -162,37 +162,30 @@ function Adapter() {
           break;
       }
 
-      const { data: people } = await MyriadAPI({
-        url: `/people`,
-        method: 'POST',
-        data: {
-          platform: providerId,
-          platform_account_id: providerAccountId,
-          username
-        }
-      });
+      try {
+        const { data: people } = await MyriadAPI({
+          url: `/people`,
+          method: 'POST',
+          data: {
+            platform: providerId,
+            platform_account_id: providerAccountId,
+            username
+          }
+        });
 
-      console.log('link credential', {
-        url: `/users/${userId}/user-credentials`,
-        method: 'POST',
-        data: {
-          access_token: accessToken,
-          refresh_token: refreshToken,
-          peopleId: people.id,
-          userId
-        }
-      });
-
-      await MyriadAPI({
-        url: `/users/${userId}/user-credentials`,
-        method: 'POST',
-        data: {
-          access_token: accessToken,
-          refresh_token: refreshToken,
-          peopleId: people.id,
-          userId
-        }
-      });
+        await MyriadAPI({
+          url: `/users/${userId}/user-credentials`,
+          method: 'POST',
+          data: {
+            access_token: accessToken,
+            refresh_token: refreshToken,
+            peopleId: people.id,
+            userId
+          }
+        });
+      } catch (error) {
+        console.error('Adapter linkAccount', error);
+      }
 
       _debug('Adapter linkAccount', userId, providerId, providerType, providerAccountId, refreshToken, accessToken, accessTokenExpires);
     }

@@ -14,7 +14,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
@@ -22,6 +21,7 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import { SocialsEnum } from '../../interfaces';
 import LinkingTutorialComponent from '../common/LinkingTutorial.component';
 import ShowIf from '../common/show-if.component';
+import { useStyles } from './conntect.style';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
 import { useShareSocial } from 'src/hooks/use-share-social';
@@ -32,41 +32,6 @@ export type Props = {
   user: WithAdditionalParams<User>;
   handleClose: () => void;
 };
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    share: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    card: {
-      boxShadow: 'none'
-    },
-    purple: {
-      backgroundColor: '#A942E9'
-    },
-    dark: {
-      backgroundColor: theme.palette.primary.main,
-      borderRadius: 8
-    },
-    info: {
-      textTransform: 'none'
-    },
-    facebook: {
-      color: '#3b5998',
-      minWidth: 40
-    },
-    twitter: {
-      color: '#1DA1F2',
-      minWidth: 40
-    },
-    reddit: {
-      color: '#FF5700',
-      minWidth: 40
-    }
-  })
-);
 
 const copy: Record<SocialsEnum, string> = {
   [SocialsEnum.TWITTER]: 'Say Hi, Copy the message below and post it on your Timeline.',
