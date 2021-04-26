@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -60,9 +60,12 @@ type Props = {
 export const EditableTextField = ({ onChange, value, name, multiline, rows, fullWidth = false, style }: Props) => {
   const styles = useStyles();
 
+  const formRef = useRef<HTMLFormElement | null>(null);
+
   const [isEditMode, setEditMode] = useState(false);
   const [isMouseOver, setMouseover] = useState(false);
   const [defaultValue, setDefaultValue] = useState(value);
+  const [newValue, setNewValue] = useState('');
 
   const editField = () => {
     setEditMode(true);
@@ -72,20 +75,29 @@ export const EditableTextField = ({ onChange, value, name, multiline, rows, full
   const cancelEditField = () => {
     setEditMode(false);
     setMouseover(true);
+    formRef?.current?.reset();
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setEditMode(false);
+    setMouseover(false);
+    setDefaultValue(newValue);
+    onChange(newValue);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDefaultValue(event.target.value);
+    setNewValue(event.target.value);
   };
 
-  const updateProfile = () => {
-    //if (event.keyCode == 13) {
-    onChange(defaultValue);
+  //const updateProfile = () => {
+  ////if (event.keyCode == 13) {
+  //onChange(defaultValue);
 
-    setEditMode(false);
-    setMouseover(false);
-    //}
-  };
+  //setEditMode(false);
+  //setMouseover(false);
+  ////}
+  //};
 
   const handleMouseOver = () => {
     setMouseover(true);
@@ -97,47 +109,49 @@ export const EditableTextField = ({ onChange, value, name, multiline, rows, full
 
   return (
     <div className={styles.root}>
-      <TextField
-        fullWidth={fullWidth}
-        multiline={multiline}
-        rows={rows}
-        name={name}
-        defaultValue={defaultValue}
-        margin="none"
-        onChange={handleChange}
-        disabled={!isEditMode}
-        className={styles.textField}
-        onMouseEnter={handleMouseOver}
-        onMouseLeave={handleMouseOut}
-        //onKeyDown={updateProfile}
-        InputProps={{
-          style,
-          classes: {
-            disabled: styles.disabled
-          },
-          endAdornment: isMouseOver ? (
-            <InputAdornment position="start">
-              {isEditMode === true ? (
-                <div className={styles.inlineButtonsLayout}>
-                  <Button onClick={updateProfile} className={styles.confirmButton}>
-                    {' '}
-                    Confirm{' '}
-                  </Button>
-                  <IconButton onClick={cancelEditField}>
-                    <Clear className={styles.cancelButton} />
+      <form onSubmit={handleSubmit} ref={formRef}>
+        <TextField
+          fullWidth={fullWidth}
+          multiline={multiline}
+          rows={rows}
+          name={name}
+          defaultValue={defaultValue}
+          margin="none"
+          onChange={handleChange}
+          disabled={!isEditMode}
+          className={styles.textField}
+          onMouseEnter={handleMouseOver}
+          onMouseLeave={handleMouseOut}
+          //onKeyDown={updateProfile}
+          InputProps={{
+            style,
+            classes: {
+              disabled: styles.disabled
+            },
+            endAdornment: isMouseOver ? (
+              <InputAdornment position="start">
+                {isEditMode === true ? (
+                  <div className={styles.inlineButtonsLayout}>
+                    <Button type="submit" value="Submit" className={styles.confirmButton}>
+                      {' '}
+                      Confirm{' '}
+                    </Button>
+                    <IconButton onClick={cancelEditField}>
+                      <Clear className={styles.cancelButton} />
+                    </IconButton>
+                  </div>
+                ) : (
+                  <IconButton onClick={editField}>
+                    <Edit />
                   </IconButton>
-                </div>
-              ) : (
-                <IconButton onClick={editField}>
-                  <Edit />
-                </IconButton>
-              )}
-            </InputAdornment>
-          ) : (
-            ''
-          )
-        }}
-      />
+                )}
+              </InputAdornment>
+            ) : (
+              ''
+            )
+          }}
+        />
+      </form>
     </div>
   );
 };
