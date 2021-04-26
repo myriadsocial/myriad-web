@@ -36,7 +36,8 @@ import { useExperience } from './use-experience.hooks';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import Panel from 'src/components/common/panel.component';
-import { Experience, People, Tag, LayoutType } from 'src/interfaces/experience';
+import { Experience, Tag, LayoutType } from 'src/interfaces/experience';
+import { People } from 'src/interfaces/people';
 
 type Props = {
   userId: string;
