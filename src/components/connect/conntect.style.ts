@@ -31,6 +31,13 @@ export const useStyles = makeStyles((theme: Theme) =>
     reddit: {
       color: '#FF5700',
       minWidth: 40
+    },
+    done: {
+      flexDirection: 'column'
+    },
+    doneText: {
+      align: 'justify',
+      color: 'red'
     }
   })
 );
