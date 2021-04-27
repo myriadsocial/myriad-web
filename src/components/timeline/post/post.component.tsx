@@ -45,6 +45,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
   const { detail } = useSocialDetail(post);
 
   const userId = session?.user.address as string;
+  const isAnonymous = session?.user.anonymous as boolean;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -134,7 +135,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
         </ShowIf>
       </Card>
 
-      <SendTipModal postId={post.id} ref={childRef} />
+      <SendTipModal postId={post.id} anonymous={isAnonymous} userAddress={userId} ref={childRef} />
     </>
   );
 }
