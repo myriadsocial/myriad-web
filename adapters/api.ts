@@ -90,7 +90,7 @@ function Adapter() {
             include_entities: false
           });
 
-          username = twitterProfile.name;
+          username = twitterProfile.screen_name;
           break;
         case 'facebook':
           const { data: facebookProfile } = await FacebookGraph({
