@@ -3,11 +3,8 @@ import Providers from 'next-auth/providers';
 
 import APIAdapter from '../../../adapters/api';
 
-import Axios from 'axios';
-
-const axios = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || ''
-});
+import * as UserAPI from 'src/lib/api/user';
+import { userToSession } from 'src/lib/serializers/session';
 
 type Credentials = {
   platform: string;
@@ -15,6 +12,7 @@ type Credentials = {
   username: string;
   accessToken: string;
 };
+
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default NextAuth({
@@ -46,33 +44,32 @@ export default NextAuth({
         address: { label: 'Address', type: 'text' }
       },
       async authorize(credentials: Record<string, string>) {
-        console.log('authorize', credentials);
+        console.log('[next-auth][debug][authorize] credentials', credentials);
+
         if (credentials.anonymous === 'false') {
           try {
-            const { data } = await axios({
-              url: `users/${credentials.address}`,
-              method: 'GET'
-            });
+            const user = await UserAPI.getUserDetail(credentials.address);
 
-            console.log('user exist', data);
+            console.log('[next-auth][debug][authorize] user exist', user);
+
+            return userToSession(user);
           } catch (error) {
             try {
-              const { data } = await axios({
-                url: '/users',
-                method: 'POST',
-                data: {
-                  id: credentials.address,
-                  name: credentials.name,
-                  profilePictureURL: '',
-                  anonymous: false,
-                  bio: '',
-                  createdAt: new Date()
-                }
+              const user = await UserAPI.createUser({
+                id: credentials.address,
+                name: credentials.name,
+                profilePictureURL: '',
+                anonymous: false,
+                bio: '',
+                createdAt: new Date()
               });
 
-              console.log('user create', data);
+              console.log('[next-auth][debug][authorize] user create', user);
+
+              return userToSession(user);
             } catch (error) {
-              console.error('user create', error);
+              console.error('[next-auth][debug][authorize] user create', error.response.data);
+              return null;
             }
           }
         }
@@ -157,6 +154,8 @@ export default NextAuth({
       };
     },
     async jwt(token, user, account, profile, isNewUser) {
+      token = { ...token, ...user };
+
       if (account && account.type === 'credentials') {
         token.userId = profile.address;
         token.address = profile.address;
@@ -164,8 +163,6 @@ export default NextAuth({
       }
 
       if (account && account.type === 'oauth') {
-        token = { ...token, ...user };
-
         const credentials = {
           platform: account.provider,
           platformUserId: account.id,
@@ -180,7 +177,7 @@ export default NextAuth({
         //@ts-ignore
         token.userCredentials.push(credentials);
 
-        console.log('jwt token', token);
+        console.log('[next-auth][debug][jwt] token', token);
       }
 
       return token;

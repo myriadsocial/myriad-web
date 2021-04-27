@@ -7,6 +7,8 @@ import { getSession } from 'next-auth/client';
 import Layout from '../src/components/Layout/Layout.container';
 import Timeline from '../src/components/timeline/timeline.component';
 
+import { healthcheck } from 'src/lib/api/healthcheck';
+
 type Props = {
   session: Session | null;
 };
@@ -25,6 +27,13 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   if (!session) {
     res.writeHead(301, { location: `${process.env.NEXTAUTH_URL}` });
+    res.end();
+  }
+
+  const available = await healthcheck();
+
+  if (!available) {
+    res.writeHead(302, { location: `${process.env.NEXTAUTH_URL}/maintenance` });
     res.end();
   }
 
