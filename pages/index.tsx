@@ -12,6 +12,7 @@ import LoginForm from 'src/components/login/login.component';
 import PostComponent from 'src/components/timeline/post/post.component';
 import Logo from 'src/images/logo.svg';
 import { Post, Comment } from 'src/interfaces/post';
+import { healthcheck } from 'src/lib/api/healthcheck';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -117,6 +118,13 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   if (session) {
     res.writeHead(301, { location: `${process.env.NEXTAUTH_URL}/home` });
+    res.end();
+  }
+
+  const available = await healthcheck();
+
+  if (!available) {
+    res.writeHead(302, { location: `${process.env.NEXTAUTH_URL}/maintenance` });
     res.end();
   }
 
