@@ -4,11 +4,11 @@ import jwt from 'next-auth/jwt';
 
 import Axios from 'axios';
 import snoowrap from 'snoowrap';
+import { SocialsEnum } from 'src/interfaces/social';
+import * as PeopleAPI from 'src/lib/api/people';
+import * as UserAPI from 'src/lib/api/user';
+import { userToSession } from 'src/lib/serializers/session';
 import { TwitterClient } from 'twitter-api-client';
-
-const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || ''
-});
 
 const FacebookGraph = Axios.create({
   baseURL: 'https://graph.facebook.com'
@@ -20,7 +20,7 @@ function Adapter() {
     // Display debug output if debug option enabled
     function _debug(...args: Object[]) {
       if (appOptions.debug) {
-        console.log('[next-auth][debug]', ...args);
+        console.log('[next-auth][adapter][debug]', ...args);
       }
     }
 
@@ -30,51 +30,17 @@ function Adapter() {
     }
 
     async function getUser(id: string) {
-      const { data } = await MyriadAPI({
-        url: `users/${id}`,
-        method: 'GET',
-        params: {
-          filter: {
-            include: [
-              {
-                relation: 'userCredentials',
-                scope: {
-                  include: [
-                    {
-                      relation: 'people'
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      });
+      try {
+        const user = await UserAPI.getUserDetail(id);
 
-      _debug('Adapter getUser', id, data);
+        _debug('Adapter getUser', id, user);
 
-      return {
-        id: data.id,
-        name: data.name,
-        profilePictureURL: data.profilePictureURL,
-        userId: data.id,
-        address: data.id,
-        anonymous: false,
+        return userToSession(user);
+      } catch (error) {
+        _debug('Adapter getUser', error.response.data);
 
-        //@ts-ignore
-        userCredentials: data.userCredentials
-          ? //@ts-ignore
-            data.userCredentials.map(item => {
-              return {
-                platform: item.people.platform,
-                platformUserId: item.people.platform_account_id,
-                username: item.people.username,
-                accessToken: item.access_token,
-                refreshToken: item.refresh_token || null
-              };
-            })
-          : []
-      };
+        return Promise.reject(error.message);
+      }
     }
 
     async function getUserByEmail(email: string) {
@@ -82,26 +48,15 @@ function Adapter() {
       return null;
     }
 
-    async function getUserByProviderAccountId(providerId: string, providerAccountId: string) {
-      const { data } = await MyriadAPI({
-        url: `/people`,
-        method: 'GET',
-        params: {
-          filter: {
-            limit: 1,
-            where: {
-              platform: {
-                eq: providerId
-              },
-              platform_account_id: {
-                eq: providerAccountId
-              }
-            }
-          }
-        }
-      });
+    async function getUserByProviderAccountId(providerId: SocialsEnum, providerAccountId: string) {
+      const people = await PeopleAPI.getPeopleByPlatform(providerId, providerAccountId);
 
-      _debug('Adapter getUserByProviderAccountId data', providerId, data);
+      if (people) {
+        _debug('Adapter getUserByProviderAccountId data', people);
+      } else {
+        _debug('Adapter getUserByProviderAccountId not found');
+      }
+
       return null;
     }
 
@@ -112,7 +67,7 @@ function Adapter() {
 
     async function linkAccount(
       userId: string,
-      providerId: string,
+      providerId: SocialsEnum,
       providerType: string,
       providerAccountId: string,
       refreshToken: string,
@@ -120,7 +75,8 @@ function Adapter() {
       accessTokenExpires: number
     ): Promise<void> {
       let username = '';
-      console.log('userId', userId);
+      _debug('userId', userId);
+
       switch (providerId) {
         case 'twitter':
           const twitterClient = new TwitterClient({
@@ -162,37 +118,23 @@ function Adapter() {
           break;
       }
 
-      const { data: people } = await MyriadAPI({
-        url: `/people`,
-        method: 'POST',
-        data: {
+      try {
+        const people = await PeopleAPI.createPeople({
           platform: providerId,
           platform_account_id: providerAccountId,
-          username
-        }
-      });
+          username,
+          hide: false
+        });
 
-      console.log('link credential', {
-        url: `/users/${userId}/user-credentials`,
-        method: 'POST',
-        data: {
+        await UserAPI.addUserCredential(userId, {
           access_token: accessToken,
           refresh_token: refreshToken,
           peopleId: people.id,
           userId
-        }
-      });
-
-      await MyriadAPI({
-        url: `/users/${userId}/user-credentials`,
-        method: 'POST',
-        data: {
-          access_token: accessToken,
-          refresh_token: refreshToken,
-          peopleId: people.id,
-          userId
-        }
-      });
+        });
+      } catch (error) {
+        _debug('Adapter linkAccount error: ', error.response.data);
+      }
 
       _debug('Adapter linkAccount', userId, providerId, providerType, providerAccountId, refreshToken, accessToken, accessTokenExpires);
     }

@@ -9,6 +9,20 @@ const client = Axios.create({
   baseURL: process.env.NEXTAUTH_URL
 });
 
+const createPostContent = (post: Post): string => {
+  let content = '';
+
+  if (post.title) {
+    content += `${post.title}`;
+  }
+
+  if (post.text) {
+    content += `${post.text}`;
+  }
+
+  return content;
+};
+
 export const useSocialDetail = (post: Post) => {
   const [detail, setDetail] = React.useState<PostDetail | null>(null);
 
@@ -34,7 +48,7 @@ export const useSocialDetail = (post: Post) => {
       loadPost();
     } else {
       setDetail({
-        text: post.text || '',
+        text: createPostContent(post),
         createdOn: format(new Date(post.createdAt), 'dd MMMM yyyy'),
         videos: [],
         images: [],
