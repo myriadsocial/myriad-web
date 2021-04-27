@@ -6,7 +6,8 @@ export enum TimelineActionType {
   INIT_POST = 'INIT_POST',
   LOAD_MORE_POST = 'LOAD_MORE_POST',
   LOAD_COMMENTS = 'LOAD_COMMENTS',
-  ADD_COMMENT = 'ADD_COMMENT'
+  ADD_COMMENT = 'ADD_COMMENT',
+  SORT_POST = 'SORT_POST'
 }
 
 interface InitPost {
@@ -31,15 +32,22 @@ interface addComments {
   comment: Comment;
 }
 
-export type Action = InitPost | LoadMorePost | loadComments | addComments;
+interface sortPost {
+  type: TimelineActionType.SORT_POST;
+  sort: string;
+}
+
+export type Action = InitPost | LoadMorePost | loadComments | addComments | sortPost;
 
 type Dispatch = (action: Action) => void;
 type TimelineProviderProps = { children: React.ReactNode };
 type State = {
+  sort: string;
   posts: Post[];
 };
 
 const initalState = {
+  sort: 'created',
   posts: []
 };
 
@@ -68,6 +76,12 @@ function timelineReducer(state: State, action: Action) {
           }
           return post;
         })
+      };
+    }
+    case TimelineActionType.SORT_POST: {
+      return {
+        ...state,
+        sort: action.sort
       };
     }
 
