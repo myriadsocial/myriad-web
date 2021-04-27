@@ -1,7 +1,15 @@
-interface Credential {
-  id?: string;
-  token: string;
-  people_id: string;
+import { People } from './people';
+
+export interface UserCredential {
+  id: string;
+  access_token: string;
+  refresh_token: string;
+  peopleId: string;
+  userId: string;
+}
+
+export interface ExtendedUserCredential extends UserCredential {
+  people: People;
 }
 
 export interface User {
@@ -9,6 +17,10 @@ export interface User {
   bio?: string;
   name: string;
   profilePictureURL?: string;
-  userCredentials: Credential[];
   anonymous: boolean;
+  createdAt?: Date;
+}
+
+export interface ExtendedUser extends User {
+  userCredentials: ExtendedUserCredential[];
 }

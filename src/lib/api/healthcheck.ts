@@ -13,6 +13,6 @@ export const healthcheck = async (): Promise<boolean> => {
 
     return true;
   } catch (error) {
-    return false
+    return false;
   }
 };
