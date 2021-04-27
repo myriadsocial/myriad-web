@@ -3,6 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import FilterTimelineComponent from './filter.component';
 import PostComponent from './post/post.component';
 import { useStyles } from './timeline.style';
 import { usePost } from './use-post.hooks';
@@ -40,6 +41,7 @@ const Timeline = () => {
   return (
     <div className={style.root}>
       <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
+        <FilterTimelineComponent />
         <InfiniteScroll
           scrollableTarget="scrollable-timeline"
           className={style.child}
