@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 
 import { useSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
 
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -39,18 +40,27 @@ type Props = {
 export default function PostComponent({ post, open = false, disable = false, reply, loadComments }: Props) {
   const style = useStyles();
 
-  const childRef = useRef<any>();
-  const [session] = useSession();
   const [expanded, setExpanded] = useState(open);
   const { detail } = useSocialDetail(post);
 
+  const childRef = useRef<any>();
+  const [session] = useSession();
+  const router = useRouter();
+
   const userId = session?.user.address as string;
+  const isAnonymous = session?.user.anonymous as boolean;
+
+  const currentPage = router.pathname as string;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
   const tipPostUser = () => {
+    //disable tipping on root page
+    if (currentPage === '/') {
+      return;
+    }
     childRef.current.triggerSendTipModal();
   };
 
@@ -68,7 +78,14 @@ export default function PostComponent({ post, open = false, disable = false, rep
   };
 
   const PostActionTipUser = (
-    <Button className={style.action} onClick={tipPostUser} aria-label="tip-post-user" color="primary" variant="contained" size="small">
+    <Button
+      className={style.action}
+      onClick={tipPostUser}
+      aria-label="tip-post-user"
+      color="primary"
+      variant="contained"
+      size="small"
+      disabled={isAnonymous}>
       Send Tip
     </Button>
   );
@@ -134,7 +151,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
         </ShowIf>
       </Card>
 
-      <SendTipModal postId={post.id} ref={childRef} />
+      <SendTipModal postId={post.id} anonymous={isAnonymous} userAddress={userId} ref={childRef} />
     </>
   );
 }

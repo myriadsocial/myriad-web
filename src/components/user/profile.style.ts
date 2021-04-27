@@ -26,6 +26,7 @@ export const useStyles = makeStyles({
     margin: 0,
     paddingLeft: 8,
     paddingRight: 8,
+    marginBottom: 4,
     borderRadius: 5
   },
   detail: {

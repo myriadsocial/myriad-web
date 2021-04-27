@@ -106,6 +106,12 @@ const Profile = ({ user, toggleLogin }: Props) => {
           </Button>
         </ShowIf>
 
+        <ShowIf condition={profile.anonymous}>
+          <Button className={styles.button} size="small" variant="contained" color="secondary" onClick={handleSignOut}>
+            Logout
+          </Button>
+        </ShowIf>
+
         <ShowIf condition={!!profile.anonymous}>
           <Button
             className={styles.button}
