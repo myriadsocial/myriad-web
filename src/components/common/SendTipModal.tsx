@@ -1,7 +1,6 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
-import { useSession } from 'next-auth/client';
-
+//import { useSession } from 'next-auth/client';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -56,10 +55,12 @@ interface PostTxHistory {
 
 type Props = {
   postId: string;
+  anonymous: boolean;
+  userAddress: string;
 };
 
-const SendTipModal = forwardRef(({ postId }: Props, ref) => {
-  const [session] = useSession();
+const SendTipModal = forwardRef(({ postId, anonymous, userAddress }: Props, ref) => {
+  //const [session] = useSession();
   const [balance, setBalance] = useState(0);
   const [TxHistory, setTxHistory] = useState<TxHistory>({
     trxHash: '',
@@ -111,7 +112,8 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
   }, [TxHistory]);
 
   const getBalanceForComponent = async () => {
-    const currentAddress = session?.user.address;
+    //const currentAddress = session?.user.address;
+    const currentAddress = userAddress;
     const freeBalance = await getBalance(currentAddress);
     //console.log('the freeBalance is: ', Number(freeBalance) / 100);
     if (freeBalance) {
@@ -208,7 +210,8 @@ const SendTipModal = forwardRef(({ postId }: Props, ref) => {
         // sendTip will open a pop-up from polkadot.js extension,
         // tx signing is done by supplying a password
         const ALICE = 'tkTptH5puVHn8VJ8NWMdsLa2fYGfYqV8QTyPRZRiQxAHBbCB4';
-        const senderAddress = session?.user.address;
+        const senderAddress = userAddress;
+        //const senderAddress = session?.user.address;
 
         const response = await sendTip(senderAddress, TxHistory.to, amountSent);
         // handle if sendTip succeed
