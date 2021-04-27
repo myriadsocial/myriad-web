@@ -5,6 +5,7 @@ import { useExperience } from '../experience/experience.context';
 import { useTimeline, TimelineActionType } from './timeline.context';
 
 import Axios from 'axios';
+import { sortBy } from 'lodash';
 import { People } from 'src/interfaces/experience';
 import { Comment, Post } from 'src/interfaces/post';
 
@@ -12,18 +13,29 @@ const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
 });
 
+type SortDirection = 'DESC' | 'ASC';
+type SortResult = {
+  field: string;
+  direction: SortDirection;
+};
+
 export const usePost = () => {
   const { state: experienceState } = useExperience();
+  const { state: timelineState, dispatch } = useTimeline();
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const { state, dispatch } = useTimeline();
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [sort, setSort] = useState<SortResult>({
+    field: 'createdAt',
+    direction: 'DESC'
+  });
   const [filter, setFilter] = useState({
     offset: 0,
     limit: 10,
     where: {},
+    order: 'createdAt DESC',
     include: [
       {
         relation: 'comments',
@@ -37,6 +49,13 @@ export const usePost = () => {
       }
     ]
   });
+
+  useEffect(() => {
+    setFilter({
+      ...filter,
+      order: sort.field + ' ' + sort.direction
+    });
+  }, [sort]);
 
   // change post filter every selected experience changed
   // each experience has people and tag attribute as filter parameter
@@ -63,6 +82,7 @@ export const usePost = () => {
         where['hasMedia'] = true;
       }
 
+      console.log('where', where);
       setFilter({
         ...filter,
         where
@@ -172,13 +192,22 @@ export const usePost = () => {
     });
   };
 
+  const sortBy = (sort: string) => {
+    dispatch({
+      type: TimelineActionType.SORT_POST,
+      sort
+    });
+  };
+
   return {
     error,
     loading,
     hasMore,
-    posts: state.posts,
+    sort: timelineState.sort,
+    posts: timelineState.posts,
     loadMorePost,
     loadComments,
-    reply
+    reply,
+    sortBy
   };
 };
