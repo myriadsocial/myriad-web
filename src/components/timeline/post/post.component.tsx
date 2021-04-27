@@ -1,4 +1,6 @@
 import React, { useState, useRef } from 'react';
+//@ts-ignore
+import { FacebookProvider, EmbeddedPost } from 'react-facebook';
 
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
@@ -102,14 +104,23 @@ export default function PostComponent({ post, open = false, disable = false, rep
           subheader={detail.createdOn}
         />
 
-        <CardContent className={style.content}>
-          <Typography variant="body1" color="textSecondary" component="p">
-            {detail.text}
-          </Typography>
-          {detail.images && detail.images.length > 0 && <PostImage images={detail.images} />}
-          {detail.videos && detail.videos.length > 0 && <PostVideo url={detail.videos[0]} />}
-        </CardContent>
+        <ShowIf condition={post.platform !== 'facebook'}>
+          <CardContent className={style.content}>
+            <Typography variant="body1" color="textSecondary" component="p">
+              {detail.text}
+            </Typography>
+            {detail.images && detail.images.length > 0 && <PostImage images={detail.images} />}
+            {detail.videos && detail.videos.length > 0 && <PostVideo url={detail.videos[0]} />}
+          </CardContent>
+        </ShowIf>
 
+        <ShowIf condition={post.platform === 'facebook'}>
+          <CardContent className={style.content}>
+            <FacebookProvider appId="1349208398779551">
+              <EmbeddedPost href={post.link} width="700" />
+            </FacebookProvider>
+          </CardContent>
+        </ShowIf>
         <CardActions disableSpacing>
           <ShowIf condition={post.platform === 'facebook'}>
             <FacebookReactionComponent metric={detail.metric} />

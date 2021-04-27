@@ -54,6 +54,7 @@ const Timeline = () => {
           ))}
         </InfiniteScroll>
       </div>
+      <div id="fb-root" />
     </div>
   );
 };

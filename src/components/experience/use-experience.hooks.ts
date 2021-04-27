@@ -49,10 +49,11 @@ export const useExperience = (userId: string) => {
       dispatch({
         type: ExperienceActionType.INIT_EXPERIENCE,
         experiences: data.map(experience => {
+          console.log(ExperienceActionType.INIT_EXPERIENCE, experience);
           return {
             ...experience,
             // @ts-ignore
-            layout: !experience.layout || experience.layout === '' ? 'timeline' : 'photo'
+            layout: experience.layout ? experience.layout : 'timeline'
           };
         })
       });

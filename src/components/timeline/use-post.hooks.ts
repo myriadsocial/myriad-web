@@ -71,7 +71,7 @@ export const usePost = () => {
             }
           },
           {
-            'people.username': {
+            'platformUser.username': {
               inq: people.filter(i => !i.hide).map(i => i.username)
             }
           }
