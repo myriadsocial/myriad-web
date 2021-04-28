@@ -67,7 +67,8 @@ const LayoutComponent = ({ children, user }: Props) => {
 
   const style = useStyles();
   const { state: setting, dispatch } = useLayoutSetting();
-  const userId = user.userId as string;
+
+  const userId = user.address as string;
 
   const changeSetting = (key: string, value: boolean) => {
     dispatch({
