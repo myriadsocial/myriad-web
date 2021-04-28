@@ -75,6 +75,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
   console.log('selected experience', selected);
+
   useEffect(() => {
     loadInitExperience();
   }, []);
