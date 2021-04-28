@@ -47,21 +47,6 @@ export const useSocialDetail = (post: Post) => {
     if (post.platform === 'twitter') {
       loadPost();
     } else {
-      console.log({
-        text: createPostContent(post),
-        createdOn: format(new Date(post.createdAt), 'dd MMMM yyyy'),
-        videos: [],
-        images: [],
-        metric: {
-          like: 0,
-          retweet: 0
-        },
-        user: {
-          name: post.platformUser?.username || '',
-          avatar: '',
-          username: post.platformUser?.username || ''
-        }
-      });
       setDetail({
         text: createPostContent(post),
         createdOn: format(new Date(post.createdAt), 'dd MMMM yyyy'),
