@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 
 import { useSession } from 'next-auth/client';
 
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
@@ -37,14 +39,24 @@ const useStyles = makeStyles((theme: Theme) =>
       textTransform: 'uppercase',
       fontSize: 12
     },
+    gutters: {
+      border: `1px solid`,
+      borderColor: '#A942E9',
+      borderRadius: 8,
+      margin: theme.spacing(2),
+      padding: 0
+    },
     buttonText: {
-      marginLeft: theme.spacing(2),
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(2),
-      fontSize: 12
+      height: 24,
+      lineHeight: 10,
+      textAlign: 'center',
+      border: 1,
+      borderRadius: 8
     }
   })
 );
+
+const typographyProps = { style: { fontSize: 10, padding: '5px 0', fontWeight: 500 } };
 
 export const BalanceComponent = React.memo(function Wallet() {
   const style = useStyles();
@@ -59,7 +71,6 @@ export const BalanceComponent = React.memo(function Wallet() {
   const getBalanceForComponent = async () => {
     const currentAddress = session?.user.address;
     const freeBalance = await getBalance(currentAddress);
-    //console.log('the freeBalance is: ', Number(freeBalance) / 100);
     if (freeBalance) {
       setBalance(Number((freeBalance / 100).toFixed(3)));
     }
@@ -75,7 +86,7 @@ export const BalanceComponent = React.memo(function Wallet() {
 
   return (
     <div className={style.root}>
-      <Grid container direction="row" justify="space-between" alignItems="center">
+      <Grid container direction="row" justify="center" alignItems="center">
         <Grid item>
           <Typography className={style.title} variant="h5">
             Total Balance
@@ -88,9 +99,13 @@ export const BalanceComponent = React.memo(function Wallet() {
           </Typography>
         </Grid>
         <Grid item>
-          <Button className={style.buttonText} onClick={handleClick}>
-            Refresh
-          </Button>
+          <List>
+            <ListItem button className={style.gutters} onClick={handleClick}>
+              <ListItemText primaryTypographyProps={typographyProps} className={style.buttonText}>
+                <Typography>Refresh</Typography>
+              </ListItemText>
+            </ListItem>
+          </List>
         </Grid>
       </Grid>
     </div>
