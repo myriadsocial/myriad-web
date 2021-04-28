@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 
 import { User } from 'next-auth';
-import { useSession } from 'next-auth/client';
 
 import Grid from '@material-ui/core/Grid';
+import NoSsr from '@material-ui/core/NoSsr';
 
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 
@@ -25,8 +25,11 @@ type Props = {
 };
 
 const LayoutComponent = ({ children, user }: Props) => {
+  const style = useStyles();
+
   const { dispatch: myriadAccountDispatch } = useMyriadAccount();
-  const [session] = useSession();
+  const { state: settingState, dispatch } = useLayoutSetting();
+
   useEffect(() => {
     // fetch for address
     (async () => {
@@ -37,7 +40,7 @@ const LayoutComponent = ({ children, user }: Props) => {
         console.log('no accounts retrieved!');
         throw new Error('no extension/account detected on browser!');
       }
-      const currentAddress = session?.user.address;
+      const currentAddress = user.address;
       const freeBalance = await getBalance(currentAddress);
       //console.log(`the address is: ${currentAddress}`);
       //console.log(`the balance is: ${freeBalance}`);
@@ -65,9 +68,6 @@ const LayoutComponent = ({ children, user }: Props) => {
     });
   };
 
-  const style = useStyles();
-  const { state: setting, dispatch } = useLayoutSetting();
-
   const userId = user.address as string;
 
   const changeSetting = (key: string, value: boolean) => {
@@ -84,11 +84,13 @@ const LayoutComponent = ({ children, user }: Props) => {
         <Grid item className={style.user}>
           <Grid className={style.fullheight} container direction="row" justify="flex-start" alignItems="stretch">
             <Grid item className={!!user.anonymous ? style.grow : style.normal}>
-              <UserDetail changeSetting={changeSetting} settings={setting} />
+              <UserDetail changeSetting={changeSetting} settings={settingState} />
             </Grid>
             <Grid item className={style.content}>
-              <ShowIf condition={!setting.focus && !user.anonymous}>
-                <Wallet />
+              <ShowIf condition={settingState.focus && !user.anonymous}>
+                <NoSsr>
+                  <Wallet />
+                </NoSsr>
               </ShowIf>
             </Grid>
           </Grid>
@@ -98,7 +100,7 @@ const LayoutComponent = ({ children, user }: Props) => {
         </Grid>
 
         <Grid item className={style.experience}>
-          <ShowIf condition={!setting.focus}>
+          <ShowIf condition={!settingState.focus}>
             <ExperienceComponent anonymous={!!user.anonymous} userId={userId} />
           </ShowIf>
         </Grid>
