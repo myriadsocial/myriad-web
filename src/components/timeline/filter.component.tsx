@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function RadioButtonsGroup() {
+export default function FilterTimelineComponent() {
   const styles = useStyles();
 
   const { sort, sortBy } = usePost();
