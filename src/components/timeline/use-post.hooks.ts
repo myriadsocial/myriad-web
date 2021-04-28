@@ -60,6 +60,7 @@ export const usePost = () => {
   // change post filter every selected experience changed
   // each experience has people and tag attribute as filter parameter
   useEffect(() => {
+    console.log('experienceState.selected', experienceState.selected);
     if (!experienceState.init && experienceState.selected) {
       const { people, tags, layout } = experienceState.selected;
 
@@ -90,9 +91,7 @@ export const usePost = () => {
 
       setReload(true);
     }
-
-    return undefined;
-  }, [experienceState.selected]);
+  }, [experienceState.selected?.id]);
 
   // fetch intial post every where filter changed
   useEffect(() => {
@@ -162,6 +161,20 @@ export const usePost = () => {
     }
   };
 
+  const addPost = async (value: Partial<Post>) => {
+    const { data } = await axios({
+      url: `/posts`,
+      method: 'POST',
+      data: value
+    });
+
+    // dispatch({
+    //   type: TimelineActionType.ADD_COMMENT,
+    //   postId,
+    //   comment: data
+    // });
+  };
+
   const loadComments = async (postId: string) => {
     const { data } = await axios({
       url: `/posts/${postId}/comments`,
@@ -207,6 +220,7 @@ export const usePost = () => {
     posts: timelineState.posts,
     loadMorePost,
     loadComments,
+    addPost,
     reply,
     sortBy
   };
