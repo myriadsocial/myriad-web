@@ -25,10 +25,11 @@ type Props = {
 };
 
 const LayoutComponent = ({ children, user }: Props) => {
-  const style = useStyles();
-
   const { dispatch: myriadAccountDispatch } = useMyriadAccount();
-  const { state: settingState, dispatch } = useLayoutSetting();
+  const style = useStyles();
+  const { state: setting, dispatch } = useLayoutSetting();
+
+  const userId = user.address as string;
 
   useEffect(() => {
     // fetch for address
@@ -68,8 +69,6 @@ const LayoutComponent = ({ children, user }: Props) => {
     });
   };
 
-  const userId = user.address as string;
-
   const changeSetting = (key: string, value: boolean) => {
     dispatch({
       type: 'CHANGE_SETTING',
@@ -84,10 +83,10 @@ const LayoutComponent = ({ children, user }: Props) => {
         <Grid item className={style.user}>
           <Grid className={style.fullheight} container direction="row" justify="flex-start" alignItems="stretch">
             <Grid item className={!!user.anonymous ? style.grow : style.normal}>
-              <UserDetail changeSetting={changeSetting} settings={settingState} />
+              <UserDetail changeSetting={changeSetting} settings={setting} />
             </Grid>
             <Grid item className={style.content}>
-              <ShowIf condition={settingState.focus && !user.anonymous}>
+              <ShowIf condition={!setting.focus && !user.anonymous}>
                 <NoSsr>
                   <Wallet />
                 </NoSsr>
@@ -100,7 +99,7 @@ const LayoutComponent = ({ children, user }: Props) => {
         </Grid>
 
         <Grid item className={style.experience}>
-          <ShowIf condition={!settingState.focus}>
+          <ShowIf condition={!setting.focus}>
             <ExperienceComponent anonymous={!!user.anonymous} userId={userId} />
           </ShowIf>
         </Grid>
