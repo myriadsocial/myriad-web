@@ -47,3 +47,14 @@ export const addUserCredential = async (userId: string, values: Partial<UserCred
     data: values
   });
 };
+
+export const verifyCredentials = async (userId: string, peopleId: string) => {
+  await MyriadAPI({
+    method: 'POST',
+    url: '/user-credentials/verify',
+    data: {
+      userId,
+      peopleId
+    }
+  });
+};
