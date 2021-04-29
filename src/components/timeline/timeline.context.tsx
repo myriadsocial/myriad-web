@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Post, Comment } from 'src/interfaces/post';
+import { Post, Comment, PostSortMethod } from 'src/interfaces/post';
 
 export enum TimelineActionType {
   INIT_POST = 'INIT_POST',
@@ -34,7 +34,7 @@ interface addComments {
 
 interface sortPost {
   type: TimelineActionType.SORT_POST;
-  sort: string;
+  sort: PostSortMethod;
 }
 
 export type Action = InitPost | LoadMorePost | loadComments | addComments | sortPost;
@@ -42,11 +42,11 @@ export type Action = InitPost | LoadMorePost | loadComments | addComments | sort
 type Dispatch = (action: Action) => void;
 type TimelineProviderProps = { children: React.ReactNode };
 type State = {
-  sort: string;
+  sort: PostSortMethod;
   posts: Post[];
 };
 
-const initalState = {
+const initalState: State = {
   sort: 'created',
   posts: []
 };

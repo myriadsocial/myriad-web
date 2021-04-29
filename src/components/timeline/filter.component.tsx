@@ -9,6 +9,8 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import { usePost } from './use-post.hooks';
 
+import { PostSortMethod } from 'src/interfaces/post';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -26,7 +28,7 @@ export default function FilterTimelineComponent() {
   const { sort, sortBy } = usePost();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const sort = event.target.value;
+    const sort = event.target.value as PostSortMethod;
 
     sortBy(sort);
   };
