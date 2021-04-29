@@ -8,6 +8,7 @@ import Chip from '@material-ui/core/Chip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -22,6 +23,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 import ImageIcon from '@material-ui/icons/Image';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import TabContext from '@material-ui/lab/TabContext';
 import TabPanel from '@material-ui/lab/TabPanel';
 
@@ -34,12 +36,10 @@ const client = Axios.create({
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
       marginTop: theme.spacing(2),
       color: '#E0E0E0'
-    },
-    footer: {
-      width: '10%'
     },
     textSecondary: {
       color: '#E0E0E0'
@@ -64,9 +64,15 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#4caf50',
       color: '#FFF'
     },
+    received: {
+      color: '#4caf50'
+    },
     red: {
       backgroundColor: '#f44336',
       color: '#FFF'
+    },
+    sent: {
+      color: '#f44336'
     },
     loading: {
       color: '#A942E9'
@@ -84,26 +90,14 @@ const useStyles = makeStyles((theme: Theme) =>
     transactionActionList: {
       display: 'flex',
       flexDirection: 'row',
-      padding: 0
+      padding: 0,
+      alignItems: 'flex-start'
     },
-    gutters: {
-      border: `1px solid`,
-      borderColor: '#A942E9',
-      borderRadius: 8,
-      margin: theme.spacing(2),
-      padding: 0
-    },
-    buttonText: {
-      height: 24,
-      lineHeight: 10,
-      textAlign: 'center',
-      border: 1,
-      borderRadius: 8
+    iconButton: {
+      color: '#FFF'
     }
   })
 );
-
-const typographyProps = { style: { fontSize: 10, padding: '5px 0', fontWeight: 700 } };
 
 interface GetTxHistory {
   id: string;
@@ -248,24 +242,27 @@ export const TransactionComponent = React.memo(function Wallet() {
       <div className={style.root}>
         <TabContext value={value}>
           <StyledTabs value={value} onChange={handleChange}>
+            <IconButton onClick={handleClick} className={style.iconButton} aria-label="refresh history" component="span">
+              <RefreshIcon />
+            </IconButton>
             <StyledTab value="0" label="All Tips" {...a11yProps(0)} />
             <StyledTab value="1" label="Received Tips" {...a11yProps(1)} />
             <StyledTab value="2" label="Sent Tips" {...a11yProps(2)} />
           </StyledTabs>
+          <List className={style.transactionActionList}>
+            <ListItem>
+              <FormControl className={style.formControl}>
+                <InputLabel id="demo-simple-select-label">Sort/Filter by</InputLabel>
+                <Select labelId="filter-tips" id="filter-tips" value={sort} onChange={handleChangeSort}>
+                  <MenuItem value={'Date'}>Date</MenuItem>
+                  <MenuItem value={'Decreasing Tips'}>Decreasing Tips</MenuItem>
+                  <MenuItem value={'Increasing Tips'}>Increasing Tips</MenuItem>
+                  <MenuItem value={'Best Tipper'}>Best Tipper</MenuItem>
+                </Select>
+              </FormControl>
+            </ListItem>
+          </List>
           <TabPanel className={style.panel} value={'0'}>
-            <List className={style.transactionActionList}>
-              <ListItem>
-                <FormControl className={style.formControl}>
-                  <InputLabel id="demo-simple-select-label">Sort/Filter by</InputLabel>
-                  <Select labelId="filter-tips" id="filter-tips" value={sort} onChange={handleChangeSort}>
-                    <MenuItem value={'Date'}>Date</MenuItem>
-                    <MenuItem value={'Decreasing Tips'}>Decreasing Tips</MenuItem>
-                    <MenuItem value={'Increasing Tips'}>Increasing Tips</MenuItem>
-                    <MenuItem value={'Best Tipper'}>Best Tipper</MenuItem>
-                  </Select>
-                </FormControl>
-              </ListItem>
-            </List>
             <List className={style.root}>
               {txHistories.map(txHistory => (
                 <ListItem key={txHistory?.id}>
@@ -278,20 +275,21 @@ export const TransactionComponent = React.memo(function Wallet() {
                     className={style.textSecondary}
                     secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
                     primary={
-                      session?.user.address === txHistory?.from ? (
-                        <Tooltip title={`${txHistory?.to}`} placement="top" leaveDelay={3000} interactive>
-                          <Button>To: ...</Button>
-                        </Tooltip>
-                      ) : (
-                        <Tooltip title={`${txHistory?.from}`} placement="top" leaveDelay={3000} interactive>
-                          <Button>From: ...</Button>
-                        </Tooltip>
-                      )
+                      <div>
+                        <div>
+                          <Button>Username: ...</Button>
+                          <Button className={style.received}>Total tips sent to me: ... MYRIA</Button>
+                        </div>
+                        <div>
+                          <Button>Transaction date: ...</Button>
+                          <Button className={style.sent}>Total tips sent to them: ... MYRIA</Button>
+                        </div>
+                      </div>
                     }
                     secondary={
-                      <Tooltip title={`${txHistory?.trxHash}`} placement="top" leaveDelay={3000} interactive>
-                        <Button>Tx: ...</Button>
-                      </Tooltip>
+                      <>
+                        <Button>Tx Hash: {txHistory?.trxHash}</Button>
+                      </>
                     }
                   />
                   <ListItemSecondaryAction>
@@ -404,13 +402,6 @@ export const TransactionComponent = React.memo(function Wallet() {
           </TabPanel>
         </TabContext>
       </div>
-      <List className={style.footer}>
-        <ListItem button className={style.gutters} onClick={handleClick}>
-          <ListItemText primaryTypographyProps={typographyProps} className={style.buttonText}>
-            <Typography>Refresh</Typography>
-          </ListItemText>
-        </ListItem>
-      </List>
     </>
   );
 });
