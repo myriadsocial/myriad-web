@@ -2,6 +2,8 @@ import { User } from './user';
 
 export type PostOrigin = 'facebook' | 'twitter' | 'reddit';
 
+export type PostSortMethod = 'created' | 'like' | 'comment' | 'trending';
+
 export type PostReaction = {
   name: string;
   total: number;

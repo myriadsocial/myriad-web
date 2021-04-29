@@ -7,7 +7,7 @@ import { useTimeline, TimelineActionType } from './timeline.context';
 import Axios from 'axios';
 import { sortBy } from 'lodash';
 import { People } from 'src/interfaces/experience';
-import { Comment, Post } from 'src/interfaces/post';
+import { Comment, Post, PostSortMethod } from 'src/interfaces/post';
 
 const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
@@ -22,11 +22,13 @@ type SortResult = {
 export const usePost = () => {
   const { state: experienceState } = useExperience();
   const { state: timelineState, dispatch } = useTimeline();
+
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const [sort, setSort] = useState<SortResult>({
     field: 'platformCreatedAt',
     direction: 'DESC'
@@ -205,7 +207,7 @@ export const usePost = () => {
     });
   };
 
-  const sortBy = (sort: string) => {
+  const sortBy = (sort: PostSortMethod) => {
     dispatch({
       type: TimelineActionType.SORT_POST,
       sort
