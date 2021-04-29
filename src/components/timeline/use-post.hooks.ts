@@ -28,14 +28,14 @@ export const usePost = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sort, setSort] = useState<SortResult>({
-    field: 'createdAt',
+    field: 'platformCreatedAt',
     direction: 'DESC'
   });
   const [filter, setFilter] = useState({
     offset: 0,
     limit: 10,
     where: {},
-    order: 'createdAt DESC',
+    order: 'platformCreatedAt DESC',
     include: [
       {
         relation: 'comments',
