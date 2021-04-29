@@ -1,6 +1,5 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
-//import { useSession } from 'next-auth/client';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -46,12 +45,12 @@ interface SendTipConfirmed {
   message: string;
 }
 
-interface PostTxHistory {
-  from: string;
-  to: string;
-  amount: number;
-  trxHash: string;
-}
+//interface PostTxHistory {
+//from: string;
+//to: string;
+//amount: number;
+//trxHash: string;
+//}
 
 type Props = {
   postId: string;
@@ -60,7 +59,6 @@ type Props = {
 };
 
 const SendTipModal = forwardRef(({ postId, anonymous, userAddress }: Props, ref) => {
-  //const [session] = useSession();
   const [balance, setBalance] = useState(0);
   const [TxHistory, setTxHistory] = useState<TxHistory>({
     trxHash: '',
@@ -100,10 +98,10 @@ const SendTipModal = forwardRef(({ postId, anonymous, userAddress }: Props, ref)
   useEffect(() => {
     // call myriad API to store TxHistory
     if (TxHistory.trxHash.length > 0) {
-      (async () => {
-        const { trxHash, from, to, amount } = TxHistory;
-        await postTxHistory({ trxHash, from, to, amount });
-      })();
+      //(async () => {
+      //const { trxHash, from, to, amount } = TxHistory;
+      //await postTxHistory({ trxHash, from, to, amount });
+      //})();
       setSendTipConfirmed({
         isConfirmed: true,
         message: 'Tip sent successfully!'
@@ -112,39 +110,37 @@ const SendTipModal = forwardRef(({ postId, anonymous, userAddress }: Props, ref)
   }, [TxHistory]);
 
   const getBalanceForComponent = async () => {
-    //const currentAddress = session?.user.address;
     const currentAddress = userAddress;
     const freeBalance = await getBalance(currentAddress);
-    //console.log('the freeBalance is: ', Number(freeBalance) / 100);
     if (freeBalance) {
       setBalance(Number((freeBalance / 100).toFixed(3)));
     }
   };
 
-  const postTxHistory = async ({ from, to, amount, trxHash }: PostTxHistory) => {
-    try {
-      const response = await client({
-        method: 'POST',
-        url: '/transactions',
-        data: {
-          from,
-          to,
-          trxHash,
-          value: Number(amount) * 100,
-          state: 'success',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: new Date()
-        }
-      });
+  //const postTxHistory = async ({ from, to, amount, trxHash }: PostTxHistory) => {
+  //try {
+  //const response = await client({
+  //method: 'POST',
+  //url: '/transactions',
+  //data: {
+  //from,
+  //to,
+  //trxHash,
+  //value: Number(amount) * 100,
+  //state: 'success',
+  //createdAt: new Date(),
+  //updatedAt: new Date(),
+  //deletedAt: new Date()
+  //}
+  //});
 
-      if (response.status === 200) {
-        console.log(`TxHistory saved successfully!`);
-      }
-    } catch (error) {
-      console.log(`error from postTxHistory: ${error}`);
-    }
-  };
+  //if (response.status === 200) {
+  //console.log(`TxHistory saved successfully!`);
+  //}
+  //} catch (error) {
+  //console.log(`error from postTxHistory: ${error}`);
+  //}
+  //};
 
   const [showSendTipModal, setShowSendTipModal] = useState(false);
   const [inputError, setInputError] = useState<InputErorState>({
@@ -209,16 +205,14 @@ const SendTipModal = forwardRef(({ postId, anonymous, userAddress }: Props, ref)
         const amountSent = Number(values.amount) * 1000000000000;
         // sendTip will open a pop-up from polkadot.js extension,
         // tx signing is done by supplying a password
-        const ALICE = 'tkTptH5puVHn8VJ8NWMdsLa2fYGfYqV8QTyPRZRiQxAHBbCB4';
         const senderAddress = userAddress;
-        //const senderAddress = session?.user.address;
 
         const response = await sendTip(senderAddress, TxHistory.to, amountSent);
         // handle if sendTip succeed
         if (typeof response === 'object') {
           setTxHistory({
             trxHash: response.trxHash,
-            to: ALICE,
+            to: TxHistory.to,
             amount: amountSent / 100,
             from: response.from
           });
