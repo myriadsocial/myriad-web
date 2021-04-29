@@ -45,13 +45,6 @@ interface SendTipConfirmed {
   message: string;
 }
 
-//interface PostTxHistory {
-//from: string;
-//to: string;
-//amount: number;
-//trxHash: string;
-//}
-
 type Props = {
   postId: string;
   anonymous: boolean;
@@ -96,12 +89,7 @@ const SendTipModal = forwardRef(({ postId, anonymous, userAddress }: Props, ref)
   }, [postId]);
 
   useEffect(() => {
-    // call myriad API to store TxHistory
     if (TxHistory.trxHash.length > 0) {
-      //(async () => {
-      //const { trxHash, from, to, amount } = TxHistory;
-      //await postTxHistory({ trxHash, from, to, amount });
-      //})();
       setSendTipConfirmed({
         isConfirmed: true,
         message: 'Tip sent successfully!'
@@ -116,31 +104,6 @@ const SendTipModal = forwardRef(({ postId, anonymous, userAddress }: Props, ref)
       setBalance(Number((freeBalance / 100).toFixed(3)));
     }
   };
-
-  //const postTxHistory = async ({ from, to, amount, trxHash }: PostTxHistory) => {
-  //try {
-  //const response = await client({
-  //method: 'POST',
-  //url: '/transactions',
-  //data: {
-  //from,
-  //to,
-  //trxHash,
-  //value: Number(amount) * 100,
-  //state: 'success',
-  //createdAt: new Date(),
-  //updatedAt: new Date(),
-  //deletedAt: new Date()
-  //}
-  //});
-
-  //if (response.status === 200) {
-  //console.log(`TxHistory saved successfully!`);
-  //}
-  //} catch (error) {
-  //console.log(`error from postTxHistory: ${error}`);
-  //}
-  //};
 
   const [showSendTipModal, setShowSendTipModal] = useState(false);
   const [inputError, setInputError] = useState<InputErorState>({
