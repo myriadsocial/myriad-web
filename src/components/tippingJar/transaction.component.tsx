@@ -25,8 +25,6 @@ import ImageIcon from '@material-ui/icons/Image';
 import TabContext from '@material-ui/lab/TabContext';
 import TabPanel from '@material-ui/lab/TabPanel';
 
-import { BalanceComponent } from '../wallet/balance.component';
-
 import Axios from 'axios';
 
 const client = Axios.create({
