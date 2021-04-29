@@ -60,6 +60,21 @@ export const useStyles = makeStyles((theme: Theme) =>
       position: 'absolute',
       top: 0,
       right: 0
+    },
+    facebook: {
+      '& .MuiBadge-badge': {
+        backgroundColor: '#3b5998'
+      }
+    },
+    twitter: {
+      '& .MuiBadge-badge': {
+        backgroundColor: '#1DA1F2'
+      }
+    },
+    reddit: {
+      '& .MuiBadge-badge': {
+        backgroundColor: '#FF5700'
+      }
     }
   })
 );
