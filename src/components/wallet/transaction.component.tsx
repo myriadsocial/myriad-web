@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -18,6 +19,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 import ImageIcon from '@material-ui/icons/Image';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import TabContext from '@material-ui/lab/TabContext';
 import TabPanel from '@material-ui/lab/TabPanel';
 
@@ -66,6 +68,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     panel: {
       padding: '4px'
+    },
+    iconButton: {
+      color: '#FFF'
     }
   })
 );
@@ -207,15 +212,15 @@ export const TransactionComponent = React.memo(function Wallet() {
     <>
       <TabContext value={value}>
         <StyledTabs value={value} onChange={handleChange}>
+          <IconButton onClick={handleClick} className={style.iconButton} aria-label="refresh history" component="span">
+            <RefreshIcon />
+          </IconButton>
           <StyledTab value="0" label="All" {...a11yProps(0)} />
           <StyledTab value="1" label="In" {...a11yProps(1)} />
           <StyledTab value="2" label="Out" {...a11yProps(2)} />
         </StyledTabs>
         <TabPanel className={style.panel} value={'0'}>
           <List className={style.root}>
-            <ListItem>
-              <Button onClick={handleClick}>Refresh history</Button>
-            </ListItem>
             {txHistories.map(txHistory => (
               <ListItem key={txHistory?.id}>
                 <ListItemAvatar className={style.avatar}>
@@ -270,9 +275,6 @@ export const TransactionComponent = React.memo(function Wallet() {
         <TabPanel className={style.panel} value={'1'}>
           <>
             <List className={style.root}>
-              <ListItem>
-                <Button onClick={handleClick}>Refresh history</Button>
-              </ListItem>
               {inboundTxs.map(inboundTx => (
                 <ListItem key={inboundTx?.id}>
                   <ListItemAvatar className={style.avatar}>
@@ -317,9 +319,6 @@ export const TransactionComponent = React.memo(function Wallet() {
         <TabPanel className={style.panel} value={'2'}>
           <>
             <List className={style.root}>
-              <ListItem>
-                <Button onClick={handleClick}>Refresh history</Button>
-              </ListItem>
               {outboundTxs.map(outboundTx => (
                 <ListItem key={outboundTx?.id}>
                   <ListItemAvatar className={style.avatar}>
