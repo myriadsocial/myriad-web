@@ -12,11 +12,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     button: {
       height: 24,
-      // background: '#A942E9',
       lineHeight: 10,
       textAlign: 'center',
       border: 1,
-      // borderColor: '#A942E9',
       borderRadius: 8
     },
     gutters: {
@@ -26,9 +24,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingTop: 0,
       paddingBottom: 0,
       marginBottom: theme.spacing(1)
-      // paddingLeft: 0,
-      // paddingTop: theme.spacing(0.5),
-      // paddingBottom: theme.spacing(0.5)
     },
     icon: {
       minWidth: 40

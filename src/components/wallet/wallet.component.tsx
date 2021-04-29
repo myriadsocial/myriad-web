@@ -5,7 +5,7 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
 import Divider from '../common/divider.component';
 import Panel from '../common/panel.component';
-import { GetMyriaTutorial } from './GetMyriaTutorial.component';
+import { TippingJarComponent } from '../tippingJar/TippingJar.component';
 import { BalanceComponent } from './balance.component';
 import { TransactionComponent } from './transaction.component';
 
@@ -24,15 +24,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const Wallet = React.memo(function Wallet() {
   const style = useStyles();
-  const childRef = useRef<any>();
+
+  const tippingJarRef = useRef<any>();
 
   const handleClickTutorial = () => {
-    childRef.current.triggerMyriaTutorial();
+    tippingJarRef.current.triggerTippingJar();
   };
 
   const WalletAction = (
     <Button onClick={handleClickTutorial} variant="contained" className={style.button}>
-      Get Myria Token
+      My Tipping Jar
     </Button>
   );
 
@@ -44,7 +45,7 @@ export const Wallet = React.memo(function Wallet() {
         <TransactionComponent />
       </Panel>
 
-      <GetMyriaTutorial ref={childRef} />
+      <TippingJarComponent ref={tippingJarRef} />
     </>
   );
 });
