@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
@@ -19,6 +19,9 @@ import Typography from '@material-ui/core/Typography';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import RedditIcon from '@material-ui/icons/Reddit';
+import TwitterIcon from '@material-ui/icons/Twitter';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import Autocomplete, { AutocompleteRenderOptionState } from '@material-ui/lab/Autocomplete';
@@ -26,6 +29,7 @@ import Autocomplete, { AutocompleteRenderOptionState } from '@material-ui/lab/Au
 import { usePeople } from '../use-people.hooks';
 import { useStyles } from './topic.style';
 
+import StyledBadge from 'src/components/common/Badge.component';
 import { People } from 'src/interfaces/people';
 
 type Props = {
@@ -41,6 +45,15 @@ export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Pro
   const [selectedPeople, setSelectedPeople] = React.useState<People[]>([]);
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+
+  const socials = useMemo(
+    () => ({
+      facebook: <FacebookIcon />,
+      twitter: <TwitterIcon />,
+      reddit: <RedditIcon />
+    }),
+    []
+  );
 
   React.useEffect(() => {
     setLoading(false);
@@ -132,11 +145,16 @@ export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Pro
         <List>
           {selectedPeople.map((people, i) => {
             const labelId = `list-label-${people.username}`;
-
+            console.log('people', people);
             return (
               <ListItem key={i} dense button>
                 <ListItemIcon>
-                  <Avatar />
+                  <StyledBadge badgeContent={socials[people.platform]} className={style[people.platform]} color="default">
+                    <Avatar
+                      aria-label="avatar"
+                      src={`https://res.cloudinary.com/dsget80gs/image/${people.platform || 'facebook'}/${people.platform_account_id}.jpg`}
+                    />
+                  </StyledBadge>
                 </ListItemIcon>
                 <ListItemText id={labelId} primary={people.username} />
                 <ListItemSecondaryAction>

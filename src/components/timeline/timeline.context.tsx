@@ -1,53 +1,72 @@
 import React from 'react';
 
-import { Post, Comment } from 'src/interfaces/post';
+import { Post, Comment, PostSortMethod, PostFilter } from 'src/interfaces/post';
 
 export enum TimelineActionType {
-  INIT_POST = 'INIT_POST',
+  LOAD_POST = 'LOAD_POST',
   LOAD_MORE_POST = 'LOAD_MORE_POST',
   LOAD_COMMENTS = 'LOAD_COMMENTS',
   ADD_COMMENT = 'ADD_COMMENT',
-  SORT_POST = 'SORT_POST'
+  SORT_POST = 'SORT_POST',
+  CREATE_POST = 'CREATE_POST',
+  UPDATE_FILTER = 'UPDATE_FILTER'
 }
 
-interface InitPost {
-  type: TimelineActionType.INIT_POST;
+interface LoadPost {
+  type: TimelineActionType.LOAD_POST;
   posts: Post[];
 }
 
 interface LoadMorePost {
   type: TimelineActionType.LOAD_MORE_POST;
-  posts: Post[];
 }
 
-interface loadComments {
+interface LoadComments {
   type: TimelineActionType.LOAD_COMMENTS;
   postId: string;
   comments: Comment[];
 }
 
-interface addComments {
+interface AddComments {
   type: TimelineActionType.ADD_COMMENT;
   postId: string;
   comment: Comment;
 }
 
-interface sortPost {
+interface SortPost {
   type: TimelineActionType.SORT_POST;
-  sort: string;
+  sort: PostSortMethod;
 }
 
-export type Action = InitPost | LoadMorePost | loadComments | addComments | sortPost;
+interface UpdateFilter {
+  type: TimelineActionType.UPDATE_FILTER;
+  filter: PostFilter;
+}
+
+interface CreatePost {
+  type: TimelineActionType.CREATE_POST;
+  post: Post;
+}
+
+export type Action = LoadPost | LoadMorePost | LoadComments | AddComments | SortPost | UpdateFilter | CreatePost;
 
 type Dispatch = (action: Action) => void;
 type TimelineProviderProps = { children: React.ReactNode };
 type State = {
-  sort: string;
+  sort: PostSortMethod;
+  page: number;
+  filter: PostFilter;
   posts: Post[];
 };
 
-const initalState = {
+const initalState: State = {
   sort: 'created',
+  page: 1,
+  filter: {
+    tags: [],
+    people: [],
+    layout: 'timeline'
+  },
   posts: []
 };
 
@@ -55,16 +74,36 @@ const TimelineContext = React.createContext<{ state: State; dispatch: Dispatch }
 
 function timelineReducer(state: State, action: Action) {
   switch (action.type) {
-    case TimelineActionType.INIT_POST: {
+    case TimelineActionType.LOAD_POST: {
       return {
         ...state,
-        posts: action.posts
+        posts: state.page === 1 ? action.posts : [...state.posts, ...action.posts]
       };
     }
     case TimelineActionType.LOAD_MORE_POST: {
       return {
         ...state,
-        posts: [...state.posts, ...action.posts]
+        page: state.page + 1
+      };
+    }
+    case TimelineActionType.CREATE_POST: {
+      return {
+        ...state,
+        posts: [action.post, ...state.posts]
+      };
+    }
+    case TimelineActionType.SORT_POST: {
+      return {
+        ...state,
+        sort: action.sort,
+        page: 1
+      };
+    }
+    case TimelineActionType.UPDATE_FILTER: {
+      return {
+        ...state,
+        filter: action.filter,
+        page: 1
       };
     }
     case TimelineActionType.LOAD_COMMENTS: {
@@ -78,13 +117,6 @@ function timelineReducer(state: State, action: Action) {
         })
       };
     }
-    case TimelineActionType.SORT_POST: {
-      return {
-        ...state,
-        sort: action.sort
-      };
-    }
-
     case TimelineActionType.ADD_COMMENT: {
       return {
         ...state,

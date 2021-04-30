@@ -1,25 +1,40 @@
 import React, { createRef, useCallback, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import { User } from 'next-auth';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import FilterTimelineComponent from './filter.component';
 import PostComponent from './post/post.component';
 import CreatePostComponent from './submit.component';
+import { useTimeline } from './timeline.context';
 import { useStyles } from './timeline.style';
-import { usePost } from './use-post.hooks';
+import { usePost } from './use-post.hook';
 
+import { WithAdditionalParams } from 'next-auth/_utils';
 import { Post, Comment } from 'src/interfaces/post';
 
-const Timeline = () => {
+type Props = {
+  user: WithAdditionalParams<User>;
+};
+
+const Timeline = ({ user }: Props) => {
   const style = useStyles();
 
-  const { hasMore, posts, loadMorePost, reply, loadComments } = usePost();
+  const { state } = useTimeline();
+  const { hasMore, loadPost, loadMorePost, reply, loadComments, sortBy, addPost } = usePost();
   const scrollRoot = createRef<HTMLDivElement>();
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, true);
   }, []);
+
+  useEffect(() => {
+    if (state.filter.tags.length > 0 || state.filter.people.length > 0) {
+      loadPost(user);
+    }
+  }, [state.filter, state.sort, state.page]);
 
   const handleScroll = useCallback(() => {
     const distance = window.scrollY;
@@ -37,23 +52,27 @@ const Timeline = () => {
     reply(comment.postId, comment);
   };
 
+  const submitPost = (text: string, files: File[]) => {
+    addPost(text, files, user);
+  };
+
   console.log('TIMELINE COMPONENT LOAD');
 
   return (
     <div className={style.root}>
       <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
-        <FilterTimelineComponent />
+        <FilterTimelineComponent selected={state.sort} onChange={sortBy} />
 
-        <CreatePostComponent />
+        <CreatePostComponent onSubmit={submitPost} />
 
         <InfiniteScroll
           scrollableTarget="scrollable-timeline"
           className={style.child}
-          dataLength={posts.length + 100}
+          dataLength={state.posts.length + 100}
           next={loadMorePost}
           hasMore={hasMore}
           loader={<CircularProgress className={style.loading} disableShrink />}>
-          {posts.map((post: Post, i: number) => (
+          {state.posts.map((post: Post, i: number) => (
             <PostComponent post={post} open={false} key={i} reply={handleReply} loadComments={loadComments} />
           ))}
         </InfiniteScroll>
