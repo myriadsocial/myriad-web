@@ -19,7 +19,6 @@ import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 
 import DialogTitle from '../common/DialogTitle.component';
-import { usePost } from './use-post.hook';
 
 import ShowIf from 'src/components/common/show-if.component';
 
@@ -62,23 +61,27 @@ type UpoadedFile = {
   preview: string;
 };
 
-export default function SubmitPostComponent() {
+type Props = {
+  onSubmit: (text: string, files: File[]) => void;
+};
+
+export default function SubmitPostComponent({ onSubmit }: Props) {
   const styles = useStyles();
 
   const uploadFieldRef = useRef<HTMLInputElement | null>(null);
 
-  const { addPost } = usePost();
   const [showCreatePost, setCreatePost] = useState(false);
   const [files, setFiles] = useState<UpoadedFile[]>([]);
+  const [postText, setPostText] = useState('');
 
   const toggleCreatePost = () => {
     setCreatePost(!showCreatePost);
   };
 
-  const savePost = () => {
-    addPost({
-      text: ''
-    });
+  const updatePostText = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const text = event.target.value;
+
+    setPostText(text);
   };
 
   const selectFile = (): void => {
@@ -94,12 +97,25 @@ export default function SubmitPostComponent() {
       const files = event.target.files;
 
       setFiles(
-        Array.from(files).map((file: File) => ({
-          file,
-          preview: URL.createObjectURL(file)
-        }))
+        Array.from(files)
+          .filter(file => file.name.match(/\.(jpg|jpeg|png|gif)$/))
+          .map((file: File) => ({
+            file,
+            preview: URL.createObjectURL(file)
+          }))
       );
     }
+  };
+
+  const savePost = () => {
+    onSubmit(
+      postText,
+      files.map(file => file.file)
+    );
+
+    toggleCreatePost();
+    setPostText('');
+    setFiles([]);
   };
 
   return (
@@ -117,7 +133,14 @@ export default function SubmitPostComponent() {
         <DialogContent>
           <Card className={styles.postContent}>
             <CardContent>
-              <TextareaAutosize rowsMin={5} placeholder="Post Something" className={styles.postText} spellCheck={false} />
+              <TextareaAutosize
+                rowsMin={5}
+                placeholder="Post Something"
+                className={styles.postText}
+                spellCheck={false}
+                value={postText}
+                onChange={updatePostText}
+              />
               <ShowIf condition={files.length > 0}>
                 <GridList cellHeight={200}>
                   <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
@@ -130,7 +153,6 @@ export default function SubmitPostComponent() {
                       <img src={file.preview} alt={file.file.name} />
                       <GridListTileBar
                         title={file.file.name}
-                        subtitle={<span>by: {file.file.name}</span>}
                         actionIcon={
                           <IconButton aria-label={`info about ${file.file.name}`}>
                             <InfoIcon />
@@ -143,10 +165,13 @@ export default function SubmitPostComponent() {
               </ShowIf>
             </CardContent>
             <CardActions>
-              <input type="file" multiple ref={uploadFieldRef} onChange={handleFileChange} style={{ display: 'none' }} />
-              <IconButton color="secondary" aria-label="upload media" onClick={selectFile}>
-                <ImageIcon />
-              </IconButton>
+              <div>
+                <input type="file" multiple ref={uploadFieldRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
+                <IconButton color="default" aria-label="upload media" onClick={selectFile}>
+                  <ImageIcon />
+                </IconButton>
+                Add Images
+              </div>
               <Button variant="contained" size="large" color="secondary" className={styles.post} onClick={savePost}>
                 Post
               </Button>

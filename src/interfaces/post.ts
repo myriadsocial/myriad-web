@@ -1,7 +1,7 @@
 import { LayoutType } from './experience';
 import { User } from './user';
 
-export type PostOrigin = 'facebook' | 'twitter' | 'reddit';
+export type PostOrigin = 'facebook' | 'twitter' | 'reddit' | 'myriad';
 
 export type PostSortMethod = 'created' | 'like' | 'comment' | 'trending';
 
@@ -28,18 +28,23 @@ export type SocialMetric = {
 };
 
 export interface Post {
-  id: string;
-  textId: string;
-  title?: string;
-  text?: string;
-  link: string;
-  platform: PostOrigin;
+  id?: string;
   tags: string[];
-  comments: Comment[];
-  createdAt: Date;
   platformUser?: {
     username: string;
+    platform_account_id: string;
   };
+  platform: PostOrigin;
+  title?: string;
+  text?: string;
+  textId?: string;
+  hasMedia: boolean;
+  link?: string;
+  assets?: string[];
+  platformCreatedAt: Date;
+  createdAt: Date;
+  walletAddress?: string;
+  comments: Comment[];
 }
 
 export interface Comment {

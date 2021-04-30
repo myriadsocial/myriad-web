@@ -62,6 +62,8 @@ export default function Index() {
       textId: '1376217381186457601',
       platform: 'twitter',
       tags: ['bitcoin'],
+      hasMedia: false,
+      platformCreatedAt: new Date(),
       comments: [
         {
           text: 'hear! hear!',
@@ -78,6 +80,8 @@ export default function Index() {
       textId: '1375868552129863681',
       platform: 'twitter',
       tags: ['politic', 'viral'],
+      hasMedia: false,
+      platformCreatedAt: new Date(),
       comments: [],
       createdAt: new Date()
     }

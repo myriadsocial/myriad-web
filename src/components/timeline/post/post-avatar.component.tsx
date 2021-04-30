@@ -32,6 +32,11 @@ const useStyles = makeStyles(() =>
       '& .MuiBadge-badge': {
         backgroundColor: '#FF5700'
       }
+    },
+    myriad: {
+      '& .MuiBadge-badge': {
+        backgroundColor: '#E849BD'
+      }
     }
   })
 );
@@ -49,7 +54,8 @@ export default function PostAvatar({ origin, avatar, onClick }: Props) {
     () => ({
       facebook: <FacebookIcon />,
       twitter: <TwitterIcon />,
-      reddit: <RedditIcon />
+      reddit: <RedditIcon />,
+      myriad: <span />
     }),
     []
   );
