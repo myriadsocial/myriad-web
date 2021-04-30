@@ -19,7 +19,7 @@ import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 
 import DialogTitle from '../common/DialogTitle.component';
-import { usePost } from './use-post.hooks';
+import { usePost } from './use-post.hook';
 
 import ShowIf from 'src/components/common/show-if.component';
 
@@ -75,7 +75,6 @@ export default function SubmitPostComponent() {
     setCreatePost(!showCreatePost);
   };
 
-  console.log('files', files);
   const savePost = () => {
     addPost({
       text: ''
@@ -93,7 +92,7 @@ export default function SubmitPostComponent() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const files = event.target.files;
-      console.log('files', files);
+
       setFiles(
         Array.from(files).map((file: File) => ({
           file,
