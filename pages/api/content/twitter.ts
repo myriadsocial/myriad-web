@@ -15,17 +15,21 @@ type Data = {
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  const tweetId = req.query.id || '841418541026877441';
+  const tweetId = req.query.id;
 
-  const response = await client({
-    url: `/1.1/statuses/show.json`,
-    method: 'GET',
-    params: {
-      id: tweetId,
-      include_entities: true,
-      tweet_mode: 'extended'
-    }
-  });
+  try {
+    const response = await client({
+      url: `/1.1/statuses/show.json`,
+      method: 'GET',
+      params: {
+        id: tweetId,
+        include_entities: true,
+        tweet_mode: 'extended'
+      }
+    });
 
-  res.status(200).json(response.data);
+    res.status(200).json(response.data);
+  } catch (error) {
+    res.status(400).json(error.response.data);
+  }
 };
