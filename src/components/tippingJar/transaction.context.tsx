@@ -9,6 +9,8 @@ export enum TransactionActionType {
 export interface InitTransaction {
   type: TransactionActionType.INIT_TRANSACTION;
   transactions: Transaction[];
+  inboundTxs: Transaction[];
+  outboundTxs: Transaction[];
 }
 
 export type Action = InitTransaction;
@@ -17,14 +19,18 @@ type TransactionProviderProps = { children: React.ReactNode };
 type State = {
   init: boolean;
   transactions: Transaction[];
+  inboundTxs: Transaction[];
+  outboundTxs: Transaction[];
 };
 
 const initialState = {
   init: true,
-  transactions: []
+  transactions: [],
+  inboundTxs: [],
+  outboundTxs: []
 };
 
-const TransactionContext = createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
+const TransactionContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
 
 function transactionReducer(state: State, action: Action) {
   switch (action.type) {
@@ -32,6 +38,8 @@ function transactionReducer(state: State, action: Action) {
       return {
         ...state,
         transactions: action.transactions,
+        inboundTxs: action.inboundTxs,
+        outboundTxs: action.outboundTxs,
         init: false
       };
     }
@@ -53,7 +61,7 @@ export const useTransaction = () => {
 };
 
 export const TransactionProvider = ({ children }: TransactionProviderProps) => {
-  const [state, dispatch] = useReducer(transactionReducer, initialState);
+  const [state, dispatch] = React.useReducer(transactionReducer, initialState);
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
   const value = { state, dispatch };

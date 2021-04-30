@@ -10,7 +10,7 @@ const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
 });
 
-export const useTransaction = () => {
+export const useTransaction = (userId: string) => {
   const { state, dispatch } = baseUseTransaction();
 
   const [loading, setLoading] = useState(false);
@@ -36,24 +36,52 @@ export const useTransaction = () => {
           filter
         }
       });
-      dispatch({
-        type: TransactionActionType.INIT_TRANSACTION,
-        transactions: data.map(transaction => {
-          return {
-            ...transaction
-          };
-        })
-      });
+
+      if (data.length > 0) {
+        //Get only transaction related to logged-in user
+        let tempData = data.filter(function (datum: any) {
+          return datum.from === userId || datum.to === userId;
+        });
+
+        const sortedTempData = tempData.slice().sort((a: any, b: any) => b.createdAt - a.createdAt);
+        const inboundTxs = sortedTempData.filter(transaction => {
+          return transaction.to === userId;
+        });
+        const outboundTxs = sortedTempData.filter(transaction => {
+          return transaction.from === userId;
+        });
+
+        dispatch({
+          type: TransactionActionType.INIT_TRANSACTION,
+          transactions: sortedTempData.map(transaction => {
+            return {
+              ...transaction
+            };
+          }),
+          inboundTxs: inboundTxs.map(inboundTx => {
+            return {
+              ...inboundTx
+            };
+          }),
+          outboundTxs: outboundTxs.map(outboundTx => {
+            return {
+              ...outboundTx
+            };
+          })
+        });
+      }
     } catch (error) {
       setError(error);
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   return {
     error,
     loading,
+    transactions: state.transactions,
+    inboundTxs: state.inboundTxs,
+    outboundTxs: state.outboundTxs,
     loadInitTransaction: load
   };
 };
