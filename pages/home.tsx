@@ -14,9 +14,11 @@ type Props = {
 };
 
 export default function Home({ session }: Props) {
+  if (!session) return null;
+
   return (
     <Layout session={session}>
-      <Timeline />
+      <Timeline user={session.user} />
     </Layout>
   );
 }

@@ -1,4 +1,7 @@
+import { User } from 'next-auth';
+
 import Axios from 'axios';
+import { WithAdditionalParams } from 'next-auth/_utils';
 import { Post, Comment, PostSortMethod, PostFilter } from 'src/interfaces/post';
 
 const MyriadAPI = Axios.create({
@@ -7,7 +10,12 @@ const MyriadAPI = Axios.create({
 
 const LIMIT = 10;
 
-export const getPost = async (page: number, sort: PostSortMethod, filters: PostFilter): Promise<Post[]> => {
+export const getPost = async (
+  user: WithAdditionalParams<User>,
+  page: number,
+  sort: PostSortMethod,
+  filters: PostFilter
+): Promise<Post[]> => {
   let orderField = 'platformCreatedAt';
 
   switch (sort) {
@@ -31,7 +39,7 @@ export const getPost = async (page: number, sort: PostSortMethod, filters: PostF
       },
       {
         'platformUser.username': {
-          inq: filters.people
+          inq: [...filters.people, user.name]
         }
       }
     ]
@@ -78,7 +86,7 @@ export const getPost = async (page: number, sort: PostSortMethod, filters: PostF
 
 export const createPost = async (values: Partial<Post>): Promise<Post> => {
   const { data } = await MyriadAPI.request<Post>({
-    url: '/post',
+    url: '/posts',
     method: 'POST',
     data: values
   });

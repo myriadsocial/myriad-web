@@ -18,7 +18,6 @@ import CommentIcon from '@material-ui/icons/Comment';
 
 import CommentComponent from '../comment/comment.component';
 import ReplyCommentComponent from '../comment/reply.component';
-import FacebookReactionComponent from '../reactions/facebook.component';
 import TwitterReactionComponent from '../reactions/twitter.component';
 import PostImage from './image-post.component';
 import PostAvatar from './post-avatar.component';
@@ -29,6 +28,7 @@ import clsx from 'clsx';
 import SendTipModal from 'src/components/common/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
 import { useSocialDetail } from 'src/hooks/use-social.hook';
+import { ImageData } from 'src/interfaces/post';
 import { Post, Comment } from 'src/interfaces/post';
 
 type Props = {
@@ -69,7 +69,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
   const replyPost = (comment: string) => {
     reply({
       text: comment,
-      postId: post.id,
+      postId: post.id as string,
       userId,
       createdAt: new Date()
     });
@@ -77,6 +77,14 @@ export default function PostComponent({ post, open = false, disable = false, rep
 
   const openContentSource = () => {
     window.open(post.link, '_blank');
+  };
+
+  const urlToImageData = (url: string): ImageData => {
+    return {
+      src: url,
+      height: 400,
+      width: 400
+    };
   };
 
   const PostActionTipUser = (
@@ -104,13 +112,22 @@ export default function PostComponent({ post, open = false, disable = false, rep
           subheader={detail.createdOn}
         />
 
-        <ShowIf condition={post.platform !== 'facebook'}>
+        <ShowIf condition={['twitter', 'reddit'].includes(post.platform)}>
           <CardContent className={style.content}>
             <Typography variant="body1" color="textSecondary" component="p">
               {detail.text}
             </Typography>
             {detail.images && detail.images.length > 0 && <PostImage images={detail.images} />}
             {detail.videos && detail.videos.length > 0 && <PostVideo url={detail.videos[0]} />}
+          </CardContent>
+        </ShowIf>
+
+        <ShowIf condition={post.platform === 'myriad'}>
+          <CardContent className={style.content}>
+            <Typography variant="body1" color="textSecondary" component="p">
+              {detail.text}
+            </Typography>
+            {post.assets && post.assets.length > 0 && <PostImage images={post.assets.map(urlToImageData)} />}
           </CardContent>
         </ShowIf>
 
@@ -121,11 +138,8 @@ export default function PostComponent({ post, open = false, disable = false, rep
             </FacebookProvider>
           </CardContent>
         </ShowIf>
-        <CardActions disableSpacing>
-          <ShowIf condition={post.platform === 'facebook'}>
-            <FacebookReactionComponent metric={detail.metric} />
-          </ShowIf>
 
+        <CardActions disableSpacing>
           <ShowIf condition={post.platform === 'twitter'}>
             <TwitterReactionComponent metric={detail.metric} />
           </ShowIf>
@@ -162,7 +176,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
         </ShowIf>
       </Card>
 
-      <SendTipModal postId={post.id} anonymous={isAnonymous} userAddress={userId} ref={childRef} />
+      <SendTipModal postId={post.id as string} anonymous={isAnonymous} userAddress={userId} ref={childRef} />
     </>
   );
 }
