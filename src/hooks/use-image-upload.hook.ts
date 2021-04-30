@@ -27,8 +27,12 @@ export const useImageUpload = () => {
       });
 
       setImage(data.url);
+
+      return data.url;
     } catch (error) {
       console.error(error);
+
+      return null;
     }
   };
 

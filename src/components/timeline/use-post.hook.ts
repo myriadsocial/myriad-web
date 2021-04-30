@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 
+import { User } from 'next-auth';
+
 import { useExperience } from '../experience/experience.context';
 import { useTimeline, TimelineActionType } from './timeline.context';
 
+import { WithAdditionalParams } from 'next-auth/_utils';
 import { Comment, Post, PostSortMethod } from 'src/interfaces/post';
+import * as LocalAPI from 'src/lib/api/local';
 import * as PostAPI from 'src/lib/api/post';
 
 export const usePost = () => {
@@ -30,11 +34,11 @@ export const usePost = () => {
     }
   }, [experienceState.selected?.id]);
 
-  const loadPost = async () => {
+  const loadPost = async (user: WithAdditionalParams<User>) => {
     setLoading(true);
 
     try {
-      const data = await PostAPI.getPost(timelineState.page, timelineState.sort, timelineState.filter);
+      const data = await PostAPI.getPost(user, timelineState.page, timelineState.sort, timelineState.filter);
 
       if (data.length < 10) {
         setHasMore(false);
@@ -57,12 +61,42 @@ export const usePost = () => {
     });
   };
 
-  const addPost = async (value: Partial<Post>) => {
-    const data = await PostAPI.createPost(value);
+  const addPost = async (text: string, files: File[], user: WithAdditionalParams<User>) => {
+    const images: string[] = [];
+
+    if (files.length) {
+      const uploadedURLs = await Promise.all(files.map(file => LocalAPI.uploadImage(file)));
+
+      uploadedURLs.forEach(url => {
+        if (url) {
+          images.push(url);
+        }
+      });
+    }
+
+    const hasMedia = files.length > 0;
+    const username = user.name as string;
+    const accountId = user.address as string;
+
+    const data = await PostAPI.createPost({
+      text,
+      tags: [],
+      hasMedia,
+      platform: 'myriad',
+      assets: hasMedia ? images : [],
+      platformUser: {
+        username,
+        platform_account_id: accountId
+      },
+      walletAddress: accountId
+    });
 
     dispatch({
       type: TimelineActionType.CREATE_POST,
-      post: data
+      post: {
+        ...data,
+        comments: []
+      }
     });
   };
 
