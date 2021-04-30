@@ -5,9 +5,7 @@ import { useSession } from 'next-auth/client';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControl from '@material-ui/core/FormControl';
-import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import List from '@material-ui/core/List';
@@ -27,11 +25,8 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import TabContext from '@material-ui/lab/TabContext';
 import TabPanel from '@material-ui/lab/TabPanel';
 
-import Axios from 'axios';
-
-const client = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL
-});
+import TransactionListComponent from './components/transactionList.component';
+import { useTransaction } from './use-transaction.hooks';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -99,16 +94,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface GetTxHistory {
-  id: string;
-  trxHash: string;
-  from: string;
-  to: string;
-  value: number;
-  state: string;
-  createdAt: string;
-}
-
 interface StyledTabProps {
   label: string;
   value: string;
@@ -161,54 +146,62 @@ const StyledTab = withStyles((theme: Theme) =>
 export const TransactionComponent = React.memo(function Wallet() {
   const style = useStyles();
 
-  const [txHistories, setTxHistories] = useState<GetTxHistory[]>([]);
-  const [outboundTxs, setOutboundTxs] = useState<GetTxHistory[]>([]);
-  const [inboundTxs, setInboundTxs] = useState<GetTxHistory[]>([]);
+  const [session] = useSession();
+  const userId = session?.user.address as string;
+  const { transactions, inboundTxs, outboundTxs, loadInitTransaction } = useTransaction(userId);
   const [sort, setSort] = useState('');
   const [value, setValue] = useState('0');
-  const [loading, setLoading] = useState<boolean>(true);
-  const [session] = useSession();
 
   useEffect(() => {
-    (async () => {
-      await getTxHistories();
-    })();
+    loadInitTransaction();
   }, []);
 
-  const getTxHistories = async () => {
-    try {
-      console.log('fetching data....');
-      setLoading(true);
-      const response = await client({
-        method: 'GET',
-        url: '/transactions'
-      });
+  //const getTxHistories = async () => {
+  //try {
+  //console.log('fetching data....');
+  //const userId = session?.user.address;
+  //setLoading(true);
+  //const response = await client({
+  //method: 'GET',
+  //url: '/transactions',
+  //params: {
+  //filter: {
+  //offset: 0,
+  //limit: 100,
+  //skip: 0,
+  //where: {},
+  //include: ['toUser', 'fromUser']
+  //}
+  //}
+  //});
+  //console.log('>>>>', response);
 
-      if (response.data.length > 0) {
-        const { data } = response;
-        console.log('data fetched!');
-        const senderAddress = session?.user.address;
-        let tempData = data.filter(function (datum: any) {
-          return datum.from === senderAddress || datum.to === senderAddress;
-        });
-        const sortedTempData = tempData.slice().sort((a: any, b: any) => b.createdAt - a.createdAt);
-        setTxHistories(sortedTempData);
-        const inboundTxs = txHistories.filter(txHistory => {
-          return txHistory.to === session?.user.address;
-        });
-        const outboundTxs = txHistories.filter(txHistory => {
-          return txHistory.from === session?.user.address;
-        });
+  //// TODO: Move the part below to transaction useTransaction hook
 
-        setInboundTxs(inboundTxs);
-        setOutboundTxs(outboundTxs);
-        setLoading(false);
-      }
-    } catch (error) {
-      setLoading(false);
-      console.log(`error from getTxHistories: ${error}`);
-    }
-  };
+  //if (response.data.length > 0) {
+  //const { data } = response;
+  //console.log('data fetched!');
+  //console.log('>>>> the data is: ', data);
+  //const senderAddress = session?.user.address;
+  //let tempData = data.filter(function (datum: any) {
+  //return datum.from === senderAddress || datum.to === senderAddress;
+  //});
+  //const sortedTempData = tempData.slice().sort((a: any, b: any) => b.createdAt - a.createdAt);
+  //setTxHistories(sortedTempData);
+  //const inboundTxs = txHistories.filter(txHistory => {
+  //return txHistory.to === session?.user.address;
+  //});
+  //const outboundTxs = txHistories.filter(txHistory => {
+  //return txHistory.from === session?.user.address;
+  //});
+
+  //setInboundTxs(inboundTxs);
+  //setOutboundTxs(outboundTxs);
+  //}
+  //} catch (error) {
+  //console.log(`error from getTxHistories: ${error}`);
+  //}
+  //};
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
     event.preventDefault();
@@ -219,24 +212,27 @@ export const TransactionComponent = React.memo(function Wallet() {
     setSort(event.target.value as string);
   };
 
-  const handleClick = async () => {
-    await getTxHistories();
+  const handleClick = () => {
+    loadInitTransaction();
   };
 
-  if (loading)
-    return (
-      <Grid container justify="center">
-        <CircularProgress className={style.loading} />
-      </Grid>
-    );
-
-  if (txHistories.length === 0)
-    return (
-      <Grid container justify="center">
-        <Typography>Data not available</Typography>
-      </Grid>
-    );
-
+  //if (loading) {
+  //return (
+  //<div className={style.root}>
+  //<Grid container justify="center">
+  //<CircularProgress className={style.loading} />
+  //</Grid>
+  //</div>
+  //);
+  //} else if (error) {
+  //return (
+  //<div className={style.root}>
+  //<Grid container justify="center">
+  //<Typography>Data not available</Typography>
+  //</Grid>
+  //</div>
+  //);
+  //}
   return (
     <>
       <div className={style.root}>
@@ -264,140 +260,17 @@ export const TransactionComponent = React.memo(function Wallet() {
           </List>
           <TabPanel className={style.panel} value={'0'}>
             <List className={style.root}>
-              {txHistories.map(txHistory => (
-                <ListItem key={txHistory?.id}>
-                  <ListItemAvatar className={style.avatar}>
-                    <Avatar>
-                      <ImageIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    className={style.textSecondary}
-                    secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-                    primary={
-                      <div>
-                        <div>
-                          <Button>Username: ...</Button>
-                          <Button className={style.received}>Total tips sent to me: ... MYRIA</Button>
-                        </div>
-                        <div>
-                          <Button>Transaction date: ...</Button>
-                          <Button className={style.sent}>Total tips sent to them: ... MYRIA</Button>
-                        </div>
-                      </div>
-                    }
-                    secondary={
-                      <>
-                        <Button>Tx Hash: {txHistory?.trxHash}</Button>
-                      </>
-                    }
-                  />
-                  <ListItemSecondaryAction>
-                    <div className={style.badge}>
-                      <Chip
-                        color="default"
-                        size="small"
-                        label={
-                          txHistory?.state === 'success' || txHistory?.state === 'verified'
-                            ? 'Success'
-                            : [txHistory.state === 'pending' ? 'Pending' : 'Failed']
-                        }
-                      />
-                      <Chip
-                        className={session?.user.address === txHistory?.from ? style.red : style.green}
-                        color="default"
-                        size="small"
-                        label={session?.user.address === txHistory?.from ? 'Out' : 'In'}
-                      />
-                      <Typography>{txHistory?.value / 1000000000000} Myria</Typography>
-                    </div>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
+              <TransactionListComponent transactions={transactions} userId={userId} />
             </List>
           </TabPanel>
           <TabPanel className={style.panel} value={'1'}>
             <List className={style.root}>
-              {inboundTxs.map(inboundTx => (
-                <ListItem key={inboundTx?.id}>
-                  <ListItemAvatar className={style.avatar}>
-                    <Avatar>
-                      <ImageIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    className={style.textSecondary}
-                    secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-                    primary={
-                      <Tooltip title={`${inboundTx?.from}`} placement="top" leaveDelay={3000} interactive>
-                        <Button>From: ...</Button>
-                      </Tooltip>
-                    }
-                    secondary={
-                      <Tooltip title={`${inboundTx?.trxHash}`} placement="top" leaveDelay={3000} interactive>
-                        <Button>Tx: ...</Button>
-                      </Tooltip>
-                    }
-                  />
-                  <ListItemSecondaryAction>
-                    <div className={style.badge}>
-                      <Chip
-                        color="default"
-                        size="small"
-                        label={
-                          inboundTx?.state === 'success' || inboundTx?.state === 'verified'
-                            ? 'Success'
-                            : [inboundTx?.state === 'pending' ? 'Pending' : 'Failed']
-                        }
-                      />
-                      <Chip className={style.green} color="default" size="small" label="In" />
-                      <Typography>{inboundTx?.value / 1000000000000} Myria</Typography>
-                    </div>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
+              <></>
             </List>
           </TabPanel>
           <TabPanel className={style.panel} value={'2'}>
             <List className={style.root}>
-              {outboundTxs.map(outboundTx => (
-                <ListItem key={outboundTx?.id}>
-                  <ListItemAvatar className={style.avatar}>
-                    <Avatar>
-                      <ImageIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    className={style.textSecondary}
-                    secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-                    primary={
-                      <Tooltip title={`${outboundTx?.to}`} placement="top" leaveDelay={3000} interactive>
-                        <Button>To: ...</Button>
-                      </Tooltip>
-                    }
-                    secondary={
-                      <Tooltip title={`${outboundTx?.trxHash}`} placement="top" leaveDelay={3000} interactive>
-                        <Button>Tx: ...</Button>
-                      </Tooltip>
-                    }
-                  />
-                  <ListItemSecondaryAction>
-                    <div className={style.badge}>
-                      <Chip
-                        color="default"
-                        size="small"
-                        label={
-                          outboundTx?.state === 'success' || outboundTx?.state === 'verified'
-                            ? 'Success'
-                            : [outboundTx?.state === 'pending' ? 'Pending' : 'Failed']
-                        }
-                      />
-                      <Chip className={style.red} color="default" size="small" label="Out" />
-                      <Typography>{outboundTx?.value / 1000000000000} Myria</Typography>
-                    </div>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
+              <></>
             </List>
           </TabPanel>
         </TabContext>
