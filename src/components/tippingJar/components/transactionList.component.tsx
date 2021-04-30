@@ -104,59 +104,65 @@ export default function TransactionListComponent({ transactions, userId }: Props
     setAllTransactions(transactions);
   }, [transactions]);
 
+  if (transactions.length === 0) return null;
+
+  const renderTransactionDetail = (txHistory: Transaction) => {
+    return (
+      <div>
+        <div>
+          <Button>Username: {txHistory?.fromUser || txHistory?.toUser} </Button>
+          <Button className={style.received}>Total tips sent to me: ... MYRIA</Button>
+        </div>
+        <div>
+          <Button>Transaction date: ...</Button>
+          <Button className={style.sent}>Total tips sent to them: ... MYRIA</Button>
+        </div>
+      </div>
+    );
+  };
+  console.log('transactions', transactions);
+
   return (
     <List className={style.root}>
-      {transactions.length > 0 &&
-        transactions.map(txHistory => (
-          <ListItem key={txHistory?.id}>
-            <ListItemAvatar className={style.avatar}>
-              <Avatar>
-                <ImageIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              className={style.textSecondary}
-              secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-              primary={
-                <div>
-                  <div>
-                    <Button>Username: {txHistory?.fromUser || txHistory?.toUser} </Button>
-                    <Button className={style.received}>Total tips sent to me: ... MYRIA</Button>
-                  </div>
-                  <div>
-                    <Button>Transaction date: ...</Button>
-                    <Button className={style.sent}>Total tips sent to them: ... MYRIA</Button>
-                  </div>
-                </div>
-              }
-              secondary={
-                <>
-                  <Button>Tx Hash: {txHistory?.trxHash}</Button>
-                </>
-              }
-            />
-            <ListItemSecondaryAction>
-              <div className={style.badge}>
-                <Chip
-                  color="default"
-                  size="small"
-                  label={
-                    txHistory?.state === 'success' || txHistory?.state === 'verified'
-                      ? 'Success'
-                      : [txHistory.state === 'pending' ? 'Pending' : 'Failed']
-                  }
-                />
-                <Chip
-                  className={userId === txHistory?.from ? style.red : style.green}
-                  color="default"
-                  size="small"
-                  label={userId === txHistory?.from ? 'Out' : 'In'}
-                />
-                <Typography>{txHistory?.value / 1000000000000} Myria</Typography>
-              </div>
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
+      {transactions.map(txHistory => (
+        <ListItem key={txHistory?.id}>
+          <ListItemAvatar className={style.avatar}>
+            <Avatar>
+              <ImageIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            className={style.textSecondary}
+            secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
+            primary={renderTransactionDetail}
+            secondary={
+              <>
+                <Button>Tx Hash: {txHistory?.trxHash}</Button>
+              </>
+            }
+          />
+          <ListItemSecondaryAction>
+            <div className={style.badge}>
+              <Chip
+                color="default"
+                size="small"
+                label={
+                  txHistory?.state === 'success' || txHistory?.state === 'verified'
+                    ? 'Success'
+                    : [txHistory.state === 'pending' ? 'Pending' : 'Failed']
+                }
+              />
+              <Chip
+                className={userId === txHistory?.from ? style.red : style.green}
+                color="default"
+                size="small"
+                label={userId === txHistory?.from ? 'Out' : 'In'}
+              />
+              <Typography>{txHistory?.value / 1000000000000} Myria</Typography>
+            </div>
+          </ListItemSecondaryAction>
+        </ListItem>
+      ))}
     </List>
   );
 }

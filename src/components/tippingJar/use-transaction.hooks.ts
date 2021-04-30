@@ -53,21 +53,9 @@ export const useTransaction = (userId: string) => {
 
         dispatch({
           type: TransactionActionType.INIT_TRANSACTION,
-          transactions: sortedTempData.map(transaction => {
-            return {
-              ...transaction
-            };
-          }),
-          inboundTxs: inboundTxs.map(inboundTx => {
-            return {
-              ...inboundTx
-            };
-          }),
-          outboundTxs: outboundTxs.map(outboundTx => {
-            return {
-              ...outboundTx
-            };
-          })
+          transactions: sortedTempData,
+          inboundTxs: inboundTxs,
+          outboundTxs: outboundTxs
         });
       }
     } catch (error) {
