@@ -233,6 +233,7 @@ export const TransactionComponent = React.memo(function Wallet() {
   //</div>
   //);
   //}
+
   return (
     <>
       <div className={style.root}>
