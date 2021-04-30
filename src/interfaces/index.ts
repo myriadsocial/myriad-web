@@ -9,3 +9,9 @@ export enum SocialsEnum {
   TWITTER = 'twitter',
   REDDIT = 'reddit'
 }
+
+export type LoopbackParams = {
+  limit: number;
+  offset: number;
+  [key: string]: number | string | object;
+};
