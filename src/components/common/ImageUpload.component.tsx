@@ -68,7 +68,7 @@ export const ImageUpload = ({ onSelected, value, preview }: Props) => {
 
   return (
     <div className={styles.root}>
-      <input type="file" ref={uploadFieldRef} onChange={handleFileChange} style={{ display: 'none' }} />
+      <input type="file" ref={uploadFieldRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
 
       <InputLabel className={styles.button}>
         <IconButton onClick={selectFile} className={styles.label} disableRipple disableFocusRipple>
