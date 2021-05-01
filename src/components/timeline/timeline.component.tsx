@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { User } from 'next-auth';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Grow from '@material-ui/core/Grow';
 
 import FilterTimelineComponent from './filter.component';
 import PostComponent from './post/post.component';
@@ -73,7 +74,9 @@ const Timeline = ({ user }: Props) => {
           hasMore={hasMore}
           loader={<CircularProgress className={style.loading} disableShrink />}>
           {state.posts.map((post: Post, i: number) => (
-            <PostComponent post={post} open={false} key={i} reply={handleReply} loadComments={loadComments} />
+            <Grow>
+              <PostComponent post={post} open={false} key={i} reply={handleReply} loadComments={loadComments} />
+            </Grow>
           ))}
         </InfiniteScroll>
       </div>

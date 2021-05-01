@@ -39,7 +39,8 @@ const theme = createMuiTheme({
     MuiCssBaseline: {
       '@global': {
         a: {
-          textDecoration: 'none'
+          textDecoration: 'none',
+          color: '#A942E9'
         },
         '*::-webkit-scrollbar': {
           width: '0.4em'
