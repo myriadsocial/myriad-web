@@ -114,6 +114,13 @@ export default function PostComponent({ post, open = false, disable = false, rep
 
         <ShowIf condition={['twitter', 'reddit'].includes(post.platform)}>
           <CardContent className={style.content}>
+            <ShowIf condition={post.tags.length > 0}>
+              <div>
+                {post.tags.map(tag => (
+                  <span>#{tag}</span>
+                ))}
+              </div>
+            </ShowIf>
             <ReactMarkdown>{detail.text}</ReactMarkdown>
             {detail.images && detail.images.length > 0 && <PostImageComponent images={detail.images} />}
             {detail.videos && detail.videos.length > 0 && <PostVideoComponent url={detail.videos[0]} />}

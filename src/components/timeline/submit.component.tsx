@@ -76,6 +76,7 @@ export default function SubmitPostComponent({ onSubmit }: Props) {
   const [files, setFiles] = useState<UpoadedFile[]>([]);
   const [postText, setPostText] = useState('');
   const [tags, setTags] = useState<string[]>(['sample tag']);
+
   const toggleCreatePost = () => {
     setCreatePost(!showCreatePost);
   };
