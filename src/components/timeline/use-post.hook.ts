@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { User } from 'next-auth';
 
+import { useLayoutSetting } from '../Layout/layout.context';
 import { useExperience } from '../experience/experience.context';
 import { useTimeline, TimelineActionType } from './timeline.context';
 
@@ -13,12 +14,13 @@ import * as PostAPI from 'src/lib/api/post';
 export const usePost = () => {
   const { state: experienceState } = useExperience();
   const { state: timelineState, dispatch } = useTimeline();
+  const { state: settingState } = useLayoutSetting();
 
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // change people and tag filter each selected experience changed
+  // change people and tag filter each selected experience changed or focus setting changed
   useEffect(() => {
     if (!experienceState.init && experienceState.selected) {
       const { people, tags, layout } = experienceState.selected;
@@ -26,13 +28,13 @@ export const usePost = () => {
       dispatch({
         type: TimelineActionType.UPDATE_FILTER,
         filter: {
-          tags: tags.filter(i => !i.hide).map(i => i.id),
-          people: people.filter(i => !i.hide).map(i => i.username),
+          tags: settingState.topic ? tags.filter(tag => !tag.hide).map(tag => tag.id) : [],
+          people: settingState.people ? people.filter(person => !person.hide).map(person => person.username) : [],
           layout: layout || 'timeline'
         }
       });
     }
-  }, [experienceState.selected?.id]);
+  }, [experienceState.selected?.id, settingState.people, settingState.topic]);
 
   const loadPost = async (user: WithAdditionalParams<User>) => {
     setLoading(true);
