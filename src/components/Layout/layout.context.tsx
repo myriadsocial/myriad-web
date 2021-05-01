@@ -2,7 +2,22 @@ import React from 'react';
 
 import { LayoutFilterType } from 'src/interfaces/setting';
 
-type Action = { type: 'ENABLE_FOCUS' } | { type: 'DISABLE_FOCUS' } | { type: 'CHANGE_SETTING'; key: string; value: boolean };
+export enum LayoutSettingActionType {
+  TOGGLE_FOCUS = 'TOGGLE_FOCUS',
+  CHANGE_SETTING = 'CHANGE_SETTING'
+}
+
+interface ToggleFocus {
+  type: LayoutSettingActionType.TOGGLE_FOCUS;
+}
+
+interface ChageSetting {
+  type: LayoutSettingActionType.CHANGE_SETTING;
+  key: LayoutFilterType;
+  value: boolean;
+}
+
+type Action = ToggleFocus | ChageSetting;
 type Dispatch = (action: Action) => void;
 type LayoutSettingProviderProps = { children: React.ReactNode };
 
@@ -18,22 +33,16 @@ const LayoutSettingContext = React.createContext<{ state: State; dispatch: Dispa
 
 function layoutSettingReducer(state: State, action: Action) {
   switch (action.type) {
-    case 'CHANGE_SETTING': {
+    case LayoutSettingActionType.CHANGE_SETTING: {
       return {
         ...state,
         [action.key]: action.value
       };
     }
-    case 'ENABLE_FOCUS': {
+    case LayoutSettingActionType.TOGGLE_FOCUS: {
       return {
         ...state,
-        focus: true
-      };
-    }
-    case 'DISABLE_FOCUS': {
-      return {
-        ...state,
-        focus: false
+        focus: !state.focus
       };
     }
     default: {
