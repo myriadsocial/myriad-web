@@ -4,7 +4,9 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { User } from 'next-auth';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import FilterTimelineComponent from './filter.component';
 import PostComponent from './post/post.component';
@@ -14,6 +16,7 @@ import { useStyles } from './timeline.style';
 import { usePost } from './use-post.hook';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
+import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import { Post, Comment } from 'src/interfaces/post';
 
 type Props = {
@@ -53,8 +56,8 @@ const Timeline = ({ user }: Props) => {
     reply(comment.postId, comment);
   };
 
-  const submitPost = (text: string, files: File[]) => {
-    addPost(text, files, user);
+  const submitPost = (text: string, tags: string[], files: File[]) => {
+    addPost(text, tags, files, user);
   };
 
   console.log('TIMELINE COMPONENT LOAD');
@@ -78,6 +81,12 @@ const Timeline = ({ user }: Props) => {
               <PostComponent post={post} open={false} key={i} reply={handleReply} loadComments={loadComments} />
             </Grow>
           ))}
+
+          <ScrollTop>
+            <Fab color="secondary" size="small" aria-label="scroll back to top">
+              <KeyboardArrowUpIcon />
+            </Fab>
+          </ScrollTop>
         </InfiniteScroll>
       </div>
       <div id="fb-root" />

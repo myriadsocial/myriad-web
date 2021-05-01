@@ -63,7 +63,7 @@ export const usePost = () => {
     });
   };
 
-  const addPost = async (text: string, files: File[], user: WithAdditionalParams<User>) => {
+  const addPost = async (text: string, tags: string[], files: File[], user: WithAdditionalParams<User>) => {
     const images: string[] = [];
 
     if (files.length) {
@@ -82,7 +82,7 @@ export const usePost = () => {
 
     const data = await PostAPI.createPost({
       text,
-      tags: [],
+      tags: tags,
       hasMedia,
       platform: 'myriad',
       assets: hasMedia ? images : [],
