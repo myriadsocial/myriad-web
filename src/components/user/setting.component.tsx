@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import theme from '../../themes/default';
 
+import { LayoutFilterType } from 'src/interfaces/setting';
+
 const useStyles = makeStyles({
   root: {
     width: 120,
@@ -20,14 +22,16 @@ const useStyles = makeStyles({
 
 type Props = {
   settings: any;
-  onChange: (key: string, value: boolean) => void;
+  onChange: (key: LayoutFilterType, value: boolean) => void;
 };
 
 const SettingComponent = ({ onChange, settings }: Props) => {
   const styles = useStyles();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(event.target.name, event.target.checked);
+    const key = event.target.name as LayoutFilterType;
+
+    onChange(key, event.target.checked);
   };
 
   return (

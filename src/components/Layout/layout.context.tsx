@@ -1,17 +1,16 @@
 import React from 'react';
 
+import { LayoutFilterType } from 'src/interfaces/setting';
+
 type Action = { type: 'ENABLE_FOCUS' } | { type: 'DISABLE_FOCUS' } | { type: 'CHANGE_SETTING'; key: string; value: boolean };
 type Dispatch = (action: Action) => void;
 type LayoutSettingProviderProps = { children: React.ReactNode };
-type State = {
-  focus: boolean;
-  topic: boolean;
-  people: boolean;
-};
+
+type State = Record<LayoutFilterType, boolean>;
 
 const initalState = {
   focus: false,
-  topic: false,
+  topic: true,
   people: true
 };
 
