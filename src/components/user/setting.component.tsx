@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 });
 
 type Props = {
-  settings: any;
+  settings: Record<LayoutFilterType, boolean>;
   onChange: (key: LayoutFilterType, value: boolean) => void;
 };
 
@@ -39,12 +39,30 @@ const SettingComponent = ({ onChange, settings }: Props) => {
       <FormGroup>
         <FormControlLabel
           className={styles.label}
-          control={<Switch size="small" checked={settings.people} onChange={handleChange} color="primary" name="people" />}
+          control={
+            <Switch
+              size="small"
+              disabled={!settings.topic && settings.people}
+              checked={settings.people}
+              onChange={handleChange}
+              color="primary"
+              name="people"
+            />
+          }
           label="Show People"
         />
         <FormControlLabel
           className={styles.label}
-          control={<Switch size="small" checked={settings.topic} onChange={handleChange} color="primary" name="topic" />}
+          control={
+            <Switch
+              size="small"
+              disabled={!settings.people && settings.topic}
+              checked={settings.topic}
+              onChange={handleChange}
+              color="primary"
+              name="topic"
+            />
+          }
           label="Show Topic"
         />
         <FormControlLabel

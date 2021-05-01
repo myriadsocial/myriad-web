@@ -1,4 +1,4 @@
-import { useLayoutSetting } from './layout.context';
+import { useLayoutSetting, LayoutSettingActionType } from './layout.context';
 
 import { LayoutFilterType } from 'src/interfaces/setting';
 
@@ -7,7 +7,7 @@ export const useLayout = () => {
 
   const changeSetting = (key: LayoutFilterType, value: boolean) => {
     dispatch({
-      type: 'CHANGE_SETTING',
+      type: LayoutSettingActionType.CHANGE_SETTING,
       key,
       value
     });
