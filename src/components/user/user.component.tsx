@@ -20,10 +20,12 @@ import Profile from './profile.component';
 import Setting from './setting.component';
 import Social from './social.component';
 
+import { LayoutFilterType } from 'src/interfaces/setting';
+
 type Props = {
   loggedIn?: boolean;
   settings: any;
-  changeSetting: (key: string, value: boolean) => void;
+  changeSetting: (key: LayoutFilterType, value: boolean) => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>

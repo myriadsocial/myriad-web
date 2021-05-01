@@ -14,8 +14,8 @@ import { ExperienceComponent } from '../experience/experience.component';
 import UserDetail from '../user/user.component';
 import { Wallet } from '../wallet/wallet.component';
 import { useMyriadAccount } from '../wallet/wallet.context';
-import { useLayoutSetting } from './layout.context';
 import { useStyles } from './layout.style';
+import { useLayout } from './use-layout.hook';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
 
@@ -25,9 +25,10 @@ type Props = {
 };
 
 const LayoutComponent = ({ children, user }: Props) => {
-  const { dispatch: myriadAccountDispatch } = useMyriadAccount();
   const style = useStyles();
-  const { state: setting, dispatch } = useLayoutSetting();
+
+  const { dispatch: myriadAccountDispatch } = useMyriadAccount();
+  const { setting, changeSetting } = useLayout();
 
   const userId = user.address as string;
 
@@ -64,14 +65,6 @@ const LayoutComponent = ({ children, user }: Props) => {
   const addAddress = (key: string, value: string) => {
     myriadAccountDispatch({
       type: 'ADD_ADDRESS',
-      key,
-      value
-    });
-  };
-
-  const changeSetting = (key: string, value: boolean) => {
-    dispatch({
-      type: 'CHANGE_SETTING',
       key,
       value
     });
