@@ -16,6 +16,8 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CommentIcon from '@material-ui/icons/Comment';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
 import CommentComponent from '../comment/comment.component';
 import ReplyCommentComponent from '../comment/reply.component';
@@ -148,6 +150,12 @@ export default function PostComponent({ post, open = false, disable = false, rep
           <ShowIf condition={post.platform === 'twitter'}>
             <TwitterReactionComponent metric={detail.metric} />
           </ShowIf>
+          <IconButton aria-label="add to favorites">
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label="share">
+            <ThumbDownIcon />
+          </IconButton>
 
           <IconButton
             className={clsx(style.expand, {
