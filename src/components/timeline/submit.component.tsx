@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import Chip from '@material-ui/core/Chip';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import GridList from '@material-ui/core/GridList';
@@ -17,6 +18,7 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme, lighten } from '@material-ui/core/styles';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
+import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
 import DialogTitle from '../common/DialogTitle.component';
 
@@ -73,6 +75,7 @@ export default function SubmitPostComponent({ onSubmit }: Props) {
   const [showCreatePost, setCreatePost] = useState(false);
   const [files, setFiles] = useState<UpoadedFile[]>([]);
   const [postText, setPostText] = useState('');
+  const [tags, setTags] = useState<string[]>(['sample tag']);
 
   const toggleCreatePost = () => {
     setCreatePost(!showCreatePost);
@@ -105,6 +108,12 @@ export default function SubmitPostComponent({ onSubmit }: Props) {
           }))
       );
     }
+  };
+
+  const openInputTag = () => {};
+
+  const removeTag = (index: number) => {
+    setTags(tags.splice(index, 1));
   };
 
   const savePost = () => {
@@ -141,6 +150,11 @@ export default function SubmitPostComponent({ onSubmit }: Props) {
                 value={postText}
                 onChange={updatePostText}
               />
+
+              {tags.map((tag, index) => {
+                return <Chip size="small" label={tag} color="primary" onDelete={() => removeTag(index)} />;
+              })}
+
               <ShowIf condition={files.length > 0}>
                 <GridList cellHeight={200}>
                   <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
@@ -170,7 +184,9 @@ export default function SubmitPostComponent({ onSubmit }: Props) {
                 <IconButton color="default" aria-label="upload media" onClick={selectFile}>
                   <ImageIcon />
                 </IconButton>
-                Add Images
+                <IconButton color="default" aria-label="add tags" onClick={openInputTag}>
+                  <LoyaltyIcon />
+                </IconButton>
               </div>
               <Button variant="contained" size="large" color="secondary" className={styles.post} onClick={savePost}>
                 Post

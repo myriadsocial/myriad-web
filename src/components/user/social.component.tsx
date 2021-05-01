@@ -118,7 +118,7 @@ const SocialComponent = ({ user, toggleLogin }: Props) => {
             </ShowIf>
           </ListItemText>
         </ListItem>
-        <ListItem button className={style.gutters} onClick={() => handleOpenConnect(SocialsEnum.TWITTER)}>
+        <ListItem button disabled={connected.twitter} className={style.gutters} onClick={() => handleOpenConnect(SocialsEnum.TWITTER)}>
           <ListItemIcon className={style.icon}>
             <TwitterIcon className={style.twitter} />
           </ListItemIcon>
