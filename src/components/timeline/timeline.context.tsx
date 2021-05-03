@@ -65,7 +65,8 @@ const initalState: State = {
   filter: {
     tags: [],
     people: [],
-    layout: 'timeline'
+    layout: 'timeline',
+    platform: []
   },
   posts: []
 };

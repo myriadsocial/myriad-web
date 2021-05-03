@@ -20,12 +20,13 @@ import Profile from './profile.component';
 import Setting from './setting.component';
 import Social from './social.component';
 
+import { SocialsEnum } from 'src/interfaces';
 import { LayoutFilterType } from 'src/interfaces/setting';
 
 type Props = {
   loggedIn?: boolean;
   settings: any;
-  changeSetting: (key: LayoutFilterType, value: boolean) => void;
+  changeSetting: (key: LayoutFilterType | SocialsEnum, value: boolean) => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -65,14 +66,15 @@ const User = ({ settings, changeSetting }: Props) => {
   return (
     <Box p={1} bgcolor="primary.light" className={style.root}>
       <Grid container direction="row" justify="space-between" alignItems="flex-start">
-        <Grid item className={!!session?.user.anonymous ? style.grow : style.normal}>
+        <Grid item md={7} className={!!session?.user.anonymous ? style.grow : style.normal}>
           <Profile toggleLogin={toggleLogin} user={session.user} />
-          <Social toggleLogin={toggleLogin} user={session.user} />
         </Grid>
-
+        <Grid item md={5} className={!!session?.user.anonymous ? style.grow : style.normal}>
+          <Setting onChange={changeSetting} settings={settings} />
+        </Grid>
         <ShowIf condition={!session?.user.anonymous}>
-          <Grid item>
-            <Setting onChange={changeSetting} settings={settings} />
+          <Grid item md={12}>
+            <Social toggleLogin={toggleLogin} onChange={changeSetting} settings={settings} user={session.user} />
           </Grid>
         </ShowIf>
       </Grid>
