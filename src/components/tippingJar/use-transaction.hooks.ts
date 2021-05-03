@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useTransaction as baseUseTransaction, TransactionActionType } from './transaction.context';
 
 import Axios from 'axios';
-//import { omit } from 'lodash';
 import { Transaction } from 'src/interfaces/transaction';
 
 const axios = Axios.create({

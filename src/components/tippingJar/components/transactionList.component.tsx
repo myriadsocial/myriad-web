@@ -12,6 +12,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import Popover from '@material-ui/core/Popover';
 import Select from '@material-ui/core/Select';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -92,6 +93,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     iconButton: {
       color: '#FFF'
+    },
+    typography: {
+      padding: theme.spacing(2)
     }
   })
 );
@@ -99,28 +103,131 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function TransactionListComponent({ transactions, userId }: Props) {
   const style = useStyles();
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
+  const [tipsReceivedDetails, setTipsReceivedDetails] = useState({
+    total: null,
+    senderAddress: ''
+  });
+  const [tipsSentDetails, setTipsSentDetails] = useState({
+    total: null,
+    receiverAddress: ''
+  });
+
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     setAllTransactions(transactions);
+
+    if (transactions.length > 0) {
+      totalTipsReceived();
+      totalTipsSent();
+    }
   }, [transactions]);
+
+  const totalTipsReceived = () => {
+    let temp = transactions.filter((el: object) => {
+      return el.to === userId;
+    });
+
+    let total = temp.map((el: object) => {
+      return el.value / 1000000000000;
+    });
+
+    let senderAddress = temp.map((el: object) => {
+      return el.from;
+    });
+
+    setTipsReceivedDetails({
+      ...tipsReceivedDetails,
+      total: total[0],
+      senderAddress: senderAddress[0]
+    });
+    console.log('>>> tips details: ', tipsReceivedDetails);
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
+  const totalTipsSent = () => {
+    let temp = transactions.filter((el: object) => {
+      return el.from === userId;
+    });
+
+    let total = temp.map((el: object) => {
+      return el.value / 1000000000000;
+    });
+
+    let receiverAddress = temp.map((el: object) => {
+      return el.to;
+    });
+
+    setTipsSentDetails({
+      ...tipsSentDetails,
+      total: total[0],
+      receiverAddress: receiverAddress[0]
+    });
+    console.log('>>> tips details: ', tipsSentDetails);
+  };
 
   if (transactions.length === 0) return null;
 
   const renderTransactionDetail = (txHistory: Transaction) => {
+    const formatDate = () => {
+      let formattedDate = new Date(txHistory?.createdAt);
+      return formattedDate.toUTCString();
+    };
+
     return (
       <div>
         <div>
-          <Button>Username: {txHistory?.fromUser || txHistory?.toUser} </Button>
-          <Button className={style.received}>Total tips sent to me: ... MYRIA</Button>
+          <Button onClick={handleClick}>
+            Username:{' '}
+            {userId === txHistory?.from
+              ? txHistory?.hasOwnProperty('toUser') === false
+                ? 'Unknown User'
+                : txHistory?.toUser?.name
+              : txHistory?.hasOwnProperty('fromUser') === false
+              ? 'Unknown User'
+              : txHistory?.fromUser?.name}{' '}
+          </Button>
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center'
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center'
+            }}>
+            <Typography className={classes.typography}>The content of the Popover.</Typography>
+          </Popover>
+          <Button className={style.received}>
+            Total tips sent to me: {tipsReceivedDetails?.senderAddress === txHistory?.from ? tipsReceivedDetails?.total : '---'} MYRIA
+          </Button>
+          <Button className={style.received}>Sender Address: {tipsReceivedDetails?.senderAddress}</Button>
+          <Button className={style.received}>Sender Address: {txHistory?.from}</Button>
         </div>
         <div>
-          <Button>Transaction date: ...</Button>
-          <Button className={style.sent}>Total tips sent to them: ... MYRIA</Button>
+          <Button>Transaction date: {formatDate()}</Button>
+          <Button className={style.sent}>
+            Total tips sent to them: {tipsSentDetails?.receiverAddress === txHistory?.to ? tipsSentDetails?.total : '---'} MYRIA
+          </Button>
         </div>
       </div>
     );
   };
-  console.log('transactions', transactions);
+  console.log('the transaction data: ', transactions);
 
   return (
     <List className={style.root}>
@@ -134,7 +241,7 @@ export default function TransactionListComponent({ transactions, userId }: Props
           <ListItemText
             className={style.textSecondary}
             secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-            primary={renderTransactionDetail}
+            primary={renderTransactionDetail(txHistory)}
             secondary={
               <>
                 <Button>Tx Hash: {txHistory?.trxHash}</Button>
