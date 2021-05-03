@@ -42,6 +42,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<ResponeTwitter>)
       await PeopleAPI.createPeople({
         username: user.screen_name,
         platform: SocialsEnum.TWITTER,
+        profile_image_url: user.profile_image_url_https,
         platform_account_id: user.id_str,
         hide: false
       });

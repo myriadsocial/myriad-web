@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import { User } from 'next-auth';
 
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
@@ -8,6 +10,11 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles, fade } from '@material-ui/core/styles';
+
+import { useConversationHook } from './use-conversation-hook';
+
+import { WithAdditionalParams } from 'next-auth/_utils';
+import ShowIf from 'src/components/common/show-if.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,62 +41,52 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function NotificationListComponent() {
+type Props = {
+  user: WithAdditionalParams<User>;
+};
+
+export default function NotificationListComponent({ user }: Props) {
   const classes = useStyles();
+
+  const { conversations, loadConversation } = useConversationHook(user);
+
+  useEffect(() => {
+    loadConversation();
+  }, []);
 
   return (
     <List className={classes.root}>
-      <ListItem alignItems="flex-start" component="nav" className={classes.notificationActive}>
-        <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="/images/avatar/1.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Brunch this weekend?"
-          secondary={
-            <React.Fragment>
-              <Typography component="span" variant="body2" className={classes.inline} color="textPrimary">
-                Ali Connors
-              </Typography>
-              {" — I'll be in your neighborhood doing errands this…"}
-            </React.Fragment>
-          }
-        />
-        <Badge className={classes.notificationBadge} color="secondary" hidden={false} badgeContent={4} />
-      </ListItem>
+      {conversations.map(conversation => {
+        return (
+          <ListItem
+            key={conversation.postId}
+            alignItems="flex-start"
+            component="nav"
+            className={conversation.read ? classes.notification : classes.notificationActive}>
+            <ListItemAvatar>
+              <Avatar alt={conversation.user.name} src={conversation.user.profilePictureURL || ''} />
+            </ListItemAvatar>
+            <ListItemText
+              primary={conversation.post.text?.slice(0, 26) + ' ...'}
+              secondary={
+                <React.Fragment>
+                  <Typography component="span" variant="body2" className={classes.inline} color="textPrimary">
+                    {'user name'}
+                  </Typography>
+                  {' — ' + conversation.post.comments[0].text}
+                </React.Fragment>
+              }
+            />
+            <Badge className={classes.notificationBadge} color="secondary" hidden={false} badgeContent={conversation.unreadMessage} />
+          </ListItem>
+        );
+      })}
 
-      <ListItem alignItems="flex-start" component="nav" className={classes.notification}>
-        <ListItemAvatar>
-          <Avatar alt="Travis Howard" src="/images/avatar/2.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Summer BBQ"
-          secondary={
-            <React.Fragment>
-              <Typography component="span" variant="body2" className={classes.inline} color="textPrimary">
-                to Scott, Alex, Jennifer
-              </Typography>
-              {" — Wish I could come, but I'm out of town this…"}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-
-      <ListItem alignItems="flex-start" component="nav" className={classes.notification}>
-        <ListItemAvatar>
-          <Avatar alt="Cindy Baker" src="/images/avatar/3.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Oui Oui"
-          secondary={
-            <React.Fragment>
-              <Typography component="span" variant="body2" className={classes.inline} color="textPrimary">
-                Sandra Adams
-              </Typography>
-              {' — Do you have Paris recommendations? Have you ever…'}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
+      <ShowIf condition={conversations.length === 0}>
+        <Typography variant="h4" color="textPrimary">
+          No Conversation
+        </Typography>
+      </ShowIf>
     </List>
   );
 }
