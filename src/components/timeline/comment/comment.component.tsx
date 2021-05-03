@@ -33,6 +33,7 @@ type Props = {
 export default function CommentComponent({ data }: Props) {
   const style = useStyles();
 
+  console.log('data', data);
   return (
     <Card className={style.root}>
       <CardHeader

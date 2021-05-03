@@ -57,6 +57,8 @@ export default function PostComponent({ post, open = false, disable = false, rep
 
   const currentPage = router.pathname as string;
 
+  if (!detail) return null;
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -119,7 +121,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
             <ShowIf condition={post.tags.length > 0}>
               <div>
                 {post.tags.map(tag => (
-                  <span>#{tag}</span>
+                  <span key={tag}>#{tag}</span>
                 ))}
               </div>
             </ShowIf>

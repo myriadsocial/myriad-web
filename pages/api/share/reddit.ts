@@ -45,6 +45,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<ResponseReddit>)
         username: friend.name,
         platform: SocialsEnum.REDDIT,
         platform_account_id: friend.id,
+        profile_image_url: '',
         hide: false
       }
     });
