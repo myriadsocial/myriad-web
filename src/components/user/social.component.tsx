@@ -2,36 +2,40 @@ import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
 import { User } from 'next-auth';
-import { useSession, signIn } from 'next-auth/client';
+import { signIn } from 'next-auth/client';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
-import { SocialsEnum } from '../../interfaces';
 import ShowIf from '../common/show-if.component';
 import ConnectComponent from '../connect/connect.component';
 import LoginOverlayComponent from '../login/overlay.component';
 import { useStyles } from './social.style';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
+import { SocialsEnum } from 'src/interfaces';
+import { LayoutFilterType } from 'src/interfaces/setting';
 
 const typograpyProps = { style: { fontSize: 10, padding: '5px 0', fontWeight: 500 } };
 
 type Props = {
   loggedIn?: boolean;
   user: WithAdditionalParams<User>;
+  settings: Record<LayoutFilterType, boolean> & Record<SocialsEnum, boolean>;
+  onChange: (key: LayoutFilterType | SocialsEnum, value: boolean) => void;
   toggleLogin: (open: boolean) => void;
 };
 
-const SocialComponent = ({ user, toggleLogin }: Props) => {
+const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
   const style = useStyles();
-  const [session] = useSession();
   const [cookies, setCookie, removeCookie] = useCookies(['social']);
 
   const [connectOpened, openConnect] = useState(false);
@@ -44,6 +48,7 @@ const SocialComponent = ({ user, toggleLogin }: Props) => {
   const [twitter, setTwitter] = useState<string>('Link To Twitter');
   const [facebook, setFacebook] = useState<string>('Link To Facebook');
   const [reddit, setReddit] = useState<string>('Link To Reddit');
+  const isAnonymous = user.anonymous as boolean;
 
   // check if redirected by social login
   useEffect(() => {
@@ -105,6 +110,10 @@ const SocialComponent = ({ user, toggleLogin }: Props) => {
     openConnect(false);
   };
 
+  const handleToggle = (value: SocialsEnum) => () => {
+    onChange(value, !settings[value]);
+  };
+
   return (
     <div className={style.root}>
       <List component="nav">
@@ -117,6 +126,16 @@ const SocialComponent = ({ user, toggleLogin }: Props) => {
               <Typography variant="body2">{facebook}</Typography>
             </ShowIf>
           </ListItemText>
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              size="small"
+              onChange={handleToggle(SocialsEnum.FACEBOOK)}
+              checked={settings[SocialsEnum.FACEBOOK]}
+              inputProps={{ 'aria-labelledby': 'switch-list-label-facebook' }}
+            />
+          </ListItemSecondaryAction>
         </ListItem>
         <ListItem button disabled={connected.twitter} className={style.gutters} onClick={() => handleOpenConnect(SocialsEnum.TWITTER)}>
           <ListItemIcon className={style.icon}>
@@ -127,6 +146,16 @@ const SocialComponent = ({ user, toggleLogin }: Props) => {
               <Typography variant="body2">{twitter}</Typography>
             </ShowIf>
           </ListItemText>
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              size="small"
+              onChange={handleToggle(SocialsEnum.TWITTER)}
+              checked={settings[SocialsEnum.TWITTER]}
+              inputProps={{ 'aria-labelledby': 'switch-list-label-twitter' }}
+            />
+          </ListItemSecondaryAction>
         </ListItem>
         <ListItem button disabled={connected.reddit} className={style.gutters} onClick={() => handleOpenConnect(SocialsEnum.REDDIT)}>
           <ListItemIcon className={style.icon}>
@@ -137,10 +166,20 @@ const SocialComponent = ({ user, toggleLogin }: Props) => {
               <Typography variant="body2">{reddit}</Typography>
             </ShowIf>
           </ListItemText>
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              size="small"
+              onChange={handleToggle(SocialsEnum.REDDIT)}
+              checked={settings[SocialsEnum.REDDIT]}
+              inputProps={{ 'aria-labelledby': 'switch-list-label-reddit' }}
+            />
+          </ListItemSecondaryAction>
         </ListItem>
       </List>
 
-      <ShowIf condition={!!session?.user.anonymous}>
+      <ShowIf condition={isAnonymous}>
         <LoginOverlayComponent toggleLogin={toggleLogin} />
       </ShowIf>
 

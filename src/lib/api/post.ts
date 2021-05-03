@@ -41,6 +41,11 @@ export const getPost = async (
         'platformUser.username': {
           inq: [...filters.people, user.name]
         }
+      },
+      {
+        platform: {
+          inq: filters.platform
+        }
       }
     ]
   };

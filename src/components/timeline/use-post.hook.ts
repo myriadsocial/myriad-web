@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { User } from 'next-auth';
 
+import { SocialsEnum } from '../../interfaces';
 import { useLayoutSetting } from '../Layout/layout.context';
 import { useExperience } from '../experience/experience.context';
 import { useTimeline, TimelineActionType } from './timeline.context';
@@ -25,16 +26,38 @@ export const usePost = () => {
     if (!experienceState.init && experienceState.selected) {
       const { people, tags, layout } = experienceState.selected;
 
+      const include: SocialsEnum[] = [];
+
+      if (settingState.facebook) {
+        include.push(SocialsEnum.FACEBOOK);
+      }
+
+      if (settingState.reddit) {
+        include.push(SocialsEnum.REDDIT);
+      }
+
+      if (settingState.twitter) {
+        include.push(SocialsEnum.TWITTER);
+      }
+
       dispatch({
         type: TimelineActionType.UPDATE_FILTER,
         filter: {
           tags: settingState.topic ? tags.filter(tag => !tag.hide).map(tag => tag.id) : [],
           people: settingState.people ? people.filter(person => !person.hide).map(person => person.username) : [],
-          layout: layout || 'timeline'
+          layout: layout || 'timeline',
+          platform: include
         }
       });
     }
-  }, [experienceState.selected?.id, settingState.people, settingState.topic]);
+  }, [
+    experienceState.selected?.id,
+    settingState.people,
+    settingState.topic,
+    settingState.facebook,
+    settingState.twitter,
+    settingState.reddit
+  ]);
 
   const loadPost = async (user: WithAdditionalParams<User>) => {
     setLoading(true);

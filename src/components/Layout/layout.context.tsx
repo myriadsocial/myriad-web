@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { SocialsEnum } from 'src/interfaces/index';
 import { LayoutFilterType } from 'src/interfaces/setting';
 
 export enum LayoutSettingActionType {
@@ -13,7 +14,7 @@ interface ToggleFocus {
 
 interface ChageSetting {
   type: LayoutSettingActionType.CHANGE_SETTING;
-  key: LayoutFilterType;
+  key: LayoutFilterType | SocialsEnum;
   value: boolean;
 }
 
@@ -21,12 +22,15 @@ type Action = ToggleFocus | ChageSetting;
 type Dispatch = (action: Action) => void;
 type LayoutSettingProviderProps = { children: React.ReactNode };
 
-type State = Record<LayoutFilterType, boolean>;
+type State = Record<LayoutFilterType, boolean> & Record<SocialsEnum, boolean>;
 
 const initalState = {
   focus: false,
   topic: true,
-  people: true
+  people: true,
+  [SocialsEnum.FACEBOOK]: true,
+  [SocialsEnum.REDDIT]: true,
+  [SocialsEnum.TWITTER]: true
 };
 
 const LayoutSettingContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
