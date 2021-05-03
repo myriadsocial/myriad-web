@@ -5,6 +5,7 @@ import Head from 'next/head';
 
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
+import { ConverstionProvider } from '../conversation/conversation.context';
 import { ExperienceProvider } from '../experience/experience.context';
 import { TimelineProvider } from '../timeline/timeline.context';
 import LayoutComponent from './Layout.component';
@@ -38,9 +39,11 @@ const Layout = ({ children, session }: Props) => {
 
       <LayoutSettingProvider>
         <ExperienceProvider>
-          <TimelineProvider>
-            <LayoutComponent user={session.user}>{children}</LayoutComponent>
-          </TimelineProvider>
+          <ConverstionProvider>
+            <TimelineProvider>
+              <LayoutComponent user={session.user}>{children}</LayoutComponent>
+            </TimelineProvider>
+          </ConverstionProvider>
         </ExperienceProvider>
       </LayoutSettingProvider>
     </div>
