@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import Chip from '@material-ui/core/Chip';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import GridList from '@material-ui/core/GridList';
@@ -12,14 +13,17 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import ListSubheader from '@material-ui/core/ListSubheader';
+import Slide from '@material-ui/core/Slide';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme, lighten } from '@material-ui/core/styles';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
+import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
 import DialogTitle from '../common/DialogTitle.component';
 
+import AddTagComponent from 'src/components/common/AddTag.component';
 import ShowIf from 'src/components/common/show-if.component';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -37,7 +41,8 @@ const useStyles = makeStyles((theme: Theme) =>
       cursor: 'pointer'
     },
     post: {
-      marginLeft: 'auto !important'
+      marginLeft: 'auto !important',
+      marginTop: theme.spacing(2)
     },
     postContent: {
       width: 600
@@ -52,6 +57,9 @@ const useStyles = makeStyles((theme: Theme) =>
     subtitle: {
       paddingLeft: 0,
       fontSize: 14
+    },
+    tag: {
+      margin: theme.spacing(2, 0)
     }
   })
 );
@@ -62,7 +70,7 @@ type UpoadedFile = {
 };
 
 type Props = {
-  onSubmit: (text: string, files: File[]) => void;
+  onSubmit: (text: string, tags: string[], files: File[]) => void;
 };
 
 export default function SubmitPostComponent({ onSubmit }: Props) {
@@ -73,6 +81,8 @@ export default function SubmitPostComponent({ onSubmit }: Props) {
   const [showCreatePost, setCreatePost] = useState(false);
   const [files, setFiles] = useState<UpoadedFile[]>([]);
   const [postText, setPostText] = useState('');
+  const [openTag, setOpenTag] = useState(false);
+  const [tags, setTags] = useState<string[]>([]);
 
   const toggleCreatePost = () => {
     setCreatePost(!showCreatePost);
@@ -107,9 +117,24 @@ export default function SubmitPostComponent({ onSubmit }: Props) {
     }
   };
 
+  const openInputTag = () => {
+    setOpenTag(!openTag);
+  };
+
+  const addTag = (text: string) => {
+    if (text.length) {
+      setTags([...tags, text]);
+    }
+  };
+
+  const removeTag = (index: number) => {
+    setTags(tags.splice(index, 1));
+  };
+
   const savePost = () => {
     onSubmit(
       postText,
+      tags,
       files.map(file => file.file)
     );
 
@@ -141,6 +166,13 @@ export default function SubmitPostComponent({ onSubmit }: Props) {
                 value={postText}
                 onChange={updatePostText}
               />
+
+              <div className={styles.tag}>
+                {tags.map((tag, index) => {
+                  return <Chip size="small" label={tag} color="primary" onDelete={() => removeTag(index)} />;
+                })}
+              </div>
+
               <ShowIf condition={files.length > 0}>
                 <GridList cellHeight={200}>
                   <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
@@ -148,6 +180,7 @@ export default function SubmitPostComponent({ onSubmit }: Props) {
                       Added to your post:{' '}
                     </ListSubheader>
                   </GridListTile>
+
                   {files.map(file => (
                     <GridListTile key={file.file.name}>
                       <img src={file.preview} alt={file.file.name} />
@@ -170,7 +203,14 @@ export default function SubmitPostComponent({ onSubmit }: Props) {
                 <IconButton color="default" aria-label="upload media" onClick={selectFile}>
                   <ImageIcon />
                 </IconButton>
-                Add Images
+                <IconButton color="default" aria-label="add tags" onClick={openInputTag}>
+                  <LoyaltyIcon />
+                </IconButton>
+                <Slide direction="right" in={openTag} mountOnEnter>
+                  <span>
+                    <AddTagComponent onSubmit={addTag} placeholder="Input post tag" />
+                  </span>
+                </Slide>
               </div>
               <Button variant="contained" size="large" color="secondary" className={styles.post} onClick={savePost}>
                 Post

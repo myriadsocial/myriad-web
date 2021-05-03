@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 
 import { User } from 'next-auth';
 
+import { SocialsEnum } from '../../interfaces';
+import { useLayoutSetting } from '../Layout/layout.context';
 import { useExperience } from '../experience/experience.context';
 import { useTimeline, TimelineActionType } from './timeline.context';
 
@@ -13,26 +15,49 @@ import * as PostAPI from 'src/lib/api/post';
 export const usePost = () => {
   const { state: experienceState } = useExperience();
   const { state: timelineState, dispatch } = useTimeline();
+  const { state: settingState } = useLayoutSetting();
 
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // change people and tag filter each selected experience changed
+  // change people and tag filter each selected experience changed or focus setting changed
   useEffect(() => {
     if (!experienceState.init && experienceState.selected) {
       const { people, tags, layout } = experienceState.selected;
 
+      const include: SocialsEnum[] = [];
+
+      if (settingState.facebook) {
+        include.push(SocialsEnum.FACEBOOK);
+      }
+
+      if (settingState.reddit) {
+        include.push(SocialsEnum.REDDIT);
+      }
+
+      if (settingState.twitter) {
+        include.push(SocialsEnum.TWITTER);
+      }
+
       dispatch({
         type: TimelineActionType.UPDATE_FILTER,
         filter: {
-          tags: tags.filter(i => !i.hide).map(i => i.id),
-          people: people.filter(i => !i.hide).map(i => i.username),
-          layout: layout || 'timeline'
+          tags: settingState.topic ? tags.filter(tag => !tag.hide).map(tag => tag.id) : [],
+          people: settingState.people ? people.filter(person => !person.hide).map(person => person.username) : [],
+          layout: layout || 'timeline',
+          platform: include
         }
       });
     }
-  }, [experienceState.selected?.id]);
+  }, [
+    experienceState.selected?.id,
+    settingState.people,
+    settingState.topic,
+    settingState.facebook,
+    settingState.twitter,
+    settingState.reddit
+  ]);
 
   const loadPost = async (user: WithAdditionalParams<User>) => {
     setLoading(true);
@@ -61,7 +86,7 @@ export const usePost = () => {
     });
   };
 
-  const addPost = async (text: string, files: File[], user: WithAdditionalParams<User>) => {
+  const addPost = async (text: string, tags: string[], files: File[], user: WithAdditionalParams<User>) => {
     const images: string[] = [];
 
     if (files.length) {
@@ -80,7 +105,7 @@ export const usePost = () => {
 
     const data = await PostAPI.createPost({
       text,
-      tags: [],
+      tags: tags,
       hasMedia,
       platform: 'myriad',
       assets: hasMedia ? images : [],

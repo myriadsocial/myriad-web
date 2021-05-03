@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 //@ts-ignore
 import { FacebookProvider, EmbeddedPost } from 'react-facebook';
+import ReactMarkdown from 'react-markdown';
 
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
@@ -15,14 +16,16 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CommentIcon from '@material-ui/icons/Comment';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
 import CommentComponent from '../comment/comment.component';
 import ReplyCommentComponent from '../comment/reply.component';
 import TwitterReactionComponent from '../reactions/twitter.component';
-import PostImage from './image-post.component';
-import PostAvatar from './post-avatar.component';
+import PostAvatarComponent from './post-avatar.component';
+import PostImageComponent from './post-image.component';
+import PostVideoComponent from './post-video.component';
 import { useStyles } from './post.style';
-import PostVideo from './video-post.component';
 
 import clsx from 'clsx';
 import SendTipModal from 'src/components/common/SendTipModal';
@@ -102,23 +105,27 @@ export default function PostComponent({ post, open = false, disable = false, rep
 
   if (!detail) return null;
 
+  const renderPostAvatar = () => {
+    return <PostAvatarComponent origin={post.platform} avatar={detail.user.avatar} onClick={openContentSource} />;
+  };
+
   return (
     <>
       <Card className={style.root}>
-        <CardHeader
-          avatar={<PostAvatar origin={post.platform} avatar={detail.user.avatar} onClick={openContentSource} />}
-          action={PostActionTipUser}
-          title={detail.user.name}
-          subheader={detail.createdOn}
-        />
+        <CardHeader avatar={renderPostAvatar()} action={PostActionTipUser} title={detail.user.name} subheader={detail.createdOn} />
 
         <ShowIf condition={['twitter', 'reddit'].includes(post.platform)}>
           <CardContent className={style.content}>
-            <Typography variant="body1" color="textSecondary" component="p">
-              {detail.text}
-            </Typography>
-            {detail.images && detail.images.length > 0 && <PostImage images={detail.images} />}
-            {detail.videos && detail.videos.length > 0 && <PostVideo url={detail.videos[0]} />}
+            <ShowIf condition={post.tags.length > 0}>
+              <div>
+                {post.tags.map(tag => (
+                  <span>#{tag}</span>
+                ))}
+              </div>
+            </ShowIf>
+            <ReactMarkdown>{detail.text}</ReactMarkdown>
+            {detail.images && detail.images.length > 0 && <PostImageComponent images={detail.images} />}
+            {detail.videos && detail.videos.length > 0 && <PostVideoComponent url={detail.videos[0]} />}
           </CardContent>
         </ShowIf>
 
@@ -127,7 +134,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
             <Typography variant="body1" color="textSecondary" component="p">
               {detail.text}
             </Typography>
-            {post.assets && post.assets.length > 0 && <PostImage images={post.assets.map(urlToImageData)} />}
+            {post.assets && post.assets.length > 0 && <PostImageComponent images={post.assets.map(urlToImageData)} />}
           </CardContent>
         </ShowIf>
 
@@ -143,6 +150,12 @@ export default function PostComponent({ post, open = false, disable = false, rep
           <ShowIf condition={post.platform === 'twitter'}>
             <TwitterReactionComponent metric={detail.metric} />
           </ShowIf>
+          <IconButton aria-label="add to favorites">
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label="share">
+            <ThumbDownIcon />
+          </IconButton>
 
           <IconButton
             className={clsx(style.expand, {
