@@ -10,6 +10,8 @@ export enum SocialsEnum {
   REDDIT = 'reddit'
 }
 
+export type SocialsEnumType = typeof SocialsEnum;
+
 export type LoopbackParams = {
   limit: number;
   offset: number;

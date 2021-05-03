@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import theme from '../../themes/default';
 
+import { LayoutFilterType } from 'src/interfaces/setting';
+
 const useStyles = makeStyles({
   root: {
     width: 120,
@@ -19,15 +21,17 @@ const useStyles = makeStyles({
 });
 
 type Props = {
-  settings: any;
-  onChange: (key: string, value: boolean) => void;
+  settings: Record<LayoutFilterType, boolean>;
+  onChange: (key: LayoutFilterType, value: boolean) => void;
 };
 
 const SettingComponent = ({ onChange, settings }: Props) => {
   const styles = useStyles();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(event.target.name, event.target.checked);
+    const key = event.target.name as LayoutFilterType;
+
+    onChange(key, event.target.checked);
   };
 
   return (
@@ -35,12 +39,30 @@ const SettingComponent = ({ onChange, settings }: Props) => {
       <FormGroup>
         <FormControlLabel
           className={styles.label}
-          control={<Switch size="small" checked={settings.people} onChange={handleChange} color="primary" name="people" />}
+          control={
+            <Switch
+              size="small"
+              disabled={!settings.topic && settings.people}
+              checked={settings.people}
+              onChange={handleChange}
+              color="primary"
+              name="people"
+            />
+          }
           label="Show People"
         />
         <FormControlLabel
           className={styles.label}
-          control={<Switch size="small" checked={settings.topic} onChange={handleChange} color="primary" name="topic" />}
+          control={
+            <Switch
+              size="small"
+              disabled={!settings.people && settings.topic}
+              checked={settings.topic}
+              onChange={handleChange}
+              color="primary"
+              name="topic"
+            />
+          }
           label="Show Topic"
         />
         <FormControlLabel

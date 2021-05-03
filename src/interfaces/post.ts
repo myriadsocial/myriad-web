@@ -1,4 +1,5 @@
 import { LayoutType } from './experience';
+import { SocialsEnum } from './index';
 import { User } from './user';
 
 export type PostOrigin = 'facebook' | 'twitter' | 'reddit' | 'myriad';
@@ -9,6 +10,7 @@ export type PostFilter = {
   tags: string[];
   people: string[];
   layout: LayoutType;
+  platform: SocialsEnum[];
 };
 
 export type PostReaction = {

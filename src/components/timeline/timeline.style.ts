@@ -27,7 +27,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     loading: {
       position: 'absolute',
-      top: theme.spacing(3),
+      top: 100,
       left: 'calc(50% - 20px)'
     }
   })
