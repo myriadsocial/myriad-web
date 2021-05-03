@@ -5,7 +5,9 @@ import { useSession } from 'next-auth/client';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControl from '@material-ui/core/FormControl';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import List from '@material-ui/core/List';
@@ -148,60 +150,13 @@ export const TransactionComponent = React.memo(function Wallet() {
 
   const [session] = useSession();
   const userId = session?.user.address as string;
-  const { transactions, inboundTxs, outboundTxs, loadInitTransaction } = useTransaction(userId);
+  const { loading, error, transactions, inboundTxs, outboundTxs, loadInitTransaction } = useTransaction(userId);
   const [sort, setSort] = useState('');
   const [value, setValue] = useState('0');
 
   useEffect(() => {
     loadInitTransaction();
   }, []);
-
-  //const getTxHistories = async () => {
-  //try {
-  //console.log('fetching data....');
-  //const userId = session?.user.address;
-  //setLoading(true);
-  //const response = await client({
-  //method: 'GET',
-  //url: '/transactions',
-  //params: {
-  //filter: {
-  //offset: 0,
-  //limit: 100,
-  //skip: 0,
-  //where: {},
-  //include: ['toUser', 'fromUser']
-  //}
-  //}
-  //});
-  //console.log('>>>>', response);
-
-  //// TODO: Move the part below to transaction useTransaction hook
-
-  //if (response.data.length > 0) {
-  //const { data } = response;
-  //console.log('data fetched!');
-  //console.log('>>>> the data is: ', data);
-  //const senderAddress = session?.user.address;
-  //let tempData = data.filter(function (datum: any) {
-  //return datum.from === senderAddress || datum.to === senderAddress;
-  //});
-  //const sortedTempData = tempData.slice().sort((a: any, b: any) => b.createdAt - a.createdAt);
-  //setTxHistories(sortedTempData);
-  //const inboundTxs = txHistories.filter(txHistory => {
-  //return txHistory.to === session?.user.address;
-  //});
-  //const outboundTxs = txHistories.filter(txHistory => {
-  //return txHistory.from === session?.user.address;
-  //});
-
-  //setInboundTxs(inboundTxs);
-  //setOutboundTxs(outboundTxs);
-  //}
-  //} catch (error) {
-  //console.log(`error from getTxHistories: ${error}`);
-  //}
-  //};
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
     event.preventDefault();
@@ -216,23 +171,23 @@ export const TransactionComponent = React.memo(function Wallet() {
     loadInitTransaction();
   };
 
-  //if (loading) {
-  //return (
-  //<div className={style.root}>
-  //<Grid container justify="center">
-  //<CircularProgress className={style.loading} />
-  //</Grid>
-  //</div>
-  //);
-  //} else if (error) {
-  //return (
-  //<div className={style.root}>
-  //<Grid container justify="center">
-  //<Typography>Data not available</Typography>
-  //</Grid>
-  //</div>
-  //);
-  //}
+  if (loading) {
+    return (
+      <div className={style.root}>
+        <Grid container justify="center">
+          <CircularProgress className={style.loading} />
+        </Grid>
+      </div>
+    );
+  } else if (error) {
+    return (
+      <div className={style.root}>
+        <Grid container justify="center">
+          <Typography>Data not available</Typography>
+        </Grid>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -266,12 +221,12 @@ export const TransactionComponent = React.memo(function Wallet() {
           </TabPanel>
           <TabPanel className={style.panel} value={'1'}>
             <List className={style.root}>
-              <></>
+              <TransactionListComponent transactions={inboundTxs} userId={userId} />
             </List>
           </TabPanel>
           <TabPanel className={style.panel} value={'2'}>
             <List className={style.root}>
-              <></>
+              <TransactionListComponent transactions={outboundTxs} userId={userId} />
             </List>
           </TabPanel>
         </TabContext>
