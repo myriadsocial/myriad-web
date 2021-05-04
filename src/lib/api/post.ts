@@ -99,6 +99,15 @@ export const createPost = async (values: Partial<Post>): Promise<Post> => {
   return data;
 };
 
+export const importPost = async (values: Partial<Post>): Promise<Post> => {
+  //const { data } = await MyriadAPI.request<Post>({
+  //url: '/posts',
+  //method: 'POST',
+  //data: values
+  //});
+  //return data;
+};
+
 export const loadComments = async (postId: string) => {
   const { data } = await MyriadAPI.request({
     url: `/posts/${postId}/comments`,
