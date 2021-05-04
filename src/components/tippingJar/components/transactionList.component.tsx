@@ -12,11 +12,14 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import ImageIcon from '@material-ui/icons/Image';
 
+import { orderBy } from 'lodash';
 import { Transaction } from 'src/interfaces/transaction';
 
 type Props = {
   transactions: Transaction[];
   userId: string;
+  sortType?: string;
+  sortDirection?: string;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -88,9 +91,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function TransactionListComponent({ transactions, userId }: Props) {
+export default function TransactionListComponent({ transactions, userId, sortType, sortDirection }: Props) {
   const style = useStyles();
-  const [_, setAllTransactions] = useState<Transaction[]>([]);
+  const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
   const [tipsReceivedDetails, setTipsReceivedDetails] = useState({
     total: 0,
     senderAddress: ''
@@ -101,13 +104,39 @@ export default function TransactionListComponent({ transactions, userId }: Props
   });
 
   useEffect(() => {
-    setAllTransactions(transactions);
+    const sortedTransactions = sortMethod(sortType, sortDirection, transactions);
+    setAllTransactions(sortedTransactions);
 
     if (transactions.length > 0) {
       totalTipsReceived();
       totalTipsSent();
     }
-  }, [transactions]);
+  }, [transactions, sortType, sortDirection]);
+
+  const sortMethod = (sortType: string | undefined, sortDirection: string | undefined, transactionList: Transaction[]) => {
+    switch (sortType) {
+      case 'Date':
+        if (sortDirection === 'asc') {
+          const result = orderBy(transactionList, ['createdAt'], ['asc']);
+          return result;
+        } else {
+          const result = orderBy(transactionList, ['createdAt'], ['desc']);
+          return result;
+        }
+      case 'Tips':
+        if (sortDirection === 'asc') {
+          const result = orderBy(transactionList, ['value'], ['asc']);
+          return result;
+        } else {
+          const result = orderBy(transactionList, ['value'], ['desc']);
+          return result;
+        }
+      case 'Best Tipper':
+        return transactionList;
+      default:
+        return transactionList;
+    }
+  };
 
   const totalTipsReceived = () => {
     let temp = transactions.filter((el: Transaction) => {
@@ -127,7 +156,6 @@ export default function TransactionListComponent({ transactions, userId }: Props
       total: total[0],
       senderAddress: senderAddress[0]
     });
-    console.log('>>> tips details: ', tipsReceivedDetails);
   };
 
   const totalTipsSent = () => {
@@ -148,7 +176,6 @@ export default function TransactionListComponent({ transactions, userId }: Props
       total: total[0],
       receiverAddress: receiverAddress[0]
     });
-    console.log('>>> tips details: ', tipsSentDetails);
   };
 
   if (transactions.length === 0) return null;
@@ -185,11 +212,10 @@ export default function TransactionListComponent({ transactions, userId }: Props
       </div>
     );
   };
-  console.log('the transaction data: ', transactions);
 
   return (
     <List className={style.root}>
-      {transactions.map(txHistory => (
+      {allTransactions.map(txHistory => (
         <ListItem key={txHistory?.id}>
           <ListItemAvatar className={style.avatar}>
             <Avatar>
