@@ -129,8 +129,9 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
           <ListItemSecondaryAction>
             <Switch
               edge="end"
-              color="primary"
+              color={connected.facebook ? 'primary' : 'secondary'}
               size="small"
+              disabled={!connected.facebook}
               onChange={handleToggle(SocialsEnum.FACEBOOK)}
               checked={settings[SocialsEnum.FACEBOOK]}
               inputProps={{ 'aria-labelledby': 'switch-list-label-facebook' }}
@@ -149,8 +150,9 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
           <ListItemSecondaryAction>
             <Switch
               edge="end"
-              color="primary"
+              color={connected.twitter ? 'primary' : 'secondary'}
               size="small"
+              disabled={!connected.twitter}
               onChange={handleToggle(SocialsEnum.TWITTER)}
               checked={settings[SocialsEnum.TWITTER]}
               inputProps={{ 'aria-labelledby': 'switch-list-label-twitter' }}
@@ -169,8 +171,9 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
           <ListItemSecondaryAction>
             <Switch
               edge="end"
-              color="primary"
+              color={connected.reddit ? 'primary' : 'secondary'}
               size="small"
+              disabled={!connected.reddit}
               onChange={handleToggle(SocialsEnum.REDDIT)}
               checked={settings[SocialsEnum.REDDIT]}
               inputProps={{ 'aria-labelledby': 'switch-list-label-reddit' }}

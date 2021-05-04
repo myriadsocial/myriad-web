@@ -93,6 +93,11 @@ const theme = createMuiTheme({
         '&&.Mui-checked': {
           color: '#A942E9'
         }
+      },
+      colorSecondary: {
+        '&&.Mui-checked': {
+          color: '#171717'
+        }
       }
     },
     MuiButton: {
