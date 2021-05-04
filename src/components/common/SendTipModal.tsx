@@ -16,21 +16,8 @@ import { sendTip } from '../../helpers/polkadotApi';
 import DialogTitle from '../common/DialogTitle.component';
 import { useStyles } from '../login/login.style';
 
-import Axios from 'axios';
-
-const client = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL
-});
-
 interface InputState {
   amount: string;
-}
-
-interface TxHistory {
-  trxHash: string;
-  from: string;
-  to: string;
-  amount: number;
 }
 
 interface InputErorState {
@@ -46,19 +33,12 @@ interface SendTipConfirmed {
 }
 
 type Props = {
-  postId: string;
-  anonymous: boolean;
   userAddress: string;
+  walletAddress?: string;
 };
 
-const SendTipModal = forwardRef(({ postId, anonymous, userAddress }: Props, ref) => {
+const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => {
   const [balance, setBalance] = useState(0);
-  const [TxHistory, setTxHistory] = useState<TxHistory>({
-    trxHash: '',
-    from: '',
-    to: '',
-    amount: 0
-  });
 
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
@@ -70,32 +50,6 @@ const SendTipModal = forwardRef(({ postId, anonymous, userAddress }: Props, ref)
       await getBalanceForComponent();
     })();
   }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await client({
-          url: `/posts/${postId}/walletaddress`,
-          method: 'GET'
-        });
-        setTxHistory({
-          ...TxHistory,
-          to: data.walletAddress
-        });
-      } catch (error) {
-        console.log('Error from get walletaddress:', error);
-      }
-    })();
-  }, [postId]);
-
-  useEffect(() => {
-    if (TxHistory.trxHash.length > 0) {
-      setSendTipConfirmed({
-        isConfirmed: true,
-        message: 'Tip sent successfully!'
-      });
-    }
-  }, [TxHistory]);
 
   const getBalanceForComponent = async () => {
     const currentAddress = userAddress;
@@ -115,7 +69,6 @@ const SendTipModal = forwardRef(({ postId, anonymous, userAddress }: Props, ref)
   const [values, setValues] = useState<InputState>({
     amount: ''
   });
-  const [open, setOpen] = useState<boolean>(false);
   const styles = useStyles();
 
   useImperativeHandle(ref, () => ({
@@ -130,6 +83,17 @@ const SendTipModal = forwardRef(({ postId, anonymous, userAddress }: Props, ref)
       ...inputError,
       isTextChanged: false,
       isErrorInput: false
+    });
+  };
+
+  const [errorText, setErrorText] = useState({
+    isError: false,
+    message: ''
+  });
+  const handleCloseError = () => {
+    setErrorText({
+      ...errorText,
+      isError: false
     });
   };
 
@@ -170,21 +134,24 @@ const SendTipModal = forwardRef(({ postId, anonymous, userAddress }: Props, ref)
         // tx signing is done by supplying a password
         const senderAddress = userAddress;
 
-        const response = await sendTip(senderAddress, TxHistory.to, amountSent);
+        const response = await sendTip(senderAddress, walletAddress, amountSent);
         // handle if sendTip succeed
         if (typeof response === 'object') {
-          setTxHistory({
-            trxHash: response.trxHash,
-            to: TxHistory.to,
-            amount: amountSent / 100,
-            from: response.from
+          setSendTipConfirmed({
+            isConfirmed: true,
+            message: 'Tip sent successfully!'
           });
-          setOpen(true);
           setShowSendTipModal(false);
           getBalanceForComponent();
         }
       }
     } else {
+      setErrorText({
+        ...errorText,
+        isError: true,
+        message: 'Send tips failed!'
+      });
+
       setInputError({
         ...inputError,
         isErrorInput: true,
@@ -199,7 +166,10 @@ const SendTipModal = forwardRef(({ postId, anonymous, userAddress }: Props, ref)
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setSendTipConfirmed({
+      ...sendTipConfirmed,
+      isConfirmed: false
+    });
   };
 
   return (
@@ -250,10 +220,17 @@ const SendTipModal = forwardRef(({ postId, anonymous, userAddress }: Props, ref)
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+      <Snackbar open={sendTipConfirmed.isConfirmed} autoHideDuration={3000} onClose={handleClose}>
         <Alert severity="success">
           <AlertTitle>Success!</AlertTitle>
           {sendTipConfirmed.message}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar open={errorText.isError} autoHideDuration={3000} onClose={handleCloseError}>
+        <Alert severity="error">
+          <AlertTitle>Error!</AlertTitle>
+          {errorText.message}
         </Alert>
       </Snackbar>
     </>
