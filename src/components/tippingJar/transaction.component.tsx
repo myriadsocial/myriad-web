@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: '4px'
     },
     formControl: {
-      margin: theme.spacing(1),
+      margin: '10px',
       minWidth: 120
     },
     selectEmpty: {
@@ -143,7 +143,10 @@ export const TransactionComponent = React.memo(function Wallet() {
   const [session] = useSession();
   const userId = session?.user.address as string;
   const { loading, error, transactions, inboundTxs, outboundTxs, loadInitTransaction } = useTransaction(userId);
-  const [sort, setSort] = useState('');
+  const [sort, setSort] = useState({
+    type: '',
+    direction: ''
+  });
   const [value, setValue] = useState('0');
 
   useEffect(() => {
@@ -155,8 +158,18 @@ export const TransactionComponent = React.memo(function Wallet() {
     setValue(newValue);
   };
 
-  const handleChangeSort = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSort(event.target.value as string);
+  const handleChangeSortType = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSort({
+      ...sort,
+      type: event.target.value as string
+    });
+  };
+
+  const handleChangeSortDirection = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSort({
+      ...sort,
+      direction: event.target.value as string
+    });
   };
 
   const handleClick = () => {
@@ -195,30 +208,36 @@ export const TransactionComponent = React.memo(function Wallet() {
           </StyledTabs>
           <List className={style.transactionActionList}>
             <ListItem>
-              <FormControl className={style.formControl}>
-                <InputLabel id="demo-simple-select-label">Sort/Filter by</InputLabel>
-                <Select labelId="filter-tips" id="filter-tips" value={sort} onChange={handleChangeSort}>
+              <FormControl className={style.formControl} id="filter-type">
+                <InputLabel id="filter-type">Sort by</InputLabel>
+                <Select labelId="filter-type" id="filter-type" value={sort.type} onChange={handleChangeSortType}>
                   <MenuItem value={'Date'}>Date</MenuItem>
-                  <MenuItem value={'Decreasing Tips'}>Decreasing Tips</MenuItem>
-                  <MenuItem value={'Increasing Tips'}>Increasing Tips</MenuItem>
+                  <MenuItem value={'Tips'}>Amount of Tips</MenuItem>
                   <MenuItem value={'Best Tipper'}>Best Tipper</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl className={style.formControl} id="filter-direction">
+                <InputLabel id="filter-direction">Sort by</InputLabel>
+                <Select labelId="filter-direction" id="filter-direction" value={sort.direction} onChange={handleChangeSortDirection}>
+                  <MenuItem value={'asc'}>Ascending</MenuItem>
+                  <MenuItem value={'desc'}>Descending</MenuItem>
                 </Select>
               </FormControl>
             </ListItem>
           </List>
           <TabPanel className={style.panel} value={'0'}>
             <List className={style.root}>
-              <TransactionListComponent transactions={transactions} userId={userId} />
+              <TransactionListComponent transactions={transactions} userId={userId} sortType={sort.type} sortDirection={sort.direction} />
             </List>
           </TabPanel>
           <TabPanel className={style.panel} value={'1'}>
             <List className={style.root}>
-              <TransactionListComponent transactions={inboundTxs} userId={userId} />
+              <TransactionListComponent transactions={inboundTxs} userId={userId} sortType={sort.type} sortDirection={sort.direction} />
             </List>
           </TabPanel>
           <TabPanel className={style.panel} value={'2'}>
             <List className={style.root}>
-              <TransactionListComponent transactions={outboundTxs} userId={userId} />
+              <TransactionListComponent transactions={outboundTxs} userId={userId} sortType={sort.type} sortDirection={sort.direction} />
             </List>
           </TabPanel>
         </TabContext>
