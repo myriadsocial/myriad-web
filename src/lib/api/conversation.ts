@@ -25,7 +25,7 @@ export const load = async (accountId: string): Promise<ExtendedConversation[]> =
                 {
                   relation: 'comments',
                   order: 'createdAt DESC',
-                  limit: 5
+                  limit: 2
                 }
               ]
             }

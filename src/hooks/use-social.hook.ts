@@ -54,7 +54,7 @@ export const useSocialDetail = (post: Post) => {
       console.log('post', post);
       setDetail({
         text: createPostContent(post),
-        createdOn: format(new Date(post.platformCreatedAt), 'dd MMMM yyyy'),
+        createdOn: format(new Date(post.platformCreatedAt || post.createdAt), 'dd MMMM yyyy'),
         videos: [],
         images: [],
         metric: {
