@@ -51,7 +51,6 @@ export const useSocialDetail = (post: Post) => {
     if (post.platform === 'twitter') {
       loadPost();
     } else {
-      console.log('post', post);
       setDetail({
         text: createPostContent(post),
         createdOn: format(new Date(post.platformCreatedAt || post.createdAt), 'dd MMMM yyyy'),
