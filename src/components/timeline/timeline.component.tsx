@@ -8,6 +8,7 @@ import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
+import ImportPostComponent from './ImportPost.component';
 import FilterTimelineComponent from './filter.component';
 import PostComponent from './post/post.component';
 import CreatePostComponent from './submit.component';
@@ -27,7 +28,7 @@ const Timeline = ({ user }: Props) => {
   const style = useStyles();
 
   const { state } = useTimeline();
-  const { hasMore, loadPost, loadMorePost, reply, loadComments, sortBy, addPost } = usePost();
+  const { hasMore, loadPost, loadMorePost, reply, loadComments, sortBy, addPost, importPost } = usePost();
   const scrollRoot = createRef<HTMLDivElement>();
 
   useEffect(() => {
@@ -60,6 +61,10 @@ const Timeline = ({ user }: Props) => {
     addPost(text, tags, files, user);
   };
 
+  const submitImportPost = (URL: string) => {
+    importPost(URL);
+  };
+
   console.log('TIMELINE COMPONENT LOAD');
 
   return (
@@ -68,6 +73,8 @@ const Timeline = ({ user }: Props) => {
         <FilterTimelineComponent selected={state.sort} onChange={sortBy} />
 
         <CreatePostComponent onSubmit={submitPost} />
+
+        <ImportPostComponent onSubmit={submitImportPost} />
 
         <InfiniteScroll
           scrollableTarget="scrollable-timeline"
