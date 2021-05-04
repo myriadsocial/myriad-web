@@ -8,7 +8,7 @@ const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
 });
 
-export const useTopic = () => {
+export const useTopic = (currentTopics: Tag[]) => {
   const [topics, setTopic] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -29,7 +29,8 @@ export const useTopic = () => {
             ...params,
             where: {
               id: {
-                like: query
+                like: query,
+                nin: currentTopics.map(i => i.id)
               }
             }
           }

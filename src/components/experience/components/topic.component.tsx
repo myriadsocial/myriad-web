@@ -31,7 +31,7 @@ type Props = {
 export default function TopicComponent({ topics, onAddItem, onRemoveItem }: Props) {
   const style = useStyles();
 
-  const { topics: options, search } = useTopic();
+  const { topics: options, search } = useTopic(topics);
   const [selectedTopics, setSelectedTopics] = React.useState<Tag[]>([]);
 
   React.useEffect(() => {
