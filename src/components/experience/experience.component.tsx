@@ -124,7 +124,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
 
     setSelectedExperience({
       ...selectedExperience,
-      people: selectedExperience.people.filter(item => item.id !== people.id)
+      people: selectedExperience.people.filter(item => item.platform_account_id !== people.platform_account_id)
     });
 
     setEdited(true);

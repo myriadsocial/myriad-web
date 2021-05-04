@@ -70,7 +70,12 @@ export default function ExperienceDetail({ data, onSave }: Props) {
               <Typography>People</Typography>
               <Box className={style.avatar}>
                 {experience.people.map((people, i) => (
-                  <Avatar key={i} alt={people.username} src={people.username} className={style.inline} />
+                  <Avatar
+                    key={i}
+                    alt={people.username}
+                    src={`https://res.cloudinary.com/dsget80gs/image/${people.platform || 'facebook'}/${people.platform_account_id}.jpg`}
+                    className={style.inline}
+                  />
                 ))}
               </Box>
             </Grid>
