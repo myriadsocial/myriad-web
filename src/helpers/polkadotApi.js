@@ -10,7 +10,6 @@ export const connectToBlockchain = async () => {
       provider: wsProvider
       //types: types
     }).isReadyOrError;
-    console.log('api is:', api);
     return api;
   } catch (error) {
     console.log('error from connectToBlockchain: ', error);
@@ -20,7 +19,6 @@ export const connectToBlockchain = async () => {
 export const getBalance = async ADDR => {
   try {
     const DECIMAL_PLACES = 10000000000;
-    //const ADDR = '5CS8upU5c44NaPu7qiSXGwna7oeDGG3vifM5nZAbwx3nTGTm';
     const api = await connectToBlockchain();
     const {
       data: { free: previousFree }
