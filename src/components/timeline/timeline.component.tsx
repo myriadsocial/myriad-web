@@ -77,8 +77,8 @@ const Timeline = ({ user }: Props) => {
           hasMore={hasMore}
           loader={<CircularProgress className={style.loading} disableShrink />}>
           {state.posts.map((post: Post, i: number) => (
-            <Grow>
-              <PostComponent post={post} open={false} key={i} reply={handleReply} loadComments={loadComments} />
+            <Grow key={i}>
+              <PostComponent post={post} open={false} reply={handleReply} loadComments={loadComments} />
             </Grow>
           ))}
 
