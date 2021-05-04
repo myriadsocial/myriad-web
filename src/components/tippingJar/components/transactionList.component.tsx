@@ -3,26 +3,14 @@ import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
-import FormControl from '@material-ui/core/FormControl';
-import IconButton from '@material-ui/core/IconButton';
-import InputLabel from '@material-ui/core/InputLabel';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import Popover from '@material-ui/core/Popover';
-import Select from '@material-ui/core/Select';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
-import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import ImageIcon from '@material-ui/icons/Image';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import TabContext from '@material-ui/lab/TabContext';
-import TabPanel from '@material-ui/lab/TabPanel';
 
 import { Transaction } from 'src/interfaces/transaction';
 
@@ -112,8 +100,6 @@ export default function TransactionListComponent({ transactions, userId }: Props
     receiverAddress: ''
   });
 
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
   useEffect(() => {
     setAllTransactions(transactions);
 
@@ -143,17 +129,6 @@ export default function TransactionListComponent({ transactions, userId }: Props
     });
     console.log('>>> tips details: ', tipsReceivedDetails);
   };
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
 
   const totalTipsSent = () => {
     let temp = transactions.filter((el: Transaction) => {
@@ -187,7 +162,7 @@ export default function TransactionListComponent({ transactions, userId }: Props
     return (
       <div>
         <div>
-          <Button onClick={handleClick}>
+          <Button>
             Username:{' '}
             {userId === txHistory?.from
               ? txHistory?.hasOwnProperty('toUser') === false
@@ -197,21 +172,6 @@ export default function TransactionListComponent({ transactions, userId }: Props
               ? 'Unknown User'
               : txHistory?.fromUser?.name}{' '}
           </Button>
-          <Popover
-            id={id}
-            open={open}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center'
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center'
-            }}>
-            <Typography className={style.typography}>The content of the Popover.</Typography>
-          </Popover>
           <Button className={style.received}>
             Total tips sent to me: {tipsReceivedDetails?.senderAddress === txHistory?.from ? tipsReceivedDetails?.total : '---'} MYRIA
           </Button>
