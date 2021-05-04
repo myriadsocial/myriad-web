@@ -62,7 +62,7 @@ export default function ExperienceDetail({ data, onSave }: Props) {
               <Typography>Topics</Typography>
               <Box className={style.avatar}>
                 {experience.tags.map((tag, i) => (
-                  <Chip key={i} size="small" label={tag.id} color="primary" />
+                  <Chip key={i} size="small" label={tag.id} color={tag.hide ? 'secondary' : 'primary'} />
                 ))}
               </Box>
             </Grid>

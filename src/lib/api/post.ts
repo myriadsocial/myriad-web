@@ -31,21 +31,25 @@ export const getPost = async (
   }
 
   let where = {
-    or: [
-      {
-        tags: {
-          inq: filters.tags
-        }
-      },
-      {
-        'platformUser.username': {
-          inq: [...filters.people, user.name]
-        }
-      },
+    and: [
       {
         platform: {
           inq: filters.platform
         }
+      },
+      {
+        or: [
+          {
+            tags: {
+              inq: filters.tags
+            }
+          },
+          {
+            'platformUser.username': {
+              inq: [...filters.people, user.name]
+            }
+          }
+        ]
       }
     ]
   };
