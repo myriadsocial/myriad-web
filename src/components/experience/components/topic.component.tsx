@@ -20,6 +20,7 @@ import { useTopic } from '../use-topic.hooks';
 import SearchTopicComponent from './search-topic.component';
 import { useStyles } from './topic.style';
 
+import ShowIf from 'src/components/common/show-if.component';
 import { Tag } from 'src/interfaces/experience';
 
 type Props = {
@@ -31,11 +32,11 @@ type Props = {
 export default function TopicComponent({ topics, onAddItem, onRemoveItem }: Props) {
   const style = useStyles();
 
-  const { topics: options, search } = useTopic();
+  const { topics: options, search } = useTopic(topics);
   const [selectedTopics, setSelectedTopics] = React.useState<Tag[]>([]);
 
   React.useEffect(() => {
-    setSelectedTopics(topics);
+    setSelectedTopics(topics.slice(0, 4));
   }, [topics]);
 
   const toggleVisible = (topic: Tag) => {
@@ -48,6 +49,14 @@ export default function TopicComponent({ topics, onAddItem, onRemoveItem }: Prop
         return item;
       })
     ]);
+  };
+
+  const toggleAll = () => {
+    if (topics.length === selectedTopics.length) {
+      setSelectedTopics(topics.slice(0, 4));
+    } else {
+      setSelectedTopics(topics);
+    }
   };
 
   const searchTopic = (text: string) => {
@@ -91,12 +100,14 @@ export default function TopicComponent({ topics, onAddItem, onRemoveItem }: Prop
           })}
         </List>
 
-        <Box className={style.more}>
-          <Button color="primary" className={style.show}>
-            Show All
-            <ExpandMoreIcon />
-          </Button>
-        </Box>
+        <ShowIf condition={topics.length > selectedTopics.length}>
+          <Box className={style.more}>
+            <Button color="primary" className={style.show} onClick={toggleAll}>
+              Show All
+              <ExpandMoreIcon />
+            </Button>
+          </Box>
+        </ShowIf>
       </CardContent>
     </Card>
   );
