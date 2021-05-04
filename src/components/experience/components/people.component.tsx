@@ -30,6 +30,7 @@ import { usePeople } from '../use-people.hooks';
 import { useStyles } from './topic.style';
 
 import StyledBadge from 'src/components/common/Badge.component';
+import ShowIf from 'src/components/common/show-if.component';
 import { People } from 'src/interfaces/people';
 
 type Props = {
@@ -60,7 +61,7 @@ export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Pro
   }, [options]);
 
   React.useEffect(() => {
-    setSelectedPeople(people);
+    setSelectedPeople(people.slice(0, 4));
   }, [people]);
 
   const handleChange = (e: React.ChangeEvent<{}>, people: People | null) => {
@@ -74,6 +75,14 @@ export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Pro
       setLoading(true);
 
       search(value);
+    }
+  };
+
+  const toggleAll = () => {
+    if (people.length === selectedPeople.length) {
+      setSelectedPeople(people.slice(0, 4));
+    } else {
+      setSelectedPeople(people);
     }
   };
 
@@ -177,12 +186,14 @@ export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Pro
           })}
         </List>
 
-        <Box className={style.more}>
-          <Button color="primary" className={style.show}>
-            Show All
-            <ExpandMoreIcon />
-          </Button>
-        </Box>
+        <ShowIf condition={people.length > selectedPeople.length}>
+          <Box className={style.more}>
+            <Button color="primary" className={style.show} onClick={toggleAll}>
+              Show All
+              <ExpandMoreIcon />
+            </Button>
+          </Box>
+        </ShowIf>
       </CardContent>
     </Card>
   );

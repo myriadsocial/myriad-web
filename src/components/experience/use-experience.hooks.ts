@@ -159,7 +159,9 @@ export const useExperience = (userId: string) => {
         people: experience.people,
         tags: experience.tags,
         layout: experience.layout,
-        description: experience.description
+        description: experience.description,
+        name: experience.name,
+        userId
       }
     });
 
