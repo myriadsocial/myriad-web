@@ -154,26 +154,20 @@ export const usePost = () => {
 
   const importPost = async (URL: string) => {
     console.log('the URL is: ', URL);
-    //put API to import post below
-    //const data = await PostAPI.createPost({
-    //text,
-    //tags: tags,
-    //hasMedia,
-    //platform: 'myriad',
-    //assets: hasMedia ? images : [],
-    //platformUser: {
-    //username,
-    //platform_account_id: accountId
-    //},
-    //walletAddress: accountId
-    //});
-    //dispatch({
-    //type: TimelineActionType.CREATE_POST,
-    //post: {
-    //...data,
-    //comments: []
-    //}
-    //});
+
+    const data = await PostAPI.importPost({
+      URL
+    });
+
+    console.log('the response data is: ', data);
+
+    dispatch({
+      type: TimelineActionType.CREATE_POST,
+      post: {
+        ...data,
+        comments: []
+      }
+    });
   };
 
   return {
