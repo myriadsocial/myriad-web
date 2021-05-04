@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { useTimeline, TimelineActionType } from '../timeline/timeline.context';
 import { useExperience as baseUseExperience, ExperienceActionType } from './experience.context';
 
 import Axios from 'axios';
@@ -12,6 +13,7 @@ const axios = Axios.create({
 
 export const useExperience = (userId: string) => {
   const { state, dispatch } = baseUseExperience();
+  const { state: timelineState, dispatch: dispatchTimeline } = useTimeline();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -165,9 +167,20 @@ export const useExperience = (userId: string) => {
       }
     });
 
+    console.log('UPDATE SELECTED EXPERIENCE', experience);
     dispatch({
       type: ExperienceActionType.UPDATE_SELECTED_EXPERIENCE,
       experience
+    });
+
+    dispatchTimeline({
+      type: TimelineActionType.UPDATE_FILTER,
+      filter: {
+        tags: experience.tags.filter(tag => !tag.hide).map(tag => tag.id),
+        people: experience.people.filter(person => !person.hide).map(person => person.username),
+        layout: experience.layout || timelineState.filter.layout,
+        platform: timelineState.filter.platform
+      }
     });
   };
 
