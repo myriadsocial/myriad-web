@@ -154,7 +154,6 @@ export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Pro
         <List>
           {selectedPeople.map((people, i) => {
             const labelId = `list-label-${people.username}`;
-            console.log('people', people);
             return (
               <ListItem key={i} dense button>
                 <ListItemIcon>
