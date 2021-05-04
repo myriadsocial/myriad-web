@@ -5,6 +5,7 @@ import Head from 'next/head';
 
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
+import { ConverstionProvider } from '../conversation/conversation.context';
 import { ExperienceProvider } from '../experience/experience.context';
 import { TimelineProvider } from '../timeline/timeline.context';
 import { TransactionProvider } from '../tippingJar/transaction.context';
@@ -38,13 +39,13 @@ const Layout = ({ children, session }: Props) => {
       </Head>
 
       <LayoutSettingProvider>
-        <TransactionProvider>
-          <ExperienceProvider>
+        <ExperienceProvider>
+          <ConverstionProvider>
             <TimelineProvider>
               <LayoutComponent user={session.user}>{children}</LayoutComponent>
             </TimelineProvider>
-          </ExperienceProvider>
-        </TransactionProvider>
+          </ConverstionProvider>
+        </ExperienceProvider>
       </LayoutSettingProvider>
     </div>
   );

@@ -15,6 +15,7 @@ import ExpandMoreRounded from '@material-ui/icons/ExpandMoreRounded';
 
 import ShowIf from '../common/show-if.component';
 import NotificationListComponent from '../conversation/notification.component';
+import { useConversationHook } from '../conversation/use-conversation-hook';
 import LoginComponent from '../login/login.component';
 import Profile from './profile.component';
 import Setting from './setting.component';
@@ -54,10 +55,13 @@ const StyledBadge = withStyles((theme: Theme) =>
 
 const User = ({ settings, changeSetting }: Props) => {
   const style = useStyles();
+
   const [session] = useSession();
   const [loginOpened, openLogin] = React.useState(false);
 
   if (!session || !session.user) return null;
+
+  const { conversations } = useConversationHook(session.user);
 
   const toggleLogin = () => {
     openLogin(!loginOpened);
@@ -82,12 +86,12 @@ const User = ({ settings, changeSetting }: Props) => {
       <ShowIf condition={!session?.user.anonymous}>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreRounded color="secondary" />}>
-            <StyledBadge badgeContent={4} color="secondary">
+            <StyledBadge badgeContent={conversations.length} color="secondary">
               <Typography variant="h5">Conversations</Typography>
             </StyledBadge>
           </AccordionSummary>
           <AccordionDetails>
-            <NotificationListComponent />
+            <NotificationListComponent user={session.user} />
           </AccordionDetails>
         </Accordion>
       </ShowIf>

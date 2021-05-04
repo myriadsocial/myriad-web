@@ -42,6 +42,7 @@ const Profile = ({ user, toggleLogin }: Props) => {
   const [cookie] = useCookies(['seed']);
 
   const { profile, updateProfile } = useProfileHook(user);
+
   const [isEditProfile, showEditProfile] = useState(false);
   const [isMnemonicCopied, setMnemonicCopied] = useState(false);
 

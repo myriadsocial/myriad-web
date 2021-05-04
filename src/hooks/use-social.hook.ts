@@ -27,19 +27,23 @@ export const useSocialDetail = (post: Post) => {
   const [detail, setDetail] = React.useState<PostDetail | null>(null);
 
   const loadPost = async () => {
-    const { data } = await client({
-      method: 'GET',
-      url: '/api/content/twitter',
-      params: {
-        id: post.textId,
-        type: 'twitter'
+    try {
+      const { data } = await client({
+        method: 'GET',
+        url: '/api/content/twitter',
+        params: {
+          id: post.textId,
+          type: 'twitter'
+        }
+      });
+
+      if (!data.errors) {
+        const lookup = parseTwitter(data);
+
+        setDetail(lookup);
       }
-    });
-
-    if (!data.errors) {
-      const lookup = parseTwitter(data);
-
-      setDetail(lookup);
+    } catch (error) {
+      setDetail(null);
     }
   };
 
@@ -47,9 +51,10 @@ export const useSocialDetail = (post: Post) => {
     if (post.platform === 'twitter') {
       loadPost();
     } else {
+      console.log('post', post);
       setDetail({
         text: createPostContent(post),
-        createdOn: format(new Date(post.createdAt), 'dd MMMM yyyy'),
+        createdOn: format(new Date(post.platformCreatedAt), 'dd MMMM yyyy'),
         videos: [],
         images: [],
         metric: {
