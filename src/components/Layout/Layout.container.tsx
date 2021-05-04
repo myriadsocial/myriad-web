@@ -39,13 +39,15 @@ const Layout = ({ children, session }: Props) => {
       </Head>
 
       <LayoutSettingProvider>
-        <ExperienceProvider>
-          <ConverstionProvider>
-            <TimelineProvider>
-              <LayoutComponent user={session.user}>{children}</LayoutComponent>
-            </TimelineProvider>
-          </ConverstionProvider>
-        </ExperienceProvider>
+        <TransactionProvider>
+          <ExperienceProvider>
+            <ConverstionProvider>
+              <TimelineProvider>
+                <LayoutComponent user={session.user}>{children}</LayoutComponent>
+              </TimelineProvider>
+            </ConverstionProvider>
+          </ExperienceProvider>
+        </TransactionProvider>
       </LayoutSettingProvider>
     </div>
   );

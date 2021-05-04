@@ -102,13 +102,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function TransactionListComponent({ transactions, userId }: Props) {
   const style = useStyles();
-  const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
+  const [_, setAllTransactions] = useState<Transaction[]>([]);
   const [tipsReceivedDetails, setTipsReceivedDetails] = useState({
-    total: null,
+    total: 0,
     senderAddress: ''
   });
   const [tipsSentDetails, setTipsSentDetails] = useState({
-    total: null,
+    total: 0,
     receiverAddress: ''
   });
 
@@ -124,15 +124,15 @@ export default function TransactionListComponent({ transactions, userId }: Props
   }, [transactions]);
 
   const totalTipsReceived = () => {
-    let temp = transactions.filter((el: object) => {
+    let temp = transactions.filter((el: Transaction) => {
       return el.to === userId;
     });
 
-    let total = temp.map((el: object) => {
+    let total = temp.map((el: Transaction) => {
       return el.value / 1000000000000;
     });
 
-    let senderAddress = temp.map((el: object) => {
+    let senderAddress = temp.map((el: Transaction) => {
       return el.from;
     });
 
@@ -156,15 +156,15 @@ export default function TransactionListComponent({ transactions, userId }: Props
   const id = open ? 'simple-popover' : undefined;
 
   const totalTipsSent = () => {
-    let temp = transactions.filter((el: object) => {
+    let temp = transactions.filter((el: Transaction) => {
       return el.from === userId;
     });
 
-    let total = temp.map((el: object) => {
+    let total = temp.map((el: Transaction) => {
       return el.value / 1000000000000;
     });
 
-    let receiverAddress = temp.map((el: object) => {
+    let receiverAddress = temp.map((el: Transaction) => {
       return el.to;
     });
 
@@ -210,13 +210,11 @@ export default function TransactionListComponent({ transactions, userId }: Props
               vertical: 'top',
               horizontal: 'center'
             }}>
-            <Typography className={classes.typography}>The content of the Popover.</Typography>
+            <Typography className={style.typography}>The content of the Popover.</Typography>
           </Popover>
           <Button className={style.received}>
             Total tips sent to me: {tipsReceivedDetails?.senderAddress === txHistory?.from ? tipsReceivedDetails?.total : '---'} MYRIA
           </Button>
-          <Button className={style.received}>Sender Address: {tipsReceivedDetails?.senderAddress}</Button>
-          <Button className={style.received}>Sender Address: {txHistory?.from}</Button>
         </div>
         <div>
           <Button>Transaction date: {formatDate()}</Button>
