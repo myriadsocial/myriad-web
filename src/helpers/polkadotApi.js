@@ -21,7 +21,7 @@ export const getBalance = async ADDR => {
     if (ADDR) {
       const DECIMAL_PLACES = 10000000000;
       const api = await connectToBlockchain();
-      console.log('get balance is called!');
+      //console.log('get balance is called!');
       const {
         data: { free: previousFree }
       } = await api.query.system.account(ADDR);
@@ -47,10 +47,11 @@ export const sendTip = async (fromAddress, toAddress, amountSent) => {
     const account = allAccounts.find(function (account) {
       return account.address === fromAddress;
     });
-    console.log('>>> account is:', account);
     // if account has not yet been imported to Polkadot.js extension
     if (account === undefined) {
-      throw Error('please import your wallet first!');
+      throw {
+        Error: 'Please import your account first!'
+      };
     }
     // otherwise
     if (account) {
@@ -71,7 +72,8 @@ export const sendTip = async (fromAddress, toAddress, amountSent) => {
       return { trxHash: txInfo.toHex(), from: fromAddress };
     }
   } catch (error) {
-    throw Error('error from sendtip');
+    console.log('the error is: ', error);
+    return error;
   }
 };
 

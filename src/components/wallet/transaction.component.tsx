@@ -71,16 +71,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface GetTxHistory {
-  id: string;
-  trxHash: string;
-  from: string;
-  to: string;
-  value: number;
-  state: string;
-  createdAt: string;
-}
-
 interface StyledTabProps {
   label: string;
   value: string;
@@ -136,11 +126,7 @@ export const TransactionComponent = React.memo(function Wallet() {
   const [session] = useSession();
   const userAddress = session?.user.address as string;
   const { loading, error, transactions, inboundTxs, outboundTxs, loadInitTransaction } = useTransaction(userAddress);
-  //const [txHistories, setTxHistories] = useState<GetTxHistory[]>([]);
-  //const [outboundTxs, setOutboundTxs] = useState<GetTxHistory[]>([]);
-  //const [inboundTxs, setInboundTxs] = useState<GetTxHistory[]>([]);
   const [value, setValue] = useState('0');
-  //const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     loadInitTransaction();
