@@ -91,16 +91,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function TransactionListComponent({ transactions, userId, loadInitTransaction }: Props) {
+export default function TransactionListComponent({ transactions, userId }: Props) {
   const style = useStyles();
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
-    if (transactions.length > 0) {
-      setAllTransactions(transactions);
-    } else {
-      loadInitTransaction();
-    }
+    setAllTransactions(transactions);
   }, []);
 
   const RenderPrimaryText = (txHistory: Transaction) => {
