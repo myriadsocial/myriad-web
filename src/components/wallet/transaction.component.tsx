@@ -23,11 +23,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import TabContext from '@material-ui/lab/TabContext';
 import TabPanel from '@material-ui/lab/TabPanel';
 
-import Axios from 'axios';
-
-const client = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL
-});
+import { useTransaction } from '../tippingJar/use-transaction.hooks';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -137,71 +133,45 @@ const StyledTab = withStyles((theme: Theme) =>
 export const TransactionComponent = React.memo(function Wallet() {
   const style = useStyles();
 
-  const [txHistories, setTxHistories] = useState<GetTxHistory[]>([]);
-  const [outboundTxs, setOutboundTxs] = useState<GetTxHistory[]>([]);
-  const [inboundTxs, setInboundTxs] = useState<GetTxHistory[]>([]);
-  const [value, setValue] = useState('0');
-  const [loading, setLoading] = useState<boolean>(true);
   const [session] = useSession();
+  const userAddress = session?.user.address as string;
+  const { loading, error, transactions, inboundTxs, outboundTxs, loadInitTransaction } = useTransaction(userAddress);
+  //const [txHistories, setTxHistories] = useState<GetTxHistory[]>([]);
+  //const [outboundTxs, setOutboundTxs] = useState<GetTxHistory[]>([]);
+  //const [inboundTxs, setInboundTxs] = useState<GetTxHistory[]>([]);
+  const [value, setValue] = useState('0');
+  //const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    (async () => {
-      await getTxHistories();
-    })();
+    loadInitTransaction();
   }, []);
-
-  const getTxHistories = async () => {
-    try {
-      console.log('fetching data....');
-      setLoading(true);
-      const response = await client({
-        method: 'GET',
-        url: '/transactions'
-      });
-
-      if (response.data.length > 0) {
-        const { data } = response;
-        console.log('data fetched!');
-        const senderAddress = session?.user.address;
-        let tempData = data.filter(function (datum: any) {
-          return datum.from === senderAddress || datum.to === senderAddress;
-        });
-        const sortedTempData = tempData.slice().sort((a: any, b: any) => b.createdAt - a.createdAt);
-        setTxHistories(sortedTempData);
-        const inboundTxs = txHistories.filter(txHistory => {
-          return txHistory.to === session?.user.address;
-        });
-        const outboundTxs = txHistories.filter(txHistory => {
-          return txHistory.from === session?.user.address;
-        });
-
-        setInboundTxs(inboundTxs);
-        setOutboundTxs(outboundTxs);
-        setLoading(false);
-      }
-    } catch (error) {
-      setLoading(false);
-      console.log(`error from getTxHistories: ${error}`);
-    }
-  };
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
     event.preventDefault();
     setValue(newValue);
   };
 
-  const handleClick = async () => {
-    await getTxHistories();
+  const handleClick = () => {
+    loadInitTransaction();
   };
 
-  if (loading)
+  if (loading) {
     return (
       <Grid container justify="center">
         <CircularProgress className={style.loading} />
       </Grid>
     );
+  }
 
-  if (txHistories.length === 0)
+  if (error) {
+    return (
+      <Grid container justify="center">
+        <Typography>Error, please try again later!</Typography>
+      </Grid>
+    );
+  }
+
+  if (transactions.length === 0)
     return (
       <Grid container justify="center">
         <Typography>Data not available</Typography>
@@ -221,7 +191,7 @@ export const TransactionComponent = React.memo(function Wallet() {
         </StyledTabs>
         <TabPanel className={style.panel} value={'0'}>
           <List className={style.root}>
-            {txHistories.map(txHistory => (
+            {transactions.map(txHistory => (
               <ListItem key={txHistory?.id}>
                 <ListItemAvatar className={style.avatar}>
                   <Avatar>
