@@ -2,7 +2,7 @@ import { User } from 'next-auth';
 
 import Axios from 'axios';
 import { WithAdditionalParams } from 'next-auth/_utils';
-import { Post, Comment, PostSortMethod, PostFilter } from 'src/interfaces/post';
+import { Post, Comment, PostSortMethod, PostFilter, ImportPost } from 'src/interfaces/post';
 
 const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
@@ -99,6 +99,18 @@ export const createPost = async (values: Partial<Post>): Promise<Post> => {
     method: 'POST',
     data: values
   });
+
+  return data;
+};
+
+export const importPost = async (values: ImportPost): Promise<Post> => {
+  const { data } = await MyriadAPI.request<Post>({
+    url: `/posts/import`,
+    method: 'POST',
+    data: values
+  });
+
+  console.log('the returned data: ', data);
 
   return data;
 };
