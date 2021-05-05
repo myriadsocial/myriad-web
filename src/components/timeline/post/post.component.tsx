@@ -191,7 +191,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
         </ShowIf>
       </Card>
 
-      <SendTipModal postId={post.id as string} anonymous={isAnonymous} userAddress={userId} ref={childRef} />
+      <SendTipModal userAddress={userId} ref={childRef} walletAddress={post.walletAddress} />
     </>
   );
 }

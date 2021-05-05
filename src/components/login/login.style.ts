@@ -53,6 +53,15 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     polkadot: {
       color: 'rgb(255, 140, 0)'
+    },
+    spinner: {
+      color: '#A942E9',
+      position: 'relative',
+      top: 4,
+      left: 6
+    },
+    sendTipDialog: {
+      minWidth: '400px'
     }
   })
 );
