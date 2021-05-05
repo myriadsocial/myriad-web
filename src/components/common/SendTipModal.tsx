@@ -1,12 +1,14 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import SendIcon from '@material-ui/icons/Send';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
@@ -39,6 +41,7 @@ type Props = {
 
 const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => {
   const [balance, setBalance] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
@@ -49,14 +52,20 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
     (async () => {
       await getBalanceForComponent();
     })();
-  }, []);
+  }, [balance]);
 
   const getBalanceForComponent = async () => {
+    setLoading(true);
     const currentAddress = userAddress;
     const freeBalance = await getBalance(currentAddress);
     if (freeBalance) {
       setBalance(Number((freeBalance / 100).toFixed(3)));
+      setLoading(false);
     }
+  };
+
+  const handleClick = () => {
+    getBalanceForComponent();
   };
 
   const [showSendTipModal, setShowSendTipModal] = useState(false);
@@ -98,7 +107,7 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
   };
 
   const checkAmountThenSend = async () => {
-    const regexValidDigits = /^(?:[1-9][0-9]*|0)$/;
+    const regexValidDigits = /^\d*(\.\d+)?$/;
     if (values.amount === '') {
       setInputError({
         ...inputError,
@@ -142,6 +151,10 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
             message: 'Tip sent successfully!'
           });
           setShowSendTipModal(false);
+          setValues({
+            ...values,
+            amount: ''
+          });
           getBalanceForComponent();
         }
       }
@@ -180,9 +193,16 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
           Send Tip
         </DialogTitle>
         <DialogContent dividers>
-          <Typography gutterBottom={true} variant="body1">
-            Free balance: {balance} MYRIA
-          </Typography>
+          {loading ? (
+            <CircularProgress className={styles.spinner} size={15} />
+          ) : (
+            <>
+              <Typography gutterBottom={true} variant="body1">
+                Free balance: {balance} MYRIA
+              </Typography>
+              <RefreshIcon onClick={handleClick} />
+            </>
+          )}
         </DialogContent>
         <DialogContent dividers>
           <form noValidate autoComplete="off">
