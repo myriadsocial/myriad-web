@@ -13,10 +13,11 @@ import SendIcon from '@material-ui/icons/Send';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
-import { getBalance } from '../../helpers/polkadotApi';
+//import { getBalance } from '../../helpers/polkadotApi';
 import { sendTip } from '../../helpers/polkadotApi';
 import DialogTitle from '../common/DialogTitle.component';
 import { useStyles } from '../login/login.style';
+import { useBalance } from '../wallet/use-balance.hooks';
 
 interface InputState {
   amount: string;
@@ -40,8 +41,7 @@ type Props = {
 };
 
 const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => {
-  const [balance, setBalance] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const { loading, error, freeBalance, loadInitBalance } = useBalance(userAddress);
 
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
@@ -49,23 +49,11 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
   });
 
   useEffect(() => {
-    (async () => {
-      await getBalanceForComponent();
-    })();
-  }, [balance]);
-
-  const getBalanceForComponent = async () => {
-    setLoading(true);
-    const currentAddress = userAddress;
-    const freeBalance = await getBalance(currentAddress);
-    if (freeBalance) {
-      setBalance(Number((freeBalance / 100).toFixed(3)));
-      setLoading(false);
-    }
-  };
+    loadInitBalance();
+  }, []);
 
   const handleClick = () => {
-    getBalanceForComponent();
+    loadInitBalance();
   };
 
   const [showSendTipModal, setShowSendTipModal] = useState(false);
@@ -122,7 +110,7 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
         isTextChanged: true
       });
 
-      if (Number(values.amount) >= balance) {
+      if (Number(values.amount) >= freeBalance) {
         setInputError({
           ...inputError,
           isErrorInput: true,
@@ -155,7 +143,7 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
             ...values,
             amount: ''
           });
-          getBalanceForComponent();
+          loadInitBalance();
         }
       }
     } else {
@@ -193,12 +181,19 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
           Send Tip
         </DialogTitle>
         <DialogContent dividers>
-          {loading ? (
+          {error ? (
+            <>
+              <Typography gutterBottom={true} variant="body1" className={styles.errorText}>
+                Try again later!
+              </Typography>
+              <RefreshIcon onClick={handleClick} />
+            </>
+          ) : loading ? (
             <CircularProgress className={styles.spinner} size={15} />
           ) : (
             <>
               <Typography gutterBottom={true} variant="body1">
-                Free balance: {balance} MYRIA
+                Free balance: {freeBalance} MYRIA
               </Typography>
               <RefreshIcon onClick={handleClick} />
             </>
