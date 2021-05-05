@@ -40,7 +40,7 @@ type Props = {
   post: Post;
   reply: (comment: Comment) => void;
   loadComments: (postId: string) => void;
-  postOwner: boolean;
+  postOwner?: boolean;
 };
 
 export default function PostComponent({ post, open = false, disable = false, reply, loadComments, postOwner }: Props) {
