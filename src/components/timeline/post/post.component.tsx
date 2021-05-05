@@ -40,20 +40,23 @@ type Props = {
   post: Post;
   reply: (comment: Comment) => void;
   loadComments: (postId: string) => void;
+  postOwner: boolean;
 };
 
-export default function PostComponent({ post, open = false, disable = false, reply, loadComments }: Props) {
+export default function PostComponent({ post, open = false, disable = false, reply, loadComments, postOwner }: Props) {
   const style = useStyles();
 
   const [expanded, setExpanded] = useState(open);
   const { detail } = useSocialDetail(post);
 
   const childRef = useRef<any>();
-  const [session] = useSession();
+  const headerRef = useRef<any>();
   const router = useRouter();
 
-  const userId = session?.user.address as string;
+  const [session] = useSession();
+
   const isAnonymous = session?.user.anonymous as boolean;
+  const userId = session?.user.address as string;
 
   const currentPage = router.pathname as string;
 
@@ -92,18 +95,20 @@ export default function PostComponent({ post, open = false, disable = false, rep
     };
   };
 
-  const PostActionTipUser = (
-    <Button
-      className={style.action}
-      onClick={tipPostUser}
-      aria-label="tip-post-user"
-      color="primary"
-      variant="contained"
-      size="small"
-      disabled={isAnonymous}>
-      Send Tip
-    </Button>
-  );
+  const PostActionTipUser = () => {
+    return (
+      <Button
+        className={style.action}
+        onClick={tipPostUser}
+        aria-label="tip-post-user"
+        color="primary"
+        variant="contained"
+        size="small"
+        disabled={isAnonymous || postOwner}>
+        Send Tip
+      </Button>
+    );
+  };
 
   if (!detail) return null;
 
@@ -114,7 +119,13 @@ export default function PostComponent({ post, open = false, disable = false, rep
   return (
     <>
       <Card className={style.root}>
-        <CardHeader avatar={renderPostAvatar()} action={PostActionTipUser} title={detail.user.name} subheader={detail.createdOn} />
+        <CardHeader
+          ref={headerRef}
+          avatar={renderPostAvatar()}
+          action={PostActionTipUser()}
+          title={detail.user.name}
+          subheader={detail.createdOn}
+        />
 
         <ShowIf condition={['twitter', 'reddit'].includes(post.platform)}>
           <CardContent className={style.content}>
