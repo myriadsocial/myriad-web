@@ -3,7 +3,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { User } from 'next-auth';
 
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';

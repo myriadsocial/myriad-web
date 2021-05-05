@@ -4,7 +4,6 @@ import { User } from 'next-auth';
 
 import Grid from '@material-ui/core/Grid';
 import NoSsr from '@material-ui/core/NoSsr';
-import Typography from '@material-ui/core/Typography';
 
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 
