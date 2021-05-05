@@ -59,10 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: '0 4px'
     },
     spinner: {
-      color: '#A942E9',
-      position: 'relative',
-      top: 4,
-      left: 6
+      color: '#A942E9'
     }
   })
 );
