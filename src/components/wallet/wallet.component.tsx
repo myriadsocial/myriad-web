@@ -26,7 +26,6 @@ export const Wallet = React.memo(function Wallet() {
   const style = useStyles();
 
   const tippingJarRef = useRef<any>();
-
   const handleClickTutorial = () => {
     tippingJarRef.current.triggerTippingJar();
   };

@@ -8,7 +8,7 @@ import Head from 'next/head';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 
-import { MyriadAccountProvider } from '../src/components/wallet/wallet.context';
+import { BalanceProvider } from '../src/components/wallet/balance.context';
 import theme from '../src/themes/default';
 
 const App = ({ Component, pageProps }: AppProps) => {
@@ -37,7 +37,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         <title>{pageTitle}</title>
       </Head>
       <ThemeProvider theme={theme}>
-        <MyriadAccountProvider>
+        <BalanceProvider>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
           <Provider
@@ -63,7 +63,7 @@ const App = ({ Component, pageProps }: AppProps) => {
               <Component {...pageProps} />
             </CookiesProvider>
           </Provider>
-        </MyriadAccountProvider>
+        </BalanceProvider>
       </ThemeProvider>
     </React.Fragment>
   );
