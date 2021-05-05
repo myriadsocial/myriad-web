@@ -152,6 +152,24 @@ export const usePost = () => {
     });
   };
 
+  const importPost = async (URL: string) => {
+    console.log('the URL is: ', URL);
+
+    const data = await PostAPI.importPost({
+      URL
+    });
+
+    console.log('the response data is: ', data);
+
+    dispatch({
+      type: TimelineActionType.CREATE_POST,
+      post: {
+        ...data,
+        comments: []
+      }
+    });
+  };
+
   return {
     error,
     loading,
@@ -162,6 +180,7 @@ export const usePost = () => {
     loadComments,
     addPost,
     reply,
-    sortBy
+    sortBy,
+    importPost
   };
 };
