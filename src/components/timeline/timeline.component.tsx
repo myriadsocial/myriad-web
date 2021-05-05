@@ -8,6 +8,7 @@ import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
+import { LoadingPage } from '../common/loading.component';
 import ImportPostComponent from './ImportPost.component';
 import FilterTimelineComponent from './filter.component';
 import PostComponent from './post/post.component';
@@ -82,7 +83,7 @@ const Timeline = ({ user }: Props) => {
           dataLength={state.posts.length + 100}
           next={loadMorePost}
           hasMore={hasMore}
-          loader={<CircularProgress className={style.loading} disableShrink />}>
+          loader={<LoadingPage />}>
           {state.posts.map((post: Post, i: number) => (
             <Grow key={i}>
               <PostComponent post={post} open={false} reply={handleReply} loadComments={loadComments} />
