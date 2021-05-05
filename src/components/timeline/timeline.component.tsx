@@ -18,6 +18,7 @@ import { usePost } from './use-post.hook';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
+import ShowIf from 'src/components/common/show-if.component';
 import { Post, Comment } from 'src/interfaces/post';
 
 type Props = {
@@ -65,6 +66,7 @@ const Timeline = ({ user }: Props) => {
     importPost(URL);
   };
 
+  console.log('user', user);
   console.log('TIMELINE COMPONENT LOAD');
 
   return (
@@ -72,9 +74,11 @@ const Timeline = ({ user }: Props) => {
       <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
         <FilterTimelineComponent selected={state.sort} onChange={sortBy} />
 
-        <CreatePostComponent onSubmit={submitPost} />
+        <ShowIf condition={!user.anonymous}>
+          <CreatePostComponent onSubmit={submitPost} />
 
-        <ImportPostComponent onSubmit={submitImportPost} />
+          <ImportPostComponent onSubmit={submitImportPost} />
+        </ShowIf>
 
         <InfiniteScroll
           scrollableTarget="scrollable-timeline"
