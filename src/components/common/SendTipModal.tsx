@@ -13,7 +13,6 @@ import SendIcon from '@material-ui/icons/Send';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
-//import { getBalance } from '../../helpers/polkadotApi';
 import { sendTip } from '../../helpers/polkadotApi';
 import DialogTitle from '../common/DialogTitle.component';
 import { useStyles } from '../login/login.style';
@@ -45,6 +44,11 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
 
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
+    message: ''
+  });
+
+  const [errorSendTips, setErrorSendTips] = useState({
+    isError: false,
     message: ''
   });
 
@@ -133,6 +137,20 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
 
         const response = await sendTip(senderAddress, walletAddress, amountSent);
         // handle if sendTip succeed
+        if (response.Error) {
+          //console.log('response is: ', response.Error);
+          setErrorSendTips({
+            ...errorSendTips,
+            isError: true,
+            message: response.Error
+          });
+          setShowSendTipModal(false);
+          setValues({
+            ...values,
+            amount: ''
+          });
+          return;
+        }
         if (typeof response === 'object') {
           setSendTipConfirmed({
             isConfirmed: true,
@@ -170,6 +188,13 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
     setSendTipConfirmed({
       ...sendTipConfirmed,
       isConfirmed: false
+    });
+  };
+
+  const handleCloseErrorSendTips = () => {
+    setErrorSendTips({
+      ...errorSendTips,
+      isError: false
     });
   };
 
@@ -246,6 +271,13 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
         <Alert severity="error">
           <AlertTitle>Error!</AlertTitle>
           {errorText.message}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar open={errorSendTips.isError} autoHideDuration={3000} onClose={handleCloseErrorSendTips}>
+        <Alert severity="error">
+          <AlertTitle>Error!</AlertTitle>
+          {errorSendTips.message}
         </Alert>
       </Snackbar>
     </>
