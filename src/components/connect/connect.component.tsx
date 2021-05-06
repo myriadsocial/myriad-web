@@ -42,7 +42,7 @@ const copy: Record<SocialsEnum, string> = {
 export default function ConnectComponent({ user, social, open, handleClose }: Props) {
   const classes = useStyles();
   const childRef = useRef<any>();
-  const { shared, shareOnTwitter, shareOnReddit } = useShareSocial();
+  const { shared, shareOnTwitter, shareOnReddit, shareOnFacebook, setSharedStatus } = useShareSocial(user.address as string);
 
   const share = useCallback(() => {
     switch (social) {
@@ -53,14 +53,16 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
         shareOnReddit();
         break;
       case SocialsEnum.FACEBOOK:
+        shareOnFacebook();
+        break;
       default:
         break;
     }
   }, [social]);
 
   const closeShare = () => {
-    share();
     handleClose();
+    setSharedStatus(false);
   };
 
   const config = useMemo(() => {
@@ -74,6 +76,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
   }, []);
 
   const message = `Saying hi to #MyriadNetwork\n\nPublic Key: ${user.address}`;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://app.myriad.systems';
 
   const handleClickTutorial = () => {
     childRef.current.triggerLinkingTutorial();
@@ -81,7 +84,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose} maxWidth="xs">
+      <Dialog open={open} onClose={handleClose} maxWidth="xs" disableBackdropClick disableEscapeKeyDown>
         <DialogTitle id="connect-social">Link Your {social} Account</DialogTitle>
         <DialogContent dividers>
           <Card className={classes.card}>
@@ -94,24 +97,24 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
             <CardHeader avatar={config.step2} title={config.shareTitle} />
             <CardContent className={classes.share}>
               <ShowIf condition={social === SocialsEnum.FACEBOOK}>
-                <FacebookShareButton url="https://myriad-fe.herokuapp.com" quote={message}>
-                  <Button variant="contained" size="large" onClick={share} startIcon={<FacebookIcon />} className={classes.facebook}>
+                <FacebookShareButton url={appUrl} quote={message} onShareWindowClose={share}>
+                  <Button variant="contained" size="large" startIcon={<FacebookIcon />} className={classes.facebook}>
                     Share
                   </Button>
                 </FacebookShareButton>
               </ShowIf>
 
               <ShowIf condition={social === SocialsEnum.TWITTER}>
-                <TwitterShareButton url="https://myriad-fe.herokuapp.com" title={message}>
-                  <Button variant="contained" size="large" onClick={share} startIcon={<TwitterIcon />} className={classes.twitter}>
+                <TwitterShareButton url={appUrl} title={message} onShareWindowClose={share}>
+                  <Button variant="contained" size="large" startIcon={<TwitterIcon />} className={classes.twitter}>
                     Share
                   </Button>
                 </TwitterShareButton>
               </ShowIf>
 
               <ShowIf condition={social === SocialsEnum.REDDIT}>
-                <RedditShareButton url="https://myriad-fe.herokuapp.com" title={message}>
-                  <Button variant="contained" size="large" onClick={share} startIcon={<RedditIcon />} className={classes.reddit}>
+                <RedditShareButton url={appUrl} title={message} onShareWindowClose={share}>
+                  <Button variant="contained" size="large" startIcon={<RedditIcon />} className={classes.reddit}>
                     Share
                   </Button>
                 </RedditShareButton>
