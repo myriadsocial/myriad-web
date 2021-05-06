@@ -17,7 +17,11 @@ export const useUserHook = (user: WithAdditionalParams<User>) => {
     setLoading(true);
 
     try {
-      const detail: ExtendedUser = await UserAPI.getUserDetail(user.address as string);
+      let detail: ExtendedUser = await UserAPI.getUserDetail(user.address as string);
+
+      if (!detail.userCredentials) {
+        detail.userCredentials = [];
+      }
 
       dispatch({
         type: UserActionType.USER_LOADED,
