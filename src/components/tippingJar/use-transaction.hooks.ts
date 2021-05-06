@@ -50,8 +50,6 @@ export const useTransaction = (userId: string) => {
           return transaction.from === userId;
         });
 
-        console.log('data: ', data);
-
         dispatch({
           type: TransactionActionType.INIT_TRANSACTION,
           transactions: sortedTempData,
