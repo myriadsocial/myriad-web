@@ -62,6 +62,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     sendTipDialog: {
       minWidth: '400px'
+    },
+    errorText: {
+      color: 'red'
     }
   })
 );
