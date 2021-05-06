@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+import { useSession } from 'next-auth/client';
 
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
@@ -33,7 +35,27 @@ type Props = {
 export default function CommentComponent({ data }: Props) {
   const style = useStyles();
 
-  console.log('data', data);
+  const [session] = useSession();
+  const userId = session?.user.id as string;
+
+  const [isHidden, setIsHidden] = useState(false);
+
+  useEffect(() => {
+    if (userId === data.userId) {
+      setIsHidden(true);
+    }
+  }, []);
+
+  const RenderAction = () => {
+    if (!isHidden)
+      return (
+        <Button className={style.action} aria-label="settings" color="primary" variant="contained" size="small">
+          Send Tip
+        </Button>
+      );
+    return null;
+  };
+
   return (
     <Card className={style.root}>
       <CardHeader
@@ -46,11 +68,7 @@ export default function CommentComponent({ data }: Props) {
             </StyledBadge>
           </IconButton>
         }
-        action={
-          <Button className={style.action} aria-label="settings" color="primary" variant="contained" size="small">
-            Send Tip
-          </Button>
-        }
+        action={RenderAction()}
         title={data.user?.name}
         subheader={<DateFormat date={data.createdAt} />}
       />

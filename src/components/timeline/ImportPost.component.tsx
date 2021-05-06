@@ -56,7 +56,7 @@ type Props = {
   onSubmit: (text: string) => void;
 };
 
-export default function SubmitPostComponent({ onSubmit }: Props) {
+export default function ImportPostComponent({ onSubmit }: Props) {
   const styles = useStyles();
 
   const [showImportPost, setCreatePost] = useState(false);
