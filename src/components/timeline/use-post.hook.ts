@@ -152,11 +152,11 @@ export const usePost = () => {
     });
   };
 
-  const importPost = async (URL: string) => {
-    console.log('the URL is: ', URL);
+  const importPost = async (url: string) => {
+    console.log('the URL is: ', url);
 
     const data = await PostAPI.importPost({
-      URL
+      url
     });
 
     console.log('the response data is: ', data);
