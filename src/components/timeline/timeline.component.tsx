@@ -2,6 +2,7 @@ import React, { createRef, useCallback, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { User } from 'next-auth';
+import { useSession } from 'next-auth/client';
 
 import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
@@ -69,6 +70,15 @@ const Timeline = ({ user }: Props) => {
   console.log('user', user);
   console.log('TIMELINE COMPONENT LOAD');
 
+  const [session] = useSession();
+  const userId = session?.user.address as string;
+  const isOwnPost = (post: Post) => {
+    if (post.walletAddress === userId) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <div className={style.root}>
       <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
@@ -89,7 +99,7 @@ const Timeline = ({ user }: Props) => {
           loader={<LoadingPage />}>
           {state.posts.map((post: Post, i: number) => (
             <Grow key={i}>
-              <PostComponent post={post} open={false} reply={handleReply} loadComments={loadComments} />
+              <PostComponent post={post} open={false} reply={handleReply} loadComments={loadComments} postOwner={isOwnPost(post)} />
             </Grow>
           ))}
 
