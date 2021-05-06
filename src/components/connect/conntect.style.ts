@@ -38,6 +38,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     doneText: {
       align: 'justify',
       color: 'red'
+    },
+    usernameForm: {
+      width: 400
     }
   })
 );
