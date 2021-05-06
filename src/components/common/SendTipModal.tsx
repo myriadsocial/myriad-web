@@ -152,6 +152,7 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
           return;
         }
         if (typeof response === 'object') {
+          console.log('response : ', response);
           setSendTipConfirmed({
             isConfirmed: true,
             message: 'Tip sent successfully!'
