@@ -10,12 +10,13 @@ const MyriadAPI = Axios.create({
 export const useShareSocial = (publicKey: string) => {
   const [shared, setShared] = useState(false);
 
-  const shareOnFacebook = async () => {
+  const shareOnFacebook = async (username: string) => {
     try {
       await MyriadAPI.request({
         method: 'POST',
         url: '/user-credentials/verify',
         data: {
+          username,
           publicKey,
           platform: SocialsEnum.FACEBOOK
         }
@@ -28,12 +29,13 @@ export const useShareSocial = (publicKey: string) => {
     }
   };
 
-  const shareOnReddit = async () => {
+  const shareOnReddit = async (username: string) => {
     try {
       await MyriadAPI.request({
         method: 'POST',
         url: '/user-credentials/verify',
         data: {
+          username,
           publicKey,
           platform: SocialsEnum.REDDIT
         }
@@ -46,12 +48,13 @@ export const useShareSocial = (publicKey: string) => {
     }
   };
 
-  const shareOnTwitter = async () => {
+  const shareOnTwitter = async (username: string) => {
     try {
       await MyriadAPI.request({
         method: 'POST',
         url: '/user-credentials/verify',
         data: {
+          username,
           publicKey,
           platform: SocialsEnum.TWITTER
         }

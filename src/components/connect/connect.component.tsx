@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useCallback } from 'react';
+import React, { useRef, useMemo, useCallback, useState } from 'react';
 import { FacebookShareButton, RedditShareButton, TwitterShareButton } from 'react-share';
 
 import { User } from 'next-auth';
@@ -24,6 +24,7 @@ import ShowIf from '../common/show-if.component';
 import { useStyles } from './conntect.style';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
+import DialogTitleCustom from 'src/components/common/DialogTitle.component';
 import { useShareSocial } from 'src/hooks/use-share-social';
 
 export type Props = {
@@ -41,24 +42,44 @@ const copy: Record<SocialsEnum, string> = {
 
 export default function ConnectComponent({ user, social, open, handleClose }: Props) {
   const classes = useStyles();
+  const [nameOpened, setNameOpened] = useState(false);
+  const [username, setUsername] = useState('');
   const childRef = useRef<any>();
   const { shared, shareOnTwitter, shareOnReddit, shareOnFacebook, setSharedStatus } = useShareSocial(user.address as string);
 
-  const share = useCallback(() => {
-    switch (social) {
-      case SocialsEnum.TWITTER:
-        shareOnTwitter();
-        break;
-      case SocialsEnum.REDDIT:
-        shareOnReddit();
-        break;
-      case SocialsEnum.FACEBOOK:
-        shareOnFacebook();
-        break;
-      default:
-        break;
-    }
-  }, [social]);
+  const share = useCallback(
+    (username: string) => {
+      switch (social) {
+        case SocialsEnum.TWITTER:
+          shareOnTwitter(username);
+          break;
+        case SocialsEnum.REDDIT:
+          shareOnReddit(username);
+          break;
+        case SocialsEnum.FACEBOOK:
+          shareOnFacebook(username);
+          break;
+        default:
+          break;
+      }
+    },
+    [social]
+  );
+
+  const toggleNameForm = () => {
+    setNameOpened(!nameOpened);
+  };
+
+  const handleUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    setUsername(value);
+  };
+
+  const setShared = () => {
+    toggleNameForm();
+    share(username);
+  };
 
   const closeShare = () => {
     handleClose();
@@ -83,7 +104,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
   };
 
   return (
-    <>
+    <div>
       <Dialog open={open} onClose={handleClose} maxWidth="xs" disableBackdropClick disableEscapeKeyDown>
         <DialogTitle id="connect-social">Link Your {social} Account</DialogTitle>
         <DialogContent dividers>
@@ -97,7 +118,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
             <CardHeader avatar={config.step2} title={config.shareTitle} />
             <CardContent className={classes.share}>
               <ShowIf condition={social === SocialsEnum.FACEBOOK}>
-                <FacebookShareButton url={appUrl} quote={message} onShareWindowClose={share}>
+                <FacebookShareButton url={appUrl} quote={message} onShareWindowClose={toggleNameForm}>
                   <Button variant="contained" size="large" startIcon={<FacebookIcon />} className={classes.facebook}>
                     Share
                   </Button>
@@ -105,7 +126,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
               </ShowIf>
 
               <ShowIf condition={social === SocialsEnum.TWITTER}>
-                <TwitterShareButton url={appUrl} title={message} onShareWindowClose={share}>
+                <TwitterShareButton url={appUrl} title={message} onShareWindowClose={toggleNameForm}>
                   <Button variant="contained" size="large" startIcon={<TwitterIcon />} className={classes.twitter}>
                     Share
                   </Button>
@@ -113,7 +134,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
               </ShowIf>
 
               <ShowIf condition={social === SocialsEnum.REDDIT}>
-                <RedditShareButton url={appUrl} title={message} onShareWindowClose={share}>
+                <RedditShareButton url={appUrl} title={message} onShareWindowClose={toggleNameForm}>
                   <Button variant="contained" size="large" startIcon={<RedditIcon />} className={classes.reddit}>
                     Share
                   </Button>
@@ -137,7 +158,34 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
         </DialogActions>
       </Dialog>
 
+      <Dialog open={nameOpened} onClose={toggleNameForm} maxWidth="xs" disableBackdropClick disableEscapeKeyDown>
+        <DialogTitleCustom id="user-title" onClose={toggleNameForm}>
+          Set Account Name
+        </DialogTitleCustom>
+        <DialogContent>
+          <TextField
+            value={username}
+            onChange={handleUsername}
+            color="secondary"
+            variant="filled"
+            margin="normal"
+            required
+            fullWidth
+            name="username"
+            label="Username"
+            type="text"
+            id="username"
+          />
+        </DialogContent>
+        <DialogActions className={classes.done}>
+          <Button onClick={setShared} fullWidth={true} size="large" variant="contained" color="secondary">
+            {' '}
+            Use as my {social} name
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <LinkingTutorialComponent ref={childRef} />
-    </>
+    </div>
   );
 }
