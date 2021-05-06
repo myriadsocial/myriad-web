@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useCallback, useState } from 'react';
+import React, { useRef, useMemo, useCallback, useState, useEffect } from 'react';
 import { FacebookShareButton, RedditShareButton, TwitterShareButton } from 'react-share';
 
 import { User } from 'next-auth';
@@ -13,6 +13,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import RedditIcon from '@material-ui/icons/Reddit';
@@ -45,7 +46,15 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
   const [nameOpened, setNameOpened] = useState(false);
   const [username, setUsername] = useState('');
   const childRef = useRef<any>();
-  const { shared, shareOnTwitter, shareOnReddit, shareOnFacebook, setSharedStatus } = useShareSocial(user.address as string);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const { shared, isUsed, shareOnTwitter, shareOnReddit, shareOnFacebook, setSharedStatus } = useShareSocial(user.address as string);
+
+  useEffect(() => {
+    if (shared && isUsed) {
+      notifyAccountUsed();
+    }
+  }, [shared, isUsed]);
 
   const share = useCallback(
     (username: string) => {
@@ -84,6 +93,17 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
   const closeShare = () => {
     handleClose();
     setSharedStatus(false);
+    setUsername('');
+  };
+
+  const notifyAccountUsed = () => {
+    setShowNotification(true);
+    setNotificationMessage(`${username} already taken`);
+  };
+
+  const clearNotification = () => {
+    setShowNotification(false);
+    setNotificationMessage('');
   };
 
   const config = useMemo(() => {
@@ -184,6 +204,18 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right'
+        }}
+        color="secondary"
+        open={showNotification}
+        autoHideDuration={2000}
+        onClose={clearNotification}
+        message={notificationMessage}
+      />
 
       <LinkingTutorialComponent ref={childRef} />
     </div>

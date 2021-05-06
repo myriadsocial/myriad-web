@@ -9,6 +9,7 @@ const MyriadAPI = Axios.create({
 
 export const useShareSocial = (publicKey: string) => {
   const [shared, setShared] = useState(false);
+  const [isUsed, setUsed] = useState(false);
 
   const shareOnFacebook = async (username: string) => {
     try {
@@ -26,6 +27,7 @@ export const useShareSocial = (publicKey: string) => {
     } catch (error) {
       console.error(error);
       setShared(false);
+      setUsed(true);
     }
   };
 
@@ -45,6 +47,7 @@ export const useShareSocial = (publicKey: string) => {
     } catch (error) {
       console.error(error);
       setShared(false);
+      setUsed(true);
     }
   };
 
@@ -64,13 +67,16 @@ export const useShareSocial = (publicKey: string) => {
     } catch (error) {
       console.error(error);
       setShared(false);
+      setUsed(true);
     }
   };
 
   const setSharedStatus = (status: boolean) => {
     setShared(status);
+    setUsed(false);
   };
   return {
+    isUsed,
     shared,
     shareOnFacebook,
     shareOnReddit,
