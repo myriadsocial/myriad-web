@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useCallback } from 'react';
+import React, { useRef, useMemo, useCallback, useState, useEffect } from 'react';
 import { FacebookShareButton, RedditShareButton, TwitterShareButton } from 'react-share';
 
 import { User } from 'next-auth';
@@ -13,6 +13,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import RedditIcon from '@material-ui/icons/Reddit';
@@ -24,6 +25,7 @@ import ShowIf from '../common/show-if.component';
 import { useStyles } from './conntect.style';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
+import DialogTitleCustom from 'src/components/common/DialogTitle.component';
 import { useShareSocial } from 'src/hooks/use-share-social';
 
 export type Props = {
@@ -41,26 +43,67 @@ const copy: Record<SocialsEnum, string> = {
 
 export default function ConnectComponent({ user, social, open, handleClose }: Props) {
   const classes = useStyles();
+  const [nameOpened, setNameOpened] = useState(false);
+  const [username, setUsername] = useState('');
   const childRef = useRef<any>();
-  const { shared, shareOnTwitter, shareOnReddit } = useShareSocial();
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const { shared, isUsed, shareOnTwitter, shareOnReddit, shareOnFacebook, setSharedStatus } = useShareSocial(user.address as string);
 
-  const share = useCallback(() => {
-    switch (social) {
-      case SocialsEnum.TWITTER:
-        shareOnTwitter();
-        break;
-      case SocialsEnum.REDDIT:
-        shareOnReddit();
-        break;
-      case SocialsEnum.FACEBOOK:
-      default:
-        break;
+  useEffect(() => {
+    if (shared && isUsed) {
+      notifyAccountUsed();
     }
-  }, [social]);
+  }, [shared, isUsed]);
+
+  const share = useCallback(
+    (username: string) => {
+      switch (social) {
+        case SocialsEnum.TWITTER:
+          shareOnTwitter(username);
+          break;
+        case SocialsEnum.REDDIT:
+          shareOnReddit(username);
+          break;
+        case SocialsEnum.FACEBOOK:
+          shareOnFacebook(username);
+          break;
+        default:
+          break;
+      }
+    },
+    [social]
+  );
+
+  const toggleNameForm = () => {
+    setNameOpened(!nameOpened);
+  };
+
+  const handleUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    setUsername(value);
+  };
+
+  const setShared = () => {
+    toggleNameForm();
+    share(username);
+  };
 
   const closeShare = () => {
-    share();
     handleClose();
+    setSharedStatus(false);
+    setUsername('');
+  };
+
+  const notifyAccountUsed = () => {
+    setShowNotification(true);
+    setNotificationMessage(`${username} already taken`);
+  };
+
+  const clearNotification = () => {
+    setShowNotification(false);
+    setNotificationMessage('');
   };
 
   const config = useMemo(() => {
@@ -74,14 +117,15 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
   }, []);
 
   const message = `Saying hi to #MyriadNetwork\n\nPublic Key: ${user.address}`;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://app.myriad.systems';
 
   const handleClickTutorial = () => {
     childRef.current.triggerLinkingTutorial();
   };
 
   return (
-    <>
-      <Dialog open={open} onClose={handleClose} maxWidth="xs">
+    <div>
+      <Dialog open={open} onClose={handleClose} maxWidth="xs" disableBackdropClick disableEscapeKeyDown>
         <DialogTitle id="connect-social">Link Your {social} Account</DialogTitle>
         <DialogContent dividers>
           <Card className={classes.card}>
@@ -94,24 +138,24 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
             <CardHeader avatar={config.step2} title={config.shareTitle} />
             <CardContent className={classes.share}>
               <ShowIf condition={social === SocialsEnum.FACEBOOK}>
-                <FacebookShareButton url="https://myriad-fe.herokuapp.com" quote={message}>
-                  <Button variant="contained" size="large" onClick={share} startIcon={<FacebookIcon />} className={classes.facebook}>
+                <FacebookShareButton url={appUrl} quote={message} onShareWindowClose={toggleNameForm}>
+                  <Button variant="contained" size="large" startIcon={<FacebookIcon />} className={classes.facebook}>
                     Share
                   </Button>
                 </FacebookShareButton>
               </ShowIf>
 
               <ShowIf condition={social === SocialsEnum.TWITTER}>
-                <TwitterShareButton url="https://myriad-fe.herokuapp.com" title={message}>
-                  <Button variant="contained" size="large" onClick={share} startIcon={<TwitterIcon />} className={classes.twitter}>
+                <TwitterShareButton url={appUrl} title={message} onShareWindowClose={toggleNameForm}>
+                  <Button variant="contained" size="large" startIcon={<TwitterIcon />} className={classes.twitter}>
                     Share
                   </Button>
                 </TwitterShareButton>
               </ShowIf>
 
               <ShowIf condition={social === SocialsEnum.REDDIT}>
-                <RedditShareButton url="https://myriad-fe.herokuapp.com" title={message}>
-                  <Button variant="contained" size="large" onClick={share} startIcon={<RedditIcon />} className={classes.reddit}>
+                <RedditShareButton url={appUrl} title={message} onShareWindowClose={toggleNameForm}>
+                  <Button variant="contained" size="large" startIcon={<RedditIcon />} className={classes.reddit}>
                     Share
                   </Button>
                 </RedditShareButton>
@@ -134,7 +178,46 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
         </DialogActions>
       </Dialog>
 
+      <Dialog open={nameOpened} onClose={toggleNameForm} maxWidth="xs" disableBackdropClick disableEscapeKeyDown>
+        <DialogTitleCustom id="user-title" onClose={toggleNameForm}>
+          Set Account Name
+        </DialogTitleCustom>
+        <DialogContent>
+          <TextField
+            value={username}
+            onChange={handleUsername}
+            color="secondary"
+            variant="filled"
+            margin="normal"
+            required
+            fullWidth
+            name="username"
+            label="Username"
+            type="text"
+            id="username"
+          />
+        </DialogContent>
+        <DialogActions className={classes.done}>
+          <Button onClick={setShared} fullWidth={true} size="large" variant="contained" color="secondary">
+            {' '}
+            Use as my {social} name
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right'
+        }}
+        color="secondary"
+        open={showNotification}
+        autoHideDuration={2000}
+        onClose={clearNotification}
+        message={notificationMessage}
+      />
+
       <LinkingTutorialComponent ref={childRef} />
-    </>
+    </div>
   );
 }
