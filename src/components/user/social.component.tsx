@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
 import { User } from 'next-auth';
-import { signIn } from 'next-auth/client';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -19,6 +18,8 @@ import ShowIf from '../common/show-if.component';
 import ConnectComponent from '../connect/connect.component';
 import LoginOverlayComponent from '../login/overlay.component';
 import { useStyles } from './social.style';
+import { useUserHook } from './use-user.hook';
+import { useUser } from './user.context';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
 import { SocialsEnum } from 'src/interfaces';
@@ -36,41 +37,31 @@ type Props = {
 
 const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
   const style = useStyles();
-  const [cookies, setCookie, removeCookie] = useCookies(['social']);
+
+  const [, setCookie] = useCookies(['social']);
+  const { state: userState } = useUser();
+  const { getUserDetail } = useUserHook(user);
 
   const [connectOpened, openConnect] = useState(false);
+  const [selectedSocial, setSelectedSocial] = useState<SocialsEnum | null>(null);
   const [connected, setConnected] = useState<Record<SocialsEnum, boolean>>({
     [SocialsEnum.TWITTER]: false,
     [SocialsEnum.FACEBOOK]: false,
     [SocialsEnum.REDDIT]: false
   });
-  const [selectedSocial, setSelectedSocial] = useState<SocialsEnum | null>(null);
   const [twitter, setTwitter] = useState<string>('Link To Twitter');
   const [facebook, setFacebook] = useState<string>('Link To Facebook');
   const [reddit, setReddit] = useState<string>('Link To Reddit');
   const isAnonymous = user.anonymous as boolean;
 
-  // check if redirected by social login
   useEffect(() => {
-    if (cookies.connection) {
-      setSelectedSocial(cookies.connection.provider);
-      openConnect(cookies.connection.provider);
-    }
-
-    return removeCookie('connection');
-  }, [cookies]);
-
-  useEffect(() => {
-    if (user.userCredentials) {
-      //@ts-ignore
-      const twitterCredential = user.userCredentials.find(item => item.platform === SocialsEnum.TWITTER);
-      //@ts-ignore
-      const facebookCredential = user.userCredentials.find(item => item.platform === SocialsEnum.FACEBOOK);
-      //@ts-ignore
-      const redditCredential = user.userCredentials.find(item => item.platform === SocialsEnum.REDDIT);
+    if (userState.user && userState.user.userCredentials.length > 0) {
+      const twitterCredential = userState.user.userCredentials.find(item => item.people.platform === SocialsEnum.TWITTER);
+      const facebookCredential = userState.user.userCredentials.find(item => item.people.platform === SocialsEnum.FACEBOOK);
+      const redditCredential = userState.user.userCredentials.find(item => item.people.platform === SocialsEnum.REDDIT);
 
       if (twitterCredential) {
-        setTwitter(twitterCredential.username);
+        setTwitter(twitterCredential.people.username);
         setConnected({
           ...connected,
           [SocialsEnum.TWITTER]: true
@@ -78,7 +69,7 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
       }
 
       if (facebookCredential) {
-        setFacebook(facebookCredential.username);
+        setFacebook(facebookCredential.people.username);
         setConnected({
           ...connected,
           [SocialsEnum.FACEBOOK]: true
@@ -86,27 +77,29 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
       }
 
       if (redditCredential) {
-        setReddit(redditCredential.username);
+        setReddit(redditCredential.people.username);
         setConnected({
           ...connected,
           [SocialsEnum.REDDIT]: true
         });
       }
     }
-  }, [user]);
+  }, [userState.user]);
 
   const handleOpenConnect = (social: SocialsEnum) => {
     if (connected[social]) return;
 
-    setCookie('connection', {
-      provider: social
-    });
-    signIn(social, {
-      redirect: false
-    });
+    setSelectedSocial(social);
+    openConnect(true);
   };
 
   const handleCloseConnect = () => {
+    setCookie(`connecting_${selectedSocial}`, {
+      link: true
+    });
+
+    getUserDetail();
+
     openConnect(false);
   };
 
