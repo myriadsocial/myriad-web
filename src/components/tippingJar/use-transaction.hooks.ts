@@ -16,8 +16,8 @@ export const useTransaction = (userId: string) => {
   const [error, setError] = useState(null);
   const [params, _] = useState({
     offset: 0,
-    limit: 100,
-    where: {},
+    limit: 10,
+    where: { or: [{ to: userId }, { from: userId }] },
     include: ['toUser', 'fromUser']
   });
 
@@ -49,6 +49,8 @@ export const useTransaction = (userId: string) => {
         const outboundTxs = sortedTempData.filter(transaction => {
           return transaction.from === userId;
         });
+
+        console.log('data: ', data);
 
         dispatch({
           type: TransactionActionType.INIT_TRANSACTION,
