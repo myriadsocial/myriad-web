@@ -18,6 +18,8 @@ import DialogTitle from '../common/DialogTitle.component';
 import { useStyles } from '../login/login.style';
 import { useBalance } from '../wallet/use-balance.hooks';
 
+import * as WalletAddressAPI from 'src/lib/api/wallet';
+
 interface InputState {
   amount: string;
 }
@@ -36,10 +38,10 @@ interface SendTipConfirmed {
 
 type Props = {
   userAddress: string;
-  walletAddress?: string;
+  postId?: string;
 };
 
-const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => {
+const SendTipModal = forwardRef(({ userAddress, postId }: Props, ref) => {
   const { loading, error, freeBalance, loadInitBalance } = useBalance(userAddress);
 
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
@@ -49,7 +51,7 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
 
   const [errorSendTips, setErrorSendTips] = useState({
     isError: false,
-    message: ''
+    message: null
   });
 
   useEffect(() => {
@@ -135,10 +137,12 @@ const SendTipModal = forwardRef(({ userAddress, walletAddress }: Props, ref) => 
         // tx signing is done by supplying a password
         const senderAddress = userAddress;
 
+        const { walletAddress } = await WalletAddressAPI.getWalletAddress(postId as string);
+
         const response = await sendTip(senderAddress, walletAddress, amountSent);
         // handle if sendTip succeed
         if (response.Error) {
-          //console.log('response is: ', response.Error);
+          console.log('response is: ', response.Error);
           setErrorSendTips({
             ...errorSendTips,
             isError: true,
