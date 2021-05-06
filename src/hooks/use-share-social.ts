@@ -14,7 +14,7 @@ export const useShareSocial = (publicKey: string) => {
     try {
       await MyriadAPI.request({
         method: 'POST',
-        url: '/user-credentials/verify',
+        url: '/verify',
         data: {
           username,
           publicKey,
@@ -33,7 +33,7 @@ export const useShareSocial = (publicKey: string) => {
     try {
       await MyriadAPI.request({
         method: 'POST',
-        url: '/user-credentials/verify',
+        url: '/verify',
         data: {
           username,
           publicKey,
@@ -52,7 +52,7 @@ export const useShareSocial = (publicKey: string) => {
     try {
       await MyriadAPI.request({
         method: 'POST',
-        url: '/user-credentials/verify',
+        url: '/verify',
         data: {
           username,
           publicKey,
