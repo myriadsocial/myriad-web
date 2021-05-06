@@ -9,6 +9,7 @@ import { ConverstionProvider } from '../conversation/conversation.context';
 import { ExperienceProvider } from '../experience/experience.context';
 import { TimelineProvider } from '../timeline/timeline.context';
 import { TransactionProvider } from '../tippingJar/transaction.context';
+import { UserProvider } from '../user/user.context';
 import LayoutComponent from './Layout.component';
 import { LayoutSettingProvider } from './layout.context';
 
@@ -38,17 +39,19 @@ const Layout = ({ children, session }: Props) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <LayoutSettingProvider>
-        <TransactionProvider>
-          <ExperienceProvider>
-            <ConverstionProvider>
-              <TimelineProvider>
-                <LayoutComponent user={session.user}>{children}</LayoutComponent>
-              </TimelineProvider>
-            </ConverstionProvider>
-          </ExperienceProvider>
-        </TransactionProvider>
-      </LayoutSettingProvider>
+      <UserProvider>
+        <LayoutSettingProvider>
+          <TransactionProvider>
+            <ExperienceProvider>
+              <ConverstionProvider>
+                <TimelineProvider>
+                  <LayoutComponent user={session.user}>{children}</LayoutComponent>
+                </TimelineProvider>
+              </ConverstionProvider>
+            </ExperienceProvider>
+          </TransactionProvider>
+        </LayoutSettingProvider>
+      </UserProvider>
     </div>
   );
 };
