@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import Axios from 'axios';
+import Axios, { AxiosError } from 'axios';
 import { SocialsEnum } from 'src/interfaces/index';
 
 const MyriadAPI = Axios.create({
@@ -8,8 +8,28 @@ const MyriadAPI = Axios.create({
 });
 
 export const useShareSocial = (publicKey: string) => {
-  const [shared, setShared] = useState(false);
+  const [sharing, setSharing] = useState(false);
+  const [isShared, setShared] = useState(false);
   const [isUsed, setUsed] = useState(false);
+
+  const handleError = (error: AxiosError) => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 404:
+          setShared(false);
+          setUsed(false);
+          break;
+
+        default:
+          setShared(true);
+          setUsed(true);
+          break;
+      }
+    } else {
+      setShared(false);
+      setUsed(false);
+    }
+  };
 
   const shareOnFacebook = async (username: string) => {
     try {
@@ -25,9 +45,11 @@ export const useShareSocial = (publicKey: string) => {
 
       setShared(true);
     } catch (error) {
-      console.error(error);
-      setShared(false);
-      setUsed(true);
+      const err = error as AxiosError;
+
+      handleError(err);
+    } finally {
+      setSharing(true);
     }
   };
 
@@ -45,9 +67,11 @@ export const useShareSocial = (publicKey: string) => {
 
       setShared(true);
     } catch (error) {
-      console.error(error);
-      setShared(false);
-      setUsed(true);
+      const err = error as AxiosError;
+
+      handleError(err);
+    } finally {
+      setSharing(true);
     }
   };
 
@@ -65,22 +89,26 @@ export const useShareSocial = (publicKey: string) => {
 
       setShared(true);
     } catch (error) {
-      console.error(error);
-      setShared(false);
-      setUsed(true);
+      const err = error as AxiosError;
+
+      handleError(err);
+    } finally {
+      setSharing(true);
     }
   };
 
-  const setSharedStatus = (status: boolean) => {
+  const resetSharedStatus = (status: boolean) => {
     setShared(status);
     setUsed(false);
+    setSharing(false);
   };
   return {
+    sharing,
     isUsed,
-    shared,
+    isShared,
     shareOnFacebook,
     shareOnReddit,
     shareOnTwitter,
-    setSharedStatus
+    resetSharedStatus
   };
 };
