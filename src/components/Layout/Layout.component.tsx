@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { User } from 'next-auth';
 
@@ -13,6 +13,7 @@ import { useStyles } from './layout.style';
 import { useLayout } from './use-layout.hook';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
+import { useUserHook } from 'src/components/user/use-user.hook';
 
 type Props = {
   children: React.ReactNode;
@@ -21,10 +22,16 @@ type Props = {
 
 const LayoutComponent = ({ children, user }: Props) => {
   const style = useStyles();
+  const userId = user.address as string;
 
   const { setting, changeSetting } = useLayout();
+  const { getUserDetail } = useUserHook(user);
 
-  const userId = user.address as string;
+  useEffect(() => {
+    getUserDetail();
+
+    return undefined;
+  }, []);
 
   return (
     <>
