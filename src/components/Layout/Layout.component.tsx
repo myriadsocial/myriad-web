@@ -1,19 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { User } from 'next-auth';
 
 import Grid from '@material-ui/core/Grid';
 import NoSsr from '@material-ui/core/NoSsr';
 
-import { cryptoWaitReady } from '@polkadot/util-crypto';
-
-import { enableExtension } from '../../helpers/extension';
-import { getBalance } from '../../helpers/polkadotApi';
 import ShowIf from '../common/show-if.component';
 import { ExperienceComponent } from '../experience/experience.component';
 import UserDetail from '../user/user.component';
 import { Wallet } from '../wallet/wallet.component';
-import { useMyriadAccount } from '../wallet/wallet.context';
 import { useStyles } from './layout.style';
 import { useLayout } from './use-layout.hook';
 
@@ -27,48 +22,9 @@ type Props = {
 const LayoutComponent = ({ children, user }: Props) => {
   const style = useStyles();
 
-  const { dispatch: myriadAccountDispatch } = useMyriadAccount();
   const { setting, changeSetting } = useLayout();
 
   const userId = user.address as string;
-
-  useEffect(() => {
-    // fetch for address
-    (async () => {
-      await cryptoWaitReady();
-      const allAccounts = await enableExtension();
-      // by default, only read the first account address
-      if (!allAccounts) {
-        console.log('no accounts retrieved!');
-        throw new Error('no extension/account detected on browser!');
-      }
-      const currentAddress = user.address;
-      const freeBalance = await getBalance(currentAddress);
-      //console.log(`the address is: ${currentAddress}`);
-      //console.log(`the balance is: ${freeBalance}`);
-      addAddress('address', String(currentAddress));
-      // divide freeBalance by 100
-      if (freeBalance) {
-        storeBalance('freeBalance', freeBalance / 100);
-      }
-    })();
-  }, []);
-
-  const storeBalance = (key: string, value: number) => {
-    myriadAccountDispatch({
-      type: 'STORE_BALANCE',
-      key,
-      value
-    });
-  };
-
-  const addAddress = (key: string, value: string) => {
-    myriadAccountDispatch({
-      type: 'ADD_ADDRESS',
-      key,
-      value
-    });
-  };
 
   return (
     <>

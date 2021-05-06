@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { useSession } from 'next-auth/client';
 
@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import { getBalance } from '../../helpers/polkadotApi';
+import { useBalance } from '../wallet/use-balance.hooks';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,6 +52,9 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: '2px',
       fontWeight: 700
     },
+    errorText: {
+      color: 'red'
+    },
     container: {
       width: '100%',
       backgroundColor: 'transparent',
@@ -66,31 +69,18 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const BalanceComponent = React.memo(function Wallet() {
   const style = useStyles();
+
   const [session] = useSession();
+  const userAddress = session?.user.address as string;
+  const { loading, error, freeBalance, loadInitBalance } = useBalance(userAddress);
+
   const [isHidden, setIsHidden] = useState(true);
-  const [balance, setBalance] = useState(0);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    getBalanceForComponent();
-  }, [balance]);
-
-  const getBalanceForComponent = async () => {
-    setLoading(true);
-    const currentAddress = session?.user.address;
-    const freeBalance = await getBalance(currentAddress);
-    if (freeBalance) {
-      setBalance(Number((freeBalance / 100).toFixed(3)));
-      setLoading(false);
-    }
-  };
-
   const handleIsHidden = () => {
     setIsHidden(!isHidden);
   };
 
   const handleClick = () => {
-    getBalanceForComponent();
+    loadInitBalance();
   };
 
   return (
@@ -116,9 +106,13 @@ export const BalanceComponent = React.memo(function Wallet() {
                     </Typography>
                   ) : loading ? (
                     <CircularProgress className={style.spinner} size={20} />
+                  ) : error ? (
+                    <Typography className={style.errorText} onClick={handleIsHidden}>
+                      Error, try again!
+                    </Typography>
                   ) : (
                     <Typography className={style.balanceText} onClick={handleIsHidden}>
-                      {balance} <span className={style.subtitle}>Myria</span>
+                      {freeBalance} <span className={style.subtitle}>Myria</span>
                     </Typography>
                   )}
                 </ListItemText>

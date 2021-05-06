@@ -77,7 +77,7 @@ export const TippingJarComponent = forwardRef((_, ref) => {
         <DialogContent dividers>
           <BalanceComponent />
           <Divider />
-          {<TransactionComponent />}
+          <TransactionComponent />
         </DialogContent>
       </Dialog>
 

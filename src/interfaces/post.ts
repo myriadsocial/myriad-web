@@ -63,5 +63,5 @@ export type UserReplies = Comment & {
 };
 
 export type ImportPost = {
-  URL: string;
+  url: string;
 };
