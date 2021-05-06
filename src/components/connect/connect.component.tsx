@@ -13,6 +13,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import FacebookIcon from '@material-ui/icons/Facebook';
@@ -39,6 +40,12 @@ const copy: Record<SocialsEnum, string> = {
   [SocialsEnum.TWITTER]: 'Say Hi, Copy the message below and post it on your Timeline.',
   [SocialsEnum.FACEBOOK]: 'Say Hi, Copy the message below and post it on your Facebook status.',
   [SocialsEnum.REDDIT]: 'Say Hi, Copy the message below and post it on Reddit.'
+};
+
+const prefix: Record<SocialsEnum, string> = {
+  [SocialsEnum.TWITTER]: 'https://twitter.com/',
+  [SocialsEnum.FACEBOOK]: 'https://www.facebook.com/',
+  [SocialsEnum.REDDIT]: 'https://www.reddit.com/user/'
 };
 
 export default function ConnectComponent({ user, social, open, handleClose }: Props) {
@@ -80,9 +87,17 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
   };
 
   const handleUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const text = e.target.value;
+    const name = text.substring(text.lastIndexOf('/') + 1);
 
-    setUsername(value);
+    setUsername(name);
+  };
+
+  const handleCopyValue = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    const text = e.clipboardData.getData('Text');
+    const name = text.substring(text.lastIndexOf('/') + 1);
+
+    setUsername(name);
   };
 
   const setShared = () => {
@@ -178,14 +193,15 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
         </DialogActions>
       </Dialog>
 
-      <Dialog open={nameOpened} onClose={toggleNameForm} maxWidth="xs" disableBackdropClick disableEscapeKeyDown>
+      <Dialog open={nameOpened} onClose={toggleNameForm} maxWidth="sm" disableBackdropClick disableEscapeKeyDown>
         <DialogTitleCustom id="user-title" onClose={toggleNameForm}>
-          Set Account Name
+          Fill your username in {social}
         </DialogTitleCustom>
-        <DialogContent>
+        <DialogContent className={classes.usernameForm}>
           <TextField
             value={username}
             onChange={handleUsername}
+            onPaste={handleCopyValue}
             color="secondary"
             variant="filled"
             margin="normal"
@@ -195,12 +211,15 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
             label="Username"
             type="text"
             id="username"
+            InputProps={{
+              startAdornment: <InputAdornment position="start">{prefix[social]}</InputAdornment>
+            }}
           />
         </DialogContent>
         <DialogActions className={classes.done}>
           <Button onClick={setShared} fullWidth={true} size="large" variant="contained" color="secondary">
             {' '}
-            Use as my {social} name
+            Verify
           </Button>
         </DialogActions>
       </Dialog>
