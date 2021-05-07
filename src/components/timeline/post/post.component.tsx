@@ -202,7 +202,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
         </ShowIf>
       </Card>
 
-      <SendTipModal userAddress={userId} ref={childRef} walletAddress={post.walletAddress} />
+      <SendTipModal userAddress={userId} ref={childRef} postId={post.id as string} />
     </>
   );
 }
