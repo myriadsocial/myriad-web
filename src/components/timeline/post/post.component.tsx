@@ -19,6 +19,7 @@ import CommentIcon from '@material-ui/icons/Comment';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
+import { useBalance } from '../../wallet/use-balance.hooks';
 import CommentComponent from '../comment/comment.component';
 import ReplyCommentComponent from '../comment/reply.component';
 import TwitterReactionComponent from '../reactions/twitter.component';
@@ -57,6 +58,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
 
   const isAnonymous = session?.user.anonymous as boolean;
   const userId = session?.user.address as string;
+  const { freeBalance } = useBalance(userId);
 
   const currentPage = router.pathname as string;
 
@@ -202,7 +204,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
         </ShowIf>
       </Card>
 
-      <SendTipModal userAddress={userId} ref={childRef} postId={post.id as string} />
+      <SendTipModal userAddress={userId} ref={childRef} postId={post.id as string} freeBalance={freeBalance as number} />
     </>
   );
 }
