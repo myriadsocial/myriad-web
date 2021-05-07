@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useSession } from 'next-auth/client';
 
@@ -62,7 +62,10 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: '0 4px'
     },
     spinner: {
-      color: '#A942E9'
+      color: '#A942E9',
+      left: '4px',
+      top: '2px',
+      position: 'relative'
     }
   })
 );
@@ -73,6 +76,10 @@ export const BalanceComponent = React.memo(function Wallet() {
   const [session] = useSession();
   const userAddress = session?.user.address as string;
   const { loading, error, freeBalance, loadInitBalance } = useBalance(userAddress);
+
+  useEffect(() => {
+    loadInitBalance();
+  }, []);
 
   const [isHidden, setIsHidden] = useState(true);
   const handleIsHidden = () => {
