@@ -1,14 +1,11 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import RefreshIcon from '@material-ui/icons/Refresh';
 import SendIcon from '@material-ui/icons/Send';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
