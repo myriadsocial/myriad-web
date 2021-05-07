@@ -16,8 +16,8 @@ export const useTransaction = (userId: string) => {
   const [error, setError] = useState(null);
   const [params, _] = useState({
     offset: 0,
-    limit: 100,
-    where: {},
+    limit: 20,
+    where: { or: [{ to: userId }, { from: userId }] },
     include: ['toUser', 'fromUser']
   });
 
