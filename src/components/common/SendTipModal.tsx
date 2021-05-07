@@ -16,7 +16,7 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 import { sendTip } from '../../helpers/polkadotApi';
 import DialogTitle from '../common/DialogTitle.component';
 import { useStyles } from '../login/login.style';
-import { useBalance } from '../wallet/use-balance.hooks';
+import { BalanceComponent } from '../wallet/balance.component';
 
 import * as WalletAddressAPI from 'src/lib/api/wallet';
 
@@ -39,11 +39,10 @@ interface SendTipConfirmed {
 type Props = {
   userAddress: string;
   postId?: string;
+  freeBalance: number;
 };
 
-const SendTipModal = forwardRef(({ userAddress, postId }: Props, ref) => {
-  const { loading, error, freeBalance, loadInitBalance } = useBalance(userAddress);
-
+const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, ref) => {
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
     message: ''
@@ -53,14 +52,6 @@ const SendTipModal = forwardRef(({ userAddress, postId }: Props, ref) => {
     isError: false,
     message: null
   });
-
-  useEffect(() => {
-    loadInitBalance();
-  }, []);
-
-  const handleClick = () => {
-    loadInitBalance();
-  };
 
   const [showSendTipModal, setShowSendTipModal] = useState(false);
   const [inputError, setInputError] = useState<InputErorState>({
@@ -211,23 +202,7 @@ const SendTipModal = forwardRef(({ userAddress, postId }: Props, ref) => {
           Send Tip
         </DialogTitle>
         <DialogContent dividers>
-          {error ? (
-            <>
-              <Typography gutterBottom={true} variant="body1" className={styles.errorText}>
-                Try again later!
-              </Typography>
-              <RefreshIcon onClick={handleClick} />
-            </>
-          ) : loading ? (
-            <CircularProgress className={styles.spinner} size={15} />
-          ) : (
-            <>
-              <Typography gutterBottom={true} variant="body1">
-                Free balance: {freeBalance} MYRIA
-              </Typography>
-              <RefreshIcon onClick={handleClick} />
-            </>
-          )}
+          <BalanceComponent />
         </DialogContent>
         <DialogContent dividers>
           <form noValidate autoComplete="off">
