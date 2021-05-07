@@ -104,18 +104,13 @@ export const createPost = async (values: Partial<Post>): Promise<Post> => {
 };
 
 export const importPost = async (values: ImportPost) => {
-  try {
-    const { data } = await MyriadAPI.request<Post>({
-      url: `/posts/import`,
-      method: 'POST',
-      data: values
-    });
+  const { data } = await MyriadAPI.request<Post>({
+    url: `/posts/import`,
+    method: 'POST',
+    data: values
+  });
 
-    return data;
-  } catch (error) {
-    console.log('the error is: ', error);
-    return error;
-  }
+  return data;
 };
 
 export const loadComments = async (postId: string) => {
