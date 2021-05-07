@@ -132,12 +132,12 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, re
 
         const response = await sendTip(senderAddress, walletAddress, amountSent);
         // handle if sendTip succeed
-        if (response.Error) {
-          console.log('response is: ', response.Error);
+        if (response.Error || typeof response === 'string') {
+          console.log('response is: ', response);
           setErrorSendTips({
             ...errorSendTips,
             isError: true,
-            message: response.Error
+            message: response.Error || response
           });
           setShowSendTipModal(false);
           setValues({
@@ -146,7 +146,7 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, re
           });
           return;
         }
-        if (typeof response === 'object') {
+        if (response.from === senderAddress) {
           console.log('response : ', response);
           setSendTipConfirmed({
             isConfirmed: true,
