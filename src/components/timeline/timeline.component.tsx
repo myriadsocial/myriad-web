@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useEffect } from 'react';
+import React, { createRef, useCallback, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { User } from 'next-auth';
@@ -6,7 +6,10 @@ import { useSession } from 'next-auth/client';
 
 import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
+import Snackbar from '@material-ui/core/Snackbar';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import { LoadingPage } from '../common/loading.component';
 import ImportPostComponent from './ImportPost.component';
@@ -30,8 +33,9 @@ const Timeline = ({ user }: Props) => {
   const style = useStyles();
 
   const { state } = useTimeline();
-  const { hasMore, loadPost, loadMorePost, reply, loadComments, sortBy, addPost, importPost } = usePost();
+  const { hasMore, loadPost, loadMorePost, reply, loadComments, sortBy, addPost, importPost, error } = usePost();
   const scrollRoot = createRef<HTMLDivElement>();
+  const [isPosting, setIsPosting] = useState(true);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, true);
@@ -64,6 +68,7 @@ const Timeline = ({ user }: Props) => {
   };
 
   const submitImportPost = (URL: string) => {
+    setIsPosting(true);
     importPost(URL);
   };
 
@@ -77,6 +82,10 @@ const Timeline = ({ user }: Props) => {
       return true;
     }
     return false;
+  };
+
+  const handleCloseError = () => {
+    setIsPosting(false);
   };
 
   return (
@@ -111,6 +120,13 @@ const Timeline = ({ user }: Props) => {
         </InfiniteScroll>
       </div>
       <div id="fb-root" />
+
+      <Snackbar open={isPosting && error !== null} autoHideDuration={3000} onClose={handleCloseError}>
+        <Alert severity="error">
+          <AlertTitle>Error!</AlertTitle>
+          Post already imported!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

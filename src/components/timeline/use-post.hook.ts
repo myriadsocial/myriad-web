@@ -153,21 +153,26 @@ export const usePost = () => {
   };
 
   const importPost = async (url: string) => {
-    console.log('the URL is: ', url);
+    setLoading(true);
 
-    const data = await PostAPI.importPost({
-      url
-    });
+    try {
+      const data = await PostAPI.importPost({
+        url
+      });
 
-    console.log('the response data is: ', data);
-
-    dispatch({
-      type: TimelineActionType.CREATE_POST,
-      post: {
-        ...data,
-        comments: []
-      }
-    });
+      dispatch({
+        type: TimelineActionType.CREATE_POST,
+        post: {
+          ...data,
+          comments: []
+        }
+      });
+    } catch (error) {
+      console.log('error from use post hooks: ', error);
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return {
