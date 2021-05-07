@@ -1,14 +1,11 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import RefreshIcon from '@material-ui/icons/Refresh';
 import SendIcon from '@material-ui/icons/Send';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
@@ -16,6 +13,7 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 import { sendTip } from '../../helpers/polkadotApi';
 import DialogTitle from '../common/DialogTitle.component';
 import { useStyles } from '../login/login.style';
+import { BalanceComponent } from '../wallet/balance.component';
 import { useBalance } from '../wallet/use-balance.hooks';
 
 import * as WalletAddressAPI from 'src/lib/api/wallet';
@@ -39,11 +37,11 @@ interface SendTipConfirmed {
 type Props = {
   userAddress: string;
   postId?: string;
+  freeBalance: number;
 };
 
-const SendTipModal = forwardRef(({ userAddress, postId }: Props, ref) => {
-  const { loading, error, freeBalance, loadInitBalance } = useBalance(userAddress);
-
+const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, ref) => {
+  const { loadInitBalance } = useBalance(userAddress);
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
     message: ''
@@ -53,14 +51,6 @@ const SendTipModal = forwardRef(({ userAddress, postId }: Props, ref) => {
     isError: false,
     message: null
   });
-
-  useEffect(() => {
-    loadInitBalance();
-  }, []);
-
-  const handleClick = () => {
-    loadInitBalance();
-  };
 
   const [showSendTipModal, setShowSendTipModal] = useState(false);
   const [inputError, setInputError] = useState<InputErorState>({
@@ -141,12 +131,12 @@ const SendTipModal = forwardRef(({ userAddress, postId }: Props, ref) => {
 
         const response = await sendTip(senderAddress, walletAddress, amountSent);
         // handle if sendTip succeed
-        if (response.Error) {
-          console.log('response is: ', response.Error);
+        if (response.Error || typeof response === 'string') {
+          console.log('response is: ', response);
           setErrorSendTips({
             ...errorSendTips,
             isError: true,
-            message: response.Error
+            message: response.Error || response
           });
           setShowSendTipModal(false);
           setValues({
@@ -155,7 +145,7 @@ const SendTipModal = forwardRef(({ userAddress, postId }: Props, ref) => {
           });
           return;
         }
-        if (typeof response === 'object') {
+        if (response.from === senderAddress) {
           console.log('response : ', response);
           setSendTipConfirmed({
             isConfirmed: true,
@@ -211,23 +201,7 @@ const SendTipModal = forwardRef(({ userAddress, postId }: Props, ref) => {
           Send Tip
         </DialogTitle>
         <DialogContent dividers>
-          {error ? (
-            <>
-              <Typography gutterBottom={true} variant="body1" className={styles.errorText}>
-                Try again later!
-              </Typography>
-              <RefreshIcon onClick={handleClick} />
-            </>
-          ) : loading ? (
-            <CircularProgress className={styles.spinner} size={15} />
-          ) : (
-            <>
-              <Typography gutterBottom={true} variant="body1">
-                Free balance: {freeBalance} MYRIA
-              </Typography>
-              <RefreshIcon onClick={handleClick} />
-            </>
-          )}
+          <BalanceComponent />
         </DialogContent>
         <DialogContent dividers>
           <form noValidate autoComplete="off">
