@@ -153,6 +153,8 @@ export const usePost = () => {
   };
 
   const importPost = async (url: string) => {
+    setLoading(true);
+
     try {
       const data = await PostAPI.importPost({
         url
@@ -167,6 +169,9 @@ export const usePost = () => {
       });
     } catch (error) {
       console.log('error from use post hooks: ', error);
+      setError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
