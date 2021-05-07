@@ -72,7 +72,6 @@ export const sendTip = async (fromAddress, toAddress, amountSent) => {
       return { trxHash: txInfo.toHex(), from: fromAddress };
     }
   } catch (error) {
-    console.log('the error is: ', error);
     return error;
   }
 };
