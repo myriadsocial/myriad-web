@@ -167,7 +167,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
     };
   }, []);
 
-  const message = `Saying hi to #MyriadNetwork\n\nPublic Key: ${user.address}`;
+  const message = `I'm part of the Myriad ${user.address}`;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://app.myriad.systems';
 
   const handleClickTutorial = () => {
