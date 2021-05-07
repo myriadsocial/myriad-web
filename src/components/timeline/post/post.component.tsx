@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 //@ts-ignore
 import { FacebookProvider, EmbeddedPost } from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
@@ -14,19 +14,15 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 import CommentIcon from '@material-ui/icons/Comment';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
-import Alert from '@material-ui/lab/Alert';
-import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import { useBalance } from '../../wallet/use-balance.hooks';
 import CommentComponent from '../comment/comment.component';
 import ReplyCommentComponent from '../comment/reply.component';
 import TwitterReactionComponent from '../reactions/twitter.component';
-import { usePost } from '../use-post.hook';
 import PostAvatarComponent from './post-avatar.component';
 import PostImageComponent from './post-image.component';
 import PostVideoComponent from './post-video.component';
@@ -50,8 +46,6 @@ type Props = {
 
 export default function PostComponent({ post, open = false, disable = false, reply, loadComments, postOwner }: Props) {
   const style = useStyles();
-
-  const { error } = usePost();
 
   const [expanded, setExpanded] = useState(open);
   const { detail } = useSocialDetail(post);
