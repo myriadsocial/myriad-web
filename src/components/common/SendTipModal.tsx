@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -14,6 +14,7 @@ import { sendTip } from '../../helpers/polkadotApi';
 import DialogTitle from '../common/DialogTitle.component';
 import { useStyles } from '../login/login.style';
 import { BalanceComponent } from '../wallet/balance.component';
+import { useBalance } from '../wallet/use-balance.hooks';
 
 import * as WalletAddressAPI from 'src/lib/api/wallet';
 
@@ -40,6 +41,7 @@ type Props = {
 };
 
 const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, ref) => {
+  const { loadInitBalance } = useBalance(userAddress);
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
     message: ''
