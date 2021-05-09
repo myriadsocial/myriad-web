@@ -57,7 +57,7 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, re
     isErrorInput: false,
     isTextChanged: false,
     isInsufficientBalance: false,
-    errorMessage: 'Put digits bigger than zero'
+    errorMessage: 'Digits must be bigger than zero!'
   });
   const [values, setValues] = useState<InputState>({
     amount: ''
@@ -216,8 +216,8 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, re
                 inputError.isErrorInput
                   ? inputError.isInsufficientBalance
                     ? inputError.errorMessage
-                    : 'Put digits bigger than zero!'
-                  : 'Please input valid digits'
+                    : 'Digits must be bigger than zero!'
+                  : 'Digits only'
               }
               variant="outlined"
             />
