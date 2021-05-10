@@ -33,7 +33,7 @@ const Timeline = ({ user }: Props) => {
   const style = useStyles();
 
   const { state } = useTimeline();
-  const { hasMore, loadPost, loadMorePost, reply, loadComments, sortBy, addPost, importPost, error } = usePost();
+  const { hasMore, loadPost, loadMorePost, reply, loadComments, sortBy, addPost, importPost, error, resetError } = usePost();
   const scrollRoot = createRef<HTMLDivElement>();
   const [isPosting, setIsPosting] = useState(true);
 
@@ -86,6 +86,11 @@ const Timeline = ({ user }: Props) => {
 
   const handleCloseError = () => {
     setIsPosting(false);
+    resetError();
+  };
+
+  const handleCloseImported = () => {
+    setIsPosting(false);
   };
 
   return (
@@ -121,10 +126,17 @@ const Timeline = ({ user }: Props) => {
       </div>
       <div id="fb-root" />
 
+      <Snackbar open={isPosting && error === null} autoHideDuration={3000} onClose={handleCloseImported}>
+        <Alert severity="success">
+          <AlertTitle>Success!</AlertTitle>
+          Post successfully imported
+        </Alert>
+      </Snackbar>
+
       <Snackbar open={isPosting && error !== null} autoHideDuration={3000} onClose={handleCloseError}>
         <Alert severity="error">
           <AlertTitle>Error!</AlertTitle>
-          Post already imported!
+          Post already imported
         </Alert>
       </Snackbar>
     </div>

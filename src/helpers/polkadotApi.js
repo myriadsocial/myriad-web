@@ -6,7 +6,7 @@ export const connectToBlockchain = async () => {
   try {
     const { ApiPromise, WsProvider } = await import('@polkadot/api');
     // 'wss://rpc.myriad.systems'
-    const wsProvider = new WsProvider(process.env.RPC_ADDRESS_TESTNET);
+    const wsProvider = new WsProvider(process.env.NEXT_PUBLIC_RPC_ADDRESS_TESTNET);
     const api = await new ApiPromise({
       provider: wsProvider
       //types: types
