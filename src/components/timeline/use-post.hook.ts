@@ -135,13 +135,16 @@ export const usePost = () => {
     });
   };
 
-  const reply = async (postId: string, comment: Comment) => {
+  const reply = async (postId: string, user: User, comment: Comment) => {
     const data = await PostAPI.reply(postId, comment);
 
     dispatch({
       type: TimelineActionType.ADD_COMMENT,
       postId,
-      comment: data
+      comment: {
+        ...data,
+        user
+      }
     });
   };
 
