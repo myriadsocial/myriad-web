@@ -195,7 +195,7 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, re
 
   return (
     <>
-      <Dialog open={showSendTipModal} onClose={closeSendTipModal} aria-labelledby="form-dialog-title" maxWidth="md">
+      <Dialog open={showSendTipModal} onClose={closeSendTipModal} aria-labelledby="send-tips-window" maxWidth="md">
         <DialogTitle id="name" onClose={closeSendTipModal}>
           {' '}
           Send Tip
@@ -239,21 +239,21 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, re
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={sendTipConfirmed.isConfirmed} autoHideDuration={3000} onClose={handleClose}>
+      <Snackbar open={sendTipConfirmed.isConfirmed} autoHideDuration={6000} onClose={handleClose}>
         <Alert severity="success">
           <AlertTitle>Success!</AlertTitle>
           {sendTipConfirmed.message}
         </Alert>
       </Snackbar>
 
-      <Snackbar open={errorText.isError} autoHideDuration={3000} onClose={handleCloseError}>
+      <Snackbar open={errorText.isError} autoHideDuration={6000} onClose={handleCloseError}>
         <Alert severity="error">
           <AlertTitle>Error!</AlertTitle>
           {errorText.message}
         </Alert>
       </Snackbar>
 
-      <Snackbar open={errorSendTips.isError} autoHideDuration={3000} onClose={handleCloseErrorSendTips}>
+      <Snackbar open={errorSendTips.isError} autoHideDuration={6000} onClose={handleCloseErrorSendTips}>
         <Alert severity="error">
           <AlertTitle>Error!</AlertTitle>
           {errorSendTips.message}

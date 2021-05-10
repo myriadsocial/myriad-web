@@ -176,7 +176,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose} maxWidth="xs" disableBackdropClick disableEscapeKeyDown>
+      <Dialog open={open} maxWidth="md" onClose={handleClose} aria-labelledby="link-social-accounts-window">
         <DialogTitle id="connect-social">Link Your {social} Account</DialogTitle>
         <DialogContent dividers>
           <Card className={classes.card}>
@@ -286,7 +286,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
           horizontal: 'center'
         }}
         open={showNotification}
-        autoHideDuration={4000}
+        autoHideDuration={6000}
         onClose={clearNotification}>
         <Alert severity="error">{notificationMessage}</Alert>
       </Snackbar>
