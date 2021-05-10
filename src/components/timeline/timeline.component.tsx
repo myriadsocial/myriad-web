@@ -126,14 +126,14 @@ const Timeline = ({ user }: Props) => {
       </div>
       <div id="fb-root" />
 
-      <Snackbar open={isPosting && error === null} autoHideDuration={3000} onClose={handleCloseImported}>
+      <Snackbar open={isPosting && error === null} autoHideDuration={6000} onClose={handleCloseImported}>
         <Alert severity="success">
           <AlertTitle>Success!</AlertTitle>
           Post successfully imported
         </Alert>
       </Snackbar>
 
-      <Snackbar open={isPosting && error !== null} autoHideDuration={3000} onClose={handleCloseError}>
+      <Snackbar open={isPosting && error !== null} autoHideDuration={6000} onClose={handleCloseError}>
         <Alert severity="error">
           <AlertTitle>Error!</AlertTitle>
           Post already imported
