@@ -110,7 +110,7 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
   return (
     <div className={style.root}>
       <List component="nav">
-        <ListItem button disabled={connected.facebook} className={style.gutters} onClick={() => handleOpenConnect(SocialsEnum.FACEBOOK)}>
+        <ListItem button disabled className={style.gutters} onClick={() => handleOpenConnect(SocialsEnum.FACEBOOK)}>
           <ListItemIcon className={style.icon}>
             <FacebookIcon className={style.facebook} />
           </ListItemIcon>
