@@ -175,6 +175,10 @@ export const usePost = () => {
     }
   };
 
+  const resetError = () => {
+    setError(null);
+  };
+
   return {
     error,
     loading,
@@ -186,6 +190,7 @@ export const usePost = () => {
     addPost,
     reply,
     sortBy,
-    importPost
+    importPost,
+    resetError
   };
 };
