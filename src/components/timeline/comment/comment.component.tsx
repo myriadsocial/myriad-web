@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { useSession } from 'next-auth/client';
 
@@ -15,6 +15,7 @@ import { withStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { useStyles } from './comment.style';
 
 import DateFormat from 'src/components/common/DateFormat';
+import SendTipModal from 'src/components/common/SendTipModal';
 import { Comment } from 'src/interfaces/post';
 
 const StyledBadge = withStyles((theme: Theme) =>
@@ -33,10 +34,13 @@ type Props = {
 };
 
 export default function CommentComponent({ data }: Props) {
+  console.log('the data is: ', data);
   const style = useStyles();
 
   const [session] = useSession();
   const userId = session?.user.id as string;
+
+  const childRef = useRef<any>();
 
   const [isHidden, setIsHidden] = useState(false);
 
@@ -57,26 +61,28 @@ export default function CommentComponent({ data }: Props) {
   };
 
   return (
-    <Card className={style.root}>
-      <CardHeader
-        avatar={
-          <IconButton aria-label="cart">
-            <StyledBadge color="secondary">
-              <Avatar aria-label={data.user?.name} src={data.user?.profilePictureURL}>
-                {data.user?.name}
-              </Avatar>
-            </StyledBadge>
-          </IconButton>
-        }
-        action={RenderAction()}
-        title={data.user?.name}
-        subheader={<DateFormat date={data.createdAt} />}
-      />
-      <CardContent>
-        <Typography variant="body1" color="textSecondary" component="p">
-          {data.text}
-        </Typography>
-      </CardContent>
-    </Card>
+    <>
+      <Card className={style.root}>
+        <CardHeader
+          avatar={
+            <IconButton aria-label="cart">
+              <StyledBadge color="secondary">
+                <Avatar aria-label={data.user?.name} src={data.user?.profilePictureURL}>
+                  {data.user?.name}
+                </Avatar>
+              </StyledBadge>
+            </IconButton>
+          }
+          action={RenderAction()}
+          title={data.user?.name}
+          subheader={<DateFormat date={data.createdAt} />}
+        />
+        <CardContent>
+          <Typography variant="body1" color="textSecondary" component="p">
+            {data.text}
+          </Typography>
+        </CardContent>
+      </Card>
+    </>
   );
 }

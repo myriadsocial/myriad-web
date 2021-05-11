@@ -34,7 +34,20 @@ const Timeline = ({ user }: Props) => {
   const style = useStyles();
 
   const { state } = useTimeline();
-  const { hasMore, loadPost, loadMorePost, reply, loadComments, sortBy, addPost, importPost, error, resetError } = usePost();
+  const {
+    hasMore,
+    loadPost,
+    loadMorePost,
+    reply,
+    loadComments,
+    sortBy,
+    addPost,
+    importPost,
+    importedPost,
+    resetImportedPost,
+    error,
+    resetError
+  } = usePost();
 
   const [session] = useSession();
   const userId = session?.user.address as string;
@@ -79,9 +92,9 @@ const Timeline = ({ user }: Props) => {
     addPost(text, tags, files, user);
   };
 
-  const submitImportPost = (URL: string) => {
+  const submitImportPost = (URL: string, experienceId: string) => {
     setIsPosting(true);
-    importPost(URL);
+    importPost(URL, experienceId);
   };
 
   console.log('user', user);
@@ -94,6 +107,7 @@ const Timeline = ({ user }: Props) => {
 
   const handleCloseImported = () => {
     setIsPosting(false);
+    resetImportedPost();
   };
 
   return (
@@ -104,7 +118,7 @@ const Timeline = ({ user }: Props) => {
         <ShowIf condition={!user.anonymous}>
           <CreatePostComponent onSubmit={submitPost} experiences={experiences} />
 
-          <ImportPostComponent onSubmit={submitImportPost} />
+          <ImportPostComponent onSubmit={submitImportPost} experiences={experiences} />
         </ShowIf>
 
         <InfiniteScroll
@@ -129,7 +143,7 @@ const Timeline = ({ user }: Props) => {
       </div>
       <div id="fb-root" />
 
-      <Snackbar open={isPosting && error === null} autoHideDuration={6000} onClose={handleCloseImported}>
+      <Snackbar open={isPosting && importedPost !== null} autoHideDuration={6000} onClose={handleCloseImported}>
         <Alert severity="success">
           <AlertTitle>Success!</AlertTitle>
           Post successfully imported

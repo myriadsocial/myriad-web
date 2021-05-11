@@ -92,8 +92,6 @@ export default function SubmitPostComponent({ onSubmit, experiences }: Props) {
 
   const uploadFieldRef = useRef<HTMLInputElement | null>(null);
 
-  console.log('the list of experiences are:', experiences);
-
   const [showCreatePost, setCreatePost] = useState(false);
   const [files, setFiles] = useState<UpoadedFile[]>([]);
   const [postText, setPostText] = useState('');
