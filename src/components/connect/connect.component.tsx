@@ -13,6 +13,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
@@ -98,6 +99,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
   };
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('target value is: ', e.target.value);
     const text = e.target.value;
     const name = text.substring(text.lastIndexOf('/') + 1);
 
@@ -106,6 +108,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
   };
 
   const handlePasteValue = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
     const text = e.clipboardData.getData('Text');
     const name = text.substring(text.lastIndexOf('/') + 1);
 
@@ -169,6 +172,8 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
 
   const message = `I'm part of the Myriad ${user.address}`;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://app.myriad.systems';
+
+  const helperTextCopyURL = 'Copy and paste the complete url of your account (e.g. https://twitter.com/myAccount)';
 
   const handleClickTutorial = () => {
     childRef.current.triggerLinkingTutorial();
@@ -252,6 +257,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
                 startAdornment: <InputAdornment position="start">{prefix[social]}</InputAdornment>
               }}
             />
+            <FormHelperText>{helperTextCopyURL}</FormHelperText>
           </ShowIf>
           <ShowIf condition={social === SocialsEnum.FACEBOOK}>
             <TextField
@@ -270,6 +276,7 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
                 startAdornment: <InputAdornment position="start">{prefix[social]}</InputAdornment>
               }}
             />
+            <FormHelperText>{helperTextCopyURL}</FormHelperText>
           </ShowIf>
         </DialogContent>
         <DialogActions className={classes.done}>
