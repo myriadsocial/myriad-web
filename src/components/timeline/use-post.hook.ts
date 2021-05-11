@@ -19,6 +19,7 @@ export const usePost = () => {
 
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [importedPost, setImportedPost] = useState<Post | null>(null);
   const [error, setError] = useState(null);
 
   // change people and tag filter each selected experience changed or focus setting changed
@@ -152,13 +153,21 @@ export const usePost = () => {
     });
   };
 
-  const importPost = async (url: string) => {
+  const importPost = async (url: string, experienceId: string) => {
     setLoading(true);
+
+    console.log('the url:', url);
+    console.log('the experienceId:', experienceId);
 
     try {
       const data = await PostAPI.importPost({
-        url
+        url,
+        experienceId
       });
+
+      console.log('the data is: ', data);
+
+      setImportedPost(data);
 
       dispatch({
         type: TimelineActionType.CREATE_POST,
@@ -179,6 +188,10 @@ export const usePost = () => {
     setError(null);
   };
 
+  const resetImportedPost = () => {
+    setImportedPost(null);
+  };
+
   return {
     error,
     loading,
@@ -191,6 +204,8 @@ export const usePost = () => {
     reply,
     sortBy,
     importPost,
+    importedPost,
+    resetImportedPost,
     resetError
   };
 };
