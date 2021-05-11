@@ -68,6 +68,12 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
           ...connected,
           [SocialsEnum.TWITTER]: true
         });
+      } else {
+        setTwitter('Link To Twitter');
+        setConnected({
+          ...connected,
+          [SocialsEnum.TWITTER]: false
+        });
       }
 
       if (facebookCredential) {
@@ -76,6 +82,12 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
           ...connected,
           [SocialsEnum.FACEBOOK]: true
         });
+      } else {
+        setTwitter('Link To Facebook');
+        setConnected({
+          ...connected,
+          [SocialsEnum.FACEBOOK]: false
+        });
       }
 
       if (redditCredential) {
@@ -83,6 +95,12 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
         setConnected({
           ...connected,
           [SocialsEnum.REDDIT]: true
+        });
+      } else {
+        setTwitter('Link To Reddit');
+        setConnected({
+          ...connected,
+          [SocialsEnum.REDDIT]: false
         });
       }
     } else {
