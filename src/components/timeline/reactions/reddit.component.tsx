@@ -3,11 +3,8 @@ import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-
-import AngryIcon from '../../../images/facebook/angry.svg';
-import HahaIcon from '../../../images/facebook/haha.svg';
-import SadIcon from '../../../images/facebook/sad.svg';
-import WowIcon from '../../../images/facebook/wow.svg';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
 import { SocialMetric } from 'src/interfaces/post';
 
@@ -32,20 +29,17 @@ export default function RedditReactionComponent({ metric }: Props) {
 
   return (
     <div className={style.root}>
-      <IconButton aria-label="angry">
-        <AngryIcon />
-      </IconButton>
-      <IconButton aria-label="sad">
-        <SadIcon />
-      </IconButton>
-      <IconButton aria-label="haha">
-        <HahaIcon />
-      </IconButton>
-      <IconButton aria-label="wow">
-        <WowIcon />
+      <IconButton aria-label="upvotes-reddit">
+        <ArrowUpwardIcon />
       </IconButton>
       <IconButton aria-label="wow">
         <Chip variant="outlined" size="small" label="20" />
+      </IconButton>
+      <IconButton aria-label="downvotes-reddit">
+        <ArrowDownwardIcon />
+      </IconButton>
+      <IconButton aria-label="wow">
+        <Chip variant="outlined" size="small" label="12" />
       </IconButton>
     </div>
   );
