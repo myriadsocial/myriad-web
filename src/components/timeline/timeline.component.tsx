@@ -60,7 +60,7 @@ const Timeline = ({ user }: Props) => {
   }, []);
 
   const handleReply = (comment: Comment) => {
-    reply(comment.postId, comment);
+    reply(comment.postId, user, comment);
   };
 
   const submitPost = (text: string, tags: string[], files: File[]) => {

@@ -113,6 +113,34 @@ export const importPost = async (values: ImportPost) => {
   return data;
 };
 
+export const getPostDetail = async (id: string) => {
+  const { data } = await MyriadAPI.request<Post>({
+    url: `/posts/${id}`,
+    method: 'GET',
+    params: {
+      filter: {
+        include: [
+          {
+            relation: 'comments',
+            scope: {
+              include: [
+                {
+                  relation: 'user'
+                }
+              ]
+            }
+          },
+          {
+            relation: 'publicMetric'
+          }
+        ]
+      }
+    }
+  });
+
+  return data;
+};
+
 export const loadComments = async (postId: string) => {
   const { data } = await MyriadAPI.request({
     url: `/posts/${postId}/comments`,

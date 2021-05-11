@@ -1,9 +1,13 @@
 import React from 'react';
 
 import { ExtendedConversation } from 'src/interfaces/conversation';
+import { Comment, Post } from 'src/interfaces/post';
 
 export enum ConversationActionType {
-  LOAD_CONVERSATION = 'LOAD_CONVERSATION'
+  LOAD_CONVERSATION = 'LOAD_CONVERSATION',
+  LOAD_CONVERSATION_DETAIL = 'LOAD_CONVERSATION_DETAIL',
+  REPLY_CONVERSATION = 'REPLY_CONVERSATION',
+  LOAD_REPLY = 'LOAD_REPLY'
 }
 
 interface LoadConversation {
@@ -11,13 +15,28 @@ interface LoadConversation {
   payload: ExtendedConversation[];
 }
 
-type Action = LoadConversation;
+interface LoadConversationDetail {
+  type: ConversationActionType.LOAD_CONVERSATION_DETAIL;
+  payload: Post;
+}
+
+interface ReplyConversation {
+  type: ConversationActionType.REPLY_CONVERSATION;
+  payload: Comment;
+}
+
+interface LoadReply {
+  type: ConversationActionType.LOAD_REPLY;
+  payload: Comment[];
+}
+
+type Action = LoadConversation | LoadConversationDetail | LoadReply | ReplyConversation;
 type Dispatch = (action: Action) => void;
 type ConversationProviderProps = { children: React.ReactNode };
 
 type State = {
   conversations: ExtendedConversation[];
-  viewed: ExtendedConversation | null;
+  viewed: Post | null;
 };
 
 const initalState = {
@@ -35,6 +54,37 @@ function conversationReducer(state: State, action: Action) {
         conversations: action.payload
       };
     }
+
+    case ConversationActionType.LOAD_CONVERSATION_DETAIL: {
+      return {
+        ...state,
+        viewed: action.payload
+      };
+    }
+
+    case ConversationActionType.REPLY_CONVERSATION: {
+      if (!state.viewed) return state;
+
+      return {
+        ...state,
+        viewed: {
+          ...state.viewed,
+          comments: [...state.viewed.comments, action.payload]
+        }
+      };
+    }
+    case ConversationActionType.LOAD_REPLY: {
+      if (!state.viewed) return state;
+
+      return {
+        ...state,
+        viewed: {
+          ...state.viewed,
+          comments: [...state.viewed.comments, ...action.payload]
+        }
+      };
+    }
+
     default: {
       throw new Error(`Unhandled action type`);
     }
