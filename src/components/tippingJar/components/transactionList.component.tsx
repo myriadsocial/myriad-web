@@ -228,7 +228,13 @@ export default function TransactionListComponent({ transactions, userId, sortTyp
             primary={renderTransactionDetail(txHistory)}
             secondary={
               <>
-                <Button>Tx Hash: {txHistory?.trxHash}</Button>
+                <Button
+                  href={`https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.myriad.systems#/explorer/query/${txHistory?.trxHash}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  color="inherit">
+                  Tx Hash: {txHistory?.trxHash}
+                </Button>
               </>
             }
           />
