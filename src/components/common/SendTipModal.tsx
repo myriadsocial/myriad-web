@@ -38,9 +38,10 @@ type Props = {
   userAddress: string;
   postId?: string;
   freeBalance: number;
+  receiverId?: string;
 };
 
-const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, ref) => {
+const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId }: Props, ref) => {
   const { loadInitBalance } = useBalance(userAddress);
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
@@ -57,7 +58,7 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, re
     isErrorInput: false,
     isTextChanged: false,
     isInsufficientBalance: false,
-    errorMessage: 'Put digits bigger than zero'
+    errorMessage: 'Digits must be bigger than zero!'
   });
   const [values, setValues] = useState<InputState>({
     amount: ''
@@ -127,9 +128,17 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, re
         // tx signing is done by supplying a password
         const senderAddress = userAddress;
 
-        const { walletAddress } = await WalletAddressAPI.getWalletAddress(postId as string);
+        let toAddress = '';
 
-        const response = await sendTip(senderAddress, walletAddress, amountSent);
+        //check if sending tips from a comment or from a post
+        if (postId === undefined) {
+          toAddress = receiverId as string;
+        } else {
+          const { walletAddress } = await WalletAddressAPI.getWalletAddress(postId as string);
+          toAddress = walletAddress;
+        }
+
+        const response = await sendTip(senderAddress, toAddress, amountSent);
         // handle if sendTip succeed
         if (response.Error || typeof response === 'string') {
           console.log('response is: ', response);
@@ -195,7 +204,7 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, re
 
   return (
     <>
-      <Dialog open={showSendTipModal} onClose={closeSendTipModal} aria-labelledby="form-dialog-title" maxWidth="md">
+      <Dialog open={showSendTipModal} onClose={closeSendTipModal} aria-labelledby="send-tips-window" maxWidth="md">
         <DialogTitle id="name" onClose={closeSendTipModal}>
           {' '}
           Send Tip
@@ -216,8 +225,8 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, re
                 inputError.isErrorInput
                   ? inputError.isInsufficientBalance
                     ? inputError.errorMessage
-                    : 'Put digits bigger than zero!'
-                  : 'Please input valid digits'
+                    : 'Digits must be bigger than zero!'
+                  : 'Digits only'
               }
               variant="outlined"
             />
@@ -239,21 +248,21 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, re
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={sendTipConfirmed.isConfirmed} autoHideDuration={3000} onClose={handleClose}>
+      <Snackbar open={sendTipConfirmed.isConfirmed} autoHideDuration={6000} onClose={handleClose}>
         <Alert severity="success">
           <AlertTitle>Success!</AlertTitle>
           {sendTipConfirmed.message}
         </Alert>
       </Snackbar>
 
-      <Snackbar open={errorText.isError} autoHideDuration={3000} onClose={handleCloseError}>
+      <Snackbar open={errorText.isError} autoHideDuration={6000} onClose={handleCloseError}>
         <Alert severity="error">
           <AlertTitle>Error!</AlertTitle>
           {errorText.message}
         </Alert>
       </Snackbar>
 
-      <Snackbar open={errorSendTips.isError} autoHideDuration={3000} onClose={handleCloseErrorSendTips}>
+      <Snackbar open={errorSendTips.isError} autoHideDuration={6000} onClose={handleCloseErrorSendTips}>
         <Alert severity="error">
           <AlertTitle>Error!</AlertTitle>
           {errorSendTips.message}

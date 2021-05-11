@@ -12,6 +12,7 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import { LoadingPage } from '../common/loading.component';
+import { useExperience } from '../experience/use-experience.hooks';
 import ImportPostComponent from './ImportPost.component';
 import FilterTimelineComponent from './filter.component';
 import PostComponent from './post/post.component';
@@ -33,7 +34,31 @@ const Timeline = ({ user }: Props) => {
   const style = useStyles();
 
   const { state } = useTimeline();
-  const { hasMore, loadPost, loadMorePost, reply, loadComments, sortBy, addPost, importPost, error } = usePost();
+  const {
+    hasMore,
+    loadPost,
+    loadMorePost,
+    reply,
+    loadComments,
+    sortBy,
+    addPost,
+    importPost,
+    importedPost,
+    resetImportedPost,
+    error,
+    resetError
+  } = usePost();
+
+  const [session] = useSession();
+  const userId = session?.user.address as string;
+  const isOwnPost = (post: Post) => {
+    if (post.walletAddress === userId) {
+      return true;
+    }
+    return false;
+  };
+  const { experiences } = useExperience(userId);
+
   const scrollRoot = createRef<HTMLDivElement>();
   const [isPosting, setIsPosting] = useState(true);
 
@@ -67,25 +92,22 @@ const Timeline = ({ user }: Props) => {
     addPost(text, tags, files, user);
   };
 
-  const submitImportPost = (URL: string) => {
+  const submitImportPost = (URL: string, experienceId: string) => {
     setIsPosting(true);
-    importPost(URL);
+    importPost(URL, experienceId);
   };
 
   console.log('user', user);
   console.log('TIMELINE COMPONENT LOAD');
 
-  const [session] = useSession();
-  const userId = session?.user.address as string;
-  const isOwnPost = (post: Post) => {
-    if (post.walletAddress === userId) {
-      return true;
-    }
-    return false;
-  };
-
   const handleCloseError = () => {
     setIsPosting(false);
+    resetError();
+  };
+
+  const handleCloseImported = () => {
+    setIsPosting(false);
+    resetImportedPost();
   };
 
   return (
@@ -94,9 +116,9 @@ const Timeline = ({ user }: Props) => {
         <FilterTimelineComponent selected={state.sort} onChange={sortBy} />
 
         <ShowIf condition={!user.anonymous}>
-          <CreatePostComponent onSubmit={submitPost} />
+          <CreatePostComponent onSubmit={submitPost} experiences={experiences} />
 
-          <ImportPostComponent onSubmit={submitImportPost} />
+          <ImportPostComponent onSubmit={submitImportPost} experiences={experiences} />
         </ShowIf>
 
         <InfiniteScroll
@@ -121,10 +143,17 @@ const Timeline = ({ user }: Props) => {
       </div>
       <div id="fb-root" />
 
-      <Snackbar open={isPosting && error !== null} autoHideDuration={3000} onClose={handleCloseError}>
+      <Snackbar open={isPosting && importedPost !== null} autoHideDuration={6000} onClose={handleCloseImported}>
+        <Alert severity="success">
+          <AlertTitle>Success!</AlertTitle>
+          Post successfully imported
+        </Alert>
+      </Snackbar>
+
+      <Snackbar open={isPosting && error !== null} autoHideDuration={6000} onClose={handleCloseError}>
         <Alert severity="error">
           <AlertTitle>Error!</AlertTitle>
-          Post already imported!
+          Post already imported
         </Alert>
       </Snackbar>
     </div>

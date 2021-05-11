@@ -421,7 +421,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
         }}
         color="secondary"
         open={showNotification}
-        autoHideDuration={2000}
+        autoHideDuration={6000}
         onClose={clearNotification}
         message={notificationMessage}
       />
