@@ -12,6 +12,7 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import { LoadingPage } from '../common/loading.component';
+import { useExperience } from '../experience/use-experience.hooks';
 import ImportPostComponent from './ImportPost.component';
 import FilterTimelineComponent from './filter.component';
 import PostComponent from './post/post.component';
@@ -34,6 +35,17 @@ const Timeline = ({ user }: Props) => {
 
   const { state } = useTimeline();
   const { hasMore, loadPost, loadMorePost, reply, loadComments, sortBy, addPost, importPost, error, resetError } = usePost();
+
+  const [session] = useSession();
+  const userId = session?.user.address as string;
+  const isOwnPost = (post: Post) => {
+    if (post.walletAddress === userId) {
+      return true;
+    }
+    return false;
+  };
+  const { experiences } = useExperience(userId);
+
   const scrollRoot = createRef<HTMLDivElement>();
   const [isPosting, setIsPosting] = useState(true);
 
@@ -75,15 +87,6 @@ const Timeline = ({ user }: Props) => {
   console.log('user', user);
   console.log('TIMELINE COMPONENT LOAD');
 
-  const [session] = useSession();
-  const userId = session?.user.address as string;
-  const isOwnPost = (post: Post) => {
-    if (post.walletAddress === userId) {
-      return true;
-    }
-    return false;
-  };
-
   const handleCloseError = () => {
     setIsPosting(false);
     resetError();
@@ -99,7 +102,7 @@ const Timeline = ({ user }: Props) => {
         <FilterTimelineComponent selected={state.sort} onChange={sortBy} />
 
         <ShowIf condition={!user.anonymous}>
-          <CreatePostComponent onSubmit={submitPost} />
+          <CreatePostComponent onSubmit={submitPost} experiences={experiences} />
 
           <ImportPostComponent onSubmit={submitImportPost} />
         </ShowIf>
