@@ -38,9 +38,10 @@ type Props = {
   userAddress: string;
   postId?: string;
   freeBalance: number;
+  receiverId?: string;
 };
 
-const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, ref) => {
+const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId }: Props, ref) => {
   const { loadInitBalance } = useBalance(userAddress);
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
@@ -127,9 +128,17 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance }: Props, re
         // tx signing is done by supplying a password
         const senderAddress = userAddress;
 
-        const { walletAddress } = await WalletAddressAPI.getWalletAddress(postId as string);
+        let toAddress = '';
 
-        const response = await sendTip(senderAddress, walletAddress, amountSent);
+        //check if sending tips from a comment or from a post
+        if (postId === undefined) {
+          toAddress = receiverId as string;
+        } else {
+          const { walletAddress } = await WalletAddressAPI.getWalletAddress(postId as string);
+          toAddress = walletAddress;
+        }
+
+        const response = await sendTip(senderAddress, toAddress, amountSent);
         // handle if sendTip succeed
         if (response.Error || typeof response === 'string') {
           console.log('response is: ', response);

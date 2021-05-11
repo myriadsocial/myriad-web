@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, createStyles, Theme } from '@material-ui/core/styles';
 
+import { useBalance } from '../../wallet/use-balance.hooks';
 import { useStyles } from './comment.style';
 
 import DateFormat from 'src/components/common/DateFormat';
@@ -39,21 +40,28 @@ export default function CommentComponent({ data }: Props) {
 
   const [session] = useSession();
   const userId = session?.user.id as string;
-
-  const childRef = useRef<any>();
-
-  const [isHidden, setIsHidden] = useState(false);
-
   useEffect(() => {
     if (userId === data.userId) {
       setIsHidden(true);
     }
   }, []);
 
+  const { freeBalance } = useBalance(userId);
+
+  const childRef = useRef<any>();
+
+  const [isHidden, setIsHidden] = useState(false);
+
+  const tipPostUser = () => {
+    childRef.current.triggerSendTipModal();
+  };
+
+  console.log('the receiverId is: ', data?.user?.id as string);
+
   const RenderAction = () => {
     if (!isHidden)
       return (
-        <Button className={style.action} aria-label="settings" color="primary" variant="contained" size="small">
+        <Button className={style.action} onClick={tipPostUser} aria-label="tip-post-user" color="primary" variant="contained" size="small">
           Send Tip
         </Button>
       );
@@ -83,6 +91,8 @@ export default function CommentComponent({ data }: Props) {
           </Typography>
         </CardContent>
       </Card>
+
+      <SendTipModal userAddress={userId} ref={childRef} receiverId={data?.user?.id as string} freeBalance={freeBalance as number} />
     </>
   );
 }
