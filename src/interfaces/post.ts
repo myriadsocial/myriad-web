@@ -64,4 +64,5 @@ export type UserReplies = Comment & {
 
 export type ImportPost = {
   url: string;
+  experienceId: string;
 };
