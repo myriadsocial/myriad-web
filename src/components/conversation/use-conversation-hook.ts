@@ -7,6 +7,7 @@ import { useConversation, ConversationActionType } from 'src/components/conversa
 import { ExtendedConversation } from 'src/interfaces/conversation';
 import { Comment, Post } from 'src/interfaces/post';
 import * as ConversationAPI from 'src/lib/api/conversation';
+import * as LocalAPI from 'src/lib/api/local';
 import * as PostAPI from 'src/lib/api/post';
 
 export const useConversationHook = (user: WithAdditionalParams<User>) => {
@@ -20,9 +21,28 @@ export const useConversationHook = (user: WithAdditionalParams<User>) => {
     try {
       const conversations: ExtendedConversation[] = await ConversationAPI.load(user.address as string);
 
+      //TODO: change this when post have text
+      const posts = await Promise.all(
+        conversations.map(async conversation => {
+          if (conversation.post.platform === 'twitter' && conversation.post.textId) {
+            const content = await LocalAPI.loadtTwitterPost(conversation.post.textId);
+
+            conversation.post.text = content.full_text;
+          }
+
+          if (conversation.post.id) {
+            const comments = await PostAPI.loadComments(conversation.post.id);
+
+            conversation.post.comments = comments;
+          }
+
+          return conversation;
+        })
+      );
+
       dispatch({
         type: ConversationActionType.LOAD_CONVERSATION,
-        payload: conversations
+        payload: posts
       });
     } catch (error) {
       setError(error);
