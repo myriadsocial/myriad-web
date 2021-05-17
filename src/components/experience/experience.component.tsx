@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -171,6 +172,14 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
     setAdded(false);
   };
 
+  // Managing Experience
+  const handleClickOutsidePanel = () => {
+    console.log('clicked away!');
+    setEditing(false);
+    setManageExperience(false);
+    setAdded(false);
+  };
+
   const showEditExperienceModal = () => {
     if (selectedExperience) {
       editExperience(selectedExperience);
@@ -252,179 +261,192 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
   };
 
   return (
-    <Panel title="Experiences">
-      <Card>
-        <CardContent>
-          <Typography variant="h5" component="h2" gutterBottom>
-            {selectedExperience?.name}
-          </Typography>
-          <Typography color="textSecondary">By {selectedExperience?.user?.name}</Typography>
-          <Typography variant="body2" component="p">
-            {selectedExperience && selectedExperience.description
-              ? selectedExperience.description
-              : `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tortor justo, lobortis ut erat imperdiet, varius mollis nunc.
+    <ClickAwayListener onClickAway={handleClickOutsidePanel}>
+      <div className={style.root}>
+        <Panel title="Experiences">
+          <Card>
+            <CardContent>
+              <Typography variant="h5" component="h2" gutterBottom>
+                {selectedExperience?.name}
+              </Typography>
+              <Typography color="textSecondary">By {selectedExperience?.user?.name}</Typography>
+              <Typography variant="body2" component="p">
+                {selectedExperience && selectedExperience.description
+                  ? selectedExperience.description
+                  : `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tortor justo, lobortis ut erat imperdiet, varius mollis nunc.
             Sed vehicula.`}
-          </Typography>
-        </CardContent>
-        <ShowIf condition={!anonymous}>
-          <CardActions>
-            <Button
-              size="small"
-              variant="contained"
-              color="secondary"
-              onClick={editCurrentExperience}
-              disabled={isEditing || selectedExperience?.userId !== userId}>
-              Customize
-            </Button>
-            <Button size="small" variant="contained" color="secondary" onClick={manageExperience} disabled={isManagingExperience}>
-              Manage Experiences
-            </Button>
-          </CardActions>
-        </ShowIf>
-      </Card>
+              </Typography>
+            </CardContent>
+            <ShowIf condition={!anonymous}>
+              <CardActions>
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="secondary"
+                  onClick={editCurrentExperience}
+                  disabled={isEditing || selectedExperience?.userId !== userId}>
+                  Customize
+                </Button>
+                <Button size="small" variant="contained" color="secondary" onClick={manageExperience} disabled={isManagingExperience}>
+                  Manage Experiences
+                </Button>
+              </CardActions>
+            </ShowIf>
+          </Card>
 
-      <ShowIf condition={!isEditing && !isManagingExperience}>
-        <ShowIf condition={anonymous}>
-          <SearchExperienceComponent title="Search Experience" data={searched} search={searchExperience} onSelected={addToMyExperience} />
-        </ShowIf>
-        <ExperienceListComponent
-          title={anonymous ? 'Available Experiences' : 'My saved Experiences'}
-          selected={selected}
-          experiences={experiences}
-          selectExperience={selectExperience}
-          removeExperience={confirmRemove}
-          loadMore={loadMoreExperience}
-        />
-      </ShowIf>
-
-      <ShowIf condition={isManagingExperience}>
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Add or Remove Experience{' '}
-          </Typography>
-        </CardContent>
-        <SearchExperienceComponent title="Search Experience" data={searched} search={searchExperience} onSelected={addToMyExperience} />
-
-        <List dense>
-          {addedExperience.map(experience => {
-            const labelId = `added-experience-list-${experience.id}`;
-            return (
-              <ListItem key={experience.id} button>
-                <ListItemAvatar>
-                  <Avatar />
-                </ListItemAvatar>
-                <ListItemText id={labelId} primary={experience.name} />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" aria-label="remove" onClick={() => removeFromAddedExperience(experience.id)}>
-                    <DeleteForeverIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            );
-          })}
-        </List>
-
-        <ShowIf condition={addedExperience.length > 0}>
-          <Grid className={style.action}>
-            <Fab
-              onClick={saveAddedAsNewExperience}
-              className={style.extendedIcon}
-              size="small"
-              variant="extended"
-              color={isAdded ? 'secondary' : 'primary'}
-              aria-label="edit">
-              <SaveIcon />
-              Save
-            </Fab>
-
-            <Fab className={style.extendedIcon} size="small" variant="extended" onClick={discardChanges}>
-              <DeleteSweepIcon />
-              Discard
-            </Fab>
-          </Grid>
-        </ShowIf>
-      </ShowIf>
-
-      <ShowIf condition={isEditing}>
-        <LayoutOptions value={selectedExperience?.layout} onChanged={changeSelectedLayout} />
-        <TopicComponent topics={selectedExperience?.tags || []} onAddItem={addTopicToExperience} onRemoveItem={removeTopicFromExperience} />
-        <PeopleComponent
-          people={selectedExperience?.people || []}
-          onAddItem={addPeopleToExperience}
-          onRemoveItem={removePeopleFromExperience}
-        />
-        <Grid className={style.action}>
-          <ShowIf condition={selectedExperience?.userId === userId}>
-            <Fab
-              onClick={showEditExperienceModal}
-              className={style.extendedIcon}
-              size="small"
-              variant="extended"
-              color={isEdited ? 'secondary' : 'primary'}
-              aria-label="add">
-              <UpdateIcon />
-              Update
-            </Fab>
+          <ShowIf condition={!isEditing && !isManagingExperience}>
+            <ShowIf condition={anonymous}>
+              <SearchExperienceComponent
+                title="Search Experience"
+                data={searched}
+                search={searchExperience}
+                onSelected={addToMyExperience}
+              />
+            </ShowIf>
+            <ExperienceListComponent
+              title={anonymous ? 'Available Experiences' : 'My saved Experiences'}
+              selected={selected}
+              experiences={experiences}
+              selectExperience={selectExperience}
+              removeExperience={confirmRemove}
+              loadMore={loadMoreExperience}
+            />
           </ShowIf>
-          <ShowIf condition={selectedExperience?.userId !== userId}>
-            <Fab
-              onClick={saveAsNewExperience}
-              className={style.extendedIcon}
-              size="small"
-              variant="extended"
-              color="secondary"
-              aria-label="edit">
-              <SaveIcon />
-              Save
-            </Fab>
+
+          <ShowIf condition={isManagingExperience}>
+            <CardContent>
+              <Typography variant="h5" gutterBottom>
+                Add or Remove Experience{' '}
+              </Typography>
+            </CardContent>
+            <SearchExperienceComponent title="Search Experience" data={searched} search={searchExperience} onSelected={addToMyExperience} />
+
+            <List dense>
+              {addedExperience.map(experience => {
+                const labelId = `added-experience-list-${experience.id}`;
+                return (
+                  <ListItem key={experience.id} button>
+                    <ListItemAvatar>
+                      <Avatar />
+                    </ListItemAvatar>
+                    <ListItemText id={labelId} primary={experience.name} />
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" aria-label="remove" onClick={() => removeFromAddedExperience(experience.id)}>
+                        <DeleteForeverIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                );
+              })}
+            </List>
+
+            <ShowIf condition={addedExperience.length > 0}>
+              <Grid className={style.action}>
+                <Fab
+                  onClick={saveAddedAsNewExperience}
+                  className={style.extendedIcon}
+                  size="small"
+                  variant="extended"
+                  color={isAdded ? 'secondary' : 'primary'}
+                  aria-label="edit">
+                  <SaveIcon />
+                  Save
+                </Fab>
+
+                <Fab className={style.extendedIcon} size="small" variant="extended" onClick={discardChanges}>
+                  <DeleteSweepIcon />
+                  Discard
+                </Fab>
+              </Grid>
+            </ShowIf>
           </ShowIf>
-          <Fab className={style.extendedIcon} size="small" variant="extended" onClick={discardChanges}>
-            <DeleteSweepIcon />
-            Discard
-          </Fab>
-        </Grid>
-      </ShowIf>
 
-      {edit && (
-        <Dialog open={modalEditOpened} onClose={toggleEditModal} maxWidth="md">
-          <DialogTitle id="connect-social" onClose={toggleEditModal}>
-            {' '}
-            This is what you are going to see
-          </DialogTitle>
-          <DialogContent dividers>
-            <ExperienceDetail data={edit} onSave={updateSelectedExperience} />
-          </DialogContent>
-        </Dialog>
-      )}
+          <ShowIf condition={isEditing}>
+            <LayoutOptions value={selectedExperience?.layout} onChanged={changeSelectedLayout} />
+            <TopicComponent
+              topics={selectedExperience?.tags || []}
+              onAddItem={addTopicToExperience}
+              onRemoveItem={removeTopicFromExperience}
+            />
+            <PeopleComponent
+              people={selectedExperience?.people || []}
+              onAddItem={addPeopleToExperience}
+              onRemoveItem={removePeopleFromExperience}
+            />
+            <Grid className={style.action}>
+              <ShowIf condition={selectedExperience?.userId === userId}>
+                <Fab
+                  onClick={showEditExperienceModal}
+                  className={style.extendedIcon}
+                  size="small"
+                  variant="extended"
+                  color={isEdited ? 'secondary' : 'primary'}
+                  aria-label="add">
+                  <UpdateIcon />
+                  Update
+                </Fab>
+              </ShowIf>
+              <ShowIf condition={selectedExperience?.userId !== userId}>
+                <Fab
+                  onClick={saveAsNewExperience}
+                  className={style.extendedIcon}
+                  size="small"
+                  variant="extended"
+                  color="secondary"
+                  aria-label="edit">
+                  <SaveIcon />
+                  Save
+                </Fab>
+              </ShowIf>
+              <Fab className={style.extendedIcon} size="small" variant="extended" onClick={discardChanges}>
+                <DeleteSweepIcon />
+                Discard
+              </Fab>
+            </Grid>
+          </ShowIf>
 
-      <Dialog open={modalAlertOpened} onClose={toggleAlertModal}>
-        <DialogTitle id="dialog-remove-experience" onClose={toggleAlertModal}>
-          {'Remove Experince?'}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">Are You sure to remove this experience?.</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={toggleAlertModal} color="primary">
-            Disagree
-          </Button>
-          <Button onClick={deleteExperience} color="secondary" autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
+          {edit && (
+            <Dialog open={modalEditOpened} onClose={toggleEditModal} maxWidth="md">
+              <DialogTitle id="connect-social" onClose={toggleEditModal}>
+                {' '}
+                This is what you are going to see
+              </DialogTitle>
+              <DialogContent dividers>
+                <ExperienceDetail data={edit} onSave={updateSelectedExperience} />
+              </DialogContent>
+            </Dialog>
+          )}
 
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
-        color="secondary"
-        open={showNotification}
-        autoHideDuration={6000}
-        onClose={clearNotification}
-        message={notificationMessage}
-      />
-    </Panel>
+          <Dialog open={modalAlertOpened} onClose={toggleAlertModal}>
+            <DialogTitle id="dialog-remove-experience" onClose={toggleAlertModal}>
+              {'Remove Experince?'}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">Are You sure to remove this experience?.</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={toggleAlertModal} color="primary">
+                Disagree
+              </Button>
+              <Button onClick={deleteExperience} color="secondary" autoFocus>
+                Agree
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+            color="secondary"
+            open={showNotification}
+            autoHideDuration={6000}
+            onClose={clearNotification}
+            message={notificationMessage}
+          />
+        </Panel>
+      </div>
+    </ClickAwayListener>
   );
 };
