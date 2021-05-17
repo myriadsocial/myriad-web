@@ -8,6 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import ImageIcon from '@material-ui/icons/Image';
@@ -228,13 +229,15 @@ export default function TransactionListComponent({ transactions, userId, sortTyp
             primary={renderTransactionDetail(txHistory)}
             secondary={
               <>
-                <Button
-                  href={`https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.myriad.systems#/explorer/query/${txHistory?.trxHash}`}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  color="inherit">
-                  Tx Hash: {txHistory?.trxHash}
-                </Button>
+                <Tooltip title="Click to open on Polkadot explorer">
+                  <Button
+                    href={`https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.myriad.systems#/explorer/query/${txHistory?.trxHash}`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    color="inherit">
+                    Tx Hash: {txHistory?.trxHash}
+                  </Button>
+                </Tooltip>
               </>
             }
           />
