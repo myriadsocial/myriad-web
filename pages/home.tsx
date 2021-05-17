@@ -24,10 +24,12 @@ export default function Home({ session }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { res } = context;
+  const { resolvedUrl, res } = context;
   const session = await getSession(context);
 
-  if (!session) {
+  console.log('getServerSideProps home', resolvedUrl);
+
+  if (!session && resolvedUrl === '/home') {
     res.writeHead(301, { location: `${process.env.NEXTAUTH_URL}` });
     res.end();
   }
