@@ -34,7 +34,7 @@ export const getPost = async (
     and: [
       {
         platform: {
-          inq: filters.platform
+          inq: [...filters.platform, 'myriad']
         }
       },
       {
@@ -142,11 +142,24 @@ export const getPostDetail = async (id: string) => {
   return data;
 };
 
-export const loadComments = async (postId: string) => {
+export const loadComments = async (postId: string, excludeUser?: string) => {
+  let where = {};
+
+  if (excludeUser) {
+    where = {
+      ...where,
+      userId: {
+        neq: excludeUser
+      }
+    };
+  }
   const { data } = await MyriadAPI.request({
     url: `/posts/${postId}/comments`,
     params: {
-      include: ['user']
+      filter: {
+        where,
+        include: ['user']
+      }
     },
     method: 'GET'
   });

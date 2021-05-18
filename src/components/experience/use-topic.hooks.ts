@@ -29,8 +29,9 @@ export const useTopic = (currentTopics: Tag[]) => {
             ...params,
             where: {
               id: {
-                like: query,
-                nin: currentTopics.map(i => i.id)
+                like: `.*${query}*`,
+                nin: currentTopics.map(i => i.id),
+                options: 'i'
               }
             }
           }

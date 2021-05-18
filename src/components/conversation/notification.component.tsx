@@ -10,39 +10,13 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles, fade } from '@material-ui/core/styles';
 
+import { useStyles } from './notification.style';
 import { useConversationHook } from './use-conversation-hook';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
 import ShowIf from 'src/components/common/show-if.component';
 import { Post } from 'src/interfaces/post';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: '100%',
-      backgroundColor: theme.palette.background.paper
-    },
-    inline: {
-      display: 'inline'
-    },
-    notification: {
-      backgroundColor: fade('#000', 0.3),
-      borderRadius: 16,
-      marginBottom: 16
-    },
-    notificationActive: {
-      background: 'linear-gradient(180deg, rgba(160, 31, 171, 0.41) 0%, rgba(25, 26, 29, 0) 100%)',
-      borderRadius: 16,
-      marginBottom: 16,
-      cursor: 'pointer'
-    },
-    notificationBadge: {
-      top: 6
-    }
-  })
-);
 
 type Props = {
   user: WithAdditionalParams<User>;
@@ -58,16 +32,16 @@ export default function NotificationListComponent({ user }: Props) {
   }, []);
 
   const getPostText = (post: Post) => {
-    return post.text ? post.text?.slice(0, 26) + ' ...' : '';
+    return post.text ? post.text?.slice(0, 27) + ' ...' : '';
   };
 
   const getPostReply = (post: Post) => {
     return (
       <React.Fragment>
         <Typography component="span" variant="body2" className={classes.inline} color="textPrimary">
-          {'user name'}
+          {post.comments[post.comments.length - 1].user?.name || ''}
         </Typography>
-        {' — ' + post.comments[0].text}
+        {' — ' + post.comments[post.comments.length - 1].text}
       </React.Fragment>
     );
   };
