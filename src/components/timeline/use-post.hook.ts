@@ -103,6 +103,7 @@ export const usePost = () => {
     const hasMedia = files.length > 0;
     const username = user.name as string;
     const accountId = user.address as string;
+    const userProfilePicture = user.profilePictureURL as string;
 
     const data = await PostAPI.createPost({
       text,
@@ -112,7 +113,8 @@ export const usePost = () => {
       assets: hasMedia ? images : [],
       platformUser: {
         username,
-        platform_account_id: accountId
+        platform_account_id: accountId,
+        profilePictureURL: userProfilePicture
       },
       walletAddress: accountId
     });

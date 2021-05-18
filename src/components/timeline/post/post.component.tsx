@@ -116,6 +116,9 @@ export default function PostComponent({ post, open = false, disable = false, rep
   if (!detail || !post) return null;
 
   const renderPostAvatar = () => {
+    //console.log('the origin is: ', post.platform);
+    //console.log('the avatar is: ', detail.user.avatar);
+    console.log('the detail is: ', detail);
     return <PostAvatarComponent origin={post.platform} avatar={detail.user.avatar} onClick={openContentSource} />;
   };
 
