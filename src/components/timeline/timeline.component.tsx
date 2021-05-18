@@ -94,7 +94,6 @@ const Timeline = ({ user }: Props) => {
 
   const submitImportPost = (URL: string) => {
     setIsPosting(true);
-    console.log(userId, ' imported the post!');
     importPost(URL, userId);
   };
 
