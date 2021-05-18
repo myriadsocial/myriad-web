@@ -35,6 +35,7 @@ export interface Post {
   platformUser?: {
     username: string;
     platform_account_id: string;
+    profilePictureURL?: string;
   };
   platform: PostOrigin;
   title?: string;
