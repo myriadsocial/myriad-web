@@ -25,7 +25,7 @@ function Adapter() {
     }
 
     async function createUser(profile: any) {
-      _debug('Adapter createUser', profile);
+      _debug('createUser', profile);
       return null;
     }
 
@@ -33,18 +33,18 @@ function Adapter() {
       try {
         const user = await UserAPI.getUserDetail(id);
 
-        _debug('Adapter getUser', id, user);
+        _debug('getUser', id, user);
 
         return userToSession(user);
       } catch (error) {
-        _debug('Adapter getUser', error.response.data);
+        _debug('getUser error', error.response.data);
 
         return Promise.reject(error.message);
       }
     }
 
     async function getUserByEmail(email: string) {
-      _debug('Adapter getUserByEmail', email);
+      _debug('getUserByEmail', email);
       return null;
     }
 
@@ -52,16 +52,16 @@ function Adapter() {
       const people = await PeopleAPI.getPeopleByPlatform(providerId, providerAccountId);
 
       if (people) {
-        _debug('Adapter getUserByProviderAccountId data', people);
+        _debug('getUserByProviderAccountId data', people);
       } else {
-        _debug('Adapter getUserByProviderAccountId not found');
+        _debug('getUserByProviderAccountId not found');
       }
 
       return null;
     }
 
     async function updateUser(user: any) {
-      _debug('Adapter updateUser', user);
+      _debug('updateUser', user);
       return null;
     }
 
@@ -140,12 +140,12 @@ function Adapter() {
     }
 
     async function createSession(user: User) {
-      _debug('Adapter createSession', user);
+      _debug('createSession', user);
       return null;
     }
 
     async function getSession(sessionToken: string) {
-      _debug('Adapter getSession', sessionToken);
+      _debug('getSession', sessionToken);
 
       try {
         const session = jwt.decode({
@@ -153,23 +153,23 @@ function Adapter() {
           secret: process.env.SECRET || ''
         });
 
-        _debug('Adapter decoded session', session);
+        _debug('decoded session', session);
 
         return session;
       } catch (error) {
-        _debug('Adapter decoded error', error);
+        _debug('decoded session error', error);
 
         return null;
       }
     }
 
     async function updateSession(session: Session, force: boolean) {
-      _debug('Adapter updateSession', session);
+      _debug('updateSession', session);
       return null;
     }
 
     async function deleteSession(sessionToken: string): Promise<void> {
-      _debug('Adapter deleteSession', sessionToken);
+      _debug('deleteSession', sessionToken);
     }
 
     return {

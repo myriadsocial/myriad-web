@@ -5,7 +5,8 @@
 export const connectToBlockchain = async () => {
   try {
     const { ApiPromise, WsProvider } = await import('@polkadot/api');
-    const wsProvider = new WsProvider(process.env.RPC_ADDRESS);
+    // 'wss://rpc.myriad.systems'
+    const wsProvider = new WsProvider(process.env.NEXT_PUBLIC_RPC_ADDRESS_TESTNET);
     const api = await new ApiPromise({
       provider: wsProvider
       //types: types
@@ -21,7 +22,7 @@ export const getBalance = async ADDR => {
     if (ADDR) {
       const DECIMAL_PLACES = 10000000000;
       const api = await connectToBlockchain();
-      //console.log('get balance is called!');
+      console.log('get balance is called!');
       const {
         data: { free: previousFree }
       } = await api.query.system.account(ADDR);
@@ -74,28 +75,4 @@ export const sendTip = async (fromAddress, toAddress, amountSent) => {
   } catch (error) {
     return error;
   }
-};
-
-export const getWalletHistory = async () => {
-  const api = await connectToBlockchain();
-  //Subscribe to system events via storage
-  api.query.system.events(events => {
-    console.log(`\nReceived ${events.length} events:`);
-
-    //Loop through the Vec<EventRecord>
-    events.forEach(record => {
-      //Extract the phase, event and the event types
-      const { event, phase } = record;
-      const types = event.typeDef;
-
-      //Show what we are busy with
-      console.log(`\t${event.section}:${event.method}:: (phase=${phase.toString()})`);
-      console.log(`\t\t${event.meta.documentation.toString()}`);
-
-      //Loop through each of the parameters, displaying the type and data
-      event.data.forEach((data, index) => {
-        console.log(`\t\t\t${types[index].type}: ${data.toString()}`);
-      });
-    });
-  });
 };
