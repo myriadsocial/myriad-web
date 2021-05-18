@@ -97,7 +97,6 @@ const Timeline = ({ user }: Props) => {
     importPost(URL, userId);
   };
 
-  console.log('user', user);
   console.log('TIMELINE COMPONENT LOAD');
 
   const handleCloseError = () => {
