@@ -97,7 +97,7 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
           [SocialsEnum.REDDIT]: true
         });
       } else {
-        setTwitter('Link To Reddit');
+        setTwitter('Link To Twitter');
         setConnected({
           ...connected,
           [SocialsEnum.REDDIT]: false

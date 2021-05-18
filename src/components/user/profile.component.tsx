@@ -55,7 +55,10 @@ const Profile = ({ user, toggleLogin }: Props) => {
   };
 
   const handleSignOut = async () => {
-    signOut();
+    await signOut({
+      callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
+      redirect: true
+    });
   };
 
   const onMnemonicCopied = () => {

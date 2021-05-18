@@ -129,7 +129,12 @@ export default function LoginComponent({ show, method, onSave, onCancel }: Props
 
     const pair: KeyringPair = keyring.createFromUri(seedUri, { name: address.name });
 
-    signIn('credentials', { address: pair.address, anonymous: false });
+    signIn('credentials', {
+      address: pair.address,
+      anonymous: false,
+      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
+      redirect: true
+    });
   };
 
   const cancel = () => {
