@@ -103,11 +103,11 @@ export default function TransactionListComponent({ transactions, userId }: Props
     return (
       <div>
         {userId === txHistory?.from ? (
-          <Tooltip title={`${txHistory?.to}`} placement="top" leaveDelay={3000} interactive>
+          <Tooltip title={`${txHistory?.to}`} placement="top">
             <Button>To: ...</Button>
           </Tooltip>
         ) : (
-          <Tooltip title={`${txHistory?.from}`} placement="top" leaveDelay={3000} interactive>
+          <Tooltip title={`${txHistory?.from}`} placement="top">
             <Button>From: ...</Button>
           </Tooltip>
         )}
@@ -117,7 +117,7 @@ export default function TransactionListComponent({ transactions, userId }: Props
 
   const RenderSecondaryText = (txHistory: Transaction) => {
     return (
-      <Tooltip title={`${txHistory?.trxHash}`} placement="top" leaveDelay={3000} interactive>
+      <Tooltip title={`${txHistory?.trxHash}`} placement="top">
         <Button>Tx: ...</Button>
       </Tooltip>
     );
