@@ -172,9 +172,8 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
     setAdded(false);
   };
 
-  // Managing Experience
+  // Abort Managing Experience
   const handleClickOutsidePanel = () => {
-    console.log('clicked away!');
     setEditing(false);
     setManageExperience(false);
     setAdded(false);
