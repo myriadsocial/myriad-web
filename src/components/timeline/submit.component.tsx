@@ -7,16 +7,16 @@ import CardContent from '@material-ui/core/CardContent';
 import Chip from '@material-ui/core/Chip';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
+//import FormControl from '@material-ui/core/FormControl';
+//import FormHelperText from '@material-ui/core/FormHelperText';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+//import MenuItem from '@material-ui/core/MenuItem';
+//import Select from '@material-ui/core/Select';
 import Slide from '@material-ui/core/Slide';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
@@ -98,20 +98,22 @@ export default function SubmitPostComponent({ onSubmit, experiences }: Props) {
   const [openTag, setOpenTag] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
 
-  const [selectedExperience, setSelectedExperience] = useState('');
-  const [openSelectExperience, setOpenSelectExperience] = useState(false);
+  // TODO: Associate a post with an experience
 
-  const handleExperienceChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedExperience(event.target.value as string);
-  };
+  //const [selectedExperience, setSelectedExperience] = useState('');
+  //const [openSelectExperience, setOpenSelectExperience] = useState(false);
 
-  const handleExperienceClose = () => {
-    setOpenSelectExperience(false);
-  };
+  //const handleExperienceChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  //setSelectedExperience(event.target.value as string);
+  //};
 
-  const handleExperienceOpen = () => {
-    setOpenSelectExperience(true);
-  };
+  //const handleExperienceClose = () => {
+  //setOpenSelectExperience(false);
+  //};
+
+  //const handleExperienceOpen = () => {
+  //setOpenSelectExperience(true);
+  //};
 
   const toggleCreatePost = () => {
     setCreatePost(!showCreatePost);
@@ -195,29 +197,32 @@ export default function SubmitPostComponent({ onSubmit, experiences }: Props) {
                 value={postText}
                 onChange={updatePostText}
               />
-              <FormControl className={styles.formControl}>
-                <InputLabel id="select-experience">Experience</InputLabel>
-                <>
-                  <Select
-                    labelId="select-an-experience"
-                    id="select-experience"
-                    open={openSelectExperience}
-                    onClose={handleExperienceClose}
-                    onOpen={handleExperienceOpen}
-                    value={selectedExperience}
-                    onChange={handleExperienceChange}>
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {experiences.map(experience => (
-                      <MenuItem key={experience.id} value={experience.id}>
-                        {experience.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </>
-                <FormHelperText>Select an experience where the post will be stored</FormHelperText>
-              </FormControl>
+              {
+                // Associate a post with an experience
+                //<FormControl className={styles.formControl}>
+                //<InputLabel id="select-experience">Experience</InputLabel>
+                //<>
+                //<Select
+                //labelId="select-an-experience"
+                //id="select-experience"
+                //open={openSelectExperience}
+                //onClose={handleExperienceClose}
+                //onOpen={handleExperienceOpen}
+                //value={selectedExperience}
+                //onChange={handleExperienceChange}>
+                //<MenuItem value="">
+                //<em>None</em>
+                //</MenuItem>
+                //{experiences.map(experience => (
+                //<MenuItem key={experience.id} value={experience.id}>
+                //{experience.name}
+                //</MenuItem>
+                //))}
+                //</Select>
+                //</>
+                //<FormHelperText>Select an experience where the post will be stored</FormHelperText>
+                //</FormControl>
+              }
 
               <div className={styles.tag}>
                 {tags.map((tag, index) => {

@@ -156,13 +156,13 @@ export const usePost = () => {
     });
   };
 
-  const importPost = async (url: string, experienceId: string) => {
+  const importPost = async (url: string, importer?: string) => {
     setLoading(true);
 
     try {
       const data = await PostAPI.importPost({
         url,
-        experienceId
+        importer
       });
 
       setImportedPost(data);
