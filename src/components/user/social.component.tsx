@@ -22,6 +22,7 @@ import { useUserHook } from './use-user.hook';
 import { useUser } from './user.context';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
+import ConfirmDialog from 'src/components/common/confirm-dialog.component';
 import { SocialsEnum } from 'src/interfaces';
 import { LayoutFilterType } from 'src/interfaces/setting';
 
@@ -40,9 +41,10 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
 
   const [, setCookie] = useCookies(['social']);
   const { state: userState } = useUser();
-  const { getUserDetail } = useUserHook(user);
+  const { getUserDetail, disconnectSocial } = useUserHook(user);
 
   const [connectOpened, openConnect] = useState(false);
+  const [confirmationOpen, setOpenConfirmation] = React.useState(false);
   const [selectedSocial, setSelectedSocial] = useState<SocialsEnum | null>(null);
   const [connected, setConnected] = useState<Record<SocialsEnum, boolean>>({
     [SocialsEnum.TWITTER]: false,
@@ -66,6 +68,12 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
           ...connected,
           [SocialsEnum.TWITTER]: true
         });
+      } else {
+        setTwitter('Link To Twitter');
+        setConnected({
+          ...connected,
+          [SocialsEnum.TWITTER]: false
+        });
       }
 
       if (facebookCredential) {
@@ -73,6 +81,12 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
         setConnected({
           ...connected,
           [SocialsEnum.FACEBOOK]: true
+        });
+      } else {
+        setTwitter('Link To Facebook');
+        setConnected({
+          ...connected,
+          [SocialsEnum.FACEBOOK]: false
         });
       }
 
@@ -82,15 +96,42 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
           ...connected,
           [SocialsEnum.REDDIT]: true
         });
+      } else {
+        setTwitter('Link To Twitter');
+        setConnected({
+          ...connected,
+          [SocialsEnum.REDDIT]: false
+        });
       }
+    } else {
+      setConnected({
+        [SocialsEnum.TWITTER]: false,
+        [SocialsEnum.FACEBOOK]: false,
+        [SocialsEnum.REDDIT]: false
+      });
+
+      setTwitter('Link To Twitter');
+      setFacebook('Link To Facebook');
+      setReddit('Link To Reddit');
     }
   }, [userState.user]);
 
   const handleOpenConnect = (social: SocialsEnum) => {
-    if (connected[social]) return;
+    if (connected[social]) {
+      setSelectedSocial(social);
+      setOpenConfirmation(true);
+    } else {
+      setSelectedSocial(social);
+      openConnect(true);
+    }
+  };
 
-    setSelectedSocial(social);
-    openConnect(true);
+  const removeSocialAccount = () => {
+    if (selectedSocial) {
+      disconnectSocial(selectedSocial);
+    }
+
+    setOpenConfirmation(false);
   };
 
   const handleCloseConnect = () => {
@@ -131,7 +172,7 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
             />
           </ListItemSecondaryAction>
         </ListItem>
-        <ListItem button disabled={connected.twitter} className={style.gutters} onClick={() => handleOpenConnect(SocialsEnum.TWITTER)}>
+        <ListItem button className={style.gutters} onClick={() => handleOpenConnect(SocialsEnum.TWITTER)}>
           <ListItemIcon className={style.icon}>
             <TwitterIcon className={style.twitter} />
           </ListItemIcon>
@@ -152,7 +193,7 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
             />
           </ListItemSecondaryAction>
         </ListItem>
-        <ListItem button disabled={connected.reddit} className={style.gutters} onClick={() => handleOpenConnect(SocialsEnum.REDDIT)}>
+        <ListItem button className={style.gutters} onClick={() => handleOpenConnect(SocialsEnum.REDDIT)}>
           <ListItemIcon className={style.icon}>
             <RedditIcon className={style.reddit} />
           </ListItemIcon>
@@ -180,6 +221,14 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
       </ShowIf>
 
       {selectedSocial && <ConnectComponent social={selectedSocial} user={user} open={connectOpened} handleClose={handleCloseConnect} />}
+
+      <ConfirmDialog
+        open={confirmationOpen}
+        handleClose={() => setOpenConfirmation(false)}
+        handleSubmit={removeSocialAccount}
+        title="Unlink social account"
+        description="Are you sure to remove this account from myriad network?"
+      />
     </div>
   );
 };

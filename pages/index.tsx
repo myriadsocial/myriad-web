@@ -117,10 +117,13 @@ export default function Index() {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { res } = context;
-  const session = await getSession(context);
+  const { resolvedUrl, res } = context;
+  console.log('getServerSideProps index', resolvedUrl);
 
-  if (session) {
+  const session = await getSession(context);
+  console.log('getServerSideProps index session', session);
+
+  if (session && resolvedUrl === '/') {
     res.writeHead(301, { location: `${process.env.NEXTAUTH_URL}/home` });
     res.end();
   }

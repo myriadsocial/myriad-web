@@ -22,6 +22,7 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { useBalance } from '../../wallet/use-balance.hooks';
 import CommentComponent from '../comment/comment.component';
 import ReplyCommentComponent from '../comment/reply.component';
+import RedditReactionComponent from '../reactions/reddit.component';
 import TwitterReactionComponent from '../reactions/twitter.component';
 import PostAvatarComponent from './post-avatar.component';
 import PostImageComponent from './post-image.component';
@@ -115,6 +116,9 @@ export default function PostComponent({ post, open = false, disable = false, rep
   if (!detail || !post) return null;
 
   const renderPostAvatar = () => {
+    //console.log('the origin is: ', post.platform);
+    //console.log('the avatar is: ', detail.user.avatar);
+    console.log('the detail is: ', detail);
     return <PostAvatarComponent origin={post.platform} avatar={detail.user.avatar} onClick={openContentSource} />;
   };
 
@@ -164,6 +168,12 @@ export default function PostComponent({ post, open = false, disable = false, rep
         <CardActions disableSpacing>
           <ShowIf condition={post.platform === 'twitter'}>
             <TwitterReactionComponent metric={detail.metric} />
+          </ShowIf>
+          <ShowIf condition={post.platform === 'reddit'}>
+            {
+              //TODO: add native metrics from reddit posts
+            }
+            <RedditReactionComponent metric={detail.metric} />
           </ShowIf>
           <IconButton aria-label="add to favorites">
             <FavoriteIcon />

@@ -34,7 +34,7 @@ export const getPost = async (
     and: [
       {
         platform: {
-          inq: filters.platform
+          inq: [...filters.platform, 'myriad']
         }
       },
       {
@@ -104,6 +104,7 @@ export const createPost = async (values: Partial<Post>): Promise<Post> => {
 };
 
 export const importPost = async (values: ImportPost) => {
+  console.log('the values are: ', values);
   const { data } = await MyriadAPI.request<Post>({
     url: `/posts/import`,
     method: 'POST',
@@ -113,11 +114,52 @@ export const importPost = async (values: ImportPost) => {
   return data;
 };
 
-export const loadComments = async (postId: string) => {
+export const getPostDetail = async (id: string) => {
+  const { data } = await MyriadAPI.request<Post>({
+    url: `/posts/${id}`,
+    method: 'GET',
+    params: {
+      filter: {
+        include: [
+          {
+            relation: 'comments',
+            scope: {
+              include: [
+                {
+                  relation: 'user'
+                }
+              ]
+            }
+          },
+          {
+            relation: 'publicMetric'
+          }
+        ]
+      }
+    }
+  });
+
+  return data;
+};
+
+export const loadComments = async (postId: string, excludeUser?: string) => {
+  let where = {};
+
+  if (excludeUser) {
+    where = {
+      ...where,
+      userId: {
+        neq: excludeUser
+      }
+    };
+  }
   const { data } = await MyriadAPI.request({
     url: `/posts/${postId}/comments`,
     params: {
-      include: ['user']
+      filter: {
+        where,
+        include: ['user']
+      }
     },
     method: 'GET'
   });

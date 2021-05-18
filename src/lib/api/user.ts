@@ -58,3 +58,12 @@ export const verifyCredentials = async (userId: string, peopleId: string) => {
     }
   });
 };
+
+export const disconnectSocial = async (credentialId: string) => {
+  const { data } = await MyriadAPI.request({
+    method: 'DELETE',
+    url: `/user-credentials/${credentialId}`
+  });
+
+  return data;
+};

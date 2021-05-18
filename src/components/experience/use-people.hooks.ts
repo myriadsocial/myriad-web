@@ -15,7 +15,14 @@ export const usePeople = () => {
     try {
       const data = await PeopleAPI.searchPeople(query);
 
-      setPeople(data);
+      const found = people.some(person => person.username === data[0]?.username);
+
+      if (found) {
+        setPeople([]);
+      } else {
+        setPeople(data);
+        setFound(false);
+      }
     } catch (error) {
       setError(error);
     } finally {

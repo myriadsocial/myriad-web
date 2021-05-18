@@ -23,7 +23,10 @@ export default function Logout() {
 
   const handleSignOut = async () => {
     await unsubscribeFromAccounts();
-    signOut();
+    await signOut({
+      callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
+      redirect: true
+    });
   };
 
   return (
