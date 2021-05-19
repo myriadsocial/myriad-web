@@ -83,7 +83,7 @@ const User = ({ settings, changeSetting }: Props) => {
         </ShowIf>
       </Grid>
 
-      <ShowIf condition={!session?.user.anonymous}>
+      <ShowIf condition={false}>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreRounded color="secondary" />}>
             <StyledBadge badgeContent={conversations.length} color="secondary">
