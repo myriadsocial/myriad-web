@@ -99,9 +99,7 @@ export default function Index() {
   // When rendering client side don't display anything until loading is complete
   if (typeof window !== 'undefined' && loading) return null;
 
-  if (typeof window !== 'undefined' && session) {
-    router.push('/home');
-  }
+  if (session) return null;
 
   return (
     <div className={style.root}>

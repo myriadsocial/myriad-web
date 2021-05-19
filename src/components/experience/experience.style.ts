@@ -3,7 +3,8 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      marginBottom: theme.spacing(2)
+      height: '100%'
+      //marginBottom: theme.spacing(2)
     },
     action: {
       paddingTop: theme.spacing(2),
