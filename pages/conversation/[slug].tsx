@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { GetServerSideProps } from 'next';
-import { Session } from 'next-auth';
-import { getSession } from 'next-auth/client';
+import { useSession, getSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
 
 import Layout from 'src/components/Layout/Layout.container';
 import ConversationComponent from 'src/components/conversation/conversation.component';
@@ -10,11 +10,22 @@ import { Post } from 'src/interfaces/post';
 import * as PostAPI from 'src/lib/api/post';
 
 type Props = {
-  session: Session | null;
   post: Post;
 };
 
-export default function Conversation({ session, post }: Props) {
+export default function Conversation({ post }: Props) {
+  const [session, loading] = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!session && !loading) {
+      router.push('/');
+    }
+  }, [loading, session]);
+
+  // When rendering client side don't display anything until loading is complete
+  if (typeof window !== 'undefined' && loading) return null;
+
   if (!session?.user) return null;
 
   return (
@@ -26,14 +37,6 @@ export default function Conversation({ session, post }: Props) {
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const { res, params } = context;
-  const session = await getSession(context);
-
-  if (!session) {
-    res.writeHead(301, { location: `${process.env.NEXTAUTH_URL}` });
-    res.end();
-
-    return {};
-  }
 
   if (!params) {
     res.writeHead(301, { location: `${process.env.NEXTAUTH_URL}/home` });
@@ -46,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   return {
     props: {
-      session,
+      session: await getSession(context),
       post
     }
   };
