@@ -30,6 +30,8 @@ import PostVideoComponent from './post-video.component';
 import { useStyles } from './post.style';
 
 import clsx from 'clsx';
+import remarkGFM from 'remark-gfm';
+import remarkHTML from 'remark-html';
 import SendTipModal from 'src/components/common/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
 import { useSocialDetail } from 'src/hooks/use-social.hook';
@@ -142,7 +144,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
                 ))}
               </div>
             </ShowIf>
-            <ReactMarkdown>{detail.text}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGFM, remarkHTML]}>{detail.text}</ReactMarkdown>
             {detail.images && detail.images.length > 0 && <PostImageComponent images={detail.images} />}
             {detail.videos && detail.videos.length > 0 && <PostVideoComponent url={detail.videos[0]} />}
           </CardContent>
