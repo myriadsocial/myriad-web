@@ -87,7 +87,13 @@ export default function PostComponent({ post, open = false, disable = false, rep
   };
 
   const openContentSource = () => {
-    window.open(post.link, '_blank');
+    if (post.platform === 'twitter') {
+      window.open(`https://twitter.com/${post.platformUser?.username}`, '_blank');
+    } else if (post.platform === 'reddit') {
+      window.open(`https://reddit.com/user/${post.platformUser?.username}`, '_blank');
+    } else {
+      window.open(post.link, '_blank');
+    }
   };
 
   const urlToImageData = (url: string): ImageData => {
