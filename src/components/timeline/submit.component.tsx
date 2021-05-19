@@ -7,12 +7,16 @@ import CardContent from '@material-ui/core/CardContent';
 import Chip from '@material-ui/core/Chip';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+//import FormControl from '@material-ui/core/FormControl';
+//import FormHelperText from '@material-ui/core/FormHelperText';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import ListSubheader from '@material-ui/core/ListSubheader';
+//import MenuItem from '@material-ui/core/MenuItem';
+//import Select from '@material-ui/core/Select';
 import Slide from '@material-ui/core/Slide';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
@@ -25,6 +29,7 @@ import DialogTitle from '../common/DialogTitle.component';
 
 import AddTagComponent from 'src/components/common/AddTag.component';
 import ShowIf from 'src/components/common/show-if.component';
+import { Experience } from 'src/interfaces/experience';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -60,6 +65,14 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     tag: {
       margin: theme.spacing(2, 0)
+    },
+    button: {
+      display: 'block',
+      marginTop: theme.spacing(2)
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120
     }
   })
 );
@@ -71,9 +84,10 @@ type UpoadedFile = {
 
 type Props = {
   onSubmit: (text: string, tags: string[], files: File[]) => void;
+  experiences: Experience[];
 };
 
-export default function SubmitPostComponent({ onSubmit }: Props) {
+export default function SubmitPostComponent({ onSubmit, experiences }: Props) {
   const styles = useStyles();
 
   const uploadFieldRef = useRef<HTMLInputElement | null>(null);
@@ -83,6 +97,23 @@ export default function SubmitPostComponent({ onSubmit }: Props) {
   const [postText, setPostText] = useState('');
   const [openTag, setOpenTag] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
+
+  // TODO: Associate a post with an experience
+
+  //const [selectedExperience, setSelectedExperience] = useState('');
+  //const [openSelectExperience, setOpenSelectExperience] = useState(false);
+
+  //const handleExperienceChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  //setSelectedExperience(event.target.value as string);
+  //};
+
+  //const handleExperienceClose = () => {
+  //setOpenSelectExperience(false);
+  //};
+
+  //const handleExperienceOpen = () => {
+  //setOpenSelectExperience(true);
+  //};
 
   const toggleCreatePost = () => {
     setCreatePost(!showCreatePost);
@@ -166,6 +197,32 @@ export default function SubmitPostComponent({ onSubmit }: Props) {
                 value={postText}
                 onChange={updatePostText}
               />
+              {
+                // Associate a post with an experience
+                //<FormControl className={styles.formControl}>
+                //<InputLabel id="select-experience">Experience</InputLabel>
+                //<>
+                //<Select
+                //labelId="select-an-experience"
+                //id="select-experience"
+                //open={openSelectExperience}
+                //onClose={handleExperienceClose}
+                //onOpen={handleExperienceOpen}
+                //value={selectedExperience}
+                //onChange={handleExperienceChange}>
+                //<MenuItem value="">
+                //<em>None</em>
+                //</MenuItem>
+                //{experiences.map(experience => (
+                //<MenuItem key={experience.id} value={experience.id}>
+                //{experience.name}
+                //</MenuItem>
+                //))}
+                //</Select>
+                //</>
+                //<FormHelperText>Select an experience where the post will be stored</FormHelperText>
+                //</FormControl>
+              }
 
               <div className={styles.tag}>
                 {tags.map((tag, index) => {
