@@ -146,12 +146,12 @@ export default function ConnectComponent({ user, social, open, handleClose }: Pr
 
   const notifyAccountUsed = () => {
     setShowNotification(true);
-    setNotificationMessage(`${username} already taken`);
+    setNotificationMessage(`Profile already used`);
   };
 
   const notifyNotShared = () => {
     setShowNotification(true);
-    setNotificationMessage(`Post not found`);
+    setNotificationMessage(`Profile already used`);
   };
 
   const clearNotification = () => {
