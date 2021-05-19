@@ -9,21 +9,26 @@ import Layout from '../src/components/Layout/Layout.container';
 import ProfileTimeline from 'src/components/profile/profile.component';
 import { healthcheck } from 'src/lib/api/healthcheck';
 
+interface Params {
+  id: string;
+}
+
 type Props = {
   session: Session | null;
+  params: Params;
 };
 
-export default function Profile({ session }: Props) {
+export default function Profile({ session, params }: Props) {
   if (!session) return null;
   return (
     <Layout session={session}>
-      <ProfileTimeline user={session.user} />
+      <ProfileTimeline user={session.user} id={params.id} />
     </Layout>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { res } = context;
+  const { res, params } = context;
   const session = await getSession(context);
 
   if (!session) {
@@ -40,7 +45,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   return {
     props: {
-      session
+      session,
+      params
     }
   };
 };
