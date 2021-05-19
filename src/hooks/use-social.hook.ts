@@ -13,7 +13,7 @@ const createPostContent = (post: Post): string => {
   let content = '';
 
   if (post.title) {
-    content += `${post.title}`;
+    content += `## ${post.title}`;
   }
 
   if (post.text) {

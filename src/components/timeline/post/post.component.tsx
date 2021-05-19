@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 //@ts-ignore
 import { FacebookProvider, EmbeddedPost } from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
+import remarkGFM from 'remark-gfm';
+import remarkHTML from 'remark-html';
 
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
@@ -138,7 +140,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
                 ))}
               </div>
             </ShowIf>
-            <ReactMarkdown>{detail.text}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGFM, remarkHTML]}>{detail.text}</ReactMarkdown>
             {detail.images && detail.images.length > 0 && <PostImageComponent images={detail.images} />}
             {detail.videos && detail.videos.length > 0 && <PostVideoComponent url={detail.videos[0]} />}
           </CardContent>
