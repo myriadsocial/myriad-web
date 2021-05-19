@@ -266,7 +266,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
             Sed vehicula.`}
           </Typography>
         </CardContent>
-        <ShowIf condition={!anonymous}>
+        <ShowIf condition={false}>
           <CardActions>
             <Button
               size="small"
@@ -283,7 +283,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
         </ShowIf>
       </Card>
 
-      <ShowIf condition={!isEditing && !isManagingExperience}>
+      <ShowIf condition={false}>
         <ShowIf condition={anonymous}>
           <SearchExperienceComponent title="Search Experience" data={searched} search={searchExperience} onSelected={addToMyExperience} />
         </ShowIf>
