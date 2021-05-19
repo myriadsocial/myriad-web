@@ -1,20 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { GetServerSideProps } from 'next';
-import { Session } from 'next-auth';
-import { getSession } from 'next-auth/client';
+import { useSession, getSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
 
 import Layout from '../src/components/Layout/Layout.container';
 import Timeline from '../src/components/timeline/timeline.component';
 
 import { healthcheck } from 'src/lib/api/healthcheck';
 
-type Props = {
-  session: Session | null;
-};
+export default function Home() {
+  const [session, loading] = useSession();
+  const router = useRouter();
 
-export default function Home({ session }: Props) {
-  if (!session) return null;
+  useEffect(() => {
+    if (!session && !loading) {
+      router.push('/');
+    }
+  }, [loading, session]);
+
+  // When rendering client side don't display anything until loading is complete
+  if (typeof window !== 'undefined' && loading) return null;
+
+  if (!session?.user) return null;
 
   return (
     <Layout session={session}>
@@ -24,15 +32,7 @@ export default function Home({ session }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { resolvedUrl, res } = context;
-  const session = await getSession(context);
-
-  console.log('getServerSideProps home', resolvedUrl);
-
-  if (!session && resolvedUrl === '/home') {
-    res.writeHead(301, { location: `${process.env.NEXTAUTH_URL}` });
-    res.end();
-  }
+  const { res } = context;
 
   const available = await healthcheck();
 
@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   return {
     props: {
-      session
+      session: await getSession(context)
     }
   };
 };

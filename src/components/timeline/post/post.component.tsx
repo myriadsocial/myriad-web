@@ -2,8 +2,6 @@ import React, { useState, useRef } from 'react';
 //@ts-ignore
 import { FacebookProvider, EmbeddedPost } from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
-import remarkGFM from 'remark-gfm';
-import remarkHTML from 'remark-html';
 
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
@@ -31,6 +29,8 @@ import PostVideoComponent from './post-video.component';
 import { useStyles } from './post.style';
 
 import clsx from 'clsx';
+import remarkGFM from 'remark-gfm';
+import remarkHTML from 'remark-html';
 import SendTipModal from 'src/components/common/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
 import { useSocialDetail } from 'src/hooks/use-social.hook';
