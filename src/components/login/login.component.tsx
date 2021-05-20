@@ -68,7 +68,8 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
       signIn('credentials', {
         address: accounts[0].address,
         name: accounts[0].meta.name,
-        anonymous: false
+        anonymous: false,
+        callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home'
       });
     }
 
@@ -113,7 +114,7 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
     setAccountName(value);
   };
 
-  const login = () => {
+  const login = async () => {
     const prefix = process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX ? Number(process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX) : 214;
     const cyptoType: KeypairType = process.env.NEXT_PUBLIC_POLKADOT_CRYPTO_TYPE
       ? (process.env.NEXT_PUBLIC_POLKADOT_CRYPTO_TYPE as KeypairType)
@@ -122,15 +123,17 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
 
     const keyring = new Keyring({ type: cyptoType, ss58Format: prefix });
     const seed = mnemonicGenerate();
-    console.log(seed);
+
     const pair: KeyringPair = keyring.createFromUri(seed + derivationPath, { name: accountName });
-    console.log(pair);
+
     setCookie('uri', seed);
 
-    signIn('credentials', {
+    await signIn('credentials', {
       address: pair.address,
       name: accountName,
-      anonymous: false
+      anonymous: false,
+      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
+      redirect: true
     });
   };
 
@@ -142,24 +145,28 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
     setShowLoginAnonymouslyDialog(false);
   };
 
-  const loginAnonymous = () => {
+  const loginAnonymous = async () => {
     const randomName: string = uniqueNamesGenerator({
       dictionaries: [adjectives, colors],
       separator: ' '
     });
 
-    signIn('credentials', {
+    await signIn('credentials', {
       address: null,
       name: randomName,
-      anonymous: true
+      anonymous: true,
+      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
+      redirect: true
     });
   };
 
-  const signinWithAccount = (account: InjectedAccountWithMeta) => {
-    signIn('credentials', {
+  const signinWithAccount = async (account: InjectedAccountWithMeta) => {
+    await signIn('credentials', {
       address: account.address,
       name: account.meta.name,
-      anonymous: false
+      anonymous: false,
+      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
+      redirect: true
     });
   };
 
