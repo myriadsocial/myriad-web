@@ -1,7 +1,12 @@
 import React from 'react';
 
+import { useRouter } from 'next/router';
+
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
@@ -39,6 +44,8 @@ export const useStyles = makeStyles((theme: Theme) =>
 export default function SearchUser({ title = 'Search..', data = [], search, onSelected }: Props) {
   const style = useStyles();
 
+  const router = useRouter();
+
   const [searchQuery, setSearchQuery] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState<User[]>([]);
@@ -72,6 +79,10 @@ export default function SearchUser({ title = 'Search..', data = [], search, onSe
       setLoading(true);
       setSearchQuery(value);
     }
+  };
+
+  const redirectToProfilePage = (url: string) => {
+    router.push(`/${url}`);
   };
 
   return (
@@ -110,10 +121,19 @@ export default function SearchUser({ title = 'Search..', data = [], search, onSe
       )}
       renderOption={(option, state: AutocompleteRenderOptionState) => {
         return (
-          <Grid className={style.optionItem}>
-            <Typography variant="body1" color="textSecondary">
-              {option.name}
-            </Typography>
+          <Grid container direction="column" alignItems="center">
+            <Button onClick={() => redirectToProfilePage(option.id)}>
+              <Grid item>
+                <IconButton aria-label="avatar-icon">
+                  <Avatar aria-label="avatar" src={option.profilePictureURL} />
+                </IconButton>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1" color="textSecondary">
+                  {option.name}
+                </Typography>
+              </Grid>
+            </Button>
           </Grid>
         );
       }}
