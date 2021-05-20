@@ -1,5 +1,6 @@
 import React from 'react';
 import Carousel from 'react-images';
+import ReactPhotoGrid from 'react-photo-grid';
 
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -12,6 +13,7 @@ import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CloseIcon from '@material-ui/icons/Close';
 
+import ShowIf from 'src/components/common/show-if.component';
 import { ImageData } from 'src/interfaces/post';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -48,13 +50,18 @@ export default function ImageListComponent({ images }: Props) {
   return (
     <div className={style.root}>
       <NoSsr>
-        <GridList cellHeight="auto" cols={2} onClick={openLightbox}>
-          {images.map(image => (
-            <GridListTile key={image.src} cols={2}>
-              <img src={image.src} />
-            </GridListTile>
-          ))}
-        </GridList>
+        <ShowIf condition={images.length > 1}>
+          <ReactPhotoGrid onImageClick={openLightbox} data={images.slice(0, 3).map(image => image.src)} containerWidth={720} />
+        </ShowIf>
+        <ShowIf condition={images.length === 1}>
+          <GridList cellHeight={400} cols={1} onClick={openLightbox}>
+            {images.map((image, i) => (
+              <GridListTile key={image.src} cols={1}>
+                <img src={image.src} />
+              </GridListTile>
+            ))}
+          </GridList>
+        </ShowIf>
 
         <Dialog open={viewerIsOpen} fullScreen={fullScreen}>
           <MuiDialogTitle>

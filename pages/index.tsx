@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/client';
+import { useSession, getSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -50,6 +51,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Index() {
   const style = useStyles();
+  const [session, loading] = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session && !loading) {
+      router.push('/home');
+    }
+  }, [loading, session]);
 
   const reply = (comment: Comment) => {};
 
@@ -87,6 +96,11 @@ export default function Index() {
     }
   ];
 
+  // When rendering client side don't display anything until loading is complete
+  if (typeof window !== 'undefined' && loading) return null;
+
+  if (session) return null;
+
   return (
     <div className={style.root}>
       <Grid container spacing={3} justify="space-around">
@@ -118,12 +132,6 @@ export default function Index() {
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const { res } = context;
-  const session = await getSession(context);
-
-  if (session) {
-    res.writeHead(301, { location: `${process.env.NEXTAUTH_URL}/home` });
-    res.end();
-  }
 
   const available = await healthcheck();
 
@@ -134,7 +142,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   return {
     props: {
-      session
+      session: await getSession(context)
     }
   };
 };

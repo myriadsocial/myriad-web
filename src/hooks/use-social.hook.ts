@@ -13,7 +13,7 @@ const createPostContent = (post: Post): string => {
   let content = '';
 
   if (post.title) {
-    content += `${post.title}`;
+    content += `## ${post.title}`;
   }
 
   if (post.text) {
@@ -62,7 +62,7 @@ export const useSocialDetail = (post: Post) => {
         },
         user: {
           name: post.platformUser?.username || '',
-          avatar: '',
+          avatar: post.platformUser?.profilePictureURL || '',
           username: post.platformUser?.username || ''
         }
       });
