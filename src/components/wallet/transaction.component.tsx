@@ -2,28 +2,20 @@ import React, { useEffect, useState } from 'react';
 
 import { useSession } from 'next-auth/client';
 
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
-import ImageIcon from '@material-ui/icons/Image';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import TabContext from '@material-ui/lab/TabContext';
 import TabPanel from '@material-ui/lab/TabPanel';
 
 import { useTransaction } from '../tippingJar/use-transaction.hooks';
+import TransactionListComponent from './transactionList.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -177,144 +169,18 @@ export const TransactionComponent = React.memo(function Wallet() {
         </StyledTabs>
         <TabPanel className={style.panel} value={'0'}>
           <List className={style.root}>
-            {transactions.map(txHistory => (
-              <ListItem key={txHistory?.id}>
-                <ListItemAvatar className={style.avatar}>
-                  <Avatar>
-                    <ImageIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  className={style.textSecondary}
-                  secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-                  primary={
-                    session?.user.address === txHistory?.from ? (
-                      <Tooltip title={`${txHistory?.to}`} placement="top" leaveDelay={3000} interactive>
-                        <Button>To: ...</Button>
-                      </Tooltip>
-                    ) : (
-                      <Tooltip title={`${txHistory?.from}`} placement="top" leaveDelay={3000} interactive>
-                        <Button>From: ...</Button>
-                      </Tooltip>
-                    )
-                  }
-                  secondary={
-                    <Tooltip title={`${txHistory?.trxHash}`} placement="top" leaveDelay={3000} interactive>
-                      <Button>Tx: ...</Button>
-                    </Tooltip>
-                  }
-                />
-                <ListItemSecondaryAction>
-                  <div className={style.badge}>
-                    <Chip
-                      color="default"
-                      size="small"
-                      label={
-                        txHistory?.state === 'success' || txHistory?.state === 'verified'
-                          ? 'Success'
-                          : [txHistory.state === 'pending' ? 'Pending' : 'Failed']
-                      }
-                    />
-                    <Chip
-                      className={session?.user.address === txHistory?.from ? style.red : style.green}
-                      color="default"
-                      size="small"
-                      label={session?.user.address === txHistory?.from ? 'Out' : 'In'}
-                    />
-                    <Typography>{txHistory?.value / 1000000000000} Myria</Typography>
-                  </div>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
+            <TransactionListComponent transactions={transactions} userId={userAddress} />
           </List>
         </TabPanel>
         <TabPanel className={style.panel} value={'1'}>
-          <>
-            <List className={style.root}>
-              {inboundTxs.map(inboundTx => (
-                <ListItem key={inboundTx?.id}>
-                  <ListItemAvatar className={style.avatar}>
-                    <Avatar>
-                      <ImageIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    className={style.textSecondary}
-                    secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-                    primary={
-                      <Tooltip title={`${inboundTx?.from}`} placement="top" leaveDelay={3000} interactive>
-                        <Button>From: ...</Button>
-                      </Tooltip>
-                    }
-                    secondary={
-                      <Tooltip title={`${inboundTx?.trxHash}`} placement="top" leaveDelay={3000} interactive>
-                        <Button>Tx: ...</Button>
-                      </Tooltip>
-                    }
-                  />
-                  <ListItemSecondaryAction>
-                    <div className={style.badge}>
-                      <Chip
-                        color="default"
-                        size="small"
-                        label={
-                          inboundTx?.state === 'success' || inboundTx?.state === 'verified'
-                            ? 'Success'
-                            : [inboundTx?.state === 'pending' ? 'Pending' : 'Failed']
-                        }
-                      />
-                      <Chip className={style.green} color="default" size="small" label="In" />
-                      <Typography>{inboundTx?.value / 1000000000000} Myria</Typography>
-                    </div>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          </>
+          <List className={style.root}>
+            <TransactionListComponent transactions={inboundTxs} userId={userAddress} />
+          </List>
         </TabPanel>
         <TabPanel className={style.panel} value={'2'}>
-          <>
-            <List className={style.root}>
-              {outboundTxs.map(outboundTx => (
-                <ListItem key={outboundTx?.id}>
-                  <ListItemAvatar className={style.avatar}>
-                    <Avatar>
-                      <ImageIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    className={style.textSecondary}
-                    secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-                    primary={
-                      <Tooltip title={`${outboundTx?.to}`} placement="top" leaveDelay={3000} interactive>
-                        <Button>To: ...</Button>
-                      </Tooltip>
-                    }
-                    secondary={
-                      <Tooltip title={`${outboundTx?.trxHash}`} placement="top" leaveDelay={3000} interactive>
-                        <Button>Tx: ...</Button>
-                      </Tooltip>
-                    }
-                  />
-                  <ListItemSecondaryAction>
-                    <div className={style.badge}>
-                      <Chip
-                        color="default"
-                        size="small"
-                        label={
-                          outboundTx?.state === 'success' || outboundTx?.state === 'verified'
-                            ? 'Success'
-                            : [outboundTx?.state === 'pending' ? 'Pending' : 'Failed']
-                        }
-                      />
-                      <Chip className={style.red} color="default" size="small" label="Out" />
-                      <Typography>{outboundTx?.value / 1000000000000} Myria</Typography>
-                    </div>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          </>
+          <List className={style.root}>
+            <TransactionListComponent transactions={outboundTxs} userId={userAddress} />
+          </List>
         </TabPanel>
       </TabContext>
     </>

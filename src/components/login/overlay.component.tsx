@@ -42,13 +42,13 @@ export default function Overlay({ toggleLogin }: Props) {
       <Card className={style.root}>
         <CardContent>
           <Typography className={style.title} color="textSecondary" gutterBottom>
-            You need to log-in or register before you can link your social media
+            Please register or login first
           </Typography>
           <Button className={style.button} onClick={() => toggleLogin(true)} size="small" variant="contained" color="secondary">
             Login or Register Now
           </Button>
           <Typography className={style.title} color="textSecondary" gutterBottom>
-            You can remain anonymous but will be able comment and send Myria tokens to other users
+            Once you're logged in, you can interact with other Myriad users and send them some tips!
           </Typography>
         </CardContent>
       </Card>

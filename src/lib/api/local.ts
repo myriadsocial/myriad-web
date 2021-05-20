@@ -28,3 +28,16 @@ export const uploadImage = async (file: File) => {
     return null;
   }
 };
+
+export const loadtTwitterPost = async (postId: string) => {
+  const { data } = await client.request({
+    method: 'GET',
+    url: '/api/content/twitter',
+    params: {
+      id: postId,
+      type: 'twitter'
+    }
+  });
+
+  return data;
+};

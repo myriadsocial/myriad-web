@@ -92,9 +92,9 @@ const Timeline = ({ user }: Props) => {
     addPost(text, tags, files, user);
   };
 
-  const submitImportPost = (URL: string, experienceId: string) => {
+  const submitImportPost = (URL: string) => {
     setIsPosting(true);
-    importPost(URL, experienceId);
+    importPost(URL, userId);
   };
 
   console.log('user', user);

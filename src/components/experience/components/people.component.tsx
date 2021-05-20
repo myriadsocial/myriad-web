@@ -66,6 +66,7 @@ export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Pro
 
   const handleChange = (e: React.ChangeEvent<{}>, people: People | null) => {
     if (people) {
+      setLoading(false);
       onAddItem(people);
     }
   };
@@ -116,6 +117,7 @@ export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Pro
           onClose={() => {
             setOpen(false);
           }}
+          getOptionDisabled={option => !!selectedPeople.some(selectedPerson => selectedPerson.username === option.username)} //disable option already found in selectedPeople
           getOptionSelected={(option, value) => option === value}
           getOptionLabel={option => option.username}
           options={options}
