@@ -1,4 +1,5 @@
 import { People } from './people';
+import { Post } from './post';
 
 export interface UserCredential {
   id: string;
@@ -23,4 +24,8 @@ export interface User {
 
 export interface ExtendedUser extends User {
   userCredentials: ExtendedUserCredential[];
+}
+
+export interface ExtendedUserPost extends User {
+  posts: Post[];
 }
