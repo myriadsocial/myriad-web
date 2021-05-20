@@ -121,7 +121,7 @@ const Timeline = ({ user }: Props) => {
   };
 
   const onSearchUser = (users: MyriadUser) => {
-    console.log('the users are: ', users);
+    //console.log('the users are: ', users);
   };
 
   return (
