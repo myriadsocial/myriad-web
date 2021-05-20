@@ -136,6 +136,7 @@ export default NextAuth({
     signIn: '/', // Displays signin buttons
     signOut: '/', // Displays form with sign out button
     error: '/' // Error code passed in query string as ?error=
+
     // verifyRequest: '/auth/verify-request', // Used for check email page
     // newUser: null // If set, new users will be directed here on first sign in
   },
