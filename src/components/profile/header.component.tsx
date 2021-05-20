@@ -1,10 +1,24 @@
 import React from 'react';
 
+import { User } from 'next-auth';
+
+import { Button } from '@material-ui/core';
+
+import ShowIf from '../common/show-if.component';
 import { useStyles } from './profile.style';
 
-export default function Header() {
-  const style = useStyles();
+import { WithAdditionalParams } from 'next-auth/_utils';
+import { ExtendedUserPost } from 'src/interfaces/user';
 
+type Props = {
+  user: WithAdditionalParams<User>;
+  profile: ExtendedUserPost | null;
+  loading: Boolean;
+  isGuest: Boolean;
+};
+
+export default function Header({ user, profile, loading, isGuest }: Props) {
+  const style = useStyles();
   return (
     <div className="header" style={{ marginBottom: 10 }}>
       <div className={style.headerPicture}>
@@ -12,22 +26,25 @@ export default function Header() {
           <div className={style.avatar}>
             <span>😘</span>
           </div>
-          <div className="Keterangan">
-            <p className="username">Firstname LastName</p>
-            <p className="publicKey">Public Key</p>
+          <div className="Keterangan" style={{ width: 300, wordWrap: 'break-word' }}>
+            <p className="username">{profile?.name}</p>
+            <p className="publicKey">{profile?.id}</p>
           </div>
         </div>
         <div className="rightSide" style={{ display: 'flex', flexDirection: 'column' }}>
-          <button>Send Tip</button>
-          <button>Add Friends</button>
+          <ShowIf condition={isGuest === true}>
+            <Button color="primary" variant="contained" size="small" style={{ margin: 5 }}>
+              Send Tip
+            </Button>
+            <Button color="secondary" variant="contained" size="small" style={{ margin: 5 }}>
+              Add Friends
+            </Button>
+          </ShowIf>
         </div>
       </div>
 
       <div className={style.about}>
-        <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis rerum laudantium aut fugit distinctio! Voluptatem, aliquam
-          assumenda sequi maiores commodi veritatis reprehenderit itaque tenetur recusandae repellat repellendus autem debitis illo.
-        </p>
+        <p>{profile?.bio}</p>
       </div>
 
       <div className={style.socialMediaList}>
