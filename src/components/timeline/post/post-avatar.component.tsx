@@ -10,6 +10,8 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import { PostOrigin } from '../../../interfaces/post';
 import StyledBadge from '../../common/Badge.component';
 
+import { MyriadIcon } from 'src/components/common/MyriadIcon';
+
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
@@ -55,7 +57,7 @@ export default function PostAvatar({ origin, avatar, onClick }: Props) {
       facebook: <FacebookIcon />,
       twitter: <TwitterIcon />,
       reddit: <RedditIcon />,
-      myriad: <span />
+      myriad: <MyriadIcon />
     }),
     []
   );

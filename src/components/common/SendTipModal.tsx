@@ -141,7 +141,6 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId 
         const response = await sendTip(senderAddress, toAddress, amountSent);
         // handle if sendTip succeed
         if (response.Error || typeof response === 'string') {
-          console.log('response is: ', response);
           setErrorSendTips({
             ...errorSendTips,
             isError: true,
@@ -155,7 +154,6 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId 
           return;
         }
         if (response.from === senderAddress) {
-          console.log('response : ', response);
           setSendTipConfirmed({
             isConfirmed: true,
             message: 'Tip sent successfully!'
