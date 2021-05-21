@@ -12,7 +12,6 @@ export const useBalance = (userId: string) => {
   const load = async (type: BalanceActionType = BalanceActionType.INIT_BALANCE) => {
     setLoading(true);
     try {
-      console.log('fetching balance');
       const resp = await getBalance(userId);
 
       if (resp) {
