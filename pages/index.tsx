@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { GetServerSideProps } from 'next';
 import { useSession, getSession } from 'next-auth/client';
@@ -6,8 +6,11 @@ import { useRouter } from 'next/router';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import LoginForm from 'src/components/login/login.component';
 import PostComponent from 'src/components/timeline/post/post.component';
@@ -53,12 +56,30 @@ export default function Index() {
   const style = useStyles();
   const [session, loading] = useSession();
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (session && !loading) {
       router.push('/home');
     }
   }, [loading, session]);
+
+  useEffect(() => {
+    if (router.query.error) {
+      if (Array.isArray(router.query.error)) {
+        setError(router.query.error[0]);
+      } else {
+        setError(router.query.error);
+      }
+    } else {
+      setError(null);
+    }
+  }, [router.query.error]);
+
+  const closeAlert = () => {
+    setError(null);
+    router.replace('/', undefined, { shallow: true });
+  };
 
   const reply = (comment: Comment) => {};
 
@@ -99,8 +120,6 @@ export default function Index() {
   // When rendering client side don't display anything until loading is complete
   if (typeof window !== 'undefined' && loading) return null;
 
-  if (session) return null;
-
   return (
     <div className={style.root}>
       <Grid container spacing={3} justify="space-around">
@@ -126,6 +145,23 @@ export default function Index() {
           </div>
         </Grid>
       </Grid>
+
+      <Snackbar
+        style={{
+          width: '200px'
+        }}
+        open={error !== null}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        autoHideDuration={6000}
+        onClose={closeAlert}>
+        <Alert severity="error">
+          <AlertTitle>Error!</AlertTitle>
+          {router.query.error}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
