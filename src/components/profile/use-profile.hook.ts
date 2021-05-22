@@ -12,8 +12,10 @@ export const useProfileHook = id => {
 
   useEffect(() => {
     console.log('masuk');
+    // state is updated but not react
+    // console.log('profile', profile);
     getProfile();
-  }, []);
+  }, [profile?.name, profile?.bio, profile?.profilePictureURL]);
 
   const getProfile = async () => {
     setLoading(true);
@@ -50,19 +52,12 @@ export const useProfileHook = id => {
     setLoading(true);
 
     try {
-      // const { data } = await MyriadAPI({
-      //   url: `/users/${user.address}`,
-      //   method: 'PATCH',
-      //   data: attributes
-      // });
-
       const data = ProfileAPI.updateUserProfile(id as string, attributes);
 
       setProfile({
         ...profile,
         ...attributes
       });
-      console.log('>>>>', attributes);
     } catch (error) {
       setError(error);
     } finally {
