@@ -3,8 +3,15 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     media: {
-      height: 0,
-      paddingTop: '34.25%'
+      height: 180,
+      objectFit: 'cover'
+      // paddingTop: '34.25%',
+    },
+    button: {
+      width: 100,
+      margin: 0,
+      marginLeft: -20,
+      borderRadius: 5
     },
     header: {
       width: '100%',
@@ -68,6 +75,26 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 400,
       color: '#FFF',
       textTransform: 'capitalize'
+    },
+    // modal
+    actions: {
+      justifyContent: 'space-between'
+    },
+    avatarBig: {
+      height: 90,
+      width: 90,
+      position: 'absolute',
+      top: 140
+    },
+    detail: {
+      position: 'relative'
+    },
+    logout: {
+      textAlign: 'center'
+    },
+    profileContent: {
+      width: 500,
+      marginTop: 40
     }
   })
 );

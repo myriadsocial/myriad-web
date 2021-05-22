@@ -5,6 +5,7 @@ import { User } from 'next-auth';
 
 import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
+import Typography from '@material-ui/core/Typography';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import { LoadingPage } from '../common/loading.component';
@@ -60,40 +61,25 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
   };
 
   if (loading) return <LoadingPage />;
-  // if (profile === null) return (
-  //   <div className={style.root}>
 
-  //   </div>
-  // )
+  if (profile === null)
+    return (
+      <div className={style.root}>
+        <Header user={user} profile={null} loading={loading} isGuest={false} />
+        <div style={{ textAlign: 'center' }}>
+          <h1>This account doesn’t exist</h1>
+          <Typography>Try searching for another.</Typography>
+        </div>
+      </div>
+    );
 
   return (
     <div className={style.root}>
       <div className={style.scroll}>
+        {/* HEADER */}
         <Header user={user} profile={profile} loading={loading} isGuest={isGuest} />
 
-        {/* <div className="Post">
-          <div
-            style={{
-              padding: 20,
-              backgroundColor: '#424242',
-              marginBottom: 10
-            }}>
-            <h2>POST</h2>
-            <p>User: {JSON.stringify(user)}</p>
-            <p>Data from params: {JSON.stringify(profile)}</p>
-            <p>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis explicabo perferendis ducimus mollitia voluptates ipsa
-              officiis iste natus dolorum voluptatum nam, a, sint modi quisquam sed eos! Consequuntur, nesciunt quidem?
-            </p>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta ipsum quas blanditiis sint magnam dolorem perferendis
-              consequuntur itaque. Tenetur vitae perferendis, voluptates ad placeat accusantium, ut nulla hic odit est consectetur sequi.
-              Dolore distinctio ullam commodi quos dolorum perspiciatis qui omnis repellendus mollitia magni sed eius, error quibusdam at
-              accusamus!
-            </p>
-          </div>
-        </div> */}
-
+        {/* POST */}
         <InfiniteScroll
           scrollableTarget="scrollable-timeline"
           className={style.child}
