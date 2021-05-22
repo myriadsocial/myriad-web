@@ -26,9 +26,9 @@ type Props = {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      width: '100%',
       display: 'flex',
       flexDirection: 'column',
-      marginTop: theme.spacing(2),
       color: '#E0E0E0'
     },
     textSecondary: {

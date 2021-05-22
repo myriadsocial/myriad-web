@@ -89,7 +89,13 @@ export default function PostComponent({ post, open = false, disable = false, rep
   };
 
   const openContentSource = () => {
-    window.open(post.link, '_blank');
+    if (post.platform === 'twitter') {
+      window.open(`https://twitter.com/${post.platformUser?.username}`, '_blank');
+    } else if (post.platform === 'reddit') {
+      window.open(`https://reddit.com/user/${post.platformUser?.username}`, '_blank');
+    } else {
+      window.open(post.link, '_blank');
+    }
   };
 
   const urlToImageData = (url: string): ImageData => {
@@ -118,9 +124,6 @@ export default function PostComponent({ post, open = false, disable = false, rep
   if (!detail || !post) return null;
 
   const renderPostAvatar = () => {
-    //console.log('the origin is: ', post.platform);
-    //console.log('the avatar is: ', detail.user.avatar);
-    console.log('the detail is: ', detail);
     return <PostAvatarComponent origin={post.platform} avatar={detail.user.avatar} onClick={openContentSource} />;
   };
 

@@ -25,6 +25,7 @@ import { useTransaction } from './use-transaction.hooks';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      width: '100%',
       display: 'flex',
       flexDirection: 'column',
       marginTop: theme.spacing(2),
@@ -226,19 +227,13 @@ export const TransactionComponent = React.memo(function Wallet() {
             </ListItem>
           </List>
           <TabPanel className={style.panel} value={'0'}>
-            <List className={style.root}>
-              <TransactionListComponent transactions={transactions} userId={userId} sortType={sort.type} sortDirection={sort.direction} />
-            </List>
+            <TransactionListComponent transactions={transactions} userId={userId} sortType={sort.type} sortDirection={sort.direction} />
           </TabPanel>
           <TabPanel className={style.panel} value={'1'}>
-            <List className={style.root}>
-              <TransactionListComponent transactions={inboundTxs} userId={userId} sortType={sort.type} sortDirection={sort.direction} />
-            </List>
+            <TransactionListComponent transactions={inboundTxs} userId={userId} sortType={sort.type} sortDirection={sort.direction} />
           </TabPanel>
           <TabPanel className={style.panel} value={'2'}>
-            <List className={style.root}>
-              <TransactionListComponent transactions={outboundTxs} userId={userId} sortType={sort.type} sortDirection={sort.direction} />
-            </List>
+            <TransactionListComponent transactions={outboundTxs} userId={userId} sortType={sort.type} sortDirection={sort.direction} />
           </TabPanel>
         </TabContext>
       </div>
