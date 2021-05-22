@@ -5,7 +5,6 @@ import { useSession } from 'next-auth/client';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
@@ -19,11 +18,6 @@ import TransactionListComponent from './transactionList.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      width: '100%',
-      marginTop: theme.spacing(2),
-      color: '#E0E0E0'
-    },
     textSecondary: {
       color: '#E0E0E0'
     },
@@ -168,19 +162,13 @@ export const TransactionComponent = React.memo(function Wallet() {
           <StyledTab value="2" label="Out" {...a11yProps(2)} />
         </StyledTabs>
         <TabPanel className={style.panel} value={'0'}>
-          <List className={style.root}>
-            <TransactionListComponent transactions={transactions} userId={userAddress} />
-          </List>
+          <TransactionListComponent transactions={transactions} userId={userAddress} />
         </TabPanel>
         <TabPanel className={style.panel} value={'1'}>
-          <List className={style.root}>
-            <TransactionListComponent transactions={inboundTxs} userId={userAddress} />
-          </List>
+          <TransactionListComponent transactions={inboundTxs} userId={userAddress} />
         </TabPanel>
         <TabPanel className={style.panel} value={'2'}>
-          <List className={style.root}>
-            <TransactionListComponent transactions={outboundTxs} userId={userAddress} />
-          </List>
+          <TransactionListComponent transactions={outboundTxs} userId={userAddress} />
         </TabPanel>
       </TabContext>
     </>
