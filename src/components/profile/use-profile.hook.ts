@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 
 import { ExtendedUserPost } from 'src/interfaces/user';
+import { User } from 'src/interfaces/user';
 import * as ProfileAPI from 'src/lib/api/profile';
 
 export const useProfileHook = id => {
@@ -11,8 +12,10 @@ export const useProfileHook = id => {
 
   useEffect(() => {
     console.log('masuk');
+    // state is updated but not react
+    // console.log('profile', profile);
     getProfile();
-  }, []);
+  }, [profile?.name, profile?.bio, profile?.profilePictureURL]);
 
   const getProfile = async () => {
     setLoading(true);
@@ -22,7 +25,18 @@ export const useProfileHook = id => {
 
       if (!detail.posts) {
         detail.posts = [];
+      } else {
+        let data = detail.posts;
+        detail.posts = data.map((item: Post) => ({ ...item, comments: item.comments || [] }));
       }
+
+      // if (!detail.posts.comments) {
+      //   detail.posts.comments = [];
+      // }
+
+      // if (!detail.posts.comments.user) {
+      //   detail.posts.comments.user = [];
+      // }
 
       setProfile({
         ...detail
@@ -34,32 +48,27 @@ export const useProfileHook = id => {
     }
   };
 
-  // const updateProfile = async (attributes: Partial<User>) => {
-  //   setLoading(true);
+  const updateProfile = async (attributes: Partial<User>) => {
+    setLoading(true);
 
-  //   try {
-  //     const { data } = await MyriadAPI({
-  //       url: `/users/${user.address}`,
-  //       method: 'PATCH',
-  //       data: attributes
-  //     });
+    try {
+      const data = ProfileAPI.updateUserProfile(id as string, attributes);
 
-  //     setProfile({
-  //       ...profile,
-  //       ...attributes
-  //     });
-  //     console.log('>>>>', attributes);
-  //   } catch (error) {
-  //     setError(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      setProfile({
+        ...profile,
+        ...attributes
+      });
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
     error,
     loading,
-    profile
-    // updateProfile
+    profile,
+    updateProfile
   };
 };
