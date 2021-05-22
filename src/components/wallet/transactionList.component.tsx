@@ -25,9 +25,9 @@ type Props = {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      width: '100%',
       display: 'flex',
       flexDirection: 'column',
-      marginTop: theme.spacing(2),
       color: '#E0E0E0'
     },
     textSecondary: {
@@ -72,9 +72,6 @@ const useStyles = makeStyles((theme: Theme) =>
     formControl: {
       margin: theme.spacing(1),
       minWidth: 120
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2)
     },
     transactionActionList: {
       display: 'flex',
@@ -126,7 +123,7 @@ export default function TransactionListComponent({ transactions, userId }: Props
   if (transactions.length === 0) return null;
 
   return (
-    <List className={style.root}>
+    <List>
       {allTransactions.map(txHistory => (
         <ListItem key={txHistory?.id}>
           <ListItemAvatar className={style.avatar}>

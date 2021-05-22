@@ -16,15 +16,19 @@ import { useExperience } from '../experience/use-experience.hooks';
 import ImportPostComponent from './ImportPost.component';
 import FilterTimelineComponent from './filter.component';
 import PostComponent from './post/post.component';
+//import SearchUserComponent from './search-user.component';
 import CreatePostComponent from './submit.component';
 import { useTimeline } from './timeline.context';
 import { useStyles } from './timeline.style';
 import { usePost } from './use-post.hook';
 
+//import { useMyriadUser } from './use-users.hooks';
 import { WithAdditionalParams } from 'next-auth/_utils';
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import ShowIf from 'src/components/common/show-if.component';
 import { Post, Comment } from 'src/interfaces/post';
+
+//import { User as MyriadUser } from 'src/interfaces/user';
 
 type Props = {
   user: WithAdditionalParams<User>;
@@ -58,6 +62,8 @@ const Timeline = ({ user }: Props) => {
     return false;
   };
   const { experiences } = useExperience(userId);
+
+  //const { users: options, search } = useMyriadUser();
 
   const scrollRoot = createRef<HTMLDivElement>();
   const [isPosting, setIsPosting] = useState(true);
@@ -97,7 +103,6 @@ const Timeline = ({ user }: Props) => {
     importPost(URL, userId);
   };
 
-  console.log('user', user);
   console.log('TIMELINE COMPONENT LOAD');
 
   const handleCloseError = () => {
@@ -110,9 +115,20 @@ const Timeline = ({ user }: Props) => {
     resetImportedPost();
   };
 
+  //const searchUser = (text: string) => {
+  //search(text);
+  //};
+
+  //const onSearchUser = (users: MyriadUser) => {
+  ////console.log('the users are: ', users);
+  //};
+
   return (
     <div className={style.root}>
       <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
+        {
+          //<SearchUserComponent title="Search Myriad" data={options} search={searchUser} onSelected={onSearchUser} />
+        }
         <FilterTimelineComponent selected={state.sort} onChange={sortBy} />
 
         <ShowIf condition={!user.anonymous}>
