@@ -90,7 +90,7 @@ const FriendRequests = ({ user }: Props) => {
       <CardHeader disableTypography title={<Typography variant="caption">Friend Requests</Typography>} />
       <CardContent className={style.content}>
         <ShowIf condition={state.requests.length === 0}>
-          <Typography variant="h4" color="textPrimary">
+          <Typography variant="h4" color="textPrimary" style={{ textAlign: 'center', padding: '16px 0' }}>
             No Friend Request
           </Typography>
         </ShowIf>
