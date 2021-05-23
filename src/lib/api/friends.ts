@@ -10,10 +10,9 @@ export const getSentRequests = async (userId: string): Promise<ExtendedFriend[]>
     url: `/friends`,
     method: 'GET',
     params: {
-      where: {
-        and: {
-          requestorId: userId,
-          status: FriendStatus.PENDING
+      filter: {
+        where: {
+          and: [{ requestorId: userId }, { status: FriendStatus.PENDING }]
         }
       }
     }
@@ -27,13 +26,10 @@ export const getFriendRequests = async (userId: string): Promise<ExtendedFriend[
     url: `/friends`,
     method: 'GET',
     params: {
-      where: {
-        and: {
-          friendId: userId,
-          status: FriendStatus.PENDING
-        }
-      },
       filter: {
+        where: {
+          and: [{ friendId: userId }, { status: FriendStatus.PENDING }]
+        },
         include: ['friend', 'requestor']
       }
     }
@@ -47,14 +43,11 @@ export const getFriends = async (userId: string): Promise<ExtendedFriend[]> => {
     url: `/friends`,
     method: 'GET',
     params: {
-      where: {
-        or: {
-          friendId: userId,
-          requestorId: userId
-        },
-        status: FriendStatus.APPROVED
-      },
       filter: {
+        where: {
+          or: [{ friendId: userId }, { requestorId: userId }],
+          status: FriendStatus.APPROVED
+        },
         include: ['friend', 'requestor']
       }
     }

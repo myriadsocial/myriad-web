@@ -77,7 +77,7 @@ const Friends = ({ user }: Props) => {
       <CardHeader disableTypography title={<Typography variant="caption">Friend</Typography>} />
       <CardContent className={style.content}>
         <ShowIf condition={state.friends.length === 0}>
-          <Typography variant="h4" color="textPrimary">
+          <Typography variant="h4" color="textPrimary" style={{ textAlign: 'center', padding: '16px 0' }}>
             No Friends
           </Typography>
         </ShowIf>
