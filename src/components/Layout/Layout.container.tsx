@@ -45,7 +45,7 @@ const Layout = ({ children, session }: Props) => {
 
       <UserProvider>
         <NoSsr>
-          <TourComponent />
+          <TourComponent user={session.user} />
         </NoSsr>
         <LayoutSettingProvider>
           <TransactionProvider>
