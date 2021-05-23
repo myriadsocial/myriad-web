@@ -1,15 +1,11 @@
-import React, { createRef, useCallback, useEffect, useState } from 'react';
+import React, { createRef, useCallback, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { User } from 'next-auth';
-import { useSession } from 'next-auth/client';
 
 import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
-import Snackbar from '@material-ui/core/Snackbar';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import Alert from '@material-ui/lab/Alert';
-import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import { LoadingPage } from '../common/loading.component';
 import { useExperience } from '../experience/use-experience.hooks';
@@ -36,37 +32,22 @@ type Props = {
 
 const Timeline = ({ user }: Props) => {
   const style = useStyles();
+  const userId = user.address as string;
 
   const { state } = useTimeline();
-  const {
-    hasMore,
-    loadPost,
-    loadMorePost,
-    reply,
-    loadComments,
-    sortBy,
-    addPost,
-    importPost,
-    importedPost,
-    resetImportedPost,
-    error,
-    resetError
-  } = usePost();
+  const { hasMore, loadPost, loadMorePost, reply, loadComments, sortBy, addPost, importPost } = usePost();
 
-  const [session] = useSession();
-  const userId = session?.user.address as string;
+  const { experiences } = useExperience(userId);
+  const scrollRoot = createRef<HTMLDivElement>();
+
   const isOwnPost = (post: Post) => {
     if (post.walletAddress === userId) {
       return true;
     }
     return false;
   };
-  const { experiences } = useExperience(userId);
 
   //const { users: options, search } = useMyriadUser();
-
-  const scrollRoot = createRef<HTMLDivElement>();
-  const [isPosting, setIsPosting] = useState(true);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, true);
@@ -99,21 +80,10 @@ const Timeline = ({ user }: Props) => {
   };
 
   const submitImportPost = (URL: string) => {
-    setIsPosting(true);
     importPost(URL, userId);
   };
 
   console.log('TIMELINE COMPONENT LOAD');
-
-  const handleCloseError = () => {
-    setIsPosting(false);
-    resetError();
-  };
-
-  const handleCloseImported = () => {
-    setIsPosting(false);
-    resetImportedPost();
-  };
 
   //const searchUser = (text: string) => {
   //search(text);
@@ -157,21 +127,8 @@ const Timeline = ({ user }: Props) => {
           </ScrollTop>
         </InfiniteScroll>
       </div>
+
       <div id="fb-root" />
-
-      <Snackbar open={isPosting && importedPost !== null} autoHideDuration={6000} onClose={handleCloseImported}>
-        <Alert severity="success">
-          <AlertTitle>Success!</AlertTitle>
-          Post successfully imported
-        </Alert>
-      </Snackbar>
-
-      <Snackbar open={isPosting && error !== null} autoHideDuration={6000} onClose={handleCloseError}>
-        <Alert severity="error">
-          <AlertTitle>Error!</AlertTitle>
-          Post already imported
-        </Alert>
-      </Snackbar>
     </div>
   );
 };

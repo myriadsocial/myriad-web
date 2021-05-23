@@ -6,6 +6,7 @@ import { WithAdditionalParams } from 'next-auth/_utils';
 import { useUser, UserActionType } from 'src/components/user/user.context';
 import { SocialsEnum } from 'src/interfaces';
 import { ExtendedUser } from 'src/interfaces/user';
+import { User as DBUser } from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 
 export const useUserHook = (user: WithAdditionalParams<User>) => {
@@ -45,10 +46,17 @@ export const useUserHook = (user: WithAdditionalParams<User>) => {
     }
   };
 
+  const updateUser = async (values: Partial<DBUser>) => {
+    await UserAPI.updateUser(user.address as string, values);
+
+    load();
+  };
+
   return {
     error,
     loading,
     getUserDetail: load,
-    disconnectSocial
+    disconnectSocial,
+    updateUser
   };
 };

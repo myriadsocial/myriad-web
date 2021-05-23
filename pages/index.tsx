@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { GetServerSideProps } from 'next';
 import { useSession, getSession } from 'next-auth/client';
@@ -6,12 +6,11 @@ import { useRouter } from 'next/router';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Alert from '@material-ui/lab/Alert';
-import AlertTitle from '@material-ui/lab/AlertTitle';
 
+import AlertComponent from 'src/components/alert/Alert.component';
+import { useAlertHook } from 'src/components/alert/use-alert.hook';
 import LoginForm from 'src/components/login/login.component';
 import PostComponent from 'src/components/timeline/post/post.component';
 import Logo from 'src/images/logo.svg';
@@ -54,9 +53,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Index() {
   const style = useStyles();
+
   const [session, loading] = useSession();
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const { showAlert } = useAlertHook();
 
   useEffect(() => {
     if (session && !loading) {
@@ -66,20 +66,13 @@ export default function Index() {
 
   useEffect(() => {
     if (router.query.error) {
-      if (Array.isArray(router.query.error)) {
-        setError(router.query.error[0]);
-      } else {
-        setError(router.query.error);
-      }
-    } else {
-      setError(null);
+      showAlert({
+        message: 'Something wrong when try to loggedin.',
+        severity: 'error',
+        title: 'Login failed'
+      });
     }
   }, [router.query.error]);
-
-  const closeAlert = () => {
-    setError(null);
-    router.replace('/', undefined, { shallow: true });
-  };
 
   const reply = (comment: Comment) => {};
 
@@ -146,22 +139,7 @@ export default function Index() {
         </Grid>
       </Grid>
 
-      <Snackbar
-        style={{
-          width: '200px'
-        }}
-        open={error !== null}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center'
-        }}
-        autoHideDuration={6000}
-        onClose={closeAlert}>
-        <Alert severity="error">
-          <AlertTitle>Error!</AlertTitle>
-          {router.query.error}
-        </Alert>
-      </Snackbar>
+      <AlertComponent />
     </div>
   );
 }

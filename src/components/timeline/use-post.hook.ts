@@ -8,6 +8,7 @@ import { useExperience } from '../experience/experience.context';
 import { useTimeline, TimelineActionType } from './timeline.context';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
+import { useAlertHook } from 'src/components/alert/use-alert.hook';
 import { Comment, Post, PostSortMethod } from 'src/interfaces/post';
 import * as LocalAPI from 'src/lib/api/local';
 import * as PostAPI from 'src/lib/api/post';
@@ -16,10 +17,10 @@ export const usePost = () => {
   const { state: experienceState } = useExperience();
   const { state: timelineState, dispatch } = useTimeline();
   const { state: settingState } = useLayoutSetting();
+  const { showAlert } = useAlertHook();
 
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [importedPost, setImportedPost] = useState<Post | null>(null);
   const [error, setError] = useState(null);
 
   // change people and tag filter each selected experience changed or focus setting changed
@@ -167,8 +168,6 @@ export const usePost = () => {
         importer
       });
 
-      setImportedPost(data);
-
       dispatch({
         type: TimelineActionType.CREATE_POST,
         post: {
@@ -176,20 +175,23 @@ export const usePost = () => {
           comments: []
         }
       });
+
+      showAlert({
+        title: 'Success!',
+        message: 'Post successfully imported',
+        severity: 'success'
+      });
     } catch (error) {
       console.log('error from use post hooks: ', error);
       setError(error);
+      showAlert({
+        title: 'Error!',
+        message: 'Post already imported',
+        severity: 'error'
+      });
     } finally {
       setLoading(false);
     }
-  };
-
-  const resetError = () => {
-    setError(null);
-  };
-
-  const resetImportedPost = () => {
-    setImportedPost(null);
   };
 
   return {
@@ -203,9 +205,6 @@ export const usePost = () => {
     addPost,
     reply,
     sortBy,
-    importPost,
-    importedPost,
-    resetImportedPost,
-    resetError
+    importPost
   };
 };

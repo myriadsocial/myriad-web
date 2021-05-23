@@ -11,6 +11,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { BalanceProvider } from '../src/components/wallet/balance.context';
 import theme from '../src/themes/default';
 
+import { AlertProvider } from 'src/components/alert/Alert.context';
 import { WalletAddressProvider } from 'src/components/timeline/post/send-tip.context';
 
 const App = ({ Component, pageProps }: AppProps) => {
@@ -63,7 +64,9 @@ const App = ({ Component, pageProps }: AppProps) => {
               }}
               session={pageProps.session}>
               <CookiesProvider>
-                <Component {...pageProps} />
+                <AlertProvider>
+                  <Component {...pageProps} />
+                </AlertProvider>
               </CookiesProvider>
             </Provider>
           </WalletAddressProvider>
