@@ -37,6 +37,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import { useSocialDetail } from 'src/hooks/use-social.hook';
 import { ImageData } from 'src/interfaces/post';
 import { Post, Comment } from 'src/interfaces/post';
+import { v4 as uuid } from 'uuid';
 
 type Props = {
   open?: boolean;
@@ -143,7 +144,7 @@ export default function PostComponent({ post, open = false, disable = false, rep
             <ShowIf condition={post.tags.length > 0}>
               <div>
                 {post.tags.map(tag => (
-                  <span key={tag}>#{tag}</span>
+                  <span key={uuid()}>#{tag}</span>
                 ))}
               </div>
             </ShowIf>
