@@ -10,12 +10,12 @@ export const useProfileHook = id => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    console.log('masuk');
-    // state is updated but not react
-    // console.log('profile', profile);
-    getProfile();
-  }, [profile?.name, profile?.bio, profile?.profilePictureURL]);
+  // useEffect(() => {
+  //   console.log('masuk');
+  //   // state is updated but not react
+  //   // console.log('profile', profile);
+  //   getProfile();
+  // }, [profile?.name, profile?.bio, profile?.profilePictureURL]);
 
   const getProfile = async () => {
     setLoading(true);
@@ -69,6 +69,7 @@ export const useProfileHook = id => {
     error,
     loading,
     profile,
-    updateProfile
+    updateProfile,
+    getProfile
   };
 };
