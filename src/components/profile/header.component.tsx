@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -22,6 +22,7 @@ import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import DialogTitle from '../common/DialogTitle.component';
 import ShowIf from '../common/show-if.component';
 import { useStyles } from './header.style';
+import { useFriendHook } from './use-friend.hook';
 import { useProfileHook } from './use-profile.hook';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
@@ -47,8 +48,13 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
 
   const { updateProfile } = useProfileHook(user.id);
+  const { makeFriend, status, requestFriendStatus } = useFriendHook(user);
   const [cookie] = useCookies(['seed']);
   const style = useStyles();
+
+  useEffect(() => {
+    requestFriendStatus(profile?.id);
+  }, [status]);
 
   const profileInfo =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae nibh eu tellus tincidunt luctus hendrerit in orci. Phasellus vitae tristique nulla. Nam magna massa, sollicitudin sed turpis eros.';
@@ -65,6 +71,13 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   const getProfilePicture = (): string => {
     const avatar = profile?.profilePictureURL as string;
     return avatar || '';
+  };
+
+  // FRIEND REQUEST
+  const friendRequest = () => {
+    makeFriend({
+      friendId: profile?.id
+    });
   };
 
   // UPDATE fn
@@ -148,9 +161,16 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
             <Button color="primary" variant="contained" size="small" style={{ margin: 5 }}>
               Send Tip
             </Button>
-            <Button color="secondary" variant="contained" size="small" style={{ margin: 5 }}>
-              Add Friends
-            </Button>
+            <ShowIf condition={status === null}>
+              <Button color="secondary" variant="contained" size="small" style={{ margin: 5 }} onClick={friendRequest}>
+                Add Friends
+              </Button>
+            </ShowIf>
+            <ShowIf condition={status === 'pending'}>
+              <Button variant="contained" size="small" disabled style={{ background: 'gray' }}>
+                Pending
+              </Button>
+            </ShowIf>
           </ShowIf>
         </div>
       </div>
