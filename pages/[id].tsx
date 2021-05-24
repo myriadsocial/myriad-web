@@ -1,5 +1,5 @@
 // PROFILE PAGE
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { GetServerSideProps } from 'next';
 import { Session } from 'next-auth';
@@ -23,7 +23,11 @@ type Props = {
 };
 
 export default function Profile({ session, params }: Props) {
-  const { profile, loading } = useProfileHook(params.id);
+  const { profile, loading, getProfile } = useProfileHook(params.id);
+
+  useEffect(() => {
+    getProfile();
+  }, [params]);
 
   if (!session) return null;
   return (
@@ -48,13 +52,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
     res.writeHead(302, { location: `${process.env.NEXTAUTH_URL}/maintenance` });
     res.end();
   }
-
-  // const exist = await getUserProfile(params?.id);
-
-  // if (!exist || exist === null) {
-  //   res.writeHead(301, { location: `${process.env.NEXTAUTH_URL}` });
-  //   res.end();
-  // }
 
   return {
     props: {
