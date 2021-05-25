@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { createRef } from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
@@ -33,7 +33,15 @@ const useStyles = makeStyles((theme: Theme) =>
 export const Wallet = React.memo(function Wallet() {
   const style = useStyles();
 
-  const tippingJarRef = useRef<any>();
+  const transactionRef = createRef<any>();
+
+  const balanceRef = createRef<any>();
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    transactionRef.current?.triggerRefresh();
+    balanceRef.current?.triggerRefresh();
+  };
 
   const WalletAction = () => {
     return (
@@ -42,7 +50,7 @@ export const Wallet = React.memo(function Wallet() {
           color="default"
           size="small"
           aria-label="refresh-wallet"
-          onClick={event => event.stopPropagation()}
+          onClick={handleClick}
           onFocus={event => event.stopPropagation()}>
           <RefreshIcon />
         </IconButton>
@@ -61,12 +69,10 @@ export const Wallet = React.memo(function Wallet() {
   return (
     <>
       <ExpandablePanel title="My Wallet" actions={<WalletAction />}>
-        <BalanceComponent />
+        <BalanceComponent ref={balanceRef} />
         <Divider />
-        <TransactionComponent />
+        <TransactionComponent ref={transactionRef} />
       </ExpandablePanel>
-
-      <TippingJarComponent ref={tippingJarRef} />
     </>
   );
 });
