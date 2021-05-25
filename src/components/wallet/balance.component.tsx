@@ -9,6 +9,13 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -90,9 +97,43 @@ export const BalanceComponent = React.memo(function Wallet() {
     loadInitBalance();
   };
 
+  function createData(currency: string, balance: number) {
+    return { currency, balance };
+  }
+
+  const rows = [createData('MYRIA', 100)];
+
+  const BasicTable = () => {
+    return (
+      <TableContainer component={Paper}>
+        <Table aria-label="balance-table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Currency</TableCell>
+              <TableCell align="right">Balance</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map(row => (
+              <TableRow key={row.currency}>
+                <TableCell component="th" scope="row">
+                  {row.currency}
+                </TableCell>
+                <TableCell align="right">{row.balance}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  };
+
   return (
     <div className={style.root}>
       <Grid container direction="column" justify="center" alignItems="center">
+        <Grid item>
+          <BasicTable />
+        </Grid>
         <Grid item>
           <Typography className={style.title} variant="h5">
             Total Balance

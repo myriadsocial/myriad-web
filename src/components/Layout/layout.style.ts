@@ -22,7 +22,9 @@ export const useStyles = makeStyles(() =>
       'scrollbar-width': 'thin !important'
     },
     content: {
-      flexGrow: 1
+      width: 320,
+      marginRight: 0,
+      height: '100vh'
     },
     fullheight: {
       height: '100%'
