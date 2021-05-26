@@ -3,8 +3,10 @@ import React, { ReactNode } from 'react';
 import { Session } from 'next-auth';
 import Head from 'next/head';
 
+import NoSsr from '@material-ui/core/NoSsr';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
+import AlertComponent from '../alert/Alert.component';
 import { ConverstionProvider } from '../conversation/conversation.context';
 import { ExperienceProvider } from '../experience/experience.context';
 import { TimelineProvider } from '../timeline/timeline.context';
@@ -12,6 +14,8 @@ import { TransactionProvider } from '../tippingJar/transaction.context';
 import { UserProvider } from '../user/user.context';
 import LayoutComponent from './Layout.component';
 import { LayoutSettingProvider } from './layout.context';
+
+import TourComponent from 'src/tour/Tour.component';
 
 type Props = {
   session: Session | null;
@@ -40,6 +44,9 @@ const Layout = ({ children, session }: Props) => {
       </Head>
 
       <UserProvider>
+        <NoSsr>
+          <TourComponent user={session.user} />
+        </NoSsr>
         <LayoutSettingProvider>
           <TransactionProvider>
             <ExperienceProvider>
@@ -51,6 +58,8 @@ const Layout = ({ children, session }: Props) => {
             </ExperienceProvider>
           </TransactionProvider>
         </LayoutSettingProvider>
+
+        <AlertComponent />
       </UserProvider>
     </div>
   );

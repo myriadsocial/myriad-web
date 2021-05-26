@@ -7,6 +7,10 @@ import NoSsr from '@material-ui/core/NoSsr';
 
 import ShowIf from '../common/show-if.component';
 import { ExperienceComponent } from '../experience/experience.component';
+import FriendsComponent from '../friends/friend-list.component';
+import FriendRequestsComponent from '../friends/friend-requests.component';
+import { FriendsProvider } from '../friends/friends.context';
+import SidebarComponent from '../sidebar/sidebar.component';
 import UserDetail from '../user/user.component';
 import { Wallet } from '../wallet/wallet.component';
 import { useStyles } from './layout.style';
@@ -14,6 +18,7 @@ import { useLayout } from './use-layout.hook';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
 import { useUserHook } from 'src/components/user/use-user.hook';
+import { firebaseCloudMessaging } from 'src/lib/firebase';
 
 type Props = {
   children: React.ReactNode;
@@ -31,6 +36,10 @@ const LayoutComponent = ({ children, user }: Props) => {
     getUserDetail();
 
     return undefined;
+  }, []);
+
+  useEffect(() => {
+    firebaseCloudMessaging.init();
   }, []);
 
   return (
@@ -54,11 +63,16 @@ const LayoutComponent = ({ children, user }: Props) => {
           {children}
         </Grid>
 
-        <Grid item className={style.experience}>
-          <ShowIf condition={!setting.focus}>
-            <ExperienceComponent anonymous={!!user.anonymous} userId={userId} />
-          </ShowIf>
-        </Grid>
+        <FriendsProvider>
+          <Grid item className={style.experience}>
+            <ShowIf condition={!setting.focus}>
+              <SidebarComponent />
+              {/* <ExperienceComponent anonymous={!!user.anonymous} userId={userId} />
+              <FriendRequestsComponent user={user} />
+              <FriendsComponent user={user} /> */}
+            </ShowIf>
+          </Grid>
+        </FriendsProvider>
       </Grid>
     </>
   );
