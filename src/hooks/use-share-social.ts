@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import Axios, { AxiosError } from 'axios';
+import { useAlertHook } from 'src/components/alert/use-alert.hook';
 import { SocialsEnum } from 'src/interfaces/index';
 
 const MyriadAPI = Axios.create({
@@ -8,30 +9,36 @@ const MyriadAPI = Axios.create({
 });
 
 export const useShareSocial = (publicKey: string) => {
+  const { showAlert } = useAlertHook();
+
   const [sharing, setSharing] = useState(false);
   const [isShared, setShared] = useState(false);
-  const [isUsed, setUsed] = useState(false);
 
   const handleError = (error: AxiosError) => {
     if (error.response) {
       switch (error.response.status) {
         case 404:
-          setShared(false);
-          setUsed(false);
+          showAlert({
+            title: 'Error',
+            message: 'Profile already used',
+            severity: 'error'
+          });
           break;
 
         default:
-          setShared(true);
-          setUsed(true);
+          showAlert({
+            title: 'Error',
+            message: 'Profile already used',
+            severity: 'error'
+          });
           break;
       }
-    } else {
-      setShared(false);
-      setUsed(false);
     }
   };
 
   const shareOnFacebook = async (username: string) => {
+    setSharing(true);
+
     try {
       await MyriadAPI.request({
         method: 'POST',
@@ -42,18 +49,19 @@ export const useShareSocial = (publicKey: string) => {
           platform: SocialsEnum.FACEBOOK
         }
       });
-
       setShared(true);
     } catch (error) {
       const err = error as AxiosError;
 
       handleError(err);
     } finally {
-      setSharing(true);
+      setSharing(false);
     }
   };
 
   const shareOnReddit = async (username: string) => {
+    setSharing(true);
+
     try {
       await MyriadAPI.request({
         method: 'POST',
@@ -71,11 +79,13 @@ export const useShareSocial = (publicKey: string) => {
 
       handleError(err);
     } finally {
-      setSharing(true);
+      setSharing(false);
     }
   };
 
   const shareOnTwitter = async (username: string) => {
+    setSharing(true);
+
     try {
       await MyriadAPI.request({
         method: 'POST',
@@ -93,22 +103,15 @@ export const useShareSocial = (publicKey: string) => {
 
       handleError(err);
     } finally {
-      setSharing(true);
+      setSharing(false);
     }
   };
 
-  const resetSharedStatus = (status: boolean) => {
-    setShared(status);
-    setUsed(false);
-    setSharing(false);
-  };
   return {
     sharing,
-    isUsed,
     isShared,
     shareOnFacebook,
     shareOnReddit,
-    shareOnTwitter,
-    resetSharedStatus
+    shareOnTwitter
   };
 };

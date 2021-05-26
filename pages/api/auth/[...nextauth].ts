@@ -69,19 +69,17 @@ export default NextAuth({
               return userToSession(user);
             } catch (error) {
               console.error('[next-auth][debug][authorize] user create', error.response.data);
-              return null;
+              throw new Error('Failed to login');
             }
           }
         }
 
-        const user = {
+        return {
           userId: credentials.address,
           name: credentials.name,
           address: credentials.address,
           anonymous: credentials.anonymous === 'true'
         };
-
-        return user;
       }
     })
   ],
@@ -149,6 +147,8 @@ export default NextAuth({
     // async redirect(url, baseUrl) { return baseUrl },
     // @ts-ignore
     async session(session, user: Record<string, string>) {
+      console.log('[next-auth][debug][session]', session, user);
+
       return {
         ...session,
         user
