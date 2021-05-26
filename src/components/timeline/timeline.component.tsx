@@ -11,7 +11,7 @@ import { LoadingPage } from '../common/loading.component';
 import { useExperience } from '../experience/use-experience.hooks';
 import ImportPostComponent from './ImportPost.component';
 import CreatePostComponent from './create-post/create-post.component';
-import FilterTimelineComponent from './filter.component';
+import FilterTimelineComponent from './filter/filter.component';
 import PostComponent from './post/post.component';
 import { useTimeline } from './timeline.context';
 import { useStyles } from './timeline.style';
@@ -90,13 +90,13 @@ const Timeline = ({ user }: Props) => {
         {
           //<SearchUserComponent title="Search Myriad" data={options} search={searchUser} onSelected={onSearchUser} />
         }
-        <FilterTimelineComponent selected={state.sort} onChange={sortBy} />
-
         <ShowIf condition={!user.anonymous}>
           <CreatePostComponent onSubmit={submitPost} experiences={experiences} user={userState.user} />
 
           <ImportPostComponent onSubmit={submitImportPost} experiences={experiences} />
         </ShowIf>
+
+        <FilterTimelineComponent selected={state.sort} onChange={sortBy} />
 
         <InfiniteScroll
           scrollableTarget="scrollable-timeline"
