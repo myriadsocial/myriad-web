@@ -4,6 +4,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { User } from 'next-auth';
 import { signOut } from 'next-auth/client';
+import { useRouter } from 'next/router';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -38,6 +39,7 @@ function Alert(props: AlertProps) {
 }
 
 const Profile = ({ user, toggleLogin }: Props) => {
+  const router = useRouter();
   const styles = useStyles();
   const [cookie] = useCookies(['seed']);
 
@@ -46,9 +48,9 @@ const Profile = ({ user, toggleLogin }: Props) => {
   const [isEditProfile, showEditProfile] = useState(false);
   const [isMnemonicCopied, setMnemonicCopied] = useState(false);
 
-  const editProfile = () => {
-    showEditProfile(true);
-  };
+  // const editProfile = () => {
+  //   showEditProfile(true);
+  // };
 
   const closeEditProfile = () => {
     showEditProfile(false);
@@ -105,8 +107,11 @@ const Profile = ({ user, toggleLogin }: Props) => {
         <Typography className={styles.name}>{profile.name}</Typography>
 
         <ShowIf condition={!profile.anonymous}>
-          <Button className={styles.button} size="small" variant="contained" color="primary" onClick={editProfile}>
+          {/* <Button className={styles.button} size="small" variant="contained" color="primary" onClick={editProfile}>
             Edit Your Profile
+          </Button> */}
+          <Button className={styles.button} size="small" variant="contained" color="primary" onClick={() => router.push(`/${profile.id}`)}>
+            My Profile
           </Button>
         </ShowIf>
 
