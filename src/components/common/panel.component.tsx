@@ -18,11 +18,11 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '100%',
       backgroundColor: theme.palette.primary.light
     },
-    menuButton: {
-      marginRight: theme.spacing(2)
-    },
     title: {
       flexGrow: 1
+    },
+    toolbar: {
+      padding: '0 12px'
     }
   })
 );
@@ -33,7 +33,7 @@ export default function Panel({ children, title, actions }: Props) {
   return (
     <Grid className={classes.root}>
       <AppBar variant="outlined" position="static" color="primary">
-        <Toolbar>
+        <Toolbar className={classes.toolbar}>
           <Typography variant="h4" className={classes.title}>
             {title}
           </Typography>

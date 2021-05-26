@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo, useImperativeHandle, forwardRef } from 'react';
 
 import { useSession } from 'next-auth/client';
 
@@ -106,7 +106,7 @@ const StyledTab = withStyles((theme: Theme) =>
   })
 )((props: StyledTabProps) => <Tab disableRipple {...props} />);
 
-export const TransactionComponent = React.memo(function Wallet() {
+export const TransactionComponent = forwardRef((_, ref) => {
   const style = useStyles();
 
   const [session] = useSession();
@@ -123,9 +123,11 @@ export const TransactionComponent = React.memo(function Wallet() {
     setValue(newValue);
   };
 
-  const handleClick = () => {
-    loadInitTransaction();
-  };
+  useImperativeHandle(ref, () => ({
+    triggerRefresh: () => {
+      loadInitTransaction();
+    }
+  }));
 
   if (loading) {
     return (
@@ -154,9 +156,11 @@ export const TransactionComponent = React.memo(function Wallet() {
     <>
       <TabContext value={value}>
         <StyledTabs value={value} onChange={handleChange}>
-          <IconButton onClick={handleClick} className={style.iconButton} aria-label="refresh history" component="span">
-            <RefreshIcon />
-          </IconButton>
+          {
+            //<IconButton onClick={handleClick} className={style.iconButton} aria-label="refresh history" component="span">
+            //<RefreshIcon />
+            //</IconButton>
+          }
           <StyledTab value="0" label="All" {...a11yProps(0)} />
           <StyledTab value="1" label="In" {...a11yProps(1)} />
           <StyledTab value="2" label="Out" {...a11yProps(2)} />
