@@ -13,6 +13,7 @@ import theme from '../src/themes/default';
 
 import { AlertProvider } from 'src/components/alert/Alert.context';
 import { WalletAddressProvider } from 'src/components/timeline/post/send-tip.context';
+import { UserProvider } from 'src/components/user/user.context';
 
 const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
@@ -64,9 +65,11 @@ const App = ({ Component, pageProps }: AppProps) => {
               }}
               session={pageProps.session}>
               <CookiesProvider>
-                <AlertProvider>
-                  <Component {...pageProps} />
-                </AlertProvider>
+                <UserProvider>
+                  <AlertProvider>
+                    <Component {...pageProps} />
+                  </AlertProvider>
+                </UserProvider>
               </CookiesProvider>
             </Provider>
           </WalletAddressProvider>

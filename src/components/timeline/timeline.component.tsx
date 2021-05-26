@@ -22,18 +22,18 @@ import ShowIf from 'src/components/common/show-if.component';
 import { Post, PostSortMethod } from 'src/interfaces/post';
 import { User } from 'src/interfaces/user';
 
-type Props = {
+type TimelineProps = {
   user: User;
 };
 
-const Timeline = ({ user }: Props) => {
+const Timeline: React.FC<TimelineProps> = ({ user }) => {
   const style = useStyles();
 
   const { state } = useTimeline();
   const { hasMore, loadUserPost, loadMorePost, sortBy, addPost, importPost } = usePost(user);
-
   const { experiences } = useExperience(user.id);
   const scrollRoot = createRef<HTMLDivElement>();
+
   const isOwnPost = (post: Post) => {
     if (post.walletAddress === user.id) {
       return true;
