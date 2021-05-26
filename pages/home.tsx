@@ -7,11 +7,13 @@ import { useRouter } from 'next/router';
 import Layout from '../src/components/Layout/Layout.container';
 import Timeline from '../src/components/timeline/timeline.component';
 
+import { useUser } from 'src/components/user/user.context';
 import { healthcheck } from 'src/lib/api/healthcheck';
 
 export default function Home() {
   const [session, loading] = useSession();
   const router = useRouter();
+  const { state: userState } = useUser();
 
   useEffect(() => {
     if (!session && !loading) {
@@ -22,11 +24,11 @@ export default function Home() {
   // When rendering client side don't display anything until loading is complete
   if (typeof window !== 'undefined' && loading) return null;
 
-  if (!session?.user) return null;
+  if (!userState.user || !session) return null;
 
   return (
     <Layout session={session}>
-      <Timeline user={session.user} />
+      <Timeline user={userState.user} />
     </Layout>
   );
 }

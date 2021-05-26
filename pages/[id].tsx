@@ -9,9 +9,8 @@ import Layout from '../src/components/Layout/Layout.container';
 
 import ProfileTimeline from 'src/components/profile/profile.component';
 import { useProfileHook } from 'src/components/profile/use-profile.hook';
+import { useUser } from 'src/components/user/user.context';
 import { healthcheck } from 'src/lib/api/healthcheck';
-
-// import { getUserProfile } from 'src/lib/api/profile';
 
 interface Params {
   id: string;
@@ -23,16 +22,18 @@ type Props = {
 };
 
 export default function Profile({ session, params }: Props) {
+  const { state: userState } = useUser();
   const { profile, loading, getProfile } = useProfileHook(params.id);
 
   useEffect(() => {
     getProfile();
   }, [params]);
 
-  if (!session) return null;
+  if (!session || !userState.user) return null;
+
   return (
     <Layout session={session}>
-      <ProfileTimeline user={session.user} profile={profile} loading={loading} />
+      <ProfileTimeline user={userState.user} profile={profile} loading={loading} />
     </Layout>
   );
 }
