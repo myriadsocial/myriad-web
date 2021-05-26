@@ -4,7 +4,7 @@ import { FacebookProvider, EmbeddedPost } from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 
 import { useSession } from 'next-auth/client';
-import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -12,59 +12,46 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Collapse from '@material-ui/core/Collapse';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import CommentIcon from '@material-ui/icons/Comment';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
 import { useBalance } from '../../wallet/use-balance.hooks';
-import CommentComponent from '../comment/comment.component';
-import ReplyCommentComponent from '../comment/reply.component';
-import RedditReactionComponent from '../reactions/reddit.component';
-import TwitterReactionComponent from '../reactions/twitter.component';
+import { PostActionComponent } from './post-action.component';
 import PostAvatarComponent from './post-avatar.component';
 import PostImageComponent from './post-image.component';
 import PostVideoComponent from './post-video.component';
 import { useStyles } from './post.style';
 
-import clsx from 'clsx';
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import SendTipModal from 'src/components/common/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
 import { useSocialDetail } from 'src/hooks/use-social.hook';
 import { ImageData } from 'src/interfaces/post';
-import { Post, Comment } from 'src/interfaces/post';
+import { Post } from 'src/interfaces/post';
 import { v4 as uuid } from 'uuid';
+
+const CommentComponent = dynamic(() => import('../comment/comment.component'));
 
 type Props = {
   open?: boolean;
   disable?: boolean;
   post: Post;
-  reply: (comment: Comment) => void;
-  loadComments: (postId: string) => void;
   postOwner?: boolean;
 };
 
-export default function PostComponent({ post, open = false, disable = false, reply, loadComments, postOwner }: Props) {
+export default function PostComponent({ post, open = false, disable = false, postOwner }: Props) {
   const style = useStyles();
 
-  const [expanded, setExpanded] = useState(open);
   const { detail } = useSocialDetail(post);
-
+  const [expanded, setExpanded] = useState(open);
   const childRef = useRef<any>();
   const headerRef = useRef<any>();
-  const router = useRouter();
 
   const [session] = useSession();
 
   const isAnonymous = session?.user.anonymous as boolean;
   const userId = session?.user.address as string;
   const { freeBalance } = useBalance(userId);
-
-  const currentPage = router.pathname as string;
 
   if (!detail) return null;
 
@@ -73,20 +60,10 @@ export default function PostComponent({ post, open = false, disable = false, rep
   };
 
   const tipPostUser = () => {
-    //disable tipping on root page
-    if (currentPage === '/') {
+    if (disable) {
       return;
     }
     childRef.current.triggerSendTipModal();
-  };
-
-  const replyPost = (comment: string) => {
-    reply({
-      text: comment,
-      postId: post.id as string,
-      userId,
-      createdAt: new Date()
-    });
   };
 
   const openContentSource = () => {
@@ -172,49 +149,13 @@ export default function PostComponent({ post, open = false, disable = false, rep
         </ShowIf>
 
         <CardActions disableSpacing>
-          <ShowIf condition={post.platform === 'twitter'}>
-            <TwitterReactionComponent metric={detail.metric} />
-          </ShowIf>
-          <ShowIf condition={post.platform === 'reddit'}>
-            {
-              //TODO: add native metrics from reddit posts
-            }
-            <RedditReactionComponent metric={detail.metric} />
-          </ShowIf>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="share">
-            <ThumbDownIcon />
-          </IconButton>
-
-          <IconButton
-            className={clsx(style.expand, {
-              [style.expandOpen]: expanded
-            })}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more">
-            <CommentIcon />
-          </IconButton>
-
-          <Typography component="span">{post.comments.length} Comments</Typography>
+          <PostActionComponent post={post} detail={detail} expandComment={handleExpandClick} commentExpanded={expanded} />
         </CardActions>
 
         <ShowIf condition={expanded}>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent className={style.reply}>
-              <Grid container spacing={2} direction="column" className={style.comment}>
-                {post.comments.map((comment, i) => (
-                  <Grid item key={i}>
-                    <CommentComponent data={comment} />
-                  </Grid>
-                ))}
-              </Grid>
-
-              <ShowIf condition={!disable}>
-                <ReplyCommentComponent close={handleExpandClick} onSubmit={replyPost} />
-              </ShowIf>
+              <CommentComponent post={post} disableReply={disable} hide={handleExpandClick} />
             </CardContent>
           </Collapse>
         </ShowIf>

@@ -1,8 +1,6 @@
-import { User } from 'next-auth';
-
 import Axios from 'axios';
-import { WithAdditionalParams } from 'next-auth/_utils';
 import { Post, Comment, PostSortMethod, PostFilter, ImportPost } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 
 const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
@@ -10,12 +8,7 @@ const MyriadAPI = Axios.create({
 
 const LIMIT = 10;
 
-export const getPost = async (
-  user: WithAdditionalParams<User>,
-  page: number,
-  sort: PostSortMethod,
-  filters: PostFilter
-): Promise<Post[]> => {
+export const getPost = async (user: User, page: number, sort: PostSortMethod, filters: PostFilter): Promise<Post[]> => {
   let orderField = 'platformCreatedAt';
 
   switch (sort) {
@@ -186,7 +179,7 @@ export const loadComments = async (postId: string, excludeUser?: string) => {
       }
     };
   }
-  const { data } = await MyriadAPI.request({
+  const { data } = await MyriadAPI.request<Comment[]>({
     url: `/posts/${postId}/comments`,
     params: {
       filter: {
@@ -208,4 +201,28 @@ export const reply = async (postId: string, comment: Comment) => {
   });
 
   return data;
+};
+
+export const like = async (userId: string, postId: string) => {
+  await MyriadAPI.request({
+    url: `/posts/${postId}/likes`,
+    method: 'POST',
+    data: {
+      status: true,
+      userId,
+      postId
+    }
+  });
+};
+
+export const dislike = async (userId: string, postId: string) => {
+  await MyriadAPI.request({
+    url: `/posts/${postId}/dislikes`,
+    method: 'POST',
+    data: {
+      status: true,
+      userId,
+      postId
+    }
+  });
 };
