@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle, memo } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
 import { useSession } from 'next-auth/client';
 
