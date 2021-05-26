@@ -15,7 +15,6 @@ import { useLayout } from './use-layout.hook';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
 import { useUserHook } from 'src/components/user/use-user.hook';
-import { firebaseCloudMessaging } from 'src/lib/firebase';
 
 type Props = {
   children: React.ReactNode;
@@ -26,7 +25,7 @@ const LayoutComponent = ({ children, user }: Props) => {
   const style = useStyles();
 
   const { setting, changeSetting } = useLayout();
-  const { getUserDetail } = useUserHook(user);
+  const { getUserDetail, loadFcmToken } = useUserHook(user);
 
   useEffect(() => {
     getUserDetail();
@@ -35,7 +34,9 @@ const LayoutComponent = ({ children, user }: Props) => {
   }, []);
 
   useEffect(() => {
-    firebaseCloudMessaging.init();
+    loadFcmToken();
+
+    return undefined;
   }, []);
 
   return (
