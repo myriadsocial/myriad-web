@@ -18,17 +18,19 @@ export const useStyles = makeStyles(() =>
       width: 320,
       marginRight: 0,
       height: '100vh',
-      overflowY: 'scroll',
+      'overflow-y': 'scroll !important',
       'scrollbar-color': '#A942E9 #171717',
       'scrollbar-width': 'thin !important'
     },
+    wallet: {
+      width: 320
+    },
     content: {
-      width: 320,
       marginRight: 0,
       height: '100vh'
     },
     fullheight: {
-      height: '100%'
+      height: '100vh'
     },
     grow: {
       flexGrow: 1
