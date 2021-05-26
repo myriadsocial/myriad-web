@@ -197,7 +197,7 @@ export const TransactionComponent = React.memo(function Wallet() {
 
   return (
     <>
-      <div className={style.root}>
+      <div className={style.root} id="transactionArea">
         <TabContext value={value}>
           <StyledTabs value={value} onChange={handleChange}>
             <IconButton onClick={handleClick} className={style.iconButton} aria-label="refresh history" component="span">

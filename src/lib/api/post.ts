@@ -93,6 +93,77 @@ export const getPost = async (
   return data;
 };
 
+export const getFriendPost = async (userId: string, page: number) => {
+  const { data } = await MyriadAPI.request<Post[]>({
+    url: `/users/${userId}/timeline`,
+    method: 'GET',
+    params: {
+      offset: Math.max(page - 1, 0) * LIMIT,
+      limit: LIMIT
+    }
+  });
+
+  return data;
+};
+
+export const getFriendPostByMetric = async (userId: string, page: number, sort?: string) => {
+  let orderField = 'platformCreatedAt';
+
+  switch (sort) {
+    case 'comment':
+      orderField = 'orderField';
+      break;
+    case 'like':
+      orderField = 'liked';
+      break;
+    case 'trending':
+    default:
+      break;
+  }
+
+  const { data } = await MyriadAPI.request<Post[]>({
+    url: `/users/${userId}/timeline`,
+    method: 'GET',
+    params: {
+      offset: Math.max(page - 1, 0) * LIMIT,
+      limit: LIMIT,
+      orderField
+    }
+  });
+
+  return data;
+};
+
+export const loadMoreFriendPost = async (userId: string, page: number) => {
+  const { data } = await MyriadAPI.request<Post[]>({
+    url: `/users/${userId}/timeline`,
+    method: 'POST',
+    params: {
+      filter: {
+        offset: Math.max(page - 1, 0) * LIMIT,
+        limit: LIMIT,
+        include: [
+          {
+            relation: 'comments',
+            scope: {
+              include: [
+                {
+                  relation: 'user'
+                }
+              ]
+            }
+          },
+          {
+            relation: 'publicMetric'
+          }
+        ]
+      }
+    }
+  });
+
+  return data;
+};
+
 export const createPost = async (values: Partial<Post>): Promise<Post> => {
   const { data } = await MyriadAPI.request<Post>({
     url: '/posts',
