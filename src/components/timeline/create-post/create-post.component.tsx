@@ -9,10 +9,10 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
-import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
+import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import ImageIcon from '@material-ui/icons/Image';
 import LinkIcon from '@material-ui/icons/Link';
 import PeopleIcon from '@material-ui/icons/People';
@@ -89,6 +89,8 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
             preview: URL.createObjectURL(file)
           }))
       );
+
+      setCreatePost(true);
     }
   };
 
@@ -133,11 +135,34 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
 
   return (
     <div className={styles.root}>
-      <InputLabel className={styles.label} onClick={toggleCreatePost}>
-        <Typography gutterBottom variant="h5" component="h2">
-          Post Something
+      <div style={{ padding: theme.spacing(1, 0) }}>
+        <Typography variant="h4" style={{ marginBottom: 8, fontWeight: 500 }}>
+          {'Post Something'}
         </Typography>
-      </InputLabel>
+      </div>
+
+      <Card variant="outlined">
+        <CardContent>
+          <TextareaAutosize
+            rowsMin={2}
+            placeholder={`Any thought about something`}
+            className={styles.postTextArea}
+            onChange={updatePostText}
+            spellCheck={false}
+          />
+        </CardContent>
+        <CardActions>
+          <Button variant="contained" color="default" className={styles.button} onClick={toggleCreatePost} startIcon={<CameraAltIcon />}>
+            Post Photos
+          </Button>
+          <Button variant="contained" color="default" disabled className={styles.button} startIcon={<VideocamIcon />}>
+            Post Videos
+          </Button>
+          <Button variant="contained" color="default" className={styles.createPost} onClick={toggleCreatePost}>
+            Create A Post
+          </Button>
+        </CardActions>
+      </Card>
 
       <Dialog className={styles.dialog} open={showCreatePost} aria-labelledby="no-extension-installed" maxWidth="lg">
         <DialogTitle id="name" onClose={toggleCreatePost}>

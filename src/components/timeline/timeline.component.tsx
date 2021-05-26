@@ -3,6 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { User } from 'next-auth';
 
+import Divider from '@material-ui/core/Divider';
 import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
@@ -21,7 +22,7 @@ import { WithAdditionalParams } from 'next-auth/_utils';
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import ShowIf from 'src/components/common/show-if.component';
 import { useUser } from 'src/components/user/user.context';
-import { Post, Comment } from 'src/interfaces/post';
+import { Post, Comment, PostSortMethod } from 'src/interfaces/post';
 
 type Props = {
   user: WithAdditionalParams<User>;
@@ -68,6 +69,10 @@ const Timeline = ({ user }: Props) => {
     loadMorePost(user);
   };
 
+  const sortTimeline = (sort: PostSortMethod) => {
+    sortBy(user, sort);
+  };
+
   const handleReply = (comment: Comment) => {
     reply(comment.postId, user, comment);
   };
@@ -93,10 +98,12 @@ const Timeline = ({ user }: Props) => {
         <ShowIf condition={!user.anonymous}>
           <CreatePostComponent onSubmit={submitPost} experiences={experiences} user={userState.user} />
 
+          <Divider component="span" style={{ margin: 8 }} />
+
           <ImportPostComponent onSubmit={submitImportPost} experiences={experiences} />
         </ShowIf>
 
-        <FilterTimelineComponent selected={state.sort} onChange={sortBy} />
+        <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />
 
         <InfiniteScroll
           scrollableTarget="scrollable-timeline"
