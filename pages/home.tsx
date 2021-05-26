@@ -13,7 +13,9 @@ import { healthcheck } from 'src/lib/api/healthcheck';
 export default function Home() {
   const [session, loading] = useSession();
   const router = useRouter();
-  const { state: userState } = useUser();
+  const {
+    state: { user }
+  } = useUser();
 
   useEffect(() => {
     if (!session && !loading) {
@@ -24,13 +26,9 @@ export default function Home() {
   // When rendering client side don't display anything until loading is complete
   if (typeof window !== 'undefined' && loading) return null;
 
-  if (!userState.user || !session) return null;
+  if (!session?.user) return null;
 
-  return (
-    <Layout session={session}>
-      <Timeline user={userState.user} />
-    </Layout>
-  );
+  return <Layout session={session}>{user && <Timeline user={user} />}</Layout>;
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
