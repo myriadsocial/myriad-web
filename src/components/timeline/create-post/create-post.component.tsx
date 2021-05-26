@@ -89,6 +89,8 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
             preview: URL.createObjectURL(file)
           }))
       );
+
+      setCreatePost(true);
     }
   };
 
@@ -143,20 +145,20 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
         <CardContent>
           <TextareaAutosize
             rowsMin={2}
-            onClick={toggleCreatePost}
             placeholder={`Any thought about something`}
             className={styles.postTextArea}
+            onChange={updatePostText}
             spellCheck={false}
           />
         </CardContent>
         <CardActions>
-          <Button variant="contained" color="default" className={styles.button} startIcon={<CameraAltIcon />}>
+          <Button variant="contained" color="default" className={styles.button} onClick={toggleCreatePost} startIcon={<CameraAltIcon />}>
             Post Photos
           </Button>
-          <Button variant="contained" color="default" className={styles.button} startIcon={<VideocamIcon />}>
+          <Button variant="contained" color="default" disabled className={styles.button} startIcon={<VideocamIcon />}>
             Post Videos
           </Button>
-          <Button variant="contained" color="default" className={styles.createPost} onClick={savePost}>
+          <Button variant="contained" color="default" className={styles.createPost} onClick={toggleCreatePost}>
             Create A Post
           </Button>
         </CardActions>
