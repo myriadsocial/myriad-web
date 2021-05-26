@@ -10,21 +10,18 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { LoadingPage } from '../common/loading.component';
 import { useExperience } from '../experience/use-experience.hooks';
 import ImportPostComponent from './ImportPost.component';
+import CreatePostComponent from './create-post/create-post.component';
 import FilterTimelineComponent from './filter.component';
 import PostComponent from './post/post.component';
-//import SearchUserComponent from './search-user.component';
-import CreatePostComponent from './submit.component';
 import { useTimeline } from './timeline.context';
 import { useStyles } from './timeline.style';
 import { usePost } from './use-post.hook';
 
-//import { useMyriadUser } from './use-users.hooks';
 import { WithAdditionalParams } from 'next-auth/_utils';
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import ShowIf from 'src/components/common/show-if.component';
+import { useUser } from 'src/components/user/user.context';
 import { Post, Comment } from 'src/interfaces/post';
-
-//import { User as MyriadUser } from 'src/interfaces/user';
 
 type Props = {
   user: WithAdditionalParams<User>;
@@ -34,20 +31,18 @@ const Timeline = ({ user }: Props) => {
   const style = useStyles();
   const userId = user.address as string;
 
+  const { state: userState } = useUser();
   const { state } = useTimeline();
   const { hasMore, loadUserPost, loadMorePost, reply, loadComments, sortBy, addPost, importPost } = usePost();
 
   const { experiences } = useExperience(userId);
   const scrollRoot = createRef<HTMLDivElement>();
-
   const isOwnPost = (post: Post) => {
     if (post.walletAddress === userId) {
       return true;
     }
     return false;
   };
-
-  //const { users: options, search } = useMyriadUser();
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, true);
@@ -85,15 +80,9 @@ const Timeline = ({ user }: Props) => {
     importPost(URL, userId);
   };
 
+  if (!userState.user) return null;
+
   console.log('TIMELINE COMPONENT LOAD');
-
-  //const searchUser = (text: string) => {
-  //search(text);
-  //};
-
-  //const onSearchUser = (users: MyriadUser) => {
-  ////console.log('the users are: ', users);
-  //};
 
   return (
     <div className={style.root}>
@@ -104,7 +93,7 @@ const Timeline = ({ user }: Props) => {
         <FilterTimelineComponent selected={state.sort} onChange={sortBy} />
 
         <ShowIf condition={!user.anonymous}>
-          <CreatePostComponent onSubmit={submitPost} experiences={experiences} />
+          <CreatePostComponent onSubmit={submitPost} experiences={experiences} user={userState.user} />
 
           <ImportPostComponent onSubmit={submitImportPost} experiences={experiences} />
         </ShowIf>
