@@ -12,9 +12,10 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AlertComponent from 'src/components/alert/Alert.component';
 import { useAlertHook } from 'src/components/alert/use-alert.hook';
 import LoginForm from 'src/components/login/login.component';
+import { CommentProvider } from 'src/components/timeline/comment/comment.context';
 import PostComponent from 'src/components/timeline/post/post.component';
 import Logo from 'src/images/logo.svg';
-import { Post, Comment } from 'src/interfaces/post';
+import { Post } from 'src/interfaces/post';
 import { healthcheck } from 'src/lib/api/healthcheck';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -74,10 +75,6 @@ export default function Index() {
     }
   }, [router.query.error]);
 
-  const reply = (comment: Comment) => {};
-
-  const loadComments = (postId: string) => {};
-
   const posts: Post[] = [
     {
       id: '1',
@@ -127,9 +124,11 @@ export default function Index() {
             </Paper>
           </Grid>
           <Grid item className={style.timeline}>
-            {posts.map(post => (
-              <PostComponent post={post} open={true} disable key={post.id} reply={reply} loadComments={loadComments} />
-            ))}
+            <CommentProvider>
+              {posts.map(post => (
+                <PostComponent post={post} open={true} disable key={post.id} />
+              ))}
+            </CommentProvider>
           </Grid>
         </Grid>
         <Grid item>

@@ -1,19 +1,17 @@
 import { useState, useEffect } from 'react';
 
-import { User } from 'next-auth';
-
 import { SocialsEnum } from '../../interfaces';
 import { useLayoutSetting } from '../Layout/layout.context';
 import { useExperience } from '../experience/experience.context';
 import { useTimeline, TimelineActionType } from './timeline.context';
 
-import { WithAdditionalParams } from 'next-auth/_utils';
 import { useAlertHook } from 'src/components/alert/use-alert.hook';
-import { Comment, Post, PostSortMethod } from 'src/interfaces/post';
+import { Post, PostSortMethod } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 import * as LocalAPI from 'src/lib/api/local';
 import * as PostAPI from 'src/lib/api/post';
 
-export const usePost = () => {
+export const usePost = (user: User) => {
   const { state: experienceState } = useExperience();
   const { state: timelineState, dispatch } = useTimeline();
   const { state: settingState } = useLayoutSetting();
@@ -61,11 +59,11 @@ export const usePost = () => {
     settingState.reddit
   ]);
 
-  const loadUserPost = async (user: WithAdditionalParams<User>, page: number = 1, sort?: PostSortMethod) => {
+  const loadUserPost = async (page: number = 1, sort?: PostSortMethod) => {
     setLoading(true);
 
     try {
-      const data = await PostAPI.getFriendPost(user.address as string, page, sort);
+      const data = await PostAPI.getFriendPost(user.id, page, sort);
 
       if (data.length < 10) {
         setHasMore(false);
@@ -82,7 +80,7 @@ export const usePost = () => {
     }
   };
 
-  const loadPost = async (user: WithAdditionalParams<User>) => {
+  const loadPost = async () => {
     setLoading(true);
 
     try {
@@ -103,24 +101,24 @@ export const usePost = () => {
     }
   };
 
-  const loadMorePost = async (user: WithAdditionalParams<User>) => {
+  const loadMorePost = async () => {
     dispatch({
       type: TimelineActionType.LOAD_MORE_POST
     });
 
-    await loadUserPost(user, timelineState.page + 1);
+    await loadUserPost(timelineState.page + 1);
   };
 
-  const sortBy = async (user: WithAdditionalParams<User>, sort: PostSortMethod) => {
+  const sortBy = async (sort: PostSortMethod) => {
     dispatch({
       type: TimelineActionType.SORT_POST,
       sort
     });
 
-    await loadUserPost(user, 1, sort);
+    await loadUserPost(1, sort);
   };
 
-  const addPost = async (text: string, tags: string[], files: File[], user: WithAdditionalParams<User>) => {
+  const addPost = async (text: string, tags: string[], files: File[]) => {
     const images: string[] = [];
 
     if (files.length) {
@@ -134,9 +132,6 @@ export const usePost = () => {
     }
 
     const hasMedia = files.length > 0;
-    const username = user.name as string;
-    const accountId = user.address as string;
-    const userProfilePicture = user.profilePictureURL as string;
 
     const data = await PostAPI.createPost({
       text,
@@ -145,11 +140,11 @@ export const usePost = () => {
       platform: 'myriad',
       assets: hasMedia ? images : [],
       platformUser: {
-        username,
-        platform_account_id: accountId,
-        profilePictureURL: userProfilePicture
+        username: user.name,
+        platform_account_id: user.id,
+        profilePictureURL: user.profilePictureURL
       },
-      walletAddress: accountId
+      walletAddress: user.id
     });
 
     dispatch({
@@ -168,19 +163,6 @@ export const usePost = () => {
       type: TimelineActionType.LOAD_COMMENTS,
       postId,
       comments: data
-    });
-  };
-
-  const reply = async (postId: string, user: User, comment: Comment) => {
-    const data = await PostAPI.reply(postId, comment);
-
-    dispatch({
-      type: TimelineActionType.ADD_COMMENT,
-      postId,
-      comment: {
-        ...data,
-        user
-      }
     });
   };
 
@@ -219,6 +201,32 @@ export const usePost = () => {
     }
   };
 
+  const likePost = async (postId: string) => {
+    setLoading(true);
+
+    try {
+      await PostAPI.like(user.id, postId);
+    } catch (error) {
+      console.log('error likePost: ', error);
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const dislikePost = async (postId: string) => {
+    setLoading(true);
+
+    try {
+      await PostAPI.dislike(user.id, postId);
+    } catch (error) {
+      console.log('error from use post hooks: ', error);
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     error,
     loading,
@@ -229,8 +237,9 @@ export const usePost = () => {
     loadMorePost,
     loadComments,
     addPost,
-    reply,
     sortBy,
-    importPost
+    importPost,
+    likePost,
+    dislikePost
   };
 };

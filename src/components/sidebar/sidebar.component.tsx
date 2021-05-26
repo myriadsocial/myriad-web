@@ -9,8 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import { useTheme } from '@material-ui/core/styles';
 import { Language, People, Notifications } from '@material-ui/icons';
 
+import { TabPanel } from '../common/tab-panel.component';
 import { useStyles } from './sidebar.style';
-import { TabPanel } from './tab-panel.component';
 
 const TopicComponent = dynamic(() => import('../topic/topic.component'));
 const FriendComponent = dynamic(() => import('../friends/friend.component'));
