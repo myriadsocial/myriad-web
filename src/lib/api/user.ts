@@ -40,6 +40,16 @@ export const createUser = async (values: Partial<User>): Promise<User> => {
   return data;
 };
 
+export const updateUser = async (userId: string, values: Partial<User>): Promise<User> => {
+  const { data } = await MyriadAPI.request<User>({
+    url: `/users/${userId}`,
+    method: 'PATCH',
+    data: values
+  });
+
+  return data;
+};
+
 export const addUserCredential = async (userId: string, values: Partial<UserCredential>) => {
   await MyriadAPI({
     url: `/users/${userId}/user-credentials`,

@@ -18,8 +18,11 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: 0,
       width: '100%',
       [theme.breakpoints.up('sm')]: {
-        margin: theme.spacing(1),
         width: 'auto'
+      },
+      '& .MuiInputBase-root': {
+        width: '100%',
+        padding: theme.spacing(0, 1)
       }
     },
     searchIcon: {
@@ -32,17 +35,13 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center'
     },
     input: {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+      padding: theme.spacing(0, 1),
       marginLeft: 0,
       transition: theme.transitions.create('width'),
+      height: 40,
       width: '100%',
       [theme.breakpoints.up('sm')]: {
-        width: '12ch',
-        '&:focus': {
-          width: '20ch'
-        }
+        width: '100%'
       }
     }
   })
@@ -72,9 +71,6 @@ export default function SearchComponent({ value = '', placeholder = 'Search', on
 
   return (
     <div className={classes.root}>
-      <div className={classes.searchIcon}>
-        <SearchIcon />
-      </div>
       <InputBase
         onKeyUp={submitSearch}
         value={search}
@@ -83,7 +79,10 @@ export default function SearchComponent({ value = '', placeholder = 'Search', on
         classes={{
           input: classes.input
         }}
-        inputProps={{ 'aria-label': 'search' }}
+        inputProps={{
+          'aria-label': 'search'
+        }}
+        endAdornment={<SearchIcon />}
       />
     </div>
   );
