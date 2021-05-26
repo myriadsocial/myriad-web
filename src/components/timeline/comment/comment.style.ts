@@ -17,12 +17,13 @@ export const useStyles = makeStyles((theme: Theme) =>
     expandOpen: {
       transform: 'rotate(180deg)'
     },
-    reply: {
-      backgroundColor: fade(theme.palette.primary.main, 0.5)
-    },
     comment: {
       backgroundColor: '#171717',
-      borderRadius: 8
+      borderRadius: 8,
+      marginBottom: theme.spacing(1)
+    },
+    reply: {
+      backgroundColor: fade(theme.palette.primary.main, 0.5)
     },
     action: {
       marginTop: 16
