@@ -1,15 +1,13 @@
-import React, { useEffect, useState, memo, useImperativeHandle, forwardRef } from 'react';
+import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
 
 import { useSession } from 'next-auth/client';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
-import RefreshIcon from '@material-ui/icons/Refresh';
 import TabContext from '@material-ui/lab/TabContext';
 import TabPanel from '@material-ui/lab/TabPanel';
 

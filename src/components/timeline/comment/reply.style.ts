@@ -12,17 +12,27 @@ export const useStyles = makeStyles((theme: Theme) =>
     write: {
       backgroundColor: '#171717',
       borderRadius: theme.spacing(1),
+      '& .MuiOutlinedInput-notchedOutline': {
+        borderColor: '#171717',
+        borderBottom: 0
+      },
+
+      '& .MuiOutlinedInput-root': {
+        border: theme.spacing(1),
+        '&:focus-visible': {
+          outline: 'none'
+        }
+      },
+
       '& .MuiFormHelperText-root': {
         textAlign: 'right',
-        borderColor: 'rgba(255, 255, 255, 0.23)',
-        border: '1px solid',
+        borderColor: '#171717',
+        border: theme.spacing(1),
         borderTop: 0,
+        borderLeft: 0,
         padding: '0 14px',
         margin: 0,
-        borderRadius: 8
-      },
-      '& .MuiOutlinedInput-notchedOutline': {
-        borderBottom: 0
+        borderRadius: theme.spacing(1)
       }
     }
   })

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { User } from 'next-auth';
 import { signOut } from 'next-auth/client';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -25,14 +24,13 @@ import { useStyles } from './header.style';
 import { useFriendHook } from './use-friend.hook';
 import { useProfileHook } from './use-profile.hook';
 
-import { WithAdditionalParams } from 'next-auth/_utils';
 import { EditableTextField } from 'src/components/common/EditableTextField';
 import { ImageUpload } from 'src/components/common/ImageUpload.component';
 import { acronym } from 'src/helpers/string';
-import { ExtendedUserPost } from 'src/interfaces/user';
+import { User, ExtendedUserPost } from 'src/interfaces/user';
 
 type Props = {
-  user: WithAdditionalParams<User>;
+  user: User;
   profile: ExtendedUserPost | null;
   loading: Boolean;
   isGuest: Boolean;
