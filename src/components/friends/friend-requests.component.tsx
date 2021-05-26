@@ -1,28 +1,25 @@
 import React, { useEffect } from 'react';
 
-import { User } from 'next-auth';
-
 import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
+import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { createStyles, Theme, makeStyles, fade } from '@material-ui/core/styles';
 
 import { useFriendsHook } from './use-friends-hook';
 
-import { WithAdditionalParams } from 'next-auth/_utils';
 import ShowIf from 'src/components/common/show-if.component';
 import { useFriends } from 'src/components/friends/friends.context';
 import { ExtendedFriend, FriendStatus } from 'src/interfaces/friend';
+import { User } from 'src/interfaces/user';
 
 type Props = {
-  user: WithAdditionalParams<User>;
+  user: User;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -31,23 +28,27 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       backgroundColor: '#424242',
       color: '#E0E0E0',
-      padding: theme.spacing(1)
+      margin: '8px 0'
     },
     header: {
       textAlign: 'center'
     },
     content: {
-      padding: '0 8px',
       '&:last-child': {
-        paddingBottom: theme.spacing(1.5)
+        paddingBottom: 0
+      }
+    },
+    list: {
+      margin: '8px 0',
+      '& .MuiListItem-root': {
+        '&:nth-child(odd)': {
+          backgroundColor: fade('#FFFFFF', 0.2)
+        }
       }
     },
     item: {
-      border: '1px solid',
-      borderColor: '#A942E9',
-      borderRadius: theme.spacing(1),
-      marginBottom: theme.spacing(1),
-      paddingRight: theme.spacing(1)
+      marginBottom: theme.spacing(0.5),
+      paddingRight: theme.spacing(0.5)
     },
     action: {
       display: 'flex',
@@ -63,6 +64,13 @@ const useStyles = makeStyles((theme: Theme) =>
           marginLeft: 0
         }
       }
+    },
+    more: {
+      display: 'block',
+      fontSize: 16,
+      margin: '0 auto',
+      color: '#000000',
+      marginBottom: 16
     }
   })
 );
@@ -86,16 +94,20 @@ const FriendRequests = ({ user }: Props) => {
   };
 
   return (
-    <Card className={style.root}>
-      <CardHeader disableTypography title={<Typography variant="caption">Friend Requests</Typography>} />
-      <CardContent className={style.content}>
+    <Box className={style.root}>
+      <div style={{ marginBottom: 16 }}>
+        <Typography variant="caption" style={{ fontWeight: 500, fontSize: 14 }}>
+          Friend Requests ({state.requests.length})
+        </Typography>
+      </div>
+      <div className={style.content}>
         <ShowIf condition={state.requests.length === 0}>
           <Typography variant="h4" color="textPrimary" style={{ textAlign: 'center', padding: '16px 0' }}>
             No Friend Request
           </Typography>
         </ShowIf>
 
-        <List className={style.root}>
+        <List className={style.list}>
           {state.requests.map(request => {
             return (
               <ListItem key={request.id} className={style.item} alignItems="flex-start">
@@ -103,26 +115,26 @@ const FriendRequests = ({ user }: Props) => {
                   <Avatar alt={request.requestor.name} src={request.requestor.profilePictureURL} />
                 </ListItemAvatar>
                 <ListItemText>
-                  <Typography component="span" variant="h4" color="textPrimary">
+                  <Typography component="span" variant="h4" color="textPrimary" style={{ color: '#000000', fontSize: 16 }}>
                     {request.requestor.name}
                   </Typography>
 
                   <div className={style.action}>
-                    <Button
-                      onClick={() => approveFriendRequest(request)}
-                      aria-label="tip-post-user"
-                      color="primary"
-                      variant="contained"
-                      size="medium">
-                      Approve
-                    </Button>
                     <Button
                       onClick={() => rejectFriendRequest(request)}
                       aria-label="tip-post-user"
                       color="default"
                       variant="contained"
                       size="medium">
-                      Delete
+                      Ignore
+                    </Button>
+                    <Button
+                      onClick={() => approveFriendRequest(request)}
+                      aria-label="tip-post-user"
+                      color="primary"
+                      variant="contained"
+                      size="medium">
+                      Accept
                     </Button>
                   </div>
                 </ListItemText>
@@ -130,8 +142,17 @@ const FriendRequests = ({ user }: Props) => {
             );
           })}
         </List>
-      </CardContent>
-    </Card>
+
+        <Link
+          className={style.more}
+          component="button"
+          onClick={() => {
+            console.info("I'm a button.");
+          }}>
+          (show all request)
+        </Link>
+      </div>
+    </Box>
   );
 };
 

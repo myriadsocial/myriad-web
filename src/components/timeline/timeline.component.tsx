@@ -35,7 +35,7 @@ const Timeline = ({ user }: Props) => {
   const userId = user.address as string;
 
   const { state } = useTimeline();
-  const { hasMore, loadPost, loadMorePost, reply, loadComments, sortBy, addPost, importPost } = usePost();
+  const { hasMore, loadUserPost, loadMorePost, reply, loadComments, sortBy, addPost, importPost } = usePost();
 
   const { experiences } = useExperience(userId);
   const scrollRoot = createRef<HTMLDivElement>();
@@ -54,10 +54,8 @@ const Timeline = ({ user }: Props) => {
   }, []);
 
   useEffect(() => {
-    if (state.filter.tags.length > 0 || state.filter.people.length > 0) {
-      loadPost(user);
-    }
-  }, [state.filter, state.sort, state.page]);
+    loadUserPost(user);
+  }, []);
 
   const handleScroll = useCallback(() => {
     const distance = window.scrollY;
@@ -70,6 +68,10 @@ const Timeline = ({ user }: Props) => {
       }
     });
   }, []);
+
+  const nextPage = () => {
+    loadMorePost(user);
+  };
 
   const handleReply = (comment: Comment) => {
     reply(comment.postId, user, comment);
@@ -111,7 +113,7 @@ const Timeline = ({ user }: Props) => {
           scrollableTarget="scrollable-timeline"
           className={style.child}
           dataLength={state.posts.length + 100}
-          next={loadMorePost}
+          next={nextPage}
           hasMore={hasMore}
           loader={<LoadingPage />}>
           {state.posts.map((post: Post, i: number) => (

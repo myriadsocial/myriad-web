@@ -1,13 +1,11 @@
 import { useState } from 'react';
 
-import { User } from 'next-auth';
-
-import { WithAdditionalParams } from 'next-auth/_utils';
 import { useFriends, FriendsActionType } from 'src/components/friends/friends.context';
 import { ExtendedFriend, FriendStatus } from 'src/interfaces/friend';
+import { User } from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
 
-export const useFriendsHook = (user: WithAdditionalParams<User>) => {
+export const useFriendsHook = (user: User) => {
   const { dispatch } = useFriends();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -16,7 +14,7 @@ export const useFriendsHook = (user: WithAdditionalParams<User>) => {
     setLoading(true);
 
     try {
-      const requests: ExtendedFriend[] = await FriendAPI.getFriendRequests(user.address as string);
+      const requests: ExtendedFriend[] = await FriendAPI.getFriendRequests(user.id);
 
       dispatch({
         type: FriendsActionType.LOAD_FRIEND_REQUESTS,
@@ -30,7 +28,7 @@ export const useFriendsHook = (user: WithAdditionalParams<User>) => {
   };
 
   const loadFriends = async () => {
-    const friends: ExtendedFriend[] = await FriendAPI.getFriends(user.address as string);
+    const friends: ExtendedFriend[] = await FriendAPI.getFriends(user.id);
 
     dispatch({
       type: FriendsActionType.LOAD_FRIENDS,
@@ -38,8 +36,8 @@ export const useFriendsHook = (user: WithAdditionalParams<User>) => {
     });
   };
 
-  const sendRequest = async (userId: string) => {
-    await FriendAPI.sendRequest(user.address as string, userId);
+  const sendRequest = async (destinationId: string) => {
+    await FriendAPI.sendRequest(user.id, destinationId);
   };
 
   const toggleRequest = async (friend: ExtendedFriend, status: FriendStatus) => {
