@@ -7,8 +7,9 @@ export const useStyles = makeStyles(() =>
       overflow: 'auto'
     },
     experience: {
-      width: 360,
+      width: 335,
       height: '100vh',
+      marginRight: 30,
       overflowY: 'scroll',
       'scrollbar-color': '#A942E9 #171717 ',
       'scrollbar-width': 'thin !important'
