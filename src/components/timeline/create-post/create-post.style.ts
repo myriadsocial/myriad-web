@@ -11,6 +11,13 @@ export const useStyles = makeStyles((theme: Theme) =>
         minWidth: 800
       }
     },
+    button: {
+      margin: theme.spacing(1)
+    },
+    createPost: {
+      marginLeft: 'auto !important',
+      marginRight: 8
+    },
     label: {
       backgroundColor: lighten(theme.palette.background.paper, 0.3),
       textAlign: 'center',

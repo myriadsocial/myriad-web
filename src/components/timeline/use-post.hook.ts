@@ -61,9 +61,11 @@ export const usePost = () => {
     settingState.reddit
   ]);
 
-  const loadUserPost = async (user: WithAdditionalParams<User>) => {
+  const loadUserPost = async (user: WithAdditionalParams<User>, page: number = 1, sort?: PostSortMethod) => {
+    setLoading(true);
+
     try {
-      const data = await PostAPI.getFriendPost(user.address as string, timelineState.page);
+      const data = await PostAPI.getFriendPost(user.address as string, page, sort);
 
       if (data.length < 10) {
         setHasMore(false);
@@ -106,7 +108,16 @@ export const usePost = () => {
       type: TimelineActionType.LOAD_MORE_POST
     });
 
-    await loadUserPost(user);
+    await loadUserPost(user, timelineState.page + 1);
+  };
+
+  const sortBy = async (user: WithAdditionalParams<User>, sort: PostSortMethod) => {
+    dispatch({
+      type: TimelineActionType.SORT_POST,
+      sort
+    });
+
+    await loadUserPost(user, 1, sort);
   };
 
   const addPost = async (text: string, tags: string[], files: File[], user: WithAdditionalParams<User>) => {
@@ -170,13 +181,6 @@ export const usePost = () => {
         ...data,
         user
       }
-    });
-  };
-
-  const sortBy = (sort: PostSortMethod) => {
-    dispatch({
-      type: TimelineActionType.SORT_POST,
-      sort
     });
   };
 
