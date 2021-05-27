@@ -310,7 +310,7 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
 
       <Dialog open={isSignin && accountFetched && accounts.length > 1} aria-labelledby="choose-account" maxWidth="sm">
         <DialogTitle id="name" onClose={cancelSignin}>
-          Choose Account to signin
+          Choose an account to sign in
         </DialogTitle>
         <DialogContent>
           <List className={style.info}>
