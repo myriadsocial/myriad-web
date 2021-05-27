@@ -12,6 +12,7 @@ import DialogTitle from '../common/DialogTitle.component';
 //import Divider from '../common/divider.component';
 //import { BalanceComponent } from '../wallet/balance.component';
 import { GetMyriaTutorial } from './GetMyriaTutorial.component';
+
 //import { TransactionComponent } from './transaction.component';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -75,11 +76,11 @@ export const TippingJarComponent = forwardRef((_, ref) => {
         </StyledDialogTitle>
         <DialogActions>{TippingJarActions}</DialogActions>
         {
-        //<DialogContent dividers>
+          //<DialogContent dividers>
           //<BalanceComponent />
           //<Divider />
           //<TransactionComponent />
-        //</DialogContent>
+          //</DialogContent>
         }
       </Dialog>
 
