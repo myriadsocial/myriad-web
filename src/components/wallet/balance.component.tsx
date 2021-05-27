@@ -1,17 +1,16 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, useImperativeHandle } from 'react';
 
 import { useSession } from 'next-auth/client';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
+import MuiTableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 
 import { useBalance } from '../wallet/use-balance.hooks';
 
@@ -71,7 +70,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const BalanceComponent = forwardRef((_, ref) => {
+const TableCell = withStyles({
+  root: {
+    borderBottom: 'none'
+  }
+})(MuiTableCell);
+
+interface BalanceProps {
+  forwardedRef: React.ForwardedRef<any>;
+}
+
+const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
   const style = useStyles();
 
   const [session] = useSession();
@@ -82,7 +91,7 @@ export const BalanceComponent = forwardRef((_, ref) => {
     loadInitBalance();
   }, []);
 
-  useImperativeHandle(ref, () => ({
+  useImperativeHandle(forwardedRef, () => ({
     triggerRefresh: () => {
       setIsHidden(false);
       loadInitBalance();
@@ -102,7 +111,7 @@ export const BalanceComponent = forwardRef((_, ref) => {
 
   const CurrencyTable = () => {
     return (
-      <TableContainer component={Paper}>
+      <TableContainer>
         <Table aria-label="balance-table">
           <TableHead>
             <TableRow>
@@ -148,8 +157,10 @@ export const BalanceComponent = forwardRef((_, ref) => {
   };
 
   return (
-    <div className={style.root}>
+    <div ref={forwardedRef} className={style.root}>
       <CurrencyTable />
     </div>
   );
-});
+};
+
+export default BalanceComponent;
