@@ -30,7 +30,7 @@ export type SocialMetric = {
 };
 
 export interface Post {
-  id?: string;
+  id: string;
   tags: string[];
   platformUser?: {
     username: string;
@@ -48,6 +48,11 @@ export interface Post {
   createdAt: Date;
   walletAddress?: string;
   comments: Comment[];
+  publicMetric: {
+    liked: number;
+    disliked: number;
+    comment: number;
+  };
 }
 
 export interface Comment {

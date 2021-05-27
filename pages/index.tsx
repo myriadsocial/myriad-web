@@ -9,10 +9,13 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
+import AlertComponent from 'src/components/alert/Alert.component';
+import { useAlertHook } from 'src/components/alert/use-alert.hook';
 import LoginForm from 'src/components/login/login.component';
+import { CommentProvider } from 'src/components/timeline/comment/comment.context';
 import PostComponent from 'src/components/timeline/post/post.component';
 import Logo from 'src/images/logo.svg';
-import { Post, Comment } from 'src/interfaces/post';
+import { Post } from 'src/interfaces/post';
 import { healthcheck } from 'src/lib/api/healthcheck';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -51,8 +54,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Index() {
   const style = useStyles();
+
   const [session, loading] = useSession();
   const router = useRouter();
+  const { showAlert } = useAlertHook();
 
   useEffect(() => {
     if (session && !loading) {
@@ -60,9 +65,15 @@ export default function Index() {
     }
   }, [loading, session]);
 
-  const reply = (comment: Comment) => {};
-
-  const loadComments = (postId: string) => {};
+  useEffect(() => {
+    if (router.query.error) {
+      showAlert({
+        message: 'Something wrong when try to loggedin.',
+        severity: 'error',
+        title: 'Login failed'
+      });
+    }
+  }, [router.query.error]);
 
   const posts: Post[] = [
     {
@@ -81,6 +92,11 @@ export default function Index() {
           createdAt: new Date()
         }
       ],
+      publicMetric: {
+        liked: 0,
+        disliked: 0,
+        comment: 1
+      },
       createdAt: new Date()
     },
     {
@@ -92,14 +108,17 @@ export default function Index() {
       hasMedia: false,
       platformCreatedAt: new Date(),
       comments: [],
+      publicMetric: {
+        liked: 0,
+        disliked: 0,
+        comment: 0
+      },
       createdAt: new Date()
     }
   ];
 
   // When rendering client side don't display anything until loading is complete
   if (typeof window !== 'undefined' && loading) return null;
-
-  if (session) return null;
 
   return (
     <div className={style.root}>
@@ -115,9 +134,11 @@ export default function Index() {
             </Paper>
           </Grid>
           <Grid item className={style.timeline}>
-            {posts.map(post => (
-              <PostComponent post={post} open={true} disable key={post.id} reply={reply} loadComments={loadComments} />
-            ))}
+            <CommentProvider>
+              {posts.map(post => (
+                <PostComponent post={post} open={true} disable key={post.id} />
+              ))}
+            </CommentProvider>
           </Grid>
         </Grid>
         <Grid item>
@@ -126,6 +147,8 @@ export default function Index() {
           </div>
         </Grid>
       </Grid>
+
+      <AlertComponent />
     </div>
   );
 }

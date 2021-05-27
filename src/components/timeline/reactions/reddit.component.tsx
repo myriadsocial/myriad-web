@@ -11,7 +11,7 @@ import { SocialMetric } from 'src/interfaces/post';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      marginRight: theme.spacing(2),
+      marginRight: theme.spacing(0),
       '& > *': {
         margin: 0,
         padding: 0

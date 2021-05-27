@@ -1,5 +1,5 @@
 // PROFILE PAGE
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { GetServerSideProps } from 'next';
 import { Session } from 'next-auth';
@@ -9,9 +9,8 @@ import Layout from '../src/components/Layout/Layout.container';
 
 import ProfileTimeline from 'src/components/profile/profile.component';
 import { useProfileHook } from 'src/components/profile/use-profile.hook';
+import { useUser } from 'src/components/user/user.context';
 import { healthcheck } from 'src/lib/api/healthcheck';
-
-// import { getUserProfile } from 'src/lib/api/profile';
 
 interface Params {
   id: string;
@@ -23,12 +22,18 @@ type Props = {
 };
 
 export default function Profile({ session, params }: Props) {
-  const { profile, loading } = useProfileHook(params.id);
+  const { state: userState } = useUser();
+  const { profile, loading, getProfile } = useProfileHook(params.id);
 
-  if (!session) return null;
+  useEffect(() => {
+    getProfile();
+  }, [params]);
+
+  if (!session || !userState.user) return null;
+
   return (
     <Layout session={session}>
-      <ProfileTimeline user={session.user} profile={profile} loading={loading} />
+      <ProfileTimeline user={userState.user} profile={profile} loading={loading} />
     </Layout>
   );
 }
@@ -48,13 +53,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
     res.writeHead(302, { location: `${process.env.NEXTAUTH_URL}/maintenance` });
     res.end();
   }
-
-  // const exist = await getUserProfile(params?.id);
-
-  // if (!exist || exist === null) {
-  //   res.writeHead(301, { location: `${process.env.NEXTAUTH_URL}` });
-  //   res.end();
-  // }
 
   return {
     props: {

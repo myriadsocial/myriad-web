@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useImperativeHandle } from 'react';
 
 import { useSession } from 'next-auth/client';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import MuiTableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import RefreshIcon from '@material-ui/icons/Refresh';
+import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 
 import { useBalance } from '../wallet/use-balance.hooks';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      width: '100%',
       backgroundColor: '#424242',
       marginBottom: theme.spacing(2),
       color: '#E0E0E0'
@@ -70,7 +70,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const BalanceComponent = React.memo(function Wallet() {
+const TableCell = withStyles({
+  root: {
+    borderBottom: 'none'
+  }
+})(MuiTableCell);
+
+interface BalanceProps {
+  forwardedRef: React.ForwardedRef<any>;
+}
+
+const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
   const style = useStyles();
 
   const [session] = useSession();
@@ -81,32 +91,47 @@ export const BalanceComponent = React.memo(function Wallet() {
     loadInitBalance();
   }, []);
 
+  useImperativeHandle(forwardedRef, () => ({
+    triggerRefresh: () => {
+      setIsHidden(false);
+      loadInitBalance();
+    }
+  }));
+
   const [isHidden, setIsHidden] = useState(true);
   const handleIsHidden = () => {
     setIsHidden(!isHidden);
   };
 
-  const handleClick = () => {
-    loadInitBalance();
-  };
+  function createData(currency: string, balance: number) {
+    return { currency, balance };
+  }
 
-  return (
-    <div className={style.root}>
-      <Grid container direction="column" justify="center" alignItems="center">
-        <Grid item>
-          <Typography className={style.title} variant="h5">
-            Total Balance
-          </Typography>
-        </Grid>
-        <Grid item>
-          <List>
-            <ListItem button className={style.gutters}>
-              <ListItemIcon className={style.icon}>
-                <RefreshIcon onClick={handleClick} />
-              </ListItemIcon>
-              <Divider orientation="vertical" flexItem />
-              <div className={style.container}>
-                <ListItemText>
+  const rows = [createData('MYRIA', freeBalance), createData('ACA', 100)];
+
+  const CurrencyTable = () => {
+    return (
+      <TableContainer>
+        <Table aria-label="balance-table">
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <Typography className={style.balanceText}>Currency</Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Typography className={style.balanceText}>Balance</Typography>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map(row => (
+              <TableRow key={row.currency}>
+                <TableCell component="th" scope="row">
+                  <Typography className={style.balanceText} onClick={handleIsHidden}>
+                    {row.currency}
+                  </Typography>
+                </TableCell>
+                <TableCell align="right">
                   {isHidden ? (
                     <Typography className={style.showText} onClick={handleIsHidden}>
                       Show balance
@@ -119,15 +144,23 @@ export const BalanceComponent = React.memo(function Wallet() {
                     </Typography>
                   ) : (
                     <Typography className={style.balanceText} onClick={handleIsHidden}>
-                      {freeBalance} <span className={style.subtitle}>Myria</span>
+                      {row.balance}
                     </Typography>
                   )}
-                </ListItemText>
-              </div>
-            </ListItem>
-          </List>
-        </Grid>
-      </Grid>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  };
+
+  return (
+    <div ref={forwardedRef} className={style.root}>
+      <CurrencyTable />
     </div>
   );
-});
+};
+
+export default BalanceComponent;

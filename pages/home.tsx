@@ -7,11 +7,15 @@ import { useRouter } from 'next/router';
 import Layout from '../src/components/Layout/Layout.container';
 import Timeline from '../src/components/timeline/timeline.component';
 
+import { useUser } from 'src/components/user/user.context';
 import { healthcheck } from 'src/lib/api/healthcheck';
 
 export default function Home() {
   const [session, loading] = useSession();
   const router = useRouter();
+  const {
+    state: { user }
+  } = useUser();
 
   useEffect(() => {
     if (!session && !loading) {
@@ -24,11 +28,7 @@ export default function Home() {
 
   if (!session?.user) return null;
 
-  return (
-    <Layout session={session}>
-      <Timeline user={session.user} />
-    </Layout>
-  );
+  return <Layout session={session}>{user && <Timeline user={user} />}</Layout>;
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {

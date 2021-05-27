@@ -3,16 +3,17 @@ import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react'
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
+//import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { styled } from '@material-ui/core/styles';
 
 import DialogTitle from '../common/DialogTitle.component';
-import Divider from '../common/divider.component';
-import { BalanceComponent } from '../wallet/balance.component';
+//import Divider from '../common/divider.component';
+//import { BalanceComponent } from '../wallet/balance.component';
 import { GetMyriaTutorial } from './GetMyriaTutorial.component';
-import { TransactionComponent } from './transaction.component';
+
+//import { TransactionComponent } from './transaction.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -74,11 +75,13 @@ export const TippingJarComponent = forwardRef((_, ref) => {
           </Typography>
         </StyledDialogTitle>
         <DialogActions>{TippingJarActions}</DialogActions>
-        <DialogContent dividers>
-          <BalanceComponent />
-          <Divider />
-          <TransactionComponent />
-        </DialogContent>
+        {
+          //<DialogContent dividers>
+          //<BalanceComponent />
+          //<Divider />
+          //<TransactionComponent />
+          //</DialogContent>
+        }
       </Dialog>
 
       <GetMyriaTutorial ref={myriaTutorialRef} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { useSession } from 'next-auth/client';
 
@@ -8,16 +8,26 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 
 import { useBalance } from '../../wallet/use-balance.hooks';
+import { useComments } from './comment.context';
 import { useStyles } from './comment.style';
+import ReplyCommentComponent from './reply.component';
+import { useCommentHook } from './use-comment.hook';
 
 import DateFormat from 'src/components/common/DateFormat';
 import SendTipModal from 'src/components/common/SendTipModal';
-import { Comment } from 'src/interfaces/post';
+import ShowIf from 'src/components/common/show-if.component';
+import { TabPanel } from 'src/components/common/tab-panel.component';
+import { useUser } from 'src/components/user/user.context';
+import { Post, Comment } from 'src/interfaces/post';
 
 const StyledBadge = withStyles((theme: Theme) =>
   createStyles({
@@ -31,35 +41,53 @@ const StyledBadge = withStyles((theme: Theme) =>
 )(Badge);
 
 type Props = {
-  data: Comment;
+  post: Post;
+  disableReply: boolean;
+  hide: () => void;
 };
 
-export default function CommentComponent({ data }: Props) {
-  console.log('the data is: ', data);
+export default function CommentComponent({ post, disableReply, hide }: Props) {
   const style = useStyles();
+  const theme = useTheme();
+
+  const { state } = useComments();
+  const { state: userState } = useUser();
+
+  const { loadInitComment, reply } = useCommentHook(post);
 
   const [session] = useSession();
   const userId = session?.user.id as string;
-  useEffect(() => {
-    if (userId === data.userId) {
-      setIsHidden(true);
-    }
-  }, []);
-
   const { freeBalance } = useBalance(userId);
-
   const childRef = useRef<any>();
+  const [selectedTab, setSelectedTab] = React.useState(0);
 
-  const [isHidden, setIsHidden] = useState(false);
+  useEffect(() => {
+    if (post.publicMetric.comment > 0) {
+      loadInitComment();
+    }
+  }, [post]);
 
   const tipPostUser = () => {
     childRef.current.triggerSendTipModal();
   };
 
-  console.log('the receiverId is: ', data?.user?.id as string);
+  const replyPost = (comment: string) => {
+    if (!userState.user) return;
 
-  const RenderAction = () => {
-    if (!isHidden)
+    reply(userState.user, {
+      text: comment,
+      postId: post.id,
+      userId,
+      createdAt: new Date()
+    });
+  };
+
+  const handleTabChange = (event: React.ChangeEvent<{}>, tabIndex: number) => {
+    setSelectedTab(tabIndex);
+  };
+
+  const renderAction = (comment: Comment) => {
+    if (userId != comment.userId)
       return (
         <Button className={style.action} onClick={tipPostUser} aria-label="tip-post-user" color="primary" variant="contained" size="small">
           Send Tip
@@ -69,30 +97,55 @@ export default function CommentComponent({ data }: Props) {
   };
 
   return (
-    <>
-      <Card className={style.root}>
-        <CardHeader
-          avatar={
-            <IconButton aria-label="cart">
-              <StyledBadge color="secondary">
-                <Avatar aria-label={data.user?.name} src={data.user?.profilePictureURL}>
-                  {data.user?.name}
-                </Avatar>
-              </StyledBadge>
-            </IconButton>
-          }
-          action={RenderAction()}
-          title={data.user?.name}
-          subheader={<DateFormat date={data.createdAt} />}
-        />
-        <CardContent>
-          <Typography variant="body1" color="textSecondary" component="p">
-            {data.text}
-          </Typography>
-        </CardContent>
-      </Card>
+    <div>
+      <Tabs value={selectedTab} onChange={handleTabChange} indicatorColor="primary" textColor="primary" variant="fullWidth">
+        <Tab label={<Typography style={{ color: '#000000' }}>General Comments ({state.comments.length})</Typography>} />
+        <Tab disabled label={<Typography>Debate Section (0) </Typography>} />
+      </Tabs>
+      <TabPanel value={selectedTab} index={0} dir={theme.direction}>
+        <Grid container spacing={2} direction="column" className={style.comment}>
+          {state.comments.map((comment, i) => {
+            return (
+              <Grid item key={i}>
+                <Card className={style.root}>
+                  <CardHeader
+                    avatar={
+                      <IconButton aria-label="cart">
+                        <StyledBadge color="secondary">
+                          <Avatar aria-label={comment.user?.name} src={comment.user?.profilePictureURL}>
+                            {comment.user?.name}
+                          </Avatar>
+                        </StyledBadge>
+                      </IconButton>
+                    }
+                    action={renderAction(comment)}
+                    title={comment.user?.name}
+                    subheader={<DateFormat date={comment.createdAt} />}
+                  />
+                  <CardContent>
+                    <Typography variant="body1" color="textSecondary" component="p">
+                      {comment.text}
+                    </Typography>
+                  </CardContent>
+                  <SendTipModal
+                    userAddress={userId}
+                    ref={childRef}
+                    receiverId={comment?.user?.id as string}
+                    freeBalance={freeBalance as number}
+                  />
+                </Card>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </TabPanel>
+      <TabPanel value={selectedTab} index={1} dir={theme.direction}>
+        Debate Content
+      </TabPanel>
 
-      <SendTipModal userAddress={userId} ref={childRef} receiverId={data?.user?.id as string} freeBalance={freeBalance as number} />
-    </>
+      <ShowIf condition={!disableReply}>
+        <ReplyCommentComponent close={hide} onSubmit={replyPost} />
+      </ShowIf>
+    </div>
   );
 }

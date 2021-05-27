@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: theme.spacing(0.5),
       paddingBottom: theme.spacing(0.5),
       marginBottom: theme.spacing(2),
+      borderRadius: 2,
       cursor: 'pointer'
     },
     post: {
@@ -113,7 +114,7 @@ export default function ImportPostComponent({ onSubmit, experiences }: Props) {
     <div className={styles.root}>
       <InputLabel className={styles.label} onClick={toggleImportPost}>
         <Typography gutterBottom variant="h5" component="h2">
-          Import A Post and Send Tips!
+          Import a post
         </Typography>
       </InputLabel>
 

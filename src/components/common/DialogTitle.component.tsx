@@ -10,14 +10,31 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       margin: 0,
-      padding: theme.spacing(3)
+      padding: theme.spacing(2.5, 0),
+      borderRadius: theme.spacing(1, 1, 0, 0),
+      textAlign: 'center',
+      boxShadow: '0px 2px 1px -1px rgb(0 0 0 / 20%),0px 1px 1px 0px rgb(0 0 0 / 14%)',
+      '&: .MuiTypography-root': {
+        fontWeight: 500,
+        lineHeight: '21px'
+      }
     },
     closeButton: {
       position: 'absolute',
-      right: theme.spacing(1),
-      top: theme.spacing(2),
+      right: theme.spacing(3),
+      top: theme.spacing(2.5),
       color: theme.palette.common.white,
-      backgroundColor: '#E849BD'
+      backgroundColor: '#E849BD',
+
+      '& .MuiIconButton-label': {
+        width: 16,
+        height: 16,
+
+        '& .MuiSvgIcon-root': {
+          width: 16,
+          height: 16
+        }
+      }
     }
   });
 
@@ -31,7 +48,7 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
   const { children, classes, onClose, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h5">{children}</Typography>
+      <Typography variant="h4">{children}</Typography>
       {onClose ? (
         <IconButton color="secondary" aria-label="close" size="small" className={classes.closeButton} onClick={onClose}>
           <CloseIcon />
