@@ -3,6 +3,7 @@ import { useCookies } from 'react-cookie';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { signOut } from 'next-auth/client';
+import Link from 'next/link';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -15,6 +16,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
@@ -122,6 +124,16 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
 
   return (
     <div className="header" style={{ marginBottom: 10, position: 'relative' }}>
+      <div>
+        <Typography variant="h4" style={{ marginBottom: 8, fontWeight: 500 }}>
+          <Link href="/home">
+            <a style={{ display: 'flex', alignItems: 'center' }}>
+              <ArrowBackIcon />
+              Home
+            </a>
+          </Link>
+        </Typography>
+      </div>
       <CardMedia
         className={style.media}
         image="https://images.pexels.com/photos/3394939/pexels-photo-3394939.jpeg"
@@ -172,11 +184,9 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
           </ShowIf>
         </div>
       </div>
-
       <div className={style.about}>
         <p>{profile?.bio || profileInfo}</p>
       </div>
-
       <div className={style.socialMediaList}>
         <div style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
           <div className={style.logo}></div>
@@ -197,7 +207,6 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
           </a>
         </div>
       </div>
-
       {/* MODAL */}
       <Dialog open={isEditProfile} aria-labelledby="no-extension-installed" maxWidth="sm">
         <DialogTitle id="name" onClose={closeEditProfile}>
