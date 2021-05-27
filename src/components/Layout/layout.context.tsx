@@ -6,7 +6,8 @@ import { SidebarTab } from 'src/interfaces/sidebar';
 
 export enum LayoutSettingActionType {
   TOGGLE_FOCUS = 'TOGGLE_FOCUS',
-  CHANGE_SETTING = 'CHANGE_SETTING'
+  CHANGE_SETTING = 'CHANGE_SETTING',
+  CHANGE_SELECTED_SIDEBAR = 'CHANGE_SELECTED_SIDEBAR'
 }
 
 interface ToggleFocus {
@@ -19,7 +20,12 @@ interface ChageSetting {
   value: boolean;
 }
 
-type Action = ToggleFocus | ChageSetting;
+interface ChageSelectedSidebar {
+  type: LayoutSettingActionType.CHANGE_SELECTED_SIDEBAR;
+  value: SidebarTab;
+}
+
+type Action = ToggleFocus | ChageSetting | ChageSelectedSidebar;
 type Dispatch = (action: Action) => void;
 type LayoutSettingProviderProps = { children: React.ReactNode };
 
@@ -35,7 +41,7 @@ const initalState: State = {
   [SocialsEnum.FACEBOOK]: true,
   [SocialsEnum.REDDIT]: true,
   [SocialsEnum.TWITTER]: true,
-  selectedSidebarMenu: SidebarTab.TRENDING
+  selectedSidebarMenu: SidebarTab.NOTIFICATION
 };
 
 const LayoutSettingContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
@@ -54,6 +60,13 @@ function layoutSettingReducer(state: State, action: Action) {
         focus: !state.focus
       };
     }
+    case LayoutSettingActionType.CHANGE_SELECTED_SIDEBAR: {
+      return {
+        ...state,
+        selectedSidebarMenu: action.value
+      };
+    }
+
     default: {
       throw new Error(`Unhandled action type`);
     }

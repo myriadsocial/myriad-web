@@ -9,12 +9,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { fade, makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
+import ForumIcon from '@material-ui/icons/Forum';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import PeopleIcon from '@material-ui/icons/People';
 import SearchIcon from '@material-ui/icons/Search';
+
+import { useLayout } from 'src/components/Layout/use-layout.hook';
+import { SidebarTab } from 'src/interfaces/sidebar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -84,6 +87,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function HeaderBar() {
   const classes = useStyles();
+  const { changeSelectedSidebar } = useLayout();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -135,7 +139,7 @@ export default function HeaderBar() {
       <MenuItem>
         <IconButton aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="secondary">
-            <MailIcon />
+            <PeopleIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
@@ -150,7 +154,7 @@ export default function HeaderBar() {
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton aria-label="account of current user" aria-controls="primary-search-account-menu" aria-haspopup="true" color="inherit">
-          <AccountCircle />
+          <ForumIcon />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -182,24 +186,33 @@ export default function HeaderBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
+            <IconButton
+              aria-label="friends"
+              color="inherit"
+              style={{ margin: '0 32px' }}
+              onClick={() => changeSelectedSidebar(SidebarTab.FRIENDS)}>
               <Badge badgeContent={4} color="secondary">
-                <MailIcon />
+                <PeopleIcon />
               </Badge>
             </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
+            <IconButton
+              aria-label="notifications"
+              color="inherit"
+              style={{ margin: '0 32px' }}
+              onClick={() => changeSelectedSidebar(SidebarTab.NOTIFICATION)}>
               <Badge badgeContent={17} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
             <IconButton
               edge="end"
-              aria-label="account of current user"
+              style={{ margin: '0 32px' }}
+              aria-label="conversation"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              onClick={() => changeSelectedSidebar(SidebarTab.TRENDING)}
               color="inherit">
-              <AccountCircle />
+              <ForumIcon />
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>
