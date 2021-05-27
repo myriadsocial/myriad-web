@@ -48,11 +48,13 @@ const LayoutComponent = ({ children, user }: Props) => {
               <UserDetail changeSetting={changeSetting} settings={setting} />
             </Grid>
             <Grid item className={style.wallet}>
-              <ShowIf condition={!setting.focus && !user.anonymous}>
-                <NoSsr>
-                  <Wallet />
-                </NoSsr>
-              </ShowIf>
+              <FriendsProvider>
+                <ShowIf condition={!setting.focus && !user.anonymous}>
+                  <NoSsr>
+                    <Wallet />
+                  </NoSsr>
+                </ShowIf>
+              </FriendsProvider>
             </Grid>
           </Grid>
         </Grid>
