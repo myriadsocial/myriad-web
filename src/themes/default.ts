@@ -54,6 +54,13 @@ const theme = createMuiTheme({
         }
       }
     },
+
+    MuiDialog: {
+      scrollPaper: {
+        alignItems: 'flex-start'
+      }
+    },
+
     MuiAvatar: {
       root: {
         width: 32,

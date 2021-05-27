@@ -1,25 +1,24 @@
 import { useState, useEffect } from 'react';
 
-import { User } from 'next-auth';
-
 import { SocialsEnum } from '../../interfaces';
 import { useLayoutSetting } from '../Layout/layout.context';
 import { useExperience } from '../experience/experience.context';
 import { useTimeline, TimelineActionType } from './timeline.context';
 
-import { WithAdditionalParams } from 'next-auth/_utils';
-import { Comment, Post, PostSortMethod } from 'src/interfaces/post';
+import { useAlertHook } from 'src/components/alert/use-alert.hook';
+import { Post, PostSortMethod } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 import * as LocalAPI from 'src/lib/api/local';
 import * as PostAPI from 'src/lib/api/post';
 
-export const usePost = () => {
+export const usePost = (user: User) => {
   const { state: experienceState } = useExperience();
   const { state: timelineState, dispatch } = useTimeline();
   const { state: settingState } = useLayoutSetting();
+  const { showAlert } = useAlertHook();
 
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [importedPost, setImportedPost] = useState<Post | null>(null);
   const [error, setError] = useState(null);
 
   // change people and tag filter each selected experience changed or focus setting changed
@@ -60,7 +59,28 @@ export const usePost = () => {
     settingState.reddit
   ]);
 
-  const loadPost = async (user: WithAdditionalParams<User>) => {
+  const loadUserPost = async (page: number = 1, sort?: PostSortMethod) => {
+    setLoading(true);
+
+    try {
+      const data = await PostAPI.getFriendPost(user.id, page, sort);
+
+      if (data.length < 10) {
+        setHasMore(false);
+      }
+
+      dispatch({
+        type: TimelineActionType.LOAD_POST,
+        posts: data.map((item: Post) => ({ ...item, comments: item.comments || [] }))
+      });
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadPost = async () => {
     setLoading(true);
 
     try {
@@ -85,9 +105,20 @@ export const usePost = () => {
     dispatch({
       type: TimelineActionType.LOAD_MORE_POST
     });
+
+    await loadUserPost(timelineState.page + 1);
   };
 
-  const addPost = async (text: string, tags: string[], files: File[], user: WithAdditionalParams<User>) => {
+  const sortBy = async (sort: PostSortMethod) => {
+    dispatch({
+      type: TimelineActionType.SORT_POST,
+      sort
+    });
+
+    await loadUserPost(1, sort);
+  };
+
+  const addPost = async (text: string, tags: string[], files: File[]) => {
     const images: string[] = [];
 
     if (files.length) {
@@ -101,9 +132,6 @@ export const usePost = () => {
     }
 
     const hasMedia = files.length > 0;
-    const username = user.name as string;
-    const accountId = user.address as string;
-    const userProfilePicture = user.profilePictureURL as string;
 
     const data = await PostAPI.createPost({
       text,
@@ -112,11 +140,11 @@ export const usePost = () => {
       platform: 'myriad',
       assets: hasMedia ? images : [],
       platformUser: {
-        username,
-        platform_account_id: accountId,
-        profilePictureURL: userProfilePicture
+        username: user.name,
+        platform_account_id: user.id,
+        profilePictureURL: user.profilePictureURL
       },
-      walletAddress: accountId
+      walletAddress: user.id
     });
 
     dispatch({
@@ -138,26 +166,6 @@ export const usePost = () => {
     });
   };
 
-  const reply = async (postId: string, user: User, comment: Comment) => {
-    const data = await PostAPI.reply(postId, comment);
-
-    dispatch({
-      type: TimelineActionType.ADD_COMMENT,
-      postId,
-      comment: {
-        ...data,
-        user
-      }
-    });
-  };
-
-  const sortBy = (sort: PostSortMethod) => {
-    dispatch({
-      type: TimelineActionType.SORT_POST,
-      sort
-    });
-  };
-
   const importPost = async (url: string, importer?: string) => {
     setLoading(true);
 
@@ -167,8 +175,6 @@ export const usePost = () => {
         importer
       });
 
-      setImportedPost(data);
-
       dispatch({
         type: TimelineActionType.CREATE_POST,
         post: {
@@ -176,6 +182,43 @@ export const usePost = () => {
           comments: []
         }
       });
+
+      showAlert({
+        title: 'Success!',
+        message: 'Post successfully imported',
+        severity: 'success'
+      });
+    } catch (error) {
+      console.log('error from use post hooks: ', error);
+      setError(error);
+      showAlert({
+        title: 'Error!',
+        message: 'Post already imported',
+        severity: 'error'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const likePost = async (postId: string) => {
+    setLoading(true);
+
+    try {
+      await PostAPI.like(user.id, postId);
+    } catch (error) {
+      console.log('error likePost: ', error);
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const dislikePost = async (postId: string) => {
+    setLoading(true);
+
+    try {
+      await PostAPI.dislike(user.id, postId);
     } catch (error) {
       console.log('error from use post hooks: ', error);
       setError(error);
@@ -184,28 +227,19 @@ export const usePost = () => {
     }
   };
 
-  const resetError = () => {
-    setError(null);
-  };
-
-  const resetImportedPost = () => {
-    setImportedPost(null);
-  };
-
   return {
     error,
     loading,
     hasMore,
     sort: timelineState.sort,
+    loadUserPost,
     loadPost,
     loadMorePost,
     loadComments,
     addPost,
-    reply,
     sortBy,
     importPost,
-    importedPost,
-    resetImportedPost,
-    resetError
+    likePost,
+    dislikePost
   };
 };

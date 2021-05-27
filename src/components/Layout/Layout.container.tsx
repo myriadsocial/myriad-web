@@ -3,15 +3,18 @@ import React, { ReactNode } from 'react';
 import { Session } from 'next-auth';
 import Head from 'next/head';
 
+import NoSsr from '@material-ui/core/NoSsr';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
+import AlertComponent from '../alert/Alert.component';
 import { ConverstionProvider } from '../conversation/conversation.context';
 import { ExperienceProvider } from '../experience/experience.context';
 import { TimelineProvider } from '../timeline/timeline.context';
 import { TransactionProvider } from '../tippingJar/transaction.context';
-import { UserProvider } from '../user/user.context';
 import LayoutComponent from './Layout.component';
 import { LayoutSettingProvider } from './layout.context';
+
+import TourComponent from 'src/tour/Tour.component';
 
 type Props = {
   session: Session | null;
@@ -38,20 +41,22 @@ const Layout = ({ children, session }: Props) => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      <NoSsr>
+        <TourComponent user={session.user} />
+      </NoSsr>
+      <LayoutSettingProvider>
+        <TransactionProvider>
+          <ExperienceProvider>
+            <ConverstionProvider>
+              <TimelineProvider>
+                <LayoutComponent user={session.user}>{children}</LayoutComponent>
+              </TimelineProvider>
+            </ConverstionProvider>
+          </ExperienceProvider>
+        </TransactionProvider>
+      </LayoutSettingProvider>
 
-      <UserProvider>
-        <LayoutSettingProvider>
-          <TransactionProvider>
-            <ExperienceProvider>
-              <ConverstionProvider>
-                <TimelineProvider>
-                  <LayoutComponent user={session.user}>{children}</LayoutComponent>
-                </TimelineProvider>
-              </ConverstionProvider>
-            </ExperienceProvider>
-          </TransactionProvider>
-        </LayoutSettingProvider>
-      </UserProvider>
+      <AlertComponent />
     </div>
   );
 };
