@@ -3,13 +3,10 @@ import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import MoodIcon from '@material-ui/icons/Mood';
@@ -82,7 +79,6 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'flex-start'
     },
     iconButton: {
-      color: '#FFF',
       margin: theme.spacing(1)
     },
     typography: {
@@ -133,22 +129,16 @@ export default function TransactionListComponent({ transactions, userId }: Props
       {allTransactions.map(txHistory => (
         <ListItem key={txHistory?.id}>
           <Card>
-            <CardActionArea>
-              <CardContent>
-                <ListItemAvatar className={style.avatar}>
-                  <Avatar
-                    aria-label="avatar"
-                    src={txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL}
-                  />
-                </ListItemAvatar>
-                <ListItemText
-                  className={style.textSecondary}
-                  secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-                  primary={RenderPrimaryText(txHistory)}
-                  secondary={RenderSecondaryText(txHistory)}
+            <CardHeader
+              avatar={
+                <Avatar
+                  aria-label="avatar"
+                  src={txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL}
                 />
-              </CardContent>
-            </CardActionArea>
+              }
+              title={RenderPrimaryText(txHistory)}
+              subheader={RenderSecondaryText(txHistory)}
+            />
             {
               //<ListItemSecondaryAction>
               //<div className={style.badge}>
@@ -172,12 +162,14 @@ export default function TransactionListComponent({ transactions, userId }: Props
               //</ListItemSecondaryAction>
             }
             <CardActions>
-              <Button size="small" variant="contained" color="default" className={style.iconButton} startIcon={<MoodIcon />}>
-                Send Emoji
-              </Button>
-              <Button size="small" variant="contained" color="primary" className={style.iconButton} startIcon={<PersonAddIcon />}>
-                Add Friend
-              </Button>
+              <div style={{ width: '100%', textAlign: 'center' }}>
+                <Button size="small" variant="contained" color="default" className={style.iconButton} startIcon={<MoodIcon />}>
+                  Send Emoji
+                </Button>
+                <Button size="small" variant="contained" color="primary" className={style.iconButton} startIcon={<PersonAddIcon />}>
+                  Add Friend
+                </Button>
+              </div>
             </CardActions>
           </Card>
         </ListItem>
