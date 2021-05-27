@@ -56,7 +56,7 @@ const LayoutComponent = ({ children, user }: Props) => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item md={5} className={style.content}>
+        <Grid item sm={12} md={8} lg={5} className={style.content}>
           {children}
         </Grid>
 

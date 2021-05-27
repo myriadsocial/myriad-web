@@ -48,6 +48,11 @@ export interface Post {
   createdAt: Date;
   walletAddress?: string;
   comments: Comment[];
+  publicMetric: {
+    liked: number;
+    disliked: number;
+    comment: number;
+  };
 }
 
 export interface Comment {
