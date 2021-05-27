@@ -1,5 +1,7 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 
+//import dynamic from 'next/dynamic';
+
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -13,10 +15,11 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 import { sendTip } from '../../helpers/polkadotApi';
 import DialogTitle from '../common/DialogTitle.component';
 import { useStyles } from '../login/login.style';
-import { BalanceComponent } from '../wallet/balance.component';
 import { useBalance } from '../wallet/use-balance.hooks';
 
 import * as WalletAddressAPI from 'src/lib/api/wallet';
+
+//const BalanceComponent = dynamic(() => import('../wallet/balance.component'));
 
 interface InputState {
   amount: string;
@@ -207,9 +210,11 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId 
           {' '}
           Send Tip
         </DialogTitle>
-        <DialogContent dividers>
-          <BalanceComponent />
-        </DialogContent>
+        {
+        //<DialogContent dividers>
+          //<BalanceComponent />
+        //</DialogContent>
+        }
         <DialogContent dividers>
           <form noValidate autoComplete="off">
             <TextField

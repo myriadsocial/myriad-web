@@ -1,14 +1,17 @@
-import React, { createRef } from 'react';
+import React, { createRef, useEffect, forwardRef } from 'react';
 
+import dynamic from 'next/dynamic';
+
+import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-import Divider from '../common/divider.component';
 import ExpandablePanel from '../common/panel-expandable.component';
-import { BalanceComponent } from './balance.component';
-import { TransactionComponent } from './transaction.component';
+
+const BalanceComponent = dynamic(() => import('./balance.component'));
+const TransactionComponent = dynamic(() => import('./transaction.component'));
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,12 +32,21 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const ForwardedBalanceComponent = forwardRef((props, ref) => <BalanceComponent {...props} forwardedRef={ref} />);
+
+const ForwardedTransactionComponent = forwardRef((props, ref) => <TransactionComponent {...props} forwardedRef={ref} />);
+
 export const Wallet = React.memo(function Wallet() {
   const style = useStyles();
 
   const transactionRef = createRef<any>();
 
   const balanceRef = createRef<any>();
+
+  useEffect(() => {
+    //console.log('transactionRef: ', transactionRef.current);
+    //console.log('balanceRef: ', balanceRef.current);
+  }, [transactionRef, balanceRef]);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -68,9 +80,9 @@ export const Wallet = React.memo(function Wallet() {
   return (
     <>
       <ExpandablePanel title="My Wallet" actions={<WalletAction />}>
-        <BalanceComponent ref={balanceRef} />
-        <Divider />
-        <TransactionComponent ref={transactionRef} />
+        <ForwardedBalanceComponent ref={balanceRef} />
+        <Divider variant="middle" />
+        <ForwardedTransactionComponent ref={transactionRef} />
       </ExpandablePanel>
     </>
   );

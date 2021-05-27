@@ -1,11 +1,11 @@
 import React, { createRef, useCallback, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import Divider from '@material-ui/core/Divider';
 import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
+import DividerWithText from '../common/divider-w-text';
 import { LoadingPage } from '../common/loading.component';
 import { useExperience } from '../experience/use-experience.hooks';
 import ImportPostComponent from './ImportPost.component';
@@ -88,7 +88,7 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
         <ShowIf condition={!user.anonymous}>
           <CreatePostComponent onSubmit={submitPost} experiences={experiences} user={user} />
 
-          <Divider component="span" style={{ margin: 8 }} />
+          <DividerWithText>or</DividerWithText>
 
           <ImportPostComponent onSubmit={submitImportPost} experiences={experiences} />
         </ShowIf>
