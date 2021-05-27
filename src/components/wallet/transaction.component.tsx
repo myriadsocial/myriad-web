@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
+import React, { useEffect, useImperativeHandle } from 'react';
 
 import { useSession } from 'next-auth/client';
 
@@ -59,7 +59,6 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 8
     },
     iconButton: {
-      color: '#FFF',
       margin: theme.spacing(1)
     }
   })
@@ -69,7 +68,11 @@ type StyledComponentProps = {
   className?: string;
 };
 
-export const TransactionComponent = forwardRef((_, ref) => {
+interface TransactionProps {
+  forwardedRef: React.ForwardedRef<any>;
+}
+
+const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef }) => {
   const styles = useStyles();
 
   const [session] = useSession();
@@ -80,7 +83,7 @@ export const TransactionComponent = forwardRef((_, ref) => {
     loadInitTransaction();
   }, []);
 
-  useImperativeHandle(ref, () => ({
+  useImperativeHandle(forwardedRef, () => ({
     triggerRefresh: () => {
       loadInitTransaction();
     }
@@ -138,7 +141,7 @@ export const TransactionComponent = forwardRef((_, ref) => {
   };
 
   return (
-    <>
+    <div ref={forwardedRef}>
       <TippingJarHeader />
       {loading ? (
         <LoadingComponent />
@@ -149,6 +152,8 @@ export const TransactionComponent = forwardRef((_, ref) => {
       ) : (
         <TransactionListComponent transactions={transactions} userId={userAddress} />
       )}
-    </>
+    </div>
   );
-});
+};
+
+export default TransactionComponent;
