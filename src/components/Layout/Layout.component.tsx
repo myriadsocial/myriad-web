@@ -6,9 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import NoSsr from '@material-ui/core/NoSsr';
 
 import ShowIf from '../common/show-if.component';
-import { ExperienceComponent } from '../experience/experience.component';
-import FriendsComponent from '../friends/friend-list.component';
-import FriendRequestsComponent from '../friends/friend-requests.component';
+//import { ExperienceComponent } from '../experience/experience.component';
+//import FriendsComponent from '../friends/friend-list.component';
+//import FriendRequestsComponent from '../friends/friend-requests.component';
 import { FriendsProvider } from '../friends/friends.context';
 import SidebarComponent from '../sidebar/sidebar.component';
 import UserDetail from '../user/user.component';
@@ -27,7 +27,7 @@ type Props = {
 
 const LayoutComponent = ({ children, user }: Props) => {
   const style = useStyles();
-  const userId = user.address as string;
+  //const userId = user.address as string;
 
   const { setting, changeSetting } = useLayout();
   const { getUserDetail } = useUserHook(user);

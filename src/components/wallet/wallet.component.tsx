@@ -7,7 +7,6 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 import Divider from '../common/divider.component';
 import ExpandablePanel from '../common/panel-expandable.component';
-import { TippingJarComponent } from '../tippingJar/TippingJar.component';
 import { BalanceComponent } from './balance.component';
 import { TransactionComponent } from './transaction.component';
 
