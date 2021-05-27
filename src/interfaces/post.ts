@@ -30,7 +30,7 @@ export type SocialMetric = {
 };
 
 export interface Post {
-  id?: string;
+  id: string;
   tags: string[];
   platformUser?: {
     username: string;
