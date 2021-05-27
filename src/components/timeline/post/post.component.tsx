@@ -83,6 +83,9 @@ export default function PostComponent({ post, open = false, disable = false, pos
       width: 400
     };
   };
+  const likePost = () => {};
+
+  const dislikePost = () => {};
 
   const PostActionTipUser = () => {
     return (
@@ -149,7 +152,14 @@ export default function PostComponent({ post, open = false, disable = false, pos
         </ShowIf>
 
         <CardActions disableSpacing>
-          <PostActionComponent post={post} detail={detail} expandComment={handleExpandClick} commentExpanded={expanded} />
+          <PostActionComponent
+            post={post}
+            detail={detail}
+            expandComment={handleExpandClick}
+            commentExpanded={expanded}
+            likePost={likePost}
+            dislikePost={dislikePost}
+          />
         </CardActions>
 
         <ShowIf condition={expanded}>
