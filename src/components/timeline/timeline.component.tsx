@@ -1,8 +1,7 @@
 import React, { createRef, useCallback, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import { User } from 'next-auth';
-
+import Divider from '@material-ui/core/Divider';
 import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
@@ -10,51 +9,44 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { LoadingPage } from '../common/loading.component';
 import { useExperience } from '../experience/use-experience.hooks';
 import ImportPostComponent from './ImportPost.component';
-import FilterTimelineComponent from './filter.component';
+import { CommentProvider } from './comment/comment.context';
+import CreatePostComponent from './create-post/create-post.component';
+import FilterTimelineComponent from './filter/filter.component';
 import PostComponent from './post/post.component';
-//import SearchUserComponent from './search-user.component';
-import CreatePostComponent from './submit.component';
 import { useTimeline } from './timeline.context';
 import { useStyles } from './timeline.style';
 import { usePost } from './use-post.hook';
 
-//import { useMyriadUser } from './use-users.hooks';
-import { WithAdditionalParams } from 'next-auth/_utils';
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import ShowIf from 'src/components/common/show-if.component';
-import { Post, Comment } from 'src/interfaces/post';
+import { Post, PostSortMethod } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 
-//import { User as MyriadUser } from 'src/interfaces/user';
-
-type Props = {
-  user: WithAdditionalParams<User>;
+type TimelineProps = {
+  user: User;
 };
 
-const Timeline = ({ user }: Props) => {
+const Timeline: React.FC<TimelineProps> = ({ user }) => {
   const style = useStyles();
-  const userId = user.address as string;
 
   const { state } = useTimeline();
-  const { hasMore, loadUserPost, loadMorePost, reply, loadComments, sortBy, addPost, importPost } = usePost();
-
-  const { experiences } = useExperience(userId);
+  const { hasMore, loadUserPost, loadMorePost, sortBy, addPost, importPost } = usePost(user);
+  const { experiences } = useExperience(user.id);
   const scrollRoot = createRef<HTMLDivElement>();
 
   const isOwnPost = (post: Post) => {
-    if (post.walletAddress === userId) {
+    if (post.walletAddress === user.id) {
       return true;
     }
     return false;
   };
-
-  //const { users: options, search } = useMyriadUser();
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, true);
   }, []);
 
   useEffect(() => {
-    loadUserPost(user);
+    loadUserPost();
   }, []);
 
   const handleScroll = useCallback(() => {
@@ -70,30 +62,22 @@ const Timeline = ({ user }: Props) => {
   }, []);
 
   const nextPage = () => {
-    loadMorePost(user);
+    loadMorePost();
   };
 
-  const handleReply = (comment: Comment) => {
-    reply(comment.postId, user, comment);
+  const sortTimeline = (sort: PostSortMethod) => {
+    sortBy(sort);
   };
 
   const submitPost = (text: string, tags: string[], files: File[]) => {
-    addPost(text, tags, files, user);
+    addPost(text, tags, files);
   };
 
   const submitImportPost = (URL: string) => {
-    importPost(URL, userId);
+    importPost(URL);
   };
 
   console.log('TIMELINE COMPONENT LOAD');
-
-  //const searchUser = (text: string) => {
-  //search(text);
-  //};
-
-  //const onSearchUser = (users: MyriadUser) => {
-  ////console.log('the users are: ', users);
-  //};
 
   return (
     <div className={style.root}>
@@ -101,33 +85,37 @@ const Timeline = ({ user }: Props) => {
         {
           //<SearchUserComponent title="Search Myriad" data={options} search={searchUser} onSelected={onSearchUser} />
         }
-        <FilterTimelineComponent selected={state.sort} onChange={sortBy} />
-
         <ShowIf condition={!user.anonymous}>
-          <CreatePostComponent onSubmit={submitPost} experiences={experiences} />
+          <CreatePostComponent onSubmit={submitPost} experiences={experiences} user={user} />
+
+          <Divider component="span" style={{ margin: 8 }} />
 
           <ImportPostComponent onSubmit={submitImportPost} experiences={experiences} />
         </ShowIf>
 
-        <InfiniteScroll
-          scrollableTarget="scrollable-timeline"
-          className={style.child}
-          dataLength={state.posts.length + 100}
-          next={nextPage}
-          hasMore={hasMore}
-          loader={<LoadingPage />}>
-          {state.posts.map((post: Post, i: number) => (
-            <Grow key={i}>
-              <PostComponent post={post} open={false} reply={handleReply} loadComments={loadComments} postOwner={isOwnPost(post)} />
-            </Grow>
-          ))}
+        <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />
 
-          <ScrollTop>
-            <Fab color="secondary" size="small" aria-label="scroll back to top">
-              <KeyboardArrowUpIcon />
-            </Fab>
-          </ScrollTop>
-        </InfiniteScroll>
+        <CommentProvider>
+          <InfiniteScroll
+            scrollableTarget="scrollable-timeline"
+            className={style.child}
+            dataLength={state.posts.length + 100}
+            next={nextPage}
+            hasMore={hasMore}
+            loader={<LoadingPage />}>
+            {state.posts.map((post: Post, i: number) => (
+              <Grow key={i}>
+                <PostComponent post={post} open={false} postOwner={isOwnPost(post)} />
+              </Grow>
+            ))}
+
+            <ScrollTop>
+              <Fab color="secondary" size="small" aria-label="scroll back to top">
+                <KeyboardArrowUpIcon />
+              </Fab>
+            </ScrollTop>
+          </InfiniteScroll>
+        </CommentProvider>
       </div>
 
       <div id="fb-root" />

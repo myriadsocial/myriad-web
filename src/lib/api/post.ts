@@ -1,8 +1,6 @@
-import { User } from 'next-auth';
-
 import Axios from 'axios';
-import { WithAdditionalParams } from 'next-auth/_utils';
 import { Post, Comment, PostSortMethod, PostFilter, ImportPost } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 
 const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
@@ -10,12 +8,7 @@ const MyriadAPI = Axios.create({
 
 const LIMIT = 10;
 
-export const getPost = async (
-  user: WithAdditionalParams<User>,
-  page: number,
-  sort: PostSortMethod,
-  filters: PostFilter
-): Promise<Post[]> => {
+export const getPost = async (user: User, page: number, sort: PostSortMethod, filters: PostFilter): Promise<Post[]> => {
   let orderField = 'platformCreatedAt';
 
   switch (sort) {
@@ -93,71 +86,33 @@ export const getPost = async (
   return data;
 };
 
-export const getFriendPost = async (userId: string, page: number) => {
-  const { data } = await MyriadAPI.request<Post[]>({
-    url: `/users/${userId}/timeline`,
-    method: 'GET',
-    params: {
-      offset: Math.max(page - 1, 0) * LIMIT,
-      limit: LIMIT
-    }
-  });
-
-  return data;
-};
-
-export const getFriendPostByMetric = async (userId: string, page: number, sort?: string) => {
+export const getFriendPost = async (userId: string, page: number, sort?: PostSortMethod) => {
+  let path = `/users/${userId}/timeline`;
   let orderField = 'platformCreatedAt';
 
-  switch (sort) {
-    case 'comment':
-      orderField = 'orderField';
-      break;
-    case 'like':
-      orderField = 'liked';
-      break;
-    case 'trending':
-    default:
-      break;
+  if (sort) {
+    path = `/users/${userId}/timeline-metric`;
+
+    switch (sort) {
+      case 'comment':
+        orderField = 'comment';
+        break;
+      case 'like':
+        orderField = 'liked';
+        break;
+      case 'trending':
+      default:
+        break;
+    }
   }
 
   const { data } = await MyriadAPI.request<Post[]>({
-    url: `/users/${userId}/timeline`,
+    url: path,
     method: 'GET',
     params: {
       offset: Math.max(page - 1, 0) * LIMIT,
       limit: LIMIT,
       orderField
-    }
-  });
-
-  return data;
-};
-
-export const loadMoreFriendPost = async (userId: string, page: number) => {
-  const { data } = await MyriadAPI.request<Post[]>({
-    url: `/users/${userId}/timeline`,
-    method: 'POST',
-    params: {
-      filter: {
-        offset: Math.max(page - 1, 0) * LIMIT,
-        limit: LIMIT,
-        include: [
-          {
-            relation: 'comments',
-            scope: {
-              include: [
-                {
-                  relation: 'user'
-                }
-              ]
-            }
-          },
-          {
-            relation: 'publicMetric'
-          }
-        ]
-      }
     }
   });
 
@@ -224,7 +179,7 @@ export const loadComments = async (postId: string, excludeUser?: string) => {
       }
     };
   }
-  const { data } = await MyriadAPI.request({
+  const { data } = await MyriadAPI.request<Comment[]>({
     url: `/posts/${postId}/comments`,
     params: {
       filter: {
@@ -246,4 +201,28 @@ export const reply = async (postId: string, comment: Comment) => {
   });
 
   return data;
+};
+
+export const like = async (userId: string, postId: string) => {
+  await MyriadAPI.request({
+    url: `/posts/${postId}/likes`,
+    method: 'POST',
+    data: {
+      status: true,
+      userId,
+      postId
+    }
+  });
+};
+
+export const dislike = async (userId: string, postId: string) => {
+  await MyriadAPI.request({
+    url: `/posts/${postId}/dislikes`,
+    method: 'POST',
+    data: {
+      status: true,
+      userId,
+      postId
+    }
+  });
 };
