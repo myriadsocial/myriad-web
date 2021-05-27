@@ -55,6 +55,13 @@ const theme = createMuiTheme({
       }
     },
 
+    MuiToolbar: {
+      gutters: {
+        paddingRight: 32,
+        paddingLeft: 32
+      }
+    },
+
     MuiDialog: {
       scrollPaper: {
         alignItems: 'flex-start'
