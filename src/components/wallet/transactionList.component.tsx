@@ -12,11 +12,13 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import MoodIcon from '@material-ui/icons/Mood';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
+import { useFriendsHook } from 'src/components/friends/use-friends-hook';
 import { Transaction } from 'src/interfaces/transaction';
+import { User } from 'src/interfaces/user';
 
 type Props = {
   transactions: Transaction[];
-  userId: string;
+  user: User;
   sortType?: string;
   sortDirection?: string;
 };
@@ -87,9 +89,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function TransactionListComponent({ transactions, userId }: Props) {
+export default function TransactionListComponent({ transactions, user }: Props) {
   const style = useStyles();
+
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
+  const { sendRequest } = useFriendsHook(user);
 
   useEffect(() => {
     setAllTransactions(transactions);
@@ -97,10 +101,17 @@ export default function TransactionListComponent({ transactions, userId }: Props
 
   const defaultUserName = 'Unknown Myrian';
 
+  const sendFriendRequest = (txHistory: Transaction) => {
+    console.log('sendFriendRequest', txHistory);
+    if (txHistory.fromUser) {
+      sendRequest(txHistory.fromUser.id);
+    }
+  };
+
   const RenderPrimaryText = (txHistory: Transaction) => {
     return (
       <div>
-        {userId === txHistory?.from ? (
+        {user.id === txHistory?.from ? (
           <Typography>
             You sent tips to {txHistory?.toUser?.name ?? defaultUserName}'s post with {txHistory?.value / 1000000000000} ACA coins
           </Typography>
@@ -133,7 +144,7 @@ export default function TransactionListComponent({ transactions, userId }: Props
               avatar={
                 <Avatar
                   aria-label="avatar"
-                  src={txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL}
+                  src={txHistory?.toUser?.id === user.id ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL}
                 />
               }
               title={RenderPrimaryText(txHistory)}
@@ -166,7 +177,13 @@ export default function TransactionListComponent({ transactions, userId }: Props
                 <Button size="small" variant="contained" color="default" className={style.iconButton} startIcon={<MoodIcon />}>
                   Send Emoji
                 </Button>
-                <Button size="small" variant="contained" color="primary" className={style.iconButton} startIcon={<PersonAddIcon />}>
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  className={style.iconButton}
+                  startIcon={<PersonAddIcon />}
+                  onClick={() => sendFriendRequest(txHistory)}>
                   Add Friend
                 </Button>
               </div>

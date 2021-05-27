@@ -2,6 +2,7 @@ import React from 'react';
 
 import { SocialsEnum } from 'src/interfaces/index';
 import { LayoutFilterType } from 'src/interfaces/setting';
+import { SidebarTab } from 'src/interfaces/sidebar';
 
 export enum LayoutSettingActionType {
   TOGGLE_FOCUS = 'TOGGLE_FOCUS',
@@ -22,15 +23,19 @@ type Action = ToggleFocus | ChageSetting;
 type Dispatch = (action: Action) => void;
 type LayoutSettingProviderProps = { children: React.ReactNode };
 
-type State = Record<LayoutFilterType, boolean> & Record<SocialsEnum, boolean>;
+type State = Record<LayoutFilterType, boolean> &
+  Record<SocialsEnum, boolean> & {
+    selectedSidebarMenu: SidebarTab;
+  };
 
-const initalState = {
+const initalState: State = {
   focus: false,
   topic: true,
   people: true,
   [SocialsEnum.FACEBOOK]: true,
   [SocialsEnum.REDDIT]: true,
-  [SocialsEnum.TWITTER]: true
+  [SocialsEnum.TWITTER]: true,
+  selectedSidebarMenu: SidebarTab.TRENDING
 };
 
 const LayoutSettingContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { useAlertHook } from 'src/components/alert/use-alert.hook';
 import { useFriends, FriendsActionType } from 'src/components/friends/friends.context';
 import { ExtendedFriend, FriendStatus } from 'src/interfaces/friend';
 import { User } from 'src/interfaces/user';
@@ -9,6 +10,7 @@ export const useFriendsHook = (user: User) => {
   const { dispatch } = useFriends();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { showAlert } = useAlertHook();
 
   const loadRequests = async () => {
     setLoading(true);
@@ -37,7 +39,20 @@ export const useFriendsHook = (user: User) => {
   };
 
   const sendRequest = async (destinationId: string) => {
-    await FriendAPI.sendRequest(user.id, destinationId);
+    setLoading(true);
+    try {
+      await FriendAPI.sendRequest(user.id, destinationId);
+
+      showAlert({
+        title: 'Success!',
+        message: 'Friend request sent',
+        severity: 'success'
+      });
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const toggleRequest = async (friend: ExtendedFriend, status: FriendStatus) => {
