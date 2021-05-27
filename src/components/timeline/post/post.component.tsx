@@ -124,7 +124,9 @@ export default function PostComponent({ post, open = false, disable = false, pos
             <ShowIf condition={post.tags.length > 0}>
               <div>
                 {post.tags.map(tag => (
-                  <span key={uuid()}>#{tag}</span>
+                  <div style={{ marginRight: 4, display: 'inline-block' }} key={uuid()}>
+                    #{tag}
+                  </div>
                 ))}
               </div>
             </ShowIf>

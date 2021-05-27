@@ -10,6 +10,7 @@ import { FriendsProvider } from '../friends/friends.context';
 import SidebarComponent from '../sidebar/sidebar.component';
 import UserDetail from '../user/user.component';
 import { Wallet } from '../wallet/wallet.component';
+import AppBar from './app-bar.component';
 import { useStyles } from './layout.style';
 import { useLayout } from './use-layout.hook';
 
@@ -41,35 +42,38 @@ const LayoutComponent = ({ children, user }: Props) => {
 
   return (
     <>
-      <Grid container direction="row" justify="space-between" alignItems="flex-start">
-        <Grid item className={style.user}>
-          <Grid className={style.fullheight} container direction="row" justify="flex-start" alignContent="flex-start">
-            <Grid item className={!!user.anonymous ? style.grow : style.normal}>
-              <UserDetail changeSetting={changeSetting} settings={setting} />
-            </Grid>
-            <Grid item className={style.wallet}>
-              <FriendsProvider>
-                <ShowIf condition={!setting.focus && !user.anonymous}>
-                  <NoSsr>
-                    <Wallet />
-                  </NoSsr>
-                </ShowIf>
-              </FriendsProvider>
+      <AppBar />
+      <div className={style.appWrapper}>
+        <div className={style.contentWrapper}>
+          <Grid item className={style.user}>
+            <Grid className={style.fullheight} container direction="row" justify="flex-start" alignContent="flex-start">
+              <Grid item className={!!user.anonymous ? style.grow : style.normal}>
+                <UserDetail changeSetting={changeSetting} settings={setting} />
+              </Grid>
+              <Grid item className={style.wallet}>
+                <FriendsProvider>
+                  <ShowIf condition={!setting.focus && !user.anonymous}>
+                    <NoSsr>
+                      <Wallet />
+                    </NoSsr>
+                  </ShowIf>
+                </FriendsProvider>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item sm={12} md={8} lg={5} className={style.content}>
-          {children}
-        </Grid>
+          <Grid item className={style.content}>
+            {children}
+          </Grid>
+        </div>
 
         <FriendsProvider>
-          <Grid item className={style.experience}>
+          <div className={style.experience}>
             <ShowIf condition={!setting.focus}>
               <SidebarComponent />
             </ShowIf>
-          </Grid>
+          </div>
         </FriendsProvider>
-      </Grid>
+      </div>
     </>
   );
 };
