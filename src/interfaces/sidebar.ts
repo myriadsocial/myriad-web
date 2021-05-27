@@ -1,7 +1,7 @@
 export enum SidebarTab {
-  NOTIFICATION = 'notification',
-  FRIENDS = 'friends',
-  TRENDING = 'trending'
+  FRIENDS = 0,
+  NOTIFICATION = 1,
+  TRENDING = 2
 }
 
 export type SidebarTabType = typeof SidebarTab;
