@@ -2,16 +2,18 @@ import React, { useState, useEffect } from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import ImageIcon from '@material-ui/icons/Image';
+import MoodIcon from '@material-ui/icons/Mood';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import { Transaction } from 'src/interfaces/transaction';
 
@@ -80,7 +82,8 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'flex-start'
     },
     iconButton: {
-      color: '#FFF'
+      color: '#FFF',
+      margin: theme.spacing(1)
     },
     typography: {
       padding: theme.spacing(2)
@@ -96,28 +99,31 @@ export default function TransactionListComponent({ transactions, userId }: Props
     setAllTransactions(transactions);
   }, []);
 
+  const defaultUserName = 'Unknown Myrian';
+
   const RenderPrimaryText = (txHistory: Transaction) => {
     return (
       <div>
         {userId === txHistory?.from ? (
-          <Tooltip title={`${txHistory?.to}`} placement="top">
-            <Button>To: ...</Button>
-          </Tooltip>
+          <Typography>
+            You sent tips to {txHistory?.toUser?.name ?? defaultUserName}'s post with {txHistory?.value / 1000000000000} ACA coins
+          </Typography>
         ) : (
-          <Tooltip title={`${txHistory?.from}`} placement="top">
-            <Button>From: ...</Button>
-          </Tooltip>
+          <Typography>
+            {txHistory?.fromUser?.name ?? defaultUserName} tipped your post with {txHistory?.value / 1000000000000} ACA coins
+          </Typography>
         )}
       </div>
     );
   };
 
   const RenderSecondaryText = (txHistory: Transaction) => {
-    return (
-      <Tooltip title={`${txHistory?.trxHash}`} placement="top">
-        <Button>Tx: ...</Button>
-      </Tooltip>
-    );
+    const formatDate = () => {
+      let formattedDate = new Date(txHistory?.createdAt);
+      return formattedDate.toUTCString();
+    };
+
+    return <Typography variant="subtitle2">{formatDate()}</Typography>;
   };
 
   if (transactions.length === 0) return null;
@@ -126,37 +132,54 @@ export default function TransactionListComponent({ transactions, userId }: Props
     <List>
       {allTransactions.map(txHistory => (
         <ListItem key={txHistory?.id}>
-          <ListItemAvatar className={style.avatar}>
-            <Avatar>
-              <ImageIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            className={style.textSecondary}
-            secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
-            primary={RenderPrimaryText(txHistory)}
-            secondary={RenderSecondaryText(txHistory)}
-          />
-          <ListItemSecondaryAction>
-            <div className={style.badge}>
-              <Chip
-                color="default"
-                size="small"
-                label={
-                  txHistory?.state === 'success' || txHistory?.state === 'verified'
-                    ? 'Success'
-                    : [txHistory.state === 'pending' ? 'Pending' : 'Failed']
-                }
-              />
-              <Chip
-                className={userId === txHistory?.from ? style.red : style.green}
-                color="default"
-                size="small"
-                label={userId === txHistory?.from ? 'Out' : 'In'}
-              />
-              <Typography>{txHistory?.value / 1000000000000} Myria</Typography>
-            </div>
-          </ListItemSecondaryAction>
+          <Card>
+            <CardActionArea>
+              <CardContent>
+                <ListItemAvatar className={style.avatar}>
+                  <Avatar
+                    aria-label="avatar"
+                    src={txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL}
+                  />
+                </ListItemAvatar>
+                <ListItemText
+                  className={style.textSecondary}
+                  secondaryTypographyProps={{ style: { color: '#bdbdbd' } }}
+                  primary={RenderPrimaryText(txHistory)}
+                  secondary={RenderSecondaryText(txHistory)}
+                />
+              </CardContent>
+            </CardActionArea>
+            {
+              //<ListItemSecondaryAction>
+              //<div className={style.badge}>
+              //<Chip
+              //color="default"
+              //size="small"
+              //label={
+              //txHistory?.state === 'success' || txHistory?.state === 'verified'
+              //? 'Success'
+              //: [txHistory.state === 'pending' ? 'Pending' : 'Failed']
+              //}
+              ///>
+              //<Chip
+              //className={userId === txHistory?.from ? style.red : style.green}
+              //color="default"
+              //size="small"
+              //label={userId === txHistory?.from ? 'Out' : 'In'}
+              ///>
+              //<Typography>{txHistory?.value / 1000000000000} Myria</Typography>
+              //</div>
+              //</ListItemSecondaryAction>
+            }
+            <CardActions>
+              <Button size="small" variant="contained" color="default" className={style.iconButton} startIcon={<MoodIcon />}>
+                Send Emoji
+              </Button>
+              <Button size="small" variant="contained" color="primary" className={style.iconButton} startIcon={<PersonAddIcon />}>
+                Add Friend
+              </Button>
+            </CardActions>
+          </Card>
         </ListItem>
       ))}
     </List>
