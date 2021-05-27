@@ -12,6 +12,8 @@ import SortIcon from '@material-ui/icons/Sort';
 import { useTransaction } from '../tippingJar/use-transaction.hooks';
 import TransactionListComponent from './transactionList.component';
 
+import { useUser } from 'src/components/user/user.context';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     textSecondary: {
@@ -76,6 +78,9 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef }) => {
   const styles = useStyles();
 
   const [session] = useSession();
+  const {
+    state: { user }
+  } = useUser();
   const userAddress = session?.user.address as string;
   const { loading, error, transactions, loadInitTransaction } = useTransaction(userAddress);
 
@@ -88,6 +93,8 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef }) => {
       loadInitTransaction();
     }
   }));
+
+  if (!user) return null;
 
   const TippingJarHeader = () => {
     return (
@@ -150,7 +157,7 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef }) => {
       ) : transactions.length === 0 ? (
         <EmptyTransactionComponent />
       ) : (
-        <TransactionListComponent transactions={transactions} userId={userAddress} />
+        <TransactionListComponent transactions={transactions} user={user} />
       )}
     </div>
   );

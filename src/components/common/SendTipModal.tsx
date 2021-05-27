@@ -1,7 +1,6 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 
 //import dynamic from 'next/dynamic';
-
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -211,9 +210,9 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId 
           Send Tip
         </DialogTitle>
         {
-        //<DialogContent dividers>
+          //<DialogContent dividers>
           //<BalanceComponent />
-        //</DialogContent>
+          //</DialogContent>
         }
         <DialogContent dividers>
           <form noValidate autoComplete="off">
