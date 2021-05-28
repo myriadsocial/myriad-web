@@ -82,9 +82,6 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
   return (
     <div className={style.root}>
       <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
-        {
-          //<SearchUserComponent title="Search Myriad" data={options} search={searchUser} onSelected={onSearchUser} />
-        }
         <ShowIf condition={!user.anonymous}>
           <CreatePostComponent onSubmit={submitPost} experiences={experiences} user={user} />
 
