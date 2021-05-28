@@ -7,6 +7,7 @@ import NoSsr from '@material-ui/core/NoSsr';
 
 import ShowIf from '../common/show-if.component';
 import { FriendsProvider } from '../friends/friends.context';
+import { NotifProvider } from '../notifications/notif.context';
 import SidebarComponent from '../sidebar/sidebar.component';
 import UserDetail from '../user/user.component';
 import { Wallet } from '../wallet/wallet.component';
@@ -67,11 +68,13 @@ const LayoutComponent = ({ children, user }: Props) => {
         </div>
 
         <FriendsProvider>
-          <div className={style.experience}>
-            <ShowIf condition={!setting.focus}>
-              <SidebarComponent />
-            </ShowIf>
-          </div>
+          <NotifProvider>
+            <div className={style.experience}>
+              <ShowIf condition={!setting.focus}>
+                <SidebarComponent />
+              </ShowIf>
+            </div>
+          </NotifProvider>
         </FriendsProvider>
       </div>
     </>
