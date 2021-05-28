@@ -22,6 +22,7 @@ import { useMyriadUser } from '../timeline/use-users.hooks';
 
 import { useLayout } from 'src/components/Layout/use-layout.hook';
 import { SidebarTab } from 'src/interfaces/sidebar';
+import { User as MyriadUser } from 'src/interfaces/user';
 
 const SearchUserComponent = dynamic(() => import('../timeline/search-user.component'));
 
