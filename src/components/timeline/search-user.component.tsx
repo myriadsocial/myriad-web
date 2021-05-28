@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import SearchIcon from '@material-ui/icons/Search';
 import Autocomplete, { AutocompleteRenderOptionState } from '@material-ui/lab/Autocomplete';
 
 import useDebounce from '../../helpers/use-debounce.hooks';
@@ -17,7 +18,7 @@ import useDebounce from '../../helpers/use-debounce.hooks';
 import { User } from 'src/interfaces/user';
 
 //@ts-ignore
-type Props = {
+type SearchUserProps = {
   title: string;
   data: User[];
   search: (text: string) => void;
@@ -27,7 +28,8 @@ type Props = {
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      margin: theme.spacing(1)
+      margin: theme.spacing(1),
+      maxWidth: '100%'
     },
     optionItem: {
       position: 'relative',
@@ -41,7 +43,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function SearchUser({ title = 'Search..', data = [], search, onSelected }: Props) {
+const SearchUser: React.FC<SearchUserProps> = ({ title = 'Search..', data = [], search, onSelected }) => {
   const style = useStyles();
 
   const router = useRouter();
@@ -51,7 +53,7 @@ export default function SearchUser({ title = 'Search..', data = [], search, onSe
   const [options, setOptions] = React.useState<User[]>([]);
   const [loading, setLoading] = React.useState(false);
 
-  const debouncedValue = useDebounce(searchQuery, 500) ?? '';
+  const debouncedValue = useDebounce(searchQuery, 2000) ?? '';
 
   React.useEffect(() => {
     search(debouncedValue);
@@ -68,11 +70,11 @@ export default function SearchUser({ title = 'Search..', data = [], search, onSe
     setLoading(false);
   }, [data]);
 
-  const handleChange = (e: React.ChangeEvent<{}>, user: User | null) => {
-    if (user) {
-      onSelected(user);
-    }
-  };
+  //const handleChange = (e: React.ChangeEvent<{}>, user: User | null) => {
+  //if (user) {
+  //onSelected(user);
+  //}
+  //};
 
   const handleSearch = (e: React.ChangeEvent<{}>, value: string | null) => {
     if (value) {
@@ -88,7 +90,9 @@ export default function SearchUser({ title = 'Search..', data = [], search, onSe
   return (
     <Autocomplete
       className={style.root}
+      freeSolo
       id="search-user"
+      aria-label="search-posts-people-or-topics"
       open={open}
       onOpen={() => {
         setOpen(true);
@@ -100,7 +104,7 @@ export default function SearchUser({ title = 'Search..', data = [], search, onSe
       getOptionLabel={option => option.name}
       options={options}
       loading={loading}
-      onChange={handleChange}
+      //onChange={handleChange}
       onInputChange={handleSearch}
       size="small"
       renderInput={params => (
@@ -112,7 +116,7 @@ export default function SearchUser({ title = 'Search..', data = [], search, onSe
             ...params.InputProps,
             endAdornment: (
               <React.Fragment>
-                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                {loading ? <CircularProgress color="inherit" size={20} /> : <SearchIcon />}
                 {params.InputProps.endAdornment}
               </React.Fragment>
             )
@@ -139,4 +143,6 @@ export default function SearchUser({ title = 'Search..', data = [], search, onSe
       }}
     />
   );
-}
+};
+
+export default SearchUser;

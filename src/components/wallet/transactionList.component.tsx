@@ -12,7 +12,7 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import MoodIcon from '@material-ui/icons/Mood';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
-import { useFriendsHook } from 'src/components/friends/use-friends-hook';
+//import { useFriendsHook } from 'src/components/friends/use-friends-hook';
 import { Transaction } from 'src/interfaces/transaction';
 import { User } from 'src/interfaces/user';
 
@@ -83,6 +83,9 @@ const useStyles = makeStyles((theme: Theme) =>
     iconButton: {
       margin: theme.spacing(1)
     },
+    expandButton: {
+      justifyContent: 'center'
+    },
     typography: {
       padding: theme.spacing(2)
     }
@@ -91,22 +94,30 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function TransactionListComponent({ transactions, user }: Props) {
   const style = useStyles();
+  const [expandable, setExpandable] = useState(true);
 
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
-  const { sendRequest } = useFriendsHook(user);
+  //const { sendRequest } = useFriendsHook(user);
+
+  const userId = user?.id as string;
 
   useEffect(() => {
     setAllTransactions(transactions);
   }, []);
 
-  const defaultUserName = 'Unknown Myrian';
+  if (transactions.length === 0) return null;
 
-  const sendFriendRequest = (txHistory: Transaction) => {
-    console.log('sendFriendRequest', txHistory);
-    if (txHistory.fromUser) {
-      sendRequest(txHistory.fromUser.id);
-    }
+  const handleClick = () => {
+    setExpandable(!expandable);
   };
+
+  //TODO: try the function below for add friend button
+  //const sendFriendRequest = (txHistory: Transaction) => {
+  //console.log('sendFriendRequest', txHistory);
+  //if (txHistory.fromUser) {
+  //sendRequest(txHistory.fromUser.id);
+  //}
+  //};
 
   const RenderPrimaryText = (txHistory: Transaction) => {
     return (
@@ -133,64 +144,132 @@ export default function TransactionListComponent({ transactions, user }: Props) 
     return <Typography variant="subtitle2">{formatDate()}</Typography>;
   };
 
-  if (transactions.length === 0) return null;
+  const defaultUserName = 'Unknown Myrian';
+
+  const ExpandMore = () => {
+    return (
+      <ListItem className={style.expandButton}>
+        <Button onClick={handleClick}>See more</Button>
+      </ListItem>
+    );
+  };
 
   return (
-    <List>
-      {allTransactions.map(txHistory => (
-        <ListItem key={txHistory?.id}>
-          <Card>
-            <CardHeader
-              avatar={
-                <Avatar
-                  aria-label="avatar"
-                  src={txHistory?.toUser?.id === user.id ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL}
-                />
-              }
-              title={RenderPrimaryText(txHistory)}
-              subheader={RenderSecondaryText(txHistory)}
-            />
-            {
-              //<ListItemSecondaryAction>
-              //<div className={style.badge}>
-              //<Chip
-              //color="default"
-              //size="small"
-              //label={
-              //txHistory?.state === 'success' || txHistory?.state === 'verified'
-              //? 'Success'
-              //: [txHistory.state === 'pending' ? 'Pending' : 'Failed']
-              //}
-              ///>
-              //<Chip
-              //className={userId === txHistory?.from ? style.red : style.green}
-              //color="default"
-              //size="small"
-              //label={userId === txHistory?.from ? 'Out' : 'In'}
-              ///>
-              //<Typography>{txHistory?.value / 1000000000000} Myria</Typography>
-              //</div>
-              //</ListItemSecondaryAction>
-            }
-            <CardActions>
-              <div style={{ width: '100%', textAlign: 'center' }}>
-                <Button size="small" variant="contained" color="default" className={style.iconButton} startIcon={<MoodIcon />}>
-                  Send Emoji
-                </Button>
-                <Button
-                  size="small"
-                  variant="contained"
-                  color="primary"
-                  className={style.iconButton}
-                  startIcon={<PersonAddIcon />}
-                  onClick={() => sendFriendRequest(txHistory)}>
-                  Add Friend
-                </Button>
+    <>
+      <List>
+        {expandable
+          ? allTransactions.slice(0, 2).map(txHistory => (
+              <div key={txHistory?.id}>
+                <ListItem>
+                  <Card>
+                    <CardHeader
+                      avatar={
+                        <Avatar
+                          aria-label="avatar"
+                          src={
+                            txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL
+                          }
+                        />
+                      }
+                      title={RenderPrimaryText(txHistory)}
+                      subheader={RenderSecondaryText(txHistory)}
+                    />
+                    {
+                      //<ListItemSecondaryAction>
+                      //<div className={style.badge}>
+                      //<Chip
+                      //color="default"
+                      //size="small"
+                      //label={
+                      //txHistory?.state === 'success' || txHistory?.state === 'verified'
+                      //? 'Success'
+                      //: [txHistory.state === 'pending' ? 'Pending' : 'Failed']
+                      //}
+                      ///>
+                      //<Chip
+                      //className={userId === txHistory?.from ? style.red : style.green}
+                      //color="default"
+                      //size="small"
+                      //label={userId === txHistory?.from ? 'Out' : 'In'}
+                      ///>
+                      //<Typography>{txHistory?.value / 1000000000000} Myria</Typography>
+                      //</div>
+                      //</ListItemSecondaryAction>
+                    }
+                    <CardActions>
+                      <div style={{ width: '100%', textAlign: 'center' }}>
+                        <Button size="small" variant="contained" color="default" className={style.iconButton} startIcon={<MoodIcon />}>
+                          Send Emoji
+                        </Button>
+                        <Button size="small" variant="contained" color="primary" className={style.iconButton} startIcon={<PersonAddIcon />}>
+                          Add Friend
+                        </Button>
+                      </div>
+                    </CardActions>
+                  </Card>
+                </ListItem>
               </div>
-            </CardActions>
-          </Card>
+            ))
+          : allTransactions.map(txHistory => (
+              <div key={txHistory?.id}>
+                <ListItem>
+                  <Card>
+                    <CardHeader
+                      avatar={
+                        <Avatar
+                          aria-label="avatar"
+                          src={
+                            txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL
+                          }
+                        />
+                      }
+                      title={RenderPrimaryText(txHistory)}
+                      subheader={RenderSecondaryText(txHistory)}
+                    />
+                    {
+                      //<ListItemSecondaryAction>
+                      //<div className={style.badge}>
+                      //<Chip
+                      //color="default"
+                      //size="small"
+                      //label={
+                      //txHistory?.state === 'success' || txHistory?.state === 'verified'
+                      //? 'Success'
+                      //: [txHistory.state === 'pending' ? 'Pending' : 'Failed']
+                      //}
+                      ///>
+                      //<Chip
+                      //className={userId === txHistory?.from ? style.red : style.green}
+                      //color="default"
+                      //size="small"
+                      //label={userId === txHistory?.from ? 'Out' : 'In'}
+                      ///>
+                      //<Typography>{txHistory?.value / 1000000000000} Myria</Typography>
+                      //</div>
+                      //</ListItemSecondaryAction>
+                    }
+                    <CardActions>
+                      <div style={{ width: '100%', textAlign: 'center' }}>
+                        <Button size="small" variant="contained" color="default" className={style.iconButton} startIcon={<MoodIcon />}>
+                          Send Emoji
+                        </Button>
+                        <Button size="small" variant="contained" color="primary" className={style.iconButton} startIcon={<PersonAddIcon />}>
+                          Add Friend
+                        </Button>
+                      </div>
+                    </CardActions>
+                  </Card>
+                </ListItem>
+              </div>
+            ))}
+      </List>
+      {expandable ? (
+        <ExpandMore />
+      ) : (
+        <ListItem className={style.expandButton}>
+          <Button onClick={handleClick}>See less</Button>
         </ListItem>
-      ))}
-    </List>
+      )}
+    </>
   );
 }
