@@ -16,6 +16,7 @@ import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import ImageIcon from '@material-ui/icons/Image';
 import LinkIcon from '@material-ui/icons/Link';
 import PeopleIcon from '@material-ui/icons/People';
+import SettingsIcon from '@material-ui/icons/Settings';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import Autocomplete, { AutocompleteChangeReason } from '@material-ui/lab/Autocomplete';
 
@@ -45,7 +46,6 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
 
   const uploadImageRef = useRef<HTMLInputElement | null>(null);
   const uploadVideoRef = useRef<HTMLInputElement | null>(null);
-
   const [showCreatePost, setCreatePost] = useState(false);
   const [files, setFiles] = useState<UpoadedFile[]>([]);
   const [postText, setPostText] = useState('');
@@ -133,14 +133,20 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
     setFiles([]);
   };
 
+  const togglePostSetting = () => {};
+
   return (
     <div className={styles.root}>
-      <div style={{ padding: theme.spacing(1, 0) }}>
+      <div style={{ padding: theme.spacing(1, 0), position: 'relative' }}>
         <Typography variant="h4" style={{ marginBottom: 8, fontWeight: 500 }}>
           {'Post Something'}
         </Typography>
+        <div style={{ position: 'absolute', right: 0, top: 0 }}>
+          <IconButton onClick={togglePostSetting}>
+            <SettingsIcon />
+          </IconButton>
+        </div>
       </div>
-
       <Card variant="outlined">
         <CardContent>
           <TextareaAutosize
