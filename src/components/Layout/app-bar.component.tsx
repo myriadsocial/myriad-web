@@ -1,23 +1,29 @@
 import React from 'react';
 
+import dynamic from 'next/dynamic';
+
 import AppBar from '@material-ui/core/AppBar';
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import { useTheme } from '@material-ui/core/styles';
 import { fade, makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import ForumIcon from '@material-ui/icons/Forum';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PeopleIcon from '@material-ui/icons/People';
-import SearchIcon from '@material-ui/icons/Search';
+
+import { useMyriadUser } from '../timeline/use-users.hooks';
 
 import { useLayout } from 'src/components/Layout/use-layout.hook';
 import { SidebarTab } from 'src/interfaces/sidebar';
+
+const SearchUserComponent = dynamic(() => import('../timeline/search-user.component'));
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -35,28 +41,28 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     search: {
       position: 'relative',
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.15),
-      '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.25)
-      },
-      marginRight: theme.spacing(2),
-      marginLeft: 0,
+      marginRight: theme.spacing(8),
+      marginLeft: theme.spacing(2),
+      paddingLeft: 262,
       width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(3),
+      backgroundColor: fade(theme.palette.primary.main, 0.15),
+      '&:hover': {
+        backgroundColor: fade(theme.palette.primary.main, 0.25)
+      },
+      [theme.breakpoints.down('sm')]: {
+        marginLeft: theme.spacing(1),
         width: 'auto'
       }
     },
-    searchIcon: {
-      padding: theme.spacing(0, 2),
-      height: '100%',
-      position: 'absolute',
-      pointerEvents: 'none',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
+    //searchIcon: {
+    //padding: theme.spacing(0, 2),
+    //height: '100%',
+    //position: 'absolute',
+    //pointerEvents: 'none',
+    //display: 'flex',
+    //alignItems: 'center',
+    //justifyContent: 'center'
+    //},
     inputRoot: {
       color: 'inherit'
     },
@@ -87,9 +93,15 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function HeaderBar() {
   const classes = useStyles();
+
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+
   const { changeSelectedSidebar } = useLayout();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const { users: options, search } = useMyriadUser();
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -161,6 +173,15 @@ export default function HeaderBar() {
     </Menu>
   );
 
+  const searchUser = (text: string) => {
+    search(text);
+    console.log('searching');
+  };
+
+  const onSearchUser = (users: MyriadUser) => {
+    //console.log('the users are: ', users);
+  };
+
   return (
     <div className={classes.grow}>
       <AppBar position="static">
@@ -171,17 +192,13 @@ export default function HeaderBar() {
           <Typography className={classes.title} variant="h6" noWrap>
             Material-UI
           </Typography>
+
           <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput
-              }}
-              inputProps={{ 'aria-label': 'search' }}
+            <SearchUserComponent
+              title={matches ? 'Search...' : 'Search for people on Myriad'}
+              data={options}
+              search={searchUser}
+              onSelected={onSearchUser}
             />
           </div>
           <div className={classes.grow} />
