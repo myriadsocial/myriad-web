@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: 'auto !important',
       marginTop: theme.spacing(2)
     },
+    cardActions: {
+      justifyContent: 'center'
+    },
     postContent: {
       width: 600
     },
@@ -120,12 +123,12 @@ export default function ImportPostComponent({ onSubmit, experiences }: Props) {
 
       <Dialog open={showImportPost} aria-labelledby="no-extension-installed" maxWidth="lg">
         <DialogTitle id="name" onClose={toggleImportPost}>
-          Import a Post
+          Import post
         </DialogTitle>
         <DialogContent>
           <Card className={styles.postContent}>
             <CardContent>
-              <TextField placeholder="Paste the post URL here" className={styles.postURL} value={postURL} onChange={updatePostURL} />
+              <TextField label="Paste the URL here" className={styles.postURL} value={postURL} onChange={updatePostURL} />
               {
                 // TODO: Associate a post with an experience
                 //<FormControl className={styles.formControl}>
@@ -153,9 +156,9 @@ export default function ImportPostComponent({ onSubmit, experiences }: Props) {
                 //</FormControl>
               }
             </CardContent>
-            <CardActions>
-              <Button variant="contained" size="large" color="secondary" className={styles.post} onClick={confirmImport}>
-                Confirm
+            <CardActions className={styles.cardActions}>
+              <Button variant="contained" size="large" color="secondary" onClick={confirmImport}>
+                Post now
               </Button>
             </CardActions>
           </Card>
