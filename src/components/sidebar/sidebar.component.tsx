@@ -17,6 +17,7 @@ import { SidebarTab } from 'src/interfaces/sidebar';
 
 const TopicComponent = dynamic(() => import('../topic/topic.component'));
 const FriendComponent = dynamic(() => import('../friends/friend.component'));
+const NotificationComponent = dynamic(() => import('../notifications/notif.component'));
 
 export default function SidebarTabs() {
   const classes = useStyles();
@@ -56,7 +57,7 @@ export default function SidebarTabs() {
         <FriendComponent />
       </TabPanel>
       <TabPanel value={value} index={SidebarTab.NOTIFICATION} dir={theme.direction}>
-        <TopicComponent />
+        <NotificationComponent />
       </TabPanel>
     </div>
   );
