@@ -57,10 +57,10 @@ export const PostActionComponent: React.FC<PostActionProps> = ({ post, detail, e
       </ShowIf>
 
       <Button aria-label="like post" startIcon={<ThumbUpIcon />} onClick={likePost}>
-        ({post.publicMetric.liked})
+        ({post.publicMetric?.liked || 0})
       </Button>
       <Button aria-label="dislike post" startIcon={<ThumbDownIcon />} onClick={dislikePost}>
-        ({post.publicMetric.disliked})
+        ({post.publicMetric?.disliked || 0})
       </Button>
 
       <IconButton
@@ -73,7 +73,7 @@ export const PostActionComponent: React.FC<PostActionProps> = ({ post, detail, e
         <CommentIcon />
       </IconButton>
 
-      <Typography component="span">{post.publicMetric.comment} Comments</Typography>
+      <Typography component="span">{post.publicMetric?.comment || 0} Comments</Typography>
     </>
   );
 };
