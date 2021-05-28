@@ -83,6 +83,9 @@ export default function PostComponent({ post, open = false, disable = false, pos
       width: 400
     };
   };
+  const likePost = () => {};
+
+  const dislikePost = () => {};
 
   const PostActionTipUser = () => {
     return (
@@ -121,7 +124,9 @@ export default function PostComponent({ post, open = false, disable = false, pos
             <ShowIf condition={post.tags.length > 0}>
               <div>
                 {post.tags.map(tag => (
-                  <span key={uuid()}>#{tag}</span>
+                  <div style={{ marginRight: 4, display: 'inline-block' }} key={uuid()}>
+                    #{tag}
+                  </div>
                 ))}
               </div>
             </ShowIf>
@@ -149,7 +154,14 @@ export default function PostComponent({ post, open = false, disable = false, pos
         </ShowIf>
 
         <CardActions disableSpacing>
-          <PostActionComponent post={post} detail={detail} expandComment={handleExpandClick} commentExpanded={expanded} />
+          <PostActionComponent
+            post={post}
+            detail={detail}
+            expandComment={handleExpandClick}
+            commentExpanded={expanded}
+            likePost={likePost}
+            dislikePost={dislikePost}
+          />
         </CardActions>
 
         <ShowIf condition={expanded}>

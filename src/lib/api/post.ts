@@ -91,8 +91,6 @@ export const getFriendPost = async (userId: string, page: number, sort?: PostSor
   let orderField = 'platformCreatedAt';
 
   if (sort) {
-    path = `/users/${userId}/timeline-metric`;
-
     switch (sort) {
       case 'comment':
         orderField = 'comment';

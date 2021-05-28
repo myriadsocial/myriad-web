@@ -60,6 +60,7 @@ export const sendRequest = async (userId: string, friendId: string): Promise<voi
     url: `/friends`,
     method: 'POST',
     data: {
+      status: 'pending',
       friendId,
       requestorId: userId
     }

@@ -12,11 +12,13 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import MoodIcon from '@material-ui/icons/Mood';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
+import { useFriendsHook } from 'src/components/friends/use-friends-hook';
 import { Transaction } from 'src/interfaces/transaction';
+import { User } from 'src/interfaces/user';
 
 type Props = {
   transactions: Transaction[];
-  userId: string;
+  user: User;
   sortType?: string;
   sortDirection?: string;
 };
@@ -90,10 +92,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function TransactionListComponent({ transactions, userId }: Props) {
+export default function TransactionListComponent({ transactions, user }: Props) {
   const style = useStyles();
   const [expandable, setExpandable] = useState(true);
+
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
+  const { sendRequest } = useFriendsHook(user);
+
+  const userId = user?.id as string;
 
   useEffect(() => {
     setAllTransactions(transactions);
@@ -105,10 +111,17 @@ export default function TransactionListComponent({ transactions, userId }: Props
     setExpandable(!expandable);
   };
 
+  const sendFriendRequest = (txHistory: Transaction) => {
+    console.log('sendFriendRequest', txHistory);
+    if (txHistory.fromUser) {
+      sendRequest(txHistory.fromUser.id);
+    }
+  };
+
   const RenderPrimaryText = (txHistory: Transaction) => {
     return (
       <div>
-        {userId === txHistory?.from ? (
+        {user.id === txHistory?.from ? (
           <Typography>
             You sent tips to {txHistory?.toUser?.name ?? defaultUserName}'s post with {txHistory?.value / 1000000000000} ACA coins
           </Typography>

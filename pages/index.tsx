@@ -92,6 +92,11 @@ export default function Index() {
           createdAt: new Date()
         }
       ],
+      publicMetric: {
+        liked: 0,
+        disliked: 0,
+        comment: 1
+      },
       createdAt: new Date()
     },
     {
@@ -103,6 +108,11 @@ export default function Index() {
       hasMedia: false,
       platformCreatedAt: new Date(),
       comments: [],
+      publicMetric: {
+        liked: 0,
+        disliked: 0,
+        comment: 0
+      },
       createdAt: new Date()
     }
   ];
