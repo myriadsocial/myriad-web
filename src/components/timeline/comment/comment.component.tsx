@@ -62,9 +62,9 @@ export default function CommentComponent({ post, disableReply, hide }: Props) {
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   useEffect(() => {
-    if (post.publicMetric?.comment > 0) {
-      loadInitComment();
-    }
+    //if (post.publicMetric?.comment > 0) {
+    //loadInitComment();
+    //}
   }, [post]);
 
   const tipPostUser = () => {
