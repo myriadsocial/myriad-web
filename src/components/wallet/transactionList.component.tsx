@@ -12,7 +12,7 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import MoodIcon from '@material-ui/icons/Mood';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
-import { useFriendsHook } from 'src/components/friends/use-friends-hook';
+//import { useFriendsHook } from 'src/components/friends/use-friends-hook';
 import { Transaction } from 'src/interfaces/transaction';
 import { User } from 'src/interfaces/user';
 
@@ -97,7 +97,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
   const [expandable, setExpandable] = useState(true);
 
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
-  const { sendRequest } = useFriendsHook(user);
+  //const { sendRequest } = useFriendsHook(user);
 
   const userId = user?.id as string;
 
@@ -111,12 +111,13 @@ export default function TransactionListComponent({ transactions, user }: Props) 
     setExpandable(!expandable);
   };
 
-  const sendFriendRequest = (txHistory: Transaction) => {
-    console.log('sendFriendRequest', txHistory);
-    if (txHistory.fromUser) {
-      sendRequest(txHistory.fromUser.id);
-    }
-  };
+  //TODO: try the function below for add friend button
+  //const sendFriendRequest = (txHistory: Transaction) => {
+  //console.log('sendFriendRequest', txHistory);
+  //if (txHistory.fromUser) {
+  //sendRequest(txHistory.fromUser.id);
+  //}
+  //};
 
   const RenderPrimaryText = (txHistory: Transaction) => {
     return (
