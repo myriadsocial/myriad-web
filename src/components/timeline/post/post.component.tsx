@@ -6,7 +6,6 @@ import ReactMarkdown from 'react-markdown';
 import { useSession } from 'next-auth/client';
 import dynamic from 'next/dynamic';
 
-import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -50,7 +49,6 @@ export default function PostComponent({ post, open = false, disable = false, pos
 
   const [session] = useSession();
 
-  const isAnonymous = session?.user.anonymous as boolean;
   const userId = session?.user.address as string;
   const { freeBalance } = useBalance(userId);
 
@@ -87,21 +85,6 @@ export default function PostComponent({ post, open = false, disable = false, pos
   const likePost = () => {};
 
   const dislikePost = () => {};
-
-  const PostActionTipUser = () => {
-    return (
-      <Button
-        className={style.action}
-        onClick={tipPostUser}
-        aria-label="tip-post-user"
-        color="primary"
-        variant="contained"
-        size="small"
-        disabled={isAnonymous || postOwner}>
-        Send Tip
-      </Button>
-    );
-  };
 
   if (!detail || !post) return null;
 
@@ -163,6 +146,7 @@ export default function PostComponent({ post, open = false, disable = false, pos
             commentExpanded={expanded}
             likePost={likePost}
             dislikePost={dislikePost}
+            tipOwner={tipPostUser}
           />
         </CardActions>
 
