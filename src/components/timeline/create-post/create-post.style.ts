@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme, lighten } from '@material-ui/core/styl
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      margin: theme.spacing(1),
+      margin: theme.spacing(0, 1),
       overflow: 'visible'
     },
     dialog: {
@@ -26,7 +26,31 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2),
       cursor: 'pointer'
     },
-    postHeader: {
+    postTextArea: {
+      width: '100%',
+      padding: theme.spacing(1),
+      border: 0,
+      borderRadius: theme.spacing(1),
+      fontSize: 16,
+      height: 56,
+      '&:focus-visible': {
+        outline: 'none'
+      }
+    },
+
+    tags: {
+      '& .MuiInputBase-root': {
+        background: '#FFFFFF',
+        border: 0
+      }
+    },
+
+    card: {
+      width: 800,
+      padding: theme.spacing(1, 0),
+      boxShadow: 'none'
+    },
+    cardHeader: {
       padding: theme.spacing(1),
       borderBottom: 'none',
       '& .MuiCardHeader-title': {
@@ -40,30 +64,17 @@ export const useStyles = makeStyles((theme: Theme) =>
         alignSelf: 'center'
       }
     },
-    postContent: {
-      width: 800,
-      padding: theme.spacing(1, 0),
-      boxShadow: 'none'
-    },
-    postTextArea: {
-      width: '100%',
-      padding: theme.spacing(2),
-      border: 0,
-      borderRadius: theme.spacing(0.5),
-      fontSize: 16,
 
-      '&:focus-visible': {
-        outline: 'none'
-      }
-    },
     additionalAction: {
-      border: '1px solid rgba(255, 255, 255, 0.3)',
+      border: '1px solid #6D15CB',
       borderRadius: theme.spacing(0.5),
       padding: theme.spacing(0, 1),
       margin: theme.spacing(2, 0),
-      width: '50%'
+      width: 458,
+      height: 44
     },
     postButton: {
+      width: 320,
       margin: '0 auto',
       marginTop: theme.spacing(2)
     }

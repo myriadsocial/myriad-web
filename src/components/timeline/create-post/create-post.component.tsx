@@ -137,18 +137,18 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
 
   return (
     <div className={styles.root}>
-      <div style={{ padding: theme.spacing(1, 0), position: 'relative' }}>
+      <div style={{ padding: theme.spacing(0, 0, 1, 0), position: 'relative' }}>
         <Typography variant="h4" style={{ marginBottom: 8, fontWeight: 500 }}>
           {'Post Something'}
         </Typography>
-        <div style={{ position: 'absolute', right: 0, top: 0 }}>
-          <IconButton onClick={togglePostSetting}>
+        <div style={{ position: 'absolute', right: 0, top: -8 }}>
+          <IconButton onClick={togglePostSetting} disableFocusRipple>
             <SettingsIcon />
           </IconButton>
         </div>
       </div>
       <Card variant="outlined">
-        <CardContent>
+        <CardContent style={{ background: '#C4C4C4' }}>
           <TextareaAutosize
             rowsMin={2}
             placeholder={`Any thought about something`}
@@ -172,19 +172,19 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
 
       <Dialog className={styles.dialog} open={showCreatePost} aria-labelledby="no-extension-installed" maxWidth="lg">
         <DialogTitle id="name" onClose={toggleCreatePost}>
-          Create Post
+          Post Something
         </DialogTitle>
-        <DialogContent style={{ padding: 8 }}>
-          <Card className={styles.postContent}>
+        <DialogContent>
+          <Card className={styles.card}>
             <CardHeader
-              className={styles.postHeader}
+              className={styles.cardHeader}
               avatar={
                 <Avatar aria-label={user.name} src={user.profilePictureURL} style={{ height: 55, width: 55 }}>
                   {acronym(user.name)}
                 </Avatar>
               }
               action={
-                <Button aria-label="post-settings" variant="contained" size="medium">
+                <Button aria-label="post-settings" variant="contained" size="medium" color="primary">
                   Post Setting
                 </Button>
               }
@@ -203,6 +203,7 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
 
               <Autocomplete
                 id="post-tags"
+                className={styles.tags}
                 freeSolo
                 multiple
                 style={{ paddingTop: 8 }}
@@ -214,7 +215,9 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
               />
 
               <div className={styles.additionalAction}>
-                <Typography variant="caption">Add somenting to your post</Typography>
+                <Typography variant="caption" style={{ marginRight: 24 }}>
+                  Add somenting to your post
+                </Typography>
                 <input type="file" multiple ref={uploadImageRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
                 <IconButton color="default" aria-label="upload images" onClick={selectImages}>
                   <ImageIcon />
@@ -236,7 +239,7 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
               </ShowIf>
             </CardContent>
             <CardActions>
-              <Button variant="contained" size="large" color="secondary" className={styles.postButton} onClick={savePost}>
+              <Button variant="contained" size="large" color="primary" className={styles.postButton} onClick={savePost}>
                 Post Now
               </Button>
             </CardActions>

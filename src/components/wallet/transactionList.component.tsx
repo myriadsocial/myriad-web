@@ -74,6 +74,12 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1),
       minWidth: 120
     },
+    transactionItem: {
+      background: '#DDDDDD',
+      '& .MuiCardHeader-root, & .MuiCardActions-root': {
+        background: '#EFEFEF'
+      }
+    },
     transactionActionList: {
       display: 'flex',
       flexDirection: 'row',
@@ -160,7 +166,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
         {expandable
           ? allTransactions.slice(0, 2).map(txHistory => (
               <div key={txHistory?.id}>
-                <ListItem>
+                <ListItem className={style.transactionItem}>
                   <Card>
                     <CardHeader
                       avatar={
@@ -198,10 +204,15 @@ export default function TransactionListComponent({ transactions, user }: Props) 
                     }
                     <CardActions>
                       <div style={{ width: '100%', textAlign: 'center' }}>
-                        <Button size="small" variant="contained" color="default" className={style.iconButton} startIcon={<MoodIcon />}>
+                        <Button size="medium" variant="contained" color="default" className={style.iconButton} startIcon={<MoodIcon />}>
                           Send Emoji
                         </Button>
-                        <Button size="small" variant="contained" color="primary" className={style.iconButton} startIcon={<PersonAddIcon />}>
+                        <Button
+                          size="medium"
+                          variant="contained"
+                          color="primary"
+                          className={style.iconButton}
+                          startIcon={<PersonAddIcon />}>
                           Add Friend
                         </Button>
                       </div>
@@ -212,7 +223,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
             ))
           : allTransactions.map(txHistory => (
               <div key={txHistory?.id}>
-                <ListItem>
+                <ListItem className={style.transactionItem}>
                   <Card>
                     <CardHeader
                       avatar={

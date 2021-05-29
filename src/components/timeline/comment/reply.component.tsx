@@ -62,7 +62,7 @@ export default function ReplyComponent({ close, onSubmit }: Props) {
           rows={4}
           fullWidth={true}
           onChange={handleChange('text')}
-          placeholder="Type your comment here"
+          placeholder="Write a Comment..."
         />
       </ShowIf>
 
