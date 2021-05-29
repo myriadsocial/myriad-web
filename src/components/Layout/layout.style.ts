@@ -1,6 +1,6 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       maxHeight: '100vh',
@@ -18,20 +18,26 @@ export const useStyles = makeStyles(() =>
     user: {
       flex: '0 0 327px',
       marginRight: 0,
-      height: '100vh',
-      'overflow-y': 'scroll !important',
+      // height: '100vh',
+      // 'overflow-y': 'scroll !important',
       'scrollbar-color': '#A942E9 #171717',
       'scrollbar-width': 'thin !important'
     },
     content: {
-      flex: '1 1 auto',
+      // flex: '1 1 auto',
+      marginLeft: 'auto',
+      marginRight: 'auto',
       padding: '0 24px 0 24px',
-      height: '100vh'
+      height: '100vh',
+      maxWidth: 726,
+      [theme.breakpoints.up('xl')]: {
+        maxWidth: 926
+      }
     },
     experience: {
-      flex: '0 0 327px',
-      height: '100vh',
-      overflowY: 'scroll',
+      flex: '0 0 331px',
+      // height: '100vh',
+      // overflowY: 'scroll',
       'scrollbar-color': '#A942E9 #171717 ',
       'scrollbar-width': 'thin !important'
     },

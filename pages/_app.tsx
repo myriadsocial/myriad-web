@@ -9,7 +9,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 
 import { BalanceProvider } from '../src/components/wallet/balance.context';
-import theme from '../src/themes/default';
+import theme from '../src/themes/light';
 
 import { AlertProvider } from 'src/components/alert/Alert.context';
 import { WalletAddressProvider } from 'src/components/timeline/post/send-tip.context';

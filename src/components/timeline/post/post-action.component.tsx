@@ -2,7 +2,6 @@ import React from 'react';
 
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import CommentIcon from '@material-ui/icons/Comment';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
@@ -69,11 +68,13 @@ export const PostActionComponent: React.FC<PostActionProps> = ({ post, detail, e
         })}
         onClick={expandComment}
         aria-expanded={commentExpanded}
-        aria-label="show more">
+        aria-label="post-comment">
         <CommentIcon />
       </IconButton>
 
-      <Typography component="span">{post.publicMetric?.comment || 0} Comments</Typography>
+      <Button aria-label="tip-post-user" color="default" variant="contained" size="medium" disabled={false}>
+        Send Tip
+      </Button>
     </>
   );
 };

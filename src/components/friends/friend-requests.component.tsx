@@ -9,7 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles, fade } from '@material-ui/core/styles';
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
 import { useFriendsHook } from './use-friends-hook';
 
@@ -26,8 +26,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      backgroundColor: '#424242',
-      color: '#E0E0E0',
       margin: '8px 0'
     },
     header: {
@@ -38,14 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
         paddingBottom: 0
       }
     },
-    list: {
-      margin: '8px 0',
-      '& .MuiListItem-root': {
-        '&:nth-child(odd)': {
-          backgroundColor: fade('#FFFFFF', 0.2)
-        }
-      }
-    },
+    list: {},
     item: {
       marginBottom: theme.spacing(0.5),
       paddingRight: theme.spacing(0.5)
