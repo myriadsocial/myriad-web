@@ -17,11 +17,12 @@ const NotificationComponent: React.FC<NotifProps> = props => {
 
   return (
     <div style={{ padding: 8 }}>
-      <div style={{ paddingTop: 24, paddingBottom: 8 }} />
-      <Typography variant="h4" style={{ marginBottom: 16 }}>
-        {'Notification'}
-      </Typography>
-      <Notification user={state.user} />
+      <div style={{ paddingTop: 16, paddingBottom: 8 }}>
+        <Typography variant="h4" style={{ marginBottom: 16 }}>
+          {'Notification'}
+        </Typography>
+        <Notification user={state.user} />
+      </div>
     </div>
   );
 };
