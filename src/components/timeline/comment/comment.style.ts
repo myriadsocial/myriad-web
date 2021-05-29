@@ -1,4 +1,4 @@
-import { makeStyles, Theme, createStyles, fade } from '@material-ui/core/styles';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,7 +23,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(1)
     },
     reply: {
-      backgroundColor: fade(theme.palette.primary.main, 0.5)
+      backgroundColor: '#C4C4C4'
     },
     action: {
       marginTop: 16

@@ -127,10 +127,10 @@ const theme = createMuiTheme({
         marginBottom: 16
       },
       containedPrimary: {
-        backgroundColor: '#A942E9'
+        backgroundColor: '#8629E9'
       },
       containedSecondary: {
-        backgroundColor: '#E849BD'
+        backgroundColor: '#B1AEB7'
       }
     },
     MuiChip: {

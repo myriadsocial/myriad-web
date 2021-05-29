@@ -18,6 +18,7 @@ import { useBalance } from '../../wallet/use-balance.hooks';
 import { PostActionComponent } from './post-action.component';
 import PostAvatarComponent from './post-avatar.component';
 import PostImageComponent from './post-image.component';
+import { PostOptionsComponent } from './post-options.component';
 import PostVideoComponent from './post-video.component';
 import { useStyles } from './post.style';
 
@@ -114,9 +115,10 @@ export default function PostComponent({ post, open = false, disable = false, pos
         <CardHeader
           ref={headerRef}
           avatar={renderPostAvatar()}
-          action={PostActionTipUser()}
+          action={<PostOptionsComponent postId={post.id} ownPost={false} />}
           title={detail.user.name}
           subheader={detail.createdOn}
+          style={{ postition: 'relative' }}
         />
 
         <ShowIf condition={['twitter', 'reddit'].includes(post.platform)}>

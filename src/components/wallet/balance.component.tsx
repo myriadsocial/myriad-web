@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      backgroundColor: '#424242',
       marginBottom: theme.spacing(2),
       color: '#E0E0E0'
     },
