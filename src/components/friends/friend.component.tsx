@@ -27,7 +27,7 @@ const FriendComponent: React.FC<TopicProps> = props => {
 
   return (
     <div style={{ padding: 8 }}>
-      <div style={{ paddingTop: 24, paddingBottom: 8 }}>
+      <div style={{ paddingTop: 16, paddingBottom: 8 }}>
         <Typography variant="h4" style={{ marginBottom: 16 }}>
           {' '}
           {title || 'Your Friends'}
