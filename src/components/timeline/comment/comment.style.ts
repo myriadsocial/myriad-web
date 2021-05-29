@@ -18,7 +18,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       transform: 'rotate(180deg)'
     },
     comment: {
-      backgroundColor: '#171717',
+      backgroundColor: '#C4C4C4',
       borderRadius: 8,
       marginBottom: theme.spacing(1)
     },

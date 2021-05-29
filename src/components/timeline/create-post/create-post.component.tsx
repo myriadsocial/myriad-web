@@ -16,11 +16,11 @@ import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import ImageIcon from '@material-ui/icons/Image';
 import LinkIcon from '@material-ui/icons/Link';
 import PeopleIcon from '@material-ui/icons/People';
-import SettingsIcon from '@material-ui/icons/Settings';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import Autocomplete, { AutocompleteChangeReason } from '@material-ui/lab/Autocomplete';
 
 import { useStyles } from './create-post.style';
+import { PostSettingComponent } from './post-setting.component';
 import { PreviewImageComponent } from './preview-image.component';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
@@ -133,8 +133,6 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
     setFiles([]);
   };
 
-  const togglePostSetting = () => {};
-
   return (
     <div className={styles.root}>
       <div style={{ padding: theme.spacing(0, 0, 1, 0), position: 'relative' }}>
@@ -142,9 +140,7 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
           {'Post Something'}
         </Typography>
         <div style={{ position: 'absolute', right: 0, top: -8 }}>
-          <IconButton onClick={togglePostSetting} disableFocusRipple>
-            <SettingsIcon />
-          </IconButton>
+          <PostSettingComponent />
         </div>
       </div>
       <Card variant="outlined">
