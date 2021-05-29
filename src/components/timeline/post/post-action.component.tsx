@@ -12,6 +12,7 @@ import TwitterReactionComponent from '../reactions/twitter.component';
 
 import clsx from 'clsx';
 import ShowIf from 'src/components/common/show-if.component';
+import { useUser } from 'src/components/user/user.context';
 import { Post } from 'src/interfaces/post';
 import { PostDetail } from 'src/lib/parse-social.util';
 
@@ -41,10 +42,32 @@ type PostActionProps = {
   expandComment: () => void;
   likePost: () => void;
   dislikePost: () => void;
+  tipOwner: () => void;
 };
 
-export const PostActionComponent: React.FC<PostActionProps> = ({ post, detail, expandComment, commentExpanded, likePost, dislikePost }) => {
+export const PostActionComponent: React.FC<PostActionProps> = ({
+  post,
+  detail,
+  expandComment,
+  commentExpanded,
+  likePost,
+  dislikePost,
+  tipOwner
+}) => {
   const styles = useStyles();
+
+  const {
+    state: { user }
+  } = useUser();
+
+  const isTippingEnabled = (): boolean => {
+    if (!user) return false;
+
+    if (user.anonymous) return false;
+
+    // TODO: current api does not return user
+    return user.id !== post.id;
+  };
 
   return (
     <>
@@ -72,7 +95,7 @@ export const PostActionComponent: React.FC<PostActionProps> = ({ post, detail, e
         <CommentIcon />
       </IconButton>
 
-      <Button aria-label="tip-post-user" color="default" variant="contained" size="medium" disabled={false}>
+      <Button aria-label="tip-post-user" color="default" variant="contained" size="medium" disabled={isTippingEnabled()} onClick={tipOwner}>
         Send Tip
       </Button>
     </>
