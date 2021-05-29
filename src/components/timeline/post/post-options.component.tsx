@@ -11,6 +11,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 
+import ShowIf from 'src/components/common/show-if.component';
+
 type PostOptionsProps = {
   ownPost: boolean;
   postId: string;
@@ -25,7 +27,10 @@ const useStyles = makeStyles((theme: Theme) =>
     menu: {},
     danger: {
       color: '#F83D3D',
-      marginBottom: 0
+      marginBottom: 0,
+      '&:hover': {
+        background: 'none'
+      }
     }
   })
 );
@@ -46,7 +51,7 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPo
 
   return (
     <div className={styles.root}>
-      <IconButton aria-label="post-setting" onClick={handleClick} disableRipple={true}>
+      <IconButton aria-label="post-setting" onClick={handleClick} disableRipple={true} disableFocusRipple={true} disableTouchRipple>
         <MoreVertIcon />
       </IconButton>
 
@@ -58,20 +63,22 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPo
         open={open}
         TransitionComponent={Fade}
         onClose={handleClose}>
-        {ownPost ? (
+        <ShowIf condition={ownPost}>
           <MenuItem onClick={handleClick}>Edit post</MenuItem>
-        ) : (
-          <>
-            <MenuItem onClick={handleClick}>Visit account</MenuItem>
-            <MenuItem onClick={handleClick}>Visit social post</MenuItem>
-            <MenuItem onClick={handleClick}>Mute post from this person</MenuItem>
-          </>
-        )}
+        </ShowIf>
+
+        <ShowIf condition={!ownPost}>
+          <MenuItem onClick={handleClick}>Visit account</MenuItem>
+          <MenuItem onClick={handleClick}>Visit social post</MenuItem>
+          <MenuItem onClick={handleClick}>Mute post from this person</MenuItem>
+        </ShowIf>
 
         <MenuItem onClick={handleClick}>Save post to archive</MenuItem>
         <MenuItem onClick={handleClick}>Share...</MenuItem>
+
         <Divider />
-        {ownPost ? (
+
+        <ShowIf condition={ownPost}>
           <MenuItem onClick={handleClick}>
             <Button
               className={styles.danger}
@@ -80,12 +87,14 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPo
               disableFocusRipple={true}
               variant="text"
               color="default"
-              size="large"
+              size="medium"
               startIcon={<DeleteIcon />}>
               Delete this Post
             </Button>
           </MenuItem>
-        ) : (
+        </ShowIf>
+
+        <ShowIf condition={!ownPost}>
           <MenuItem onClick={handleClick}>
             <Button
               className={styles.danger}
@@ -94,12 +103,12 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPo
               disableFocusRipple={true}
               variant="text"
               color="default"
-              size="large"
+              size="medium"
               startIcon={<ReportProblemIcon />}>
               Report this post
             </Button>
           </MenuItem>
-        )}
+        </ShowIf>
       </Menu>
     </div>
   );

@@ -98,7 +98,7 @@ export default function PostComponent({ post, open = false, disable = false, pos
         <CardHeader
           ref={headerRef}
           avatar={renderPostAvatar()}
-          action={<PostOptionsComponent postId={post.id} ownPost={false} />}
+          action={<PostOptionsComponent postId={post.id} ownPost={postOwner || false} />}
           title={detail.user.name}
           subheader={detail.createdOn}
           style={{ postition: 'relative' }}
