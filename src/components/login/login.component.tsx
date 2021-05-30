@@ -21,8 +21,9 @@ import Typography from '@material-ui/core/Typography';
 import ImageIcon from '@material-ui/icons/Image';
 
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
-import { Keyring } from '@polkadot/keyring';
+import { Keyring, decodeAddress } from '@polkadot/keyring';
 import type { KeyringPair } from '@polkadot/keyring/types';
+import { u8aToHex } from '@polkadot/util';
 import { mnemonicGenerate } from '@polkadot/util-crypto';
 import { KeypairType } from '@polkadot/util-crypto/types';
 
@@ -65,8 +66,10 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
   useEffect(() => {
     // if on signin and only one accounts available, log in the available account
     if (isSignin && accountFetched && accounts.length === 1) {
+      const hexPublicKey = u8aToHex(decodeAddress(accounts[0].address));
+
       signIn('credentials', {
-        address: accounts[0].address,
+        address: hexPublicKey,
         name: accounts[0].meta.name,
         anonymous: false,
         callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home'
@@ -125,11 +128,11 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
     const seed = mnemonicGenerate();
 
     const pair: KeyringPair = keyring.createFromUri(seed + derivationPath, { name: accountName });
-
+    const hexPublicKey = u8aToHex(pair.publicKey);
     setCookie('uri', seed);
 
     await signIn('credentials', {
-      address: pair.address,
+      address: hexPublicKey,
       name: accountName,
       anonymous: false,
       callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
@@ -161,8 +164,10 @@ export default function LoginComponent({ allowAnonymous = true }: Props) {
   };
 
   const signinWithAccount = async (account: InjectedAccountWithMeta) => {
+    const hexPublicKey = u8aToHex(decodeAddress(account.address));
+
     await signIn('credentials', {
-      address: account.address,
+      address: hexPublicKey,
       name: account.meta.name,
       anonymous: false,
       callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
