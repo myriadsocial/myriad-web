@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { CookiesProvider } from 'react-cookie';
 
 import { Provider } from 'next-auth/client';
-import { AppProps } from 'next/app';
+import { AppProps, NextWebVitalsMetric } from 'next/app';
 import Head from 'next/head';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -78,5 +78,9 @@ const App = ({ Component, pageProps }: AppProps) => {
     </React.Fragment>
   );
 };
+
+export function reportWebVitals(metric: NextWebVitalsMetric) {
+  console.log('report:', metric)
+}
 
 export default App;
