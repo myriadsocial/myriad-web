@@ -58,6 +58,7 @@ export default NextAuth({
               const user = await UserAPI.createUser({
                 id: credentials.address,
                 name: credentials.name,
+                username: credentials.name.replace(/\s/g, ''),
                 profilePictureURL: '',
                 anonymous: false,
                 bio: '',
@@ -68,7 +69,7 @@ export default NextAuth({
 
               return userToSession(user);
             } catch (error) {
-              console.error('[next-auth][debug][authorize] user create', error.response.data);
+              console.error('[next-auth][debug][authorize] user create error', error.response.data.error);
               throw new Error('Failed to login');
             }
           }
