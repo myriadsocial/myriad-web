@@ -60,21 +60,21 @@ export const PostActionComponent: React.FC<PostActionProps> = ({
     state: { user }
   } = useUser();
 
-  const isTippingEnabled = (): boolean => {
-    if (!user) return false;
+  const isTippingDisabled = (): boolean => {
+    if (!user) return true;
 
-    if (user.anonymous) return false;
+    if (user.anonymous) return true;
 
     // TODO: current api does not return user
-    return user.id !== post.id;
+    return user.id === post.walletAddress;
   };
 
   return (
     <>
-      <ShowIf condition={post.platform === 'twitter'}>
+      <ShowIf condition={post.platform === 'twitter' && false}>
         <TwitterReactionComponent metric={detail.metric} />
       </ShowIf>
-      <ShowIf condition={post.platform === 'reddit'}>
+      <ShowIf condition={post.platform === 'reddit' && false}>
         <RedditReactionComponent metric={detail.metric} />
       </ShowIf>
 
@@ -95,7 +95,13 @@ export const PostActionComponent: React.FC<PostActionProps> = ({
         <CommentIcon />
       </IconButton>
 
-      <Button aria-label="tip-post-user" color="default" variant="contained" size="medium" disabled={isTippingEnabled()} onClick={tipOwner}>
+      <Button
+        aria-label="tip-post-user"
+        color="default"
+        variant="contained"
+        size="medium"
+        disabled={isTippingDisabled()}
+        onClick={tipOwner}>
         Send Tip
       </Button>
     </>

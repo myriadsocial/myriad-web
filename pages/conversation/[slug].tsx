@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 
 import Layout from 'src/components/Layout/Layout.container';
 import ConversationComponent from 'src/components/conversation/conversation.component';
+import { useUser } from 'src/components/user/user.context';
 import { Post } from 'src/interfaces/post';
 import * as PostAPI from 'src/lib/api/post';
 
@@ -16,6 +17,10 @@ type Props = {
 export default function Conversation({ post }: Props) {
   const [session, loading] = useSession();
   const router = useRouter();
+
+  const {
+    state: { user }
+  } = useUser();
 
   useEffect(() => {
     if (!session && !loading) {
@@ -28,11 +33,7 @@ export default function Conversation({ post }: Props) {
 
   if (!session?.user) return null;
 
-  return (
-    <Layout session={session}>
-      <ConversationComponent post={post} user={session.user} />
-    </Layout>
-  );
+  return <Layout session={session}>{user && <ConversationComponent post={post} user={user} />}</Layout>;
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
