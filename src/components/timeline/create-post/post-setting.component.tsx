@@ -155,7 +155,14 @@ export const PostSettingComponent: React.FC<PostSettingProps> = ({ userId }) => 
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={settingClosed} disableRipple={true} disableFocusRipple={true} variant="contained" color="primary" size="medium">
+          <Button
+            onClick={settingClosed}
+            disableRipple={true}
+            disableFocusRipple={true}
+            variant="contained"
+            color="primary"
+            size="medium"
+            style={{ margin: '0 auto' }}>
             Save settings
           </Button>
         </DialogActions>
