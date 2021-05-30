@@ -15,15 +15,11 @@ import { ProfileActionComponent } from './profile-action.component';
 import { SocialListComponent } from './social-list.component';
 
 import { acronym } from 'src/helpers/string';
-import { SocialsEnum } from 'src/interfaces';
-import { LayoutFilterType } from 'src/interfaces/setting';
 import { User } from 'src/interfaces/user';
 
 type Props = {
   loggedIn?: boolean;
   user: User;
-  settings: any;
-  changeSetting: (key: LayoutFilterType | SocialsEnum, value: boolean) => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -57,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const UserComponent: React.FC<Props> = ({ user, settings, changeSetting }) => {
+const UserComponent: React.FC<Props> = ({ user }) => {
   const style = useStyles();
 
   const [loginOpened, openLogin] = React.useState(false);
