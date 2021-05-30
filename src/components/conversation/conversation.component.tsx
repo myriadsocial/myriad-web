@@ -1,17 +1,15 @@
 import React, { useEffect } from 'react';
 
-import { User } from 'next-auth';
-
 import { useConversationHook } from './use-conversation-hook';
 
-import { WithAdditionalParams } from 'next-auth/_utils';
 import { useConversation } from 'src/components/conversation/conversation.context';
 import PostComponent from 'src/components/timeline/post/post.component';
 import { Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 
 type Props = {
   post: Post;
-  user: WithAdditionalParams<User>;
+  user: User;
 };
 
 const Conversation = ({ post, user }: Props) => {

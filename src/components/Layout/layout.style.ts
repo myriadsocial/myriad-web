@@ -48,9 +48,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     fullheight: {
       height: '100vh'
     },
-    grow: {
+
+    profile: {
       flexGrow: 1
-    },
-    normal: {}
+    }
   })
 );

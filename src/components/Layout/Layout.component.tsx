@@ -17,6 +17,7 @@ import { useLayout } from './use-layout.hook';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
 import { useUserHook } from 'src/components/user/use-user.hook';
+import { useUser } from 'src/components/user/user.context';
 
 type Props = {
   children: React.ReactNode;
@@ -27,7 +28,8 @@ const LayoutComponent = ({ children, user }: Props) => {
   const style = useStyles();
 
   const { setting, changeSetting } = useLayout();
-  const { getUserDetail, loadFcmToken } = useUserHook(user);
+  const { state } = useUser();
+  const { getUserDetail, loadFcmToken } = useUserHook(user.address as string);
 
   useEffect(() => {
     getUserDetail();
@@ -41,6 +43,8 @@ const LayoutComponent = ({ children, user }: Props) => {
     return undefined;
   }, []);
 
+  if (!state.user) return null;
+
   return (
     <>
       <AppBar />
@@ -48,8 +52,8 @@ const LayoutComponent = ({ children, user }: Props) => {
         <div className={style.contentWrapper}>
           <Grid item className={style.user}>
             <Grid className={style.fullheight} container direction="row" justify="flex-start" alignContent="flex-start">
-              <Grid item className={!!user.anonymous ? style.grow : style.normal}>
-                <UserDetail changeSetting={changeSetting} settings={setting} />
+              <Grid item className={style.profile}>
+                <UserDetail user={state.user} changeSetting={changeSetting} settings={setting} />
               </Grid>
               <Grid item className={style.wallet}>
                 <FriendsProvider>
