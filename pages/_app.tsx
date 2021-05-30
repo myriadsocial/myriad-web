@@ -80,7 +80,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 };
 
 export function reportWebVitals(metric: NextWebVitalsMetric) {
-  console.log('report:', metric)
+  console.log('report:', metric);
 }
 
 export default App;
