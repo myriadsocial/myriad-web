@@ -10,6 +10,7 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       margin: 0,
+      height: 56,
       padding: theme.spacing(2.5, 0),
       borderRadius: theme.spacing(1, 1, 0, 0),
       textAlign: 'center',

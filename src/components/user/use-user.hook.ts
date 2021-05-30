@@ -1,8 +1,5 @@
 import { useState } from 'react';
 
-import { User } from 'next-auth';
-
-import { WithAdditionalParams } from 'next-auth/_utils';
 import { useUser, UserActionType } from 'src/components/user/user.context';
 import { SocialsEnum } from 'src/interfaces';
 import { ExtendedUser } from 'src/interfaces/user';
@@ -10,7 +7,7 @@ import { User as DBUser } from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 import { firebaseCloudMessaging } from 'src/lib/firebase';
 
-export const useUserHook = (user: WithAdditionalParams<User>) => {
+export const useUserHook = (userId: string) => {
   const { state: userState, dispatch } = useUser();
 
   const [loading, setLoading] = useState(false);
@@ -20,7 +17,7 @@ export const useUserHook = (user: WithAdditionalParams<User>) => {
     setLoading(true);
 
     try {
-      let detail: ExtendedUser = await UserAPI.getUserDetail(user.address as string);
+      let detail: ExtendedUser = await UserAPI.getUserDetail(userId);
 
       if (!detail.userCredentials) {
         detail.userCredentials = [];
@@ -48,7 +45,7 @@ export const useUserHook = (user: WithAdditionalParams<User>) => {
   };
 
   const updateUser = async (values: Partial<DBUser>) => {
-    await UserAPI.updateUser(user.address as string, values);
+    await UserAPI.updateUser(userId, values);
 
     load();
   };

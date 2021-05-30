@@ -1,16 +1,14 @@
 import { useState } from 'react';
 
-import { User } from 'next-auth';
-
-import { WithAdditionalParams } from 'next-auth/_utils';
 import { useConversation, ConversationActionType } from 'src/components/conversation/conversation.context';
 import { ExtendedConversation } from 'src/interfaces/conversation';
 import { Comment, Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 import * as ConversationAPI from 'src/lib/api/conversation';
 import * as LocalAPI from 'src/lib/api/local';
 import * as PostAPI from 'src/lib/api/post';
 
-export const useConversationHook = (user: WithAdditionalParams<User>) => {
+export const useConversationHook = (user: User) => {
   const { state, dispatch } = useConversation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -19,7 +17,7 @@ export const useConversationHook = (user: WithAdditionalParams<User>) => {
     setLoading(true);
 
     try {
-      const conversations: ExtendedConversation[] = await ConversationAPI.load(user.address as string);
+      const conversations: ExtendedConversation[] = await ConversationAPI.load(user.id);
 
       //TODO: change this when post have text
       const posts = await Promise.all(

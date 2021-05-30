@@ -41,7 +41,7 @@ const initalState: State = {
   [SocialsEnum.FACEBOOK]: true,
   [SocialsEnum.REDDIT]: true,
   [SocialsEnum.TWITTER]: true,
-  selectedSidebarMenu: SidebarTab.NOTIFICATION
+  selectedSidebarMenu: SidebarTab.FRIENDS
 };
 
 const LayoutSettingContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);

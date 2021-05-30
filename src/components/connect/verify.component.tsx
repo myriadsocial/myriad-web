@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from 'react';
 
-import { User } from 'next-auth';
-
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,14 +12,14 @@ import { SocialsEnum } from '../../interfaces';
 import ShowIf from '../common/show-if.component';
 import { useStyles } from './conntect.style';
 
-import { WithAdditionalParams } from 'next-auth/_utils';
 import DialogTitleCustom from 'src/components/common/DialogTitle.component';
 import { useShareSocial } from 'src/hooks/use-share-social';
+import { User } from 'src/interfaces/user';
 
 export type Props = {
   open: boolean;
   social: SocialsEnum;
-  user: WithAdditionalParams<User>;
+  user: User;
   onClose: () => void;
 };
 
@@ -35,7 +33,7 @@ export default function VerifyComponent({ user, social, open, onClose }: Props) 
   const classes = useStyles();
 
   const [username, setUsername] = useState('');
-  const { shareOnTwitter, shareOnReddit, shareOnFacebook } = useShareSocial(user.address as string);
+  const { shareOnTwitter, shareOnReddit, shareOnFacebook } = useShareSocial(user.id);
 
   const share = useCallback(
     (username: string) => {
@@ -92,7 +90,7 @@ export default function VerifyComponent({ user, social, open, onClose }: Props) 
         <DialogTitleCustom id="user-title" onClose={onClose}>
           {social !== SocialsEnum.FACEBOOK ? `Fill your username in ${social}` : 'Copy Facebook shared url to verify'}
         </DialogTitleCustom>
-        <DialogContent className={classes.usernameForm}>
+        <DialogContent>
           <ShowIf condition={social !== SocialsEnum.FACEBOOK}>
             <TextField
               value={username}
