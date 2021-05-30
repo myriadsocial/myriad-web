@@ -17,6 +17,7 @@ export interface User {
   id: string;
   bio?: string;
   name: string;
+  username: string;
   profilePictureURL?: string;
   anonymous: boolean;
   fcm_token?: string[];

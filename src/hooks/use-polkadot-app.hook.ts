@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import { decodeAddress } from '@polkadot/keyring';
+import { u8aToHex } from '@polkadot/util';
 
 import Axios from 'axios';
 import { User } from 'src/interfaces/user';
@@ -16,11 +18,9 @@ export const usePolkadotExtension = () => {
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
 
   const getRegisteredAccounts = async (accounts: InjectedAccountWithMeta[]) => {
-    console.log(accounts);
-
-    console.log({
+    console.log('getRegisteredAccounts', {
       id: {
-        inq: accounts.map(account => account.address)
+        inq: accounts.map(account => u8aToHex(decodeAddress(account.address)))
       }
     });
     try {
@@ -31,7 +31,7 @@ export const usePolkadotExtension = () => {
           filter: {
             where: {
               id: {
-                inq: accounts.map(account => account.address)
+                inq: accounts.map(account => u8aToHex(decodeAddress(account.address)))
               }
             }
           }
@@ -40,9 +40,9 @@ export const usePolkadotExtension = () => {
 
       setAccounts(
         accounts.filter(account => {
-          const addresses = users.map(user => user.id);
+          const hexPublicKeys = users.map(user => user.id);
 
-          return addresses.includes(account.address);
+          return hexPublicKeys.includes(u8aToHex(decodeAddress(account.address)));
         })
       );
     } catch (error) {
