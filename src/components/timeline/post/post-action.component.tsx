@@ -24,13 +24,15 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     expand: {
       transform: 'rotate(0deg)',
-      marginLeft: 'auto',
       transition: theme.transitions.create('transform', {
         duration: theme.transitions.duration.shortest
       })
     },
     expandOpen: {
       transform: 'rotate(180deg)'
+    },
+    right: {
+      marginLeft: 'auto'
     }
   })
 );
@@ -96,6 +98,7 @@ export const PostActionComponent: React.FC<PostActionProps> = ({
       </IconButton>
 
       <Button
+        className={styles.right}
         aria-label="tip-post-user"
         color="default"
         variant="contained"

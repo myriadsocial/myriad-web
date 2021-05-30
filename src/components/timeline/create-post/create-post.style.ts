@@ -77,6 +77,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 320,
       margin: '0 auto',
       marginTop: theme.spacing(2)
+    },
+    action: {
+      background: '#F2F2F4'
     }
   })
 );
