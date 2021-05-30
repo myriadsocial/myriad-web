@@ -13,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { Keyring } from '@polkadot/keyring';
 import type { KeyringPair } from '@polkadot/keyring/types';
+import { u8aToHex } from '@polkadot/util';
 
 import DialogTitle from '../common/DialogTitle.component';
 import ShowIf from '../common/show-if.component';
@@ -128,9 +129,10 @@ export default function LoginComponent({ show, method, onSave, onCancel }: Props
     const seedUri = address.seed + '//hard//' + address.password;
 
     const pair: KeyringPair = keyring.createFromUri(seedUri, { name: address.name });
+    const hexPublicKey = u8aToHex(pair.publicKey);
 
     signIn('credentials', {
-      address: pair.address,
+      address: hexPublicKey,
       anonymous: false,
       callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
       redirect: true
