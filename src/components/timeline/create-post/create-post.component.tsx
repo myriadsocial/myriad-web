@@ -234,7 +234,7 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
                 <PreviewImageComponent files={files} />
               </ShowIf>
             </CardContent>
-            <CardActions>
+            <CardActions className={styles.action}>
               <Button variant="contained" size="large" color="primary" className={styles.postButton} onClick={savePost}>
                 Post Now
               </Button>
