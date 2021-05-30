@@ -266,6 +266,12 @@ const theme = createMuiTheme({
           color: '#000000'
         }
       }
+    },
+
+    MuiPaper: {
+      rounded: {
+        borderRadius: 8
+      }
     }
   }
 });
