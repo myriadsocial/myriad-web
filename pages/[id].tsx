@@ -26,7 +26,7 @@ export default function Profile({ session, params }: Props) {
   const { state: userState } = useUser();
   const { profile, loading, getProfile } = useProfileHook(params.id);
 
-  const { getUserDetail } = useUserHook(session.user);
+  const { getUserDetail } = useUserHook(session.user.address as string);
 
   useEffect(() => {
     getProfile();
