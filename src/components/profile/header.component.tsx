@@ -50,7 +50,7 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
 
   const { updateProfile } = useProfileHook(user.id);
-  const { makeFriend, status, requestFriendStatus } = useFriendHook(user);
+  const { /*makeFriend,*/ status, requestFriendStatus } = useFriendHook(user);
   const [cookie] = useCookies(['seed']);
   const style = useStyles();
 
