@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import SwipeableViews from 'react-swipeable-views';
 
-import Fab from '@material-ui/core/Fab';
-import Grow from '@material-ui/core/Grow';
+import dynamic from 'next/dynamic';
+
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import { useTheme } from '@material-ui/core/styles';
 
 import { LoadingPage } from '../common/loading.component';
+import { TabPanel } from '../common/tab-panel.component';
 import Header from './header.component';
 import { useStyles } from './profile.style';
 
-import { ScrollTop } from 'src/components/common/ScrollToTop.component';
-import PostComponent from 'src/components/timeline/post/post.component';
-import { usePost } from 'src/components/timeline/use-post.hook';
-import { Post } from 'src/interfaces/post';
 import { User, ExtendedUserPost } from 'src/interfaces/user';
+
+const PostList = dynamic(() => import('./post-list.component'));
 
 type Props = {
   user: User;
@@ -23,16 +24,17 @@ type Props = {
 };
 
 export default function ProfileTimeline({ user, profile, loading }: Props) {
-  const style = useStyles();
+  const [value, setValue] = React.useState(0);
   const [isGuest, setIsGuest] = useState<Boolean>(false);
+  const style = useStyles();
+  const theme = useTheme();
 
-  const { hasMore, loadMorePost } = usePost(user);
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setValue(newValue);
+  };
 
-  const isOwnPost = (post: Post) => {
-    if (post.walletAddress === user.id) {
-      return true;
-    }
-    return false;
+  const handleChangeIndex = (index: number) => {
+    setValue(index);
   };
 
   useEffect(() => {
@@ -59,26 +61,39 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
         {/* HEADER */}
         <Header user={user} profile={profile} loading={loading} isGuest={isGuest} />
 
-        {/* POST */}
-        <InfiniteScroll
-          scrollableTarget="scrollable-timeline"
-          className={style.child}
-          dataLength={profile?.posts.length || 100}
-          next={loadMorePost}
-          hasMore={hasMore}
-          loader={<LoadingPage />}>
-          {profile?.posts.map((post: Post, i: number) => (
-            <Grow key={i}>
-              <PostComponent post={post} open={false} postOwner={isOwnPost(post)} />
-            </Grow>
-          ))}
-
-          <ScrollTop>
-            <Fab color="secondary" size="small" aria-label="scroll back to top">
-              <KeyboardArrowUpIcon />
-            </Fab>
-          </ScrollTop>
-        </InfiniteScroll>
+        {/* TAB */}
+        <div className={style.root2}>
+          <Tabs
+            value={value}
+            className={style.tabHeader}
+            variant="fullWidth"
+            onChange={handleChange}
+            indicatorColor="primary"
+            textColor="primary">
+            <Tab className={style.tabItem} label={'My Post'} />
+            <Tab className={style.tabItem} label={'Imported Post'} />
+            <Tab className={style.tabItem} label={'Friends(0)'} />
+            <Tab className={style.tabItem} label={'My Wallet'} />
+            <Tab className={style.tabItem} label={'My Experience'} />
+          </Tabs>
+          <SwipeableViews axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'} index={value} onChangeIndex={handleChangeIndex}>
+            <TabPanel value={value} index={0} dir={theme.direction}>
+              <PostList profile={profile} user={user} />
+            </TabPanel>
+            <TabPanel value={value} index={1} dir={theme.direction}>
+              <h1>imported post</h1>
+            </TabPanel>
+            <TabPanel value={value} index={2} dir={theme.direction}>
+              <h1>Friends</h1>
+            </TabPanel>
+            <TabPanel value={value} index={3} dir={theme.direction}>
+              <h1>My wallet</h1>
+            </TabPanel>
+            <TabPanel value={value} index={4} dir={theme.direction}>
+              <h1>My experience</h1>
+            </TabPanel>
+          </SwipeableViews>
+        </div>
       </div>
     </div>
   );

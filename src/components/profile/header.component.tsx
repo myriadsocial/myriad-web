@@ -16,12 +16,14 @@ import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import CheckIcon from '@material-ui/icons/Check';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 import DialogTitle from '../common/DialogTitle.component';
-import ShowIf from '../common/show-if.component';
+// import ShowIf from '../common/show-if.component';
 import { useStyles } from './header.style';
 import { useFriendHook } from './use-friend.hook';
 import { useProfileHook } from './use-profile.hook';
@@ -74,11 +76,11 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   };
 
   // FRIEND REQUEST
-  const friendRequest = () => {
-    makeFriend({
-      friendId: profile?.id
-    });
-  };
+  // const friendRequest = () => {
+  //   makeFriend({
+  //     friendId: profile?.id
+  //   });
+  // };
 
   // UPDATE fn
   const updateName = (value: string) => {
@@ -100,9 +102,9 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   };
 
   // PUBLICKEY
-  const onPublicKeyCopied = () => {
-    setPublicKeyCopied(true);
-  };
+  // const onPublicKeyCopied = () => {
+  //   setPublicKeyCopied(true);
+  // };
 
   // MNEMONIC fn
   const onMnemonicCopied = () => {
@@ -134,79 +136,78 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
           </Link>
         </Typography>
       </div>
-      <CardMedia
-        className={style.media}
-        image="https://images.pexels.com/photos/3394939/pexels-photo-3394939.jpeg"
-        title={profile?.name || 'Avatar'}
-      />
+
       <div className={style.header}>
-        <div className="leftSide" style={{ display: 'flex', alignItems: 'flex-end' }}>
-          <div style={{ position: 'relative', width: 100, height: 100, marginRight: 10 }}>
+        <div className="leftSide">
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <Avatar className={style.avatar} src={profile?.profilePictureURL}>
               {acronym(profile?.name || '')}
             </Avatar>
+            <Typography className={style.name}>{profile?.name || ''}</Typography>
           </div>
-          <div className="Keterangan" style={{ width: 300, wordWrap: 'break-word' }}>
-            <ShowIf condition={profile !== null}>
-              <Typography className={style.name}>{profile?.name || ''}</Typography>
-              <Typography className={style.publicKey}>
-                {/* {profile?.id} */}
-                Public Key
-                <CopyToClipboard text={profile?.id || ''} onCopy={onPublicKeyCopied}>
-                  <IconButton>
-                    <FileCopyIcon fontSize="small" />
-                  </IconButton>
-                </CopyToClipboard>
-              </Typography>
-            </ShowIf>
+          <div style={{ marginTop: '20px' }}>
+            <Typography variant="body1" style={{ fontWeight: 700, fontSize: 16 }}>
+              Bio
+            </Typography>
+            <Typography variant="body2" style={{ fontWeight: 400, fontSize: 16 }}>
+              {profile?.bio || profileInfo}
+            </Typography>
+          </div>
+          <div style={{ marginTop: '20px' }}>
+            <Typography variant="body1" style={{ fontWeight: 700, fontSize: 16 }}>
+              Mnemonic Seed
+            </Typography>
+            <CopyToClipboard text={cookie.uri || ''} onCopy={onMnemonicCopied}>
+              <Button size="medium" color="primary" variant="outlined" className={style.logout}>
+                Copy Mnemonic Seed
+                <FileCopyIcon />
+              </Button>
+            </CopyToClipboard>
           </div>
         </div>
-        <div className="rightSide" style={{ display: 'flex', flexDirection: 'column' }}>
-          <ShowIf condition={isGuest === false}>
+
+        <div className="rightSide" style={{ width: 315 }}>
+          <div style={{ textAlign: 'right' }}>
             <Button className={style.button} size="small" variant="contained" color="primary" onClick={openEditProfile}>
-              Edit Your Profile
+              Edit Profile
             </Button>
-          </ShowIf>
-          <ShowIf condition={isGuest === true}>
-            <Button color="primary" variant="contained" size="small" style={{ margin: 5 }}>
-              Send Tip
+            <Button className={style.button} size="small" variant="outlined" color="primary" onClick={handleSignOut}>
+              Logout
             </Button>
-            <ShowIf condition={status === null}>
-              <Button color="secondary" variant="contained" size="small" style={{ margin: 5 }} onClick={friendRequest}>
-                Add Friends
-              </Button>
-            </ShowIf>
-            <ShowIf condition={status === 'pending'}>
-              <Button variant="contained" size="small" disabled style={{ background: 'gray' }}>
-                Pending
-              </Button>
-            </ShowIf>
-          </ShowIf>
+          </div>
+          <div style={{ marginTop: '30px' }}>
+            <Typography variant="body1" style={{ fontWeight: 700, fontSize: 16 }}>
+              Link my Social
+            </Typography>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 1px', marginTop: '10px' }}>
+              <Typography variant="body2" style={{ fontSize: 16, fontWeight: 400 }}>
+                Facebook
+              </Typography>
+
+              <IconButton style={{ color: '#53C51E' }} aria-label="upload picture" size="small">
+                <CheckIcon />
+              </IconButton>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 1px', marginTop: '10px' }}>
+              <Typography variant="body2" style={{ fontSize: 16, fontWeight: 400 }}>
+                Twitter
+              </Typography>
+              <IconButton aria-label="upload picture" size="small">
+                <AddIcon />
+              </IconButton>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+              <Typography variant="body2" style={{ fontSize: 16, fontWeight: 400 }}>
+                Reddit
+              </Typography>
+              <IconButton aria-label="upload picture" size="small">
+                <AddIcon />
+              </IconButton>
+            </div>
+          </div>
         </div>
       </div>
-      <div className={style.about}>
-        <p>{profile?.bio || profileInfo}</p>
-      </div>
-      <div className={style.socialMediaList}>
-        <div style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
-          <div className={style.logo}></div>
-          <a href="#" target="_blank" style={{ color: 'white' }}>
-            Link 1
-          </a>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
-          <div className={style.logo}></div>
-          <a href="#" target="_blank" style={{ color: 'white' }}>
-            Link 2
-          </a>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
-          <div className={style.logo}></div>
-          <a href="#" target="_blank" style={{ color: 'white' }}>
-            Link 3
-          </a>
-        </div>
-      </div>
+
       {/* MODAL */}
       <Dialog open={isEditProfile} aria-labelledby="no-extension-installed" maxWidth="sm">
         <DialogTitle id="name" onClose={closeEditProfile}>
