@@ -5,7 +5,8 @@
 export const connectToBlockchain = async () => {
   try {
     const { ApiPromise, WsProvider } = await import('@polkadot/api');
-    // 'wss://rpc.myriad.systems'
+    //TODO:
+    // which rpc address for dev and which one is for staging??
     const wsProvider = new WsProvider(process.env.NEXT_PUBLIC_RPC_ADDRESS_TESTNET);
     const api = await new ApiPromise({
       provider: wsProvider

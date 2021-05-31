@@ -3,14 +3,11 @@ import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import MoodIcon from '@material-ui/icons/Mood';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 //import { useFriendsHook } from 'src/components/friends/use-friends-hook';
 import { Transaction } from 'src/interfaces/transaction';
@@ -29,7 +26,16 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
-      color: '#E0E0E0'
+      justifyContent: 'center'
+    },
+    rootPrimaryText: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center'
+    },
+    cardContentBox: {
+      width: 640,
+      height: 80
     },
     textSecondary: {
       color: '#E0E0E0'
@@ -125,17 +131,21 @@ export default function TransactionListComponent({ transactions, user }: Props) 
   //}
   //};
 
+  const defaultUserName = 'Unknown Myrian';
+
   const RenderPrimaryText = (txHistory: Transaction) => {
     return (
       <div>
         {user.id === txHistory?.from ? (
-          <Typography>
-            You sent tips to {txHistory?.toUser?.name ?? defaultUserName}'s post with {txHistory?.value / 1000000000000} ACA coins
-          </Typography>
+          <div className={style.rootPrimaryText}>
+            <Typography>You tipped {txHistory?.toUser?.name ?? defaultUserName} Acala</Typography>
+            <Typography>{txHistory?.value / 1000000000000}</Typography>
+          </div>
         ) : (
-          <Typography>
-            {txHistory?.fromUser?.name ?? defaultUserName} tipped your post with {txHistory?.value / 1000000000000} ACA coins
-          </Typography>
+          <div className={style.rootPrimaryText}>
+            <Typography>{txHistory?.fromUser?.name ?? defaultUserName} tipped you Acala</Typography>
+            <Typography>{txHistory?.value / 1000000000000}</Typography>
+          </div>
         )}
       </div>
     );
@@ -150,23 +160,6 @@ export default function TransactionListComponent({ transactions, user }: Props) 
     return <Typography variant="subtitle2">{formatDate()}</Typography>;
   };
 
-  const defaultUserName = 'Unknown Myrian';
-
-  const CardActionButtons = () => {
-    return (
-      <CardActions>
-        <div style={{ width: '100%', textAlign: 'center' }}>
-          <Button size="medium" variant="contained" color="default" className={style.iconButton}>
-            Visit Profile
-          </Button>
-          <Button size="medium" variant="contained" color="primary" className={style.iconButton} startIcon={<PersonAddIcon />}>
-            Add Friend
-          </Button>
-        </div>
-      </CardActions>
-    );
-  };
-
   const ExpandMore = () => {
     return (
       <ListItem className={style.expandButton}>
@@ -177,25 +170,34 @@ export default function TransactionListComponent({ transactions, user }: Props) 
 
   return (
     <>
-      <List>
+      <List className={style.root}>
         {expandable
           ? allTransactions.slice(0, 2).map(txHistory => (
               <div key={txHistory?.id}>
                 <ListItem className={style.transactionItem}>
                   <Card>
-                    <CardHeader
-                      avatar={
-                        <Avatar
-                          aria-label="avatar"
-                          src={
-                            txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL
-                          }
-                        />
-                      }
-                      title={RenderPrimaryText(txHistory)}
-                      subheader={RenderSecondaryText(txHistory)}
-                    />
-                    <CardActionButtons />
+                    <CardContent className={style.cardContentBox}>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {RenderPrimaryText(txHistory)}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" component="p">
+                        {RenderSecondaryText(txHistory)}
+                      </Typography>
+                    </CardContent>
+                    {
+                      //<CardHeader
+                      //avatar={
+                      //<Avatar
+                      //aria-label="avatar"
+                      //src={
+                      //txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL
+                      //}
+                      ///>
+                      //}
+                      //title={RenderPrimaryText(txHistory)}
+                      //subheader={RenderSecondaryText(txHistory)}
+                      ///>
+                    }
                   </Card>
                 </ListItem>
               </div>
@@ -204,19 +206,14 @@ export default function TransactionListComponent({ transactions, user }: Props) 
               <div key={txHistory?.id}>
                 <ListItem className={style.transactionItem}>
                   <Card>
-                    <CardHeader
-                      avatar={
-                        <Avatar
-                          aria-label="avatar"
-                          src={
-                            txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL
-                          }
-                        />
-                      }
-                      title={RenderPrimaryText(txHistory)}
-                      subheader={RenderSecondaryText(txHistory)}
-                    />
-                    <CardActionButtons />
+                    <CardContent className={style.cardContentBox}>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {RenderPrimaryText(txHistory)}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" component="p">
+                        {RenderSecondaryText(txHistory)}
+                      </Typography>
+                    </CardContent>
                   </Card>
                 </ListItem>
               </div>

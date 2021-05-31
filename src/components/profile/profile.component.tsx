@@ -3,11 +3,15 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles, withStyles, Theme, createStyles, fade } from '@material-ui/core/styles';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import { LoadingPage } from '../common/loading.component';
 import Header from './header.component';
+import { WalletComponent } from './myWallet/wallet.component';
 import { useStyles } from './profile.style';
 
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
@@ -21,6 +25,98 @@ type Props = {
   profile: ExtendedUserPost | null;
   loading: Boolean;
 };
+
+interface StyledTabsProps {
+  value: number;
+  onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
+}
+
+const StyledTabs = withStyles({
+  indicator: {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: 'transparent'
+  }
+})((props: StyledTabsProps) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
+
+interface StyledTabProps {
+  label: string;
+  ariaLabel?: string;
+}
+
+const StyledTab = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      textTransform: 'none',
+      color: '#4b4851',
+      fontWeight: 'bold',
+      fontSize: 18,
+      marginRight: theme.spacing(1),
+      marginBottom: theme.spacing(2),
+      borderRadius: 8,
+      '&:focus': {
+        opacity: 1,
+        backgroundColor: fade('#8629e9', 0.2),
+        color: '#8629e9'
+      }
+    }
+  })
+)((props: StyledTabProps) => <Tab aria-label={props.ariaLabel} disableRipple {...props} />);
+
+const useStylesForTabs = makeStyles((theme: Theme) => ({
+  root: {
+    flexGrow: 1
+  },
+  padding: {
+    padding: theme.spacing(3)
+  },
+  demo2: {
+    backgroundColor: 'transparent'
+  }
+}));
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: any;
+  value: any;
+  ariaLabel?: string;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ariaLabel, ...other } = props;
+
+  return (
+    <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
+      {value === index && <div>{children}</div>}
+    </div>
+  );
+}
+
+function CustomizedTabs() {
+  const classes = useStylesForTabs();
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setValue(newValue);
+  };
+
+  return (
+    <div className={classes.root}>
+      <div className={classes.demo2}>
+        <StyledTabs value={value} onChange={handleChange} aria-label="styled tabs example">
+          <StyledTab ariaLabel="wallet-details" label="Wallet" />
+          <StyledTab ariaLabel="tipping-details" label="Tipping" />
+        </StyledTabs>
+        <TabPanel ariaLabel="wallet-details" value={value} index={0}>
+          <WalletComponent />
+        </TabPanel>
+        <TabPanel ariaLabel="tipping-details" value={value} index={1}>
+          Item Two
+        </TabPanel>
+      </div>
+    </div>
+  );
+}
 
 export default function ProfileTimeline({ user, profile, loading }: Props) {
   const style = useStyles();
@@ -79,6 +175,8 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
             </Fab>
           </ScrollTop>
         </InfiniteScroll>
+
+        <CustomizedTabs />
       </div>
     </div>
   );
