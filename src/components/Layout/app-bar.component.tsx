@@ -176,7 +176,7 @@ export default function HeaderBar() {
 
   const searchUser = (text: string) => {
     search(text);
-    console.log('searching');
+    console.log('the query is: ', text);
   };
 
   const onSearchUser = (users: MyriadUser) => {
