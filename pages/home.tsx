@@ -12,6 +12,7 @@ import Layout from 'src/components/Layout/Layout.container';
 import ShowIf from 'src/components/common/show-if.component';
 import { FriendsProvider } from 'src/components/friends/friends.context';
 import Timeline from 'src/components/timeline/timeline.component';
+import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
 import { useUser } from 'src/components/user/user.context';
 import { Wallet } from 'src/components/wallet/wallet.component';
@@ -87,6 +88,8 @@ export default function Home() {
                     </NoSsr>
                   </ShowIf>
                 </FriendsProvider>
+
+                <TopicComponent />
               </Grid>
             </Grid>
           </Grid>

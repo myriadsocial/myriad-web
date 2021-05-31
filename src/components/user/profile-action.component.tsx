@@ -40,7 +40,7 @@ export const ProfileActionComponent: React.FC<ProfileActionProps> = ({ anonymous
   return (
     <div className={styles.root}>
       <ShowIf condition={anonymous}>
-        <Button disableRipple={true} disableFocusRipple={true} variant="contained" size="medium">
+        <Button disableRipple={true} disableFocusRipple={true} variant="contained" size="medium" color="primary">
           Get a name, Login or Register
         </Button>
       </ShowIf>
@@ -48,7 +48,7 @@ export const ProfileActionComponent: React.FC<ProfileActionProps> = ({ anonymous
       {user && (
         <>
           <ProfileEditComponent user={user} />
-          <Button disableRipple={true} disableFocusRipple={true} variant="contained" size="medium" onClick={viewProfile}>
+          <Button disableRipple={true} disableFocusRipple={true} variant="contained" size="medium" color="primary" onClick={viewProfile}>
             View Profile
           </Button>
         </>
