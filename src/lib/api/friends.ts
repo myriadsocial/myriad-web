@@ -55,6 +55,25 @@ export const getFriends = async (userId: string): Promise<ExtendedFriend[]> => {
   return data;
 };
 
+export const searchFriend = async (query: string): Promise<ExtendedFriend[]> => {
+  const { data } = await MyriadAPI.request<ExtendedFriend[]>({
+    url: `/friends`,
+    method: 'GET',
+    params: {
+      filter: {
+        where: {
+          'friend.nama': {
+            ilike: `*${query}*`
+          },
+          status: FriendStatus.APPROVED
+        },
+        include: ['friend', 'requestor']
+      }
+    }
+  });
+  return data;
+};
+
 export const sendRequest = async (userId: string, friendId: string): Promise<void> => {
   await MyriadAPI.request<ExtendedFriend[]>({
     url: `/friends`,
