@@ -14,10 +14,11 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'block'
     },
+    list: {
+      marginLeft: theme.spacing(-2),
+      marginRight: theme.spacing(-2)
+    },
     item: {
-      paddingLeft: 0,
-      paddingRight: 0,
-
       '& .MuiListItemText-primary': {
         fontWeight: 400,
         fontSize: 16,
@@ -39,8 +40,8 @@ export const TopicListComponent: React.FC<TopicListProps> = ({ add = false, onAd
   const classes = useStyles();
 
   return (
-    <div>
-      <List className={classes.root}>
+    <div className={classes.root}>
+      <List className={classes.list}>
         <ListItem className={classes.item}>
           <ListItemAvatar className={classes.avatar}>
             <Typography variant="caption">1</Typography>
