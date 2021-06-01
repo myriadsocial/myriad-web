@@ -43,7 +43,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const SearchUser: React.FC<SearchUserProps> = ({ title = 'Search..', data = [], search, onSelected }) => {
+const SearchUser: React.FC<SearchUserProps> = ({ title = 'Search..', data, search }) => {
   const style = useStyles();
 
   const router = useRouter();
@@ -64,6 +64,13 @@ const SearchUser: React.FC<SearchUserProps> = ({ title = 'Search..', data = [], 
       setOptions([]);
     }
   }, [open]);
+
+  //const handleSearch = (value: string | null) => {
+  //if (value) {
+  //setLoading(true);
+  //setSearchQuery(value);
+  //}
+  //};
 
   React.useEffect(() => {
     setOptions(data);
