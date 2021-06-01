@@ -35,7 +35,10 @@ const useStyles = makeStyles((theme: Theme) =>
         paddingBottom: 0
       }
     },
-    list: {},
+    list: {
+      marginLeft: theme.spacing(-2),
+      marginRight: theme.spacing(-2)
+    },
     item: {
       marginBottom: theme.spacing(0.5),
       paddingRight: theme.spacing(0.5),
