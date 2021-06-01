@@ -9,7 +9,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import MoodIcon from '@material-ui/icons/Mood';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 //import { useFriendsHook } from 'src/components/friends/use-friends-hook';
@@ -152,6 +151,21 @@ export default function TransactionListComponent({ transactions, user }: Props) 
 
   const defaultUserName = 'Unknown Myrian';
 
+  const CardActionButtons = () => {
+    return (
+      <CardActions>
+        <div style={{ width: '100%', textAlign: 'center' }}>
+          <Button size="medium" variant="contained" color="default" className={style.iconButton}>
+            Visit Profile
+          </Button>
+          <Button size="medium" variant="contained" color="primary" className={style.iconButton} startIcon={<PersonAddIcon />}>
+            Add Friend
+          </Button>
+        </div>
+      </CardActions>
+    );
+  };
+
   const ExpandMore = () => {
     return (
       <ListItem className={style.expandButton}>
@@ -180,43 +194,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
                       title={RenderPrimaryText(txHistory)}
                       subheader={RenderSecondaryText(txHistory)}
                     />
-                    {
-                      //<ListItemSecondaryAction>
-                      //<div className={style.badge}>
-                      //<Chip
-                      //color="default"
-                      //size="small"
-                      //label={
-                      //txHistory?.state === 'success' || txHistory?.state === 'verified'
-                      //? 'Success'
-                      //: [txHistory.state === 'pending' ? 'Pending' : 'Failed']
-                      //}
-                      ///>
-                      //<Chip
-                      //className={userId === txHistory?.from ? style.red : style.green}
-                      //color="default"
-                      //size="small"
-                      //label={userId === txHistory?.from ? 'Out' : 'In'}
-                      ///>
-                      //<Typography>{txHistory?.value / 1000000000000} Myria</Typography>
-                      //</div>
-                      //</ListItemSecondaryAction>
-                    }
-                    <CardActions>
-                      <div style={{ width: '100%', textAlign: 'center' }}>
-                        <Button size="medium" variant="contained" color="default" className={style.iconButton} startIcon={<MoodIcon />}>
-                          Send Emoji
-                        </Button>
-                        <Button
-                          size="medium"
-                          variant="contained"
-                          color="primary"
-                          className={style.iconButton}
-                          startIcon={<PersonAddIcon />}>
-                          Add Friend
-                        </Button>
-                      </div>
-                    </CardActions>
+                    <CardActionButtons />
                   </Card>
                 </ListItem>
               </div>
@@ -237,38 +215,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
                       title={RenderPrimaryText(txHistory)}
                       subheader={RenderSecondaryText(txHistory)}
                     />
-                    {
-                      //<ListItemSecondaryAction>
-                      //<div className={style.badge}>
-                      //<Chip
-                      //color="default"
-                      //size="small"
-                      //label={
-                      //txHistory?.state === 'success' || txHistory?.state === 'verified'
-                      //? 'Success'
-                      //: [txHistory.state === 'pending' ? 'Pending' : 'Failed']
-                      //}
-                      ///>
-                      //<Chip
-                      //className={userId === txHistory?.from ? style.red : style.green}
-                      //color="default"
-                      //size="small"
-                      //label={userId === txHistory?.from ? 'Out' : 'In'}
-                      ///>
-                      //<Typography>{txHistory?.value / 1000000000000} Myria</Typography>
-                      //</div>
-                      //</ListItemSecondaryAction>
-                    }
-                    <CardActions>
-                      <div style={{ width: '100%', textAlign: 'center' }}>
-                        <Button size="small" variant="contained" color="default" className={style.iconButton} startIcon={<MoodIcon />}>
-                          Send Emoji
-                        </Button>
-                        <Button size="small" variant="contained" color="primary" className={style.iconButton} startIcon={<PersonAddIcon />}>
-                          Add Friend
-                        </Button>
-                      </div>
-                    </CardActions>
+                    <CardActionButtons />
                   </Card>
                 </ListItem>
               </div>
