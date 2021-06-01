@@ -138,7 +138,7 @@ export default function PostComponent({ post, open = false, disable = false, pos
           </CardContent>
         </ShowIf>
 
-        <CardActions disableSpacing>
+        <CardActions disableSpacing className={style.action}>
           <PostActionComponent
             post={post}
             detail={detail}

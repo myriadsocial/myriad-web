@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
+import { useFriendsHook } from 'src/components/friends/use-friends-hook';
 //import { useFriendsHook } from 'src/components/friends/use-friends-hook';
 import { Transaction } from 'src/interfaces/transaction';
 import { User } from 'src/interfaces/user';
@@ -99,6 +100,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function TransactionListComponent({ transactions, user }: Props) {
   const style = useStyles();
+
+  const { friended, checkFriendStatus } = useFriendsHook(user);
   const [expandable, setExpandable] = useState(true);
 
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
@@ -108,12 +111,20 @@ export default function TransactionListComponent({ transactions, user }: Props) 
 
   useEffect(() => {
     setAllTransactions(transactions);
+    // list all transaction user id as param
+    checkFriendStatus([]);
   }, []);
 
   if (transactions.length === 0) return null;
 
   const handleClick = () => {
     setExpandable(!expandable);
+  };
+
+  const getFriendStatus = (user: User) => {
+    const found = friended.find(friend => friend.id === user.id);
+
+    return found ? found.status : null;
   };
 
   //TODO: try the function below for add friend button
@@ -151,16 +162,26 @@ export default function TransactionListComponent({ transactions, user }: Props) 
 
   const defaultUserName = 'Unknown Myrian';
 
-  const CardActionButtons = () => {
+  type CardActionProps = {
+    from?: User;
+  };
+
+  const CardActionButtons: React.FC<CardActionProps> = ({ from }) => {
+    if (!from || from.id === userId) return null;
+
+    const status = getFriendStatus(from);
+
     return (
       <CardActions>
         <div style={{ width: '100%', textAlign: 'center' }}>
           <Button size="medium" variant="contained" color="default" className={style.iconButton}>
             Visit Profile
           </Button>
-          <Button size="medium" variant="contained" color="primary" className={style.iconButton} startIcon={<PersonAddIcon />}>
-            Add Friend
-          </Button>
+          {!status && (
+            <Button size="medium" variant="contained" color="primary" className={style.iconButton} startIcon={<PersonAddIcon />}>
+              Add Friend
+            </Button>
+          )}
         </div>
       </CardActions>
     );
@@ -194,7 +215,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
                       title={RenderPrimaryText(txHistory)}
                       subheader={RenderSecondaryText(txHistory)}
                     />
-                    <CardActionButtons />
+                    <CardActionButtons from={txHistory?.fromUser} />
                   </Card>
                 </ListItem>
               </div>
@@ -215,7 +236,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
                       title={RenderPrimaryText(txHistory)}
                       subheader={RenderSecondaryText(txHistory)}
                     />
-                    <CardActionButtons />
+                    <CardActionButtons from={txHistory?.fromUser} />
                   </Card>
                 </ListItem>
               </div>

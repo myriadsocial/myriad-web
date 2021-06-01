@@ -8,6 +8,8 @@ import * as FriendAPI from 'src/lib/api/friends';
 
 export const useFriendsHook = (user: User) => {
   const { dispatch } = useFriends();
+
+  const [friended, setFriended] = useState<ExtendedFriend[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { showAlert } = useAlertHook();
@@ -64,6 +66,19 @@ export const useFriendsHook = (user: User) => {
     }
   };
 
+  const checkFriendStatus = async (userIds: string[]) => {
+    setLoading(true);
+    try {
+      const requests = await FriendAPI.checkFriendStatus(userIds);
+
+      setFriended(requests.filter(request => request.friendId !== user.id));
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const toggleRequest = async (friend: ExtendedFriend, status: FriendStatus) => {
     await FriendAPI.toggleRequest(friend.id, status);
 
@@ -74,10 +89,12 @@ export const useFriendsHook = (user: User) => {
   return {
     error,
     loading,
+    friended,
     loadFriends,
     searchFriend,
     loadRequests,
     sendRequest,
-    toggleRequest
+    toggleRequest,
+    checkFriendStatus
   };
 };

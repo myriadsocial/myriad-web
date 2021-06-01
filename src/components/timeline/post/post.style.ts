@@ -25,7 +25,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#E849BD'
     },
     action: {
-      marginTop: 16
+      borderTop: 1,
+      borderLeft: 0,
+      borderRight: 0,
+      borderBottom: 0,
+      borderColor: '#DEDCE1',
+      borderStyle: 'solid'
     }
   })
 );
