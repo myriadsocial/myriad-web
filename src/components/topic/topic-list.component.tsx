@@ -9,6 +9,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
+import { Tag } from 'src/interfaces/experience';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -32,6 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface TopicListProps {
+  topics: Tag[];
   add?: boolean;
   onAdd?: (tag: string) => void;
 }
