@@ -10,36 +10,18 @@ export const useProfileHook = id => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // useEffect(() => {
-  //   console.log('masuk');
-  //   // state is updated but not react
-  //   // console.log('profile', profile);
-  //   getProfile();
-  // }, [profile?.name, profile?.bio, profile?.profilePictureURL]);
-
   const getProfile = async () => {
     setLoading(true);
 
     try {
       let detail: ExtendedUser = await ProfileAPI.getUserProfile(id as string);
+      let posts = await ProfileAPI.getPostProfile(id as string);
 
-      if (!detail.posts) {
-        detail.posts = [];
-      } else {
-        let data = detail.posts;
-        detail.posts = data.map((item: Post) => ({ ...item, comments: item.comments || [] }));
-      }
-
-      // if (!detail.posts.comments) {
-      //   detail.posts.comments = [];
-      // }
-
-      // if (!detail.posts.comments.user) {
-      //   detail.posts.comments.user = [];
-      // }
+      posts = posts.map((item: Post) => ({ ...item, comments: item.comments || [] }));
 
       setProfile({
-        ...detail
+        ...detail,
+        posts: [...posts]
       });
     } catch (error) {
       setError(error);

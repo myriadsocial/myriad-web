@@ -38,6 +38,15 @@ export const useFriendsHook = (user: User) => {
     });
   };
 
+  const searchFriend = async (query: string) => {
+    const friends: ExtendedFriend[] = await FriendAPI.searchFriend(query);
+
+    dispatch({
+      type: FriendsActionType.LOAD_FRIENDS,
+      payload: friends
+    });
+  };
+
   const sendRequest = async (destinationId: string) => {
     setLoading(true);
     try {
@@ -66,6 +75,7 @@ export const useFriendsHook = (user: User) => {
     error,
     loading,
     loadFriends,
+    searchFriend,
     loadRequests,
     sendRequest,
     toggleRequest

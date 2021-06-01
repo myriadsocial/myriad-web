@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 
-import { User } from 'next-auth';
 import Link from 'next/link';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -14,12 +13,12 @@ import Typography from '@material-ui/core/Typography';
 import { useStyles } from './notification.style';
 import { useConversationHook } from './use-conversation-hook';
 
-import { WithAdditionalParams } from 'next-auth/_utils';
 import ShowIf from 'src/components/common/show-if.component';
 import { Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 
 type Props = {
-  user: WithAdditionalParams<User>;
+  user: User;
 };
 
 export default function NotificationListComponent({ user }: Props) {

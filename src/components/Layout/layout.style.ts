@@ -1,40 +1,25 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       maxHeight: '100vh',
       overflow: 'auto'
     },
+    appWrapper: {
+      display: 'flex',
+      margin: '0 32px  0 32px'
+    },
+    contentWrapper: {
+      display: 'flex',
+      flex: '1 1 auto',
+      marginTop: 32
+    },
     experience: {
-      width: 335,
-      height: '100vh',
-      marginRight: 30,
-      overflowY: 'scroll',
+      filter: 'drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.16))',
+      flex: '0 0 331px',
       'scrollbar-color': '#A942E9 #171717 ',
       'scrollbar-width': 'thin !important'
-    },
-    user: {
-      width: 320,
-      marginRight: 0,
-      height: '100vh',
-      'overflow-y': 'scroll !important',
-      'scrollbar-color': '#A942E9 #171717',
-      'scrollbar-width': 'thin !important'
-    },
-    wallet: {
-      width: 320
-    },
-    content: {
-      marginRight: 0,
-      height: '100vh'
-    },
-    fullheight: {
-      height: '100vh'
-    },
-    grow: {
-      flexGrow: 1
-    },
-    normal: {}
+    }
   })
 );

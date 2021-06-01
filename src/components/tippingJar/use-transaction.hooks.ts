@@ -27,7 +27,6 @@ export const useTransaction = (userId: string) => {
     setLoading(true);
 
     try {
-      console.log('fetching transactions');
       const { data } = await axios.request<Transaction[]>({
         url: '/transactions',
         method: 'GET',
@@ -49,8 +48,6 @@ export const useTransaction = (userId: string) => {
         const outboundTxs = sortedTempData.filter(transaction => {
           return transaction.from === userId;
         });
-
-        console.log('the data is: ', data);
 
         dispatch({
           type: TransactionActionType.INIT_TRANSACTION,

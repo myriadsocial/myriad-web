@@ -4,15 +4,58 @@ import { GetServerSideProps } from 'next';
 import { useSession, getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 
-import Layout from '../src/components/Layout/Layout.container';
-import Timeline from '../src/components/timeline/timeline.component';
+import Grid from '@material-ui/core/Grid';
+import NoSsr from '@material-ui/core/NoSsr';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
+import Layout from 'src/components/Layout/Layout.container';
+import ShowIf from 'src/components/common/show-if.component';
+import { FriendsProvider } from 'src/components/friends/friends.context';
+import Timeline from 'src/components/timeline/timeline.component';
+import TopicComponent from 'src/components/topic/topic.component';
+import UserDetail from 'src/components/user/user.component';
 import { useUser } from 'src/components/user/user.context';
+import { Wallet } from 'src/components/wallet/wallet.component';
 import { healthcheck } from 'src/lib/api/healthcheck';
 
+export const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {},
+    user: {
+      flex: '0 0 327px',
+      marginRight: 0,
+      'scrollbar-color': '#A942E9 #171717',
+      'scrollbar-width': 'thin !important'
+    },
+    wallet: {
+      width: 327
+    },
+    fullheight: {
+      height: '100vh'
+    },
+    profile: {
+      flexGrow: 1
+    },
+    content: {
+      // flex: '1 1 auto',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      padding: '0 24px 0 24px',
+      height: '100vh',
+      maxWidth: 726,
+      [theme.breakpoints.up('xl')]: {
+        maxWidth: 926
+      }
+    }
+  })
+);
+
 export default function Home() {
+  const style = useStyles();
+
   const [session, loading] = useSession();
   const router = useRouter();
+
   const {
     state: { user }
   } = useUser();
@@ -28,7 +71,35 @@ export default function Home() {
 
   if (!session?.user) return null;
 
-  return <Layout session={session}>{user && <Timeline user={user} />}</Layout>;
+  return (
+    <Layout session={session}>
+      {user && (
+        <>
+          <Grid item className={style.user}>
+            <Grid className={style.fullheight} container direction="row" justify="flex-start" alignContent="flex-start">
+              <Grid item className={style.profile}>
+                <UserDetail user={user} />
+              </Grid>
+              <Grid item className={style.wallet}>
+                <FriendsProvider>
+                  <ShowIf condition={!user.anonymous}>
+                    <NoSsr>
+                      <Wallet />
+                    </NoSsr>
+                  </ShowIf>
+                </FriendsProvider>
+
+                <TopicComponent />
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item className={style.content}>
+            <Timeline user={user} />
+          </Grid>
+        </>
+      )}
+    </Layout>
+  );
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {

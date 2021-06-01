@@ -2,6 +2,7 @@ import { useLayoutSetting, LayoutSettingActionType } from './layout.context';
 
 import { SocialsEnum } from 'src/interfaces/index';
 import { LayoutFilterType } from 'src/interfaces/setting';
+import { SidebarTab } from 'src/interfaces/sidebar';
 
 export const useLayout = () => {
   const { state: setting, dispatch } = useLayoutSetting();
@@ -14,8 +15,16 @@ export const useLayout = () => {
     });
   };
 
+  const changeSelectedSidebar = (selected: SidebarTab) => {
+    dispatch({
+      type: LayoutSettingActionType.CHANGE_SELECTED_SIDEBAR,
+      value: selected
+    });
+  };
+
   return {
     setting,
-    changeSetting
+    changeSetting,
+    changeSelectedSidebar
   };
 };

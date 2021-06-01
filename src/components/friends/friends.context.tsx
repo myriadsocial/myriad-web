@@ -25,11 +25,13 @@ type Dispatch = (action: Action) => void;
 type FriendsProviderProps = { children: React.ReactNode };
 
 type State = {
+  totalFriends: number;
   friends: ExtendedFriend[];
   requests: ExtendedFriend[];
 };
 
 const initalState: State = {
+  totalFriends: 0,
   friends: [],
   requests: []
 };
@@ -41,7 +43,8 @@ function conversationReducer(state: State, action: Action) {
     case FriendsActionType.LOAD_FRIENDS: {
       return {
         ...state,
-        friends: action.payload
+        friends: action.payload,
+        totalFriends: action.payload.length
       };
     }
 

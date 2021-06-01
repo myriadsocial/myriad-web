@@ -3,7 +3,6 @@ import { useCookies } from 'react-cookie';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { signOut } from 'next-auth/client';
-import Link from 'next/link';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -13,26 +12,24 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 import DialogTitle from '../common/DialogTitle.component';
-import ShowIf from '../common/show-if.component';
 import { useStyles } from './header.style';
 import { useFriendHook } from './use-friend.hook';
 import { useProfileHook } from './use-profile.hook';
 
 import { EditableTextField } from 'src/components/common/EditableTextField';
 import { ImageUpload } from 'src/components/common/ImageUpload.component';
+import { SocialListComponent } from 'src/components/user/social-list.component';
 import { acronym } from 'src/helpers/string';
-import { User, ExtendedUserPost } from 'src/interfaces/user';
+import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
 
 type Props = {
-  user: User;
+  user: ExtendedUser;
   profile: ExtendedUserPost | null;
   loading: Boolean;
   isGuest: Boolean;
@@ -48,7 +45,7 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
 
   const { updateProfile } = useProfileHook(user.id);
-  const { makeFriend, status, requestFriendStatus } = useFriendHook(user);
+  const { /*makeFriend,*/ status, requestFriendStatus } = useFriendHook(user);
   const [cookie] = useCookies(['seed']);
   const style = useStyles();
 
@@ -74,11 +71,11 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   };
 
   // FRIEND REQUEST
-  const friendRequest = () => {
-    makeFriend({
-      friendId: profile?.id
-    });
-  };
+  // const friendRequest = () => {
+  //   makeFriend({
+  //     friendId: profile?.id
+  //   });
+  // };
 
   // UPDATE fn
   const updateName = (value: string) => {
@@ -100,9 +97,9 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   };
 
   // PUBLICKEY
-  const onPublicKeyCopied = () => {
-    setPublicKeyCopied(true);
-  };
+  // const onPublicKeyCopied = () => {
+  //   setPublicKeyCopied(true);
+  // };
 
   // MNEMONIC fn
   const onMnemonicCopied = () => {
@@ -123,90 +120,57 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   };
 
   return (
-    <div className="header" style={{ marginBottom: 10, position: 'relative' }}>
-      <div>
-        <Typography variant="h4" style={{ marginBottom: 8, fontWeight: 500 }}>
-          <Link href="/home">
-            <a style={{ display: 'flex', alignItems: 'center' }}>
-              <ArrowBackIcon />
-              Home
-            </a>
-          </Link>
-        </Typography>
-      </div>
-      <CardMedia
-        className={style.media}
-        image="https://images.pexels.com/photos/3394939/pexels-photo-3394939.jpeg"
-        title={profile?.name || 'Avatar'}
-      />
+    <div className={style.root}>
       <div className={style.header}>
-        <div className="leftSide" style={{ display: 'flex', alignItems: 'flex-end' }}>
-          <div style={{ position: 'relative', width: 100, height: 100, marginRight: 10 }}>
+        <div className="leftSide">
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <Avatar className={style.avatar} src={profile?.profilePictureURL}>
               {acronym(profile?.name || '')}
             </Avatar>
+            <Typography className={style.name}>{profile?.name || ''}</Typography>
           </div>
-          <div className="Keterangan" style={{ width: 300, wordWrap: 'break-word' }}>
-            <ShowIf condition={profile !== null}>
-              <Typography className={style.name}>{profile?.name || ''}</Typography>
-              <Typography className={style.publicKey}>
-                {/* {profile?.id} */}
-                Public Key
-                <CopyToClipboard text={profile?.id || ''} onCopy={onPublicKeyCopied}>
-                  <IconButton>
-                    <FileCopyIcon fontSize="small" />
-                  </IconButton>
-                </CopyToClipboard>
-              </Typography>
-            </ShowIf>
+          <div style={{ marginTop: '20px' }}>
+            <Typography variant="body1" style={{ fontWeight: 700, fontSize: 16 }}>
+              Bio
+            </Typography>
+            <Typography variant="body2" style={{ fontWeight: 400, fontSize: 16 }}>
+              {profile?.bio || profileInfo}
+            </Typography>
+          </div>
+          <div style={{ marginTop: '20px' }}>
+            <Typography variant="body1" style={{ fontWeight: 700, fontSize: 16 }}>
+              Mnemonic Seed
+            </Typography>
+            <CopyToClipboard text={cookie.uri || ''} onCopy={onMnemonicCopied}>
+              <Button size="medium" color="primary" variant="outlined" className={style.logout}>
+                Copy Mnemonic Seed
+                <FileCopyIcon />
+              </Button>
+            </CopyToClipboard>
           </div>
         </div>
-        <div className="rightSide" style={{ display: 'flex', flexDirection: 'column' }}>
-          <ShowIf condition={isGuest === false}>
-            <Button className={style.button} size="small" variant="contained" color="primary" onClick={openEditProfile}>
-              Edit Your Profile
+
+        <div className="rightSide" style={{ width: 315 }}>
+          <div style={{ textAlign: 'right' }}>
+            <Button
+              className={style.button}
+              style={{ marginRight: 16 }}
+              size="medium"
+              variant="contained"
+              color="primary"
+              onClick={openEditProfile}>
+              Edit Profile
             </Button>
-          </ShowIf>
-          <ShowIf condition={isGuest === true}>
-            <Button color="primary" variant="contained" size="small" style={{ margin: 5 }}>
-              Send Tip
+            <Button className={style.button} size="medium" variant="outlined" color="primary" onClick={handleSignOut}>
+              Logout
             </Button>
-            <ShowIf condition={status === null}>
-              <Button color="secondary" variant="contained" size="small" style={{ margin: 5 }} onClick={friendRequest}>
-                Add Friends
-              </Button>
-            </ShowIf>
-            <ShowIf condition={status === 'pending'}>
-              <Button variant="contained" size="small" disabled style={{ background: 'gray' }}>
-                Pending
-              </Button>
-            </ShowIf>
-          </ShowIf>
+          </div>
+          <div style={{ marginTop: '30px' }}>
+            <SocialListComponent user={user} />
+          </div>
         </div>
       </div>
-      <div className={style.about}>
-        <p>{profile?.bio || profileInfo}</p>
-      </div>
-      <div className={style.socialMediaList}>
-        <div style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
-          <div className={style.logo}></div>
-          <a href="#" target="_blank" style={{ color: 'white' }}>
-            Link 1
-          </a>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
-          <div className={style.logo}></div>
-          <a href="#" target="_blank" style={{ color: 'white' }}>
-            Link 2
-          </a>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
-          <div className={style.logo}></div>
-          <a href="#" target="_blank" style={{ color: 'white' }}>
-            Link 3
-          </a>
-        </div>
-      </div>
+
       {/* MODAL */}
       <Dialog open={isEditProfile} aria-labelledby="no-extension-installed" maxWidth="sm">
         <DialogTitle id="name" onClose={closeEditProfile}>

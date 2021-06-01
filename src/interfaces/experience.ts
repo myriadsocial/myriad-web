@@ -10,6 +10,7 @@ export interface Searchable {
 export interface Tag {
   id: string;
   hide: boolean;
+  count: number;
 }
 
 export interface Topic extends Searchable {

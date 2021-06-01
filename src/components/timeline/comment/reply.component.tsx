@@ -57,12 +57,12 @@ export default function ReplyComponent({ close, onSubmit }: Props) {
           helperText={`${comment.text.length}/${CHARACTER_LIMIT}`}
           value={comment.text}
           multiline
-          variant="outlined"
+          variant="standard"
           className={style.write}
           rows={4}
           fullWidth={true}
           onChange={handleChange('text')}
-          placeholder="Type your comment here"
+          placeholder="Write a Comment..."
         />
       </ShowIf>
 
@@ -79,10 +79,10 @@ export default function ReplyComponent({ close, onSubmit }: Props) {
             </IconButton>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="default" size="small" onClick={discard}>
+            <Button variant="contained" color="default" size="medium" onClick={discard} style={{ marginRight: 16 }}>
               Discard
             </Button>
-            <Button variant="contained" color="primary" size="small" onClick={reply}>
+            <Button variant="contained" color="primary" size="medium" onClick={reply}>
               Send
             </Button>
           </Grid>
