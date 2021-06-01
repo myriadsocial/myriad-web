@@ -16,8 +16,8 @@ import { ListHeaderComponent } from './list-header.component';
 import { ListSubHeaderComponent } from './list-sub-header.component';
 import { useFriendsHook } from './use-friends-hook';
 
+import { ToggleCollapseButton } from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
-import { ToggleExpandButton } from 'src/components/common/toggle-expand.component';
 import { useFriends } from 'src/components/friends/friends.context';
 import { User } from 'src/interfaces/user';
 
@@ -59,12 +59,18 @@ const Friends = ({ user }: Props) => {
 
   const { state } = useFriends();
   const { loadFriends } = useFriendsHook(user);
-  const [openFriends, setOpenFriends] = useState(true);
+  const [openOnlineFriends, setOpenOnlineFriends] = useState(true);
+  const [openOtherFriends] = useState(false);
 
   useEffect(() => {
     loadFriends();
   }, []);
 
+  const toggleOnlineFriends = () => {
+    setOpenOnlineFriends(!openOnlineFriends);
+  };
+
+  console.log('openOnlineFriends', openOnlineFriends);
   return (
     <Box className={style.root}>
       <ListHeaderComponent title={`Friends (${state.friends.length})`} />
@@ -72,9 +78,9 @@ const Friends = ({ user }: Props) => {
       <div>
         <div className={style.header}>
           <ListSubHeaderComponent title={`Online (${state.friends.length})`} />
-          <ToggleExpandButton onClick={setOpenFriends} />
+          {state.friends.length > 0 && <ToggleCollapseButton onClick={toggleOnlineFriends} />}
         </div>
-        <Collapse in={openFriends} timeout="auto" unmountOnExit>
+        <Collapse in={openOnlineFriends} timeout="auto" unmountOnExit>
           <div className={style.content}>
             <ShowIf condition={state.friends.length === 0}>
               <Typography variant="h4" color="textPrimary" style={{ textAlign: 'center', padding: '16px 0' }}>
@@ -107,8 +113,8 @@ const Friends = ({ user }: Props) => {
 
       <div>
         <div className={style.header}>
-          <ListSubHeaderComponent title={`Others (${state.friends.length})`} />
-          <ToggleExpandButton onClick={console.log} />
+          <ListSubHeaderComponent title={`Others (0)`} />
+          {openOtherFriends && <ToggleCollapseButton onClick={console.log} />}
         </div>
       </div>
     </Box>

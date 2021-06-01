@@ -14,8 +14,8 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
 import { useFriendsHook } from './use-friends-hook';
 
+import { ToggleCollapseButton } from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
-import { ToggleExpandButton } from 'src/components/common/toggle-expand.component';
 import { useFriends } from 'src/components/friends/friends.context';
 import { ExtendedFriend, FriendStatus } from 'src/interfaces/friend';
 import { User } from 'src/interfaces/user';
@@ -98,7 +98,7 @@ const FriendRequests = ({ user }: Props) => {
           Friend Requests ({state.requests.length})
         </Typography>
 
-        <ToggleExpandButton onClick={setOpenFriends} />
+        <ToggleCollapseButton onClick={setOpenFriends} />
       </div>
       <div className={style.content}>
         <Collapse in={openFriends} timeout="auto" unmountOnExit>

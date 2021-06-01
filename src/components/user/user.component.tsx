@@ -15,11 +15,11 @@ import { ProfileActionComponent } from './profile-action.component';
 import { SocialListComponent } from './social-list.component';
 
 import { acronym } from 'src/helpers/string';
-import { User } from 'src/interfaces/user';
+import { ExtendedUser } from 'src/interfaces/user';
 
 type Props = {
   loggedIn?: boolean;
-  user: User;
+  user: ExtendedUser;
 };
 
 const useStyles = makeStyles((theme: Theme) =>

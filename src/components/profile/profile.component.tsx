@@ -13,12 +13,13 @@ import { TabPanel } from '../common/tab-panel.component';
 import Header from './header.component';
 import { useStyles } from './profile.style';
 
-import { User, ExtendedUserPost } from 'src/interfaces/user';
+import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
 
 const PostList = dynamic(() => import('./post-list.component'));
+const FriendComponent = dynamic(() => import('../friends/friend.component'));
 
 type Props = {
-  user: User;
+  user: ExtendedUser;
   profile: ExtendedUserPost | null;
   loading: Boolean;
 };
@@ -84,7 +85,7 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
               <h1>imported post</h1>
             </TabPanel>
             <TabPanel value={value} index={2} dir={theme.direction}>
-              <h1>Friends</h1>
+              <FriendComponent />
             </TabPanel>
             <TabPanel value={value} index={3} dir={theme.direction}>
               <h1>My wallet</h1>
