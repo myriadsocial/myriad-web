@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(1)
     },
     content: {
-      padding: theme.spacing(1)
+      padding: theme.spacing(0, 2)
     }
   })
 );
