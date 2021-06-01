@@ -2,19 +2,17 @@ import React, { useEffect } from 'react';
 
 import { User } from 'next-auth';
 
-import Grid from '@material-ui/core/Grid';
-import NoSsr from '@material-ui/core/NoSsr';
-
+import AppBar from '../app-bar/app-bar.component';
 import ShowIf from '../common/show-if.component';
 import { FriendsProvider } from '../friends/friends.context';
+import { NotifProvider } from '../notifications/notif.context';
 import SidebarComponent from '../sidebar/sidebar.component';
-import UserDetail from '../user/user.component';
-import { Wallet } from '../wallet/wallet.component';
 import { useStyles } from './layout.style';
 import { useLayout } from './use-layout.hook';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
 import { useUserHook } from 'src/components/user/use-user.hook';
+import { useUser } from 'src/components/user/user.context';
 
 type Props = {
   children: React.ReactNode;
@@ -24,8 +22,9 @@ type Props = {
 const LayoutComponent = ({ children, user }: Props) => {
   const style = useStyles();
 
-  const { setting, changeSetting } = useLayout();
-  const { getUserDetail, loadFcmToken } = useUserHook(user);
+  const { setting } = useLayout();
+  const { state } = useUser();
+  const { getUserDetail, loadFcmToken } = useUserHook(user.address as string);
 
   useEffect(() => {
     getUserDetail();
@@ -39,37 +38,24 @@ const LayoutComponent = ({ children, user }: Props) => {
     return undefined;
   }, []);
 
+  if (!state.user) return null;
+
   return (
     <>
-      <Grid container direction="row" justify="space-between" alignItems="flex-start">
-        <Grid item className={style.user}>
-          <Grid className={style.fullheight} container direction="row" justify="flex-start" alignContent="flex-start">
-            <Grid item className={!!user.anonymous ? style.grow : style.normal}>
-              <UserDetail changeSetting={changeSetting} settings={setting} />
-            </Grid>
-            <Grid item className={style.wallet}>
-              <FriendsProvider>
-                <ShowIf condition={!setting.focus && !user.anonymous}>
-                  <NoSsr>
-                    <Wallet />
-                  </NoSsr>
-                </ShowIf>
-              </FriendsProvider>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item sm={12} md={8} lg={5} className={style.content}>
-          {children}
-        </Grid>
+      <FriendsProvider>
+        <AppBar />
+        <div className={style.appWrapper}>
+          <div className={style.contentWrapper}>{children}</div>
 
-        <FriendsProvider>
-          <Grid item className={style.experience}>
-            <ShowIf condition={!setting.focus}>
-              <SidebarComponent />
-            </ShowIf>
-          </Grid>
-        </FriendsProvider>
-      </Grid>
+          <NotifProvider>
+            <div className={style.experience}>
+              <ShowIf condition={!setting.focus}>
+                <SidebarComponent />
+              </ShowIf>
+            </div>
+          </NotifProvider>
+        </div>
+      </FriendsProvider>
     </>
   );
 };

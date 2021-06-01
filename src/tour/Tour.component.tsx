@@ -11,7 +11,7 @@ type Props = {
 };
 
 const TourComponent: React.FC<Props> = ({ user }) => {
-  const { updateUser } = useUserHook(user);
+  const { updateUser } = useUserHook(user.address as string);
   const [run, setRun] = useState(false);
 
   const steps = [

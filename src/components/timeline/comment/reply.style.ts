@@ -10,10 +10,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(1)
     },
     write: {
-      backgroundColor: '#171717',
+      padding: theme.spacing(1),
+      backgroundColor: '#F7F7F7',
       borderRadius: theme.spacing(1),
       '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: '#171717',
+        borderColor: '#F7F7F7',
         borderBottom: 0
       },
 
@@ -21,18 +22,25 @@ export const useStyles = makeStyles((theme: Theme) =>
         border: theme.spacing(1),
         '&:focus-visible': {
           outline: 'none'
+        },
+        '&:hover': {
+          border: 0
         }
       },
 
       '& .MuiFormHelperText-root': {
         textAlign: 'right',
-        borderColor: '#171717',
+        borderColor: '#C4C4C4',
         border: theme.spacing(1),
         borderTop: 0,
         borderLeft: 0,
         padding: '0 14px',
         margin: 0,
         borderRadius: theme.spacing(1)
+      },
+
+      '&:focus-visible': {
+        outline: 'none'
       }
     }
   })

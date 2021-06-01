@@ -16,11 +16,11 @@ import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import ImageIcon from '@material-ui/icons/Image';
 import LinkIcon from '@material-ui/icons/Link';
 import PeopleIcon from '@material-ui/icons/People';
-import SettingsIcon from '@material-ui/icons/Settings';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import Autocomplete, { AutocompleteChangeReason } from '@material-ui/lab/Autocomplete';
 
 import { useStyles } from './create-post.style';
+import { PostSettingComponent } from './post-setting.component';
 import { PreviewImageComponent } from './preview-image.component';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
@@ -133,21 +133,17 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
     setFiles([]);
   };
 
-  const togglePostSetting = () => {};
-
   return (
     <div className={styles.root}>
-      <div style={{ padding: theme.spacing(1, 0), position: 'relative' }}>
+      <div style={{ padding: theme.spacing(0, 0, 1, 0), position: 'relative' }}>
         <Typography variant="h4" style={{ marginBottom: 8, fontWeight: 500 }}>
           {'Post Something'}
         </Typography>
-        <div style={{ position: 'absolute', right: 0, top: 0 }}>
-          <IconButton onClick={togglePostSetting}>
-            <SettingsIcon />
-          </IconButton>
+        <div style={{ position: 'absolute', right: 0, top: -8 }}>
+          <PostSettingComponent />
         </div>
       </div>
-      <Card variant="outlined">
+      <Card variant="outlined" className={styles.cardPost}>
         <CardContent>
           <TextareaAutosize
             rowsMin={2}
@@ -157,14 +153,14 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
             spellCheck={false}
           />
         </CardContent>
-        <CardActions>
-          <Button variant="contained" color="default" className={styles.button} onClick={toggleCreatePost} startIcon={<CameraAltIcon />}>
+        <CardActions className={styles.cardPostAction}>
+          <Button variant="outlined" color="primary" className={styles.button} onClick={toggleCreatePost} startIcon={<CameraAltIcon />}>
             Post Photos
           </Button>
-          <Button variant="contained" color="default" disabled className={styles.button} startIcon={<VideocamIcon />}>
+          <Button variant="outlined" color="primary" disabled className={styles.button} startIcon={<VideocamIcon />}>
             Post Videos
           </Button>
-          <Button variant="contained" color="default" className={styles.createPost} onClick={toggleCreatePost}>
+          <Button variant="contained" color="primary" className={styles.createPost} onClick={toggleCreatePost}>
             Create A Post
           </Button>
         </CardActions>
@@ -172,19 +168,19 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
 
       <Dialog className={styles.dialog} open={showCreatePost} aria-labelledby="no-extension-installed" maxWidth="lg">
         <DialogTitle id="name" onClose={toggleCreatePost}>
-          Create Post
+          Post Something
         </DialogTitle>
-        <DialogContent style={{ padding: 8 }}>
-          <Card className={styles.postContent}>
+        <DialogContent>
+          <Card className={styles.card}>
             <CardHeader
-              className={styles.postHeader}
+              className={styles.cardHeader}
               avatar={
                 <Avatar aria-label={user.name} src={user.profilePictureURL} style={{ height: 55, width: 55 }}>
                   {acronym(user.name)}
                 </Avatar>
               }
               action={
-                <Button aria-label="post-settings" variant="contained" size="medium">
+                <Button aria-label="post-settings" variant="contained" size="medium" color="primary">
                   Post Setting
                 </Button>
               }
@@ -203,6 +199,7 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
 
               <Autocomplete
                 id="post-tags"
+                className={styles.tags}
                 freeSolo
                 multiple
                 style={{ paddingTop: 8 }}
@@ -214,19 +211,21 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
               />
 
               <div className={styles.additionalAction}>
-                <Typography variant="caption">Add somenting to your post</Typography>
+                <Typography variant="caption" style={{ marginRight: 24 }}>
+                  Add somenting to your post
+                </Typography>
                 <input type="file" multiple ref={uploadImageRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
-                <IconButton color="default" aria-label="upload images" onClick={selectImages}>
+                <IconButton color="primary" aria-label="upload images" onClick={selectImages}>
                   <ImageIcon />
                 </IconButton>
                 <input type="file" multiple ref={uploadVideoRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
-                <IconButton aria-label="upload-video" disabled color="default" onClick={selectVideo}>
+                <IconButton color="primary" aria-label="upload-video" disabled onClick={selectVideo}>
                   <VideocamIcon />
                 </IconButton>
-                <IconButton color="default" disabled aria-label="add-people">
+                <IconButton color="primary" disabled aria-label="add-people">
                   <PeopleIcon />
                 </IconButton>
-                <IconButton color="default" disabled aria-label="add-link">
+                <IconButton color="primary" disabled aria-label="add-link">
                   <LinkIcon />
                 </IconButton>
               </div>
@@ -235,8 +234,8 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
                 <PreviewImageComponent files={files} />
               </ShowIf>
             </CardContent>
-            <CardActions>
-              <Button variant="contained" size="large" color="secondary" className={styles.postButton} onClick={savePost}>
+            <CardActions className={styles.action}>
+              <Button variant="contained" size="large" color="primary" className={styles.postButton} onClick={savePost}>
                 Post Now
               </Button>
             </CardActions>

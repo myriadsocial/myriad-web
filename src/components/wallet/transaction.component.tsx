@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     rootPanel: {
       paddingTop: 24,
-      paddingBottom: 8
+      paddingBottom: 2
     },
     panelHeader: {
       paddingLeft: 16,
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) =>
     panelButtons: {
       paddingLeft: 4,
       paddingRight: 4,
-      marginBottom: 8
+      marginBottom: 2
     },
     iconButton: {
       margin: theme.spacing(1)

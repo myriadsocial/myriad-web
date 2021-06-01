@@ -6,7 +6,6 @@ import ReactMarkdown from 'react-markdown';
 import { useSession } from 'next-auth/client';
 import dynamic from 'next/dynamic';
 
-import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -18,6 +17,7 @@ import { useBalance } from '../../wallet/use-balance.hooks';
 import { PostActionComponent } from './post-action.component';
 import PostAvatarComponent from './post-avatar.component';
 import PostImageComponent from './post-image.component';
+import { PostOptionsComponent } from './post-options.component';
 import PostVideoComponent from './post-video.component';
 import { useStyles } from './post.style';
 
@@ -49,7 +49,6 @@ export default function PostComponent({ post, open = false, disable = false, pos
 
   const [session] = useSession();
 
-  const isAnonymous = session?.user.anonymous as boolean;
   const userId = session?.user.address as string;
   const { freeBalance } = useBalance(userId);
 
@@ -87,21 +86,6 @@ export default function PostComponent({ post, open = false, disable = false, pos
 
   const dislikePost = () => {};
 
-  const PostActionTipUser = () => {
-    return (
-      <Button
-        className={style.action}
-        onClick={tipPostUser}
-        aria-label="tip-post-user"
-        color="primary"
-        variant="contained"
-        size="small"
-        disabled={isAnonymous || postOwner}>
-        Send Tip
-      </Button>
-    );
-  };
-
   if (!detail || !post) return null;
 
   const renderPostAvatar = () => {
@@ -114,9 +98,10 @@ export default function PostComponent({ post, open = false, disable = false, pos
         <CardHeader
           ref={headerRef}
           avatar={renderPostAvatar()}
-          action={PostActionTipUser()}
+          action={<PostOptionsComponent postId={post.id} ownPost={postOwner || false} />}
           title={detail.user.name}
           subheader={detail.createdOn}
+          style={{ postition: 'relative' }}
         />
 
         <ShowIf condition={['twitter', 'reddit'].includes(post.platform)}>
@@ -124,7 +109,9 @@ export default function PostComponent({ post, open = false, disable = false, pos
             <ShowIf condition={post.tags.length > 0}>
               <div>
                 {post.tags.map(tag => (
-                  <span key={uuid()}>#{tag}</span>
+                  <div style={{ marginRight: 4, display: 'inline-block' }} key={uuid()}>
+                    #{tag}
+                  </div>
                 ))}
               </div>
             </ShowIf>
@@ -159,6 +146,7 @@ export default function PostComponent({ post, open = false, disable = false, pos
             commentExpanded={expanded}
             likePost={likePost}
             dislikePost={dislikePost}
+            tipOwner={tipPostUser}
           />
         </CardActions>
 

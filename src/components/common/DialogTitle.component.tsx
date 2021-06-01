@@ -10,29 +10,29 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       margin: 0,
+      height: 56,
       padding: theme.spacing(2.5, 0),
       borderRadius: theme.spacing(1, 1, 0, 0),
       textAlign: 'center',
       boxShadow: '0px 2px 1px -1px rgb(0 0 0 / 20%),0px 1px 1px 0px rgb(0 0 0 / 14%)',
       '&: .MuiTypography-root': {
-        fontWeight: 500,
+        fontWeight: 700,
         lineHeight: '21px'
       }
     },
     closeButton: {
       position: 'absolute',
       right: theme.spacing(3),
-      top: theme.spacing(2.5),
+      top: theme.spacing(2),
       color: theme.palette.common.white,
-      backgroundColor: '#E849BD',
 
       '& .MuiIconButton-label': {
-        width: 16,
-        height: 16,
+        width: theme.spacing(3),
+        height: theme.spacing(3),
 
         '& .MuiSvgIcon-root': {
-          width: 16,
-          height: 16
+          width: theme.spacing(3),
+          height: theme.spacing(3)
         }
       }
     }

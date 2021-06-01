@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
-import { User } from 'next-auth';
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -15,22 +13,22 @@ import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
 import ShowIf from '../common/show-if.component';
-import ConnectComponent from '../connect/connect.component';
+import { ConnectComponent } from '../connect/connect.component';
 import LoginOverlayComponent from '../login/overlay.component';
 import { useStyles } from './social.style';
 import { useUserHook } from './use-user.hook';
 import { useUser } from './user.context';
 
-import { WithAdditionalParams } from 'next-auth/_utils';
 import ConfirmDialog from 'src/components/common/confirm-dialog.component';
 import { SocialsEnum } from 'src/interfaces';
 import { LayoutFilterType } from 'src/interfaces/setting';
+import { User } from 'src/interfaces/user';
 
 const typograpyProps = { style: { fontSize: 10, padding: '5px 0', fontWeight: 500 } };
 
 type Props = {
   loggedIn?: boolean;
-  user: WithAdditionalParams<User>;
+  user: User;
   settings: Record<LayoutFilterType, boolean> & Record<SocialsEnum, boolean>;
   onChange: (key: LayoutFilterType | SocialsEnum, value: boolean) => void;
   toggleLogin: (open: boolean) => void;
@@ -41,11 +39,10 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
 
   const [, setCookie] = useCookies(['social']);
   const { state: userState } = useUser();
-  const { getUserDetail, disconnectSocial } = useUserHook(user);
+  const { getUserDetail, disconnectSocial } = useUserHook(user.id);
 
-  const [connectOpened, openConnect] = useState(false);
   const [confirmationOpen, setOpenConfirmation] = React.useState(false);
-  const [selectedSocial, setSelectedSocial] = useState<SocialsEnum | null>(null);
+  const [selectedSocial] = useState<SocialsEnum | null>(null);
   const [connected, setConnected] = useState<Record<SocialsEnum, boolean>>({
     [SocialsEnum.TWITTER]: false,
     [SocialsEnum.FACEBOOK]: false,
@@ -116,15 +113,7 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
     }
   }, [userState.user]);
 
-  const handleOpenConnect = (social: SocialsEnum) => {
-    if (connected[social]) {
-      setSelectedSocial(social);
-      setOpenConfirmation(true);
-    } else {
-      setSelectedSocial(social);
-      openConnect(true);
-    }
-  };
+  const handleOpenConnect = (social: SocialsEnum) => {};
 
   const removeSocialAccount = () => {
     if (selectedSocial) {
@@ -140,8 +129,6 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
     });
 
     getUserDetail();
-
-    openConnect(false);
   };
 
   const handleToggle = (value: SocialsEnum) => () => {
@@ -220,7 +207,7 @@ const SocialComponent = ({ user, settings, onChange, toggleLogin }: Props) => {
         <LoginOverlayComponent toggleLogin={toggleLogin} />
       </ShowIf>
 
-      {selectedSocial && <ConnectComponent social={selectedSocial} user={user} open={connectOpened} handleClose={handleCloseConnect} />}
+      <ConnectComponent publicKey={user.id} verify={handleCloseConnect} />
 
       <ConfirmDialog
         open={confirmationOpen}
