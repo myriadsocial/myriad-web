@@ -37,7 +37,7 @@ export default function ExpandablePanel({ children, title, expanded = false, act
 
   return (
     <div className={classes.root}>
-      <Accordion expanded={true}>
+      <Accordion defaultExpanded={expanded}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-label="Expand"

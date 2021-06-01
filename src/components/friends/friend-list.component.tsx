@@ -10,7 +10,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 import { ListHeaderComponent } from './list-header.component';
 import { ListSubHeaderComponent } from './list-sub-header.component';
@@ -95,7 +95,7 @@ const Friends = ({ user }: Props) => {
                       </Typography>
                     </ListItemText>
                     <ListItemSecondaryAction>
-                      <RadioButtonCheckedIcon style={{ color: '#06960C' }} />
+                      <FiberManualRecordIcon style={{ color: '#06960C' }} />
                     </ListItemSecondaryAction>
                   </ListItem>
                 );
