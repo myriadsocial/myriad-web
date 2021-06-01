@@ -32,8 +32,8 @@ export const MobileMenuComponent = ({ onChange }: Props) => {
 
   return (
     <BottomNavigation value={value} onChange={handleChange} className={styles.root}>
-      <BottomNavigationAction label="Home" icon={<HomeIcon />} />
-      <BottomNavigationAction label="Wallet" icon={<AccountBalanceWalletIcon />} />
+      <BottomNavigationAction label="Home" value={SidebarTab.HOME} icon={<HomeIcon />} />
+      <BottomNavigationAction label="Wallet" value={SidebarTab.WALLET} icon={<AccountBalanceWalletIcon />} />
       <BottomNavigationAction label="Topics" value={SidebarTab.TRENDING} icon={<LanguageIcon />} />
       <BottomNavigationAction label="Friends" value={SidebarTab.FRIENDS} icon={<PeopleIcon />} />
       <BottomNavigationAction label="Notifications" value={SidebarTab.NOTIFICATION} icon={<NotificationsIcon />} />
