@@ -59,6 +59,10 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('sm')]: {
         marginLeft: theme.spacing(1),
         width: 288
+      },
+
+      '& .MuiFormLabel-root': {
+        color: '#5F5C5C'
       }
     },
     //searchIcon: {

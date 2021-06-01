@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
-import DividerComponent from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import LanguageIcon from '@material-ui/icons/Language';
@@ -9,7 +8,6 @@ import { TopicListComponent } from './topic-list.component';
 import { useTopic } from './use-topic.hooks';
 
 import ExpandablePanel from 'src/components/common/panel-expandable.component';
-import SearchComponent from 'src/components/common/search.component';
 
 interface TopicProps {}
 
@@ -20,7 +18,8 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(1)
     },
     content: {
-      padding: theme.spacing(0, 2)
+      padding: theme.spacing(0, 2),
+      background: theme.palette.background.paper
     }
   })
 );
@@ -28,18 +27,11 @@ const useStyles = makeStyles((theme: Theme) =>
 const TopicComponent: React.FC<TopicProps> = props => {
   const styles = useStyles();
 
-  const { popularTopics, topics, loadPopularTopic, loadTopic, searchTopic } = useTopic();
-  const [search, setSearchQuery] = useState('');
+  const { popularTopics, loadPopularTopic } = useTopic();
 
   useEffect(() => {
-    loadTopic();
     loadPopularTopic();
   }, []);
-
-  const handleSearchTag = (query: string) => {
-    setSearchQuery(query);
-    searchTopic(query);
-  };
 
   return (
     <div className={styles.root}>
@@ -52,18 +44,6 @@ const TopicComponent: React.FC<TopicProps> = props => {
           </div>
 
           <TopicListComponent topics={popularTopics} />
-
-          <DividerComponent />
-
-          <div style={{ paddingTop: 24, paddingBottom: 8 }}>
-            <Typography variant="h4" style={{ marginBottom: 8 }}>
-              {'Tags To Add'}
-            </Typography>
-          </div>
-
-          <SearchComponent value={search} placeholder="Search a tag" onSubmit={handleSearchTag} />
-
-          <TopicListComponent add={true} topics={topics} />
         </div>
       </ExpandablePanel>
     </div>

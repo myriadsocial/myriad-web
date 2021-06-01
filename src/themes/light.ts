@@ -258,6 +258,17 @@ const theme = createMuiTheme({
           margin: defaultTheme.spacing(1.5, 0)
         }
       }
+    },
+
+    MuiBottomNavigationAction: {
+      root: {
+        color: '#B1AEB7',
+
+        '& .MuiSvgIcon-root': {
+          height: defaultTheme.spacing(3),
+          width: defaultTheme.spacing(3)
+        }
+      }
     }
   }
 });

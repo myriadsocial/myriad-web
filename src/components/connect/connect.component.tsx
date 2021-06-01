@@ -15,6 +15,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import { useTheme } from '@material-ui/core/styles';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
@@ -42,6 +43,7 @@ const prefix: Record<SocialsEnum, string> = {
 
 export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectComponentProps, ref: React.Ref<ConnectComponentRefProps>) => {
   const styles = useStyles();
+  const theme = useTheme();
 
   const [open, setOpen] = useState(false);
   const [social, setSocial] = useState<SocialsEnum | null>(null);
@@ -117,7 +119,7 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
                   value={socialName}
                   onChange={handleSocialNameChange}
                   onPaste={handleSocialNamePasted}
-                  color="secondary"
+                  color="primary"
                   margin="dense"
                   required
                   fullWidth
@@ -126,7 +128,12 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
                   id="username"
                   InputProps={{
                     disableUnderline: true,
-                    startAdornment: <InputAdornment position="start">{prefix[social]}</InputAdornment>
+                    color: 'primary',
+                    startAdornment: (
+                      <InputAdornment position="start" disableTypography style={{ color: theme.palette.primary.dark }}>
+                        {prefix[social]}
+                      </InputAdornment>
+                    )
                   }}
                 />
               </ListItemText>
@@ -142,6 +149,7 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
                   margin="dense"
                   className={styles.message}
                   multiline
+                  color="primary"
                   variant="outlined"
                   rows={6}
                   fullWidth={true}
