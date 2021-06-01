@@ -30,12 +30,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const ToggleExpandButton = ({ className, onClick }: Props) => {
+export const ToggleCollapseButton = ({ className, onClick }: Props) => {
   const styles = useStyles();
 
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
+    console.log('expand', !expanded);
     setExpanded(!expanded);
     onClick(!expanded);
   };
