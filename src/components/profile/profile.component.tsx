@@ -15,12 +15,14 @@ import Header from './header.component';
 import { WalletComponent } from './myWallet/wallet.component';
 import { useStyles } from './profile.style';
 
-import { User, ExtendedUserPost } from 'src/interfaces/user';
+import { useFriends } from 'src/components/friends/friends.context';
+import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
 
 const PostList = dynamic(() => import('./post-list.component'));
+const FriendComponent = dynamic(() => import('./user-friends.component'));
 
 type Props = {
-  user: User;
+  user: ExtendedUser;
   profile: ExtendedUserPost | null;
   loading: Boolean;
 };
@@ -118,6 +120,10 @@ function CustomizedTabs() {
 }
 
 export default function ProfileTimeline({ user, profile, loading }: Props) {
+  const {
+    state: { totalFriends }
+  } = useFriends();
+
   const [value, setValue] = React.useState(0);
   const [isGuest, setIsGuest] = useState<Boolean>(false);
   const style = useStyles();
@@ -165,11 +171,15 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
             textColor="primary">
             <Tab className={style.tabItem} label={'My Post'} />
             <Tab className={style.tabItem} label={'Imported Post'} />
-            <Tab className={style.tabItem} label={'Friends(0)'} />
+            <Tab className={style.tabItem} label={`Friends(${totalFriends})`} />
             <Tab className={style.tabItem} label={'My Wallet'} />
             <Tab className={style.tabItem} label={'My Experience'} />
           </Tabs>
-          <SwipeableViews axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'} index={value} onChangeIndex={handleChangeIndex}>
+          <SwipeableViews
+            className={style.tabContent}
+            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+            index={value}
+            onChangeIndex={handleChangeIndex}>
             <TabPanel value={value} index={0} dir={theme.direction}>
               <PostList profile={profile} user={user} />
             </TabPanel>
@@ -177,7 +187,7 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
               <h1>imported post</h1>
             </TabPanel>
             <TabPanel value={value} index={2} dir={theme.direction}>
-              <h1>Friends</h1>
+              <FriendComponent />
             </TabPanel>
             <TabPanel value={value} index={3} dir={theme.direction}>
               {

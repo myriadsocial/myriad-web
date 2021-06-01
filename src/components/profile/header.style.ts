@@ -2,6 +2,11 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    root: {
+      background: theme.palette.background.paper,
+      marginBottom: theme.spacing(5),
+      position: 'relative'
+    },
     media: {
       height: 180,
       objectFit: 'cover'
@@ -17,7 +22,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'space-between',
       // alignItems: 'center',
-      backgroundColor: '#F2F2F4',
+      backgroundColor: theme.palette.background.paper,
       padding: 16,
       borderRadius: '8px',
       color: '#4B4851'

@@ -3,7 +3,6 @@ import { useCookies } from 'react-cookie';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { signOut } from 'next-auth/client';
-import Link from 'next/link';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -13,28 +12,24 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
-import AddIcon from '@material-ui/icons/Add';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import CheckIcon from '@material-ui/icons/Check';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 import DialogTitle from '../common/DialogTitle.component';
-// import ShowIf from '../common/show-if.component';
 import { useStyles } from './header.style';
 import { useFriendHook } from './use-friend.hook';
 import { useProfileHook } from './use-profile.hook';
 
 import { EditableTextField } from 'src/components/common/EditableTextField';
 import { ImageUpload } from 'src/components/common/ImageUpload.component';
+import { SocialListComponent } from 'src/components/user/social-list.component';
 import { acronym } from 'src/helpers/string';
-import { User, ExtendedUserPost } from 'src/interfaces/user';
+import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
 
 type Props = {
-  user: User;
+  user: ExtendedUser;
   profile: ExtendedUserPost | null;
   loading: Boolean;
   isGuest: Boolean;
@@ -125,18 +120,7 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   };
 
   return (
-    <div className="header" style={{ marginBottom: 10, position: 'relative' }}>
-      <div>
-        <Typography variant="h4" style={{ marginBottom: 8, fontWeight: 500 }}>
-          <Link href="/home">
-            <a style={{ display: 'flex', alignItems: 'center' }}>
-              <ArrowBackIcon />
-              Home
-            </a>
-          </Link>
-        </Typography>
-      </div>
-
+    <div className={style.root}>
       <div className={style.header}>
         <div className="leftSide">
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -168,42 +152,21 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
 
         <div className="rightSide" style={{ width: 315 }}>
           <div style={{ textAlign: 'right' }}>
-            <Button className={style.button} size="small" variant="contained" color="primary" onClick={openEditProfile}>
+            <Button
+              className={style.button}
+              style={{ marginRight: 16 }}
+              size="medium"
+              variant="contained"
+              color="primary"
+              onClick={openEditProfile}>
               Edit Profile
             </Button>
-            <Button className={style.button} size="small" variant="outlined" color="primary" onClick={handleSignOut}>
+            <Button className={style.button} size="medium" variant="outlined" color="primary" onClick={handleSignOut}>
               Logout
             </Button>
           </div>
           <div style={{ marginTop: '30px' }}>
-            <Typography variant="body1" style={{ fontWeight: 700, fontSize: 16 }}>
-              Link my Social
-            </Typography>
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 1px', marginTop: '10px' }}>
-              <Typography variant="body2" style={{ fontSize: 16, fontWeight: 400 }}>
-                Facebook
-              </Typography>
-
-              <IconButton style={{ color: '#53C51E' }} aria-label="upload picture" size="small">
-                <CheckIcon />
-              </IconButton>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 1px', marginTop: '10px' }}>
-              <Typography variant="body2" style={{ fontSize: 16, fontWeight: 400 }}>
-                Twitter
-              </Typography>
-              <IconButton aria-label="upload picture" size="small">
-                <AddIcon />
-              </IconButton>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-              <Typography variant="body2" style={{ fontSize: 16, fontWeight: 400 }}>
-                Reddit
-              </Typography>
-              <IconButton aria-label="upload picture" size="small">
-                <AddIcon />
-              </IconButton>
-            </div>
+            <SocialListComponent user={user} />
           </div>
         </div>
       </div>

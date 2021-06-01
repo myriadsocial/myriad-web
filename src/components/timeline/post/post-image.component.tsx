@@ -1,5 +1,5 @@
 import React from 'react';
-import Carousel from 'react-images';
+import Carousel, { CarouselStyles } from 'react-images';
 import ReactPhotoGrid from 'react-photo-grid';
 
 import Dialog from '@material-ui/core/Dialog';
@@ -15,6 +15,7 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import ShowIf from 'src/components/common/show-if.component';
 import { ImageData } from 'src/interfaces/post';
+import theme from 'src/themes/light';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,9 +26,23 @@ const useStyles = makeStyles((theme: Theme) =>
       overflow: 'hidden',
       backgroundColor: theme.palette.background.paper
     },
-    gridList: {}
+    gridList: {},
+    transparentHeader: {
+      '& .MuiDialogTitle-root': {
+        background: theme.palette.background.default
+      }
+    }
   })
 );
+
+const carouselStyle: CarouselStyles = {
+  navigationNext: base => {
+    return { ...base, background: theme.palette.primary.main };
+  },
+  navigationPrev: base => {
+    return { ...base, background: theme.palette.primary.main };
+  }
+};
 
 type Props = {
   images: ImageData[];
@@ -63,14 +78,14 @@ export default function ImageListComponent({ images }: Props) {
           </GridList>
         </ShowIf>
 
-        <Dialog open={viewerIsOpen} fullScreen={fullScreen}>
+        <Dialog open={viewerIsOpen} fullScreen={fullScreen} className={style.transparentHeader}>
           <MuiDialogTitle>
-            <IconButton color="secondary" aria-label="close" size="small" onClick={closeLightbox}>
+            <IconButton color="primary" aria-label="close" size="small" onClick={closeLightbox}>
               <CloseIcon />
             </IconButton>
           </MuiDialogTitle>
 
-          <Carousel views={images.map((image, i) => ({ source: image.src, key: i }))} />
+          <Carousel styles={carouselStyle} views={images.map((image, i) => ({ source: image.src, key: i }))} />
         </Dialog>
       </NoSsr>
     </div>

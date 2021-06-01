@@ -62,9 +62,18 @@ export const searchFriend = async (query: string): Promise<ExtendedFriend[]> => 
     params: {
       filter: {
         where: {
-          'friend.nama': {
-            ilike: `*${query}*`
-          },
+          or: [
+            {
+              'friend.name': {
+                like: `.*${query}*`,
+                options: 'i'
+              },
+              'requestor.name': {
+                like: `.*${query}*`,
+                options: 'i'
+              }
+            }
+          ],
           status: FriendStatus.APPROVED
         },
         include: ['friend', 'requestor']

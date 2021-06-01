@@ -19,7 +19,7 @@ type Props = {
   user: WithAdditionalParams<User>;
 };
 
-const LayoutComponent = ({ children, user }: Props) => {
+const DesktopLayoutComponent = ({ children, user }: Props) => {
   const style = useStyles();
 
   const { setting } = useLayout();
@@ -42,11 +42,11 @@ const LayoutComponent = ({ children, user }: Props) => {
 
   return (
     <>
-      <AppBar />
-      <div className={style.appWrapper}>
-        <div className={style.contentWrapper}>{children}</div>
+      <FriendsProvider>
+        <AppBar />
+        <div className={style.appWrapper}>
+          <div className={style.contentWrapper}>{children}</div>
 
-        <FriendsProvider>
           <NotifProvider>
             <div className={style.experience}>
               <ShowIf condition={!setting.focus}>
@@ -54,10 +54,10 @@ const LayoutComponent = ({ children, user }: Props) => {
               </ShowIf>
             </div>
           </NotifProvider>
-        </FriendsProvider>
-      </div>
+        </div>
+      </FriendsProvider>
     </>
   );
 };
 
-export default LayoutComponent;
+export default DesktopLayoutComponent;

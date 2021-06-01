@@ -1,6 +1,7 @@
 import React from 'react';
 
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 import AppBar from '@material-ui/core/AppBar';
 import Badge from '@material-ui/core/Badge';
@@ -128,7 +129,11 @@ export default function HeaderBar() {
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-          <div className={classes.logo}>{isMobile ? <LogoImageCompact /> : <LogoImage />}</div>
+          <div className={classes.logo}>
+            <Link href="/home">
+              <a>{isMobile ? <LogoImageCompact /> : <LogoImage />}</a>
+            </Link>
+          </div>
           <div className={classes.grow} />
           <div className={classes.search}>
             <SearchUserComponent
