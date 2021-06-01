@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 
 import { User } from 'next-auth';
 
+import AppBar from '../app-bar/app-bar.component';
 import ShowIf from '../common/show-if.component';
 import { FriendsProvider } from '../friends/friends.context';
 import { NotifProvider } from '../notifications/notif.context';
 import SidebarComponent from '../sidebar/sidebar.component';
-import AppBar from './app-bar.component';
 import { useStyles } from './layout.style';
 import { useLayout } from './use-layout.hook';
 
