@@ -105,9 +105,9 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
           <ListItemIcon>
             <TwitterIcon />
           </ListItemIcon>
-          <ListItemText id="social-twitter" primary="TWITTER" />
+          <ListItemText id="social-twitter" primary="Twitter" />
           <ListItemSecondaryAction>
-            <IconButton onClick={connectSocial(SocialsEnum.REDDIT)} aria-label="social-list-item-twitter" size="medium">
+            <IconButton onClick={connectSocial(SocialsEnum.TWITTER)} aria-label="social-list-item-twitter" size="medium">
               {connected[SocialsEnum.TWITTER] ? <CheckIcon /> : <AddIcon />}
             </IconButton>
           </ListItemSecondaryAction>

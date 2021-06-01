@@ -3,10 +3,11 @@ import { FacebookShareButton, RedditShareButton, TwitterShareButton } from 'reac
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -20,6 +21,7 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 
 import { useStyles } from './conntect.style';
 
+import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
 import { SocialsEnum } from 'src/interfaces';
 
@@ -45,6 +47,7 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
   const [social, setSocial] = useState<SocialsEnum | null>(null);
   const [socialName, setSocialName] = useState('');
   const [shared, setShared] = useState(false);
+  const [termApproved, setTermApproved] = useState(false);
 
   const message = `I'm part of the Myriad ${publicKey}`;
   const APP_URL = 'https://app.myriad.systems';
@@ -83,7 +86,6 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
 
   const handleShared = () => {
     if (social && socialName) {
-      console.log('HERE');
       verify(social, socialName);
       close();
     }
@@ -98,15 +100,17 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
   return (
     <div>
       <Dialog open={open} maxWidth="md" onClose={close} aria-labelledby="link-social-accounts-window">
-        <DialogTitle id="connect-social">Link Your {social} Account</DialogTitle>
-        <DialogContent dividers>
+        <DialogTitle onClose={close} id="link-account">
+          Social Media Link
+        </DialogTitle>
+        <DialogContent className={styles.root}>
           <List component="div" aria-label="connect social steps">
-            <ListItem button>
-              <ListItemIcon>
-                <Avatar className={styles.icon}>1</Avatar>
+            <ListItem>
+              <ListItemIcon style={{ alignSelf: 'flex-start' }}>
+                <Avatar className={styles.icon}>1.</Avatar>
               </ListItemIcon>
               <ListItemText disableTypography>
-                <Typography variant="caption">Your Twitter Account</Typography>
+                <Typography variant="caption">Your {social} Account</Typography>
                 <TextField
                   className={styles.account}
                   hiddenLabel
@@ -121,17 +125,18 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
                   type="text"
                   id="username"
                   InputProps={{
+                    disableUnderline: true,
                     startAdornment: <InputAdornment position="start">{prefix[social]}</InputAdornment>
                   }}
                 />
               </ListItemText>
             </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <Avatar className={styles.icon}>2</Avatar>
+            <ListItem>
+              <ListItemIcon style={{ alignSelf: 'flex-start' }}>
+                <Avatar className={styles.icon}>2.</Avatar>
               </ListItemIcon>
               <ListItemText disableTypography>
-                <Typography variant="caption">Post it to your Twitter timeline</Typography>
+                <Typography variant="caption">Post it to your {social} timeline</Typography>
                 <TextField
                   disabled
                   margin="dense"
@@ -141,20 +146,23 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
                   rows={6}
                   fullWidth={true}
                   value={message}
+                  InputProps={{
+                    notched: true
+                  }}
                 />
               </ListItemText>
             </ListItem>
 
-            <ListItem button>
-              <ListItemIcon>
-                <Avatar className={styles.icon}>3</Avatar>
+            <ListItem>
+              <ListItemIcon style={{ alignSelf: 'flex-start' }}>
+                <Avatar className={styles.icon}>3.</Avatar>
               </ListItemIcon>
               <ListItemText disableTypography>
-                <Typography variant="caption">Post it to your Twitter timeline</Typography>
+                <Typography variant="caption">Post it to your {social} timeline</Typography>
                 <div className={styles.linkAction}>
                   <ShowIf condition={social === SocialsEnum.FACEBOOK}>
                     <FacebookShareButton url={APP_URL} quote={message} onShareWindowClose={onShareClosed}>
-                      <Button variant="contained" size="large" startIcon={<FacebookIcon />} className={styles.facebook}>
+                      <Button variant="outlined" size="large" startIcon={<FacebookIcon />} className={styles.facebook}>
                         Share
                       </Button>
                     </FacebookShareButton>
@@ -162,26 +170,32 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
 
                   <ShowIf condition={social === SocialsEnum.TWITTER}>
                     <TwitterShareButton url={APP_URL} title={message} onShareWindowClose={onShareClosed}>
-                      <Button variant="contained" size="large" startIcon={<TwitterIcon />} className={styles.twitter}>
-                        Share
+                      <Button variant="outlined" size="large" startIcon={<TwitterIcon />} className={styles.twitter}>
+                        Tweet Now
                       </Button>
                     </TwitterShareButton>
                   </ShowIf>
 
                   <ShowIf condition={social === SocialsEnum.REDDIT}>
                     <RedditShareButton url={APP_URL} title={message} onShareWindowClose={onShareClosed}>
-                      <Button variant="contained" size="large" startIcon={<RedditIcon />} className={styles.reddit}>
+                      <Button variant="outlined" size="large" startIcon={<RedditIcon />} className={styles.reddit}>
                         Share
                       </Button>
                     </RedditShareButton>
                   </ShowIf>
+
+                  <FormControlLabel
+                    className={styles.term}
+                    control={<Checkbox checked={termApproved} onChange={() => setTermApproved(!termApproved)} name="term" />}
+                    label="Please Check this box if you agree with our Privacy and Policy"
+                  />
                 </div>
               </ListItemText>
             </ListItem>
           </List>
         </DialogContent>
         <DialogActions className={styles.done}>
-          <Button onClick={handleShared} disabled={!shared} size="medium" variant="contained" color="primary">
+          <Button onClick={handleShared} disabled={!shared || !termApproved} size="large" variant="contained" color="primary">
             Verified My Twitter Account
           </Button>
         </DialogActions>
