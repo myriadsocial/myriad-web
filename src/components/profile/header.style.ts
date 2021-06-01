@@ -5,30 +5,26 @@ export const useStyles = makeStyles((theme: Theme) =>
     media: {
       height: 180,
       objectFit: 'cover'
-      // paddingTop: '34.25%',
     },
     button: {
-      width: 100,
-      margin: 0,
-      marginLeft: -20,
-      borderRadius: 5
+      // width: 100,
+      paddingRight: 24,
+      paddingLeft: 24,
+      borderRadius: '8px'
     },
     header: {
       width: '100%',
       display: 'flex',
       justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingRight: 20,
-      paddingLeft: 20,
-      paddingBottom: 10,
-      position: 'absolute',
-      top: 80
+      // alignItems: 'center',
+      backgroundColor: '#F2F2F4',
+      padding: 16,
+      borderRadius: '8px',
+      color: '#4B4851'
     },
     avatar: {
-      width: '100px',
-      height: '100px',
-      border: '3px solid',
-      borderColor: 'white',
+      width: '72px',
+      height: '72px',
       borderRadius: '9999px',
       backgroundColor: '#424242',
       display: 'flex',
@@ -36,9 +32,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       fontSize: 30,
       color: 'white',
-      marginRight: 10,
-      position: 'absolute',
-      top: 50
+      marginRight: 10
     },
     about: {
       textAlign: 'center',
@@ -63,10 +57,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginRight: 10
     },
     name: {
-      fontSize: 16,
+      fontSize: 18,
       lineHeight: '12px',
       fontWeight: 500,
-      color: '#FFF',
       textTransform: 'capitalize'
     },
     publicKey: {

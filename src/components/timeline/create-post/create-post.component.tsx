@@ -143,8 +143,8 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
           <PostSettingComponent />
         </div>
       </div>
-      <Card variant="outlined">
-        <CardContent style={{ background: '#C4C4C4' }}>
+      <Card variant="outlined" className={styles.cardPost}>
+        <CardContent>
           <TextareaAutosize
             rowsMin={2}
             placeholder={`Any thought about something`}
@@ -153,14 +153,14 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
             spellCheck={false}
           />
         </CardContent>
-        <CardActions>
-          <Button variant="contained" color="default" className={styles.button} onClick={toggleCreatePost} startIcon={<CameraAltIcon />}>
+        <CardActions className={styles.cardPostAction}>
+          <Button variant="outlined" color="primary" className={styles.button} onClick={toggleCreatePost} startIcon={<CameraAltIcon />}>
             Post Photos
           </Button>
-          <Button variant="contained" color="default" disabled className={styles.button} startIcon={<VideocamIcon />}>
+          <Button variant="outlined" color="primary" disabled className={styles.button} startIcon={<VideocamIcon />}>
             Post Videos
           </Button>
-          <Button variant="contained" color="default" className={styles.createPost} onClick={toggleCreatePost}>
+          <Button variant="contained" color="primary" className={styles.createPost} onClick={toggleCreatePost}>
             Create A Post
           </Button>
         </CardActions>
@@ -215,17 +215,17 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
                   Add somenting to your post
                 </Typography>
                 <input type="file" multiple ref={uploadImageRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
-                <IconButton color="default" aria-label="upload images" onClick={selectImages}>
+                <IconButton color="primary" aria-label="upload images" onClick={selectImages}>
                   <ImageIcon />
                 </IconButton>
                 <input type="file" multiple ref={uploadVideoRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
-                <IconButton aria-label="upload-video" disabled color="default" onClick={selectVideo}>
+                <IconButton color="primary" aria-label="upload-video" disabled onClick={selectVideo}>
                   <VideocamIcon />
                 </IconButton>
-                <IconButton color="default" disabled aria-label="add-people">
+                <IconButton color="primary" disabled aria-label="add-people">
                   <PeopleIcon />
                 </IconButton>
-                <IconButton color="default" disabled aria-label="add-link">
+                <IconButton color="primary" disabled aria-label="add-link">
                   <LinkIcon />
                 </IconButton>
               </div>

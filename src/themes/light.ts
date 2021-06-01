@@ -1,22 +1,24 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
+const defaultTheme = createMuiTheme();
+
 // Create a theme instance.
 const theme = createMuiTheme({
   palette: {
     type: 'light',
     primary: {
-      main: '#6D15CB',
+      main: '#8629E9',
       light: '#DEDCE1',
       dark: '#4B4851'
     },
     secondary: {
       main: '#A25AEE',
       light: '#BB87F3',
-      dark: '#6D15CB'
+      dark: '#8629E9'
     },
     background: {
-      default: '#FFFFFF',
-      paper: '#DEDCE1'
+      default: '#F2F2F4',
+      paper: '#FFFFFF'
     },
     text: {
       primary: '#000000'
@@ -42,12 +44,13 @@ const theme = createMuiTheme({
       fontWeight: 'bold'
     }
   },
+
   overrides: {
     MuiCssBaseline: {
       '@global': {
         a: {
           textDecoration: 'none',
-          color: '#6D15CB'
+          color: '#8629E9'
         },
         '*::-webkit-scrollbar': {
           width: '0.4em'
@@ -56,7 +59,7 @@ const theme = createMuiTheme({
           '-webkit-box-shadow': 'inset 0 0 6px #171717'
         },
         '*::-webkit-scrollbar-thumb': {
-          backgroundColor: '#6D15CB',
+          backgroundColor: '#8629E9',
           outline: '1px solid #424242'
         }
       }
@@ -66,7 +69,11 @@ const theme = createMuiTheme({
     MuiToolbar: {
       gutters: {
         paddingRight: 32,
-        paddingLeft: 32
+        paddingLeft: 32,
+        [defaultTheme.breakpoints.up('md')]: {
+          paddingRight: 32,
+          paddingLeft: 32
+        }
       }
     },
 
@@ -83,7 +90,7 @@ const theme = createMuiTheme({
     },
     MuiDialogTitle: {
       root: {
-        background: '#6D15CB',
+        background: '#8629E9',
         fontWeight: 700,
         fontSize: 18,
         lineHeight: 23,
@@ -128,42 +135,6 @@ const theme = createMuiTheme({
       }
     },
 
-    // MuiInput: {
-    //   colorSecondary: {
-    //     backgroundColor: fade('#FFF', 0.9),
-    //     color: '#2D2D2D',
-    //     '&.MuiInput-underline:after': {
-    //       borderBottomColor: '#E849BD'
-    //     },
-    //     '& .MuiInputBase-input': {
-    //       marginLeft: 4
-    //     }
-    //   }
-    // },
-    // MuiFormLabel: {
-    //   colorSecondary: {
-    //     zIndex: 1,
-    //     marginLeft: 4,
-    //     color: fade('#000', 0.7),
-    //     '&.Mui-focused': {
-    //       marginLeft: 0,
-    //       color: '#E849BD'
-    //     }
-    //   }
-    // },
-    // MuiSwitch: {
-    //   colorPrimary: {
-    //     '&&.Mui-checked': {
-    //       color: '#6D15CB'
-    //     }
-    //   },
-    //   colorSecondary: {
-    //     '&&.Mui-checked': {
-    //       color: '#171717'
-    //     }
-    //   }
-    // },
-
     // BUTTON
     MuiButton: {
       root: {
@@ -181,41 +152,12 @@ const theme = createMuiTheme({
         marginBottom: 16
       },
       containedPrimary: {
-        backgroundColor: '#6D15CB'
+        backgroundColor: '#8629E9'
       },
       containedSecondary: {
         backgroundColor: '#B1AEB7'
       }
     },
-
-    // MuiChip: {
-    //   colorPrimary: {
-    //     backgroundColor: '#6D15CB'
-    //   },
-    //   colorSecondary: {
-    //     backgroundColor: '#171717'
-    //   }
-    // },
-    // MuiAccordion: {
-    //   root: {
-    //     background: 'transparent',
-    //     border: 0,
-    //     color: '#E0E0E0'
-    //   }
-    // },
-
-    // MuiCardHeader: {
-    //   root: {
-    //     borderBottom: `1px solid #171717`,
-    //     padding: '8px 16px',
-    //     fontSize: 14
-    //   }
-    // },
-    // MuiTypography: {
-    //   colorSecondary: {
-    //     color: '#6D15CB'
-    //   }
-    // },
 
     // MENU & LIST
     MuiList: {
@@ -226,7 +168,7 @@ const theme = createMuiTheme({
     MuiListItem: {
       root: {
         '&:nth-child(even)': {
-          backgroundColor: '#EFEFEF'
+          backgroundColor: '#F2F2F4'
         }
       }
     },
@@ -245,16 +187,22 @@ const theme = createMuiTheme({
     },
 
     // CARD
+    MuiCard: {
+      root: {
+        background: 'rgba(255, 255, 255, 0.8)',
+        border: 0
+      }
+    },
     MuiCardHeader: {
       root: {
-        background: '#C4C4C4',
+        background: '#FFFFFF',
         padding: 16,
         height: 88
       }
     },
     MuiCardActions: {
       root: {
-        background: '#C4C4C4',
+        background: '#FFFFFF',
         padding: 8
       }
     },
@@ -271,6 +219,16 @@ const theme = createMuiTheme({
     MuiPaper: {
       rounded: {
         borderRadius: 8
+      }
+    },
+
+    MuiAccordionSummary: {
+      root: {
+        background: '#8629E9',
+        borderRadius: 8,
+        fontSize: 16,
+        color: '#FFFFFF',
+        fontWeight: 700
       }
     }
   }

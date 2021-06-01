@@ -12,6 +12,9 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       backgroundColor: theme.palette.primary.light
     },
+    icon: {
+      marginRight: theme.spacing(1)
+    },
     toolbar: {
       padding: '0 12px'
     },
@@ -24,20 +27,23 @@ const useStyles = makeStyles((theme: Theme) =>
 type Props = {
   children: React.ReactNode;
   title: string;
+  expanded?: boolean;
   actions?: React.ReactElement;
+  startIcon?: React.ReactElement;
 };
 
-export default function ExpandablePanel({ children, title, actions }: Props) {
+export default function ExpandablePanel({ children, title, expanded = false, actions, startIcon }: Props) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <Accordion>
+      <Accordion defaultExpanded={expanded}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-label="Expand"
           aria-controls="additional-actions1-content"
           id="additional-actions1-header">
+          {startIcon && <div className={classes.icon}>{startIcon}</div>}
           <Typography variant="h4" className={classes.title}>
             {title}
           </Typography>

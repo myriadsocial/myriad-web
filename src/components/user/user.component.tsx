@@ -26,7 +26,10 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       marginBottom: theme.spacing(3),
-      width: '100%'
+      width: '100%',
+      background: theme.palette.background.paper,
+      borderRadius: theme.spacing(1),
+      filter: 'drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.08))'
     },
     cardProfile: {
       boxShadow: 'none'

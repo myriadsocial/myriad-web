@@ -109,7 +109,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user }) => {
 
   return (
     <>
-      <Button disableRipple={true} disableFocusRipple={true} variant="contained" size="medium" onClick={toggleProfileForm}>
+      <Button disableRipple={true} disableFocusRipple={true} variant="contained" size="medium" color="primary" onClick={toggleProfileForm}>
         Edit Profile
       </Button>
 
