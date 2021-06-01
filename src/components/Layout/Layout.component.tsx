@@ -42,11 +42,11 @@ const LayoutComponent = ({ children, user }: Props) => {
 
   return (
     <>
-      <AppBar />
-      <div className={style.appWrapper}>
-        <div className={style.contentWrapper}>{children}</div>
+      <FriendsProvider>
+        <AppBar />
+        <div className={style.appWrapper}>
+          <div className={style.contentWrapper}>{children}</div>
 
-        <FriendsProvider>
           <NotifProvider>
             <div className={style.experience}>
               <ShowIf condition={!setting.focus}>
@@ -54,8 +54,8 @@ const LayoutComponent = ({ children, user }: Props) => {
               </ShowIf>
             </div>
           </NotifProvider>
-        </FriendsProvider>
-      </div>
+        </div>
+      </FriendsProvider>
     </>
   );
 };
