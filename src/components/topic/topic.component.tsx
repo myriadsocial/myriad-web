@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import DividerComponent from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
@@ -6,6 +6,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import LanguageIcon from '@material-ui/icons/Language';
 
 import { TopicListComponent } from './topic-list.component';
+import { useTopic } from './use-topic.hooks';
 
 import ExpandablePanel from 'src/components/common/panel-expandable.component';
 import SearchComponent from 'src/components/common/search.component';
@@ -27,10 +28,17 @@ const useStyles = makeStyles((theme: Theme) =>
 const TopicComponent: React.FC<TopicProps> = props => {
   const styles = useStyles();
 
+  const { popularTopics, topics, loadPopularTopic, loadTopic, searchTopic } = useTopic();
   const [search, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    loadTopic();
+    loadPopularTopic();
+  }, []);
 
   const handleSearchTag = (query: string) => {
     setSearchQuery(query);
+    searchTopic(query);
   };
 
   return (
@@ -43,7 +51,7 @@ const TopicComponent: React.FC<TopicProps> = props => {
             </Typography>
           </div>
 
-          <TopicListComponent />
+          <TopicListComponent topics={popularTopics} />
 
           <DividerComponent />
 
@@ -55,7 +63,7 @@ const TopicComponent: React.FC<TopicProps> = props => {
 
           <SearchComponent value={search} placeholder="Search a tag" onSubmit={handleSearchTag} />
 
-          <TopicListComponent add={true} />
+          <TopicListComponent add={true} topics={topics} />
         </div>
       </ExpandablePanel>
     </div>
