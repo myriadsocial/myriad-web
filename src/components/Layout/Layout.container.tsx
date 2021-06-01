@@ -1,20 +1,25 @@
 import React, { ReactNode } from 'react';
 
 import { Session } from 'next-auth';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
 import NoSsr from '@material-ui/core/NoSsr';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import AlertComponent from '../alert/Alert.component';
 import { ConverstionProvider } from '../conversation/conversation.context';
 import { ExperienceProvider } from '../experience/experience.context';
 import { TimelineProvider } from '../timeline/timeline.context';
 import { TransactionProvider } from '../tippingJar/transaction.context';
-import LayoutComponent from './Layout.component';
 import { LayoutSettingProvider } from './layout.context';
 
 import TourComponent from 'src/tour/Tour.component';
+
+const DektopLayoutComponent = dynamic(() => import('./desktop-layout.component'));
+const MobileLayoutComponent = dynamic(() => import('./mobile-layout.component'));
 
 type Props = {
   session: Session | null;
@@ -32,7 +37,8 @@ const useStyles = makeStyles(() =>
 
 const Layout = ({ children, session }: Props) => {
   const style = useStyles();
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   if (!session) return null;
 
   return (
@@ -49,7 +55,11 @@ const Layout = ({ children, session }: Props) => {
           <ExperienceProvider>
             <ConverstionProvider>
               <TimelineProvider>
-                <LayoutComponent user={session.user}>{children}</LayoutComponent>
+                {isMobile ? (
+                  <MobileLayoutComponent user={session.user}>{children}</MobileLayoutComponent>
+                ) : (
+                  <DektopLayoutComponent user={session.user}>{children}</DektopLayoutComponent>
+                )}
               </TimelineProvider>
             </ConverstionProvider>
           </ExperienceProvider>

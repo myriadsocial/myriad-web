@@ -19,7 +19,7 @@ type Props = {
   user: WithAdditionalParams<User>;
 };
 
-const LayoutComponent = ({ children, user }: Props) => {
+const DesktopLayoutComponent = ({ children, user }: Props) => {
   const style = useStyles();
 
   const { setting } = useLayout();
@@ -60,4 +60,4 @@ const LayoutComponent = ({ children, user }: Props) => {
   );
 };
 
-export default LayoutComponent;
+export default DesktopLayoutComponent;

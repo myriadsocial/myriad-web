@@ -9,6 +9,7 @@ import LanguageIcon from '@material-ui/icons/Language';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PeopleIcon from '@material-ui/icons/People';
 
+import { useLayout } from 'src/components/Layout/use-layout.hook';
 import { SidebarTab } from 'src/interfaces/sidebar';
 
 interface Props {
@@ -24,10 +25,12 @@ const useStyles = makeStyles((theme: Theme) =>
 export const MobileMenuComponent = ({ onChange }: Props) => {
   const styles = useStyles();
 
-  const [value, setValue] = React.useState('recents');
+  const { changeSelectedSidebar } = useLayout();
+  const [value, setValue] = React.useState(4);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
-    setValue(newValue);
+  const handleChange = (event: React.ChangeEvent<{}>, tab: SidebarTab) => {
+    setValue(tab);
+    changeSelectedSidebar(tab);
   };
 
   return (
