@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
@@ -14,6 +14,7 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
+import { ConnectSuccessComponent } from '../connect/connect-success.component';
 import { ConnectComponent } from '../connect/connect.component';
 
 import { useShareSocial } from 'src/hooks/use-share-social';
@@ -37,13 +38,20 @@ type SocialListProps = {
 export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
   const classes = useStyles();
 
-  const { shareOnTwitter, shareOnReddit, shareOnFacebook } = useShareSocial(user.id);
+  const { isShared, shareOnTwitter, shareOnReddit, shareOnFacebook } = useShareSocial(user.id);
+  const [connecting, setConnecting] = useState(false);
   const connectRef = useRef<React.ElementRef<typeof ConnectComponent>>(null);
   const connected: Record<SocialsEnum, boolean> = {
     [SocialsEnum.FACEBOOK]: false,
     [SocialsEnum.TWITTER]: false,
     [SocialsEnum.REDDIT]: false
   };
+
+  useEffect(() => {
+    if (!isShared) {
+      setConnecting(false);
+    }
+  }, [isShared]);
 
   if (user && user.userCredentials.length > 0) {
     const twitterCredential = user.userCredentials.find(item => item.people.platform === SocialsEnum.TWITTER);
@@ -65,6 +73,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
 
   const connectSocial = (social: SocialsEnum) => () => {
     if (!connected[social]) {
+      setConnecting(true);
       connectRef.current?.openConnectForm(social);
     }
   };
@@ -126,6 +135,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
       </List>
 
       <ConnectComponent ref={connectRef} publicKey={user.id} verify={verifyShared} />
+      <ConnectSuccessComponent open={connecting && isShared} onClose={() => setConnecting(false)} />
     </>
   );
 };
