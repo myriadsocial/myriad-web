@@ -31,6 +31,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(1),
       border: 0,
       borderRadius: theme.spacing(1),
+      background: theme.palette.background.paper,
       fontSize: 16,
       height: 56,
       '&:focus-visible': {
@@ -49,6 +50,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 800,
       padding: theme.spacing(1, 0),
       boxShadow: 'none'
+    },
+    cardPost: {
+      background: lighten(theme.palette.background.default, 0.2),
+      filter: 'drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.08))'
+    },
+    cardPostAction: {
+      background: lighten(theme.palette.background.default, 0.2)
     },
     cardHeader: {
       padding: theme.spacing(1),
@@ -79,7 +87,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(2)
     },
     action: {
-      background: '#F2F2F4'
+      background: theme.palette.background.paper
     }
   })
 );
