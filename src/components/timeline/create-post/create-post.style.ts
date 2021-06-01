@@ -87,7 +87,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(2)
     },
     action: {
-      background: theme.palette.background.paper
+      background: theme.palette.background.default
     }
   })
 );

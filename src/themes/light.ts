@@ -8,7 +8,7 @@ const theme = createMuiTheme({
     type: 'light',
     primary: {
       main: '#8629E9',
-      light: '#DEDCE1',
+      light: '#F2F2F4',
       dark: '#4B4851'
     },
     secondary: {
@@ -228,13 +228,35 @@ const theme = createMuiTheme({
       }
     },
 
+    MuiAccordion: {
+      rounded: {
+        background: '#F2F2F4',
+        '&:last-child': {
+          borderBottomLeftRadius: defaultTheme.spacing(1),
+          borderBottomRightRadius: defaultTheme.spacing(1)
+        },
+        '&:first-child': {
+          borderTopLeftRadius: defaultTheme.spacing(1),
+          borderTopRightRadius: defaultTheme.spacing(1)
+        }
+      }
+    },
     MuiAccordionSummary: {
       root: {
         background: '#8629E9',
         borderRadius: 8,
         fontSize: 16,
         color: '#FFFFFF',
-        fontWeight: 700
+        fontWeight: 700,
+
+        '&.Mui-expanded': {
+          minHeight: 48
+        }
+      },
+      content: {
+        '&.Mui-expanded': {
+          margin: defaultTheme.spacing(1.5, 0)
+        }
       }
     }
   }
