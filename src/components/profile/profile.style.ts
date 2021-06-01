@@ -9,7 +9,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingRight: '32px',
       marginRight: 'auto',
       height: '100vh',
-      width: '78vw',
       overflow: 'hidden',
       scrollbarWidth: 'none',
       msOverflowStyle: 'none',
