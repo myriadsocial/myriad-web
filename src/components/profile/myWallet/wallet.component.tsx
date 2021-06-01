@@ -51,36 +51,11 @@ export const WalletComponent = React.memo(function Wallet() {
 
   useEffect(() => {}, [transactionRef, balanceRef]);
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    transactionRef.current?.triggerRefresh();
-    balanceRef.current?.triggerRefresh();
-  };
-
-  {
-    //const WalletAction = () => {
-    //return (
-    //<div className={style.walletActions}>
-    //<IconButton
-    //color="default"
-    //size="small"
-    //aria-label="refresh-wallet"
-    //onClick={handleClick}
-    //onFocus={event => event.stopPropagation()}>
-    //<RefreshIcon />
-    //</IconButton>
-    //<IconButton
-    //color="default"
-    //size="small"
-    //aria-label="wallet-settings"
-    //onClick={event => event.stopPropagation()}
-    //onFocus={event => event.stopPropagation()}>
-    //<SettingsIcon />
-    //</IconButton>
-    //</div>
-    //);
-    //};
-  }
+  //const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //e.stopPropagation();
+  //transactionRef.current?.triggerRefresh();
+  //balanceRef.current?.triggerRefresh();
+  //};
 
   return (
     <div className={style.root}>

@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 
 //import { useFriendsHook } from 'src/components/friends/use-friends-hook';
 import { Transaction } from 'src/interfaces/transaction';
@@ -20,7 +21,12 @@ type Props = {
   sortDirection?: string;
 };
 
-const useStyles = makeStyles((theme: Theme) =>
+type ListItemContentProps = {
+  txHistory: Transaction;
+  userId: string;
+};
+
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       width: '100%',
@@ -28,22 +34,14 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       justifyContent: 'center'
     },
-    rootPrimaryText: {
-      display: 'flex',
-      flexDirection: 'row',
+    expandButton: {
       justifyContent: 'center'
-    },
-    cardContentBox: {
-      width: 640,
-      height: 80
-    },
-    textSecondary: {
-      color: '#E0E0E0'
-    },
-    action: {
-      backgroundColor: theme.palette.secondary.light,
-      color: theme.palette.common.white
-    },
+    }
+  })
+);
+
+const useStylesListItemContent = makeStyles((theme: Theme) =>
+  createStyles({
     badge: {
       textAlign: 'right',
       '& > *': {
@@ -53,56 +51,81 @@ const useStyles = makeStyles((theme: Theme) =>
         textTransform: 'uppercase'
       }
     },
-    avatar: {
-      minWidth: 40
-    },
     green: {
-      backgroundColor: '#4caf50',
-      color: '#FFF'
-    },
-    received: {
       color: '#4caf50'
     },
     red: {
-      backgroundColor: '#f44336',
-      color: '#FFF'
-    },
-    sent: {
-      color: '#f44336'
-    },
-    loading: {
-      color: '#A942E9'
-    },
-    panel: {
-      padding: '4px'
-    },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120
-    },
-    transactionItem: {
-      background: '#DDDDDD',
-      '& .MuiCardHeader-root, & .MuiCardActions-root': {
-        background: '#EFEFEF'
-      }
-    },
-    transactionActionList: {
-      display: 'flex',
-      flexDirection: 'row',
-      padding: 0,
-      alignItems: 'flex-start'
-    },
-    iconButton: {
-      margin: theme.spacing(1)
-    },
-    expandButton: {
-      justifyContent: 'center'
-    },
-    typography: {
-      padding: theme.spacing(2)
+      color: '#B9210D'
     }
   })
 );
+
+const StyledListItemAvatar = withStyles({
+  root: {
+    minWidth: 40
+  }
+})(ListItemAvatar);
+
+const StyledListItemText = withStyles({
+  primary: {
+    color: '#4b4851',
+    fontWeight: 'bold',
+    fontSize: 16
+  },
+  secondary: {
+    color: '#9e9e9e',
+    fontWeight: 'normal',
+    fontSize: 14
+  }
+})(ListItemText);
+
+const ListItemContent = ({ txHistory, userId }: ListItemContentProps) => {
+  const style = useStylesListItemContent();
+
+  const defaultUserName = 'Unknown Myrian';
+
+  const RenderPrimaryText = (txHistory: Transaction) => {
+    return (
+      <>
+        {userId === txHistory?.from ? (
+          <>You tipped {txHistory?.toUser?.name ?? defaultUserName} with Acala</>
+        ) : (
+          <>{txHistory?.fromUser?.name ?? defaultUserName} tipped you Acala</>
+        )}
+      </>
+    );
+  };
+
+  const RenderSecondaryText = (txHistory: Transaction) => {
+    const formatDate = () => {
+      let formattedDate = new Date(txHistory?.createdAt);
+      return formattedDate.toUTCString();
+    };
+
+    return <>{formatDate()}</>;
+  };
+
+  return (
+    <div key={txHistory?.id}>
+      <ListItem>
+        <StyledListItemAvatar>
+          <Avatar
+            aria-label="avatar"
+            src={txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL}
+          />
+        </StyledListItemAvatar>
+        <StyledListItemText primary={RenderPrimaryText(txHistory)} secondary={RenderSecondaryText(txHistory)} />
+        <ListItemSecondaryAction>
+          <div className={style.badge}>
+            <Typography className={userId === txHistory?.from ? style.red : style.green}>
+              {userId === txHistory?.from ? '-' : '+'} {txHistory?.value / 1000000000000} Myria
+            </Typography>
+          </div>
+        </ListItemSecondaryAction>
+      </ListItem>
+    </div>
+  );
+};
 
 export default function TransactionListComponent({ transactions, user }: Props) {
   const style = useStyles();
@@ -131,35 +154,6 @@ export default function TransactionListComponent({ transactions, user }: Props) 
   //}
   //};
 
-  const defaultUserName = 'Unknown Myrian';
-
-  const RenderPrimaryText = (txHistory: Transaction) => {
-    return (
-      <div>
-        {user.id === txHistory?.from ? (
-          <div className={style.rootPrimaryText}>
-            <Typography>You tipped {txHistory?.toUser?.name ?? defaultUserName} Acala</Typography>
-            <Typography>{txHistory?.value / 1000000000000}</Typography>
-          </div>
-        ) : (
-          <div className={style.rootPrimaryText}>
-            <Typography>{txHistory?.fromUser?.name ?? defaultUserName} tipped you Acala</Typography>
-            <Typography>{txHistory?.value / 1000000000000}</Typography>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  const RenderSecondaryText = (txHistory: Transaction) => {
-    const formatDate = () => {
-      let formattedDate = new Date(txHistory?.createdAt);
-      return formattedDate.toUTCString();
-    };
-
-    return <Typography variant="subtitle2">{formatDate()}</Typography>;
-  };
-
   const ExpandMore = () => {
     return (
       <ListItem className={style.expandButton}>
@@ -172,52 +166,8 @@ export default function TransactionListComponent({ transactions, user }: Props) 
     <>
       <List className={style.root}>
         {expandable
-          ? allTransactions.slice(0, 2).map(txHistory => (
-              <div key={txHistory?.id}>
-                <ListItem className={style.transactionItem}>
-                  <Card>
-                    <CardContent className={style.cardContentBox}>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {RenderPrimaryText(txHistory)}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary" component="p">
-                        {RenderSecondaryText(txHistory)}
-                      </Typography>
-                    </CardContent>
-                    {
-                      //<CardHeader
-                      //avatar={
-                      //<Avatar
-                      //aria-label="avatar"
-                      //src={
-                      //txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL
-                      //}
-                      ///>
-                      //}
-                      //title={RenderPrimaryText(txHistory)}
-                      //subheader={RenderSecondaryText(txHistory)}
-                      ///>
-                    }
-                  </Card>
-                </ListItem>
-              </div>
-            ))
-          : allTransactions.map(txHistory => (
-              <div key={txHistory?.id}>
-                <ListItem className={style.transactionItem}>
-                  <Card>
-                    <CardContent className={style.cardContentBox}>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {RenderPrimaryText(txHistory)}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary" component="p">
-                        {RenderSecondaryText(txHistory)}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </ListItem>
-              </div>
-            ))}
+          ? allTransactions.slice(0, 2).map(txHistory => <ListItemContent txHistory={txHistory} userId={userId} />)
+          : allTransactions.map(txHistory => <ListItemContent txHistory={txHistory} userId={userId} />)}
       </List>
       {expandable ? (
         <ExpandMore />
