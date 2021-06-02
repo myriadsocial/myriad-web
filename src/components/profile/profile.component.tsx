@@ -12,6 +12,7 @@ import { useTheme } from '@material-ui/core/styles';
 import { LoadingPage } from '../common/loading.component';
 import { TabPanel } from '../common/tab-panel.component';
 import Header from './header.component';
+import { TippingComponent } from './myWallet/tipping.component';
 import { WalletComponent } from './myWallet/wallet.component';
 import { useStyles } from './profile.style';
 
@@ -76,23 +77,6 @@ const useStylesForTabs = makeStyles((theme: Theme) => ({
   }
 }));
 
-//interface TabPanelProps {
-//children?: React.ReactNode;
-//index: any;
-//value: any;
-//ariaLabel?: string;
-//}
-
-//function TabPanel(props: TabPanelProps) {
-//const { children, value, index, ariaLabel, ...other } = props;
-
-//return (
-//<div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
-//{value === index && <div>{children}</div>}
-//</div>
-//);
-//}
-
 function CustomizedTabs() {
   const classes = useStylesForTabs();
   const [value, setValue] = React.useState(0);
@@ -104,7 +88,7 @@ function CustomizedTabs() {
   return (
     <div className={classes.root}>
       <div className={classes.demo2}>
-        <StyledTabs value={value} onChange={handleChange} aria-label="styled tabs example">
+        <StyledTabs value={value} onChange={handleChange} aria-label="tabs-for-wallet-or-tipping">
           <StyledTab label="Wallet" />
           <StyledTab label="Tipping" />
         </StyledTabs>
@@ -112,7 +96,7 @@ function CustomizedTabs() {
           <WalletComponent />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Item Two
+          <TippingComponent />
         </TabPanel>
       </div>
     </div>

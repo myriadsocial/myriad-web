@@ -38,13 +38,19 @@ type BalanceProps = {
   hidden?: boolean;
 };
 
+type TransactionProps = {
+  detailed?: boolean;
+};
+
 const ForwardedBalanceComponent = forwardRef(({ hidden, ...props }: BalanceProps, ref) => (
   <BalanceComponent {...props} hidden={hidden} forwardedRef={ref} />
 ));
 
-const ForwardedTransactionComponent = forwardRef((props, ref) => <TransactionComponent {...props} forwardedRef={ref} />);
+const ForwardedTransactionComponent = forwardRef(({ detailed, ...props }: TransactionProps, ref) => (
+  <TransactionComponent detailed={detailed} {...props} forwardedRef={ref} />
+));
 
-export const WalletComponent = React.memo(function Wallet() {
+export const TippingComponent = React.memo(function Wallet() {
   const style = useStyles();
 
   const transactionRef = createRef<any>();
@@ -61,9 +67,9 @@ export const WalletComponent = React.memo(function Wallet() {
 
   return (
     <div className={style.root}>
-      <ForwardedBalanceComponent ref={balanceRef} />
+      <ForwardedBalanceComponent ref={balanceRef} hidden={true} />
       <Divider variant="middle" />
-      <ForwardedTransactionComponent ref={transactionRef} />
+      <ForwardedTransactionComponent ref={transactionRef} detailed={true} />
     </div>
   );
 });

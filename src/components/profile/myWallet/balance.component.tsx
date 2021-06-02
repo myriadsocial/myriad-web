@@ -100,9 +100,10 @@ const TableCell = withStyles({
 
 interface BalanceProps {
   forwardedRef: React.ForwardedRef<any>;
+  hidden?: boolean;
 }
 
-const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
+const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, hidden }) => {
   const style = useStyles();
 
   const [session] = useSession();
@@ -173,9 +174,7 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
   return (
     <div ref={forwardedRef} className={style.root}>
       <CurrencyTable />
-      <div className={style.buttonContainer}>
-        <Button className={style.button}> Add more currency </Button>
-      </div>
+      <div className={style.buttonContainer}>{hidden === true ? '' : <Button className={style.button}> Add more currency </Button>}</div>
     </div>
   );
 };

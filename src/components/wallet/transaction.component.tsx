@@ -72,9 +72,10 @@ type StyledComponentProps = {
 
 interface TransactionProps {
   forwardedRef: React.ForwardedRef<any>;
+  detailed?: boolean;
 }
 
-const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef }) => {
+const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef, detailed }) => {
   const styles = useStyles();
 
   const [session] = useSession();
