@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
-import { LoadingPage } from '../common/loading.component';
-import { useStyles } from './profile.style';
+import { LoadingPage } from '../../common/loading.component';
+import { useStyles } from '../profile.style';
 
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
+import { useProfileHook } from 'src/components/profile/use-profile.hook';
 import PostComponent from 'src/components/timeline/post/post.component';
 import { usePost } from 'src/components/timeline/use-post.hook';
 import { Post } from 'src/interfaces/post';
@@ -16,30 +17,42 @@ import { User, ExtendedUserPost } from 'src/interfaces/user';
 
 type Props = {
   user: User;
-  profile: ExtendedUserPost | null;
+  profile: ExtendedUserPost;
 };
 
-export default function PostList({ user, profile }: Props) {
+export default function ImportedPostList({ user, profile }: Props) {
   const style = useStyles();
   const { hasMore, loadMorePost } = usePost(user);
+  const { loadImportedPost, importedPost: posts, loading } = useProfileHook(profile.id);
 
   const isOwnPost = (post: Post) => {
-    if (post.walletAddress === user.id) {
-      return true;
-    }
+    if (post.walletAddress === user.id) return true;
     return false;
   };
+
+  useEffect(() => {
+    loadImportedPost();
+  }, []);
+
+  if (loading === false && posts.length === 0) {
+    return (
+      <div style={{ textAlign: 'center', padding: 16, backgroundColor: 'white', borderRadius: 8 }}>
+        <h2>You haven’t imported any post yet</h2>
+        <p>When you import post in them, it will show up here.</p>
+      </div>
+    );
+  }
 
   return (
     <>
       <InfiniteScroll
         scrollableTarget="scrollable-timeline"
         className={style.child}
-        dataLength={profile?.posts.length || 100}
+        dataLength={posts.length || 100}
         next={loadMorePost}
         hasMore={hasMore}
         loader={<LoadingPage />}>
-        {profile?.posts.map((post: Post, i: number) => (
+        {posts.map((post: Post, i: number) => (
           <Grow key={i}>
             <PostComponent post={post} open={false} postOwner={isOwnPost(post)} />
           </Grow>

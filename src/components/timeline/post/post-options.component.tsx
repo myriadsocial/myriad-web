@@ -45,6 +45,36 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPo
     setAnchorEl(event.currentTarget);
   };
 
+  const handleEditPost = () => {
+    handleClose();
+    console.log('post edited!');
+  };
+
+  const handleCopyLink = () => {
+    handleClose();
+    console.log('link copied!');
+  };
+
+  const handleVisitMyriadAccount = () => {
+    handleClose();
+    console.log('go to myriad profile');
+  };
+
+  const handleVisitSocialPost = () => {
+    handleClose();
+    console.log('got to social post');
+  };
+
+  const handleDeletePost = () => {
+    handleClose();
+    console.log('post deleted!');
+  };
+
+  const handleReportPost = () => {
+    handleClose();
+    console.log('post reported!');
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -57,6 +87,7 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPo
 
       <Menu
         id="post-options"
+        aria-label="post-options"
         className={styles.menu}
         anchorEl={anchorEl}
         keepMounted
@@ -64,25 +95,31 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPo
         TransitionComponent={Fade}
         onClose={handleClose}>
         <ShowIf condition={ownPost}>
-          <MenuItem onClick={handleClick}>Edit post</MenuItem>
+          <MenuItem aria-label="edit-post" onClick={handleEditPost}>
+            Edit post
+          </MenuItem>
+          <MenuItem aria-label="copy-link" onClick={handleCopyLink}>
+            Copy link...
+          </MenuItem>
         </ShowIf>
 
         <ShowIf condition={!ownPost}>
-          <MenuItem onClick={handleClick}>Visit account</MenuItem>
-          <MenuItem onClick={handleClick}>Visit social post</MenuItem>
-          <MenuItem onClick={handleClick}>Mute post from this person</MenuItem>
+          <MenuItem onClick={handleVisitMyriadAccount}>Visit Myriad account</MenuItem>
+          <MenuItem onClick={handleVisitSocialPost}>Visit social post</MenuItem>
+          <MenuItem onClick={handleCopyLink}>Copy link...</MenuItem>
         </ShowIf>
 
-        <MenuItem onClick={handleClick}>Save post to archive</MenuItem>
-        <MenuItem onClick={handleClick}>Share...</MenuItem>
+        {
+          //<MenuItem onClick={handleClick}>Save post to archive</MenuItem>
+          //<MenuItem onClick={handleClick}>Share...</MenuItem>
+        }
 
         <Divider />
 
         <ShowIf condition={ownPost}>
-          <MenuItem onClick={handleClick}>
+          <MenuItem onClick={handleDeletePost}>
             <Button
               className={styles.danger}
-              onClick={handleClick}
               disableRipple={true}
               disableFocusRipple={true}
               variant="text"
@@ -95,10 +132,9 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPo
         </ShowIf>
 
         <ShowIf condition={!ownPost}>
-          <MenuItem onClick={handleClick}>
+          <MenuItem onClick={handleReportPost}>
             <Button
               className={styles.danger}
-              onClick={handleClick}
               disableRipple={true}
               disableFocusRipple={true}
               variant="text"
