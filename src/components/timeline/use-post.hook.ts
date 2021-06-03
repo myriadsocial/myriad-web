@@ -10,6 +10,7 @@ import { Post, PostSortMethod } from 'src/interfaces/post';
 import { User } from 'src/interfaces/user';
 import * as LocalAPI from 'src/lib/api/local';
 import * as PostAPI from 'src/lib/api/post';
+import * as UserAPI from 'src/lib/api/user';
 
 export const usePost = (user: User) => {
   const { state: experienceState } = useExperience();
@@ -67,6 +68,17 @@ export const usePost = (user: User) => {
 
       if (data.length < 10) {
         setHasMore(false);
+      }
+
+      if (data.length > 0) {
+        for await (const post of data) {
+          console.log('post.importBy', post.importBy);
+          if (post.importBy && post.importBy.length > 0) {
+            const user = await UserAPI.getUserDetail(post.importBy[0]);
+
+            post.importer = user;
+          }
+        }
       }
 
       dispatch({
@@ -172,7 +184,7 @@ export const usePost = (user: User) => {
     try {
       const data = await PostAPI.importPost({
         url,
-        importer
+        importer: importer || user.id
       });
 
       dispatch({
