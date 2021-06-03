@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useImperativeHandle } from 'react';
 
 import { useSession } from 'next-auth/client';
+import dynamic from 'next/dynamic';
 
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
+import ListItem from '@material-ui/core/ListItem';
 import Tab from '@material-ui/core/Tab';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -20,9 +22,10 @@ import SortIcon from '@material-ui/icons/Sort';
 import { TabPanel } from '../../common/tab-panel.component';
 import { useTransaction } from '../../tippingJar/use-transaction.hooks';
 import { useBalance } from '../../wallet/use-balance.hooks';
-import TransactionListComponent from './transactionList.component';
 
 import { useUser } from 'src/components/user/user.context';
+
+const TransactionListComponent = dynamic(() => import('./transactionList.component'));
 
 interface StyledTabsProps {
   value: number;
@@ -183,6 +186,12 @@ const useStylesForCurrencyDetails = makeStyles((theme: Theme) =>
         backgroundColor: '#fff',
         color: theme.palette.primary.main
       }
+    },
+    green: {
+      color: '#4caf50'
+    },
+    red: {
+      color: '#f44336'
     }
   })
 );
@@ -198,16 +207,16 @@ const CurrencyDetails = () => {
   const userAddress = session?.user.address as string;
   const { loading, error, freeBalance, loadInitBalance } = useBalance(userAddress);
 
-  const [isHidden, setIsHidden] = useState(true);
-  const handleIsHidden = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setIsHidden(!isHidden);
-  };
+  //const [isHidden, setIsHidden] = useState(true);
+  //const handleIsHidden = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //setIsHidden(!isHidden);
+  //};
 
-  function createData(currency: string, balance: number) {
+  function createData(currency: string, balance: string) {
     return { currency, balance };
   }
 
-  const rows = [createData('Total received', 82.31), createData('Total sent', 12.4123)];
+  const rows = [createData('Total received', '+82.31'), createData('Total sent', '-12.4123')];
 
   return (
     <TableContainer>
@@ -229,15 +238,7 @@ const CurrencyDetails = () => {
                 <Typography className={style.balanceText}>{row.currency}</Typography>
               </TableCell>
               <TableCell align="right">
-                {isHidden ? (
-                  <Button onClick={handleIsHidden}>Show balance</Button>
-                ) : loading ? (
-                  <CircularProgress className={style.spinner} size={20} />
-                ) : error ? (
-                  <Typography className={style.errorText}>Error, try again!</Typography>
-                ) : (
-                  <Button onClick={handleIsHidden}>{row.balance}</Button>
-                )}
+                <Typography className={row.currency === 'Total received' ? style.green : style.red}>{row.balance}</Typography>
               </TableCell>
             </TableRow>
           ))}
@@ -308,7 +309,7 @@ type StyledComponentProps = {
   className?: string;
 };
 
-type TippingJarHeaderProps = {
+type TippingJarComponentProps = {
   detailed?: boolean;
 };
 
@@ -320,7 +321,7 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef, detail
     state: { user }
   } = useUser();
   const userAddress = session?.user.address as string;
-  const { loading, error, transactions, loadInitTransaction } = useTransaction(userAddress);
+  const { loading, error, transactions, inboundTxs, outboundTxs, loadInitTransaction } = useTransaction(userAddress);
 
   useEffect(() => {
     loadInitTransaction();
@@ -336,7 +337,15 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef, detail
 
   const ActionTabsComponent = () => {
     const classes = useStylesForTabs();
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(0);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+      setLoading(true);
+      setInterval(() => {
+        setLoading(false);
+      }, 2000);
+    }, [value]);
 
     const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
       setValue(newValue);
@@ -347,24 +356,24 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef, detail
         <div className={classes.demo2}>
           <StyledTabs value={value} onChange={handleChange} aria-label="styled tabs example">
             <StyledTab label="All" />
-            <StyledTab label="In" />
-            <StyledTab label="Out" />
+            <StyledTab label="Received Tip" />
+            <StyledTab label="Sent Tip" />
           </StyledTabs>
           <TabPanel value={value} index={0}>
-            All
+            {loading ? <LoadingComponent /> : <TransactionListComponent transactions={transactions} user={user} />}
           </TabPanel>
           <TabPanel value={value} index={1}>
-            In
+            {loading ? <LoadingComponent /> : <TransactionListComponent transactions={inboundTxs} user={user} />}
           </TabPanel>
           <TabPanel value={value} index={2}>
-            Out
+            {loading ? <LoadingComponent /> : <TransactionListComponent transactions={outboundTxs} user={user} />}
           </TabPanel>
         </div>
       </div>
     );
   };
 
-  const TippingJarHeader = ({ detailed }: TippingJarHeaderProps) => {
+  const TippingJarComponent = ({ detailed }: TippingJarComponentProps) => {
     return (
       <div className={detailed ? '' : styles.rootPanel}>
         {detailed === true ? <ActionTabsComponent /> : <ActionButtonComponent className={styles.panelButtons} />}
@@ -374,17 +383,21 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef, detail
 
   const LoadingComponent = () => {
     return (
-      <Grid container justify="center">
-        <CircularProgress className={styles.loading} />
-      </Grid>
+      <ListItem>
+        <Grid container justify="center">
+          <CircularProgress className={styles.loading} />
+        </Grid>
+      </ListItem>
     );
   };
 
   const ErrorComponent = () => {
     return (
-      <Grid container justify="center">
-        <Typography>Error, please try again later!</Typography>
-      </Grid>
+      <ListItem>
+        <Grid container justify="center">
+          <Typography>Error, please try again later!</Typography>
+        </Grid>
+      </ListItem>
     );
   };
 
@@ -394,7 +407,9 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef, detail
         <Button variant="contained" color="primary" size="medium" className={styles.iconButton} endIcon={<SortIcon />}>
           Filter by
         </Button>
-        <Button variant="contained" color="default" size="medium" className={styles.iconButton}></Button>
+        <Button variant="contained" color="default" size="medium" className={styles.iconButton}>
+          Myria
+        </Button>
         <Button variant="contained" color="default" size="medium" className={styles.iconButton}>
           Acala
         </Button>
@@ -407,22 +422,25 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef, detail
 
   const EmptyTransactionComponent = () => {
     return (
-      <Grid container justify="center">
-        <Typography>Data not available</Typography>
-      </Grid>
+      <ListItem>
+        <Grid container justify="center">
+          <Typography>Data not available</Typography>
+        </Grid>
+      </ListItem>
     );
   };
 
   return (
     <div ref={forwardedRef}>
       {detailed === true ? <TokenDetailComponent /> : ''}
-      <TippingJarHeader detailed={detailed} />
       {loading ? (
         <LoadingComponent />
       ) : error ? (
         <ErrorComponent />
       ) : transactions.length === 0 ? (
         <EmptyTransactionComponent />
+      ) : detailed === true ? (
+        <TippingJarComponent detailed={detailed} />
       ) : (
         <TransactionListComponent transactions={transactions} user={user} />
       )}

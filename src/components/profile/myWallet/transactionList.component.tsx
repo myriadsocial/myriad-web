@@ -136,7 +136,7 @@ const ListItemContent = ({ txHistory, userId }: ListItemContentProps) => {
   );
 };
 
-export default function TransactionListComponent({ transactions, user }: Props) {
+const TransactionListComponent: React.FC<Props> = ({ transactions, user }) => {
   const style = useStyles();
   const [expandable, setExpandable] = useState(true);
 
@@ -179,4 +179,6 @@ export default function TransactionListComponent({ transactions, user }: Props) 
       )}
     </>
   );
-}
+};
+
+export default TransactionListComponent;
