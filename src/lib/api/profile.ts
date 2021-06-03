@@ -32,8 +32,43 @@ export const getPostProfile = async (id: string) => {
     method: 'GET',
     params: {
       filter: {
+        order: `createdAt DESC`,
         where: {
           walletAddress: id
+        },
+        include: [
+          {
+            relation: 'comments',
+            scope: {
+              include: [
+                {
+                  relation: 'user'
+                }
+              ]
+            }
+          },
+          {
+            relation: 'publicMetric'
+          }
+        ]
+      }
+    }
+  });
+
+  return data;
+};
+
+export const getImportedPost = async (id: string) => {
+  const { data } = await MyriadAPI.request<Post[]>({
+    url: `/posts`,
+    method: 'GET',
+    params: {
+      filter: {
+        order: `createdAt DESC`,
+        where: {
+          importBy: {
+            inq: [[id]]
+          }
         },
         include: [
           {
