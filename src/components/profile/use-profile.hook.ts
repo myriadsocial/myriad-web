@@ -1,12 +1,14 @@
 // @ts-nocheck
 import { useState, useEffect } from 'react';
 
+import { Post } from 'src/interfaces/post';
 import { ExtendedUserPost } from 'src/interfaces/user';
 import { User } from 'src/interfaces/user';
 import * as ProfileAPI from 'src/lib/api/profile';
 
 export const useProfileHook = id => {
   const [profile, setProfile] = useState<ExtendedUserPost | null>(null);
+  const [importedPost, setimportedPost] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -23,6 +25,22 @@ export const useProfileHook = id => {
         ...detail,
         posts: [...posts]
       });
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadImportedPost = async () => {
+    setLoading(true);
+
+    try {
+      let posts = await ProfileAPI.getImportedPost(id as string);
+
+      posts = posts.map((item: Post) => ({ ...item, comments: item.comments || [] }));
+
+      setimportedPost([...posts]);
     } catch (error) {
       setError(error);
     } finally {
@@ -52,6 +70,8 @@ export const useProfileHook = id => {
     loading,
     profile,
     updateProfile,
-    getProfile
+    getProfile,
+    loadImportedPost,
+    importedPost
   };
 };

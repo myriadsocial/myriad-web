@@ -5,16 +5,21 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       background: theme.palette.background.paper,
       marginBottom: theme.spacing(5),
-      position: 'relative'
-    },
-    media: {
-      height: 180,
-      objectFit: 'cover'
+      position: 'relative',
+      borderRadius: '8px'
     },
     button: {
-      // width: 100,
       paddingRight: 24,
       paddingLeft: 24,
+      paddingTop: 8,
+      paddingBottom: 8,
+      borderRadius: '8px'
+    },
+    button2: {
+      paddingRight: 40,
+      paddingLeft: 40,
+      paddingTop: 8,
+      paddingBottom: 8,
       borderRadius: '8px'
     },
     header: {
@@ -22,9 +27,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'space-between',
       // alignItems: 'center',
-      backgroundColor: theme.palette.background.paper,
+      // backgroundColor: theme.palette.background.paper,
       padding: 16,
-      borderRadius: '8px',
+      height: '339px',
       color: '#4B4851'
     },
     avatar: {
@@ -75,14 +80,21 @@ export const useStyles = makeStyles((theme: Theme) =>
       textTransform: 'capitalize'
     },
     // modal
+    media: {
+      height: 159,
+      width: 420,
+      objectFit: 'cover',
+      borderRadius: 8
+    },
     actions: {
       justifyContent: 'space-between'
     },
     avatarBig: {
-      height: 90,
-      width: 90,
+      height: 72,
+      width: 72,
       position: 'absolute',
-      top: 140
+      top: 46,
+      left: 16
     },
     detail: {
       position: 'relative'
@@ -91,8 +103,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center'
     },
     profileContent: {
-      width: 500,
-      marginTop: 40
+      width: 420
+    },
+    subtitle: {
+      fontWeight: 700,
+      fontSize: 16,
+      color: '#4B4851'
     }
   })
 );
