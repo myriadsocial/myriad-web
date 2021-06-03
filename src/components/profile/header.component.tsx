@@ -79,6 +79,8 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
 
   // FRIEND REQUEST
   const friendRequest = () => {
+    console.log('profile', profile);
+
     makeFriend({
       friendId: profile?.id
     });
