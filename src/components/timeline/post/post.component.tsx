@@ -123,7 +123,7 @@ export default function PostComponent({ post, open = false, disable = false, pos
 
         <ShowIf condition={post.platform === 'myriad'}>
           <CardContent className={style.content}>
-            <Typography variant="body1" color="textSecondary" component="p">
+            <Typography variant="body1" color="textPrimary" component="p">
               {detail.text}
             </Typography>
             {post.assets && post.assets.length > 0 && <PostImageComponent images={post.assets.map(urlToImageData)} />}

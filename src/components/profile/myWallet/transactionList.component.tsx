@@ -55,14 +55,23 @@ const useStylesListItemContent = makeStyles((theme: Theme) =>
       color: '#4caf50'
     },
     red: {
-      color: '#B9210D'
+      color: '#b9210d'
     }
   })
 );
 
+const StyledAvatar = withStyles({
+  root: {
+    width: 56,
+    height: 56
+  }
+})(Avatar);
+
 const StyledListItemAvatar = withStyles({
   root: {
-    minWidth: 40
+    minWidth: 56,
+    minHeight: 56,
+    margin: '0 12px'
   }
 })(ListItemAvatar);
 
@@ -109,7 +118,7 @@ const ListItemContent = ({ txHistory, userId }: ListItemContentProps) => {
     <div key={txHistory?.id}>
       <ListItem>
         <StyledListItemAvatar>
-          <Avatar
+          <StyledAvatar
             aria-label="avatar"
             src={txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL}
           />
@@ -118,7 +127,7 @@ const ListItemContent = ({ txHistory, userId }: ListItemContentProps) => {
         <ListItemSecondaryAction>
           <div className={style.badge}>
             <Typography className={userId === txHistory?.from ? style.red : style.green}>
-              {userId === txHistory?.from ? '-' : '+'} {txHistory?.value / 1000000000000} Myria
+              {userId === txHistory?.from ? '-' : '+'} {txHistory?.value / 1000000000000}
             </Typography>
           </div>
         </ListItemSecondaryAction>
@@ -127,7 +136,7 @@ const ListItemContent = ({ txHistory, userId }: ListItemContentProps) => {
   );
 };
 
-export default function TransactionListComponent({ transactions, user }: Props) {
+const TransactionListComponent: React.FC<Props> = ({ transactions, user }) => {
   const style = useStyles();
   const [expandable, setExpandable] = useState(true);
 
@@ -145,14 +154,6 @@ export default function TransactionListComponent({ transactions, user }: Props) 
   const handleClick = () => {
     setExpandable(!expandable);
   };
-
-  //TODO: try the function below for add friend button
-  //const sendFriendRequest = (txHistory: Transaction) => {
-  //console.log('sendFriendRequest', txHistory);
-  //if (txHistory.fromUser) {
-  //sendRequest(txHistory.fromUser.id);
-  //}
-  //};
 
   const ExpandMore = () => {
     return (
@@ -178,4 +179,6 @@ export default function TransactionListComponent({ transactions, user }: Props) 
       )}
     </>
   );
-}
+};
+
+export default TransactionListComponent;
