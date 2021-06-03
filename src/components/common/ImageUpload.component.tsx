@@ -12,8 +12,8 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {},
     button: {
       position: 'absolute',
-      left: 80,
-      top: 190,
+      left: 70,
+      top: 70,
       zIndex: 10
     },
     label: {

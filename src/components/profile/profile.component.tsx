@@ -15,6 +15,7 @@ import Header from './header.component';
 import { WalletComponent } from './myWallet/wallet.component';
 import { useStyles } from './profile.style';
 
+import ShowIf from 'src/components/common/show-if.component';
 import { useFriends } from 'src/components/friends/friends.context';
 import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
 
@@ -165,36 +166,66 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
         <Header user={user} profile={profile} loading={loading} isGuest={isGuest} />
         {/* TAB */}
         <div className={style.root2}>
-          <Tabs
-            value={value}
-            className={style.tabHeader}
-            variant="fullWidth"
-            onChange={handleChange}
-            indicatorColor="primary"
-            textColor="primary">
-            <Tab className={style.tabItem} label={'My Post'} />
-            <Tab className={style.tabItem} label={'Imported Post'} />
-            <Tab className={style.tabItem} label={`Friends(${totalFriends})`} />
-            <Tab className={style.tabItem} label={'My Wallet'} />
-          </Tabs>
-          <SwipeableViews
-            className={style.tabContent}
-            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-            index={value}
-            onChangeIndex={handleChangeIndex}>
-            <TabPanel value={value} index={0} dir={theme.direction}>
-              <PostList profile={profile} user={user} />
-            </TabPanel>
-            <TabPanel value={value} index={1} dir={theme.direction}>
-              <ImportedPostList user={user} profile={profile} />
-            </TabPanel>
-            <TabPanel value={value} index={2} dir={theme.direction}>
-              <FriendComponent />
-            </TabPanel>
-            <TabPanel value={value} index={3} dir={theme.direction}>
-              <CustomizedTabs />
-            </TabPanel>
-          </SwipeableViews>
+          <ShowIf condition={isGuest === false}>
+            <Tabs
+              value={value}
+              className={style.tabHeader}
+              variant="fullWidth"
+              onChange={handleChange}
+              indicatorColor="primary"
+              textColor="primary">
+              <Tab className={style.tabItem} label={'My Post'} />
+              <Tab className={style.tabItem} label={'Imported Post'} />
+              <Tab className={style.tabItem} label={`Friends(${totalFriends})`} />
+              <Tab className={style.tabItem} label={'My Wallet'} />
+            </Tabs>
+            <SwipeableViews
+              className={style.tabContent}
+              axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+              index={value}
+              onChangeIndex={handleChangeIndex}>
+              <TabPanel value={value} index={0} dir={theme.direction}>
+                <PostList profile={profile} user={user} />
+              </TabPanel>
+              <TabPanel value={value} index={1} dir={theme.direction}>
+                <ImportedPostList user={user} profile={profile} />
+              </TabPanel>
+              <TabPanel value={value} index={2} dir={theme.direction}>
+                <FriendComponent />
+              </TabPanel>
+              <TabPanel value={value} index={3} dir={theme.direction}>
+                <CustomizedTabs />
+              </TabPanel>
+            </SwipeableViews>
+          </ShowIf>
+          <ShowIf condition={isGuest === true}>
+            <Tabs
+              value={value}
+              className={style.tabHeader}
+              variant="fullWidth"
+              onChange={handleChange}
+              indicatorColor="primary"
+              textColor="primary">
+              <Tab className={style.tabItem} label={'My Post'} />
+              <Tab className={style.tabItem} label={'Imported Post'} />
+              <Tab className={style.tabItem} label={`Friends(${totalFriends})`} />
+            </Tabs>
+            <SwipeableViews
+              className={style.tabContent}
+              axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+              index={value}
+              onChangeIndex={handleChangeIndex}>
+              <TabPanel value={value} index={0} dir={theme.direction}>
+                <PostList profile={profile} user={user} />
+              </TabPanel>
+              <TabPanel value={value} index={1} dir={theme.direction}>
+                <ImportedPostList user={user} profile={profile} />
+              </TabPanel>
+              <TabPanel value={value} index={2} dir={theme.direction}>
+                <FriendComponent />
+              </TabPanel>
+            </SwipeableViews>
+          </ShowIf>
         </div>
       </div>
     </div>
