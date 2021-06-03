@@ -31,6 +31,22 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderBottom: 0,
       borderColor: '#DEDCE1',
       borderStyle: 'solid'
+    },
+    header: {
+      '& .MuiCardHeader-title': {
+        fontSize: 18,
+        lineHeight: '24px',
+        fontWeight: 'bold'
+      }
+    },
+    subheader: {
+      color: '#828282',
+      fontSize: 14,
+      lineHeight: '18px'
+    },
+    circle: {
+      margin: theme.spacing(0, 0.5),
+      fontSize: 10
     }
   })
 );

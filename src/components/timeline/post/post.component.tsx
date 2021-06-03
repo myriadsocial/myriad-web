@@ -12,6 +12,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Collapse from '@material-ui/core/Collapse';
 import Typography from '@material-ui/core/Typography';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 import { useBalance } from '../../wallet/use-balance.hooks';
 import { PostActionComponent } from './post-action.component';
@@ -96,11 +97,24 @@ export default function PostComponent({ post, open = false, disable = false, pos
     <>
       <Card className={style.root}>
         <CardHeader
+          className={style.header}
           ref={headerRef}
           avatar={renderPostAvatar()}
           action={<PostOptionsComponent postId={post.id} ownPost={postOwner || false} />}
           title={detail.user.name}
-          subheader={detail.createdOn}
+          subheader={
+            <Typography component="div" className={style.subheader}>
+              {detail.createdOn}
+
+              {post.importer && (
+                <>
+                  <FiberManualRecordIcon className={style.circle} />
+                  {`Imported from ${post.platform} by `}
+                  <b>{post.importer.name}</b>
+                </>
+              )}
+            </Typography>
+          }
           style={{ postition: 'relative' }}
         />
 

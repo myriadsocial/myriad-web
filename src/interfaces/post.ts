@@ -53,6 +53,8 @@ export interface Post {
     disliked: number;
     comment: number;
   };
+  importBy?: string[];
+  importer?: User;
 }
 
 export interface Comment {
@@ -70,5 +72,5 @@ export type UserReplies = Comment & {
 
 export type ImportPost = {
   url: string;
-  importer?: string;
+  importer: string;
 };
