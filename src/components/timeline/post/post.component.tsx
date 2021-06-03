@@ -55,6 +55,8 @@ export default function PostComponent({ post, open = false, disable = false, pos
 
   if (!detail) return null;
 
+  if (post.text === '[removed]' && post.platform === 'reddit') return null;
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
