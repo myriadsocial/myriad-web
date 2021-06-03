@@ -164,10 +164,13 @@ export default function TransactionListComponent({ transactions, user }: Props) 
 
   type CardActionProps = {
     from?: User;
+    to?: User;
   };
 
-  const CardActionButtons: React.FC<CardActionProps> = ({ from }) => {
-    if (!from || from.id === userId) return null;
+  const CardActionButtons: React.FC<CardActionProps> = ({ from, to }) => {
+    if (!from) return null;
+
+    let isBefriendable = to?.id !== userId ? true : false;
 
     const status = getFriendStatus(from);
 
@@ -177,7 +180,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
           <Button size="medium" variant="contained" color="default" className={style.iconButton}>
             Visit Profile
           </Button>
-          {!status && (
+          {(!status || isBefriendable) && (
             <Button size="medium" variant="contained" color="primary" className={style.iconButton} startIcon={<PersonAddIcon />}>
               Add Friend
             </Button>
@@ -215,7 +218,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
                       title={RenderPrimaryText(txHistory)}
                       subheader={RenderSecondaryText(txHistory)}
                     />
-                    <CardActionButtons from={txHistory?.fromUser} />
+                    <CardActionButtons to={txHistory?.toUser} from={txHistory?.fromUser} />
                   </Card>
                 </ListItem>
               </div>
@@ -236,7 +239,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
                       title={RenderPrimaryText(txHistory)}
                       subheader={RenderSecondaryText(txHistory)}
                     />
-                    <CardActionButtons from={txHistory?.fromUser} />
+                    <CardActionButtons to={txHistory?.toUser} from={txHistory?.fromUser} />
                   </Card>
                 </ListItem>
               </div>
