@@ -205,7 +205,7 @@ const CurrencyDetails = () => {
 
   const [session] = useSession();
   const userAddress = session?.user.address as string;
-  const { loading, error, freeBalance, loadInitBalance } = useBalance(userAddress);
+  const { freeBalance, loadInitBalance } = useBalance(userAddress);
 
   //const [isHidden, setIsHidden] = useState(true);
   //const handleIsHidden = (e: React.MouseEvent<HTMLButtonElement>) => {
