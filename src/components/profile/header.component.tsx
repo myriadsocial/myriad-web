@@ -12,6 +12,9 @@ import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -87,7 +90,6 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   };
 
   // EDIT fn PROFILE
-
   const updateProfilePicture = (preview: string) => {
     updateProfile({
       profilePictureURL: preview
@@ -107,12 +109,13 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     updateProfile(defaultValue);
+    showEditProfile(false);
   };
 
-  // PUBLICKEY
-  // const onPublicKeyCopied = () => {
-  //   setPublicKeyCopied(true);
-  // };
+  // PUBLICKEY;
+  const onPublicKeyCopied = () => {
+    setPublicKeyCopied(true);
+  };
 
   // MNEMONIC fn
   const onMnemonicCopied = () => {
@@ -135,7 +138,7 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   return (
     <div className={style.root}>
       <div className={style.header}>
-        <div className="leftSide" style={{ width: 500 }}>
+        <div style={{ width: 500 }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <Avatar className={style.avatar} src={profile?.profilePictureURL}>
               {acronym(profile?.name || '')}
@@ -143,24 +146,35 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
             <Typography className={style.name}>{profile?.name || ''}</Typography>
           </div>
           <div style={{ marginTop: '24px' }}>
-            <Typography variant="body1" style={{ fontWeight: 700, fontSize: 16 }}>
+            <Typography variant="body1" className={style.subtitle}>
               Bio
             </Typography>
-            <Typography variant="body2" style={{ fontWeight: 400, fontSize: 16 }}>
+            <Typography variant="body2" style={{ fontWeight: 400, fontSize: 16, marginTop: 8 }}>
               {profile?.bio || profileInfo}
             </Typography>
           </div>
           <ShowIf condition={isGuest === false}>
             <div style={{ marginTop: '24px' }}>
-              <Typography variant="body1" style={{ fontWeight: 700, fontSize: 16 }}>
-                Mnemonic Seed
+              <Typography variant="body1" className={style.subtitle}>
+                Public Key
               </Typography>
-              <CopyToClipboard text={cookie.uri || ''} onCopy={onMnemonicCopied}>
-                <Button size="medium" color="primary" variant="outlined" className={style.logout}>
-                  Copy Mnemonic Seed
-                  <FileCopyIcon />
-                </Button>
-              </CopyToClipboard>
+              <Input
+                className={style.input}
+                style={{ width: 400, border: '1px solid #8629E9' }}
+                name="publickey"
+                disabled={true}
+                defaultValue={user.id}
+                inputProps={{ 'aria-label': 'description' }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <CopyToClipboard text={user.id || ''} onCopy={onPublicKeyCopied}>
+                      <IconButton aria-label="toggle password visibility">
+                        <FileCopyIcon />
+                      </IconButton>
+                    </CopyToClipboard>
+                  </InputAdornment>
+                }
+              />
             </div>
           </ShowIf>
           <ShowIf condition={isGuest === true}>
@@ -199,7 +213,7 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
           </ShowIf>
         </div>
 
-        <div className="rightSide" style={{ width: 315 }}>
+        <div style={{ width: 315 }}>
           <ShowIf condition={isGuest === false}>
             <div style={{ textAlign: 'right' }}>
               <Button
@@ -273,6 +287,19 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
                     Username
                   </Typography>
                   <TextField
+                    name="username"
+                    style={{ marginTop: 8 }}
+                    disabled={true}
+                    fullWidth={true}
+                    defaultValue={profile?.username}
+                    inputProps={{ 'aria-label': 'description' }}
+                  />
+
+                  <Typography className={style.subtitle} variant="body1" style={{ marginTop: 16 }}>
+                    Display Name
+                  </Typography>
+                  <TextField
+                    className={style.input}
                     name="name"
                     onChange={handleChange}
                     fullWidth={true}
@@ -281,18 +308,15 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
                   />
 
                   <Typography className={style.subtitle} variant="body1" style={{ marginTop: 16 }}>
-                    Display Name
-                  </Typography>
-                  <TextField disabled={true} fullWidth={true} defaultValue="Hello world" inputProps={{ 'aria-label': 'description' }} />
-
-                  <Typography className={style.subtitle} variant="body1" style={{ marginTop: 16 }}>
                     Bio
                   </Typography>
                   <TextField
+                    className={style.input}
                     name="bio"
                     onChange={handleChange}
                     multiline={true}
                     fullWidth={true}
+                    rows={5}
                     defaultValue={defaultValue.bio}
                     inputProps={{ 'aria-label': 'description' }}
                   />
@@ -309,11 +333,39 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
                   Mnemonic Seed
                 </Typography>
                 <CopyToClipboard text={cookie.uri || ''} onCopy={onMnemonicCopied}>
-                  <Button size="medium" color="primary" variant="outlined" className={style.logout} style={{ backgroundColor: 'white' }}>
+                  <Button
+                    size="medium"
+                    color="primary"
+                    variant="outlined"
+                    className={style.logout}
+                    style={{ backgroundColor: 'white', marginTop: 8 }}>
                     Copy Mnemonic Seed
                     <FileCopyIcon />
                   </Button>
                 </CopyToClipboard>
+              </div>
+              <div style={{ marginTop: '24px' }}>
+                <Typography variant="body1" className={style.subtitle}>
+                  Public Key
+                </Typography>
+                <Input
+                  className={style.input}
+                  style={{ border: '1px solid #8629E9', marginTop: 8 }}
+                  name="publickey"
+                  disabled={true}
+                  fullWidth={true}
+                  defaultValue={user.id}
+                  inputProps={{ 'aria-label': 'description' }}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <CopyToClipboard text={user.id || ''} onCopy={onPublicKeyCopied}>
+                        <IconButton aria-label="toggle password visibility">
+                          <FileCopyIcon />
+                        </IconButton>
+                      </CopyToClipboard>
+                    </InputAdornment>
+                  }
+                />
               </div>
             </div>
           </div>
