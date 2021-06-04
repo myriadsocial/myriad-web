@@ -4,15 +4,15 @@ import { User } from 'next-auth';
 
 import AppBar from '../app-bar/app-bar.component';
 import ShowIf from '../common/show-if.component';
-import { FriendsProvider } from '../friends/friends.context';
-import { NotifProvider } from '../notifications/notif.context';
 import SidebarComponent from '../sidebar/sidebar.component';
 import { useStyles } from './layout.style';
-import { useLayout } from './use-layout.hook';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
-import { useUserHook } from 'src/components/user/use-user.hook';
-import { useUser } from 'src/components/user/user.context';
+import { FriendsProvider } from 'src/context/friends.context';
+import { NotifProvider } from 'src/context/notif.context';
+import { useUser } from 'src/context/user.context';
+import { useLayout } from 'src/hooks/use-layout.hook';
+import { useUserHook } from 'src/hooks/use-user.hook';
 
 type Props = {
   children: React.ReactNode;

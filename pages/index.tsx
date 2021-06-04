@@ -9,9 +9,9 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import AlertComponent from 'src/components/alert/Alert.component';
-import { useAlertHook } from 'src/components/alert/use-alert.hook';
 import { LoginFormComponent } from 'src/components/login/login-form.component';
 import { LoginInfoComponent } from 'src/components/login/login-info.component';
+import { useAlertHook } from 'src/hooks/use-alert.hook';
 import LogoImage from 'src/images/header-logo.svg';
 import { healthcheck } from 'src/lib/api/healthcheck';
 

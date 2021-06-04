@@ -11,10 +11,10 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
 import { ListHeaderComponent } from './list-header.component';
-import { useNotif } from './notif.context';
-import { useNotifHook } from './use-notif.hook';
 
 import ShowIf from 'src/components/common/show-if.component';
+import { useNotif } from 'src/context/notif.context';
+import { useNotifHook } from 'src/hooks/use-notif.hook';
 import { User } from 'src/interfaces/user';
 
 type Props = {

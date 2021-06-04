@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useTimeline, TimelineActionType } from '../timeline/timeline.context';
+import { useTimeline, TimelineActionType } from '../../context/timeline.context';
 import { useExperience as baseUseExperience, ExperienceActionType } from './experience.context';
 
 import Axios from 'axios';

@@ -16,10 +16,10 @@ import ShowIf from '../common/show-if.component';
 import { ConnectComponent } from '../connect/connect.component';
 import LoginOverlayComponent from '../login/overlay.component';
 import { useStyles } from './social.style';
-import { useUserHook } from './use-user.hook';
-import { useUser } from './user.context';
 
 import ConfirmDialog from 'src/components/common/confirm-dialog.component';
+import { useUser } from 'src/context/user.context';
+import { useUserHook } from 'src/hooks/use-user.hook';
 import { SocialsEnum } from 'src/interfaces';
 import { LayoutFilterType } from 'src/interfaces/setting';
 import { User } from 'src/interfaces/user';

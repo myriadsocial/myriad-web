@@ -4,7 +4,7 @@ import Joyride, { CallBackProps, STATUS } from 'react-joyride';
 import { User } from 'next-auth';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
-import { useUserHook } from 'src/components/user/use-user.hook';
+import { useUserHook } from 'src/hooks/use-user.hook';
 
 type Props = {
   user: WithAdditionalParams<User>;

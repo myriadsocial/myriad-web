@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
+import { useAlertHook } from './use-alert.hook';
+
 import Axios, { AxiosError } from 'axios';
-import { useAlertHook } from 'src/components/alert/use-alert.hook';
 import { SocialsEnum } from 'src/interfaces/index';
 
 const MyriadAPI = Axios.create({

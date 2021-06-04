@@ -5,12 +5,11 @@ import { GetServerSideProps } from 'next';
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/client';
 
-import Layout from '../src/components/Layout/Layout.container';
-
+import Layout from 'src/components/Layout/Layout.container';
 import ProfileTimeline from 'src/components/profile/profile.component';
 import { useProfileHook } from 'src/components/profile/use-profile.hook';
-import { useUserHook } from 'src/components/user/use-user.hook';
-import { useUser } from 'src/components/user/user.context';
+import { useUser } from 'src/context/user.context';
+import { useUserHook } from 'src/hooks/use-user.hook';
 import { healthcheck } from 'src/lib/api/healthcheck';
 
 interface Params {

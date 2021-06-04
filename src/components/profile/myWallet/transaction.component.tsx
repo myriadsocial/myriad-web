@@ -23,7 +23,7 @@ import { TabPanel } from '../../common/tab-panel.component';
 import { useTransaction } from '../../tippingJar/use-transaction.hooks';
 import { useBalance } from '../../wallet/use-balance.hooks';
 
-import { useUser } from 'src/components/user/user.context';
+import { useUser } from 'src/context/user.context';
 
 const TransactionListComponent = dynamic(() => import('./transactionList.component'));
 

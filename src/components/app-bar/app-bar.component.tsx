@@ -17,8 +17,8 @@ import { useMyriadUser } from '../timeline/use-users.hooks';
 import { MobileMenuComponent } from './mobile-menu.component';
 
 import clsx from 'clsx';
-import { useLayoutSetting } from 'src/components/Layout/layout.context';
-import { useLayout } from 'src/components/Layout/use-layout.hook';
+import { useLayoutSetting } from 'src/context/layout.context';
+import { useLayout } from 'src/hooks/use-layout.hook';
 import LogoImageCompact from 'src/images/header-logo-compact.svg';
 import LogoImage from 'src/images/header-logo.svg';
 import { SidebarTab } from 'src/interfaces/sidebar';

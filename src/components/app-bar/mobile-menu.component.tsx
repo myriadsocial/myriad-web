@@ -9,7 +9,7 @@ import LanguageIcon from '@material-ui/icons/Language';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PeopleIcon from '@material-ui/icons/People';
 
-import { useLayout } from 'src/components/Layout/use-layout.hook';
+import { useLayout } from 'src/hooks/use-layout.hook';
 import { SidebarTab } from 'src/interfaces/sidebar';
 
 interface Props {

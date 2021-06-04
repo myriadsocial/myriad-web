@@ -12,7 +12,7 @@ import ShowIf from '../common/show-if.component';
 import { TabPanel } from '../common/tab-panel.component';
 import { useStyles } from './sidebar.style';
 
-import { useLayoutSetting } from 'src/components/Layout/layout.context';
+import { useLayoutSetting } from 'src/context/layout.context';
 import { SidebarTab } from 'src/interfaces/sidebar';
 
 const FriendComponent = dynamic(() => import('../friends/friend.component'));

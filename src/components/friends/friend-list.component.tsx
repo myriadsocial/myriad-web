@@ -12,13 +12,13 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
+import { useFriendsHook } from '../../hooks/use-friends-hook';
 import { ListHeaderComponent } from './list-header.component';
 import { ListSubHeaderComponent } from './list-sub-header.component';
-import { useFriendsHook } from './use-friends-hook';
 
 import { ToggleCollapseButton } from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
-import { useFriends } from 'src/components/friends/friends.context';
+import { useFriends } from 'src/context/friends.context';
 import { User } from 'src/interfaces/user';
 
 type Props = {

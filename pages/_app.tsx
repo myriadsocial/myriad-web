@@ -11,9 +11,9 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { BalanceProvider } from '../src/components/wallet/balance.context';
 import theme from '../src/themes/light';
 
-import { AlertProvider } from 'src/components/alert/Alert.context';
 import { WalletAddressProvider } from 'src/components/timeline/post/send-tip.context';
-import { UserProvider } from 'src/components/user/user.context';
+import { AlertProvider } from 'src/context/Alert.context';
+import { UserProvider } from 'src/context/user.context';
 
 const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {

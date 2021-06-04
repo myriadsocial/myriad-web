@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useUser, UserActionType } from 'src/components/user/user.context';
+import { useUser, UserActionType } from 'src/context/user.context';
 import { SocialsEnum } from 'src/interfaces';
 import { ExtendedUser } from 'src/interfaces/user';
 import { User as DBUser } from 'src/interfaces/user';
@@ -57,7 +57,7 @@ export const useUserHook = (userId: string) => {
 
     if (token) {
       updateUser({
-        fcm_token: [token as string]
+        fcmTokens: [token as string]
       });
     }
   };
