@@ -4,27 +4,19 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
 import AppBar from '@material-ui/core/AppBar';
-import Badge from '@material-ui/core/Badge';
-import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import { useTheme } from '@material-ui/core/styles';
 import { fade, makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import PeopleIcon from '@material-ui/icons/People';
 
-import { useMyriadUser } from '../timeline/use-users.hooks';
-import { MobileMenuComponent } from './mobile-menu.component';
-
-import clsx from 'clsx';
-import { useLayoutSetting } from 'src/context/layout.context';
-import { useLayout } from 'src/hooks/use-layout.hook';
+import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
 import LogoImageCompact from 'src/images/header-logo-compact.svg';
 import LogoImage from 'src/images/header-logo.svg';
-import { SidebarTab } from 'src/interfaces/sidebar';
 import { User as MyriadUser } from 'src/interfaces/user';
 
 const SearchUserComponent = dynamic(() => import('../timeline/search-user.component'));
+const DesktopMenuComponent = dynamic(() => import('./desktop-menu.component'));
+const MobileMenuComponent = dynamic(() => import('./mobile-menu.component'));
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -74,19 +66,6 @@ const useStyles = makeStyles((theme: Theme) =>
     //alignItems: 'center',
     //justifyContent: 'center'
     //},
-    inputRoot: {
-      color: 'inherit'
-    },
-    inputInput: {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('md')]: {
-        width: '20ch'
-      }
-    },
     sectionDesktop: {
       display: 'none',
       [theme.breakpoints.up('md')]: {
@@ -94,16 +73,6 @@ const useStyles = makeStyles((theme: Theme) =>
         justifyContent: 'space-around',
         width: 331
       }
-    },
-    sectionMobile: {
-      display: 'flex',
-      [theme.breakpoints.up('md')]: {
-        display: 'none'
-      }
-    },
-
-    iconActive: {
-      background: theme.palette.secondary.light
     }
   })
 );
@@ -112,11 +81,7 @@ export default function HeaderBar() {
   const classes = useStyles();
 
   const theme = useTheme();
-  const {
-    state: { selectedSidebarMenu }
-  } = useLayoutSetting();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { changeSelectedSidebar } = useLayout();
 
   const { users: options, search } = useMyriadUser();
 
@@ -149,34 +114,11 @@ export default function HeaderBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton
-              className={clsx({
-                [classes.iconActive]: selectedSidebarMenu === SidebarTab.FRIENDS
-              })}
-              aria-label="friends"
-              color="inherit"
-              style={{ margin: '0 32px' }}
-              onClick={() => changeSelectedSidebar(SidebarTab.FRIENDS)}>
-              <Badge badgeContent={4} color="secondary">
-                <PeopleIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              className={clsx({
-                [classes.iconActive]: selectedSidebarMenu === SidebarTab.NOTIFICATION
-              })}
-              aria-label="notifications"
-              color="inherit"
-              style={{ margin: '0 32px' }}
-              onClick={() => changeSelectedSidebar(SidebarTab.NOTIFICATION)}>
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            <DesktopMenuComponent />
           </div>
         </Toolbar>
       </AppBar>
-      {isMobile && <MobileMenuComponent onChange={changeSelectedSidebar} />}
+      {isMobile && <MobileMenuComponent />}
     </div>
   );
 }

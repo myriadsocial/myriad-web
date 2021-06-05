@@ -30,6 +30,24 @@ export const getUserDetail = async (id: string): Promise<ExtendedUser> => {
   return data;
 };
 
+export const getUserByAddress = async (address: string[]) => {
+  const { data } = await MyriadAPI.request<User[]>({
+    url: '/users',
+    method: 'GET',
+    params: {
+      filter: {
+        where: {
+          id: {
+            inq: address
+          }
+        }
+      }
+    }
+  });
+
+  return data;
+};
+
 export const createUser = async (values: Partial<User>): Promise<User> => {
   const { data } = await MyriadAPI.request<User>({
     url: '/users',
@@ -73,6 +91,24 @@ export const disconnectSocial = async (credentialId: string) => {
   const { data } = await MyriadAPI.request({
     method: 'DELETE',
     url: `/user-credentials/${credentialId}`
+  });
+
+  return data;
+};
+
+export const search = async (query: string) => {
+  const { data } = await MyriadAPI.request<User[]>({
+    url: '/users',
+    method: 'GET',
+    params: {
+      filter: {
+        where: {
+          name: {
+            like: query
+          }
+        }
+      }
+    }
   });
 
   return data;
