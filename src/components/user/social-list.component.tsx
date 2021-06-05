@@ -27,6 +27,11 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       maxWidth: 360,
       backgroundColor: theme.palette.background.paper
+    },
+    subheader: {
+      fontSize: 16,
+      fontWeight: 500,
+      color: theme.palette.text.primary
     }
   })
 );
@@ -96,9 +101,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
 
   return (
     <>
-      <List
-        subheader={<ListSubheader style={{ fontSize: 16, fontWeight: 500, color: '#000' }}>Link my social</ListSubheader>}
-        className={classes.root}>
+      <List subheader={<ListSubheader className={classes.subheader}>Link my social</ListSubheader>} className={classes.root}>
         <ListItem>
           <ListItemIcon>
             <FacebookIcon />

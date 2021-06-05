@@ -163,7 +163,8 @@ const theme = createMuiTheme({
     // MENU & LIST
     MuiList: {
       root: {
-        margin: '8px 0'
+        margin: '8px 0',
+        background: 'transparent'
       }
     },
     MuiListItem: {
