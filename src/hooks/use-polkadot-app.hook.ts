@@ -1,81 +1,23 @@
-import { useState } from 'react';
-
-import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
-import { decodeAddress } from '@polkadot/keyring';
-import { u8aToHex } from '@polkadot/util';
-
-import Axios from 'axios';
-import { User } from 'src/interfaces/user';
-
-const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
-});
-
 export const usePolkadotExtension = () => {
-  const [isExtensionInstalled, setExtensionInstalled] = useState(false);
-  const [isInjected, setIsInjected] = useState(false);
-  const [isLoading, setLoading] = useState(false);
-  const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
-
-  const getRegisteredAccounts = async (accounts: InjectedAccountWithMeta[]) => {
-    console.log('getRegisteredAccounts', {
-      id: {
-        inq: accounts.map(account => u8aToHex(decodeAddress(account.address)))
-      }
-    });
-    try {
-      const { data: users } = await MyriadAPI.request<User[]>({
-        url: '/users',
-        method: 'GET',
-        params: {
-          filter: {
-            where: {
-              id: {
-                inq: accounts.map(account => u8aToHex(decodeAddress(account.address)))
-              }
-            }
-          }
-        }
-      });
-
-      setAccounts(
-        accounts.filter(account => {
-          const hexPublicKeys = users.map(user => user.id);
-
-          return hexPublicKeys.includes(u8aToHex(decodeAddress(account.address)));
-        })
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getPolkadotAccounts = async () => {
-    const { web3Enable, web3Accounts } = await import('@polkadot/extension-dapp');
-
-    setLoading(true);
+  const enablePolkadotExtension = async () => {
+    const { web3Enable } = await import('@polkadot/extension-dapp');
 
     const extensions = await web3Enable(process.env.NEXT_PUBLIC_APP_NAME || 'myriad-dev');
 
-    setIsInjected(true);
+    // no extension installed, or the user did not accept the authorization
+    // in this case we should inform the use and give a link to the extension
+    return extensions.length > 0;
+  };
 
-    if (extensions.length === 0) {
-      setExtensionInstalled(false);
-      // no extension installed, or the user did not accept the authorization
-      // in this case we should inform the use and give a link to the extension
-    } else {
-      setExtensionInstalled(true);
-      const prefix = process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX ? Number(process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX) : 214;
-      const allAccounts = await web3Accounts({
-        ss58Format: prefix
-      });
+  const getPolkadotAccounts = async () => {
+    const { web3Accounts } = await import('@polkadot/extension-dapp');
 
-      if (allAccounts.length) {
-        await getRegisteredAccounts(allAccounts);
-      }
-    }
+    const prefix = process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX ? Number(process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX) : 214;
+    const allAccounts = await web3Accounts({
+      ss58Format: prefix
+    });
 
-    setLoading(false);
+    return allAccounts;
   };
 
   const unsubscribeFromAccounts = async () => {
@@ -95,9 +37,7 @@ export const usePolkadotExtension = () => {
   };
 
   return {
-    isExtensionInstalled: !isLoading && isInjected && isExtensionInstalled,
-    accountFetched: isInjected && !isLoading,
-    accounts,
+    enablePolkadotExtension,
     getPolkadotAccounts,
     unsubscribeFromAccounts
   };

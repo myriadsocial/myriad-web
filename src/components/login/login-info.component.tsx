@@ -16,21 +16,32 @@ const useStyles = makeStyles((theme: Theme) =>
 
       '& .MuiCard-root': {
         width: 445,
+        height: 175,
         background: 'linear-gradient(117.69deg, rgba(112, 112, 112, 0.2) 60.66%, rgba(203, 203, 203, 0) 114.57%)',
         backdropFilter: 'blur(24px)',
         /* Note: backdrop-filter has minimal browser support */
         borderColor: ' #696969',
         borderRadius: 8,
         marginRight: 32,
-        fontSize: 18,
-        fontWeight: 600,
-        padding: 24,
+        padding: 8,
         '&:last-child': {
           marginRight: 0
         },
 
         '& .MuiCardActions-root': {
-          background: 'transparent'
+          background: 'transparent',
+          justifyContent: 'flex-end',
+        },
+
+        '& .MuiTypography-body1': {
+          width: 312,
+          fontSize: 16,
+          fontWeight: 500,
+          lineHeight: '22px'
+        },
+
+        '& .MuiTypography-gutterBottom': {
+          marginBottom: 12
         }
       }
     }
@@ -46,12 +57,10 @@ export const LoginInfoComponent = ({}: Props) => {
     <div className={style.root}>
       <Card>
         <CardContent>
-          <Typography color="textSecondary" gutterBottom>
+          <Typography color="textSecondary" gutterBottom variant="h2" style={{ fontSize: 22, fontWeight: 700 }}>
             Sky is the Limit
           </Typography>
-          <Typography variant="h5" component="h2">
-            There is no post limitation on Myriad, Freedom of speech is our vision.
-          </Typography>
+          <Typography variant="body1">There is no post limitation on Myriad, Freedom of speech is our vision.</Typography>
         </CardContent>
         <CardActions>
           <Button size="medium" variant="contained" color="primary">
@@ -61,12 +70,10 @@ export const LoginInfoComponent = ({}: Props) => {
       </Card>
       <Card>
         <CardContent>
-          <Typography color="textSecondary" gutterBottom>
+          <Typography color="textSecondary" gutterBottom variant="h2" style={{ fontSize: 20, fontWeight: 700 }}>
             Monetize Your Idea
           </Typography>
-          <Typography variant="h5" component="h2">
-            Post your best idea and get a chance to earn crypto tip.
-          </Typography>
+          <Typography variant="body1">Post your best idea and get a chance to earn crypto tip.</Typography>
         </CardContent>
         <CardActions>
           <Button size="medium" variant="contained" color="primary">
