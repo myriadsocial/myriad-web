@@ -48,7 +48,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(1),
       padding: theme.spacing(1),
       fontSize: 16,
-      fontWeight: 600,
+      fontWeight: 600
     },
     confirm: {
       width: 444,

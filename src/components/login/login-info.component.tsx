@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
         '& .MuiCardActions-root': {
           background: 'transparent',
-          justifyContent: 'flex-end',
+          justifyContent: 'flex-end'
         },
 
         '& .MuiTypography-body1': {

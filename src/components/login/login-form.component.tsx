@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(1),
       padding: theme.spacing(1),
       fontSize: 16,
-      fontWeight: 700,
+      fontWeight: 700
     },
     action: {
       flexWrap: 'wrap',
@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme: Theme) =>
       '& .MuiButton-root': {
         width: 300,
         fontSize: 16,
-      fontWeight: 600,
+        fontWeight: 600,
         marginRight: theme.spacing(3),
         '&:last-child': {
           marginRight: 0
@@ -91,12 +91,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     anonymous: {
       background: theme.palette.text.secondary,
-      color: '#2998E9',
-
+      color: '#2998E9'
     },
     register: {
       background: '#2998E9',
-      color: theme.palette.text.secondary,
+      color: theme.palette.text.secondary
     },
     info: {
       display: 'flex',
