@@ -31,7 +31,7 @@ const UserFriendComponent: React.FC<UserFriendProps> = props => {
   }, 300);
 
   return (
-    <div style={{ padding: 8 }}>
+    <div style={{ padding: 8, background: 'white', borderRadius: 8 }}>
       <div style={{ paddingTop: 16, paddingBottom: 8 }}>
         <Typography variant="h4" style={{ marginBottom: 16 }}>
           Friends with {friends.length} people

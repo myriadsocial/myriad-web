@@ -12,6 +12,7 @@ import { BalanceProvider } from '../src/components/wallet/balance.context';
 import theme from '../src/themes/light';
 
 import { AlertProvider } from 'src/components/alert/Alert.context';
+import { ProfileProvider } from 'src/components/profile/profile.context';
 import { WalletAddressProvider } from 'src/components/timeline/post/send-tip.context';
 import { UserProvider } from 'src/components/user/user.context';
 
@@ -66,9 +67,11 @@ const App = ({ Component, pageProps }: AppProps) => {
               session={pageProps.session}>
               <CookiesProvider>
                 <UserProvider>
-                  <AlertProvider>
-                    <Component {...pageProps} />
-                  </AlertProvider>
+                  <ProfileProvider>
+                    <AlertProvider>
+                      <Component {...pageProps} />
+                    </AlertProvider>
+                  </ProfileProvider>
                 </UserProvider>
               </CookiesProvider>
             </Provider>

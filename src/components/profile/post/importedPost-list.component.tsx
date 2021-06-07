@@ -9,6 +9,7 @@ import { LoadingPage } from '../../common/loading.component';
 import { useStyles } from '../profile.style';
 
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
+import { useProfile } from 'src/components/profile/profile.context';
 import { useProfileHook } from 'src/components/profile/use-profile.hook';
 import PostComponent from 'src/components/timeline/post/post.component';
 import { usePost } from 'src/components/timeline/use-post.hook';
@@ -23,8 +24,9 @@ type Props = {
 export default function ImportedPostList({ user, profile }: Props) {
   const style = useStyles();
   const { hasMore, loadMorePost } = usePost(user);
-  const { loadImportedPost, importedPost: posts, loading } = useProfileHook(profile.id);
-
+  const { state: profileState } = useProfile();
+  const { loadImportedPost, loading } = useProfileHook(profile.id);
+  const posts = profileState.importedPost;
   const isOwnPost = (post: Post) => {
     if (post.walletAddress === user.id) return true;
     return false;
