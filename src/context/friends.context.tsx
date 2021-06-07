@@ -25,15 +25,15 @@ type Dispatch = (action: Action) => void;
 type FriendsProviderProps = { children: React.ReactNode };
 
 type State = {
-  totalFriend: number;
-  totalFriendRequest: number;
+  totalFriends: number;
+  totalFriendRequests: number;
   friends: ExtendedFriend[];
   requests: ExtendedFriend[];
 };
 
 const initalState: State = {
-  totalFriend: 0,
-  totalFriendRequest: 0,
+  totalFriends: 0,
+  totalFriendRequests: 0,
   friends: [],
   requests: []
 };
@@ -46,7 +46,7 @@ function conversationReducer(state: State, action: Action) {
       return {
         ...state,
         friends: action.payload,
-        totalFriend: action.payload.length
+        totalFriends: action.payload.length
       };
     }
 
@@ -54,7 +54,7 @@ function conversationReducer(state: State, action: Action) {
       return {
         ...state,
         requests: action.payload,
-        totalFriendRequest: action.payload.length
+        totalFriendRequests: action.payload.length
       };
     }
     default: {

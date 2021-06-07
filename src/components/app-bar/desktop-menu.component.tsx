@@ -35,7 +35,7 @@ const DesktopMenuComponent: React.FC<DesktopMenuProps> = () => {
     state: { selectedSidebarMenu }
   } = useLayoutSetting();
   const {
-    state: { totalFriendRequest: totalFriendRequest }
+    state: { totalFriendRequests }
   } = useFriends();
   const {
     state: { total: totalNotif }
@@ -53,7 +53,7 @@ const DesktopMenuComponent: React.FC<DesktopMenuProps> = () => {
         color="inherit"
         style={{ margin: '0 32px' }}
         onClick={() => changeSelectedSidebar(SidebarTab.FRIENDS)}>
-        <Badge badgeContent={totalFriendRequest} color="secondary">
+        <Badge badgeContent={totalFriendRequests} color="secondary">
           <PeopleIcon />
         </Badge>
       </IconButton>

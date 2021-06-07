@@ -146,7 +146,7 @@ const FriendRequests = ({ user }: Props) => {
             })}
           </List>
 
-          <ShowIf condition={state.totalFriendRequest > state.requests.length}>
+          <ShowIf condition={state.totalFriendRequests > state.requests.length}>
             <Link
               className={style.more}
               component="button"

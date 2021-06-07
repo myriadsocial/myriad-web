@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(1),
       padding: theme.spacing(1),
       fontSize: 16,
-      fontWeight: 700
+      fontWeight: 600
     },
     action: {
       flexWrap: 'wrap',
@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 48,
       '& .MuiButton-root': {
         width: 300,
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 600,
         marginRight: theme.spacing(3),
         '&:last-child': {
