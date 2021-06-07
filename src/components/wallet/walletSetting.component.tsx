@@ -61,7 +61,7 @@ interface Token {
 
 const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
   const [showSetting, setShowSetting] = useState(false);
-  const [value, setValue] = useState('');
+  const [value] = useState('');
 
   const styles = useStyles();
 
