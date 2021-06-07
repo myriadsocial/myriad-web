@@ -42,7 +42,7 @@ export const useFriendHook = (user: User) => {
 
   const requestFriendStatus = async friendId => {
     const { data } = await MyriadAPI({
-      url: `/users/${user.address}/friends`,
+      url: `/users/${user.id}/friends`,
       method: 'GET'
     });
 

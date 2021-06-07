@@ -1,14 +1,15 @@
 // @ts-nocheck
 import { useState, useEffect } from 'react';
 
+import { useProfile, ProfileActionType } from 'src/components/profile/profile.context';
 import { Post } from 'src/interfaces/post';
 import { ExtendedUserPost } from 'src/interfaces/user';
 import { User } from 'src/interfaces/user';
 import * as ProfileAPI from 'src/lib/api/profile';
 
-export const useProfileHook = id => {
-  const [profile, setProfile] = useState<ExtendedUserPost | null>(null);
-  const [importedPost, setimportedPost] = useState<Post[]>([]);
+export const useProfileHook = (id: string) => {
+  const { state: profileState, dispatch } = useProfile();
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -21,9 +22,14 @@ export const useProfileHook = id => {
 
       posts = posts.map((item: Post) => ({ ...item, comments: item.comments || [] }));
 
-      setProfile({
+      const data = {
         ...detail,
         posts: [...posts]
+      };
+
+      dispatch({
+        type: ProfileActionType.PROFILE_LOADED,
+        payload: data
       });
     } catch (error) {
       setError(error);
@@ -40,7 +46,10 @@ export const useProfileHook = id => {
 
       posts = posts.map((item: Post) => ({ ...item, comments: item.comments || [] }));
 
-      setimportedPost([...posts]);
+      dispatch({
+        type: ProfileActionType.IMPORTEDPOST_LOADED,
+        payload: posts
+      });
     } catch (error) {
       setError(error);
     } finally {
@@ -54,10 +63,7 @@ export const useProfileHook = id => {
     try {
       const data = ProfileAPI.updateUserProfile(id as string, attributes);
 
-      setProfile({
-        ...profile,
-        ...attributes
-      });
+      getProfile();
     } catch (error) {
       setError(error);
     } finally {
@@ -68,10 +74,8 @@ export const useProfileHook = id => {
   return {
     error,
     loading,
-    profile,
     updateProfile,
     getProfile,
-    loadImportedPost,
-    importedPost
+    loadImportedPost
   };
 };

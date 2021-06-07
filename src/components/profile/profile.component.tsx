@@ -41,7 +41,7 @@ const StyledTabs = withStyles({
     justifyContent: 'center',
     backgroundColor: 'transparent'
   }
-})((props: StyledTabsProps) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
+})((props: StyledTabsProps) => <Tabs variant="fullWidth" {...props} TabIndicatorProps={{ children: <span /> }} />);
 
 interface StyledTabProps {
   label: string;

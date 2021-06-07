@@ -40,12 +40,13 @@ export const useStyles = makeStyles((theme: Theme) =>
     root2: {
       // backgroundColor: theme.palette.background.paper,
       width: 678,
-      height: '100%'
+      height: '100%',
+      marginBottom: theme.spacing(1)
     },
 
     tabContent: {
-      filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.16))',
-      background: theme.palette.background.paper
+      filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.16))'
+      // background: theme.palette.background.paper
     },
     tabHeader: {
       // background: '#C4C4C4'

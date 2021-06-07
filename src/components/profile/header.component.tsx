@@ -61,6 +61,10 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
 
   useEffect(() => {
     requestFriendStatus(profile?.id);
+  }, []);
+
+  useEffect(() => {
+    console.log(status, 'status');
   }, [status]);
 
   const profileInfo =
