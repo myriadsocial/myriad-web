@@ -63,7 +63,7 @@ export const RegisterFormComponent: React.FC<RegisterComponentProps> = props => 
     if (mnemonicCopied) {
       register({
         name: username,
-        username,
+        username: username.replace(/\s/g, ''),
         anonymous: false,
         id: key
       });

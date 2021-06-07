@@ -10,10 +10,10 @@ import Typography from '@material-ui/core/Typography';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 import ShowIf from '../common/show-if.component';
-import LoginComponent from '../login/login.component';
 import { ProfileActionComponent } from './profile-action.component';
 import { SocialListComponent } from './social-list.component';
 
+import { LoginFormComponent } from 'src/components/login/login-form.component';
 import { acronym } from 'src/helpers/string';
 import { ExtendedUser } from 'src/interfaces/user';
 
@@ -101,7 +101,7 @@ const UserComponent: React.FC<Props> = ({ user }) => {
       </Card>
 
       <Dialog open={loginOpened} onClose={toggleLogin} maxWidth="xs">
-        <LoginComponent allowAnonymous={false} />
+        <LoginFormComponent />
       </Dialog>
     </Box>
   );

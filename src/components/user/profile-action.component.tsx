@@ -7,8 +7,8 @@ import Dialog from '@material-ui/core/Dialog';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ShowIf from '../common/show-if.component';
-import LoginComponent from '../login/login.component';
 
+import { LoginFormComponent } from 'src/components/login/login-form.component';
 import { ProfileEditComponent } from 'src/components/profile/profile-edit.component';
 import { User } from 'src/interfaces/user';
 
@@ -55,7 +55,7 @@ export const ProfileActionComponent: React.FC<ProfileActionProps> = ({ anonymous
       )}
 
       <Dialog open={loginOpened} onClose={toggleLogin} maxWidth="xs">
-        <LoginComponent allowAnonymous={false} />
+        <LoginFormComponent />
       </Dialog>
     </div>
   );

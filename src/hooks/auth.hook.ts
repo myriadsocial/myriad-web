@@ -62,7 +62,6 @@ export const useAuthHook = () => {
 
   const login = async (username: string) => {
     const accounts = await getPolkadotAccounts();
-    console.log('0xf0f7f6fb0ed7c75c58e1422de8430a6d6efd2de6202e31fd940c2c0ba246ae64');
 
     if (accounts.length === 0) {
       console.log('[useAuthHook][login][info]', 'No account found on polkadot extension');
@@ -86,7 +85,7 @@ export const useAuthHook = () => {
       return;
     }
 
-    const selected = users.find(user => user.username === username);
+    const selected = users.find(user => user.username.toLocaleLowerCase() === username.toLocaleLowerCase());
 
     if (selected) {
       signIn('credentials', {
