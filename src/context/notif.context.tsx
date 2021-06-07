@@ -16,10 +16,12 @@ type Dispatch = (action: Action) => void;
 type NotifProviderProps = { children: React.ReactNode };
 
 type State = {
+  total: number;
   notifications: ExtendedNotification[];
 };
 
 const initialState: State = {
+  total: 0,
   notifications: []
 };
 
@@ -30,7 +32,8 @@ function notificationReducer(state: State, action: Action) {
     case NotifActionType.LOAD_NOTIF: {
       return {
         ...state,
-        notifications: action.payload
+        notifications: action.payload,
+        total: action.payload.length
       };
     }
     default: {

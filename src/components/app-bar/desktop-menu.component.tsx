@@ -7,7 +7,9 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import PeopleIcon from '@material-ui/icons/People';
 
 import clsx from 'clsx';
+import { useFriends } from 'src/context/friends.context';
 import { useLayoutSetting } from 'src/context/layout.context';
+import { useNotif } from 'src/context/notif.context';
 import { useLayout } from 'src/hooks/use-layout.hook';
 import { SidebarTab } from 'src/interfaces/sidebar';
 
@@ -32,6 +34,13 @@ const DesktopMenuComponent: React.FC<DesktopMenuProps> = () => {
   const {
     state: { selectedSidebarMenu }
   } = useLayoutSetting();
+  const {
+    state: { totalFriendRequest: totalFriendRequest }
+  } = useFriends();
+  const {
+    state: { total: totalNotif }
+  } = useNotif();
+
   const { changeSelectedSidebar } = useLayout();
 
   return (
@@ -44,7 +53,7 @@ const DesktopMenuComponent: React.FC<DesktopMenuProps> = () => {
         color="inherit"
         style={{ margin: '0 32px' }}
         onClick={() => changeSelectedSidebar(SidebarTab.FRIENDS)}>
-        <Badge badgeContent={4} color="secondary">
+        <Badge badgeContent={totalFriendRequest} color="secondary">
           <PeopleIcon />
         </Badge>
       </IconButton>
@@ -56,7 +65,7 @@ const DesktopMenuComponent: React.FC<DesktopMenuProps> = () => {
         color="inherit"
         style={{ margin: '0 32px' }}
         onClick={() => changeSelectedSidebar(SidebarTab.NOTIFICATION)}>
-        <Badge badgeContent={17} color="secondary">
+        <Badge badgeContent={totalNotif} color="secondary">
           <NotificationsIcon />
         </Badge>
       </IconButton>

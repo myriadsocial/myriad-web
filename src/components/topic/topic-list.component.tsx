@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
 import { Tag } from 'src/interfaces/experience';
+import { v4 as uuid } from 'uuid';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,6 +26,10 @@ const useStyles = makeStyles((theme: Theme) =>
         fontWeight: 400,
         fontSize: 16,
         lineHeight: '19px'
+      },
+
+      '& .MuiTypography-colorTextSecondary': {
+        color: theme.palette.primary.dark
       }
     },
     avatar: {
@@ -39,77 +44,27 @@ interface TopicListProps {
   onAdd?: (tag: string) => void;
 }
 
-export const TopicListComponent: React.FC<TopicListProps> = ({ add = false, onAdd }) => {
+export const TopicListComponent: React.FC<TopicListProps> = ({ topics, add = false, onAdd }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <List className={classes.list}>
-        <ListItem className={classes.item}>
-          <ListItemAvatar className={classes.avatar}>
-            <Typography variant="caption">1</Typography>
-          </ListItemAvatar>
-          <ListItemText primary="#BitcoinDropValue" secondary="500 Posts" />
-          {add && (
-            <ListItemSecondaryAction>
-              <Button onClick={() => console.log('add tag')} aria-label="add-tag" color="primary" variant="contained" size="medium">
-                Add Tag
-              </Button>
-            </ListItemSecondaryAction>
-          )}
-        </ListItem>
-        <ListItem className={classes.item}>
-          <ListItemAvatar className={classes.avatar}>
-            <Typography variant="caption">2</Typography>
-          </ListItemAvatar>
-          <ListItemText primary="#ATTAAURELL" secondary="450 Posts" />
-          {add && (
-            <ListItemSecondaryAction>
-              <Button onClick={() => console.log('add tag')} aria-label="add-tag" color="primary" variant="contained" size="medium">
-                Add Tag
-              </Button>
-            </ListItemSecondaryAction>
-          )}
-        </ListItem>
-        <ListItem className={classes.item}>
-          <ListItemAvatar className={classes.avatar}>
-            <Typography variant="caption">3</Typography>
-          </ListItemAvatar>
-          <ListItemText primary="#EllonMurz" secondary="200 Posts" />
-          {add && (
-            <ListItemSecondaryAction>
-              <Button onClick={() => console.log('add tag')} aria-label="add-tag" color="primary" variant="contained" size="medium">
-                Add Tag
-              </Button>
-            </ListItemSecondaryAction>
-          )}
-        </ListItem>
-        <ListItem className={classes.item}>
-          <ListItemAvatar className={classes.avatar}>
-            <Typography variant="caption">4</Typography>
-          </ListItemAvatar>
-          <ListItemText primary="#GoToMerger" secondary="200 Posts" />
-          {add && (
-            <ListItemSecondaryAction>
-              <Button onClick={() => console.log('add tag')} aria-label="add-tag" color="primary" variant="contained" size="medium">
-                Add Tag
-              </Button>
-            </ListItemSecondaryAction>
-          )}
-        </ListItem>
-        <ListItem className={classes.item}>
-          <ListItemAvatar className={classes.avatar}>
-            <Typography variant="caption">5</Typography>
-          </ListItemAvatar>
-          <ListItemText primary="#KeretacepatJKTBDG" secondary="200 Posts" />
-          {add && (
-            <ListItemSecondaryAction>
-              <Button onClick={() => console.log('add tag')} aria-label="add-tag" color="primary" variant="contained" size="medium">
-                Add Tag
-              </Button>
-            </ListItemSecondaryAction>
-          )}
-        </ListItem>
+        {topics.map((topic, i) => (
+          <ListItem className={classes.item} key={uuid()}>
+            <ListItemAvatar className={classes.avatar}>
+              <Typography variant="caption">{i + 1}</Typography>
+            </ListItemAvatar>
+            <ListItemText primary={`#${topic.id}`} secondary={`${topic.count} Posts`} />
+            {add && (
+              <ListItemSecondaryAction>
+                <Button onClick={() => console.log('add tag')} aria-label="add-tag" color="primary" variant="contained" size="medium">
+                  Add Tag
+                </Button>
+              </ListItemSecondaryAction>
+            )}
+          </ListItem>
+        ))}
       </List>
     </div>
   );

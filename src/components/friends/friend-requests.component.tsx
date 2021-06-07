@@ -102,8 +102,11 @@ const FriendRequests = ({ user }: Props) => {
       <div className={style.content}>
         <Collapse in={openFriends} timeout="auto" unmountOnExit>
           <ShowIf condition={state.requests.length === 0}>
-            <Typography variant="h4" color="textPrimary" style={{ textAlign: 'center', padding: '16px 0' }}>
-              No Friend Request
+            <Typography
+              variant="h4"
+              color="textPrimary"
+              style={{ fontWeight: 500, textAlign: 'center', fontSize: 14, color: '#B1AEB7', padding: '16px 0' }}>
+              You don't have any friend request
             </Typography>
           </ShowIf>
 
@@ -143,14 +146,16 @@ const FriendRequests = ({ user }: Props) => {
             })}
           </List>
 
-          <Link
-            className={style.more}
-            component="button"
-            onClick={() => {
-              console.info("I'm a button.");
-            }}>
-            (show all request)
-          </Link>
+          <ShowIf condition={state.totalFriendRequest > state.requests.length}>
+            <Link
+              className={style.more}
+              component="button"
+              onClick={() => {
+                console.info("I'm a button.");
+              }}>
+              (show all request)
+            </Link>
+          </ShowIf>
         </Collapse>
       </div>
     </Box>

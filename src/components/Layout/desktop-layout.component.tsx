@@ -43,7 +43,9 @@ const DesktopLayoutComponent = ({ children, user }: Props) => {
   return (
     <>
       <FriendsProvider>
-        <AppBar />
+        <NotifProvider>
+          <AppBar />
+        </NotifProvider>
         <div className={style.appWrapper}>
           <div className={style.contentWrapper}>{children}</div>
 

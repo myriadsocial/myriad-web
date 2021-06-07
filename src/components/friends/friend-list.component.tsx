@@ -83,8 +83,11 @@ const Friends = ({ user }: Props) => {
         <Collapse in={openOnlineFriends} timeout="auto" unmountOnExit>
           <div className={style.content}>
             <ShowIf condition={state.friends.length === 0}>
-              <Typography variant="h4" color="textPrimary" style={{ textAlign: 'center', padding: '16px 0' }}>
-                No Friends
+              <Typography
+                variant="h4"
+                color="textPrimary"
+                style={{ fontWeight: 500, fontSize: 14, textAlign: 'center', padding: '16px 0', color: '#B1AEB7' }}>
+                You don't have any Myriad friend, try to search for people or tell your friends about myriad
               </Typography>
             </ShowIf>
 
