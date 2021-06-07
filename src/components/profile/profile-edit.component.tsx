@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -21,6 +21,7 @@ import { useAlertHook } from 'src/components/alert/use-alert.hook';
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import { EditableTextField } from 'src/components/common/EditableTextField';
 import { ImageUpload } from 'src/components/common/ImageUpload.component';
+import { useProfile } from 'src/components/profile/profile.context';
 import { acronym } from 'src/helpers/string';
 import { User } from 'src/interfaces/user';
 
@@ -62,9 +63,16 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user }) => {
   const styles = useStyles();
 
   const [cookie] = useCookies(['seed']);
-  const { profile, updateProfile } = useProfileHook(user);
+  const { updateProfile, getProfile } = useProfileHook(user.id);
+  const { state: profileState } = useProfile();
+  const profile = profileState.profile;
+
   const { showAlert } = useAlertHook();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    getProfile();
+  }, []);
 
   const toggleProfileForm = () => {
     setOpen(!open);
