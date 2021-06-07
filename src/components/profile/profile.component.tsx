@@ -79,7 +79,7 @@ const useStylesForTabs = makeStyles((theme: Theme) => ({
   }
 }));
 
-function CustomizedTabs() {
+function MyWalletTabs() {
   const classes = useStylesForTabs();
   const [value, setValue] = React.useState(0);
 
@@ -178,7 +178,7 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
                 <FriendComponent />
               </TabPanel>
               <TabPanel value={value} index={3} dir={theme.direction}>
-                <CustomizedTabs />
+                <MyWalletTabs />
               </TabPanel>
             </SwipeableViews>
           </ShowIf>

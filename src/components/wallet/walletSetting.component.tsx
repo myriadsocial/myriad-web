@@ -19,6 +19,8 @@ import SendIcon from '@material-ui/icons/Send';
 //import AlertTitle from '@material-ui/lab/AlertTitle';
 import DialogTitle from '../common/DialogTitle.component';
 import SearchComponent from '../common/search.component';
+import { TabPanel } from '../common/tab-panel.component';
+import { StyledTabs, StyledTab } from '../common/tabs.component';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -31,20 +33,11 @@ const useStyles = makeStyles(() =>
     },
     listItemToken: {
       flex: '0 0 100%'
+    },
+    walletSettingDialog: {
+      maxHeight: '50vh',
+      overflow: 'auto'
     }
-    //form: {
-    //display: 'flex',
-    //flexDirection: 'column',
-    //margin: 'auto',
-    //width: 'fit-content'
-    //},
-    //formControl: {
-    //marginTop: theme.spacing(2),
-    //minWidth: 120
-    //},
-    //formControlLabel: {
-    //marginTop: theme.spacing(1)
-    //},
   })
 );
 
@@ -59,11 +52,15 @@ interface Token {
   address?: string;
 }
 
-const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
-  const [showSetting, setShowSetting] = useState(false);
-  const [value] = useState('');
+// WALLET TAB
 
+const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
   const styles = useStyles();
+
+  const [idx, setIdx] = React.useState(0);
+  const [showSetting, setShowSetting] = useState(false);
+  const [value, setValue] = useState('');
+  const [RPCAddress, setRPCAddress] = useState('');
 
   useImperativeHandle(forwardedRef, () => ({
     triggerShowSetting: () => {
@@ -79,8 +76,18 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
     console.log('the value is: ', value);
   };
 
-  const submitSearch = () => {
-    console.log('search is submitted for: ', value);
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setIdx(newValue);
+  };
+
+  const submitSearch = (newValue: string) => {
+    setValue(newValue);
+    console.log('the value is: ', newValue);
+  };
+
+  const submitSearchRPCAdress = (newValue: string) => {
+    setRPCAddress(newValue);
+    console.log('the value is: ', newValue);
   };
 
   const createData = (logoURL: string, ticker: string, name: string, address?: string) => {
@@ -104,31 +111,50 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
 
   return (
     <>
-      <Dialog maxWidth="sm" fullWidth={true} open={showSetting} onClose={closeSetting} aria-labelledby="wallet-settings">
+      <Dialog
+        maxWidth="sm"
+        PaperProps={{
+          style: { overflow: 'hidden' }
+        }}
+        fullWidth={true}
+        open={showSetting}
+        onClose={closeSetting}
+        aria-labelledby="wallet-settings">
         <DialogTitle id="name" onClose={closeSetting}>
           {' '}
           Wallet Setting
         </DialogTitle>
-        <DialogContent dividers>
-          <SearchComponent value={value} placeholder="Search by Asset ID, Name or Ticker Symbol" onSubmit={submitSearch} />
-        </DialogContent>
-        <DialogContent>
-          <List>
-            {rows.map(token => (
-              <div key={token?.ticker}>
-                <ListItem className={styles.listItemRoot}>
-                  <Card className={styles.listItemToken}>
-                    <CardHeader
-                      avatar={<Avatar aria-label="avatar" src={token?.logoURL} />}
-                      title={RenderPrimaryText(token)}
-                      subheader={RenderSecondaryText(token)}
-                    />
-                  </Card>
-                </ListItem>
-              </div>
-            ))}
-          </List>
-        </DialogContent>
+        <StyledTabs value={idx} onChange={handleChange} aria-label="tabs-for-wallet-or-tipping">
+          <StyledTab label="Search" />
+          <StyledTab label="Custom Asset" />
+        </StyledTabs>
+        <TabPanel value={idx} index={0}>
+          <DialogContent>
+            <SearchComponent value={value} placeholder="Search by Asset ID, Name or Ticker Symbol" onSubmit={submitSearch} />
+          </DialogContent>
+          <DialogContent className={styles.walletSettingDialog}>
+            <List>
+              {rows.map(token => (
+                <div key={token?.ticker}>
+                  <ListItem className={styles.listItemRoot}>
+                    <Card className={styles.listItemToken}>
+                      <CardHeader
+                        avatar={<Avatar aria-label="avatar" src={token?.logoURL} />}
+                        title={RenderPrimaryText(token)}
+                        subheader={RenderSecondaryText(token)}
+                      />
+                    </Card>
+                  </ListItem>
+                </div>
+              ))}
+            </List>
+          </DialogContent>
+        </TabPanel>
+        <TabPanel value={idx} index={1}>
+          <DialogContent>
+            <SearchComponent value={RPCAddress} placeholder="RPC Address (wss://rpc.myriad.systems)" onSubmit={submitSearchRPCAdress} />
+          </DialogContent>
+        </TabPanel>
         <DialogActions>
           <Button fullWidth={true} size="large" variant="contained" onClick={closeSetting}>
             Cancel
@@ -138,7 +164,6 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
           </Button>
         </DialogActions>
       </Dialog>
-
       {
         //<Snackbar open={sendTipConfirmed.isConfirmed} autoHideDuration={6000} onClose={handleClose}>
         //<Alert severity="success">
