@@ -13,12 +13,12 @@ import { CommentProvider } from './comment/comment.context';
 import CreatePostComponent from './create-post/create-post.component';
 import FilterTimelineComponent from './filter/filter.component';
 import PostComponent from './post/post.component';
-import { useTimeline } from './timeline.context';
 import { useStyles } from './timeline.style';
-import { usePost } from './use-post.hook';
 
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import ShowIf from 'src/components/common/show-if.component';
+import { useTimeline } from 'src/context/timeline.context';
+import { usePost } from 'src/hooks/use-post.hook';
 import { Post, PostSortMethod } from 'src/interfaces/post';
 import { User } from 'src/interfaces/user';
 

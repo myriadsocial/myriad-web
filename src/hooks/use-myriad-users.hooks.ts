@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import Axios from 'axios';
 import { User } from 'src/interfaces/user';
+import * as UserAPI from 'src/lib/api/user';
 
 const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
@@ -21,31 +22,9 @@ export const useMyriadUser = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios({
-        url: '/users',
-        method: 'GET',
-        params: {
-          filter: {
-            ...params,
-            where: {
-              name: {
-                like: query
-              }
-            }
-          }
-        }
-      });
+      const users = await UserAPI.search(query);
 
-      setUser(
-        data.map(i => ({
-          id: i.id,
-          name: i.name,
-          profilePictureURL: i.profilePictureURL,
-          anonymous: i.anonymous,
-          bio: i.bio,
-          createdAt: i.createdAt
-        }))
-      );
+      setUser(users);
     } catch (error) {
       setError(error);
     } finally {

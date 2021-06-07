@@ -9,8 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import AlertComponent from 'src/components/alert/Alert.component';
-import { LoginFormComponent } from 'src/components/login/login-form.component';
-import { LoginInfoComponent } from 'src/components/login/login-info.component';
+import { RegisterFormComponent } from 'src/components/register/register-form.component';
 import { useAlertHook } from 'src/hooks/use-alert.hook';
 import LogoImage from 'src/images/header-logo.svg';
 import { healthcheck } from 'src/lib/api/healthcheck';
@@ -22,9 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
       minHeight: '100vh',
       backgroundImage: 'url(/images/login-background.png)',
       backgroundRepeat: 'no-repeat',
-      backgroundSize: 'cover',
-      display: 'flex',
-      flexWrap: 'wrap'
+      backgroundSize: 'cover'
     },
     header: {
       textAlign: 'center'
@@ -44,7 +41,8 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: 140,
       width: 320,
       marginRight: 65
-    }
+    },
+    timeline: {}
   })
 );
 
@@ -77,16 +75,15 @@ export default function Index() {
   return (
     <div className={style.root}>
       <Grid container direction="column" alignItems="center">
-        <div className={style.header}>
+        <Grid item className={style.header}>
           <LogoImage className={style.logo} />
           <Typography variant="h1" className={style.title}>
             Social Media with no boundary
           </Typography>
-        </div>
-
-        <LoginFormComponent />
-
-        <LoginInfoComponent />
+        </Grid>
+        <Grid item className={style.timeline}>
+          <RegisterFormComponent />
+        </Grid>
       </Grid>
 
       <AlertComponent />

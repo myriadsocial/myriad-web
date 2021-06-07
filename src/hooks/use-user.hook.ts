@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import { useUser, UserActionType } from 'src/components/user/user.context';
+import { useUser, UserActionType } from 'src/context/user.context';
 import { SocialsEnum } from 'src/interfaces';
 import { ExtendedUser } from 'src/interfaces/user';
-import { User as DBUser } from 'src/interfaces/user';
+import { User } from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 import { firebaseCloudMessaging } from 'src/lib/firebase';
 
@@ -44,7 +44,7 @@ export const useUserHook = (userId: string) => {
     }
   };
 
-  const updateUser = async (values: Partial<DBUser>) => {
+  const updateUser = async (values: Partial<User>) => {
     await UserAPI.updateUser(userId, values);
 
     load();
@@ -57,7 +57,7 @@ export const useUserHook = (userId: string) => {
 
     if (token) {
       updateUser({
-        fcm_token: [token as string]
+        fcmTokens: [token as string]
       });
     }
   };

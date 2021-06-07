@@ -5,9 +5,9 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import LanguageIcon from '@material-ui/icons/Language';
 
 import { TopicListComponent } from './topic-list.component';
-import { useTopic } from './use-topic.hooks';
 
 import ExpandablePanel from 'src/components/common/panel-expandable.component';
+import { useTopic } from 'src/hooks/use-topic.hooks';
 
 interface TopicProps {}
 

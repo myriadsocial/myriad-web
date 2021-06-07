@@ -12,7 +12,7 @@ import TwitterReactionComponent from '../reactions/twitter.component';
 
 import clsx from 'clsx';
 import ShowIf from 'src/components/common/show-if.component';
-import { useUser } from 'src/components/user/user.context';
+import { useUser } from 'src/context/user.context';
 import { Post } from 'src/interfaces/post';
 import { PostDetail } from 'src/lib/parse-social.util';
 

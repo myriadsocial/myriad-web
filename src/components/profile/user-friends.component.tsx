@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import FriendListComponent from '../friends/friend-list.component';
-import { useFriendsHook } from '../friends/use-friends-hook';
 
 import { debounce } from 'lodash';
 import SearchComponent from 'src/components/common/search.component';
-import { useFriends } from 'src/components/friends/friends.context';
-import { useUser } from 'src/components/user/user.context';
+import { useFriends } from 'src/context/friends.context';
+import { useUser } from 'src/context/user.context';
+import { useFriendsHook } from 'src/hooks/use-friends-hook';
 
 interface UserFriendProps {}
 

@@ -7,13 +7,13 @@ import { useTheme } from '@material-ui/core/styles';
 
 import AppBar from '../app-bar/app-bar.component';
 import { TabPanel } from '../common/tab-panel.component';
-import { FriendsProvider } from '../friends/friends.context';
-import { NotifProvider } from '../notifications/notif.context';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
-import { useLayoutSetting } from 'src/components/Layout/layout.context';
-import { useUserHook } from 'src/components/user/use-user.hook';
-import { useUser } from 'src/components/user/user.context';
+import { FriendsProvider } from 'src/context/friends.context';
+import { useLayoutSetting } from 'src/context/layout.context';
+import { NotifProvider } from 'src/context/notif.context';
+import { useUser } from 'src/context/user.context';
+import { useUserHook } from 'src/hooks/use-user.hook';
 import { SidebarTab } from 'src/interfaces/sidebar';
 
 const FriendComponent = dynamic(() => import('../friends/friend.component'));

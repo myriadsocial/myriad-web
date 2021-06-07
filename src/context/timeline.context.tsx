@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Tag } from 'src/interfaces/experience';
 import { Post, Comment, PostSortMethod, PostFilter } from 'src/interfaces/post';
 
 export enum TimelineActionType {
@@ -57,6 +58,7 @@ type State = {
   page: number;
   filter: PostFilter;
   posts: Post[];
+  trending: Tag[];
 };
 
 const initalState: State = {
@@ -68,7 +70,8 @@ const initalState: State = {
     layout: 'timeline',
     platform: []
   },
-  posts: []
+  posts: [],
+  trending: []
 };
 
 const TimelineContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);

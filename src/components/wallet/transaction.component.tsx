@@ -12,7 +12,7 @@ import SortIcon from '@material-ui/icons/Sort';
 import { useTransaction } from '../tippingJar/use-transaction.hooks';
 import TransactionListComponent from './transactionList.component';
 
-import { useUser } from 'src/components/user/user.context';
+import { useUser } from 'src/context/user.context';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Notification from './notif-list.component';
 
-import { useUser } from 'src/components/user/user.context';
+import { useUser } from 'src/context/user.context';
 
 interface NotifProps {
   title?: string;

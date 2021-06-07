@@ -11,8 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
-import { useFriendsHook } from 'src/components/friends/use-friends-hook';
-//import { useFriendsHook } from 'src/components/friends/use-friends-hook';
+import { useFriendsHook } from 'src/hooks/use-friends-hook';
 import { Transaction } from 'src/interfaces/transaction';
 import { User } from 'src/interfaces/user';
 

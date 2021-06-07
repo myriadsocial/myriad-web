@@ -17,7 +17,7 @@ import { WalletComponent } from './myWallet/wallet.component';
 import { useStyles } from './profile.style';
 
 import ShowIf from 'src/components/common/show-if.component';
-import { useFriends } from 'src/components/friends/friends.context';
+import { useFriends } from 'src/context/friends.context';
 import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
 
 const PostList = dynamic(() => import('./post/post-list.component'));
