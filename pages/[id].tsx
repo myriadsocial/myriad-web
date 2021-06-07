@@ -7,6 +7,7 @@ import { getSession } from 'next-auth/client';
 
 import Layout from 'src/components/Layout/Layout.container';
 import ProfileTimeline from 'src/components/profile/profile.component';
+import { useProfile } from 'src/components/profile/profile.context';
 import { useProfileHook } from 'src/components/profile/use-profile.hook';
 import { useUser } from 'src/context/user.context';
 import { useUserHook } from 'src/hooks/use-user.hook';
@@ -23,7 +24,8 @@ type Props = {
 
 export default function Profile({ session, params }: Props) {
   const { state: userState } = useUser();
-  const { profile, loading, getProfile } = useProfileHook(params.id);
+  const { state: profileState } = useProfile();
+  const { loading, getProfile } = useProfileHook(params.id);
 
   const { getUserDetail } = useUserHook(session.user.address as string);
 
@@ -37,7 +39,11 @@ export default function Profile({ session, params }: Props) {
 
   if (!session || !userState.user) return null;
 
-  return <Layout session={session}>{userState && <ProfileTimeline user={userState.user} profile={profile} loading={loading} />}</Layout>;
+  return (
+    <Layout session={session}>
+      {userState && <ProfileTimeline user={userState.user} profile={profileState.profile} loading={loading} />}
+    </Layout>
+  );
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {

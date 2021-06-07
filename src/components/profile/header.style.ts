@@ -26,8 +26,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       display: 'flex',
       justifyContent: 'space-between',
-      // alignItems: 'center',
-      // backgroundColor: theme.palette.background.paper,
       padding: 16,
       height: '339px',
       color: '#4B4851'
@@ -43,21 +41,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: 30,
       color: 'white',
       marginRight: 10
-    },
-    about: {
-      textAlign: 'center',
-      padding: 20,
-      backgroundColor: '#424242',
-      borderBottom: `1px solid`,
-      borderBottomColor: 'black'
-    },
-    socialMediaList: {
-      display: 'flex',
-      justifyContent: 'flex-start',
-      backgroundColor: '#424242',
-      padding: 20,
-      borderBottomRightRadius: '4px',
-      borderBottomLeftRadius: '4px'
     },
     logo: {
       width: 30,
@@ -109,6 +92,14 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 700,
       fontSize: 16,
       color: '#4B4851'
+    },
+    input: {
+      marginTop: 8,
+      background: 'white',
+      borderRadius: 8,
+      '& .MuiInputBase-root': {
+        background: 'white'
+      }
     }
   })
 );
