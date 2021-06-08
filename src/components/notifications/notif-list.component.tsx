@@ -12,8 +12,10 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
 import { ListHeaderComponent } from './list-header.component';
 
+import moment from 'moment';
 import ShowIf from 'src/components/common/show-if.component';
 import { useNotif } from 'src/context/notif.context';
+import { acronym } from 'src/helpers/string';
 import { useNotifHook } from 'src/hooks/use-notif.hook';
 import { User } from 'src/interfaces/user';
 
@@ -56,7 +58,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Notification = ({ user }: Props) => {
   const style = useStyles();
-  // const [notif, setNotif] = useState(3);
   const { state } = useNotif();
   const { loadNotifications } = useNotifHook(user);
 
@@ -66,82 +67,36 @@ const Notification = ({ user }: Props) => {
 
   return (
     <>
-      <ListHeaderComponent title={`New Notification (${state.notifications.length})`} />
+      <ListHeaderComponent title={`New Notification (${state.total})`} />
       <DividerComponent />
       <Box className={style.root}>
         <div>
           <div className={style.content}>
-            <ShowIf condition={state.notifications.length === 0}>
-              <Typography variant="h4" color="textPrimary" style={{ textAlign: 'center', padding: '16px 0' }}>
-                No Notification
+            <ShowIf condition={state.total == 0}>
+              <Typography variant="h5" color="textPrimary" style={{ textAlign: 'center', padding: '16px 40px' }}>
+                You haven’t any notification, let’s start post something
               </Typography>
             </ShowIf>
-
             <List className={style.list}>
               {state.notifications.map(notif => {
                 return (
                   <ListItem key={notif.id} className={style.item} alignItems="center">
                     <ListItemAvatar>
                       <Avatar className={style.avatar} src={notif.fromUserId.profilePictureURL || ''}>
-                        {'JW'}
+                        {acronym(notif.fromUserId.name || '')}
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText>
-                      <Typography variant="h6" color="textPrimary">
-                        {notif.fromUserId.name} {notif.message}
+                      <Typography variant="body1" color="textPrimary" style={{ fontWeight: 400 }}>
+                        {notif.message}
                       </Typography>
                       <Typography variant="body2" color="textPrimary">
-                        {'a few second ago'}
+                        {moment(notif.createdAt).startOf('day').fromNow()}
                       </Typography>
                     </ListItemText>
                   </ListItem>
                 );
               })}
-              {/* <ListItem className={style.item} alignItems="center">
-                <ListItemAvatar>
-                  <Avatar className={style.avatar} src={''}>
-                    {'JW'}
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText>
-                  <Typography variant="h6" color="textPrimary" style={{ color: '#fff' }}>
-                    {'Johny Walker'} {'commented on your post from twitter'}
-                  </Typography>
-                  <Typography variant="body2" color="textPrimary" style={{ color: '#fff' }}>
-                    {'a few second ago'}
-                  </Typography>
-                </ListItemText>
-              </ListItem>
-              <ListItem className={style.item} alignItems="center">
-                <ListItemAvatar>
-                  <Avatar className={style.avatar} src={''}>
-                    {'JW'}
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText>
-                  <Typography variant="h6" color="textPrimary" style={{ color: '#fff' }}>
-                    {'Johny Walker'} {'commented on your post from twitter'}
-                  </Typography>
-                  <Typography variant="body2" color="textPrimary" style={{ color: '#fff' }}>
-                    {'a few second ago'}
-                  </Typography>
-                </ListItemText>
-              </ListItem>
-              <ListItem className={style.item} alignItems="center">
-                <ListItemAvatar>
-                  <Avatar className={style.avatar} src={''}>
-                    {'JW'}
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText>
-                  <Typography variant="h6" color="textPrimary" style={{ color: '#fff' }}>
-                    {'Johny Walker'} {'commented on your post from twitter'}
-                  </Typography>
-                  <Typography variant="body2" color="textPrimary" style={{ color: '#fff' }}>
-                    {'1 day ago'}
-                  </Typography>
-                </ListItemText>
-              </ListItem> */}
             </List>
           </div>
         </div>
