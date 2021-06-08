@@ -88,7 +88,13 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
 
   const handleShared = () => {
     if (social && socialName) {
-      verify(social, socialName);
+      let username = socialName;
+
+      if (social === SocialsEnum.FACEBOOK) {
+        username = `${prefix.facebook}/${socialName}`;
+      }
+
+      verify(social, username);
       close();
     }
   };
