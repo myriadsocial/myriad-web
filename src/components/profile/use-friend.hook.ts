@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 
 import Axios from 'axios';
+import { useProfile, ProfileActionType } from 'src/components/profile/profile.context';
 import { FriendRequest } from 'src/interfaces/friend';
 import { User } from 'src/interfaces/user';
 
@@ -10,8 +11,9 @@ const MyriadAPI = Axios.create({
 });
 
 export const useFriendHook = (user: User) => {
-  const [isSuccess, setIsSuccess] = useState(null);
-  const [status, setStatus] = useState(null);
+  const { state: profileState, dispatch } = useProfile();
+
+  // const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -28,9 +30,7 @@ export const useFriendHook = (user: User) => {
         }
       });
 
-      setIsSuccess({
-        ...data
-      });
+      checkFriendStatus(values.friendId);
       console.log('after Add friend', data);
     } catch (error) {
       setError(error);
@@ -40,15 +40,47 @@ export const useFriendHook = (user: User) => {
     }
   };
 
-  const requestFriendStatus = async friendId => {
-    const { data } = await MyriadAPI({
-      url: `/users/${user.id}/friends`,
-      method: 'GET'
-    });
+  // const requestFriendStatus = async friendId => {
+  //   const { data } = await MyriadAPI({
+  //     url: `/users/${user.id}/friends`,
+  //     method: 'GET'
+  //   });
 
-    const result = data.filter(friend => friend.friendId === friendId);
-    if (result.length > 0) {
-      setStatus(result[0].status);
+  //   const result = data.filter(friend => friend.friendId === friendId);
+  //   if (result.length > 0) {
+  //     setStatus(result[0].status);
+  //   }
+  // };
+
+  const checkFriendStatus = async friendId => {
+    setLoading(true);
+
+    try {
+      const { data } = await MyriadAPI({
+        url: `/friends`,
+        method: 'GET',
+        params: {
+          filter: {
+            where: {
+              or: [
+                { friendId: friendId, requestorId: user.id },
+                { friendId: user.id, requestorId: friendId }
+              ]
+            }
+          }
+        }
+      });
+
+      console.log(data[0], 'status');
+      dispatch({
+        type: ProfileActionType.FRIEND_STATUS,
+        payload: data[0]
+      });
+    } catch (error) {
+      setError(error);
+      console.log(error, '<<<error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,6 +89,7 @@ export const useFriendHook = (user: User) => {
     loading,
     makeFriend,
     status,
-    requestFriendStatus
+    // requestFriendStatus,
+    checkFriendStatus
   };
 };

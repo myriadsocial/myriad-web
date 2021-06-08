@@ -29,6 +29,7 @@ import { useProfileHook } from './use-profile.hook';
 // import { EditableTextField } from 'src/components/common/EditableTextField';
 import { ImageUpload } from 'src/components/common/ImageUpload.component';
 import ShowIf from 'src/components/common/show-if.component';
+import { useProfile } from 'src/components/profile/profile.context';
 import { SocialListComponent } from 'src/components/user/social-list.component';
 import { acronym } from 'src/helpers/string';
 import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
@@ -54,18 +55,16 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
     bio: profile?.bio
   });
 
+  const { state: profileState } = useProfile();
   const { updateProfile } = useProfileHook(user.id);
-  const { makeFriend, status, requestFriendStatus } = useFriendHook(user);
+  const { makeFriend, checkFriendStatus } = useFriendHook(user);
   const [cookie] = useCookies(['seed']);
   const style = useStyles();
 
   useEffect(() => {
-    requestFriendStatus(profile?.id);
+    checkFriendStatus(profile?.id);
+    console.log(profileState.friendStatus, 'friendsttus <<<<<');
   }, []);
-
-  useEffect(() => {
-    console.log(status, 'status');
-  }, [status]);
 
   const profileInfo =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae nibh eu tellus tincidunt luctus hendrerit in orci. Phasellus vitae tristique nulla. Nam magna massa, sollicitudin sed turpis eros.';
@@ -183,7 +182,7 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
           </ShowIf>
           <ShowIf condition={isGuest === true}>
             <div style={{ marginTop: '40px' }}>
-              <ShowIf condition={status === null}>
+              <ShowIf condition={profileState.friendStatus == null}>
                 <Button
                   className={style.button2}
                   style={{ marginRight: 24 }}
@@ -194,7 +193,29 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
                   Add Friends
                 </Button>
               </ShowIf>
-              <ShowIf condition={status === 'pending'}>
+
+              <ShowIf condition={profileState.friendStatus?.status === 'pending' && profileState.friendStatus.requestorId == profile?.id}>
+                <Button
+                  className={style.button2}
+                  style={{ marginRight: 24 }}
+                  color="primary"
+                  variant="contained"
+                  size="medium"
+                  onClick={() => console.log('acc')}>
+                  Accept
+                </Button>
+                <Button
+                  className={style.button2}
+                  style={{ marginRight: 24 }}
+                  color="primary"
+                  variant="contained"
+                  size="medium"
+                  onClick={() => console.log('decline')}>
+                  Ignore
+                </Button>
+              </ShowIf>
+
+              <ShowIf condition={profileState.friendStatus?.status === 'pending' && profileState.friendStatus.friendId == profile?.id}>
                 <Button
                   className={style.button2}
                   variant="contained"
@@ -203,7 +224,29 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
                   style={{ background: 'gray', marginRight: 24 }}>
                   Pending
                 </Button>
+                <Button
+                  className={style.button2}
+                  style={{ marginRight: 24 }}
+                  color="primary"
+                  variant="contained"
+                  size="medium"
+                  onClick={() => console.log('cancel')}>
+                  Cancel
+                </Button>
               </ShowIf>
+
+              <ShowIf condition={profileState.friendStatus?.status === 'approved'}>
+                <Button
+                  className={style.button2}
+                  style={{ marginRight: 24 }}
+                  color="primary"
+                  variant="contained"
+                  size="medium"
+                  onClick={() => console.log('unFriend')}>
+                  Unfriend
+                </Button>
+              </ShowIf>
+
               <Button
                 className={style.button2}
                 color="primary"
