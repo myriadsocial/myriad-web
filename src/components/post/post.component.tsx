@@ -14,7 +14,7 @@ import Collapse from '@material-ui/core/Collapse';
 import Typography from '@material-ui/core/Typography';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
-import { useBalance } from '../../wallet/use-balance.hooks';
+import { useBalance } from '../wallet/use-balance.hooks';
 import { PostActionComponent } from './post-action.component';
 import PostAvatarComponent from './post-avatar.component';
 import PostImageComponent from './post-image.component';
@@ -31,7 +31,7 @@ import { ImageData } from 'src/interfaces/post';
 import { Post } from 'src/interfaces/post';
 import { v4 as uuid } from 'uuid';
 
-const CommentComponent = dynamic(() => import('../comment/comment.component'));
+const CommentComponent = dynamic(() => import('./comment/comment.component'));
 
 type Props = {
   open?: boolean;

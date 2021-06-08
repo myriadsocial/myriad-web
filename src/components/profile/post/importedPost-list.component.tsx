@@ -9,9 +9,9 @@ import { LoadingPage } from '../../common/loading.component';
 import { useStyles } from '../profile.style';
 
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
+import PostComponent from 'src/components/post/post.component';
 import { useProfile } from 'src/components/profile/profile.context';
 import { useProfileHook } from 'src/components/profile/use-profile.hook';
-import PostComponent from 'src/components/timeline/post/post.component';
 import { usePost } from 'src/hooks/use-post.hook';
 import { Post } from 'src/interfaces/post';
 import { User, ExtendedUserPost } from 'src/interfaces/user';

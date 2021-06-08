@@ -9,14 +9,13 @@ import DividerWithText from '../common/divider-w-text';
 import { LoadingPage } from '../common/loading.component';
 import { useExperience } from '../experience/use-experience.hooks';
 import ImportPostComponent from './ImportPost.component';
-import { CommentProvider } from './comment/comment.context';
-import CreatePostComponent from './create-post/create-post.component';
 import FilterTimelineComponent from './filter/filter.component';
-import PostComponent from './post/post.component';
 import { useStyles } from './timeline.style';
 
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import ShowIf from 'src/components/common/show-if.component';
+import CreatePostComponent from 'src/components/post/create/create-post.component';
+import PostComponent from 'src/components/post/post.component';
 import { useTimeline } from 'src/context/timeline.context';
 import { usePost } from 'src/hooks/use-post.hook';
 import { Post, PostSortMethod } from 'src/interfaces/post';
@@ -92,27 +91,25 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
 
         <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />
 
-        <CommentProvider>
-          <InfiniteScroll
-            scrollableTarget="scrollable-timeline"
-            className={style.child}
-            dataLength={state.posts.length + 100}
-            next={nextPage}
-            hasMore={hasMore}
-            loader={<LoadingPage />}>
-            {state.posts.map((post: Post, i: number) => (
-              <Grow key={i}>
-                <PostComponent post={post} open={false} postOwner={isOwnPost(post)} />
-              </Grow>
-            ))}
+        <InfiniteScroll
+          scrollableTarget="scrollable-timeline"
+          className={style.child}
+          dataLength={state.posts.length + 100}
+          next={nextPage}
+          hasMore={hasMore}
+          loader={<LoadingPage />}>
+          {state.posts.map((post: Post, i: number) => (
+            <Grow key={i}>
+              <PostComponent post={post} open={false} postOwner={isOwnPost(post)} />
+            </Grow>
+          ))}
 
-            <ScrollTop>
-              <Fab color="secondary" size="small" aria-label="scroll back to top">
-                <KeyboardArrowUpIcon />
-              </Fab>
-            </ScrollTop>
-          </InfiniteScroll>
-        </CommentProvider>
+          <ScrollTop>
+            <Fab color="secondary" size="small" aria-label="scroll back to top">
+              <KeyboardArrowUpIcon />
+            </Fab>
+          </ScrollTop>
+        </InfiniteScroll>
       </div>
 
       <div id="fb-root" />

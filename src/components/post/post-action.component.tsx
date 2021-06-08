@@ -7,8 +7,8 @@ import CommentIcon from '@material-ui/icons/Comment';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
-import RedditReactionComponent from '../reactions/reddit.component';
-import TwitterReactionComponent from '../reactions/twitter.component';
+import RedditReactionComponent from './reactions/reddit.component';
+import TwitterReactionComponent from './reactions/twitter.component';
 
 import clsx from 'clsx';
 import ShowIf from 'src/components/common/show-if.component';
