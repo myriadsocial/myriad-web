@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
-import { useNotif, NotifActionType } from './notif.context';
-
+import { useNotif, NotifActionType } from 'src/context/notif.context';
 import { ExtendedNotification } from 'src/interfaces/notification';
 import { User } from 'src/interfaces/user';
 import * as NotifAPI from 'src/lib/api/notification';

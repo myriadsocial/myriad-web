@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import DividerComponent from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
+import { useFriendsHook } from '../../hooks/use-friends-hook';
 import FriendListComponent from './friend-list.component';
 import FriendRequestComponent from './friend-requests.component';
-import { useFriendsHook } from './use-friends-hook';
 
 import { debounce } from 'lodash';
 import SearchComponent from 'src/components/common/search.component';
-import { useUser } from 'src/components/user/user.context';
+import { useUser } from 'src/context/user.context';
 
 interface TopicProps {
   title?: string;

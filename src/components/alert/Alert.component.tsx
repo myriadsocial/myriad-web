@@ -4,7 +4,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
-import { useAlertHook } from './use-alert.hook';
+import { useAlertHook } from 'src/hooks/use-alert.hook';
 
 const AlertComponent: React.FC = () => {
   const { error, clearAlert } = useAlertHook();

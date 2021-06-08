@@ -1,5 +1,4 @@
-import { useAlert, AlertActionType } from './Alert.context';
-
+import { useAlert, AlertActionType } from 'src/context/Alert.context';
 import { ErrorProp } from 'src/interfaces/error';
 
 export const useAlertHook = () => {

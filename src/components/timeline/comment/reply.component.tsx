@@ -9,11 +9,11 @@ import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
-import LoginComponent from '../../login/login.component';
-import LoginOverlayComponent from '../../login/overlay.component';
 import { useStyles } from './reply.style';
 
 import ShowIf from 'src/components/common/show-if.component';
+import { LoginFormComponent } from 'src/components/login/login-form.component';
+import LoginOverlayComponent from 'src/components/login/overlay.component';
 
 type Props = {
   close: () => void;
@@ -90,7 +90,7 @@ export default function ReplyComponent({ close, onSubmit }: Props) {
       </ShowIf>
 
       <Dialog open={loginOpened} onClose={toggleLogin} maxWidth="xs">
-        <LoginComponent allowAnonymous={false} />
+        <LoginFormComponent />
       </Dialog>
     </div>
   );

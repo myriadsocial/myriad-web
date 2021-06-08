@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import Axios from 'axios';
 import { Tag } from 'src/interfaces/experience';
+import * as TrendingAPI from 'src/lib/api/trending';
 
 const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
@@ -22,15 +23,7 @@ export const useTopic = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.request<Tag[]>({
-        url: '/tags',
-        method: 'GET',
-        params: {
-          filter: {
-            ...params
-          }
-        }
-      });
+      const data = await TrendingAPI.trendingTopic();
 
       setPopularTopic(data);
     } catch (error) {

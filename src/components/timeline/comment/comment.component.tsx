@@ -26,7 +26,7 @@ import DateFormat from 'src/components/common/DateFormat';
 import SendTipModal from 'src/components/common/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
 import { TabPanel } from 'src/components/common/tab-panel.component';
-import { useUser } from 'src/components/user/user.context';
+import { useUser } from 'src/context/user.context';
 import { Post, Comment } from 'src/interfaces/post';
 
 const StyledBadge = withStyles((theme: Theme) =>

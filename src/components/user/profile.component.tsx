@@ -22,12 +22,12 @@ import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import DialogTitle from '../common/DialogTitle.component';
 import ShowIf from '../common/show-if.component';
 import { useStyles } from './profile.style';
-import { useProfileHook } from './use-profile.hook';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
 import { EditableTextField } from 'src/components/common/EditableTextField';
 import { ImageUpload } from 'src/components/common/ImageUpload.component';
 import { acronym } from 'src/helpers/string';
+import { useProfileHook } from 'src/hooks/use-profile.hook';
 
 type Props = {
   user: WithAdditionalParams<User>;

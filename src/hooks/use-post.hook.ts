@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 
-import { SocialsEnum } from '../../interfaces';
-import { useLayoutSetting } from '../Layout/layout.context';
-import { useExperience } from '../experience/experience.context';
-import { useTimeline, TimelineActionType } from './timeline.context';
+import { useAlertHook } from './use-alert.hook';
 
-import { useAlertHook } from 'src/components/alert/use-alert.hook';
+import { useExperience } from 'src/components/experience/experience.context';
+import { useLayoutSetting } from 'src/context/layout.context';
+import { useTimeline, TimelineActionType } from 'src/context/timeline.context';
+import { SocialsEnum } from 'src/interfaces';
 import { Post, PostSortMethod } from 'src/interfaces/post';
 import { User } from 'src/interfaces/user';
 import * as LocalAPI from 'src/lib/api/local';

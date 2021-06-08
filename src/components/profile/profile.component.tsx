@@ -17,7 +17,7 @@ import { WalletComponent } from './myWallet/wallet.component';
 import { useStyles } from './profile.style';
 
 import ShowIf from 'src/components/common/show-if.component';
-import { useFriends } from 'src/components/friends/friends.context';
+import { useFriends } from 'src/context/friends.context';
 import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
 
 const PostList = dynamic(() => import('./post/post-list.component'));
@@ -79,7 +79,7 @@ const useStylesForTabs = makeStyles((theme: Theme) => ({
   }
 }));
 
-function CustomizedTabs() {
+function MyWalletTabs() {
   const classes = useStylesForTabs();
   const [value, setValue] = React.useState(0);
 
@@ -178,7 +178,7 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
                 <FriendComponent />
               </TabPanel>
               <TabPanel value={value} index={3} dir={theme.direction}>
-                <CustomizedTabs />
+                <MyWalletTabs />
               </TabPanel>
             </SwipeableViews>
           </ShowIf>

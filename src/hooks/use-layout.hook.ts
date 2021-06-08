@@ -1,5 +1,4 @@
-import { useLayoutSetting, LayoutSettingActionType } from './layout.context';
-
+import { useLayoutSetting, LayoutSettingActionType } from 'src/context/layout.context';
 import { SocialsEnum } from 'src/interfaces/index';
 import { LayoutFilterType } from 'src/interfaces/setting';
 import { SidebarTab } from 'src/interfaces/sidebar';

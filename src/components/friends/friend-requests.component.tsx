@@ -12,11 +12,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
-import { useFriendsHook } from './use-friends-hook';
-
 import { ToggleCollapseButton } from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
-import { useFriends } from 'src/components/friends/friends.context';
+import { useFriends } from 'src/context/friends.context';
+import { useFriendsHook } from 'src/hooks/use-friends-hook';
 import { ExtendedFriend, FriendStatus } from 'src/interfaces/friend';
 import { User } from 'src/interfaces/user';
 
@@ -103,8 +102,11 @@ const FriendRequests = ({ user }: Props) => {
       <div className={style.content}>
         <Collapse in={openFriends} timeout="auto" unmountOnExit>
           <ShowIf condition={state.requests.length === 0}>
-            <Typography variant="h4" color="textPrimary" style={{ textAlign: 'center', padding: '16px 0' }}>
-              No Friend Request
+            <Typography
+              variant="h4"
+              color="textPrimary"
+              style={{ fontWeight: 500, textAlign: 'center', fontSize: 14, color: '#B1AEB7', padding: '16px 0' }}>
+              You don't have any friend request
             </Typography>
           </ShowIf>
 
@@ -144,14 +146,16 @@ const FriendRequests = ({ user }: Props) => {
             })}
           </List>
 
-          <Link
-            className={style.more}
-            component="button"
-            onClick={() => {
-              console.info("I'm a button.");
-            }}>
-            (show all request)
-          </Link>
+          <ShowIf condition={state.totalFriendRequests > state.requests.length}>
+            <Link
+              className={style.more}
+              component="button"
+              onClick={() => {
+                console.info("I'm a button.");
+              }}>
+              (show all request)
+            </Link>
+          </ShowIf>
         </Collapse>
       </div>
     </Box>

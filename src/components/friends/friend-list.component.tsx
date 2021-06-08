@@ -12,13 +12,13 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
+import { useFriendsHook } from '../../hooks/use-friends-hook';
 import { ListHeaderComponent } from './list-header.component';
 import { ListSubHeaderComponent } from './list-sub-header.component';
-import { useFriendsHook } from './use-friends-hook';
 
 import { ToggleCollapseButton } from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
-import { useFriends } from 'src/components/friends/friends.context';
+import { useFriends } from 'src/context/friends.context';
 import { User } from 'src/interfaces/user';
 
 type Props = {
@@ -83,8 +83,11 @@ const Friends = ({ user }: Props) => {
         <Collapse in={openOnlineFriends} timeout="auto" unmountOnExit>
           <div className={style.content}>
             <ShowIf condition={state.friends.length === 0}>
-              <Typography variant="h4" color="textPrimary" style={{ textAlign: 'center', padding: '16px 0' }}>
-                No Friends
+              <Typography
+                variant="h4"
+                color="textPrimary"
+                style={{ fontWeight: 500, fontSize: 14, textAlign: 'center', padding: '16px 0', color: '#B1AEB7' }}>
+                You don't have any Myriad friend, try to search for people or tell your friends about myriad
               </Typography>
             </ShowIf>
 

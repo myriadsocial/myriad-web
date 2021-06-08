@@ -11,7 +11,16 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import ExpandablePanel from '../common/panel-expandable.component';
 
 const BalanceComponent = dynamic(() => import('./balance.component'));
+
 const TransactionComponent = dynamic(() => import('./transaction.component'));
+
+const WalletSettingComponent = dynamic(() => import('./walletSetting.component'));
+
+const ForwardedBalanceComponent = forwardRef((props, ref) => <BalanceComponent {...props} forwardedRef={ref} />);
+
+const ForwardedTransactionComponent = forwardRef((props, ref) => <TransactionComponent {...props} forwardedRef={ref} />);
+
+const ForwardedWalletSettingComponent = forwardRef((props, ref) => <WalletSettingComponent {...props} forwardedRef={ref} />);
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,10 +41,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const ForwardedBalanceComponent = forwardRef((props, ref) => <BalanceComponent {...props} forwardedRef={ref} />);
-
-const ForwardedTransactionComponent = forwardRef((props, ref) => <TransactionComponent {...props} forwardedRef={ref} />);
-
 export const Wallet = React.memo(function Wallet() {
   const style = useStyles();
 
@@ -43,12 +48,19 @@ export const Wallet = React.memo(function Wallet() {
 
   const balanceRef = createRef<any>();
 
+  const walletSettingRef = createRef<any>();
+
   useEffect(() => {}, [transactionRef, balanceRef]);
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleRefresh = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     transactionRef.current?.triggerRefresh();
     balanceRef.current?.triggerRefresh();
+  };
+
+  const handleWalletSetting = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    walletSettingRef.current?.triggerShowSetting();
   };
 
   const WalletAction = () => {
@@ -58,7 +70,7 @@ export const Wallet = React.memo(function Wallet() {
           color="default"
           size="small"
           aria-label="refresh-wallet"
-          onClick={handleClick}
+          onClick={handleRefresh}
           onFocus={event => event.stopPropagation()}>
           <RefreshIcon />
         </IconButton>
@@ -66,7 +78,7 @@ export const Wallet = React.memo(function Wallet() {
           color="default"
           size="small"
           aria-label="wallet-settings"
-          onClick={event => event.stopPropagation()}
+          onClick={handleWalletSetting}
           onFocus={event => event.stopPropagation()}>
           <SettingsIcon />
         </IconButton>
@@ -81,6 +93,8 @@ export const Wallet = React.memo(function Wallet() {
         <Divider variant="middle" />
         <ForwardedTransactionComponent ref={transactionRef} />
       </ExpandablePanel>
+
+      <ForwardedWalletSettingComponent ref={walletSettingRef} />
     </>
   );
 });

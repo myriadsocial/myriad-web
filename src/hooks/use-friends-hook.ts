@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
-import { useAlertHook } from 'src/components/alert/use-alert.hook';
-import { useFriends, FriendsActionType } from 'src/components/friends/friends.context';
+import { useAlertHook } from './use-alert.hook';
+
+import { useFriends, FriendsActionType } from 'src/context/friends.context';
 import { ExtendedFriend, FriendStatus } from 'src/interfaces/friend';
 import { User } from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';

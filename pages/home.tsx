@@ -10,12 +10,12 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import Layout from 'src/components/Layout/Layout.container';
 import ShowIf from 'src/components/common/show-if.component';
-import { FriendsProvider } from 'src/components/friends/friends.context';
 import Timeline from 'src/components/timeline/timeline.component';
 import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
-import { useUser } from 'src/components/user/user.context';
 import { Wallet } from 'src/components/wallet/wallet.component';
+import { FriendsProvider } from 'src/context/friends.context';
+import { useUser } from 'src/context/user.context';
 import { healthcheck } from 'src/lib/api/healthcheck';
 
 export const useStyles = makeStyles((theme: Theme) =>

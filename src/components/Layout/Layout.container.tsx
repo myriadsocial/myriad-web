@@ -9,13 +9,13 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
+import { TimelineProvider } from '../../context/timeline.context';
 import AlertComponent from '../alert/Alert.component';
 import { ConverstionProvider } from '../conversation/conversation.context';
 import { ExperienceProvider } from '../experience/experience.context';
-import { TimelineProvider } from '../timeline/timeline.context';
 import { TransactionProvider } from '../tippingJar/transaction.context';
-import { LayoutSettingProvider } from './layout.context';
 
+import { LayoutSettingProvider } from 'src/context/layout.context';
 import TourComponent from 'src/tour/Tour.component';
 
 const DektopLayoutComponent = dynamic(() => import('./desktop-layout.component'));

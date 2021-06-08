@@ -17,12 +17,12 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 import { useProfileHook } from './use-profile.hook';
 
-import { useAlertHook } from 'src/components/alert/use-alert.hook';
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import { EditableTextField } from 'src/components/common/EditableTextField';
 import { ImageUpload } from 'src/components/common/ImageUpload.component';
 import { useProfile } from 'src/components/profile/profile.context';
 import { acronym } from 'src/helpers/string';
+import { useAlertHook } from 'src/hooks/use-alert.hook';
 import { User } from 'src/interfaces/user';
 
 const useStyles = makeStyles({

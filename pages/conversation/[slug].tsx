@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 import Layout from 'src/components/Layout/Layout.container';
 import ConversationComponent from 'src/components/conversation/conversation.component';
-import { useUser } from 'src/components/user/user.context';
+import { useUser } from 'src/context/user.context';
 import { Post } from 'src/interfaces/post';
 import * as PostAPI from 'src/lib/api/post';
 
