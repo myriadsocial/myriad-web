@@ -3,6 +3,8 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import DividerWithText from '../common/divider-w-text';
@@ -28,6 +30,8 @@ type TimelineProps = {
 const Timeline: React.FC<TimelineProps> = ({ user }) => {
   const style = useStyles();
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { state } = useTimeline();
   const { hasMore, loadUserPost, loadMorePost, sortBy, addPost, importPost } = usePost(user);
   const { experiences } = useExperience(user.id);
@@ -89,7 +93,7 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
           <ImportPostComponent onSubmit={submitImportPost} experiences={experiences} />
         </ShowIf>
 
-        <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />
+        {!isMobile && <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />}
 
         <div id="timeline">
           <InfiniteScroll
