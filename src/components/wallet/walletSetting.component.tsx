@@ -88,20 +88,22 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
   const [errorPopup, setErrorPopup] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
 
+  //delayReset must be bigger than delayClosePopup!
+  const delayReset = 3250;
+  const delayClosePopup = 3000;
+
   useEffect(() => {
     if (errorUserTokens) {
       console.log('called!');
       setErrorPopup(true);
-
-      let timeoutID = setTimeout(() => {
-        resetErrorUserTokens();
-      }, 1500);
-
-      return () => {
-        clearTimeout(timeoutID);
-      };
     }
-    return;
+    let timeoutID = setTimeout(() => {
+      resetErrorUserTokens();
+    }, delayReset);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
   }, [errorUserTokens]);
 
   useEffect(() => {
@@ -262,17 +264,17 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={successPopup} autoHideDuration={3000} onClose={handleCloseSuccess}>
+      <Snackbar open={successPopup} autoHideDuration={delayClosePopup} onClose={handleCloseSuccess}>
         <Alert severity="success">
           <AlertTitle>Success!</AlertTitle>
           Token added to your wallet!
         </Alert>
       </Snackbar>
 
-      <Snackbar open={errorPopup} autoHideDuration={3000} onClose={handleCloseError}>
+      <Snackbar open={errorPopup} autoHideDuration={delayClosePopup} onClose={handleCloseError}>
         <Alert severity="error">
           <AlertTitle>Error!</AlertTitle>
-          {errorUserTokens === 422 ? 'Token is already on your wallet!' : 'An error occurred!'}
+          {errorUserTokens === 422 ? 'Token is already on your wallet!' : errorUserTokens}
         </Alert>
       </Snackbar>
     </>
