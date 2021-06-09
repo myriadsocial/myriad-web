@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      backgroundColor: theme.palette.primary.light
+      background: 'transparent'
     },
     icon: {
       marginRight: theme.spacing(1)

@@ -1,39 +1,24 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import IconButton from '@material-ui/core/IconButton';
-import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
-import ImageIcon from '@material-ui/icons/Image';
-import LinkIcon from '@material-ui/icons/Link';
-import PeopleIcon from '@material-ui/icons/People';
 import VideocamIcon from '@material-ui/icons/Videocam';
-import Autocomplete, { AutocompleteChangeReason } from '@material-ui/lab/Autocomplete';
 
+import { CreatePostExpandedComponent } from './create-post-expanded.component';
 import { useStyles } from './create-post.style';
 import { PostSettingComponent } from './post-setting.component';
-import { PreviewImageComponent } from './preview-image.component';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
-import ShowIf from 'src/components/common/show-if.component';
-import { acronym } from 'src/helpers/string';
 import { Experience } from 'src/interfaces/experience';
 import { User } from 'src/interfaces/user';
 import theme from 'src/themes/default';
-
-type UpoadedFile = {
-  file: File;
-  preview: string;
-};
 
 type Props = {
   user: User;
@@ -44,12 +29,8 @@ type Props = {
 export default function CreatePostComponent({ onSubmit, user, experiences }: Props) {
   const styles = useStyles();
 
-  const uploadImageRef = useRef<HTMLInputElement | null>(null);
-  const uploadVideoRef = useRef<HTMLInputElement | null>(null);
-  const [showCreatePost, setCreatePost] = useState(false);
-  const [files, setFiles] = useState<UpoadedFile[]>([]);
   const [postText, setPostText] = useState('');
-  const [tags, setTags] = useState<string[]>([]);
+  const [showCreatePost, setCreatePost] = useState(false);
 
   const toggleCreatePost = () => {
     setCreatePost(!showCreatePost);
@@ -61,76 +42,10 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
     setPostText(text);
   };
 
-  const selectVideo = (): void => {
-    const uploadField: any = uploadVideoRef?.current;
-
-    if (!uploadField) return;
-
-    uploadField.click();
-  };
-
-  const selectImages = (): void => {
-    const uploadField: any = uploadImageRef?.current;
-
-    if (!uploadField) return;
-
-    uploadField.click();
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const files = event.target.files;
-
-      setFiles(
-        Array.from(files)
-          .filter(file => file.name.match(/\.(jpg|jpeg|png|gif)$/))
-          .map((file: File) => ({
-            file,
-            preview: URL.createObjectURL(file)
-          }))
-      );
-
-      setCreatePost(true);
-    }
-  };
-
-  const addToTags = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.code === 'Enter') {
-      console.log('addToTags', event.target);
-    }
-  };
-
-  const handleTagsChange = (event: React.ChangeEvent<{}>, value: (string | string[])[], reason: AutocompleteChangeReason) => {
-    console.log(value, reason);
-
-    if (reason === 'clear') {
-    }
-
-    if (reason === 'create-option') {
-      let createdTags: string[] = [];
-
-      if (typeof value === 'string') {
-        createdTags.push(value);
-      }
-
-      if (typeof value === 'object') {
-        createdTags.push(...value.flat());
-      }
-      console.log('createdTags', createdTags);
-      setTags([...createdTags]);
-    }
-  };
-
-  const savePost = () => {
-    onSubmit(
-      postText,
-      tags,
-      files.map(file => file.file)
-    );
+  const savePost = (text: string, tags: string[], files: File[]) => {
+    onSubmit(text, tags, files);
 
     toggleCreatePost();
-    setPostText('');
-    setFiles([]);
   };
 
   return (
@@ -171,75 +86,7 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
           Post Something
         </DialogTitle>
         <DialogContent>
-          <Card className={styles.card}>
-            <CardHeader
-              className={styles.cardHeader}
-              avatar={
-                <Avatar aria-label={user.name} src={user.profilePictureURL} style={{ height: 55, width: 55 }}>
-                  {acronym(user.name)}
-                </Avatar>
-              }
-              action={
-                <Button aria-label="post-settings" variant="contained" size="medium" color="primary">
-                  Post Setting
-                </Button>
-              }
-              title={user.name}
-              subheader=""
-            />
-            <CardContent style={{ padding: theme.spacing(1) }}>
-              <TextareaAutosize
-                rowsMin={5}
-                placeholder={`Any thought about something, ${user.name}?`}
-                className={styles.postTextArea}
-                spellCheck={false}
-                value={postText}
-                onChange={updatePostText}
-              />
-
-              <Autocomplete
-                id="post-tags"
-                className={styles.tags}
-                freeSolo
-                multiple
-                style={{ paddingTop: 8 }}
-                value={tags}
-                options={[]}
-                forcePopupIcon={false}
-                onChange={handleTagsChange}
-                renderInput={params => <TextField {...params} placeholder="# Add Tags" variant="outlined" onKeyDown={addToTags} />}
-              />
-
-              <div className={styles.additionalAction}>
-                <Typography variant="caption" style={{ marginRight: 24 }}>
-                  Add somenting to your post
-                </Typography>
-                <input type="file" multiple ref={uploadImageRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
-                <IconButton color="primary" aria-label="upload images" onClick={selectImages}>
-                  <ImageIcon />
-                </IconButton>
-                <input type="file" multiple ref={uploadVideoRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
-                <IconButton color="primary" aria-label="upload-video" disabled onClick={selectVideo}>
-                  <VideocamIcon />
-                </IconButton>
-                <IconButton color="primary" disabled aria-label="add-people">
-                  <PeopleIcon />
-                </IconButton>
-                <IconButton color="primary" disabled aria-label="add-link">
-                  <LinkIcon />
-                </IconButton>
-              </div>
-
-              <ShowIf condition={files.length > 0}>
-                <PreviewImageComponent files={files} />
-              </ShowIf>
-            </CardContent>
-            <CardActions className={styles.action}>
-              <Button variant="contained" size="large" color="primary" className={styles.postButton} onClick={savePost}>
-                Post Now
-              </Button>
-            </CardActions>
-          </Card>
+          <CreatePostExpandedComponent text={postText} onSubmit={savePost} user={user} experiences={[]} />
         </DialogContent>
       </Dialog>
     </div>
