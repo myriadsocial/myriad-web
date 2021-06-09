@@ -31,7 +31,7 @@ export default function FilterTimelineComponent({ selected, onChange }: Props) {
   };
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} id="filter-timeline">
       <div style={{ padding: 8 }}>
         <Typography variant="h4" style={{ marginBottom: 8 }}>
           {'Timeline'}

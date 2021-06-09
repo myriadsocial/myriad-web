@@ -91,25 +91,27 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
 
         <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />
 
-        <InfiniteScroll
-          scrollableTarget="scrollable-timeline"
-          className={style.child}
-          dataLength={state.posts.length + 100}
-          next={nextPage}
-          hasMore={hasMore}
-          loader={<LoadingPage />}>
-          {state.posts.map((post: Post, i: number) => (
-            <Grow key={i}>
-              <PostComponent post={post} open={false} postOwner={isOwnPost(post)} />
-            </Grow>
-          ))}
+        <div id="timeline">
+          <InfiniteScroll
+            scrollableTarget="scrollable-timeline"
+            className={style.child}
+            dataLength={state.posts.length + 100}
+            next={nextPage}
+            hasMore={hasMore}
+            loader={<LoadingPage />}>
+            {state.posts.map((post: Post, i: number) => (
+              <Grow key={i}>
+                <PostComponent post={post} open={false} postOwner={isOwnPost(post)} />
+              </Grow>
+            ))}
 
-          <ScrollTop>
-            <Fab color="secondary" size="small" aria-label="scroll back to top">
-              <KeyboardArrowUpIcon />
-            </Fab>
-          </ScrollTop>
-        </InfiniteScroll>
+            <ScrollTop>
+              <Fab color="secondary" size="small" aria-label="scroll back to top">
+                <KeyboardArrowUpIcon />
+              </Fab>
+            </ScrollTop>
+          </InfiniteScroll>
+        </div>
       </div>
 
       <div id="fb-root" />

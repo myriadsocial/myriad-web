@@ -72,7 +72,7 @@ const UserComponent: React.FC<Props> = ({ user }) => {
   };
 
   return (
-    <Box p={1} bgcolor="primary.light" className={style.root}>
+    <Box p={1} bgcolor="primary.light" className={style.root} id="user-profile">
       <Card className={style.cardProfile}>
         <CardHeader
           className={style.cardHeader}
