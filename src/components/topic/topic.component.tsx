@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flex: '1 1 auto',
-      marginTop: theme.spacing(1)
+      marginTop: theme.spacing(1),
+      background: 'transparent'
     },
     content: {
       padding: theme.spacing(0, 2),

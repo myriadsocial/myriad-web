@@ -231,7 +231,7 @@ const theme = createMuiTheme({
 
     MuiAccordion: {
       rounded: {
-        background: '#F2F2F4',
+        background: 'transparent',
         '&:last-child': {
           borderBottomLeftRadius: defaultTheme.spacing(1),
           borderBottomRightRadius: defaultTheme.spacing(1)
