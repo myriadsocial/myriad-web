@@ -34,6 +34,18 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: 16,
       fontWeight: 500,
       color: theme.palette.text.primary
+    },
+    facebook: {
+      color: '#3b5998',
+      minWidth: 40
+    },
+    twitter: {
+      color: '#1DA1F2',
+      minWidth: 40
+    },
+    reddit: {
+      color: '#FF5700',
+      minWidth: 40
     }
   })
 );
@@ -119,7 +131,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
       <List subheader={<ListSubheader className={classes.subheader}>Link my social</ListSubheader>} className={classes.root}>
         <ListItem>
           <ListItemIcon>
-            <FacebookIcon />
+            <FacebookIcon className={classes.facebook} />
           </ListItemIcon>
           <ListItemText id="social-facebook" primary="Facebook" />
           <ListItemSecondaryAction>
@@ -130,7 +142,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
         </ListItem>
         <ListItem>
           <ListItemIcon>
-            <TwitterIcon />
+            <TwitterIcon className={classes.twitter} />
           </ListItemIcon>
           <ListItemText id="social-twitter" primary="Twitter" />
           <ListItemSecondaryAction>
@@ -141,7 +153,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
         </ListItem>
         <ListItem>
           <ListItemIcon>
-            <RedditIcon />
+            <RedditIcon className={classes.reddit} />
           </ListItemIcon>
           <ListItemText id="social-reddit" primary="Reddit" />
           <ListItemSecondaryAction>

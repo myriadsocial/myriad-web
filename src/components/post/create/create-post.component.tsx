@@ -134,7 +134,7 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
   };
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} id="create-post">
       <div style={{ padding: theme.spacing(0, 0, 1, 0), position: 'relative' }}>
         <Typography variant="h4" style={{ marginBottom: 8, fontWeight: 500 }}>
           {'Post Something'}

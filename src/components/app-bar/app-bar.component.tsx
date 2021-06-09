@@ -104,7 +104,7 @@ export default function HeaderBar() {
             </Link>
           </div>
           <div className={classes.grow} />
-          <div className={classes.search}>
+          <div className={classes.search} id="search-app">
             <SearchUserComponent
               title={isMobile ? 'Search on Myria' : 'Search for people on Myriad'}
               data={options}
@@ -113,7 +113,7 @@ export default function HeaderBar() {
             />
           </div>
           <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
+          <div className={classes.sectionDesktop} id="user-menu">
             <DesktopMenuComponent />
           </div>
         </Toolbar>

@@ -7,10 +7,9 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
-import { PostOrigin } from '../../../interfaces/post';
-import StyledBadge from '../../common/Badge.component';
-
+import StyledBadge from 'src/components/common/Badge.component';
 import { MyriadIcon } from 'src/components/common/MyriadIcon';
+import { PostOrigin } from 'src/interfaces/post';
 
 const useStyles = makeStyles(() =>
   createStyles({

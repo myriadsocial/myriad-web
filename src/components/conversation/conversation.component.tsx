@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useConversationHook } from './use-conversation-hook';
 
 import { useConversation } from 'src/components/conversation/conversation.context';
-import PostComponent from 'src/components/timeline/post/post.component';
+import PostComponent from 'src/components/post/post.component';
 import { Post } from 'src/interfaces/post';
 import { User } from 'src/interfaces/user';
 

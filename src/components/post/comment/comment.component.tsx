@@ -17,16 +17,15 @@ import { withStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
 
 import { useBalance } from '../../wallet/use-balance.hooks';
-import { useComments } from './comment.context';
 import { useStyles } from './comment.style';
 import ReplyCommentComponent from './reply.component';
-import { useCommentHook } from './use-comment.hook';
 
 import DateFormat from 'src/components/common/DateFormat';
 import SendTipModal from 'src/components/common/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
 import { TabPanel } from 'src/components/common/tab-panel.component';
 import { useUser } from 'src/context/user.context';
+import { useCommentHook } from 'src/hooks/use-comment.hook';
 import { Post, Comment } from 'src/interfaces/post';
 
 const StyledBadge = withStyles((theme: Theme) =>
@@ -50,10 +49,11 @@ export default function CommentComponent({ post, disableReply, hide }: Props) {
   const style = useStyles();
   const theme = useTheme();
 
-  const { state } = useComments();
-  const { state: userState } = useUser();
+  const {
+    state: { user }
+  } = useUser();
 
-  const { reply } = useCommentHook(post);
+  const { comments, loadInitComment, reply } = useCommentHook(post);
 
   const [session] = useSession();
   const userId = session?.user.id as string;
@@ -62,10 +62,9 @@ export default function CommentComponent({ post, disableReply, hide }: Props) {
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   useEffect(() => {
-    //TODO: fix below and destructure loadInitComment in useCommentHook
-    //if (post.publicMetric?.comment > 0) {
-    //loadInitComment();
-    //}
+    if (post.publicMetric && post.publicMetric.comment > 0) {
+      loadInitComment();
+    }
   }, [post]);
 
   const tipPostUser = () => {
@@ -73,9 +72,9 @@ export default function CommentComponent({ post, disableReply, hide }: Props) {
   };
 
   const replyPost = (comment: string) => {
-    if (!userState.user) return;
+    if (!user) return;
 
-    reply(userState.user, {
+    reply(user, {
       text: comment,
       postId: post.id,
       userId,
@@ -100,12 +99,12 @@ export default function CommentComponent({ post, disableReply, hide }: Props) {
   return (
     <div>
       <Tabs value={selectedTab} onChange={handleTabChange} indicatorColor="primary" textColor="primary" variant="fullWidth">
-        <Tab label={<Typography style={{ color: '#000000' }}>General Comments ({state.comments.length})</Typography>} />
+        <Tab label={<Typography style={{ color: '#000000' }}>General Comments ({comments.length})</Typography>} />
         <Tab disabled label={<Typography>Debate Section (0) </Typography>} />
       </Tabs>
       <TabPanel value={selectedTab} index={0} dir={theme.direction}>
         <Grid container spacing={2} direction="column" className={style.comment}>
-          {state.comments.map((comment, i) => {
+          {comments.map((comment, i) => {
             return (
               <Grid item key={i}>
                 <Card className={style.root}>
