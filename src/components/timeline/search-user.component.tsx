@@ -46,7 +46,7 @@ export const useStyles = makeStyles((theme: Theme) =>
 const SearchUser: React.FC<SearchUserProps> = ({ title = 'Search..', data, search }) => {
   const style = useStyles();
 
-  const router = useRouter();
+  //const router = useRouter();
 
   const [searchQuery, setSearchQuery] = React.useState('');
   const [open, setOpen] = React.useState(false);
