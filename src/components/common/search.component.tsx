@@ -60,11 +60,10 @@ export default function SearchComponent({ value = '', placeholder = 'Search', on
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
-    onSubmit(event.target.value);
   };
 
   const submitSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.keyCode === 13) {
+    if (event.key === 'Enter') {
       setSearch('');
       onSubmit(search);
     }
