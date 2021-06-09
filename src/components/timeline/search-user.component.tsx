@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { useRouter } from 'next/router';
-
+//import { useRouter } from 'next/router';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -91,7 +90,7 @@ const SearchUser: React.FC<SearchUserProps> = ({ title = 'Search..', data, searc
   };
 
   const redirectToProfilePage = (url: string) => {
-    router.push(`/${url}`);
+    //router.push(`/${url}`);
   };
 
   return (

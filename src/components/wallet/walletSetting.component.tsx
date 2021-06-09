@@ -158,7 +158,7 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
     }
   };
 
-  const DOTLogoURL = 'https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/DOT.svg';
+  //const DOTLogoURL = 'https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/DOT.svg';
   const KSMLogoURL = 'https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/KSM.jpg';
   const XORLogoURL = 'https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/XOR.jpg';
   const ACALogoURL = 'https://dotmarketcap.com/uploads/Acala%20LOGO-04.png';
@@ -262,14 +262,13 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
         </DialogActions>
       </Dialog>
 
-      {
-        <Snackbar open={successPopup} autoHideDuration={3000} onClose={handleCloseSuccess}>
-          <Alert severity="success">
-            <AlertTitle>Success!</AlertTitle>
-            Token added to your wallet!
-          </Alert>
-        </Snackbar>
-      }
+      <Snackbar open={successPopup} autoHideDuration={3000} onClose={handleCloseSuccess}>
+        <Alert severity="success">
+          <AlertTitle>Success!</AlertTitle>
+          Token added to your wallet!
+        </Alert>
+      </Snackbar>
+
       <Snackbar open={errorPopup} autoHideDuration={3000} onClose={handleCloseError}>
         <Alert severity="error">
           <AlertTitle>Error!</AlertTitle>
