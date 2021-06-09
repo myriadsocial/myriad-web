@@ -1,12 +1,14 @@
 import React from 'react';
 
+import { FriendRequest } from 'src/interfaces/friend';
 import { Post } from 'src/interfaces/post';
 import { ExtendedUserPost } from 'src/interfaces/user';
 
 export enum ProfileActionType {
   FETCH_PROFILE = 'FETCH_PROFILE',
   PROFILE_LOADED = 'PROFILE_LOADED',
-  IMPORTEDPOST_LOADED = 'IMPORTEDPOST_LOADED'
+  IMPORTEDPOST_LOADED = 'IMPORTEDPOST_LOADED',
+  FRIEND_STATUS = 'FRIEND_STATUS'
 }
 
 interface ProfileLoaded {
@@ -23,7 +25,12 @@ interface FetchProfile {
   type: ProfileActionType.FETCH_PROFILE;
 }
 
-type Action = ProfileLoaded | FetchProfile | ImportedPostLoaded;
+interface CheckFriendStatus {
+  type: ProfileActionType.FRIEND_STATUS;
+  payload: FriendRequest;
+}
+
+type Action = ProfileLoaded | FetchProfile | ImportedPostLoaded | CheckFriendStatus;
 type Dispatch = (action: Action) => void;
 type ProfileProviderProps = { children: React.ReactNode };
 
@@ -31,12 +38,14 @@ type State = {
   profile: ExtendedUserPost | null;
   loading: boolean;
   importedPost: Post[];
+  friendStatus: FriendRequest | null;
 };
 
 const initalState = {
   loading: false,
   profile: null,
-  importedPost: []
+  importedPost: [],
+  friendStatus: null
 };
 
 const ProfileContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
@@ -54,6 +63,13 @@ function profileReducer(state: State, action: Action) {
       return {
         ...state,
         importedPost: action.payload,
+        loading: false
+      };
+    }
+    case ProfileActionType.FRIEND_STATUS: {
+      return {
+        ...state,
+        friendStatus: action.payload,
         loading: false
       };
     }

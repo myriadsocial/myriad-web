@@ -6,9 +6,6 @@ import { signOut } from 'next-auth/client';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-// import Card from '@material-ui/core/Card';
-// import CardActions from '@material-ui/core/CardActions';
-// import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -26,11 +23,12 @@ import { useStyles } from './header.style';
 import { useFriendHook } from './use-friend.hook';
 import { useProfileHook } from './use-profile.hook';
 
-// import { EditableTextField } from 'src/components/common/EditableTextField';
 import { ImageUpload } from 'src/components/common/ImageUpload.component';
 import ShowIf from 'src/components/common/show-if.component';
+import { useProfile } from 'src/components/profile/profile.context';
 import { SocialListComponent } from 'src/components/user/social-list.component';
 import { acronym } from 'src/helpers/string';
+import { FriendStatus } from 'src/interfaces/friend';
 import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
 
 type Props = {
@@ -48,24 +46,21 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   const [isEditProfile, showEditProfile] = useState(false);
   const [isMnemonicCopied, setMnemonicCopied] = useState(false);
   const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
-
   const [defaultValue, setDefaultValue] = useState({
     name: profile?.name,
     bio: profile?.bio
   });
 
+  const { state: profileState } = useProfile();
   const { updateProfile } = useProfileHook(user.id);
-  const { makeFriend, status, requestFriendStatus } = useFriendHook(user);
+  const { makeFriend, checkFriendStatus, cancelFriendRequest, toggleRequest } = useFriendHook(user);
+
   const [cookie] = useCookies(['seed']);
   const style = useStyles();
 
   useEffect(() => {
-    requestFriendStatus(profile?.id);
+    checkFriendStatus(profile?.id);
   }, []);
-
-  useEffect(() => {
-    console.log(status, 'status');
-  }, [status]);
 
   const profileInfo =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae nibh eu tellus tincidunt luctus hendrerit in orci. Phasellus vitae tristique nulla. Nam magna massa, sollicitudin sed turpis eros.';
@@ -91,6 +86,18 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
     makeFriend({
       friendId: profile?.id
     });
+  };
+
+  const handlecancelFriendRequest = () => {
+    cancelFriendRequest(profileState.friendStatus);
+  };
+
+  const approveFriendRequest = () => {
+    toggleRequest(profileState.friendStatus, FriendStatus.APPROVED);
+  };
+
+  const rejectFriendRequest = () => {
+    toggleRequest(profileState.friendStatus, FriendStatus.REJECTED);
   };
 
   // EDIT fn PROFILE
@@ -183,7 +190,7 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
           </ShowIf>
           <ShowIf condition={isGuest === true}>
             <div style={{ marginTop: '40px' }}>
-              <ShowIf condition={status === null}>
+              <ShowIf condition={profileState.friendStatus?.status == null}>
                 <Button
                   className={style.button2}
                   style={{ marginRight: 24 }}
@@ -194,16 +201,55 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
                   Add Friends
                 </Button>
               </ShowIf>
-              <ShowIf condition={status === 'pending'}>
+
+              <ShowIf condition={profileState.friendStatus?.status === 'pending' && profileState.friendStatus.requestorId == profile?.id}>
                 <Button
-                  className={style.button2}
+                  className={style.button}
+                  style={{ marginRight: 12 }}
+                  color="default"
                   variant="contained"
                   size="medium"
-                  disabled
-                  style={{ background: 'gray', marginRight: 24 }}>
-                  Pending
+                  onClick={rejectFriendRequest}>
+                  Ignore
+                </Button>
+                <Button
+                  className={style.button}
+                  style={{ marginRight: 24 }}
+                  color="primary"
+                  variant="contained"
+                  size="medium"
+                  onClick={approveFriendRequest}>
+                  Accept
                 </Button>
               </ShowIf>
+
+              <ShowIf condition={profileState.friendStatus?.status === 'pending' && profileState.friendStatus.friendId == profile?.id}>
+                <Button className={style.button} variant="contained" size="medium" disabled style={{ background: 'gray', marginRight: 12 }}>
+                  Pending
+                </Button>
+                <Button
+                  className={style.button}
+                  style={{ marginRight: 24 }}
+                  color="primary"
+                  variant="contained"
+                  size="medium"
+                  onClick={handlecancelFriendRequest}>
+                  Cancel
+                </Button>
+              </ShowIf>
+
+              <ShowIf condition={profileState.friendStatus?.status === 'approved'}>
+                <Button
+                  className={style.button2}
+                  style={{ marginRight: 24 }}
+                  color="primary"
+                  variant="contained"
+                  size="medium"
+                  onClick={() => console.log('unFriend')}>
+                  Unfriend
+                </Button>
+              </ShowIf>
+
               <Button
                 className={style.button2}
                 color="primary"
