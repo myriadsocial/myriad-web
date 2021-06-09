@@ -91,7 +91,7 @@ const Notification = ({ user }: Props) => {
                         {notif.message}
                       </Typography>
                       <Typography variant="body2" color="textPrimary">
-                        {moment(notif.createdAt).startOf('day').fromNow()}
+                        {moment(notif.createdAt).fromNow()}
                       </Typography>
                     </ListItemText>
                   </ListItem>
