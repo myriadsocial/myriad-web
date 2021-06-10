@@ -17,6 +17,11 @@ export const useStyles = makeStyles((theme: Theme) =>
         width: '0 !important'
       }
     },
+    flex: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
     scroll: {
       height: '100%',
       width: '100%',
