@@ -14,7 +14,7 @@ import LogoImageCompact from 'src/images/header-logo-compact.svg';
 import LogoImage from 'src/images/header-logo.svg';
 import { User as MyriadUser } from 'src/interfaces/user';
 
-const SearchUserComponent = dynamic(() => import('../timeline/search-user.component'));
+const SearchUserComponent = dynamic(() => import('../search/search.component'));
 const DesktopMenuComponent = dynamic(() => import('./desktop-menu.component'));
 const MobileMenuComponent = dynamic(() => import('./mobile-menu.component'));
 
@@ -83,11 +83,10 @@ export default function HeaderBar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const { users: options, search } = useMyriadUser();
+  const { search } = useMyriadUser();
 
   const searchUser = (text: string) => {
     search(text);
-    console.log('searching');
   };
 
   const onSearchUser = (users: MyriadUser) => {
@@ -105,12 +104,7 @@ export default function HeaderBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.search}>
-            <SearchUserComponent
-              title={isMobile ? 'Search on Myria' : 'Search for people on Myriad'}
-              data={options}
-              search={searchUser}
-              onSelected={onSearchUser}
-            />
+            <SearchUserComponent placeholder={isMobile ? 'Search on Myria' : 'Search for people on Myriad'} search={searchUser} />
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>

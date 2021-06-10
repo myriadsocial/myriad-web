@@ -104,7 +104,8 @@ export const search = async (query: string) => {
       filter: {
         where: {
           name: {
-            like: query
+            like: `${query}.*`,
+            options: 'i'
           }
         }
       }

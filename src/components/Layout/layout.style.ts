@@ -8,7 +8,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     appWrapper: {
       display: 'flex',
-      margin: '0 32px  0 32px'
+      margin: '0 32px  0 32px',
+      maxHeight: '100vh'
     },
     contentWrapper: {
       display: 'flex',

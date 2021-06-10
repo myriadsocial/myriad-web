@@ -12,6 +12,7 @@ import { BalanceProvider } from '../src/components/wallet/balance.context';
 import theme from '../src/themes/light';
 
 import { ProfileProvider } from 'src/components/profile/profile.context';
+import { SearchProvider } from 'src/components/search/search.context';
 import { WalletAddressProvider } from 'src/components/timeline/post/send-tip.context';
 import { AlertProvider } from 'src/context/Alert.context';
 import { UserProvider } from 'src/context/user.context';
@@ -69,7 +70,9 @@ const App = ({ Component, pageProps }: AppProps) => {
                 <UserProvider>
                   <ProfileProvider>
                     <AlertProvider>
-                      <Component {...pageProps} />
+                      <SearchProvider>
+                        <Component {...pageProps} />
+                      </SearchProvider>
                     </AlertProvider>
                   </ProfileProvider>
                 </UserProvider>
