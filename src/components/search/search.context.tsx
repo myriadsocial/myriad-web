@@ -3,8 +3,13 @@ import React, { createContext, useContext, useReducer } from 'react';
 import { User } from 'src/interfaces/user';
 
 export enum SearchActionType {
+  RESET_STATE = 'RESET_STATE',
   LOAD_USER = 'USER_LOADED',
   ABORT_SEARCH = 'ABORT_SEARCH'
+}
+
+export interface ResetState {
+  type: SearchActionType.RESET_STATE;
 }
 
 export interface LoadUser {
@@ -33,6 +38,11 @@ const SearchContext = createContext<{ state: State; dispatch: Dispatch } | undef
 
 function searchReducer(state: State, action: Action) {
   switch (action.type) {
+    case SearchActionType.RESET_STATE: {
+      return {
+        ...initialState
+      };
+    }
     case SearchActionType.LOAD_USER: {
       return {
         ...state,

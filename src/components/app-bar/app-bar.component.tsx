@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -83,7 +83,11 @@ export default function HeaderBar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const { search } = useMyriadUser();
+  const { load, search } = useMyriadUser();
+
+  useEffect(() => {
+    load();
+  }, []);
 
   const searchUser = (text: string) => {
     search(text);

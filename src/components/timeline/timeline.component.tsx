@@ -34,7 +34,16 @@ type TimelineProps = {
 const Timeline: React.FC<TimelineProps> = ({ user }) => {
   const style = useStyles();
 
-  const { searching, backToTimeline, users: options } = useMyriadUser();
+  const { load, searching, backToTimeline, users: options } = useMyriadUser();
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  //useEffect(() => {
+  //backToTimeline();
+  //console.log('the searching is: ', true);
+  //}, []);
 
   const [loading, setLoading] = useState(false);
 
@@ -51,11 +60,11 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
   };
 
   useEffect(() => {
-    if (searching) {
-      loadingSequence();
-    }
+    //if (searching) {
+    //loadingSequence();
+    //}
 
-    return;
+    console.log('searching again: ', searching);
   }, [searching]);
 
   const theme = useTheme();
@@ -123,51 +132,46 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
     );
   };
 
+  if (searching)
+    return <>{loading ? <LoadingComponent /> : <SearchResultComponent user={user} users={options} clickBack={handleClick} />}</>;
+
   return (
     <div className={style.root}>
-      {loading ? (
-        <LoadingComponent />
-      ) : searching ? (
-        <SearchResultComponent user={user} users={options} clickBack={handleClick} />
-      ) : (
-        <>
-          <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
-            <ShowIf condition={!user.anonymous}>
-              <CreatePostComponent onSubmit={submitPost} experiences={experiences} user={user} />
+      <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
+        <ShowIf condition={!user.anonymous}>
+          <CreatePostComponent onSubmit={submitPost} experiences={experiences} user={user} />
 
-              <DividerWithText>or</DividerWithText>
+          <DividerWithText>or</DividerWithText>
 
-              <ImportPostComponent onSubmit={submitImportPost} experiences={experiences} />
-            </ShowIf>
+          <ImportPostComponent onSubmit={submitImportPost} experiences={experiences} />
+        </ShowIf>
 
-            {!isMobile && <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />}
+        {!isMobile && <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />}
 
-            <div id="timeline">
-              <InfiniteScroll
-                scrollableTarget="scrollable-timeline"
-                className={style.child}
-                dataLength={state.posts.length + 100}
-                next={nextPage}
-                hasMore={hasMore}
-                loader={<LoadingPage />}>
-                {state.posts.map((post: Post, i: number) => (
-                  <Grow key={i}>
-                    <PostComponent post={post} open={false} postOwner={isOwnPost(post)} />
-                  </Grow>
-                ))}
+        <div id="timeline">
+          <InfiniteScroll
+            scrollableTarget="scrollable-timeline"
+            className={style.child}
+            dataLength={state.posts.length + 100}
+            next={nextPage}
+            hasMore={hasMore}
+            loader={<LoadingPage />}>
+            {state.posts.map((post: Post, i: number) => (
+              <Grow key={i}>
+                <PostComponent post={post} open={false} postOwner={isOwnPost(post)} />
+              </Grow>
+            ))}
 
-                <ScrollTop>
-                  <Fab color="secondary" size="small" aria-label="scroll back to top">
-                    <KeyboardArrowUpIcon />
-                  </Fab>
-                </ScrollTop>
-              </InfiniteScroll>
-            </div>
-          </div>
+            <ScrollTop>
+              <Fab color="secondary" size="small" aria-label="scroll back to top">
+                <KeyboardArrowUpIcon />
+              </Fab>
+            </ScrollTop>
+          </InfiniteScroll>
+        </div>
+      </div>
 
-          <div id="fb-root" />
-        </>
-      )}
+      <div id="fb-root" />
     </div>
   );
 };

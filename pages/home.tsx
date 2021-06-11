@@ -70,7 +70,11 @@ export default function Home() {
     state: { user }
   } = useUser();
 
-  const { searching } = useMyriadUser();
+  const { load, searching } = useMyriadUser();
+
+  useEffect(() => {
+    load();
+  }, []);
 
   useEffect(() => {
     if (!session && !loading) {

@@ -8,6 +8,12 @@ export const useMyriadUser = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const load = () => {
+    dispatch({
+      type: SearchActionType.RESET_STATE
+    });
+  };
+
   const search = async (query: string) => {
     setLoading(true);
 
@@ -18,6 +24,8 @@ export const useMyriadUser = () => {
         type: SearchActionType.LOAD_USER,
         payload: users
       });
+
+      console.log('called');
     } catch (error) {
       setError(error);
     } finally {
@@ -32,6 +40,7 @@ export const useMyriadUser = () => {
   };
 
   return {
+    load,
     error,
     loading,
     users: state.users,
