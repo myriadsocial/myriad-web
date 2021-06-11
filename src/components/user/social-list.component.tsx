@@ -17,7 +17,9 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import { ConnectSuccessComponent } from '../connect/connect-success.component';
 import { ConnectComponent } from '../connect/connect.component';
 
+import { ConfirmDialog } from 'src/components/common/confirm-dialog.component';
 import { useShareSocial } from 'src/hooks/use-share-social';
+import { useUserHook } from 'src/hooks/use-user.hook';
 import { SocialsEnum } from 'src/interfaces';
 import { ExtendedUser } from 'src/interfaces/user';
 
@@ -32,6 +34,18 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: 16,
       fontWeight: 500,
       color: theme.palette.text.primary
+    },
+    facebook: {
+      color: '#3b5998',
+      minWidth: 40
+    },
+    twitter: {
+      color: '#1DA1F2',
+      minWidth: 40
+    },
+    reddit: {
+      color: '#FF5700',
+      minWidth: 40
     }
   })
 );
@@ -44,7 +58,10 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
   const classes = useStyles();
 
   const { isShared, shareOnTwitter, shareOnReddit, shareOnFacebook } = useShareSocial(user.id);
+  const { disconnectSocial } = useUserHook(user.id);
   const [connecting, setConnecting] = useState(false);
+  const [unlink, setUnlink] = useState<SocialsEnum | null>(null);
+
   const connectRef = useRef<React.ElementRef<typeof ConnectComponent>>(null);
   const connected: Record<SocialsEnum, boolean> = {
     [SocialsEnum.FACEBOOK]: false,
@@ -59,6 +76,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
   }, [isShared]);
 
   if (user && user.userCredentials.length > 0) {
+    console.log('user.userCredentials', user.userCredentials);
     const twitterCredential = user.userCredentials.find(item => item.people.platform === SocialsEnum.TWITTER);
     const facebookCredential = user.userCredentials.find(item => item.people.platform === SocialsEnum.FACEBOOK);
     const redditCredential = user.userCredentials.find(item => item.people.platform === SocialsEnum.REDDIT);
@@ -80,6 +98,15 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
     if (!connected[social]) {
       setConnecting(true);
       connectRef.current?.openConnectForm(social);
+    } else {
+      setUnlink(social);
+    }
+  };
+
+  const unlinkSocial = () => {
+    if (unlink) {
+      disconnectSocial(unlink);
+      setUnlink(null);
     }
   };
 
@@ -104,7 +131,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
       <List subheader={<ListSubheader className={classes.subheader}>Link my social</ListSubheader>} className={classes.root}>
         <ListItem>
           <ListItemIcon>
-            <FacebookIcon />
+            <FacebookIcon className={classes.facebook} />
           </ListItemIcon>
           <ListItemText id="social-facebook" primary="Facebook" />
           <ListItemSecondaryAction>
@@ -115,7 +142,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
         </ListItem>
         <ListItem>
           <ListItemIcon>
-            <TwitterIcon />
+            <TwitterIcon className={classes.twitter} />
           </ListItemIcon>
           <ListItemText id="social-twitter" primary="Twitter" />
           <ListItemSecondaryAction>
@@ -126,12 +153,12 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
         </ListItem>
         <ListItem>
           <ListItemIcon>
-            <RedditIcon />
+            <RedditIcon className={classes.reddit} />
           </ListItemIcon>
           <ListItemText id="social-reddit" primary="Reddit" />
           <ListItemSecondaryAction>
             <IconButton onClick={connectSocial(SocialsEnum.REDDIT)} aria-label="social-list-item-reddit" size="medium">
-              {connected[SocialsEnum.TWITTER] ? <CheckIcon /> : <AddIcon />}
+              {connected[SocialsEnum.REDDIT] ? <CheckIcon /> : <AddIcon />}
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
@@ -139,6 +166,13 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
 
       <ConnectComponent ref={connectRef} publicKey={user.id} verify={verifyShared} />
       <ConnectSuccessComponent open={connecting && isShared} onClose={() => setConnecting(false)} />
+      <ConfirmDialog
+        open={unlink !== null}
+        handleClose={() => setUnlink(null)}
+        handleSubmit={unlinkSocial}
+        title="Unlink social account"
+        description={`Are you sure to remove ${unlink} account from myriad network?`}
+      />
     </>
   );
 };

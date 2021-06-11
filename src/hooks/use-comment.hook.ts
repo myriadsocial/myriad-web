@@ -1,14 +1,11 @@
 import { useState } from 'react';
 
-import { useComments, CommentActionType } from './comment.context';
-
 import { Post, Comment } from 'src/interfaces/post';
 import { User } from 'src/interfaces/user';
 import * as PostAPI from 'src/lib/api/post';
 
 export const useCommentHook = (post: Post) => {
-  const { dispatch } = useComments();
-
+  const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -18,13 +15,7 @@ export const useCommentHook = (post: Post) => {
     try {
       const comments = await PostAPI.loadComments(post.id);
 
-      dispatch({
-        type: CommentActionType.LOAD_COMMENTS,
-        payload: {
-          comments,
-          post
-        }
-      });
+      setComments(comments);
     } catch (error) {
       setError(error);
     } finally {
@@ -34,12 +25,9 @@ export const useCommentHook = (post: Post) => {
 
   const loadMore = async () => {
     try {
-      const comments = await PostAPI.loadComments(post.id);
+      const data = await PostAPI.loadComments(post.id);
 
-      dispatch({
-        type: CommentActionType.LOAD_MORE_COMMENT,
-        payload: comments
-      });
+      setComments([...comments, ...data]);
     } catch (error) {
       setError(error);
     } finally {
@@ -50,18 +38,19 @@ export const useCommentHook = (post: Post) => {
   const reply = async (user: User, comment: Comment) => {
     const data = await PostAPI.reply(post.id, comment);
 
-    dispatch({
-      type: CommentActionType.REPLY_COMMENT,
-      payload: {
+    setComments([
+      ...comments,
+      {
         ...data,
         user
       }
-    });
+    ]);
   };
 
   return {
     error,
     loading,
+    comments,
     loadInitComment: load,
     loadMoreComment: loadMore,
     reply

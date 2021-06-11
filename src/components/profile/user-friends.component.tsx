@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import Typography from '@material-ui/core/Typography';
 
-import FriendListComponent from '../friends/friend-list.component';
+import FriendList from './friend-list.component';
 
 import { debounce } from 'lodash';
 import SearchComponent from 'src/components/common/search.component';
@@ -40,7 +40,7 @@ const UserFriendComponent: React.FC<UserFriendProps> = props => {
         <SearchComponent value={search} placeholder="Find a Friend" onSubmit={handleSearchFriend} />
       </div>
 
-      <FriendListComponent user={user} />
+      <FriendList user={user} />
     </div>
   );
 };

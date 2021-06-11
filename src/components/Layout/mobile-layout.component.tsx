@@ -61,24 +61,24 @@ const MobileLayoutComponent = ({ children, user }: Props) => {
   return (
     <>
       <FriendsProvider>
-        <AppBar />
-        <TabPanel value={value} index={SidebarTab.HOME} dir={theme.direction}>
-          <TimelineComponent user={state.user} />
-        </TabPanel>
-        <TabPanel value={value} index={SidebarTab.WALLET} dir={theme.direction}>
-          <WalletComponent />
-        </TabPanel>
-        <TabPanel value={value} index={SidebarTab.TRENDING} dir={theme.direction}>
-          <TopicComponent />
-        </TabPanel>
-        <TabPanel value={value} index={SidebarTab.FRIENDS} dir={theme.direction}>
-          <FriendComponent />
-        </TabPanel>
-        <TabPanel value={value} index={SidebarTab.NOTIFICATION} dir={theme.direction}>
-          <NotifProvider>
+        <NotifProvider>
+          <AppBar />
+          <TabPanel value={value} index={SidebarTab.HOME} dir={theme.direction}>
+            <TimelineComponent user={state.user} />
+          </TabPanel>
+          <TabPanel value={value} index={SidebarTab.WALLET} dir={theme.direction}>
+            <WalletComponent />
+          </TabPanel>
+          <TabPanel value={value} index={SidebarTab.TRENDING} dir={theme.direction}>
+            <TopicComponent />
+          </TabPanel>
+          <TabPanel value={value} index={SidebarTab.FRIENDS} dir={theme.direction}>
+            <FriendComponent />
+          </TabPanel>
+          <TabPanel value={value} index={SidebarTab.NOTIFICATION} dir={theme.direction}>
             <NotificationComponent />
-          </NotifProvider>
-        </TabPanel>
+          </TabPanel>
+        </NotifProvider>
       </FriendsProvider>
     </>
   );

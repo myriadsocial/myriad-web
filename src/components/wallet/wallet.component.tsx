@@ -87,7 +87,7 @@ export const Wallet = React.memo(function Wallet() {
   };
 
   return (
-    <>
+    <div id="wallet">
       <ExpandablePanel title="My Wallet" actions={<WalletAction />}>
         <ForwardedBalanceComponent ref={balanceRef} />
         <Divider variant="middle" />
@@ -95,6 +95,6 @@ export const Wallet = React.memo(function Wallet() {
       </ExpandablePanel>
 
       <ForwardedWalletSettingComponent ref={walletSettingRef} />
-    </>
+    </div>
   );
 });

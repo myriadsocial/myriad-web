@@ -107,7 +107,7 @@ export default function HeaderBar() {
             <SearchUserComponent placeholder={isMobile ? 'Search on Myria' : 'Search for people on Myriad'} search={searchUser} />
           </div>
           <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
+          <div className={classes.sectionDesktop} id="user-menu">
             <DesktopMenuComponent />
           </div>
         </Toolbar>

@@ -2,16 +2,19 @@
 import { useState, useEffect } from 'react';
 
 import Axios from 'axios';
+import { useProfile, ProfileActionType } from 'src/components/profile/profile.context';
+import { useFriendsHook } from 'src/hooks/use-friends-hook';
 import { FriendRequest } from 'src/interfaces/friend';
 import { User } from 'src/interfaces/user';
+import * as FriendAPI from 'src/lib/api/friends';
 
 const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
 });
 
 export const useFriendHook = (user: User) => {
-  const [isSuccess, setIsSuccess] = useState(null);
-  const [status, setStatus] = useState(null);
+  const { loadFriends, loadRequests } = useFriendsHook(user);
+  const { state: profileState, dispatch } = useProfile();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -28,10 +31,7 @@ export const useFriendHook = (user: User) => {
         }
       });
 
-      setIsSuccess({
-        ...data
-      });
-      console.log('after Add friend', data);
+      checkFriendStatus(values.friendId);
     } catch (error) {
       setError(error);
       console.log(error, '<<<error');
@@ -40,15 +40,70 @@ export const useFriendHook = (user: User) => {
     }
   };
 
-  const requestFriendStatus = async friendId => {
-    const { data } = await MyriadAPI({
-      url: `/users/${user.id}/friends`,
-      method: 'GET'
-    });
+  const checkFriendStatus = async friendId => {
+    setLoading(true);
 
-    const result = data.filter(friend => friend.friendId === friendId);
-    if (result.length > 0) {
-      setStatus(result[0].status);
+    try {
+      const { data } = await MyriadAPI({
+        url: `/friends`,
+        method: 'GET',
+        params: {
+          filter: {
+            where: {
+              or: [
+                { friendId: friendId, requestorId: user.id },
+                { friendId: user.id, requestorId: friendId }
+              ]
+            }
+          }
+        }
+      });
+
+      console.log(data[0], 'status');
+      dispatch({
+        type: ProfileActionType.FRIEND_STATUS,
+        payload: data[0]
+      });
+    } catch (error) {
+      setError(error);
+      console.log(error, '<<<error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const cancelFriendRequest = async friend => {
+    setLoading(true);
+
+    try {
+      const { data } = await MyriadAPI({
+        url: `/friends/${friend.id}`,
+        method: 'DELETE'
+      });
+
+      checkFriendStatus(friend.friendId);
+    } catch (error) {
+      setError(error);
+      console.log(error, '<<<error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleRequest = async (friend, status: FriendStatus) => {
+    setLoading(true);
+
+    try {
+      await FriendAPI.toggleRequest(friend.id, status);
+
+      loadFriends();
+      loadRequests();
+      checkFriendStatus(friend.friendId);
+    } catch (error) {
+      setError(error);
+      console.log(error, '<<<error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,6 +112,8 @@ export const useFriendHook = (user: User) => {
     loading,
     makeFriend,
     status,
-    requestFriendStatus
+    cancelFriendRequest,
+    checkFriendStatus,
+    toggleRequest
   };
 };

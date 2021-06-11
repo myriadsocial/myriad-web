@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flex: '1 1 auto',
-      marginTop: theme.spacing(1)
+      marginTop: theme.spacing(1),
+      background: 'transparent'
     },
     content: {
       padding: theme.spacing(0, 2),
@@ -34,7 +35,7 @@ const TopicComponent: React.FC<TopicProps> = props => {
   }, []);
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} id="worldwide">
       <ExpandablePanel expanded={true} title="World Wide" startIcon={<LanguageIcon />}>
         <div className={styles.content}>
           <div style={{ paddingTop: 24, paddingBottom: 8 }}>

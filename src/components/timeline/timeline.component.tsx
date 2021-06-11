@@ -5,20 +5,21 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import Grow from '@material-ui/core/Grow';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import DividerWithText from '../common/divider-w-text';
 import { LoadingPage } from '../common/loading.component';
 import { useExperience } from '../experience/use-experience.hooks';
 import ImportPostComponent from './ImportPost.component';
-import { CommentProvider } from './comment/comment.context';
-import CreatePostComponent from './create-post/create-post.component';
 import FilterTimelineComponent from './filter/filter.component';
-import PostComponent from './post/post.component';
 import { useStyles } from './timeline.style';
 
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import ShowIf from 'src/components/common/show-if.component';
+import CreatePostComponent from 'src/components/post/create/create-post.component';
+import PostComponent from 'src/components/post/post.component';
 import SearchResultComponent from 'src/components/search/search-result.component';
 import { useTimeline } from 'src/context/timeline.context';
 import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
@@ -57,6 +58,8 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
     return;
   }, [searching]);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { state } = useTimeline();
   const { hasMore, loadUserPost, loadMorePost, sortBy, addPost, importPost } = usePost(user);
   const { experiences } = useExperience(user.id);
@@ -137,9 +140,9 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
               <ImportPostComponent onSubmit={submitImportPost} experiences={experiences} />
             </ShowIf>
 
-            <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />
+            {!isMobile && <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />}
 
-            <CommentProvider>
+            <div id="timeline">
               <InfiniteScroll
                 scrollableTarget="scrollable-timeline"
                 className={style.child}
@@ -159,7 +162,7 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
                   </Fab>
                 </ScrollTop>
               </InfiniteScroll>
-            </CommentProvider>
+            </div>
           </div>
 
           <div id="fb-root" />
