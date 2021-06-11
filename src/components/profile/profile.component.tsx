@@ -140,7 +140,7 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
   if (profile === null) {
     return (
       <div className={style.root}>
-        <Header user={user} profile={null} loading={loading} isGuest={false} />
+        <Header user={user} profile={null} loading={loading} isGuest={true} />
         <div style={{ textAlign: 'center' }}>
           <h1>This account doesn’t exist</h1>
           <Typography>Try searching for another.</Typography>

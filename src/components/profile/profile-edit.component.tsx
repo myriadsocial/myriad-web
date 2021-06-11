@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -93,7 +93,7 @@ function Alert(props: AlertProps) {
 
 export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleProfileForm, open }) => {
   const style = useStyles();
-  const { updateProfile, getProfile } = useProfileHook(user.id);
+  const { updateProfile } = useProfileHook(user.id);
   const {
     state: { profile }
   } = useProfile();
@@ -102,10 +102,6 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
     name: user.name,
     bio: user.bio
   });
-
-  useEffect(() => {
-    getProfile();
-  }, []);
 
   const getProfilePicture = (): string => {
     return user.profilePictureURL || '';

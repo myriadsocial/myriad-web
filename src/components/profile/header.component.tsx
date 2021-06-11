@@ -39,7 +39,9 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const { state: profileState } = useProfile();
+  const {
+    state: { friendStatus }
+  } = useProfile();
   const { makeFriend, checkFriendStatus, cancelFriendRequest, toggleRequest } = useFriendHook(user);
 
   const style = useStyles();
@@ -66,15 +68,15 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   };
 
   const handlecancelFriendRequest = () => {
-    cancelFriendRequest(profileState.friendStatus);
+    cancelFriendRequest(friendStatus);
   };
 
   const approveFriendRequest = () => {
-    toggleRequest(profileState.friendStatus, FriendStatus.APPROVED);
+    toggleRequest(friendStatus, FriendStatus.APPROVED);
   };
 
   const rejectFriendRequest = () => {
-    toggleRequest(profileState.friendStatus, FriendStatus.REJECTED);
+    toggleRequest(friendStatus, FriendStatus.REJECTED);
   };
 
   // PUBLICKEY;
@@ -94,22 +96,47 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
     });
   };
 
+  if (profile === null) {
+    return (
+      <div className={style.root}>
+        <div className={style.header}>
+          <div style={{ width: 500 }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Avatar className={style.avatar} src={''}>
+                {acronym('')}
+              </Avatar>
+              <Typography className={style.name}>{''}</Typography>
+            </div>
+            <div style={{ marginTop: '24px' }}>
+              <Typography variant="body1" className={style.subtitle}>
+                Bio
+              </Typography>
+              <Typography variant="body2" style={{ fontWeight: 400, fontSize: 16, marginTop: 8 }}>
+                {profileInfo}
+              </Typography>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={style.root}>
       <div className={style.header}>
         <div style={{ width: 500 }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Avatar className={style.avatar} src={profile?.profilePictureURL}>
-              {acronym(profile?.name || '')}
+            <Avatar className={style.avatar} src={profile.profilePictureURL}>
+              {acronym(profile.name || '')}
             </Avatar>
-            <Typography className={style.name}>{profile?.name || ''}</Typography>
+            <Typography className={style.name}>{profile.name || ''}</Typography>
           </div>
           <div style={{ marginTop: '24px' }}>
             <Typography variant="body1" className={style.subtitle}>
               Bio
             </Typography>
             <Typography variant="body2" style={{ fontWeight: 400, fontSize: 16, marginTop: 8 }}>
-              {profile?.bio || profileInfo}
+              {profile.bio || profileInfo}
             </Typography>
           </div>
           <ShowIf condition={isGuest === false}>
@@ -122,11 +149,11 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
                 style={{ width: 400, border: '1px solid #8629E9' }}
                 name="publickey"
                 disabled={true}
-                defaultValue={user.id}
+                defaultValue={profile.id}
                 inputProps={{ 'aria-label': 'description' }}
                 endAdornment={
                   <InputAdornment position="end">
-                    <CopyToClipboard text={user.id || ''} onCopy={onPublicKeyCopied}>
+                    <CopyToClipboard text={profile.id || ''} onCopy={onPublicKeyCopied}>
                       <IconButton aria-label="toggle password visibility">
                         <FileCopyIcon />
                       </IconButton>
@@ -138,7 +165,7 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
           </ShowIf>
           <ShowIf condition={isGuest === true}>
             <div style={{ marginTop: '40px' }}>
-              <ShowIf condition={profileState.friendStatus?.status == null}>
+              <ShowIf condition={friendStatus?.status == null}>
                 <Button
                   className={style.button2}
                   style={{ marginRight: 24 }}
@@ -150,7 +177,7 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
                 </Button>
               </ShowIf>
 
-              <ShowIf condition={profileState.friendStatus?.status === 'pending' && profileState.friendStatus.requestorId == profile?.id}>
+              <ShowIf condition={friendStatus?.status === 'pending' && friendStatus.requestorId == profile.id}>
                 <Button
                   className={style.button}
                   style={{ marginRight: 12 }}
@@ -171,7 +198,7 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
                 </Button>
               </ShowIf>
 
-              <ShowIf condition={profileState.friendStatus?.status === 'pending' && profileState.friendStatus.friendId == profile?.id}>
+              <ShowIf condition={friendStatus?.status === 'pending' && friendStatus.friendId == profile.id}>
                 <Button className={style.button} variant="contained" size="medium" disabled style={{ background: 'gray', marginRight: 12 }}>
                   Pending
                 </Button>
@@ -186,7 +213,7 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
                 </Button>
               </ShowIf>
 
-              <ShowIf condition={profileState.friendStatus?.status === 'approved'}>
+              <ShowIf condition={friendStatus?.status === 'approved'}>
                 <Button
                   className={style.button2}
                   style={{ marginRight: 24 }}
