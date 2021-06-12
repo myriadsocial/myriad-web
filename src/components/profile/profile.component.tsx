@@ -3,13 +3,13 @@ import SwipeableViews from 'react-swipeable-views';
 
 import dynamic from 'next/dynamic';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles, Theme, createStyles, fade } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
 
-import { LoadingPage } from '../common/loading.component';
 import { TabPanel } from '../common/tab-panel.component';
 import Header from './header.component';
 import { TippingComponent } from './myWallet/tipping.component';
@@ -129,12 +129,18 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
     else setIsGuest(true);
   }, [profile]);
 
-  if (loading) return <LoadingPage />;
+  if (loading) {
+    return (
+      <div className={`${style.root} ${style.flex}`}>
+        <CircularProgress color="primary" size={100} />
+      </div>
+    );
+  }
 
   if (profile === null) {
     return (
       <div className={style.root}>
-        <Header user={user} profile={null} loading={loading} isGuest={false} />
+        <Header user={user} profile={null} loading={loading} isGuest={true} />
         <div style={{ textAlign: 'center' }}>
           <h1>This account doesn’t exist</h1>
           <Typography>Try searching for another.</Typography>
