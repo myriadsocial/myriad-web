@@ -88,6 +88,7 @@
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@polkadot/api": "^4.1.1",
     "@polkadot/extension-dapp": "^0.37.2",
+    "@polkadot/react-identicon": "^0.58.*",
     "axios": "^0.21.1",
     "boring-avatars": "^1.5.3",
     "cloudinary": "^1.25.1",

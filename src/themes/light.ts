@@ -26,6 +26,7 @@ const theme = createMuiTheme({
     }
   },
   typography: {
+    fontFamily: `"Mulish", ${defaultTheme.typography.fontFamily}`,
     fontSize: 12,
     caption: {
       fontSize: 14,
@@ -33,8 +34,8 @@ const theme = createMuiTheme({
     },
     h4: {
       fontSize: 18,
-      fontWeight: 300,
-      lineHeight: '140%'
+      fontWeight: 700,
+      lineHeight: '22px'
     },
     h5: {
       fontSize: 16,

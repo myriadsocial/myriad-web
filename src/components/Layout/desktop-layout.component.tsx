@@ -27,12 +27,8 @@ const DesktopLayoutComponent = ({ children, user }: Props) => {
   const { getUserDetail, loadFcmToken } = useUserHook(user.address as string);
 
   useEffect(() => {
+    // TODO: this should be only loaded once on layout container
     getUserDetail();
-
-    return undefined;
-  }, []);
-
-  useEffect(() => {
     loadFcmToken();
 
     return undefined;

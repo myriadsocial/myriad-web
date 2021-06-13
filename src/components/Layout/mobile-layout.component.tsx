@@ -10,9 +10,9 @@ import { TabPanel } from '../common/tab-panel.component';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
 import { FriendsProvider } from 'src/context/friends.context';
-import { useLayoutSetting } from 'src/context/layout.context';
 import { NotifProvider } from 'src/context/notif.context';
 import { useUser } from 'src/context/user.context';
+import { useLayout } from 'src/hooks/use-layout.hook';
 import { useUserHook } from 'src/hooks/use-user.hook';
 import { SidebarTab } from 'src/interfaces/sidebar';
 
@@ -29,30 +29,24 @@ type Props = {
 
 const MobileLayoutComponent = ({ children, user }: Props) => {
   const theme = useTheme();
-  const {
-    state: { selectedSidebarMenu }
-  } = useLayoutSetting();
+
+  const { selectedSidebar, changeSelectedSidebar } = useLayout();
   const { state } = useUser();
   const { getUserDetail, loadFcmToken } = useUserHook(user.address as string);
   const [value, setValue] = React.useState(0);
 
   useEffect(() => {
-    if (value !== selectedSidebarMenu) {
-      console.log('CHANGE_SELECTED_SIDEBAR HEH', value);
-
-      setValue(selectedSidebarMenu);
+    if (value !== selectedSidebar) {
+      setValue(selectedSidebar);
     }
-  }, [selectedSidebarMenu]);
+  }, [selectedSidebar]);
 
   useEffect(() => {
+    // TODO: this should be only loaded once on layout container
     getUserDetail();
-
-    return undefined;
-  }, []);
-
-  useEffect(() => {
     loadFcmToken();
 
+    changeSelectedSidebar(SidebarTab.HOME);
     return undefined;
   }, []);
 

@@ -40,6 +40,7 @@ const Layout = ({ children, session }: Props) => {
   const style = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   if (!session) return null;
 
   return (
