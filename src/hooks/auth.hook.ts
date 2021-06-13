@@ -60,6 +60,15 @@ export const useAuthHook = () => {
     });
   };
 
+  const signInWithAccount = (account: InjectedAccountWithMeta) => {
+    signIn('credentials', {
+      address: account.address,
+      name: account.meta.name,
+      anonymous: false,
+      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home'
+    });
+  };
+
   const login = async (username: string) => {
     const accounts = await getPolkadotAccounts();
 
@@ -116,6 +125,7 @@ export const useAuthHook = () => {
   return {
     login,
     logout,
+    signInWithAccount,
     register,
     anonymous
   };
