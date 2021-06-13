@@ -261,7 +261,7 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
               </Button>
             </div>
             <div style={{ marginTop: '30px' }}>
-              <SocialListComponent user={user} />
+              <SocialListComponent isAnonymous={user.anonymous} user={user} />
             </div>
           </ShowIf>
         </div>

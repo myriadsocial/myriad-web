@@ -4,44 +4,34 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       position: 'relative',
+      padding: theme.spacing(0, 1),
       marginBottom: theme.spacing(1)
     },
     postAction: {
       marginTop: theme.spacing(1)
     },
     write: {
-      padding: theme.spacing(1),
-      backgroundColor: '#F7F7F7',
+      width: '100%',
+      fontFamily: theme.typography.fontFamily,
+      borderColor: theme.palette.primary.main,
+      padding: theme.spacing(1.5),
+      backgroundColor: theme.palette.background.paper,
       borderRadius: theme.spacing(1),
-      '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: '#F7F7F7',
-        borderBottom: 0
-      },
-
-      '& .MuiOutlinedInput-root': {
-        border: theme.spacing(1),
-        '&:focus-visible': {
-          outline: 'none'
-        },
-        '&:hover': {
-          border: 0
-        }
-      },
-
-      '& .MuiFormHelperText-root': {
-        textAlign: 'right',
-        borderColor: '#C4C4C4',
-        border: theme.spacing(1),
-        borderTop: 0,
-        borderLeft: 0,
-        padding: '0 14px',
-        margin: 0,
-        borderRadius: theme.spacing(1)
-      },
-
+      resize: 'none',
       '&:focus-visible': {
         outline: 'none'
       }
+    },
+    reply: {
+      position: 'absolute',
+      width: 48,
+      height: 48,
+      right: 0,
+      bottom: 8
+    },
+    replyIcon: {
+      color: theme.palette.primary.main,
+      transform: 'rotate(-30deg)'
     }
   })
 );

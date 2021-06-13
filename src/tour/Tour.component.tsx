@@ -61,7 +61,7 @@ const TourComponent: React.FC<Props> = ({ user }) => {
   ];
 
   useEffect(() => {
-    setRun(true);
+    setRun(false);
   }, []);
 
   const handleJoyrideCallback = (data: CallBackProps) => {

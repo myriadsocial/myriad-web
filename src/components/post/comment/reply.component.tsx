@@ -1,41 +1,32 @@
 import React from 'react';
 
-import { useSession } from 'next-auth/client';
-
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import SendIcon from '@material-ui/icons/Send';
 
 import { useStyles } from './reply.style';
 
 import ShowIf from 'src/components/common/show-if.component';
-import { LoginFormComponent } from 'src/components/login/login-form.component';
 import LoginOverlayComponent from 'src/components/login/overlay.component';
 
 type Props = {
+  isAnonymous: boolean;
   close: () => void;
   onSubmit: (comment: string) => void;
 };
 
-export default function ReplyComponent({ close, onSubmit }: Props) {
+const CHARACTER_LIMIT = 2000;
+
+export default function ReplyComponent({ isAnonymous, close, onSubmit }: Props) {
   const style = useStyles();
-  const [session] = useSession();
-  const [loginOpened, openLogin] = React.useState(false);
-  const anonymous = !!session?.user.anonymous;
-  const CHARACTER_LIMIT = 2000;
+
   const [comment, setValues] = React.useState({
     text: ''
   });
 
-  const toggleLogin = () => {
-    openLogin(!loginOpened);
-  };
-
-  const handleChange = (text: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...comment, [text]: event.target.value });
+  const handleChange = (text: string) => (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setValues({ ...comment, [text]: event.target.value.substring(0, CHARACTER_LIMIT) });
   };
 
   const discard = () => {
@@ -49,49 +40,32 @@ export default function ReplyComponent({ close, onSubmit }: Props) {
 
   return (
     <div className={style.root}>
-      <ShowIf condition={!anonymous}>
-        <TextField
-          inputProps={{
-            maxLength: CHARACTER_LIMIT
-          }}
-          helperText={`${comment.text.length}/${CHARACTER_LIMIT}`}
+      <ShowIf condition={!isAnonymous}>
+        <TextareaAutosize
+          rowsMin={2}
           value={comment.text}
-          multiline
-          variant="standard"
-          className={style.write}
-          rows={4}
-          fullWidth={true}
-          onChange={handleChange('text')}
           placeholder="Write a Comment..."
+          className={style.write}
+          onChange={handleChange('text')}
+          spellCheck={false}
         />
+
+        <IconButton
+          aria-label="reply"
+          className={style.reply}
+          disableTouchRipple
+          disableFocusRipple
+          disableRipple
+          disabled={comment.text.length === 0}
+          onClick={reply}>
+          <SendIcon className={style.replyIcon} />
+        </IconButton>
       </ShowIf>
 
-      <ShowIf condition={anonymous}>
+      <ShowIf condition={isAnonymous}>
         <TextField multiline variant="outlined" className={style.write} rows={4} fullWidth={true} />
-        <LoginOverlayComponent toggleLogin={toggleLogin} />
+        <LoginOverlayComponent />
       </ShowIf>
-
-      <ShowIf condition={!anonymous}>
-        <Grid className={style.postAction} container direction="row" justify="space-between" alignItems="center">
-          <Grid item>
-            <IconButton aria-label="hide" size="small" onClick={close} color="secondary">
-              <ExpandLessIcon />
-            </IconButton>
-          </Grid>
-          <Grid item>
-            <Button variant="contained" color="default" size="medium" onClick={discard} style={{ marginRight: 16 }}>
-              Discard
-            </Button>
-            <Button variant="contained" color="primary" size="medium" onClick={reply}>
-              Send
-            </Button>
-          </Grid>
-        </Grid>
-      </ShowIf>
-
-      <Dialog open={loginOpened} onClose={toggleLogin} maxWidth="xs">
-        <LoginFormComponent />
-      </Dialog>
     </div>
   );
 }

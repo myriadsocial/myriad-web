@@ -12,7 +12,7 @@ import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import PostComponent from 'src/components/post/post.component';
 import { useProfile } from 'src/components/profile/profile.context';
 import { useProfileHook } from 'src/components/profile/use-profile.hook';
-import { usePost } from 'src/hooks/use-post.hook';
+import { useTimelineHook } from 'src/hooks/use-timeline.hook';
 import { Post } from 'src/interfaces/post';
 import { User, ExtendedUserPost } from 'src/interfaces/user';
 
@@ -23,7 +23,7 @@ type Props = {
 
 export default function ImportedPostList({ user, profile }: Props) {
   const style = useStyles();
-  const { hasMore, loadMorePost } = usePost(user);
+  const { hasMore, nextPosts } = useTimelineHook();
   const { state: profileState } = useProfile();
   const { loadImportedPost, loading } = useProfileHook(profile.id);
   const posts = profileState.importedPost;
@@ -51,12 +51,12 @@ export default function ImportedPostList({ user, profile }: Props) {
         scrollableTarget="scrollable-timeline"
         className={style.child}
         dataLength={posts.length || 100}
-        next={loadMorePost}
+        next={nextPosts}
         hasMore={hasMore}
         loader={<LoadingPage />}>
         {posts.map((post: Post, i: number) => (
           <Grow key={i}>
-            <PostComponent post={post} open={false} postOwner={isOwnPost(post)} />
+            <PostComponent post={post} postOwner={isOwnPost(post)} />
           </Grow>
         ))}
 

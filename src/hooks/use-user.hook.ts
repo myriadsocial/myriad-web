@@ -7,13 +7,15 @@ import { User } from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 import { firebaseCloudMessaging } from 'src/lib/firebase';
 
-export const useUserHook = (userId: string) => {
+export const useUserHook = (userId?: string) => {
   const { state: userState, dispatch } = useUser();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const load = async () => {
+    if (!userId) return;
+
     setLoading(true);
 
     try {
@@ -34,6 +36,12 @@ export const useUserHook = (userId: string) => {
     }
   };
 
+  const setAsAnonymous = () => {
+    dispatch({
+      type: UserActionType.SET_ANONYMOUS
+    });
+  };
+
   const disconnectSocial = async (social: SocialsEnum) => {
     const credential = userState.user?.userCredentials.find(credential => credential.people.platform === social);
 
@@ -45,6 +53,8 @@ export const useUserHook = (userId: string) => {
   };
 
   const updateUser = async (values: Partial<User>) => {
+    if (!userId) return;
+
     await UserAPI.updateUser(userId, values);
 
     load();
@@ -65,6 +75,7 @@ export const useUserHook = (userId: string) => {
   return {
     error,
     loading,
+    setAsAnonymous,
     getUserDetail: load,
     disconnectSocial,
     updateUser,

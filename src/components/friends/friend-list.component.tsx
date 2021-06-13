@@ -22,7 +22,7 @@ import { useFriends } from 'src/context/friends.context';
 import { User } from 'src/interfaces/user';
 
 type Props = {
-  user: User;
+  user: User | null;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -70,7 +70,6 @@ const Friends = ({ user }: Props) => {
     setOpenOnlineFriends(!openOnlineFriends);
   };
 
-  console.log('openOnlineFriends', openOnlineFriends);
   return (
     <Box className={style.root}>
       <ListHeaderComponent title={`Friends (${state.friends.length})`} />
