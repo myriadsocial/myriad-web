@@ -8,7 +8,6 @@ import PeopleIcon from '@material-ui/icons/People';
 
 import clsx from 'clsx';
 import { useFriends } from 'src/context/friends.context';
-import { useLayoutSetting } from 'src/context/layout.context';
 import { useNotif } from 'src/context/notif.context';
 import { useLayout } from 'src/hooks/use-layout.hook';
 import { SidebarTab } from 'src/interfaces/sidebar';
@@ -32,22 +31,19 @@ const DesktopMenuComponent: React.FC<DesktopMenuProps> = () => {
   const styles = useStyles();
 
   const {
-    state: { selectedSidebarMenu }
-  } = useLayoutSetting();
-  const {
     state: { totalFriendRequests }
   } = useFriends();
   const {
     state: { total: totalNotif }
   } = useNotif();
 
-  const { changeSelectedSidebar } = useLayout();
+  const { selectedSidebar, changeSelectedSidebar } = useLayout();
 
   return (
     <div className={styles.root}>
       <IconButton
         className={clsx({
-          [styles.iconActive]: selectedSidebarMenu === SidebarTab.FRIENDS
+          [styles.iconActive]: selectedSidebar === SidebarTab.FRIENDS
         })}
         aria-label="friends"
         color="inherit"
@@ -59,7 +55,7 @@ const DesktopMenuComponent: React.FC<DesktopMenuProps> = () => {
       </IconButton>
       <IconButton
         className={clsx({
-          [styles.iconActive]: selectedSidebarMenu === SidebarTab.NOTIFICATION
+          [styles.iconActive]: selectedSidebar === SidebarTab.NOTIFICATION
         })}
         aria-label="notifications"
         color="inherit"

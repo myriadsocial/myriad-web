@@ -57,7 +57,7 @@ export const LoginInfoComponent = ({}: Props) => {
     <div className={style.root}>
       <Card>
         <CardContent>
-          <Typography color="textSecondary" gutterBottom variant="h2" style={{ fontSize: 22, fontWeight: 700 }}>
+          <Typography color="textSecondary" gutterBottom variant="h2" style={{ fontSize: 24, fontWeight: 700 }}>
             Sky is the Limit
           </Typography>
           <Typography variant="body1">There is no post limitation on Myriad, Freedom of speech is our vision.</Typography>
@@ -70,7 +70,7 @@ export const LoginInfoComponent = ({}: Props) => {
       </Card>
       <Card>
         <CardContent>
-          <Typography color="textSecondary" gutterBottom variant="h2" style={{ fontSize: 20, fontWeight: 700 }}>
+          <Typography color="textSecondary" gutterBottom variant="h2" style={{ fontSize: 24, fontWeight: 700 }}>
             Monetize Your Idea
           </Typography>
           <Typography variant="body1">Post your best idea and get a chance to earn crypto tip.</Typography>

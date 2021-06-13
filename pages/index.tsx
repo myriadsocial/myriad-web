@@ -9,10 +9,10 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import AlertComponent from 'src/components/alert/Alert.component';
-import { LoginFormComponent } from 'src/components/login/login-form.component';
 import { LoginInfoComponent } from 'src/components/login/login-info.component';
+import { LoginComponent } from 'src/components/login/login.component';
 import { useAlertHook } from 'src/hooks/use-alert.hook';
-import LogoImage from 'src/images/header-logo.svg';
+import LogoImage from 'src/images/myriad-logo.svg';
 import { healthcheck } from 'src/lib/api/healthcheck';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,15 +30,18 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center'
     },
     logo: {
-      marginTop: 64,
-      height: 56
+      marginTop: 48,
+      height: 87
     },
     title: {
       fontSize: 24,
       fontWeight: 700,
       lineHeight: '30px',
-      marginBottom: 40,
+      marginBottom: 59,
       color: theme.palette.text.secondary
+    },
+    titlePrimary: {
+      color: theme.palette.primary.main
     },
     login: {
       marginTop: 140,
@@ -80,11 +83,11 @@ export default function Index() {
         <div className={style.header}>
           <LogoImage className={style.logo} />
           <Typography variant="h1" className={style.title}>
-            Social Media with no boundary
+            Social Media with <span className={style.titlePrimary}>no boundary</span>
           </Typography>
         </div>
 
-        <LoginFormComponent />
+        <LoginComponent />
 
         <LoginInfoComponent />
       </Grid>

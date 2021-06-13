@@ -23,6 +23,7 @@ export const useLayout = () => {
 
   return {
     setting,
+    selectedSidebar: setting.selectedSidebarMenu,
     changeSetting,
     changeSelectedSidebar
   };
