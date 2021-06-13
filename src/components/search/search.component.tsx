@@ -38,8 +38,8 @@ const SearchUser: React.FC<SearchProps> = ({ placeholder, search }) => {
     search(debouncedValue);
   }, [debouncedValue]);
 
-  const handleSearch = (value: string | null) => {
-    if (value) {
+  const handleSearch = (value: string) => {
+    if (value.length > 0) {
       setSearchQuery(value);
     }
   };

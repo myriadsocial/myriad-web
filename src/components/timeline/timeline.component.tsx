@@ -34,16 +34,7 @@ type TimelineProps = {
 const Timeline: React.FC<TimelineProps> = ({ user }) => {
   const style = useStyles();
 
-  const { load, searching, backToTimeline, users: options } = useMyriadUser();
-
-  useEffect(() => {
-    load();
-  }, []);
-
-  //useEffect(() => {
-  //backToTimeline();
-  //console.log('the searching is: ', true);
-  //}, []);
+  const { searching, backToTimeline, users: options } = useMyriadUser();
 
   const [loading, setLoading] = useState(false);
 
@@ -60,11 +51,9 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
   };
 
   useEffect(() => {
-    //if (searching) {
-    //loadingSequence();
-    //}
-
-    console.log('searching again: ', searching);
+    if (searching) {
+      loadingSequence();
+    }
   }, [searching]);
 
   const theme = useTheme();

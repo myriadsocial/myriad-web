@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useSearch as baseUseSearch, SearchActionType } from 'src/components/search/search.context';
 import * as UserAPI from 'src/lib/api/user';
@@ -17,19 +17,21 @@ export const useMyriadUser = () => {
   const search = async (query: string) => {
     setLoading(true);
 
-    try {
-      const users = await UserAPI.search(query);
+    if (query.length === 0) return null;
 
-      dispatch({
-        type: SearchActionType.LOAD_USER,
-        payload: users
-      });
+    if (query.length > 0) {
+      try {
+        const users = await UserAPI.search(query);
 
-      console.log('called');
-    } catch (error) {
-      setError(error);
-    } finally {
-      setLoading(false);
+        dispatch({
+          type: SearchActionType.LOAD_USER,
+          payload: users
+        });
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 

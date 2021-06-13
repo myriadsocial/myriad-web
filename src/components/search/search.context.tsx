@@ -21,7 +21,7 @@ export interface AbortSearch {
   type: SearchActionType.ABORT_SEARCH;
 }
 
-export type Action = LoadUser | AbortSearch;
+export type Action = LoadUser | AbortSearch | ResetState;
 type Dispatch = (action: Action) => void;
 type SearchProviderProps = { children: React.ReactNode };
 type State = {
