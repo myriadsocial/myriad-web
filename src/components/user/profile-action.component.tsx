@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 
 type ProfileActionProps = {
   anonymous: boolean;
-  userId?: string;
+  userId: string | null;
   onEditProfileClicked: () => void;
   onLoginCliked: () => void;
 };

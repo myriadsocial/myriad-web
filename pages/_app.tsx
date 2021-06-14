@@ -14,6 +14,7 @@ import theme from '../src/themes/light';
 import { WalletAddressProvider } from 'src/components/post/send-tip.context';
 import { ProfileProvider } from 'src/components/profile/profile.context';
 import { AlertProvider } from 'src/context/Alert.context';
+import { UserProvider } from 'src/context/user.context';
 
 const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
@@ -65,11 +66,13 @@ const App = ({ Component, pageProps }: AppProps) => {
               }}
               session={pageProps.session}>
               <CookiesProvider>
-                <ProfileProvider>
-                  <AlertProvider>
-                    <Component {...pageProps} />
-                  </AlertProvider>
-                </ProfileProvider>
+                <UserProvider>
+                  <ProfileProvider>
+                    <AlertProvider>
+                      <Component {...pageProps} />
+                    </AlertProvider>
+                  </ProfileProvider>
+                </UserProvider>
               </CookiesProvider>
             </Provider>
           </WalletAddressProvider>
