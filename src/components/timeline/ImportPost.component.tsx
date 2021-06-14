@@ -1,7 +1,7 @@
-import { LinkPreview } from '@dhaiwat10/react-link-preview';
-
+//import { LinkPreview } from '@dhaiwat10/react-link-preview';
 import React, { useState } from 'react';
 
+//import dynamic from 'next/dynamic';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -22,6 +22,19 @@ import DialogTitle from '../common/DialogTitle.component';
 import { usePostHook } from 'src/hooks/use-post.hook';
 import { Experience } from 'src/interfaces/experience';
 import { User } from 'src/interfaces/user';
+
+//const ReactTinyLink = dynamic(
+//() => {
+//return import('react-tiny-link').then(mod => mod.ReactTinyLink);
+//},
+//{ ssr: false }
+//);
+const useScrapper = dynamic(
+  () => {
+    return import('react-tiny-link').then(mod => mod.useScrapper);
+  },
+  { ssr: false }
+);
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -85,6 +98,14 @@ export default function ImportPostComponent({ user, experiences }: Props) {
   const { importPost } = usePostHook(user);
   const [showImportPost, setCreatePost] = useState(false);
   const [postURL, setPostURL] = useState('');
+
+  useEffect(() => {
+    const [result, loading, error] = useScrapper({
+      url: postURL
+    });
+  }, [postURL]);
+
+  console.log('result is:', result);
 
   //Associate a post with an experience
   //const [selectedExperienceId, setSelectedExperienceId] = useState('');
@@ -160,7 +181,12 @@ export default function ImportPostComponent({ user, experiences }: Props) {
                 //<FormHelperText>Select an experience where the post will be stored</FormHelperText>
                 //</FormControl>
               }
-              <LinkPreview url={postURL} width="400px" />
+              {
+                //result ? <ReactTinyLink cardSize="small" showGraphic={true} maxLine={2} minLine={1} url={result} /> : ''
+              }
+              {
+                //<LinkPreview url={postURL} width="400px" />
+              }
             </CardContent>
             <CardActions className={styles.cardActions}>
               <Button variant="contained" size="large" color="secondary" onClick={confirmImport}>

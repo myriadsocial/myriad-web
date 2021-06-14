@@ -125,6 +125,7 @@
     "react-player": "^2.9.0",
     "react-share": "^4.4.0",
     "react-swipeable-views": "^0.13.9",
+    "react-tiny-link": "^3.6.1",
     "remark-gfm": "^1.0.0",
     "remark-html": "^13.0.1",
     "remark-images": "^2.0.0",
