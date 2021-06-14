@@ -1,6 +1,6 @@
-import { LinkPreview } from '@dhaiwat10/react-link-preview';
-
+//import { LinkPreview } from '@dhaiwat10/react-link-preview';
 import React, { useState } from 'react';
+import { Tweet } from 'react-twitter-widgets';
 
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -8,11 +8,11 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-//import FormControl from '@material-ui/core/FormControl';
-//import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import InputLabel from '@material-ui/core/InputLabel';
-//import MenuItem from '@material-ui/core/MenuItem';
-//import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -106,16 +106,37 @@ export default function ImportPostComponent({ user, experiences }: Props) {
     setCreatePost(!showImportPost);
   };
 
-  const updatePostURL = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const URL = event.target.value;
-
-    setPostURL(URL);
-  };
-
   const confirmImport = () => {
     importPost(postURL);
     toggleImportPost();
     setPostURL('');
+  };
+
+  const [social, setSocial] = useState('');
+  const [tweetId, setTweetId] = useState('');
+  const [sansDomain, setSansDomain] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+    setSocial(e.target.value as string);
+  };
+
+  const handleChangeTweetId = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const text = e.target.value;
+    const sansDomain = text.substring(text.indexOf('m') + 2);
+    const tweetId = text.substring(text.lastIndexOf('/') + 1);
+
+    setSansDomain(sansDomain);
+    setTweetId(tweetId);
+  };
+
+  const handleTweetIdPasted = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const text = e.clipboardData.getData('Text');
+    const sansDomain = text.substring(text.indexOf('m') + 2);
+    const tweetId = text.substring(text.lastIndexOf('/') + 1);
+
+    setSansDomain(sansDomain);
+    setTweetId(tweetId);
   };
 
   return (
@@ -133,7 +154,35 @@ export default function ImportPostComponent({ user, experiences }: Props) {
         <DialogContent>
           <Card className={styles.postContent}>
             <CardContent>
-              <TextField label="Paste the URL here" className={styles.postURL} value={postURL} onChange={updatePostURL} />
+              <TextField
+                hiddenLabel
+                value={sansDomain}
+                onChange={handleChangeTweetId}
+                onPaste={handleTweetIdPasted}
+                color="primary"
+                margin="dense"
+                required
+                fullWidth
+                name="username"
+                type="text"
+                id="username"
+                InputProps={{
+                  disableUnderline: true,
+                  color: 'primary',
+                  startAdornment: (
+                    <InputAdornment position="start" disableTypography>
+                      {social === 'twitter' ? 'https://twitter.com/' : 'https://www.facebook.com/'}
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <FormControl className={styles.formControl}>
+                <InputLabel id="demo-simple-select-label">Social Platform</InputLabel>
+                <Select labelId="demo-simple-select-label" id="demo-simple-select" value={social} onChange={handleChange}>
+                  <MenuItem value={'twitter'}>Twitter</MenuItem>
+                  <MenuItem value={'facebook'}>Facebook</MenuItem>
+                </Select>
+              </FormControl>
               {
                 // TODO: Associate a post with an experience
                 //<FormControl className={styles.formControl}>
@@ -160,7 +209,7 @@ export default function ImportPostComponent({ user, experiences }: Props) {
                 //<FormHelperText>Select an experience where the post will be stored</FormHelperText>
                 //</FormControl>
               }
-              <LinkPreview url={postURL} width="400px" />
+              <Tweet tweetId={tweetId} />
             </CardContent>
             <CardActions className={styles.cardActions}>
               <Button variant="contained" size="large" color="secondary" onClick={confirmImport}>
