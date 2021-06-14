@@ -106,12 +106,6 @@ export default function ImportPostComponent({ user, experiences }: Props) {
     setCreatePost(!showImportPost);
   };
 
-  const updatePostURL = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const URL = event.target.value;
-
-    setPostURL(URL);
-  };
-
   const confirmImport = () => {
     importPost(postURL);
     toggleImportPost();
