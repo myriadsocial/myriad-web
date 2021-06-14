@@ -15,7 +15,6 @@ import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
 import { Wallet } from 'src/components/wallet/wallet.component';
 import { FriendsProvider } from 'src/context/friends.context';
-import { useUser } from 'src/context/user.context';
 import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
 import { healthcheck } from 'src/lib/api/healthcheck';
 

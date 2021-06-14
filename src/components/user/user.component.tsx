@@ -100,7 +100,14 @@ const UserComponent: React.FC<Props> = ({ isAnonymous, user }) => {
               {user.name}
             </Typography>
           }
-          subheader={<ProfileActionComponent anonymous={isAnonymous} onEditProfileClicked={toggleEdit} onLoginCliked={toggleLogin} />}
+          subheader={
+            <ProfileActionComponent
+              userId={userState.user?.id || null}
+              anonymous={isAnonymous}
+              onEditProfileClicked={toggleEdit}
+              onLoginCliked={toggleLogin}
+            />
+          }
         />
         <CardContent style={{ padding: '16px 0' }}>
           <SocialListComponent isAnonymous={isAnonymous} user={userState.user} />

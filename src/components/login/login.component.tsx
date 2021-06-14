@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600
     },
     anonymous: {
-      background: theme.palette.text.secondary,
+      background: theme.palette.background.paper,
       color: '#2998E9',
       height: 48,
       fontSize: 16,
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600,
       fontStyle: 'normal',
       lineHeight: '20px',
-      color: theme.palette.text.secondary,
+      color: theme.palette.background.paper,
       textDecoration: 'underline',
       marginBottom: 40
     },

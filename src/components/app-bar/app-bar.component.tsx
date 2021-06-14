@@ -12,7 +12,8 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
 import LogoImageCompact from 'src/images/header-logo-compact.svg';
 import LogoImage from 'src/images/header-logo.svg';
-import { User as MyriadUser } from 'src/interfaces/user';
+
+//import { User as MyriadUser } from 'src/interfaces/user';
 
 const SearchUserComponent = dynamic(() => import('../search/search.component'));
 const DesktopMenuComponent = dynamic(() => import('./desktop-menu.component'));
@@ -93,9 +94,9 @@ export default function HeaderBar() {
     search(text);
   };
 
-  const onSearchUser = (users: MyriadUser) => {
-    //console.log('the users are: ', users);
-  };
+  //const onSearchUser = (users: MyriadUser) => {
+  //console.log('the users are: ', users);
+  //};
 
   return (
     <div className={classes.grow}>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { useSearch as baseUseSearch, SearchActionType } from 'src/components/search/search.context';
 import * as UserAPI from 'src/lib/api/user';
