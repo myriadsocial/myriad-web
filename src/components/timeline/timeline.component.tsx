@@ -4,7 +4,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
-import Grow from '@material-ui/core/Grow';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
@@ -118,7 +117,7 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
     return <>{loading ? <LoadingComponent /> : <SearchResultComponent user={user} users={options} clickBack={handleClick} />}</>;
 
   return (
-    <div className={style.root}>
+    <div className={style.root} id="timeline">
       <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
         {user && (
           <>
@@ -132,28 +131,27 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
 
         {!isMobile && <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />}
 
-        <div id="timeline">
+        <div>
           <InfiniteScroll
             scrollableTarget="scrollable-timeline"
             className={style.child}
             dataLength={state.posts.length}
             next={nextPage}
             hasMore={hasMore}
-            onScroll={() => console.log('scroll')}
             loader={<LoadingPage />}>
             {state.posts.map((post: Post, i: number) => (
-              <Grow key={i}>
+              <div key={i} id={`post-detail-${i}`}>
                 <PostComponent post={post} postOwner={isOwnPost(post)} />
-              </Grow>
+              </div>
             ))}
-
-            <ScrollTop>
-              <Fab color="secondary" size="small" aria-label="scroll back to top">
-                <KeyboardArrowUpIcon />
-              </Fab>
-            </ScrollTop>
           </InfiniteScroll>
         </div>
+
+        <ScrollTop>
+          <Fab color="secondary" size="small" aria-label="scroll back to top">
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </ScrollTop>
       </div>
 
       <div id="fb-root" />

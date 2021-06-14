@@ -120,7 +120,10 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ isAnonymous, us
 
   return (
     <>
-      <List subheader={<ListSubheader className={classes.subheader}>Link my social</ListSubheader>} className={classes.root}>
+      <List
+        id="social-list"
+        subheader={<ListSubheader className={classes.subheader}>Link my social</ListSubheader>}
+        className={classes.root}>
         <ListItem disabled={isAnonymous}>
           <ListItemIcon>
             <FacebookIcon className={classes.facebook} />
