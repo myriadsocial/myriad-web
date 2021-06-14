@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600,
       fontStyle: 'normal',
       lineHeight: '20px',
-      color: theme.palette.text.secondary,
+      color: theme.palette.background.paper,
       textDecoration: 'underline',
       marginBottom: 40
     },
