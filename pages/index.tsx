@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 700,
       lineHeight: '30px',
       marginBottom: 59,
-      color: theme.palette.text.secondary
+      color: theme.palette.background.paper
     },
     titlePrimary: {
       color: theme.palette.primary.main
