@@ -27,6 +27,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       cursor: 'pointer'
     },
     postTextArea: {
+      resize: 'none',
+      fontFamily: theme.typography.fontFamily,
       width: '100%',
       padding: theme.spacing(1),
       border: 0,

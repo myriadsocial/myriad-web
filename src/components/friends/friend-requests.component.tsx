@@ -20,7 +20,7 @@ import { ExtendedFriend, FriendStatus } from 'src/interfaces/friend';
 import { User } from 'src/interfaces/user';
 
 type Props = {
-  user: User;
+  user: User | null;
 };
 
 const useStyles = makeStyles((theme: Theme) =>

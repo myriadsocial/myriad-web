@@ -17,7 +17,9 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import DialogTitle from '../common/DialogTitle.component';
 
+import { usePostHook } from 'src/hooks/use-post.hook';
 import { Experience } from 'src/interfaces/experience';
+import { User } from 'src/interfaces/user';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -71,13 +73,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type Props = {
-  onSubmit: (url: string) => void;
+  user: User;
   experiences: Experience[];
 };
 
-export default function ImportPostComponent({ onSubmit, experiences }: Props) {
+export default function ImportPostComponent({ user, experiences }: Props) {
   const styles = useStyles();
 
+  const { importPost } = usePostHook(user);
   const [showImportPost, setCreatePost] = useState(false);
   const [postURL, setPostURL] = useState('');
 
@@ -108,7 +111,7 @@ export default function ImportPostComponent({ onSubmit, experiences }: Props) {
   };
 
   const confirmImport = () => {
-    onSubmit(postURL);
+    importPost(postURL);
     toggleImportPost();
     setPostURL('');
   };

@@ -21,8 +21,8 @@ const theme = createMuiTheme({
       paper: '#FFFFFF'
     },
     text: {
-      primary: '#000000',
-      secondary: '#FFFFFF'
+      primary: '#4B4851',
+      secondary: '#828282'
     }
   },
   typography: {

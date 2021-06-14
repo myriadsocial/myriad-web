@@ -18,17 +18,19 @@ interface TopicProps {
 const FriendComponent: React.FC<TopicProps> = props => {
   const { title } = props;
 
-  const { state } = useUser();
+  const {
+    state: { user, anonymous }
+  } = useUser();
   const [search, setSearchQuery] = useState('');
 
-  if (!state.user) return null;
-  //@ts-ignore
-  const { searchFriend } = useFriendsHook(state.user);
+  const { searchFriend } = useFriendsHook(user);
 
   const handleSearchFriend = debounce((query: string) => {
-    console.log('SEARCH', query), setSearchQuery(query);
+    setSearchQuery(query);
     searchFriend(query);
   }, 300);
+
+  if (!user && !anonymous) return null;
 
   return (
     <div style={{ padding: 8 }}>
@@ -41,9 +43,9 @@ const FriendComponent: React.FC<TopicProps> = props => {
         <SearchComponent value={search} placeholder="Find a Friend" onSubmit={handleSearchFriend} />
       </div>
 
-      <FriendRequestComponent user={state.user} />
+      <FriendRequestComponent user={user} />
       <DividerComponent />
-      <FriendListComponent user={state.user} />
+      <FriendListComponent user={user} />
     </div>
   );
 };

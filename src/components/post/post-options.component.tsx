@@ -11,8 +11,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 
-import ShowIf from 'src/components/common/show-if.component';
-
 type PostOptionsProps = {
   ownPost: boolean;
   postId: string;
@@ -34,6 +32,13 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 );
+
+type MenuOptions = {
+  id: string;
+  name: string;
+  show: boolean;
+  onClick: () => void;
+};
 
 export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPost }) => {
   const styles = useStyles();
@@ -79,6 +84,33 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPo
     setAnchorEl(null);
   };
 
+  const menuList: MenuOptions[] = [
+    {
+      id: 'edit-post',
+      name: 'Edit post',
+      show: ownPost,
+      onClick: handleEditPost
+    },
+    {
+      id: 'copy-link',
+      name: 'Copy link...',
+      show: true,
+      onClick: handleCopyLink
+    },
+    {
+      id: 'visit-myriad-account',
+      name: 'Visit Myriad account',
+      show: !ownPost,
+      onClick: handleVisitMyriadAccount
+    },
+    {
+      id: 'visit-social-post',
+      name: 'Visit social post',
+      show: !ownPost,
+      onClick: handleVisitSocialPost
+    }
+  ];
+
   return (
     <div className={styles.root}>
       <IconButton aria-label="post-setting" onClick={handleClick} disableRipple={true} disableFocusRipple={true} disableTouchRipple>
@@ -94,29 +126,17 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPo
         open={open}
         TransitionComponent={Fade}
         onClose={handleClose}>
-        <ShowIf condition={ownPost}>
-          <MenuItem aria-label="edit-post" onClick={handleEditPost}>
-            Edit post
-          </MenuItem>
-          <MenuItem aria-label="copy-link" onClick={handleCopyLink}>
-            Copy link...
-          </MenuItem>
-        </ShowIf>
-
-        <ShowIf condition={!ownPost}>
-          <MenuItem onClick={handleVisitMyriadAccount}>Visit Myriad account</MenuItem>
-          <MenuItem onClick={handleVisitSocialPost}>Visit social post</MenuItem>
-          <MenuItem onClick={handleCopyLink}>Copy link...</MenuItem>
-        </ShowIf>
-
-        {
-          //<MenuItem onClick={handleClick}>Save post to archive</MenuItem>
-          //<MenuItem onClick={handleClick}>Share...</MenuItem>
-        }
+        {menuList.map(item => {
+          return (
+            <MenuItem aria-label={item.id} onClick={item.onClick} key={item.id}>
+              {item.name}
+            </MenuItem>
+          );
+        })}
 
         <Divider />
 
-        <ShowIf condition={ownPost}>
+        {ownPost && (
           <MenuItem onClick={handleDeletePost}>
             <Button
               className={styles.danger}
@@ -129,9 +149,9 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPo
               Delete this Post
             </Button>
           </MenuItem>
-        </ShowIf>
+        )}
 
-        <ShowIf condition={!ownPost}>
+        {!ownPost && (
           <MenuItem onClick={handleReportPost}>
             <Button
               className={styles.danger}
@@ -144,7 +164,7 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPo
               Report this post
             </Button>
           </MenuItem>
-        </ShowIf>
+        )}
       </Menu>
     </div>
   );

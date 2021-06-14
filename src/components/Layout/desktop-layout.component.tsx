@@ -24,17 +24,22 @@ const DesktopLayoutComponent = ({ children, user }: Props) => {
 
   const { setting } = useLayout();
   const { state } = useUser();
-  const { getUserDetail, loadFcmToken } = useUserHook(user.address as string);
+  const { getUserDetail, loadFcmToken, setAsAnonymous } = useUserHook(user.address as string);
+  const isAnonymous = Boolean(user.anonymous);
 
   useEffect(() => {
     // TODO: this should be only loaded once on layout container
-    getUserDetail();
-    loadFcmToken();
+    if (!isAnonymous) {
+      getUserDetail();
+      loadFcmToken();
+    } else {
+      setAsAnonymous();
+    }
 
     return undefined;
-  }, []);
+  }, [isAnonymous]);
 
-  if (!state.user) return null;
+  if (!state.anonymous && !state.user) return null;
 
   return (
     <>
@@ -48,7 +53,7 @@ const DesktopLayoutComponent = ({ children, user }: Props) => {
           <NotifProvider>
             <div className={style.experience}>
               <ShowIf condition={!setting.focus}>
-                <SidebarComponent />
+                <SidebarComponent isAnonymous={isAnonymous} />
               </ShowIf>
             </div>
           </NotifProvider>

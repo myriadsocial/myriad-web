@@ -16,19 +16,20 @@ import { useStyles } from './create-post.style';
 import { PostSettingComponent } from './post-setting.component';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
+import { usePostHook } from 'src/hooks/use-post.hook';
 import { Experience } from 'src/interfaces/experience';
 import { User } from 'src/interfaces/user';
 import theme from 'src/themes/default';
 
 type Props = {
   user: User;
-  onSubmit: (text: string, tags: string[], files: File[]) => void;
   experiences: Experience[];
 };
 
-export default function CreatePostComponent({ onSubmit, user, experiences }: Props) {
+export default function CreatePostComponent({ user, experiences }: Props) {
   const styles = useStyles();
 
+  const { addPost } = usePostHook(user);
   const [postText, setPostText] = useState('');
   const [showCreatePost, setCreatePost] = useState(false);
 
@@ -43,7 +44,7 @@ export default function CreatePostComponent({ onSubmit, user, experiences }: Pro
   };
 
   const savePost = (text: string, tags: string[], files: File[]) => {
-    onSubmit(text, tags, files);
+    addPost(text, tags, files);
 
     toggleCreatePost();
   };

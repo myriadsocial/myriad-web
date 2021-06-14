@@ -7,7 +7,7 @@ import { ExtendedFriend, FriendStatus } from 'src/interfaces/friend';
 import { User } from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
 
-export const useFriendsHook = (user: User) => {
+export const useFriendsHook = (user: User | null) => {
   const { dispatch } = useFriends();
 
   const [friended, setFriended] = useState<ExtendedFriend[]>([]);
@@ -16,6 +16,8 @@ export const useFriendsHook = (user: User) => {
   const { showAlert } = useAlertHook();
 
   const loadRequests = async () => {
+    if (!user) return;
+
     setLoading(true);
 
     try {
@@ -33,6 +35,8 @@ export const useFriendsHook = (user: User) => {
   };
 
   const loadFriends = async () => {
+    if (!user) return;
+
     const friends: ExtendedFriend[] = await FriendAPI.getFriends(user.id);
 
     dispatch({
@@ -51,7 +55,10 @@ export const useFriendsHook = (user: User) => {
   };
 
   const sendRequest = async (destinationId: string) => {
+    if (!user) return;
+
     setLoading(true);
+
     try {
       await FriendAPI.sendRequest(user.id, destinationId);
 
@@ -68,7 +75,10 @@ export const useFriendsHook = (user: User) => {
   };
 
   const checkFriendStatus = async (userIds: string[]) => {
+    if (!user) return;
+
     setLoading(true);
+
     try {
       const requests = await FriendAPI.checkFriendStatus(userIds);
 

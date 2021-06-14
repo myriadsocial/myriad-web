@@ -32,8 +32,9 @@ const MobileLayoutComponent = ({ children, user }: Props) => {
 
   const { selectedSidebar, changeSelectedSidebar } = useLayout();
   const { state } = useUser();
-  const { getUserDetail, loadFcmToken } = useUserHook(user.address as string);
+  const { getUserDetail, loadFcmToken, setAsAnonymous } = useUserHook(user.address as string);
   const [value, setValue] = React.useState(0);
+  const isAnonymous = Boolean(user.anonymous);
 
   useEffect(() => {
     if (value !== selectedSidebar) {
@@ -42,15 +43,20 @@ const MobileLayoutComponent = ({ children, user }: Props) => {
   }, [selectedSidebar]);
 
   useEffect(() => {
-    // TODO: this should be only loaded once on layout container
-    getUserDetail();
-    loadFcmToken();
-
     changeSelectedSidebar(SidebarTab.HOME);
-    return undefined;
-  }, []);
 
-  if (!state.user) return null;
+    // TODO: this should be only loaded once on layout container
+    if (!isAnonymous) {
+      getUserDetail();
+      loadFcmToken();
+    } else {
+      setAsAnonymous();
+    }
+
+    return undefined;
+  }, [isAnonymous]);
+
+  if (!state.anonymous && !state.user) return null;
 
   return (
     <>
@@ -58,7 +64,7 @@ const MobileLayoutComponent = ({ children, user }: Props) => {
         <NotifProvider>
           <AppBar />
           <TabPanel value={value} index={SidebarTab.HOME} dir={theme.direction}>
-            <TimelineComponent user={state.user} />
+            <TimelineComponent isAnonymous={isAnonymous} />
           </TabPanel>
           <TabPanel value={value} index={SidebarTab.WALLET} dir={theme.direction}>
             <WalletComponent />
@@ -70,7 +76,7 @@ const MobileLayoutComponent = ({ children, user }: Props) => {
             <FriendComponent />
           </TabPanel>
           <TabPanel value={value} index={SidebarTab.NOTIFICATION} dir={theme.direction}>
-            <NotificationComponent />
+            <NotificationComponent isAnonymous={isAnonymous} />
           </TabPanel>
         </NotifProvider>
       </FriendsProvider>

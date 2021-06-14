@@ -17,6 +17,7 @@ import { TransactionProvider } from '../tippingJar/transaction.context';
 import { TokenProvider } from '../wallet/token.context';
 
 import { LayoutSettingProvider } from 'src/context/layout.context';
+import { UserProvider } from 'src/context/user.context';
 import TourComponent from 'src/tour/Tour.component';
 
 const DektopLayoutComponent = dynamic(() => import('./desktop-layout.component'));
@@ -49,25 +50,28 @@ const Layout = ({ children, session }: Props) => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <NoSsr>
-        <TourComponent user={session.user} />
-      </NoSsr>
+
       <LayoutSettingProvider>
-        <TransactionProvider>
-          <ExperienceProvider>
-            <ConverstionProvider>
-              <TokenProvider>
-                <TimelineProvider>
-                  {isMobile ? (
-                    <MobileLayoutComponent user={session.user}>{children}</MobileLayoutComponent>
-                  ) : (
-                    <DektopLayoutComponent user={session.user}>{children}</DektopLayoutComponent>
-                  )}
-                </TimelineProvider>
-              </TokenProvider>
-            </ConverstionProvider>
-          </ExperienceProvider>
-        </TransactionProvider>
+        <UserProvider>
+          <NoSsr>
+            <TourComponent user={session.user} />
+          </NoSsr>
+          <TransactionProvider>
+            <ExperienceProvider>
+              <ConverstionProvider>
+                <TokenProvider>
+                  <TimelineProvider>
+                    {isMobile ? (
+                      <MobileLayoutComponent user={session.user}>{children}</MobileLayoutComponent>
+                    ) : (
+                      <DektopLayoutComponent user={session.user}>{children}</DektopLayoutComponent>
+                    )}
+                  </TimelineProvider>
+                </TokenProvider>
+              </ConverstionProvider>
+            </ExperienceProvider>
+          </TransactionProvider>
+        </UserProvider>
       </LayoutSettingProvider>
 
       <AlertComponent />

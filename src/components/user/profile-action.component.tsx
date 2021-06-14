@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ShowIf from '../common/show-if.component';
 
-import { LoginFormComponent } from 'src/components/login/login-form.component';
-import { ProfileEditComponent } from 'src/components/profile/profile-edit.component';
-import { ExtendedUser } from 'src/interfaces/user';
+import { CreateAccountComponent } from 'src/components/login/create-account.component';
 
 const useStyles = makeStyles({
   root: {}
@@ -18,39 +15,21 @@ const useStyles = makeStyles({
 
 type ProfileActionProps = {
   anonymous: boolean;
-  user?: ExtendedUser;
+  userId?: string;
+  onEditProfileClicked: () => void;
+  onLoginCliked: () => void;
 };
 
-export const ProfileActionComponent: React.FC<ProfileActionProps> = ({ anonymous, user }) => {
+export const ProfileActionComponent: React.FC<ProfileActionProps> = ({ anonymous, userId, onEditProfileClicked, onLoginCliked }) => {
   const styles = useStyles();
-
-  const router = useRouter();
-  const [loginOpened, openLogin] = useState(false);
-  const [open, setOpen] = useState(false);
-
-  const toggleLogin = () => {
-    openLogin(!loginOpened);
-  };
-
-  const toggleProfileForm = () => {
-    setOpen(!open);
-  };
-
-  const viewProfile = () => {
-    if (!user) return;
-
-    router.push(`/${user.id}`);
-  };
 
   return (
     <div className={styles.root}>
       <ShowIf condition={anonymous}>
-        <Button disableRipple={true} disableFocusRipple={true} variant="contained" size="medium" color="primary">
-          Get a name, Login or Register
-        </Button>
+        <CreateAccountComponent />
       </ShowIf>
 
-      {user && (
+      {!anonymous && (
         <>
           <Button
             disableRipple={true}
@@ -58,19 +37,17 @@ export const ProfileActionComponent: React.FC<ProfileActionProps> = ({ anonymous
             variant="contained"
             size="medium"
             color="primary"
-            onClick={toggleProfileForm}>
+            onClick={onEditProfileClicked}>
             Edit Profile
           </Button>
-          <ProfileEditComponent toggleProfileForm={toggleProfileForm} open={open} user={user} />
-          <Button disableRipple={true} disableFocusRipple={true} variant="contained" size="medium" color="primary" onClick={viewProfile}>
-            View Profile
-          </Button>
+
+          <Link href={`/${userId}`}>
+            <Button disableRipple={true} disableFocusRipple={true} variant="contained" size="medium" color="primary">
+              View Profile
+            </Button>
+          </Link>
         </>
       )}
-
-      <Dialog open={loginOpened} onClose={toggleLogin} maxWidth="xs">
-        <LoginFormComponent />
-      </Dialog>
     </div>
   );
 };

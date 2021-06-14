@@ -24,7 +24,7 @@ const Conversation = ({ post, user }: Props) => {
 
   return (
     <div>
-      <PostComponent post={state.viewed} open={true} />
+      <PostComponent post={state.viewed} />
     </div>
   );
 };

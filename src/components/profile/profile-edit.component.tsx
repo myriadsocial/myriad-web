@@ -220,7 +220,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
 
             <div style={{ width: 360 }}>
               <div>
-                <SocialListComponent user={user} />
+                <SocialListComponent isAnonymous={user.anonymous} user={user} />
               </div>
               <div style={{ marginTop: '72px' }}>
                 <Typography variant="body1" className={style.subtitle}>

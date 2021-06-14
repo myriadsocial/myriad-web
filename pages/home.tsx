@@ -15,33 +15,26 @@ import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
 import { Wallet } from 'src/components/wallet/wallet.component';
 import { FriendsProvider } from 'src/context/friends.context';
-import { useUser } from 'src/context/user.context';
 import { healthcheck } from 'src/lib/api/healthcheck';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
     user: {
+      width: 327,
       flex: '0 0 327px',
       marginRight: 0,
       'scrollbar-color': '#A942E9 #171717',
       'scrollbar-width': 'thin !important'
     },
-    wallet: {
+    fullwidth: {
       width: 327
     },
-    fullheight: {
-      height: '100vh'
-    },
-    profile: {
-      flexGrow: 1
-    },
     content: {
-      // flex: '1 1 auto',
+      flex: 1,
       marginLeft: 'auto',
       marginRight: 'auto',
       padding: '0 24px 0 24px',
-      height: '100vh',
       maxWidth: 726,
       [theme.breakpoints.up('xl')]: {
         maxWidth: 926
@@ -56,9 +49,7 @@ export default function Home() {
   const [session, loading] = useSession();
   const router = useRouter();
 
-  const {
-    state: { user }
-  } = useUser();
+  const isAnonymous = !!session?.user.anonymous;
 
   useEffect(() => {
     if (!session && !loading) {
@@ -69,35 +60,31 @@ export default function Home() {
   // When rendering client side don't display anything until loading is complete
   if (typeof window !== 'undefined' && loading) return null;
 
-  if (!session?.user) return null;
+  if (!session) return null;
 
   return (
     <Layout session={session}>
-      {user && (
-        <>
-          <Grid item className={style.user}>
-            <Grid className={style.fullheight} container direction="row" justify="flex-start" alignContent="flex-start">
-              <Grid item className={style.profile}>
-                <UserDetail user={user} />
-              </Grid>
-              <Grid item className={style.wallet}>
-                <FriendsProvider>
-                  <ShowIf condition={!user.anonymous}>
-                    <NoSsr>
-                      <Wallet />
-                    </NoSsr>
-                  </ShowIf>
-                </FriendsProvider>
+      <Grid item className={style.user}>
+        <Grid container direction="row" justify="flex-start" alignContent="flex-start">
+          <Grid item className={style.fullwidth}>
+            <UserDetail user={session.user} isAnonymous={isAnonymous} />
+          </Grid>
+          <Grid item className={style.fullwidth}>
+            <FriendsProvider>
+              <ShowIf condition={!isAnonymous}>
+                <NoSsr>
+                  <Wallet />
+                </NoSsr>
+              </ShowIf>
+            </FriendsProvider>
 
-                <TopicComponent />
-              </Grid>
-            </Grid>
+            <TopicComponent />
           </Grid>
-          <Grid item className={style.content}>
-            <Timeline user={user} />
-          </Grid>
-        </>
-      )}
+        </Grid>
+      </Grid>
+      <Grid item className={style.content}>
+        <Timeline isAnonymous={isAnonymous} />
+      </Grid>
     </Layout>
   );
 }

@@ -4,6 +4,7 @@ import { ExtendedUser } from 'src/interfaces/user';
 
 export enum UserActionType {
   FETCH_USER = 'FETCH_USER',
+  SET_ANONYMOUS = 'SET_ANONYMOUS',
   USER_LOADED = 'USER_LOADED'
 }
 
@@ -12,21 +13,27 @@ interface UserLoaded {
   payload: ExtendedUser;
 }
 
+interface SetAsAnonymous {
+  type: UserActionType.SET_ANONYMOUS;
+}
+
 interface FetchUser {
   type: UserActionType.FETCH_USER;
 }
 
-type Action = UserLoaded | FetchUser;
+type Action = UserLoaded | FetchUser | SetAsAnonymous;
 type Dispatch = (action: Action) => void;
 type UserProviderProps = { children: React.ReactNode };
 
 type State = {
   user: ExtendedUser | null;
+  anonymous: boolean;
   loading: boolean;
 };
 
 const initalState = {
   loading: false,
+  anonymous: false,
   user: null
 };
 
@@ -45,6 +52,13 @@ function userReducer(state: State, action: Action) {
       return {
         ...state,
         loading: true
+      };
+    }
+    case UserActionType.SET_ANONYMOUS: {
+      return {
+        ...state,
+        loading: false,
+        anonymous: true
       };
     }
     default: {
