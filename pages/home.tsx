@@ -15,6 +15,7 @@ import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
 import { Wallet } from 'src/components/wallet/wallet.component';
 import { FriendsProvider } from 'src/context/friends.context';
+import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
 import { healthcheck } from 'src/lib/api/healthcheck';
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -27,14 +28,33 @@ export const useStyles = makeStyles((theme: Theme) =>
       'scrollbar-color': '#A942E9 #171717',
       'scrollbar-width': 'thin !important'
     },
+    wallet: {
+      width: 327
+    },
     fullwidth: {
       width: 327
+    },
+    fullheight: {
+      height: '100vh'
+    },
+    profile: {
+      flexGrow: 1
     },
     content: {
       flex: 1,
       marginLeft: 'auto',
       marginRight: 'auto',
       padding: '0 24px 0 24px',
+      height: '100vh',
+      maxWidth: 726,
+      [theme.breakpoints.up('xl')]: {
+        maxWidth: 926
+      }
+    },
+    searchedContent: {
+      marginLeft: 0,
+      padding: '0 24px 0 24px',
+      height: '100vh',
       maxWidth: 726,
       [theme.breakpoints.up('xl')]: {
         maxWidth: 926
@@ -50,6 +70,12 @@ export default function Home() {
   const router = useRouter();
 
   const isAnonymous = !!session?.user.anonymous;
+
+  const { load, searching } = useMyriadUser();
+
+  useEffect(() => {
+    load();
+  }, []);
 
   useEffect(() => {
     if (!session && !loading) {
@@ -82,7 +108,7 @@ export default function Home() {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item className={style.content}>
+      <Grid item className={searching ? style.searchedContent : style.content}>
         <Timeline isAnonymous={isAnonymous} />
       </Grid>
     </Layout>

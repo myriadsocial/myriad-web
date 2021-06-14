@@ -13,6 +13,7 @@ import theme from '../src/themes/light';
 
 import { WalletAddressProvider } from 'src/components/post/send-tip.context';
 import { ProfileProvider } from 'src/components/profile/profile.context';
+import { SearchProvider } from 'src/components/search/search.context';
 import { AlertProvider } from 'src/context/Alert.context';
 import { UserProvider } from 'src/context/user.context';
 
@@ -69,7 +70,9 @@ const App = ({ Component, pageProps }: AppProps) => {
                 <UserProvider>
                   <ProfileProvider>
                     <AlertProvider>
-                      <Component {...pageProps} />
+                      <SearchProvider>
+                        <Component {...pageProps} />
+                      </SearchProvider>
                     </AlertProvider>
                   </ProfileProvider>
                 </UserProvider>

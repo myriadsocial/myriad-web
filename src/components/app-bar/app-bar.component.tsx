@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -12,9 +12,10 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
 import LogoImageCompact from 'src/images/header-logo-compact.svg';
 import LogoImage from 'src/images/header-logo.svg';
-import { User as MyriadUser } from 'src/interfaces/user';
 
-const SearchUserComponent = dynamic(() => import('../timeline/search-user.component'));
+//import { User as MyriadUser } from 'src/interfaces/user';
+
+const SearchUserComponent = dynamic(() => import('../search/search.component'));
 const DesktopMenuComponent = dynamic(() => import('./desktop-menu.component'));
 const MobileMenuComponent = dynamic(() => import('./mobile-menu.component'));
 
@@ -83,16 +84,19 @@ export default function HeaderBar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const { users: options, search } = useMyriadUser();
+  const { load, search } = useMyriadUser();
+
+  useEffect(() => {
+    load();
+  }, []);
 
   const searchUser = (text: string) => {
     search(text);
-    console.log('searching');
   };
 
-  const onSearchUser = (users: MyriadUser) => {
-    //console.log('the users are: ', users);
-  };
+  //const onSearchUser = (users: MyriadUser) => {
+  //console.log('the users are: ', users);
+  //};
 
   return (
     <div className={classes.grow}>
@@ -104,13 +108,8 @@ export default function HeaderBar() {
             </Link>
           </div>
           <div className={classes.grow} />
-          <div className={classes.search} id="search-app">
-            <SearchUserComponent
-              title={isMobile ? 'Search on Myria' : 'Search for people on Myriad'}
-              data={options}
-              search={searchUser}
-              onSelected={onSearchUser}
-            />
+          <div className={classes.search}>
+            <SearchUserComponent placeholder={isMobile ? 'Search on Myria' : 'Search for people on Myriad'} search={searchUser} />
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop} id="user-menu">

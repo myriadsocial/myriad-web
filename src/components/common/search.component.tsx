@@ -26,15 +26,10 @@ const useStyles = makeStyles((theme: Theme) =>
       }
     },
     searchIcon: {
-      padding: theme.spacing(0, 2),
-      height: '100%',
-      position: 'absolute',
-      pointerEvents: 'none',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
+      color: theme.palette.primary.main
     },
     input: {
+      color: theme.palette.text.primary,
       padding: theme.spacing(0, 1),
       marginLeft: 0,
       transition: theme.transitions.create('width'),
@@ -82,7 +77,7 @@ export default function SearchComponent({ value = '', placeholder = 'Search', on
         inputProps={{
           'aria-label': 'search'
         }}
-        endAdornment={<SearchIcon />}
+        endAdornment={<SearchIcon className={classes.searchIcon} />}
       />
     </div>
   );
