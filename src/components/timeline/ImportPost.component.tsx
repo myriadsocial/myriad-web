@@ -1,3 +1,5 @@
+import { LinkPreview } from '@dhaiwat10/react-link-preview';
+
 import React, { useState } from 'react';
 
 import Button from '@material-ui/core/Button';
@@ -158,6 +160,7 @@ export default function ImportPostComponent({ user, experiences }: Props) {
                 //<FormHelperText>Select an experience where the post will be stored</FormHelperText>
                 //</FormControl>
               }
+              <LinkPreview url={postURL} width="400px" />
             </CardContent>
             <CardActions className={styles.cardActions}>
               <Button variant="contained" size="large" color="secondary" onClick={confirmImport}>

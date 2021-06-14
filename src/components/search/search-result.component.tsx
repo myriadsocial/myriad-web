@@ -44,7 +44,7 @@ export const useStyles = makeStyles((theme: Theme) =>
 type SearchResultProps = {
   users: User[];
   loading?: boolean;
-  user: User;
+  user: User | null;
   clickBack: () => void;
 };
 

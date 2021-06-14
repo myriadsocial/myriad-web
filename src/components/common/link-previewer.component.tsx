@@ -1,26 +1,44 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 
-import './link-previewer.style.ts';
+import { useStyles } from './link-previewer.style';
 
-export const LinkPreviewer = props => {
+type LinkPreviewerProps = {
+  image: string;
+  title: string;
+  text: string;
+  href: string;
+  children: ReactNode;
+};
+
+const LinkPreviewer = ({ image, title, text, href, children }: LinkPreviewerProps) => {
+  const styles = useStyles();
   const [isShown, setIsShown] = useState(false);
 
   return (
-    <a href={props.href} className="link-with-preview" onMouseEnter={() => setIsShown(true)} onMouseLeave={() => setIsShown(false)}>
-      <span> {props.children} </span>
-      {isShown && <Card image={props.image} title={props.title} text={props.text} />}
+    <a href={href} className={styles.linkWithPreview} onMouseEnter={() => setIsShown(true)} onMouseLeave={() => setIsShown(false)}>
+      <span> {children} </span>
+      {isShown && <Card image={image} title={title} text={text} />}
     </a>
   );
 };
 
-const Card = props => {
+type CardProps = {
+  image: string;
+  title: string;
+  text: string;
+};
+
+const Card = ({ image, title, text }: CardProps) => {
+  const styles = useStyles();
   return (
-    <div className="card">
-      <img src={props.image} className="card-img-top" alt="" />
+    <div className={styles.card}>
+      <img src={image} className={styles.card} alt="no-image" />
       <div className="card-body">
-        <h5 className="card-title">{props.title}</h5>
-        <p className="card-text">{props.text}</p>
+        <h5 className="card-title">{title}</h5>
+        <p className="card-text">{text}</p>
       </div>
     </div>
   );
 };
+
+export default LinkPreviewer;

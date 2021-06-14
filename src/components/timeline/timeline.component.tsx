@@ -11,13 +11,11 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import DividerWithText from '../common/divider-w-text';
 import { LoadingPage } from '../common/loading.component';
-import { useExperience } from '../experience/use-experience.hooks';
 import ImportPostComponent from './ImportPost.component';
 import FilterTimelineComponent from './filter/filter.component';
 import { useStyles } from './timeline.style';
 
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
-import ShowIf from 'src/components/common/show-if.component';
 import CreatePostComponent from 'src/components/post/create/create-post.component';
 import PostComponent from 'src/components/post/post.component';
 import SearchResultComponent from 'src/components/search/search-result.component';
@@ -101,16 +99,12 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
     nextPosts();
   };
 
-<<<<<<< HEAD
   const handleClick = () => {
     loadingSequence();
     backToTimeline();
   };
 
-  console.log('TIMELINE COMPONENT LOAD');
-=======
   console.log('TIMELINE COMPONENT LOAD', hasMore);
->>>>>>> ed6d29b4144bb0b6f63e0a8f4454aac486d04c8a
 
   const LoadingComponent = () => {
     return (
