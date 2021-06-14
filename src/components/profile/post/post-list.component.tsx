@@ -10,7 +10,7 @@ import { useStyles } from '../profile.style';
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import { LoadingPage } from 'src/components/common/loading.component';
 import PostComponent from 'src/components/post/post.component';
-import { usePost } from 'src/hooks/use-post.hook';
+import { useTimelineHook } from 'src/hooks/use-timeline.hook';
 import { Post } from 'src/interfaces/post';
 import { User, ExtendedUserPost } from 'src/interfaces/user';
 
@@ -21,7 +21,7 @@ type Props = {
 
 export default function PostList({ user, profile }: Props) {
   const style = useStyles();
-  const { hasMore, loadMorePost } = usePost(user);
+  const { hasMore, nextPosts } = useTimelineHook();
 
   const isOwnPost = (post: Post) => {
     if (post.walletAddress === user.id) {
@@ -45,12 +45,12 @@ export default function PostList({ user, profile }: Props) {
         scrollableTarget="scrollable-timeline"
         className={style.child}
         dataLength={profile.posts.length || 100}
-        next={loadMorePost}
+        next={nextPosts}
         hasMore={hasMore}
         loader={<LoadingPage />}>
         {profile.posts.map((post: Post, i: number) => (
           <Grow key={i}>
-            <PostComponent post={post} open={false} postOwner={isOwnPost(post)} />
+            <PostComponent post={post} postOwner={isOwnPost(post)} />
           </Grow>
         ))}
 

@@ -57,6 +57,7 @@ export default function CommentComponent({ post, disableReply, hide }: Props) {
 
   const [session] = useSession();
   const userId = session?.user.id as string;
+  const isAnonymous = Boolean(session?.user.anonymous);
   const { freeBalance } = useBalance(userId);
   const childRef = useRef<any>();
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -123,7 +124,7 @@ export default function CommentComponent({ post, disableReply, hide }: Props) {
                     subheader={<DateFormat date={comment.createdAt} />}
                   />
                   <CardContent>
-                    <Typography variant="body1" color="textSecondary" component="p">
+                    <Typography variant="body1" color="textPrimary" component="p">
                       {comment.text}
                     </Typography>
                   </CardContent>
@@ -144,7 +145,7 @@ export default function CommentComponent({ post, disableReply, hide }: Props) {
       </TabPanel>
 
       <ShowIf condition={!disableReply}>
-        <ReplyCommentComponent close={hide} onSubmit={replyPost} />
+        <ReplyCommentComponent isAnonymous={isAnonymous} close={hide} onSubmit={replyPost} />
       </ShowIf>
     </div>
   );

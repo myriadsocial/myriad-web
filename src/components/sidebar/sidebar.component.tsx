@@ -18,7 +18,11 @@ import { SidebarTab } from 'src/interfaces/sidebar';
 const FriendComponent = dynamic(() => import('../friends/friend.component'));
 const NotificationComponent = dynamic(() => import('../notifications/notif.component'));
 
-export default function SidebarTabs() {
+type SidebarProps = {
+  isAnonymous: boolean;
+};
+
+export default function SidebarTabs({ isAnonymous }: SidebarProps) {
   const classes = useStyles();
   const theme = useTheme();
   const {
@@ -29,8 +33,6 @@ export default function SidebarTabs() {
 
   useEffect(() => {
     if (value !== selectedSidebarMenu) {
-      console.log('CHANGE_SELECTED_SIDEBAR HEH', value);
-
       setValue(selectedSidebarMenu);
     }
   }, [selectedSidebarMenu]);
@@ -51,7 +53,7 @@ export default function SidebarTabs() {
         <FriendComponent />
       </TabPanel>
       <TabPanel value={value} index={SidebarTab.NOTIFICATION} dir={theme.direction}>
-        <NotificationComponent />
+        <NotificationComponent isAnonymous />
       </TabPanel>
     </div>
   );

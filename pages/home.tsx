@@ -23,12 +23,16 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
     user: {
+      width: 327,
       flex: '0 0 327px',
       marginRight: 0,
       'scrollbar-color': '#A942E9 #171717',
       'scrollbar-width': 'thin !important'
     },
     wallet: {
+      width: 327
+    },
+    fullwidth: {
       width: 327
     },
     fullheight: {
@@ -38,7 +42,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1
     },
     content: {
-      // flex: '1 1 auto',
+      flex: 1,
       marginLeft: 'auto',
       marginRight: 'auto',
       padding: '0 24px 0 24px',
@@ -66,9 +70,7 @@ export default function Home() {
   const [session, loading] = useSession();
   const router = useRouter();
 
-  const {
-    state: { user }
-  } = useUser();
+  const isAnonymous = !!session?.user.anonymous;
 
   const { load, searching } = useMyriadUser();
 
@@ -85,35 +87,31 @@ export default function Home() {
   // When rendering client side don't display anything until loading is complete
   if (typeof window !== 'undefined' && loading) return null;
 
-  if (!session?.user) return null;
+  if (!session) return null;
 
   return (
     <Layout session={session}>
-      {user && (
-        <>
-          <Grid item className={style.user}>
-            <Grid className={style.fullheight} container direction="row" justify="flex-start" alignContent="flex-start">
-              <Grid item className={style.profile}>
-                <UserDetail user={user} />
-              </Grid>
-              <Grid item className={style.wallet}>
-                <FriendsProvider>
-                  <ShowIf condition={!user.anonymous}>
-                    <NoSsr>
-                      <Wallet />
-                    </NoSsr>
-                  </ShowIf>
-                </FriendsProvider>
+      <Grid item className={style.user}>
+        <Grid container direction="row" justify="flex-start" alignContent="flex-start">
+          <Grid item className={style.fullwidth}>
+            <UserDetail user={session.user} isAnonymous={isAnonymous} />
+          </Grid>
+          <Grid item className={style.fullwidth}>
+            <FriendsProvider>
+              <ShowIf condition={!isAnonymous}>
+                <NoSsr>
+                  <Wallet />
+                </NoSsr>
+              </ShowIf>
+            </FriendsProvider>
 
-                <TopicComponent />
-              </Grid>
-            </Grid>
+            <TopicComponent />
           </Grid>
-          <Grid item className={searching ? style.searchedContent : style.content}>
-            <Timeline user={user} />
-          </Grid>
-        </>
-      )}
+        </Grid>
+      </Grid>
+      <Grid item className={searching ? style.searchedContent : style.content}>
+        <Timeline isAnonymous={isAnonymous} />
+      </Grid>
     </Layout>
   );
 }

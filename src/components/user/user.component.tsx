@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { User } from 'next-auth';
+
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
@@ -9,17 +11,18 @@ import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
-import ShowIf from '../common/show-if.component';
 import { ProfileActionComponent } from './profile-action.component';
 import { SocialListComponent } from './social-list.component';
 
+import { WithAdditionalParams } from 'next-auth/_utils';
 import { LoginFormComponent } from 'src/components/login/login-form.component';
+import { ProfileEditComponent } from 'src/components/profile/profile-edit.component';
+import { useUser } from 'src/context/user.context';
 import { acronym } from 'src/helpers/string';
-import { ExtendedUser } from 'src/interfaces/user';
 
 type Props = {
-  loggedIn?: boolean;
-  user: ExtendedUser;
+  isAnonymous: boolean;
+  user: WithAdditionalParams<User>;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -56,17 +59,23 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const UserComponent: React.FC<Props> = ({ user }) => {
+const UserComponent: React.FC<Props> = ({ isAnonymous, user }) => {
   const style = useStyles();
 
+  const { state: userState } = useUser();
   const [loginOpened, openLogin] = React.useState(false);
+  const [editProfile, setEditProfile] = React.useState(false);
 
   const toggleLogin = () => {
     openLogin(!loginOpened);
   };
 
+  const toggleEdit = () => {
+    setEditProfile(!editProfile);
+  };
+
   const getProfilePicture = (): string => {
-    const avatar = user.profilePictureURL as string;
+    const avatar = userState.user?.profilePictureURL as string;
 
     return avatar || '';
   };
@@ -80,10 +89,10 @@ const UserComponent: React.FC<Props> = ({ user }) => {
             <Avatar
               aria-label={`${user.name} avatar`}
               src={getProfilePicture()}
-              variant="circle"
+              variant="circular"
               sizes="lg"
               style={{ width: 72, height: 72 }}>
-              {acronym(user.name)}
+              {acronym(user.name as string)}
             </Avatar>
           }
           title={
@@ -91,14 +100,14 @@ const UserComponent: React.FC<Props> = ({ user }) => {
               {user.name}
             </Typography>
           }
-          subheader={<ProfileActionComponent anonymous={user.anonymous} user={user} />}
+          subheader={<ProfileActionComponent anonymous={isAnonymous} onEditProfileClicked={toggleEdit} onLoginCliked={toggleLogin} />}
         />
         <CardContent style={{ padding: '16px 0' }}>
-          <ShowIf condition={!user.anonymous}>
-            <SocialListComponent user={user} />
-          </ShowIf>
+          <SocialListComponent isAnonymous={isAnonymous} user={userState.user} />
         </CardContent>
       </Card>
+
+      {userState.user && <ProfileEditComponent open={editProfile} user={userState.user} toggleProfileForm={toggleEdit} />}
 
       <Dialog open={loginOpened} onClose={toggleLogin} maxWidth="xs">
         <LoginFormComponent />

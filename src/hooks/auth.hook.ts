@@ -62,7 +62,7 @@ export const useAuthHook = () => {
 
   const signInWithAccount = (account: InjectedAccountWithMeta) => {
     signIn('credentials', {
-      address: account.address,
+      address: toHexPublicKey(account),
       name: account.meta.name,
       anonymous: false,
       callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home'

@@ -25,6 +25,7 @@ export const useProfileHook = user => {
     setLoading(true);
 
     try {
+      console.log('getProfile');
       const { data } = await MyriadAPI({
         url: `/users/${user.address}`,
         method: 'GET'

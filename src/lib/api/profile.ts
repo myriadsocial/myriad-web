@@ -9,6 +9,7 @@ const MyriadAPI = Axios.create({
 });
 
 export const getUserProfile = async (id: string): Promise<ExtendedUserPost> => {
+  console.log('getUserProfile');
   const { data } = await MyriadAPI.request<ExtendedUserPost>({
     url: `users/${id}`,
     method: 'GET'
@@ -62,7 +63,6 @@ export const getImportedPost = async (id: string) => {
 
   if (data.length > 0) {
     for await (const post of data) {
-      console.log('post.importBy', post.importBy);
       if (post.importBy && post.importBy.length > 0) {
         const user = await UserAPI.getUserDetail(post.importBy[0]);
 

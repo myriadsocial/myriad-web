@@ -1,6 +1,5 @@
 import Axios from 'axios';
 import { Post, Comment, PostSortMethod, PostFilter, ImportPost } from 'src/interfaces/post';
-import { User } from 'src/interfaces/user';
 
 const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
@@ -8,7 +7,7 @@ const MyriadAPI = Axios.create({
 
 const LIMIT = 10;
 
-export const getPost = async (user: User, page: number, sort: PostSortMethod, filters: PostFilter): Promise<Post[]> => {
+export const getPost = async (page: number, sort: PostSortMethod, filters: PostFilter): Promise<Post[]> => {
   let orderField = 'platformCreatedAt';
 
   switch (sort) {
@@ -24,27 +23,27 @@ export const getPost = async (user: User, page: number, sort: PostSortMethod, fi
   }
 
   let where = {
-    and: [
-      {
-        platform: {
-          inq: [...filters.platform, 'myriad']
-        }
-      },
-      {
-        or: [
-          {
-            tags: {
-              inq: filters.tags
-            }
-          },
-          {
-            'platformUser.username': {
-              inq: [...filters.people, user.name]
-            }
-          }
-        ]
-      }
-    ]
+    // and: [
+    //   {
+    //     platform: {
+    //       inq: [...filters.platform, 'myriad']
+    //     }
+    //   },
+    //   {
+    //     or: [
+    //       {
+    //         tags: {
+    //           inq: filters.tags
+    //         }
+    //       },
+    //       {
+    //         'platformUser.username': {
+    //           inq: filters.people
+    //         }
+    //       }
+    //     ]
+    //   }
+    // ]
   };
 
   if (filters.layout === 'photo') {

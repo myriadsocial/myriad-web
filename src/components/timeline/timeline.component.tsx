@@ -22,16 +22,16 @@ import CreatePostComponent from 'src/components/post/create/create-post.componen
 import PostComponent from 'src/components/post/post.component';
 import SearchResultComponent from 'src/components/search/search-result.component';
 import { useTimeline } from 'src/context/timeline.context';
+import { useUser } from 'src/context/user.context';
 import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
-import { usePost } from 'src/hooks/use-post.hook';
-import { Post, PostSortMethod } from 'src/interfaces/post';
-import { User } from 'src/interfaces/user';
+import { useTimelineHook } from 'src/hooks/use-timeline.hook';
+import { Post } from 'src/interfaces/post';
 
 type TimelineProps = {
-  user: User;
+  isAnonymous: boolean;
 };
 
-const Timeline: React.FC<TimelineProps> = ({ user }) => {
+const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
   const style = useStyles();
 
   const { searching, backToTimeline, users: options } = useMyriadUser();
@@ -58,15 +58,21 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const {
+    state: { user }
+  } = useUser();
   const { state } = useTimeline();
-  const { hasMore, loadUserPost, loadMorePost, sortBy, addPost, importPost } = usePost(user);
-  const { experiences } = useExperience(user.id);
+
+  const { hasMore, loadTimeline, nextPosts, sortTimeline } = useTimelineHook();
   const scrollRoot = createRef<HTMLDivElement>();
 
   const isOwnPost = (post: Post) => {
+    if (!user) return false;
+
     if (post.walletAddress === user.id) {
       return true;
     }
+
     return false;
   };
 
@@ -75,7 +81,7 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
   }, []);
 
   useEffect(() => {
-    loadUserPost();
+    loadTimeline();
   }, []);
 
   const handleScroll = useCallback(() => {
@@ -91,27 +97,20 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
   }, []);
 
   const nextPage = () => {
-    loadMorePost();
+    console.log('nextPage');
+    nextPosts();
   };
 
-  const sortTimeline = (sort: PostSortMethod) => {
-    sortBy(sort);
-  };
-
-  const submitPost = (text: string, tags: string[], files: File[]) => {
-    addPost(text, tags, files);
-  };
-
-  const submitImportPost = (URL: string) => {
-    importPost(URL);
-  };
-
+<<<<<<< HEAD
   const handleClick = () => {
     loadingSequence();
     backToTimeline();
   };
 
   console.log('TIMELINE COMPONENT LOAD');
+=======
+  console.log('TIMELINE COMPONENT LOAD', hasMore);
+>>>>>>> ed6d29b4144bb0b6f63e0a8f4454aac486d04c8a
 
   const LoadingComponent = () => {
     return (
@@ -127,13 +126,15 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
   return (
     <div className={style.root}>
       <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
-        <ShowIf condition={!user.anonymous}>
-          <CreatePostComponent onSubmit={submitPost} experiences={experiences} user={user} />
+        {user && (
+          <>
+            <CreatePostComponent user={user} experiences={[]} />
 
-          <DividerWithText>or</DividerWithText>
+            <DividerWithText>or</DividerWithText>
 
-          <ImportPostComponent onSubmit={submitImportPost} experiences={experiences} />
-        </ShowIf>
+            <ImportPostComponent user={user} experiences={[]} />
+          </>
+        )}
 
         {!isMobile && <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />}
 
@@ -141,13 +142,14 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
           <InfiniteScroll
             scrollableTarget="scrollable-timeline"
             className={style.child}
-            dataLength={state.posts.length + 100}
+            dataLength={state.posts.length}
             next={nextPage}
             hasMore={hasMore}
+            onScroll={() => console.log('scroll')}
             loader={<LoadingPage />}>
             {state.posts.map((post: Post, i: number) => (
               <Grow key={i}>
-                <PostComponent post={post} open={false} postOwner={isOwnPost(post)} />
+                <PostComponent post={post} postOwner={isOwnPost(post)} />
               </Grow>
             ))}
 

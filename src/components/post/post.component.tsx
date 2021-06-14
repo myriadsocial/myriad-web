@@ -34,17 +34,17 @@ import { v4 as uuid } from 'uuid';
 const CommentComponent = dynamic(() => import('./comment/comment.component'));
 
 type Props = {
-  open?: boolean;
+  defaultExpanded?: boolean;
   disable?: boolean;
   post: Post;
   postOwner?: boolean;
 };
 
-export default function PostComponent({ post, open = false, disable = false, postOwner }: Props) {
+export default function PostComponent({ post, defaultExpanded = false, disable = false, postOwner }: Props) {
   const style = useStyles();
 
   const { detail } = useSocialDetail(post);
-  const [expanded, setExpanded] = useState(open);
+  const [expanded, setExpanded] = useState(defaultExpanded);
   const childRef = useRef<any>();
   const headerRef = useRef<any>();
 

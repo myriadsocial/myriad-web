@@ -51,14 +51,15 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type SocialListProps = {
-  user: ExtendedUser;
+  isAnonymous: boolean;
+  user: ExtendedUser | null;
 };
 
-export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
+export const SocialListComponent: React.FC<SocialListProps> = ({ isAnonymous, user }) => {
   const classes = useStyles();
 
-  const { isShared, shareOnTwitter, shareOnReddit, shareOnFacebook } = useShareSocial(user.id);
-  const { disconnectSocial } = useUserHook(user.id);
+  const { isShared, verifyPublicKeyShared } = useShareSocial(user?.id);
+  const { disconnectSocial } = useUserHook(user?.id);
   const [connecting, setConnecting] = useState(false);
   const [unlink, setUnlink] = useState<SocialsEnum | null>(null);
 
@@ -71,12 +72,11 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
 
   useEffect(() => {
     if (!isShared) {
-      setConnecting(false);
+      toggleConnect();
     }
   }, [isShared]);
 
   if (user && user.userCredentials.length > 0) {
-    console.log('user.userCredentials', user.userCredentials);
     const twitterCredential = user.userCredentials.find(item => item.people.platform === SocialsEnum.TWITTER);
     const facebookCredential = user.userCredentials.find(item => item.people.platform === SocialsEnum.FACEBOOK);
     const redditCredential = user.userCredentials.find(item => item.people.platform === SocialsEnum.REDDIT);
@@ -93,6 +93,10 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
       connected[SocialsEnum.REDDIT] = true;
     }
   }
+
+  const toggleConnect = () => {
+    setConnecting(!connecting);
+  };
 
   const connectSocial = (social: SocialsEnum) => () => {
     if (!connected[social]) {
@@ -111,25 +115,13 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
   };
 
   const verifyShared = (social: SocialsEnum, username: string) => {
-    switch (social) {
-      case SocialsEnum.TWITTER:
-        shareOnTwitter(username);
-        break;
-      case SocialsEnum.REDDIT:
-        shareOnReddit(username);
-        break;
-      case SocialsEnum.FACEBOOK:
-        shareOnFacebook(username);
-        break;
-      default:
-        break;
-    }
+    verifyPublicKeyShared(social, username);
   };
 
   return (
     <>
       <List subheader={<ListSubheader className={classes.subheader}>Link my social</ListSubheader>} className={classes.root}>
-        <ListItem>
+        <ListItem disabled={isAnonymous}>
           <ListItemIcon>
             <FacebookIcon className={classes.facebook} />
           </ListItemIcon>
@@ -140,7 +132,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
-        <ListItem>
+        <ListItem disabled={isAnonymous}>
           <ListItemIcon>
             <TwitterIcon className={classes.twitter} />
           </ListItemIcon>
@@ -151,7 +143,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
-        <ListItem>
+        <ListItem disabled={isAnonymous}>
           <ListItemIcon>
             <RedditIcon className={classes.reddit} />
           </ListItemIcon>
@@ -164,8 +156,8 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ user }) => {
         </ListItem>
       </List>
 
-      <ConnectComponent ref={connectRef} publicKey={user.id} verify={verifyShared} />
-      <ConnectSuccessComponent open={connecting && isShared} onClose={() => setConnecting(false)} />
+      {user && <ConnectComponent ref={connectRef} publicKey={user.id} verify={verifyShared} />}
+      <ConnectSuccessComponent open={connecting && isShared} onClose={toggleConnect} />
       <ConfirmDialog
         open={unlink !== null}
         handleClose={() => setUnlink(null)}

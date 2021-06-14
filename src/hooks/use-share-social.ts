@@ -9,7 +9,7 @@ const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
 });
 
-export const useShareSocial = (publicKey: string) => {
+export const useShareSocial = (publicKey?: string) => {
   const { showAlert } = useAlertHook();
 
   const [sharing, setSharing] = useState(false);
@@ -37,7 +37,35 @@ export const useShareSocial = (publicKey: string) => {
     }
   };
 
+  const verifyPublicKeyShared = async (platform: SocialsEnum, username: string) => {
+    if (!publicKey) return;
+
+    setSharing(true);
+
+    try {
+      await MyriadAPI.request({
+        method: 'POST',
+        url: '/verify',
+        data: {
+          username,
+          publicKey,
+          platform
+        }
+      });
+
+      setShared(true);
+    } catch (error) {
+      const err = error as AxiosError;
+
+      handleError(err);
+    } finally {
+      setSharing(false);
+    }
+  };
+
   const shareOnFacebook = async (username: string) => {
+    if (!publicKey) return;
+
     setSharing(true);
 
     try {
@@ -61,6 +89,8 @@ export const useShareSocial = (publicKey: string) => {
   };
 
   const shareOnReddit = async (username: string) => {
+    if (!publicKey) return;
+
     setSharing(true);
 
     try {
@@ -85,6 +115,8 @@ export const useShareSocial = (publicKey: string) => {
   };
 
   const shareOnTwitter = async (username: string) => {
+    if (!publicKey) return;
+
     setSharing(true);
 
     try {
@@ -111,6 +143,7 @@ export const useShareSocial = (publicKey: string) => {
   return {
     sharing,
     isShared,
+    verifyPublicKeyShared,
     shareOnFacebook,
     shareOnReddit,
     shareOnTwitter
