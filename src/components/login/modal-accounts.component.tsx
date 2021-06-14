@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Typography } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -11,6 +12,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import YouTubeIcon from '@material-ui/icons/YouTube';
 
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import Identicon from '@polkadot/react-identicon';
@@ -43,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: 16,
       fontWeight: 600,
       fontStyle: 'normal',
-      lineHeight: '20px'
+      lineHeight: '24px'
     },
     polkadot: {
       color: 'rgb(255, 140, 0)'
@@ -59,6 +61,20 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(0, 0.5),
       fontSize: 10,
       color: '#BCBCBC'
+    },
+    buttonGroup: {
+      width: '100%',
+      padding: theme.spacing(2, 2, 0, 2),
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+
+      '& .MuiButton-contained': {
+        background: theme.palette.background.paper,
+        fontSize: 16,
+        fontWeight: 600,
+        color: theme.palette.secondary.main
+      }
     }
   })
 );
@@ -82,29 +98,25 @@ export const ChooseAccountComponent: React.FC<ChooseAccountComponentProps> = ({ 
         <DialogContent className={style.wrapper}>
           <ShowIf condition={accounts.length == 0}>
             <Typography className={style.help}>
-              Make sure you already have account registered on{' '}
+              Please open your
               <Link href="https://polkadot.js.org/extension" target="_blank" className={style.polkadot}>
                 Polkadot.js
               </Link>{' '}
-              extension.
+              extension and create new account or import existing.Then reload this page.
             </Typography>
-            <Typography className={style.help}>
-              Follow{' '}
-              <Link
-                href="https://wiki.polkadot.network/docs/en/learn-account-generation#create-account"
-                target="_blank"
-                className={style.polkadot}>
-                this
-              </Link>{' '}
-              tutorial to create account.
-            </Typography>
+
+            <div className={style.buttonGroup}>
+              <Button variant="contained" fullWidth size="medium" href="https://polkadot.js.org/extension" startIcon={<YouTubeIcon />}>
+                Watch Tutorial Video
+              </Button>
+            </div>
           </ShowIf>
           <ShowIf condition={accounts.length > 0}>
             <Typography variant="h4">Extension Account</Typography>
             <List className={style.list}>
               {accounts.map(account => {
                 return (
-                  <ListItem disableGutters onClick={() => onSelect(account)} key={account.address}>
+                  <ListItem disableGutters onClick={() => onSelect(account)} key={account.address} button>
                     <ListItemAvatar>
                       <Identicon value={account.address} size={48} theme="polkadot" />
                     </ListItemAvatar>
