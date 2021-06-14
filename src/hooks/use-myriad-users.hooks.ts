@@ -32,7 +32,9 @@ export const useMyriadUser = () => {
       } finally {
         setLoading(false);
       }
+      return;
     }
+    return;
   };
 
   const backToTimeline = () => {
