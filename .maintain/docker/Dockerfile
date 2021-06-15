@@ -2,7 +2,7 @@
 FROM node:14-buster-slim AS deps
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn install --network-timeout 100000
 
 # Rebuild the source code only when needed
 FROM node:14-buster-slim AS builder
