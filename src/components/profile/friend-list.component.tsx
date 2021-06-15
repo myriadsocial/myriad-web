@@ -27,12 +27,13 @@ import { useFriendsHook } from '../../hooks/use-friends-hook';
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
 import { useFriends } from 'src/context/friends.context';
+import { useUser } from 'src/context/user.context';
 import { acronym } from 'src/helpers/string';
 import RemoveUser from 'src/images/user-minus.svg';
 import { User } from 'src/interfaces/user';
 
 type Props = {
-  user: User;
+  profile: User;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -120,7 +121,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const FriendsList = ({ user }: Props) => {
+const FriendsList = ({ profile }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   // alert remove friend
@@ -129,8 +130,13 @@ const FriendsList = ({ user }: Props) => {
   const style = useStyles();
   const router = useRouter();
 
-  const { state } = useFriends();
-  const { loadFriends } = useFriendsHook(user);
+  const {
+    state: { friends }
+  } = useFriends();
+  const {
+    state: { user }
+  } = useUser();
+  const { loadFriends } = useFriendsHook(profile);
 
   useEffect(() => {
     loadFriends();
@@ -146,62 +152,109 @@ const FriendsList = ({ user }: Props) => {
 
   const visitProfile = (id: string) => {
     router.push(`/${id}`);
-    console.log(id, '<<<');
   };
 
   const toggleProfileForm = () => {
     setOpenModal(!openModal);
   };
 
+  if (!user) return null;
+
   return (
     <Box className={style.root}>
       <div>
         <div className={style.content}>
-          <ShowIf condition={state.friends.length === 0}>
+          <ShowIf condition={friends.length === 0}>
             <Typography variant="h4" color="textPrimary" className={style.noContent}>
               You don't have any Myriad friend, try to search for people or tell your friends about myriad
             </Typography>
           </ShowIf>
 
           <List className={style.list}>
-            {state.friends.map(request => {
+            {friends.map(request => {
               return (
                 <>
-                  <ListItem key={request.id} className={style.item} alignItems="center">
-                    <ListItemAvatar>
-                      <Avatar className={style.avatar} alt={request.requestor.name} src={request.requestor.profilePictureURL || ''}>
-                        {acronym(request.requestor.name || '')}
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                      <Typography component="span" variant="h4" color="textPrimary">
-                        {request.requestor.name}
-                      </Typography>
-                    </ListItemText>
-                    <ListItemSecondaryAction>
-                      <IconButton edge="end" aria-label="more" aria-controls="long-menu" aria-haspopup="true" onClick={handleClick}>
-                        <MoreVertIcon />
-                      </IconButton>
-                      <Menu id="long-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
-                        <MenuItem onClick={() => visitProfile(request.requestorId)}>Visit Profile</MenuItem>
-                        <MenuItem onClick={handleClose}>Add to Favorite</MenuItem>
-                        <Divider />
-                        <MenuItem onClick={toggleProfileForm}>
-                          <Button
-                            className={style.danger}
-                            disableRipple={true}
-                            disableFocusRipple={true}
-                            variant="text"
-                            color="default"
-                            size="medium"
-                            startIcon={<RemoveUser />}>
-                            Remove Friend
-                          </Button>
-                        </MenuItem>
-                      </Menu>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                  <Divider />
+                  {profile.id !== request.friendId && (
+                    <ListItem key={request.id} className={style.item} alignItems="center" divider={true}>
+                      <ListItemAvatar>
+                        <Avatar className={style.avatar} alt={request.friend.name} src={request.friend.profilePictureURL || ''}>
+                          {acronym(request.friend.name || '')}
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText>
+                        <Typography component="span" variant="h4" color="textPrimary">
+                          {request.friend.name}
+                        </Typography>
+                      </ListItemText>
+                      <ListItemSecondaryAction>
+                        {profile.id == user.id && (
+                          <>
+                            <IconButton edge="end" aria-label="more" aria-controls="long-menu" aria-haspopup="true" onClick={handleClick}>
+                              <MoreVertIcon />
+                            </IconButton>
+                            <Menu id="long-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
+                              <MenuItem onClick={() => visitProfile(request.friendId)}>Visit Profile</MenuItem>
+                              <MenuItem onClick={handleClose} divider={true} disabled={true}>
+                                Add to Favorite
+                              </MenuItem>
+                              <MenuItem onClick={toggleProfileForm}>
+                                <Button
+                                  className={style.danger}
+                                  disableRipple={true}
+                                  disableFocusRipple={true}
+                                  variant="text"
+                                  color="default"
+                                  size="medium"
+                                  startIcon={<RemoveUser />}>
+                                  Remove Friend
+                                </Button>
+                              </MenuItem>
+                            </Menu>
+                          </>
+                        )}
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  )}
+                  {profile.id !== request.requestorId && (
+                    <ListItem key={request.id} className={style.item} alignItems="center" divider={true}>
+                      <ListItemAvatar>
+                        <Avatar className={style.avatar} alt={request.requestor.name} src={request.requestor.profilePictureURL || ''}>
+                          {acronym(request.requestor.name || '')}
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText>
+                        <Typography component="span" variant="h4" color="textPrimary">
+                          {request.requestor.name}
+                        </Typography>
+                      </ListItemText>
+                      <ListItemSecondaryAction>
+                        {profile.id == user.id && (
+                          <>
+                            <IconButton edge="end" aria-label="more" aria-controls="long-menu" aria-haspopup="true" onClick={handleClick}>
+                              <MoreVertIcon />
+                            </IconButton>
+                            <Menu id="long-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
+                              <MenuItem onClick={() => visitProfile(request.requestorId)}>Visit Profile</MenuItem>
+                              <MenuItem onClick={handleClose}>Add to Favorite</MenuItem>
+                              <Divider />
+                              <MenuItem onClick={toggleProfileForm}>
+                                <Button
+                                  className={style.danger}
+                                  disableRipple={true}
+                                  disableFocusRipple={true}
+                                  variant="text"
+                                  color="default"
+                                  size="medium"
+                                  startIcon={<RemoveUser />}>
+                                  Remove Friend
+                                </Button>
+                              </MenuItem>
+                            </Menu>
+                          </>
+                        )}
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  )}
 
                   <Dialog open={openModal} aria-labelledby="no-extension-installed">
                     <DialogTitle id="name" onClose={toggleProfileForm}>
@@ -213,7 +266,7 @@ const FriendsList = ({ user }: Props) => {
                           <WarningRoundedIcon />
                         </SvgIcon>
                         <Typography className={style.subtitle1} variant="h2" color="error">
-                          Unfriend {request.requestor.name}
+                          Unfriend {profile.id == request.requestor.id ? request.friend.name : request.requestor.name}
                         </Typography>
                         <Typography className={`${style.subtitle2} ${style.alertMessage}  ${style.center} ${style['m-vertical2']}`}>
                           Are you sure want to remove this person from your friend list? You will{' '}

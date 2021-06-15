@@ -181,7 +181,7 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
                 <ImportedPostList user={user} profile={profile} />
               </TabPanel>
               <TabPanel value={value} index={2} dir={theme.direction}>
-                <FriendComponent />
+                <FriendComponent profile={profile} />
               </TabPanel>
               <TabPanel value={value} index={3} dir={theme.direction}>
                 <MyWalletTabs />
@@ -212,7 +212,7 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
                 <ImportedPostList user={user} profile={profile} />
               </TabPanel>
               <TabPanel value={value} index={2} dir={theme.direction}>
-                <FriendComponent />
+                <FriendComponent profile={profile} />
               </TabPanel>
             </SwipeableViews>
           </ShowIf>
