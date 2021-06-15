@@ -17,6 +17,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: 32
     },
     experience: {
+      minHeight: '100vh',
       filter: 'drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.16))',
       flex: '0 0 331px',
       'scrollbar-color': '#A942E9 #171717 ',

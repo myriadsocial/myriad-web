@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Typography } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -33,7 +34,8 @@ const useStyles = makeStyles((theme: Theme) =>
     content: {
       padding: 8,
       width: 250,
-      textAlign: 'center'
+      textAlign: 'center',
+      lineHeight: '24px'
     },
     polkadot: {
       color: 'rgb(255, 140, 0)'
@@ -49,6 +51,21 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(0, 0.5),
       fontSize: 10,
       color: '#BCBCBC'
+    },
+    buttonGroup: {
+      width: '100%',
+      padding: theme.spacing(2),
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+
+      '& .MuiButton-contained': {
+        background: theme.palette.background.paper,
+        fontSize: 16,
+        fontWeight: 600,
+        color: theme.palette.secondary.main,
+        width: 150
+      }
     }
   })
 );
@@ -84,6 +101,20 @@ export const NoExtensionComponent: React.FC<NoExtensionComponentProps> = ({ isOp
               </Link>{' '}
               extension on your browser before sign in
             </Typography>
+          </div>
+
+          <div className={style.buttonGroup}>
+            <Button
+              style={{ color: 'rgb(255, 140, 0)' }}
+              variant="contained"
+              size="medium"
+              href="https://polkadot.js.org/extension"
+              target="_blank">
+              Polkadot.js
+            </Button>
+            <Button variant="contained" size="medium" onClick={onClose}>
+              Close
+            </Button>
           </div>
         </DialogContent>
 

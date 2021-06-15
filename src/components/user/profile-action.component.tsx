@@ -32,6 +32,7 @@ export const ProfileActionComponent: React.FC<ProfileActionProps> = ({ anonymous
       {!anonymous && (
         <>
           <Button
+            id="#edit-profile"
             disableRipple={true}
             disableFocusRipple={true}
             variant="contained"
@@ -42,7 +43,7 @@ export const ProfileActionComponent: React.FC<ProfileActionProps> = ({ anonymous
           </Button>
 
           <Link href={`/${userId}`}>
-            <Button disableRipple={true} disableFocusRipple={true} variant="contained" size="medium" color="primary">
+            <Button id="#view-profile" disableRipple={true} disableFocusRipple={true} variant="contained" size="medium" color="primary">
               View Profile
             </Button>
           </Link>
