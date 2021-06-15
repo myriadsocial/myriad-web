@@ -26,7 +26,7 @@ const NotificationComponent: React.FC<NotifProps> = ({ isAnonymous }) => {
 
         <ShowIf condition={isAnonymous}>
           <Typography variant="h5" color="textPrimary" style={{ textAlign: 'center', padding: '16px 40px' }}>
-            You don't have any notification, create account to receive notfication.
+            You don't have any notification, create account to receive notification.
           </Typography>
         </ShowIf>
 
