@@ -9,8 +9,11 @@ import SearchComponent from 'src/components/common/search.component';
 import { useFriends } from 'src/context/friends.context';
 import { useUser } from 'src/context/user.context';
 import { useFriendsHook } from 'src/hooks/use-friends-hook';
+import { ExtendedUserPost } from 'src/interfaces/user';
 
-interface UserFriendProps {}
+interface UserFriendProps {
+  profile: ExtendedUserPost;
+}
 
 const UserFriendComponent: React.FC<UserFriendProps> = props => {
   const {
@@ -40,7 +43,7 @@ const UserFriendComponent: React.FC<UserFriendProps> = props => {
         <SearchComponent value={search} placeholder="Find a Friend" onSubmit={handleSearchFriend} />
       </div>
 
-      <FriendList user={user} />
+      <FriendList profile={props.profile} />
     </div>
   );
 };

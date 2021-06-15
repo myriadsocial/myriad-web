@@ -12,7 +12,7 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
 import { ListHeaderComponent } from './list-header.component';
 
-import moment from 'moment';
+import { formatDistance, subDays } from 'date-fns';
 import ShowIf from 'src/components/common/show-if.component';
 import { useNotif } from 'src/context/notif.context';
 import { acronym } from 'src/helpers/string';
@@ -91,7 +91,7 @@ const Notification = ({ user }: Props) => {
                         {notif.message}
                       </Typography>
                       <Typography variant="body2" color="textPrimary">
-                        {moment(notif.createdAt).fromNow()}
+                        {formatDistance(subDays(new Date(notif.createdAt), 0), new Date(), { addSuffix: true })}
                       </Typography>
                     </ListItemText>
                   </ListItem>
