@@ -25,7 +25,8 @@ const ImportedPostList = dynamic(() => import('./post/importedPost-list.componen
 const FriendComponent = dynamic(() => import('./user-friends.component'));
 
 type Props = {
-  user: ExtendedUser;
+  isAnonymous: boolean;
+  user: ExtendedUser | null;
   profile: ExtendedUserPost | null;
   loading: Boolean;
 };
@@ -106,7 +107,7 @@ function MyWalletTabs() {
 }
 // WALLET TAB
 
-export default function ProfileTimeline({ user, profile, loading }: Props) {
+export default function ProfileTimeline({ isAnonymous, user, profile, loading }: Props) {
   const {
     state: { totalFriends }
   } = useFriends();
@@ -125,7 +126,7 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
   };
 
   useEffect(() => {
-    if (user.id === profile?.id) setIsGuest(false);
+    if (user && user.id === profile?.id) setIsGuest(false);
     else setIsGuest(true);
   }, [profile]);
 
@@ -140,7 +141,7 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
   if (profile === null) {
     return (
       <div className={style.root}>
-        <Header user={user} profile={null} loading={loading} isGuest={true} />
+        <Header isAnonymous={isAnonymous} user={user} profile={null} loading={loading} isGuest={true} />
         <div style={{ textAlign: 'center' }}>
           <h1>This account doesn’t exist</h1>
           <Typography>Try searching for another.</Typography>
@@ -153,7 +154,7 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
     <div className={style.root}>
       <div className={style.scroll}>
         {/* HEADER */}
-        <Header user={user} profile={profile} loading={loading} isGuest={isGuest} />
+        <Header isAnonymous={isAnonymous} user={user} profile={profile} loading={loading} isGuest={isGuest} />
         {/* TAB */}
         <div className={style.root2}>
           <ShowIf condition={isGuest === false}>

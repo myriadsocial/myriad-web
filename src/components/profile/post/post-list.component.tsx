@@ -15,7 +15,7 @@ import { Post } from 'src/interfaces/post';
 import { User, ExtendedUserPost } from 'src/interfaces/user';
 
 type Props = {
-  user: User;
+  user: User | null;
   profile: ExtendedUserPost;
 };
 
@@ -24,7 +24,7 @@ export default function PostList({ user, profile }: Props) {
   const { hasMore, nextPosts } = useTimelineHook();
 
   const isOwnPost = (post: Post) => {
-    if (post.walletAddress === user.id) {
+    if (user && post.walletAddress === user.id) {
       return true;
     }
     return false;

@@ -26,6 +26,7 @@ export default function Profile({ session, params }: Props) {
   const { state: userState } = useUser();
   const { state: profileState } = useProfile();
   const { loading, getProfile } = useProfileHook(params.id);
+  const isAnonymous = !!session?.user.anonymous;
 
   const { getUserDetail } = useUserHook(session.user.address as string);
 
@@ -37,11 +38,11 @@ export default function Profile({ session, params }: Props) {
     getUserDetail();
   }, []);
 
-  if (!session || !userState.user) return null;
+  if (!session) return null;
 
   return (
     <Layout session={session}>
-      {userState && <ProfileTimeline user={userState.user} profile={profileState.profile} loading={loading} />}
+      {userState && <ProfileTimeline isAnonymous={isAnonymous} user={userState.user} profile={profileState.profile} loading={loading} />}
     </Layout>
   );
 }
