@@ -25,7 +25,8 @@ import { FriendStatus } from 'src/interfaces/friend';
 import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
 
 type Props = {
-  user: ExtendedUser;
+  isAnonymous: boolean;
+  user: ExtendedUser | null;
   profile: ExtendedUserPost | null;
   loading: Boolean;
   isGuest: Boolean;
@@ -35,7 +36,7 @@ function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export default function Header({ user, profile, loading, isGuest }: Props) {
+export default function Header({ isAnonymous, user, profile, loading, isGuest }: Props) {
   const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -167,6 +168,7 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
             <div style={{ marginTop: '40px' }}>
               <ShowIf condition={friendStatus?.status == null}>
                 <Button
+                  disabled={isAnonymous}
                   className={style.button2}
                   style={{ marginRight: 24 }}
                   color="primary"
@@ -261,14 +263,14 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
               </Button>
             </div>
             <div style={{ marginTop: '30px' }}>
-              <SocialListComponent isAnonymous={user.anonymous} user={user} />
+              <SocialListComponent isAnonymous={isAnonymous} user={user} />
             </div>
           </ShowIf>
         </div>
       </div>
 
       {/* MODAL */}
-      <ProfileEditComponent toggleProfileForm={toggleProfileForm} open={open} user={user} />
+      {user && <ProfileEditComponent toggleProfileForm={toggleProfileForm} open={open} user={user} />}
 
       <Snackbar open={isPublicKeyCopied} autoHideDuration={6000} onClose={closeNotify}>
         <Alert onClose={closeNotify} severity="success">
