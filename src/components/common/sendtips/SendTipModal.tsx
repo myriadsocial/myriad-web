@@ -2,6 +2,7 @@ import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'rea
 
 import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -307,6 +308,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         } else {
           toAddress = walletAddress;
         }
+        console.log('amount sent: ', amountSent);
 
         const sendTipPayload = {
           fromAddress: senderAddress,
@@ -413,6 +415,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         </Table>
       </TableContainer>
     );
+<<<<<<< HEAD:src/components/common/sendtips/SendTipModal.tsx
   };
 
   const hideDuration = 3000;
