@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { useProfile, ProfileActionType } from 'src/components/profile/profile.context';
 import { useFriendsHook } from 'src/hooks/use-friends-hook';
-import { FriendRequest } from 'src/interfaces/friend';
+import { FriendRequest, FriendStatus, ExtendedFriend } from 'src/interfaces/friend';
 import { User } from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
 
@@ -17,6 +17,42 @@ export const useFriendHook = (user: User | null) => {
   const { state: profileState, dispatch } = useProfile();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const getFriends = async () => {
+    if (!user) return;
+
+    setLoading(true);
+    try {
+      const friends: ExtendedFriend[] = await FriendAPI.getFriends(user.id);
+
+      dispatch({
+        type: ProfileActionType.LOAD_FRIENDS,
+        payload: friends
+      });
+    } catch (error) {
+      setError(error);
+      console.log(error, '<<<error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const searchFriend = async (query: string) => {
+    setLoading(true);
+
+    try {
+      const friends: ExtendedFriend[] = await FriendAPI.searchFriend(query);
+      dispatch({
+        type: ProfileActionType.LOAD_FRIENDS,
+        payload: friends
+      });
+    } catch (error) {
+      setError(error);
+      console.log(error, '<<<error');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const makeFriend = async (values: Partial<FriendRequest>) => {
     if (!user) return;
@@ -114,7 +150,9 @@ export const useFriendHook = (user: User | null) => {
   return {
     error,
     loading,
+    getFriends,
     makeFriend,
+    searchFriend,
     status,
     cancelFriendRequest,
     checkFriendStatus,
