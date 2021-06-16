@@ -88,7 +88,7 @@ const Friends = ({ user }: Props) => {
                 variant="h4"
                 color="textPrimary"
                 style={{ fontWeight: 500, fontSize: 14, textAlign: 'center', padding: '16px 0', color: '#B1AEB7' }}>
-                You don't have any Myriad friend, try to search for people or tell your friends about myriad
+                You don't have any Myriad friends, try to search for people or tell your friends about myriad
               </Typography>
             </ShowIf>
 

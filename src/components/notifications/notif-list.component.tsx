@@ -74,7 +74,7 @@ const Notification = ({ user }: Props) => {
           <div className={style.content}>
             <ShowIf condition={state.total == 0}>
               <Typography variant="h5" color="textPrimary" style={{ textAlign: 'center', padding: '16px 40px' }}>
-                You don't have any notification, let’s start post something
+                You don't have any notifications, start posting!
               </Typography>
             </ShowIf>
             <List className={style.list}>

@@ -11,6 +11,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 import { useStyles } from './header.style';
@@ -174,8 +175,9 @@ export default function Header({ isAnonymous, user, profile, loading, isGuest }:
                   color="primary"
                   variant="contained"
                   size="medium"
+                  startIcon={<PersonAddIcon />}
                   onClick={friendRequest}>
-                  Add Friends
+                  Add Friend
                 </Button>
               </ShowIf>
 
