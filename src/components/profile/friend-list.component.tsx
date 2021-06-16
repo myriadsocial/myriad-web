@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 
+// import { useRouter } from 'next/router';
 import { SvgIcon } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -22,11 +22,9 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 
-import { useFriendsHook } from '../../hooks/use-friends-hook';
-
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
-import { useFriends } from 'src/context/friends.context';
+import { useProfile } from 'src/components/profile/profile.context';
 import { useUser } from 'src/context/user.context';
 import { acronym } from 'src/helpers/string';
 import RemoveUser from 'src/images/user-minus.svg';
@@ -128,19 +126,14 @@ const FriendsList = ({ profile }: Props) => {
   const [openModal, setOpenModal] = useState(false);
 
   const style = useStyles();
-  const router = useRouter();
+  // const router = useRouter();
 
   const {
     state: { friends }
-  } = useFriends();
+  } = useProfile();
   const {
     state: { user }
   } = useUser();
-  const { loadFriends } = useFriendsHook(profile);
-
-  useEffect(() => {
-    loadFriends();
-  }, []);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -150,9 +143,9 @@ const FriendsList = ({ profile }: Props) => {
     setAnchorEl(null);
   };
 
-  const visitProfile = (id: string) => {
-    router.push(`/${id}`);
-  };
+  // const visitProfile = (id: string) => {
+  //   router.push(`/${id}`);
+  // };
 
   const toggleProfileForm = () => {
     setOpenModal(!openModal);
@@ -166,7 +159,7 @@ const FriendsList = ({ profile }: Props) => {
         <div className={style.content}>
           <ShowIf condition={friends.length === 0}>
             <Typography variant="h4" color="textPrimary" className={style.noContent}>
-              You don't have any Myriad friend, try to search for people or tell your friends about myriad
+              You don't have any Myriad friends, try to search for people or tell your friends about myriad
             </Typography>
           </ShowIf>
 
@@ -193,7 +186,11 @@ const FriendsList = ({ profile }: Props) => {
                               <MoreVertIcon />
                             </IconButton>
                             <Menu id="long-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
-                              <MenuItem onClick={() => visitProfile(request.friendId)}>Visit Profile</MenuItem>
+                              <Link href={`/${request.friendId}`}>
+                                <a>
+                                  <MenuItem>Visit Profile</MenuItem>
+                                </a>
+                              </Link>
                               <MenuItem onClick={handleClose} divider={true} disabled={true}>
                                 Add to Favorite
                               </MenuItem>
@@ -234,9 +231,14 @@ const FriendsList = ({ profile }: Props) => {
                               <MoreVertIcon />
                             </IconButton>
                             <Menu id="long-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
-                              <MenuItem onClick={() => visitProfile(request.requestorId)}>Visit Profile</MenuItem>
-                              <MenuItem onClick={handleClose}>Add to Favorite</MenuItem>
-                              <Divider />
+                              <Link href={`/${request.requestorId}`}>
+                                <a>
+                                  <MenuItem>Visit Profile</MenuItem>
+                                </a>
+                              </Link>
+                              <MenuItem onClick={handleClose} divider={true} disabled={true}>
+                                Add to Favorite
+                              </MenuItem>
                               <MenuItem onClick={toggleProfileForm}>
                                 <Button
                                   className={style.danger}

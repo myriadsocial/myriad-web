@@ -83,7 +83,7 @@ export default function Index() {
         <div className={style.header}>
           <LogoImage className={style.logo} />
           <Typography variant="h1" className={style.title}>
-            Social Media with <span className={style.titlePrimary}>no boundary</span>
+            Social Media with <span className={style.titlePrimary}>no boundaries</span>
           </Typography>
         </div>
 
