@@ -106,7 +106,7 @@ const FriendRequests = ({ user }: Props) => {
               variant="h4"
               color="textPrimary"
               style={{ fontWeight: 500, textAlign: 'center', fontSize: 14, color: '#B1AEB7', padding: '16px 0' }}>
-              You don't have any friend request
+              You don't have any friend requests
             </Typography>
           </ShowIf>
 

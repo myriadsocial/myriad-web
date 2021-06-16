@@ -46,7 +46,7 @@ export default function FilterTimelineComponent({ selected, onChange }: Props) {
           Date Posted
         </Button>
         <Button variant="contained" color="default" className={styles.button} onClick={() => handleSort('like')}>
-          Most Like
+          Most Liked
         </Button>
         <Button variant="contained" color="default" className={styles.button} onClick={() => handleSort('comment')}>
           Most Commented
