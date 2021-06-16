@@ -17,6 +17,7 @@ type Props = {
 
 const TourComponent: React.FC<Props> = ({ user }) => {
   const { state: userState } = useUser();
+  const isAnonymous = Boolean(user.anonymous);
 
   const { updateUser } = useUserHook(user.address as string);
   const [run, setRun] = useState(false);
@@ -71,8 +72,10 @@ const TourComponent: React.FC<Props> = ({ user }) => {
   ];
 
   useEffect(() => {
-    setRun(!Boolean(userState.user?.skip_tour));
-  }, [userState]);
+    if (!isAnonymous) {
+      setRun(!Boolean(userState.user?.skip_tour));
+    }
+  }, [userState.user, isAnonymous]);
 
   const handleJoyrideCallback = (data: CallBackProps) => {
     const { status } = data;
@@ -81,9 +84,11 @@ const TourComponent: React.FC<Props> = ({ user }) => {
       // Need to set our running state to false, so we can restart if we click start again.
       setRun(false);
 
-      updateUser({
-        skip_tour: true
-      });
+      if (!isAnonymous) {
+        updateUser({
+          skip_tour: true
+        });
+      }
     }
   };
 

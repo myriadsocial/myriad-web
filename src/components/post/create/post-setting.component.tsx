@@ -98,7 +98,7 @@ export const PostSettingComponent: React.FC<PostSettingProps> = ({ userId }) => 
               </ListItemSecondaryAction>
             </ListItem>
             <ListItem button>
-              <ListItemText primary="Only my friend" />
+              <ListItemText primary="Only my friends" />
               <ListItemSecondaryAction>
                 <Switch
                   edge="end"

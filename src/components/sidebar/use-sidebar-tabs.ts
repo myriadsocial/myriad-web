@@ -17,7 +17,7 @@ type TabElemement = {
 export const useSidebarTabs = () => {
   const tabElements: TabElemement[] = [
     {
-      title: 'World Wide',
+      title: 'Worldwide',
       icon: Language,
       component: TopicComponent,
       default: true

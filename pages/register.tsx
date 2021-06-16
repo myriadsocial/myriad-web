@@ -78,7 +78,7 @@ export default function Index() {
         <Grid item className={style.header}>
           <LogoImage className={style.logo} />
           <Typography variant="h1" className={style.title}>
-            Social Media with no boundary
+            Social Media with no boundaries
           </Typography>
         </Grid>
         <Grid item className={style.timeline}>
