@@ -21,6 +21,7 @@ export const usePolkadotApi = () => {
 
   const [dotBalance, setDotBalance] = useState();
   const [acaBalance, setACABalance] = useState();
+  const [ausdBalance, setAUSDBalance] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -54,22 +55,25 @@ export const usePolkadotApi = () => {
       setDotBalance(tokenData?.free);
 
       const ausdData = await api.query.tokens.accounts(address, { TOKEN: 'AUSD' });
-      setDotBalance(ausdData?.free);
+      setAUSDBalance(ausdData?.free);
 
       dispatch({
         type: BalanceActionType.INIT_BALANCE,
         balanceDetails: [
           {
             freeBalance: formatNumber(ausdData?.free as number, 12),
-            tokenSymbol: 'AUSD'
+            tokenSymbol: 'AUSD',
+            tokenDecimals: 12
           },
           {
             freeBalance: formatNumber(accountData.data.free as number, 13),
-            tokenSymbol: 'ACA'
+            tokenSymbol: 'ACA',
+            tokenDecimals: 13
           },
           {
             freeBalance: formatNumber(tokenData?.free as number, 10),
-            tokenSymbol: 'DOT'
+            tokenSymbol: 'DOT',
+            tokenDecimals: 10
           }
         ]
       });
@@ -148,8 +152,6 @@ export const usePolkadotApi = () => {
     error,
     load,
     tokens: state.balanceDetails,
-    formattedDOT,
-    formattedACA,
     sendTip
   };
 };

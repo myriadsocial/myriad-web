@@ -27,6 +27,7 @@ import SendTipModal from 'src/components/common/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
 //import { useBalance } from '../wallet/use-balance.hooks';
 import { useSocialDetail } from 'src/hooks/use-social.hook';
+import { BalanceDetail } from 'src/interfaces/balance';
 import { ImageData } from 'src/interfaces/post';
 import { Post } from 'src/interfaces/post';
 import { v4 as uuid } from 'uuid';
@@ -38,10 +39,10 @@ type Props = {
   disable?: boolean;
   post: Post;
   postOwner?: boolean;
-  freeBalance?: number;
+  balanceDetails: BalanceDetail[];
 };
 
-export default function PostComponent({ freeBalance, post, defaultExpanded = false, disable = false, postOwner }: Props) {
+export default function PostComponent({ balanceDetails, post, defaultExpanded = false, disable = false, postOwner }: Props) {
   const style = useStyles();
 
   const { detail } = useSocialDetail(post);
@@ -169,13 +170,13 @@ export default function PostComponent({ freeBalance, post, defaultExpanded = fal
         <ShowIf condition={expanded}>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent className={style.reply}>
-              <CommentComponent post={post} disableReply={disable} hide={handleExpandClick} freeBalance={freeBalance} />
+              <CommentComponent post={post} disableReply={disable} hide={handleExpandClick} balanceDetails={balanceDetails} />
             </CardContent>
           </Collapse>
         </ShowIf>
       </Card>
 
-      <SendTipModal userAddress={userId} ref={childRef} postId={post.id as string} freeBalance={freeBalance} />
+      <SendTipModal userAddress={userId} ref={childRef} postId={post.id as string} balanceDetails={balanceDetails} />
     </>
   );
 }

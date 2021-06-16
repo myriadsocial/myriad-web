@@ -104,7 +104,7 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
   const [session] = useSession();
   const userAddress = session?.user.address as string;
 
-  const { loading, error, tokens, load, formattedDOT, formattedACA } = usePolkadotApi();
+  const { loading, error, tokens, load } = usePolkadotApi();
 
   useEffect(() => {
     if (userAddress) {
@@ -123,12 +123,6 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
   const handleIsHidden = (e: React.MouseEvent<HTMLButtonElement>) => {
     setIsHidden(!isHidden);
   };
-
-  //function createData(currency: string, balance: number) {
-  //return { currency, balance };
-  //}
-
-  //const rows = [createData('MYRIA', freeBalance), createData('ACA', 100)];
 
   const TooltipContent = () => {
     return (
@@ -162,79 +156,33 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {
-              <>
-                <TableRow>
-                  <TableCell component="th" scope="row">
-                    <Typography className={style.balanceText}>
+            {tokens.map(row => (
+              <TableRow key={row.tokenSymbol}>
+                <TableCell component="th" scope="row">
+                  <Typography className={style.balanceText}>
+                    {row.tokenSymbol === 'MYRIA' ? (
                       <>
                         {' '}
-                        <StyledBadge>DOT</StyledBadge>
+                        <StyledBadge badgeContent={<StyledTooltip />}>MYRIA</StyledBadge>
                       </>
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    {isHidden ? (
-                      <Button onClick={handleIsHidden}>Show balance</Button>
-                    ) : loading ? (
-                      <CircularProgress className={style.spinner} size={20} />
-                    ) : error ? (
-                      <Typography className={style.errorText}>Error, try again!</Typography>
                     ) : (
-                      <Button onClick={handleIsHidden}>{formattedDOT()}</Button>
+                      row.tokenSymbol
                     )}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component="th" scope="row">
-                    <Typography className={style.balanceText}>
-                      <>
-                        {' '}
-                        <StyledBadge>ACA</StyledBadge>
-                      </>
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    {isHidden ? (
-                      <Button onClick={handleIsHidden}>Show balance</Button>
-                    ) : loading ? (
-                      <CircularProgress className={style.spinner} size={20} />
-                    ) : error ? (
-                      <Typography className={style.errorText}>Error, try again!</Typography>
-                    ) : (
-                      <Button onClick={handleIsHidden}>{formattedACA()}</Button>
-                    )}
-                  </TableCell>
-                </TableRow>
-              </>
-              //balanceDetails.map(row => (
-              //<TableRow key={row.tokenSymbol}>
-              //<TableCell component="th" scope="row">
-              //<Typography className={style.balanceText}>
-              //{row.tokenSymbol === 'MYRIA' ? (
-              //<>
-              //{' '}
-              //<StyledBadge badgeContent={<StyledTooltip />}>MYRIA</StyledBadge>
-              //</>
-              //) : (
-              //row.tokenSymbol
-              //)}
-              //</Typography>
-              //</TableCell>
-              //<TableCell align="right">
-              //{isHidden ? (
-              //<Button onClick={handleIsHidden}>Show balance</Button>
-              //) : loading ? (
-              //<CircularProgress className={style.spinner} size={20} />
-              //) : error ? (
-              //<Typography className={style.errorText}>Error, try again!</Typography>
-              //) : (
-              //<Button onClick={handleIsHidden}>{row.freeBalance}</Button>
-              //)}
-              //</TableCell>
-              //</TableRow>
-              //))
-            }
+                  </Typography>
+                </TableCell>
+                <TableCell align="right">
+                  {isHidden ? (
+                    <Button onClick={handleIsHidden}>Show balance</Button>
+                  ) : loading ? (
+                    <CircularProgress className={style.spinner} size={20} />
+                  ) : error ? (
+                    <Typography className={style.errorText}>Error, try again!</Typography>
+                  ) : (
+                    <Button onClick={handleIsHidden}>{row.freeBalance}</Button>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

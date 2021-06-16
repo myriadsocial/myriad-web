@@ -1,17 +1,27 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
+import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import Snackbar from '@material-ui/core/Snackbar';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import MuiTableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles, lighten } from '@material-ui/core/styles';
+import { createStyles, Theme, makeStyles, lighten, withStyles } from '@material-ui/core/styles';
+import InfoIcon from '@material-ui/icons/Info';
 import SendIcon from '@material-ui/icons/Send';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
@@ -19,6 +29,7 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 import DialogTitle from '../common/DialogTitle.component';
 
 import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
+import { BalanceDetail } from 'src/interfaces/balance';
 import * as WalletAddressAPI from 'src/lib/api/wallet';
 
 interface InputState {
@@ -40,9 +51,26 @@ interface SendTipConfirmed {
 type Props = {
   userAddress: string;
   postId?: string;
-  freeBalance?: number;
+  balanceDetails: BalanceDetail[];
   receiverId?: string;
 };
+
+const TableCell = withStyles({
+  root: {
+    borderBottom: 'none',
+    paddingTop: 3,
+    paddingBottom: 3
+  }
+})(MuiTableCell);
+
+const StyledBadge = withStyles((theme: Theme) =>
+  createStyles({
+    badge: {
+      right: -5,
+      top: 0
+    }
+  })
+)(Badge);
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -108,14 +136,33 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     errorText: {
       color: 'red'
-    }
+    },
+    balanceText: {
+      width: '100%',
+      padding: '2px',
+      fontWeight: 700
+    },
+    tooltipContentHeader: {
+      fontWeight: 'bold'
+    },
+    tooltipContentRoot: { display: 'flex', flexDirection: 'column' }
   })
 );
 
-const SendTipModal = forwardRef(({ freeBalance, userAddress, postId, receiverId }: Props, ref) => {
-  const { sendTip, load } = usePolkadotApi();
-  const [selectedToken, setSelectedToken] = useState('ACA');
-  //const [tokenBalance, setTokenBalance] = useState('');
+const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiverId }: Props, ref) => {
+  const { sendTip } = usePolkadotApi();
+  const [selectedToken, setSelectedToken] = useState('');
+  const [tokenBalance, setTokenBalance] = useState('');
+
+  useEffect(() => {
+    if (balanceDetails.length > 0) {
+      const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
+      if (typeof idx === 'number') {
+        setTokenBalance(balanceDetails[idx].freeBalance.toString());
+        console.log('the idex: ', tokenBalance);
+      }
+    }
+  }, [selectedToken]);
 
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
@@ -182,7 +229,7 @@ const SendTipModal = forwardRef(({ freeBalance, userAddress, postId, receiverId 
         isTextChanged: true
       });
 
-      if (freeBalance !== undefined && Number(values.amount) >= freeBalance) {
+      if (tokenBalance !== undefined && Number(values.amount) >= Number(tokenBalance)) {
         setInputError({
           ...inputError,
           isErrorInput: true,
@@ -198,7 +245,11 @@ const SendTipModal = forwardRef(({ freeBalance, userAddress, postId, receiverId 
           isInsufficientBalance: false,
           errorMessage: ''
         });
-        const decimals = selectedToken === 'ACA' ? 13 : 10;
+
+        const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
+        const decimals = balanceDetails[idx].tokenDecimals ?? 10;
+        console.log('the decimals: ', decimals);
+        console.log('selected token: ', selectedToken);
         const amountStr = values.amount as string;
         const amountSent = Number(parseInt(amountStr) * 10 ** decimals);
 
@@ -215,6 +266,7 @@ const SendTipModal = forwardRef(({ freeBalance, userAddress, postId, receiverId 
           const { walletAddress } = await WalletAddressAPI.getWalletAddress(postId as string);
           toAddress = walletAddress;
         }
+        console.log('amount sent: ', amountSent);
 
         const response = await sendTip(senderAddress, toAddress, amountSent, postId);
         // handle if sendTip succeed
@@ -278,15 +330,68 @@ const SendTipModal = forwardRef(({ freeBalance, userAddress, postId, receiverId 
     });
   };
 
-  const handleSetSelectedToken = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const token = event.target.value as string;
-    setSelectedToken(token);
-    //load(userAddress);
-    //if (token === 'DOT') {
-    //setTokenBalance(formattedDOT());
-    //} else {
-    //setTokenBalance(formattedACA());
-    //}
+  const handleSetSelectedToken = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedToken((event.target as HTMLInputElement).value);
+  };
+
+  const TooltipContent = () => {
+    return (
+      <div className={styles.tooltipContentRoot}>
+        <Typography className={styles.tooltipContentHeader}>Myria</Typography>{' '}
+        <Typography>A reward token you earn by sending a tip to a post you think is valuable.</Typography>
+      </div>
+    );
+  };
+
+  const StyledTooltip = () => {
+    return (
+      <Tooltip title={<TooltipContent />} placement="right" aria-label="myria-token-info">
+        <InfoIcon fontSize="small" />
+      </Tooltip>
+    );
+  };
+
+  const CurrencyTable = () => {
+    return (
+      <TableContainer>
+        <Table size="small" aria-label="balance-table">
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <Typography className={styles.balanceText}>Currency Selection</Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Typography className={styles.balanceText}>Your Balance</Typography>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {balanceDetails.map(row => (
+              <TableRow key={row.tokenSymbol}>
+                <FormControl component="fieldset">
+                  <RadioGroup aria-label="gender" name="gender1" value={selectedToken} onChange={handleSetSelectedToken}>
+                    <TableCell component="th" scope="row">
+                      {row.tokenSymbol === 'MYRIA' ? (
+                        <>
+                          {' '}
+                          <StyledBadge badgeContent={<StyledTooltip />}>MYRIA</StyledBadge>
+                        </>
+                      ) : (
+                        <>
+                          <FormControlLabel value={row.tokenSymbol} control={<Radio />} label={row.tokenSymbol} />
+                          <Typography className={styles.balanceText}>{row.freeBalance}</Typography>
+                        </>
+                      )}
+                    </TableCell>
+                    <TableCell align="right"></TableCell>
+                  </RadioGroup>
+                </FormControl>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
   };
 
   return (
@@ -296,19 +401,8 @@ const SendTipModal = forwardRef(({ freeBalance, userAddress, postId, receiverId 
           {' '}
           Send Tip
         </DialogTitle>
-        {
-          <DialogContent dividers>
-            <FormControl>
-              <InputLabel aria-label="select-token-for-send-tips">Select token</InputLabel>
-              <Select value={selectedToken} onChange={handleSetSelectedToken}>
-                <MenuItem value={'DOT'}>DOT</MenuItem>
-                <MenuItem value={'ACA'}>ACA</MenuItem>
-              </Select>
-            </FormControl>
-          </DialogContent>
-        }
         <DialogContent dividers>
-          <Typography>{freeBalance} ACA</Typography>
+          <CurrencyTable />
         </DialogContent>
         <DialogContent dividers>
           <form noValidate autoComplete="off">
@@ -318,7 +412,7 @@ const SendTipModal = forwardRef(({ freeBalance, userAddress, postId, receiverId 
               required
               error={inputError.isErrorInput ? true : false}
               id="sendTipAmount"
-              label="How many ACA?"
+              label={`How many ${selectedToken}`}
               helperText={
                 inputError.isErrorInput
                   ? inputError.isInsufficientBalance

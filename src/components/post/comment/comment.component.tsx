@@ -16,7 +16,6 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
 
-//import { useBalance } from '../../wallet/use-balance.hooks';
 import { useStyles } from './comment.style';
 import ReplyCommentComponent from './reply.component';
 
@@ -26,6 +25,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import { TabPanel } from 'src/components/common/tab-panel.component';
 import { useUser } from 'src/context/user.context';
 import { useCommentHook } from 'src/hooks/use-comment.hook';
+import { BalanceDetail } from 'src/interfaces/balance';
 import { Post, Comment } from 'src/interfaces/post';
 
 const StyledBadge = withStyles((theme: Theme) =>
@@ -43,10 +43,10 @@ type Props = {
   post: Post;
   disableReply: boolean;
   hide: () => void;
-  freeBalance: number;
+  balanceDetails: BalanceDetail[];
 };
 
-export default function CommentComponent({ freeBalance, post, disableReply, hide }: Props) {
+export default function CommentComponent({ balanceDetails, post, disableReply, hide }: Props) {
   const style = useStyles();
   const theme = useTheme();
 
@@ -128,7 +128,12 @@ export default function CommentComponent({ freeBalance, post, disableReply, hide
                       {comment.text}
                     </Typography>
                   </CardContent>
-                  <SendTipModal userAddress={userId} ref={childRef} receiverId={comment?.user?.id as string} freeBalance={freeBalance} />
+                  <SendTipModal
+                    userAddress={userId}
+                    ref={childRef}
+                    receiverId={comment?.user?.id as string}
+                    balanceDetails={balanceDetails}
+                  />
                 </Card>
               </Grid>
             );

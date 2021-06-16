@@ -163,7 +163,7 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
             loader={<LoadingPage />}>
             {state.posts.map((post: Post, i: number) => (
               <div key={i} id={`post-detail-${i}`}>
-                <PostComponent post={post} postOwner={isOwnPost(post)} freeBalance={tokens.length > 0 ? tokens[0].freeBalance : 0} />
+                <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={tokens.length > 0 ? tokens : []} />
               </div>
             ))}
           </InfiniteScroll>
