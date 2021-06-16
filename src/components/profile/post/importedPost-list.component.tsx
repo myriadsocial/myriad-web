@@ -17,7 +17,7 @@ import { Post } from 'src/interfaces/post';
 import { User, ExtendedUserPost } from 'src/interfaces/user';
 
 type Props = {
-  user: User;
+  user: User | null;
   profile: ExtendedUserPost;
 };
 
@@ -28,7 +28,7 @@ export default function ImportedPostList({ user, profile }: Props) {
   const { loadImportedPost, loading } = useProfileHook(profile.id);
   const posts = profileState.importedPost;
   const isOwnPost = (post: Post) => {
-    if (post.walletAddress === user.id) return true;
+    if (user && post.walletAddress === user.id) return true;
     return false;
   };
 

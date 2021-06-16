@@ -12,13 +12,15 @@ const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
 });
 
-export const useFriendHook = (user: User) => {
+export const useFriendHook = (user: User | null) => {
   const { loadFriends, loadRequests } = useFriendsHook(user);
   const { state: profileState, dispatch } = useProfile();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const makeFriend = async (values: Partial<FriendRequest>) => {
+    if (!user) return;
+
     setLoading(true);
 
     try {
@@ -41,6 +43,8 @@ export const useFriendHook = (user: User) => {
   };
 
   const checkFriendStatus = async friendId => {
+    if (!user) return;
+
     setLoading(true);
 
     try {

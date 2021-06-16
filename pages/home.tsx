@@ -9,7 +9,6 @@ import NoSsr from '@material-ui/core/NoSsr';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import Layout from 'src/components/Layout/Layout.container';
-import ShowIf from 'src/components/common/show-if.component';
 import Timeline from 'src/components/timeline/timeline.component';
 import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
@@ -97,11 +96,9 @@ export default function Home() {
           </Grid>
           <Grid item className={style.fullwidth}>
             <FriendsProvider>
-              <ShowIf condition={!isAnonymous}>
-                <NoSsr>
-                  <Wallet />
-                </NoSsr>
-              </ShowIf>
+              <NoSsr>
+                <Wallet />
+              </NoSsr>
             </FriendsProvider>
 
             <TopicComponent />

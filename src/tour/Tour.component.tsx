@@ -82,7 +82,7 @@ const TourComponent: React.FC<Props> = ({ user }) => {
       setRun(false);
 
       updateUser({
-        skip_tour: true,
+        skip_tour: true
       });
     }
   };

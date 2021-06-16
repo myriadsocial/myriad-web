@@ -32,8 +32,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: 8
     },
     searchContent: {
+      display: 'flex',
+      flexDirection: 'row',
       maxHeight: 1200,
       overflow: 'auto'
+    },
+    listWrapper: {
+      textAlign: 'center'
     },
     iconButton: {
       margin: theme.spacing(1)
@@ -42,13 +47,14 @@ export const useStyles = makeStyles((theme: Theme) =>
 );
 
 type SearchResultProps = {
+  isAnonymous: boolean;
   users: User[];
   loading?: boolean;
   user: User | null;
   clickBack: () => void;
 };
 
-const SearchResultComponent: React.FC<SearchResultProps> = ({ user, users, clickBack }) => {
+const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user, users, clickBack }) => {
   const styles = useStyles();
 
   const { friended, checkFriendStatus } = useFriendsHook(user);
@@ -79,7 +85,7 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({ user, users, click
 
     return (
       <CardActions>
-        <div style={{ width: '100%', textAlign: 'center' }}>
+        <div className={styles.listWrapper}>
           <Button
             onClick={() => redirectToProfilePage(from?.id)}
             size="medium"
@@ -89,7 +95,13 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({ user, users, click
             Visit Profile
           </Button>
           {!status && (
-            <Button size="medium" variant="contained" color="primary" className={styles.iconButton} startIcon={<PersonAddIcon />}>
+            <Button
+              size="medium"
+              variant="contained"
+              color="primary"
+              disabled={isAnonymous}
+              className={styles.iconButton}
+              startIcon={<PersonAddIcon />}>
               Add Friend
             </Button>
           )}

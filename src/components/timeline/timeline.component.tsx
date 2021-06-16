@@ -114,7 +114,15 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
   };
 
   if (searching)
-    return <>{loading ? <LoadingComponent /> : <SearchResultComponent user={user} users={options} clickBack={handleClick} />}</>;
+    return (
+      <>
+        {loading ? (
+          <LoadingComponent />
+        ) : (
+          <SearchResultComponent isAnonymous={isAnonymous} user={user} users={options} clickBack={handleClick} />
+        )}
+      </>
+    );
 
   return (
     <div className={style.root} id="timeline">
