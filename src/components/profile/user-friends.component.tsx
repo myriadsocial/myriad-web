@@ -6,7 +6,8 @@ import FriendList from './friend-list.component';
 
 import { debounce } from 'lodash';
 import SearchComponent from 'src/components/common/search.component';
-import { useFriends } from 'src/context/friends.context';
+// import { useFriends } from 'src/context/friends.context';
+import { useProfile } from 'src/components/profile/profile.context';
 import { useUser } from 'src/context/user.context';
 import { useFriendsHook } from 'src/hooks/use-friends-hook';
 import { ExtendedUserPost } from 'src/interfaces/user';
@@ -20,8 +21,8 @@ const UserFriendComponent: React.FC<UserFriendProps> = props => {
     state: { user }
   } = useUser();
   const {
-    state: { friends }
-  } = useFriends();
+    state: { totalFriends }
+  } = useProfile();
   const [search, setSearchQuery] = useState('');
 
   if (!user) return null;
@@ -37,7 +38,7 @@ const UserFriendComponent: React.FC<UserFriendProps> = props => {
     <div style={{ padding: 8, background: 'white', borderRadius: 8 }}>
       <div style={{ paddingTop: 16, paddingBottom: 8 }}>
         <Typography variant="h4" style={{ marginBottom: 16 }}>
-          Friends with {friends.length} people
+          Friends with {totalFriends} people
         </Typography>
 
         <SearchComponent value={search} placeholder="Find a Friend" onSubmit={handleSearchFriend} />

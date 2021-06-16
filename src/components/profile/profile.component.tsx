@@ -17,7 +17,8 @@ import { WalletComponent } from './myWallet/wallet.component';
 import { useStyles } from './profile.style';
 
 import ShowIf from 'src/components/common/show-if.component';
-import { useFriends } from 'src/context/friends.context';
+import { useProfile } from 'src/components/profile/profile.context';
+import { useFriendHook } from 'src/components/profile/use-friend.hook';
 import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
 
 const PostList = dynamic(() => import('./post/post-list.component'));
@@ -110,7 +111,8 @@ function MyWalletTabs() {
 export default function ProfileTimeline({ isAnonymous, user, profile, loading }: Props) {
   const {
     state: { totalFriends }
-  } = useFriends();
+  } = useProfile();
+  const { getFriends } = useFriendHook(profile);
 
   const [value, setValue] = React.useState(0);
   const [isGuest, setIsGuest] = useState<Boolean>(false);
@@ -129,6 +131,10 @@ export default function ProfileTimeline({ isAnonymous, user, profile, loading }:
     if (user && user.id === profile?.id) setIsGuest(false);
     else setIsGuest(true);
   }, [profile]);
+
+  useEffect(() => {
+    getFriends();
+  }, [profile?.id]);
 
   if (loading) {
     return (
