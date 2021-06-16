@@ -1,9 +1,11 @@
 import { useState } from 'react';
 
-import { getBalance } from '../../helpers/polkadotApi';
 import { useBalance as baseUseBalance, BalanceActionType } from './balance.context';
 
-export const useBalance = (userId: string) => {
+import { getBalance } from 'src/helpers/polkadotApi';
+import { BalanceDetail } from 'src/interfaces/balance';
+
+export const useBalance = (userId: string, wsProvider: string) => {
   const { state, dispatch } = baseUseBalance();
 
   const [loading, setLoading] = useState(false);
@@ -12,13 +14,15 @@ export const useBalance = (userId: string) => {
   const load = async (type: BalanceActionType = BalanceActionType.INIT_BALANCE) => {
     setLoading(true);
     try {
-      const resp = await getBalance(userId);
+      const resp = await getBalance(userId, wsProvider);
 
       if (resp) {
-        dispatch({
-          type: BalanceActionType.INIT_BALANCE,
-          freeBalance: Number(Number(resp / 100).toFixed(3))
-        });
+        console.log('the response: ', resp);
+        //dispatch({
+        //type: BalanceActionType.INIT_BALANCE,
+        //balanceDetails: resp.map((item: BalanceDetail) => ({ ...item }))
+        ////freeBalance: Number(Number(resp / 100).toFixed(3))
+        //});
       }
     } catch (error) {
       setError(error);
@@ -29,7 +33,7 @@ export const useBalance = (userId: string) => {
   return {
     error,
     loading,
-    freeBalance: state.freeBalance,
+    balanceDetails: state.balanceDetails,
     loadInitBalance: load
   };
 };

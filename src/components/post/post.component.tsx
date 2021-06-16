@@ -51,7 +51,8 @@ export default function PostComponent({ post, defaultExpanded = false, disable =
   const [session] = useSession();
 
   const userId = session?.user.address as string;
-  const { freeBalance } = useBalance(userId);
+  // Change this destructure to the updated format
+  //const { freeBalance } = useBalance(userId);
 
   if (!detail) return null;
 
@@ -175,7 +176,7 @@ export default function PostComponent({ post, defaultExpanded = false, disable =
         </ShowIf>
       </Card>
 
-      <SendTipModal userAddress={userId} ref={childRef} postId={post.id as string} freeBalance={freeBalance as number} />
+      <SendTipModal userAddress={userId} ref={childRef} postId={post.id as string} />
     </>
   );
 }

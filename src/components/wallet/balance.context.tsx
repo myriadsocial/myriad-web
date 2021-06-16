@@ -1,25 +1,28 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
+import { BalanceDetail } from 'src/interfaces/balance';
+
 export enum BalanceActionType {
   INIT_BALANCE = 'INIT_BALANCE'
 }
 
+type State = {
+  init: boolean;
+  balanceDetails: BalanceDetail[];
+};
+
 export interface InitBalance {
   type: BalanceActionType.INIT_BALANCE;
-  freeBalance: number;
+  balanceDetails: BalanceDetail[];
 }
 
 export type Action = InitBalance;
 type Dispatch = (action: Action) => void;
 type BalanceProviderProps = { children: React.ReactNode };
-type State = {
-  init: boolean;
-  freeBalance: number;
-};
 
 const initialState = {
   init: true,
-  freeBalance: 0
+  balanceDetails: []
 };
 
 const BalanceContext = createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
@@ -29,7 +32,7 @@ function balanceReducer(state: State, action: Action) {
     case BalanceActionType.INIT_BALANCE: {
       return {
         ...state,
-        freeBalance: action.freeBalance,
+        balanceDetails: action.balanceDetails,
         init: false
       };
     }

@@ -39,7 +39,7 @@ interface SendTipConfirmed {
 type Props = {
   userAddress: string;
   postId?: string;
-  freeBalance: number;
+  freeBalance?: number;
   receiverId?: string;
 };
 

@@ -103,7 +103,10 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
 
   const [session] = useSession();
   const userAddress = session?.user.address as string;
-  const { loading, error, freeBalance, loadInitBalance } = useBalance(userAddress);
+  //const wsProvider = 'wss://rococo-rpc.polkadot.io';
+
+  const wsProvider = 'wss://acala-mandala.api.onfinality.io/public-ws';
+  const { loading, error, balanceDetails, loadInitBalance } = useBalance(userAddress, wsProvider);
 
   useEffect(() => {
     loadInitBalance();
@@ -121,11 +124,11 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
     setIsHidden(!isHidden);
   };
 
-  function createData(currency: string, balance: number) {
-    return { currency, balance };
-  }
+  //function createData(currency: string, balance: number) {
+  //return { currency, balance };
+  //}
 
-  const rows = [createData('MYRIA', freeBalance), createData('ACA', 100)];
+  //const rows = [createData('MYRIA', freeBalance), createData('ACA', 100)];
 
   const TooltipContent = () => {
     return (
@@ -159,17 +162,17 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => (
-              <TableRow key={row.currency}>
+            {balanceDetails.map(row => (
+              <TableRow key={row.tokenSymbol}>
                 <TableCell component="th" scope="row">
                   <Typography className={style.balanceText}>
-                    {row.currency === 'MYRIA' ? (
+                    {row.tokenSymbol === 'MYRIA' ? (
                       <>
                         {' '}
                         <StyledBadge badgeContent={<StyledTooltip />}>MYRIA</StyledBadge>
                       </>
                     ) : (
-                      row.currency
+                      row.tokenSymbol
                     )}
                   </Typography>
                 </TableCell>
@@ -181,7 +184,7 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
                   ) : error ? (
                     <Typography className={style.errorText}>Error, try again!</Typography>
                   ) : (
-                    <Button onClick={handleIsHidden}>{row.balance}</Button>
+                    <Button onClick={handleIsHidden}>{row.freeBalance}</Button>
                   )}
                 </TableCell>
               </TableRow>

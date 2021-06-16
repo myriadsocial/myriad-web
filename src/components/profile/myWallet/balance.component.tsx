@@ -108,7 +108,9 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, hidden }) => {
 
   const [session] = useSession();
   const userAddress = session?.user.address as string;
-  const { loading, error, freeBalance, loadInitBalance } = useBalance(userAddress);
+  // user tokens hooks here
+  const wsProvider = 'wss://rococo-rpc.polkadot.io';
+  const { loading, error, balanceDetails, loadInitBalance } = useBalance(userAddress, wsProvider);
 
   useEffect(() => {
     loadInitBalance();
@@ -126,11 +128,11 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, hidden }) => {
     setIsHidden(!isHidden);
   };
 
-  function createData(currency: string, balance: number) {
-    return { currency, balance };
-  }
+  //function createData(currency: string, balance: number) {
+  //return { currency, balance };
+  //}
 
-  const rows = [createData('MYRIA', freeBalance), createData('ACA', 100)];
+  //const rows = [createData('MYRIA', freeBalance), createData('ACA', 100)];
 
   const CurrencyTable = () => {
     return (
@@ -147,10 +149,10 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, hidden }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => (
-              <TableRow key={row.currency}>
+            {balanceDetails.map(row => (
+              <TableRow key={row.tokenSymbol}>
                 <TableCell component="th" scope="row">
-                  <Typography className={style.balanceText}>{row.currency}</Typography>
+                  <Typography className={style.balanceText}>{row.tokenSymbol}</Typography>
                 </TableCell>
                 <TableCell align="right">
                   {isHidden ? (
@@ -160,7 +162,7 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, hidden }) => {
                   ) : error ? (
                     <Typography className={style.errorText}>Error, try again!</Typography>
                   ) : (
-                    <Button onClick={handleIsHidden}>{row.balance}</Button>
+                    <Button onClick={handleIsHidden}>{row.freeBalance}</Button>
                   )}
                 </TableCell>
               </TableRow>
