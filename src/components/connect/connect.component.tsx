@@ -113,7 +113,7 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
         </DialogTitle>
         <DialogContent className={styles.root}>
           <List component="div" aria-label="connect social steps">
-          <ListItem>
+            <ListItem>
               <ListItemIcon style={{ alignSelf: 'flex-start' }}>
                 <Avatar className={styles.icon}>1.</Avatar>
               </ListItemIcon>
@@ -141,7 +141,9 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
                 <Avatar className={styles.icon}>2.</Avatar>
               </ListItemIcon>
               <ListItemText disableTypography>
-                <Typography variant="caption">Alternatively, you can click the Share button below and just click the Post button in the pop-up!</Typography>
+                <Typography variant="caption">
+                  Alternatively, you can click the Share button below and just click the Post button in the pop-up!
+                </Typography>
                 <div className={styles.linkAction}>
                   <ShowIf condition={social === SocialsEnum.FACEBOOK}>
                     <FacebookShareButton url={APP_URL} quote={message} onShareWindowClose={onShareClosed}>
@@ -180,11 +182,12 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
                 <Avatar className={styles.icon}>3.</Avatar>
               </ListItemIcon>
               <ListItemText disableTypography>
-                {social === SocialsEnum.FACEBOOK ? 
-                  <Typography variant="caption">Copy and paste the URL of the post (make sure it's public!) here:</Typography> :
+                {social === SocialsEnum.FACEBOOK ? (
+                  <Typography variant="caption">Copy and paste the URL of the post (make sure it's public!) here:</Typography>
+                ) : (
                   <Typography variant="caption">Tell us your {social} username here:</Typography>
-                }
-                
+                )}
+
                 <TextField
                   className={styles.account}
                   hiddenLabel
@@ -210,7 +213,6 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
                 />
               </ListItemText>
             </ListItem>
-            
           </List>
         </DialogContent>
         <DialogActions className={styles.done}>
