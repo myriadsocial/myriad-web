@@ -96,6 +96,7 @@ export default function ImportPostComponent({ user, experiences }: Props) {
 
   const { importPost } = usePostHook(user);
   const [showImportPost, setCreatePost] = useState(false);
+
   const [postURL, setPostURL] = useState('');
   const [social, setSocial] = useState<SocialsEnum | null>(null);
   const [postId, setPostId] = useState('');
