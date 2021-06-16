@@ -125,7 +125,7 @@ const FriendsList = ({ profile }: Props) => {
   const [openModal, setOpenModal] = useState(false);
 
   const style = useStyles();
-  const router = useRouter();
+  // const router = useRouter();
 
   const {
     state: { friends }
@@ -142,9 +142,9 @@ const FriendsList = ({ profile }: Props) => {
     setAnchorEl(null);
   };
 
-  const visitProfile = (id: string) => {
-    router.push(`/${id}`);
-  };
+  // const visitProfile = (id: string) => {
+  //   router.push(`/${id}`);
+  // };
 
   const toggleProfileForm = () => {
     setOpenModal(!openModal);
