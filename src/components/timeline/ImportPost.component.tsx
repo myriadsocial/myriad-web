@@ -84,7 +84,6 @@ export default function ImportPostComponent({ user, experiences }: Props) {
 
   const { importPost } = usePostHook(user);
   const [showImportPost, setCreatePost] = useState(false);
-  const [postURL, setPostURL] = useState('');
 
   //Associate a post with an experience
   //const [selectedExperienceId, setSelectedExperienceId] = useState('');
@@ -107,9 +106,8 @@ export default function ImportPostComponent({ user, experiences }: Props) {
   };
 
   const confirmImport = () => {
-    importPost(postURL);
+    importPost(social + sansDomain);
     toggleImportPost();
-    setPostURL('');
   };
 
   const [social, setSocial] = useState('');
@@ -171,7 +169,7 @@ export default function ImportPostComponent({ user, experiences }: Props) {
                   color: 'primary',
                   startAdornment: (
                     <InputAdornment position="start" disableTypography>
-                      {social === 'twitter' ? 'https://twitter.com/' : 'https://www.facebook.com/'}
+                      {social === 'https://twitter.com/' ? 'https://twitter.com/' : 'https://www.facebook.com/'}
                     </InputAdornment>
                   )
                 }}
@@ -179,8 +177,8 @@ export default function ImportPostComponent({ user, experiences }: Props) {
               <FormControl className={styles.formControl}>
                 <InputLabel id="demo-simple-select-label">Social Platform</InputLabel>
                 <Select labelId="demo-simple-select-label" id="demo-simple-select" value={social} onChange={handleChange}>
-                  <MenuItem value={'twitter'}>Twitter</MenuItem>
-                  <MenuItem value={'facebook'}>Facebook</MenuItem>
+                  <MenuItem value={'https://twitter.com/'}>Twitter</MenuItem>
+                  <MenuItem value={'https://www.facebook.com/'}>Facebook</MenuItem>
                 </Select>
               </FormControl>
               {
