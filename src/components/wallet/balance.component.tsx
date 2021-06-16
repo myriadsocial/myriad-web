@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 
-import { useBalance } from '../wallet/use-balance.hooks';
+import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -103,19 +103,19 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
 
   const [session] = useSession();
   const userAddress = session?.user.address as string;
-  //const wsProvider = 'wss://rococo-rpc.polkadot.io';
 
-  const wsProvider = 'wss://acala-mandala.api.onfinality.io/public-ws';
-  const { loading, error, balanceDetails, loadInitBalance } = useBalance(userAddress, wsProvider);
+  const { loading, error, tokens, load, formattedDOT, formattedACA } = usePolkadotApi();
 
   useEffect(() => {
-    loadInitBalance();
-  }, []);
+    if (userAddress) {
+      load(userAddress);
+    }
+  }, [userAddress]);
 
   useImperativeHandle(forwardedRef, () => ({
     triggerRefresh: () => {
       setIsHidden(false);
-      loadInitBalance();
+      //loadInitBalance();
     }
   }));
 
@@ -162,33 +162,79 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {balanceDetails.map(row => (
-              <TableRow key={row.tokenSymbol}>
-                <TableCell component="th" scope="row">
-                  <Typography className={style.balanceText}>
-                    {row.tokenSymbol === 'MYRIA' ? (
+            {
+              <>
+                <TableRow>
+                  <TableCell component="th" scope="row">
+                    <Typography className={style.balanceText}>
                       <>
                         {' '}
-                        <StyledBadge badgeContent={<StyledTooltip />}>MYRIA</StyledBadge>
+                        <StyledBadge>DOT</StyledBadge>
                       </>
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    {isHidden ? (
+                      <Button onClick={handleIsHidden}>Show balance</Button>
+                    ) : loading ? (
+                      <CircularProgress className={style.spinner} size={20} />
+                    ) : error ? (
+                      <Typography className={style.errorText}>Error, try again!</Typography>
                     ) : (
-                      row.tokenSymbol
+                      <Button onClick={handleIsHidden}>{formattedDOT()}</Button>
                     )}
-                  </Typography>
-                </TableCell>
-                <TableCell align="right">
-                  {isHidden ? (
-                    <Button onClick={handleIsHidden}>Show balance</Button>
-                  ) : loading ? (
-                    <CircularProgress className={style.spinner} size={20} />
-                  ) : error ? (
-                    <Typography className={style.errorText}>Error, try again!</Typography>
-                  ) : (
-                    <Button onClick={handleIsHidden}>{row.freeBalance}</Button>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell component="th" scope="row">
+                    <Typography className={style.balanceText}>
+                      <>
+                        {' '}
+                        <StyledBadge>ACA</StyledBadge>
+                      </>
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    {isHidden ? (
+                      <Button onClick={handleIsHidden}>Show balance</Button>
+                    ) : loading ? (
+                      <CircularProgress className={style.spinner} size={20} />
+                    ) : error ? (
+                      <Typography className={style.errorText}>Error, try again!</Typography>
+                    ) : (
+                      <Button onClick={handleIsHidden}>{formattedACA()}</Button>
+                    )}
+                  </TableCell>
+                </TableRow>
+              </>
+              //balanceDetails.map(row => (
+              //<TableRow key={row.tokenSymbol}>
+              //<TableCell component="th" scope="row">
+              //<Typography className={style.balanceText}>
+              //{row.tokenSymbol === 'MYRIA' ? (
+              //<>
+              //{' '}
+              //<StyledBadge badgeContent={<StyledTooltip />}>MYRIA</StyledBadge>
+              //</>
+              //) : (
+              //row.tokenSymbol
+              //)}
+              //</Typography>
+              //</TableCell>
+              //<TableCell align="right">
+              //{isHidden ? (
+              //<Button onClick={handleIsHidden}>Show balance</Button>
+              //) : loading ? (
+              //<CircularProgress className={style.spinner} size={20} />
+              //) : error ? (
+              //<Typography className={style.errorText}>Error, try again!</Typography>
+              //) : (
+              //<Button onClick={handleIsHidden}>{row.freeBalance}</Button>
+              //)}
+              //</TableCell>
+              //</TableRow>
+              //))
+            }
           </TableBody>
         </Table>
       </TableContainer>

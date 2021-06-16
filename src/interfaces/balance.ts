@@ -1,5 +1,5 @@
 export type BalanceDetail = {
   freeBalance: number;
-  tokenDecimals: number;
+  tokenDecimals?: number;
   tokenSymbol: string;
 };

@@ -1,24 +1,25 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 
-//import dynamic from 'next/dynamic';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import { createStyles, Theme, makeStyles, lighten } from '@material-ui/core/styles';
 import SendIcon from '@material-ui/icons/Send';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
-import { sendTip } from '../../helpers/polkadotApi';
 import DialogTitle from '../common/DialogTitle.component';
-import { useStyles } from '../login/login.style';
-import { useBalance } from '../wallet/use-balance.hooks';
 
+import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 import * as WalletAddressAPI from 'src/lib/api/wallet';
-
-//const BalanceComponent = dynamic(() => import('../wallet/balance.component'));
 
 interface InputState {
   amount: string;
@@ -43,8 +44,79 @@ type Props = {
   receiverId?: string;
 };
 
-const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId }: Props, ref) => {
-  const { loadInitBalance } = useBalance(userAddress);
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    paper: {
+      backgroundColor: theme.palette.primary.light,
+      padding: '15px 29px',
+      color: '#E0E0E0',
+      flex: '0 0 100%',
+      width: 320
+    },
+    title: {
+      paddingBottom: 10,
+      borderBottom: '5px solid',
+      borderBottomColor: theme.palette.secondary.main
+    },
+    action: {
+      marginTop: 25
+    },
+    button: {
+      marginBottom: theme.spacing(1.5),
+      borderRadius: 0,
+      textTransform: 'none'
+    },
+    buttonIcon: {
+      marginBottom: theme.spacing(1.5),
+      borderRadius: 0,
+      '&& .MuiButton-label': {
+        display: 'flex',
+        justifyContent: 'flex-start',
+        flexDirection: 'row',
+        width: '60%'
+      }
+    },
+    whiteLightButton: {
+      marginBottom: 10,
+      backgroundColor: lighten('#f4f5e2', 0.3),
+      textAlign: 'left',
+      borderRadius: 20
+    },
+    lightButton: {
+      marginBottom: 10,
+      backgroundColor: lighten('#E849BD', 0.3),
+      textAlign: 'left',
+      borderRadius: 20
+    },
+    btnCreateAccount: {
+      margin: '8px 16px'
+    },
+    info: {
+      marginBottom: theme.spacing(2)
+    },
+    polkadot: {
+      color: 'rgb(255, 140, 0)'
+    },
+    spinner: {
+      color: '#A942E9',
+      position: 'relative',
+      top: 4,
+      left: 6
+    },
+    sendTipDialog: {
+      minWidth: '400px'
+    },
+    errorText: {
+      color: 'red'
+    }
+  })
+);
+
+const SendTipModal = forwardRef(({ freeBalance, userAddress, postId, receiverId }: Props, ref) => {
+  const { sendTip, load } = usePolkadotApi();
+  const [selectedToken, setSelectedToken] = useState('ACA');
+  //const [tokenBalance, setTokenBalance] = useState('');
+
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
     message: ''
@@ -93,6 +165,7 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId 
     });
   };
 
+  // TODO: input ditambahin decimals masing2 token
   const checkAmountThenSend = async () => {
     const regexValidDigits = /^\d*(\.\d+)?$/;
     if (values.amount === '') {
@@ -109,7 +182,7 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId 
         isTextChanged: true
       });
 
-      if (Number(values.amount) >= freeBalance) {
+      if (freeBalance !== undefined && Number(values.amount) >= freeBalance) {
         setInputError({
           ...inputError,
           isErrorInput: true,
@@ -125,7 +198,10 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId 
           isInsufficientBalance: false,
           errorMessage: ''
         });
-        const amountSent = Number(values.amount) * 1000000000000;
+        const decimals = selectedToken === 'ACA' ? 13 : 10;
+        const amountStr = values.amount as string;
+        const amountSent = Number(parseInt(amountStr) * 10 ** decimals);
+
         // sendTip will open a pop-up from polkadot.js extension,
         // tx signing is done by supplying a password
         const senderAddress = userAddress;
@@ -140,7 +216,7 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId 
           toAddress = walletAddress;
         }
 
-        const response = await sendTip(senderAddress, toAddress, amountSent);
+        const response = await sendTip(senderAddress, toAddress, amountSent, postId);
         // handle if sendTip succeed
         if (response.Error || typeof response === 'string') {
           setErrorSendTips({
@@ -165,7 +241,7 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId 
             ...values,
             amount: ''
           });
-          loadInitBalance();
+          //load(userAddress);
         }
       }
     } else {
@@ -202,6 +278,17 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId 
     });
   };
 
+  const handleSetSelectedToken = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const token = event.target.value as string;
+    setSelectedToken(token);
+    //load(userAddress);
+    //if (token === 'DOT') {
+    //setTokenBalance(formattedDOT());
+    //} else {
+    //setTokenBalance(formattedACA());
+    //}
+  };
+
   return (
     <>
       <Dialog open={showSendTipModal} onClose={closeSendTipModal} aria-labelledby="send-tips-window" maxWidth="md">
@@ -210,10 +297,19 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId 
           Send Tip
         </DialogTitle>
         {
-          //<DialogContent dividers>
-          //<BalanceComponent />
-          //</DialogContent>
+          <DialogContent dividers>
+            <FormControl>
+              <InputLabel aria-label="select-token-for-send-tips">Select token</InputLabel>
+              <Select value={selectedToken} onChange={handleSetSelectedToken}>
+                <MenuItem value={'DOT'}>DOT</MenuItem>
+                <MenuItem value={'ACA'}>ACA</MenuItem>
+              </Select>
+            </FormControl>
+          </DialogContent>
         }
+        <DialogContent dividers>
+          <Typography>{freeBalance} ACA</Typography>
+        </DialogContent>
         <DialogContent dividers>
           <form noValidate autoComplete="off">
             <TextField
@@ -222,7 +318,7 @@ const SendTipModal = forwardRef(({ userAddress, postId, freeBalance, receiverId 
               required
               error={inputError.isErrorInput ? true : false}
               id="sendTipAmount"
-              label="How many MYRIA?"
+              label="How many ACA?"
               helperText={
                 inputError.isErrorInput
                   ? inputError.isInsufficientBalance

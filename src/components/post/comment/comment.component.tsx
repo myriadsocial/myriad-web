@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
 
-import { useBalance } from '../../wallet/use-balance.hooks';
+//import { useBalance } from '../../wallet/use-balance.hooks';
 import { useStyles } from './comment.style';
 import ReplyCommentComponent from './reply.component';
 
@@ -43,9 +43,10 @@ type Props = {
   post: Post;
   disableReply: boolean;
   hide: () => void;
+  freeBalance: number;
 };
 
-export default function CommentComponent({ post, disableReply, hide }: Props) {
+export default function CommentComponent({ freeBalance, post, disableReply, hide }: Props) {
   const style = useStyles();
   const theme = useTheme();
 
@@ -58,7 +59,6 @@ export default function CommentComponent({ post, disableReply, hide }: Props) {
   const [session] = useSession();
   const userId = session?.user.id as string;
   const isAnonymous = Boolean(session?.user.anonymous);
-  const { freeBalance } = useBalance(userId);
   const childRef = useRef<any>();
   const [selectedTab, setSelectedTab] = React.useState(0);
 
@@ -128,12 +128,7 @@ export default function CommentComponent({ post, disableReply, hide }: Props) {
                       {comment.text}
                     </Typography>
                   </CardContent>
-                  <SendTipModal
-                    userAddress={userId}
-                    ref={childRef}
-                    receiverId={comment?.user?.id as string}
-                    freeBalance={freeBalance as number}
-                  />
+                  <SendTipModal userAddress={userId} ref={childRef} receiverId={comment?.user?.id as string} freeBalance={freeBalance} />
                 </Card>
               </Grid>
             );
