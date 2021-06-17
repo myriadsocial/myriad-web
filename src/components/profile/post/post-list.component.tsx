@@ -26,7 +26,7 @@ export default function PostList({ user, profile, balanceDetails }: Props) {
   const { hasMore, nextPosts } = useTimelineHook();
 
   const isOwnPost = (post: Post) => {
-    if (user && post.walletAddress === user.id) {
+    if (user && post.platformUser?.platform_account_id === user.id) {
       return true;
     }
     return false;

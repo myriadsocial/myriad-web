@@ -80,7 +80,7 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
   const isOwnPost = (post: Post) => {
     if (!user) return false;
 
-    if (post.walletAddress === user.id) {
+    if (post.platformUser?.platform_account_id === user.id) {
       return true;
     }
 
