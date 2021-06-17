@@ -36,7 +36,7 @@ const TopicComponent: React.FC<TopicProps> = props => {
 
   return (
     <div className={styles.root} id="worldwide">
-      <ExpandablePanel expanded={true} title="World Wide" startIcon={<LanguageIcon />}>
+      <ExpandablePanel expanded={true} title="Worldwide" startIcon={<LanguageIcon />}>
         <div className={styles.content}>
           <div style={{ paddingTop: 24, paddingBottom: 8 }}>
             <Typography variant="h4" style={{ marginBottom: 8 }}>

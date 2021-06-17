@@ -14,7 +14,6 @@ import Collapse from '@material-ui/core/Collapse';
 import Typography from '@material-ui/core/Typography';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
-import { useBalance } from '../wallet/use-balance.hooks';
 import { PostActionComponent } from './post-action.component';
 import PostAvatarComponent from './post-avatar.component';
 import PostImageComponent from './post-image.component';
@@ -27,6 +26,7 @@ import remarkHTML from 'remark-html';
 import SendTipModal from 'src/components/common/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
 import { useSocialDetail } from 'src/hooks/use-social.hook';
+import { BalanceDetail } from 'src/interfaces/balance';
 import { ImageData } from 'src/interfaces/post';
 import { Post } from 'src/interfaces/post';
 import { v4 as uuid } from 'uuid';
@@ -38,9 +38,10 @@ type Props = {
   disable?: boolean;
   post: Post;
   postOwner?: boolean;
+  balanceDetails: BalanceDetail[];
 };
 
-export default function PostComponent({ post, defaultExpanded = false, disable = false, postOwner }: Props) {
+export default function PostComponent({ balanceDetails, post, defaultExpanded = false, disable = false, postOwner }: Props) {
   const style = useStyles();
 
   const { detail } = useSocialDetail(post);
@@ -51,7 +52,6 @@ export default function PostComponent({ post, defaultExpanded = false, disable =
   const [session] = useSession();
 
   const userId = session?.user.address as string;
-  const { freeBalance } = useBalance(userId);
 
   if (!detail) return null;
 
@@ -169,13 +169,13 @@ export default function PostComponent({ post, defaultExpanded = false, disable =
         <ShowIf condition={expanded}>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent className={style.reply}>
-              <CommentComponent post={post} disableReply={disable} hide={handleExpandClick} />
+              <CommentComponent post={post} disableReply={disable} hide={handleExpandClick} balanceDetails={balanceDetails} />
             </CardContent>
           </Collapse>
         </ShowIf>
       </Card>
 
-      <SendTipModal userAddress={userId} ref={childRef} postId={post.id as string} freeBalance={freeBalance as number} />
+      <SendTipModal userAddress={userId} ref={childRef} postId={post.id as string} balanceDetails={balanceDetails} />
     </>
   );
 }

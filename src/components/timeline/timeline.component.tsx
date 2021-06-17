@@ -1,6 +1,8 @@
 import React, { useState, createRef, useCallback, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import { useSession } from 'next-auth/client';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
@@ -21,6 +23,7 @@ import SearchResultComponent from 'src/components/search/search-result.component
 import { useTimeline } from 'src/context/timeline.context';
 import { useUser } from 'src/context/user.context';
 import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
+import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 import { useTimelineHook } from 'src/hooks/use-timeline.hook';
 import { Post } from 'src/interfaces/post';
 
@@ -31,7 +34,18 @@ type TimelineProps = {
 const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
   const style = useStyles();
 
+  const [session] = useSession();
+  const userAddress = session?.user.address as string;
+
   const { searching, backToTimeline, users: options } = useMyriadUser();
+
+  const { load, tokens } = usePolkadotApi();
+
+  useEffect(() => {
+    if (userAddress) {
+      load(userAddress);
+    }
+  }, [userAddress]);
 
   const [loading, setLoading] = useState(false);
 
@@ -149,7 +163,7 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
             loader={<LoadingPage />}>
             {state.posts.map((post: Post, i: number) => (
               <div key={i} id={`post-detail-${i}`}>
-                <PostComponent post={post} postOwner={isOwnPost(post)} />
+                <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={tokens.length > 0 ? tokens : []} />
               </div>
             ))}
           </InfiniteScroll>
