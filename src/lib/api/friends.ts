@@ -65,11 +65,11 @@ export const searchFriend = async (query: string): Promise<ExtendedFriend[]> => 
           or: [
             {
               'friend.name': {
-                like: `.*${query}*`,
+                like: `${query}.*`,
                 options: 'i'
               },
               'requestor.name': {
-                like: `.*${query}*`,
+                like: `${query}.*`,
                 options: 'i'
               }
             }
@@ -93,16 +93,15 @@ export const checkFriendStatus = async (userIds: string[]): Promise<ExtendedFrie
           or: [
             {
               friendId: {
-                in: userIds
+                inq: userIds
               }
             },
             {
               requestorId: {
-                in: userIds
+                inq: userIds
               }
             }
-          ],
-          status: FriendStatus.APPROVED
+          ]
         },
         include: ['friend', 'requestor']
       }

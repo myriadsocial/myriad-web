@@ -1,7 +1,7 @@
 import { User } from './user';
 
 export interface Friend {
-  status: string;
+  status: FriendStatus;
   friendId: string;
   requestorId: string;
 }
