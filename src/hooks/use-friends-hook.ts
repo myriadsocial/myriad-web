@@ -82,7 +82,7 @@ export const useFriendsHook = (user: User | null) => {
     try {
       const requests = await FriendAPI.checkFriendStatus(userIds);
 
-      setFriended(requests.filter(request => request.friendId !== user.id));
+      setFriended(requests);
     } catch (error) {
       setError(error);
     } finally {
