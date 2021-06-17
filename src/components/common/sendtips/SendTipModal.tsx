@@ -415,7 +415,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         </Table>
       </TableContainer>
     );
-<<<<<<< HEAD:src/components/common/sendtips/SendTipModal.tsx
   };
 
   const hideDuration = 3000;
