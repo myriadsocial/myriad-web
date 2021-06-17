@@ -61,7 +61,6 @@ const useStyles = makeStyles((theme: Theme) =>
       // marginRight: theme.spacing(-2)
     },
     item: {
-      marginBottom: theme.spacing(0.5),
       paddingLeft: theme.spacing(0.5),
       paddingRight: theme.spacing(0.5),
       '& .MuiListItemText-root': {
@@ -281,7 +280,7 @@ const FriendsList = ({ profile }: Props) => {
                           <Button variant="text" onClick={toggleProfileForm}>
                             Cancel
                           </Button>
-                          <Button variant="contained" color="primary" onClick={() => console.log('remove friend')}>
+                          <Button disabled variant="contained" color="primary" onClick={() => console.log('remove friend')}>
                             Remove
                           </Button>
                         </div>
