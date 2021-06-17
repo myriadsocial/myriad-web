@@ -159,7 +159,7 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user,
         </Typography>
       </div>
       <div>
-        <Link href="/">
+        <Link href="/home">
           <IconButton className={styles.back} aria-label="back" size="medium">
             <ArrowBackIcon />
           </IconButton>
