@@ -122,7 +122,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ isAnonymous, us
     <>
       <List
         id="social-list"
-        subheader={<ListSubheader className={classes.subheader}>Link my social</ListSubheader>}
+        subheader={<ListSubheader className={classes.subheader}>Claimed social media accounts</ListSubheader>}
         className={classes.root}>
         <ListItem disabled={isAnonymous}>
           <ListItemIcon>
