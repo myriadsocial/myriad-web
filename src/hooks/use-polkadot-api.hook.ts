@@ -94,7 +94,7 @@ export const usePolkadotApi = () => {
     return formatNumber(acaBalance, 13);
   };
 
-  const sendTip = async (fromAddress, toAddress, amountSent, postId) => {
+  const sendTip = async (fromAddress, toAddress, amountSent, currencyId, postId) => {
     setLoading(true);
     try {
       const { enableExtension } = await import('../helpers/extension');
@@ -120,13 +120,16 @@ export const usePolkadotApi = () => {
         const api = await connectToBlockchain();
 
         // here we use the api to create a balance transfer to some account of a value of 12345678
-        const transferExtrinsic = api.tx.balances.transfer(toAddress, amountSent);
+        const transferExtrinsic =
+          currencyId === 'ACA'
+            ? api.tx.balances.transfer(toAddress, amountSent)
+            : api.tx.currencies.transfer(toAddress, { TOKEN: currencyId }, amountSent);
+
+        console.log('transferExtrinsic: ', transferExtrinsic);
 
         // to be able to retrieve the signer interface from this account
         // we can use web3FromSource which will return an InjectedExtension type
         const injector = await web3FromSource(account.meta.source);
-
-        console.log('the injector: ', injector);
 
         // passing the injected account address as the first argument of signAndSend
         // will allow the api to retrieve the signer and the user will see the extension
@@ -134,8 +137,9 @@ export const usePolkadotApi = () => {
         const txInfo = await transferExtrinsic.signAndSend(fromAddress, { signer: injector.signer });
 
         console.log('txInfo: ', txInfo);
+        console.log('the currencyId is: ', currencyId);
 
-        const response = updateTips('ACA', amountSent, postId);
+        const response = updateTips(amountSent, postId);
         console.log('response is:', response);
 
         return { trxHash: txInfo.toHex(), from: fromAddress };

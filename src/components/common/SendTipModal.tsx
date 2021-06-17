@@ -158,11 +158,10 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
     if (balanceDetails.length > 0) {
       const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
       if (typeof idx === 'number') {
-        setTokenBalance(balanceDetails[idx].freeBalance.toString());
-        console.log('the idex: ', tokenBalance);
+        setTokenBalance(balanceDetails[idx]?.freeBalance.toString() ?? '');
       }
     }
-  }, [selectedToken]);
+  }, [selectedToken, balanceDetails]);
 
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
@@ -247,11 +246,12 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         });
 
         const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
-        const decimals = balanceDetails[idx].tokenDecimals ?? 10;
+        let decimals = balanceDetails[idx].tokenDecimals ?? 0;
+
         console.log('the decimals: ', decimals);
         console.log('selected token: ', selectedToken);
         const amountStr = values.amount as string;
-        const amountSent = Number(parseInt(amountStr) * 10 ** decimals);
+        const amountSent = Number(amountStr) * 10 ** decimals;
 
         // sendTip will open a pop-up from polkadot.js extension,
         // tx signing is done by supplying a password
@@ -268,7 +268,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         }
         console.log('amount sent: ', amountSent);
 
-        const response = await sendTip(senderAddress, toAddress, amountSent, postId);
+        const response = await sendTip(senderAddress, toAddress, amountSent, selectedToken, postId);
         // handle if sendTip succeed
         if (response.Error || typeof response === 'string') {
           setErrorSendTips({
@@ -368,24 +368,23 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
           <TableBody>
             {balanceDetails.map(row => (
               <TableRow key={row.tokenSymbol}>
-                <FormControl component="fieldset">
-                  <RadioGroup aria-label="gender" name="gender1" value={selectedToken} onChange={handleSetSelectedToken}>
-                    <TableCell component="th" scope="row">
-                      {row.tokenSymbol === 'MYRIA' ? (
-                        <>
-                          {' '}
-                          <StyledBadge badgeContent={<StyledTooltip />}>MYRIA</StyledBadge>
-                        </>
-                      ) : (
-                        <>
-                          <FormControlLabel value={row.tokenSymbol} control={<Radio />} label={row.tokenSymbol} />
-                          <Typography className={styles.balanceText}>{row.freeBalance}</Typography>
-                        </>
-                      )}
-                    </TableCell>
-                    <TableCell align="right"></TableCell>
-                  </RadioGroup>
-                </FormControl>
+                <RadioGroup aria-label="gender" name="gender1" value={selectedToken} onChange={handleSetSelectedToken}>
+                  <TableCell component="th" scope="row">
+                    {row.tokenSymbol === 'MYRIA' ? (
+                      <>
+                        {' '}
+                        <StyledBadge badgeContent={<StyledTooltip />}>MYRIA</StyledBadge>
+                      </>
+                    ) : (
+                      <>
+                        <FormControlLabel value={row.tokenSymbol} control={<Radio />} label={row.tokenSymbol} />
+                      </>
+                    )}
+                  </TableCell>
+                </RadioGroup>
+                <TableCell align="right">
+                  <Typography className={styles.balanceText}>{row.freeBalance}</Typography>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -393,6 +392,8 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
       </TableContainer>
     );
   };
+
+  const hideDuration = 3000;
 
   return (
     <>
@@ -414,11 +415,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
               id="sendTipAmount"
               label={`How many ${selectedToken}`}
               helperText={
-                inputError.isErrorInput
-                  ? inputError.isInsufficientBalance
-                    ? inputError.errorMessage
-                    : 'Digits must be bigger than zero!'
-                  : 'Digits only'
+                inputError.isErrorInput ? (inputError.isInsufficientBalance ? inputError.errorMessage : 'Invalid input') : 'Digits only'
               }
               variant="outlined"
             />
@@ -434,27 +431,28 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
             size="large"
             variant="contained"
             startIcon={<SendIcon />}
+            disabled={balanceDetails.length === 0 || balanceDetails === undefined}
             onClick={checkAmountThenSend}>
             Send
           </Button>
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={sendTipConfirmed.isConfirmed} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar open={sendTipConfirmed.isConfirmed} autoHideDuration={hideDuration} onClose={handleClose}>
         <Alert severity="success">
           <AlertTitle>Success!</AlertTitle>
           {sendTipConfirmed.message}
         </Alert>
       </Snackbar>
 
-      <Snackbar open={errorText.isError} autoHideDuration={6000} onClose={handleCloseError}>
+      <Snackbar open={errorText.isError} autoHideDuration={hideDuration} onClose={handleCloseError}>
         <Alert severity="error">
           <AlertTitle>Error!</AlertTitle>
           {errorText.message}
         </Alert>
       </Snackbar>
 
-      <Snackbar open={errorSendTips.isError} autoHideDuration={6000} onClose={handleCloseErrorSendTips}>
+      <Snackbar open={errorSendTips.isError} autoHideDuration={hideDuration} onClose={handleCloseErrorSendTips}>
         <Alert severity="error">
           <AlertTitle>Error!</AlertTitle>
           {errorSendTips.message}
