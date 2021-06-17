@@ -29,8 +29,8 @@ export default async (req: NextApiRequest, res: NextApiResponse<ResponeTwitter>)
   }
 
   const twitterClient = new TwitterClient({
-    apiKey: process.env.TWITTER_API_KEY || '',
-    apiSecret: process.env.TWITTER_API_KEY_SECRET || '',
+    apiKey: process.env.TWITTER_API_KEY as string,
+    apiSecret: process.env.TWITTER_API_KEY_SECRET as string,
     accessToken: credential.accessToken,
     accessTokenSecret: credential.refreshToken
   });

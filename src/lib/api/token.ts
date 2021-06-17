@@ -2,7 +2,7 @@ import Axios from 'axios';
 import { Token } from 'src/interfaces/token';
 
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
+  baseURL: process.env.NEXT_PUBLIC_API_URL
 });
 
 type NewAssetProps = {

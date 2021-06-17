@@ -14,7 +14,7 @@ export const generateKey = (name: string): { mnemonic: string; key: string } => 
   const cyptoType: KeypairType = process.env.NEXT_PUBLIC_POLKADOT_CRYPTO_TYPE
     ? (process.env.NEXT_PUBLIC_POLKADOT_CRYPTO_TYPE as KeypairType)
     : 'sr25519';
-  const derivationPath = process.env.NEXT_PUBLIC_POLKADOT_DERIVATION_PATH || '';
+  const derivationPath = process.env.NEXT_PUBLIC_POLKADOT_DERIVATION_PATH;
 
   const keyring = new Keyring({ type: cyptoType, ss58Format: prefix });
   const seed = mnemonicGenerate();

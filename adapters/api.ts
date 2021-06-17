@@ -80,8 +80,8 @@ function Adapter() {
       switch (providerId) {
         case 'twitter':
           const twitterClient = new TwitterClient({
-            apiKey: process.env.TWITTER_API_KEY || '',
-            apiSecret: process.env.TWITTER_API_KEY_SECRET || '',
+            apiKey: process.env.TWITTER_API_KEY as string,
+            apiSecret: process.env.TWITTER_API_KEY_SECRET as string,
             accessToken: accessToken,
             accessTokenSecret: refreshToken
           });
@@ -106,8 +106,8 @@ function Adapter() {
         case 'reddit':
           const reddit = new snoowrap({
             userAgent: 'myriad',
-            clientId: process.env.REDDIT_APP_ID,
-            clientSecret: process.env.REDDIT_SECRET,
+            clientId: process.env.REDDIT_APP_ID as string,
+            clientSecret: process.env.REDDIT_SECRET as string,
             accessToken
           });
 
@@ -150,7 +150,7 @@ function Adapter() {
       try {
         const session = jwt.decode({
           token: sessionToken,
-          secret: process.env.SECRET || ''
+          secret: process.env.SECRET as string
         });
 
         _debug('decoded session', session);

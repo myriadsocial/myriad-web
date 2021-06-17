@@ -13,7 +13,7 @@ const RedditAPI = Axios.create({
 });
 
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || ''
+  baseURL: process.env.NEXT_PUBLIC_API_URL
 });
 
 export default async (req: NextApiRequest, res: NextApiResponse<ResponseReddit>) => {

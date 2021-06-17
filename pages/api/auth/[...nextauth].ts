@@ -20,17 +20,17 @@ export default NextAuth({
   // https://next-auth.js.org/configuration/providers
   providers: [
     Providers.Twitter({
-      clientId: process.env.TWITTER_API_KEY || '',
-      clientSecret: process.env.TWITTER_API_KEY_SECRET || ''
+      clientId: process.env.TWITTER_API_KEY as string,
+      clientSecret: process.env.TWITTER_API_KEY_SECRET as string
     }),
     Providers.Facebook({
-      clientId: process.env.FACEBOKK_APP_ID || '',
-      clientSecret: process.env.FACEBOOK_APP_SECRET || '',
+      clientId: process.env.FACEBOKK_APP_ID as string,
+      clientSecret: process.env.FACEBOOK_APP_SECRET as string,
       scope: 'user_posts,user_friends'
     }),
     Providers.Reddit({
-      clientId: process.env.REDDIT_APP_ID || '',
-      clientSecret: process.env.REDDIT_SECRET || '',
+      clientId: process.env.REDDIT_APP_ID as string,
+      clientSecret: process.env.REDDIT_SECRET as string,
       scope: 'identity read'
     }),
     Providers.Credentials({

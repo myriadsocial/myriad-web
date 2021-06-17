@@ -2,7 +2,7 @@ export const usePolkadotExtension = () => {
   const enablePolkadotExtension = async () => {
     const { web3Enable } = await import('@polkadot/extension-dapp');
 
-    const extensions = await web3Enable(process.env.NEXT_PUBLIC_APP_NAME || 'myriad-dev');
+    const extensions = await web3Enable(process.env.NEXT_PUBLIC_APP_NAME as string);
 
     // no extension installed, or the user did not accept the authorization
     // in this case we should inform the use and give a link to the extension

@@ -8,7 +8,7 @@ import { omit } from 'lodash';
 import { Experience } from 'src/interfaces/experience';
 
 const axios = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
+  baseURL: process.env.NEXT_PUBLIC_API_URL
 });
 
 export const useExperience = (userId: string) => {
