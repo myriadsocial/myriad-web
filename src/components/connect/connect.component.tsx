@@ -210,7 +210,7 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
         </DialogContent>
         <DialogActions className={styles.done}>
           <Button onClick={handleShared} disabled={!shared || !termApproved} size="large" variant="contained" color="primary">
-            Verify My Twitter Account
+            Verify My {social} Account
           </Button>
         </DialogActions>
       </Dialog>
