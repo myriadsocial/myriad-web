@@ -7,6 +7,7 @@ export interface Transaction {
   to: string;
   value: number;
   state: string;
+  tokenId: string;
   createdAt: string;
   fromUser?: User;
   toUser?: User;
