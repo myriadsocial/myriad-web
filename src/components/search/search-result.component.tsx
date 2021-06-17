@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { IconButton } from '@material-ui/core';
@@ -159,11 +158,9 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user,
         </Typography>
       </div>
       <div>
-        <Link href="/home">
-          <IconButton className={styles.back} aria-label="back" size="medium">
-            <ArrowBackIcon />
-          </IconButton>
-        </Link>
+        <IconButton className={styles.back} aria-label="back" size="medium" onClick={clickBack}>
+          <ArrowBackIcon />
+        </IconButton>
       </div>
       <div>
         <Grid container spacing={3} className={styles.searchContent}>

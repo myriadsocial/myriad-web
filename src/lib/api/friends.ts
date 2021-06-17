@@ -55,32 +55,61 @@ export const getFriends = async (userId: string): Promise<ExtendedFriend[]> => {
   return data;
 };
 
-export const searchFriend = async (query: string): Promise<ExtendedFriend[]> => {
+export const searchFriend = async (userId: string, query: string): Promise<ExtendedFriend[]> => {
   const { data } = await MyriadAPI.request<ExtendedFriend[]>({
     url: `/friends`,
     method: 'GET',
     params: {
       filter: {
         where: {
-          or: [
-            {
-              'friend.name': {
-                like: `${query}.*`,
-                options: 'i'
-              },
-              'requestor.name': {
-                like: `${query}.*`,
-                options: 'i'
+          status: FriendStatus.APPROVED,
+          or: [{ requestorId: userId }, { friendId: userId }]
+        },
+        include: [
+          {
+            relation: 'requestor',
+            scope: {
+              where: {
+                or: [
+                  {
+                    name: {
+                      like: `${query}.*`,
+                      options: 'i'
+                    }
+                  },
+                  { id: userId }
+                ]
               }
             }
-          ],
-          status: FriendStatus.APPROVED
-        },
-        include: ['friend', 'requestor']
+          },
+          {
+            relation: 'friend',
+            scope: {
+              where: {
+                or: [
+                  {
+                    name: {
+                      like: `${query}.*`,
+                      options: 'i'
+                    }
+                  },
+                  { id: userId }
+                ]
+              }
+            }
+          }
+        ]
       }
     }
   });
-  return data;
+
+  return data.filter(item => {
+    if (item.requestorId === userId) {
+      return !!item.friend;
+    } else {
+      return !!item.requestor;
+    }
+  });
 };
 
 export const checkFriendStatus = async (userIds: string[]): Promise<ExtendedFriend[]> => {
