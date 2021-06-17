@@ -5,7 +5,7 @@ import { User } from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
+  baseURL: process.env.NEXT_PUBLIC_API_URL
 });
 
 export const getUserProfile = async (id: string): Promise<ExtendedUserPost> => {

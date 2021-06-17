@@ -2,7 +2,7 @@ import Axios from 'axios';
 import { ExtendedFriend, FriendStatus } from 'src/interfaces/friend';
 
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
+  baseURL: process.env.NEXT_PUBLIC_API_URL
 });
 
 export const getSentRequests = async (userId: string): Promise<ExtendedFriend[]> => {

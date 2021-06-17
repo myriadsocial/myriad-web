@@ -3,7 +3,7 @@ import { People } from 'src/interfaces/people';
 import { SocialsEnum } from 'src/interfaces/social';
 
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
+  baseURL: process.env.NEXT_PUBLIC_API_URL
 });
 
 export const getPeopleByPlatform = async (platform: SocialsEnum, accountId: string): Promise<People | null> => {
