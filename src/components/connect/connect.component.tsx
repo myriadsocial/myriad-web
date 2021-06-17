@@ -113,43 +113,12 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
         </DialogTitle>
         <DialogContent className={styles.root}>
           <List component="div" aria-label="connect social steps">
-            <ListItem>
+          <ListItem>
               <ListItemIcon style={{ alignSelf: 'flex-start' }}>
                 <Avatar className={styles.icon}>1.</Avatar>
               </ListItemIcon>
               <ListItemText disableTypography>
-                <Typography variant="caption">Your {social} Account</Typography>
-                <TextField
-                  className={styles.account}
-                  hiddenLabel
-                  value={socialName}
-                  onChange={handleSocialNameChange}
-                  onPaste={handleSocialNamePasted}
-                  color="primary"
-                  margin="dense"
-                  required
-                  fullWidth
-                  name="username"
-                  type="text"
-                  id="username"
-                  InputProps={{
-                    disableUnderline: true,
-                    color: 'primary',
-                    startAdornment: (
-                      <InputAdornment position="start" disableTypography style={{ color: theme.palette.primary.dark }}>
-                        {prefix[social]}
-                      </InputAdornment>
-                    )
-                  }}
-                />
-              </ListItemText>
-            </ListItem>
-            <ListItem>
-              <ListItemIcon style={{ alignSelf: 'flex-start' }}>
-                <Avatar className={styles.icon}>2.</Avatar>
-              </ListItemIcon>
-              <ListItemText disableTypography>
-                <Typography variant="caption">Post it to your {social} timeline</Typography>
+                <Typography variant="caption">Copy and post the following to your {social} timeline</Typography>
                 <TextField
                   disabled
                   margin="dense"
@@ -169,10 +138,10 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
 
             <ListItem>
               <ListItemIcon style={{ alignSelf: 'flex-start' }}>
-                <Avatar className={styles.icon}>3.</Avatar>
+                <Avatar className={styles.icon}>2.</Avatar>
               </ListItemIcon>
               <ListItemText disableTypography>
-                <Typography variant="caption">Post it to your {social} timeline</Typography>
+                <Typography variant="caption">Alternatively, you can click the Share button below and just click the Post button in the pop-up!</Typography>
                 <div className={styles.linkAction}>
                   <ShowIf condition={social === SocialsEnum.FACEBOOK}>
                     <FacebookShareButton url={APP_URL} quote={message} onShareWindowClose={onShareClosed}>
@@ -206,6 +175,38 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
                 </div>
               </ListItemText>
             </ListItem>
+            <ListItem>
+              <ListItemIcon style={{ alignSelf: 'flex-start' }}>
+                <Avatar className={styles.icon}>3.</Avatar>
+              </ListItemIcon>
+              <ListItemText disableTypography>
+                <Typography variant="caption">Copy and paste the URL of the post (make sure it's public!) here:</Typography>
+                <TextField
+                  className={styles.account}
+                  hiddenLabel
+                  value={socialName}
+                  onChange={handleSocialNameChange}
+                  onPaste={handleSocialNamePasted}
+                  color="primary"
+                  margin="dense"
+                  required
+                  fullWidth
+                  name="username"
+                  type="text"
+                  id="username"
+                  InputProps={{
+                    disableUnderline: true,
+                    color: 'primary',
+                    startAdornment: (
+                      <InputAdornment position="start" disableTypography style={{ color: theme.palette.primary.dark }}>
+                        {prefix[social]}
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </ListItemText>
+            </ListItem>
+            
           </List>
         </DialogContent>
         <DialogActions className={styles.done}>
