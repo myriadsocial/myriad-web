@@ -125,8 +125,6 @@ export const usePolkadotApi = () => {
             ? api.tx.balances.transfer(toAddress, amountSent)
             : api.tx.currencies.transfer(toAddress, { TOKEN: currencyId }, amountSent);
 
-        console.log('transferExtrinsic: ', transferExtrinsic);
-
         // to be able to retrieve the signer interface from this account
         // we can use web3FromSource which will return an InjectedExtension type
         const injector = await web3FromSource(account.meta.source);
@@ -136,11 +134,7 @@ export const usePolkadotApi = () => {
         // popup asking to sign the balance transfer transaction
         const txInfo = await transferExtrinsic.signAndSend(fromAddress, { signer: injector.signer });
 
-        console.log('txInfo: ', txInfo);
-        console.log('the currencyId is: ', currencyId);
-
         const response = updateTips(amountSent, postId);
-        console.log('response is:', response);
 
         return { trxHash: txInfo.toHex(), from: fromAddress };
       }

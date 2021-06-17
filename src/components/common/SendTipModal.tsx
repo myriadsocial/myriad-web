@@ -2,11 +2,9 @@ import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'rea
 
 import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -150,9 +148,13 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiverId }: Props, ref) => {
-  const { sendTip } = usePolkadotApi();
+  const { sendTip, load } = usePolkadotApi();
   const [selectedToken, setSelectedToken] = useState('');
   const [tokenBalance, setTokenBalance] = useState('');
+
+  useEffect(() => {
+    load(userAddress);
+  }, []);
 
   useEffect(() => {
     if (balanceDetails.length > 0) {
@@ -266,7 +268,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
           const { walletAddress } = await WalletAddressAPI.getWalletAddress(postId as string);
           toAddress = walletAddress;
         }
-        console.log('amount sent: ', amountSent);
 
         const response = await sendTip(senderAddress, toAddress, amountSent, selectedToken, postId);
         // handle if sendTip succeed
@@ -293,7 +294,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
             ...values,
             amount: ''
           });
-          //load(userAddress);
+          load(userAddress);
         }
       }
     } else {
@@ -431,7 +432,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
             size="large"
             variant="contained"
             startIcon={<SendIcon />}
-            disabled={balanceDetails.length === 0 || balanceDetails === undefined}
+            disabled={balanceDetails === undefined}
             onClick={checkAmountThenSend}>
             Send
           </Button>

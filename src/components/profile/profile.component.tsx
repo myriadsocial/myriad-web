@@ -19,6 +19,7 @@ import { useStyles } from './profile.style';
 import ShowIf from 'src/components/common/show-if.component';
 import { useProfile } from 'src/components/profile/profile.context';
 import { useFriendHook } from 'src/components/profile/use-friend.hook';
+import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
 
 const PostList = dynamic(() => import('./post/post-list.component'));
@@ -114,6 +115,14 @@ export default function ProfileTimeline({ isAnonymous, user, profile, loading }:
   } = useProfile();
   const { getFriends } = useFriendHook(profile);
 
+  const { load, tokens } = usePolkadotApi();
+
+  useEffect(() => {
+    if (user) {
+      load(user?.id);
+    }
+  }, []);
+
   const [value, setValue] = React.useState(0);
   const [isGuest, setIsGuest] = useState<Boolean>(false);
   const style = useStyles();
@@ -182,10 +191,10 @@ export default function ProfileTimeline({ isAnonymous, user, profile, loading }:
               index={value}
               onChangeIndex={handleChangeIndex}>
               <TabPanel value={value} index={0} dir={theme.direction}>
-                <PostList profile={profile} user={user} />
+                <PostList profile={profile} user={user} balanceDetails={tokens.length > 0 ? tokens : []} />
               </TabPanel>
               <TabPanel value={value} index={1} dir={theme.direction}>
-                <ImportedPostList user={user} profile={profile} />
+                <ImportedPostList user={user} profile={profile} balanceDetails={tokens.length > 0 ? tokens : []} />
               </TabPanel>
               <TabPanel value={value} index={2} dir={theme.direction}>
                 <FriendComponent profile={profile} />
@@ -213,10 +222,10 @@ export default function ProfileTimeline({ isAnonymous, user, profile, loading }:
               index={value}
               onChangeIndex={handleChangeIndex}>
               <TabPanel value={value} index={0} dir={theme.direction}>
-                <PostList profile={profile} user={user} />
+                <PostList profile={profile} user={user} balanceDetails={tokens.length > 0 ? tokens : []} />
               </TabPanel>
               <TabPanel value={value} index={1} dir={theme.direction}>
-                <ImportedPostList user={user} profile={profile} />
+                <ImportedPostList user={user} profile={profile} balanceDetails={tokens.length > 0 ? tokens : []} />
               </TabPanel>
               <TabPanel value={value} index={2} dir={theme.direction}>
                 <FriendComponent profile={profile} />
