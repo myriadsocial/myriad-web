@@ -150,8 +150,12 @@ const useStyles = makeStyles((theme: Theme) =>
 const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiverId }: Props, ref) => {
   const { sendTip, load, trxHash, error } = usePolkadotApi();
   const { loadWalletAddress, walletAddress } = useWalletAddress(postId);
+=======
   const [selectedToken, setSelectedToken] = useState('');
   const [tokenBalance, setTokenBalance] = useState('');
+  useEffect(() => {
+    loadWalletAddress();
+  }, []);
 
   useEffect(() => {
     console.log('load send tip modal');
