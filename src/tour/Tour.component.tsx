@@ -26,21 +26,21 @@ const TourComponent: React.FC<Props> = ({ user }) => {
     {
       target: '#user-profile',
       title: 'Complete your profile',
-      content: 'Make your profile stand out. Upload a profile picture, set your display name, and tell people a bit about yourself.',
+      content: 'Make your profile stand out. Upload a profile picture, set your display name, and tell everyone a bit about yourself.',
       placement: 'right'
     },
     {
       target: '#user-profile',
       title: 'Explore Myriad from your profile.',
       content:
-        'You can access your myriad posts, imported posts, friends, your wallet and tip jar from your profile. You can also find your public key here. Be sure to check them out..',
+        'You can access your Myriad posts, imported posts, friends, wallet and tip jar from your profile. You can also find your public key here. Be sure to check them out...',
       placement: 'right'
     },
     {
       target: '#user-profile #social-list',
       title: 'Claim your tips.',
       content:
-        'People might be a fan of your posts and have sent you some tips while you’re not on Myriad yet. Claim them now by verifying your social media.',
+        'People might be a fan of your posts and have sent you some tips while you’re not on Myriad yet. Claim them now by verifying your social media account.',
       placement: 'right'
     },
     {
