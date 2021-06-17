@@ -63,7 +63,7 @@ export default function CreatePostComponent({ user, experiences }: Props) {
         <CardContent>
           <TextareaAutosize
             rowsMin={2}
-            placeholder={`Any thought about something`}
+            placeholder={`A penny for your thoughts?`}
             className={styles.postTextArea}
             onChange={updatePostText}
             spellCheck={false}

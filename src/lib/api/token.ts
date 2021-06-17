@@ -10,6 +10,14 @@ type NewAssetProps = {
   tokenId: string;
 };
 
+type NewTokenProps = {
+  id: string;
+  token_name: string;
+  token_decimal: number;
+  address_format: number;
+  rpc_address: string;
+};
+
 export const getTokens = async () => {
   const { data } = await MyriadAPI.request<Token[]>({
     url: '/tokens',
@@ -38,8 +46,17 @@ export const searchToken = async (query: string) => {
   return data;
 };
 
-export const addNewToken = async (values: NewAssetProps) => {
-  console.log('the values:', values);
+export const addNewToken = async (values: NewTokenProps) => {
+  const { data } = await MyriadAPI.request<Token[]>({
+    url: `/tokens`,
+    method: 'POST',
+    data: values
+  });
+
+  return data;
+};
+
+export const addUserToken = async (values: NewAssetProps) => {
   const { data } = await MyriadAPI.request<Token[]>({
     url: `/user-tokens`,
     method: 'POST',

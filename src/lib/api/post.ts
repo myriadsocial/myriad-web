@@ -127,7 +127,6 @@ export const createPost = async (values: Partial<Post>): Promise<Post> => {
 };
 
 export const importPost = async (values: ImportPost) => {
-  console.log('the values are: ', values);
   const { data } = await MyriadAPI.request<Post>({
     url: `/posts/import`,
     method: 'POST',
@@ -222,4 +221,19 @@ export const dislike = async (userId: string, postId: string) => {
       postId
     }
   });
+};
+
+export const updateTips = async (tokenId: string, tipsReceived: number, postId: string) => {
+  try {
+    await MyriadAPI.request({
+      url: `/posts/${postId}/update-tips`,
+      method: 'POST',
+      data: {
+        tokenId,
+        tipsReceived
+      }
+    });
+  } catch (error) {
+    console.log('error from updateTips: ', error);
+  }
 };

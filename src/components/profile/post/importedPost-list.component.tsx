@@ -13,22 +13,24 @@ import PostComponent from 'src/components/post/post.component';
 import { useProfile } from 'src/components/profile/profile.context';
 import { useProfileHook } from 'src/components/profile/use-profile.hook';
 import { useTimelineHook } from 'src/hooks/use-timeline.hook';
+import { BalanceDetail } from 'src/interfaces/balance';
 import { Post } from 'src/interfaces/post';
 import { User, ExtendedUserPost } from 'src/interfaces/user';
 
 type Props = {
-  user: User;
+  user: User | null;
   profile: ExtendedUserPost;
+  balanceDetails: BalanceDetail[];
 };
 
-export default function ImportedPostList({ user, profile }: Props) {
+export default function ImportedPostList({ user, profile, balanceDetails }: Props) {
   const style = useStyles();
   const { hasMore, nextPosts } = useTimelineHook();
   const { state: profileState } = useProfile();
   const { loadImportedPost, loading } = useProfileHook(profile.id);
   const posts = profileState.importedPost;
   const isOwnPost = (post: Post) => {
-    if (post.walletAddress === user.id) return true;
+    if (user && post.walletAddress === user.id) return true;
     return false;
   };
 
@@ -56,7 +58,7 @@ export default function ImportedPostList({ user, profile }: Props) {
         loader={<LoadingPage />}>
         {posts.map((post: Post, i: number) => (
           <Grow key={i}>
-            <PostComponent post={post} postOwner={isOwnPost(post)} />
+            <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={balanceDetails} />
           </Grow>
         ))}
 

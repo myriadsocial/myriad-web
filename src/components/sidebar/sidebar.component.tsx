@@ -53,7 +53,7 @@ export default function SidebarTabs({ isAnonymous }: SidebarProps) {
         <FriendComponent />
       </TabPanel>
       <TabPanel value={value} index={SidebarTab.NOTIFICATION} dir={theme.direction}>
-        <NotificationComponent isAnonymous />
+        <NotificationComponent isAnonymous={isAnonymous} />
       </TabPanel>
     </div>
   );

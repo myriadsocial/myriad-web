@@ -17,7 +17,9 @@ import { WalletComponent } from './myWallet/wallet.component';
 import { useStyles } from './profile.style';
 
 import ShowIf from 'src/components/common/show-if.component';
-import { useFriends } from 'src/context/friends.context';
+import { useProfile } from 'src/components/profile/profile.context';
+import { useFriendHook } from 'src/components/profile/use-friend.hook';
+import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
 
 const PostList = dynamic(() => import('./post/post-list.component'));
@@ -25,7 +27,8 @@ const ImportedPostList = dynamic(() => import('./post/importedPost-list.componen
 const FriendComponent = dynamic(() => import('./user-friends.component'));
 
 type Props = {
-  user: ExtendedUser;
+  isAnonymous: boolean;
+  user: ExtendedUser | null;
   profile: ExtendedUserPost | null;
   loading: Boolean;
 };
@@ -106,10 +109,19 @@ function MyWalletTabs() {
 }
 // WALLET TAB
 
-export default function ProfileTimeline({ user, profile, loading }: Props) {
+export default function ProfileTimeline({ isAnonymous, user, profile, loading }: Props) {
   const {
     state: { totalFriends }
-  } = useFriends();
+  } = useProfile();
+  const { getFriends } = useFriendHook(profile);
+
+  const { load, tokens } = usePolkadotApi();
+
+  useEffect(() => {
+    if (user) {
+      load(user?.id);
+    }
+  }, []);
 
   const [value, setValue] = React.useState(0);
   const [isGuest, setIsGuest] = useState<Boolean>(false);
@@ -125,9 +137,13 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
   };
 
   useEffect(() => {
-    if (user.id === profile?.id) setIsGuest(false);
+    if (user && user.id === profile?.id) setIsGuest(false);
     else setIsGuest(true);
   }, [profile]);
+
+  useEffect(() => {
+    getFriends();
+  }, [profile?.id]);
 
   if (loading) {
     return (
@@ -140,7 +156,7 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
   if (profile === null) {
     return (
       <div className={style.root}>
-        <Header user={user} profile={null} loading={loading} isGuest={true} />
+        <Header isAnonymous={isAnonymous} user={user} profile={null} loading={loading} isGuest={true} />
         <div style={{ textAlign: 'center' }}>
           <h1>This account doesn’t exist</h1>
           <Typography>Try searching for another.</Typography>
@@ -153,7 +169,7 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
     <div className={style.root}>
       <div className={style.scroll}>
         {/* HEADER */}
-        <Header user={user} profile={profile} loading={loading} isGuest={isGuest} />
+        <Header isAnonymous={isAnonymous} user={user} profile={profile} loading={loading} isGuest={isGuest} />
         {/* TAB */}
         <div className={style.root2}>
           <ShowIf condition={isGuest === false}>
@@ -175,13 +191,13 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
               index={value}
               onChangeIndex={handleChangeIndex}>
               <TabPanel value={value} index={0} dir={theme.direction}>
-                <PostList profile={profile} user={user} />
+                <PostList profile={profile} user={user} balanceDetails={tokens.length > 0 ? tokens : []} />
               </TabPanel>
               <TabPanel value={value} index={1} dir={theme.direction}>
-                <ImportedPostList user={user} profile={profile} />
+                <ImportedPostList user={user} profile={profile} balanceDetails={tokens.length > 0 ? tokens : []} />
               </TabPanel>
               <TabPanel value={value} index={2} dir={theme.direction}>
-                <FriendComponent />
+                <FriendComponent profile={profile} />
               </TabPanel>
               <TabPanel value={value} index={3} dir={theme.direction}>
                 <MyWalletTabs />
@@ -206,13 +222,13 @@ export default function ProfileTimeline({ user, profile, loading }: Props) {
               index={value}
               onChangeIndex={handleChangeIndex}>
               <TabPanel value={value} index={0} dir={theme.direction}>
-                <PostList profile={profile} user={user} />
+                <PostList profile={profile} user={user} balanceDetails={tokens.length > 0 ? tokens : []} />
               </TabPanel>
               <TabPanel value={value} index={1} dir={theme.direction}>
-                <ImportedPostList user={user} profile={profile} />
+                <ImportedPostList user={user} profile={profile} balanceDetails={tokens.length > 0 ? tokens : []} />
               </TabPanel>
               <TabPanel value={value} index={2} dir={theme.direction}>
-                <FriendComponent />
+                <FriendComponent profile={profile} />
               </TabPanel>
             </SwipeableViews>
           </ShowIf>

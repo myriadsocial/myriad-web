@@ -46,7 +46,9 @@ export const useFriendsHook = (user: User | null) => {
   };
 
   const searchFriend = async (query: string) => {
-    const friends: ExtendedFriend[] = await FriendAPI.searchFriend(query);
+    if (!user) return;
+
+    const friends: ExtendedFriend[] = await FriendAPI.searchFriend(user.id, query);
 
     dispatch({
       type: FriendsActionType.LOAD_FRIENDS,
@@ -82,7 +84,7 @@ export const useFriendsHook = (user: User | null) => {
     try {
       const requests = await FriendAPI.checkFriendStatus(userIds);
 
-      setFriended(requests.filter(request => request.friendId !== user.id));
+      setFriended(requests);
     } catch (error) {
       setError(error);
     } finally {

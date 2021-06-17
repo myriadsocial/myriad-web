@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 
-import { useBalance } from '../wallet/use-balance.hooks';
+import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -103,16 +103,19 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
 
   const [session] = useSession();
   const userAddress = session?.user.address as string;
-  const { loading, error, freeBalance, loadInitBalance } = useBalance(userAddress);
+
+  const { loading, error, tokens, load } = usePolkadotApi();
 
   useEffect(() => {
-    loadInitBalance();
-  }, []);
+    if (userAddress) {
+      load(userAddress);
+    }
+  }, [userAddress]);
 
   useImperativeHandle(forwardedRef, () => ({
     triggerRefresh: () => {
       setIsHidden(false);
-      loadInitBalance();
+      //loadInitBalance();
     }
   }));
 
@@ -120,12 +123,6 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
   const handleIsHidden = (e: React.MouseEvent<HTMLButtonElement>) => {
     setIsHidden(!isHidden);
   };
-
-  function createData(currency: string, balance: number) {
-    return { currency, balance };
-  }
-
-  const rows = [createData('MYRIA', freeBalance), createData('ACA', 100)];
 
   const TooltipContent = () => {
     return (
@@ -159,17 +156,17 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => (
-              <TableRow key={row.currency}>
+            {tokens.map(row => (
+              <TableRow key={row.tokenSymbol}>
                 <TableCell component="th" scope="row">
                   <Typography className={style.balanceText}>
-                    {row.currency === 'MYRIA' ? (
+                    {row.tokenSymbol === 'MYRIA' ? (
                       <>
                         {' '}
                         <StyledBadge badgeContent={<StyledTooltip />}>MYRIA</StyledBadge>
                       </>
                     ) : (
-                      row.currency
+                      row.tokenSymbol
                     )}
                   </Typography>
                 </TableCell>
@@ -181,7 +178,7 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
                   ) : error ? (
                     <Typography className={style.errorText}>Error, try again!</Typography>
                   ) : (
-                    <Button onClick={handleIsHidden}>{row.balance}</Button>
+                    <Button onClick={handleIsHidden}>{row.freeBalance}</Button>
                   )}
                 </TableCell>
               </TableRow>

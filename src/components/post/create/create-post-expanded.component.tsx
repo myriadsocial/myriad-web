@@ -139,7 +139,7 @@ export const CreatePostExpandedComponent: React.FC<CreatePostExpandedComponentPr
       <CardContent style={{ padding: theme.spacing(1) }}>
         <TextareaAutosize
           rowsMin={5}
-          placeholder={`Any thought about something, ${user.name}?`}
+          placeholder={`What's on your mind ${user.name}?`}
           className={styles.postTextArea}
           spellCheck={false}
           value={postText}
@@ -161,7 +161,7 @@ export const CreatePostExpandedComponent: React.FC<CreatePostExpandedComponentPr
 
         <div className={styles.additionalAction}>
           <Typography variant="caption" style={{ marginRight: 24 }}>
-            Add somenting to your post
+            Add something to your post
           </Typography>
           <input type="file" multiple ref={uploadImageRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
           <IconButton color="primary" aria-label="upload images" onClick={selectImages}>

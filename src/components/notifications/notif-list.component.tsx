@@ -12,7 +12,7 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
 import { ListHeaderComponent } from './list-header.component';
 
-import moment from 'moment';
+import { formatDistance, subDays } from 'date-fns';
 import ShowIf from 'src/components/common/show-if.component';
 import { useNotif } from 'src/context/notif.context';
 import { acronym } from 'src/helpers/string';
@@ -74,7 +74,7 @@ const Notification = ({ user }: Props) => {
           <div className={style.content}>
             <ShowIf condition={state.total == 0}>
               <Typography variant="h5" color="textPrimary" style={{ textAlign: 'center', padding: '16px 40px' }}>
-                You don't have any notification, let’s start post something
+                You don't have any notifications, start posting!
               </Typography>
             </ShowIf>
             <List className={style.list}>
@@ -91,7 +91,7 @@ const Notification = ({ user }: Props) => {
                         {notif.message}
                       </Typography>
                       <Typography variant="body2" color="textPrimary">
-                        {moment(notif.createdAt).fromNow()}
+                        {formatDistance(subDays(new Date(notif.createdAt), 0), new Date(), { addSuffix: true })}
                       </Typography>
                     </ListItemText>
                   </ListItem>

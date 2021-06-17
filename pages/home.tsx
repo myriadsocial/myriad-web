@@ -9,7 +9,6 @@ import NoSsr from '@material-ui/core/NoSsr';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import Layout from 'src/components/Layout/Layout.container';
-import ShowIf from 'src/components/common/show-if.component';
 import Timeline from 'src/components/timeline/timeline.component';
 import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
@@ -50,15 +49,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up('xl')]: {
         maxWidth: 926
       }
-    },
-    searchedContent: {
-      marginLeft: 0,
-      padding: '0 24px 0 24px',
-      height: '100vh',
-      maxWidth: 726,
-      [theme.breakpoints.up('xl')]: {
-        maxWidth: 926
-      }
     }
   })
 );
@@ -71,7 +61,7 @@ export default function Home() {
 
   const isAnonymous = !!session?.user.anonymous;
 
-  const { load, searching } = useMyriadUser();
+  const { load } = useMyriadUser();
 
   useEffect(() => {
     load();
@@ -97,18 +87,16 @@ export default function Home() {
           </Grid>
           <Grid item className={style.fullwidth}>
             <FriendsProvider>
-              <ShowIf condition={!isAnonymous}>
-                <NoSsr>
-                  <Wallet />
-                </NoSsr>
-              </ShowIf>
+              <NoSsr>
+                <Wallet />
+              </NoSsr>
             </FriendsProvider>
 
             <TopicComponent />
           </Grid>
         </Grid>
       </Grid>
-      <Grid item className={searching ? style.searchedContent : style.content}>
+      <Grid item className={style.content}>
         <Timeline isAnonymous={isAnonymous} />
       </Grid>
     </Layout>

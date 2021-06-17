@@ -3,29 +3,37 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { signOut } from 'next-auth/client';
 
+import { SvgIcon } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 import { useStyles } from './header.style';
 import { useFriendHook } from './use-friend.hook';
 
+import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
 import { ProfileEditComponent } from 'src/components/profile/profile-edit.component';
 import { useProfile } from 'src/components/profile/profile.context';
 import { SocialListComponent } from 'src/components/user/social-list.component';
 import { acronym } from 'src/helpers/string';
+import RemoveUser from 'src/images/user-minus2.svg';
 import { FriendStatus } from 'src/interfaces/friend';
 import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
 
 type Props = {
-  user: ExtendedUser;
+  isAnonymous: boolean;
+  user: ExtendedUser | null;
   profile: ExtendedUserPost | null;
   loading: Boolean;
   isGuest: Boolean;
@@ -35,9 +43,10 @@ function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export default function Header({ user, profile, loading, isGuest }: Props) {
+export default function Header({ isAnonymous, user, profile, loading, isGuest }: Props) {
   const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const {
     state: { friendStatus }
@@ -56,6 +65,11 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
   // SHOW MODAL
   const toggleProfileForm = () => {
     setOpen(!open);
+  };
+
+  // SHOW REMOVE ALERT MODAL
+  const toggleRemoveAlert = () => {
+    setOpenModal(!openModal);
   };
 
   // FRIEND REQUEST
@@ -167,13 +181,15 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
             <div style={{ marginTop: '40px' }}>
               <ShowIf condition={friendStatus?.status == null}>
                 <Button
+                  disabled={isAnonymous}
                   className={style.button2}
                   style={{ marginRight: 24 }}
                   color="primary"
                   variant="contained"
                   size="medium"
+                  startIcon={<PersonAddIcon />}
                   onClick={friendRequest}>
-                  Add Friends
+                  Add Friend
                 </Button>
               </ShowIf>
 
@@ -220,7 +236,8 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
                   color="primary"
                   variant="contained"
                   size="medium"
-                  onClick={() => console.log('unFriend')}>
+                  startIcon={<RemoveUser />}
+                  onClick={toggleRemoveAlert}>
                   Unfriend
                 </Button>
               </ShowIf>
@@ -261,14 +278,45 @@ export default function Header({ user, profile, loading, isGuest }: Props) {
               </Button>
             </div>
             <div style={{ marginTop: '30px' }}>
-              <SocialListComponent isAnonymous={user.anonymous} user={user} />
+              <SocialListComponent isAnonymous={isAnonymous} user={user} />
             </div>
           </ShowIf>
         </div>
       </div>
 
       {/* MODAL */}
-      <ProfileEditComponent toggleProfileForm={toggleProfileForm} open={open} user={user} />
+      {user && <ProfileEditComponent toggleProfileForm={toggleProfileForm} open={open} user={user} />}
+
+      <Dialog open={openModal} aria-labelledby="no-extension-installed">
+        <DialogTitle id="name" onClose={toggleRemoveAlert}>
+          Remove Friend
+        </DialogTitle>
+        <DialogContent>
+          <div className={style.dialogRoot}>
+            <SvgIcon className={style.icon} fontSize="inherit" color="error">
+              <WarningRoundedIcon />
+            </SvgIcon>
+            <Typography className={style.subtitle1} variant="h2" color="error">
+              Unfriend {profile.name}
+            </Typography>
+            <Typography className={`${style.subtitle2} ${style.alertMessage}  ${style.center} ${style['m-vertical2']}`}>
+              Are you sure want to remove this person from your friend list? You will{' '}
+              <Typography variant="inherit" color="error">
+                no longer see posts
+              </Typography>{' '}
+              from this person.
+            </Typography>
+            <div className={`${style['flex-center']} ${style['m-vertical1']}`}>
+              <Button variant="text" onClick={toggleRemoveAlert}>
+                Cancel
+              </Button>
+              <Button disabled variant="contained" color="primary" onClick={() => console.log('remove friend')}>
+                Remove
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <Snackbar open={isPublicKeyCopied} autoHideDuration={6000} onClose={closeNotify}>
         <Alert onClose={closeNotify} severity="success">

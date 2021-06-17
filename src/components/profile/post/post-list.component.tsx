@@ -11,20 +11,22 @@ import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import { LoadingPage } from 'src/components/common/loading.component';
 import PostComponent from 'src/components/post/post.component';
 import { useTimelineHook } from 'src/hooks/use-timeline.hook';
+import { BalanceDetail } from 'src/interfaces/balance';
 import { Post } from 'src/interfaces/post';
 import { User, ExtendedUserPost } from 'src/interfaces/user';
 
 type Props = {
-  user: User;
+  user: User | null;
   profile: ExtendedUserPost;
+  balanceDetails: BalanceDetail[];
 };
 
-export default function PostList({ user, profile }: Props) {
+export default function PostList({ user, profile, balanceDetails }: Props) {
   const style = useStyles();
   const { hasMore, nextPosts } = useTimelineHook();
 
   const isOwnPost = (post: Post) => {
-    if (post.walletAddress === user.id) {
+    if (user && post.platformUser?.platform_account_id === user.id) {
       return true;
     }
     return false;
@@ -50,7 +52,7 @@ export default function PostList({ user, profile }: Props) {
         loader={<LoadingPage />}>
         {profile.posts.map((post: Post, i: number) => (
           <Grow key={i}>
-            <PostComponent post={post} postOwner={isOwnPost(post)} />
+            <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={balanceDetails} />
           </Grow>
         ))}
 

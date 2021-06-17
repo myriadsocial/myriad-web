@@ -70,6 +70,8 @@ const Friends = ({ user }: Props) => {
     setOpenOnlineFriends(!openOnlineFriends);
   };
 
+  if (!user) return null;
+
   return (
     <Box className={style.root}>
       <ListHeaderComponent title={`Friends (${state.friends.length})`} />
@@ -86,26 +88,46 @@ const Friends = ({ user }: Props) => {
                 variant="h4"
                 color="textPrimary"
                 style={{ fontWeight: 500, fontSize: 14, textAlign: 'center', padding: '16px 0', color: '#B1AEB7' }}>
-                You don't have any Myriad friend, try to search for people or tell your friends about myriad
+                You don't have any Myriad friends yet. Search for people or tell your friends about Myriad!
               </Typography>
             </ShowIf>
 
             <List className={style.list}>
               {state.friends.map(request => {
                 return (
-                  <ListItem key={request.id} className={style.item} alignItems="flex-start">
-                    <ListItemAvatar>
-                      <Avatar alt={request.requestor.name} src={request.requestor.profilePictureURL} />
-                    </ListItemAvatar>
-                    <ListItemText>
-                      <Typography component="span" variant="h4" color="textPrimary" style={{ fontSize: 16 }}>
-                        {request.requestor.name}
-                      </Typography>
-                    </ListItemText>
-                    <ListItemSecondaryAction>
-                      <FiberManualRecordIcon style={{ color: '#06960C' }} />
-                    </ListItemSecondaryAction>
-                  </ListItem>
+                  <>
+                    {user.id !== request.requestorId && (
+                      <ListItem key={request.id} className={style.item} alignItems="flex-start">
+                        <ListItemAvatar>
+                          <Avatar alt={request.requestor.name} src={request.requestor.profilePictureURL} />
+                        </ListItemAvatar>
+                        <ListItemText>
+                          <Typography component="span" variant="h4" color="textPrimary" style={{ fontSize: 16 }}>
+                            {request.requestor.name}
+                          </Typography>
+                        </ListItemText>
+                        <ListItemSecondaryAction>
+                          <FiberManualRecordIcon style={{ color: '#06960C' }} />
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                    )}
+
+                    {user.id !== request.friendId && (
+                      <ListItem key={request.id} className={style.item} alignItems="flex-start">
+                        <ListItemAvatar>
+                          <Avatar alt={request.friend.name} src={request.friend.profilePictureURL} />
+                        </ListItemAvatar>
+                        <ListItemText>
+                          <Typography component="span" variant="h4" color="textPrimary" style={{ fontSize: 16 }}>
+                            {request.friend.name}
+                          </Typography>
+                        </ListItemText>
+                        <ListItemSecondaryAction>
+                          <FiberManualRecordIcon style={{ color: '#06960C' }} />
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                    )}
+                  </>
                 );
               })}
             </List>

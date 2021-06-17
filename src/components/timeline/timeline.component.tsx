@@ -1,10 +1,11 @@
 import React, { useState, createRef, useCallback, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import { useSession } from 'next-auth/client';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
-import Grow from '@material-ui/core/Grow';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
@@ -22,6 +23,7 @@ import SearchResultComponent from 'src/components/search/search-result.component
 import { useTimeline } from 'src/context/timeline.context';
 import { useUser } from 'src/context/user.context';
 import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
+import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 import { useTimelineHook } from 'src/hooks/use-timeline.hook';
 import { Post } from 'src/interfaces/post';
 
@@ -32,7 +34,18 @@ type TimelineProps = {
 const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
   const style = useStyles();
 
+  const [session] = useSession();
+  const userAddress = session?.user.address as string;
+
   const { searching, backToTimeline, users: options } = useMyriadUser();
+
+  const { load, tokens } = usePolkadotApi();
+
+  useEffect(() => {
+    if (userAddress) {
+      load(userAddress);
+    }
+  }, [userAddress]);
 
   const [loading, setLoading] = useState(false);
 
@@ -67,7 +80,7 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
   const isOwnPost = (post: Post) => {
     if (!user) return false;
 
-    if (post.walletAddress === user.id) {
+    if (post.platformUser?.platform_account_id === user.id) {
       return true;
     }
 
@@ -115,10 +128,18 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
   };
 
   if (searching)
-    return <>{loading ? <LoadingComponent /> : <SearchResultComponent user={user} users={options} clickBack={handleClick} />}</>;
+    return (
+      <div id="search-result">
+        {loading ? (
+          <LoadingComponent />
+        ) : (
+          <SearchResultComponent isAnonymous={isAnonymous} user={user} users={options} clickBack={handleClick} />
+        )}
+      </div>
+    );
 
   return (
-    <div className={style.root}>
+    <div className={style.root} id="timeline">
       <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
         {user && (
           <>
@@ -132,28 +153,27 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
 
         {!isMobile && <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />}
 
-        <div id="timeline">
+        <div>
           <InfiniteScroll
             scrollableTarget="scrollable-timeline"
             className={style.child}
             dataLength={state.posts.length}
             next={nextPage}
             hasMore={hasMore}
-            onScroll={() => console.log('scroll')}
             loader={<LoadingPage />}>
             {state.posts.map((post: Post, i: number) => (
-              <Grow key={i}>
-                <PostComponent post={post} postOwner={isOwnPost(post)} />
-              </Grow>
+              <div key={i} id={`post-detail-${i}`}>
+                <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={tokens.length > 0 ? tokens : []} />
+              </div>
             ))}
-
-            <ScrollTop>
-              <Fab color="secondary" size="small" aria-label="scroll back to top">
-                <KeyboardArrowUpIcon />
-              </Fab>
-            </ScrollTop>
           </InfiniteScroll>
         </div>
+
+        <ScrollTop>
+          <Fab color="secondary" size="small" aria-label="scroll back to top">
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </ScrollTop>
       </div>
 
       <div id="fb-root" />

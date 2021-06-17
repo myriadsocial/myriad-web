@@ -81,7 +81,7 @@ export const PostSettingComponent: React.FC<PostSettingProps> = ({ userId }) => 
             aria-labelledby="nested-list-subheader"
             subheader={
               <ListSubheader className={styles.header} component="div" id="nested-list-subheader">
-                Show my post to
+                Show my posts to
               </ListSubheader>
             }>
             <ListItem button>
@@ -98,7 +98,7 @@ export const PostSettingComponent: React.FC<PostSettingProps> = ({ userId }) => 
               </ListItemSecondaryAction>
             </ListItem>
             <ListItem button>
-              <ListItemText primary="Only my friend" />
+              <ListItemText primary="Only friends" />
               <ListItemSecondaryAction>
                 <Switch
                   edge="end"
@@ -122,11 +122,11 @@ export const PostSettingComponent: React.FC<PostSettingProps> = ({ userId }) => 
             aria-labelledby="nested-list-subheader"
             subheader={
               <ListSubheader className={styles.header} component="div" id="nested-list-subheader">
-                Tipping allowed
+                Receive tips on
               </ListSubheader>
             }>
             <ListItem button>
-              <ListItemText primary="My original post" />
+              <ListItemText primary="My Myriad posts" />
               <ListItemSecondaryAction>
                 <Switch
                   edge="end"
@@ -139,7 +139,7 @@ export const PostSettingComponent: React.FC<PostSettingProps> = ({ userId }) => 
               </ListItemSecondaryAction>
             </ListItem>
             <ListItem button>
-              <ListItemText primary="Imported post" />
+              <ListItemText primary="Imported posts" />
               <ListItemSecondaryAction>
                 <Switch
                   edge="end"
