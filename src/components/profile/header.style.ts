@@ -100,6 +100,42 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiInputBase-root': {
         background: 'white'
       }
+    },
+    // modalremovealert
+    dialogRoot: {
+      width: '413px',
+      textAlign: 'center'
+    },
+    icon: {
+      fontSize: 80
+    },
+    subtitle1: {
+      fontSize: 18,
+      fontWeight: 700
+    },
+    subtitle2: {
+      fontSize: 16,
+      fontWeight: 400
+    },
+    alertMessage: {
+      color: '#4B4851',
+      width: 236
+    },
+    'm-vertical1': {
+      marginBottom: 16,
+      marginTop: 16
+    },
+    'm-vertical2': {
+      marginBottom: 24,
+      marginTop: 24
+    },
+    center: {
+      marginRight: 'auto',
+      marginLeft: 'auto'
+    },
+    'flex-center': {
+      display: 'flex',
+      justifyContent: 'space-evenly'
     }
   })
 );
