@@ -33,7 +33,7 @@ export const useToken = () => {
     setLoading(true);
 
     try {
-      const data = await TokenAPI.addNewToken({
+      const data = await TokenAPI.addUserToken({
         tokenId,
         userId
       });
