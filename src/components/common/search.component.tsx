@@ -4,6 +4,8 @@ import InputBase from '@material-ui/core/InputBase';
 import { makeStyles, createStyles, fade, Theme } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 
+import { debounce } from 'lodash';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -55,6 +57,12 @@ export default function SearchComponent({ value = '', placeholder = 'Search', on
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
+
+    const debounceSubmit = debounce(() => {
+      onSubmit(event.target.value);
+    }, 300);
+
+    debounceSubmit();
   };
 
   const submitSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {

@@ -3,7 +3,7 @@
   "license": "UNLICENSED",
   "private": true,
   "engines": {
-    "node": ">=12.18.3",
+    "node": ">=14.0.0",
     "yarn": ">=1.21.1"
   },
   "homepage": ".",
