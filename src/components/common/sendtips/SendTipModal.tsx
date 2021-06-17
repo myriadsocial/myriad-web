@@ -2,7 +2,6 @@ import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'rea
 
 import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
