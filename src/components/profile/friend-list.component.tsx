@@ -158,7 +158,7 @@ const FriendsList = ({ profile }: Props) => {
         <div className={style.content}>
           <ShowIf condition={friends.length === 0}>
             <Typography variant="h4" color="textPrimary" className={style.noContent}>
-              You don't have any Myriad friends, try to search for people or tell your friends about myriad
+              You don't have any Myriad friends yet. Search for people or tell your friends about Myriad!
             </Typography>
           </ShowIf>
 
