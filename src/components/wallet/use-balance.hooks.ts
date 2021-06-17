@@ -3,10 +3,11 @@ import { useState } from 'react';
 import { useBalance as baseUseBalance, BalanceActionType } from './balance.context';
 
 import { getBalance } from 'src/helpers/polkadotApi';
-import { BalanceDetail } from 'src/interfaces/balance';
+
+//import { BalanceDetail } from 'src/interfaces/balance';
 
 export const useBalance = (userId: string, wsProvider: string) => {
-  const { state, dispatch } = baseUseBalance();
+  const { state } = baseUseBalance();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
