@@ -29,6 +29,11 @@ export type SocialMetric = {
   retweet: number;
 };
 
+export interface TipsReceived {
+  tokenId: string;
+  totalTips: number;
+}
+
 export interface Post {
   id: string;
   tags: string[];
@@ -55,6 +60,7 @@ export interface Post {
   };
   importBy?: string[];
   importer?: User;
+  tipsReceived?: TipsReceived[];
 }
 
 export interface Comment {

@@ -20,6 +20,7 @@ import PostImageComponent from './post-image.component';
 import { PostOptionsComponent } from './post-options.component';
 import PostVideoComponent from './post-video.component';
 import { useStyles } from './post.style';
+import { TipSummaryComponent } from './tip-summary/tip-summary.component';
 
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
@@ -46,6 +47,7 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
 
   const { detail } = useSocialDetail(post);
   const [expanded, setExpanded] = useState(defaultExpanded);
+  const [showTipSummary, setShowTipSummary] = useState(false);
   const childRef = useRef<any>();
   const headerRef = useRef<any>();
 
@@ -65,6 +67,7 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
     if (disable) {
       return;
     }
+
     childRef.current.triggerSendTipModal();
   };
 
@@ -176,6 +179,7 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
       </Card>
 
       <SendTipModal userAddress={userId} ref={childRef} postId={post.id as string} balanceDetails={balanceDetails} />
+      <TipSummaryComponent open={showTipSummary} post={post} close={() => setShowTipSummary(false)} />
     </>
   );
 }
