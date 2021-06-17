@@ -43,7 +43,6 @@ export const usePolkadotApi = () => {
     setLoading(true);
 
     try {
-      console.log('the address is: ', address);
       const provider = new WsProvider(process.env.NEXT_PUBLIC_ACALA_TESTNET);
       const api = new ApiPromise(options({ provider }));
       await api.isReady;
@@ -134,7 +133,7 @@ export const usePolkadotApi = () => {
         // popup asking to sign the balance transfer transaction
         const txInfo = await transferExtrinsic.signAndSend(fromAddress, { signer: injector.signer });
 
-        const response = updateTips(amountSent, postId);
+        const transactionRecord = updateTips(currencyId, amountSent, postId);
 
         return { trxHash: txInfo.toHex(), from: fromAddress };
       }

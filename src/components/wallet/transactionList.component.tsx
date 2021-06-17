@@ -139,11 +139,11 @@ export default function TransactionListComponent({ transactions, user }: Props) 
       <div>
         {user.id === txHistory?.from ? (
           <Typography>
-            You sent tips to {txHistory?.toUser?.name ?? defaultUserName}'s post with {txHistory?.value / 1000000000000} ACA coins
+            You sent tips to {txHistory?.toUser?.name ?? defaultUserName}'s post with {txHistory?.value / 1000000000000} MYRIA coins
           </Typography>
         ) : (
           <Typography>
-            {txHistory?.fromUser?.name ?? defaultUserName} tipped your post with {txHistory?.value / 1000000000000} ACA coins
+            {txHistory?.fromUser?.name ?? defaultUserName} tipped your post with {txHistory?.value / 1000000000000} MYRIA coins
           </Typography>
         )}
       </div>
