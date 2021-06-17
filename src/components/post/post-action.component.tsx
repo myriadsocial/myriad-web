@@ -68,7 +68,8 @@ export const PostActionComponent: React.FC<PostActionProps> = ({
     if (user.anonymous) return true;
 
     // TODO: current api does not return user
-    return user.id === post.walletAddress;
+    if (user.id === post.platformUser?.platform_account_id) return true;
+    return false;
   };
 
   return (
