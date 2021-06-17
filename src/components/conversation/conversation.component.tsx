@@ -4,6 +4,7 @@ import { useConversationHook } from './use-conversation-hook';
 
 import { useConversation } from 'src/components/conversation/conversation.context';
 import PostComponent from 'src/components/post/post.component';
+import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 import { Post } from 'src/interfaces/post';
 import { User } from 'src/interfaces/user';
 
@@ -15,6 +16,7 @@ type Props = {
 const Conversation = ({ post, user }: Props) => {
   const { state } = useConversation();
   const { setPost } = useConversationHook(user);
+  const { tokens } = usePolkadotApi();
 
   useEffect(() => {
     setPost(post);
@@ -24,7 +26,7 @@ const Conversation = ({ post, user }: Props) => {
 
   return (
     <div>
-      <PostComponent post={state.viewed} />
+      <PostComponent post={state.viewed} balanceDetails={tokens.length > 0 ? tokens : []} />
     </div>
   );
 };

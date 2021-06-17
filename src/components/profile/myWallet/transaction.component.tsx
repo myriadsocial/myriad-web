@@ -21,8 +21,8 @@ import SortIcon from '@material-ui/icons/Sort';
 
 import { TabPanel } from '../../common/tab-panel.component';
 import { useTransaction } from '../../tippingJar/use-transaction.hooks';
-import { useBalance } from '../../wallet/use-balance.hooks';
 
+//import { useBalance } from '../../wallet/use-balance.hooks';
 import { useUser } from 'src/context/user.context';
 
 const TransactionListComponent = dynamic(() => import('./transactionList.component'));
@@ -199,13 +199,13 @@ const useStylesForCurrencyDetails = makeStyles((theme: Theme) =>
 const CurrencyDetails = () => {
   const style = useStylesForCurrencyDetails();
 
-  useEffect(() => {
-    loadInitBalance();
-  }, []);
+  //useEffect(() => {
+  //loadInitBalance();
+  //}, []);
 
-  const [session] = useSession();
-  const userAddress = session?.user.address as string;
-  const { freeBalance, loadInitBalance } = useBalance(userAddress);
+  //const [session] = useSession();
+  //const userAddress = session?.user.address as string;
+  //const { freeBalance, loadInitBalance } = useBalance(userAddress);
 
   //const [isHidden, setIsHidden] = useState(true);
   //const handleIsHidden = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -227,7 +227,7 @@ const CurrencyDetails = () => {
               <Typography className={style.balanceText}>ACA</Typography>
             </TableCell>
             <TableCell align="right">
-              <Typography className={style.balanceText}>{freeBalance}</Typography>
+              <Typography className={style.balanceText}>20</Typography>
             </TableCell>
           </TableRow>
         </TableHead>
