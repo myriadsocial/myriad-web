@@ -38,10 +38,11 @@ export const useFriendHook = (user: User | null) => {
   };
 
   const searchFriend = async (query: string) => {
+    if (!user) return null;
     setLoading(true);
 
     try {
-      const friends: ExtendedFriend[] = await FriendAPI.searchFriend(query);
+      const friends: ExtendedFriend[] = await FriendAPI.searchFriend(user.id, query);
       dispatch({
         type: ProfileActionType.LOAD_FRIENDS,
         payload: friends
