@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { options } from '@acala-network/api';
 
 import { useState } from 'react';
@@ -10,18 +9,29 @@ import { useBalance as baseUseBalance, BalanceActionType } from '../components/w
 
 import { updateTips } from 'src/lib/api/post';
 
-const formatNumber = (number: number, decimals: string) => {
+type Props = {
+  fromAddress: string;
+  toAddress: string;
+  amountSent: number;
+  currencyId: string;
+  postId: string;
+};
+
+interface SendTipResponseProps {
+  from?: string;
+  trxHash?: string;
+}
+
+const formatNumber = (number: number, decimals: number) => {
   if (number.toString() === '0') return '0';
-  return (Number(number.toString()) / 10 ** decimals).toFixed(5);
+  const result = Number((Number(number.toString()) / 10 ** decimals).toFixed(5));
+  return result;
 };
 
 // params mungkin butuh address sama tipe wsProvider
 export const usePolkadotApi = () => {
   const { state, dispatch } = baseUseBalance();
 
-  const [dotBalance, setDotBalance] = useState();
-  const [acaBalance, setACABalance] = useState();
-  const [ausdBalance, setAUSDBalance] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -34,6 +44,7 @@ export const usePolkadotApi = () => {
       return api;
     } catch (error) {
       setError(error);
+      return;
     } finally {
       setLoading(false);
     }
@@ -47,14 +58,13 @@ export const usePolkadotApi = () => {
       const api = new ApiPromise(options({ provider }));
       await api.isReady;
 
-      const accountData = await api.query.system.account(address);
-      setACABalance(accountData.data.free);
+      //const accountData = await api.query.system.account(address);
+      //setACABalance(accountData.data.free);
 
-      const tokenData = await api.query.tokens.accounts(address, { TOKEN: 'DOT' });
-      setDotBalance(tokenData?.free);
+      //const tokenData = await api.query.tokens.accounts(address, { TOKEN: 'DOT' });
+      //setDotBalance(tokenData?.free);
 
       const ausdData = await api.query.tokens.accounts(address, { TOKEN: 'AUSD' });
-      setAUSDBalance(ausdData?.free);
 
       dispatch({
         type: BalanceActionType.INIT_BALANCE,
@@ -63,17 +73,17 @@ export const usePolkadotApi = () => {
             freeBalance: formatNumber(ausdData?.free as number, 12),
             tokenSymbol: 'AUSD',
             tokenDecimals: 12
-          },
-          {
-            freeBalance: formatNumber(accountData.data.free as number, 13),
-            tokenSymbol: 'ACA',
-            tokenDecimals: 13
-          },
-          {
-            freeBalance: formatNumber(tokenData?.free as number, 10),
-            tokenSymbol: 'DOT',
-            tokenDecimals: 10
           }
+          //{
+          //freeBalance: formatNumber(accountData.data.free as number, 13),
+          //tokenSymbol: 'ACA',
+          //tokenDecimals: 13
+          //},
+          //{
+          //freeBalance: formatNumber(tokenData?.free as number, 10),
+          //tokenSymbol: 'DOT',
+          //tokenDecimals: 10
+          //}
         ]
       });
     } catch (error) {
@@ -83,17 +93,7 @@ export const usePolkadotApi = () => {
     }
   };
 
-  const formattedDOT = () => {
-    if (!dotBalance) return '0';
-    return formatNumber(dotBalance, 10);
-  };
-
-  const formattedACA = () => {
-    if (!acaBalance) return '0';
-    return formatNumber(acaBalance, 13);
-  };
-
-  const sendTip = async (fromAddress, toAddress, amountSent, currencyId, postId) => {
+  const sendTip = async ({ fromAddress, toAddress, amountSent, currencyId, postId }: Props) => {
     setLoading(true);
     try {
       const { enableExtension } = await import('../helpers/extension');
@@ -103,7 +103,7 @@ export const usePolkadotApi = () => {
       // We select the first account found by using fromAddress
       // `account` is of type InjectedAccountWithMeta
       const keyring = new Keyring();
-      const account = allAccounts.find(function (account) {
+      const account = allAccounts?.find(function (account) {
         // address from session must match address on polkadot extension
         return account.address === keyring.encodeAddress(fromAddress, 42);
       });
@@ -121,8 +121,8 @@ export const usePolkadotApi = () => {
         // here we use the api to create a balance transfer to some account of a value of 12345678
         const transferExtrinsic =
           currencyId === 'ACA'
-            ? api.tx.balances.transfer(toAddress, amountSent)
-            : api.tx.currencies.transfer(toAddress, { TOKEN: currencyId }, amountSent);
+            ? api?.tx.balances.transfer(toAddress, amountSent)
+            : api?.tx.currencies.transfer(toAddress, { TOKEN: currencyId }, amountSent);
 
         // to be able to retrieve the signer interface from this account
         // we can use web3FromSource which will return an InjectedExtension type
@@ -131,14 +131,25 @@ export const usePolkadotApi = () => {
         // passing the injected account address as the first argument of signAndSend
         // will allow the api to retrieve the signer and the user will see the extension
         // popup asking to sign the balance transfer transaction
-        const txInfo = await transferExtrinsic.signAndSend(fromAddress, { signer: injector.signer });
+        const txInfo = await transferExtrinsic?.signAndSend(fromAddress, { signer: injector.signer });
 
         const transactionRecord = updateTips(currencyId, amountSent, postId);
+        console.log('the transaction record is: ', transactionRecord);
 
-        return { trxHash: txInfo.toHex(), from: fromAddress };
+        if (!txInfo) {
+          throw {
+            Error: 'Something is wrong, please try again later!'
+          };
+        }
+
+        dispatch;
+        const response = {
+          trxHash: txInfo?.toHex()
+        };
+        return response;
       }
     } catch (error) {
-      return error;
+      setError(error);
     } finally {
       setLoading(false);
     }

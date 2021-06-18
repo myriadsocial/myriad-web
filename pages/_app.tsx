@@ -11,7 +11,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { BalanceProvider } from '../src/components/wallet/balance.context';
 import theme from '../src/themes/light';
 
-import { WalletAddressProvider } from 'src/components/post/send-tip.context';
+import { WalletAddressProvider } from 'src/components/common/sendtips/send-tip.context';
 import { ProfileProvider } from 'src/components/profile/profile.context';
 import { SearchProvider } from 'src/components/search/search.context';
 import { AlertProvider } from 'src/context/Alert.context';

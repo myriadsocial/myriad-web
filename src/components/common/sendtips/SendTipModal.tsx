@@ -24,11 +24,11 @@ import SendIcon from '@material-ui/icons/Send';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
-import DialogTitle from '../common/DialogTitle.component';
+import DialogTitle from '../DialogTitle.component';
+import { useWalletAddress } from './use-wallet.hook';
 
 import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 import { BalanceDetail } from 'src/interfaces/balance';
-import * as WalletAddressAPI from 'src/lib/api/wallet';
 
 interface InputState {
   amount: string;
@@ -48,7 +48,7 @@ interface SendTipConfirmed {
 
 type Props = {
   userAddress: string;
-  postId?: string;
+  postId: string;
   balanceDetails: BalanceDetail[];
   receiverId?: string;
 };
@@ -149,11 +149,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiverId }: Props, ref) => {
   const { sendTip, load } = usePolkadotApi();
+  const { loadWalletAddress, walletAddress } = useWalletAddress(postId);
   const [selectedToken, setSelectedToken] = useState('');
   const [tokenBalance, setTokenBalance] = useState('');
 
   useEffect(() => {
-    load(userAddress);
+    loadWalletAddress();
   }, []);
 
   useEffect(() => {
@@ -213,8 +214,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
     });
   };
 
-  // TODO: input ditambahin decimals masing2 token
-  const checkAmountThenSend = async () => {
+  const checkAmountThenSend = () => {
     const regexValidDigits = /^\d*(\.\d+)?$/;
     if (values.amount === '') {
       setInputError({
@@ -250,8 +250,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
         let decimals = balanceDetails[idx].tokenDecimals ?? 0;
 
-        console.log('the decimals: ', decimals);
-        console.log('selected token: ', selectedToken);
         const amountStr = values.amount as string;
         const amountSent = Number(amountStr) * 10 ** decimals;
 
@@ -265,12 +263,23 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         if (postId === undefined) {
           toAddress = receiverId as string;
         } else {
-          const { walletAddress } = await WalletAddressAPI.getWalletAddress(postId as string);
           toAddress = walletAddress;
         }
 
-        const response = await sendTip(senderAddress, toAddress, amountSent, selectedToken, postId);
+        const sendTipPayload = {
+          fromAddress: senderAddress,
+          toAddress,
+          amountSent,
+          currencyId: selectedToken,
+          postId
+        };
+
+        const response = sendTip(sendTipPayload);
         // handle if sendTip succeed
+        if (response) {
+        }
+
+        //TODO: control tipping error and success from context
         if (response.Error || typeof response === 'string') {
           setErrorSendTips({
             ...errorSendTips,
@@ -284,7 +293,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
           });
           return;
         }
-        if (response.from === senderAddress) {
+        if (response?.from === senderAddress) {
           setSendTipConfirmed({
             isConfirmed: true,
             message: 'Tip sent successfully!'

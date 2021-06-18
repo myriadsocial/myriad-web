@@ -10,9 +10,13 @@ export interface InitWalletAddress {
   payload: string;
 }
 
+//TODO: add new state to contain all the transactions made during user session
 export interface SendTips {
   type: WalletAddressActionType.SEND_TIPS;
   amount: number;
+  from: string;
+  to: string;
+  trxHash: string;
 }
 
 export type Action = InitWalletAddress | SendTips;
