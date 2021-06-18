@@ -142,7 +142,7 @@ export const usePolkadotApi = () => {
           };
         }
 
-        dispatch;
+        //TODO: move trxHash to dispatch
         const response = {
           trxHash: txInfo?.toHex()
         };
