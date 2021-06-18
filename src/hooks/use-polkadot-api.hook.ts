@@ -94,6 +94,7 @@ export const usePolkadotApi = () => {
   };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   const sendTip = async ({ fromAddress, toAddress, amountSent, currencyId, postId }: Props) => {
 =======
   const formattedDOT = () => {
@@ -108,6 +109,9 @@ export const usePolkadotApi = () => {
 
   const sendTip = async (fromAddress, toAddress, amountSent, currencyId, postId) => {
 >>>>>>> d0f6fbf (handled rebase conflicts with dev branch)
+=======
+  const sendTip = async ({ fromAddress, toAddress, amountSent, currencyId, postId }: Props) => {
+>>>>>>> c5917f4 (revised send tips coding flow, todos must be done)
     setLoading(true);
     try {
       const { enableExtension } = await import('../helpers/extension');
@@ -136,11 +140,16 @@ export const usePolkadotApi = () => {
         const transferExtrinsic =
           currencyId === 'ACA'
 <<<<<<< HEAD
+<<<<<<< HEAD
             ? api?.tx.balances.transfer(toAddress, amountSent)
             : api?.tx.currencies.transfer(toAddress, { TOKEN: currencyId }, amountSent);
 =======
             ? api.tx.balances.transfer(toAddress, amountSent)
             : api.tx.currencies.transfer(toAddress, { TOKEN: currencyId }, amountSent);
+=======
+            ? api?.tx.balances.transfer(toAddress, amountSent)
+            : api?.tx.currencies.transfer(toAddress, { TOKEN: currencyId }, amountSent);
+>>>>>>> c5917f4 (revised send tips coding flow, todos must be done)
 
 <<<<<<< HEAD
         console.log('transferExtrinsic: ', transferExtrinsic);
@@ -156,11 +165,15 @@ export const usePolkadotApi = () => {
         // will allow the api to retrieve the signer and the user will see the extension
         // popup asking to sign the balance transfer transaction
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c5917f4 (revised send tips coding flow, todos must be done)
         const txInfo = await transferExtrinsic?.signAndSend(fromAddress, { signer: injector.signer });
 
 <<<<<<< HEAD
         const transactionRecord = updateTips(currencyId, amountSent, postId);
         console.log('the transaction record is: ', transactionRecord);
+<<<<<<< HEAD
 
         if (!txInfo) {
           throw {
@@ -181,6 +194,16 @@ export const usePolkadotApi = () => {
 >>>>>>> 29f1f40 (handled undefined error on balanceDetails object)
 
         //TODO: move trxHash to dispatch
+=======
+
+        if (!txInfo) {
+          throw {
+            Error: 'Something is wrong, please try again later!'
+          };
+        }
+
+        dispatch;
+>>>>>>> c5917f4 (revised send tips coding flow, todos must be done)
         const response = {
           trxHash: txInfo?.toHex()
         };

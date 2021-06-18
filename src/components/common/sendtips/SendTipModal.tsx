@@ -150,7 +150,6 @@ const useStyles = makeStyles((theme: Theme) =>
 const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiverId }: Props, ref) => {
   const { sendTip, load } = usePolkadotApi();
   const { loadWalletAddress, walletAddress } = useWalletAddress(postId);
-=======
   const [selectedToken, setSelectedToken] = useState('');
   const [tokenBalance, setTokenBalance] = useState('');
   useEffect(() => {
@@ -159,7 +158,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
 
   useEffect(() => {
     if (balanceDetails?.length > 0) {
-      const idx = balanceDetails?.findIndex(item => item.tokenSymbol === selectedToken);
+      const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
       if (typeof idx === 'number') {
         setTokenBalance(balanceDetails[idx]?.freeBalance.toString() ?? '');
         console.log('the idex: ', tokenBalance);
