@@ -9,7 +9,11 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+//import FormControl from '@material-ui/core/FormControl';
+//import InputAdornment from '@material-ui/core/InputAdornment';
 import InputLabel from '@material-ui/core/InputLabel';
+//import MenuItem from '@material-ui/core/MenuItem';
+//import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -219,6 +223,32 @@ export default function ImportPostComponent({ user, experiences }: Props) {
                   />
                 </ShowIf>
               </div>
+              {
+                // TODO: Associate a post with an experience
+                //<FormControl className={styles.formControl}>
+                //<InputLabel id="select-experience">Experience</InputLabel>
+                //<>
+                //<Select
+                //labelId="select-an-experience"
+                //id="select-experience"
+                //open={openSelectExperience}
+                //onClose={handleExperienceClose}
+                //onOpen={handleExperienceOpen}
+                //value={selectedExperienceId}
+                //onChange={handleExperienceChange}>
+                //<MenuItem value="">
+                //<em>None</em>
+                //</MenuItem>
+                //{experiences.map(experience => (
+                //<MenuItem key={experience.id} value={experience.id}>
+                //{experience.name}
+                //</MenuItem>
+                //))}
+                //</Select>
+                //</>
+                //<FormHelperText>Select an experience where the post will be stored</FormHelperText>
+                //</FormControl>
+              }
             </CardContent>
             <CardActions className={styles.cardActions}>
               <Button
