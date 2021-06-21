@@ -203,7 +203,8 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
     if (balanceDetails?.length > 0) {
       const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
       if (typeof idx === 'number') {
-        setTokenBalance(balanceDetails[idx]?.freeBalance.toString() ?? '');
+        setTokenBalance(balanceDetails[idx]?.freeBalance.toString());
+        console.log('the idex: ', tokenBalance);
       }
     }
   }, [selectedToken, balanceDetails]);
