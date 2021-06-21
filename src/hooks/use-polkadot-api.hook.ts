@@ -93,7 +93,21 @@ export const usePolkadotApi = () => {
     }
   };
 
+<<<<<<< HEAD
   const sendTip = async ({ fromAddress, toAddress, amountSent, currencyId, postId }: Props) => {
+=======
+  const formattedDOT = () => {
+    if (!dotBalance) return '0';
+    return formatNumber(dotBalance, 10);
+  };
+
+  const formattedACA = () => {
+    if (!acaBalance) return '0';
+    return formatNumber(acaBalance, 13);
+  };
+
+  const sendTip = async (fromAddress, toAddress, amountSent, currencyId, postId) => {
+>>>>>>> d0f6fbf (handled rebase conflicts with dev branch)
     setLoading(true);
     try {
       const { enableExtension } = await import('../helpers/extension');
@@ -121,8 +135,15 @@ export const usePolkadotApi = () => {
         // here we use the api to create a balance transfer to some account of a value of 12345678
         const transferExtrinsic =
           currencyId === 'ACA'
+<<<<<<< HEAD
             ? api?.tx.balances.transfer(toAddress, amountSent)
             : api?.tx.currencies.transfer(toAddress, { TOKEN: currencyId }, amountSent);
+=======
+            ? api.tx.balances.transfer(toAddress, amountSent)
+            : api.tx.currencies.transfer(toAddress, { TOKEN: currencyId }, amountSent);
+
+        console.log('transferExtrinsic: ', transferExtrinsic);
+>>>>>>> d0f6fbf (handled rebase conflicts with dev branch)
 
         // to be able to retrieve the signer interface from this account
         // we can use web3FromSource which will return an InjectedExtension type
@@ -133,6 +154,7 @@ export const usePolkadotApi = () => {
         // popup asking to sign the balance transfer transaction
         const txInfo = await transferExtrinsic?.signAndSend(fromAddress, { signer: injector.signer });
 
+<<<<<<< HEAD
         const transactionRecord = updateTips(currencyId, amountSent, postId);
         console.log('the transaction record is: ', transactionRecord);
 
@@ -141,6 +163,13 @@ export const usePolkadotApi = () => {
             Error: 'Something is wrong, please try again later!'
           };
         }
+=======
+        console.log('txInfo: ', txInfo);
+        console.log('the currencyId is: ', currencyId);
+
+        const response = updateTips(amountSent, postId);
+        console.log('response is:', response);
+>>>>>>> d0f6fbf (handled rebase conflicts with dev branch)
 
         //TODO: move trxHash to dispatch
         const response = {
