@@ -160,14 +160,7 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef }) => {
               <TableRow key={row.tokenSymbol}>
                 <TableCell component="th" scope="row">
                   <Typography className={style.balanceText}>
-                    {row.tokenSymbol === 'MYRIA' ? (
-                      <>
-                        {' '}
-                        <StyledBadge badgeContent={<StyledTooltip />}>MYRIA</StyledBadge>
-                      </>
-                    ) : (
-                      row.tokenSymbol
-                    )}
+                    {row.tokenSymbol === 'MYRIA' ? <StyledBadge badgeContent={<StyledTooltip />}>MYRIA</StyledBadge> : row.tokenSymbol}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
