@@ -6,6 +6,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Link from '@material-ui/core/Link';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -152,11 +153,14 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
   const { loadWalletAddress, walletAddress } = useWalletAddress(postId);
   const [selectedToken, setSelectedToken] = useState('');
   const [tokenBalance, setTokenBalance] = useState('');
+
   useEffect(() => {
+    console.log('load send tip modal');
     loadWalletAddress();
   }, []);
 
   useEffect(() => {
+<<<<<<< HEAD
     console.log('load send tip modal');
     loadWalletAddress();
 
@@ -173,6 +177,8 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
   }, []);
 
   useEffect(() => {
+=======
+>>>>>>> 7f3cc6d (Refactored code for send tips flow)
     if (trxHash.length > 0) {
       setSendTipConfirmed({
         isConfirmed: true,
@@ -207,7 +213,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
       const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
       if (typeof idx === 'number') {
         setTokenBalance(balanceDetails[idx]?.freeBalance.toString() ?? '');
-        console.log('the idex: ', tokenBalance);
       }
     }
   }, [selectedToken, balanceDetails]);
