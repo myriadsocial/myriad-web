@@ -24,7 +24,7 @@ import { TipSummaryComponent } from './tip-summary/tip-summary.component';
 
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
-import SendTipModal from 'src/components/common/SendTipModal';
+import SendTipModal from 'src/components/common/sendtips/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
 import { useSocialDetail } from 'src/hooks/use-social.hook';
 import { BalanceDetail } from 'src/interfaces/balance';

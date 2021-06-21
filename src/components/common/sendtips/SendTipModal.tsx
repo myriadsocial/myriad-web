@@ -24,11 +24,11 @@ import SendIcon from '@material-ui/icons/Send';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
-import DialogTitle from '../common/DialogTitle.component';
+import DialogTitle from '../DialogTitle.component';
+import { useWalletAddress } from './use-wallet.hook';
 
 import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 import { BalanceDetail } from 'src/interfaces/balance';
-import * as WalletAddressAPI from 'src/lib/api/wallet';
 
 interface InputState {
   amount: string;
@@ -48,7 +48,7 @@ interface SendTipConfirmed {
 
 type Props = {
   userAddress: string;
-  postId?: string;
+  postId: string;
   balanceDetails: BalanceDetail[];
   receiverId?: string;
 };
@@ -148,16 +148,48 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiverId }: Props, ref) => {
-  const { sendTip, load } = usePolkadotApi();
+  const { sendTip, load, trxHash, error } = usePolkadotApi();
+  const { loadWalletAddress, walletAddress } = useWalletAddress(postId);
   const [selectedToken, setSelectedToken] = useState('');
   const [tokenBalance, setTokenBalance] = useState('');
 
   useEffect(() => {
-    load(userAddress);
+    console.log('load send tip modal');
+    loadWalletAddress();
   }, []);
 
   useEffect(() => {
-    if (balanceDetails.length > 0) {
+    if (trxHash.length > 0) {
+      setSendTipConfirmed({
+        isConfirmed: true,
+        message: 'Tip sent successfully!'
+      });
+      setShowSendTipModal(false);
+      setValues({
+        ...values,
+        amount: ''
+      });
+      load(userAddress);
+    }
+  }, [trxHash]);
+
+  useEffect(() => {
+    if (error) {
+      setErrorSendTips({
+        ...errorSendTips,
+        isError: true,
+        message: 'Something is wrong, please try again!'
+      });
+      setShowSendTipModal(false);
+      setValues({
+        ...values,
+        amount: ''
+      });
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (balanceDetails?.length > 0) {
       const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
       if (typeof idx === 'number') {
         setTokenBalance(balanceDetails[idx]?.freeBalance.toString() ?? '');
@@ -172,7 +204,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
 
   const [errorSendTips, setErrorSendTips] = useState({
     isError: false,
-    message: null
+    message: ''
   });
 
   const [showSendTipModal, setShowSendTipModal] = useState(false);
@@ -213,8 +245,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
     });
   };
 
-  // TODO: input ditambahin decimals masing2 token
-  const checkAmountThenSend = async () => {
+  const checkAmountThenSend = () => {
     const regexValidDigits = /^\d*(\.\d+)?$/;
     if (values.amount === '') {
       setInputError({
@@ -250,8 +281,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
         let decimals = balanceDetails[idx].tokenDecimals ?? 0;
 
-        console.log('the decimals: ', decimals);
-        console.log('selected token: ', selectedToken);
         const amountStr = values.amount as string;
         const amountSent = Number(amountStr) * 10 ** decimals;
 
@@ -265,37 +294,18 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         if (postId === undefined) {
           toAddress = receiverId as string;
         } else {
-          const { walletAddress } = await WalletAddressAPI.getWalletAddress(postId as string);
           toAddress = walletAddress;
         }
 
-        const response = await sendTip(senderAddress, toAddress, amountSent, selectedToken, postId);
-        // handle if sendTip succeed
-        if (response.Error || typeof response === 'string') {
-          setErrorSendTips({
-            ...errorSendTips,
-            isError: true,
-            message: response.Error || response
-          });
-          setShowSendTipModal(false);
-          setValues({
-            ...values,
-            amount: ''
-          });
-          return;
-        }
-        if (response.from === senderAddress) {
-          setSendTipConfirmed({
-            isConfirmed: true,
-            message: 'Tip sent successfully!'
-          });
-          setShowSendTipModal(false);
-          setValues({
-            ...values,
-            amount: ''
-          });
-          load(userAddress);
-        }
+        const sendTipPayload = {
+          fromAddress: senderAddress,
+          toAddress,
+          amountSent,
+          currencyId: selectedToken,
+          postId
+        };
+
+        sendTip(sendTipPayload);
       }
     } else {
       setErrorText({
@@ -396,6 +406,11 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
 
   const hideDuration = 3000;
 
+  const handleExtrinsicExplorer = (event: React.SyntheticEvent) => {
+    window.open(`https://acala-testnet.subscan.io/extrinsic/${trxHash}`, '_blank');
+    event.preventDefault();
+  };
+
   return (
     <>
       <Dialog open={showSendTipModal} onClose={closeSendTipModal} aria-labelledby="send-tips-window" maxWidth="md">
@@ -443,6 +458,11 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         <Alert severity="success">
           <AlertTitle>Success!</AlertTitle>
           {sendTipConfirmed.message}
+          <br />
+          TxHash:{' '}
+          <a target="_blank" onClick={handleExtrinsicExplorer} rel="noopener noreferrer">
+            {trxHash}
+          </a>
         </Alert>
       </Snackbar>
 

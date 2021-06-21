@@ -83,7 +83,7 @@ const Notification = ({ user }: Props) => {
                   <ListItem key={notif.id} className={style.item} alignItems="center">
                     <ListItemAvatar>
                       <Avatar className={style.avatar} src={notif.fromUserId.profilePictureURL || ''}>
-                        {acronym(notif.fromUserId.name || '')}
+                        {acronym(notif.fromUserId.name ?? '')}
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText>

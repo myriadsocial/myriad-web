@@ -20,7 +20,7 @@ import { useStyles } from './comment.style';
 import ReplyCommentComponent from './reply.component';
 
 import DateFormat from 'src/components/common/DateFormat';
-import SendTipModal from 'src/components/common/SendTipModal';
+import SendTipModal from 'src/components/common/sendtips/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
 import { TabPanel } from 'src/components/common/tab-panel.component';
 import { useUser } from 'src/context/user.context';
@@ -129,6 +129,7 @@ export default function CommentComponent({ balanceDetails, post, disableReply, h
                     </Typography>
                   </CardContent>
                   <SendTipModal
+                    postId={post?.id as string}
                     userAddress={userId}
                     ref={childRef}
                     receiverId={comment?.user?.id as string}

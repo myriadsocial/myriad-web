@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useWalletAddress as baseUseWalletAddress, WalletAddressActionType } from '../common/sendtips/send-tip.context';
+import { useWalletAddress as baseUseWalletAddress, WalletAddressActionType } from './send-tip.context';
 
 import * as WalletAddressAPI from 'src/lib/api/wallet';
 
@@ -10,7 +10,7 @@ export const useWalletAddress = (postId: string) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const load = async () => {
+  const loadWalletAddress = async () => {
     setLoading(true);
     try {
       const { data } = await WalletAddressAPI.getWalletAddress(postId);
@@ -30,6 +30,6 @@ export const useWalletAddress = (postId: string) => {
     error,
     loading,
     walletAddress: state.walletAddress,
-    getWalletAddress: load
+    loadWalletAddress
   };
 };
