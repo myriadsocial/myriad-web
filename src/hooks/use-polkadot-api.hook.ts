@@ -93,25 +93,7 @@ export const usePolkadotApi = () => {
     }
   };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
   const sendTip = async ({ fromAddress, toAddress, amountSent, currencyId, postId }: Props) => {
-=======
-  const formattedDOT = () => {
-    if (!dotBalance) return '0';
-    return formatNumber(dotBalance, 10);
-  };
-
-  const formattedACA = () => {
-    if (!acaBalance) return '0';
-    return formatNumber(acaBalance, 13);
-  };
-
-  const sendTip = async (fromAddress, toAddress, amountSent, currencyId, postId) => {
->>>>>>> d0f6fbf (handled rebase conflicts with dev branch)
-=======
-  const sendTip = async ({ fromAddress, toAddress, amountSent, currencyId, postId }: Props) => {
->>>>>>> c5917f4 (revised send tips coding flow, todos must be done)
     setLoading(true);
     try {
       const { enableExtension } = await import('../helpers/extension');
@@ -139,24 +121,11 @@ export const usePolkadotApi = () => {
         // here we use the api to create a balance transfer to some account of a value of 12345678
         const transferExtrinsic =
           currencyId === 'ACA'
-<<<<<<< HEAD
-<<<<<<< HEAD
             ? api?.tx.balances.transfer(toAddress, amountSent)
             : api?.tx.currencies.transfer(toAddress, { TOKEN: currencyId }, amountSent);
-=======
-            ? api.tx.balances.transfer(toAddress, amountSent)
-            : api.tx.currencies.transfer(toAddress, { TOKEN: currencyId }, amountSent);
-=======
-            ? api?.tx.balances.transfer(toAddress, amountSent)
-            : api?.tx.currencies.transfer(toAddress, { TOKEN: currencyId }, amountSent);
->>>>>>> c5917f4 (revised send tips coding flow, todos must be done)
 
-<<<<<<< HEAD
         console.log('transferExtrinsic: ', transferExtrinsic);
->>>>>>> d0f6fbf (handled rebase conflicts with dev branch)
 
-=======
->>>>>>> 29f1f40 (handled undefined error on balanceDetails object)
         // to be able to retrieve the signer interface from this account
         // we can use web3FromSource which will return an InjectedExtension type
         const injector = await web3FromSource(account.meta.source);
@@ -164,37 +133,10 @@ export const usePolkadotApi = () => {
         // passing the injected account address as the first argument of signAndSend
         // will allow the api to retrieve the signer and the user will see the extension
         // popup asking to sign the balance transfer transaction
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> c5917f4 (revised send tips coding flow, todos must be done)
         const txInfo = await transferExtrinsic?.signAndSend(fromAddress, { signer: injector.signer });
 
-<<<<<<< HEAD
         const transactionRecord = updateTips(currencyId, amountSent, postId);
         console.log('the transaction record is: ', transactionRecord);
-<<<<<<< HEAD
-
-        if (!txInfo) {
-          throw {
-            Error: 'Something is wrong, please try again later!'
-          };
-        }
-=======
-        console.log('txInfo: ', txInfo);
-        console.log('the currencyId is: ', currencyId);
-
-        const response = updateTips(amountSent, postId);
-        console.log('response is:', response);
->>>>>>> d0f6fbf (handled rebase conflicts with dev branch)
-=======
-        const txInfo = await transferExtrinsic.signAndSend(fromAddress, { signer: injector.signer });
-
-        const response = updateTips(amountSent, postId);
->>>>>>> 29f1f40 (handled undefined error on balanceDetails object)
-
-        //TODO: move trxHash to dispatch
-=======
 
         if (!txInfo) {
           throw {
@@ -202,8 +144,6 @@ export const usePolkadotApi = () => {
           };
         }
 
-        dispatch;
->>>>>>> c5917f4 (revised send tips coding flow, todos must be done)
         const response = {
           trxHash: txInfo?.toHex()
         };
