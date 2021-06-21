@@ -68,13 +68,8 @@ export const PostActionComponent: React.FC<PostActionProps> = ({
     if (user.anonymous) return true;
 
     // TODO: current api does not return user
-<<<<<<< HEAD
     if (user.id === post.platformUser?.platform_account_id) return true;
     return false;
-=======
-    console.log('post wallet address: ', post.walletAddress);
-    return user.id === post.walletAddress;
->>>>>>> 29f1f40 (handled undefined error on balanceDetails object)
   };
 
   return (
