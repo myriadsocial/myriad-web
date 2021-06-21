@@ -224,24 +224,6 @@ export default function ImportPostComponent({ user, experiences }: Props) {
                   />
                 </ShowIf>
               </div>
-=======
-                  disableUnderline: true,
-                  color: 'primary',
-                  startAdornment: (
-                    <InputAdornment position="start" disableTypography>
-                      {social === 'https://twitter.com/' ? 'https://twitter.com/' : 'https://www.facebook.com/'}
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <FormControl className={styles.formControl}>
-                <InputLabel id="demo-simple-select-label">Social Platform</InputLabel>
-                <Select labelId="demo-simple-select-label" id="demo-simple-select" value={social} onChange={handleChange}>
-                  <MenuItem value={'https://twitter.com/'}>Twitter</MenuItem>
-                  <MenuItem value={'https://www.facebook.com/'}>Facebook</MenuItem>
-                </Select>
-              </FormControl>
->>>>>>> 458dff3 (fix importing post)
               {
                 // TODO: Associate a post with an experience
                 //<FormControl className={styles.formControl}>
