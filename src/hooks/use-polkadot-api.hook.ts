@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { Keyring } from '@polkadot/keyring';
 
+import { useWalletAddress as baseUseWalletAddress, WalletAddressActionType } from '../components/common/sendtips/send-tip.context';
 import { useBalance as baseUseBalance, BalanceActionType } from '../components/wallet/balance.context';
 
 import { updateTips } from 'src/lib/api/post';
@@ -17,11 +18,6 @@ type Props = {
   postId: string;
 };
 
-interface SendTipResponseProps {
-  from?: string;
-  trxHash?: string;
-}
-
 const formatNumber = (number: number, decimals: number) => {
   if (number.toString() === '0') return '0';
   const result = Number((Number(number.toString()) / 10 ** decimals).toFixed(5));
@@ -31,6 +27,7 @@ const formatNumber = (number: number, decimals: number) => {
 // params mungkin butuh address sama tipe wsProvider
 export const usePolkadotApi = () => {
   const { state, dispatch } = baseUseBalance();
+  const { state: walletAddressState, dispatch: walletAddressDispatch } = baseUseWalletAddress();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -103,9 +100,10 @@ export const usePolkadotApi = () => {
       // We select the first account found by using fromAddress
       // `account` is of type InjectedAccountWithMeta
       const keyring = new Keyring();
+      const baseAddress = keyring.encodeAddress(fromAddress, 42);
       const account = allAccounts?.find(function (account) {
         // address from session must match address on polkadot extension
-        return account.address === keyring.encodeAddress(fromAddress, 42);
+        return account.address === baseAddress;
       });
 
       // if account has not yet been imported to Polkadot.js extension
@@ -135,7 +133,7 @@ export const usePolkadotApi = () => {
         // popup asking to sign the balance transfer transaction
         const txInfo = await transferExtrinsic?.signAndSend(fromAddress, { signer: injector.signer });
 
-        const transactionRecord = updateTips(currencyId, amountSent, postId);
+        const transactionRecord = await updateTips(currencyId, amountSent, postId);
         console.log('the transaction record is: ', transactionRecord);
 
         if (!txInfo) {
@@ -144,10 +142,13 @@ export const usePolkadotApi = () => {
           };
         }
 
-        const response = {
+        walletAddressDispatch({
+          type: WalletAddressActionType.SEND_TIPS,
+          amountSent,
+          from: baseAddress,
+          to: toAddress,
           trxHash: txInfo?.toHex()
-        };
-        return response;
+        });
       }
     } catch (error) {
       setError(error);
@@ -161,6 +162,7 @@ export const usePolkadotApi = () => {
     error,
     load,
     tokens: state.balanceDetails,
-    sendTip
+    sendTip,
+    trxHash: walletAddressState.trxHash
   };
 };
