@@ -13,7 +13,7 @@ export interface InitWalletAddress {
 //TODO: add new state to contain all the transactions made during user session
 export interface SendTips {
   type: WalletAddressActionType.SEND_TIPS;
-  amount: number;
+  amountSent: number;
   from: string;
   to: string;
   trxHash: string;
@@ -26,12 +26,18 @@ type State = {
   init: boolean;
   walletAddress: string;
   amountSent: number;
+  from: string;
+  to: string;
+  trxHash: string;
 };
 
 const initialState = {
   init: true,
   walletAddress: '',
-  amountSent: 0
+  amountSent: 0,
+  from: '',
+  to: '',
+  trxHash: ''
 };
 
 const WalletAddressContext = createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
@@ -49,7 +55,10 @@ function walletAddressReducer(state: State, action: Action) {
     case WalletAddressActionType.SEND_TIPS: {
       return {
         ...state,
-        amountSent: action.amount,
+        amountSent: action.amountSent,
+        from: action.from,
+        to: action.to,
+        trxHash: action.trxHash,
         init: false
       };
     }
