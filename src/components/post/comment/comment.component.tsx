@@ -129,6 +129,7 @@ export default function CommentComponent({ balanceDetails, post, disableReply, h
                     </Typography>
                   </CardContent>
                   <SendTipModal
+                    postId={post?.id as string}
                     userAddress={userId}
                     ref={childRef}
                     receiverId={comment?.user?.id as string}

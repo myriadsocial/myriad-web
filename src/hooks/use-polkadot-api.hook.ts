@@ -19,7 +19,7 @@ type Props = {
 };
 
 const formatNumber = (number: number, decimals: number) => {
-  if (number.toString() === '0') return '0';
+  if (number.toString() === '0') return 0;
   const result = Number((Number(number.toString()) / 10 ** decimals).toFixed(5));
   return result;
 };
@@ -67,7 +67,8 @@ export const usePolkadotApi = () => {
         type: BalanceActionType.INIT_BALANCE,
         balanceDetails: [
           {
-            freeBalance: formatNumber(ausdData?.free as number, 12),
+            //@ts-ignore
+            freeBalance: formatNumber(ausdData.free as number, 12),
             tokenSymbol: 'AUSD',
             tokenDecimals: 12
           }
