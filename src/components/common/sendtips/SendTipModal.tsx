@@ -6,6 +6,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Link from '@material-ui/core/Link';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -148,20 +149,51 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiverId }: Props, ref) => {
-  const { sendTip, load } = usePolkadotApi();
+  const { sendTip, load, trxHash, error } = usePolkadotApi();
   const { loadWalletAddress, walletAddress } = useWalletAddress(postId);
   const [selectedToken, setSelectedToken] = useState('');
   const [tokenBalance, setTokenBalance] = useState('');
+
   useEffect(() => {
+    console.log('load send tip modal');
     loadWalletAddress();
   }, []);
+
+  useEffect(() => {
+    if (trxHash.length > 0) {
+      setSendTipConfirmed({
+        isConfirmed: true,
+        message: 'Tip sent successfully!'
+      });
+      setShowSendTipModal(false);
+      setValues({
+        ...values,
+        amount: ''
+      });
+      load(userAddress);
+    }
+  }, [trxHash]);
+
+  useEffect(() => {
+    if (error) {
+      setErrorSendTips({
+        ...errorSendTips,
+        isError: true,
+        message: 'Something is wrong, please try again!'
+      });
+      setShowSendTipModal(false);
+      setValues({
+        ...values,
+        amount: ''
+      });
+    }
+  }, [error]);
 
   useEffect(() => {
     if (balanceDetails?.length > 0) {
       const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
       if (typeof idx === 'number') {
         setTokenBalance(balanceDetails[idx]?.freeBalance.toString() ?? '');
-        console.log('the idex: ', tokenBalance);
       }
     }
   }, [selectedToken, balanceDetails]);
@@ -173,7 +205,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
 
   const [errorSendTips, setErrorSendTips] = useState({
     isError: false,
-    message: null
+    message: ''
   });
 
   const [showSendTipModal, setShowSendTipModal] = useState(false);
@@ -274,37 +306,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
           postId
         };
 
-        const response = sendTip(sendTipPayload);
-        // handle if sendTip succeed
-        if (response) {
-        }
-
-        //TODO: control tipping error and success from context
-        if (response.Error || typeof response === 'string') {
-          setErrorSendTips({
-            ...errorSendTips,
-            isError: true,
-            message: response.Error || response
-          });
-          setShowSendTipModal(false);
-          setValues({
-            ...values,
-            amount: ''
-          });
-          return;
-        }
-        if (response?.from === senderAddress) {
-          setSendTipConfirmed({
-            isConfirmed: true,
-            message: 'Tip sent successfully!'
-          });
-          setShowSendTipModal(false);
-          setValues({
-            ...values,
-            amount: ''
-          });
-          load(userAddress);
-        }
+        sendTip(sendTipPayload);
       }
     } else {
       setErrorText({
@@ -405,6 +407,11 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
 
   const hideDuration = 3000;
 
+  const handleExtrinsicExplorer = (event: React.SyntheticEvent) => {
+    window.open(`https://acala-testnet.subscan.io/extrinsic/${trxHash}`, '_blank');
+    event.preventDefault();
+  };
+
   return (
     <>
       <Dialog open={showSendTipModal} onClose={closeSendTipModal} aria-labelledby="send-tips-window" maxWidth="md">
@@ -452,6 +459,11 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         <Alert severity="success">
           <AlertTitle>Success!</AlertTitle>
           {sendTipConfirmed.message}
+          <br />
+          TxHash:{' '}
+          <a target="_blank" onClick={handleExtrinsicExplorer} rel="noopener noreferrer">
+            {trxHash}
+          </a>
         </Alert>
       </Snackbar>
 
