@@ -9,6 +9,7 @@ import { useWalletAddress as baseUseWalletAddress, WalletAddressActionType } fro
 import { useBalance as baseUseBalance, BalanceActionType } from '../components/wallet/balance.context';
 
 import { updateTips } from 'src/lib/api/post';
+import { storeTransaction } from 'src/lib/api/transaction';
 
 type Props = {
   fromAddress: string;
@@ -138,17 +139,18 @@ export const usePolkadotApi = () => {
             // popup asking to sign the balance transfer transaction
             const txInfo = await transferExtrinsic.signAndSend(fromAddress, { signer: injector.signer });
 
-            console.log('the post id: ', postId);
             // Update the tip sent to a post
             await updateTips(currencyId, amountSent, postId);
 
             // Record the transaction
-
-            if (!txInfo) {
-              throw {
-                Error: 'Something is wrong, please try again later!'
-              };
-            }
+            await storeTransaction({
+              trxHash: txInfo?.toHex(),
+              from: fromAddress,
+              to: toAddress,
+              value: amountSent,
+              state: 'success',
+              tokenId: currencyId
+            });
 
             walletAddressDispatch({
               type: WalletAddressActionType.SEND_TIPS,
@@ -158,6 +160,12 @@ export const usePolkadotApi = () => {
               trxHash: txInfo?.toHex()
             });
             await api.disconnect();
+
+            //if (!txInfo) {
+            //throw {
+            //Error: 'Something is wrong, please try again later!'
+            //};
+            //}
           }
         }
       }
