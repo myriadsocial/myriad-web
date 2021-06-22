@@ -13,11 +13,11 @@ export const useWalletAddress = (postId: string) => {
   const loadWalletAddress = async () => {
     setLoading(true);
     try {
-      const { data } = await WalletAddressAPI.getWalletAddress(postId);
+      const { walletAddress } = await WalletAddressAPI.getWalletAddress(postId);
 
       dispatch({
         type: WalletAddressActionType.INIT_WALLET_ADDRESS,
-        payload: data
+        payload: walletAddress
       });
     } catch (error) {
       setError(error);
