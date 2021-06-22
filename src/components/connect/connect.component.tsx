@@ -180,7 +180,11 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
                 <Avatar className={styles.icon}>3.</Avatar>
               </ListItemIcon>
               <ListItemText disableTypography>
-                <Typography variant="caption">Copy and paste the URL of the post (make sure it's public!) here:</Typography>
+                {social === SocialsEnum.FACEBOOK ? 
+                  <Typography variant="caption">Copy and paste the URL of the post (make sure it's public!) here:</Typography> :
+                  <Typography variant="caption">Tell us your {social} username here:</Typography>
+                }
+                
                 <TextField
                   className={styles.account}
                   hiddenLabel
