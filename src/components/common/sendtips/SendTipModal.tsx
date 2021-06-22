@@ -156,6 +156,17 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
   useEffect(() => {
     console.log('load send tip modal');
     loadWalletAddress();
+
+    setSendTipConfirmed({
+      isConfirmed: false,
+      message: ''
+    });
+
+    setErrorSendTips({
+      ...errorSendTips,
+      isError: false,
+      message: ''
+    });
   }, []);
 
   useEffect(() => {
