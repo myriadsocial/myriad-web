@@ -149,7 +149,8 @@ export const usePolkadotApi = () => {
               to: toAddress,
               value: amountSent,
               state: 'success',
-              tokenId: currencyId
+              tokenId: currencyId,
+              createdAt: new Date().toISOString()
             });
 
             walletAddressDispatch({
