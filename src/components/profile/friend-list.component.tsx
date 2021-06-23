@@ -25,9 +25,11 @@ import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
 import { useProfile } from 'src/components/profile/profile.context';
+import { useFriendHook } from 'src/components/profile/use-friend.hook';
 import { useUser } from 'src/context/user.context';
 import { acronym } from 'src/helpers/string';
 import RemoveUser from 'src/images/user-minus.svg';
+import { ExtendedFriend } from 'src/interfaces/friend';
 import { User } from 'src/interfaces/user';
 
 type Props = {
@@ -133,6 +135,7 @@ const FriendsList = ({ profile }: Props) => {
   const {
     state: { user }
   } = useUser();
+  const { cancelFriendRequest } = useFriendHook(profile);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -146,8 +149,13 @@ const FriendsList = ({ profile }: Props) => {
   //   router.push(`/${id}`);
   // };
 
-  const toggleProfileForm = () => {
+  const toggleRemoveAlert = () => {
     setOpenModal(!openModal);
+  };
+
+  const handleUnFriendRequest = (friendStatus: ExtendedFriend) => {
+    cancelFriendRequest(friendStatus);
+    toggleRemoveAlert();
   };
 
   if (!user) return null;
@@ -193,7 +201,7 @@ const FriendsList = ({ profile }: Props) => {
                               <MenuItem onClick={handleClose} divider={true} disabled={true}>
                                 Add to Favorite
                               </MenuItem>
-                              <MenuItem onClick={toggleProfileForm}>
+                              <MenuItem onClick={toggleRemoveAlert}>
                                 <Button
                                   className={style.danger}
                                   disableRipple={true}
@@ -238,7 +246,7 @@ const FriendsList = ({ profile }: Props) => {
                               <MenuItem onClick={handleClose} divider={true} disabled={true}>
                                 Add to Favorite
                               </MenuItem>
-                              <MenuItem onClick={toggleProfileForm}>
+                              <MenuItem onClick={toggleRemoveAlert}>
                                 <Button
                                   className={style.danger}
                                   disableRipple={true}
@@ -258,7 +266,7 @@ const FriendsList = ({ profile }: Props) => {
                   )}
 
                   <Dialog open={openModal} aria-labelledby="no-extension-installed">
-                    <DialogTitle id="name" onClose={toggleProfileForm}>
+                    <DialogTitle id="name" onClose={toggleRemoveAlert}>
                       Remove Friend
                     </DialogTitle>
                     <DialogContent>
@@ -277,10 +285,10 @@ const FriendsList = ({ profile }: Props) => {
                           from this person.
                         </Typography>
                         <div className={`${style['flex-center']} ${style['m-vertical1']}`}>
-                          <Button variant="text" onClick={toggleProfileForm}>
+                          <Button variant="text" onClick={toggleRemoveAlert}>
                             Cancel
                           </Button>
-                          <Button disabled variant="contained" color="primary" onClick={() => console.log('remove friend')}>
+                          <Button variant="contained" color="primary" onClick={() => handleUnFriendRequest(request)}>
                             Remove
                           </Button>
                         </div>
