@@ -45,8 +45,8 @@ function Alert(props: AlertProps) {
 
 export default function Header({ isAnonymous, user, profile, loading, isGuest }: Props) {
   const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openRemoveModal, setOpenRemoveModal] = useState(false);
 
   const {
     state: { friendStatus }
@@ -64,32 +64,33 @@ export default function Header({ isAnonymous, user, profile, loading, isGuest }:
 
   // SHOW MODAL
   const toggleProfileForm = () => {
-    setOpen(!open);
+    setOpenEditModal(!openEditModal);
   };
 
   // SHOW REMOVE ALERT MODAL
   const toggleRemoveAlert = () => {
-    setOpenModal(!openModal);
+    setOpenRemoveModal(!openRemoveModal);
   };
 
   // FRIEND REQUEST
-  const friendRequest = () => {
-    console.log('profile', profile);
+  const handleSendFriendRequest = () => {
+    makeFriend({ friendId: profile?.id });
+  };
 
-    makeFriend({
-      friendId: profile?.id
-    });
+  const handleUnFriendRequest = () => {
+    cancelFriendRequest(friendStatus);
+    toggleRemoveAlert();
   };
 
   const handlecancelFriendRequest = () => {
     cancelFriendRequest(friendStatus);
   };
 
-  const approveFriendRequest = () => {
+  const handleApproveFriendRequest = () => {
     toggleRequest(friendStatus, FriendStatus.APPROVED);
   };
 
-  const rejectFriendRequest = () => {
+  const handleRejectFriendRequest = () => {
     toggleRequest(friendStatus, FriendStatus.REJECTED);
   };
 
@@ -188,7 +189,7 @@ export default function Header({ isAnonymous, user, profile, loading, isGuest }:
                   variant="contained"
                   size="medium"
                   startIcon={<PersonAddIcon />}
-                  onClick={friendRequest}>
+                  onClick={handleSendFriendRequest}>
                   Add Friend
                 </Button>
               </ShowIf>
@@ -200,7 +201,7 @@ export default function Header({ isAnonymous, user, profile, loading, isGuest }:
                   color="default"
                   variant="contained"
                   size="medium"
-                  onClick={rejectFriendRequest}>
+                  onClick={handleRejectFriendRequest}>
                   Ignore
                 </Button>
                 <Button
@@ -209,7 +210,7 @@ export default function Header({ isAnonymous, user, profile, loading, isGuest }:
                   color="primary"
                   variant="contained"
                   size="medium"
-                  onClick={approveFriendRequest}>
+                  onClick={handleApproveFriendRequest}>
                   Accept
                 </Button>
               </ShowIf>
@@ -285,9 +286,9 @@ export default function Header({ isAnonymous, user, profile, loading, isGuest }:
       </div>
 
       {/* MODAL */}
-      {user && <ProfileEditComponent toggleProfileForm={toggleProfileForm} open={open} user={user} />}
+      {user && <ProfileEditComponent toggleProfileForm={toggleProfileForm} open={openEditModal} user={user} />}
 
-      <Dialog open={openModal} aria-labelledby="no-extension-installed">
+      <Dialog open={openRemoveModal} aria-labelledby="no-extension-installed">
         <DialogTitle id="name" onClose={toggleRemoveAlert}>
           Remove Friend
         </DialogTitle>
@@ -310,7 +311,7 @@ export default function Header({ isAnonymous, user, profile, loading, isGuest }:
               <Button variant="text" onClick={toggleRemoveAlert}>
                 Cancel
               </Button>
-              <Button disabled variant="contained" color="primary" onClick={() => console.log('remove friend')}>
+              <Button variant="contained" color="primary" onClick={handleUnFriendRequest}>
                 Remove
               </Button>
             </div>

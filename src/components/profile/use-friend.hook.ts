@@ -123,6 +123,9 @@ export const useFriendHook = (user: User | null) => {
       });
 
       checkFriendStatus(friend.friendId);
+      getFriends();
+      loadFriends();
+      loadRequests();
     } catch (error) {
       setError(error);
       console.log(error, '<<<error');
@@ -137,6 +140,7 @@ export const useFriendHook = (user: User | null) => {
     try {
       await FriendAPI.toggleRequest(friend.id, status);
 
+      getFriends();
       loadFriends();
       loadRequests();
       checkFriendStatus(friend.friendId);
