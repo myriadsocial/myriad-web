@@ -1,7 +1,7 @@
 import { User } from 'src/interfaces/user';
 
 export interface Transaction {
-  id: string;
+  id?: string;
   trxHash: string;
   from: string;
   to: string;
