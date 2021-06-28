@@ -24,6 +24,7 @@ import { useStyles } from './conntect.style';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
+import { parsePostUrl } from 'src/helpers/url';
 import { SocialsEnum } from 'src/interfaces';
 
 export type ConnectComponentRefProps = {
@@ -50,6 +51,7 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
   const [socialName, setSocialName] = useState('');
   const [shared, setShared] = useState(false);
   const [termApproved, setTermApproved] = useState(false);
+  const [validUrl, setUrlValid] = useState(false);
 
   const message = `I'm part of the Myriad ${publicKey}`;
   const APP_URL = 'https://app.myriad.systems';
@@ -69,17 +71,36 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
 
   const handleSocialNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
-    const name = text.substring(text.lastIndexOf('/') + 1);
 
-    setSocialName(name);
+    if (social === SocialsEnum.FACEBOOK) {
+      setSocialName(text);
+    } else {
+      const name = text.substring(text.lastIndexOf('/') + 1);
+      setSocialName(name);
+    }
+
+    setUrlValid(text.trim().length > 0);
   };
 
   const handleSocialNamePasted = (e: React.ClipboardEvent<HTMLDivElement>) => {
     e.preventDefault();
     const text = e.clipboardData.getData('Text');
-    const name = text.substring(text.lastIndexOf('/') + 1);
 
-    setSocialName(name);
+    if (social === SocialsEnum.FACEBOOK) {
+      const match = parsePostUrl(social, text);
+
+      setUrlValid(match !== null);
+      console.log('match', match)
+      if ( match) {
+        const name = text.replace(prefix.facebook, '');
+        setSocialName(name);
+      }
+    } else {
+      const name = text.substring(text.lastIndexOf('/') + 1);
+
+      setSocialName(name);
+      setUrlValid(true);
+    }
   };
 
   const onShareClosed = () => {
@@ -95,6 +116,7 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
       }
 
       verify(social, username);
+
       close();
     }
   };
@@ -196,6 +218,7 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
                   onPaste={handleSocialNamePasted}
                   color="primary"
                   margin="dense"
+                  error={true}
                   required
                   fullWidth
                   name="username"
@@ -216,7 +239,7 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
           </List>
         </DialogContent>
         <DialogActions className={styles.done}>
-          <Button onClick={handleShared} disabled={!shared || !termApproved} size="large" variant="contained" color="primary">
+          <Button onClick={handleShared} disabled={!shared || !termApproved || !validUrl} size="large" variant="contained" color="primary">
             Verify My {social} Account
           </Button>
         </DialogActions>

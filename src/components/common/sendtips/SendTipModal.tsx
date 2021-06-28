@@ -198,25 +198,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
   }, []);
 
   useEffect(() => {
-<<<<<<< HEAD
-    console.log('load send tip modal');
-    loadWalletAddress();
-
-    setSendTipConfirmed({
-      isConfirmed: false,
-      message: ''
-    });
-
-    setErrorSendTips({
-      ...errorSendTips,
-      isError: false,
-      message: ''
-    });
-  }, []);
-
-  useEffect(() => {
-=======
->>>>>>> 7f3cc6d (Refactored code for send tips flow)
     if (trxHash.length > 0) {
       setSendTipConfirmed({
         isConfirmed: true,
