@@ -153,9 +153,48 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
   const [selectedToken, setSelectedToken] = useState('');
   const [tokenBalance, setTokenBalance] = useState('');
 
+  const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
+    isConfirmed: false,
+    message: ''
+  });
+
+  const [errorSendTips, setErrorSendTips] = useState({
+    isError: false,
+    message: ''
+  });
+
+  const [showSendTipModal, setShowSendTipModal] = useState(false);
+  const [inputError, setInputError] = useState<InputErorState>({
+    isErrorInput: false,
+    isTextChanged: false,
+    isInsufficientBalance: false,
+    errorMessage: 'Digits must be bigger than zero!'
+  });
+  const [values, setValues] = useState<InputState>({
+    amount: ''
+  });
+  const styles = useStyles();
+
+  useImperativeHandle(ref, () => ({
+    triggerSendTipModal: () => {
+      setShowSendTipModal(true);
+    }
+  }));
+
   useEffect(() => {
     console.log('load send tip modal');
     loadWalletAddress();
+
+    setSendTipConfirmed({
+      isConfirmed: false,
+      message: ''
+    });
+
+    setErrorSendTips({
+      ...errorSendTips,
+      isError: false,
+      message: ''
+    });
   }, []);
 
   useEffect(() => {
@@ -196,34 +235,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
       }
     }
   }, [selectedToken, balanceDetails]);
-
-  const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
-    isConfirmed: false,
-    message: ''
-  });
-
-  const [errorSendTips, setErrorSendTips] = useState({
-    isError: false,
-    message: ''
-  });
-
-  const [showSendTipModal, setShowSendTipModal] = useState(false);
-  const [inputError, setInputError] = useState<InputErorState>({
-    isErrorInput: false,
-    isTextChanged: false,
-    isInsufficientBalance: false,
-    errorMessage: 'Digits must be bigger than zero!'
-  });
-  const [values, setValues] = useState<InputState>({
-    amount: ''
-  });
-  const styles = useStyles();
-
-  useImperativeHandle(ref, () => ({
-    triggerSendTipModal: () => {
-      setShowSendTipModal(true);
-    }
-  }));
 
   const closeSendTipModal = () => {
     setShowSendTipModal(false);
