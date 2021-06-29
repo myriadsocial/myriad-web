@@ -115,7 +115,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
   useEffect(() => {
     setAllTransactions(transactions);
     const ids = transactions.reduce((result, item) => {
-      console.log('the transaction is: ', item);
+      //console.log('the transaction is: ', item);
       if (item.from === userId) {
         result.push(item.to);
       } else {
@@ -148,15 +148,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
     return found ? found.status : null;
   };
 
-  //const getFriendStatus = (user: User) => {
-  //const found = friended.find(friend => friend.id === user.id);
-
-  //return found ? found.status : null;
-  //};
-
-  //TODO: try the function below for add friend button
   const sendFriendRequest = (receiverId: string) => {
-    console.log('receiverId', receiverId);
     sendRequest(receiverId);
   };
 
