@@ -168,7 +168,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
     isErrorInput: false,
     isTextChanged: false,
     isInsufficientBalance: false,
-    errorMessage: 'Digits must be bigger than zero!'
+    errorMessage: 'Please input a number larger than 0!'
   });
   const [values, setValues] = useState<InputState>({
     amount: ''
@@ -182,7 +182,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
   }));
 
   useEffect(() => {
-    console.log('load send tip modal');
+    //console.log('load send tip modal');
     loadWalletAddress();
 
     setSendTipConfirmed({
@@ -307,7 +307,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         } else {
           toAddress = walletAddress;
         }
-        console.log('amount sent: ', amountSent);
+        //console.log('amount sent: ', amountSent);
 
         const sendTipPayload = {
           fromAddress: senderAddress,
