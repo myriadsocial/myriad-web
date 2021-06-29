@@ -11,7 +11,10 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
+import ShowIf from '../common/show-if.component';
+
 import { useFriendsHook } from 'src/hooks/use-friends-hook';
+import { FriendStatus } from 'src/interfaces/friend';
 import { Transaction } from 'src/interfaces/transaction';
 import { User } from 'src/interfaces/user';
 
@@ -100,19 +103,36 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function TransactionListComponent({ transactions, user }: Props) {
   const style = useStyles();
 
-  const { friended, checkFriendStatus } = useFriendsHook(user);
+  const { friended, checkFriendStatus, sendRequest } = useFriendsHook(user);
   const [expandable, setExpandable] = useState(true);
 
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
-  //const { sendRequest } = useFriendsHook(user);
+
+  const [requestableIds, setRequestableIds] = useState<string[]>([]);
 
   const userId = user?.id as string;
 
   useEffect(() => {
     setAllTransactions(transactions);
-    // list all transaction user id as param
-    checkFriendStatus([]);
+    const ids = transactions.reduce((result, item) => {
+      console.log('the transaction is: ', item);
+      if (item.from === userId) {
+        result.push(item.to);
+      } else {
+        result.push(item.from);
+      }
+      return result;
+    }, [] as Array<string>);
+
+    setRequestableIds(ids);
   }, []);
+
+  useEffect(() => {
+    if (requestableIds.length > 0) {
+      const checked = checkFriendStatus(requestableIds);
+      console.log('checking: ', checked);
+    }
+  }, [requestableIds]);
 
   if (transactions.length === 0) return null;
 
@@ -120,33 +140,38 @@ export default function TransactionListComponent({ transactions, user }: Props) 
     setExpandable(!expandable);
   };
 
-  const getFriendStatus = (user: User) => {
-    const found = friended.find(friend => friend.id === user.id);
+  const getFriendStatus = (user: User): FriendStatus | null => {
+    const found = friended.find(friend => {
+      return friend.requestorId === user.id || friend.friendId == user.id;
+    });
 
     return found ? found.status : null;
   };
 
-  //TODO: try the function below for add friend button
-  //const sendFriendRequest = (txHistory: Transaction) => {
-  //console.log('sendFriendRequest', txHistory);
-  //if (txHistory.fromUser) {
-  //sendRequest(txHistory.fromUser.id);
-  //}
+  //const getFriendStatus = (user: User) => {
+  //const found = friended.find(friend => friend.id === user.id);
+
+  //return found ? found.status : null;
   //};
 
+  //TODO: try the function below for add friend button
+  const sendFriendRequest = (receiverId: string) => {
+    console.log('receiverId', receiverId);
+    sendRequest(receiverId);
+  };
+
   const RenderPrimaryText = (txHistory: Transaction) => {
-    console.log('the txHistory is:', txHistory);
     return (
       <div>
         {user.id === txHistory?.from ? (
           <Typography>
-            You sent tips to {txHistory?.toUser?.name ?? defaultUserName}'s post with {txHistory?.value / 1000000000000}{' '}
+            You sent tips to {txHistory?.toUser?.name ?? defaultUserName}'s post with {(txHistory?.value / 1000000000000).toString()}{' '}
             {txHistory?.tokenId} coins
           </Typography>
         ) : (
           <Typography>
-            {txHistory?.fromUser?.name ?? defaultUserName} tipped your post with {txHistory?.value / 1000000000000} {txHistory?.tokenId}{' '}
-            coins
+            {txHistory?.fromUser?.name ?? defaultUserName} tipped your post with {(txHistory?.value / 1000000000000).toString()}{' '}
+            {txHistory?.tokenId} coins
           </Typography>
         )}
       </div>
@@ -169,12 +194,31 @@ export default function TransactionListComponent({ transactions, user }: Props) 
     to?: User;
   };
 
+  const getRequesteeId = (from: User, to?: User) => {
+    if (from.id === userId && to !== undefined) return to.id;
+    return from.id;
+  };
+
   const CardActionButtons: React.FC<CardActionProps> = ({ from, to }) => {
     if (!from) return null;
 
     let isBefriendable = to?.id !== userId ? true : false;
 
     const status = getFriendStatus(from);
+
+    let disableRequest = false;
+
+    if (status) {
+      disableRequest = [FriendStatus.PENDING, FriendStatus.APPROVED].includes(status);
+    }
+
+    let requesteeId: string;
+
+    if (to !== undefined) {
+      requesteeId = getRequesteeId(from, to);
+    } else {
+      requesteeId = getRequesteeId(from);
+    }
 
     return (
       <CardActions>
@@ -183,8 +227,17 @@ export default function TransactionListComponent({ transactions, user }: Props) 
             Visit Profile
           </Button>
           {(!status || isBefriendable) && (
-            <Button size="medium" variant="contained" color="primary" className={style.iconButton} startIcon={<PersonAddIcon />}>
-              Add Friend
+            <Button
+              onClick={() => sendFriendRequest(requesteeId)}
+              size="medium"
+              variant="contained"
+              color="primary"
+              disabled={disableRequest}
+              className={style.iconButton}
+              startIcon={<PersonAddIcon />}>
+              <ShowIf condition={status === null}>Add Friend</ShowIf>
+              <ShowIf condition={status === FriendStatus.PENDING}>Request Sent</ShowIf>
+              <ShowIf condition={status === FriendStatus.APPROVED}>Friend</ShowIf>
             </Button>
           )}
         </div>
