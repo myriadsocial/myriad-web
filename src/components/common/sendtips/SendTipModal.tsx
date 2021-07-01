@@ -1,6 +1,5 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
-import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -11,141 +10,23 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Snackbar from '@material-ui/core/Snackbar';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import MuiTableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles, lighten, withStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 import SendIcon from '@material-ui/icons/Send';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import DialogTitle from '../DialogTitle.component';
+import { useStyles, TableCell, StyledBadge } from './send-tips.style';
 import { useWalletAddress } from './use-wallet.hook';
 
 import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
-import { BalanceDetail } from 'src/interfaces/balance';
-
-interface InputState {
-  amount: string;
-}
-
-interface InputErorState {
-  isErrorInput: boolean;
-  isTextChanged: boolean;
-  isInsufficientBalance: boolean;
-  errorMessage: string;
-}
-
-interface SendTipConfirmed {
-  isConfirmed: boolean;
-  message: string;
-}
-
-type Props = {
-  userAddress: string;
-  postId: string;
-  balanceDetails: BalanceDetail[];
-  receiverId?: string;
-};
-
-const TableCell = withStyles({
-  root: {
-    borderBottom: 'none',
-    paddingTop: 3,
-    paddingBottom: 3
-  }
-})(MuiTableCell);
-
-const StyledBadge = withStyles((theme: Theme) =>
-  createStyles({
-    badge: {
-      right: -5,
-      top: 0
-    }
-  })
-)(Badge);
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      backgroundColor: theme.palette.primary.light,
-      padding: '15px 29px',
-      color: '#E0E0E0',
-      flex: '0 0 100%',
-      width: 320
-    },
-    title: {
-      paddingBottom: 10,
-      borderBottom: '5px solid',
-      borderBottomColor: theme.palette.secondary.main
-    },
-    action: {
-      marginTop: 25
-    },
-    button: {
-      marginBottom: theme.spacing(1.5),
-      borderRadius: 0,
-      textTransform: 'none'
-    },
-    buttonIcon: {
-      marginBottom: theme.spacing(1.5),
-      borderRadius: 0,
-      '&& .MuiButton-label': {
-        display: 'flex',
-        justifyContent: 'flex-start',
-        flexDirection: 'row',
-        width: '60%'
-      }
-    },
-    whiteLightButton: {
-      marginBottom: 10,
-      backgroundColor: lighten('#f4f5e2', 0.3),
-      textAlign: 'left',
-      borderRadius: 20
-    },
-    lightButton: {
-      marginBottom: 10,
-      backgroundColor: lighten('#E849BD', 0.3),
-      textAlign: 'left',
-      borderRadius: 20
-    },
-    btnCreateAccount: {
-      margin: '8px 16px'
-    },
-    info: {
-      marginBottom: theme.spacing(2)
-    },
-    polkadot: {
-      color: 'rgb(255, 140, 0)'
-    },
-    spinner: {
-      color: '#A942E9',
-      position: 'relative',
-      top: 4,
-      left: 6
-    },
-    sendTipDialog: {
-      minWidth: '400px'
-    },
-    errorText: {
-      color: 'red'
-    },
-    balanceText: {
-      width: '100%',
-      padding: '2px',
-      fontWeight: 700
-    },
-    tooltipContentHeader: {
-      fontWeight: 'bold'
-    },
-    tooltipContentRoot: { display: 'flex', flexDirection: 'column' }
-  })
-);
+import { InputState, InputErrorState, SendTipConfirmed, Props } from 'src/interfaces/send-tips/send-tips';
 
 const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiverId }: Props, ref) => {
   const { sendTip, load, trxHash, error } = usePolkadotApi();
@@ -164,7 +45,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
   });
 
   const [showSendTipModal, setShowSendTipModal] = useState(false);
-  const [inputError, setInputError] = useState<InputErorState>({
+  const [inputError, setInputError] = useState<InputErrorState>({
     isErrorInput: false,
     isTextChanged: false,
     isInsufficientBalance: false,
@@ -313,6 +194,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
           fromAddress: senderAddress,
           toAddress,
           amountSent,
+          decimals,
           currencyId: selectedToken,
           postId
         };
