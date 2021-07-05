@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import { FacebookProvider, EmbeddedPost } from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 
+import { useSession } from 'next-auth/client';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
@@ -56,11 +57,16 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
   } = useUser();
 
   const [expanded, setExpanded] = useState(defaultExpanded);
-  const [showTipSummary, setShowTipSummary] = useState(false);
-  const childRef = useRef<any>();
+  const [openTipSummary, setOpenTipSummary] = useState(false);
+  const [tippedPost, setTippedPost] = useState<Post>();
   const headerRef = useRef<any>();
+  const sendTipRef = useRef<any>();
 
-  if (!detail || !user) return null;
+  const [session] = useSession();
+
+  const userId = session?.user.address as string;
+
+  if (!detail) return null;
 
   if (post.text === '[removed]' && post.platform === 'reddit') return null;
 
@@ -73,7 +79,7 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
       return;
     }
 
-    childRef.current.triggerSendTipModal();
+    sendTipRef.current.triggerSendTipModal();
   };
 
   const openContentSource = () => {
@@ -132,6 +138,18 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
   const dislikePost = () => {};
 
   if (!detail || !post) return null;
+
+  const handleTipSentSuccess = (postId: string) => {
+    console.log('post id being tipped: ', postId);
+    if (post.id === postId) {
+      setTippedPost(post);
+      setOpenTipSummary(true);
+    }
+  };
+
+  const handleCloseTipSummary = () => {
+    setOpenTipSummary(false);
+  };
 
   const renderPostAvatar = () => {
     let avatarUrl: string = detail.user.avatar;
@@ -211,8 +229,15 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
         </ShowIf>
       </Card>
 
-      <SendTipModal userAddress={user.id} ref={childRef} postId={post.id as string} balanceDetails={balanceDetails} />
-      <TipSummaryComponent open={showTipSummary} post={post} close={() => setShowTipSummary(false)} />
+      <SendTipModal
+        success={postId => handleTipSentSuccess(postId)}
+        userAddress={userId}
+        ref={sendTipRef}
+        postId={post.id as string}
+        balanceDetails={balanceDetails}
+      />
+
+      {tippedPost ? <TipSummaryComponent post={tippedPost} open={openTipSummary} close={handleCloseTipSummary} /> : <></>}
     </>
   );
 }
