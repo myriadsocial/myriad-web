@@ -117,7 +117,7 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
     backToTimeline();
   };
 
-  console.log('TIMELINE COMPONENT LOAD', hasMore);
+  //console.log('TIMELINE COMPONENT LOAD', hasMore);
 
   const LoadingComponent = () => {
     return (
