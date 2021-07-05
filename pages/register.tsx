@@ -62,7 +62,7 @@ export default function Index() {
   useEffect(() => {
     if (router.query.error) {
       showAlert({
-        message: 'Something wrong when try to loggedin.',
+        message: 'Something wrong when trying to log in.',
         severity: 'error',
         title: 'Login failed'
       });
