@@ -6,7 +6,7 @@ const MyriadAPI = Axios.create({
 });
 
 export const getUserDetail = async (id: string): Promise<ExtendedUser> => {
-  console.log('getUserDetail');
+  //console.log('getUserDetail');
   const { data } = await MyriadAPI.request<ExtendedUser>({
     url: `users/${id}`,
     method: 'GET',
