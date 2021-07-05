@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
@@ -50,7 +51,13 @@ const AlertComponent: React.FC = () => {
         onClose={clearAlert}>
         <Alert className={style.alert} severity={error.severity || 'info'}>
           <AlertTitle>{error.title}</AlertTitle>
-          {error.message}
+          {error.severity === 'success' && error.message ? (
+            <Button target="_blank" href={`https://acala-testnet.subscan.io/extrinsic/${error.message}`}>
+              TxHash: {error.message.substring(0, 5)}....{' '}
+            </Button>
+          ) : (
+            error.message
+          )}
         </Alert>
       </Snackbar>
     </div>
