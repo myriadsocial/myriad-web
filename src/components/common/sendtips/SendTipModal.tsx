@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -7,7 +7,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import Snackbar from '@material-ui/core/Snackbar';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -18,21 +17,50 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import InfoIcon from '@material-ui/icons/Info';
 import SendIcon from '@material-ui/icons/Send';
-import Alert from '@material-ui/lab/Alert';
-import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import DialogTitle from '../DialogTitle.component';
 import { useStyles, TableCell, StyledBadge } from './send-tips.style';
 import { useWalletAddress } from './use-wallet.hook';
 
+import AlertComponent from 'src/components/alert/Alert.component';
+import { useAlertHook } from 'src/hooks/use-alert.hook';
 import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 import { InputState, InputErrorState, SendTipConfirmed, Props } from 'src/interfaces/send-tips/send-tips';
 
-const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiverId }: Props, ref) => {
-  const { sendTip, load, trxHash, error } = usePolkadotApi();
+const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiverId, success }: Props, ref) => {
+  const { sendTip, load, trxHash, sendTipSuccess, error } = usePolkadotApi();
   const { loadWalletAddress, walletAddress } = useWalletAddress(postId);
+  const [showSendTipModal, setShowSendTipModal] = useState(false);
   const [selectedToken, setSelectedToken] = useState('');
   const [tokenBalance, setTokenBalance] = useState('');
+  const { showAlert } = useAlertHook();
+
+  useEffect(() => {
+    if (sendTipSuccess) {
+      showAlert({
+        severity: 'success',
+        title: 'Tip sent!',
+        message: `${trxHash}`
+      });
+    }
+  }, [sendTipSuccess]);
+
+  useEffect(() => {
+    if (error) {
+      showAlert({
+        severity: 'error',
+        title: 'Error!',
+        message: `Something is wrong`
+      });
+    }
+  }, [error]);
+
+  useImperativeHandle(ref, () => ({
+    triggerSendTipModal: () => {
+      console.log('the post id is: ', postId);
+      setShowSendTipModal(true);
+    }
+  }));
 
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
@@ -44,7 +72,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
     message: ''
   });
 
-  const [showSendTipModal, setShowSendTipModal] = useState(false);
   const [inputError, setInputError] = useState<InputErrorState>({
     isErrorInput: false,
     isTextChanged: false,
@@ -54,28 +81,17 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
   const [values, setValues] = useState<InputState>({
     amount: ''
   });
-  const styles = useStyles();
-
-  useImperativeHandle(ref, () => ({
-    triggerSendTipModal: () => {
-      setShowSendTipModal(true);
-    }
-  }));
 
   useEffect(() => {
-    //console.log('load send tip modal');
+    if (sendTipConfirmed.isConfirmed) {
+      success(postId);
+    }
+  }, [sendTipConfirmed]);
+
+  const styles = useStyles();
+
+  useEffect(() => {
     loadWalletAddress();
-
-    setSendTipConfirmed({
-      isConfirmed: false,
-      message: ''
-    });
-
-    setErrorSendTips({
-      ...errorSendTips,
-      isError: false,
-      message: ''
-    });
   }, []);
 
   useEffect(() => {
@@ -94,21 +110,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
   }, [trxHash]);
 
   useEffect(() => {
-    if (error) {
-      setErrorSendTips({
-        ...errorSendTips,
-        isError: true,
-        message: 'Something is wrong, please try again!'
-      });
-      setShowSendTipModal(false);
-      setValues({
-        ...values,
-        amount: ''
-      });
-    }
-  }, [error]);
-
-  useEffect(() => {
     if (balanceDetails?.length > 0) {
       const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
       if (typeof idx === 'number') {
@@ -116,26 +117,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
       }
     }
   }, [selectedToken, balanceDetails]);
-
-  const closeSendTipModal = () => {
-    setShowSendTipModal(false);
-    setInputError({
-      ...inputError,
-      isTextChanged: false,
-      isErrorInput: false
-    });
-  };
-
-  const [errorText, setErrorText] = useState({
-    isError: false,
-    message: ''
-  });
-  const handleCloseError = () => {
-    setErrorText({
-      ...errorText,
-      isError: false
-    });
-  };
 
   const checkAmountThenSend = () => {
     const regexValidDigits = /^\d*(\.\d+)?$/;
@@ -188,7 +169,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         } else {
           toAddress = walletAddress;
         }
-        //console.log('amount sent: ', amountSent);
 
         const sendTipPayload = {
           fromAddress: senderAddress,
@@ -202,12 +182,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         sendTip(sendTipPayload);
       }
     } else {
-      setErrorText({
-        ...errorText,
-        isError: true,
-        message: 'Send tips failed!'
-      });
-
       setInputError({
         ...inputError,
         isErrorInput: true,
@@ -221,22 +195,26 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  const handleClose = () => {
-    setSendTipConfirmed({
-      ...sendTipConfirmed,
-      isConfirmed: false
-    });
-  };
+  //const handleClose = () => {
+  //setSendTipConfirmed({
+  //...sendTipConfirmed,
+  //isConfirmed: false
+  //});
+  //};
 
-  const handleCloseErrorSendTips = () => {
-    setErrorSendTips({
-      ...errorSendTips,
-      isError: false
-    });
-  };
+  //const handleCloseErrorSendTips = () => {
+  //setErrorSendTips({
+  //...errorSendTips,
+  //isError: false
+  //});
+  //};
 
   const handleSetSelectedToken = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedToken((event.target as HTMLInputElement).value);
+  };
+
+  const closeSendTipModal = () => {
+    setShowSendTipModal(false);
   };
 
   const TooltipContent = () => {
@@ -298,13 +276,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
     );
   };
 
-  const hideDuration = 3000;
-
-  const handleExtrinsicExplorer = (event: React.SyntheticEvent) => {
-    window.open(`https://acala-testnet.subscan.io/extrinsic/${trxHash}`, '_blank');
-    event.preventDefault();
-  };
-
   return (
     <>
       <Dialog open={showSendTipModal} onClose={closeSendTipModal} aria-labelledby="send-tips-window" maxWidth="md">
@@ -348,31 +319,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={sendTipConfirmed.isConfirmed} autoHideDuration={hideDuration} onClose={handleClose}>
-        <Alert severity="success">
-          <AlertTitle>Success!</AlertTitle>
-          {sendTipConfirmed.message}
-          <br />
-          TxHash:{' '}
-          <a target="_blank" onClick={handleExtrinsicExplorer} rel="noopener noreferrer">
-            {trxHash}
-          </a>
-        </Alert>
-      </Snackbar>
-
-      <Snackbar open={errorText.isError} autoHideDuration={hideDuration} onClose={handleCloseError}>
-        <Alert severity="error">
-          <AlertTitle>Error!</AlertTitle>
-          {errorText.message}
-        </Alert>
-      </Snackbar>
-
-      <Snackbar open={errorSendTips.isError} autoHideDuration={hideDuration} onClose={handleCloseErrorSendTips}>
-        <Alert severity="error">
-          <AlertTitle>Error!</AlertTitle>
-          {errorSendTips.message}
-        </Alert>
-      </Snackbar>
+      <AlertComponent />
     </>
   );
 });

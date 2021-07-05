@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, forwardRef, useState, useImperativeHandle } from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -27,15 +27,15 @@ import { Post } from 'src/interfaces/post';
 import { Transaction } from 'src/interfaces/transaction';
 
 type TipSummaryComponentProps = {
-  post: Post;
   open: boolean;
   close: () => void;
+  post: Post;
 };
 
 const UNKNOWN_ACCOUNT = 'unknown';
-const TRANSACTION_DIVIDER = 1000000000000;
+//const TRANSACTION_DIVIDER = 1000000000000;
 
-export const TipSummaryComponent: React.FC<TipSummaryComponentProps> = ({ open, close, post }) => {
+export const TipSummaryComponent = ({ open, close, post }: TipSummaryComponentProps) => {
   const styles = useStyles();
 
   const { postDetail, transactions, loadTransaction } = usePostTransactionHistory(post);
@@ -52,15 +52,17 @@ export const TipSummaryComponent: React.FC<TipSummaryComponentProps> = ({ open, 
     return transaction.fromUser.name;
   };
 
+  if (!post) return null;
+
   return (
     <div>
       <Dialog open={open} maxWidth="md" onClose={close}>
         <DialogTitle onClose={close} id="tip-summary">
-          Tip Recieved
+          Tip Received
         </DialogTitle>
         <DialogContent className={styles.root}>
           <Typography variant="h5" style={{ marginTop: 8, marginBottom: 24 }}>
-            This post has recieved :
+            This post has received:
           </Typography>
 
           <TableContainer component={Paper}>
@@ -95,7 +97,7 @@ export const TipSummaryComponent: React.FC<TipSummaryComponentProps> = ({ open, 
                   <Avatar alt={getTippingUserName(transaction)} src={transaction.fromUser?.profilePictureURL} />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={`${getTippingUserName(transaction)} tipped ${transaction.value / TRANSACTION_DIVIDER} ${transaction.tokenId}`}
+                  primary={`${getTippingUserName(transaction)} tipped ${transaction.value} ${transaction.tokenId}`}
                   secondary={timeAgo(transaction.createdAt)}
                 />
               </ListItem>
@@ -104,7 +106,7 @@ export const TipSummaryComponent: React.FC<TipSummaryComponentProps> = ({ open, 
         </DialogContent>
         <DialogActions className={styles.done}>
           <Button onClick={close} size="large" variant="contained" color="primary" style={{ width: 200 }}>
-            close
+            Close
           </Button>
         </DialogActions>
       </Dialog>
