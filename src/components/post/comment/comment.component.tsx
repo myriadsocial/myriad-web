@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 import { useSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
 
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
@@ -19,6 +20,7 @@ import { useTheme } from '@material-ui/core/styles';
 import { useStyles } from './comment.style';
 import ReplyCommentComponent from './reply.component';
 
+import CardTitle from 'src/components/common/CardTitle.component';
 import DateFormat from 'src/components/common/DateFormat';
 import SendTipModal from 'src/components/common/sendtips/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
@@ -55,7 +57,7 @@ export default function CommentComponent({ balanceDetails, post, disableReply, h
   } = useUser();
 
   const { comments, loadInitComment, reply } = useCommentHook(post);
-
+  const router = useRouter();
   const [session] = useSession();
   const userId = session?.user.id as string;
   const isAnonymous = Boolean(session?.user.anonymous);
@@ -87,6 +89,10 @@ export default function CommentComponent({ balanceDetails, post, disableReply, h
     setSelectedTab(tabIndex);
   };
 
+  const openProfile = () => {
+    router.push(user?.id || '');
+  };
+
   const renderAction = (comment: Comment) => {
     if (userId != comment.userId)
       return (
@@ -111,7 +117,7 @@ export default function CommentComponent({ balanceDetails, post, disableReply, h
                 <Card className={style.root}>
                   <CardHeader
                     avatar={
-                      <IconButton aria-label="cart">
+                      <IconButton aria-label="cart" onClick={openProfile}>
                         <StyledBadge color="secondary">
                           <Avatar aria-label={comment.user?.name} src={comment.user?.profilePictureURL}>
                             {comment.user?.name}
@@ -120,7 +126,7 @@ export default function CommentComponent({ balanceDetails, post, disableReply, h
                       </IconButton>
                     }
                     action={renderAction(comment)}
-                    title={comment.user?.name}
+                    title={<CardTitle text={comment.user?.name || ''} url={comment.user?.id} />}
                     subheader={<DateFormat date={comment.createdAt} />}
                   />
                   <CardContent>
