@@ -90,7 +90,6 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
       const match = parsePostUrl(social, text);
 
       setUrlValid(match !== null);
-
       if (match) {
         const name = text.replace(prefix.facebook, '');
         setSocialName(name);
@@ -103,7 +102,7 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
     }
   };
 
-  const onShareClosed = () => {
+  const onSharedAttempt = () => {
     setShared(true);
   };
 
@@ -123,6 +122,8 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
 
   const close = () => {
     setOpen(false);
+    setShared(false);
+    setTermApproved(false);
   };
 
   if (!social) return null;
@@ -168,7 +169,7 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
                 </Typography>
                 <div className={styles.linkAction}>
                   <ShowIf condition={social === SocialsEnum.FACEBOOK}>
-                    <FacebookShareButton url={APP_URL} quote={message} onShareWindowClose={onShareClosed}>
+                    <FacebookShareButton url={APP_URL} quote={message} beforeOnClick={onSharedAttempt}>
                       <Button variant="outlined" size="large" startIcon={<FacebookIcon />} className={styles.facebook}>
                         Share
                       </Button>
@@ -176,7 +177,7 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
                   </ShowIf>
 
                   <ShowIf condition={social === SocialsEnum.TWITTER}>
-                    <TwitterShareButton url={APP_URL} title={message} onShareWindowClose={onShareClosed}>
+                    <TwitterShareButton url={APP_URL} title={message} beforeOnClick={onSharedAttempt}>
                       <Button variant="outlined" size="large" startIcon={<TwitterIcon />} className={styles.twitter}>
                         Tweet Now
                       </Button>
@@ -184,7 +185,7 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
                   </ShowIf>
 
                   <ShowIf condition={social === SocialsEnum.REDDIT}>
-                    <RedditShareButton url={APP_URL} title={message} onShareWindowClose={onShareClosed}>
+                    <RedditShareButton url={APP_URL} title={message} beforeOnClick={onSharedAttempt}>
                       <Button variant="outlined" size="large" startIcon={<RedditIcon />} className={styles.reddit}>
                         Share
                       </Button>
