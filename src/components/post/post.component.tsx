@@ -11,18 +11,19 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Collapse from '@material-ui/core/Collapse';
 import Typography from '@material-ui/core/Typography';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 import { PostActionComponent } from './post-action.component';
 import PostAvatarComponent from './post-avatar.component';
 import PostImageComponent from './post-image.component';
 import { PostOptionsComponent } from './post-options.component';
+import { PostSubHeader } from './post-sub-header.component';
 import PostVideoComponent from './post-video.component';
 import { useStyles } from './post.style';
 import { TipSummaryComponent } from './tip-summary/tip-summary.component';
 
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
+import CardTitle from 'src/components/common/CardTitle.component';
 import SendTipModal from 'src/components/common/sendtips/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
 import { useUser } from 'src/context/user.context';
@@ -81,6 +82,29 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
     }
   };
 
+  const getPlatformUrl = (): string => {
+    let url = '';
+
+    if (!post.platformUser) return url;
+
+    switch (post.platform) {
+      case 'twitter':
+        url = `https://twitter.com/${post.platformUser.username}`;
+        break;
+      case 'reddit':
+        url = `https://reddit.com/user/${post.platformUser.username}`;
+        break;
+      case 'myriad':
+        url = post.platformUser.platform_account_id;
+        break;
+      default:
+        url = post.link || '';
+        break;
+    }
+
+    return url;
+  };
+
   const urlToImageData = (url: string): ImageData => {
     return {
       src: url,
@@ -112,21 +136,8 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
           ref={headerRef}
           avatar={renderPostAvatar()}
           action={<PostOptionsComponent postId={post.id} ownPost={postOwner || false} />}
-          title={detail.user.name}
-          subheader={
-            <Typography component="div" className={style.subheader}>
-              {detail.createdOn}
-
-              {post.importer && (
-                <>
-                  <FiberManualRecordIcon className={style.circle} />
-                  {`Imported from ${post.platform} by `}
-                  <b>{post.importer.name}</b>
-                </>
-              )}
-            </Typography>
-          }
-          style={{ postition: 'relative' }}
+          title={<CardTitle text={detail.user.name} url={getPlatformUrl()} />}
+          subheader={<PostSubHeader date={detail.createdOn} importer={post.importer} platform={post.platform} />}
         />
 
         <ShowIf condition={['twitter', 'reddit'].includes(post.platform)}>
