@@ -4,6 +4,7 @@ import { FacebookProvider, EmbeddedPost } from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -34,7 +35,9 @@ import { v4 as uuid } from 'uuid';
 
 const CommentComponent = dynamic(() => import('./comment/comment.component'));
 
-type Props = {
+const FACEBOOK_APP_ID = process.env.FACEBOKK_APP_ID as string;
+
+type PostProps = {
   defaultExpanded?: boolean;
   disable?: boolean;
   post: Post;
@@ -42,9 +45,10 @@ type Props = {
   balanceDetails: BalanceDetail[];
 };
 
-export default function PostComponent({ balanceDetails, post, defaultExpanded = false, disable = false, postOwner }: Props) {
+export default function PostComponent({ balanceDetails, post, defaultExpanded = false, disable = false, postOwner }: PostProps) {
   const style = useStyles();
 
+  const router = useRouter();
   const { detail } = useSocialDetail(post);
   const {
     state: { user }
@@ -72,12 +76,23 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
   };
 
   const openContentSource = () => {
-    if (post.platform === 'twitter') {
-      window.open(`https://twitter.com/${post.platformUser?.username}`, '_blank');
-    } else if (post.platform === 'reddit') {
-      window.open(`https://reddit.com/user/${post.platformUser?.username}`, '_blank');
-    } else {
-      window.open(post.link, '_blank');
+    if (!post.platformUser) {
+      return;
+    }
+
+    switch (post.platform) {
+      case 'twitter':
+        window.open(`https://twitter.com/${post.platformUser.username}`, '_blank');
+        break;
+      case 'reddit':
+        window.open(`https://reddit.com/user/${post.platformUser.username}`, '_blank');
+        break;
+      case 'myriad':
+        router.push(post.platformUser.platform_account_id);
+        break;
+      default:
+        window.open(post.link, '_blank');
+        break;
     }
   };
 
@@ -109,6 +124,7 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
       <Card className={style.root}>
         <CardHeader
           className={style.header}
+          disableTypography
           ref={headerRef}
           avatar={renderPostAvatar()}
           action={<PostOptionsComponent postId={post.id} ownPost={postOwner || false} />}
@@ -157,7 +173,7 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
 
         <ShowIf condition={post.platform === 'facebook'}>
           <CardContent className={style.content}>
-            <FacebookProvider appId="1349208398779551">
+            <FacebookProvider appId={FACEBOOK_APP_ID}>
               <EmbeddedPost href={post.link} width="700" />
             </FacebookProvider>
           </CardContent>
