@@ -12,7 +12,7 @@ import ExpandablePanel from '../common/panel-expandable.component';
 
 const BalanceComponent = dynamic(() => import('./balance.component'));
 
-const TransactionComponent = dynamic(() => import('./transaction.component'));
+const TransactionComponent = dynamic(() => import('./transactions/transaction.component'));
 
 const WalletSettingComponent = dynamic(() => import('./walletSetting.component'));
 
