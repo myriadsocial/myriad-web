@@ -15,6 +15,7 @@ type Props = {
   fromAddress: string;
   toAddress: string;
   amountSent: number;
+  decimals: number;
   currencyId: string;
   postId: string;
 };
@@ -95,7 +96,11 @@ export const usePolkadotApi = () => {
     }
   };
 
-  const sendTip = async ({ fromAddress, toAddress, amountSent, currencyId, postId }: Props) => {
+  const sendTip = async ({ fromAddress, toAddress, amountSent, decimals, currencyId, postId }: Props) => {
+    walletAddressDispatch({
+      type: WalletAddressActionType.INIT_SEND_TIPS
+    });
+
     setLoading(true);
     try {
       const { enableExtension } = await import('../helpers/extension');
@@ -142,31 +147,31 @@ export const usePolkadotApi = () => {
             // Update the tip sent to a post
             await updateTips(currencyId, amountSent, postId);
 
-            // Record the transaction
-            await storeTransaction({
-              trxHash: txInfo?.toHex(),
-              from: fromAddress,
-              to: toAddress,
-              value: amountSent,
-              state: 'success',
-              tokenId: currencyId,
-              createdAt: new Date().toISOString()
-            });
+            const correctedValue = amountSent / 10 ** decimals;
 
-            walletAddressDispatch({
-              type: WalletAddressActionType.SEND_TIPS,
-              amountSent,
-              from: baseAddress,
-              to: toAddress,
-              trxHash: txInfo?.toHex()
-            });
+            if (txInfo) {
+              // Record the transaction
+              await storeTransaction({
+                trxHash: txInfo.toHex(),
+                from: fromAddress,
+                to: toAddress,
+                value: correctedValue,
+                state: 'success',
+                tokenId: currencyId,
+                createdAt: new Date().toISOString()
+              });
+
+              walletAddressDispatch({
+                type: WalletAddressActionType.SEND_TIPS_SUCCESS,
+                amountSent,
+                from: baseAddress,
+                to: toAddress,
+                trxHash: txInfo.toHex(),
+                success: true
+              });
+            }
+
             await api.disconnect();
-
-            //if (!txInfo) {
-            //throw {
-            //Error: 'Something is wrong, please try again later!'
-            //};
-            //}
           }
         }
       }
@@ -183,6 +188,7 @@ export const usePolkadotApi = () => {
     load,
     tokens: state.balanceDetails,
     sendTip,
-    trxHash: walletAddressState.trxHash
+    trxHash: walletAddressState.trxHash,
+    sendTipSuccess: walletAddressState.success
   };
 };
