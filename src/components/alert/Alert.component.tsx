@@ -12,28 +12,27 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: '100%',
       '& > * + *': {
-        marginTop: theme.spacing(2),
-      },
+        marginTop: theme.spacing(2)
+      }
     },
     alert: {
       width: 400,
       borderRadius: theme.spacing(1),
 
       '& .MuiAlert-icon': {
-        fontSize: 32,
+        fontSize: 32
       },
       '& .MuiAlert-message': {
         fontSize: 14,
-        fontWeight: 500,
+        fontWeight: 500
       },
       '& .MuiAlertTitle-root': {
         fontSize: 16,
-        fontWeight: 600,
+        fontWeight: 600
       }
     }
-  }),
+  })
 );
-
 
 const AlertComponent: React.FC = () => {
   const style = useStyles();

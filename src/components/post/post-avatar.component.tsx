@@ -16,9 +16,7 @@ const useStyles = makeStyles(() =>
     root: {
       fontSize: 14
     },
-    avatar: {
-      backgroundColor: '#E849BD'
-    },
+    avatar: {},
     facebook: {
       '& .MuiBadge-badge': {
         backgroundColor: '#3b5998'
@@ -36,7 +34,7 @@ const useStyles = makeStyles(() =>
     },
     myriad: {
       '& .MuiBadge-badge': {
-        backgroundColor: '#E849BD'
+        backgroundColor: '#8629E9'
       }
     }
   })
