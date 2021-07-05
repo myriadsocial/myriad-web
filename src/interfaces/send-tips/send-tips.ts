@@ -18,6 +18,7 @@ export interface SendTipConfirmed {
 
 export type Props = {
   userAddress: string;
+  success: (postId: string) => void;
   postId: string;
   balanceDetails: BalanceDetail[];
   receiverId?: string;
