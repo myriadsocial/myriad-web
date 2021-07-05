@@ -2,7 +2,8 @@ import React, { createContext, useContext, useReducer } from 'react';
 
 export enum WalletAddressActionType {
   INIT_WALLET_ADDRESS = 'INIT_WALLET_ADDRESS',
-  SEND_TIPS = 'SEND_TIPS'
+  INIT_SEND_TIPS = 'INIT_SEND_TIPS',
+  SEND_TIPS_SUCCESS = 'SEND_TIPS_SUCCESS'
 }
 
 export interface InitWalletAddress {
@@ -10,16 +11,20 @@ export interface InitWalletAddress {
   payload: string;
 }
 
-//TODO: add new state to contain all the transactions made during user session
-export interface SendTips {
-  type: WalletAddressActionType.SEND_TIPS;
+export interface InitSendTips {
+  type: WalletAddressActionType.INIT_SEND_TIPS;
+}
+
+export interface SendTipsSuccess {
+  type: WalletAddressActionType.SEND_TIPS_SUCCESS;
   amountSent: number;
   from: string;
   to: string;
   trxHash: string;
+  success: boolean;
 }
 
-export type Action = InitWalletAddress | SendTips;
+export type Action = InitWalletAddress | InitSendTips | SendTipsSuccess;
 type Dispatch = (action: Action) => void;
 type WalletAddressProviderProps = { children: React.ReactNode };
 type State = {
@@ -29,6 +34,7 @@ type State = {
   from: string;
   to: string;
   trxHash: string;
+  success: boolean;
 };
 
 const initialState = {
@@ -37,7 +43,8 @@ const initialState = {
   amountSent: 0,
   from: '',
   to: '',
-  trxHash: ''
+  trxHash: '',
+  success: false
 };
 
 const WalletAddressContext = createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
@@ -52,13 +59,21 @@ function walletAddressReducer(state: State, action: Action) {
       };
     }
 
-    case WalletAddressActionType.SEND_TIPS: {
+    case WalletAddressActionType.INIT_SEND_TIPS: {
+      return {
+        ...initialState,
+        success: false
+      };
+    }
+
+    case WalletAddressActionType.SEND_TIPS_SUCCESS: {
       return {
         ...state,
         amountSent: action.amountSent,
         from: action.from,
         to: action.to,
         trxHash: action.trxHash,
+        success: true,
         init: false
       };
     }
