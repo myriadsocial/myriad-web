@@ -57,7 +57,17 @@ export const useUserHook = (userId?: string) => {
 
     await UserAPI.updateUser(userId, values);
 
-    load();
+    if (userState.user) {
+      dispatch({
+        type: UserActionType.USER_LOADED,
+        payload: {
+          ...userState.user,
+          ...values
+        }
+      });
+    } else {
+      load();
+    }
   };
 
   const loadFcmToken = async () => {
