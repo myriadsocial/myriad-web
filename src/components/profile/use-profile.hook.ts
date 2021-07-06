@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 
 import { useProfile, ProfileActionType } from 'src/components/profile/profile.context';
+import { useUser, UserActionType } from 'src/context/user.context';
 import { useUserHook } from 'src/hooks/use-user.hook';
 import { Post } from 'src/interfaces/post';
 import { ExtendedUserPost } from 'src/interfaces/user';
@@ -10,7 +11,7 @@ import * as ProfileAPI from 'src/lib/api/profile';
 
 export const useProfileHook = (id: string) => {
   const { state: profileState, dispatch } = useProfile();
-  const { getUserDetail } = useUserHook(id);
+  const { updateUser } = useUserHook(id);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -63,10 +64,19 @@ export const useProfileHook = (id: string) => {
     setLoading(true);
 
     try {
-      const data = ProfileAPI.updateUserProfile(id as string, attributes);
+      await updateUser(attributes);
 
-      getProfile();
-      getUserDetail();
+      if (profileState.profile) {
+        dispatch({
+          type: ProfileActionType.PROFILE_LOADED,
+          payload: {
+            ...profileState.profile,
+            ...attributes
+          }
+        });
+      } else {
+        getProfile();
+      }
     } catch (error) {
       setError(error);
     } finally {
