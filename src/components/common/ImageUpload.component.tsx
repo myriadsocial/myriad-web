@@ -41,12 +41,20 @@ export const ImageUpload = ({ onSelected, value, preview }: Props) => {
   const { image, uploadImage } = useImageUpload();
   const [isUploading, setUploading] = useState(false);
 
+  // upload image to storage
   useEffect(() => {
-    if (image && isUploading) {
+    if (image) {
       onSelected(image);
       setUploading(false);
     }
-  }, [image, isUploading]);
+  }, [image]);
+
+  // reset the form & upload state
+  useEffect(() => {
+    if (!isUploading && uploadFieldRef && uploadFieldRef.current) {
+      uploadFieldRef.current.value = '';
+    }
+  }, [isUploading, uploadFieldRef]);
 
   const selectFile = (): void => {
     const uploadField: any = uploadFieldRef?.current;
@@ -69,7 +77,6 @@ export const ImageUpload = ({ onSelected, value, preview }: Props) => {
   return (
     <div className={styles.root}>
       <input type="file" ref={uploadFieldRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
-
       <InputLabel className={styles.button}>
         <IconButton onClick={selectFile} className={styles.label} disableRipple disableFocusRipple>
           <Edit className={styles.icon} />

@@ -3,7 +3,6 @@ import React, { useState, useRef } from 'react';
 import { FacebookProvider, EmbeddedPost } from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 
-import { useSession } from 'next-auth/client';
 import dynamic from 'next/dynamic';
 
 import Card from '@material-ui/core/Card';
@@ -26,6 +25,7 @@ import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import SendTipModal from 'src/components/common/sendtips/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
+import { useUser } from 'src/context/user.context';
 import { useSocialDetail } from 'src/hooks/use-social.hook';
 import { BalanceDetail } from 'src/interfaces/balance';
 import { ImageData } from 'src/interfaces/post';
@@ -46,16 +46,16 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
   const style = useStyles();
 
   const { detail } = useSocialDetail(post);
+  const {
+    state: { user }
+  } = useUser();
+
   const [expanded, setExpanded] = useState(defaultExpanded);
   const [showTipSummary, setShowTipSummary] = useState(false);
   const childRef = useRef<any>();
   const headerRef = useRef<any>();
 
-  const [session] = useSession();
-
-  const userId = session?.user.address as string;
-
-  if (!detail) return null;
+  if (!detail || !user) return null;
 
   if (post.text === '[removed]' && post.platform === 'reddit') return null;
 
@@ -95,7 +95,13 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
   if (!detail || !post) return null;
 
   const renderPostAvatar = () => {
-    return <PostAvatarComponent origin={post.platform} avatar={detail.user.avatar} onClick={openContentSource} />;
+    let avatarUrl: string = detail.user.avatar;
+
+    if (post.platform === 'myriad' && post.platformUser?.platform_account_id === user.id) {
+      avatarUrl = user.profilePictureURL as string;
+    }
+
+    return <PostAvatarComponent origin={post.platform} avatar={avatarUrl} onClick={openContentSource} />;
   };
 
   return (
@@ -178,7 +184,7 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
         </ShowIf>
       </Card>
 
-      <SendTipModal userAddress={userId} ref={childRef} postId={post.id as string} balanceDetails={balanceDetails} />
+      <SendTipModal userAddress={user.id} ref={childRef} postId={post.id as string} balanceDetails={balanceDetails} />
       <TipSummaryComponent open={showTipSummary} post={post} close={() => setShowTipSummary(false)} />
     </>
   );

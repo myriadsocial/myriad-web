@@ -20,8 +20,8 @@ import { useProfileHook } from './use-profile.hook';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import { ImageUpload } from 'src/components/common/ImageUpload.component';
-import { useProfile } from 'src/components/profile/profile.context';
 import { SocialListComponent } from 'src/components/user/social-list.component';
+import { useUser } from 'src/context/user.context';
 import { acronym } from 'src/helpers/string';
 import { ExtendedUser } from 'src/interfaces/user';
 
@@ -44,7 +44,8 @@ const useStyles = makeStyles({
     height: 159,
     width: 420,
     objectFit: 'cover',
-    borderRadius: 8
+    borderRadius: 8,
+    marginTop: 8
   },
   actions: {
     justifyContent: 'space-between'
@@ -93,18 +94,20 @@ function Alert(props: AlertProps) {
 
 export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleProfileForm, open }) => {
   const style = useStyles();
-  const { updateProfile } = useProfileHook(user.id);
+
   const {
-    state: { profile }
-  } = useProfile();
+    state: { user: useDetail }
+  } = useUser();
+
+  const { updateProfile } = useProfileHook(user.id);
   const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
-  const [defaultValue, setDefaultValue] = useState({
+  const [defaultValue, setDefaultValue] = useState<Record<string, string>>({
     name: user.name,
-    bio: user.bio
+    bio: user.bio ?? ''
   });
 
   const getProfilePicture = (): string => {
-    return user.profilePictureURL || '';
+    return useDetail?.profilePictureURL || '';
   };
 
   const updateProfilePicture = (preview: string) => {
@@ -113,18 +116,23 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
     });
   };
 
+  const editBanner = () => {};
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
+
     const name = target.name;
     const value = target.value;
+
     setDefaultValue({
       ...defaultValue,
-      [name as string]: value as string
+      [name]: value
     });
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     updateProfile(defaultValue);
   };
 
@@ -140,7 +148,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
     <>
       <Dialog open={open} aria-labelledby="no-extension-installed" maxWidth="md" fullWidth={false}>
         <DialogTitle id="name" onClose={toggleProfileForm}>
-          Edit Profile
+          Edit Profile YYY
         </DialogTitle>
         <DialogContent>
           <div style={{ display: 'flex', justifyContent: 'space-around', width: 896 }}>
@@ -149,10 +157,9 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
                 Profile
               </Typography>
               <CardMedia
-                style={{ marginTop: 8 }}
                 className={style.media}
                 image="https://images.pexels.com/photos/3394939/pexels-photo-3394939.jpeg"
-                title={profile?.name || 'Avatar'}
+                title={user.name}
               />
 
               <div className={style.profileContent} style={{ marginTop: 16, marginBottom: 16 }}>
@@ -160,7 +167,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
                   value={getProfilePicture()}
                   preview={
                     <Avatar className={style.avatarBig} src={getProfilePicture()}>
-                      {acronym(profile?.name || '')}
+                      {acronym(user.name)}
                     </Avatar>
                   }
                   onSelected={updateProfilePicture}
@@ -173,7 +180,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
                   variant="outlined"
                   color="primary"
                   disabled
-                  onClick={() => console.log('edit banner')}>
+                  onClick={editBanner}>
                   Edit Banner Image
                 </Button>
                 <form id="editForm" onSubmit={handleSubmit}>
@@ -185,7 +192,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
                     style={{ marginTop: 8 }}
                     disabled={true}
                     fullWidth={true}
-                    defaultValue={profile?.username}
+                    defaultValue={user.username}
                     inputProps={{ 'aria-label': 'description' }}
                   />
 
