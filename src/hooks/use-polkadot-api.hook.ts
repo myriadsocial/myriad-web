@@ -163,10 +163,11 @@ export const usePolkadotApi = () => {
 
               walletAddressDispatch({
                 type: WalletAddressActionType.SEND_TIPS_SUCCESS,
-                amountSent,
+                amountSent: correctedValue,
                 from: baseAddress,
                 to: toAddress,
                 trxHash: txInfo.toHex(),
+                tokenId: currencyId,
                 success: true
               });
             }
