@@ -29,6 +29,7 @@ import { useUser } from 'src/context/user.context';
 import { useCommentHook } from 'src/hooks/use-comment.hook';
 import { BalanceDetail } from 'src/interfaces/balance';
 import { Post, Comment } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 
 const StyledBadge = withStyles((theme: Theme) =>
   createStyles({
@@ -89,8 +90,10 @@ export default function CommentComponent({ balanceDetails, post, disableReply, h
     setSelectedTab(tabIndex);
   };
 
-  const openProfile = () => {
-    router.push(user?.id || '');
+  const openCommentProfile = (user?: User) => {
+    if (user) {
+      router.push(user.id);
+    }
   };
 
   const renderAction = (comment: Comment) => {
@@ -117,7 +120,7 @@ export default function CommentComponent({ balanceDetails, post, disableReply, h
                 <Card className={style.root}>
                   <CardHeader
                     avatar={
-                      <IconButton aria-label="cart" onClick={openProfile}>
+                      <IconButton aria-label="cart" onClick={() => openCommentProfile(comment.user)}>
                         <StyledBadge color="secondary">
                           <Avatar aria-label={comment.user?.name} src={comment.user?.profilePictureURL}>
                             {comment.user?.name}
