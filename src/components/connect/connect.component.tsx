@@ -90,7 +90,7 @@ export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectCompon
       const match = parsePostUrl(social, text);
 
       setUrlValid(match !== null);
-      console.log('match', match);
+
       if (match) {
         const name = text.replace(prefix.facebook, '');
         setSocialName(name);
