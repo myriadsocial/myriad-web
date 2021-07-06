@@ -35,12 +35,19 @@ export const useTimelineHook = () => {
         setHasMore(false);
       }
 
+      // TODO: should be provided by backend
       if (data.length > 0) {
         for await (const post of data) {
           if (post.importBy && post.importBy.length > 0) {
             const user = await UserAPI.getUserDetail(post.importBy[0]);
 
             post.importer = user;
+          }
+
+          if (post.platform === 'myriad' && post.platformUser) {
+            const user = await UserAPI.getUserDetail(post.platformUser.platform_account_id);
+
+            post.platformUser.profilePictureURL = user.profilePictureURL;
           }
         }
       }
