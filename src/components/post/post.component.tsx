@@ -143,7 +143,7 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
     console.log('post id being tipped: ', postId);
     if (post.id === postId) {
       setTippedPost(post);
-      setOpenTipSummary(true);
+      //setOpenTipSummary(true);
     }
   };
 
