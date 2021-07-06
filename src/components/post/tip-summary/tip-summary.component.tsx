@@ -52,7 +52,6 @@ export const TipSummaryComponent: React.FC<TipSummaryComponentProps> = ({ open, 
     return transaction.fromUser.name;
   };
 
-  console.log('POST', post);
   return (
     <div>
       <Dialog open={open} maxWidth="md" onClose={close}>
