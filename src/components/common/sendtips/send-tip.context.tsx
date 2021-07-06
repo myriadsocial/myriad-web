@@ -22,6 +22,7 @@ export interface SendTipsSuccess {
   to: string;
   trxHash: string;
   success: boolean;
+  tokenId: string;
 }
 
 export type Action = InitWalletAddress | InitSendTips | SendTipsSuccess;
@@ -35,6 +36,7 @@ type State = {
   to: string;
   trxHash: string;
   success: boolean;
+  tokenId: string;
 };
 
 const initialState = {
@@ -44,7 +46,8 @@ const initialState = {
   from: '',
   to: '',
   trxHash: '',
-  success: false
+  success: false,
+  tokenId: ''
 };
 
 const WalletAddressContext = createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
@@ -74,6 +77,7 @@ function walletAddressReducer(state: State, action: Action) {
         to: action.to,
         trxHash: action.trxHash,
         success: true,
+        tokenId: action.tokenId,
         init: false
       };
     }
