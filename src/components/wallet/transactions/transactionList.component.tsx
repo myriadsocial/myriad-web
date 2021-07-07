@@ -27,7 +27,7 @@ interface Props {
 export default function TransactionListComponent({ transactions, user }: Props) {
   const style = useStyles();
 
-  const { friended, checkFriendStatus, sendRequest } = useFriendsHook(user);
+  const { friended, sendRequest } = useFriendsHook(user);
   const [expandable, setExpandable] = useState(true);
 
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
@@ -39,7 +39,6 @@ export default function TransactionListComponent({ transactions, user }: Props) 
   useEffect(() => {
     setAllTransactions(transactions);
     const ids = transactions.reduce((result, item) => {
-      //console.log('the transaction is: ', item);
       if (item.from === userId) {
         result.push(item.to);
       } else {
@@ -53,7 +52,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
 
   useEffect(() => {
     if (requestableIds.length > 0) {
-      const checked = checkFriendStatus(requestableIds);
+      //const checked = checkFriendStatus(requestableIds);
     }
   }, [requestableIds]);
 

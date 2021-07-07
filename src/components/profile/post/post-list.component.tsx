@@ -13,15 +13,17 @@ import PostComponent from 'src/components/post/post.component';
 import { useTimelineHook } from 'src/hooks/use-timeline.hook';
 import { BalanceDetail } from 'src/interfaces/balance';
 import { Post } from 'src/interfaces/post';
+import { Token } from 'src/interfaces/token';
 import { User, ExtendedUserPost } from 'src/interfaces/user';
 
 type Props = {
   user: User | null;
   profile: ExtendedUserPost;
   balanceDetails: BalanceDetail[];
+  availableTokens: Token[];
 };
 
-export default function PostList({ user, profile, balanceDetails }: Props) {
+export default function PostList({ user, profile, balanceDetails, availableTokens }: Props) {
   const style = useStyles();
   const { hasMore, nextPosts } = useTimelineHook();
 
@@ -52,7 +54,7 @@ export default function PostList({ user, profile, balanceDetails }: Props) {
         loader={<LoadingPage />}>
         {profile.posts.map((post: Post, i: number) => (
           <Grow key={i}>
-            <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={balanceDetails} />
+            <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={balanceDetails} availableTokens={availableTokens} />
           </Grow>
         ))}
 

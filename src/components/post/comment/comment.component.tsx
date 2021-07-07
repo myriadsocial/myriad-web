@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
@@ -29,6 +29,7 @@ import { useUser } from 'src/context/user.context';
 import { useCommentHook } from 'src/hooks/use-comment.hook';
 import { BalanceDetail } from 'src/interfaces/balance';
 import { Post, Comment } from 'src/interfaces/post';
+import { Token } from 'src/interfaces/token';
 import { User } from 'src/interfaces/user';
 
 const StyledBadge = withStyles((theme: Theme) =>
@@ -47,9 +48,10 @@ type Props = {
   disableReply: boolean;
   hide: () => void;
   balanceDetails: BalanceDetail[];
+  availableTokens: Token[];
 };
 
-export default function CommentComponent({ balanceDetails, post, disableReply, hide }: Props) {
+export default function CommentComponent({ balanceDetails, post, disableReply, hide, availableTokens }: Props) {
   const style = useStyles();
   const theme = useTheme();
 
@@ -106,6 +108,14 @@ export default function CommentComponent({ balanceDetails, post, disableReply, h
     return null;
   };
 
+  const [_, setTippedPost] = useState<Post>();
+  const handleTipSentSuccess = (postId: string) => {
+    if (post.id === postId) {
+      setTippedPost(post);
+      //setOpenTipSummary(true);
+    }
+  };
+
   return (
     <div>
       <Tabs value={selectedTab} onChange={handleTabChange} indicatorColor="primary" textColor="primary" variant="fullWidth">
@@ -138,6 +148,8 @@ export default function CommentComponent({ balanceDetails, post, disableReply, h
                     </Typography>
                   </CardContent>
                   <SendTipModal
+                    availableTokens={availableTokens}
+                    success={postId => handleTipSentSuccess(postId)}
                     postId={post?.id as string}
                     userAddress={userId}
                     ref={childRef}

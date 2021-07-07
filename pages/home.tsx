@@ -15,6 +15,7 @@ import UserDetail from 'src/components/user/user.component';
 import { Wallet } from 'src/components/wallet/wallet.component';
 import { FriendsProvider } from 'src/context/friends.context';
 import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
+import { useToken } from 'src/hooks/use-token.hook';
 import { healthcheck } from 'src/lib/api/healthcheck';
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -63,8 +64,12 @@ export default function Home() {
 
   const { load } = useMyriadUser();
 
+  let userId = session?.user.userId as string;
+  const { loadAllUserTokens, userTokens } = useToken(userId);
+
   useEffect(() => {
     load();
+    loadAllUserTokens();
   }, []);
 
   useEffect(() => {
@@ -97,7 +102,7 @@ export default function Home() {
         </Grid>
       </Grid>
       <Grid item className={style.content}>
-        <Timeline isAnonymous={isAnonymous} />
+        <Timeline isAnonymous={isAnonymous} availableTokens={userTokens} />
       </Grid>
     </Layout>
   );

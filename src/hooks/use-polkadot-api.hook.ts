@@ -28,7 +28,7 @@ const formatNumber = (number: number, decimals: number) => {
 };
 
 // params mungkin butuh address sama tipe wsProvider
-export const usePolkadotApi = (availableTokens: Token[]) => {
+export const usePolkadotApi = () => {
   const { state, dispatch } = baseUseBalance();
   const { state: walletAddressState, dispatch: walletAddressDispatch } = baseUseWalletAddress();
 
@@ -51,7 +51,7 @@ export const usePolkadotApi = (availableTokens: Token[]) => {
     }
   };
 
-  const load = async (address: string) => {
+  const load = async (address: string, availableTokens: Token[]) => {
     setLoading(true);
     let tokenBalances = [];
 

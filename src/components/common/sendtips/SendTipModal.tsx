@@ -27,7 +27,7 @@ import { useAlertHook } from 'src/hooks/use-alert.hook';
 import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 import { InputState, InputErrorState, SendTipConfirmed, Props } from 'src/interfaces/send-tips/send-tips';
 
-const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiverId, success }: Props, ref) => {
+const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiverId, success, availableTokens }: Props, ref) => {
   const { sendTip, load, trxHash, sendTipSuccess, error } = usePolkadotApi();
   const { loadWalletAddress, walletAddress } = useWalletAddress(postId);
   const [showSendTipModal, setShowSendTipModal] = useState(false);
@@ -67,11 +67,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
     message: ''
   });
 
-  const [errorSendTips, setErrorSendTips] = useState({
-    isError: false,
-    message: ''
-  });
-
   const [inputError, setInputError] = useState<InputErrorState>({
     isErrorInput: false,
     isTextChanged: false,
@@ -105,7 +100,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         ...values,
         amount: ''
       });
-      load(userAddress);
+      load(userAddress, availableTokens);
     }
   }, [trxHash]);
 
@@ -194,20 +189,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
   const handleChange = (prop: keyof InputState) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value });
   };
-
-  //const handleClose = () => {
-  //setSendTipConfirmed({
-  //...sendTipConfirmed,
-  //isConfirmed: false
-  //});
-  //};
-
-  //const handleCloseErrorSendTips = () => {
-  //setErrorSendTips({
-  //...errorSendTips,
-  //isError: false
-  //});
-  //};
 
   const handleSetSelectedToken = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedToken((event.target as HTMLInputElement).value);

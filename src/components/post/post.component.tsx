@@ -33,6 +33,7 @@ import { useSocialDetail } from 'src/hooks/use-social.hook';
 import { BalanceDetail } from 'src/interfaces/balance';
 import { ImageData } from 'src/interfaces/post';
 import { Post } from 'src/interfaces/post';
+import { Token } from 'src/interfaces/token';
 import { v4 as uuid } from 'uuid';
 
 const CommentComponent = dynamic(() => import('./comment/comment.component'));
@@ -45,12 +46,21 @@ type PostProps = {
   post: Post;
   postOwner?: boolean;
   balanceDetails: BalanceDetail[];
+  availableTokens: Token[];
 };
 
-export default function PostComponent({ balanceDetails, post, defaultExpanded = false, disable = false, postOwner }: PostProps) {
+export default function PostComponent({
+  balanceDetails,
+  post,
+  defaultExpanded = false,
+  disable = false,
+  postOwner,
+  availableTokens
+}: PostProps) {
   const style = useStyles();
 
   const router = useRouter();
+
   const { detail } = useSocialDetail(post);
   const {
     state: { user }
@@ -140,7 +150,6 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
   if (!detail || !post) return null;
 
   const handleTipSentSuccess = (postId: string) => {
-    console.log('post id being tipped: ', postId);
     if (post.id === postId) {
       setTippedPost(post);
       //setOpenTipSummary(true);
@@ -223,13 +232,20 @@ export default function PostComponent({ balanceDetails, post, defaultExpanded = 
         <ShowIf condition={expanded}>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent className={style.reply}>
-              <CommentComponent post={post} disableReply={disable} hide={handleExpandClick} balanceDetails={balanceDetails} />
+              <CommentComponent
+                post={post}
+                disableReply={disable}
+                hide={handleExpandClick}
+                balanceDetails={balanceDetails}
+                availableTokens={availableTokens}
+              />
             </CardContent>
           </Collapse>
         </ShowIf>
       </Card>
 
       <SendTipModal
+        availableTokens={availableTokens}
         success={postId => handleTipSentSuccess(postId)}
         userAddress={userId}
         ref={sendTipRef}

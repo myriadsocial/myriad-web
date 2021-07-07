@@ -29,7 +29,7 @@ type Props = {
   user: WithAdditionalParams<User>;
 };
 
-const MobileLayoutComponent = ({ children, user }: Props) => {
+const MobileLayoutComponent = ({ user }: Props) => {
   const theme = useTheme();
 
   const { selectedSidebar, changeSelectedSidebar } = useLayout();
@@ -46,7 +46,7 @@ const MobileLayoutComponent = ({ children, user }: Props) => {
     }
   }, [sessionLoading]);
 
-  const { loadAllUserTokens, loading, userTokens, errorUserTokens } = useToken(userId);
+  const { loadAllUserTokens, userTokens } = useToken(userId);
 
   useEffect(() => {
     loadAllUserTokens();
