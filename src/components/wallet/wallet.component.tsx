@@ -1,14 +1,20 @@
 import React, { createRef, useEffect, forwardRef } from 'react';
 
+import { useSession } from 'next-auth/client';
 import dynamic from 'next/dynamic';
 
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import SettingsIcon from '@material-ui/icons/Settings';
 
+import { LoadingPage } from '../common/loading.component';
 import ExpandablePanel from '../common/panel-expandable.component';
+import { useStyles } from './wallet.style';
+
+import { useToken } from 'src/hooks/use-token.hook';
+import { Token } from 'src/interfaces/token';
 
 const BalanceComponent = dynamic(() => import('./balance.component'));
 
@@ -16,30 +22,17 @@ const TransactionComponent = dynamic(() => import('./transactions/transaction.co
 
 const WalletSettingComponent = dynamic(() => import('./walletSetting.component'));
 
-const ForwardedBalanceComponent = forwardRef((props, ref) => <BalanceComponent {...props} forwardedRef={ref} />);
+type Props = {
+  availableTokens: Token[];
+};
+
+const ForwardedBalanceComponent = forwardRef(({ availableTokens }: Props, ref) => (
+  <BalanceComponent availableTokens={availableTokens} forwardedRef={ref} />
+));
 
 const ForwardedTransactionComponent = forwardRef((props, ref) => <TransactionComponent {...props} forwardedRef={ref} />);
 
 const ForwardedWalletSettingComponent = forwardRef((props, ref) => <WalletSettingComponent {...props} forwardedRef={ref} />);
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      height: '100%'
-    },
-    button: {
-      backgroundColor: theme.palette.secondary.light,
-      color: theme.palette.common.white,
-      borderRadius: 15
-    },
-    walletActions: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: theme.spacing(0.25)
-    }
-  })
-);
 
 export const Wallet = React.memo(function Wallet() {
   const style = useStyles();
@@ -50,7 +43,20 @@ export const Wallet = React.memo(function Wallet() {
 
   const walletSettingRef = createRef<any>();
 
-  useEffect(() => {}, [transactionRef, balanceRef]);
+  const [session, sessionLoading] = useSession();
+  let userId = session?.user.userId as string;
+
+  useEffect(() => {
+    if (session !== null && !sessionLoading) {
+      userId = session?.user.userId as string;
+    }
+  }, [sessionLoading]);
+
+  const { loadAllUserTokens, loading, userTokens, errorUserTokens } = useToken(userId);
+
+  useEffect(() => {
+    loadAllUserTokens();
+  }, []);
 
   const handleRefresh = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -63,7 +69,11 @@ export const Wallet = React.memo(function Wallet() {
     walletSettingRef.current?.triggerShowSetting();
   };
 
-  const WalletAction = () => {
+  type WalletActionProps = {
+    disabled?: boolean;
+  };
+
+  const WalletAction = ({ disabled }: WalletActionProps) => {
     return (
       <div className={style.walletActions}>
         <IconButton
@@ -71,6 +81,7 @@ export const Wallet = React.memo(function Wallet() {
           size="small"
           aria-label="refresh-wallet"
           onClick={handleRefresh}
+          disabled={disabled}
           onFocus={event => event.stopPropagation()}>
           <RefreshIcon />
         </IconButton>
@@ -78,6 +89,7 @@ export const Wallet = React.memo(function Wallet() {
           color="default"
           size="small"
           aria-label="wallet-settings"
+          disabled={disabled}
           onClick={handleWalletSetting}
           onFocus={event => event.stopPropagation()}>
           <SettingsIcon />
@@ -86,10 +98,24 @@ export const Wallet = React.memo(function Wallet() {
     );
   };
 
+  if (loading)
+    return (
+      <ExpandablePanel title="My Wallet" actions={<WalletAction disabled={true} />}>
+        <LoadingPage />
+      </ExpandablePanel>
+    );
+
+  if (errorUserTokens)
+    return (
+      <ExpandablePanel title="My Wallet" actions={<WalletAction disabled={false} />}>
+        <Typography>Error, please try again!</Typography>
+      </ExpandablePanel>
+    );
+
   return (
     <div id="wallet">
-      <ExpandablePanel title="My Wallet" actions={<WalletAction />}>
-        <ForwardedBalanceComponent ref={balanceRef} />
+      <ExpandablePanel title="My Wallet" actions={<WalletAction disabled={false} />}>
+        <ForwardedBalanceComponent ref={balanceRef} availableTokens={userTokens} />
         <Divider variant="middle" />
         <ForwardedTransactionComponent ref={transactionRef} />
       </ExpandablePanel>
