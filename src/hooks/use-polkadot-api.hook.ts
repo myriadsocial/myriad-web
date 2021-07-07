@@ -8,6 +8,7 @@ import { Keyring } from '@polkadot/keyring';
 import { useWalletAddress as baseUseWalletAddress, WalletAddressActionType } from '../components/common/sendtips/send-tip.context';
 import { useBalance as baseUseBalance, BalanceActionType } from '../components/wallet/balance.context';
 
+import { Token } from 'src/interfaces/token';
 import { updateTips } from 'src/lib/api/post';
 import { storeTransaction } from 'src/lib/api/transaction';
 
@@ -27,7 +28,7 @@ const formatNumber = (number: number, decimals: number) => {
 };
 
 // params mungkin butuh address sama tipe wsProvider
-export const usePolkadotApi = () => {
+export const usePolkadotApi = (availableTokens: Token[]) => {
   const { state, dispatch } = baseUseBalance();
   const { state: walletAddressState, dispatch: walletAddressDispatch } = baseUseWalletAddress();
 
@@ -52,43 +53,42 @@ export const usePolkadotApi = () => {
 
   const load = async (address: string) => {
     setLoading(true);
+    let tokenBalances = [];
 
     try {
-      const acalaMandalaProvider = process.env.NEXT_PUBLIC_ACALA_TESTNET ?? '';
-      const api = await connectToBlockchain(acalaMandalaProvider);
+      for (let i = 0; i < availableTokens.length; i++) {
+        let provider = availableTokens[i].rpc_address;
 
-      if (api) {
-        const accountData = await api.query.system.account(address);
+        let api = await connectToBlockchain(provider);
 
-        const tokenData = await api.query.tokens.accounts(address, { TOKEN: 'DOT' });
+        if (api) {
+          switch (availableTokens[i].id) {
+            case 'MYR':
+              const { data: balance } = await api.query.system.account(address);
+              tokenBalances.push({
+                //@ts-ignore
+                freeBalance: formatNumber(balance.free as number, availableTokens[i].token_decimal),
+                tokenSymbol: availableTokens[i].id,
+                tokenDecimals: availableTokens[i].token_decimal
+              });
+              break;
+            default:
+              const tokenData = await api.query.tokens.accounts(address, { TOKEN: availableTokens[i].id });
+              tokenBalances.push({
+                //@ts-ignore
+                freeBalance: formatNumber(tokenData.free as number, availableTokens[i].token_decimal),
+                tokenSymbol: availableTokens[i].id,
+                tokenDecimals: availableTokens[i].token_decimal
+              });
+          }
 
-        const ausdData = await api.query.tokens.accounts(address, { TOKEN: 'AUSD' });
-
-        dispatch({
-          type: BalanceActionType.INIT_BALANCE,
-          balanceDetails: [
-            {
-              //@ts-ignore
-              freeBalance: formatNumber(ausdData.free as number, 12),
-              tokenSymbol: 'AUSD',
-              tokenDecimals: 12
-            },
-            {
-              //@ts-ignore
-              freeBalance: formatNumber(accountData.data.free as number, 13),
-              tokenSymbol: 'ACA',
-              tokenDecimals: 13
-            },
-            {
-              //@ts-ignore
-              freeBalance: formatNumber(tokenData?.free as number, 10),
-              tokenSymbol: 'DOT',
-              tokenDecimals: 10
-            }
-          ]
-        });
-        await api.disconnect();
+          await api.disconnect();
+        }
       }
+      dispatch({
+        type: BalanceActionType.INIT_BALANCE,
+        balanceDetails: tokenBalances
+      });
     } catch (error) {
       setError(error);
     } finally {
@@ -187,7 +187,7 @@ export const usePolkadotApi = () => {
     loading,
     error,
     load,
-    tokens: state.balanceDetails,
+    tokensReady: state.balanceDetails,
     sendTip,
     trxHash: walletAddressState.trxHash,
     sendTipSuccess: walletAddressState.success
