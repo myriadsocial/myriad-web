@@ -29,10 +29,10 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, availableToken
   const [session] = useSession();
   const userAddress = session?.user.address as string;
 
-  const { loading, error, tokensReady, load } = usePolkadotApi(availableTokens);
+  const { loading, error, tokensReady, load } = usePolkadotApi();
 
   useEffect(() => {
-    load(userAddress);
+    load(userAddress, availableTokens);
   }, []);
 
   useImperativeHandle(forwardedRef, () => ({

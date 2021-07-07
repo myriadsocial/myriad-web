@@ -15,15 +15,17 @@ import { useProfileHook } from 'src/components/profile/use-profile.hook';
 import { useTimelineHook } from 'src/hooks/use-timeline.hook';
 import { BalanceDetail } from 'src/interfaces/balance';
 import { Post } from 'src/interfaces/post';
+import { Token } from 'src/interfaces/token';
 import { User, ExtendedUserPost } from 'src/interfaces/user';
 
 type Props = {
   user: User | null;
   profile: ExtendedUserPost;
   balanceDetails: BalanceDetail[];
+  availableTokens: Token[];
 };
 
-export default function ImportedPostList({ user, profile, balanceDetails }: Props) {
+export default function ImportedPostList({ user, profile, balanceDetails, availableTokens }: Props) {
   const style = useStyles();
   const { hasMore, nextPosts } = useTimelineHook();
   const { state: profileState } = useProfile();
@@ -58,7 +60,7 @@ export default function ImportedPostList({ user, profile, balanceDetails }: Prop
         loader={<LoadingPage />}>
         {posts.map((post: Post, i: number) => (
           <Grow key={i}>
-            <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={balanceDetails} />
+            <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={balanceDetails} availableTokens={availableTokens} />
           </Grow>
         ))}
 

@@ -1,4 +1,4 @@
-import React, { useEffect, forwardRef, useState, useImperativeHandle } from 'react';
+import React, { useEffect } from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';

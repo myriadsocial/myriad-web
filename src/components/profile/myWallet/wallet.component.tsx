@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, forwardRef } from 'react';
+import React, { createRef, forwardRef } from 'react';
 
 import dynamic from 'next/dynamic';
 

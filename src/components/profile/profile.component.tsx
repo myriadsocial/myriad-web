@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import { useSession } from 'next-auth/client';
 import dynamic from 'next/dynamic';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -18,6 +19,7 @@ import { useStyles } from './profile.style';
 import { useProfile } from 'src/components/profile/profile.context';
 import { useFriendHook } from 'src/components/profile/use-friend.hook';
 import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
+import { useToken } from 'src/hooks/use-token.hook';
 import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
 
 const PostList = dynamic(() => import('./post/post-list.component'));
@@ -113,12 +115,16 @@ export default function ProfileTimeline({ isAnonymous, user, profile, loading }:
   } = useProfile();
   const { getFriends } = useFriendHook(profile);
 
-  const { load, tokens } = usePolkadotApi();
+  const { load, tokensReady } = usePolkadotApi();
+  const [session] = useSession();
+  let userId = session?.user.userId as string;
+  const { loadAllUserTokens, userTokens } = useToken(userId);
 
   useEffect(() => {
     if (user) {
-      load(user?.id);
+      load(user?.id, userTokens);
     }
+    loadAllUserTokens();
   }, []);
 
   const [value, setValue] = React.useState(0);

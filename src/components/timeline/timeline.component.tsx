@@ -41,11 +41,11 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous, availableTokens }) => 
 
   const { searching, backToTimeline, users: options } = useMyriadUser();
 
-  const { load, tokensReady } = usePolkadotApi(availableTokens);
+  const { load, tokensReady } = usePolkadotApi();
 
   useEffect(() => {
     if (userAddress) {
-      load(userAddress);
+      load(userAddress, availableTokens);
     }
   }, [userAddress]);
 
@@ -165,7 +165,12 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous, availableTokens }) => 
             loader={<LoadingPage />}>
             {state.posts.map((post: Post, i: number) => (
               <div key={i} id={`post-detail-${i}`}>
-                <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={tokensReady.length > 0 ? tokensReady : []} />
+                <PostComponent
+                  post={post}
+                  postOwner={isOwnPost(post)}
+                  balanceDetails={tokensReady.length > 0 ? tokensReady : []}
+                  availableTokens={availableTokens}
+                />
               </div>
             ))}
           </InfiniteScroll>
