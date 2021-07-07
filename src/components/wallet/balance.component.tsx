@@ -82,7 +82,11 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, availableToken
               <TableRow key={row.tokenSymbol}>
                 <TableCell component="th" scope="row">
                   <Typography className={style.balanceText}>
-                    {row.tokenSymbol === 'MYRIA' ? <StyledBadge badgeContent={<StyledTooltip />}>MYRIA</StyledBadge> : row.tokenSymbol}
+                    {row.tokenSymbol === 'MYR' ? (
+                      <StyledBadge badgeContent={<StyledTooltip />}>{row.tokenSymbol}</StyledBadge>
+                    ) : (
+                      row.tokenSymbol
+                    )}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
