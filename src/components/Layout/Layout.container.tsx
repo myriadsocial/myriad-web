@@ -14,7 +14,6 @@ import AlertComponent from '../alert/Alert.component';
 import { ConverstionProvider } from '../conversation/conversation.context';
 import { ExperienceProvider } from '../experience/experience.context';
 import { TransactionProvider } from '../tippingJar/transaction.context';
-import { TokenProvider } from '../wallet/token.context';
 
 import { LayoutSettingProvider } from 'src/context/layout.context';
 import { UserProvider } from 'src/context/user.context';
@@ -59,15 +58,13 @@ const Layout = ({ children, session }: Props) => {
           <TransactionProvider>
             <ExperienceProvider>
               <ConverstionProvider>
-                <TokenProvider>
-                  <TimelineProvider>
-                    {isMobile ? (
-                      <MobileLayoutComponent user={session.user}>{children}</MobileLayoutComponent>
-                    ) : (
-                      <DektopLayoutComponent user={session.user}>{children}</DektopLayoutComponent>
-                    )}
-                  </TimelineProvider>
-                </TokenProvider>
+                <TimelineProvider>
+                  {isMobile ? (
+                    <MobileLayoutComponent user={session.user}>{children}</MobileLayoutComponent>
+                  ) : (
+                    <DektopLayoutComponent user={session.user}>{children}</DektopLayoutComponent>
+                  )}
+                </TimelineProvider>
               </ConverstionProvider>
             </ExperienceProvider>
           </TransactionProvider>
