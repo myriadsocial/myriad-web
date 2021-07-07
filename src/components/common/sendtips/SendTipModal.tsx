@@ -13,13 +13,11 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import InfoIcon from '@material-ui/icons/Info';
 import SendIcon from '@material-ui/icons/Send';
 
 import DialogTitle from '../DialogTitle.component';
-import { useStyles, TableCell, StyledBadge } from './send-tips.style';
+import { useStyles, TableCell } from './send-tips.style';
 import { useWalletAddress } from './use-wallet.hook';
 
 import AlertComponent from 'src/components/alert/Alert.component';
@@ -196,23 +194,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
 
   const closeSendTipModal = () => {
     setShowSendTipModal(false);
-  };
-
-  const TooltipContent = () => {
-    return (
-      <div className={styles.tooltipContentRoot}>
-        <Typography className={styles.tooltipContentHeader}>Myria</Typography>{' '}
-        <Typography>A reward token you earn by sending a tip to a post you think is valuable.</Typography>
-      </div>
-    );
-  };
-
-  const StyledTooltip = () => {
-    return (
-      <Tooltip title={<TooltipContent />} placement="right" aria-label="myria-token-info">
-        <InfoIcon fontSize="small" />
-      </Tooltip>
-    );
   };
 
   const CurrencyTable = () => {
