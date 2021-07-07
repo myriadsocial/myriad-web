@@ -15,7 +15,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import SendIcon from '@material-ui/icons/Send';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
@@ -24,31 +23,10 @@ import DialogTitle from '../common/DialogTitle.component';
 import SearchComponent from '../common/search.component';
 import { TabPanel } from '../common/tab-panel.component';
 import { StyledTabs, StyledTab } from '../common/tabs.component';
-import { useToken } from './use-token.hooks';
 
+import { useStyles } from 'src/components/wallet/walletSetting.style';
+import { useToken } from 'src/hooks/use-token.hook';
 import { Token } from 'src/interfaces/token';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    listItemRoot: {
-      flexWrap: 'wrap',
-      background: '#DDDDDD',
-      '& .MuiCardHeader-root, & .MuiCardActions-root': {
-        background: '#EFEFEF'
-      }
-    },
-    listItemToken: {
-      flex: '0 0 100%'
-    },
-    walletSettingDialog: {
-      maxHeight: '50vh',
-      overflow: 'auto'
-    },
-    loading: {
-      color: theme.palette.primary.main
-    }
-  })
-);
 
 interface Props {
   forwardedRef: React.ForwardedRef<any>;
@@ -57,19 +35,12 @@ interface Props {
 const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
   const styles = useStyles();
 
-  const {
-    loadAllTokens,
-    loading,
-    errorTokens,
-    isTokenAddSuccess,
-    resetErrorUserTokens,
-    errorUserTokens,
-    addUserToken,
-    tokens
-  } = useToken();
-
   const [session, sessionLoading] = useSession();
   let userId = session?.user.userId as string;
+
+  const { loadAllTokens, loading, errorTokens, isTokenAddSuccess, resetErrorUserTokens, errorUserTokens, addUserToken, tokens } = useToken(
+    userId
+  );
 
   useEffect(() => {
     if (session !== null && !sessionLoading) {
@@ -94,7 +65,6 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
 
   useEffect(() => {
     if (errorUserTokens) {
-      console.log('called!');
       setErrorPopup(true);
     }
     let timeoutID = setTimeout(() => {
@@ -160,11 +130,11 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
     }
   };
 
-  //const DOTLogoURL = 'https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/DOT.svg';
-  const KSMLogoURL = 'https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/KSM.jpg';
-  const XORLogoURL = 'https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/XOR.jpg';
+  const DOTLogoURL = 'https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/DOT.svg';
+  const AUSDLogoURL = 'https://apps.acala.network/static/media/AUSD.439bc3f2.png';
   const ACALogoURL = 'https://dotmarketcap.com/uploads/Acala%20LOGO-04.png';
   const NOLogoURL = 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Icon-round-Question_mark.svg';
+  const MYRLogoPath = 'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg';
 
   const capitalizeFirstLetter = (str: string, locale = navigator.language) => {
     return str.replace(/^\p{CWU}/u, char => char.toLocaleUpperCase(locale));
@@ -232,12 +202,14 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
                           <Avatar
                             aria-label="avatar"
                             src={
-                              token?.id === 'KSM'
-                                ? KSMLogoURL
-                                : token?.id === 'XOR'
-                                ? XORLogoURL
+                              token?.id === 'AUSD'
+                                ? AUSDLogoURL
+                                : token?.id === 'DOT'
+                                ? DOTLogoURL
                                 : token?.id === 'ACA'
                                 ? ACALogoURL
+                                : token?.id === 'MYR'
+                                ? MYRLogoPath
                                 : NOLogoURL
                             }
                           />
