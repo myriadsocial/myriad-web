@@ -36,7 +36,7 @@ import { v4 as uuid } from 'uuid';
 
 const CommentComponent = dynamic(() => import('./comment/comment.component'));
 
-const FACEBOOK_APP_ID = process.env.FACEBOKK_APP_ID as string;
+const FACEBOOK_APP_ID = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID as string;
 
 type PostProps = {
   defaultExpanded?: boolean;
