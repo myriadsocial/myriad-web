@@ -51,8 +51,6 @@ export const WalletComponent = React.memo(function Wallet() {
 
   const balanceRef = createRef<any>();
 
-  useEffect(() => {}, [transactionRef, balanceRef]);
-
   //const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
   //e.stopPropagation();
   //transactionRef.current?.triggerRefresh();
