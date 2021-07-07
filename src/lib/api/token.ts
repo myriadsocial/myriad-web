@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import { Token } from 'src/interfaces/token';
+import { User } from 'src/interfaces/user';
 
 const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL
@@ -28,7 +29,6 @@ export const getTokens = async () => {
 };
 
 export const searchToken = async (query: string) => {
-  console.log('the values:', query);
   const { data } = await MyriadAPI.request<Token[]>({
     url: `/tokens`,
     method: 'GET',
@@ -51,6 +51,16 @@ export const addNewToken = async (values: NewTokenProps) => {
     url: `/tokens`,
     method: 'POST',
     data: values
+  });
+
+  return data;
+};
+
+export const getUserTokens = async (values: Partial<User>) => {
+  const { id } = values;
+  const { data } = await MyriadAPI.request<Token[]>({
+    url: `/users/${id}/tokens`,
+    method: 'GET'
   });
 
   return data;
