@@ -163,8 +163,8 @@ export default function PostComponent({
   const renderPostAvatar = () => {
     let avatarUrl: string = detail.user.avatar;
 
-    if (post.platform === 'myriad' && post.platformUser?.platform_account_id === user.id) {
-      avatarUrl = user.profilePictureURL as string;
+    if (post.platform === 'myriad' && post.platformUser?.platform_account_id === user?.id) {
+      avatarUrl = user?.profilePictureURL as string;
     }
 
     return <PostAvatarComponent origin={post.platform} avatar={avatarUrl} onClick={openContentSource} />;
