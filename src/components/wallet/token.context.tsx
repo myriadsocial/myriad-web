@@ -4,6 +4,7 @@ import { Token } from 'src/interfaces/token';
 
 export enum TokenActionType {
   INIT_TOKEN = 'INIT_TOKEN',
+  INIT_USER_TOKEN = 'INIT_USER_TOKEN',
   ADD_TOKEN = 'ADD_TOKEN'
 }
 
@@ -12,12 +13,17 @@ export interface InitToken {
   payload: Token[];
 }
 
+export interface InitUserToken {
+  type: TokenActionType.INIT_USER_TOKEN;
+  payload: Token[];
+}
+
 export interface AddToken {
   type: TokenActionType.ADD_TOKEN;
   payload: Token[];
 }
 
-export type Action = InitToken | AddToken;
+export type Action = InitToken | InitUserToken | AddToken;
 type Dispatch = (action: Action) => void;
 type TokenProviderProps = { children: React.ReactNode };
 type State = {
@@ -44,7 +50,7 @@ function tokenReducer(state: State, action: Action) {
       };
     }
 
-    case TokenActionType.ADD_TOKEN: {
+    case TokenActionType.INIT_USER_TOKEN: {
       return {
         ...state,
         userTokens: action.payload
