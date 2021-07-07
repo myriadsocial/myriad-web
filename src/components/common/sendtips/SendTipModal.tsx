@@ -234,11 +234,8 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
               <TableRow key={row.tokenSymbol}>
                 <RadioGroup aria-label="gender" name="gender1" value={selectedToken} onChange={handleSetSelectedToken}>
                   <TableCell component="th" scope="row">
-                    {row.tokenSymbol === 'MYRIA' ? (
-                      <>
-                        {' '}
-                        <StyledBadge badgeContent={<StyledTooltip />}>MYRIA</StyledBadge>
-                      </>
+                    {row.tokenSymbol === 'MYR' ? (
+                      <></>
                     ) : (
                       <>
                         <FormControlLabel value={row.tokenSymbol} control={<Radio />} label={row.tokenSymbol} />
@@ -247,7 +244,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
                   </TableCell>
                 </RadioGroup>
                 <TableCell align="right">
-                  <Typography className={styles.balanceText}>{row.freeBalance}</Typography>
+                  {row.tokenSymbol === 'MYR' ? <></> : <Typography className={styles.balanceText}>{row.freeBalance}</Typography>}
                 </TableCell>
               </TableRow>
             ))}
