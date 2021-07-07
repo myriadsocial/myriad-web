@@ -26,12 +26,14 @@ import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
 import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 import { useTimelineHook } from 'src/hooks/use-timeline.hook';
 import { Post } from 'src/interfaces/post';
+import { Token } from 'src/interfaces/token';
 
 type TimelineProps = {
   isAnonymous: boolean;
+  availableTokens: Token[];
 };
 
-const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
+const Timeline: React.FC<TimelineProps> = ({ isAnonymous, availableTokens }) => {
   const style = useStyles();
 
   const [session] = useSession();
@@ -39,7 +41,7 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
 
   const { searching, backToTimeline, users: options } = useMyriadUser();
 
-  const { load, tokens } = usePolkadotApi();
+  const { load, tokensReady } = usePolkadotApi(availableTokens);
 
   useEffect(() => {
     if (userAddress) {
@@ -163,7 +165,7 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous }) => {
             loader={<LoadingPage />}>
             {state.posts.map((post: Post, i: number) => (
               <div key={i} id={`post-detail-${i}`}>
-                <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={tokens.length > 0 ? tokens : []} />
+                <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={tokensReady.length > 0 ? tokensReady : []} />
               </div>
             ))}
           </InfiniteScroll>
