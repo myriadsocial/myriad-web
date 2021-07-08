@@ -18,6 +18,8 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
+import { encodeAddress } from '@polkadot/util-crypto';
+
 import { useStyles } from './header.style';
 import { useFriendHook } from './use-friend.hook';
 
@@ -156,32 +158,30 @@ export default function Header({ isAnonymous, user, profile, loading, isGuest }:
               {profile.bio || profileInfo}
             </Typography>
           </div>
-          <ShowIf condition={isGuest === false}>
-            <div style={{ marginTop: '24px' }}>
-              <Typography variant="body1" className={style.subtitle}>
-                Public Key
-              </Typography>
-              <Input
-                className={style.input}
-                style={{ width: 400, border: '1px solid #8629E9' }}
-                name="publickey"
-                disabled={true}
-                defaultValue={profile.id}
-                inputProps={{ 'aria-label': 'description' }}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <CopyToClipboard text={profile.id || ''} onCopy={onPublicKeyCopied}>
-                      <IconButton aria-label="toggle password visibility">
-                        <FileCopyIcon />
-                      </IconButton>
-                    </CopyToClipboard>
-                  </InputAdornment>
-                }
-              />
-            </div>
-          </ShowIf>
+          <div style={{ marginTop: '24px' }}>
+            <Typography variant="body1" className={style.subtitle}>
+              Public Key
+            </Typography>
+            <Input
+              className={style.input}
+              style={{ width: 400, border: '1px solid #8629E9' }}
+              name="publickey"
+              disabled={true}
+              defaultValue={encodeAddress(profile.id, 42)}
+              inputProps={{ 'aria-label': 'description' }}
+              endAdornment={
+                <InputAdornment position="end">
+                  <CopyToClipboard text={encodeAddress(profile.id, 42) || ''} onCopy={onPublicKeyCopied}>
+                    <IconButton aria-label="toggle password visibility">
+                      <FileCopyIcon />
+                    </IconButton>
+                  </CopyToClipboard>
+                </InputAdornment>
+              }
+            />
+          </div>
           <ShowIf condition={isGuest === true}>
-            <div style={{ marginTop: '40px' }}>
+            <div style={{ marginTop: '24px' }}>
               <ShowIf condition={friendStatus?.status == null}>
                 <Button
                   disabled={isAnonymous}
