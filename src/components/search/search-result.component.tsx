@@ -76,9 +76,9 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user,
     router.push(`/${url}`);
   };
 
-  const getFriendStatus = (user: User): FriendStatus | null => {
+  const getFriendStatus = (friendUser: User): FriendStatus | null => {
     const found = friended.find(friend => {
-      return friend.requestorId === user.id || friend.friendId == user.id;
+      return friend.requestorId === friendUser.id || friend.friendId == friendUser.id;
     });
     return found ? found.status : null;
   };
@@ -86,7 +86,7 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user,
   const sendFriendRequest = (destinationId: string) => {
     sendRequest(destinationId);
 
-    checkFriendStatus(users.map(item => item.id));
+    if (user) checkFriendStatus([user.id]);
   };
 
   type CardActionProps = {
