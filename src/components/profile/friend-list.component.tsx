@@ -191,9 +191,13 @@ const FriendsList = ({ profile }: Props) => {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText>
-                        <Typography component="span" variant="h4" color="textPrimary">
-                          {request.friend.name}
-                        </Typography>
+                        <Link href={`/${request.friendId}`}>
+                          <a>
+                            <Typography component="span" variant="h4" color="textPrimary">
+                              {request.friend.name}
+                            </Typography>
+                          </a>
+                        </Link>
                       </ListItemText>
                       <ListItemSecondaryAction>
                         {profile.id == user.id && (
@@ -217,9 +221,13 @@ const FriendsList = ({ profile }: Props) => {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText>
-                        <Typography component="span" variant="h4" color="textPrimary">
-                          {request.requestor.name}
-                        </Typography>
+                        <Link href={`/${request.requestorId}`}>
+                          <a>
+                            <Typography component="span" variant="h4" color="textPrimary">
+                              {request.requestor.name}
+                            </Typography>
+                          </a>
+                        </Link>
                       </ListItemText>
                       <ListItemSecondaryAction>
                         {profile.id == user.id && (

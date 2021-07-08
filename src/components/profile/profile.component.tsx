@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import SwipeableViews from 'react-swipeable-views';
 
 import dynamic from 'next/dynamic';
 
@@ -16,7 +15,6 @@ import { TippingComponent } from './myWallet/tipping.component';
 import { WalletComponent } from './myWallet/wallet.component';
 import { useStyles } from './profile.style';
 
-import ShowIf from 'src/components/common/show-if.component';
 import { useProfile } from 'src/components/profile/profile.context';
 import { useFriendHook } from 'src/components/profile/use-friend.hook';
 import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
@@ -132,10 +130,6 @@ export default function ProfileTimeline({ isAnonymous, user, profile, loading }:
     setValue(newValue);
   };
 
-  const handleChangeIndex = (index: number) => {
-    setValue(index);
-  };
-
   useEffect(() => {
     if (user && user.id === profile?.id) setIsGuest(false);
     else setIsGuest(true);
@@ -143,6 +137,7 @@ export default function ProfileTimeline({ isAnonymous, user, profile, loading }:
 
   useEffect(() => {
     getFriends();
+    setValue(0);
   }, [profile?.id]);
 
   if (loading) {
@@ -172,66 +167,32 @@ export default function ProfileTimeline({ isAnonymous, user, profile, loading }:
         <Header isAnonymous={isAnonymous} user={user} profile={profile} loading={loading} isGuest={isGuest} />
         {/* TAB */}
         <div className={style.root2}>
-          <ShowIf condition={isGuest === false}>
-            <Tabs
-              value={value}
-              className={style.tabHeader}
-              variant="fullWidth"
-              onChange={handleChange}
-              indicatorColor="primary"
-              textColor="primary">
-              <Tab className={style.tabItem} label={'My Post'} />
-              <Tab className={style.tabItem} label={'Imported Post'} />
-              <Tab className={style.tabItem} label={`Friends(${totalFriends})`} />
-              <Tab className={style.tabItem} label={'My Wallet'} />
-            </Tabs>
-            <SwipeableViews
-              className={style.tabContent}
-              axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-              index={value}
-              onChangeIndex={handleChangeIndex}>
-              <TabPanel value={value} index={0} dir={theme.direction}>
-                <PostList profile={profile} user={user} balanceDetails={tokens.length > 0 ? tokens : []} />
-              </TabPanel>
-              <TabPanel value={value} index={1} dir={theme.direction}>
-                <ImportedPostList user={user} profile={profile} balanceDetails={tokens.length > 0 ? tokens : []} />
-              </TabPanel>
-              <TabPanel value={value} index={2} dir={theme.direction}>
-                <FriendComponent profile={profile} />
-              </TabPanel>
-              <TabPanel value={value} index={3} dir={theme.direction}>
-                <MyWalletTabs />
-              </TabPanel>
-            </SwipeableViews>
-          </ShowIf>
-          <ShowIf condition={isGuest === true}>
-            <Tabs
-              value={value}
-              className={style.tabHeader}
-              variant="fullWidth"
-              onChange={handleChange}
-              indicatorColor="primary"
-              textColor="primary">
-              <Tab className={style.tabItem} label={'My Post'} />
-              <Tab className={style.tabItem} label={'Imported Post'} />
-              <Tab className={style.tabItem} label={`Friends(${totalFriends})`} />
-            </Tabs>
-            <SwipeableViews
-              className={style.tabContent}
-              axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-              index={value}
-              onChangeIndex={handleChangeIndex}>
-              <TabPanel value={value} index={0} dir={theme.direction}>
-                <PostList profile={profile} user={user} balanceDetails={tokens.length > 0 ? tokens : []} />
-              </TabPanel>
-              <TabPanel value={value} index={1} dir={theme.direction}>
-                <ImportedPostList user={user} profile={profile} balanceDetails={tokens.length > 0 ? tokens : []} />
-              </TabPanel>
-              <TabPanel value={value} index={2} dir={theme.direction}>
-                <FriendComponent profile={profile} />
-              </TabPanel>
-            </SwipeableViews>
-          </ShowIf>
+          <Tabs
+            value={value}
+            className={style.tabHeader}
+            variant="fullWidth"
+            onChange={handleChange}
+            indicatorColor="primary"
+            textColor="primary">
+            <Tab className={style.tabItem} label={'My Post'} />
+            <Tab className={style.tabItem} label={'Imported Post'} />
+            <Tab className={style.tabItem} label={`Friends(${totalFriends})`} />
+            {isGuest == false && <Tab className={style.tabItem} label={'My Wallet'} />}
+          </Tabs>
+          <TabPanel value={value} index={0} dir={theme.direction}>
+            <PostList profile={profile} user={user} balanceDetails={tokens.length > 0 ? tokens : []} />
+          </TabPanel>
+          <TabPanel value={value} index={1} dir={theme.direction}>
+            <ImportedPostList user={user} profile={profile} balanceDetails={tokens.length > 0 ? tokens : []} />
+          </TabPanel>
+          <TabPanel value={value} index={2} dir={theme.direction}>
+            <FriendComponent profile={profile} />
+          </TabPanel>
+          {isGuest == false && (
+            <TabPanel value={value} index={3} dir={theme.direction}>
+              <MyWalletTabs />
+            </TabPanel>
+          )}
         </div>
       </div>
     </div>
