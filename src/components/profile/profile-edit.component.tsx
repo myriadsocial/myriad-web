@@ -148,7 +148,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
     <>
       <Dialog open={open} aria-labelledby="no-extension-installed" maxWidth="md" fullWidth={false}>
         <DialogTitle id="name" onClose={toggleProfileForm}>
-          Edit Profile YYY
+          Edit Profile
         </DialogTitle>
         <DialogContent>
           <div style={{ display: 'flex', justifyContent: 'space-around', width: 896 }}>
@@ -184,18 +184,6 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
                   Edit Banner Image
                 </Button>
                 <form id="editForm" onSubmit={handleSubmit}>
-                  <Typography className={style.subtitle} variant="body1">
-                    Username
-                  </Typography>
-                  <TextField
-                    name="username"
-                    style={{ marginTop: 8 }}
-                    disabled={true}
-                    fullWidth={true}
-                    defaultValue={user.username}
-                    inputProps={{ 'aria-label': 'description' }}
-                  />
-
                   <Typography className={style.subtitle} variant="body1" style={{ marginTop: 16 }}>
                     Display Name
                   </Typography>
@@ -205,7 +193,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
                     onChange={handleChange}
                     fullWidth={true}
                     defaultValue={defaultValue.name}
-                    inputProps={{ 'aria-label': 'description' }}
+                    inputProps={{ 'aria-label': 'profile-name' }}
                   />
 
                   <Typography className={style.subtitle} variant="body1" style={{ marginTop: 16 }}>
@@ -219,7 +207,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
                     fullWidth={true}
                     rows={5}
                     defaultValue={defaultValue.bio}
-                    inputProps={{ 'aria-label': 'description' }}
+                    inputProps={{ 'aria-label': 'profile-bio' }}
                   />
                 </form>
               </div>
@@ -240,7 +228,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
                   disabled={true}
                   fullWidth={true}
                   defaultValue={user.id}
-                  inputProps={{ 'aria-label': 'description' }}
+                  inputProps={{ 'aria-label': 'public-key' }}
                   endAdornment={
                     <InputAdornment position="end">
                       <CopyToClipboard text={user.id || ''} onCopy={onPublicKeyCopied}>
