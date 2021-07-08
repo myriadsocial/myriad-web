@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { useProfile, ProfileActionType } from 'src/components/profile/profile.context';
 import { useFriendsHook } from 'src/hooks/use-friends-hook';
-import { FriendRequest, FriendStatus, ExtendedFriend } from 'src/interfaces/friend';
+import { FriendStatus, ExtendedFriend } from 'src/interfaces/friend';
 import { User } from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
 
@@ -55,7 +55,7 @@ export const useFriendHook = (user: User | null) => {
     }
   };
 
-  const makeFriend = async (values: Partial<FriendRequest>) => {
+  const makeFriend = async (values: Partial<ExtendedFriend>) => {
     if (!user) return;
 
     setLoading(true);
@@ -113,7 +113,7 @@ export const useFriendHook = (user: User | null) => {
     }
   };
 
-  const cancelFriendRequest = async friend => {
+  const cancelFriendRequest = async (friend: ExtendedFriend) => {
     setLoading(true);
 
     try {
@@ -122,7 +122,8 @@ export const useFriendHook = (user: User | null) => {
         method: 'DELETE'
       });
 
-      checkFriendStatus(friend.friendId);
+      if (user?.id !== friend.friendId) checkFriendStatus(friend.friendId);
+      else checkFriendStatus(friend.requestorId);
       getFriends();
       loadFriends();
       loadRequests();
@@ -134,7 +135,7 @@ export const useFriendHook = (user: User | null) => {
     }
   };
 
-  const toggleRequest = async (friend, status: FriendStatus) => {
+  const toggleRequest = async (friend: ExtendedFriend, status: FriendStatus) => {
     setLoading(true);
 
     try {
@@ -143,7 +144,8 @@ export const useFriendHook = (user: User | null) => {
       getFriends();
       loadFriends();
       loadRequests();
-      checkFriendStatus(friend.friendId);
+      if (user?.id !== friend.friendId) checkFriendStatus(friend.friendId);
+      else checkFriendStatus(friend.requestorId);
     } catch (error) {
       setError(error);
       console.log(error, '<<<error');

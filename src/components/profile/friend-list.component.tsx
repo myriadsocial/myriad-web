@@ -126,6 +126,10 @@ const FriendsList = ({ profile }: Props) => {
   // alert remove friend
   const [openModal, setOpenModal] = useState(false);
 
+  const [selectedProfileId, setSelectedProfileId] = useState('');
+  const [selectedFriendName, setSelectedFriendName] = useState('');
+  const [selectedFriend, setSelectedFriend] = useState<ExtendedFriend | null>(null);
+
   const style = useStyles();
   // const router = useRouter();
 
@@ -137,8 +141,12 @@ const FriendsList = ({ profile }: Props) => {
   } = useUser();
   const { cancelFriendRequest } = useFriendHook(profile);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>, id: string, name: string, request: ExtendedFriend) => {
     setAnchorEl(event.currentTarget);
+    console.log(id);
+    setSelectedProfileId(id);
+    setSelectedFriendName(name);
+    setSelectedFriend(request);
   };
 
   const handleClose = () => {
@@ -153,9 +161,10 @@ const FriendsList = ({ profile }: Props) => {
     setOpenModal(!openModal);
   };
 
-  const handleUnFriendRequest = (friendStatus: ExtendedFriend) => {
-    cancelFriendRequest(friendStatus);
+  const handleUnFriendRequest = (friend: ExtendedFriend | null) => {
+    if (friend) cancelFriendRequest(friend);
     toggleRemoveAlert();
+    handleClose();
   };
 
   if (!user) return null;
@@ -188,33 +197,14 @@ const FriendsList = ({ profile }: Props) => {
                       </ListItemText>
                       <ListItemSecondaryAction>
                         {profile.id == user.id && (
-                          <>
-                            <IconButton edge="end" aria-label="more" aria-controls="long-menu" aria-haspopup="true" onClick={handleClick}>
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Menu id="long-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
-                              <Link href={`/${request.friendId}`}>
-                                <a>
-                                  <MenuItem>Visit Profile</MenuItem>
-                                </a>
-                              </Link>
-                              <MenuItem onClick={handleClose} divider={true} disabled={true}>
-                                Add to Favorite
-                              </MenuItem>
-                              <MenuItem onClick={toggleRemoveAlert}>
-                                <Button
-                                  className={style.danger}
-                                  disableRipple={true}
-                                  disableFocusRipple={true}
-                                  variant="text"
-                                  color="default"
-                                  size="medium"
-                                  startIcon={<RemoveUser />}>
-                                  Remove Friend
-                                </Button>
-                              </MenuItem>
-                            </Menu>
-                          </>
+                          <IconButton
+                            edge="end"
+                            aria-label="more"
+                            aria-controls="long-menu"
+                            aria-haspopup="true"
+                            onClick={event => handleClick(event, request.friendId, request.friend.name, request)}>
+                            <MoreVertIcon />
+                          </IconButton>
                         )}
                       </ListItemSecondaryAction>
                     </ListItem>
@@ -233,72 +223,75 @@ const FriendsList = ({ profile }: Props) => {
                       </ListItemText>
                       <ListItemSecondaryAction>
                         {profile.id == user.id && (
-                          <>
-                            <IconButton edge="end" aria-label="more" aria-controls="long-menu" aria-haspopup="true" onClick={handleClick}>
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Menu id="long-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
-                              <Link href={`/${request.requestorId}`}>
-                                <a>
-                                  <MenuItem>Visit Profile</MenuItem>
-                                </a>
-                              </Link>
-                              <MenuItem onClick={handleClose} divider={true} disabled={true}>
-                                Add to Favorite
-                              </MenuItem>
-                              <MenuItem onClick={toggleRemoveAlert}>
-                                <Button
-                                  className={style.danger}
-                                  disableRipple={true}
-                                  disableFocusRipple={true}
-                                  variant="text"
-                                  color="default"
-                                  size="medium"
-                                  startIcon={<RemoveUser />}>
-                                  Remove Friend
-                                </Button>
-                              </MenuItem>
-                            </Menu>
-                          </>
+                          <IconButton
+                            edge="end"
+                            aria-label="more"
+                            aria-controls="long-menu"
+                            aria-haspopup="true"
+                            onClick={event => handleClick(event, request.requestorId, request.requestor.name, request)}>
+                            <MoreVertIcon />
+                          </IconButton>
                         )}
                       </ListItemSecondaryAction>
                     </ListItem>
                   )}
-
-                  <Dialog open={openModal} aria-labelledby="no-extension-installed">
-                    <DialogTitle id="name" onClose={toggleRemoveAlert}>
-                      Remove Friend
-                    </DialogTitle>
-                    <DialogContent>
-                      <div className={style.dialogRoot}>
-                        <SvgIcon className={style.icon} fontSize="inherit" color="error">
-                          <WarningRoundedIcon />
-                        </SvgIcon>
-                        <Typography className={style.subtitle1} variant="h2" color="error">
-                          Unfriend {profile.id == request.requestor.id ? request.friend.name : request.requestor.name}
-                        </Typography>
-                        <Typography className={`${style.subtitle2} ${style.alertMessage}  ${style.center} ${style['m-vertical2']}`}>
-                          Are you sure want to remove this person from your friend list? You will{' '}
-                          <Typography variant="inherit" color="error">
-                            no longer see posts
-                          </Typography>{' '}
-                          from this person.
-                        </Typography>
-                        <div className={`${style['flex-center']} ${style['m-vertical1']}`}>
-                          <Button variant="text" onClick={toggleRemoveAlert}>
-                            Cancel
-                          </Button>
-                          <Button variant="contained" color="primary" onClick={() => handleUnFriendRequest(request)}>
-                            Remove
-                          </Button>
-                        </div>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
                 </>
               );
             })}
           </List>
+          <Menu id="long-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
+            <Link href={`/${selectedProfileId}`}>
+              <a>
+                <MenuItem>Visit Profile</MenuItem>
+              </a>
+            </Link>
+            <MenuItem onClick={handleClose} divider={true} disabled={true}>
+              Add to Favorite
+            </MenuItem>
+            <MenuItem onClick={toggleRemoveAlert}>
+              <Button
+                className={style.danger}
+                disableRipple={true}
+                disableFocusRipple={true}
+                variant="text"
+                color="default"
+                size="medium"
+                startIcon={<RemoveUser />}>
+                Remove Friend
+              </Button>
+            </MenuItem>
+          </Menu>
+
+          <Dialog open={openModal} aria-labelledby="no-extension-installed">
+            <DialogTitle id="name" onClose={toggleRemoveAlert}>
+              Remove Friend
+            </DialogTitle>
+            <DialogContent>
+              <div className={style.dialogRoot}>
+                <SvgIcon className={style.icon} fontSize="inherit" color="error">
+                  <WarningRoundedIcon />
+                </SvgIcon>
+                <Typography className={style.subtitle1} variant="h2" color="error">
+                  Unfriend {selectedFriendName}
+                </Typography>
+                <Typography className={`${style.subtitle2} ${style.alertMessage}  ${style.center} ${style['m-vertical2']}`}>
+                  Are you sure want to remove this person from your friend list? You will{' '}
+                  <Typography variant="inherit" color="error">
+                    no longer see posts
+                  </Typography>{' '}
+                  from this person.
+                </Typography>
+                <div className={`${style['flex-center']} ${style['m-vertical1']}`}>
+                  <Button variant="text" onClick={toggleRemoveAlert}>
+                    Cancel
+                  </Button>
+                  <Button variant="contained" color="primary" onClick={() => handleUnFriendRequest(selectedFriend)}>
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </Box>
