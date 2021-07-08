@@ -1,5 +1,6 @@
 import React from 'react';
 
+import update from 'immutability-helper';
 import { Tag } from 'src/interfaces/experience';
 import { Post, Comment, PostSortMethod, PostFilter } from 'src/interfaces/post';
 
@@ -79,36 +80,49 @@ const TimelineContext = React.createContext<{ state: State; dispatch: Dispatch }
 function timelineReducer(state: State, action: Action) {
   switch (action.type) {
     case TimelineActionType.LOAD_POST: {
-      return {
-        ...state,
-        posts: state.page === 1 ? action.posts : [...state.posts, ...action.posts]
-      };
+      if (state.page === 1) {
+        state = update(state, {
+          posts: { $set: action.posts }
+        });
+
+        return state;
+      } else {
+        state = update(state, {
+          posts: { $unshift: action.posts }
+        });
+
+        return state;
+      }
     }
     case TimelineActionType.LOAD_MORE_POST: {
-      return {
-        ...state,
-        page: state.page + 1
-      };
+      state = update(state, {
+        page: { $set: state.page + 1 }
+      });
+
+      return state;
     }
     case TimelineActionType.CREATE_POST: {
-      return {
-        ...state,
-        posts: [action.post, ...state.posts]
-      };
+      state = update(state, {
+        posts: { $unshift: [action.post] }
+      });
+
+      return state;
     }
     case TimelineActionType.SORT_POST: {
-      return {
-        ...state,
-        sort: action.sort,
-        page: 1
-      };
+      state = update(state, {
+        sort: { $set: action.sort },
+        page: { $set: 1 }
+      });
+
+      return state;
     }
     case TimelineActionType.UPDATE_FILTER: {
-      return {
-        ...state,
-        filter: action.filter,
-        page: 1
-      };
+      state = update(state, {
+        filter: { $set: action.filter },
+        page: { $set: 1 }
+      });
+
+      return state;
     }
     case TimelineActionType.LOAD_COMMENTS: {
       return {
