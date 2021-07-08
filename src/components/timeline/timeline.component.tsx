@@ -110,7 +110,6 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous, availableTokens }) => 
   }, []);
 
   const nextPage = () => {
-    console.log('nextPage');
     nextPosts();
   };
 

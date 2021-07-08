@@ -8,19 +8,24 @@ import * as PostAPI from 'src/lib/api/post';
 import * as UserAPI from 'src/lib/api/user';
 
 export const useTimelineHook = () => {
-  const { state: userState } = useUser();
-  const { state: timelineState, dispatch } = useTimeline();
+  const {
+    state: { user, anonymous }
+  } = useUser();
+  const {
+    state: { filter, page, sort },
+    dispatch
+  } = useTimeline();
 
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const loadTimeline = async (page: number = 1, sort?: PostSortMethod) => {
-    if (userState.user) {
-      await loadUserPosts(userState.user, page, sort);
+    if (user) {
+      await loadUserPosts(user, page, sort);
     }
 
-    if (userState.anonymous) {
+    if (anonymous) {
       await loadPosts(page, sort);
     }
   };
@@ -67,7 +72,7 @@ export const useTimelineHook = () => {
     setLoading(true);
 
     try {
-      const data = await PostAPI.getPost(page, sort, timelineState.filter);
+      const data = await PostAPI.getPost(page, sort, filter);
 
       if (data.length < 10) {
         setHasMore(false);
@@ -89,7 +94,7 @@ export const useTimelineHook = () => {
       type: TimelineActionType.LOAD_MORE_POST
     });
 
-    await loadTimeline(timelineState.page + 1);
+    await loadTimeline(page + 1);
   };
 
   const sortTimeline = async (sort: PostSortMethod) => {
@@ -105,7 +110,7 @@ export const useTimelineHook = () => {
     error,
     loading,
     hasMore,
-    sort: timelineState.sort,
+    sort,
     loadTimeline,
     nextPosts,
     sortTimeline
