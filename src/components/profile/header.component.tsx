@@ -26,6 +26,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import { ProfileEditComponent } from 'src/components/profile/profile-edit.component';
 import { useProfile } from 'src/components/profile/profile.context';
 import { SocialListComponent } from 'src/components/user/social-list.component';
+import { useUser } from 'src/context/user.context';
 import { acronym } from 'src/helpers/string';
 import RemoveUser from 'src/images/user-minus2.svg';
 import { FriendStatus } from 'src/interfaces/friend';
@@ -48,6 +49,7 @@ export default function Header({ isAnonymous, user, profile, loading, isGuest }:
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);
 
+  const { state: userState } = useUser();
   const {
     state: { friendStatus }
   } = useProfile();
@@ -286,7 +288,7 @@ export default function Header({ isAnonymous, user, profile, loading, isGuest }:
       </div>
 
       {/* MODAL */}
-      {user && <ProfileEditComponent toggleProfileForm={toggleProfileForm} open={openEditModal} user={user} />}
+      {userState.user && <ProfileEditComponent toggleProfileForm={toggleProfileForm} open={openEditModal} user={userState.user} />}
 
       <Dialog open={openRemoveModal} aria-labelledby="no-extension-installed">
         <DialogTitle id="name" onClose={toggleRemoveAlert}>
