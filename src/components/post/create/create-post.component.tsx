@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
@@ -29,12 +30,25 @@ type Props = {
 export default function CreatePostComponent({ user, experiences }: Props) {
   const styles = useStyles();
 
-  const { addPost } = usePostHook(user);
+  const { addPost, loading } = usePostHook(user);
   const [postText, setPostText] = useState('');
   const [showCreatePost, setCreatePost] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const expandRef = useRef<React.ElementRef<typeof CreatePostExpandedComponent>>(null);
+
+  useEffect(() => {
+    if (submitting && !loading) {
+      expandRef.current?.clearForm();
+
+      toggleCreatePost();
+    }
+
+    return undefined;
+  }, [submitting, loading]);
 
   const toggleCreatePost = () => {
     setCreatePost(!showCreatePost);
+    setSubmitting(false);
   };
 
   const updatePostText = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -44,9 +58,9 @@ export default function CreatePostComponent({ user, experiences }: Props) {
   };
 
   const savePost = (text: string, tags: string[], files: File[]) => {
-    addPost(text, tags, files);
+    setSubmitting(true);
 
-    toggleCreatePost();
+    addPost(text, tags, files);
   };
 
   return (
@@ -87,8 +101,10 @@ export default function CreatePostComponent({ user, experiences }: Props) {
           Post Something
         </DialogTitle>
         <DialogContent>
-          <CreatePostExpandedComponent text={postText} onSubmit={savePost} user={user} experiences={[]} />
+          <CreatePostExpandedComponent ref={expandRef} text={postText} onSubmit={savePost} user={user} experiences={[]} />
         </DialogContent>
+
+        {submitting && <CircularProgress size={40} className={styles.buttonProgress} />}
       </Dialog>
     </div>
   );

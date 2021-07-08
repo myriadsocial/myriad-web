@@ -15,40 +15,52 @@ export const usePostHook = (user: User) => {
 
   const addPost = async (text: string, tags: string[], files: File[]) => {
     const images: string[] = [];
-
-    if (files.length) {
-      const uploadedURLs = await Promise.all(files.map(file => LocalAPI.uploadImage(file)));
-
-      uploadedURLs.forEach(url => {
-        if (url) {
-          images.push(url);
-        }
-      });
-    }
-
     const hasMedia = files.length > 0;
 
-    const data = await PostAPI.createPost({
-      text,
-      tags: tags,
-      hasMedia,
-      platform: 'myriad',
-      assets: hasMedia ? images : [],
-      platformUser: {
-        username: user.name,
-        platform_account_id: user.id,
-        profilePictureURL: user.profilePictureURL
-      },
-      walletAddress: user.id
-    });
+    setLoading(true);
 
-    dispatch({
-      type: TimelineActionType.CREATE_POST,
-      post: {
-        ...data,
-        comments: []
+    try {
+      if (hasMedia) {
+        const uploadedURLs = await Promise.all(files.map(file => LocalAPI.uploadImage(file)));
+
+        uploadedURLs.forEach(url => {
+          if (url) {
+            images.push(url);
+          }
+        });
       }
-    });
+
+      const data = await PostAPI.createPost({
+        text,
+        tags,
+        hasMedia,
+        platform: 'myriad',
+        assets: hasMedia ? images : [],
+        platformUser: {
+          username: user.name,
+          platform_account_id: user.id,
+          profilePictureURL: user.profilePictureURL
+        },
+        walletAddress: user.id
+      });
+
+      dispatch({
+        type: TimelineActionType.CREATE_POST,
+        post: {
+          ...data,
+          comments: []
+        }
+      });
+    } catch (error) {
+      setError(error);
+      showAlert({
+        title: 'Error!',
+        message: 'Failed to create post, try again later',
+        severity: 'error'
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const loadComments = async (postId: string) => {
