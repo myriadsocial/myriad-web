@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import ShowIf from '../common/show-if.component';
@@ -67,7 +68,7 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user,
 
   useEffect(() => {
     // list all transaction user id as param
-    checkFriendStatus(users.map(item => item.id));
+    if (user) checkFriendStatus([user.id]);
   }, []);
 
   const router = useRouter();
@@ -79,7 +80,6 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user,
     const found = friended.find(friend => {
       return friend.requestorId === user.id || friend.friendId == user.id;
     });
-
     return found ? found.status : null;
   };
 
@@ -101,33 +101,44 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user,
     let disableRequest = false;
 
     if (status) {
-      disableRequest = [FriendStatus.PENDING, FriendStatus.APPROVED].includes(status);
+      disableRequest = [FriendStatus.PENDING, FriendStatus.APPROVED, FriendStatus.REJECTED].includes(status);
     }
 
     return (
       <CardActions>
         <div className={styles.listWrapper}>
           <Button
-            onClick={() => redirectToProfilePage(from?.id)}
+            onClick={() => redirectToProfilePage(from.id)}
             size="medium"
             variant="contained"
             color="default"
             className={styles.iconButton}>
             Visit Profile
           </Button>
-
-          <Button
-            size="medium"
-            variant="contained"
-            color="primary"
-            onClick={() => sendFriendRequest(from.id)}
-            disabled={isAnonymous || disableRequest}
-            className={styles.iconButton}
-            startIcon={<PersonAddIcon />}>
-            <ShowIf condition={status === null}>Add Friend</ShowIf>
-            <ShowIf condition={status === FriendStatus.PENDING}>Request Sent</ShowIf>
-            <ShowIf condition={status === FriendStatus.APPROVED}>Friend</ShowIf>
-          </Button>
+          {from.id !== user?.id && (
+            <Button
+              size="medium"
+              variant="contained"
+              color="primary"
+              onClick={() => sendFriendRequest(from.id)}
+              disabled={isAnonymous || disableRequest}
+              className={styles.iconButton}
+              startIcon={
+                <>
+                  <ShowIf condition={status === null}>
+                    <PersonAddIcon />
+                  </ShowIf>
+                  <ShowIf condition={status === FriendStatus.APPROVED}>
+                    <PersonIcon />
+                  </ShowIf>
+                </>
+              }>
+              <ShowIf condition={status === null}>Add Friend</ShowIf>
+              <ShowIf condition={status === FriendStatus.PENDING}>Request Sent</ShowIf>
+              <ShowIf condition={status === FriendStatus.APPROVED}>Friend</ShowIf>
+              <ShowIf condition={status === FriendStatus.REJECTED}>Rejected</ShowIf>
+            </Button>
+          )}
         </div>
       </CardActions>
     );
@@ -149,7 +160,6 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user,
     );
   };
 
-  console.log('friended', friended);
   return (
     <div className={styles.root}>
       <div className={styles.header}>
