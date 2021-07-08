@@ -81,48 +81,36 @@ function timelineReducer(state: State, action: Action) {
   switch (action.type) {
     case TimelineActionType.LOAD_POST: {
       if (state.page === 1) {
-        state = update(state, {
+        return update(state, {
           posts: { $set: action.posts }
         });
-
-        return state;
       } else {
-        state = update(state, {
-          posts: { $unshift: action.posts }
+        return update(state, {
+          posts: { $push: action.posts }
         });
-
-        return state;
       }
     }
     case TimelineActionType.LOAD_MORE_POST: {
-      state = update(state, {
+      return update(state, {
         page: { $set: state.page + 1 }
       });
-
-      return state;
     }
     case TimelineActionType.CREATE_POST: {
-      state = update(state, {
+      return update(state, {
         posts: { $unshift: [action.post] }
       });
-
-      return state;
     }
     case TimelineActionType.SORT_POST: {
-      state = update(state, {
+      return update(state, {
         sort: { $set: action.sort },
         page: { $set: 1 }
       });
-
-      return state;
     }
     case TimelineActionType.UPDATE_FILTER: {
-      state = update(state, {
+      return update(state, {
         filter: { $set: action.filter },
         page: { $set: 1 }
       });
-
-      return state;
     }
     case TimelineActionType.LOAD_COMMENTS: {
       return {
