@@ -96,7 +96,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
   const style = useStyles();
 
   const {
-    state: { user: useDetail }
+    state: { user: userDetail }
   } = useUser();
 
   const { updateProfile } = useProfileHook(user.id);
@@ -107,7 +107,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
   });
 
   const getProfilePicture = (): string => {
-    return useDetail?.profilePictureURL || '';
+    return userDetail?.profilePictureURL || '';
   };
 
   const updateProfilePicture = (preview: string) => {

@@ -87,17 +87,17 @@ const UserComponent: React.FC<Props> = ({ isAnonymous, user }) => {
           className={style.cardHeader}
           avatar={
             <Avatar
-              aria-label={`${user.name} avatar`}
+              aria-label={`${isAnonymous ? user.name : userState.user?.name} avatar`}
               src={getProfilePicture()}
               variant="circular"
               sizes="lg"
               style={{ width: 72, height: 72 }}>
-              {acronym(user.name as string)}
+              {isAnonymous ? acronym(user.name as string) : acronym(userState.user?.name as string)}
             </Avatar>
           }
           title={
             <Typography variant="h4" style={{ marginBottom: 4, fontWeight: 400 }}>
-              {user.name}
+              {isAnonymous ? user.name : userState.user?.name}
             </Typography>
           }
           subheader={
