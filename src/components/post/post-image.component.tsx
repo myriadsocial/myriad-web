@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Carousel, { CarouselStyles } from 'react-images';
-import ReactPhotoGrid from 'react-photo-grid';
 
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import NoSsr from '@material-ui/core/NoSsr';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
@@ -13,13 +13,15 @@ import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CloseIcon from '@material-ui/icons/Close';
 
-import ShowIf from 'src/components/common/show-if.component';
+import { useImageHooks } from './post-image.hook';
+
 import { ImageData } from 'src/interfaces/post';
 import theme from 'src/themes/light';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      width: 640,
       display: 'flex',
       flexWrap: 'wrap',
       justifyContent: 'space-around',
@@ -31,6 +33,12 @@ const useStyles = makeStyles((theme: Theme) =>
       '& .MuiDialogTitle-root': {
         background: theme.palette.background.default
       }
+    },
+    tileTitle: {
+      height: 200,
+      textAlign: 'center',
+      fontSize: 18,
+      fontWeight: 700
     }
   })
 );
@@ -51,10 +59,16 @@ type Props = {
 export default function ImageListComponent({ images }: Props) {
   const style = useStyles();
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('lg'));
-  const [viewerIsOpen, setViewerIsOpen] = React.useState(false);
 
-  const openLightbox = () => {
+  const fullScreen = useMediaQuery(theme.breakpoints.down('lg'));
+  const [viewerIsOpen, setViewerIsOpen] = useState(false);
+  const { buildList } = useImageHooks();
+  const [index, setIndex] = useState(0);
+
+  const list = buildList(images.map(i => i.src));
+
+  const openLightbox = (i: number) => {
+    setIndex(i);
     setViewerIsOpen(true);
   };
 
@@ -65,18 +79,21 @@ export default function ImageListComponent({ images }: Props) {
   return (
     <div className={style.root}>
       <NoSsr>
-        <ShowIf condition={images.length > 1}>
-          <ReactPhotoGrid onImageClick={openLightbox} data={images.slice(0, 3).map(image => image.src)} containerWidth={720} />
-        </ShowIf>
-        <ShowIf condition={images.length === 1}>
-          <GridList cellHeight={400} cols={1} onClick={openLightbox}>
-            {images.map((image, i) => (
-              <GridListTile key={image.src} cols={1}>
-                <img src={image.src} />
-              </GridListTile>
-            ))}
-          </GridList>
-        </ShowIf>
+        <GridList cellHeight={list.cellHeight} cols={list.cols}>
+          {list.images.slice(0, 4).map((image, i) => (
+            <GridListTile key={image.src} cols={image.cols} rows={image.rows} onClick={() => openLightbox(i)}>
+              <img src={image.src} />
+              {images.length > 4 && i === 3 && (
+                <GridListTileBar
+                  title={`+ ${list.images.length - 4} more`}
+                  titlePosition="top"
+                  actionPosition="left"
+                  className={style.tileTitle}
+                />
+              )}
+            </GridListTile>
+          ))}
+        </GridList>
 
         <Dialog open={viewerIsOpen} fullScreen={fullScreen} className={style.transparentHeader}>
           <MuiDialogTitle>
@@ -85,7 +102,7 @@ export default function ImageListComponent({ images }: Props) {
             </IconButton>
           </MuiDialogTitle>
 
-          <Carousel styles={carouselStyle} views={images.map((image, i) => ({ source: image.src, key: i }))} />
+          <Carousel styles={carouselStyle} currentIndex={index} views={images.map((image, i) => ({ source: image.src, key: i }))} />
         </Dialog>
       </NoSsr>
     </div>

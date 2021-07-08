@@ -24,6 +24,7 @@ const createMarkdownContent = (post: Post): string => {
 };
 
 export const useSocialDetail = (post: Post) => {
+  const [loading, setLoading] = React.useState(true);
   const [detail, setDetail] = React.useState<PostDetail | null>(null);
 
   const loadPost = async () => {
@@ -41,6 +42,8 @@ export const useSocialDetail = (post: Post) => {
         const lookup = parseTwitter(data);
 
         setDetail(lookup);
+
+        setLoading(false);
       }
     } catch (error) {
       setDetail(null);
@@ -66,10 +69,13 @@ export const useSocialDetail = (post: Post) => {
           username: post.platformUser?.username || ''
         }
       });
+
+      setLoading(false);
     }
   }, [post]);
 
   return {
+    loading,
     detail
   };
 };
