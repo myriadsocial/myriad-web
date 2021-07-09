@@ -41,7 +41,7 @@ const MobileLayoutComponent = ({ user }: Props) => {
   let userId = session?.user.userId as string;
 
   useEffect(() => {
-    if (session !== null && !sessionLoading) {
+    if (session && !sessionLoading) {
       userId = session?.user.userId as string;
     }
   }, [sessionLoading]);
