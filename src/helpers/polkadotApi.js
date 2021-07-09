@@ -22,7 +22,7 @@ export const connectToBlockchain = async provider => {
 
     //TODO:
     // which rpc address for dev and which one is for staging??
-    //const wsProvider = new WsProvider(process.env.NEXT_PUBLIC_RPC_ADDRESS_TESTNET);
+    //const wsProvider = new WsProvider(process.env.NEXT_PUBLIC_MYRIAD_WS_RPC);
     //const wsProvider = new WsProvider(provider);
     //console.log('the wsProvider: ', wsProvider);
     //const api = await ApiPromise.create({
