@@ -68,7 +68,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         // background: 'white',
         borderRadius: 8,
         background: theme.palette.primary.main,
-        color: theme.palette.text.secondary,
+        color: '#FFFFFF',
         // width: 157,
 
         '& .MuiTypography-root': {
