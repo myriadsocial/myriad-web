@@ -130,7 +130,11 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ isAnonymous, us
           </ListItemIcon>
           <ListItemText id="social-facebook" primary="Facebook" />
           <ListItemSecondaryAction>
-            <IconButton onClick={connectSocial(SocialsEnum.FACEBOOK)} aria-label="social-list-item-facebook" size="medium">
+            <IconButton
+              disabled={isAnonymous}
+              onClick={connectSocial(SocialsEnum.FACEBOOK)}
+              aria-label="social-list-item-facebook"
+              size="medium">
               {connected[SocialsEnum.FACEBOOK] ? <CheckIcon /> : <AddIcon />}
             </IconButton>
           </ListItemSecondaryAction>
@@ -141,7 +145,11 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ isAnonymous, us
           </ListItemIcon>
           <ListItemText id="social-twitter" primary="Twitter" />
           <ListItemSecondaryAction>
-            <IconButton onClick={connectSocial(SocialsEnum.TWITTER)} aria-label="social-list-item-twitter" size="medium">
+            <IconButton
+              disabled={isAnonymous}
+              onClick={connectSocial(SocialsEnum.TWITTER)}
+              aria-label="social-list-item-twitter"
+              size="medium">
               {connected[SocialsEnum.TWITTER] ? <CheckIcon /> : <AddIcon />}
             </IconButton>
           </ListItemSecondaryAction>
@@ -152,7 +160,11 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ isAnonymous, us
           </ListItemIcon>
           <ListItemText id="social-reddit" primary="Reddit" />
           <ListItemSecondaryAction>
-            <IconButton onClick={connectSocial(SocialsEnum.REDDIT)} aria-label="social-list-item-reddit" size="medium">
+            <IconButton
+              disabled={isAnonymous}
+              onClick={connectSocial(SocialsEnum.REDDIT)}
+              aria-label="social-list-item-reddit"
+              size="medium">
               {connected[SocialsEnum.REDDIT] ? <CheckIcon /> : <AddIcon />}
             </IconButton>
           </ListItemSecondaryAction>
