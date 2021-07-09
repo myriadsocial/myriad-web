@@ -50,6 +50,9 @@ const useStyles = makeStyles((theme: Theme) =>
       '& .MuiListItemText-root': {
         alignSelf: 'center'
       }
+    },
+    online: {
+      color: '#06960C'
     }
   })
 );
@@ -61,6 +64,7 @@ const Friends = ({ user }: Props) => {
   const { loadFriends } = useFriendsHook(user);
   const [openOnlineFriends, setOpenOnlineFriends] = useState(true);
   const [openOtherFriends] = useState(false);
+  const [showOnlineFriends] = useState(false);
 
   useEffect(() => {
     loadFriends();
@@ -106,9 +110,11 @@ const Friends = ({ user }: Props) => {
                             {request.requestor.name}
                           </Typography>
                         </ListItemText>
-                        <ListItemSecondaryAction>
-                          <FiberManualRecordIcon style={{ color: '#06960C' }} />
-                        </ListItemSecondaryAction>
+                        {showOnlineFriends && (
+                          <ListItemSecondaryAction>
+                            <FiberManualRecordIcon className={style.online} />
+                          </ListItemSecondaryAction>
+                        )}
                       </ListItem>
                     )}
 
@@ -122,9 +128,11 @@ const Friends = ({ user }: Props) => {
                             {request.friend.name}
                           </Typography>
                         </ListItemText>
-                        <ListItemSecondaryAction>
-                          <FiberManualRecordIcon style={{ color: '#06960C' }} />
-                        </ListItemSecondaryAction>
+                        {showOnlineFriends && (
+                          <ListItemSecondaryAction>
+                            <FiberManualRecordIcon className={style.online} />
+                          </ListItemSecondaryAction>
+                        )}
                       </ListItem>
                     )}
                   </>
