@@ -9,11 +9,11 @@ const client = Axios.create({
   baseURL: process.env.NEXTAUTH_URL
 });
 
-const createPostContent = (post: Post): string => {
+const createMarkdownContent = (post: Post): string => {
   let content = '';
 
   if (post.title) {
-    content += `## ${post.title}`;
+    content += `## ${post.title}\n\n`;
   }
 
   if (post.text) {
@@ -52,7 +52,7 @@ export const useSocialDetail = (post: Post) => {
       loadPost();
     } else {
       setDetail({
-        text: createPostContent(post),
+        text: createMarkdownContent(post),
         createdOn: format(new Date(post.platformCreatedAt || post.createdAt), 'dd MMMM yyyy'),
         videos: [],
         images: [],
