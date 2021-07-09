@@ -69,9 +69,6 @@ export default function CreatePostComponent({ user, experiences }: Props) {
         <Typography variant="h4" style={{ marginBottom: 8, fontWeight: 500 }}>
           {'Post Something'}
         </Typography>
-        <div style={{ position: 'absolute', right: 0, top: -8 }}>
-          <PostSettingComponent />
-        </div>
       </div>
       <Card variant="outlined" className={styles.cardPost}>
         <CardContent>
