@@ -149,12 +149,12 @@ export default function PostComponent({
 
   if (!detail || !post) return null;
 
-  const handleTipSentSuccess = (postId: string) => {
-    if (post.id === postId) {
-      setTippedPost(post);
-      //setOpenTipSummary(true);
-    }
-  };
+  //const handleTipSentSuccess = (postId: string) => {
+  //if (post.id === postId) {
+  //setTippedPost(post);
+  //setOpenTipSummary(true);
+  //}
+  //};
 
   const handleCloseTipSummary = () => {
     setOpenTipSummary(false);
