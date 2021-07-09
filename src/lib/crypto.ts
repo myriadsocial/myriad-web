@@ -10,9 +10,9 @@ export const toHexPublicKey = (account: InjectedAccountWithMeta) => {
 };
 
 export const generateKey = (name: string): { mnemonic: string; key: string } => {
-  const prefix = process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX ? Number(process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX) : 214;
-  const cyptoType: KeypairType = process.env.NEXT_PUBLIC_POLKADOT_CRYPTO_TYPE
-    ? (process.env.NEXT_PUBLIC_POLKADOT_CRYPTO_TYPE as KeypairType)
+  const prefix = process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX ? Number(process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX) : 214;
+  const cyptoType: KeypairType = process.env.NEXT_PUBLIC_MYRIAD_CRYPTO_TYPE
+    ? (process.env.NEXT_PUBLIC_MYRIAD_CRYPTO_TYPE as KeypairType)
     : 'sr25519';
   const derivationPath = process.env.NEXT_PUBLIC_POLKADOT_DERIVATION_PATH;
 
