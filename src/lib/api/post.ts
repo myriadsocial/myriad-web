@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { Post, Comment, PostSortMethod, PostFilter, ImportPost } from 'src/interfaces/post';
+import { Post, Comment, CreateCommentProps, PostSortMethod, PostFilter, ImportPost } from 'src/interfaces/post';
 
 const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL
@@ -189,7 +189,7 @@ export const loadComments = async (postId: string, excludeUser?: string) => {
   return data;
 };
 
-export const reply = async (postId: string, comment: Comment) => {
+export const reply = async (postId: string, comment: CreateCommentProps) => {
   const { data } = await MyriadAPI.request({
     url: `/posts/${postId}/comments`,
     method: 'POST',

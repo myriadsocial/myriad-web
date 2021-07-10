@@ -64,12 +64,15 @@ export interface Post {
 }
 
 export interface Comment {
+  id: string;
   text: string;
   postId: string;
   userId: string;
   createdAt: Date;
   user?: User;
 }
+
+export type CreateCommentProps = Omit<Comment, 'id'>;
 
 export type UserReplies = Comment & {
   id: string;

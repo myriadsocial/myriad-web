@@ -164,7 +164,7 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous, availableTokens }) => 
             hasMore={hasMore}
             loader={<LoadingPage />}>
             {state.posts.map((post: Post, i: number) => (
-              <div key={i} id={`post-detail-${i}`}>
+              <div key={post.id} id={`post-detail-${i}`}>
                 <PostComponent
                   post={post}
                   postOwner={isOwnPost(post)}
