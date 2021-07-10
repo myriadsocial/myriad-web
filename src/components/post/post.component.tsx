@@ -3,7 +3,6 @@ import React, { useState, useRef } from 'react';
 import { FacebookProvider, EmbeddedPost } from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 
-import { useSession } from 'next-auth/client';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
@@ -72,11 +71,7 @@ export default function PostComponent({
   const headerRef = useRef<any>();
   const sendTipRef = useRef<any>();
 
-  const [session] = useSession();
-
-  const userId = session?.user.address as string;
-
-  if (!detail) return null;
+  if (!detail || !user) return null;
 
   if (post.text === '[removed]' && post.platform === 'reddit') return null;
 
@@ -246,7 +241,7 @@ export default function PostComponent({
       <SendTipModal
         availableTokens={availableTokens}
         success={postId => handleTipSentSuccess(postId)}
-        userAddress={userId}
+        userAddress={user.id}
         ref={sendTipRef}
         postId={post.id as string}
         balanceDetails={balanceDetails}

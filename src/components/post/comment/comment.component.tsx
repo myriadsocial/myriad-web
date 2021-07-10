@@ -68,10 +68,8 @@ export default function CommentComponent({ balanceDetails, post, disableReply, h
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   useEffect(() => {
-    if (post.publicMetric && post.publicMetric.comment > 0) {
-      loadInitComment();
-    }
-  }, [post]);
+    loadInitComment();
+  }, []);
 
   const tipPostUser = () => {
     childRef.current.triggerSendTipModal();
@@ -124,9 +122,9 @@ export default function CommentComponent({ balanceDetails, post, disableReply, h
       </Tabs>
       <TabPanel value={selectedTab} index={0} dir={theme.direction}>
         <Grid container spacing={2} direction="column" className={style.comment}>
-          {comments.map((comment, i) => {
+          {comments.map(comment => {
             return (
-              <Grid item key={i}>
+              <Grid item key={comment.id}>
                 <Card className={style.root}>
                   <CardHeader
                     avatar={
