@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -21,11 +20,13 @@ import { encodeAddress } from '@polkadot/util-crypto';
 
 import { useProfileHook } from './use-profile.hook';
 
+import { ButtonUpload } from 'src/components/common/ButtonUpload.component';
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import { ImageUpload } from 'src/components/common/ImageUpload.component';
 import { SocialListComponent } from 'src/components/user/social-list.component';
 import { useUser } from 'src/context/user.context';
 import { acronym } from 'src/helpers/string';
+import { useConfig } from 'src/hooks/config.hook';
 import { ExtendedUser } from 'src/interfaces/user';
 
 const useStyles = makeStyles({
@@ -101,25 +102,33 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
   const {
     state: { user: userDetail }
   } = useUser();
+  const config = useConfig();
 
-  const { updateProfile, isLoading } = useProfileHook(user.id);
+  const { isLoading, updateBanner, updateProfile } = useProfileHook(user.id);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
   const [defaultValue, setDefaultValue] = useState<Record<string, string>>({
     name: user.name,
     bio: user.bio ?? ''
   });
 
+  useEffect(() => {
+    if (uploadingAvatar && !isLoading) {
+      setUploadingAvatar(false);
+    }
+  }, [isLoading, uploadingAvatar]);
+
   const getProfilePicture = (): string => {
     return userDetail?.profilePictureURL || '';
   };
 
   const updateProfilePicture = (preview: string) => {
+    setUploadingAvatar(true);
+
     updateProfile({
       profilePictureURL: preview
     });
   };
-
-  const editBanner = () => {};
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
@@ -159,33 +168,26 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
               <Typography className={style.subtitle} variant="body1">
                 Profile
               </Typography>
-              <CardMedia
-                className={style.media}
-                image="https://images.pexels.com/photos/3394939/pexels-photo-3394939.jpeg"
-                title={user.name}
-              />
+              <CardMedia className={style.media} image={user.bannerImageUrl ?? config.default.banner} title={user.name} />
 
               <div className={style.profileContent} style={{ marginTop: 16, marginBottom: 16 }}>
                 <ImageUpload
                   value={getProfilePicture()}
-                  preview={
-                    <Avatar className={style.avatarBig} src={getProfilePicture()}>
-                      {acronym(user.name)}
-                    </Avatar>
-                  }
-                  onSelected={updateProfilePicture}
+                  title={acronym(user.name)}
+                  onImageSelected={updateProfilePicture}
+                  loading={uploadingAvatar && isLoading}
                 />
-
-                <Button
-                  className={style.button}
-                  style={{ position: 'absolute', top: 128, left: 250, backgroundColor: 'white' }}
+                <ButtonUpload
+                  title="Edit Banner Image"
+                  onImageSelected={updateBanner}
+                  accept="image"
                   size="medium"
                   variant="outlined"
                   color="primary"
-                  disabled
-                  onClick={editBanner}>
-                  Edit Banner Image
-                </Button>
+                  className={style.button}
+                  style={{ position: 'absolute', top: 128, left: 250, backgroundColor: 'white' }}
+                />
+
                 <form id="editForm" onSubmit={handleSubmit}>
                   <Typography className={style.subtitle} variant="body1" style={{ marginTop: 16 }}>
                     Display Name

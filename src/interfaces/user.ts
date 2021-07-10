@@ -19,6 +19,7 @@ export interface User {
   name: string;
   username: string;
   profilePictureURL?: string;
+  bannerImageUrl?: string;
   anonymous: boolean;
   fcmTokens?: string[];
   skip_tour?: boolean;

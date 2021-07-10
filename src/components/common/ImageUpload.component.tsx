@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
+import Avatar from '@material-ui/core/Avatar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import { createStyles, makeStyles, Theme, fade } from '@material-ui/core/styles';
@@ -20,7 +22,16 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: fade(theme.palette.primary.main, 0.7)
     },
     preview: {
-      position: 'relative'
+      height: 72,
+      width: 72,
+      position: 'absolute',
+      top: 46,
+      left: 16
+    },
+    loading: {
+      position: 'absolute',
+      top: 62,
+      left: 32
     },
     icon: {
       color: '#FFF'
@@ -30,11 +41,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = {
   value: string;
-  preview: React.ReactNode;
-  onSelected: (preview: string) => void;
+  loading?: boolean;
+  title?: string;
+  onImageSelected: (preview: string) => void;
 };
 
-export const ImageUpload = ({ onSelected, value, preview }: Props) => {
+export const ImageUpload = ({ onImageSelected, value, loading, title }: Props) => {
   const styles = useStyles();
 
   const uploadFieldRef = useRef<HTMLInputElement | null>(null);
@@ -44,7 +56,7 @@ export const ImageUpload = ({ onSelected, value, preview }: Props) => {
   // upload image to storage
   useEffect(() => {
     if (image) {
-      onSelected(image);
+      onImageSelected(image);
       setUploading(false);
     }
   }, [image]);
@@ -74,6 +86,10 @@ export const ImageUpload = ({ onSelected, value, preview }: Props) => {
     }
   };
 
+  const getPreviewImage = (): string => {
+    return image ?? value;
+  };
+
   return (
     <div className={styles.root}>
       <input type="file" ref={uploadFieldRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
@@ -83,7 +99,11 @@ export const ImageUpload = ({ onSelected, value, preview }: Props) => {
         </IconButton>
       </InputLabel>
 
-      {preview}
+      <Avatar src={getPreviewImage()} className={styles.preview} alt={title}>
+        {title}
+      </Avatar>
+
+      {loading && <CircularProgress color="primary" className={styles.loading} />}
     </div>
   );
 };
