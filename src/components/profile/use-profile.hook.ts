@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 
 import { useProfile, ProfileActionType } from 'src/components/profile/profile.context';
 import { useUser, UserActionType } from 'src/context/user.context';
+import { useImageUpload } from 'src/hooks/use-image-upload.hook';
 import { useUserHook } from 'src/hooks/use-user.hook';
 import { Post } from 'src/interfaces/post';
 import { ExtendedUserPost } from 'src/interfaces/user';
@@ -11,7 +12,9 @@ import * as ProfileAPI from 'src/lib/api/profile';
 
 export const useProfileHook = (id: string) => {
   const { state: profileState, dispatch } = useProfile();
+
   const { updateUser } = useUserHook(id);
+  const { uploadImage } = useImageUpload();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -84,10 +87,31 @@ export const useProfileHook = (id: string) => {
     }
   };
 
+  const updateBanner = async (file: File) => {
+    const url = await uploadImage(file);
+
+    await updateProfile({
+      bannerImageUrl: url
+    });
+
+    if (profileState.profile) {
+      dispatch({
+        type: ProfileActionType.PROFILE_LOADED,
+        payload: {
+          ...profileState.profile,
+          bannerImageUrl: url
+        }
+      });
+    } else {
+      getProfile();
+    }
+  };
+
   return {
     error,
     isLoading,
     updateProfile,
+    updateBanner,
     getProfile,
     loadImportedPost
   };
