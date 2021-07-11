@@ -2,7 +2,8 @@ import React from 'react';
 
 import update from 'immutability-helper';
 import { Tag } from 'src/interfaces/experience';
-import { Post, Comment, PostSortMethod, PostFilter } from 'src/interfaces/post';
+import { Post, Comment } from 'src/interfaces/post';
+import { TimelineType, PostSortMethod, PostFilter } from 'src/interfaces/timeline';
 
 export enum TimelineActionType {
   LOAD_POST = 'LOAD_POST',
@@ -11,7 +12,8 @@ export enum TimelineActionType {
   ADD_COMMENT = 'ADD_COMMENT',
   SORT_POST = 'SORT_POST',
   CREATE_POST = 'CREATE_POST',
-  UPDATE_FILTER = 'UPDATE_FILTER'
+  UPDATE_FILTER = 'UPDATE_FILTER',
+  CHANGE_TIMELINE_TYPE = 'CHANGE_TIMELINE_TYPE'
 }
 
 interface LoadPost {
@@ -50,11 +52,18 @@ interface CreatePost {
   post: Post;
 }
 
-export type Action = LoadPost | LoadMorePost | LoadComments | AddComments | SortPost | UpdateFilter | CreatePost;
+interface ChangeTimeLineType {
+  type: TimelineActionType.CHANGE_TIMELINE_TYPE;
+  value: TimelineType;
+  filter: PostFilter;
+}
+
+export type Action = LoadPost | LoadMorePost | LoadComments | AddComments | SortPost | UpdateFilter | CreatePost | ChangeTimeLineType;
 
 type Dispatch = (action: Action) => void;
 type TimelineProviderProps = { children: React.ReactNode };
 type State = {
+  type: TimelineType;
   sort: PostSortMethod;
   page: number;
   filter: PostFilter;
@@ -65,6 +74,7 @@ type State = {
 const initalState: State = {
   sort: 'created',
   page: 1,
+  type: TimelineType.DEFAULT,
   filter: {
     tags: [],
     people: [],
@@ -111,6 +121,14 @@ function timelineReducer(state: State, action: Action) {
         filter: { $set: action.filter },
         page: { $set: 1 }
       });
+    }
+    case TimelineActionType.CHANGE_TIMELINE_TYPE: {
+      return {
+        ...state,
+        type: action.value,
+        filter: action.filter,
+        page: 1
+      };
     }
     case TimelineActionType.LOAD_COMMENTS: {
       return {
