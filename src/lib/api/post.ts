@@ -1,5 +1,6 @@
 import Axios from 'axios';
-import { Post, Comment, CreateCommentProps, PostSortMethod, PostFilter, ImportPost } from 'src/interfaces/post';
+import { Post, Comment, CreateCommentProps, ImportPost } from 'src/interfaces/post';
+import { PostSortMethod, PostFilter } from 'src/interfaces/timeline';
 
 const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL
@@ -22,36 +23,16 @@ export const getPost = async (page: number, sort: PostSortMethod, filters: PostF
       break;
   }
 
-  let where = {
-    // and: [
-    //   {
-    //     platform: {
-    //       inq: [...filters.platform, 'myriad']
-    //     }
-    //   },
-    //   {
-    //     or: [
-    //       {
-    //         tags: {
-    //           inq: filters.tags
-    //         }
-    //       },
-    //       {
-    //         'platformUser.username': {
-    //           inq: filters.people
-    //         }
-    //       }
-    //     ]
-    //   }
-    // ]
-  };
+  let where: Record<string, any> = {};
+
+  if (filters.tags.length) {
+    where.tags = {
+      inq: filters.tags
+    };
+  }
 
   if (filters.layout === 'photo') {
-    where = {
-      ...where,
-      //@ts-ignore
-      hasMedia: true
-    };
+    where.hasMedia = true;
   }
 
   const { data } = await MyriadAPI.request<Post[]>({

@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import SortIcon from '@material-ui/icons/Sort';
 
-import { PostSortMethod } from 'src/interfaces/post';
+import { PostSortMethod } from 'src/interfaces/timeline';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

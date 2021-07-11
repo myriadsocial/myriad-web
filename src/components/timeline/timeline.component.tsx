@@ -2,6 +2,7 @@ import React, { useState, createRef, useCallback, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { useSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
@@ -15,6 +16,7 @@ import { LoadingPage } from '../common/loading.component';
 import ImportPostComponent from './ImportPost.component';
 import FilterTimelineComponent from './filter/filter.component';
 import { useStyles } from './timeline.style';
+import { useTimelineFilter } from './use-timeline-filter.hook';
 
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import CreatePostComponent from 'src/components/post/create/create-post.component';
@@ -37,6 +39,8 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous, availableTokens }) => 
   const style = useStyles();
 
   const [session] = useSession();
+  const { query } = useRouter();
+
   const userAddress = session?.user.address as string;
 
   const { searching, backToTimeline, users: options } = useMyriadUser();
@@ -76,7 +80,9 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous, availableTokens }) => 
   } = useUser();
   const { state } = useTimeline();
 
-  const { hasMore, loadTimeline, nextPosts, sortTimeline } = useTimelineHook();
+  const { hasMore, nextPosts, sortTimeline } = useTimelineHook();
+  const { filterTimeline } = useTimelineFilter();
+
   const scrollRoot = createRef<HTMLDivElement>();
 
   const isOwnPost = (post: Post) => {
@@ -94,8 +100,8 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous, availableTokens }) => 
   }, []);
 
   useEffect(() => {
-    loadTimeline();
-  }, []);
+    filterTimeline(query);
+  }, [query]);
 
   const handleScroll = useCallback(() => {
     const distance = window.scrollY;
@@ -117,8 +123,6 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous, availableTokens }) => 
     loadingSequence();
     backToTimeline();
   };
-
-  //console.log('TIMELINE COMPONENT LOAD', hasMore);
 
   const LoadingComponent = () => {
     return (

@@ -2,7 +2,8 @@ import { useState } from 'react';
 
 import { useTimeline, TimelineActionType } from 'src/context/timeline.context';
 import { useUser } from 'src/context/user.context';
-import { Post, PostSortMethod } from 'src/interfaces/post';
+import { Post } from 'src/interfaces/post';
+import { TimelineType, PostFilter, PostSortMethod } from 'src/interfaces/timeline';
 import { User } from 'src/interfaces/user';
 import * as PostAPI from 'src/lib/api/post';
 import * as UserAPI from 'src/lib/api/user';
@@ -12,7 +13,7 @@ export const useTimelineHook = () => {
     state: { user, anonymous }
   } = useUser();
   const {
-    state: { filter, page, sort },
+    state: { filter: storedFilter, page, sort, type },
     dispatch
   } = useTimeline();
 
@@ -20,17 +21,17 @@ export const useTimelineHook = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const loadTimeline = async (page: number = 1, sort?: PostSortMethod) => {
-    if (user) {
-      await loadUserPosts(user, page, sort);
+  const loadTimeline = async (page: number = 1, sort?: PostSortMethod, filter?: PostFilter) => {
+    if (user && type === TimelineType.DEFAULT) {
+      return loadUserPosts(user, page, sort, filter);
     }
 
-    if (anonymous) {
-      await loadPosts(page, sort);
+    if (anonymous || type === TimelineType.TRENDING) {
+      return loadPosts(page, sort, filter);
     }
   };
 
-  const loadUserPosts = async (user: User, page: number = 1, sort?: PostSortMethod) => {
+  const loadUserPosts = async (user: User, page: number = 1, sort?: PostSortMethod, filter?: PostFilter) => {
     setLoading(true);
 
     try {
@@ -68,11 +69,11 @@ export const useTimelineHook = () => {
     }
   };
 
-  const loadPosts = async (page: number = 1, sort: PostSortMethod = 'created') => {
+  const loadPosts = async (page: number = 1, sort: PostSortMethod = 'created', filter?: PostFilter) => {
     setLoading(true);
 
     try {
-      const data = await PostAPI.getPost(page, sort, filter);
+      const data = await PostAPI.getPost(page, sort, filter ?? storedFilter);
 
       if (data.length < 10) {
         setHasMore(false);

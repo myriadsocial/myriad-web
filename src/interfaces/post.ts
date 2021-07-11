@@ -1,17 +1,5 @@
-import { LayoutType } from './experience';
-import { SocialsEnum } from './index';
+import { PostOrigin } from './timeline';
 import { User } from './user';
-
-export type PostOrigin = 'facebook' | 'twitter' | 'reddit' | 'myriad';
-
-export type PostSortMethod = 'created' | 'like' | 'comment' | 'trending';
-
-export type PostFilter = {
-  tags: string[];
-  people: string[];
-  layout: LayoutType;
-  platform: SocialsEnum[];
-};
 
 export type PostReaction = {
   name: string;

@@ -9,7 +9,7 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 
 import StyledBadge from 'src/components/common/Badge.component';
 import { MyriadIcon } from 'src/components/common/MyriadIcon';
-import { PostOrigin } from 'src/interfaces/post';
+import { PostOrigin } from 'src/interfaces/timeline';
 
 const useStyles = makeStyles(() =>
   createStyles({

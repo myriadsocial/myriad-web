@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Link from 'next/link';
+
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -34,6 +36,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     avatar: {
       minWidth: 20
+    },
+    text: {
+      '& > a': {
+        color: theme.palette.text.primary
+      }
     }
   })
 );
@@ -45,17 +52,24 @@ interface TopicListProps {
 }
 
 export const TopicListComponent: React.FC<TopicListProps> = ({ topics, add = false, onAdd }) => {
-  const classes = useStyles();
+  const style = useStyles();
 
   return (
-    <div className={classes.root}>
-      <List className={classes.list}>
+    <div className={style.root}>
+      <List className={style.list}>
         {topics.map((topic, i) => (
-          <ListItem className={classes.item} key={uuid()}>
-            <ListItemAvatar className={classes.avatar}>
+          <ListItem className={style.item} key={uuid()}>
+            <ListItemAvatar className={style.avatar}>
               <Typography variant="caption">{i + 1}</Typography>
             </ListItemAvatar>
-            <ListItemText primary={`#${topic.id}`} secondary={`${topic.count} Posts`} />
+            <ListItemText disableTypography className={style.text}>
+              <Link href={`?tag=${topic.id}&type=trending`} shallow={true}>
+                <a>
+                  <Typography variant="h4">{`#${topic.id}`}</Typography>
+                  <Typography variant="caption">{`${topic.count} Posts`}</Typography>
+                </a>
+              </Link>
+            </ListItemText>
             {add && (
               <ListItemSecondaryAction>
                 <Button onClick={() => console.log('add tag')} aria-label="add-tag" color="primary" variant="contained" size="medium">
