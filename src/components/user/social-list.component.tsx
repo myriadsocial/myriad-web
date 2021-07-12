@@ -7,6 +7,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
+import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
@@ -124,15 +125,23 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ isAnonymous, us
         id="social-list"
         subheader={<ListSubheader className={classes.subheader}>Claim social media accounts</ListSubheader>}
         className={classes.root}>
-        <ListItem disabled={isAnonymous}>
+        <ListItem disabled={true}>
           <ListItemIcon>
             <FacebookIcon className={classes.facebook} />
           </ListItemIcon>
           <ListItemText id="social-facebook" primary="Facebook" />
           <ListItemSecondaryAction>
-            <IconButton onClick={connectSocial(SocialsEnum.FACEBOOK)} aria-label="social-list-item-facebook" size="medium">
-              {connected[SocialsEnum.FACEBOOK] ? <CheckIcon /> : <AddIcon />}
-            </IconButton>
+            <Tooltip title={<h2 style={{ color: 'lightblue' }}>"This feature is under maintenance, please try again later!"</h2>}>
+              <div>
+                <IconButton
+                  disabled={true}
+                  onClick={connectSocial(SocialsEnum.FACEBOOK)}
+                  aria-label="social-list-item-facebook"
+                  size="medium">
+                  {connected[SocialsEnum.FACEBOOK] ? <CheckIcon /> : <AddIcon />}
+                </IconButton>
+              </div>
+            </Tooltip>
           </ListItemSecondaryAction>
         </ListItem>
         <ListItem disabled={isAnonymous}>
