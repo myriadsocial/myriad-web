@@ -6,6 +6,7 @@ import { ErrorProp } from 'src/interfaces/error';
 
 export enum AlertActionType {
   SET_ALERT = 'SET_ALERT',
+  SET_TIP_ALERT = 'SET_TIP_ALERT',
   CLEAR_ALERT = 'CLEAR_ALERT'
 }
 
@@ -14,15 +15,21 @@ interface SetAlert {
   payload: ErrorProp;
 }
 
+interface SetTipAlert {
+  type: AlertActionType.SET_TIP_ALERT;
+  payload: ErrorProp;
+}
+
 interface ClearAlert {
   type: AlertActionType.CLEAR_ALERT;
 }
 
-type Action = SetAlert | ClearAlert;
+type Action = SetAlert | SetTipAlert | ClearAlert;
 type Dispatch = (action: Action) => void;
 type AlertProviderProps = { children: React.ReactNode };
 
 type State = {
+  isTipping: boolean;
   open: boolean;
   title: string | null;
   message: string | null;
@@ -30,6 +37,7 @@ type State = {
 };
 
 const initalState: State = {
+  isTipping: false,
   open: false,
   title: null,
   message: null,
@@ -40,6 +48,13 @@ const AlertContext = React.createContext<{ state: State; dispatch: Dispatch } | 
 
 function errorReducer(state: State, action: Action) {
   switch (action.type) {
+    case AlertActionType.SET_TIP_ALERT: {
+      return {
+        ...state,
+        ...action.payload,
+        isTipping: true
+      };
+    }
     case AlertActionType.SET_ALERT: {
       return {
         ...state,
