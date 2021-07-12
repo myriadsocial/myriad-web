@@ -18,11 +18,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Logout() {
+interface Props {
+  isAnonymous?: boolean;
+}
+
+export default function Logout({ isAnonymous }: Props) {
   const styles = useStyles();
 
   const handleSignOut = async () => {
-    await unsubscribeFromAccounts();
+    if (isAnonymous === false) {
+      await unsubscribeFromAccounts();
+    }
     await signOut({
       callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
       redirect: true
@@ -30,7 +36,7 @@ export default function Logout() {
   };
 
   return (
-    <Button className={styles.button} size="small" variant="contained" color="secondary" onClick={() => handleSignOut()}>
+    <Button className={styles.button} size="medium" variant="outlined" color="secondary" onClick={() => handleSignOut()}>
       Logout
     </Button>
   );
