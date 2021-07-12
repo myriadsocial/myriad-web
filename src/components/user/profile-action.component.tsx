@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import ShowIf from '../common/show-if.component';
 
-import { CreateAccountComponent } from 'src/components/login/create-account.component';
+import Logout from 'src/components/logout/logout.component';
 
 const useStyles = makeStyles({
   root: {}
@@ -17,16 +17,15 @@ type ProfileActionProps = {
   anonymous: boolean;
   userId: string | null;
   onEditProfileClicked: () => void;
-  onLoginCliked: () => void;
 };
 
-export const ProfileActionComponent: React.FC<ProfileActionProps> = ({ anonymous, userId, onEditProfileClicked, onLoginCliked }) => {
+export const ProfileActionComponent: React.FC<ProfileActionProps> = ({ anonymous, userId, onEditProfileClicked }) => {
   const styles = useStyles();
 
   return (
     <div className={styles.root}>
       <ShowIf condition={anonymous}>
-        <CreateAccountComponent />
+        <Logout isAnonymous={anonymous} />
       </ShowIf>
 
       {!anonymous && (
