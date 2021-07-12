@@ -8,6 +8,7 @@ import SidebarComponent from '../sidebar/sidebar.component';
 import { useStyles } from './layout.style';
 
 import { WithAdditionalParams } from 'next-auth/_utils';
+import BannerDemo from 'src/components/common/banner-demo.component';
 import { FriendsProvider } from 'src/context/friends.context';
 import { NotifProvider } from 'src/context/notif.context';
 import { useUser } from 'src/context/user.context';
@@ -47,6 +48,7 @@ const DesktopLayoutComponent = ({ children, user }: Props) => {
         <NotifProvider>
           <AppBar />
         </NotifProvider>
+        <BannerDemo />
         <div className={style.appWrapper}>
           <div className={style.contentWrapper}>{children}</div>
 
