@@ -14,7 +14,6 @@ import VideocamIcon from '@material-ui/icons/Videocam';
 
 import { CreatePostExpandedComponent } from './create-post-expanded.component';
 import { useStyles } from './create-post.style';
-import { PostSettingComponent } from './post-setting.component';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import { usePostHook } from 'src/hooks/use-post.hook';
