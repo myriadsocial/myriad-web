@@ -11,6 +11,13 @@ export const useAlertHook = () => {
     });
   };
 
+  const showTipAlert = (error: ErrorProp) => {
+    dispatch({
+      type: AlertActionType.SET_TIP_ALERT,
+      payload: error
+    });
+  };
+
   const clearAlert = () => {
     dispatch({
       type: AlertActionType.CLEAR_ALERT
@@ -19,7 +26,9 @@ export const useAlertHook = () => {
 
   return {
     error: state,
+    isTipping: state.isTipping,
     showAlert,
+    showTipAlert,
     clearAlert
   };
 };
