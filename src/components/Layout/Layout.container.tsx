@@ -15,6 +15,7 @@ import { ConverstionProvider } from '../conversation/conversation.context';
 import { ExperienceProvider } from '../experience/experience.context';
 import { TransactionProvider } from '../tippingJar/transaction.context';
 
+import TipAlertComponent from 'src/components/alert/TipAlert.component';
 import { LayoutSettingProvider } from 'src/context/layout.context';
 import { UserProvider } from 'src/context/user.context';
 import TourComponent from 'src/tour/Tour.component';
@@ -72,6 +73,7 @@ const Layout = ({ children, session }: Props) => {
       </LayoutSettingProvider>
 
       <AlertComponent />
+      <TipAlertComponent />
     </div>
   );
 };
