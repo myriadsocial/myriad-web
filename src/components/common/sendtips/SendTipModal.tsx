@@ -20,7 +20,6 @@ import DialogTitle from '../DialogTitle.component';
 import { useStyles, TableCell } from './send-tips.style';
 import { useWalletAddress } from './use-wallet.hook';
 
-import AlertComponent from 'src/components/alert/Alert.component';
 import { useAlertHook } from 'src/hooks/use-alert.hook';
 import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 import { InputState, InputErrorState, SendTipConfirmed, Props } from 'src/interfaces/send-tips/send-tips';
@@ -31,11 +30,11 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
   const [showSendTipModal, setShowSendTipModal] = useState(false);
   const [selectedToken, setSelectedToken] = useState('');
   const [tokenBalance, setTokenBalance] = useState('');
-  const { showAlert } = useAlertHook();
+  const { showTipAlert, showAlert } = useAlertHook();
 
   useEffect(() => {
     if (sendTipSuccess) {
-      showAlert({
+      showTipAlert({
         severity: 'success',
         title: 'Tip sent!',
         message: `${trxHash}`
@@ -277,8 +276,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
           </Button>
         </DialogActions>
       </Dialog>
-
-      <AlertComponent />
     </>
   );
 });
