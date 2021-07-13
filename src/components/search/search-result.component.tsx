@@ -64,7 +64,7 @@ type SearchResultProps = {
 const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user, users, clickBack }) => {
   const styles = useStyles();
 
-  const { friended, checkFriendStatus, sendRequest } = useFriendsHook(user);
+  const { friended: friendsList, checkFriendStatus, sendRequest } = useFriendsHook(user);
 
   useEffect(() => {
     // list all transaction user id as param
@@ -76,11 +76,11 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user,
     router.push(`/${url}`);
   };
 
-  const getFriendStatus = (friendUser: User): FriendStatus | null => {
-    const found = friended.find(friend => {
-      return friend.requestorId === friendUser.id || friend.friendId == friendUser.id;
+  const getFriendStatus = (user: User): FriendStatus | null => {
+    const friendOrFriendRequested = friendsList.find(friend => {
+      return friend.requestorId === user.id || friend.friendId == user.id;
     });
-    return found ? found.status : null;
+    return friendOrFriendRequested ? friendOrFriendRequested.status : null;
   };
 
   const sendFriendRequest = (destinationId: string) => {
