@@ -151,6 +151,7 @@ export const usePolkadotApi = () => {
 
             if (txInfo) {
               // Record the transaction
+              // TODO: Add postId to payload
               await storeTransaction({
                 trxHash: txInfo.toHex(),
                 from: fromAddress,
