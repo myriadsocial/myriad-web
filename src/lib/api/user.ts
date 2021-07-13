@@ -6,7 +6,6 @@ const MyriadAPI = Axios.create({
 });
 
 export const getUserDetail = async (id: string): Promise<ExtendedUser> => {
-  //console.log('getUserDetail');
   const { data } = await MyriadAPI.request<ExtendedUser>({
     url: `users/${id}`,
     method: 'GET',
@@ -31,7 +30,7 @@ export const getUserDetail = async (id: string): Promise<ExtendedUser> => {
   return data;
 };
 
-export const getUserByAddress = async (address: string[]) => {
+export const getUserByAddress = async (address: string[]): Promise<User[]> => {
   const { data } = await MyriadAPI.request<User[]>({
     url: '/users',
     method: 'GET',
@@ -69,7 +68,7 @@ export const updateUser = async (userId: string, values: Partial<User>): Promise
   return data;
 };
 
-export const addUserCredential = async (userId: string, values: Partial<UserCredential>) => {
+export const addUserCredential = async (userId: string, values: Partial<UserCredential>): Promise<void> => {
   await MyriadAPI({
     url: `/users/${userId}/user-credentials`,
     method: 'POST',
@@ -77,7 +76,7 @@ export const addUserCredential = async (userId: string, values: Partial<UserCred
   });
 };
 
-export const verifyCredentials = async (userId: string, peopleId: string) => {
+export const verifyCredentials = async (userId: string, peopleId: string): Promise<void> => {
   await MyriadAPI({
     method: 'POST',
     url: '/user-credentials/verify',
@@ -88,16 +87,14 @@ export const verifyCredentials = async (userId: string, peopleId: string) => {
   });
 };
 
-export const disconnectSocial = async (credentialId: string) => {
-  const { data } = await MyriadAPI.request({
+export const disconnectSocial = async (credentialId: string): Promise<void> => {
+  await MyriadAPI.request({
     method: 'DELETE',
     url: `/user-credentials/${credentialId}`
   });
-
-  return data;
 };
 
-export const search = async (query: string) => {
+export const search = async (query: string): Promise<User[]> => {
   const { data } = await MyriadAPI.request<User[]>({
     url: '/users',
     method: 'GET',

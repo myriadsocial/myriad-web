@@ -3,7 +3,7 @@ import 'firebase/messaging';
 import localforage from 'localforage';
 
 const firebaseCloudMessaging = {
-  tokenInlocalforage: async () => {
+  tokenInlocalforage: async (): Promise<string | null> => {
     return localforage.getItem('fcm_token');
   },
 

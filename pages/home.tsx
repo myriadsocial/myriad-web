@@ -64,7 +64,7 @@ export default function Home() {
 
   const { load } = useMyriadUser();
 
-  let userId = session?.user.userId as string;
+  const userId = session?.user.userId as string;
   const { loadAllUserTokens, userTokens } = useToken(userId);
 
   useEffect(() => {

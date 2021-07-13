@@ -19,7 +19,7 @@ type NewTokenProps = {
   rpc_address: string;
 };
 
-export const getTokens = async () => {
+export const getTokens = async (): Promise<Token[]> => {
   const { data } = await MyriadAPI.request<Token[]>({
     url: '/tokens',
     method: 'GET'
@@ -28,7 +28,7 @@ export const getTokens = async () => {
   return data;
 };
 
-export const searchToken = async (query: string) => {
+export const searchToken = async (query: string): Promise<Token[]> => {
   const { data } = await MyriadAPI.request<Token[]>({
     url: `/tokens`,
     method: 'GET',
@@ -46,7 +46,7 @@ export const searchToken = async (query: string) => {
   return data;
 };
 
-export const addNewToken = async (values: NewTokenProps) => {
+export const addNewToken = async (values: NewTokenProps): Promise<Token[]> => {
   const { data } = await MyriadAPI.request<Token[]>({
     url: `/tokens`,
     method: 'POST',
@@ -56,7 +56,7 @@ export const addNewToken = async (values: NewTokenProps) => {
   return data;
 };
 
-export const getUserTokens = async (values: Partial<User>) => {
+export const getUserTokens = async (values: Partial<User>): Promise<Token[]> => {
   const { id } = values;
   const { data } = await MyriadAPI.request<Token[]>({
     url: `/users/${id}/tokens`,
@@ -66,7 +66,7 @@ export const getUserTokens = async (values: Partial<User>) => {
   return data;
 };
 
-export const addUserToken = async (values: NewAssetProps) => {
+export const addUserToken = async (values: NewAssetProps): Promise<Token[]> => {
   const { data } = await MyriadAPI.request<Token[]>({
     url: `/user-tokens`,
     method: 'POST',

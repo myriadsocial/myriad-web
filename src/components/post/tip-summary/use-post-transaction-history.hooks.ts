@@ -32,7 +32,7 @@ export const usePostTransactionHistory = (post: Post) => {
   };
 
   const loadTransaction = async () => {
-    let filter = params;
+    const filter = params;
 
     setLoading(true);
 

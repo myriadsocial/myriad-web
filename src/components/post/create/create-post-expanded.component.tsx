@@ -111,7 +111,7 @@ export const CreatePostExpandedComponent = forwardRef(
       }
 
       if (reason === 'create-option') {
-        let createdTags: string[] = [];
+        const createdTags: string[] = [];
 
         if (typeof value === 'string') {
           createdTags.push(value);

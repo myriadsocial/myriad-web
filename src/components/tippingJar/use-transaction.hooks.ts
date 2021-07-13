@@ -22,7 +22,7 @@ export const useTransaction = (userId: string) => {
   });
 
   const load = async (type: TransactionActionType = TransactionActionType.INIT_TRANSACTION) => {
-    let filter = params;
+    const filter = params;
 
     setLoading(true);
 
@@ -37,7 +37,7 @@ export const useTransaction = (userId: string) => {
 
       if (data.length > 0) {
         //Get only transaction related to logged-in user
-        let tempData = data.filter(function (datum: any) {
+        const tempData = data.filter(function (datum: any) {
           return datum.from === userId || datum.to === userId;
         });
 

@@ -31,7 +31,7 @@ export const useTimelineHook = () => {
     }
   };
 
-  const loadUserPosts = async (user: User, page: number = 1, sort?: PostSortMethod, filter?: PostFilter) => {
+  const loadUserPosts = async (user: User, page = 1, sort?: PostSortMethod, filter?: PostFilter) => {
     setLoading(true);
 
     try {
@@ -69,7 +69,7 @@ export const useTimelineHook = () => {
     }
   };
 
-  const loadPosts = async (page: number = 1, sort: PostSortMethod = 'created', filter?: PostFilter) => {
+  const loadPosts = async (page = 1, sort: PostSortMethod = 'created', filter?: PostFilter) => {
     setLoading(true);
 
     try {

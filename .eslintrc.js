@@ -19,11 +19,13 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+    'plugin:react/recommended', // Uses the recommended rules from @eslint-plugin-react
     'plugin:jsx-a11y/recommended',
     'plugin:prettier/recommended' // Make this the last element so prettier config overrides other formatting rules
   ],
   rules: {
+    'react/prop-types': 0,
     'prettier/prettier': ['error', {}, { usePrettierrc: true }] // Use our .prettierrc file as source
   }
 };

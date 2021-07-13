@@ -144,7 +144,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
         });
 
         const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
-        let decimals = balanceDetails[idx].tokenDecimals ?? 0;
+        const decimals = balanceDetails[idx].tokenDecimals ?? 0;
 
         const amountStr = values.amount as string;
         const amountSent = Number(amountStr) * 10 ** decimals;

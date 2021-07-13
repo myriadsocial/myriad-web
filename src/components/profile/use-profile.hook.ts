@@ -23,7 +23,7 @@ export const useProfileHook = (id: string) => {
     setIsLoading(true);
 
     try {
-      let detail: ExtendedUser = await ProfileAPI.getUserProfile(id as string);
+      const detail: ExtendedUser = await ProfileAPI.getUserProfile(id as string);
       let posts = await ProfileAPI.getPostProfile(id as string);
 
       posts = posts.map((item: Post) => ({ ...item, comments: item.comments || [] }));

@@ -53,13 +53,13 @@ export const usePolkadotApi = () => {
 
   const load = async (address: string, availableTokens: Token[]) => {
     setLoading(true);
-    let tokenBalances = [];
+    const tokenBalances = [];
 
     try {
       for (let i = 0; i < availableTokens.length; i++) {
-        let provider = availableTokens[i].rpc_address;
+        const provider = availableTokens[i].rpc_address;
 
-        let api = await connectToBlockchain(provider);
+        const api = await connectToBlockchain(provider);
 
         if (api) {
           switch (availableTokens[i].id) {
