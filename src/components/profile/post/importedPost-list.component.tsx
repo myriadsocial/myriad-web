@@ -29,7 +29,7 @@ export default function ImportedPostList({ user, profile, balanceDetails, availa
   const style = useStyles();
   const { hasMore, nextPosts } = useTimelineHook();
   const { state: profileState } = useProfile();
-  const { loadImportedPost, loading } = useProfileHook(profile.id);
+  const { loadImportedPost, isLoading } = useProfileHook(profile.id);
   const posts = profileState.importedPost;
   const isOwnPost = (post: Post) => {
     if (user && post.walletAddress === user.id) return true;
@@ -40,7 +40,7 @@ export default function ImportedPostList({ user, profile, balanceDetails, availa
     loadImportedPost();
   }, []);
 
-  if (loading === false && posts.length === 0) {
+  if (isLoading === false && posts.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: 16, backgroundColor: 'white', borderRadius: 8 }}>
         <h2>You haven’t imported any post yet</h2>
