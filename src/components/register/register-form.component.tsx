@@ -92,7 +92,6 @@ export const RegisterFormComponent: React.FC<RegisterComponentProps> = props => 
                 onChange={handleNameChange}
                 error={submitted && username.length < 6}
                 helperText={submitted && username.length < 6 ? 'Username must be filled and has 6 character or more' : ''}
-                autoFocus
                 fullWidth
                 hiddenLabel
                 placeholder="Username"

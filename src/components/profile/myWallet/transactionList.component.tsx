@@ -167,8 +167,8 @@ const TransactionListComponent: React.FC<Props> = ({ transactions, user }) => {
     <>
       <List className={style.root}>
         {expandable
-          ? allTransactions.slice(0, 2).map(txHistory => <ListItemContent txHistory={txHistory} userId={userId} />)
-          : allTransactions.map(txHistory => <ListItemContent txHistory={txHistory} userId={userId} />)}
+          ? allTransactions.slice(0, 2).map(txHistory => <ListItemContent key={txHistory.trxHash} txHistory={txHistory} userId={userId} />)
+          : allTransactions.map(txHistory => <ListItemContent key={txHistory.trxHash} txHistory={txHistory} userId={userId} />)}
       </List>
       {expandable ? (
         <ExpandMore />

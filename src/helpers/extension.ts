@@ -22,11 +22,10 @@ export const enableExtension = async () => {
 
 export const unsubscribeFromAccounts = async () => {
   const { web3AccountsSubscribe } = await import('@polkadot/extension-dapp');
-  let unsubscribe; // this is the function of type `() => void` that should be called to unsubscribe
 
   //// we subscribe to any account change and log the new list.
   //// note that `web3AccountsSubscribe` returns the function to unsubscribe
-  unsubscribe = await web3AccountsSubscribe(injectedAccounts => {
+  const unsubscribe = await web3AccountsSubscribe(injectedAccounts => {
     injectedAccounts.map(accounts => {
       console.log('detail about the unsubscribed accounts: ', accounts);
     });
