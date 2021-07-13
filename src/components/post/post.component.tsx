@@ -19,7 +19,6 @@ import { PostOptionsComponent } from './post-options.component';
 import { PostSubHeader } from './post-sub-header.component';
 import PostVideoComponent from './post-video.component';
 import { useStyles } from './post.style';
-import { TipSummaryComponent } from './tip-summary/tip-summary.component';
 
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
@@ -27,6 +26,7 @@ import CardTitle from 'src/components/common/CardTitle.component';
 import SendTipModal from 'src/components/common/sendtips/SendTipModal';
 import { useWalletAddress } from 'src/components/common/sendtips/use-wallet.hook';
 import ShowIf from 'src/components/common/show-if.component';
+import { useTipSummaryHook } from 'src/components/tip-summary/tip-summar.hook';
 import { useUser } from 'src/context/user.context';
 import { useSocialDetail } from 'src/hooks/use-social.hook';
 import { BalanceDetail } from 'src/interfaces/balance';
@@ -65,11 +65,10 @@ export default function PostComponent({
     state: { user, anonymous }
   } = useUser();
 
+  const { openTipSummary } = useTipSummaryHook();
   const [expanded, setExpanded] = useState(defaultExpanded);
-  const [openTipSummary, setOpenTipSummary] = useState(false);
   const { loadWalletDetails, walletDetails } = useWalletAddress(post.id);
   const [walletReceiverDetail, setWalletReceiverDetail] = useState<WalletDetail>();
-  const [tippedPost, setTippedPost] = useState<Post>();
   const headerRef = useRef<any>();
   const sendTipRef = useRef<any>();
 
@@ -152,13 +151,10 @@ export default function PostComponent({
   if (!detail || !post) return null;
 
   const handleTipSentSuccess = (postId: string) => {
-    if (postId) {
-      setTippedPost(post);
+    if (post.id === postId) {
+      console.log('send tip', post);
+      openTipSummary(post);
     }
-  };
-
-  const handleCloseTipSummary = () => {
-    setOpenTipSummary(false);
   };
 
   const renderPostAvatar = () => {
@@ -266,8 +262,6 @@ export default function PostComponent({
           walletReceiverDetail={walletReceiverDetail}
         />
       )}
-
-      {tippedPost ? <TipSummaryComponent post={tippedPost} open={openTipSummary} close={handleCloseTipSummary} /> : <></>}
     </>
   );
 }

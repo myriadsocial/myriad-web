@@ -10,6 +10,7 @@ import { useStyles } from '../profile.style';
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import { LoadingPage } from 'src/components/common/loading.component';
 import PostComponent from 'src/components/post/post.component';
+import { TipSummaryProvider } from 'src/components/tip-summary/tip-summary.context';
 import { useTimelineHook } from 'src/hooks/use-timeline.hook';
 import { BalanceDetail } from 'src/interfaces/balance';
 import { Post } from 'src/interfaces/post';
@@ -45,25 +46,27 @@ export default function PostList({ user, profile, balanceDetails, availableToken
 
   return (
     <>
-      <InfiniteScroll
-        scrollableTarget="scrollable-timeline"
-        className={style.child}
-        dataLength={profile.posts.length || 100}
-        next={nextPosts}
-        hasMore={hasMore}
-        loader={<LoadingPage />}>
-        {profile.posts.map((post: Post, i: number) => (
-          <Grow key={i}>
-            <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={balanceDetails} availableTokens={availableTokens} />
-          </Grow>
-        ))}
+      <TipSummaryProvider>
+        <InfiniteScroll
+          scrollableTarget="scrollable-timeline"
+          className={style.child}
+          dataLength={profile.posts.length || 100}
+          next={nextPosts}
+          hasMore={hasMore}
+          loader={<LoadingPage />}>
+          {profile.posts.map((post: Post, i: number) => (
+            <Grow key={i}>
+              <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={balanceDetails} availableTokens={availableTokens} />
+            </Grow>
+          ))}
 
-        <ScrollTop>
-          <Fab color="secondary" size="small" aria-label="scroll back to top">
-            <KeyboardArrowUpIcon />
-          </Fab>
-        </ScrollTop>
-      </InfiniteScroll>
+          <ScrollTop>
+            <Fab color="secondary" size="small" aria-label="scroll back to top">
+              <KeyboardArrowUpIcon />
+            </Fab>
+          </ScrollTop>
+        </InfiniteScroll>
+      </TipSummaryProvider>
     </>
   );
 }

@@ -13,8 +13,8 @@ interface PostAddress {
   walletAddress: string;
 }
 
-export const usePostTransactionHistory = (post: Post) => {
-  const [postDetail, setPostDetail] = useState<Post>(post);
+export const useTransactionHistory = () => {
+  const [postDetail, setPostDetail] = useState<Post | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -25,19 +25,19 @@ export const usePostTransactionHistory = (post: Post) => {
     include: ['fromUser']
   });
 
-  const loadPostDetail = async () => {
+  const loadPostDetail = async (post: Post) => {
     const detail = await PostAPI.getPostDetail(post.id);
 
     setPostDetail(detail);
   };
 
-  const loadTransaction = async () => {
-    const filter = params;
+  const loadTransaction = async (post: Post) => {
+    let filter = params;
 
     setLoading(true);
 
     try {
-      await loadPostDetail();
+      await loadPostDetail(post);
 
       const {
         data: { walletAddress }
@@ -52,7 +52,10 @@ export const usePostTransactionHistory = (post: Post) => {
         params: {
           filter: {
             ...filter,
-            where: { to: walletAddress }
+            where: {
+              to: walletAddress,
+              postId: post.id
+            }
           }
         }
       });

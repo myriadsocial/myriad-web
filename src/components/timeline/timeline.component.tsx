@@ -19,6 +19,8 @@ import { useTimelineFilter } from './use-timeline-filter.hook';
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import CreatePostComponent from 'src/components/post/create/create-post.component';
 import PostComponent from 'src/components/post/post.component';
+import { TipSummaryComponent } from 'src/components/tip-summary/tip-summary.component';
+import { TipSummaryProvider } from 'src/components/tip-summary/tip-summary.context';
 import { useTimeline } from 'src/context/timeline.context';
 import { useUser } from 'src/context/user.context';
 import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
@@ -108,27 +110,30 @@ const Timeline: React.FC<TimelineProps> = ({ availableTokens }) => {
 
         {!isMobile && <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />}
 
-        <div>
-          <InfiniteScroll
-            scrollableTarget="scrollable-timeline"
-            className={style.child}
-            dataLength={state.posts.length}
-            next={nextPage}
-            hasMore={hasMore}
-            loader={<LoadingPage />}>
-            {state.posts.map((post: Post, i: number) => (
-              <div key={post.id} id={`post-detail-${i}`}>
-                <PostComponent
-                  post={post}
-                  postOwner={isOwnPost(post)}
-                  balanceDetails={tokensReady.length > 0 ? tokensReady : []}
-                  availableTokens={availableTokens}
-                />
-              </div>
-            ))}
-          </InfiniteScroll>
-        </div>
+        <TipSummaryProvider>
+          <div>
+            <InfiniteScroll
+              scrollableTarget="scrollable-timeline"
+              className={style.child}
+              dataLength={state.posts.length}
+              next={nextPage}
+              hasMore={hasMore}
+              loader={<LoadingPage />}>
+              {state.posts.map((post: Post, i: number) => (
+                <div key={post.id} id={`post-detail-${i}`}>
+                  <PostComponent
+                    post={post}
+                    postOwner={isOwnPost(post)}
+                    balanceDetails={tokensReady.length > 0 ? tokensReady : []}
+                    availableTokens={availableTokens}
+                  />
+                </div>
+              ))}
+            </InfiniteScroll>
+          </div>
 
+          <TipSummaryComponent />
+        </TipSummaryProvider>
         <ScrollTop>
           <Fab color="secondary" size="small" aria-label="scroll back to top">
             <KeyboardArrowUpIcon />
