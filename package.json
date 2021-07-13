@@ -24,11 +24,6 @@
     "prepare": "husky install",
     "test": "echo \"No test specified\""
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "./src/**/*.{js,ts,tsx,scss}": [
       "yarn lint",
@@ -39,6 +34,7 @@
     ".next/cache"
   ],
   "devDependencies": {
+    "@commitlint/cli": "^12.1.4",
     "@svgr/webpack": "^5.5.0",
     "@trivago/prettier-plugin-sort-imports": "^2.0.1",
     "@types/file-saver": "^2.0.1",
@@ -59,6 +55,8 @@
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
     "autoprefixer": "^9.4.9",
+    "commitlint-config-jira": "^1.5.1",
+    "commitlint-plugin-jira-rules": "^1.5.1",
     "dotenv": "^8.2.0",
     "eslint": "^7.12.1",
     "eslint-config-prettier": "^8.1.0",
