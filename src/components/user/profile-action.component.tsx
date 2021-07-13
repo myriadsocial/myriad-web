@@ -17,6 +17,7 @@ type ProfileActionProps = {
   anonymous: boolean;
   userId: string | null;
   onEditProfileClicked: () => void;
+  onLoginClicked: () => void;
 };
 
 export const ProfileActionComponent: React.FC<ProfileActionProps> = ({ anonymous, userId, onEditProfileClicked }) => {

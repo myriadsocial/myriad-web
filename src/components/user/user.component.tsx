@@ -105,7 +105,7 @@ const UserComponent: React.FC<Props> = ({ isAnonymous, user }) => {
               userId={userState.user?.id || null}
               anonymous={isAnonymous}
               onEditProfileClicked={toggleEdit}
-              onLoginCliked={toggleLogin}
+              onLoginClicked={toggleLogin}
             />
           }
         />
