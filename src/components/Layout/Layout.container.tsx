@@ -23,7 +23,7 @@ import TourComponent from 'src/tour/Tour.component';
 const DektopLayoutComponent = dynamic(() => import('./desktop-layout.component'));
 const MobileLayoutComponent = dynamic(() => import('./mobile-layout.component'));
 
-type Props = {
+type LayoutProps = {
   session: Session | null;
   children: ReactNode;
 };
@@ -37,10 +37,12 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const Layout = ({ children, session }: Props) => {
+const Layout: React.FC<LayoutProps> = ({ children, session }) => {
   const style = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const userId = session?.user.id as string;
 
   if (!session) return null;
 
@@ -54,7 +56,7 @@ const Layout = ({ children, session }: Props) => {
       <LayoutSettingProvider>
         <UserProvider>
           <NoSsr>
-            <TourComponent user={session.user} />
+            <TourComponent disable={Boolean(session.user.anonymous)} userId={userId} />
           </NoSsr>
           <TransactionProvider>
             <ExperienceProvider>

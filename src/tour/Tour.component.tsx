@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
 
-import { User } from 'next-auth';
-
 import { Button } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
-import { WithAdditionalParams } from 'next-auth/_utils';
 import { useUser } from 'src/context/user.context';
 import { useUserHook } from 'src/hooks/use-user.hook';
 import theme from 'src/themes/light';
 
-type Props = {
-  user: WithAdditionalParams<User>;
+type TourComponentProps = {
+  disable: boolean;
+  userId: string;
 };
 
-const TourComponent: React.FC<Props> = ({ user }) => {
-  const { state: userState } = useUser();
-  const isAnonymous = Boolean(user.anonymous);
-
-  const { updateUser } = useUserHook(user.address as string);
+const TourComponent: React.FC<TourComponentProps> = ({ disable, userId }) => {
+  const {
+    state: { user }
+  } = useUser();
+  const { updateUser } = useUserHook(userId);
   const [run, setRun] = useState(false);
 
   const steps: Step[] = [
@@ -72,19 +70,22 @@ const TourComponent: React.FC<Props> = ({ user }) => {
   ];
 
   useEffect(() => {
-    if (!isAnonymous) {
-      setRun(!Boolean(userState.user?.skip_tour));
+    const skip = Boolean(user?.skip_tour);
+
+    if (!disable && !skip) {
+      setRun(true);
     }
-  }, [userState.user, isAnonymous]);
+  }, [user, disable]);
 
   const handleJoyrideCallback = (data: CallBackProps) => {
     const { status } = data;
 
     if (([STATUS.FINISHED] as string[]).includes(status)) {
       // Need to set our running state to false, so we can restart if we click start again.
+
       setRun(false);
 
-      if (!isAnonymous) {
+      if (!disable) {
         updateUser({
           skip_tour: true
         });
@@ -92,13 +93,15 @@ const TourComponent: React.FC<Props> = ({ user }) => {
     }
   };
 
+  if (!user) return null;
+
   return (
     <>
       <Joyride
         run={run}
         steps={steps}
         continuous={true}
-        scrollToFirstStep={false}
+        scrollToFirstStep={true}
         showSkipButton={true}
         hideBackButton
         locale={{

@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { random } from 'lodash';
 import { ImageData, SocialMetric } from 'src/interfaces/post';
 
-type PostUser = {
+export type PostUser = {
   name: string;
   avatar: string;
   username: string;
@@ -23,7 +23,7 @@ export const parseTwitter = (data: Record<string, any>) => {
     createdOn: format(new Date(data.created_at), 'dd MMMM yyyy'),
     user: {
       name: data.user.name,
-      avatar: data.user.profile_image_url,
+      avatar: data.user.profile_image_url_https,
       username: `@${data.user.screen_name}`
     },
     videos: [],
