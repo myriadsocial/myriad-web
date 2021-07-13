@@ -167,11 +167,11 @@ export default function Header({ isAnonymous, user, profile, loading, isGuest }:
               style={{ width: 400, border: '1px solid #8629E9' }}
               name="publickey"
               disabled={true}
-              defaultValue={encodeAddress(profile.id, 42)}
+              defaultValue={encodeAddress(profile.id)}
               inputProps={{ 'aria-label': 'description' }}
               endAdornment={
                 <InputAdornment position="end">
-                  <CopyToClipboard text={encodeAddress(profile.id, 42) || ''} onCopy={onPublicKeyCopied}>
+                  <CopyToClipboard text={encodeAddress(profile.id) || ''} onCopy={onPublicKeyCopied}>
                     <IconButton aria-label="toggle password visibility">
                       <FileCopyIcon />
                     </IconButton>
