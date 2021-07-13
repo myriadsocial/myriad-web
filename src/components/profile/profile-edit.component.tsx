@@ -12,12 +12,12 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 import { encodeAddress } from '@polkadot/util-crypto';
 
+import { useStyles } from './profile-edit.style';
 import { useProfileHook } from './use-profile.hook';
 
 import { ButtonUpload } from 'src/components/common/ButtonUpload.component';
@@ -28,63 +28,6 @@ import { useUser } from 'src/context/user.context';
 import { acronym } from 'src/helpers/string';
 import { useConfig } from 'src/hooks/config.hook';
 import { ExtendedUser } from 'src/interfaces/user';
-
-const useStyles = makeStyles({
-  root: {},
-  detail: {
-    position: 'relative'
-  },
-  profileContent: {
-    width: 420
-  },
-  avatarBig: {
-    height: 72,
-    width: 72,
-    position: 'absolute',
-    top: 46,
-    left: 16
-  },
-  media: {
-    height: 159,
-    width: 420,
-    objectFit: 'cover',
-    borderRadius: 8,
-    marginTop: 8
-  },
-  actions: {
-    justifyContent: 'space-between'
-  },
-  logout: {
-    textAlign: 'center'
-  },
-  button: {
-    paddingRight: 24,
-    paddingLeft: 24,
-    paddingTop: 8,
-    paddingBottom: 8,
-    borderRadius: '8px'
-  },
-  button2: {
-    paddingRight: 40,
-    paddingLeft: 40,
-    paddingTop: 8,
-    paddingBottom: 8,
-    borderRadius: '8px'
-  },
-  input: {
-    marginTop: 8,
-    background: 'white',
-    borderRadius: 8,
-    '& .MuiInputBase-root': {
-      background: 'white'
-    }
-  },
-  subtitle: {
-    fontWeight: 700,
-    fontSize: 16,
-    color: '#4B4851'
-  }
-});
 
 type ProfileEditProps = {
   user: ExtendedUser;
