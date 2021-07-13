@@ -25,7 +25,11 @@ module.exports = {
     'plugin:prettier/recommended' // Make this the last element so prettier config overrides other formatting rules
   ],
   rules: {
-    'react/prop-types': 0,
+    '@typescript-eslint/ban-types': ['warn'],
+    '@typescript-eslint/no-empty-interface': ['warn'],
+    'react/prop-types': ['off'],
+    'react/display-name': ['warn'],
+    'react/no-unescaped-entities': ['warn'],
     'prettier/prettier': ['error', {}, { usePrettierrc: true }] // Use our .prettierrc file as source
   }
 };

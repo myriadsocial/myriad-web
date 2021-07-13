@@ -43,7 +43,7 @@ const StyledBadge = withStyles((theme: Theme) =>
   })
 )(Badge);
 
-type Props = {
+type CommentComponentProps = {
   post: Post;
   disableReply: boolean;
   hide: () => void;
@@ -51,7 +51,7 @@ type Props = {
   availableTokens: Token[];
 };
 
-export default function CommentComponent({ balanceDetails, post, disableReply, hide, availableTokens }: Props) {
+const CommentComponent: React.FC<CommentComponentProps> = ({ balanceDetails, post, disableReply, hide, availableTokens }) => {
   const style = useStyles();
   const theme = useTheme();
 
@@ -169,4 +169,6 @@ export default function CommentComponent({ balanceDetails, post, disableReply, h
       </ShowIf>
     </div>
   );
-}
+};
+
+export default CommentComponent;

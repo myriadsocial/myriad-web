@@ -170,7 +170,7 @@ export const loadComments = async (postId: string, excludeUser?: string): Promis
   return data;
 };
 
-export const reply = async (postId: string, comment: Comment): Promise<Comment> => {
+export const reply = async (postId: string, comment: CreateCommentProps): Promise<Comment> => {
   const { data } = await MyriadAPI.request<Comment>({
     url: `/posts/${postId}/comments`,
     method: 'POST',

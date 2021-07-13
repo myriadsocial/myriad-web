@@ -5,7 +5,6 @@ import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import useDebounce from '../../helpers/use-debounce.hooks';
 import SearchComponent from '../common/search.component';
 
-//@ts-ignore
 type SearchProps = {
   placeholder?: string;
   search: (text: string) => void;
