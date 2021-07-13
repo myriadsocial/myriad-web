@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -18,31 +18,36 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
+import { useTipSummary } from './tip-summary.context';
 import { useStyles } from './tip-summary.style';
-import { usePostTransactionHistory } from './use-post-transaction-history.hooks';
+import { useTransactionHistory } from './use-transaction-history.hooks';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import { timeAgo } from 'src/helpers/date';
-import { Post } from 'src/interfaces/post';
 import { Transaction } from 'src/interfaces/transaction';
 
-type TipSummaryComponentProps = {
-  open: boolean;
-  close: () => void;
-  post: Post;
-};
+type TipSummaryComponentProps = {};
 
 const UNKNOWN_ACCOUNT = 'unknown';
-//const TRANSACTION_DIVIDER = 1000000000000;
 
-export const TipSummaryComponent = ({ open, close, post }: TipSummaryComponentProps) => {
+export const TipSummaryComponent: React.FC<TipSummaryComponentProps> = () => {
   const styles = useStyles();
 
-  const { postDetail, transactions, loadTransaction } = usePostTransactionHistory(post);
+  const {
+    state: { post }
+  } = useTipSummary();
+  const [open, setOpen] = useState(false);
+  const { postDetail, transactions, loadTransaction } = useTransactionHistory();
 
   useEffect(() => {
-    loadTransaction();
-  }, []);
+    console.log('tip post changed', post);
+    if (post) {
+      loadTransaction(post);
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }, [post]);
 
   const getTippingUserName = (transaction: Transaction): string => {
     if (transaction.from === UNKNOWN_ACCOUNT || !transaction.fromUser) {
@@ -52,12 +57,17 @@ export const TipSummaryComponent = ({ open, close, post }: TipSummaryComponentPr
     return transaction.fromUser.name;
   };
 
-  if (!post) return null;
+  const toggleOpen = () => {
+    setOpen(!open);
+  };
 
+  if (!postDetail) return null;
+
+  console.log('transactions', transactions);
   return (
     <div>
       <Dialog open={open} maxWidth="md" onClose={close}>
-        <DialogTitle onClose={close} id="tip-summary">
+        <DialogTitle onClose={toggleOpen} id="tip-summary">
           Tip Received
         </DialogTitle>
         <DialogContent className={styles.root}>
@@ -105,7 +115,7 @@ export const TipSummaryComponent = ({ open, close, post }: TipSummaryComponentPr
           </List>
         </DialogContent>
         <DialogActions className={styles.done}>
-          <Button onClick={close} size="large" variant="contained" color="primary" style={{ width: 200 }}>
+          <Button onClick={toggleOpen} size="large" variant="contained" color="primary" style={{ width: 200 }}>
             Close
           </Button>
         </DialogActions>
