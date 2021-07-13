@@ -12,7 +12,8 @@ const useStyles = makeStyles((theme: Theme) =>
     button: {
       marginBottom: theme.spacing(1.5),
       borderRadius: 15,
-      fontSize: 12,
+      fontSize: 14,
+      fontWeight: 'normal',
       textTransform: 'none'
     }
   })
@@ -36,7 +37,7 @@ export default function Logout({ isAnonymous }: Props) {
   };
 
   return (
-    <Button className={styles.button} size="medium" variant="outlined" color="secondary" onClick={() => handleSignOut()}>
+    <Button className={styles.button} variant="outlined" color="secondary" onClick={() => handleSignOut()} fullWidth>
       Logout
     </Button>
   );
