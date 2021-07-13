@@ -186,10 +186,20 @@ export default function ProfileTimeline({ isAnonymous, user, profile, loading }:
             {isGuest == false && <Tab className={style.tabItem} label={'My Wallet'} />}
           </Tabs>
           <TabPanel value={value} index={0} dir={theme.direction}>
-            <PostList profile={profile} user={user} balanceDetails={tokens.length > 0 ? tokens : []} />
+            <PostList
+              profile={profile}
+              user={user}
+              balanceDetails={tokensReady.length > 0 ? tokensReady : []}
+              availableTokens={userTokens}
+            />
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
-            <ImportedPostList user={user} profile={profile} balanceDetails={tokens.length > 0 ? tokens : []} />
+            <ImportedPostList
+              user={user}
+              profile={profile}
+              balanceDetails={tokensReady.length > 0 ? tokensReady : []}
+              availableTokens={userTokens}
+            />
           </TabPanel>
           <TabPanel value={value} index={2} dir={theme.direction}>
             <FriendComponent profile={profile} />
