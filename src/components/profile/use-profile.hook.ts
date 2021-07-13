@@ -13,11 +13,11 @@ export const useProfileHook = (id: string) => {
   const { state: profileState, dispatch } = useProfile();
   const { updateUser } = useUserHook(id);
 
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const getProfile = async () => {
-    setLoading(true);
+    setIsLoading(true);
 
     try {
       let detail: ExtendedUser = await ProfileAPI.getUserProfile(id as string);
@@ -37,12 +37,12 @@ export const useProfileHook = (id: string) => {
     } catch (error) {
       setError(error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   const loadImportedPost = async () => {
-    setLoading(true);
+    setIsLoading(true);
 
     try {
       let posts = await ProfileAPI.getImportedPost(id as string);
@@ -56,12 +56,12 @@ export const useProfileHook = (id: string) => {
     } catch (error) {
       setError(error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   const updateProfile = async (attributes: Partial<User>) => {
-    setLoading(true);
+    setIsLoading(true);
 
     try {
       await updateUser(attributes);
@@ -80,13 +80,13 @@ export const useProfileHook = (id: string) => {
     } catch (error) {
       setError(error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   return {
     error,
-    loading,
+    isLoading,
     updateProfile,
     getProfile,
     loadImportedPost

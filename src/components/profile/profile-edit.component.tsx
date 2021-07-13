@@ -4,6 +4,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
@@ -15,6 +16,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+
+import { encodeAddress } from '@polkadot/util-crypto';
 
 import { useProfileHook } from './use-profile.hook';
 
@@ -99,7 +102,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
     state: { user: userDetail }
   } = useUser();
 
-  const { updateProfile } = useProfileHook(user.id);
+  const { updateProfile, isLoading } = useProfileHook(user.id);
   const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
   const [defaultValue, setDefaultValue] = useState<Record<string, string>>({
     name: user.name,
@@ -227,11 +230,11 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
                   name="publickey"
                   disabled={true}
                   fullWidth={true}
-                  defaultValue={user.id}
+                  defaultValue={encodeAddress(user.id, 42)}
                   inputProps={{ 'aria-label': 'public-key' }}
                   endAdornment={
                     <InputAdornment position="end">
-                      <CopyToClipboard text={user.id || ''} onCopy={onPublicKeyCopied}>
+                      <CopyToClipboard text={encodeAddress(user.id, 42) || ''} onCopy={onPublicKeyCopied}>
                         <IconButton aria-label="toggle password visibility">
                           <FileCopyIcon />
                         </IconButton>
@@ -243,7 +246,15 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
             </div>
           </div>
           <div style={{ marginTop: 44, marginBottom: 32, textAlign: 'center' }}>
-            <Button form="editForm" type="submit" className={style.button2} size="medium" variant="contained" color="primary">
+            <Button
+              form="editForm"
+              type="submit"
+              className={style.button2}
+              size="medium"
+              variant="contained"
+              color="primary"
+              disabled={isLoading}
+              endIcon={isLoading && <CircularProgress size={20} style={{ color: 'white' }} thickness={6} color="inherit" />}>
               Save Setting
             </Button>
           </div>
