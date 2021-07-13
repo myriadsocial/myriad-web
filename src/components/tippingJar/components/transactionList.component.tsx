@@ -140,15 +140,15 @@ export default function TransactionListComponent({ transactions, userId, sortTyp
   };
 
   const totalTipsReceived = () => {
-    let temp = transactions.filter((el: Transaction) => {
+    const temp = transactions.filter((el: Transaction) => {
       return el.to === userId;
     });
 
-    let total = temp.map((el: Transaction) => {
+    const total = temp.map((el: Transaction) => {
       return el.value / 1000000000000;
     });
 
-    let senderAddress = temp.map((el: Transaction) => {
+    const senderAddress = temp.map((el: Transaction) => {
       return el.from;
     });
 
@@ -160,15 +160,15 @@ export default function TransactionListComponent({ transactions, userId, sortTyp
   };
 
   const totalTipsSent = () => {
-    let temp = transactions.filter((el: Transaction) => {
+    const temp = transactions.filter((el: Transaction) => {
       return el.from === userId;
     });
 
-    let total = temp.map((el: Transaction) => {
+    const total = temp.map((el: Transaction) => {
       return el.value / 1000000000000;
     });
 
-    let receiverAddress = temp.map((el: Transaction) => {
+    const receiverAddress = temp.map((el: Transaction) => {
       return el.to;
     });
 
@@ -183,7 +183,7 @@ export default function TransactionListComponent({ transactions, userId, sortTyp
 
   const renderTransactionDetail = (txHistory: Transaction) => {
     const formatDate = () => {
-      let formattedDate = new Date(txHistory?.createdAt);
+      const formattedDate = new Date(txHistory?.createdAt);
       return formattedDate.toUTCString();
     };
 

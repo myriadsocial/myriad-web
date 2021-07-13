@@ -93,7 +93,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
 
   const RenderSecondaryText = (txHistory: Transaction) => {
     const formatDate = () => {
-      let formattedDate = new Date(txHistory?.createdAt);
+      const formattedDate = new Date(txHistory?.createdAt);
       return formattedDate.toUTCString();
     };
 
@@ -115,7 +115,7 @@ export default function TransactionListComponent({ transactions, user }: Props) 
   const CardActionButtons: React.FC<CardActionProps> = ({ from, to }) => {
     if (!from) return null;
 
-    let isBefriendable = to?.id !== userId ? true : false;
+    const isBefriendable = to?.id !== userId ? true : false;
 
     const status = getFriendStatus(from);
 

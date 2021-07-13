@@ -21,7 +21,7 @@ const Conversation = ({ post, user }: Props) => {
   const { setPost } = useConversationHook(user);
   const { tokensReady } = usePolkadotApi();
   const [session] = useSession();
-  let userId = session?.user.userId as string;
+  const userId = session?.user.userId as string;
   const { loadAllUserTokens, userTokens } = useToken(userId);
 
   useEffect(() => {

@@ -19,7 +19,7 @@ export const useUserHook = (userId?: string) => {
     setLoading(true);
 
     try {
-      let detail: ExtendedUser = await UserAPI.getUserDetail(userId);
+      const detail: ExtendedUser = await UserAPI.getUserDetail(userId);
 
       if (!detail.userCredentials) {
         detail.userCredentials = [];
@@ -42,7 +42,7 @@ export const useUserHook = (userId?: string) => {
     });
   };
 
-  const disconnectSocial = async (social: SocialsEnum) => {
+  const disconnectSocial = async (social: SocialsEnum): Promise<void> => {
     const credential = userState.user?.userCredentials.find(credential => credential.people.platform === social);
 
     if (credential) {

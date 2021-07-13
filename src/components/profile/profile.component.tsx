@@ -30,7 +30,7 @@ type Props = {
   isAnonymous: boolean;
   user: ExtendedUser | null;
   profile: ExtendedUserPost | null;
-  loading: Boolean;
+  loading: boolean;
 };
 // WALLET TAB
 interface StyledTabsProps {
@@ -117,7 +117,7 @@ export default function ProfileTimeline({ isAnonymous, user, profile, loading }:
 
   const { load, tokensReady } = usePolkadotApi();
   const [session] = useSession();
-  let userId = session?.user.userId as string;
+  const userId = session?.user.userId as string;
   const { loadAllUserTokens, userTokens } = useToken(userId);
 
   useEffect(() => {
@@ -128,7 +128,7 @@ export default function ProfileTimeline({ isAnonymous, user, profile, loading }:
   }, []);
 
   const [value, setValue] = React.useState(0);
-  const [isGuest, setIsGuest] = useState<Boolean>(false);
+  const [isGuest, setIsGuest] = useState<boolean>(false);
   const style = useStyles();
   const theme = useTheme();
 

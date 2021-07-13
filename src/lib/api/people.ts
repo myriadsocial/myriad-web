@@ -38,7 +38,7 @@ export const createPeople = async (values: Partial<People>): Promise<People> => 
   return data;
 };
 
-export const searchPeople = async (query: string) => {
+export const searchPeople = async (query: string): Promise<People[]> => {
   const { data } = await MyriadAPI.request<People[]>({
     url: '/people',
     method: 'GET',

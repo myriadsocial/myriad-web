@@ -107,7 +107,7 @@ const ListItemContent = ({ txHistory, userId }: ListItemContentProps) => {
 
   const RenderSecondaryText = (txHistory: Transaction) => {
     const formatDate = () => {
-      let formattedDate = new Date(txHistory?.createdAt);
+      const formattedDate = new Date(txHistory?.createdAt);
       return formattedDate.toUTCString();
     };
 

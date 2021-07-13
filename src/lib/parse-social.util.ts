@@ -17,7 +17,8 @@ export type PostDetail = {
   metric: SocialMetric;
 };
 
-export const parseTwitter = (data: Record<string, any>) => {
+/* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
+export const parseTwitter = (data: Record<string, any>): PostDetail => {
   const lookup: PostDetail = {
     text: data.full_text,
     createdOn: format(new Date(data.created_at), 'dd MMMM yyyy'),
@@ -35,6 +36,7 @@ export const parseTwitter = (data: Record<string, any>) => {
   };
 
   if (data.extended_entities && data.extended_entities.media?.length) {
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
     data.extended_entities.media.forEach((media: { type: string; media_url_https: string; video_info: any }) => {
       if (media.type === 'photo') {
         lookup.images.push({

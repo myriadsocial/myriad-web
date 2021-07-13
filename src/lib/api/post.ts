@@ -66,8 +66,8 @@ export const getPost = async (page: number, sort: PostSortMethod, filters: PostF
   return data;
 };
 
-export const getFriendPost = async (userId: string, page: number, sort?: PostSortMethod) => {
-  let path = `/users/${userId}/timeline`;
+export const getFriendPost = async (userId: string, page: number, sort?: PostSortMethod): Promise<Post[]> => {
+  const path = `/users/${userId}/timeline`;
   let orderField = 'platformCreatedAt';
 
   if (sort) {
@@ -107,7 +107,7 @@ export const createPost = async (values: Partial<Post>): Promise<Post> => {
   return data;
 };
 
-export const importPost = async (values: ImportPost) => {
+export const importPost = async (values: ImportPost): Promise<Post> => {
   const { data } = await MyriadAPI.request<Post>({
     url: `/posts/import`,
     method: 'POST',
@@ -117,7 +117,7 @@ export const importPost = async (values: ImportPost) => {
   return data;
 };
 
-export const getPostDetail = async (id: string) => {
+export const getPostDetail = async (id: string): Promise<Post> => {
   const { data } = await MyriadAPI.request<Post>({
     url: `/posts/${id}`,
     method: 'GET',
@@ -145,7 +145,7 @@ export const getPostDetail = async (id: string) => {
   return data;
 };
 
-export const loadComments = async (postId: string, excludeUser?: string) => {
+export const loadComments = async (postId: string, excludeUser?: string): Promise<Comment[]> => {
   let where = {};
 
   if (excludeUser) {
@@ -170,8 +170,8 @@ export const loadComments = async (postId: string, excludeUser?: string) => {
   return data;
 };
 
-export const reply = async (postId: string, comment: CreateCommentProps) => {
-  const { data } = await MyriadAPI.request({
+export const reply = async (postId: string, comment: Comment): Promise<Comment> => {
+  const { data } = await MyriadAPI.request<Comment>({
     url: `/posts/${postId}/comments`,
     method: 'POST',
     data: comment
@@ -180,7 +180,7 @@ export const reply = async (postId: string, comment: CreateCommentProps) => {
   return data;
 };
 
-export const like = async (userId: string, postId: string) => {
+export const like = async (userId: string, postId: string): Promise<void> => {
   await MyriadAPI.request({
     url: `/posts/${postId}/likes`,
     method: 'POST',
@@ -192,7 +192,7 @@ export const like = async (userId: string, postId: string) => {
   });
 };
 
-export const dislike = async (userId: string, postId: string) => {
+export const dislike = async (userId: string, postId: string): Promise<void> => {
   await MyriadAPI.request({
     url: `/posts/${postId}/dislikes`,
     method: 'POST',
@@ -204,7 +204,7 @@ export const dislike = async (userId: string, postId: string) => {
   });
 };
 
-export const updateTips = async (tokenId: string, tipsReceived: number, postId: string) => {
+export const updateTips = async (tokenId: string, tipsReceived: number, postId: string): Promise<void> => {
   try {
     await MyriadAPI.request({
       url: `/posts/${postId}/update-tips`,

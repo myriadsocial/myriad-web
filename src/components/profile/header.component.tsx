@@ -38,8 +38,8 @@ type Props = {
   isAnonymous: boolean;
   user: ExtendedUser | null;
   profile: ExtendedUserPost | null;
-  loading: Boolean;
-  isGuest: Boolean;
+  loading: boolean;
+  isGuest: boolean;
 };
 
 function Alert(props: AlertProps) {

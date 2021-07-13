@@ -5,7 +5,7 @@ const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL
 });
 
-export const trendingTopic = async (limit?: number) => {
+export const trendingTopic = async (limit?: number): Promise<Tag[]> => {
   const { data } = await MyriadAPI.request<Tag[]>({
     url: '/trending',
     method: 'GET',

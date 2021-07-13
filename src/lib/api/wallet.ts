@@ -13,13 +13,3 @@ export const getWalletAddress = async (postId: string): Promise<Wallet> => {
 
   return data;
 };
-
-export const sendTips = async (postId: string, amountSent: string) => {
-  const { data } = await MyriadAPI({
-    url: `/posts/${postId}/update-tips`,
-    method: 'POST',
-    data: amountSent
-  });
-
-  return data;
-};

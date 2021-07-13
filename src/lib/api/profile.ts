@@ -9,7 +9,6 @@ const MyriadAPI = Axios.create({
 });
 
 export const getUserProfile = async (id: string): Promise<ExtendedUserPost> => {
-  console.log('getUserProfile');
   const { data } = await MyriadAPI.request<ExtendedUserPost>({
     url: `users/${id}`,
     method: 'GET'
@@ -18,8 +17,8 @@ export const getUserProfile = async (id: string): Promise<ExtendedUserPost> => {
   return data;
 };
 
-export const updateUserProfile = async (id: string, attributes: Partial<User>) => {
-  const { data } = await MyriadAPI({
+export const updateUserProfile = async (id: string, attributes: Partial<User>): Promise<ExtendedUserPost> => {
+  const { data } = await MyriadAPI.request<ExtendedUserPost>({
     url: `/users/${id}`,
     method: 'PATCH',
     data: attributes
@@ -28,7 +27,7 @@ export const updateUserProfile = async (id: string, attributes: Partial<User>) =
   return data;
 };
 
-export const getPostProfile = async (id: string) => {
+export const getPostProfile = async (id: string): Promise<Post[]> => {
   const { data } = await MyriadAPI.request<Post[]>({
     url: `/posts`,
     method: 'GET',
@@ -45,7 +44,7 @@ export const getPostProfile = async (id: string) => {
   return data;
 };
 
-export const getImportedPost = async (id: string) => {
+export const getImportedPost = async (id: string): Promise<Post[]> => {
   const { data } = await MyriadAPI.request<Post[]>({
     url: `/posts`,
     method: 'GET',

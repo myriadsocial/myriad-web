@@ -58,7 +58,7 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous, availableTokens }) => 
   const delayLoading = 2000;
   const loadingSequence = () => {
     setLoading(true);
-    let timeoutID = setTimeout(() => {
+    const timeoutID = setTimeout(() => {
       setLoading(false);
     }, delayLoading);
 
