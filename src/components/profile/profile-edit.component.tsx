@@ -230,11 +230,11 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
                   name="publickey"
                   disabled={true}
                   fullWidth={true}
-                  defaultValue={encodeAddress(user.id, 42)}
+                  defaultValue={encodeAddress(user.id)}
                   inputProps={{ 'aria-label': 'public-key' }}
                   endAdornment={
                     <InputAdornment position="end">
-                      <CopyToClipboard text={encodeAddress(user.id, 42) || ''} onCopy={onPublicKeyCopied}>
+                      <CopyToClipboard text={encodeAddress(user.id) || ''} onCopy={onPublicKeyCopied}>
                         <IconButton aria-label="toggle password visibility">
                           <FileCopyIcon />
                         </IconButton>
