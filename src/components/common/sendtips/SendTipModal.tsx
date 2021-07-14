@@ -173,7 +173,8 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
           amountSent,
           decimals,
           currencyId: selectedToken,
-          postId
+          postId,
+          wsAddress
         };
 
         sendTip(sendTipPayload);
