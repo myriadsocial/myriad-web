@@ -69,7 +69,8 @@ export const usePolkadotApi = () => {
                 //@ts-ignore
                 freeBalance: formatNumber(balance.free as number, availableTokens[i].token_decimal),
                 tokenSymbol: availableTokens[i].id,
-                tokenDecimals: availableTokens[i].token_decimal
+                tokenDecimals: availableTokens[i].token_decimal,
+                rpcAddress: provider
               });
               break;
             default:
@@ -78,7 +79,8 @@ export const usePolkadotApi = () => {
                 //@ts-ignore
                 freeBalance: formatNumber(tokenData.free as number, availableTokens[i].token_decimal),
                 tokenSymbol: availableTokens[i].id,
-                tokenDecimals: availableTokens[i].token_decimal
+                tokenDecimals: availableTokens[i].token_decimal,
+                rpcAddress: provider
               });
           }
 
