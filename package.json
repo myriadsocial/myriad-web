@@ -22,7 +22,7 @@
     "lint": "eslint --fix .",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
     "prepare": "husky install",
-    "test": "echo \"No test specified\""
+    "test": "yarn build && yarn lint-staged"
   },
   "lint-staged": {
     "./src/**/*.{js,ts,tsx,scss}": [
