@@ -1,17 +1,27 @@
 import { useRef } from 'react';
 
 import Button, { ButtonProps } from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { green } from '@material-ui/core/colors';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {},
-    button: {
-      paddingTop: theme.spacing(1),
-      paddingRight: 24,
-      paddingBottom: theme.spacing(1),
-      paddingLeft: 24,
-      borderRadius: theme.spacing(1)
+    root: {
+      display: 'flex',
+      justifyContent: 'flex-end'
+    },
+    wrapper: {
+      margin: theme.spacing(1),
+      position: 'relative'
+    },
+    buttonProgress: {
+      color: green[500],
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      marginTop: -12,
+      marginLeft: -12
     }
   })
 );
@@ -49,9 +59,12 @@ export const ButtonUpload: React.FC<ButtonUploadProps & ButtonProps> = ({ onImag
   return (
     <div className={styles.root}>
       <input type="file" ref={uploadFieldRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
-      <Button {...props} className={styles.button} onClick={selectFile}>
-        {title}
-      </Button>
+      <div className={styles.wrapper}>
+        <Button {...props} onClick={selectFile} disabled={loading}>
+          {title}
+        </Button>
+        {loading && <CircularProgress size={24} className={styles.buttonProgress} />}
+      </div>
     </div>
   );
 };
