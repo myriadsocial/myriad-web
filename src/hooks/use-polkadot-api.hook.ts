@@ -19,6 +19,7 @@ type Props = {
   decimals: number;
   currencyId: string;
   postId: string;
+  wsAddress: string;
 };
 
 const formatNumber = (number: number, decimals: number) => {
@@ -98,7 +99,7 @@ export const usePolkadotApi = () => {
     }
   };
 
-  const sendTip = async ({ fromAddress, toAddress, amountSent, decimals, currencyId, postId }: Props) => {
+  const sendTip = async ({ fromAddress, toAddress, amountSent, decimals, currencyId, postId, wsAddress }: Props) => {
     walletAddressDispatch({
       type: WalletAddressActionType.INIT_SEND_TIPS
     });
@@ -126,8 +127,9 @@ export const usePolkadotApi = () => {
       }
       // otherwise
       if (account) {
-        const acalaMandalaProvider = process.env.NEXT_PUBLIC_ACALA_TESTNET ?? '';
-        const api = await connectToBlockchain(acalaMandalaProvider);
+        console.log('the wsAddress is: ', wsAddress);
+        //const acalaMandalaProvider = process.env.NEXT_PUBLIC_ACALA_TESTNET ?? '';
+        const api = await connectToBlockchain(wsAddress);
 
         if (api) {
           // here we use the api to create a balance transfer to some account of a value of 12345678
