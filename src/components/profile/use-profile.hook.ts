@@ -88,22 +88,30 @@ export const useProfileHook = (id: string) => {
   };
 
   const updateBanner = async (file: File) => {
-    const url = await uploadImage(file);
+    setIsLoading(true);
 
-    await updateProfile({
-      bannerImageUrl: url
-    });
+    try {
+      const url = await uploadImage(file);
 
-    if (profileState.profile) {
-      dispatch({
-        type: ProfileActionType.PROFILE_LOADED,
-        payload: {
-          ...profileState.profile,
-          bannerImageUrl: url
-        }
+      await updateProfile({
+        bannerImageUrl: url
       });
-    } else {
-      getProfile();
+
+      if (profileState.profile) {
+        dispatch({
+          type: ProfileActionType.PROFILE_LOADED,
+          payload: {
+            ...profileState.profile,
+            bannerImageUrl: url
+          }
+        });
+      } else {
+        getProfile();
+      }
+    } catch (error) {
+      setError(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 

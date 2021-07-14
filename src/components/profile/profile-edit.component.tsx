@@ -49,6 +49,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
 
   const { isLoading, updateBanner, updateProfile } = useProfileHook(user.id);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [uploadingBanner, setUploadingBanner] = useState(false);
   const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
   const [defaultValue, setDefaultValue] = useState<Record<string, string>>({
     name: user.name,
@@ -59,7 +60,11 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
     if (uploadingAvatar && !isLoading) {
       setUploadingAvatar(false);
     }
-  }, [isLoading, uploadingAvatar]);
+
+    if (uploadingBanner && !isLoading) {
+      setUploadingBanner(false);
+    }
+  }, [isLoading, uploadingAvatar, uploadingBanner]);
 
   const getProfilePicture = (): string => {
     return userDetail?.profilePictureURL || '';
@@ -71,6 +76,12 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
     updateProfile({
       profilePictureURL: preview
     });
+  };
+
+  const updateBannerImage = (image: File): void => {
+    setUploadingBanner(true);
+
+    updateBanner(image);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,16 +131,18 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({ user, toggleP
                   onImageSelected={updateProfilePicture}
                   loading={uploadingAvatar && isLoading}
                 />
-                <ButtonUpload
-                  title="Edit Banner Image"
-                  onImageSelected={updateBanner}
-                  accept="image"
-                  size="medium"
-                  variant="outlined"
-                  color="primary"
-                  className={style.button}
-                  style={{ position: 'absolute', top: 128, left: 250, backgroundColor: 'white' }}
-                />
+                <div className={style.bannerUploadWrapper}>
+                  <ButtonUpload
+                    title="Edit Banner Image"
+                    onImageSelected={updateBannerImage}
+                    loading={uploadingBanner}
+                    accept="image"
+                    size="medium"
+                    variant="outlined"
+                    color="primary"
+                    className={style.button}
+                  />
+                </div>
 
                 <form id="editForm" onSubmit={handleSubmit}>
                   <Typography className={style.subtitle} variant="body1" style={{ marginTop: 16 }}>

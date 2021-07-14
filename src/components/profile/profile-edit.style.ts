@@ -29,12 +29,22 @@ export const useStyles = makeStyles((theme: Theme) =>
     logout: {
       textAlign: 'center'
     },
+    bannerUploadWrapper: {
+      position: 'absolute',
+      top: 128,
+      left: 250
+    },
     button: {
+      backgroundColor: theme.palette.background.default,
       paddingRight: 24,
       paddingLeft: 24,
       paddingTop: theme.spacing(1),
       paddingBottom: theme.spacing(1),
-      borderRadius: theme.spacing(1)
+      borderRadius: theme.spacing(1),
+
+      '&:hover': {
+        backgroundColor: theme.palette.background.paper
+      }
     },
     button2: {
       paddingRight: 40,
