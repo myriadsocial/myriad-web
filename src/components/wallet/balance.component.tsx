@@ -86,6 +86,9 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, availableToken
                   <div className={style.tokenColumn}>
                     <Avatar alt={row.tokenSymbol} src={row.tokenImage} />
                     <Typography className={style.balanceText}>
+                      {
+                        // TODO: move to single file constant or enum
+                      }
                       {row.tokenSymbol === 'MYR' ? (
                         <StyledBadge badgeContent={<StyledTooltip />}>{row.tokenSymbol}</StyledBadge>
                       ) : (
