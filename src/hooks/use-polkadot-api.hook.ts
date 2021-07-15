@@ -64,7 +64,7 @@ export const usePolkadotApi = () => {
 
         if (api) {
           switch (availableTokens[i].id) {
-            case 'MYR':
+            case 'MYR': {
               const { data: balance } = await api.query.system.account(address);
               tokenBalances.push({
                 //@ts-ignore
@@ -74,7 +74,8 @@ export const usePolkadotApi = () => {
                 rpcAddress: provider
               });
               break;
-            default:
+            }
+            default: {
               const tokenData = await api.query.tokens.accounts(address, { TOKEN: availableTokens[i].id });
               tokenBalances.push({
                 //@ts-ignore
@@ -83,6 +84,7 @@ export const usePolkadotApi = () => {
                 tokenDecimals: availableTokens[i].token_decimal,
                 rpcAddress: provider
               });
+            }
           }
 
           await api.disconnect();
@@ -113,7 +115,7 @@ export const usePolkadotApi = () => {
       // We select the first account found by using fromAddress
       // `account` is of type InjectedAccountWithMeta
       const keyring = new Keyring();
-      const baseAddress = keyring.encodeAddress(fromAddress, 42);
+      const baseAddress = keyring.encodeAddress(fromAddress, Number(process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX));
       const account = allAccounts?.find(function (account) {
         // address from session must match address on polkadot extension
         return account.address === baseAddress;
@@ -125,6 +127,7 @@ export const usePolkadotApi = () => {
           Error: 'Please import your account first!'
         };
       }
+
       // otherwise
       if (account) {
         const api = await connectToBlockchain(wsAddress);
