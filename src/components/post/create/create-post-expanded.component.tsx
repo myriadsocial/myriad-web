@@ -108,6 +108,13 @@ export const CreatePostExpandedComponent = forwardRef(
 
     const handleTagsChange = (event: React.ChangeEvent<{}>, value: (string | string[])[], reason: AutocompleteChangeReason) => {
       if (reason === 'clear') {
+        if (typeof value === 'string') {
+          setTags([value]);
+        }
+
+        if (typeof value === 'object') {
+          setTags(value.flat());
+        }
       }
 
       if (reason === 'create-option') {
