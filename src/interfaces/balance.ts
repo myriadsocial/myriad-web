@@ -3,4 +3,5 @@ export type BalanceDetail = {
   tokenDecimals?: number;
   tokenSymbol: string;
   rpcAddress: string;
+  tokenImage: string;
 };
