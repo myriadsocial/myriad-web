@@ -2,34 +2,15 @@ version: '3'
 
 services:
   web:
-    image: myriadsocial/myriad-web:1.0.0
+    image: myriadsocial/myriad-web:1.0.0-dev
     environment:
+      - HOST=0.0.0.0
       - PORT=3000
-      - NEXT_PUBLIC_APP_NAME=myriad
-      - NEXTAUTH_URL=http://web:3000
-      - SECRET=
-      - NEXT_PUBLIC_API_URL=http://api.3000
-      - TWITTER_BEARER_TOKEN=
-      - FACEBOKK_APP_ID=
-      - FACEBOOK_APP_SECRET=
-      - NEXT_PUBLIC_RECAPTCHA_API_URL=
-      - NEXT_PUBLIC_RECAPTCHA_SITE_KEY=
-      - RECAPTCHA_SECRET_KEY=
-      - NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX=214
-      - NEXT_PUBLIC_MYRIAD_CRYPTO_TYPE=sr25519
-      - NEXT_PUBLIC_MYRIAD_WS_RPC=ws://parachain-alice:9944
-      - CLOUDINARY_CLOUD_NAME=
-      - CLOUDINARY_API_KEY=
-      - CLOUDINARY_SECRET=
-      - NEXT_PUBLIC_FIREBASE_API_KEY=
-      - NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-      - NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-      - NEXT_PUBLIC_FIREBASE_APP_ID=
     ports:
       - 3002:3000
     networks:
       myriad:
-        ipv4_address: 172.27.1.8
+        ipv4_address: 172.27.1.5
         aliases:
           - web
 
