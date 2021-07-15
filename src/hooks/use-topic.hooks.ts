@@ -18,7 +18,7 @@ export const useTopic = () => {
     skip: 0
   });
 
-  const loadPopularTopic = async () => {
+  const loadPopularTopic = async (): Promise<void> => {
     setLoading(true);
 
     try {
