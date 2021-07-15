@@ -13,7 +13,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, fade, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 
-import { useBalance } from '../../wallet/use-balance.hooks';
+import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
+import { useToken } from 'src/hooks/use-token.hook';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -108,31 +109,33 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, hidden }) => {
 
   const [session] = useSession();
   const userAddress = session?.user.address as string;
-  // user tokens hooks here
-  const wsProvider = 'wss://rococo-rpc.polkadot.io';
-  const { loading, error, balanceDetails, loadInitBalance } = useBalance(userAddress, wsProvider);
+  const userId = session?.user.userId as string;
+
+  const { loadAllUserTokens, userTokens } = useToken(userId);
+
+  const { loading, error, tokensReady, load } = usePolkadotApi();
 
   useEffect(() => {
-    loadInitBalance();
+    loadAllUserTokens();
   }, []);
+
+  useEffect(() => {
+    if (userTokens.length > 0) {
+      load(userAddress, userTokens);
+    }
+  }, [userTokens]);
 
   useImperativeHandle(forwardedRef, () => ({
     triggerRefresh: () => {
       setIsHidden(false);
-      loadInitBalance();
+      load(userAddress, userTokens);
     }
   }));
 
   const [isHidden, setIsHidden] = useState(true);
-  const handleIsHidden = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleIsHidden = () => {
     setIsHidden(!isHidden);
   };
-
-  //function createData(currency: string, balance: number) {
-  //return { currency, balance };
-  //}
-
-  //const rows = [createData('MYRIA', freeBalance), createData('ACA', 100)];
 
   const CurrencyTable = () => {
     return (
@@ -149,7 +152,7 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, hidden }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {balanceDetails.map(row => (
+            {tokensReady.map(row => (
               <TableRow key={row.tokenSymbol}>
                 <TableCell component="th" scope="row">
                   <Typography className={style.balanceText}>{row.tokenSymbol}</Typography>
