@@ -23,6 +23,8 @@ import { useStyles } from './tip-summary.style';
 import { useTransactionHistory } from './use-transaction-history.hooks';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
+import { useToken } from 'src/components/wallet/token.context';
+import { formatTipBalance, formatTransactionBalance } from 'src/helpers/balance';
 import { timeAgo } from 'src/helpers/date';
 import { Transaction } from 'src/interfaces/transaction';
 
@@ -38,9 +40,11 @@ export const TipSummaryComponent: React.FC<TipSummaryComponentProps> = () => {
   } = useTipSummary();
   const [open, setOpen] = useState(false);
   const { postDetail, transactions, loadTransaction } = useTransactionHistory();
+  const {
+    state: { userTokens }
+  } = useToken();
 
   useEffect(() => {
-    console.log('tip post changed', post);
     if (post) {
       loadTransaction(post);
       setOpen(true);
@@ -63,7 +67,6 @@ export const TipSummaryComponent: React.FC<TipSummaryComponentProps> = () => {
 
   if (!postDetail) return null;
 
-  console.log('transactions', transactions);
   return (
     <div>
       <Dialog open={open} maxWidth="md" onClose={close}>
@@ -86,11 +89,11 @@ export const TipSummaryComponent: React.FC<TipSummaryComponentProps> = () => {
               <TableBody>
                 {postDetail.tipsReceived &&
                   postDetail.tipsReceived.map((tip, i) => (
-                    <TableRow>
+                    <TableRow key={i}>
                       <TableCell component="th" scope="row">
                         {tip.tokenId}
                       </TableCell>
-                      <TableCell align="right">{tip.totalTips}</TableCell>
+                      <TableCell align="right">{formatTipBalance(tip, userTokens)}</TableCell>
                     </TableRow>
                   ))}
               </TableBody>
@@ -107,7 +110,9 @@ export const TipSummaryComponent: React.FC<TipSummaryComponentProps> = () => {
                   <Avatar alt={getTippingUserName(transaction)} src={transaction.fromUser?.profilePictureURL} />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={`${getTippingUserName(transaction)} tipped ${transaction.value} ${transaction.tokenId}`}
+                  primary={`${getTippingUserName(transaction)} tipped ${formatTransactionBalance(transaction, userTokens)} ${
+                    transaction.tokenId
+                  }`}
                   secondary={timeAgo(transaction.createdAt)}
                 />
               </ListItem>

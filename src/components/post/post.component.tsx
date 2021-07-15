@@ -152,7 +152,6 @@ export default function PostComponent({
 
   const handleTipSentSuccess = (postId: string) => {
     if (post.id === postId) {
-      console.log('send tip', post);
       openTipSummary(post);
     }
   };
