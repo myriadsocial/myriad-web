@@ -33,8 +33,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
   const [tokenBalance, setTokenBalance] = useState('');
   const { showTipAlert, showAlert } = useAlertHook();
 
-  console.log('availableTokens: ', availableTokens);
-
   useEffect(() => {
     if (sendTipSuccess) {
       showTipAlert({
@@ -113,8 +111,6 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
     }
   }, [selectedToken, balanceDetails]);
 
-  console.log('the selected token is: ', selectedToken);
-
   const checkAmountThenSend = () => {
     const regexValidDigits = /^\d*(\.\d+)?$/;
     if (values.amount === '') {
@@ -167,17 +163,19 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
           toAddress = walletAddress;
         }
 
-        const sendTipPayload = {
-          fromAddress: senderAddress,
-          toAddress,
-          amountSent,
-          decimals,
-          currencyId: selectedToken,
-          postId,
-          wsAddress
-        };
+        if (wsAddress.length > 0) {
+          const sendTipPayload = {
+            fromAddress: senderAddress,
+            toAddress,
+            amountSent,
+            decimals,
+            currencyId: selectedToken,
+            postId,
+            wsAddress
+          };
 
-        sendTip(sendTipPayload);
+          sendTip(sendTipPayload);
+        }
       }
     } else {
       setInputError({
@@ -198,8 +196,7 @@ const SendTipModal = forwardRef(({ balanceDetails, userAddress, postId, receiver
     setSelectedToken(clickedToken);
 
     availableTokens.forEach(token => {
-      if (token.token_name === clickedToken) {
-        console.log('selected rpc is: ', token.rpc_address);
+      if (token.id === clickedToken) {
         setWSAddress(token.rpc_address);
       }
     });
