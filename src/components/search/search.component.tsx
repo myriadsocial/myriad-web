@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 
+import { useRouter } from 'next/router';
+
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 
-import useDebounce from '../../helpers/use-debounce.hooks';
+// import useDebounce from '../../helpers/use-debounce.hooks';
 import SearchComponent from '../common/search.component';
 
 type SearchProps = {
   placeholder?: string;
-  search: (text: string) => void;
+  // search: (text: string) => void;
 };
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -28,18 +30,20 @@ export const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const SearchUser: React.FC<SearchProps> = ({ placeholder, search }) => {
+const SearchUser: React.FC<SearchProps> = ({ placeholder }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
 
-  const debouncedValue = useDebounce(searchQuery, 2000) ?? '';
+  // const debouncedValue = useDebounce(searchQuery, 2000) ?? '';
 
-  React.useEffect(() => {
-    search(debouncedValue);
-  }, [debouncedValue]);
+  // React.useEffect(() => {
+  //   search(debouncedValue);
+  // }, [debouncedValue]);
 
   const handleSearch = (value: string) => {
-    if (value.length > 0) {
+    if (value) {
       setSearchQuery(value);
+      router.push(`/search?q=${value}`);
     }
   };
 

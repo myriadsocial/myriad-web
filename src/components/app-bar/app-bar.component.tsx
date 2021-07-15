@@ -84,15 +84,18 @@ export default function HeaderBar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const { load, search } = useMyriadUser();
+  const {
+    load
+    // search
+  } = useMyriadUser();
 
   useEffect(() => {
     load();
   }, []);
 
-  const searchUser = (text: string) => {
-    search(text);
-  };
+  // const searchUser = (text: string) => {
+  //   search(text);
+  // };
 
   //const onSearchUser = (users: MyriadUser) => {
   //console.log('the users are: ', users);
@@ -111,7 +114,7 @@ export default function HeaderBar() {
           <div className={classes.search}>
             <SearchUserComponent
               placeholder={isMobile ? 'Search Myria...' : 'Search for people or posts on Myriad...'}
-              search={searchUser}
+              // search={searchUser}
             />
           </div>
           <div className={classes.grow} />
