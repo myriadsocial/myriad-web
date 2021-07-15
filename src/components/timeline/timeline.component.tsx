@@ -4,9 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 
-// import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
-// import Grid from '@material-ui/core/Grid';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
@@ -21,10 +19,8 @@ import { useTimelineFilter } from './use-timeline-filter.hook';
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import CreatePostComponent from 'src/components/post/create/create-post.component';
 import PostComponent from 'src/components/post/post.component';
-// import SearchResultComponent from 'src/components/search/search-result.component';
 import { useTimeline } from 'src/context/timeline.context';
 import { useUser } from 'src/context/user.context';
-// import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
 import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 import { useTimelineHook } from 'src/hooks/use-timeline.hook';
 import { Post } from 'src/interfaces/post';
@@ -35,15 +31,13 @@ type TimelineProps = {
   availableTokens: Token[];
 };
 
-const Timeline: React.FC<TimelineProps> = ({ isAnonymous, availableTokens }) => {
+const Timeline: React.FC<TimelineProps> = ({ availableTokens }) => {
   const style = useStyles();
 
   const [session] = useSession();
   const { query } = useRouter();
 
   const userAddress = session?.user.address as string;
-  // bisa pake useSearch buat ambil state.users
-  // const { searching, backToTimeline, users: options } = useMyriadUser();
 
   const { load, tokensReady } = usePolkadotApi();
 
@@ -52,26 +46,6 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous, availableTokens }) => 
       load(userAddress, availableTokens);
     }
   }, [userAddress]);
-
-  // const [loading, setLoading] = useState(false);
-
-  // const delayLoading = 2000;
-  // const loadingSequence = () => {
-  //   setLoading(true);
-  //   const timeoutID = setTimeout(() => {
-  //     setLoading(false);
-  //   }, delayLoading);
-
-  //   return () => {
-  //     clearTimeout(timeoutID);
-  //   };
-  // };
-
-  // useEffect(() => {
-  //   if (searching) {
-  //     loadingSequence();
-  //   }
-  // }, [searching]);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -118,30 +92,6 @@ const Timeline: React.FC<TimelineProps> = ({ isAnonymous, availableTokens }) => 
   const nextPage = () => {
     nextPosts();
   };
-
-  // const handleClick = () => {
-  //   loadingSequence();
-  //   backToTimeline();
-  // };
-
-  // const LoadingComponent = () => {
-  //   return (
-  //     <Grid container justify="center">
-  //       <CircularProgress className={style.loading} />
-  //     </Grid>
-  //   );
-  // };
-
-  // if (searching)
-  //   return (
-  //     <div id="search-result">
-  //       {loading ? (
-  //         <LoadingComponent />
-  //       ) : (
-  //         <SearchResultComponent isAnonymous={isAnonymous} user={user} users={options} clickBack={handleClick} />
-  //       )}
-  //     </div>
-  //   );
 
   return (
     <div className={style.root} id="timeline">
