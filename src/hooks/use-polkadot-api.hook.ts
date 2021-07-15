@@ -71,7 +71,8 @@ export const usePolkadotApi = () => {
                 freeBalance: formatNumber(balance.free as number, availableTokens[i].token_decimal),
                 tokenSymbol: availableTokens[i].id,
                 tokenDecimals: availableTokens[i].token_decimal,
-                rpcAddress: provider
+                rpcAddress: provider,
+                tokenImage: availableTokens[i].token_image
               });
               break;
             }
@@ -82,7 +83,8 @@ export const usePolkadotApi = () => {
                 freeBalance: formatNumber(tokenData.free as number, availableTokens[i].token_decimal),
                 tokenSymbol: availableTokens[i].id,
                 tokenDecimals: availableTokens[i].token_decimal,
-                rpcAddress: provider
+                rpcAddress: provider,
+                tokenImage: availableTokens[i].token_image
               });
             }
           }
