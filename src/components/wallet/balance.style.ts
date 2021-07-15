@@ -57,7 +57,12 @@ export const useStyles = makeStyles((theme: Theme) =>
     tooltipContentHeader: {
       fontWeight: 'bold'
     },
-    tooltipContentRoot: { display: 'flex', flexDirection: 'column' }
+    tooltipContentRoot: { display: 'flex', flexDirection: 'column' },
+    tokenColumn: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-around'
+    }
   })
 );
 
