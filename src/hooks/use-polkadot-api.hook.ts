@@ -127,8 +127,6 @@ export const usePolkadotApi = () => {
       }
       // otherwise
       if (account) {
-        console.log('the wsAddress is: ', wsAddress);
-        //const acalaMandalaProvider = process.env.NEXT_PUBLIC_ACALA_TESTNET ?? '';
         const api = await connectToBlockchain(wsAddress);
 
         if (api) {
