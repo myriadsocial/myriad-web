@@ -38,11 +38,12 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, availableToken
   useImperativeHandle(forwardedRef, () => ({
     triggerRefresh: () => {
       setIsHidden(false);
+      load(userAddress, availableTokens);
     }
   }));
 
   const [isHidden, setIsHidden] = useState(true);
-  const handleIsHidden = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleIsHidden = () => {
     setIsHidden(!isHidden);
   };
 
