@@ -21,9 +21,9 @@ LABEL social.myriad.web.image.authors="1@myriad.social" \
   social.myriad.web.image.vendor="Myriadsocial" \
   social.myriad.web.image.title="myriadsocial/myriad-web" \
   social.myriad.web.image.description="myriad-web" \
-  social.myriad.web.image.source="https://github.com/myriadsocial/myriad-web/blob/${VCS_REF}/.maintain/docker/Dockerfile" \
   social.myriad.web.image.revision="${VCS_REF}" \
 	social.myriad.web.image.created="${BUILD_DATE}" \
+  social.myriad.web.image.source="https://github.com/myriadsocial/myriad-web/blob/${VCS_REF}/.maintain/docker/Dockerfile" \
   social.myriad.web.image.documentation="https://github.com/myriadsocial/myriad-web/tree/${VCS_REF}"
 
 # Change default user name
