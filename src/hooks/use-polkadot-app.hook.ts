@@ -12,9 +12,10 @@ export const usePolkadotExtension = () => {
   const getPolkadotAccounts = async () => {
     const { web3Accounts } = await import('@polkadot/extension-dapp');
 
-    const prefix = process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX ? Number(process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX) : 214;
+    const format = process.env.NEXT_PUBLIC_MYRIAD_CRYPTO_TYPE ? Number(process.env.NEXT_PUBLIC_MYRIAD_CRYPTO_TYPE) : 214;
+
     const allAccounts = await web3Accounts({
-      ss58Format: prefix
+      ss58Format: format
     });
 
     return allAccounts;
