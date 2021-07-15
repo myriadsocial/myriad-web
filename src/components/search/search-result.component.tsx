@@ -164,7 +164,7 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user,
     <div className={styles.root}>
       <div className={styles.header}>
         <Typography variant="h4" style={{ marginBottom: 8 }}>
-          Search results
+          Search results for {router.query.q}:
         </Typography>
       </div>
       <div>
