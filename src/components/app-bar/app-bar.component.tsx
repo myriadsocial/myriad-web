@@ -13,8 +13,6 @@ import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
 import LogoImageCompact from 'src/images/header-logo-compact.svg';
 import LogoImage from 'src/images/header-logo.svg';
 
-//import { User as MyriadUser } from 'src/interfaces/user';
-
 const SearchUserComponent = dynamic(() => import('../search/search.component'));
 const DesktopMenuComponent = dynamic(() => import('./desktop-menu.component'));
 const MobileMenuComponent = dynamic(() => import('./mobile-menu.component'));
@@ -78,28 +76,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function HeaderBar() {
+export default function HeaderBar(): JSX.Element {
   const classes = useStyles();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const {
-    load
-    // search
-  } = useMyriadUser();
+  const { load } = useMyriadUser();
 
   useEffect(() => {
     load();
   }, []);
-
-  // const searchUser = (text: string) => {
-  //   search(text);
-  // };
-
-  //const onSearchUser = (users: MyriadUser) => {
-  //console.log('the users are: ', users);
-  //};
 
   return (
     <div className={classes.grow}>
@@ -107,15 +94,12 @@ export default function HeaderBar() {
         <Toolbar>
           <div className={classes.logo}>
             <Link href="/home">
-              <a>{isMobile ? <LogoImageCompact /> : <LogoImage />}</a>
+              <a href="#top">{isMobile ? <LogoImageCompact /> : <LogoImage />}</a>
             </Link>
           </div>
           <div className={classes.grow} />
           <div className={classes.search}>
-            <SearchUserComponent
-              placeholder={isMobile ? 'Search Myria...' : 'Search for people or posts on Myriad...'}
-              // search={searchUser}
-            />
+            <SearchUserComponent placeholder={isMobile ? 'Search Myria...' : 'Search for people or posts on Myriad...'} />
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop} id="user-menu">
