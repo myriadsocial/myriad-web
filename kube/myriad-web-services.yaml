@@ -1,0 +1,27 @@
+
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/neg: '{"ingress":true}'
+  creationTimestamp: "2021-07-15T10:04:11Z"
+  name: myriad-web
+  namespace: development
+  resourceVersion: "13559947"
+  selfLink: /api/v1/namespaces/development/services/myriad-web
+spec:
+  clusterIP: 10.116.10.152
+  ports:
+  - port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    name: myriad-web
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

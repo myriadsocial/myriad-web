@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myriad-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: myriad-web
+  template:
+    metadata:
+      labels:
+        name: myriad-web
+    spec:
+      containers:
+      - name: myriad-web
+        image: myriadsocial/myriad-web:1.0.0-stg
+        command: []
+        env:
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                name: application-configs
+                key: PORT
