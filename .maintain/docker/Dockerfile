@@ -21,8 +21,10 @@ LABEL social.myriad.web.image.authors="1@myriad.social" \
   social.myriad.web.image.vendor="Myriadsocial" \
   social.myriad.web.image.title="myriadsocial/myriad-web" \
   social.myriad.web.image.description="myriad-web" \
-  social.myriad.web.image.source="https://github.com/myriadsocial/myriad-web/.maintain/docker/Dockerfile" \
-  social.myriad.web.image.documentation="https://github.com/myriadsocial/myriad-web/"
+  social.myriad.web.image.source="https://github.com/myriadsocial/myriad-web/blob/${VCS_REF}/.maintain/docker/Dockerfile" \
+  social.myriad.web.image.revision="${VCS_REF}" \
+	social.myriad.web.image.created="${BUILD_DATE}" \
+  social.myriad.web.image.documentation="https://github.com/myriadsocial/myriad-web/tree/${VCS_REF}"
 
 # Change default user name
 RUN usermod -d /home/myriad -l myriad node && \
@@ -40,6 +42,7 @@ WORKDIR /home/myriad/app
 
 # You only need to copy next.config.js if you are NOT using the default configuration
 # COPY --from=builder /app/next.config.js ./
+COPY --from=builder --chown=myriad /app/.env ./.env
 COPY --from=builder --chown=myriad /app/public ./public
 COPY --from=builder --chown=myriad /app/.next ./.next
 COPY --from=builder --chown=myriad /app/node_modules ./node_modules
