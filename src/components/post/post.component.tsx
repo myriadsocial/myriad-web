@@ -155,6 +155,14 @@ export default function PostComponent({
     return <PostAvatarComponent origin={post.platform} avatar={avatarUrl} onClick={openContentSource} />;
   };
 
+  const likePost = () => {
+    console.log('liked Post!');
+  };
+
+  const dislikePost = () => {
+    console.log('disliked Post!');
+  };
+
   if (loading) return null;
 
   return (
@@ -231,14 +239,16 @@ export default function PostComponent({
         </ShowIf>
       </Card>
 
-      <SendTipModal
-        availableTokens={availableTokens}
-        success={postId => handleTipSentSuccess(postId)}
-        userAddress={user?.id}
-        ref={sendTipRef}
-        postId={post.id as string}
-        balanceDetails={balanceDetails}
-      />
+      {user && (
+        <SendTipModal
+          availableTokens={availableTokens}
+          success={postId => handleTipSentSuccess(postId)}
+          userAddress={user.id}
+          ref={sendTipRef}
+          postId={post.id as string}
+          balanceDetails={balanceDetails}
+        />
+      )}
 
       {tippedPost ? <TipSummaryComponent post={tippedPost} open={openTipSummary} close={handleCloseTipSummary} /> : <></>}
     </>
