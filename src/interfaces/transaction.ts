@@ -8,6 +8,7 @@ export interface Transaction {
   value: number;
   state: string;
   tokenId: string;
+  postId: string;
   createdAt: string;
   fromUser?: User;
   toUser?: User;
