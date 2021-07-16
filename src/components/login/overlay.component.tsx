@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function Overlay(props: OverlayProps) {
+export default function Overlay() {
   const style = useStyles();
 
   return (
