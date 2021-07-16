@@ -1,15 +1,16 @@
-version: '3.1'
+version: '3'
 
 services:
-  myriad-dashboard:
-    ports:
-      - 3000:3000
+  web:
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./:/app
-      - /app/node_modules
-      - /app/.next
+      - ./:/home/myriad/app
+      - /home/myriad/app/node_modules
+      - /home/myriad/app/.next
     environment:
-      - PORT=3000
+      - HOST=0.0.0.0
+      - PORT=3002
+    ports:
+      - 3002:3002
