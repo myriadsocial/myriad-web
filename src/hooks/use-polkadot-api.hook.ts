@@ -167,7 +167,8 @@ export const usePolkadotApi = () => {
                 value: correctedValue,
                 state: 'success',
                 tokenId: currencyId,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                postId
               });
 
               walletAddressDispatch({
