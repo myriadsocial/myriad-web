@@ -10,7 +10,7 @@ export const enableExtension = async () => {
   }
 
   // Using proper prefix
-  const prefix = process.env.NEXT_PUBLIC_MYRIAD_CRYPTO_TYPE ? Number(process.env.NEXT_PUBLIC_MYRIAD_CRYPTO_TYPE) : 214;
+  const prefix = process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX ? Number(process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX) : 214;
 
   // we are now informed that the user has at least one extension and that we
   // will be able to show and use accounts
