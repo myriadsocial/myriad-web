@@ -27,8 +27,6 @@ const useStyles = makeStyles({
   }
 });
 
-type OverlayProps = {};
-
 export default function Overlay(props: OverlayProps) {
   const style = useStyles();
 
@@ -37,11 +35,12 @@ export default function Overlay(props: OverlayProps) {
       <Card className={style.root}>
         <CardContent>
           <Typography variant="body1" color="textPrimary" gutterBottom>
-            Please register or login first
+            Please sign in first
           </Typography>
           <CreateAccountComponent />
           <Typography variant="body1" gutterBottom>
-            Once you're logged in, you can interact with other Myriad users and send them some tips!
+            Once you're signed in, you can send tips to anyone you like, and not only those on Myriad - just import their social media post,
+            tip it, then the owner will collect the tip as soon as they've joined Myriad!
           </Typography>
         </CardContent>
       </Card>
