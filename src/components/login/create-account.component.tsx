@@ -62,7 +62,7 @@ export const CreateAccountComponent: React.FC<CreateAccountComponentProps> = pro
   return (
     <div className={style.root}>
       <Button onClick={checkExtensionInstalled} variant="contained" color="primary" size="medium" className={style.signIn}>
-        Create Account
+        Sign In
       </Button>
 
       <NoExtensionComponent isOpen={signIn && !extensionInstalled} onClose={toggleModal} />
