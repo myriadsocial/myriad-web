@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-//@ts-ignore
 import { FacebookProvider, EmbeddedPost } from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 
@@ -61,7 +60,7 @@ export default function PostComponent({
   const router = useRouter();
   const { loading, detail } = useSocialDetail(post);
   const {
-    state: { user }
+    state: { user, anonymous }
   } = useUser();
 
   const [expanded, setExpanded] = useState(defaultExpanded);
@@ -70,7 +69,7 @@ export default function PostComponent({
   const headerRef = useRef<any>();
   const sendTipRef = useRef<any>();
 
-  if (!detail || !user) return null;
+  if (!detail && !user && !anonymous) return null;
 
   if (post.text === '[removed]' && post.platform === 'reddit') return null;
 
@@ -133,9 +132,6 @@ export default function PostComponent({
       width: 400
     };
   };
-  const likePost = () => {};
-
-  const dislikePost = () => {};
 
   if (!detail || !post) return null;
 
@@ -238,7 +234,7 @@ export default function PostComponent({
       <SendTipModal
         availableTokens={availableTokens}
         success={postId => handleTipSentSuccess(postId)}
-        userAddress={user.id}
+        userAddress={user?.id}
         ref={sendTipRef}
         postId={post.id as string}
         balanceDetails={balanceDetails}
