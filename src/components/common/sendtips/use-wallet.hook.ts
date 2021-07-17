@@ -10,14 +10,19 @@ export const useWalletAddress = (postId: string) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const loadWalletAddress = async () => {
+  const loadWalletDetails = async () => {
     setLoading(true);
     try {
       const { walletAddress } = await WalletAddressAPI.getWalletAddress(postId);
 
+      const walletDetailPayload = {
+        walletAddress,
+        postId
+      };
+
       dispatch({
         type: WalletAddressActionType.INIT_WALLET_ADDRESS,
-        payload: walletAddress
+        payload: walletDetailPayload
       });
     } catch (error) {
       setError(error);
@@ -29,7 +34,7 @@ export const useWalletAddress = (postId: string) => {
   return {
     error,
     loading,
-    walletAddress: state.walletAddress,
-    loadWalletAddress
+    walletDetails: state.walletDetails,
+    loadWalletDetails
   };
 };
