@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
+import { WalletDetail } from 'src/interfaces/wallet';
+
 export enum WalletAddressActionType {
   INIT_WALLET_ADDRESS = 'INIT_WALLET_ADDRESS',
   INIT_SEND_TIPS = 'INIT_SEND_TIPS',
@@ -8,7 +10,7 @@ export enum WalletAddressActionType {
 
 export interface InitWalletAddress {
   type: WalletAddressActionType.INIT_WALLET_ADDRESS;
-  payload: string;
+  payload: WalletDetail;
 }
 
 export interface InitSendTips {
@@ -30,7 +32,7 @@ type Dispatch = (action: Action) => void;
 type WalletAddressProviderProps = { children: React.ReactNode };
 type State = {
   init: boolean;
-  walletAddress: string;
+  walletDetails: WalletDetail[];
   amountSent: number;
   from: string;
   to: string;
@@ -41,7 +43,7 @@ type State = {
 
 const initialState = {
   init: true,
-  walletAddress: '',
+  walletDetails: [],
   amountSent: 0,
   from: '',
   to: '',
@@ -57,7 +59,7 @@ function walletAddressReducer(state: State, action: Action) {
     case WalletAddressActionType.INIT_WALLET_ADDRESS: {
       return {
         ...state,
-        walletAddress: action.payload,
+        walletDetails: [...state.walletDetails, action.payload],
         init: false
       };
     }
