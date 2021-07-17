@@ -394,6 +394,7 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef, detail
   };
 
   const ActionButtonComponent = ({ className, tokens }: StyledComponentProps) => {
+    //TODO: token name still hardcoded, will be fixed on next PR
     return (
       <div className={className}>
         <Button variant="contained" color="primary" size="medium" className={styles.iconButton} endIcon={<SortIcon />}>
