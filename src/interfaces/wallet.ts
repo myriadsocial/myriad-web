@@ -1,3 +1,4 @@
-export interface Wallet {
+export interface WalletDetail {
+  postId: string;
   walletAddress: string;
 }
