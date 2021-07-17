@@ -2,6 +2,8 @@ import { TipsReceived } from 'src/interfaces/post';
 import { Token } from 'src/interfaces/token';
 import { Transaction } from 'src/interfaces/transaction';
 
+const UNKNOWN_ACCOUNT = 'unknown';
+
 const formatBalance = (value: number, decimals: number): number => {
   if (value.toString() === '0') return 0;
 
@@ -24,4 +26,12 @@ export const formatTransactionBalance = (transaction: Transaction, tokens: Token
   if (!token) return transaction.value;
 
   return formatBalance(transaction.value, token.token_decimal);
+};
+
+export const getTipperUserName = (transaction: Transaction): string => {
+  if (transaction.from === UNKNOWN_ACCOUNT || !transaction.fromUser) {
+    return 'Anonymous user';
+  }
+
+  return transaction.fromUser.name;
 };

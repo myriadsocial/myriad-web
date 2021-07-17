@@ -18,31 +18,25 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
-import { useTipSummary } from './tip-summary.context';
+import { useTipSummaryHook } from './tip-summar.hook';
 import { useStyles } from './tip-summary.style';
 import { useTransactionHistory } from './use-transaction-history.hooks';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import { useToken } from 'src/components/wallet/token.context';
-import { formatTipBalance, formatTransactionBalance } from 'src/helpers/balance';
 import { timeAgo } from 'src/helpers/date';
-import { Transaction } from 'src/interfaces/transaction';
+import { formatTipBalance, getTipperUserName } from 'src/helpers/transaction';
 
-type TipSummaryComponentProps = {};
-
-const UNKNOWN_ACCOUNT = 'unknown';
-
-export const TipSummaryComponent: React.FC<TipSummaryComponentProps> = () => {
+export const TipSummaryComponent: React.FC = () => {
   const styles = useStyles();
 
   const {
-    state: { post }
-  } = useTipSummary();
-  const [open, setOpen] = useState(false);
-  const { postDetail, transactions, loadTransaction } = useTransactionHistory();
-  const {
     state: { userTokens }
   } = useToken();
+
+  const { post, clearTipSummary } = useTipSummaryHook();
+  const { postDetail, transactions, loadTransaction } = useTransactionHistory();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (post) {
@@ -53,16 +47,12 @@ export const TipSummaryComponent: React.FC<TipSummaryComponentProps> = () => {
     }
   }, [post]);
 
-  const getTippingUserName = (transaction: Transaction): string => {
-    if (transaction.from === UNKNOWN_ACCOUNT || !transaction.fromUser) {
-      return 'Anonymous user';
-    }
-
-    return transaction.fromUser.name;
-  };
-
   const toggleOpen = () => {
     setOpen(!open);
+
+    if (open) {
+      clearTipSummary();
+    }
   };
 
   if (!postDetail) return null;
@@ -105,14 +95,12 @@ export const TipSummaryComponent: React.FC<TipSummaryComponentProps> = () => {
           </Typography>
           <List className={styles.list}>
             {transactions.map(transaction => (
-              <ListItem>
+              <ListItem key={transaction.trxHash}>
                 <ListItemAvatar>
-                  <Avatar alt={getTippingUserName(transaction)} src={transaction.fromUser?.profilePictureURL} />
+                  <Avatar alt={getTipperUserName(transaction)} src={transaction.fromUser?.profilePictureURL} />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={`${getTippingUserName(transaction)} tipped ${formatTransactionBalance(transaction, userTokens)} ${
-                    transaction.tokenId
-                  }`}
+                  primary={`${getTipperUserName(transaction)} tipped ${transaction.value} ${transaction.tokenId}`}
                   secondary={timeAgo(transaction.createdAt)}
                 />
               </ListItem>
