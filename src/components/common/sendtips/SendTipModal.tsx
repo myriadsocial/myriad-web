@@ -28,6 +28,8 @@ enum ContentType {
   COMMENT = 'commentContent'
 }
 
+//TODO: move codes to different files, too big!
+
 const SendTipModal = forwardRef(
   ({ balanceDetails, walletReceiverDetail, userAddress, postId, receiverId, success, availableTokens }: Props, ref) => {
     const { sendTip, load, trxHash, sendTipSuccess, error } = usePolkadotApi();
@@ -116,6 +118,7 @@ const SendTipModal = forwardRef(
     }, [selectedToken, balanceDetails]);
 
     const checkAmountThenSend = () => {
+      // TODO: this function needs to be separated into smaller chunks for the love of God!
       const regexValidDigits = /^\d*(\.\d+)?$/;
 
       if (values.amount === '') {
