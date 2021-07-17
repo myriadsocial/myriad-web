@@ -67,9 +67,9 @@ export const usePolkadotApi = () => {
             // TODO: move to single file constant or enum
             case 'MYR': {
               const { data: balance } = await api.query.system.account(address);
+              const tempBalance = balance.free as unknown;
               tokenBalances.push({
-                //@ts-ignore
-                freeBalance: formatNumber(balance.free as number, availableTokens[i].token_decimal),
+                freeBalance: formatNumber(tempBalance as number, availableTokens[i].token_decimal),
                 tokenSymbol: availableTokens[i].id,
                 tokenDecimals: availableTokens[i].token_decimal,
                 rpcAddress: provider,
@@ -159,7 +159,6 @@ export const usePolkadotApi = () => {
 
             if (txInfo) {
               // Record the transaction
-              // TODO: Add postId to payload
               await storeTransaction({
                 trxHash: txInfo.toHex(),
                 from: fromAddress,
