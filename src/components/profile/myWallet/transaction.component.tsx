@@ -24,6 +24,7 @@ import { useTransaction } from '../../tippingJar/use-transaction.hooks';
 
 import { useUser } from 'src/context/user.context';
 import { useToken } from 'src/hooks/use-token.hook';
+import { Token } from 'src/interfaces/token';
 
 const TransactionListComponent = dynamic(() => import('./transactionList.component'));
 
@@ -294,6 +295,7 @@ interface TransactionProps {
 
 type StyledComponentProps = {
   className?: string;
+  tokens: Token[];
 };
 
 type TippingJarComponentProps = {
@@ -366,7 +368,7 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef, detail
   const TippingJarComponent = ({ detailed }: TippingJarComponentProps) => {
     return (
       <div className={detailed ? '' : styles.rootPanel}>
-        {detailed === true ? <ActionTabsComponent /> : <ActionButtonComponent className={styles.panelButtons} />}
+        {detailed === true ? <ActionTabsComponent /> : <ActionButtonComponent tokens={userTokens} className={styles.panelButtons} />}
       </div>
     );
   };
@@ -391,20 +393,17 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef, detail
     );
   };
 
-  const ActionButtonComponent = ({ className }: StyledComponentProps) => {
+  const ActionButtonComponent = ({ className, tokens }: StyledComponentProps) => {
     return (
       <div className={className}>
         <Button variant="contained" color="primary" size="medium" className={styles.iconButton} endIcon={<SortIcon />}>
           Filter by
         </Button>
         <Button variant="contained" color="default" size="medium" className={styles.iconButton}>
-          Myria
+          {tokens[0].token_name}
         </Button>
         <Button variant="contained" color="default" size="medium" className={styles.iconButton}>
-          Acala
-        </Button>
-        <Button variant="contained" color="default" size="medium" className={styles.iconButton}>
-          Polkadot
+          {tokens[1].token_name}
         </Button>
       </div>
     );
