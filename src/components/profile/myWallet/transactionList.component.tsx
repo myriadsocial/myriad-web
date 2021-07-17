@@ -10,7 +10,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
 
-//import { useFriendsHook } from 'src/components/friends/use-friends-hook';
 import { Transaction } from 'src/interfaces/transaction';
 import { User } from 'src/interfaces/user';
 
@@ -93,13 +92,19 @@ const ListItemContent = ({ txHistory, userId }: ListItemContentProps) => {
 
   const defaultUserName = 'Unknown Myrian';
 
+  if (!txHistory) return null;
+
   const RenderPrimaryText = (txHistory: Transaction) => {
     return (
       <>
-        {userId === txHistory?.from ? (
-          <>You tipped {txHistory?.toUser?.name ?? defaultUserName} with Acala</>
+        {userId === txHistory.from ? (
+          <>
+            You tipped {txHistory.toUser?.name ?? defaultUserName} with {txHistory.tokenId}
+          </>
         ) : (
-          <>{txHistory?.fromUser?.name ?? defaultUserName} tipped you Acala</>
+          <>
+            {txHistory.fromUser?.name ?? defaultUserName} tipped you {txHistory.tokenId}
+          </>
         )}
       </>
     );
@@ -107,7 +112,7 @@ const ListItemContent = ({ txHistory, userId }: ListItemContentProps) => {
 
   const RenderSecondaryText = (txHistory: Transaction) => {
     const formatDate = () => {
-      const formattedDate = new Date(txHistory?.createdAt);
+      const formattedDate = new Date(txHistory.createdAt);
       return formattedDate.toUTCString();
     };
 
@@ -115,19 +120,19 @@ const ListItemContent = ({ txHistory, userId }: ListItemContentProps) => {
   };
 
   return (
-    <div key={txHistory?.id}>
+    <div key={txHistory.id}>
       <ListItem>
         <StyledListItemAvatar>
           <StyledAvatar
             aria-label="avatar"
-            src={txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL}
+            src={txHistory.toUser?.id === userId ? txHistory.fromUser?.profilePictureURL : txHistory.toUser?.profilePictureURL}
           />
         </StyledListItemAvatar>
         <StyledListItemText primary={RenderPrimaryText(txHistory)} secondary={RenderSecondaryText(txHistory)} />
         <ListItemSecondaryAction>
           <div className={style.badge}>
-            <Typography className={userId === txHistory?.from ? style.red : style.green}>
-              {userId === txHistory?.from ? '-' : '+'} {txHistory?.value / 1000000000000}
+            <Typography className={userId === txHistory.from ? style.red : style.green}>
+              {userId === txHistory.from ? '-' : '+'} {txHistory.value}
             </Typography>
           </div>
         </ListItemSecondaryAction>
