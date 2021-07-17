@@ -22,8 +22,8 @@ import SortIcon from '@material-ui/icons/Sort';
 import { TabPanel } from '../../common/tab-panel.component';
 import { useTransaction } from '../../tippingJar/use-transaction.hooks';
 
-//import { useBalance } from '../../wallet/use-balance.hooks';
 import { useUser } from 'src/context/user.context';
+import { useToken } from 'src/hooks/use-token.hook';
 
 const TransactionListComponent = dynamic(() => import('./transactionList.component'));
 
@@ -199,19 +199,6 @@ const useStylesForCurrencyDetails = makeStyles((theme: Theme) =>
 const CurrencyDetails = () => {
   const style = useStylesForCurrencyDetails();
 
-  //useEffect(() => {
-  //loadInitBalance();
-  //}, []);
-
-  //const [session] = useSession();
-  //const userAddress = session?.user.address as string;
-  //const { freeBalance, loadInitBalance } = useBalance(userAddress);
-
-  //const [isHidden, setIsHidden] = useState(true);
-  //const handleIsHidden = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //setIsHidden(!isHidden);
-  //};
-
   function createData(currency: string, balance: string) {
     return { currency, balance };
   }
@@ -321,10 +308,13 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef, detail
     state: { user }
   } = useUser();
   const userAddress = session?.user.address as string;
+  console.log('userAddress is: ', userAddress);
   const { loading, error, transactions, inboundTxs, outboundTxs, loadInitTransaction } = useTransaction(userAddress);
+  const { loadAllUserTokens, userTokens } = useToken(userAddress);
 
   useEffect(() => {
     loadInitTransaction();
+    loadAllUserTokens();
   }, []);
 
   useImperativeHandle(forwardedRef, () => ({
