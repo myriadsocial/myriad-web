@@ -25,6 +25,7 @@ module.exports = {
     'plugin:prettier/recommended' // Make this the last element so prettier config overrides other formatting rules
   ],
   rules: {
+    '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/ban-types': ['warn'],
     '@typescript-eslint/no-empty-interface': ['warn'],
     'react/prop-types': ['off'],
