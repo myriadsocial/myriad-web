@@ -9,43 +9,38 @@ const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
 });
 
-interface PostAddress {
-  walletAddress: string;
-}
+type useTransactionHistoryProps = {
+  error: string | null;
+  loading: boolean;
+  postDetail: Post | null;
+  transactions: Transaction[];
+  loadTransaction: (post: Post) => void;
+};
 
-export const useTransactionHistory = () => {
+export const useTransactionHistory = (): useTransactionHistoryProps => {
   const [postDetail, setPostDetail] = useState<Post | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const [params, _] = useState({
+  const [params] = useState({
     offset: 0,
     limit: 20,
     include: ['fromUser']
   });
 
-  const loadPostDetail = async (post: Post) => {
+  const loadPostDetail = async (post: Post): Promise<void> => {
     const detail = await PostAPI.getPostDetail(post.id);
 
     setPostDetail(detail);
   };
 
-  const loadTransaction = async (post: Post) => {
-    let filter = params;
+  const loadTransaction = async (post: Post): Promise<void> => {
+    const filter = params;
 
     setLoading(true);
 
     try {
-      await loadPostDetail(post);
-
-      const {
-        data: { walletAddress }
-      } = await axios.request<PostAddress>({
-        url: `/posts/${post.id}/walletaddress`,
-        method: 'GET'
-      });
-
       const { data } = await axios.request<Transaction[]>({
         url: '/transactions',
         method: 'GET',
@@ -53,7 +48,6 @@ export const useTransactionHistory = () => {
           filter: {
             ...filter,
             where: {
-              to: walletAddress,
               postId: post.id
             }
           }
@@ -62,11 +56,14 @@ export const useTransactionHistory = () => {
 
       if (data.length > 0) {
         setTransactions(data);
+
+        await loadPostDetail(post);
       }
     } catch (error) {
       setError(error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return {

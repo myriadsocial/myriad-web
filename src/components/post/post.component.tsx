@@ -40,7 +40,7 @@ const CommentComponent = dynamic(() => import('./comment/comment.component'));
 
 const FACEBOOK_APP_ID = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID as string;
 
-type PostProps = {
+type PostComponentProps = {
   defaultExpanded?: boolean;
   disable?: boolean;
   post: Post;
@@ -49,16 +49,15 @@ type PostProps = {
   availableTokens: Token[];
 };
 
-export default function PostComponent({
+const PostComponent: React.FC<PostComponentProps> = ({
   balanceDetails,
   post,
   defaultExpanded = false,
   disable = false,
   postOwner,
   availableTokens
-}: PostProps) {
+}) => {
   const style = useStyles();
-
   const router = useRouter();
   const { loading, detail } = useSocialDetail(post);
   const {
@@ -88,11 +87,11 @@ export default function PostComponent({
 
   if (post.text === '[removed]' && post.platform === 'reddit') return null;
 
-  const handleExpandClick = () => {
+  const handleExpandClick = (): void => {
     setExpanded(!expanded);
   };
 
-  const tipPostUser = () => {
+  const tipPostUser = (): void => {
     if (disable) {
       return;
     }
@@ -100,7 +99,7 @@ export default function PostComponent({
     sendTipRef.current.triggerSendTipModal();
   };
 
-  const openContentSource = () => {
+  const openContentSource = (): void => {
     if (!post.platformUser) {
       return;
     }
@@ -263,4 +262,6 @@ export default function PostComponent({
       )}
     </>
   );
-}
+};
+
+export default PostComponent;

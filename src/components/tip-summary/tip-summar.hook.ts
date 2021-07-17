@@ -1,17 +1,34 @@
 import { useTipSummary, TipSummaryActionType } from 'src/components/tip-summary/tip-summary.context';
 import { Post } from 'src/interfaces/post';
 
-export const useTipSummaryHook = () => {
-  const { dispatch } = useTipSummary();
+type TipSummaryHookProps = {
+  post: Post | null;
+  openTipSummary: (post: Post) => void;
+  clearTipSummary: () => void;
+};
 
-  const openTipSummary = (post: Post) => {
+export const useTipSummaryHook = (): TipSummaryHookProps => {
+  const {
+    state: { post },
+    dispatch
+  } = useTipSummary();
+
+  const openTipSummary = (post: Post): void => {
     dispatch({
       type: TipSummaryActionType.SET_TIPPED_POST,
       payload: post
     });
   };
 
+  const clearTipSummary = (): void => {
+    dispatch({
+      type: TipSummaryActionType.CLEAR_TIPPED_POST
+    });
+  };
+
   return {
-    openTipSummary
+    post,
+    openTipSummary,
+    clearTipSummary
   };
 };

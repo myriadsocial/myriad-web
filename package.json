@@ -27,7 +27,7 @@
   "lint-staged": {
     "./src/**/*.{js,ts,tsx,scss}": [
       "eslint --fix",
-      "yarn format"
+      "prettier --write"
     ]
   },
   "cacheDirectories": [
