@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FacebookProvider, EmbeddedPost } from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 
@@ -25,6 +25,7 @@ import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import CardTitle from 'src/components/common/CardTitle.component';
 import SendTipModal from 'src/components/common/sendtips/SendTipModal';
+import { useWalletAddress } from 'src/components/common/sendtips/use-wallet.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import { useUser } from 'src/context/user.context';
 import { useSocialDetail } from 'src/hooks/use-social.hook';
@@ -32,6 +33,7 @@ import { BalanceDetail } from 'src/interfaces/balance';
 import { ImageData } from 'src/interfaces/post';
 import { Post } from 'src/interfaces/post';
 import { Token } from 'src/interfaces/token';
+import { WalletDetail } from 'src/interfaces/wallet';
 import { v4 as uuid } from 'uuid';
 
 const CommentComponent = dynamic(() => import('./comment/comment.component'));
@@ -65,9 +67,23 @@ export default function PostComponent({
 
   const [expanded, setExpanded] = useState(defaultExpanded);
   const [openTipSummary, setOpenTipSummary] = useState(false);
+  const { loadWalletDetails, walletDetails } = useWalletAddress(post.id);
+  const [walletReceiverDetail, setWalletReceiverDetail] = useState<WalletDetail>();
   const [tippedPost, setTippedPost] = useState<Post>();
   const headerRef = useRef<any>();
   const sendTipRef = useRef<any>();
+
+  const defineWalletReceiverDetail = () => {
+    const tempWalletDetail = walletDetails.filter(walletDetail => {
+      return walletDetail.postId === post.id;
+    });
+    setWalletReceiverDetail(tempWalletDetail[0]);
+  };
+
+  useEffect(() => {
+    loadWalletDetails();
+    defineWalletReceiverDetail();
+  }, [post.id]);
 
   if (!detail && !user && !anonymous) return null;
 
@@ -81,6 +97,9 @@ export default function PostComponent({
     if (disable) {
       return;
     }
+
+    console.log('the sendTipRef: ', sendTipRef);
+    console.log('the walletReceiverDetail: ', walletReceiverDetail);
 
     sendTipRef.current.triggerSendTipModal();
   };
@@ -239,7 +258,7 @@ export default function PostComponent({
         </ShowIf>
       </Card>
 
-      {user && (
+      {user && walletReceiverDetail && (
         <SendTipModal
           availableTokens={availableTokens}
           success={postId => handleTipSentSuccess(postId)}
@@ -247,6 +266,7 @@ export default function PostComponent({
           ref={sendTipRef}
           postId={post.id as string}
           balanceDetails={balanceDetails}
+          walletReceiverDetail={walletReceiverDetail}
         />
       )}
 
