@@ -1,5 +1,6 @@
 import { BalanceDetail } from 'src/interfaces/balance';
 import { Token } from 'src/interfaces/token';
+import { WalletDetail } from 'src/interfaces/wallet';
 
 export interface InputState {
   amount: string;
@@ -24,4 +25,5 @@ export type Props = {
   balanceDetails: BalanceDetail[];
   receiverId?: string;
   availableTokens: Token[];
+  walletReceiverDetail?: WalletDetail;
 };
