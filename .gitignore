@@ -53,3 +53,5 @@ prisma
 
 # Developer
 
+# build
+/public/sw-env.js

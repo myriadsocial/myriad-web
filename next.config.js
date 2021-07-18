@@ -1,3 +1,5 @@
+const ExportEnvPlugin = require('./plugins/export-env');
+
 module.exports = {
   webpack(config) {
     config.module.rules.push({
@@ -13,6 +15,12 @@ module.exports = {
       },
       use: ['@svgr/webpack']
     });
+
+    config.plugins.push(
+      new ExportEnvPlugin({
+        filename: 'sw-env.js'
+      })
+    );
 
     return config;
   }
