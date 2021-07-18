@@ -23,7 +23,13 @@ const firebaseCloudMessaging = {
       }
 
       const messaging = firebase.messaging();
+
+      messaging.onMessage(payload => {
+        console.log('Message received. ', payload);
+      });
+
       await Notification.requestPermission();
+
       const token = await messaging.getToken();
 
       localforage.setItem('fcm_token', token);
