@@ -5,8 +5,8 @@ import dynamic from 'next/dynamic';
 import Divider from '@material-ui/core/Divider';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
-const BalanceComponent = dynamic(() => import('./balance.component'));
-const TransactionComponent = dynamic(() => import('./transaction.component'));
+const BalanceComponent = dynamic(() => import('../balance/balance.component'));
+const TransactionComponent = dynamic(() => import('../transactions/transaction.component'));
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -56,8 +56,6 @@ export const TippingComponent = React.memo(function Wallet() {
   const transactionRef = createRef<any>();
 
   const balanceRef = createRef<any>();
-
-  useEffect(() => {}, [transactionRef, balanceRef]);
 
   //const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
   //e.stopPropagation();
