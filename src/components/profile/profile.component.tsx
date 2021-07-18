@@ -12,8 +12,8 @@ import { useTheme } from '@material-ui/core/styles';
 
 import { TabPanel } from '../common/tab-panel.component';
 import Header from './header.component';
-import { TippingComponent } from './myWallet/tipping.component';
-import { WalletComponent } from './myWallet/wallet.component';
+import { TippingComponent } from './myWallet/tipping/tipping.component';
+import { WalletComponent } from './myWallet/wallet/wallet.component';
 import { useStyles } from './profile.style';
 
 import { useProfile } from 'src/components/profile/profile.context';
