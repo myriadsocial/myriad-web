@@ -2,6 +2,7 @@ import React, { useState, useEffect, useImperativeHandle } from 'react';
 
 import { useSession } from 'next-auth/client';
 
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
@@ -87,6 +88,11 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: '#fff',
         color: theme.palette.primary.main
       }
+    },
+    tokenColumn: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-around'
     }
   })
 );
@@ -155,7 +161,10 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, hidden }) => {
             {tokensReady.map(row => (
               <TableRow key={row.tokenSymbol}>
                 <TableCell component="th" scope="row">
-                  <Typography className={style.balanceText}>{row.tokenSymbol}</Typography>
+                  <div className={style.tokenColumn}>
+                    <Avatar alt={row.tokenSymbol} src={row.tokenImage} />
+                    <Typography className={style.balanceText}>{row.tokenSymbol}</Typography>
+                  </div>
                 </TableCell>
                 <TableCell align="right">
                   {isHidden ? (
