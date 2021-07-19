@@ -14,6 +14,11 @@ const basicTransform = (txHistory: Transaction) => {
 const transformValueForMYR = (txHistory: Transaction) => {
   let temp = '';
   const BASE_NUMBER = 10;
+  if (!txHistory.token) {
+    temp = 'Decimals N/A';
+    return temp;
+  }
+
   temp = (txHistory.value / BASE_NUMBER ** txHistory.token.token_decimal).toString();
   return temp;
 };
