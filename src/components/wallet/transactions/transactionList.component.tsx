@@ -17,6 +17,11 @@ import { FriendStatus } from 'src/interfaces/friend';
 import { Transaction } from 'src/interfaces/transaction';
 import { User } from 'src/interfaces/user';
 
+enum TokenID {
+  MYR = 'MYR',
+  AUSD = 'AUSD'
+}
+
 interface Props {
   transactions: Transaction[];
   user: User;
@@ -72,6 +77,19 @@ export default function TransactionListComponent({ transactions, user }: Props) 
 
   const sendFriendRequest = (receiverId: string) => {
     sendRequest(receiverId);
+  };
+
+  const checkIfMyriad = (txHistory: Transaction) => {
+    let tokenValue = '';
+    switch (txHistory.tokenId) {
+      case TokenID.AUSD:
+        tokenValue = txHistory.value.toString();
+        break;
+      default:
+        tokenValue = (txHistory.value / txHistory.token.token_decimal).toString();
+    }
+
+    return tokenValue;
   };
 
   const RenderPrimaryText = (txHistory: Transaction) => {
