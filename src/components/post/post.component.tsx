@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FacebookProvider, EmbeddedPost } from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
+import { useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -27,13 +28,14 @@ import SendTipModal from 'src/components/common/sendtips/SendTipModal';
 import { useWalletAddress } from 'src/components/common/sendtips/use-wallet.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import { useTipSummaryHook } from 'src/components/tip-summary/tip-summar.hook';
-import { useUser } from 'src/context/user.context';
 import { useSocialDetail } from 'src/hooks/use-social.hook';
 import { BalanceDetail } from 'src/interfaces/balance';
 import { ImageData } from 'src/interfaces/post';
 import { Post } from 'src/interfaces/post';
 import { Token } from 'src/interfaces/token';
 import { WalletDetail } from 'src/interfaces/wallet';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 import { v4 as uuid } from 'uuid';
 
 const CommentComponent = dynamic(() => import('./comment/comment.component'));
@@ -59,10 +61,8 @@ const PostComponent: React.FC<PostComponentProps> = ({
 }) => {
   const style = useStyles();
   const router = useRouter();
+  const { user, anonymous } = useSelector<RootState, UserState>(state => state.userState);
   const { loading, detail } = useSocialDetail(post);
-  const {
-    state: { user, anonymous }
-  } = useUser();
 
   const { openTipSummary } = useTipSummaryHook();
   const [expanded, setExpanded] = useState(defaultExpanded);

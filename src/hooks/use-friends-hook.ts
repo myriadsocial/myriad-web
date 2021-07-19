@@ -1,14 +1,20 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { useAlertHook } from './use-alert.hook';
 
 import { useFriends, FriendsActionType } from 'src/context/friends.context';
 import { ExtendedFriend, FriendStatus } from 'src/interfaces/friend';
-import { User } from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
-export const useFriendsHook = (user: User | null) => {
-  const { dispatch } = useFriends();
+export const useFriendsHook = () => {
+  const {
+    dispatch,
+    state: { friends }
+  } = useFriends();
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
 
   const [friended, setFriended] = useState<ExtendedFriend[]>([]);
   const [loading, setLoading] = useState(false);

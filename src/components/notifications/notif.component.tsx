@@ -1,21 +1,20 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import Typography from '@material-ui/core/Typography';
 
 import Notification from './notif-list.component';
 
 import ShowIf from 'src/components/common/show-if.component';
-import { useUser } from 'src/context/user.context';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
-interface NotifProps {
+interface NotificationProps {
   title?: string;
-  isAnonymous: boolean;
 }
 
-const NotificationComponent: React.FC<NotifProps> = ({ isAnonymous }) => {
-  const { state } = useUser();
-
-  if (!isAnonymous && !state.user) return null;
+const NotificationComponent: React.FC<NotificationProps> = ({ title }) => {
+  const { anonymous } = useSelector<RootState, UserState>(state => state.userState);
 
   return (
     <div style={{ padding: 8 }}>
@@ -24,13 +23,15 @@ const NotificationComponent: React.FC<NotifProps> = ({ isAnonymous }) => {
           {'Notification'}
         </Typography>
 
-        <ShowIf condition={isAnonymous}>
+        <ShowIf condition={anonymous}>
           <Typography variant="h5" color="textPrimary" style={{ textAlign: 'center', padding: '16px 40px' }}>
             You don't have any notifications, create account to receive notification.
           </Typography>
         </ShowIf>
 
-        {state.user && <Notification user={state.user} />}
+        <ShowIf condition={!anonymous}>
+          <Notification />
+        </ShowIf>
       </div>
     </div>
   );

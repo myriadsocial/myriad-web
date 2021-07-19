@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { useRouter } from 'next/router';
 
@@ -20,6 +21,8 @@ import ShowIf from '../common/show-if.component';
 import { useFriendsHook } from 'src/hooks/use-friends-hook';
 import { FriendStatus } from 'src/interfaces/friend';
 import { User } from 'src/interfaces/user';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,24 +57,23 @@ export const useStyles = makeStyles((theme: Theme) =>
 );
 
 type SearchResultProps = {
-  isAnonymous: boolean;
-  users: User[];
+  options: User[];
   loading?: boolean;
-  user: User | null;
   clickBack: () => void;
 };
 
-const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user, users, clickBack }) => {
+const SearchResultComponent: React.FC<SearchResultProps> = ({ options, clickBack }) => {
   const styles = useStyles();
 
-  const { friended: friendsList, checkFriendStatus, sendRequest } = useFriendsHook(user);
+  const { anonymous, user } = useSelector<RootState, UserState>(state => state.userState);
+  const { friended: friendsList, checkFriendStatus, sendRequest } = useFriendsHook();
+  const router = useRouter();
 
   useEffect(() => {
     // list all transaction user id as param
-    if (user) checkFriendStatus([user.id]);
+    if (!anonymous) checkFriendStatus([]);
   }, []);
 
-  const router = useRouter();
   const redirectToProfilePage = (url: string) => {
     router.push(`/${url}`);
   };
@@ -121,7 +123,7 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user,
               variant="contained"
               color="primary"
               onClick={() => sendFriendRequest(from.id)}
-              disabled={isAnonymous || disableRequest}
+              disabled={anonymous || disableRequest}
               className={styles.iconButton}
               startIcon={
                 <>
@@ -174,12 +176,12 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({ isAnonymous, user,
       </div>
       <div>
         <Grid container spacing={3} className={styles.searchContent}>
-          {users.length === 0 ? (
+          {options.length === 0 ? (
             <Grid item xs={12}>
               <EmptySearchResultComponent />
             </Grid>
           ) : (
-            users.map(user => (
+            options.map(user => (
               <Grid item xs={12} sm={6} key={user.id}>
                 <Card>
                   <CardHeader avatar={<Avatar aria-label="avatar" src={user.profilePictureURL} />} title={RenderPrimaryText(user.name)} />

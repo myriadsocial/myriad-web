@@ -1,5 +1,6 @@
 import React, { createRef, useCallback, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useSelector } from 'react-redux';
 
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
@@ -21,19 +22,19 @@ import CreatePostComponent from 'src/components/post/create/create-post.componen
 import PostComponent from 'src/components/post/post.component';
 import { TipSummaryComponent } from 'src/components/tip-summary/tip-summary.component';
 import { TipSummaryProvider } from 'src/components/tip-summary/tip-summary.context';
-import { useTimeline } from 'src/context/timeline.context';
-import { useUser } from 'src/context/user.context';
 import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
 import { useTimelineHook } from 'src/hooks/use-timeline.hook';
 import { Post } from 'src/interfaces/post';
 import { Token } from 'src/interfaces/token';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
-type TimelineProps = {
+type TimelineComponentProps = {
   isAnonymous: boolean;
   availableTokens: Token[];
 };
 
-const Timeline: React.FC<TimelineProps> = ({ availableTokens }) => {
+const TimelineComponent: React.FC<TimelineComponentProps> = ({ isAnonymous, availableTokens }) => {
   const style = useStyles();
 
   const [session] = useSession();
@@ -51,12 +52,9 @@ const Timeline: React.FC<TimelineProps> = ({ availableTokens }) => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const {
-    state: { user }
-  } = useUser();
-  const { state } = useTimeline();
 
-  const { hasMore, nextPosts, sortTimeline } = useTimelineHook();
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
+  const { posts, hasMore, sort, nextPage, sortTimeline } = useTimelineHook();
   const { filterTimeline } = useTimelineFilter();
 
   const scrollRoot = createRef<HTMLDivElement>();
@@ -91,10 +89,6 @@ const Timeline: React.FC<TimelineProps> = ({ availableTokens }) => {
     });
   }, []);
 
-  const nextPage = () => {
-    nextPosts();
-  };
-
   return (
     <div className={style.root} id="timeline">
       <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
@@ -108,18 +102,18 @@ const Timeline: React.FC<TimelineProps> = ({ availableTokens }) => {
           </>
         )}
 
-        {!isMobile && <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />}
+        {!isMobile && <FilterTimelineComponent selected={sort} onChange={sortTimeline} />}
 
         <TipSummaryProvider>
           <div>
             <InfiniteScroll
               scrollableTarget="scrollable-timeline"
               className={style.child}
-              dataLength={state.posts.length}
+              dataLength={posts.length}
               next={nextPage}
               hasMore={hasMore}
               loader={<LoadingPage />}>
-              {state.posts.map((post: Post, i: number) => (
+              {posts.map((post: Post, i: number) => (
                 <div key={post.id} id={`post-detail-${i}`}>
                   <PostComponent
                     post={post}
@@ -146,4 +140,4 @@ const Timeline: React.FC<TimelineProps> = ({ availableTokens }) => {
   );
 };
 
-export default Timeline;
+export default TimelineComponent;

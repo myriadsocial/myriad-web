@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type SocialListProps = {
   isAnonymous: boolean;
-  user: ExtendedUser | null;
+  user?: ExtendedUser;
 };
 
 export const SocialListComponent: React.FC<SocialListProps> = ({ isAnonymous, user }) => {
@@ -76,7 +76,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ isAnonymous, us
     }
   }, [isShared]);
 
-  if (user && user.userCredentials.length > 0) {
+  if (user && user.userCredentials && user.userCredentials.length > 0) {
     const twitterCredential = user.userCredentials.find(item => item.people.platform === SocialsEnum.TWITTER);
     const facebookCredential = user.userCredentials.find(item => item.people.platform === SocialsEnum.FACEBOOK);
     const redditCredential = user.userCredentials.find(item => item.people.platform === SocialsEnum.REDDIT);

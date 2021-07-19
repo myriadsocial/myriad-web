@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { GetServerSideProps } from 'next';
-import { useSession, getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 
 import Grid from '@material-ui/core/Grid';
@@ -54,28 +54,18 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Index() {
   const style = useStyles();
 
-  const [session, loading] = useSession();
-  const router = useRouter();
+  const { query } = useRouter();
   const { showAlert } = useAlertHook();
 
   useEffect(() => {
-    if (session && !loading) {
-      router.push('/home');
-    }
-  }, [loading, session]);
-
-  useEffect(() => {
-    if (router.query.error) {
+    if (query.error) {
       showAlert({
         message: 'Something wrong when try to loggedin.',
         severity: 'error',
         title: 'Login failed'
       });
     }
-  }, [router.query.error]);
-
-  // When rendering client side don't display anything until loading is complete
-  if (typeof window !== 'undefined' && loading) return null;
+  }, [query.error]);
 
   return (
     <div className={style.root}>
@@ -103,13 +93,20 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const available = await healthcheck();
 
   if (!available) {
-    res.writeHead(302, { location: `${process.env.NEXTAUTH_URL}/maintenance` });
+    res.setHeader('location', '/maintenance');
+    res.statusCode = 302;
+    res.end();
+  }
+
+  const session = await getSession(context);
+
+  if (session) {
+    res.setHeader('location', '/home');
+    res.statusCode = 302;
     res.end();
   }
 
   return {
-    props: {
-      session: await getSession(context)
-    }
+    props: {}
   };
 };

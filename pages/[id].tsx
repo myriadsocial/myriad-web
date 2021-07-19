@@ -49,24 +49,27 @@ export default function Profile({ session, params }: Props) {
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const { res, params } = context;
-  const session = await getSession(context);
-
-  if (!session) {
-    res.writeHead(301, { location: `${process.env.NEXTAUTH_URL}` });
-    res.end();
-  }
 
   const available = await healthcheck();
 
   if (!available) {
-    res.writeHead(302, { location: `${process.env.NEXTAUTH_URL}/maintenance` });
+    res.setHeader('location', '/maintenance');
+    res.statusCode = 302;
+    res.end();
+  }
+
+  const session = await getSession(context);
+
+  if (!session) {
+    res.setHeader('location', '/');
+    res.statusCode = 302;
     res.end();
   }
 
   return {
     props: {
-      session,
-      params
+      params,
+      session
     }
   };
 };

@@ -14,3 +14,19 @@ export const storeTransaction = async (values: Transaction): Promise<Transaction
 
   return data;
 };
+
+export const getTransaction = async (options: Partial<Transaction>): Promise<Transaction[]> => {
+  const { to: userId } = options;
+
+  const { data } = await MyriadAPI.request<Transaction[]>({
+    url: '/transactions',
+    method: 'GET',
+    params: {
+      filter: {
+        where: { to: userId }
+      }
+    }
+  });
+
+  return data;
+};
