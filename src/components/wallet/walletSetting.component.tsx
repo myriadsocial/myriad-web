@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Snackbar from '@material-ui/core/Snackbar';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import SendIcon from '@material-ui/icons/Send';
 import Alert from '@material-ui/lab/Alert';
@@ -226,7 +227,12 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
         </TabPanel>
         <TabPanel value={idx} index={1}>
           <DialogContent>
-            <SearchComponent value={RPCAddress} placeholder="RPC Address (wss://rpc.myriad.systems)" onSubmit={submitSearchRPCAdress} />
+            <SearchComponent
+              value={RPCAddress}
+              placeholder="RPC Address (wss://rpc.myriad.systems) - Under maintenance, coming soon!"
+              onSubmit={submitSearchRPCAdress}
+              isDisabled={true}
+            />
           </DialogContent>
         </TabPanel>
         <DialogActions>
