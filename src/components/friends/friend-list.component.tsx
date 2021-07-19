@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
@@ -19,10 +20,11 @@ import { ListSubHeaderComponent } from './list-sub-header.component';
 import { ToggleCollapseButton } from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
 import { useFriends } from 'src/context/friends.context';
-import { User } from 'src/interfaces/user';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
-type Props = {
-  user: User | null;
+type FriendsListProps = {
+  showOnlineStatus?: boolean;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -57,14 +59,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Friends = ({ user }: Props) => {
+const FriendsListComponent: React.FC<FriendsListProps> = ({ showOnlineStatus = false }) => {
   const style = useStyles();
 
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
   const { state } = useFriends();
-  const { loadFriends } = useFriendsHook(user);
+  const { loadFriends } = useFriendsHook();
   const [openOnlineFriends, setOpenOnlineFriends] = useState(true);
   const [openOtherFriends] = useState(false);
-  const [showOnlineFriends] = useState(false);
 
   useEffect(() => {
     loadFriends();
@@ -110,7 +112,7 @@ const Friends = ({ user }: Props) => {
                             {request.requestor.name}
                           </Typography>
                         </ListItemText>
-                        {showOnlineFriends && (
+                        {showOnlineStatus && (
                           <ListItemSecondaryAction>
                             <FiberManualRecordIcon className={style.online} />
                           </ListItemSecondaryAction>
@@ -128,7 +130,7 @@ const Friends = ({ user }: Props) => {
                             {request.friend.name}
                           </Typography>
                         </ListItemText>
-                        {showOnlineFriends && (
+                        {showOnlineStatus && (
                           <ListItemSecondaryAction>
                             <FiberManualRecordIcon className={style.online} />
                           </ListItemSecondaryAction>
@@ -153,4 +155,4 @@ const Friends = ({ user }: Props) => {
   );
 };
 
-export default Friends;
+export default FriendsListComponent;

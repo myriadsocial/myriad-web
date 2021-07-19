@@ -17,11 +17,8 @@ import ShowIf from 'src/components/common/show-if.component';
 import { useFriends } from 'src/context/friends.context';
 import { useFriendsHook } from 'src/hooks/use-friends-hook';
 import { ExtendedFriend, FriendStatus } from 'src/interfaces/friend';
-import { User } from 'src/interfaces/user';
 
-type Props = {
-  user: User | null;
-};
+type FriendRequestsProps = {};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -71,11 +68,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const FriendRequests = ({ user }: Props) => {
+const FriendRequests: React.FC<FriendRequestsProps> = () => {
   const style = useStyles();
 
   const { state } = useFriends();
-  const { loadRequests, toggleRequest } = useFriendsHook(user);
+  const { loadRequests, toggleRequest } = useFriendsHook();
   const [openFriends, setOpenFriends] = useState(true);
 
   useEffect(() => {

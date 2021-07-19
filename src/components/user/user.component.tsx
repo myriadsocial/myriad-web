@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { User } from 'next-auth';
+import { useSelector } from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
@@ -14,15 +13,14 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { ProfileActionComponent } from './profile-action.component';
 import { SocialListComponent } from './social-list.component';
 
-import { WithAdditionalParams } from 'next-auth/_utils';
 import { LoginFormComponent } from 'src/components/login/login-form.component';
 import { ProfileEditComponent } from 'src/components/profile/profile-edit.component';
-import { useUser } from 'src/context/user.context';
 import { acronym } from 'src/helpers/string';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
-type Props = {
+type UserComponentProps = {
   isAnonymous: boolean;
-  user: WithAdditionalParams<User>;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -59,10 +57,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const UserComponent: React.FC<Props> = ({ isAnonymous, user }) => {
+const UserComponent: React.FC<UserComponentProps> = ({ isAnonymous }) => {
   const style = useStyles();
 
-  const { state: userState } = useUser();
+  const { user, alias } = useSelector<RootState, UserState>(state => state.userState);
   const [loginOpened, openLogin] = React.useState(false);
   const [editProfile, setEditProfile] = React.useState(false);
 
@@ -75,10 +73,12 @@ const UserComponent: React.FC<Props> = ({ isAnonymous, user }) => {
   };
 
   const getProfilePicture = (): string => {
-    const avatar = userState.user?.profilePictureURL as string;
+    const avatar = user?.profilePictureURL as string;
 
     return avatar || '';
   };
+
+  if (!isAnonymous && !user) return null;
 
   return (
     <Box p={1} bgcolor="primary.light" className={style.root} id="user-profile">
@@ -87,22 +87,22 @@ const UserComponent: React.FC<Props> = ({ isAnonymous, user }) => {
           className={style.cardHeader}
           avatar={
             <Avatar
-              aria-label={`${isAnonymous ? user.name : userState.user?.name} avatar`}
+              aria-label={`${user?.name || alias} avatar`}
               src={getProfilePicture()}
               variant="circular"
               sizes="lg"
               style={{ width: 72, height: 72 }}>
-              {isAnonymous ? acronym(user.name as string) : acronym(userState.user?.name as string)}
+              {acronym(user?.name || alias)}
             </Avatar>
           }
           title={
             <Typography variant="h4" style={{ marginBottom: 4, fontWeight: 400 }}>
-              {isAnonymous ? user.name : userState.user?.name}
+              {user?.name || alias}
             </Typography>
           }
           subheader={
             <ProfileActionComponent
-              userId={userState.user?.id || null}
+              userId={user?.id || null}
               anonymous={isAnonymous}
               onEditProfileClicked={toggleEdit}
               onLoginClicked={toggleLogin}
@@ -110,11 +110,11 @@ const UserComponent: React.FC<Props> = ({ isAnonymous, user }) => {
           }
         />
         <CardContent style={{ padding: '16px 0' }}>
-          <SocialListComponent isAnonymous={isAnonymous} user={userState.user} />
+          <SocialListComponent isAnonymous={isAnonymous} user={user} />
         </CardContent>
       </Card>
 
-      {userState.user && <ProfileEditComponent open={editProfile} user={userState.user} toggleProfileForm={toggleEdit} />}
+      {user && <ProfileEditComponent open={editProfile} user={user} toggleProfileForm={toggleEdit} />}
 
       <Dialog open={loginOpened} onClose={toggleLogin} maxWidth="xs">
         <LoginFormComponent />

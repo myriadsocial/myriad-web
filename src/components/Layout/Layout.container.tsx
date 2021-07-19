@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
+import { useSelector } from 'react-redux';
 
-import { Session } from 'next-auth';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
@@ -18,13 +18,14 @@ import TipAlertComponent from 'src/components/alert/TipAlert.component';
 import { LayoutSettingProvider } from 'src/context/layout.context';
 import { TransactionProvider } from 'src/context/transaction.context';
 import { UserProvider } from 'src/context/user.context';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 import TourComponent from 'src/tour/Tour.component';
 
 const DektopLayoutComponent = dynamic(() => import('./desktop-layout.component'));
 const MobileLayoutComponent = dynamic(() => import('./mobile-layout.component'));
 
 type LayoutProps = {
-  session: Session | null;
   children: ReactNode;
 };
 
@@ -37,14 +38,14 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const Layout: React.FC<LayoutProps> = ({ children, session }) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   const style = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const userId = session?.user.id as string;
+  const { user, anonymous } = useSelector<RootState, UserState>(state => state.userState);
 
-  if (!session) return null;
+  if (!user) return null;
 
   return (
     <div className={style.root}>
@@ -56,16 +57,16 @@ const Layout: React.FC<LayoutProps> = ({ children, session }) => {
       <LayoutSettingProvider>
         <UserProvider>
           <NoSsr>
-            <TourComponent disable={Boolean(session.user.anonymous)} userId={userId} />
+            <TourComponent disable={Boolean(anonymous)} userId={user.id} />
           </NoSsr>
           <TransactionProvider>
             <ExperienceProvider>
               <ConverstionProvider>
                 <TimelineProvider>
                   {isMobile ? (
-                    <MobileLayoutComponent user={session.user}>{children}</MobileLayoutComponent>
+                    <MobileLayoutComponent user={user}>{children}</MobileLayoutComponent>
                   ) : (
-                    <DektopLayoutComponent user={session.user}>{children}</DektopLayoutComponent>
+                    <DektopLayoutComponent user={user}>{children}</DektopLayoutComponent>
                   )}
                 </TimelineProvider>
               </ConverstionProvider>

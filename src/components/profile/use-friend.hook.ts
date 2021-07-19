@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import Axios from 'axios';
 import { useProfile, ProfileActionType } from 'src/components/profile/profile.context';
@@ -7,12 +8,16 @@ import { useFriendsHook } from 'src/hooks/use-friends-hook';
 import { FriendStatus, ExtendedFriend } from 'src/interfaces/friend';
 import { User } from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL
 });
 
 export const useFriendHook = (user: User | null) => {
+  const { user: loggedUser } = useSelector<RootState, UserState>(state => state.userState);
+
   const { loadFriends, loadRequests } = useFriendsHook(user);
   const { state: profileState, dispatch } = useProfile();
   const [loading, setLoading] = useState(false);

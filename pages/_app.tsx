@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { CookiesProvider } from 'react-cookie';
 
-import { Provider } from 'next-auth/client';
+import { Provider as AuthProvider } from 'next-auth/client';
 import { AppProps, NextWebVitalsMetric } from 'next/app';
 import Head from 'next/head';
 
@@ -9,6 +9,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 
 import { BalanceProvider } from '../src/components/wallet/balance.context';
+import { wrapper } from '../src/store';
 import theme from '../src/themes/light';
 
 import { WalletAddressProvider } from 'src/components/common/sendtips/send-tip.context';
@@ -25,8 +26,6 @@ const App = ({ Component, pageProps }: AppProps) => {
     if (jssStyles) {
       jssStyles.parentElement && jssStyles.parentElement.removeChild(jssStyles);
     }
-
-    // keyring.loadAll({ ss58Format: 42, type: 'sr25519' });
   }, []);
 
   const pageTitle = 'Myriad';
@@ -49,7 +48,7 @@ const App = ({ Component, pageProps }: AppProps) => {
             <WalletAddressProvider>
               {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
               <CssBaseline />
-              <Provider
+              <AuthProvider
                 // Provider options are not required but can be useful in situations where
                 // you have a short session maxAge time. Shown here with default values.
                 options={{
@@ -79,7 +78,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                     </ProfileProvider>
                   </UserProvider>
                 </CookiesProvider>
-              </Provider>
+              </AuthProvider>
             </WalletAddressProvider>
           </BalanceProvider>
         </TokenProvider>
@@ -92,4 +91,4 @@ export function reportWebVitals(metric: NextWebVitalsMetric) {
   console.log('report:', metric);
 }
 
-export default App;
+export default wrapper.withRedux(App);

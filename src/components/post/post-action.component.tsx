@@ -7,12 +7,12 @@ import CommentIcon from '@material-ui/icons/Comment';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
+import { usePostActionHook } from './post-action.hook';
 import RedditReactionComponent from './reactions/reddit.component';
 import TwitterReactionComponent from './reactions/twitter.component';
 
 import clsx from 'clsx';
 import ShowIf from 'src/components/common/show-if.component';
-import { useUser } from 'src/context/user.context';
 import { Post } from 'src/interfaces/post';
 import { PostDetail } from 'src/lib/parse-social.util';
 
@@ -58,19 +58,7 @@ export const PostActionComponent: React.FC<PostActionProps> = ({
 }) => {
   const styles = useStyles();
 
-  const {
-    state: { user }
-  } = useUser();
-
-  const isTippingDisabled = (): boolean => {
-    if (!user) return true;
-
-    if (user.anonymous) return true;
-
-    // TODO: current api does not return user
-    if (user.id === post.platformUser?.platform_account_id) return true;
-    return false;
-  };
+  const { tippingEnabled } = usePostActionHook(post);
 
   return (
     <>
@@ -104,7 +92,7 @@ export const PostActionComponent: React.FC<PostActionProps> = ({
         color="default"
         variant="contained"
         size="medium"
-        disabled={isTippingDisabled()}
+        disabled={!tippingEnabled}
         onClick={tipOwner}>
         Send Tip
       </Button>

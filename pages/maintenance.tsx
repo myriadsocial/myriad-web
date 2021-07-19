@@ -1,5 +1,9 @@
 import React from 'react';
 
+import { GetServerSideProps } from 'next';
+
+import { healthcheck } from 'src/lib/api/healthcheck';
+
 export default function Maintenance() {
   return (
     <article>
@@ -14,3 +18,19 @@ export default function Maintenance() {
     </article>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async context => {
+  const { res } = context;
+
+  const available = await healthcheck();
+
+  if (available) {
+    res.setHeader('location', '/');
+    res.statusCode = 302;
+    res.end();
+  }
+
+  return {
+    props: {}
+  };
+};

@@ -48,8 +48,8 @@ export const ConnectSuccessComponent: React.FC<ConnectSuccessProps> = ({ open, o
 
   return (
     <div className={styles.root}>
-      <Dialog open={open} maxWidth="md" onClose={close} aria-labelledby="link-social-accounts-window">
-        <DialogTitle onClose={close} id="link-account">
+      <Dialog open={open} maxWidth="md" onClose={onClose} aria-labelledby="link-social-accounts-window">
+        <DialogTitle onClose={onClose} id="link-account">
           Post Something
         </DialogTitle>
         <DialogContent className={styles.content}>

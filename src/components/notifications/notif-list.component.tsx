@@ -17,11 +17,8 @@ import ShowIf from 'src/components/common/show-if.component';
 import { useNotif } from 'src/context/notif.context';
 import { acronym } from 'src/helpers/string';
 import { useNotifHook } from 'src/hooks/use-notif.hook';
-import { User } from 'src/interfaces/user';
 
-type Props = {
-  user: User;
-};
+type NotificationListProps = {};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -56,10 +53,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Notification = ({ user }: Props) => {
+const NotificationListComponent: React.FC<NotificationListProps> = props => {
   const style = useStyles();
   const { state } = useNotif();
-  const { loadNotifications } = useNotifHook(user);
+  const { loadNotifications } = useNotifHook();
 
   useEffect(() => {
     loadNotifications();
@@ -105,4 +102,4 @@ const Notification = ({ user }: Props) => {
   );
 };
 
-export default Notification;
+export default NotificationListComponent;

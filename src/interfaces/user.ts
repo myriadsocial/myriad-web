@@ -27,7 +27,7 @@ export interface User {
 }
 
 export interface ExtendedUser extends User {
-  userCredentials: ExtendedUserCredential[];
+  userCredentials?: ExtendedUserCredential[];
 }
 
 export interface ExtendedUserPost extends User {

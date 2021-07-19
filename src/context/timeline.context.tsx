@@ -3,7 +3,7 @@ import React from 'react';
 import update from 'immutability-helper';
 import { Tag } from 'src/interfaces/experience';
 import { Post, Comment } from 'src/interfaces/post';
-import { TimelineType, PostSortMethod, PostFilter } from 'src/interfaces/timeline';
+import { TimelineType, TimelineSortMethod, TimelineFilter } from 'src/interfaces/timeline';
 
 export enum TimelineActionType {
   LOAD_POST = 'LOAD_POST',
@@ -39,12 +39,12 @@ interface AddComments {
 
 interface SortPost {
   type: TimelineActionType.SORT_POST;
-  sort: PostSortMethod;
+  sort: TimelineSortMethod;
 }
 
 interface UpdateFilter {
   type: TimelineActionType.UPDATE_FILTER;
-  filter: PostFilter;
+  filter: TimelineFilter;
 }
 
 interface CreatePost {
@@ -55,7 +55,7 @@ interface CreatePost {
 interface ChangeTimeLineType {
   type: TimelineActionType.CHANGE_TIMELINE_TYPE;
   value: TimelineType;
-  filter: PostFilter;
+  filter: TimelineFilter;
 }
 
 export type Action = LoadPost | LoadMorePost | LoadComments | AddComments | SortPost | UpdateFilter | CreatePost | ChangeTimeLineType;
@@ -64,9 +64,9 @@ type Dispatch = (action: Action) => void;
 type TimelineProviderProps = { children: React.ReactNode };
 type State = {
   type: TimelineType;
-  sort: PostSortMethod;
+  sort: TimelineSortMethod;
   page: number;
-  filter: PostFilter;
+  filter: TimelineFilter;
   posts: Post[];
   trending: Tag[];
 };

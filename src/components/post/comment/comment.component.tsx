@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -25,12 +25,13 @@ import DateFormat from 'src/components/common/DateFormat';
 import SendTipModal from 'src/components/common/sendtips/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
 import { TabPanel } from 'src/components/common/tab-panel.component';
-import { useUser } from 'src/context/user.context';
 import { useCommentHook } from 'src/hooks/use-comment.hook';
 import { BalanceDetail } from 'src/interfaces/balance';
 import { Post, Comment } from 'src/interfaces/post';
 import { Token } from 'src/interfaces/token';
 import { User } from 'src/interfaces/user';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 const StyledBadge = withStyles((theme: Theme) =>
   createStyles({
@@ -55,15 +56,9 @@ const CommentComponent: React.FC<CommentComponentProps> = ({ balanceDetails, pos
   const style = useStyles();
   const theme = useTheme();
 
-  const {
-    state: { user }
-  } = useUser();
-
-  const { comments, loadInitComment, reply } = useCommentHook(post);
   const router = useRouter();
-  const [session] = useSession();
-  const userId = session?.user.id as string;
-  const isAnonymous = Boolean(session?.user.anonymous);
+  const { user, anonymous } = useSelector<RootState, UserState>(state => state.userState);
+  const { comments, loadInitComment, reply } = useCommentHook(post);
   const childRef = useRef<any>();
   const [selectedTab, setSelectedTab] = React.useState(0);
 
@@ -81,7 +76,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({ balanceDetails, pos
     reply(user, {
       text: comment,
       postId: post.id,
-      userId,
+      userId: user.id,
       createdAt: new Date()
     });
   };
@@ -97,7 +92,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({ balanceDetails, pos
   };
 
   const renderAction = (comment: Comment) => {
-    if (userId != comment.userId)
+    if (user && user.id != comment.userId)
       return (
         <Button
           className={style.action}
@@ -152,15 +147,17 @@ const CommentComponent: React.FC<CommentComponentProps> = ({ balanceDetails, pos
                       {comment.text}
                     </Typography>
                   </CardContent>
-                  <SendTipModal
-                    availableTokens={availableTokens}
-                    success={postId => handleTipSentSuccess(postId)}
-                    postId={post?.id as string}
-                    userAddress={userId}
-                    ref={childRef}
-                    receiverId={comment?.user?.id as string}
-                    balanceDetails={balanceDetails}
-                  />
+                  {user && (
+                    <SendTipModal
+                      availableTokens={availableTokens}
+                      success={postId => handleTipSentSuccess(postId)}
+                      postId={post?.id as string}
+                      userAddress={user.id}
+                      ref={childRef}
+                      receiverId={comment?.user?.id as string}
+                      balanceDetails={balanceDetails}
+                    />
+                  )}
                 </Card>
               </Grid>
             );
@@ -172,7 +169,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({ balanceDetails, pos
       </TabPanel>
 
       <ShowIf condition={!disableReply}>
-        <ReplyCommentComponent isAnonymous={isAnonymous} close={hide} onSubmit={replyPost} />
+        <ReplyCommentComponent isAnonymous={anonymous} close={hide} onSubmit={replyPost} />
       </ShowIf>
     </div>
   );

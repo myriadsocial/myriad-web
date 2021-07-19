@@ -8,11 +8,11 @@ export enum TimelineType {
 
 export type PostOrigin = 'facebook' | 'twitter' | 'reddit' | 'myriad';
 
-export type PostSortMethod = 'created' | 'like' | 'comment' | 'trending';
+export type TimelineSortMethod = 'created' | 'like' | 'comment' | 'trending';
 
-export type PostFilter = {
-  tags: string[];
-  people: string[];
-  layout: LayoutType;
-  platform: PostOrigin[];
+export type TimelineFilter = {
+  tags?: string[];
+  people?: string[];
+  layout?: LayoutType;
+  platform?: PostOrigin[];
 };

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useSelector } from 'react-redux';
 
 import { signOut } from 'next-auth/client';
 
@@ -28,15 +29,15 @@ import ShowIf from 'src/components/common/show-if.component';
 import { ProfileEditComponent } from 'src/components/profile/profile-edit.component';
 import { useProfile } from 'src/components/profile/profile.context';
 import { SocialListComponent } from 'src/components/user/social-list.component';
-import { useUser } from 'src/context/user.context';
 import { acronym } from 'src/helpers/string';
 import RemoveUser from 'src/images/user-minus2.svg';
 import { FriendStatus } from 'src/interfaces/friend';
-import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
+import { ExtendedUserPost } from 'src/interfaces/user';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 type Props = {
   isAnonymous: boolean;
-  user: ExtendedUser | null;
   profile: ExtendedUserPost | null;
   loading: boolean;
   isGuest: boolean;
@@ -46,18 +47,18 @@ function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export default function Header({ isAnonymous, user, profile, loading, isGuest }: Props) {
+export default function Header({ isAnonymous, profile, loading, isGuest }: Props) {
+  const style = useStyles();
+
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
   const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);
 
-  const { state: userState } = useUser();
   const {
     state: { friendStatus }
   } = useProfile();
-  const { makeFriend, checkFriendStatus, cancelFriendRequest, toggleRequest } = useFriendHook(user);
-
-  const style = useStyles();
+  const { makeFriend, checkFriendStatus, cancelFriendRequest, toggleRequest } = useFriendHook();
 
   useEffect(() => {
     checkFriendStatus(profile?.id);
@@ -281,14 +282,14 @@ export default function Header({ isAnonymous, user, profile, loading, isGuest }:
               </Button>
             </div>
             <div style={{ marginTop: '30px' }}>
-              <SocialListComponent isAnonymous={isAnonymous} user={user} />
+              <SocialListComponent isAnonymous={isAnonymous} />
             </div>
           </ShowIf>
         </div>
       </div>
 
       {/* MODAL */}
-      {userState.user && <ProfileEditComponent toggleProfileForm={toggleProfileForm} open={openEditModal} user={userState.user} />}
+      {user && <ProfileEditComponent toggleProfileForm={toggleProfileForm} open={openEditModal} user={user} />}
 
       <Dialog open={openRemoveModal} aria-labelledby="no-extension-installed">
         <DialogTitle id="name" onClose={toggleRemoveAlert}>

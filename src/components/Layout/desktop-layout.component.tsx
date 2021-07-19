@@ -1,46 +1,37 @@
 import React, { useEffect } from 'react';
 
-import { User } from 'next-auth';
-
 import AppBar from '../app-bar/app-bar.component';
 import ShowIf from '../common/show-if.component';
 import SidebarComponent from '../sidebar/sidebar.component';
 import { useStyles } from './layout.style';
 
-import { WithAdditionalParams } from 'next-auth/_utils';
 import BannerDemo from 'src/components/common/banner-demo.component';
 import { FriendsProvider } from 'src/context/friends.context';
 import { NotifProvider } from 'src/context/notif.context';
-import { useUser } from 'src/context/user.context';
 import { useLayout } from 'src/hooks/use-layout.hook';
 import { useUserHook } from 'src/hooks/use-user.hook';
+import { ExtendedUser } from 'src/interfaces/user';
 
 type Props = {
   children: React.ReactNode;
-  user: WithAdditionalParams<User>;
+  user: ExtendedUser;
 };
 
 const DesktopLayoutComponent = ({ children, user }: Props) => {
   const style = useStyles();
 
   const { setting } = useLayout();
-  const { state } = useUser();
-  const { getUserDetail, loadFcmToken, setAsAnonymous } = useUserHook(user.address as string);
-  const isAnonymous = Boolean(user.anonymous);
+
+  const { loadFcmToken } = useUserHook(user.id);
 
   useEffect(() => {
     // TODO: this should be only loaded once on layout container
-    if (!isAnonymous) {
-      getUserDetail();
+    if (!user.anonymous) {
       loadFcmToken();
-    } else {
-      setAsAnonymous();
     }
 
     return undefined;
-  }, [isAnonymous]);
-
-  if (!state.anonymous && !state.user) return null;
+  }, []);
 
   return (
     <>
@@ -55,7 +46,7 @@ const DesktopLayoutComponent = ({ children, user }: Props) => {
           <NotifProvider>
             <div className={style.experience}>
               <ShowIf condition={!setting.focus}>
-                <SidebarComponent isAnonymous={isAnonymous} />
+                <SidebarComponent isAnonymous={user.anonymous} />
               </ShowIf>
             </div>
           </NotifProvider>

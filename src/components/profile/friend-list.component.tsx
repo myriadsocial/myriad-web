@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import Link from 'next/link';
 
@@ -26,11 +27,12 @@ import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
 import { useProfile } from 'src/components/profile/profile.context';
 import { useFriendHook } from 'src/components/profile/use-friend.hook';
-import { useUser } from 'src/context/user.context';
 import { acronym } from 'src/helpers/string';
 import RemoveUser from 'src/images/user-minus.svg';
 import { ExtendedFriend } from 'src/interfaces/friend';
 import { User } from 'src/interfaces/user';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 type Props = {
   profile: User;
@@ -136,9 +138,7 @@ const FriendsList = ({ profile }: Props) => {
   const {
     state: { friends }
   } = useProfile();
-  const {
-    state: { user }
-  } = useUser();
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
   const { cancelFriendRequest } = useFriendHook(profile);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>, id: string, name: string, request: ExtendedFriend) => {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import DividerComponent from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
@@ -9,21 +10,20 @@ import FriendRequestComponent from './friend-requests.component';
 
 import { debounce } from 'lodash';
 import SearchComponent from 'src/components/common/search.component';
-import { useUser } from 'src/context/user.context';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
-interface TopicProps {
+interface FriendComponentProps {
   title?: string;
 }
 
-const FriendComponent: React.FC<TopicProps> = props => {
+const FriendComponent: React.FC<FriendComponentProps> = props => {
   const { title } = props;
 
-  const {
-    state: { user, anonymous }
-  } = useUser();
+  const { user, anonymous } = useSelector<RootState, UserState>(state => state.userState);
   const [search, setSearchQuery] = useState('');
 
-  const { searchFriend } = useFriendsHook(user);
+  const { searchFriend } = useFriendsHook();
 
   const handleSearchFriend = debounce((query: string) => {
     setSearchQuery(query);
@@ -43,9 +43,9 @@ const FriendComponent: React.FC<TopicProps> = props => {
         <SearchComponent value={search} placeholder="Find a Friend" onSubmit={handleSearchFriend} />
       </div>
 
-      <FriendRequestComponent user={user} />
+      <FriendRequestComponent />
       <DividerComponent />
-      <FriendListComponent user={user} />
+      <FriendListComponent />
     </div>
   );
 };

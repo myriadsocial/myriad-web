@@ -1,0 +1,5 @@
+export const LOAD_TIMELINE = 'LOAD_TIMELINE';
+export type LOAD_TIMELINE = typeof LOAD_TIMELINE;
+
+export const ADD_POST_TO_TIMELINE = 'ADD_POST_TO_TIMELINE';
+export type ADD_POST_TO_TIMELINE = typeof ADD_POST_TO_TIMELINE;
