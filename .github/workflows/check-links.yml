@@ -3,22 +3,24 @@ name: Check Links
 on:
   pull_request:
     branches:
-      - master
       - main
-      - development
-  push:
-    branches:
-      - master
-      - main
-      - development
+    types:
+      - ready_for_review
 
 jobs:
   check-link-markdown:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        with:
+          access_token: ${{ github.token }}
+
       - name: Checkout Code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Check Link Markdown
         uses: gaurav-nelson/github-action-markdown-link-check@v1

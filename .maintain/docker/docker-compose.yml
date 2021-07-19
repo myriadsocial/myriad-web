@@ -2,7 +2,17 @@ version: '3'
 
 services:
   web:
-    image: myriadsocial/myriad-web:1.0.0
+    container_name: myriad-web
+    image: myriadsocial/myriad-web
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    volumes:
+      - ../../:/home/myriad/app
+      - /home/myriad/app/node_modules
+      - /home/myriad/app/.next
+    env_file:
+      - ../../.env
     environment:
       - HOST=0.0.0.0
       - PORT=3000

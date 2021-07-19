@@ -2,7 +2,7 @@
 FROM node:14-buster-slim AS deps
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --network-timeout 100000
+RUN yarn install --network-timeout 100000
 
 # Rebuild the source code only when needed
 FROM node:14-buster-slim AS builder
@@ -17,14 +17,14 @@ FROM node:14-buster-slim AS runner
 ARG VCS_REF
 ARG BUILD_DATE
 
-LABEL social.myriad.web.image.authors="1@myriad.social" \
-  social.myriad.web.image.vendor="Myriadsocial" \
-  social.myriad.web.image.title="myriadsocial/myriad-web" \
-  social.myriad.web.image.description="myriad-web" \
-  social.myriad.web.image.revision="${VCS_REF}" \
-	social.myriad.web.image.created="${BUILD_DATE}" \
-  social.myriad.web.image.source="https://github.com/myriadsocial/myriad-web/blob/${VCS_REF}/.maintain/docker/Dockerfile" \
-  social.myriad.web.image.documentation="https://github.com/myriadsocial/myriad-web/tree/${VCS_REF}"
+LABEL social.myriad.image.title="myriadsocial/myriad-web" \
+  social.myriad.image.description="myriad-web" \
+  social.myriad.image.authors="myriad.dev@blocksphere.id" \
+	social.myriad.image.vendor="Blocksphere" \
+  social.myriad.image.revision="${VCS_REF}" \
+	social.myriad.image.created="${BUILD_DATE}" \
+  social.myriad.image.source="https://github.com/myriadsocial/myriad-web/blob/${VCS_REF}/.maintain/docker/Dockerfile" \
+  social.myriad.image.documentation="https://github.com/myriadsocial/myriad-web/tree/${VCS_REF}"
 
 # Change default user name
 RUN usermod -d /home/myriad -l myriad node && \
