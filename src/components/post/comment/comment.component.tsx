@@ -99,7 +99,14 @@ const CommentComponent: React.FC<CommentComponentProps> = ({ balanceDetails, pos
   const renderAction = (comment: Comment) => {
     if (userId != comment.userId)
       return (
-        <Button className={style.action} onClick={tipPostUser} aria-label="tip-post-user" color="primary" variant="contained" size="small">
+        <Button
+          className={style.action}
+          onClick={tipPostUser}
+          aria-label="tip-post-user"
+          color="primary"
+          variant="contained"
+          size="small"
+          disabled={isAnonymous}>
           Send Tip
         </Button>
       );
