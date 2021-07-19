@@ -85,6 +85,7 @@ prisma
 
 # next.js
 .next
+/public/sw-env.js
 
 # IDE
 .idea

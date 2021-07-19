@@ -83,8 +83,6 @@ prisma
 # misc
 *.pem
 
-# build
-/public/sw-env.js
-
 # next.js
 .next
+/public/sw-env.js
