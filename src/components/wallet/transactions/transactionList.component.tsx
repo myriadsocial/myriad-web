@@ -76,16 +76,17 @@ export default function TransactionListComponent({ transactions, user }: Props) 
   };
 
   const RenderPrimaryText = (txHistory: Transaction) => {
+    if (!txHistory) return null;
     return (
       <div>
-        {user.id === txHistory?.from ? (
+        {user.id === txHistory.from ? (
           <Typography>
-            You sent tips to {txHistory?.toUser?.name ?? defaultUserName}'s post with {transformTokenValue(txHistory)} {txHistory?.tokenId}{' '}
+            You sent tips to {txHistory.toUser?.name ?? defaultUserName}'s post with {transformTokenValue(txHistory)} {txHistory.tokenId}{' '}
             coins
           </Typography>
         ) : (
           <Typography>
-            {txHistory?.fromUser?.name ?? defaultUserName} tipped your post with {transformTokenValue(txHistory)} {txHistory?.tokenId} coins
+            {txHistory.fromUser?.name ?? defaultUserName} tipped your post with {transformTokenValue(txHistory)} {txHistory.tokenId} coins
           </Typography>
         )}
       </div>
@@ -93,8 +94,9 @@ export default function TransactionListComponent({ transactions, user }: Props) 
   };
 
   const RenderSecondaryText = (txHistory: Transaction) => {
+    if (!txHistory) return null;
     const formatDate = () => {
-      const formattedDate = new Date(txHistory?.createdAt);
+      const formattedDate = new Date(txHistory.createdAt);
       return formattedDate.toUTCString();
     };
 
