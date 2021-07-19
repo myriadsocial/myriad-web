@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import Button from '@material-ui/core/Button';
 import SortIcon from '@material-ui/icons/Sort';
 
-import { useTransaction } from '../../../tippingJar/use-transaction.hooks';
+import { useTransaction } from '../../../../hooks/use-transaction.hooks';
 import { ActionTabsComponent } from '../tipping/actionTabs.component';
 import { TokenDetailComponent } from '../tipping/tokenDetail.component';
 import { EmptyTransactionComponent } from './EmptyTransaction.component';
