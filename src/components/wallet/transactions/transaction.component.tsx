@@ -11,8 +11,8 @@ import SortIcon from '@material-ui/icons/Sort';
 import { useStyles } from './transaction-style';
 import TransactionListComponent from './transactionList.component';
 
-import { useTransaction } from 'src/components/tippingJar/use-transaction.hooks';
 import { useUser } from 'src/context/user.context';
+import { useTransaction } from 'src/hooks/use-transaction.hooks';
 
 type StyledComponentProps = {
   className?: string;
