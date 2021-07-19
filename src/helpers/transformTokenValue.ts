@@ -11,15 +11,21 @@ const basicTransform = (txHistory: Transaction) => {
   return temp;
 };
 
+const transformValueForMYR = (txHistory: Transaction) => {
+  let temp = '';
+  const BASE_NUMBER = 10;
+  temp = (txHistory.value / BASE_NUMBER ** txHistory.token.token_decimal).toString();
+  return temp;
+};
+
 export const transformTokenValue = (txHistory: Transaction) => {
   let tokenValue = '';
-  const BASE_NUMBER = 10;
   switch (txHistory.tokenId) {
     case TokenID.AUSD:
       tokenValue = basicTransform(txHistory);
       break;
     default:
-      tokenValue = (txHistory.value / BASE_NUMBER ** txHistory.token.token_decimal).toString();
+      tokenValue = transformValueForMYR(txHistory);
   }
 
   return tokenValue;
