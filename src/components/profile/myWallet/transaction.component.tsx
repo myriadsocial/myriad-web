@@ -310,7 +310,6 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef, detail
     state: { user }
   } = useUser();
   const userAddress = session?.user.address as string;
-  console.log('userAddress is: ', userAddress);
   const { loading, error, transactions, inboundTxs, outboundTxs, loadInitTransaction } = useTransaction(userAddress);
   const { loadAllUserTokens, userTokens } = useToken(userAddress);
 

@@ -98,9 +98,6 @@ export default function PostComponent({
       return;
     }
 
-    console.log('the sendTipRef: ', sendTipRef);
-    console.log('the walletReceiverDetail: ', walletReceiverDetail);
-
     sendTipRef.current.triggerSendTipModal();
   };
 
