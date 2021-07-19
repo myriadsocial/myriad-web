@@ -18,7 +18,7 @@ export const useTransaction = (userId: string) => {
     offset: 0,
     limit: 20,
     where: { or: [{ to: userId }, { from: userId }] },
-    include: ['toUser', 'fromUser']
+    include: ['toUser', 'fromUser', 'token']
   });
 
   const load = async (type: TransactionActionType = TransactionActionType.INIT_TRANSACTION) => {
