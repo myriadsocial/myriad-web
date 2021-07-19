@@ -1,2 +1,5 @@
-**/.next/*
-**/node_modules/*
+node_modules/
+dist/
+.next/
+coverage/
+.eslintrc.js
