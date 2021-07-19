@@ -20,9 +20,9 @@ ARG BUILD_DATE
 LABEL social.myriad.image.title="myriadsocial/myriad-web" \
   social.myriad.image.description="myriad-web" \
   social.myriad.image.authors="myriad.dev@blocksphere.id" \
-	social.myriad.image.vendor="Blocksphere" \
+  social.myriad.image.vendor="Blocksphere" \
   social.myriad.image.revision="${VCS_REF}" \
-	social.myriad.image.created="${BUILD_DATE}" \
+  social.myriad.image.created="${BUILD_DATE}" \
   social.myriad.image.source="https://github.com/myriadsocial/myriad-web/blob/${VCS_REF}/.maintain/docker/Dockerfile" \
   social.myriad.image.documentation="https://github.com/myriadsocial/myriad-web/tree/${VCS_REF}"
 
@@ -41,8 +41,7 @@ RUN mkdir -p /home/myriad/app
 WORKDIR /home/myriad/app
 
 # You only need to copy next.config.js if you are NOT using the default configuration
-# COPY --from=builder /app/next.config.js ./
-COPY --from=builder --chown=myriad /app/.env ./.env
+COPY --from=builder --chown=myriad /app/next.config.js ./app/next.config.js
 COPY --from=builder --chown=myriad /app/public ./public
 COPY --from=builder --chown=myriad /app/.next ./.next
 COPY --from=builder --chown=myriad /app/node_modules ./node_modules
