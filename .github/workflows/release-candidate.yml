@@ -1,0 +1,44 @@
+name: Release-candidate automation
+
+on:
+  push:
+    branches:
+      - release-v[0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  tag-rc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Compute Next RC Tag
+        id: compute_tag
+        shell: bash
+        run: |
+          # Get last rc tag if exists, else set it to {version}-rc1
+          version=${GITHUB_REF#refs/heads/release-}
+          echo "$version"
+          echo "::set-output name=version::$version"
+          git tag -l
+          last_rc=$(git tag -l "$version-rc*" | sort -V | tail -n 1)
+          if [ -n "$last_rc" ]; then
+            suffix=$(echo "$last_rc" | grep -Eo '[0-9]+$')
+            echo $suffix
+            ((suffix++))
+            echo $suffix
+            echo "::set-output name=new_tag::$version-rc$suffix"
+            echo "::set-output name=first_rc::false"
+          else
+            echo "::set-output name=new_tag::$version-rc1"
+            echo "::set-output name=first_rc::true"
+          fi
+
+      - name: Apply New Tag
+        uses: mathieudutour/github-tag-action@v5.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.compute_tag.outputs.new_tag }}
