@@ -81,12 +81,13 @@ export default function TransactionListComponent({ transactions, user }: Props) 
 
   const checkIfMyriad = (txHistory: Transaction) => {
     let tokenValue = '';
+    const BASE_NUMBER = 10;
     switch (txHistory.tokenId) {
       case TokenID.AUSD:
         tokenValue = txHistory.value.toString();
         break;
       default:
-        tokenValue = (txHistory.value / txHistory.token.token_decimal).toString();
+        tokenValue = (txHistory.value / BASE_NUMBER ** txHistory.token.token_decimal).toString();
     }
 
     return tokenValue;
@@ -97,12 +98,11 @@ export default function TransactionListComponent({ transactions, user }: Props) 
       <div>
         {user.id === txHistory?.from ? (
           <Typography>
-            You sent tips to {txHistory?.toUser?.name ?? defaultUserName}'s post with {(txHistory?.value).toString()} {txHistory?.tokenId}{' '}
-            coins
+            You sent tips to {txHistory?.toUser?.name ?? defaultUserName}'s post with {checkIfMyriad(txHistory)} {txHistory?.tokenId} coins
           </Typography>
         ) : (
           <Typography>
-            {txHistory?.fromUser?.name ?? defaultUserName} tipped your post with {(txHistory?.value).toString()} {txHistory?.tokenId} coins
+            {txHistory?.fromUser?.name ?? defaultUserName} tipped your post with {checkIfMyriad(txHistory)} {txHistory?.tokenId} coins
           </Typography>
         )}
       </div>
