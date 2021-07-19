@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
-import { useTransaction as baseUseTransaction, TransactionActionType } from './transaction.context';
-
 import Axios from 'axios';
+import { useTransaction as baseUseTransaction, TransactionActionType } from 'src/context/transaction.context';
 import { Transaction } from 'src/interfaces/transaction';
 
 const axios = Axios.create({
