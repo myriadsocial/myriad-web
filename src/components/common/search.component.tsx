@@ -46,9 +46,10 @@ type Props = {
   onSubmit: (value: string) => void;
   value?: string;
   placeholder?: string;
+  isDisabled?: boolean;
 };
 
-export default function SearchComponent({ value = '', placeholder = 'Search', onSubmit }: Props): JSX.Element {
+export default function SearchComponent({ value = '', placeholder = 'Search', onSubmit, isDisabled }: Props): JSX.Element {
   const classes = useStyles();
 
   const [search, setSearch] = React.useState(value);
@@ -80,6 +81,7 @@ export default function SearchComponent({ value = '', placeholder = 'Search', on
           'aria-label': 'search'
         }}
         endAdornment={<SearchIcon className={classes.searchIcon} />}
+        disabled={isDisabled}
       />
     </div>
   );
