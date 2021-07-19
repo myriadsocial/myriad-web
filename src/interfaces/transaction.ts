@@ -10,7 +10,7 @@ export interface Transaction {
   state: string;
   tokenId: string;
   postId: string;
-  token: Token;
+  token?: Token;
   createdAt: string;
   fromUser?: User;
   toUser?: User;
