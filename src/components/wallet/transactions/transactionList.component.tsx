@@ -12,15 +12,11 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import ShowIf from 'src/components/common/show-if.component';
 import { useStyles } from 'src/components/wallet/transactions/transactionList-style';
+import { transformTokenValue } from 'src/helpers/transformTokenValue';
 import { useFriendsHook } from 'src/hooks/use-friends-hook';
 import { FriendStatus } from 'src/interfaces/friend';
 import { Transaction } from 'src/interfaces/transaction';
 import { User } from 'src/interfaces/user';
-
-enum TokenID {
-  MYR = 'MYR',
-  AUSD = 'AUSD'
-}
 
 interface Props {
   transactions: Transaction[];
@@ -79,30 +75,17 @@ export default function TransactionListComponent({ transactions, user }: Props) 
     sendRequest(receiverId);
   };
 
-  const checkIfMyriad = (txHistory: Transaction) => {
-    let tokenValue = '';
-    const BASE_NUMBER = 10;
-    switch (txHistory.tokenId) {
-      case TokenID.AUSD:
-        tokenValue = txHistory.value.toString();
-        break;
-      default:
-        tokenValue = (txHistory.value / BASE_NUMBER ** txHistory.token.token_decimal).toString();
-    }
-
-    return tokenValue;
-  };
-
   const RenderPrimaryText = (txHistory: Transaction) => {
     return (
       <div>
         {user.id === txHistory?.from ? (
           <Typography>
-            You sent tips to {txHistory?.toUser?.name ?? defaultUserName}'s post with {checkIfMyriad(txHistory)} {txHistory?.tokenId} coins
+            You sent tips to {txHistory?.toUser?.name ?? defaultUserName}'s post with {transformTokenValue(txHistory)} {txHistory?.tokenId}{' '}
+            coins
           </Typography>
         ) : (
           <Typography>
-            {txHistory?.fromUser?.name ?? defaultUserName} tipped your post with {checkIfMyriad(txHistory)} {txHistory?.tokenId} coins
+            {txHistory?.fromUser?.name ?? defaultUserName} tipped your post with {transformTokenValue(txHistory)} {txHistory?.tokenId} coins
           </Typography>
         )}
       </div>
