@@ -58,7 +58,7 @@ export default function Header({ isAnonymous, profile, loading, isGuest }: Props
   const {
     state: { friendStatus }
   } = useProfile();
-  const { makeFriend, checkFriendStatus, cancelFriendRequest, toggleRequest } = useFriendHook();
+  const { makeFriend, checkFriendStatus, cancelFriendRequest, toggleRequest } = useFriendHook(user);
 
   useEffect(() => {
     checkFriendStatus(profile?.id);
