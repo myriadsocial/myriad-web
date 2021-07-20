@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-import { useSession } from 'next-auth/client';
 import dynamic from 'next/dynamic';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -19,16 +19,15 @@ import { useStyles } from './profile.style';
 import { useProfile } from 'src/components/profile/profile.context';
 import { useFriendHook } from 'src/components/profile/use-friend.hook';
 import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
-import { useToken } from 'src/hooks/use-token.hook';
-import { ExtendedUser, ExtendedUserPost } from 'src/interfaces/user';
+import { ExtendedUserPost } from 'src/interfaces/user';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 const PostList = dynamic(() => import('./post/post-list.component'));
 const ImportedPostList = dynamic(() => import('./post/importedPost-list.component'));
 const FriendComponent = dynamic(() => import('./user-friends.component'));
 
 type Props = {
-  isAnonymous: boolean;
-  user: ExtendedUser | null;
   profile: ExtendedUserPost | null;
   loading: boolean;
 };
@@ -37,7 +36,7 @@ interface StyledTabsProps {
   value: number;
   onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
 }
-
+//TODO: move to common component
 const StyledTabs = withStyles({
   indicator: {
     display: 'flex',
@@ -50,7 +49,7 @@ interface StyledTabProps {
   label: string;
   ariaLabel?: string;
 }
-
+//TODO: move to common component
 const StyledTab = withStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -109,42 +108,38 @@ function MyWalletTabs() {
 }
 // WALLET TAB
 
-export default function ProfileTimeline({ isAnonymous, user, profile, loading }: Props) {
-  const {
-    state: { totalFriends }
-  } = useProfile();
-  const { getFriends } = useFriendHook(profile);
-
-  const { load, tokensReady } = usePolkadotApi();
-  const [session] = useSession();
-  const userId = session?.user.userId as string;
-  const { loadAllUserTokens, userTokens } = useToken(userId);
-
-  useEffect(() => {
-    if (user) {
-      load(user?.id, userTokens);
-    }
-    loadAllUserTokens();
-  }, []);
-
-  const [value, setValue] = React.useState(0);
-  const [isGuest, setIsGuest] = useState<boolean>(false);
+export default function ProfileTimeline({ profile, loading }: Props) {
   const style = useStyles();
   const theme = useTheme();
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
+  const {
+    state: { totalFriends }
+  } = useProfile();
+  const { anonymous, user, tokens: userTokens } = useSelector<RootState, UserState>(state => state.userState);
+
+  const { getFriends } = useFriendHook(profile);
+  const { load, tokensReady } = usePolkadotApi();
+  const [selectedTab, setSelectedTab] = React.useState(0);
+  const [isGuest, setIsGuest] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (user && userTokens) {
+      load(user?.id, userTokens);
+    }
+  }, [user, userTokens]);
+
+  useEffect(() => {
+    setIsGuest(user?.id !== profile?.id);
+
+    if (profile?.id) {
+      getFriends();
+      setSelectedTab(0);
+    }
+  }, [user, profile]);
+
+  const handleChange = (event: React.ChangeEvent<{}>, tab: number) => {
+    setSelectedTab(tab);
   };
-
-  useEffect(() => {
-    if (user && user.id === profile?.id) setIsGuest(false);
-    else setIsGuest(true);
-  }, [profile]);
-
-  useEffect(() => {
-    getFriends();
-    setValue(0);
-  }, [profile?.id]);
 
   if (loading) {
     return (
@@ -157,7 +152,7 @@ export default function ProfileTimeline({ isAnonymous, user, profile, loading }:
   if (profile === null) {
     return (
       <div className={style.root}>
-        <Header isAnonymous={isAnonymous} user={user} profile={null} loading={loading} isGuest={true} />
+        <Header isAnonymous={anonymous} profile={null} loading={loading} isGuest={true} />
         <div style={{ textAlign: 'center' }}>
           <h1>This account doesn’t exist</h1>
           <Typography>Try searching for another.</Typography>
@@ -170,11 +165,11 @@ export default function ProfileTimeline({ isAnonymous, user, profile, loading }:
     <div className={style.root}>
       <div className={style.scroll}>
         {/* HEADER */}
-        <Header isAnonymous={isAnonymous} user={user} profile={profile} loading={loading} isGuest={isGuest} />
+        <Header isAnonymous={anonymous} profile={profile} loading={loading} isGuest={isGuest} />
         {/* TAB */}
         <div className={style.root2}>
           <Tabs
-            value={value}
+            value={selectedTab}
             className={style.tabHeader}
             variant="fullWidth"
             onChange={handleChange}
@@ -185,27 +180,17 @@ export default function ProfileTimeline({ isAnonymous, user, profile, loading }:
             <Tab className={style.tabItem} label={`Friends(${totalFriends})`} />
             {isGuest == false && <Tab className={style.tabItem} label={'My Wallet'} />}
           </Tabs>
-          <TabPanel value={value} index={0} dir={theme.direction}>
-            <PostList
-              profile={profile}
-              user={user}
-              balanceDetails={tokensReady.length > 0 ? tokensReady : []}
-              availableTokens={userTokens}
-            />
+          <TabPanel value={selectedTab} index={0} dir={theme.direction}>
+            <PostList profile={profile} balanceDetails={tokensReady.length > 0 ? tokensReady : []} availableTokens={userTokens} />
           </TabPanel>
-          <TabPanel value={value} index={1} dir={theme.direction}>
-            <ImportedPostList
-              user={user}
-              profile={profile}
-              balanceDetails={tokensReady.length > 0 ? tokensReady : []}
-              availableTokens={userTokens}
-            />
+          <TabPanel value={selectedTab} index={1} dir={theme.direction}>
+            <ImportedPostList profile={profile} balanceDetails={tokensReady.length > 0 ? tokensReady : []} availableTokens={userTokens} />
           </TabPanel>
-          <TabPanel value={value} index={2} dir={theme.direction}>
+          <TabPanel value={selectedTab} index={2} dir={theme.direction}>
             <FriendComponent profile={profile} />
           </TabPanel>
           {isGuest == false && (
-            <TabPanel value={value} index={3} dir={theme.direction}>
+            <TabPanel value={selectedTab} index={3} dir={theme.direction}>
               <MyWalletTabs />
             </TabPanel>
           )}

@@ -1,54 +1,34 @@
-// PROFILE PAGE
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { GetServerSideProps } from 'next';
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/client';
 
+import { wrapper } from '../src/store';
+
 import Layout from 'src/components/Layout/Layout.container';
 import ProfileTimeline from 'src/components/profile/profile.component';
-import { useProfile } from 'src/components/profile/profile.context';
-import { useProfileHook } from 'src/components/profile/use-profile.hook';
-import { useUser } from 'src/context/user.context';
-import { useUserHook } from 'src/hooks/use-user.hook';
+import { ExtendedUserPost } from 'src/interfaces/user';
 import { healthcheck } from 'src/lib/api/healthcheck';
+import * as ProfileAPI from 'src/lib/api/profile';
+import * as UserAPI from 'src/lib/api/user';
+import { setAnonymous, setUser } from 'src/reducers/user/actions';
 
-interface Params {
-  id: string;
-}
-
-type Props = {
+type ProfilePageProps = {
   session: Session;
-  params: Params;
+  profile: ExtendedUserPost;
 };
 
-export default function Profile({ session, params }: Props) {
-  const { state: userState } = useUser();
-  const { state: profileState } = useProfile();
-  const { isLoading, getProfile } = useProfileHook(params.id);
-  const isAnonymous = !!session?.user.anonymous;
-
-  const { getUserDetail } = useUserHook(session.user.address as string);
-
-  useEffect(() => {
-    getProfile();
-  }, [params]);
-
-  useEffect(() => {
-    getUserDetail();
-  }, []);
-
-  if (!session) return null;
-
+const ProfilePageComponent: React.FC<ProfilePageProps> = ({ profile }) => {
   return (
-    <Layout session={session}>
-      {userState && <ProfileTimeline isAnonymous={isAnonymous} user={userState.user} profile={profileState.profile} loading={isLoading} />}
+    <Layout>
+      <ProfileTimeline profile={profile} loading={false} />
     </Layout>
   );
-}
+};
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const { res, params } = context;
+  const { dispatch } = store;
 
   const available = await healthcheck();
 
@@ -66,10 +46,29 @@ export const getServerSideProps: GetServerSideProps = async context => {
     res.end();
   }
 
+  const anonymous = Boolean(session?.user.anonymous);
+  const userId = session?.user.id as string;
+  const username = session?.user.name as string;
+  const profileId = params?.id as string;
+
+  //TODO: this process should call thunk action creator instead of dispatch thunk acion
+  //ISSUE: state not hydrated when using thunk action creator
+  if (anonymous) {
+    dispatch(setAnonymous(username));
+  } else {
+    const user = await UserAPI.getUserDetail(userId);
+
+    dispatch(setUser(user));
+  }
+
+  const profile = await ProfileAPI.getUserProfile(profileId);
+
   return {
     props: {
-      params,
-      session
+      session,
+      profile
     }
   };
-};
+});
+
+export default ProfilePageComponent;

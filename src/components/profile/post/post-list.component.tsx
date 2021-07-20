@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useSelector } from 'react-redux';
 
 import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import { useStyles } from '../profile.style';
+import { usePeopleTimeline } from '../use-people-timeline.hook';
 
 import { ScrollTop } from 'src/components/common/ScrollToTop.component';
 import { LoadingPage } from 'src/components/common/loading.component';
@@ -15,18 +17,26 @@ import { useTimelineHook } from 'src/hooks/use-timeline.hook';
 import { BalanceDetail } from 'src/interfaces/balance';
 import { Post } from 'src/interfaces/post';
 import { Token } from 'src/interfaces/token';
-import { User, ExtendedUserPost } from 'src/interfaces/user';
+import { ExtendedUserPost } from 'src/interfaces/user';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 type Props = {
-  user: User | null;
   profile: ExtendedUserPost;
   balanceDetails: BalanceDetail[];
   availableTokens: Token[];
 };
 
-export default function PostList({ user, profile, balanceDetails, availableTokens }: Props) {
+export default function PostList({ profile, balanceDetails, availableTokens }: Props) {
   const style = useStyles();
-  const { hasMore, nextPosts } = useTimelineHook();
+
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
+  const { posts, hasMore, nextPage } = useTimelineHook();
+  const { filterOwnedPost } = usePeopleTimeline(profile);
+
+  useEffect(() => {
+    filterOwnedPost();
+  }, []);
 
   const isOwnPost = (post: Post) => {
     if (user && post.platformUser?.platform_account_id === user.id) {
@@ -35,7 +45,7 @@ export default function PostList({ user, profile, balanceDetails, availableToken
     return false;
   };
 
-  if (profile.posts.length === 0) {
+  if (posts.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: 16, backgroundColor: 'white', borderRadius: 8 }}>
         <h2>You haven’t any post yet</h2>
@@ -50,11 +60,11 @@ export default function PostList({ user, profile, balanceDetails, availableToken
         <InfiniteScroll
           scrollableTarget="scrollable-timeline"
           className={style.child}
-          dataLength={profile.posts.length || 100}
-          next={nextPosts}
+          dataLength={posts.length || 100}
+          next={nextPage}
           hasMore={hasMore}
           loader={<LoadingPage />}>
-          {profile.posts.map((post: Post, i: number) => (
+          {posts.map((post: Post, i: number) => (
             <Grow key={i}>
               <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={balanceDetails} availableTokens={availableTokens} />
             </Grow>

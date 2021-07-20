@@ -116,6 +116,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const userId = session?.user.id as string;
   const username = session?.user.name as string;
 
+  //TODO: this process should call thunk action creator instead of dispatch thunk acion
+  //ISSUE: state not hydrated when using thunk action creator
   if (anonymous) {
     dispatch(setAnonymous(username));
   } else {

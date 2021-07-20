@@ -71,7 +71,7 @@ export default function Search({ session }: Props) {
   const isAnonymous = !!session?.user.anonymous;
 
   return (
-    <Layout session={session}>
+    <Layout>
       <Grid item className={style.user}>
         <Grid container direction="row" justify="flex-start" alignContent="flex-start">
           <Grid item className={style.fullwidth}>
