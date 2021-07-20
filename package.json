@@ -29,7 +29,7 @@
     "test": "yarn build && yarn lint-staged",
     "docker:build": "./.maintain/docker/build-image.sh",
     "docker:run": "./.maintain/docker/start-docker-compose.sh",
-    "docker:stop": "./.maintain/docker/stop-docker-compose.sh"
+    "docker:down": "./.maintain/docker/stop-docker-compose.sh"
   },
   "lint-staged": {
     "./src/**/*.{js,ts,tsx,scss}": [

@@ -24,7 +24,7 @@ jobs:
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
-          path: /tmp/.buildx-cache
+          path: /tmp/release/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
@@ -46,16 +46,16 @@ jobs:
           build-args: |
             VCS_REF=${{ github.ref }}
             BUILD_DATE=${{ github.event.release.published_at }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          cache-from: type=local,src=/tmp/release/.buildx-cache
+          cache-to: type=local,dest=/tmp/release/.buildx-cache-new
 
       # Temp fix
       # https://github.com/docker/build-push-action/issues/252
       # https://github.com/moby/buildkit/issues/1896
       - name: Move cache
         run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+          rm -rf /tmp/release/.buildx-cache
+          mv /tmp/release/.buildx-cache-new /tmp/release/.buildx-cache
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

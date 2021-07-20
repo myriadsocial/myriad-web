@@ -4,8 +4,7 @@ on:
   pull_request:
     branches:
       - main
-    types:
-      - ready_for_review
+      - development # TODO : remove this, if we use one branch
 
 jobs:
   check-link-markdown:
