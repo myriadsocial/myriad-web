@@ -2,7 +2,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {Session} from 'next-auth';
 import {getSession} from 'next-auth/client';
 import {useRouter} from 'next/router';
 
@@ -65,11 +64,8 @@ export const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-type Props = {
-  session: Session;
-};
-
-export default function Search({session}: Props) {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export default function Search() {
   const style = useStyles();
   const dispatch = useDispatch();
 
@@ -106,7 +102,7 @@ type SearchTimelineProps = {
   isAnonymous: boolean;
 };
 
-const SearchTimeline: React.FC<SearchTimelineProps> = ({isAnonymous}) => {
+const SearchTimeline: React.FC<SearchTimelineProps> = () => {
   const router = useRouter();
 
   const {searching, backToTimeline, users: options, search} = useMyriadUser();
