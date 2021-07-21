@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Tab from '@material-ui/core/Tab';
-import { fade, withStyles, createStyles } from '@material-ui/core/styles';
+import {fade, withStyles, createStyles} from '@material-ui/core/styles';
 
 interface StyledTabProps {
   label: string;
@@ -22,8 +22,10 @@ export const StyledTab = withStyles(() =>
       '&:focus': {
         opacity: 1,
         backgroundColor: fade('#8629e9', 0.2),
-        color: '#8629e9'
-      }
-    }
-  })
-)((props: StyledTabProps) => <Tab aria-label={props.ariaLabel} disableRipple {...props} label={props.label} />);
+        color: '#8629e9',
+      },
+    },
+  }),
+)((props: StyledTabProps) => (
+  <Tab aria-label={props.ariaLabel} disableRipple {...props} label={props.label} />
+));

@@ -1,9 +1,9 @@
-import { State as BaseState } from '../base/state';
-import { Actions } from './actions';
+import {State as BaseState} from '../base/state';
+import {Actions} from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import { Tag } from 'src/interfaces/experience';
+import {Tag} from 'src/interfaces/experience';
 
 export interface ConfigState extends BaseState {
   topics: Tag[];
@@ -11,15 +11,18 @@ export interface ConfigState extends BaseState {
 
 const initalState: ConfigState = {
   loading: false,
-  topics: []
+  topics: [],
 };
 
-export const PopularReducer: Redux.Reducer<ConfigState, Actions> = (state = initalState, action) => {
+export const PopularReducer: Redux.Reducer<ConfigState, Actions> = (
+  state = initalState,
+  action,
+) => {
   switch (action.type) {
     case constants.FETCH_POPULAR_TOPIC: {
       return {
         ...state,
-        topics: action.topics
+        topics: action.topics,
       };
     }
 

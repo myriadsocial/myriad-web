@@ -1,126 +1,56 @@
-// @ts-nocheck
-import { useState, useEffect } from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
-import { useProfile, ProfileActionType } from 'src/components/profile/profile.context';
-import { useUser, UserActionType } from 'src/context/user.context';
-import { useImageUpload } from 'src/hooks/use-image-upload.hook';
-import { useUserHook } from 'src/hooks/use-user.hook';
-import { Post } from 'src/interfaces/post';
-import { ExtendedUserPost } from 'src/interfaces/user';
-import { User } from 'src/interfaces/user';
-import * as ProfileAPI from 'src/lib/api/profile';
+import {useImageUpload} from 'src/hooks/use-image-upload.hook';
+import {User} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
+import {fetchProfileDetail} from 'src/reducers/profile/actions';
+import {ProfileState} from 'src/reducers/profile/reducer';
+import {updateUser} from 'src/reducers/user/actions';
+import {UserState} from 'src/reducers/user/reducer';
 
-export const useProfileHook = (id: string) => {
-  const { state: profileState, dispatch } = useProfile();
+export const useProfileHook = () => {
+  const dispatch = useDispatch();
+  const {uploadImage} = useImageUpload();
 
-  const { updateUser } = useUserHook(id);
-  const { uploadImage } = useImageUpload();
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {detail: profileDetail, loading} = useSelector<RootState, ProfileState>(
+    state => state.profileState,
+  );
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const updateProfile = (attributes: Partial<User>) => {
+    dispatch(updateUser(attributes));
 
-  const getProfile = async () => {
-    setIsLoading(true);
-
-    try {
-      const detail: ExtendedUser = await ProfileAPI.getUserProfile(id as string);
-      let posts = await ProfileAPI.getPostProfile(id as string);
-
-      posts = posts.map((item: Post) => ({ ...item, comments: item.comments || [] }));
-
-      const data = {
-        ...detail,
-        posts: [...posts]
-      };
-
-      dispatch({
-        type: ProfileActionType.PROFILE_LOADED,
-        payload: data
-      });
-    } catch (error) {
-      setError(error);
-    } finally {
-      setIsLoading(false);
+    if (user && profileDetail?.id === user.id) {
+      dispatch(fetchProfileDetail(user.id));
     }
   };
 
-  const loadImportedPost = async () => {
-    setIsLoading(true);
+  const updateProfilePicture = (url: string) => {
+    dispatch(
+      updateUser({
+        profilePictureURL: url,
+      }),
+    );
 
-    try {
-      let posts = await ProfileAPI.getImportedPost(id as string);
-
-      posts = posts.map((item: Post) => ({ ...item, comments: item.comments || [] }));
-
-      dispatch({
-        type: ProfileActionType.IMPORTEDPOST_LOADED,
-        payload: posts
-      });
-    } catch (error) {
-      setError(error);
-    } finally {
-      setIsLoading(false);
+    if (user && profileDetail?.id === user.id) {
+      dispatch(fetchProfileDetail(user.id));
     }
   };
 
-  const updateProfile = async (attributes: Partial<User>) => {
-    setIsLoading(true);
+  const updateProfileBanner = async (image: File): Promise<void> => {
+    const url = await uploadImage(image);
 
-    try {
-      await updateUser(attributes);
-
-      if (profileState.profile) {
-        dispatch({
-          type: ProfileActionType.PROFILE_LOADED,
-          payload: {
-            ...profileState.profile,
-            ...attributes
-          }
-        });
-      } else {
-        getProfile();
-      }
-    } catch (error) {
-      setError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const updateBanner = async (file: File) => {
-    setIsLoading(true);
-
-    try {
-      const url = await uploadImage(file);
-
-      await updateProfile({
-        bannerImageUrl: url
-      });
-
-      if (profileState.profile) {
-        dispatch({
-          type: ProfileActionType.PROFILE_LOADED,
-          payload: {
-            ...profileState.profile,
-            bannerImageUrl: url
-          }
-        });
-      } else {
-        getProfile();
-      }
-    } catch (error) {
-      setError(error);
-    } finally {
-      setIsLoading(false);
-    }
+    dispatch(
+      updateUser({
+        bannerImageUrl: url,
+      }),
+    );
   };
 
   return {
-    error,
-    isLoading,
+    loading,
     updateProfile,
-    updateBanner,
-    getProfile,
-    loadImportedPost
+    updateProfilePicture,
+    updateProfileBanner,
   };
 };

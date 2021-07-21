@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
 import Axios from 'axios';
-import { Tag } from 'src/interfaces/experience';
+import {Tag} from 'src/interfaces/experience';
 import * as TrendingAPI from 'src/lib/api/trending';
 
 const axios = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 export const useTopic = () => {
@@ -15,7 +15,7 @@ export const useTopic = () => {
   const [error, setError] = useState(null);
   const [params] = useState({
     limit: 10,
-    skip: 0
+    skip: 0,
   });
 
   const loadPopularTopic = async (): Promise<void> => {
@@ -36,14 +36,14 @@ export const useTopic = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.request<Tag[]>({
+      const {data} = await axios.request<Tag[]>({
         url: '/tags',
         method: 'GET',
         params: {
           filter: {
-            ...params
-          }
-        }
+            ...params,
+          },
+        },
       });
 
       setTopic(data);
@@ -58,7 +58,7 @@ export const useTopic = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.request<Tag[]>({
+      const {data} = await axios.request<Tag[]>({
         url: '/tags',
         method: 'GET',
         params: {
@@ -67,11 +67,11 @@ export const useTopic = () => {
             where: {
               id: {
                 like: `.*${query}*`,
-                options: 'i'
-              }
-            }
-          }
-        }
+                options: 'i',
+              },
+            },
+          },
+        },
       });
 
       setTopic(data);
@@ -89,6 +89,6 @@ export const useTopic = () => {
     popularTopics,
     loadPopularTopic,
     loadTopic,
-    searchTopic
+    searchTopic,
   };
 };

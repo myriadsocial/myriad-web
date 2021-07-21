@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, {createContext, useContext, useReducer} from 'react';
 
-import { BalanceDetail } from 'src/interfaces/balance';
+import {BalanceDetail} from 'src/interfaces/balance';
 
 export enum BalanceActionType {
-  INIT_BALANCE = 'INIT_BALANCE'
+  INIT_BALANCE = 'INIT_BALANCE',
 }
 
 type State = {
@@ -18,14 +18,14 @@ export interface InitBalance {
 
 export type Action = InitBalance;
 type Dispatch = (action: Action) => void;
-type BalanceProviderProps = { children: React.ReactNode };
+type BalanceProviderProps = {children: React.ReactNode};
 
 const initialState = {
   init: true,
-  balanceDetails: []
+  balanceDetails: [],
 };
 
-const BalanceContext = createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
+const BalanceContext = createContext<{state: State; dispatch: Dispatch} | undefined>(undefined);
 
 function balanceReducer(state: State, action: Action) {
   switch (action.type) {
@@ -33,7 +33,7 @@ function balanceReducer(state: State, action: Action) {
       return {
         ...state,
         balanceDetails: action.balanceDetails,
-        init: false
+        init: false,
       };
     }
 
@@ -53,11 +53,11 @@ export const useBalance = () => {
   return context;
 };
 
-export const BalanceProvider = ({ children }: BalanceProviderProps) => {
+export const BalanceProvider = ({children}: BalanceProviderProps) => {
   const [state, dispatch] = useReducer(balanceReducer, initialState);
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
-  const value = { state, dispatch };
+  const value = {state, dispatch};
 
   return <BalanceContext.Provider value={value}>{children}</BalanceContext.Provider>;
 };

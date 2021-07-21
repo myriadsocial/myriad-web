@@ -1,4 +1,4 @@
-import { SocialsEnum } from './social';
+import {SocialsEnum} from './social';
 
 export interface People {
   id: string;

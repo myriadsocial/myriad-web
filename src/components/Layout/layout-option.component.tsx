@@ -4,7 +4,7 @@ import Fade from '@material-ui/core/Fade';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 type PostOptionsProps = {
@@ -16,20 +16,20 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'block',
-      position: 'relative'
+      position: 'relative',
     },
     menu: {},
     danger: {
       color: '#F83D3D',
       marginBottom: 0,
       '&:hover': {
-        background: 'none'
-      }
-    }
-  })
+        background: 'none',
+      },
+    },
+  }),
 );
 
-export const LayoutOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPost }) => {
+export const LayoutOptionsComponent: React.FC<PostOptionsProps> = ({postId, ownPost}) => {
   const styles = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -45,7 +45,12 @@ export const LayoutOptionsComponent: React.FC<PostOptionsProps> = ({ postId, own
 
   return (
     <div className={styles.root}>
-      <IconButton aria-label="post-setting" onClick={handleClick} disableRipple={true} disableFocusRipple={true} disableTouchRipple>
+      <IconButton
+        aria-label="post-setting"
+        onClick={handleClick}
+        disableRipple={true}
+        disableFocusRipple={true}
+        disableTouchRipple>
         <MoreVertIcon />
       </IconButton>
 

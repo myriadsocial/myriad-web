@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { ExtendedConversation } from 'src/interfaces/conversation';
-import { Comment, Post } from 'src/interfaces/post';
+import {ExtendedConversation} from 'src/interfaces/conversation';
+import {Comment, Post} from 'src/interfaces/post';
 
 export enum ConversationActionType {
   LOAD_CONVERSATION = 'LOAD_CONVERSATION',
   LOAD_CONVERSATION_DETAIL = 'LOAD_CONVERSATION_DETAIL',
   REPLY_CONVERSATION = 'REPLY_CONVERSATION',
-  LOAD_REPLY = 'LOAD_REPLY'
+  LOAD_REPLY = 'LOAD_REPLY',
 }
 
 interface LoadConversation {
@@ -32,7 +32,7 @@ interface LoadReply {
 
 type Action = LoadConversation | LoadConversationDetail | LoadReply | ReplyConversation;
 type Dispatch = (action: Action) => void;
-type ConversationProviderProps = { children: React.ReactNode };
+type ConversationProviderProps = {children: React.ReactNode};
 
 type State = {
   conversations: ExtendedConversation[];
@@ -41,24 +41,26 @@ type State = {
 
 const initalState = {
   conversations: [],
-  viewed: null
+  viewed: null,
 };
 
-const ConversationContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
+const ConversationContext = React.createContext<{state: State; dispatch: Dispatch} | undefined>(
+  undefined,
+);
 
 function conversationReducer(state: State, action: Action) {
   switch (action.type) {
     case ConversationActionType.LOAD_CONVERSATION: {
       return {
         ...state,
-        conversations: action.payload
+        conversations: action.payload,
       };
     }
 
     case ConversationActionType.LOAD_CONVERSATION_DETAIL: {
       return {
         ...state,
-        viewed: action.payload
+        viewed: action.payload,
       };
     }
 
@@ -69,8 +71,8 @@ function conversationReducer(state: State, action: Action) {
         ...state,
         viewed: {
           ...state.viewed,
-          comments: [...state.viewed.comments, action.payload]
-        }
+          comments: [...state.viewed.comments, action.payload],
+        },
       };
     }
     case ConversationActionType.LOAD_REPLY: {
@@ -80,8 +82,8 @@ function conversationReducer(state: State, action: Action) {
         ...state,
         viewed: {
           ...state.viewed,
-          comments: [...state.viewed.comments, ...action.payload]
-        }
+          comments: [...state.viewed.comments, ...action.payload],
+        },
       };
     }
 
@@ -101,11 +103,11 @@ export const useConversation = () => {
   return context;
 };
 
-export const ConverstionProvider = ({ children }: ConversationProviderProps) => {
+export const ConverstionProvider = ({children}: ConversationProviderProps) => {
   const [state, dispatch] = React.useReducer(conversationReducer, initalState);
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
-  const value = { state, dispatch };
+  const value = {state, dispatch};
 
   return <ConversationContext.Provider value={value}>{children}</ConversationContext.Provider>;
 };

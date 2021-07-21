@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import {useState} from 'react';
+import {useDispatch} from 'react-redux';
 
-import { useAlertHook } from './use-alert.hook';
+import {useAlertHook} from './use-alert.hook';
 
-import { useTimeline, TimelineActionType } from 'src/context/timeline.context';
-import { User } from 'src/interfaces/user';
+import {User} from 'src/interfaces/user';
 import * as LocalAPI from 'src/lib/api/local';
-import * as PostAPI from 'src/lib/api/post';
+import {createPost, importPost, toggleLikePost} from 'src/reducers/timeline/actions';
 
 export const usePostHook = (user: User) => {
-  const { dispatch } = useTimeline();
-  const { showAlert } = useAlertHook();
+  const dispatch = useDispatch();
+  const {showAlert} = useAlertHook();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -30,78 +30,36 @@ export const usePostHook = (user: User) => {
         });
       }
 
-      const data = await PostAPI.createPost({
-        text,
-        tags,
-        hasMedia,
-        platform: 'myriad',
-        assets: hasMedia ? images : [],
-        platformUser: {
-          username: user.name,
-          platform_account_id: user.id,
-          profilePictureURL: user.profilePictureURL
-        },
-        walletAddress: user.id
-      });
-
-      dispatch({
-        type: TimelineActionType.CREATE_POST,
-        post: {
-          ...data,
-          comments: []
-        }
-      });
+      dispatch(createPost(text, tags, images));
     } catch (error) {
       setError(error);
       showAlert({
         title: 'Error!',
         message: 'Failed to create post, try again later',
-        severity: 'error'
+        severity: 'error',
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const loadComments = async (postId: string) => {
-    const data = await PostAPI.loadComments(postId);
-
-    dispatch({
-      type: TimelineActionType.LOAD_COMMENTS,
-      postId,
-      comments: data
-    });
-  };
-
-  const importPost = async (url: string, importer?: string) => {
+  const importPostUrl = async (url: string) => {
     setLoading(true);
 
     try {
-      const data = await PostAPI.importPost({
-        url,
-        importer: importer || user.id
-      });
-
-      dispatch({
-        type: TimelineActionType.CREATE_POST,
-        post: {
-          ...data,
-          comments: []
-        }
-      });
+      await dispatch(importPost(url));
 
       showAlert({
         title: 'Success!',
         message: 'Post successfully imported',
-        severity: 'success'
+        severity: 'success',
       });
     } catch (error) {
-      console.log('error from use post hooks: ', error);
       setError(error);
       showAlert({
         title: 'Error!',
         message: 'Post already imported',
-        severity: 'error'
+        severity: 'error',
       });
     } finally {
       setLoading(false);
@@ -111,36 +69,21 @@ export const usePostHook = (user: User) => {
   const likePost = async (postId: string) => {
     setLoading(true);
 
-    try {
-      await PostAPI.like(user.id, postId);
-    } catch (error) {
-      console.log('error likePost: ', error);
-      setError(error);
-    } finally {
-      setLoading(false);
-    }
+    dispatch(toggleLikePost(postId));
   };
 
   const dislikePost = async (postId: string) => {
     setLoading(true);
 
-    try {
-      await PostAPI.dislike(user.id, postId);
-    } catch (error) {
-      console.log('error from use post hooks: ', error);
-      setError(error);
-    } finally {
-      setLoading(false);
-    }
+    dispatch(toggleLikePost(postId, false));
   };
 
   return {
     error,
     loading,
-    loadComments,
     addPost,
-    importPost,
+    importPost: importPostUrl,
     likePost,
-    dislikePost
+    dislikePost,
   };
 };

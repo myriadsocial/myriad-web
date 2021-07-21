@@ -5,7 +5,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
@@ -13,7 +13,7 @@ import DialogTitle from 'src/components/common/DialogTitle.component';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      textAlign: 'center'
+      textAlign: 'center',
     },
     content: {
       width: 724,
@@ -21,21 +21,21 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'center',
       flexDirection: 'column',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     icon: {
       fontSize: theme.spacing(7),
       color: '#17B509',
-      marginBottom: theme.spacing(4)
+      marginBottom: theme.spacing(4),
     },
     message: {
       width: 300,
-      textAlign: 'center'
+      textAlign: 'center',
     },
     done: {
-      flexDirection: 'column'
-    }
-  })
+      flexDirection: 'column',
+    },
+  }),
 );
 
 type ConnectSuccessProps = {
@@ -43,12 +43,16 @@ type ConnectSuccessProps = {
   onClose: () => void;
 };
 
-export const ConnectSuccessComponent: React.FC<ConnectSuccessProps> = ({ open, onClose }) => {
+export const ConnectSuccessComponent: React.FC<ConnectSuccessProps> = ({open, onClose}) => {
   const styles = useStyles();
 
   return (
     <div className={styles.root}>
-      <Dialog open={open} maxWidth="md" onClose={onClose} aria-labelledby="link-social-accounts-window">
+      <Dialog
+        open={open}
+        maxWidth="md"
+        onClose={onClose}
+        aria-labelledby="link-social-accounts-window">
         <DialogTitle onClose={onClose} id="link-account">
           Post Something
         </DialogTitle>

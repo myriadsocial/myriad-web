@@ -1,6 +1,6 @@
-import React, { createRef, useEffect, forwardRef } from 'react';
+import React, {createRef, useEffect, forwardRef} from 'react';
 
-import { useSession } from 'next-auth/client';
+import {useSession} from 'next-auth/client';
 import dynamic from 'next/dynamic';
 
 import Divider from '@material-ui/core/Divider';
@@ -9,12 +9,12 @@ import Typography from '@material-ui/core/Typography';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-import { LoadingPage } from '../common/loading.component';
+import {LoadingPage} from '../common/loading.component';
 import ExpandablePanel from '../common/panel-expandable.component';
-import { useStyles } from './wallet.style';
+import {useStyles} from './wallet.style';
 
-import { useToken } from 'src/hooks/use-token.hook';
-import { Token } from 'src/interfaces/token';
+import {useToken} from 'src/hooks/use-token.hook';
+import {Token} from 'src/interfaces/token';
 
 const BalanceComponent = dynamic(() => import('./balance.component'));
 
@@ -26,13 +26,17 @@ type Props = {
   availableTokens: Token[];
 };
 
-const ForwardedBalanceComponent = forwardRef(({ availableTokens }: Props, ref) => (
+const ForwardedBalanceComponent = forwardRef(({availableTokens}: Props, ref) => (
   <BalanceComponent availableTokens={availableTokens} forwardedRef={ref} />
 ));
 
-const ForwardedTransactionComponent = forwardRef((props, ref) => <TransactionComponent {...props} forwardedRef={ref} />);
+const ForwardedTransactionComponent = forwardRef((props, ref) => (
+  <TransactionComponent {...props} forwardedRef={ref} />
+));
 
-const ForwardedWalletSettingComponent = forwardRef((props, ref) => <WalletSettingComponent {...props} forwardedRef={ref} />);
+const ForwardedWalletSettingComponent = forwardRef((props, ref) => (
+  <WalletSettingComponent {...props} forwardedRef={ref} />
+));
 
 export const Wallet = React.memo(function Wallet() {
   const style = useStyles();
@@ -52,7 +56,7 @@ export const Wallet = React.memo(function Wallet() {
     }
   }, [sessionLoading]);
 
-  const { loadAllUserTokens, loading, userTokens, errorUserTokens } = useToken(userId);
+  const {loadAllUserTokens, loading, userTokens, errorUserTokens} = useToken(userId);
 
   useEffect(() => {
     loadAllUserTokens();
@@ -73,7 +77,7 @@ export const Wallet = React.memo(function Wallet() {
     disabled?: boolean;
   };
 
-  const WalletAction = ({ disabled }: WalletActionProps) => {
+  const WalletAction = ({disabled}: WalletActionProps) => {
     return (
       <div className={style.walletActions}>
         <IconButton

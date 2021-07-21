@@ -1,12 +1,12 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type {NextApiRequest, NextApiResponse} from 'next';
 
 import Axios from 'axios';
 
 const client = Axios.create({
   baseURL: 'https://api.twitter.com',
   headers: {
-    Authorization: `Bearer ${process.env.TWITTER_BEARER_TOKEN}`
-  }
+    Authorization: `Bearer ${process.env.TWITTER_BEARER_TOKEN}`,
+  },
 });
 
 type Data = {
@@ -24,8 +24,8 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       params: {
         id: tweetId,
         include_entities: true,
-        tweet_mode: 'extended'
-      }
+        tweet_mode: 'extended',
+      },
     });
 
     res.status(200).json(response.data);

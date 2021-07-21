@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
-import { useWalletAddress as baseUseWalletAddress, WalletAddressActionType } from './send-tip.context';
+import {
+  useWalletAddress as baseUseWalletAddress,
+  WalletAddressActionType,
+} from './send-tip.context';
 
 import * as WalletAddressAPI from 'src/lib/api/wallet';
 
 export const useWalletAddress = (postId: string) => {
-  const { state, dispatch } = baseUseWalletAddress();
+  const {state, dispatch} = baseUseWalletAddress();
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,16 +16,16 @@ export const useWalletAddress = (postId: string) => {
   const loadWalletDetails = async () => {
     setLoading(true);
     try {
-      const { walletAddress } = await WalletAddressAPI.getWalletAddress(postId);
+      const {walletAddress} = await WalletAddressAPI.getWalletAddress(postId);
 
       const walletDetailPayload = {
         walletAddress,
-        postId
+        postId,
       };
 
       dispatch({
         type: WalletAddressActionType.INIT_WALLET_ADDRESS,
-        payload: walletDetailPayload
+        payload: walletDetailPayload,
       });
     } catch (error) {
       setError(error);
@@ -35,6 +38,6 @@ export const useWalletAddress = (postId: string) => {
     error,
     loading,
     walletDetails: state.walletDetails,
-    loadWalletDetails
+    loadWalletDetails,
   };
 };

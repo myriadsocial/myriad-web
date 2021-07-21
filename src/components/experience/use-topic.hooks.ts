@@ -1,11 +1,11 @@
 // @ts-nocheck
-import { useState } from 'react';
+import {useState} from 'react';
 
 import Axios from 'axios';
-import { Tag } from 'src/interfaces/experience';
+import {Tag} from 'src/interfaces/experience';
 
 const axios = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 export const useTopic = (currentTopics: Tag[]) => {
@@ -14,14 +14,14 @@ export const useTopic = (currentTopics: Tag[]) => {
   const [error, setError] = useState(null);
   const [params] = useState({
     limit: 20,
-    skip: 0
+    skip: 0,
   });
 
   const search = async (query: string) => {
     setLoading(true);
 
     try {
-      const { data } = await axios({
+      const {data} = await axios({
         url: '/tags',
         method: 'GET',
         params: {
@@ -31,18 +31,18 @@ export const useTopic = (currentTopics: Tag[]) => {
               id: {
                 like: `.*${query}*`,
                 nin: currentTopics.map(i => i.id),
-                options: 'i'
-              }
-            }
-          }
-        }
+                options: 'i',
+              },
+            },
+          },
+        },
       });
 
       setTopic(
         data.map(i => ({
           id: i.id,
-          hide: i.hide
-        }))
+          hide: i.hide,
+        })),
       );
     } catch (error) {
       setError(error);
@@ -55,6 +55,6 @@ export const useTopic = (currentTopics: Tag[]) => {
     error,
     loading,
     topics,
-    search
+    search,
   };
 };

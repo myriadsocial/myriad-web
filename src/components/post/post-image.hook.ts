@@ -35,18 +35,18 @@ export const useImageHooks = () => {
       images.push({
         cols: itemCols,
         rows: ROWS,
-        src: source[index]
+        src: source[index],
       });
     }
 
     return {
       cols: listCols,
       cellHeight: cellHeight,
-      images
+      images,
     };
   };
 
   return {
-    buildList
+    buildList,
   };
 };

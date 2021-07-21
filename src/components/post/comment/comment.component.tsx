@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, {useEffect, useRef, useState} from 'react';
+import {useSelector} from 'react-redux';
 
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
@@ -14,24 +14,24 @@ import IconButton from '@material-ui/core/IconButton';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
-import { withStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { useTheme } from '@material-ui/core/styles';
+import {withStyles, createStyles, Theme} from '@material-ui/core/styles';
+import {useTheme} from '@material-ui/core/styles';
 
-import { useStyles } from './comment.style';
+import {useStyles} from './comment.style';
 import ReplyCommentComponent from './reply.component';
 
 import CardTitle from 'src/components/common/CardTitle.component';
 import DateFormat from 'src/components/common/DateFormat';
 import SendTipModal from 'src/components/common/sendtips/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
-import { TabPanel } from 'src/components/common/tab-panel.component';
-import { useCommentHook } from 'src/hooks/use-comment.hook';
-import { BalanceDetail } from 'src/interfaces/balance';
-import { Post, Comment } from 'src/interfaces/post';
-import { Token } from 'src/interfaces/token';
-import { User } from 'src/interfaces/user';
-import { RootState } from 'src/reducers';
-import { UserState } from 'src/reducers/user/reducer';
+import {TabPanel} from 'src/components/common/tab-panel.component';
+import {useCommentHook} from 'src/hooks/use-comment.hook';
+import {BalanceDetail} from 'src/interfaces/balance';
+import {Post, Comment} from 'src/interfaces/post';
+import {Token} from 'src/interfaces/token';
+import {User} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 const StyledBadge = withStyles((theme: Theme) =>
   createStyles({
@@ -39,9 +39,9 @@ const StyledBadge = withStyles((theme: Theme) =>
       right: 40,
       top: 30,
       border: `1px solid ${theme.palette.background.paper}`,
-      padding: '0 4px'
-    }
-  })
+      padding: '0 4px',
+    },
+  }),
 )(Badge);
 
 type CommentComponentProps = {
@@ -52,13 +52,19 @@ type CommentComponentProps = {
   availableTokens: Token[];
 };
 
-const CommentComponent: React.FC<CommentComponentProps> = ({ balanceDetails, post, disableReply, hide, availableTokens }) => {
+const CommentComponent: React.FC<CommentComponentProps> = ({
+  balanceDetails,
+  post,
+  disableReply,
+  hide,
+  availableTokens,
+}) => {
   const style = useStyles();
   const theme = useTheme();
 
   const router = useRouter();
-  const { user, anonymous } = useSelector<RootState, UserState>(state => state.userState);
-  const { comments, loadInitComment, reply } = useCommentHook(post);
+  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const {comments, loadInitComment, reply} = useCommentHook(post);
   const childRef = useRef<any>();
   const [selectedTab, setSelectedTab] = React.useState(0);
 
@@ -77,7 +83,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({ balanceDetails, pos
       text: comment,
       postId: post.id,
       userId: user.id,
-      createdAt: new Date()
+      createdAt: new Date(),
     });
   };
 
@@ -101,7 +107,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({ balanceDetails, pos
           color="primary"
           variant="contained"
           size="small"
-          disabled={isAnonymous}>
+          disabled={anonymous}>
           Send Tip
         </Button>
       );
@@ -118,8 +124,17 @@ const CommentComponent: React.FC<CommentComponentProps> = ({ balanceDetails, pos
 
   return (
     <div>
-      <Tabs value={selectedTab} onChange={handleTabChange} indicatorColor="primary" textColor="primary" variant="fullWidth">
-        <Tab label={<Typography style={{ color: '#000000' }}>General Comments ({comments.length})</Typography>} />
+      <Tabs
+        value={selectedTab}
+        onChange={handleTabChange}
+        indicatorColor="primary"
+        textColor="primary"
+        variant="fullWidth">
+        <Tab
+          label={
+            <Typography style={{color: '#000000'}}>General Comments ({comments.length})</Typography>
+          }
+        />
         <Tab disabled label={<Typography>Debate Section (0) </Typography>} />
       </Tabs>
       <TabPanel value={selectedTab} index={0} dir={theme.direction}>
@@ -130,9 +145,13 @@ const CommentComponent: React.FC<CommentComponentProps> = ({ balanceDetails, pos
                 <Card className={style.root}>
                   <CardHeader
                     avatar={
-                      <IconButton aria-label="cart" onClick={() => openCommentProfile(comment.user)}>
+                      <IconButton
+                        aria-label="cart"
+                        onClick={() => openCommentProfile(comment.user)}>
                         <StyledBadge color="secondary">
-                          <Avatar aria-label={comment.user?.name} src={comment.user?.profilePictureURL}>
+                          <Avatar
+                            aria-label={comment.user?.name}
+                            src={comment.user?.profilePictureURL}>
                             {comment.user?.name}
                           </Avatar>
                         </StyledBadge>

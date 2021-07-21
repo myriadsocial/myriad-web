@@ -1,13 +1,16 @@
 import Axios from 'axios';
-import { People } from 'src/interfaces/people';
-import { SocialsEnum } from 'src/interfaces/social';
+import {People} from 'src/interfaces/people';
+import {SocialsEnum} from 'src/interfaces/social';
 
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
-export const getPeopleByPlatform = async (platform: SocialsEnum, accountId: string): Promise<People | null> => {
-  const { data: people } = await MyriadAPI.request<People[]>({
+export const getPeopleByPlatform = async (
+  platform: SocialsEnum,
+  accountId: string,
+): Promise<People | null> => {
+  const {data: people} = await MyriadAPI.request<People[]>({
     url: `/people`,
     method: 'GET',
     params: {
@@ -15,31 +18,31 @@ export const getPeopleByPlatform = async (platform: SocialsEnum, accountId: stri
         limit: 1,
         where: {
           platform: {
-            eq: platform
+            eq: platform,
           },
           platform_account_id: {
-            eq: accountId
-          }
-        }
-      }
-    }
+            eq: accountId,
+          },
+        },
+      },
+    },
   });
 
   return people.length ? people[0] : null;
 };
 
 export const createPeople = async (values: Partial<People>): Promise<People> => {
-  const { data } = await MyriadAPI.request<People>({
+  const {data} = await MyriadAPI.request<People>({
     url: '/people',
     method: 'POST',
-    data: values
+    data: values,
   });
 
   return data;
 };
 
 export const searchPeople = async (query: string): Promise<People[]> => {
-  const { data } = await MyriadAPI.request<People[]>({
+  const {data} = await MyriadAPI.request<People[]>({
     url: '/people',
     method: 'GET',
     params: {
@@ -47,11 +50,11 @@ export const searchPeople = async (query: string): Promise<People[]> => {
         limit: 10,
         where: {
           username: {
-            like: query
-          }
-        }
-      }
-    }
+            like: query,
+          },
+        },
+      },
+    },
   });
 
   return data;

@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core';
+import {makeStyles} from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   border: {
     borderBottom: '2px solid lightgray',
-    width: '100%'
+    width: '100%',
   },
   content: {
     paddingTop: theme.spacing(0.5),
@@ -18,15 +18,15 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: theme.spacing(2),
     fontWeight: 400,
     fontSize: 18,
-    color: 'lightgray'
-  }
+    color: 'lightgray',
+  },
 }));
 
 interface IProps {
   children: React.ReactNode;
 }
 
-const DividerWithText = ({ children }: IProps) => {
+const DividerWithText = ({children}: IProps) => {
   const classes = useStyles();
   return (
     <div className={classes.container}>

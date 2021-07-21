@@ -1,22 +1,22 @@
-import React, { useEffect, useImperativeHandle } from 'react';
+import React, {useEffect, useImperativeHandle} from 'react';
+import {useSelector} from 'react-redux';
 
-import { useSession } from 'next-auth/client';
 import dynamic from 'next/dynamic';
 
 import Button from '@material-ui/core/Button';
 import SortIcon from '@material-ui/icons/Sort';
 
-import { useTransaction } from '../../../../hooks/use-transaction.hooks';
-import { ActionTabsComponent } from '../tipping/actionTabs.component';
-import { TokenDetailComponent } from '../tipping/tokenDetail.component';
-import { EmptyTransactionComponent } from './EmptyTransaction.component';
-import { ErrorTransactionComponent } from './ErrorTransaction.component';
-import { LoadingTransactionComponent } from './LoadingTransaction.component';
-import { useStyles } from './transaction.style';
+import {useTransaction} from '../../../../hooks/use-transaction.hooks';
+import {ActionTabsComponent} from '../tipping/actionTabs.component';
+import {TokenDetailComponent} from '../tipping/tokenDetail.component';
+import {EmptyTransactionComponent} from './EmptyTransaction.component';
+import {ErrorTransactionComponent} from './ErrorTransaction.component';
+import {LoadingTransactionComponent} from './LoadingTransaction.component';
+import {useStyles} from './transaction.style';
 
-import { useUser } from 'src/context/user.context';
-import { useToken } from 'src/hooks/use-token.hook';
-import { Token } from 'src/interfaces/token';
+import {Token} from 'src/interfaces/token';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 const TransactionListComponent = dynamic(() => import('./transactionList.component'));
 
@@ -34,35 +34,35 @@ type TippingJarComponentProps = {
   detailed?: boolean;
 };
 
-const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef, detailed }) => {
+const TransactionComponent: React.FC<TransactionProps> = ({forwardedRef, detailed}) => {
   const styles = useStyles();
 
-  const [session] = useSession();
-  const {
-    state: { user }
-  } = useUser();
-  const userAddress = session?.user.address as string;
-  const { loading, error, transactions, inboundTxs, outboundTxs, loadInitTransaction } = useTransaction(userAddress);
-  const { loadAllUserTokens, userTokens } = useToken(userAddress);
+  const {user, tokens: userTokens} = useSelector<RootState, UserState>(state => state.userState);
+  const {loading, error, transactions, inboundTxs, outboundTxs, loadInitTransaction} =
+    useTransaction();
 
   useEffect(() => {
     loadInitTransaction();
-    loadAllUserTokens();
   }, []);
 
   useImperativeHandle(forwardedRef, () => ({
     triggerRefresh: () => {
       loadInitTransaction();
-    }
+    },
   }));
 
   if (!user) return null;
 
-  const TippingJarComponent = ({ detailed }: TippingJarComponentProps) => {
+  const TippingJarComponent = ({detailed}: TippingJarComponentProps) => {
     return (
       <div className={detailed ? '' : styles.rootPanel}>
         {detailed === true ? (
-          <ActionTabsComponent transactions={transactions} inboundTxs={inboundTxs} outboundTxs={outboundTxs} user={user} />
+          <ActionTabsComponent
+            transactions={transactions}
+            inboundTxs={inboundTxs}
+            outboundTxs={outboundTxs}
+            user={user}
+          />
         ) : (
           <ActionButtonComponent tokens={userTokens} className={styles.panelButtons} />
         )}
@@ -70,11 +70,16 @@ const TransactionComponent: React.FC<TransactionProps> = ({ forwardedRef, detail
     );
   };
 
-  const ActionButtonComponent = ({ className, tokens }: StyledComponentProps) => {
+  const ActionButtonComponent = ({className, tokens}: StyledComponentProps) => {
     //TODO: token name still hardcoded, will be fixed on next PR
     return (
       <div className={className}>
-        <Button variant="contained" color="primary" size="medium" className={styles.iconButton} endIcon={<SortIcon />}>
+        <Button
+          variant="contained"
+          color="primary"
+          size="medium"
+          className={styles.iconButton}
+          endIcon={<SortIcon />}>
           Filter by
         </Button>
         <Button variant="contained" color="default" size="medium" className={styles.iconButton}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -32,20 +32,20 @@ import PeopleComponent from './components/people.component';
 import SearchExperienceComponent from './components/search-experience.component';
 import TopicComponent from './components/topic.component';
 import ExperienceDetail from './experience-detail.component';
-import { useStyles } from './experience.style';
-import { useExperience } from './use-experience.hooks';
+import {useStyles} from './experience.style';
+import {useExperience} from './use-experience.hooks';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import Panel from 'src/components/common/panel.component';
-import { Experience, Tag, LayoutType } from 'src/interfaces/experience';
-import { People } from 'src/interfaces/people';
+import {Experience, Tag, LayoutType} from 'src/interfaces/experience';
+import {People} from 'src/interfaces/people';
 
 type Props = {
   userId: string;
   anonymous: boolean;
 };
 
-export const ExperienceComponent = ({ userId, anonymous }: Props) => {
+export const ExperienceComponent = ({userId, anonymous}: Props) => {
   const style = useStyles();
 
   const {
@@ -62,7 +62,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
     selectExperience,
     removeExperience,
     searchExperience,
-    prependExperience
+    prependExperience,
   } = useExperience(userId);
   const [isEditing, setEditing] = useState(false);
   const [isEdited, setEdited] = useState(false);
@@ -98,7 +98,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
 
     setSelectedExperience({
       ...selectedExperience,
-      layout: type
+      layout: type,
     });
 
     setEdited(true);
@@ -111,7 +111,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
 
     setSelectedExperience({
       ...selectedExperience,
-      people: [...selectedExperience.people, people]
+      people: [...selectedExperience.people, people],
     });
 
     setEdited(true);
@@ -124,7 +124,9 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
 
     setSelectedExperience({
       ...selectedExperience,
-      people: selectedExperience.people.filter(item => item.platform_account_id !== people.platform_account_id)
+      people: selectedExperience.people.filter(
+        item => item.platform_account_id !== people.platform_account_id,
+      ),
     });
 
     setEdited(true);
@@ -137,7 +139,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
 
     setSelectedExperience({
       ...selectedExperience,
-      tags: [...selectedExperience.tags, tag]
+      tags: [...selectedExperience.tags, tag],
     });
 
     setEdited(true);
@@ -150,7 +152,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
 
     setSelectedExperience({
       ...selectedExperience,
-      tags: selectedExperience.tags.filter(item => item.id !== tag.id)
+      tags: selectedExperience.tags.filter(item => item.id !== tag.id),
     });
 
     setEdited(true);
@@ -287,7 +289,12 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
                   disabled={isEditing || selectedExperience?.userId !== userId}>
                   Customize
                 </Button>
-                <Button size="small" variant="contained" color="secondary" onClick={manageExperience} disabled={isManagingExperience}>
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="secondary"
+                  onClick={manageExperience}
+                  disabled={isManagingExperience}>
                   Manage Experiences
                 </Button>
               </CardActions>
@@ -319,7 +326,12 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
                 Add or Remove Experience{' '}
               </Typography>
             </CardContent>
-            <SearchExperienceComponent title="Search Experience" data={searched} search={searchExperience} onSelected={addToMyExperience} />
+            <SearchExperienceComponent
+              title="Search Experience"
+              data={searched}
+              search={searchExperience}
+              onSelected={addToMyExperience}
+            />
 
             <List dense>
               {addedExperience.map(experience => {
@@ -331,7 +343,10 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
                     </ListItemAvatar>
                     <ListItemText id={labelId} primary={experience.name} />
                     <ListItemSecondaryAction>
-                      <IconButton edge="end" aria-label="remove" onClick={() => removeFromAddedExperience(experience.id)}>
+                      <IconButton
+                        edge="end"
+                        aria-label="remove"
+                        onClick={() => removeFromAddedExperience(experience.id)}>
                         <DeleteForeverIcon />
                       </IconButton>
                     </ListItemSecondaryAction>
@@ -353,7 +368,11 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
                   Save
                 </Fab>
 
-                <Fab className={style.extendedIcon} size="small" variant="extended" onClick={discardChanges}>
+                <Fab
+                  className={style.extendedIcon}
+                  size="small"
+                  variant="extended"
+                  onClick={discardChanges}>
                   <DeleteSweepIcon />
                   Discard
                 </Fab>
@@ -398,7 +417,11 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
                   Save
                 </Fab>
               </ShowIf>
-              <Fab className={style.extendedIcon} size="small" variant="extended" onClick={discardChanges}>
+              <Fab
+                className={style.extendedIcon}
+                size="small"
+                variant="extended"
+                onClick={discardChanges}>
                 <DeleteSweepIcon />
                 Discard
               </Fab>
@@ -422,7 +445,9 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
               {'Remove Experince?'}
             </DialogTitle>
             <DialogContent>
-              <DialogContentText id="alert-dialog-description">Are You sure to remove this experience?.</DialogContentText>
+              <DialogContentText id="alert-dialog-description">
+                Are You sure to remove this experience?.
+              </DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button onClick={toggleAlertModal} color="primary">
@@ -437,7 +462,7 @@ export const ExperienceComponent = ({ userId, anonymous }: Props) => {
           <Snackbar
             anchorOrigin={{
               vertical: 'top',
-              horizontal: 'right'
+              horizontal: 'right',
             }}
             color="secondary"
             open={showNotification}

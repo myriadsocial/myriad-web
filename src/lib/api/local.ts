@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const client = Axios.create({
-  baseURL: process.env.NEXTAUTH_URL
+  baseURL: process.env.NEXTAUTH_URL,
 });
 
 type ResponseImageUpload = {
@@ -15,10 +15,10 @@ export const uploadImage = async (file: File): Promise<string | null> => {
   formData.append('image', file);
 
   try {
-    const { data } = await client.request<ResponseImageUpload>({
+    const {data} = await client.request<ResponseImageUpload>({
       method: 'POST',
       url: '/api/image',
-      data: formData
+      data: formData,
     });
 
     return data.url;
@@ -31,13 +31,13 @@ export const uploadImage = async (file: File): Promise<string | null> => {
 
 /* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
 export const loadtTwitterPost = async (postId: string): Promise<any> => {
-  const { data } = await client.request({
+  const {data} = await client.request({
     method: 'GET',
     url: '/api/content/twitter',
     params: {
       id: postId,
-      type: 'twitter'
-    }
+      type: 'twitter',
+    },
   });
 
   return data;

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { ExtendedNotification } from 'src/interfaces/notification';
+import {ExtendedNotification} from 'src/interfaces/notification';
 
 export enum NotifActionType {
-  LOAD_NOTIF = 'LOAD_NOTIF'
+  LOAD_NOTIF = 'LOAD_NOTIF',
 }
 
 interface LoadNotif {
@@ -13,7 +13,7 @@ interface LoadNotif {
 
 type Action = LoadNotif;
 type Dispatch = (action: Action) => void;
-type NotifProviderProps = { children: React.ReactNode };
+type NotifProviderProps = {children: React.ReactNode};
 
 type State = {
   total: number;
@@ -22,10 +22,10 @@ type State = {
 
 const initialState: State = {
   total: 0,
-  notifications: []
+  notifications: [],
 };
 
-const NotifContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
+const NotifContext = React.createContext<{state: State; dispatch: Dispatch} | undefined>(undefined);
 
 function notificationReducer(state: State, action: Action) {
   switch (action.type) {
@@ -33,7 +33,7 @@ function notificationReducer(state: State, action: Action) {
       return {
         ...state,
         notifications: action.payload,
-        total: action.payload.length
+        total: action.payload.length,
       };
     }
     default: {
@@ -52,9 +52,9 @@ export const useNotif = () => {
   return context;
 };
 
-export const NotifProvider = ({ children }: NotifProviderProps) => {
+export const NotifProvider = ({children}: NotifProviderProps) => {
   const [state, dispatch] = React.useReducer(notificationReducer, initialState);
-  const value = { state, dispatch };
+  const value = {state, dispatch};
 
   return <NotifContext.Provider value={value}>{children}</NotifContext.Provider>;
 };

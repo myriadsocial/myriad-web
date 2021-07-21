@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import {useState, useEffect} from 'react';
+import {useSelector} from 'react-redux';
 
-import { Post } from 'src/interfaces/post';
-import { RootState } from 'src/reducers';
-import { UserState } from 'src/reducers/user/reducer';
+import {Post} from 'src/interfaces/post';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 export const usePostActionHook = (post: Post) => {
-  const { user, anonymous } = useSelector<RootState, UserState>(state => state.userState);
+  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const [tippingEnabled, setTippingEnabled] = useState(false);
   const [isPostOwner, setIsPostOwner] = useState(false);
 
@@ -23,7 +23,7 @@ export const usePostActionHook = (post: Post) => {
     }
 
     if (user) {
-      setTippingEnabled(user.id === post.platformUser?.platform_account_id);
+      setTippingEnabled(user.id !== post.platformUser?.platform_account_id);
     } else {
       setTippingEnabled(false);
     }
@@ -43,6 +43,6 @@ export const usePostActionHook = (post: Post) => {
 
   return {
     tippingEnabled,
-    isPostOwner
+    isPostOwner,
   };
 };

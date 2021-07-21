@@ -1,45 +1,45 @@
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: 'flex'
+      display: 'flex',
     },
     details: {
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
     },
     content: {
-      flex: '1 0 auto'
+      flex: '1 0 auto',
     },
     cover: {
-      width: 151
+      width: 151,
     },
     layout: {
       display: 'flex',
-      justifyContent: 'space-around'
+      justifyContent: 'space-around',
     },
     check: {
-      margin: 0
+      margin: 0,
     },
     avatar: {
       '& > *': {
-        margin: theme.spacing(1)
+        margin: theme.spacing(1),
       },
-      marginBottom: theme.spacing(2)
+      marginBottom: theme.spacing(2),
     },
     form: {
       display: 'flex',
       flexDirection: 'column',
       '& >*': {
-        marginBottom: theme.spacing(1.5)
-      }
+        marginBottom: theme.spacing(1.5),
+      },
     },
     active: {
-      backgroundColor: '#E849BD'
+      backgroundColor: '#E849BD',
     },
     inline: {
-      display: 'inline-flex'
-    }
-  })
+      display: 'inline-flex',
+    },
+  }),
 );

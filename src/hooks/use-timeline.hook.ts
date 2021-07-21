@@ -1,18 +1,18 @@
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 
-import { TimelineFilter, TimelineSortMethod } from 'src/interfaces/timeline';
-import { RootState } from 'src/reducers';
-import { loadTimeline } from 'src/reducers/timeline/actions';
-import { TimelineState } from 'src/reducers/timeline/reducer';
+import {TimelineFilter, TimelineSortMethod} from 'src/interfaces/timeline';
+import {RootState} from 'src/reducers';
+import {loadTimeline} from 'src/reducers/timeline/actions';
+import {TimelineState} from 'src/reducers/timeline/reducer';
 
 export const useTimelineHook = () => {
   const timelineState = useSelector<RootState, TimelineState>(state => state.timelineState);
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const initTimeline = async (page: number = 1, sort?: TimelineSortMethod, filter?: TimelineFilter) => {
+  const initTimeline = async (page = 1, sort?: TimelineSortMethod, filter?: TimelineFilter) => {
     dispatch(loadTimeline(page, sort, filter));
   };
 
@@ -24,7 +24,7 @@ export const useTimelineHook = () => {
 
   const sortTimeline = async (sort: TimelineSortMethod) => {
     // shallow push, without rerender page
-    router.push(`?sort=${sort}`, undefined, { shallow: true });
+    router.push(`?sort=${sort}`, undefined, {shallow: true});
 
     dispatch(loadTimeline(1, sort));
   };
@@ -37,6 +37,6 @@ export const useTimelineHook = () => {
     posts: timelineState.posts,
     initTimeline,
     nextPage,
-    sortTimeline
+    sortTimeline,
   };
 };

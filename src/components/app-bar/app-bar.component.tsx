@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { useTheme } from '@material-ui/core/styles';
-import { fade, makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import {useTheme} from '@material-ui/core/styles';
+import {fade, makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
+import {useMyriadUser} from 'src/hooks/use-myriad-users.hooks';
 import LogoImageCompact from 'src/images/header-logo-compact.svg';
 import LogoImage from 'src/images/header-logo.svg';
 
@@ -20,21 +20,21 @@ const MobileMenuComponent = dynamic(() => import('./mobile-menu.component'));
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     grow: {
-      flexGrow: 1
+      flexGrow: 1,
     },
     title: {
       display: 'none',
       [theme.breakpoints.up('sm')]: {
-        display: 'block'
-      }
+        display: 'block',
+      },
     },
     logo: {
       display: 'flex',
       width: 327,
       margin: theme.spacing(0.5),
       [theme.breakpoints.down('sm')]: {
-        width: 56
-      }
+        width: 56,
+      },
     },
     search: {
       position: 'relative',
@@ -45,16 +45,16 @@ const useStyles = makeStyles((theme: Theme) =>
       // width: '100%',
       backgroundColor: fade(theme.palette.primary.main, 0.15),
       '&:hover': {
-        backgroundColor: fade(theme.palette.primary.main, 0.25)
+        backgroundColor: fade(theme.palette.primary.main, 0.25),
       },
       [theme.breakpoints.down('sm')]: {
         marginLeft: theme.spacing(1),
-        width: 288
+        width: 288,
       },
 
       '& .MuiFormLabel-root': {
-        color: '#5F5C5C'
-      }
+        color: '#5F5C5C',
+      },
     },
     //searchIcon: {
     //padding: theme.spacing(0, 2),
@@ -70,10 +70,10 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up('md')]: {
         display: 'flex',
         justifyContent: 'space-around',
-        width: 331
-      }
-    }
-  })
+        width: 331,
+      },
+    },
+  }),
 );
 
 export default function HeaderBar(): JSX.Element {
@@ -82,7 +82,7 @@ export default function HeaderBar(): JSX.Element {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const { load } = useMyriadUser();
+  const {load} = useMyriadUser();
 
   useEffect(() => {
     load();
@@ -99,7 +99,9 @@ export default function HeaderBar(): JSX.Element {
           </div>
           <div className={classes.grow} />
           <div className={classes.search}>
-            <SearchUserComponent placeholder={isMobile ? 'Search Myria...' : 'Search for people or posts on Myriad...'} />
+            <SearchUserComponent
+              placeholder={isMobile ? 'Search Myria...' : 'Search for people or posts on Myriad...'}
+            />
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop} id="user-menu">

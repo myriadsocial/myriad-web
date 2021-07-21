@@ -1,73 +1,56 @@
-import React, { createRef, useCallback, useEffect } from 'react';
+import React, {createRef, useCallback, useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
-import { useSession } from 'next-auth/client';
-import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
+import {useRouter} from 'next/router';
 
 import Fab from '@material-ui/core/Fab';
-import { useTheme } from '@material-ui/core/styles';
+import {useTheme} from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import DividerWithText from '../common/divider-w-text';
-import { LoadingPage } from '../common/loading.component';
-import ImportPostComponent from './ImportPost.component';
+import {LoadingPage} from '../common/loading.component';
 import FilterTimelineComponent from './filter/filter.component';
-import { useStyles } from './timeline.style';
-import { useTimelineFilter } from './use-timeline-filter.hook';
+import {useStyles} from './timeline.style';
+import {useTimelineFilter} from './use-timeline-filter.hook';
 
-import { ScrollTop } from 'src/components/common/ScrollToTop.component';
+import {ScrollTop} from 'src/components/common/ScrollToTop.component';
 import CreatePostComponent from 'src/components/post/create/create-post.component';
 import PostComponent from 'src/components/post/post.component';
-import { TipSummaryComponent } from 'src/components/tip-summary/tip-summary.component';
-import { TipSummaryProvider } from 'src/components/tip-summary/tip-summary.context';
-import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
-import { useTimelineHook } from 'src/hooks/use-timeline.hook';
-import { Post } from 'src/interfaces/post';
-import { Token } from 'src/interfaces/token';
-import { RootState } from 'src/reducers';
-import { UserState } from 'src/reducers/user/reducer';
+import {TipSummaryProvider} from 'src/components/tip-summary/tip-summary.context';
+import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
+import {useTimelineHook} from 'src/hooks/use-timeline.hook';
+import {Post} from 'src/interfaces/post';
+import {TimelineFilter} from 'src/interfaces/timeline';
+import {Token} from 'src/interfaces/token';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
+
+const TipSummaryComponent = dynamic(
+  () => import('src/components/tip-summary/tip-summary.component'),
+);
+const ImportPostComponent = dynamic(() => import('./ImportPost.component'));
 
 type TimelineComponentProps = {
   isAnonymous: boolean;
   availableTokens: Token[];
+  filter?: TimelineFilter;
 };
 
-const TimelineComponent: React.FC<TimelineComponentProps> = ({ isAnonymous, availableTokens }) => {
+const TimelineComponent: React.FC<TimelineComponentProps> = ({availableTokens}) => {
   const style = useStyles();
-
-  const [session] = useSession();
-  const { query } = useRouter();
-
-  const userAddress = session?.user.address as string;
-
-  const { load, tokensReady } = usePolkadotApi();
-
-  useEffect(() => {
-    if (userAddress) {
-      load(userAddress, availableTokens);
-    }
-  }, [userAddress]);
-
   const theme = useTheme();
+  const {query} = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const { user } = useSelector<RootState, UserState>(state => state.userState);
-  const { posts, hasMore, sort, nextPage, sortTimeline } = useTimelineHook();
-  const { filterTimeline } = useTimelineFilter();
+  const {load, tokensReady} = usePolkadotApi();
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {posts, hasMore, sort, nextPage, sortTimeline} = useTimelineHook();
+  const {filterTimeline} = useTimelineFilter();
 
   const scrollRoot = createRef<HTMLDivElement>();
-
-  const isOwnPost = (post: Post) => {
-    if (!user) return false;
-
-    if (post.platformUser?.platform_account_id === user.id) {
-      return true;
-    }
-
-    return false;
-  };
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, true);
@@ -76,6 +59,12 @@ const TimelineComponent: React.FC<TimelineComponentProps> = ({ isAnonymous, avai
   useEffect(() => {
     filterTimeline(query);
   }, [query]);
+
+  useEffect(() => {
+    if (user?.id) {
+      load(user.id, availableTokens);
+    }
+  }, [user]);
 
   const handleScroll = useCallback(() => {
     const distance = window.scrollY;
@@ -88,6 +77,16 @@ const TimelineComponent: React.FC<TimelineComponentProps> = ({ isAnonymous, avai
       }
     });
   }, []);
+
+  const isOwnPost = (post: Post) => {
+    if (!user) return false;
+
+    if (post.platformUser?.platform_account_id === user.id) {
+      return true;
+    }
+
+    return false;
+  };
 
   return (
     <div className={style.root} id="timeline">

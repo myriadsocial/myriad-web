@@ -9,18 +9,18 @@ import ListItemIcon from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
-import { useStyles } from './layout-options.style';
+import {useStyles} from './layout-options.style';
 
 import PhotoLayoutIcon from 'src/images/photo-layout-light.svg';
 import TimelineLayoutIcon from 'src/images/timeline-layout-light.svg';
-import { LayoutType } from 'src/interfaces/experience';
+import {LayoutType} from 'src/interfaces/experience';
 
 type Props = {
   value?: LayoutType;
   onChanged: (value: LayoutType) => void;
 };
 
-export default function Layouts({ value, onChanged }: Props) {
+export default function Layouts({value, onChanged}: Props) {
   const style = useStyles();
 
   const changeLayoutType = (type: LayoutType) => {
@@ -29,7 +29,11 @@ export default function Layouts({ value, onChanged }: Props) {
 
   return (
     <Card className={style.root}>
-      <CardHeader disableTypography className={style.header} title={<Typography variant="h5">Look And Feel</Typography>} />
+      <CardHeader
+        disableTypography
+        className={style.header}
+        title={<Typography variant="h5">Look And Feel</Typography>}
+      />
       <CardContent>
         <List component="nav" className={style.root}>
           <ListItem

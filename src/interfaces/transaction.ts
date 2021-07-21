@@ -1,5 +1,5 @@
-import { Token } from 'src/interfaces/token';
-import { User } from 'src/interfaces/user';
+import {Token} from 'src/interfaces/token';
+import {User} from 'src/interfaces/user';
 
 export interface Transaction {
   id?: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Experience } from 'src/interfaces/experience';
-import { People } from 'src/interfaces/people';
+import {Experience} from 'src/interfaces/experience';
+import {People} from 'src/interfaces/people';
 
 export enum ExperienceActionType {
   INIT_EXPERIENCE = 'INIT_EXPERIENCE',
@@ -13,7 +13,7 @@ export enum ExperienceActionType {
   ADD_EXPERIENCE = 'ADD_EXPERIENCE',
   REMOVE_EXPERIENCE = 'REMOVE_EXPERIENCE',
   ADD_TO_HIDDEN = 'ADD_TO_HIDDEN',
-  REMOVE_FROM_HIDDEN = 'REMOVE_FROM_HIDDEN'
+  REMOVE_FROM_HIDDEN = 'REMOVE_FROM_HIDDEN',
 }
 
 export interface InitExperience {
@@ -86,7 +86,7 @@ export type Action =
   | addToHidden
   | removeFromHidden;
 type Dispatch = (action: Action) => void;
-type ExperienceProviderProps = { children: React.ReactNode };
+type ExperienceProviderProps = {children: React.ReactNode};
 type State = {
   init: boolean;
   experiences: Experience[];
@@ -104,10 +104,12 @@ const initalState = {
   experiences: [],
   searched: [],
   hiddenPeople: [],
-  hiddenTags: []
+  hiddenTags: [],
 };
 
-const ExperienceContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
+const ExperienceContext = React.createContext<{state: State; dispatch: Dispatch} | undefined>(
+  undefined,
+);
 
 function experienceReducer(state: State, action: Action) {
   switch (action.type) {
@@ -116,7 +118,7 @@ function experienceReducer(state: State, action: Action) {
         ...state,
         experiences: action.experiences,
         selected: action.experiences[0],
-        init: false
+        init: false,
       };
     }
 
@@ -124,14 +126,14 @@ function experienceReducer(state: State, action: Action) {
       return {
         ...state,
         selected: action.payload,
-        experiences: [action.payload, ...state.experiences]
+        experiences: [action.payload, ...state.experiences],
       };
     }
 
     case ExperienceActionType.SELECT_EXPERIENCE: {
       return {
         ...state,
-        selected: action.experience
+        selected: action.experience,
       };
     }
 
@@ -140,36 +142,36 @@ function experienceReducer(state: State, action: Action) {
         ...state,
         selected: {
           ...state.selected,
-          ...action.experience
-        }
+          ...action.experience,
+        },
       };
     }
 
     case ExperienceActionType.EDIT_EXPERIENCE: {
       return {
         ...state,
-        edit: action.experience
+        edit: action.experience,
       };
     }
 
     case ExperienceActionType.REMOVE_EXPERIENCE: {
       return {
         ...state,
-        experiences: state.experiences.filter(item => item.id !== action.experience_id)
+        experiences: state.experiences.filter(item => item.id !== action.experience_id),
       };
     }
 
     case ExperienceActionType.SEARCH_EXPERIENCE: {
       return {
         ...state,
-        searched: [...action.experiences, ...state.searched]
+        searched: [...action.experiences, ...state.searched],
       };
     }
 
     case ExperienceActionType.SHOW_MORE_EXPERIENCE: {
       return {
         ...state,
-        experiences: [...action.experiences, ...state.experiences]
+        experiences: [...action.experiences, ...state.experiences],
       };
     }
 
@@ -177,15 +179,17 @@ function experienceReducer(state: State, action: Action) {
       return {
         ...state,
         hiddenPeople: [...state.hiddenPeople, ...action.people],
-        hiddenTags: [...state.hiddenTags, ...action.tags]
+        hiddenTags: [...state.hiddenTags, ...action.tags],
       };
     }
 
     case ExperienceActionType.REMOVE_FROM_HIDDEN: {
       return {
         ...state,
-        hiddenPeople: state.hiddenPeople.filter(item => !action.people.map(people => people.id).includes(item.id)),
-        hiddenTags: state.hiddenTags.filter(item => !action.tags.includes(item))
+        hiddenPeople: state.hiddenPeople.filter(
+          item => !action.people.map(people => people.id).includes(item.id),
+        ),
+        hiddenTags: state.hiddenTags.filter(item => !action.tags.includes(item)),
       };
     }
 
@@ -205,11 +209,11 @@ export const useExperience = () => {
   return context;
 };
 
-export const ExperienceProvider = ({ children }: ExperienceProviderProps) => {
+export const ExperienceProvider = ({children}: ExperienceProviderProps) => {
   const [state, dispatch] = React.useReducer(experienceReducer, initalState);
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
-  const value = { state, dispatch };
+  const value = {state, dispatch};
 
   return <ExperienceContext.Provider value={value}>{children}</ExperienceContext.Provider>;
 };

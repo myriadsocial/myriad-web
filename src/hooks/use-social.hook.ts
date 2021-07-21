@@ -1,12 +1,12 @@
 import React from 'react';
 
 import Axios from 'axios';
-import { format } from 'date-fns';
-import { Post } from 'src/interfaces/post';
-import { parseTwitter, PostDetail } from 'src/lib/parse-social.util';
+import {format} from 'date-fns';
+import {Post} from 'src/interfaces/post';
+import {parseTwitter, PostDetail} from 'src/lib/parse-social.util';
 
 const client = Axios.create({
-  baseURL: process.env.NEXTAUTH_URL
+  baseURL: process.env.NEXTAUTH_URL,
 });
 
 const createMarkdownContent = (post: Post): string => {
@@ -29,13 +29,13 @@ export const useSocialDetail = (post: Post) => {
 
   const loadPost = async () => {
     try {
-      const { data } = await client({
+      const {data} = await client({
         method: 'GET',
         url: '/api/content/twitter',
         params: {
           id: post.textId,
-          type: 'twitter'
-        }
+          type: 'twitter',
+        },
       });
 
       if (!data.errors) {
@@ -61,13 +61,13 @@ export const useSocialDetail = (post: Post) => {
         images: [],
         metric: {
           like: 0,
-          retweet: 0
+          retweet: 0,
         },
         user: {
           name: post.platformUser?.username || '',
           avatar: post.platformUser?.profilePictureURL || '',
-          username: post.platformUser?.username || ''
-        }
+          username: post.platformUser?.username || '',
+        },
       });
 
       setLoading(false);
@@ -76,6 +76,6 @@ export const useSocialDetail = (post: Post) => {
 
   return {
     loading,
-    detail
+    detail,
   };
 };

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
-import { Divider } from '@material-ui/core';
+import {Divider} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,7 +12,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Switch from '@material-ui/core/Switch';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
@@ -25,26 +25,26 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'block',
-      position: 'relative'
+      position: 'relative',
     },
     header: {
       fontSize: 16,
       fontWeight: 500,
-      color: '#000000'
-    }
-  })
+      color: '#000000',
+    },
+  }),
 );
 
 type SettingKey = 'everyone' | 'friend' | 'original' | 'imported';
 
-export const PostSettingComponent: React.FC<PostSettingProps> = ({ userId }) => {
+export const PostSettingComponent: React.FC<PostSettingProps> = ({userId}) => {
   const styles = useStyles();
 
   const [settings, setSetting] = useState<Record<SettingKey, boolean>>({
     everyone: true,
     friend: false,
     original: true,
-    imported: true
+    imported: true,
   });
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -61,7 +61,7 @@ export const PostSettingComponent: React.FC<PostSettingProps> = ({ userId }) => 
   const handleToggle = (key: SettingKey) => () => {
     setSetting({
       ...settings,
-      [key]: !settings[key]
+      [key]: !settings[key],
     });
   };
 
@@ -75,7 +75,7 @@ export const PostSettingComponent: React.FC<PostSettingProps> = ({ userId }) => 
         <DialogTitle id="post-setting-title" onClose={settingClosed}>
           Post Setting
         </DialogTitle>
-        <DialogContent style={{ width: 408 }}>
+        <DialogContent style={{width: 408}}>
           <List
             component="nav"
             aria-labelledby="nested-list-subheader"
@@ -93,7 +93,7 @@ export const PostSettingComponent: React.FC<PostSettingProps> = ({ userId }) => 
                   size="small"
                   onChange={handleToggle('everyone')}
                   checked={settings.everyone}
-                  inputProps={{ 'aria-labelledby': 'switch-show-post-everyone' }}
+                  inputProps={{'aria-labelledby': 'switch-show-post-everyone'}}
                 />
               </ListItemSecondaryAction>
             </ListItem>
@@ -106,7 +106,7 @@ export const PostSettingComponent: React.FC<PostSettingProps> = ({ userId }) => 
                   size="small"
                   onChange={handleToggle('friend')}
                   checked={settings.friend}
-                  inputProps={{ 'aria-labelledby': 'switch-show-post-frien' }}
+                  inputProps={{'aria-labelledby': 'switch-show-post-frien'}}
                 />
               </ListItemSecondaryAction>
             </ListItem>
@@ -134,7 +134,7 @@ export const PostSettingComponent: React.FC<PostSettingProps> = ({ userId }) => 
                   size="small"
                   onChange={handleToggle('original')}
                   checked={settings.original}
-                  inputProps={{ 'aria-labelledby': 'switch-tipping-originnal' }}
+                  inputProps={{'aria-labelledby': 'switch-tipping-originnal'}}
                 />
               </ListItemSecondaryAction>
             </ListItem>
@@ -147,7 +147,7 @@ export const PostSettingComponent: React.FC<PostSettingProps> = ({ userId }) => 
                   size="small"
                   onChange={handleToggle('imported')}
                   checked={settings.imported}
-                  inputProps={{ 'aria-labelledby': 'switch-tipping-imported' }}
+                  inputProps={{'aria-labelledby': 'switch-tipping-imported'}}
                 />
               </ListItemSecondaryAction>
             </ListItem>
@@ -162,7 +162,7 @@ export const PostSettingComponent: React.FC<PostSettingProps> = ({ userId }) => 
             variant="contained"
             color="primary"
             size="medium"
-            style={{ margin: '0 auto' }}>
+            style={{margin: '0 auto'}}>
             Save settings
           </Button>
         </DialogActions>

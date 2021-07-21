@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 
-import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/client';
-import { useRouter } from 'next/router';
+import {GetServerSideProps} from 'next';
+import {getSession} from 'next-auth/client';
+import {useRouter} from 'next/router';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import AlertComponent from 'src/components/alert/Alert.component';
-import { LoginInfoComponent } from 'src/components/login/login-info.component';
-import { LoginComponent } from 'src/components/login/login.component';
-import { useAlertHook } from 'src/hooks/use-alert.hook';
+import {LoginInfoComponent} from 'src/components/login/login-info.component';
+import {LoginComponent} from 'src/components/login/login.component';
+import {useAlertHook} from 'src/hooks/use-alert.hook';
 import LogoImage from 'src/images/myriad-logo.svg';
-import { healthcheck } from 'src/lib/api/healthcheck';
+import {healthcheck} from 'src/lib/api/healthcheck';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,45 +24,45 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
       display: 'flex',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
     },
     header: {
-      textAlign: 'center'
+      textAlign: 'center',
     },
     logo: {
       marginTop: 48,
-      height: 87
+      height: 87,
     },
     title: {
       fontSize: 24,
       fontWeight: 700,
       lineHeight: '30px',
       marginBottom: 59,
-      color: theme.palette.background.paper
+      color: theme.palette.background.paper,
     },
     titlePrimary: {
-      color: theme.palette.primary.main
+      color: theme.palette.primary.main,
     },
     login: {
       marginTop: 140,
       width: 320,
-      marginRight: 65
-    }
-  })
+      marginRight: 65,
+    },
+  }),
 );
 
 export default function Index() {
   const style = useStyles();
 
-  const { query } = useRouter();
-  const { showAlert } = useAlertHook();
+  const {query} = useRouter();
+  const {showAlert} = useAlertHook();
 
   useEffect(() => {
     if (query.error) {
       showAlert({
         message: 'Something wrong when try to loggedin.',
         severity: 'error',
-        title: 'Login failed'
+        title: 'Login failed',
       });
     }
   }, [query.error]);
@@ -88,7 +88,7 @@ export default function Index() {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { res } = context;
+  const {res} = context;
 
   const available = await healthcheck();
 
@@ -107,6 +107,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
   }
 
   return {
-    props: {}
+    props: {},
   };
 };

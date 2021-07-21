@@ -1,5 +1,5 @@
 export const enableExtension = async () => {
-  const { web3Enable, web3Accounts } = await import('@polkadot/extension-dapp');
+  const {web3Enable, web3Accounts} = await import('@polkadot/extension-dapp');
 
   const extensions = await web3Enable(process.env.NEXT_PUBLIC_APP_NAME as string);
 
@@ -10,18 +10,20 @@ export const enableExtension = async () => {
   }
 
   // Using proper prefix
-  const prefix = process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX ? Number(process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX) : 214;
+  const prefix = process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX
+    ? Number(process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX)
+    : 214;
 
   // we are now informed that the user has at least one extension and that we
   // will be able to show and use accounts
   const allAccounts = await web3Accounts({
-    ss58Format: prefix
+    ss58Format: prefix,
   });
   return allAccounts;
 };
 
 export const unsubscribeFromAccounts = async () => {
-  const { web3AccountsSubscribe } = await import('@polkadot/extension-dapp');
+  const {web3AccountsSubscribe} = await import('@polkadot/extension-dapp');
 
   //// we subscribe to any account change and log the new list.
   //// note that `web3AccountsSubscribe` returns the function to unsubscribe

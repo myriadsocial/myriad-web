@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
-import { Post, Comment, CreateCommentProps } from 'src/interfaces/post';
-import { User } from 'src/interfaces/user';
+import {Post, Comment, CreateCommentProps} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
 import * as PostAPI from 'src/lib/api/post';
 
 type useCommentHookProps = {
@@ -51,8 +51,8 @@ export const useCommentHook = (post: Post): useCommentHookProps => {
       ...comments,
       {
         ...data,
-        user
-      }
+        user,
+      },
     ]);
   };
 
@@ -62,6 +62,6 @@ export const useCommentHook = (post: Post): useCommentHookProps => {
     comments,
     loadInitComment: load,
     loadMoreComment: loadMore,
-    reply
+    reply,
   };
 };

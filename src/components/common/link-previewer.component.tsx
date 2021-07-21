@@ -1,6 +1,6 @@
-import React, { ReactNode, useState } from 'react';
+import React, {ReactNode, useState} from 'react';
 
-import { useStyles } from './link-previewer.style';
+import {useStyles} from './link-previewer.style';
 
 type LinkPreviewerProps = {
   image: string;
@@ -10,12 +10,16 @@ type LinkPreviewerProps = {
   children: ReactNode;
 };
 
-const LinkPreviewer = ({ image, title, text, href, children }: LinkPreviewerProps) => {
+const LinkPreviewer = ({image, title, text, href, children}: LinkPreviewerProps) => {
   const styles = useStyles();
   const [isShown, setIsShown] = useState(false);
 
   return (
-    <a href={href} className={styles.linkWithPreview} onMouseEnter={() => setIsShown(true)} onMouseLeave={() => setIsShown(false)}>
+    <a
+      href={href}
+      className={styles.linkWithPreview}
+      onMouseEnter={() => setIsShown(true)}
+      onMouseLeave={() => setIsShown(false)}>
       <span> {children} </span>
       {isShown && <Card image={image} title={title} text={text} />}
     </a>
@@ -28,7 +32,7 @@ type CardProps = {
   text: string;
 };
 
-const Card = ({ image, title, text }: CardProps) => {
+const Card = ({image, title, text}: CardProps) => {
   const styles = useStyles();
   return (
     <div className={styles.card}>

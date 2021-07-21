@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 
 import Button from '@material-ui/core/Button';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 
-import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
-import { ChooseAccountComponent } from './modal-accounts.component';
-import { NoExtensionComponent } from './modal-no-extension.component';
+import {ChooseAccountComponent} from './modal-accounts.component';
+import {NoExtensionComponent} from './modal-no-extension.component';
 
-import { useAuthHook } from 'src/hooks/auth.hook';
-import { usePolkadotExtension } from 'src/hooks/use-polkadot-app.hook';
+import {useAuthHook} from 'src/hooks/auth.hook';
+import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      marginBottom: theme.spacing(1)
+      marginBottom: theme.spacing(1),
     },
     signIn: {
       padding: theme.spacing(0.5, 3),
       fontSize: 14,
-      fontWeight: 500
-    }
-  })
+      fontWeight: 500,
+    },
+  }),
 );
 
 type CreateAccountComponentProps = {};
@@ -29,8 +29,8 @@ type CreateAccountComponentProps = {};
 export const CreateAccountComponent: React.FC<CreateAccountComponentProps> = props => {
   const style = useStyles();
 
-  const { enablePolkadotExtension, getPolkadotAccounts } = usePolkadotExtension();
-  const { signInWithAccount } = useAuthHook();
+  const {enablePolkadotExtension, getPolkadotAccounts} = usePolkadotExtension();
+  const {signInWithAccount} = useAuthHook();
 
   const [extensionInstalled, setExtensionInstalled] = useState(false);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
@@ -61,7 +61,12 @@ export const CreateAccountComponent: React.FC<CreateAccountComponentProps> = pro
 
   return (
     <div className={style.root}>
-      <Button onClick={checkExtensionInstalled} variant="contained" color="primary" size="medium" className={style.signIn}>
+      <Button
+        onClick={checkExtensionInstalled}
+        variant="contained"
+        color="primary"
+        size="medium"
+        className={style.signIn}>
         Sign In
       </Button>
 

@@ -1,13 +1,16 @@
-import { createWrapper } from 'next-redux-wrapper';
+import {createWrapper} from 'next-redux-wrapper';
 
-import { combinedReducers } from './reducers';
+import {combinedReducers} from './reducers';
 
-import { applyMiddleware, Store, createStore } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import {applyMiddleware, Store, createStore} from 'redux';
+import {composeWithDevTools} from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk';
 
 const makeStore = () => {
-  const store: Store = createStore(combinedReducers, composeWithDevTools(applyMiddleware(thunkMiddleware)));
+  const store: Store = createStore(
+    combinedReducers,
+    composeWithDevTools(applyMiddleware(thunkMiddleware)),
+  );
 
   return store;
 };

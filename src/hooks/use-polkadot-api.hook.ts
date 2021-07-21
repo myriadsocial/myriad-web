@@ -1,16 +1,22 @@
-import { options } from '@acala-network/api';
+import {options} from '@acala-network/api';
 
-import { useState } from 'react';
+import {useState} from 'react';
 
-import { ApiPromise, WsProvider } from '@polkadot/api';
-import { Keyring } from '@polkadot/keyring';
+import {ApiPromise, WsProvider} from '@polkadot/api';
+import {Keyring} from '@polkadot/keyring';
 
-import { useWalletAddress as baseUseWalletAddress, WalletAddressActionType } from '../components/common/sendtips/send-tip.context';
-import { useBalance as baseUseBalance, BalanceActionType } from '../components/wallet/balance.context';
+import {
+  useWalletAddress as baseUseWalletAddress,
+  WalletAddressActionType,
+} from '../components/common/sendtips/send-tip.context';
+import {
+  useBalance as baseUseBalance,
+  BalanceActionType,
+} from '../components/wallet/balance.context';
 
-import { Token } from 'src/interfaces/token';
-import { updateTips } from 'src/lib/api/post';
-import { storeTransaction } from 'src/lib/api/transaction';
+import {Token} from 'src/interfaces/token';
+import {updateTips} from 'src/lib/api/post';
+import {storeTransaction} from 'src/lib/api/transaction';
 
 type Props = {
   fromAddress: string;
@@ -30,8 +36,8 @@ const formatNumber = (number: number, decimals: number) => {
 
 // params mungkin butuh address sama tipe wsProvider
 export const usePolkadotApi = () => {
-  const { state, dispatch } = baseUseBalance();
-  const { state: walletAddressState, dispatch: walletAddressDispatch } = baseUseWalletAddress();
+  const {state, dispatch} = baseUseBalance();
+  const {state: walletAddressState, dispatch: walletAddressDispatch} = baseUseWalletAddress();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -41,7 +47,7 @@ export const usePolkadotApi = () => {
     let api: ApiPromise;
     try {
       const provider = new WsProvider(wsProvider);
-      api = new ApiPromise(options({ provider }));
+      api = new ApiPromise(options({provider}));
       await api.isReadyOrError;
       return api;
     } catch (error) {
@@ -66,26 +72,30 @@ export const usePolkadotApi = () => {
           switch (availableTokens[i].id) {
             // TODO: move to single file constant or enum
             case 'MYR': {
-              const { data: balance } = await api.query.system.account(address);
+              const {data: balance} = await api.query.system.account(address);
               const tempBalance = balance.free as unknown;
               tokenBalances.push({
                 freeBalance: formatNumber(tempBalance as number, availableTokens[i].token_decimal),
                 tokenSymbol: availableTokens[i].id,
                 tokenDecimals: availableTokens[i].token_decimal,
                 rpcAddress: provider,
-                tokenImage: availableTokens[i].token_image
+                tokenImage: availableTokens[i].token_image,
               });
               break;
             }
             default: {
-              const tokenData = await api.query.tokens.accounts(address, { TOKEN: availableTokens[i].id });
+              const tokenData: any = await api.query.tokens.accounts(address, {
+                TOKEN: availableTokens[i].id,
+              });
               tokenBalances.push({
-                //@ts-ignore
-                freeBalance: formatNumber(tokenData.free as number, availableTokens[i].token_decimal),
+                freeBalance: formatNumber(
+                  tokenData.free as number,
+                  availableTokens[i].token_decimal,
+                ),
                 tokenSymbol: availableTokens[i].id,
                 tokenDecimals: availableTokens[i].token_decimal,
                 rpcAddress: provider,
-                tokenImage: availableTokens[i].token_image
+                tokenImage: availableTokens[i].token_image,
               });
             }
           }
@@ -95,7 +105,7 @@ export const usePolkadotApi = () => {
       }
       dispatch({
         type: BalanceActionType.INIT_BALANCE,
-        balanceDetails: tokenBalances
+        balanceDetails: tokenBalances,
       });
     } catch (error) {
       setError(error);
@@ -104,21 +114,32 @@ export const usePolkadotApi = () => {
     }
   };
 
-  const sendTip = async ({ fromAddress, toAddress, amountSent, decimals, currencyId, postId, wsAddress }: Props) => {
+  const sendTip = async ({
+    fromAddress,
+    toAddress,
+    amountSent,
+    decimals,
+    currencyId,
+    postId,
+    wsAddress,
+  }: Props) => {
     walletAddressDispatch({
-      type: WalletAddressActionType.INIT_SEND_TIPS
+      type: WalletAddressActionType.INIT_SEND_TIPS,
     });
 
     setLoading(true);
     try {
-      const { enableExtension } = await import('../helpers/extension');
-      const { web3FromSource } = await import('@polkadot/extension-dapp');
+      const {enableExtension} = await import('../helpers/extension');
+      const {web3FromSource} = await import('@polkadot/extension-dapp');
 
       const allAccounts = await enableExtension();
       // We select the first account found by using fromAddress
       // `account` is of type InjectedAccountWithMeta
       const keyring = new Keyring();
-      const baseAddress = keyring.encodeAddress(fromAddress, Number(process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX));
+      const baseAddress = keyring.encodeAddress(
+        fromAddress,
+        Number(process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX),
+      );
       const account = allAccounts?.find(function (account) {
         // address from session must match address on polkadot extension
         return account.address === baseAddress;
@@ -127,7 +148,7 @@ export const usePolkadotApi = () => {
       // if account has not yet been imported to Polkadot.js extension
       if (account === undefined) {
         throw {
-          Error: 'Please import your account first!'
+          Error: 'Please import your account first!',
         };
       }
 
@@ -140,7 +161,7 @@ export const usePolkadotApi = () => {
           const transferExtrinsic =
             currencyId === 'ACA'
               ? api?.tx.balances.transfer(toAddress, amountSent)
-              : api?.tx.currencies.transfer(toAddress, { TOKEN: currencyId }, amountSent);
+              : api?.tx.currencies.transfer(toAddress, {TOKEN: currencyId}, amountSent);
 
           // to be able to retrieve the signer interface from this account
           // we can use web3FromSource which will return an InjectedExtension type
@@ -150,7 +171,9 @@ export const usePolkadotApi = () => {
             // passing the injected account address as the first argument of signAndSend
             // will allow the api to retrieve the signer and the user will see the extension
             // popup asking to sign the balance transfer transaction
-            const txInfo = await transferExtrinsic.signAndSend(fromAddress, { signer: injector.signer });
+            const txInfo = await transferExtrinsic.signAndSend(fromAddress, {
+              signer: injector.signer,
+            });
 
             // Update the tip sent to a post
             await updateTips(currencyId, amountSent, postId);
@@ -167,7 +190,7 @@ export const usePolkadotApi = () => {
                 state: 'success',
                 tokenId: currencyId,
                 createdAt: new Date().toISOString(),
-                postId
+                postId,
               });
 
               walletAddressDispatch({
@@ -177,7 +200,7 @@ export const usePolkadotApi = () => {
                 to: toAddress,
                 trxHash: txInfo.toHex(),
                 tokenId: currencyId,
-                success: true
+                success: true,
               });
             }
 
@@ -199,6 +222,6 @@ export const usePolkadotApi = () => {
     tokensReady: state.balanceDetails,
     sendTip,
     trxHash: walletAddressState.trxHash,
-    sendTipSuccess: walletAddressState.success
+    sendTipSuccess: walletAddressState.success,
   };
 };

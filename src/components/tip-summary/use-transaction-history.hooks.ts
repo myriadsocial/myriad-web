@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
 import Axios from 'axios';
-import { Post } from 'src/interfaces/post';
-import { Transaction } from 'src/interfaces/transaction';
+import {Post} from 'src/interfaces/post';
+import {Transaction} from 'src/interfaces/transaction';
 import * as PostAPI from 'src/lib/api/post';
 
 const axios = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000',
 });
 
 type useTransactionHistoryProps = {
@@ -26,7 +26,7 @@ export const useTransactionHistory = (): useTransactionHistoryProps => {
   const [params] = useState({
     offset: 0,
     limit: 20,
-    include: ['fromUser']
+    include: ['fromUser'],
   });
 
   const loadPostDetail = async (post: Post): Promise<void> => {
@@ -41,17 +41,17 @@ export const useTransactionHistory = (): useTransactionHistoryProps => {
     setLoading(true);
 
     try {
-      const { data } = await axios.request<Transaction[]>({
+      const {data} = await axios.request<Transaction[]>({
         url: '/transactions',
         method: 'GET',
         params: {
           filter: {
             ...filter,
             where: {
-              postId: post.id
-            }
-          }
-        }
+              postId: post.id,
+            },
+          },
+        },
       });
 
       if (data.length > 0) {
@@ -71,6 +71,6 @@ export const useTransactionHistory = (): useTransactionHistoryProps => {
     loading,
     postDetail,
     transactions,
-    loadTransaction
+    loadTransaction,
   };
 };

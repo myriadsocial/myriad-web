@@ -1,6 +1,6 @@
-import { format } from 'date-fns';
-import { random } from 'lodash';
-import { ImageData, SocialMetric } from 'src/interfaces/post';
+import {format} from 'date-fns';
+import {random} from 'lodash';
+import {ImageData, SocialMetric} from 'src/interfaces/post';
 
 export type PostUser = {
   name: string;
@@ -25,31 +25,33 @@ export const parseTwitter = (data: Record<string, any>): PostDetail => {
     user: {
       name: data.user.name,
       avatar: data.user.profile_image_url_https,
-      username: `@${data.user.screen_name}`
+      username: `@${data.user.screen_name}`,
     },
     videos: [],
     images: [],
     metric: {
       like: data.favorite_count,
-      retweet: data.retweet_count
-    }
+      retweet: data.retweet_count,
+    },
   };
 
   if (data.extended_entities && data.extended_entities.media?.length) {
     /* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
-    data.extended_entities.media.forEach((media: { type: string; media_url_https: string; video_info: any }) => {
-      if (media.type === 'photo') {
-        lookup.images.push({
-          src: media.media_url_https,
-          height: random(2, 4),
-          width: random(2, 4)
-        });
-      }
+    data.extended_entities.media.forEach(
+      (media: {type: string; media_url_https: string; video_info: any}) => {
+        if (media.type === 'photo') {
+          lookup.images.push({
+            src: media.media_url_https,
+            height: random(2, 4),
+            width: random(2, 4),
+          });
+        }
 
-      if (media.type === 'video') {
-        lookup.videos.push(media.video_info.variants[0].url);
-      }
-    });
+        if (media.type === 'video') {
+          lookup.videos.push(media.video_info.variants[0].url);
+        }
+      },
+    );
   }
 
   return lookup;

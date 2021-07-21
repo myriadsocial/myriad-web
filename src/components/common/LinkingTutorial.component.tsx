@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, {useState, forwardRef, useImperativeHandle} from 'react';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 
 import DialogTitle from '../common/DialogTitle.component';
-import { useStyles } from '../login/login.style';
+import {useStyles} from '../login/login.style';
 
 const LinkingTutorialComponent = forwardRef((_, ref) => {
   const [showLinkingTutorial, setShowLinkingTutorial] = useState(false);
@@ -16,7 +16,7 @@ const LinkingTutorialComponent = forwardRef((_, ref) => {
   useImperativeHandle(ref, () => ({
     triggerLinkingTutorial: () => {
       setShowLinkingTutorial(true);
-    }
+    },
   }));
 
   const closeLinkingTutorial = () => {
@@ -25,7 +25,11 @@ const LinkingTutorialComponent = forwardRef((_, ref) => {
 
   return (
     <>
-      <Dialog open={showLinkingTutorial} onClose={closeLinkingTutorial} aria-labelledby="form-dialog-title" maxWidth="md">
+      <Dialog
+        open={showLinkingTutorial}
+        onClose={closeLinkingTutorial}
+        aria-labelledby="form-dialog-title"
+        maxWidth="md">
         <DialogTitle id="name" onClose={closeLinkingTutorial}>
           {' '}
           So what to do now?
@@ -39,7 +43,12 @@ const LinkingTutorialComponent = forwardRef((_, ref) => {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button className={styles.lightButton} fullWidth={true} size="large" variant="contained" onClick={closeLinkingTutorial}>
+          <Button
+            className={styles.lightButton}
+            fullWidth={true}
+            size="large"
+            variant="contained"
+            onClick={closeLinkingTutorial}>
             Okay, I understood!
           </Button>
         </DialogActions>

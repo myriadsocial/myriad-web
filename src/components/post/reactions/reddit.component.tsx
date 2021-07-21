@@ -2,11 +2,11 @@ import React from 'react';
 
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
-import { SocialMetric } from 'src/interfaces/post';
+import {SocialMetric} from 'src/interfaces/post';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -14,17 +14,17 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(0),
       '& > *': {
         margin: 0,
-        padding: 0
-      }
-    }
-  })
+        padding: 0,
+      },
+    },
+  }),
 );
 
 type Props = {
   metric: SocialMetric;
 };
 
-export default function RedditReactionComponent({ metric }: Props) {
+export default function RedditReactionComponent({metric}: Props) {
   const style = useStyles();
 
   return (

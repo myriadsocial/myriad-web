@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const RedditAPI = Axios.create({
-  baseURL: 'https://www.reddit.com'
+  baseURL: 'https://www.reddit.com',
 });
 
 type RedditProfile = {
@@ -15,9 +15,9 @@ type RedditProfile = {
 
 export const getProfile = async (user: string): Promise<RedditProfile | null> => {
   try {
-    const { data } = await RedditAPI.request<RedditProfile>({
+    const {data} = await RedditAPI.request<RedditProfile>({
       url: `user/${user}/about.json`,
-      method: 'GET'
+      method: 'GET',
     });
 
     return data;

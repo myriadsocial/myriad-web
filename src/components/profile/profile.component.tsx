@@ -1,34 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, {useState, useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles, withStyles, Theme, createStyles, fade } from '@material-ui/core/styles';
-import { useTheme } from '@material-ui/core/styles';
+import {makeStyles, withStyles, Theme, createStyles, fade} from '@material-ui/core/styles';
+import {useTheme} from '@material-ui/core/styles';
 
-import { TabPanel } from '../common/tab-panel.component';
-import Header from './header.component';
-import { TippingComponent } from './myWallet/tipping/tipping.component';
-import { WalletComponent } from './myWallet/wallet/wallet.component';
-import { useStyles } from './profile.style';
+import {TabPanel} from '../common/tab-panel.component';
+import Header from './header/header.component';
+import {TippingComponent} from './myWallet/tipping/tipping.component';
+import {WalletComponent} from './myWallet/wallet/wallet.component';
+import {useStyles} from './profile.style';
 
-import { useProfile } from 'src/components/profile/profile.context';
-import { useFriendHook } from 'src/components/profile/use-friend.hook';
-import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
-import { ExtendedUserPost } from 'src/interfaces/user';
-import { RootState } from 'src/reducers';
-import { UserState } from 'src/reducers/user/reducer';
+import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
+import {ExtendedUser} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
+import {fetchProfileFriend} from 'src/reducers/profile/actions';
+import {ProfileState} from 'src/reducers/profile/reducer';
+import {UserState} from 'src/reducers/user/reducer';
 
 const PostList = dynamic(() => import('./post/post-list.component'));
 const ImportedPostList = dynamic(() => import('./post/importedPost-list.component'));
-const FriendComponent = dynamic(() => import('./user-friends.component'));
+const FriendComponent = dynamic(() => import('./friend/user-friends.component'));
 
 type Props = {
-  profile: ExtendedUserPost | null;
+  profile: ExtendedUser;
   loading: boolean;
 };
 // WALLET TAB
@@ -36,19 +35,23 @@ interface StyledTabsProps {
   value: number;
   onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
 }
+
 //TODO: move to common component
 const StyledTabs = withStyles({
   indicator: {
     display: 'flex',
     justifyContent: 'center',
-    backgroundColor: 'transparent'
-  }
-})((props: StyledTabsProps) => <Tabs variant="fullWidth" {...props} TabIndicatorProps={{ children: <span /> }} />);
+    backgroundColor: 'transparent',
+  },
+})((props: StyledTabsProps) => (
+  <Tabs variant="fullWidth" {...props} TabIndicatorProps={{children: <span />}} />
+));
 
 interface StyledTabProps {
   label: string;
   ariaLabel?: string;
 }
+
 //TODO: move to common component
 const StyledTab = withStyles((theme: Theme) =>
   createStyles({
@@ -63,24 +66,25 @@ const StyledTab = withStyles((theme: Theme) =>
       '&:focus': {
         opacity: 1,
         backgroundColor: fade('#8629e9', 0.2),
-        color: '#8629e9'
-      }
-    }
-  })
+        color: '#8629e9',
+      },
+    },
+  }),
 )((props: StyledTabProps) => <Tab aria-label={props.ariaLabel} disableRipple {...props} />);
 
 const useStylesForTabs = makeStyles((theme: Theme) => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   padding: {
-    padding: theme.spacing(3)
+    padding: theme.spacing(3),
   },
   demo2: {
-    backgroundColor: 'transparent'
-  }
+    backgroundColor: 'transparent',
+  },
 }));
 
+// TODO: move to single component file
 function MyWalletTabs() {
   const classes = useStylesForTabs();
   const [value, setValue] = React.useState(0);
@@ -108,34 +112,38 @@ function MyWalletTabs() {
 }
 // WALLET TAB
 
-export default function ProfileTimeline({ profile, loading }: Props) {
+export default function ProfileTimeline({profile, loading}: Props) {
   const style = useStyles();
   const theme = useTheme();
+  const dispatch = useDispatch();
+
+  const {load, tokensReady} = usePolkadotApi();
 
   const {
-    state: { totalFriends }
-  } = useProfile();
-  const { anonymous, user, tokens: userTokens } = useSelector<RootState, UserState>(state => state.userState);
-
-  const { getFriends } = useFriendHook(profile);
-  const { load, tokensReady } = usePolkadotApi();
+    anonymous,
+    user,
+    tokens: userTokens,
+  } = useSelector<RootState, UserState>(state => state.userState);
+  const {totalFriends} = useSelector<RootState, ProfileState>(state => state.profileState);
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [isGuest, setIsGuest] = useState<boolean>(false);
 
   useEffect(() => {
-    if (user && userTokens) {
-      load(user?.id, userTokens);
-    }
-  }, [user, userTokens]);
+    dispatch(fetchProfileFriend(profile.id));
+    setSelectedTab(0);
+
+    return undefined;
+  }, []);
 
   useEffect(() => {
-    setIsGuest(user?.id !== profile?.id);
-
-    if (profile?.id) {
-      getFriends();
-      setSelectedTab(0);
+    if (user) {
+      setIsGuest(user.id !== profile.id);
     }
-  }, [user, profile]);
+
+    if (user && userTokens) {
+      load(user.id, userTokens);
+    }
+  }, [user, userTokens]);
 
   const handleChange = (event: React.ChangeEvent<{}>, tab: number) => {
     setSelectedTab(tab);
@@ -145,18 +153,6 @@ export default function ProfileTimeline({ profile, loading }: Props) {
     return (
       <div className={`${style.root} ${style.flex}`}>
         <CircularProgress color="primary" size={100} />
-      </div>
-    );
-  }
-
-  if (profile === null) {
-    return (
-      <div className={style.root}>
-        <Header isAnonymous={anonymous} profile={null} loading={loading} isGuest={true} />
-        <div style={{ textAlign: 'center' }}>
-          <h1>This account doesn’t exist</h1>
-          <Typography>Try searching for another.</Typography>
-        </div>
       </div>
     );
   }
@@ -181,10 +177,18 @@ export default function ProfileTimeline({ profile, loading }: Props) {
             {isGuest == false && <Tab className={style.tabItem} label={'My Wallet'} />}
           </Tabs>
           <TabPanel value={selectedTab} index={0} dir={theme.direction}>
-            <PostList profile={profile} balanceDetails={tokensReady.length > 0 ? tokensReady : []} availableTokens={userTokens} />
+            <PostList
+              profile={profile}
+              balanceDetails={tokensReady.length > 0 ? tokensReady : []}
+              availableTokens={userTokens}
+            />
           </TabPanel>
           <TabPanel value={selectedTab} index={1} dir={theme.direction}>
-            <ImportedPostList profile={profile} balanceDetails={tokensReady.length > 0 ? tokensReady : []} availableTokens={userTokens} />
+            <ImportedPostList
+              profile={profile}
+              balanceDetails={tokensReady.length > 0 ? tokensReady : []}
+              availableTokens={userTokens}
+            />
           </TabPanel>
           <TabPanel value={selectedTab} index={2} dir={theme.direction}>
             <FriendComponent profile={profile} />

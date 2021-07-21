@@ -1,4 +1,4 @@
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -6,21 +6,21 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: theme.palette.background.paper,
       marginBottom: theme.spacing(5),
       position: 'relative',
-      borderRadius: '8px'
+      borderRadius: '8px',
     },
     button: {
       paddingRight: 24,
       paddingLeft: 24,
       paddingTop: 8,
       paddingBottom: 8,
-      borderRadius: '8px'
+      borderRadius: '8px',
     },
     button2: {
       paddingRight: 40,
       paddingLeft: 40,
       paddingTop: 8,
       paddingBottom: 8,
-      borderRadius: '8px'
+      borderRadius: '8px',
     },
     header: {
       width: '100%',
@@ -28,7 +28,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
       padding: 16,
       height: '339px',
-      color: '#4B4851'
+      color: '#4B4851',
     },
     avatar: {
       width: '72px',
@@ -40,102 +40,102 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       fontSize: 30,
       color: 'white',
-      marginRight: 10
+      marginRight: 10,
     },
     logo: {
       width: 30,
       height: 30,
       backgroundColor: 'white',
       borderRadius: 10,
-      marginRight: 10
+      marginRight: 10,
     },
     name: {
       fontSize: 18,
       lineHeight: '12px',
       fontWeight: 500,
-      textTransform: 'capitalize'
+      textTransform: 'capitalize',
     },
     publicKey: {
       fontSize: 14,
       lineHeight: '12px',
       fontWeight: 400,
       color: '#FFF',
-      textTransform: 'capitalize'
+      textTransform: 'capitalize',
     },
     // modal
     media: {
       height: 159,
       width: 420,
       objectFit: 'cover',
-      borderRadius: 8
+      borderRadius: 8,
     },
     actions: {
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
     },
     avatarBig: {
       height: 72,
       width: 72,
       position: 'absolute',
       top: 46,
-      left: 16
+      left: 16,
     },
     detail: {
-      position: 'relative'
+      position: 'relative',
     },
     logout: {
-      textAlign: 'center'
+      textAlign: 'center',
     },
     profileContent: {
-      width: 420
+      width: 420,
     },
     subtitle: {
       fontWeight: 700,
       fontSize: 16,
-      color: '#4B4851'
+      color: '#4B4851',
     },
     input: {
       marginTop: 8,
       background: 'white',
       borderRadius: 8,
       '& .MuiInputBase-root': {
-        background: 'white'
-      }
+        background: 'white',
+      },
     },
     // modalremovealert
     dialogRoot: {
       width: '413px',
-      textAlign: 'center'
+      textAlign: 'center',
     },
     icon: {
-      fontSize: 80
+      fontSize: 80,
     },
     subtitle1: {
       fontSize: 18,
-      fontWeight: 700
+      fontWeight: 700,
     },
     subtitle2: {
       fontSize: 16,
-      fontWeight: 400
+      fontWeight: 400,
     },
     alertMessage: {
       color: '#4B4851',
-      width: 236
+      width: 236,
     },
     'm-vertical1': {
       marginBottom: 16,
-      marginTop: 16
+      marginTop: 16,
     },
     'm-vertical2': {
       marginBottom: 24,
-      marginTop: 24
+      marginTop: 24,
     },
     center: {
       marginRight: 'auto',
-      marginLeft: 'auto'
+      marginLeft: 'auto',
     },
     'flex-center': {
       display: 'flex',
-      justifyContent: 'space-evenly'
-    }
-  })
+      justifyContent: 'space-evenly',
+    },
+  }),
 );

@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import {useState} from 'react';
+import {useSelector} from 'react-redux';
 
-import { useNotif, NotifActionType } from 'src/context/notif.context';
-import { ExtendedNotification } from 'src/interfaces/notification';
+import {useNotif, NotifActionType} from 'src/context/notif.context';
+import {ExtendedNotification} from 'src/interfaces/notification';
 import * as NotifAPI from 'src/lib/api/notification';
-import { RootState } from 'src/reducers';
-import { UserState } from 'src/reducers/user/reducer';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 export const useNotifHook = () => {
-  const { dispatch } = useNotif();
-  const { user } = useSelector<RootState, UserState>(state => state.userState);
+  const {dispatch} = useNotif();
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -25,7 +25,7 @@ export const useNotifHook = () => {
 
       dispatch({
         type: NotifActionType.LOAD_NOTIF,
-        payload: data
+        payload: data,
       });
     } catch (error) {
       setError(error);
@@ -36,6 +36,6 @@ export const useNotifHook = () => {
   return {
     error,
     loading,
-    loadNotifications
+    loadNotifications,
   };
 };

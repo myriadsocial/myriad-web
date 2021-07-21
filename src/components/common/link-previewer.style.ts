@@ -1,4 +1,4 @@
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -10,16 +10,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       zIndex: 100,
       bottom: 30,
       left: '50%',
-      transform: 'translateX(-50%)'
+      transform: 'translateX(-50%)',
     },
     linkWithPreview: {
-      position: 'relative'
+      position: 'relative',
     },
     cardImgTop: {
-      width: 150
+      width: 150,
     },
     cardTitle: {
-      fontSize: 14
-    }
-  })
+      fontSize: 14,
+    },
+  }),
 );

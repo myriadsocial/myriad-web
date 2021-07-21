@@ -1,9 +1,9 @@
 import Axios from 'axios';
-import { Token } from 'src/interfaces/token';
-import { User } from 'src/interfaces/user';
+import {Token} from 'src/interfaces/token';
+import {User} from 'src/interfaces/user';
 
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 type NewAssetProps = {
@@ -20,57 +20,57 @@ type NewTokenProps = {
 };
 
 export const getTokens = async (): Promise<Token[]> => {
-  const { data } = await MyriadAPI.request<Token[]>({
+  const {data} = await MyriadAPI.request<Token[]>({
     url: '/tokens',
-    method: 'GET'
+    method: 'GET',
   });
 
   return data;
 };
 
 export const searchToken = async (query: string): Promise<Token[]> => {
-  const { data } = await MyriadAPI.request<Token[]>({
+  const {data} = await MyriadAPI.request<Token[]>({
     url: `/tokens`,
     method: 'GET',
     params: {
       filter: {
         where: {
           name: {
-            like: query
-          }
-        }
-      }
-    }
+            like: query,
+          },
+        },
+      },
+    },
   });
 
   return data;
 };
 
 export const addNewToken = async (values: NewTokenProps): Promise<Token[]> => {
-  const { data } = await MyriadAPI.request<Token[]>({
+  const {data} = await MyriadAPI.request<Token[]>({
     url: `/tokens`,
     method: 'POST',
-    data: values
+    data: values,
   });
 
   return data;
 };
 
 export const getUserTokens = async (values: Partial<User>): Promise<Token[]> => {
-  const { id } = values;
-  const { data } = await MyriadAPI.request<Token[]>({
+  const {id} = values;
+  const {data} = await MyriadAPI.request<Token[]>({
     url: `/users/${id}/tokens`,
-    method: 'GET'
+    method: 'GET',
   });
 
   return data;
 };
 
 export const addUserToken = async (values: NewAssetProps): Promise<Token[]> => {
-  const { data } = await MyriadAPI.request<Token[]>({
+  const {data} = await MyriadAPI.request<Token[]>({
     url: `/user-tokens`,
     method: 'POST',
-    data: values
+    data: values,
   });
 
   return data;

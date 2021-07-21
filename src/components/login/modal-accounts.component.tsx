@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Typography } from '@material-ui/core';
+import {Typography} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -10,11 +10,11 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 
-import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import Identicon from '@polkadot/react-identicon';
 
 import ShowIf from '../common/show-if.component';
@@ -26,15 +26,15 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {},
     wrapper: {
       width: 400,
-      padding: theme.spacing(3, 4)
+      padding: theme.spacing(3, 4),
     },
     list: {},
     accountDetail: {
       '& .MuiListItemText-secondary': {
         overflow: 'hidden',
         color: ' #4B4851',
-        textOverflow: 'ellipsis'
-      }
+        textOverflow: 'ellipsis',
+      },
     },
     help: {
       padding: theme.spacing(1),
@@ -45,22 +45,22 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: 16,
       fontWeight: 600,
       fontStyle: 'normal',
-      lineHeight: '24px'
+      lineHeight: '24px',
     },
     polkadot: {
-      color: 'rgb(255, 140, 0)'
+      color: 'rgb(255, 140, 0)',
     },
     actions: {
       display: 'flex',
       flexWrap: 'wrap',
       justifyContent: 'center',
       flexDirection: 'row',
-      marginBottom: 24
+      marginBottom: 24,
     },
     circle: {
       margin: theme.spacing(0, 0.5),
       fontSize: 10,
-      color: '#BCBCBC'
+      color: '#BCBCBC',
     },
     buttonGroup: {
       width: '100%',
@@ -73,10 +73,10 @@ const useStyles = makeStyles((theme: Theme) =>
         background: theme.palette.background.paper,
         fontSize: 16,
         fontWeight: 600,
-        color: theme.palette.secondary.main
-      }
-    }
-  })
+        color: theme.palette.secondary.main,
+      },
+    },
+  }),
 );
 
 type ChooseAccountComponentProps = {
@@ -86,7 +86,12 @@ type ChooseAccountComponentProps = {
   accounts: InjectedAccountWithMeta[];
 };
 
-export const ChooseAccountComponent: React.FC<ChooseAccountComponentProps> = ({ isOpen, accounts, onSelect, onClose }) => {
+export const ChooseAccountComponent: React.FC<ChooseAccountComponentProps> = ({
+  isOpen,
+  accounts,
+  onSelect,
+  onClose,
+}) => {
   const style = useStyles();
 
   return (
@@ -99,14 +104,22 @@ export const ChooseAccountComponent: React.FC<ChooseAccountComponentProps> = ({ 
           <ShowIf condition={accounts.length == 0}>
             <Typography className={style.help}>
               Please open your
-              <Link href="https://polkadot.js.org/extension" target="_blank" className={style.polkadot}>
+              <Link
+                href="https://polkadot.js.org/extension"
+                target="_blank"
+                className={style.polkadot}>
                 Polkadot.js
               </Link>{' '}
               extension and create new account or import existing.Then reload this page.
             </Typography>
 
             <div className={style.buttonGroup}>
-              <Button variant="contained" fullWidth size="medium" href="https://polkadot.js.org/extension" startIcon={<YouTubeIcon />}>
+              <Button
+                variant="contained"
+                fullWidth
+                size="medium"
+                href="https://polkadot.js.org/extension"
+                startIcon={<YouTubeIcon />}>
                 Watch Tutorial Video
               </Button>
             </div>
@@ -116,11 +129,19 @@ export const ChooseAccountComponent: React.FC<ChooseAccountComponentProps> = ({ 
             <List className={style.list}>
               {accounts.map(account => {
                 return (
-                  <ListItem disableGutters onClick={() => onSelect(account)} key={account.address} button>
+                  <ListItem
+                    disableGutters
+                    onClick={() => onSelect(account)}
+                    key={account.address}
+                    button>
                     <ListItemAvatar>
                       <Identicon value={account.address} size={48} theme="polkadot" />
                     </ListItemAvatar>
-                    <ListItemText primary={account.meta.name} secondary={account.address} className={style.accountDetail} />
+                    <ListItemText
+                      primary={account.meta.name}
+                      secondary={account.address}
+                      className={style.accountDetail}
+                    />
                   </ListItem>
                 );
               })}

@@ -1,19 +1,19 @@
-import { useRef } from 'react';
+import {useRef} from 'react';
 
-import Button, { ButtonProps } from '@material-ui/core/Button';
+import Button, {ButtonProps} from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { green } from '@material-ui/core/colors';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {green} from '@material-ui/core/colors';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
-      justifyContent: 'flex-end'
+      justifyContent: 'flex-end',
     },
     wrapper: {
       margin: theme.spacing(1),
-      position: 'relative'
+      position: 'relative',
     },
     buttonProgress: {
       color: green[500],
@@ -21,9 +21,9 @@ const useStyles = makeStyles((theme: Theme) =>
       top: '50%',
       left: '50%',
       marginTop: -12,
-      marginLeft: -12
-    }
-  })
+      marginLeft: -12,
+    },
+  }),
 );
 
 type ButtonUploadProps = {
@@ -33,7 +33,13 @@ type ButtonUploadProps = {
   onImageSelected: (file: File) => void;
 };
 
-export const ButtonUpload: React.FC<ButtonUploadProps & ButtonProps> = ({ onImageSelected, title, accept, loading, ...props }) => {
+export const ButtonUpload: React.FC<ButtonUploadProps & ButtonProps> = ({
+  onImageSelected,
+  title,
+  accept,
+  loading,
+  ...props
+}) => {
   const styles = useStyles();
 
   const uploadFieldRef = useRef<HTMLInputElement | null>(null);
@@ -58,7 +64,13 @@ export const ButtonUpload: React.FC<ButtonUploadProps & ButtonProps> = ({ onImag
 
   return (
     <div className={styles.root}>
-      <input type="file" ref={uploadFieldRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
+      <input
+        type="file"
+        ref={uploadFieldRef}
+        onChange={handleFileChange}
+        style={{display: 'none'}}
+        accept="image/*"
+      />
       <div className={styles.wrapper}>
         <Button {...props} onClick={selectFile} disabled={loading}>
           {title}

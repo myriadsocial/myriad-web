@@ -1,41 +1,41 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import Fab from '@material-ui/core/Fab';
 import Grow from '@material-ui/core/Grow';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
-import { useStyles } from '../profile.style';
-import { usePeopleTimeline } from '../use-people-timeline.hook';
+import {useStyles} from '../profile.style';
+import {useProfileTimeline} from '../use-profile-timeline.hook';
 
-import { ScrollTop } from 'src/components/common/ScrollToTop.component';
-import { LoadingPage } from 'src/components/common/loading.component';
+import {ScrollTop} from 'src/components/common/ScrollToTop.component';
+import {LoadingPage} from 'src/components/common/loading.component';
 import PostComponent from 'src/components/post/post.component';
-import { TipSummaryProvider } from 'src/components/tip-summary/tip-summary.context';
-import { useTimelineHook } from 'src/hooks/use-timeline.hook';
-import { BalanceDetail } from 'src/interfaces/balance';
-import { Post } from 'src/interfaces/post';
-import { Token } from 'src/interfaces/token';
-import { ExtendedUserPost } from 'src/interfaces/user';
-import { RootState } from 'src/reducers';
-import { UserState } from 'src/reducers/user/reducer';
+import {TipSummaryProvider} from 'src/components/tip-summary/tip-summary.context';
+import {useTimelineHook} from 'src/hooks/use-timeline.hook';
+import {BalanceDetail} from 'src/interfaces/balance';
+import {Post} from 'src/interfaces/post';
+import {Token} from 'src/interfaces/token';
+import {ExtendedUser} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 type Props = {
-  profile: ExtendedUserPost;
+  profile: ExtendedUser;
   balanceDetails: BalanceDetail[];
   availableTokens: Token[];
 };
 
-export default function PostList({ profile, balanceDetails, availableTokens }: Props) {
+export default function PostList({profile, balanceDetails, availableTokens}: Props) {
   const style = useStyles();
 
-  const { user } = useSelector<RootState, UserState>(state => state.userState);
-  const { posts, hasMore, nextPage } = useTimelineHook();
-  const { filterOwnedPost } = usePeopleTimeline(profile);
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {posts, hasMore, nextPage} = useTimelineHook();
+  const {filterOriginalPost} = useProfileTimeline(profile);
 
   useEffect(() => {
-    filterOwnedPost();
+    filterOriginalPost();
   }, []);
 
   const isOwnPost = (post: Post) => {
@@ -47,7 +47,7 @@ export default function PostList({ profile, balanceDetails, availableTokens }: P
 
   if (posts.length === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: 16, backgroundColor: 'white', borderRadius: 8 }}>
+      <div style={{textAlign: 'center', padding: 16, backgroundColor: 'white', borderRadius: 8}}>
         <h2>You haven’t any post yet</h2>
         <p>When you post in them, it will show up here.</p>
       </div>
@@ -66,7 +66,12 @@ export default function PostList({ profile, balanceDetails, availableTokens }: P
           loader={<LoadingPage />}>
           {posts.map((post: Post, i: number) => (
             <Grow key={i}>
-              <PostComponent post={post} postOwner={isOwnPost(post)} balanceDetails={balanceDetails} availableTokens={availableTokens} />
+              <PostComponent
+                post={post}
+                postOwner={isOwnPost(post)}
+                balanceDetails={balanceDetails}
+                availableTokens={availableTokens}
+              />
             </Grow>
           ))}
 

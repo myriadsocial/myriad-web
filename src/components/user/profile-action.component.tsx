@@ -3,14 +3,14 @@ import React from 'react';
 import Link from 'next/link';
 
 import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 
 import ShowIf from '../common/show-if.component';
 
 import Logout from 'src/components/logout/logout.component';
 
 const useStyles = makeStyles({
-  root: {}
+  root: {},
 });
 
 type ProfileActionProps = {
@@ -20,7 +20,11 @@ type ProfileActionProps = {
   onLoginClicked: () => void;
 };
 
-export const ProfileActionComponent: React.FC<ProfileActionProps> = ({ anonymous, userId, onEditProfileClicked }) => {
+export const ProfileActionComponent: React.FC<ProfileActionProps> = ({
+  anonymous,
+  userId,
+  onEditProfileClicked,
+}) => {
   const styles = useStyles();
 
   return (
@@ -43,7 +47,13 @@ export const ProfileActionComponent: React.FC<ProfileActionProps> = ({ anonymous
           </Button>
 
           <Link href={`/${userId}`}>
-            <Button id="#view-profile" disableRipple={true} disableFocusRipple={true} variant="contained" size="medium" color="primary">
+            <Button
+              id="#view-profile"
+              disableRipple={true}
+              disableFocusRipple={true}
+              variant="contained"
+              size="medium"
+              color="primary">
               View Profile
             </Button>
           </Link>

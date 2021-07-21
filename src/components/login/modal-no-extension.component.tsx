@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { Typography } from '@material-ui/core';
+import {Typography} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Link from '@material-ui/core/Link';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import WarningIcon from '@material-ui/icons/Warning';
 
@@ -20,37 +20,37 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
     },
     icon: {
       width: 54,
       height: 48,
-      color: theme.palette.error.main
+      color: theme.palette.error.main,
     },
     header: {
       padding: 16,
-      textAlign: 'center'
+      textAlign: 'center',
     },
     content: {
       padding: 8,
       width: 250,
       textAlign: 'center',
-      lineHeight: '24px'
+      lineHeight: '24px',
     },
     polkadot: {
-      color: 'rgb(255, 140, 0)'
+      color: 'rgb(255, 140, 0)',
     },
     actions: {
       display: 'flex',
       flexWrap: 'wrap',
       justifyContent: 'center',
       flexDirection: 'row',
-      marginBottom: 24
+      marginBottom: 24,
     },
     circle: {
       margin: theme.spacing(0, 0.5),
       fontSize: 10,
-      color: '#BCBCBC'
+      color: '#BCBCBC',
     },
     buttonGroup: {
       width: '100%',
@@ -64,10 +64,10 @@ const useStyles = makeStyles((theme: Theme) =>
         fontSize: 16,
         fontWeight: 600,
         color: theme.palette.secondary.main,
-        width: 150
-      }
-    }
-  })
+        width: 150,
+      },
+    },
+  }),
 );
 
 type NoExtensionComponentProps = {
@@ -75,7 +75,7 @@ type NoExtensionComponentProps = {
   onClose: () => void;
 };
 
-export const NoExtensionComponent: React.FC<NoExtensionComponentProps> = ({ isOpen, onClose }) => {
+export const NoExtensionComponent: React.FC<NoExtensionComponentProps> = ({isOpen, onClose}) => {
   const style = useStyles();
 
   return (
@@ -94,9 +94,12 @@ export const NoExtensionComponent: React.FC<NoExtensionComponentProps> = ({ isOp
           </div>
 
           <div className={style.content}>
-            <Typography style={{ fontSize: 16, fontWeight: 400 }}>
+            <Typography style={{fontSize: 16, fontWeight: 400}}>
               You need to download and install{' '}
-              <Link href="https://polkadot.js.org/extension" target="_blank" className={style.polkadot}>
+              <Link
+                href="https://polkadot.js.org/extension"
+                target="_blank"
+                className={style.polkadot}>
                 Polkadot.js
               </Link>{' '}
               extension on your browser before sign in
@@ -105,7 +108,7 @@ export const NoExtensionComponent: React.FC<NoExtensionComponentProps> = ({ isOp
 
           <div className={style.buttonGroup}>
             <Button
-              style={{ color: 'rgb(255, 140, 0)' }}
+              style={{color: 'rgb(255, 140, 0)'}}
               variant="contained"
               size="medium"
               href="https://polkadot.js.org/extension"

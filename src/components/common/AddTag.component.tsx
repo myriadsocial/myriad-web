@@ -2,7 +2,7 @@ import React from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
-import { makeStyles, createStyles, fade, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, fade, Theme} from '@material-ui/core/styles';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: theme.shape.borderRadius,
       backgroundColor: fade(theme.palette.common.white, 0.15),
       '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.25)
+        backgroundColor: fade(theme.palette.common.white, 0.25),
       },
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(0),
@@ -21,8 +21,8 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       [theme.breakpoints.up('sm')]: {
         margin: theme.spacing(1),
-        width: 'auto'
-      }
+        width: 'auto',
+      },
     },
     searchIcon: {
       padding: theme.spacing(0, 2),
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
       pointerEvents: 'none',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
     },
     input: {
       padding: theme.spacing(1, 1, 1, 0),
@@ -43,11 +43,11 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up('sm')]: {
         width: '16ch',
         '&:focus': {
-          width: '24ch'
-        }
-      }
-    }
-  })
+          width: '24ch',
+        },
+      },
+    },
+  }),
 );
 
 type Props = {
@@ -56,7 +56,7 @@ type Props = {
   placeholder?: string;
 };
 
-export default function AddTagComponent({ value = '', placeholder = 'Search', onSubmit }: Props) {
+export default function AddTagComponent({value = '', placeholder = 'Search', onSubmit}: Props) {
   const classes = useStyles();
 
   const [text, setText] = React.useState(value);
@@ -77,9 +77,9 @@ export default function AddTagComponent({ value = '', placeholder = 'Search', on
         onChange={handleChange}
         placeholder={`${placeholder}...`}
         classes={{
-          input: classes.input
+          input: classes.input,
         }}
-        inputProps={{ 'aria-label': 'search' }}
+        inputProps={{'aria-label': 'search'}}
       />
       <IconButton color="default" aria-label="add tags" onClick={submitSearch}>
         <AddCircleIcon />

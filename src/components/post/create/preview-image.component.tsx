@@ -5,7 +5,7 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 
 interface PreviewImageProps {
@@ -20,18 +20,18 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {},
     subtitle: {
       paddingLeft: 0,
-      fontSize: 14
-    }
-  })
+      fontSize: 14,
+    },
+  }),
 );
 
-export const PreviewImageComponent: React.FC<PreviewImageProps> = ({ files }) => {
+export const PreviewImageComponent: React.FC<PreviewImageProps> = ({files}) => {
   const styles = useStyles();
 
   return (
     <div>
       <GridList cellHeight={200}>
-        <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
+        <GridListTile key="Subheader" cols={2} style={{height: 'auto'}}>
           <ListSubheader className={styles.subtitle} component="span">
             Added to your post:{' '}
           </ListSubheader>

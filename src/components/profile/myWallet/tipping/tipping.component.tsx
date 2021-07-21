@@ -1,9 +1,9 @@
-import React, { createRef, forwardRef } from 'react';
+import React, {createRef, forwardRef} from 'react';
 
 import dynamic from 'next/dynamic';
 
 import Divider from '@material-ui/core/Divider';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 
 const BalanceComponent = dynamic(() => import('../balance/balance.component'));
 const TransactionComponent = dynamic(() => import('../transactions/transaction.component'));
@@ -18,20 +18,20 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: 27,
       paddingRight: 21,
       maxWidth: 678,
-      maxHeight: 797
+      maxHeight: 797,
     },
     button: {
       backgroundColor: theme.palette.secondary.light,
       color: theme.palette.common.white,
-      borderRadius: 15
+      borderRadius: 15,
     },
     walletActions: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      gap: theme.spacing(0.25)
-    }
-  })
+      gap: theme.spacing(0.25),
+    },
+  }),
 );
 
 type BalanceProps = {
@@ -42,11 +42,11 @@ type TransactionProps = {
   detailed?: boolean;
 };
 
-const ForwardedBalanceComponent = forwardRef(({ hidden, ...props }: BalanceProps, ref) => (
+const ForwardedBalanceComponent = forwardRef(({hidden, ...props}: BalanceProps, ref) => (
   <BalanceComponent {...props} hidden={hidden} forwardedRef={ref} />
 ));
 
-const ForwardedTransactionComponent = forwardRef(({ detailed, ...props }: TransactionProps, ref) => (
+const ForwardedTransactionComponent = forwardRef(({detailed, ...props}: TransactionProps, ref) => (
   <TransactionComponent detailed={detailed} {...props} forwardedRef={ref} />
 ));
 

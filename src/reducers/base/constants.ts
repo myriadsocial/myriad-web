@@ -1,4 +1,4 @@
-import { HYDRATE } from 'next-redux-wrapper';
+import {HYDRATE} from 'next-redux-wrapper';
 
 export const ACTION_LOADING = 'ACTION_LOADING';
 export type ACTION_LOADING = typeof ACTION_LOADING;

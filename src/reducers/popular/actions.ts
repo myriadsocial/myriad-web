@@ -1,11 +1,11 @@
-import { Actions as BaseAction, setLoading, setError } from '../base/actions';
-import { RootState } from '../index';
+import {Actions as BaseAction, setLoading, setError} from '../base/actions';
+import {RootState} from '../index';
 import * as constants from './constants';
 
-import { Action } from 'redux';
-import { Tag } from 'src/interfaces/experience';
+import {Action} from 'redux';
+import {Tag} from 'src/interfaces/experience';
 import * as TrendingAPI from 'src/lib/api/trending';
-import { ThunkActionCreator } from 'src/types/thunk';
+import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
  * Action Types
@@ -38,7 +38,7 @@ export const fetchPopularTopic: ThunkActionCreator<Actions, RootState> = () => a
 
     dispatch({
       type: constants.FETCH_POPULAR_TOPIC,
-      topics
+      topics,
     });
   } catch (error) {
     dispatch(setError(error.message));

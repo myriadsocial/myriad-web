@@ -1,58 +1,64 @@
-import { useState } from 'react';
+import {useState} from 'react';
+import {useSelector} from 'react-redux';
 
 import Axios from 'axios';
-import { useTransaction as baseUseTransaction, TransactionActionType } from 'src/context/transaction.context';
-import { Transaction } from 'src/interfaces/transaction';
+import {
+  useTransaction as baseUseTransaction,
+  TransactionActionType,
+} from 'src/context/transaction.context';
+import {Transaction} from 'src/interfaces/transaction';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 const axios = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
-export const useTransaction = (userId: string) => {
-  const { state, dispatch } = baseUseTransaction();
-
+export const useTransaction = () => {
+  const {state, dispatch} = baseUseTransaction();
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [params, _] = useState({
+  const [params] = useState<Record<string, any>>({
     offset: 0,
     limit: 20,
-    where: { or: [{ to: userId }, { from: userId }] },
-    include: ['toUser', 'fromUser', 'token']
+    include: ['toUser', 'fromUser', 'token'],
   });
 
   const load = async (type: TransactionActionType = TransactionActionType.INIT_TRANSACTION) => {
-    const filter = params;
+    if (!user) return;
 
     setLoading(true);
 
     try {
-      const { data } = await axios.request<Transaction[]>({
+      const {data} = await axios.request<Transaction[]>({
         url: '/transactions',
         method: 'GET',
         params: {
-          filter
-        }
+          ...params,
+          where: {or: [{to: user.id}, {from: user.id}]},
+        },
       });
 
       if (data.length > 0) {
         //Get only transaction related to logged-in user
         const tempData = data.filter(function (datum: any) {
-          return datum.from === userId || datum.to === userId;
+          return datum.from === user.id || datum.to === user.id;
         });
 
         const sortedTempData = tempData.slice().sort((a: any, b: any) => b.createdAt - a.createdAt);
         const inboundTxs = sortedTempData.filter(transaction => {
-          return transaction.to === userId;
+          return transaction.to === user.id;
         });
         const outboundTxs = sortedTempData.filter(transaction => {
-          return transaction.from === userId;
+          return transaction.from === user.id;
         });
 
         dispatch({
           type: TransactionActionType.INIT_TRANSACTION,
           transactions: sortedTempData,
           inboundTxs: inboundTxs,
-          outboundTxs: outboundTxs
+          outboundTxs: outboundTxs,
         });
       }
     } catch (error) {
@@ -67,6 +73,6 @@ export const useTransaction = (userId: string) => {
     transactions: state.transactions,
     inboundTxs: state.inboundTxs,
     outboundTxs: state.outboundTxs,
-    loadInitTransaction: load
+    loadInitTransaction: load,
   };
 };

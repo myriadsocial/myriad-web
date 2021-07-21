@@ -3,7 +3,7 @@ import React from 'react';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import {createStyles, Theme, withStyles, WithStyles} from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 
 const styles = (theme: Theme) =>
@@ -17,8 +17,8 @@ const styles = (theme: Theme) =>
       boxShadow: '0px 2px 1px -1px rgb(0 0 0 / 20%),0px 1px 1px 0px rgb(0 0 0 / 14%)',
       '&: .MuiTypography-root': {
         fontWeight: 700,
-        lineHeight: '21px'
-      }
+        lineHeight: '21px',
+      },
     },
     closeButton: {
       position: 'absolute',
@@ -32,10 +32,10 @@ const styles = (theme: Theme) =>
 
         '& .MuiSvgIcon-root': {
           width: theme.spacing(3),
-          height: theme.spacing(3)
-        }
-      }
-    }
+          height: theme.spacing(3),
+        },
+      },
+    },
   });
 
 export interface DialogTitleProps extends WithStyles<typeof styles> {
@@ -45,12 +45,17 @@ export interface DialogTitleProps extends WithStyles<typeof styles> {
 }
 
 const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
-  const { children, classes, onClose, ...other } = props;
+  const {children, classes, onClose, ...other} = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
       <Typography variant="h4">{children}</Typography>
       {onClose ? (
-        <IconButton color="secondary" aria-label="close" size="small" className={classes.closeButton} onClick={onClose}>
+        <IconButton
+          color="secondary"
+          aria-label="close"
+          size="small"
+          className={classes.closeButton}
+          onClick={onClose}>
           <CloseIcon />
         </IconButton>
       ) : null}

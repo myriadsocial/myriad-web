@@ -1,25 +1,23 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, {useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
-import { getSession } from 'next-auth/client';
+import {getSession} from 'next-auth/client';
 
 import Grid from '@material-ui/core/Grid';
 import NoSsr from '@material-ui/core/NoSsr';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-
-import { wrapper } from '../src/store';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import Layout from 'src/components/Layout/Layout.container';
 import Timeline from 'src/components/timeline/timeline.component';
 import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
-import { Wallet } from 'src/components/wallet/wallet.component';
-import { FriendsProvider } from 'src/context/friends.context';
-import { healthcheck } from 'src/lib/api/healthcheck';
+import {Wallet} from 'src/components/wallet/wallet.component';
+import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
-import { RootState } from 'src/reducers';
-import { setAnonymous, setUser, fetchToken } from 'src/reducers/user/actions';
-import { UserState } from 'src/reducers/user/reducer';
+import {RootState} from 'src/reducers';
+import {setAnonymous, setUser, fetchToken} from 'src/reducers/user/actions';
+import {UserState} from 'src/reducers/user/reducer';
+import {wrapper} from 'src/store';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,19 +27,19 @@ export const useStyles = makeStyles((theme: Theme) =>
       flex: '0 0 327px',
       marginRight: 0,
       'scrollbar-color': '#A942E9 #171717',
-      'scrollbar-width': 'thin !important'
+      'scrollbar-width': 'thin !important',
     },
     wallet: {
-      width: 327
+      width: 327,
     },
     fullwidth: {
-      width: 327
+      width: 327,
     },
     fullheight: {
-      height: '100vh'
+      height: '100vh',
     },
     profile: {
-      flexGrow: 1
+      flexGrow: 1,
     },
     content: {
       flex: 1,
@@ -51,19 +49,20 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: '100vh',
       maxWidth: 726,
       [theme.breakpoints.up('xl')]: {
-        maxWidth: 926
-      }
-    }
-  })
+        maxWidth: 926,
+      },
+    },
+  }),
 );
 
 const Home: React.FC = () => {
   const style = useStyles();
 
-  const { anonymous, tokens } = useSelector<RootState, UserState>(state => state.userState);
+  const {anonymous, tokens} = useSelector<RootState, UserState>(state => state.userState);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // load current authenticated user tokens
     dispatch(fetchToken());
   }, [dispatch]);
 
@@ -75,11 +74,9 @@ const Home: React.FC = () => {
             <UserDetail isAnonymous={anonymous} />
           </Grid>
           <Grid item className={style.fullwidth}>
-            <FriendsProvider>
-              <NoSsr>
-                <Wallet />
-              </NoSsr>
-            </FriendsProvider>
+            <NoSsr>
+              <Wallet />
+            </NoSsr>
 
             <TopicComponent />
           </Grid>
@@ -93,8 +90,8 @@ const Home: React.FC = () => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const { dispatch } = store;
-  const { res } = context;
+  const {dispatch} = store;
+  const {res} = context;
 
   const available = await healthcheck();
 
@@ -128,8 +125,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   return {
     props: {
-      session
-    }
+      session,
+    },
   };
 });
 

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Post } from 'src/interfaces/post';
+import {Post} from 'src/interfaces/post';
 
 export enum TipSummaryActionType {
   SET_TIPPED_POST = 'SET_CURRENT_TIPPED_POST',
-  CLEAR_TIPPED_POST = 'CLEAR_TIPPED_POST'
+  CLEAR_TIPPED_POST = 'CLEAR_TIPPED_POST',
 }
 
 interface SetTippedPost {
@@ -18,24 +18,26 @@ interface ClearTippedPost {
 
 type Action = SetTippedPost | ClearTippedPost;
 type Dispatch = (action: Action) => void;
-type TipSummaryProviderProps = { children: React.ReactNode };
+type TipSummaryProviderProps = {children: React.ReactNode};
 
 type State = {
   post: Post | null;
 };
 
 const initalState: State = {
-  post: null
+  post: null,
 };
 
-const TipSummaryContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
+const TipSummaryContext = React.createContext<{state: State; dispatch: Dispatch} | undefined>(
+  undefined,
+);
 
 function tipSummaryReducer(state: State, action: Action) {
   switch (action.type) {
     case TipSummaryActionType.SET_TIPPED_POST: {
       return {
         ...state,
-        post: action.payload
+        post: action.payload,
       };
     }
 
@@ -59,11 +61,11 @@ export const useTipSummary = () => {
   return context;
 };
 
-export const TipSummaryProvider = ({ children }: TipSummaryProviderProps) => {
+export const TipSummaryProvider = ({children}: TipSummaryProviderProps) => {
   const [state, dispatch] = React.useReducer(tipSummaryReducer, initalState);
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
-  const value = { state, dispatch };
+  const value = {state, dispatch};
 
   return <TipSummaryContext.Provider value={value}>{children}</TipSummaryContext.Provider>;
 };
