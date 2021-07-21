@@ -1,14 +1,15 @@
 import React, {useEffect, useImperativeHandle} from 'react';
 import {useSelector} from 'react-redux';
 
+import {useSession} from 'next-auth/client';
 import dynamic from 'next/dynamic';
 
 import Button from '@material-ui/core/Button';
 import SortIcon from '@material-ui/icons/Sort';
 
 import {useTransaction} from '../../../../hooks/use-transaction.hooks';
-import {ActionTabsComponent} from '../tipping/actionTabs.component';
-import {TokenDetailComponent} from '../tipping/tokenDetail.component';
+import ActionTabsComponent from '../tipping/actionTabs.component';
+import TokenDetailComponent from '../tipping/tokenDetail.component';
 import {EmptyTransactionComponent} from './EmptyTransaction.component';
 import {ErrorTransactionComponent} from './ErrorTransaction.component';
 import {LoadingTransactionComponent} from './LoadingTransaction.component';
@@ -94,7 +95,7 @@ const TransactionComponent: React.FC<TransactionProps> = ({forwardedRef, detaile
 
   return (
     <div ref={forwardedRef}>
-      {detailed === true ? <TokenDetailComponent tokens={userTokens} /> : ''}
+      {detailed && <TokenDetailComponent tokens={userTokens} />}
       {loading ? (
         <LoadingTransactionComponent />
       ) : error ? (

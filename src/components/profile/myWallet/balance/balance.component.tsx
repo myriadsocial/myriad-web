@@ -189,7 +189,12 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, hidden}) => {
     <div ref={forwardedRef} className={style.root}>
       <CurrencyTable />
       <div className={style.buttonContainer}>
-        {hidden === true ? '' : <Button className={style.button}> Add more currency </Button>}
+        {!hidden && (
+          <Button className={style.button} disabled>
+            {' '}
+            Add more currency{' '}
+          </Button>
+        )}
       </div>
     </div>
   );
