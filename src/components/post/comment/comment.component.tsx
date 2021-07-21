@@ -11,11 +11,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import {withStyles, createStyles, Theme} from '@material-ui/core/styles';
-import {useTheme} from '@material-ui/core/styles';
 
 import {useStyles} from './comment.style';
 import ReplyCommentComponent from './reply.component';
@@ -24,7 +21,6 @@ import CardTitle from 'src/components/common/CardTitle.component';
 import DateFormat from 'src/components/common/DateFormat';
 import SendTipModal from 'src/components/common/sendtips/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
-import {TabPanel} from 'src/components/common/tab-panel.component';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Post, Comment} from 'src/interfaces/post';
@@ -60,13 +56,12 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
   availableTokens,
 }) => {
   const style = useStyles();
-  const theme = useTheme();
 
   const router = useRouter();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {comments, loadInitComment, reply} = useCommentHook(post);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const childRef = useRef<any>();
-  const [selectedTab, setSelectedTab] = React.useState(0);
 
   useEffect(() => {
     loadInitComment();
@@ -85,10 +80,6 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
       userId: user.id,
       createdAt: new Date(),
     });
-  };
-
-  const handleTabChange = (event: React.ChangeEvent<{}>, tabIndex: number) => {
-    setSelectedTab(tabIndex);
   };
 
   const openCommentProfile = (user?: User) => {
@@ -114,7 +105,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
     return null;
   };
 
-  const [_, setTippedPost] = useState<Post>();
+  const [, setTippedPost] = useState<Post>();
   const handleTipSentSuccess = (postId: string) => {
     if (post.id === postId) {
       setTippedPost(post);
@@ -124,69 +115,48 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
 
   return (
     <div>
-      <Tabs
-        value={selectedTab}
-        onChange={handleTabChange}
-        indicatorColor="primary"
-        textColor="primary"
-        variant="fullWidth">
-        <Tab
-          label={
-            <Typography style={{color: '#000000'}}>General Comments ({comments.length})</Typography>
-          }
-        />
-        <Tab disabled label={<Typography>Debate Section (0) </Typography>} />
-      </Tabs>
-      <TabPanel value={selectedTab} index={0} dir={theme.direction}>
-        <Grid container spacing={2} direction="column" className={style.comment}>
-          {comments.map(comment => {
-            return (
-              <Grid item key={comment.id}>
-                <Card className={style.root}>
-                  <CardHeader
-                    avatar={
-                      <IconButton
-                        aria-label="cart"
-                        onClick={() => openCommentProfile(comment.user)}>
-                        <StyledBadge color="secondary">
-                          <Avatar
-                            aria-label={comment.user?.name}
-                            src={comment.user?.profilePictureURL}>
-                            {comment.user?.name}
-                          </Avatar>
-                        </StyledBadge>
-                      </IconButton>
-                    }
-                    action={renderAction(comment)}
-                    title={<CardTitle text={comment.user?.name || ''} url={comment.user?.id} />}
-                    subheader={<DateFormat date={comment.createdAt} />}
+      <Grid container spacing={2} direction="column" className={style.comment}>
+        {comments.map(comment => {
+          return (
+            <Grid item key={comment.id}>
+              <Card className={style.root}>
+                <CardHeader
+                  avatar={
+                    <IconButton aria-label="cart" onClick={() => openCommentProfile(comment.user)}>
+                      <StyledBadge color="secondary">
+                        <Avatar
+                          aria-label={comment.user?.name}
+                          src={comment.user?.profilePictureURL}>
+                          {comment.user?.name}
+                        </Avatar>
+                      </StyledBadge>
+                    </IconButton>
+                  }
+                  action={renderAction(comment)}
+                  title={<CardTitle text={comment.user?.name || ''} url={comment.user?.id} />}
+                  subheader={<DateFormat date={comment.createdAt} />}
+                />
+                <CardContent>
+                  <Typography variant="body1" color="textPrimary" component="p">
+                    {comment.text}
+                  </Typography>
+                </CardContent>
+                {user && (
+                  <SendTipModal
+                    availableTokens={availableTokens}
+                    success={postId => handleTipSentSuccess(postId)}
+                    postId={post?.id as string}
+                    userAddress={user.id}
+                    ref={childRef}
+                    receiverId={comment?.user?.id as string}
+                    balanceDetails={balanceDetails}
                   />
-                  <CardContent>
-                    <Typography variant="body1" color="textPrimary" component="p">
-                      {comment.text}
-                    </Typography>
-                  </CardContent>
-                  {user && (
-                    <SendTipModal
-                      availableTokens={availableTokens}
-                      success={postId => handleTipSentSuccess(postId)}
-                      postId={post?.id as string}
-                      userAddress={user.id}
-                      ref={childRef}
-                      receiverId={comment?.user?.id as string}
-                      balanceDetails={balanceDetails}
-                    />
-                  )}
-                </Card>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </TabPanel>
-      <TabPanel value={selectedTab} index={1} dir={theme.direction}>
-        Debate Content
-      </TabPanel>
-
+                )}
+              </Card>
+            </Grid>
+          );
+        })}
+      </Grid>
       <ShowIf condition={!disableReply}>
         <ReplyCommentComponent isAnonymous={anonymous} close={hide} onSubmit={replyPost} />
       </ShowIf>
