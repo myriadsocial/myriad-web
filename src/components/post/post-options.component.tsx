@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { Divider } from '@material-ui/core';
+import {Divider} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Fade from '@material-ui/core/Fade';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ReportProblemIcon from '@material-ui/icons/ReportProblem';
@@ -20,17 +20,17 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'block',
-      position: 'relative'
+      position: 'relative',
     },
     menu: {},
     danger: {
       color: '#F83D3D',
       marginBottom: 0,
       '&:hover': {
-        background: 'none'
-      }
-    }
-  })
+        background: 'none',
+      },
+    },
+  }),
 );
 
 type MenuOptions = {
@@ -40,7 +40,7 @@ type MenuOptions = {
   onClick: () => void;
 };
 
-export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPost }) => {
+export const PostOptionsComponent: React.FC<PostOptionsProps> = ({postId, ownPost}) => {
   const styles = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -89,31 +89,36 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({ postId, ownPo
       id: 'edit-post',
       name: 'Edit post',
       show: ownPost,
-      onClick: handleEditPost
+      onClick: handleEditPost,
     },
     {
       id: 'copy-link',
       name: 'Copy link...',
       show: true,
-      onClick: handleCopyLink
+      onClick: handleCopyLink,
     },
     {
       id: 'visit-myriad-account',
       name: 'Visit Myriad account',
       show: !ownPost,
-      onClick: handleVisitMyriadAccount
+      onClick: handleVisitMyriadAccount,
     },
     {
       id: 'visit-social-post',
       name: 'Visit social post',
       show: !ownPost,
-      onClick: handleVisitSocialPost
-    }
+      onClick: handleVisitSocialPost,
+    },
   ];
 
   return (
     <div className={styles.root}>
-      <IconButton aria-label="post-setting" onClick={handleClick} disableRipple={true} disableFocusRipple={true} disableTouchRipple>
+      <IconButton
+        aria-label="post-setting"
+        onClick={handleClick}
+        disableRipple={true}
+        disableFocusRipple={true}
+        disableTouchRipple>
         <MoreVertIcon />
       </IconButton>
 

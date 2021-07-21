@@ -7,7 +7,7 @@ firebase.initializeApp({
   apiKey: NEXT_PUBLIC_FIREBASE_API_KEY,
   projectId: NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   messagingSenderId: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: NEXT_PUBLIC_FIREBASE_APP_ID
+  appId: NEXT_PUBLIC_FIREBASE_APP_ID,
 });
 
 const messaging = firebase.messaging();

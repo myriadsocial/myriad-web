@@ -1,11 +1,11 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, {createContext, useContext, useReducer} from 'react';
 
-import { WalletDetail } from 'src/interfaces/wallet';
+import {WalletDetail} from 'src/interfaces/wallet';
 
 export enum WalletAddressActionType {
   INIT_WALLET_ADDRESS = 'INIT_WALLET_ADDRESS',
   INIT_SEND_TIPS = 'INIT_SEND_TIPS',
-  SEND_TIPS_SUCCESS = 'SEND_TIPS_SUCCESS'
+  SEND_TIPS_SUCCESS = 'SEND_TIPS_SUCCESS',
 }
 
 export interface InitWalletAddress {
@@ -29,7 +29,7 @@ export interface SendTipsSuccess {
 
 export type Action = InitWalletAddress | InitSendTips | SendTipsSuccess;
 type Dispatch = (action: Action) => void;
-type WalletAddressProviderProps = { children: React.ReactNode };
+type WalletAddressProviderProps = {children: React.ReactNode};
 type State = {
   init: boolean;
   walletDetails: WalletDetail[];
@@ -49,10 +49,12 @@ const initialState = {
   to: '',
   trxHash: '',
   success: false,
-  tokenId: ''
+  tokenId: '',
 };
 
-const WalletAddressContext = createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
+const WalletAddressContext = createContext<{state: State; dispatch: Dispatch} | undefined>(
+  undefined,
+);
 
 function walletAddressReducer(state: State, action: Action) {
   switch (action.type) {
@@ -60,14 +62,14 @@ function walletAddressReducer(state: State, action: Action) {
       return {
         ...state,
         walletDetails: [...state.walletDetails, action.payload],
-        init: false
+        init: false,
       };
     }
 
     case WalletAddressActionType.INIT_SEND_TIPS: {
       return {
         ...initialState,
-        success: false
+        success: false,
       };
     }
 
@@ -80,7 +82,7 @@ function walletAddressReducer(state: State, action: Action) {
         trxHash: action.trxHash,
         success: true,
         tokenId: action.tokenId,
-        init: false
+        init: false,
       };
     }
 
@@ -100,11 +102,11 @@ export const useWalletAddress = () => {
   return context;
 };
 
-export const WalletAddressProvider = ({ children }: WalletAddressProviderProps) => {
+export const WalletAddressProvider = ({children}: WalletAddressProviderProps) => {
   const [state, dispatch] = useReducer(walletAddressReducer, initialState);
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
-  const value = { state, dispatch };
+  const value = {state, dispatch};
 
   return <WalletAddressContext.Provider value={value}>{children}</WalletAddressContext.Provider>;
 };

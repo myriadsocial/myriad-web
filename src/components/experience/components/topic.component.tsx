@@ -16,12 +16,12 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
-import { useTopic } from '../use-topic.hooks';
+import {useTopic} from '../use-topic.hooks';
 import SearchTopicComponent from './search-topic.component';
-import { useStyles } from './topic.style';
+import {useStyles} from './topic.style';
 
 import ShowIf from 'src/components/common/show-if.component';
-import { Tag } from 'src/interfaces/experience';
+import {Tag} from 'src/interfaces/experience';
 
 type Props = {
   topics: Tag[];
@@ -29,10 +29,10 @@ type Props = {
   onRemoveItem: (topic: Tag) => void;
 };
 
-export default function TopicComponent({ topics, onAddItem, onRemoveItem }: Props) {
+export default function TopicComponent({topics, onAddItem, onRemoveItem}: Props) {
   const style = useStyles();
 
-  const { topics: options, search } = useTopic(topics);
+  const {topics: options, search} = useTopic(topics);
   const [selectedTopics, setSelectedTopics] = React.useState<Tag[]>([]);
 
   React.useEffect(() => {
@@ -47,7 +47,7 @@ export default function TopicComponent({ topics, onAddItem, onRemoveItem }: Prop
         }
 
         return item;
-      })
+      }),
     ]);
   };
 
@@ -69,9 +69,18 @@ export default function TopicComponent({ topics, onAddItem, onRemoveItem }: Prop
 
   return (
     <Card className={style.root}>
-      <CardHeader disableTypography className={style.header} title={<Typography variant="h5">Topic</Typography>} />
+      <CardHeader
+        disableTypography
+        className={style.header}
+        title={<Typography variant="h5">Topic</Typography>}
+      />
       <CardContent className={style.content}>
-        <SearchTopicComponent title="Search Topics" data={options} search={searchTopic} onSelected={onAddItem} />
+        <SearchTopicComponent
+          title="Search Topics"
+          data={options}
+          search={searchTopic}
+          onSelected={onAddItem}
+        />
 
         <List>
           {selectedTopics.map((topic, i) => {
@@ -82,16 +91,25 @@ export default function TopicComponent({ topics, onAddItem, onRemoveItem }: Prop
                 <ListItemText id={labelId} primary={topic.id} />
                 <ListItemSecondaryAction>
                   {topic.hide ? (
-                    <IconButton edge="end" aria-label="hide-from-experience" onClick={() => toggleVisible(topic)}>
+                    <IconButton
+                      edge="end"
+                      aria-label="hide-from-experience"
+                      onClick={() => toggleVisible(topic)}>
                       <VisibilityOffIcon />
                     </IconButton>
                   ) : (
-                    <IconButton edge="end" aria-label="show-on-experience" onClick={() => toggleVisible(topic)}>
+                    <IconButton
+                      edge="end"
+                      aria-label="show-on-experience"
+                      onClick={() => toggleVisible(topic)}>
                       <VisibilityIcon />
                     </IconButton>
                   )}
 
-                  <IconButton edge="end" aria-label="comments" onClick={() => removeFromExperience(topic)}>
+                  <IconButton
+                    edge="end"
+                    aria-label="comments"
+                    onClick={() => removeFromExperience(topic)}>
                     <DeleteForeverIcon />
                   </IconButton>
                 </ListItemSecondaryAction>

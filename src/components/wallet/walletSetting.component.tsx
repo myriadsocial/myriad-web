@@ -1,6 +1,6 @@
-import React, { useState, useImperativeHandle, useEffect } from 'react';
+import React, {useState, useImperativeHandle, useEffect} from 'react';
 
-import { useSession } from 'next-auth/client';
+import {useSession} from 'next-auth/client';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -21,26 +21,33 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import DialogTitle from '../common/DialogTitle.component';
 import SearchComponent from '../common/search.component';
-import { TabPanel } from '../common/tab-panel.component';
-import { StyledTabs, StyledTab } from '../common/tabs.component';
+import {TabPanel} from '../common/tab-panel.component';
+import {StyledTabs, StyledTab} from '../common/tabs.component';
 
-import { useStyles } from 'src/components/wallet/walletSetting.style';
-import { useToken } from 'src/hooks/use-token.hook';
-import { Token } from 'src/interfaces/token';
+import {useStyles} from 'src/components/wallet/walletSetting.style';
+import {useToken} from 'src/hooks/use-token.hook';
+import {Token} from 'src/interfaces/token';
 
 interface Props {
   forwardedRef: React.ForwardedRef<any>;
 }
 
-const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
+const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
   const styles = useStyles();
 
   const [session, sessionLoading] = useSession();
   let userId = session?.user.userId as string;
 
-  const { loadAllTokens, loading, errorTokens, isTokenAddSuccess, resetErrorUserTokens, errorUserTokens, addUserToken, tokens } = useToken(
-    userId
-  );
+  const {
+    loadAllTokens,
+    loading,
+    errorTokens,
+    isTokenAddSuccess,
+    resetErrorUserTokens,
+    errorUserTokens,
+    addUserToken,
+    tokens,
+  } = useToken(userId);
 
   useEffect(() => {
     if (session !== null && !sessionLoading) {
@@ -92,7 +99,7 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
   useImperativeHandle(forwardedRef, () => ({
     triggerShowSetting: () => {
       setShowSetting(true);
-    }
+    },
   }));
 
   const closeSetting = () => {
@@ -130,11 +137,14 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
     }
   };
 
-  const DOTLogoURL = 'https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/DOT.svg';
+  const DOTLogoURL =
+    'https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/DOT.svg';
   const AUSDLogoURL = 'https://apps.acala.network/static/media/AUSD.439bc3f2.png';
   const ACALogoURL = 'https://dotmarketcap.com/uploads/Acala%20LOGO-04.png';
-  const NOLogoURL = 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Icon-round-Question_mark.svg';
-  const MYRLogoPath = 'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg';
+  const NOLogoURL =
+    'https://upload.wikimedia.org/wikipedia/commons/d/d9/Icon-round-Question_mark.svg';
+  const MYRLogoPath =
+    'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg';
 
   const capitalizeFirstLetter = (str: string, locale = navigator.language) => {
     return str.replace(/^\p{CWU}/u, char => char.toLocaleUpperCase(locale));
@@ -169,7 +179,7 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
       <Dialog
         maxWidth="sm"
         PaperProps={{
-          style: { overflow: 'hidden' }
+          style: {overflow: 'hidden'},
         }}
         fullWidth={true}
         open={showSetting}
@@ -185,7 +195,11 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
         </StyledTabs>
         <TabPanel value={idx} index={0}>
           <DialogContent>
-            <SearchComponent value={value} placeholder="Search by Asset ID, Name or Ticker Symbol" onSubmit={submitSearch} />
+            <SearchComponent
+              value={value}
+              placeholder="Search by Asset ID, Name or Ticker Symbol"
+              onSubmit={submitSearch}
+            />
           </DialogContent>
           <DialogContent className={styles.walletSettingDialog}>
             <List>
@@ -195,7 +209,11 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
                 <ErrorComponent />
               ) : (
                 tokens.map(token => (
-                  <ListItem className={styles.listItemRoot} key={token?.id} button onClick={() => handleSelectAsset(token)}>
+                  <ListItem
+                    className={styles.listItemRoot}
+                    key={token?.id}
+                    button
+                    onClick={() => handleSelectAsset(token)}>
                     <Card className={styles.listItemToken}>
                       <CardHeader
                         avatar={
@@ -235,7 +253,13 @@ const WalletSettingComponent: React.FC<Props> = ({ forwardedRef }) => {
           </DialogContent>
         </TabPanel>
         <DialogActions>
-          <Button color="primary" fullWidth={true} size="large" variant="contained" startIcon={<SendIcon />} onClick={addAsset}>
+          <Button
+            color="primary"
+            fullWidth={true}
+            size="large"
+            variant="contained"
+            startIcon={<SendIcon />}
+            onClick={addAsset}>
             Add Asset
           </Button>
         </DialogActions>

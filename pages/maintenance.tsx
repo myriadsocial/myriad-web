@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { GetServerSideProps } from 'next';
+import {GetServerSideProps} from 'next';
 
-import { healthcheck } from 'src/lib/api/healthcheck';
+import {healthcheck} from 'src/lib/api/healthcheck';
 
 export default function Maintenance() {
   return (
@@ -10,8 +10,9 @@ export default function Maintenance() {
       <h1>We&rsquo;ll be back soon!</h1>
       <div>
         <p>
-          Sorry for the inconvenience but we&rsquo;re performing some maintenance at the moment. If you need to you can always{' '}
-          <a href="mailto:support@myriad.com">contact us</a>, otherwise we&rsquo;ll be back online shortly!
+          Sorry for the inconvenience but we&rsquo;re performing some maintenance at the moment. If
+          you need to you can always <a href="mailto:support@myriad.com">contact us</a>, otherwise
+          we&rsquo;ll be back online shortly!
         </p>
         <p>&mdash; The Team</p>
       </div>
@@ -20,7 +21,7 @@ export default function Maintenance() {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { res } = context;
+  const {res} = context;
 
   const available = await healthcheck();
 
@@ -31,6 +32,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
   }
 
   return {
-    props: {}
+    props: {},
   };
 };

@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
-import { useToken as baseUseToken, TokenActionType } from 'src/components/wallet/token.context';
+import {useToken as baseUseToken, TokenActionType} from 'src/components/wallet/token.context';
 import * as TokenAPI from 'src/lib/api/token';
 
 export const useToken = (userId: string) => {
-  const { state, dispatch } = baseUseToken();
+  const {state, dispatch} = baseUseToken();
 
   const [loading, setLoading] = useState(true);
   const [isTokenAddSuccess, setIsTokenAddSuccess] = useState(false);
@@ -19,7 +19,7 @@ export const useToken = (userId: string) => {
 
       dispatch({
         type: TokenActionType.INIT_TOKEN,
-        payload: data
+        payload: data,
       });
     } catch (error) {
       setErrorTokens(error);
@@ -33,12 +33,12 @@ export const useToken = (userId: string) => {
 
     try {
       const data = await TokenAPI.getUserTokens({
-        id: userId
+        id: userId,
       });
 
       dispatch({
         type: TokenActionType.INIT_USER_TOKEN,
-        payload: data
+        payload: data,
       });
     } catch (error) {
       setErrorTokens(error);
@@ -53,7 +53,7 @@ export const useToken = (userId: string) => {
     try {
       const data = await TokenAPI.addUserToken({
         tokenId,
-        userId
+        userId,
       });
 
       //console.log('the data is: ', data);
@@ -64,7 +64,7 @@ export const useToken = (userId: string) => {
 
       dispatch({
         type: TokenActionType.ADD_TOKEN,
-        payload: data
+        payload: data,
       });
     } catch (error) {
       setErrorUserTokens(error.response.status);
@@ -87,6 +87,6 @@ export const useToken = (userId: string) => {
     loadAllTokens,
     addUserToken,
     tokens: state.tokens,
-    userTokens: state.userTokens
+    userTokens: state.userTokens,
   };
 };

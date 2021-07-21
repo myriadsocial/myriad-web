@@ -1,25 +1,28 @@
 // SEARCH PAGE
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
-import { GetServerSideProps } from 'next';
-import { Session } from 'next-auth';
-import { getSession } from 'next-auth/client';
-import { useRouter } from 'next/router';
+import {Session} from 'next-auth';
+import {getSession} from 'next-auth/client';
+import {useRouter} from 'next/router';
 
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import NoSsr from '@material-ui/core/NoSsr';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import Layout from 'src/components/Layout/Layout.container';
+import {LoadingBasic} from 'src/components/common/LoadingBasic.component';
 import SearchResultComponent from 'src/components/search/search-result.component';
 import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
-import { Wallet } from 'src/components/wallet/wallet.component';
-import { FriendsProvider } from 'src/context/friends.context';
-import { useUser } from 'src/context/user.context';
-import { useMyriadUser } from 'src/hooks/use-myriad-users.hooks';
-import { healthcheck } from 'src/lib/api/healthcheck';
+import {Wallet} from 'src/components/wallet/wallet.component';
+import {useMyriadUser} from 'src/hooks/use-myriad-users.hooks';
+import {healthcheck} from 'src/lib/api/healthcheck';
+import * as UserAPI from 'src/lib/api/user';
+import {RootState} from 'src/reducers';
+import {setAnonymous, setUser, fetchToken} from 'src/reducers/user/actions';
+import {UserState} from 'src/reducers/user/reducer';
+import {wrapper} from 'src/store';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,19 +32,19 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 327,
       marginRight: 0,
       'scrollbar-color': '#A942E9 #171717',
-      'scrollbar-width': 'thin !important'
+      'scrollbar-width': 'thin !important',
     },
     wallet: {
-      width: 327
+      width: 327,
     },
     fullwidth: {
-      width: 327
+      width: 327,
     },
     fullheight: {
-      height: '100vh'
+      height: '100vh',
     },
     profile: {
-      flexGrow: 1
+      flexGrow: 1,
     },
     content: {
       padding: '0 24px 0 24px',
@@ -51,44 +54,49 @@ export const useStyles = makeStyles((theme: Theme) =>
       maxWidth: 726,
       flex: 1,
       [theme.breakpoints.up('xl')]: {
-        maxWidth: 926
-      }
+        maxWidth: 926,
+      },
     },
     loading: {
       left: 'calc(50% - 20px)',
       position: 'absolute',
-      top: 100
-    }
-  })
+      top: 100,
+    },
+  }),
 );
 
 type Props = {
   session: Session;
 };
 
-export default function Search({ session }: Props) {
+export default function Search({session}: Props) {
   const style = useStyles();
-  const isAnonymous = !!session?.user.anonymous;
+  const dispatch = useDispatch();
+
+  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
+
+  useEffect(() => {
+    // load current authenticated user tokens
+    dispatch(fetchToken());
+  }, [dispatch]);
 
   return (
     <Layout>
       <Grid item className={style.user}>
         <Grid container direction="row" justify="flex-start" alignContent="flex-start">
           <Grid item className={style.fullwidth}>
-            <UserDetail user={session.user} isAnonymous={isAnonymous} />
+            <UserDetail isAnonymous={anonymous} />
           </Grid>
           <Grid item className={style.fullwidth}>
-            <FriendsProvider>
-              <NoSsr>
-                <Wallet />
-              </NoSsr>
-            </FriendsProvider>
+            <NoSsr>
+              <Wallet />
+            </NoSsr>
             <TopicComponent />
           </Grid>
         </Grid>
       </Grid>
       <Grid item className={style.content}>
-        <SearchTimeline isAnonymous={isAnonymous} />
+        <SearchTimeline isAnonymous={anonymous} />
       </Grid>
     </Layout>
   );
@@ -98,14 +106,12 @@ type SearchTimelineProps = {
   isAnonymous: boolean;
 };
 
-const SearchTimeline: React.FC<SearchTimelineProps> = ({ isAnonymous }) => {
-  const [loading, setLoading] = useState(false);
-  const style = useStyles();
+const SearchTimeline: React.FC<SearchTimelineProps> = ({isAnonymous}) => {
   const router = useRouter();
-  const { searching, backToTimeline, users: options, search } = useMyriadUser();
-  const {
-    state: { user }
-  } = useUser();
+
+  const {searching, backToTimeline, users: options, search} = useMyriadUser();
+  const [loading, setLoading] = useState(false);
+
   const delayLoading = 2000;
 
   useEffect(() => {
@@ -134,46 +140,56 @@ const SearchTimeline: React.FC<SearchTimelineProps> = ({ isAnonymous }) => {
     };
   };
 
-  const LoadingComponent = () => {
-    return (
-      <Grid container justify="center">
-        <CircularProgress className={style.loading} />
-      </Grid>
-    );
-  };
-
   return (
     <>
       <div id="search-result">
         {loading ? (
-          <LoadingComponent />
+          <LoadingBasic />
         ) : (
-          <SearchResultComponent isAnonymous={isAnonymous} user={user} users={options} clickBack={handleClick} />
+          <SearchResultComponent loading={loading} options={options} clickBack={handleClick} />
         )}
       </div>
     </>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const { res } = context;
-  const session = await getSession(context);
-
-  if (!session) {
-    res.writeHead(301, { location: `${process.env.NEXTAUTH_URL}` });
-    res.end();
-  }
+export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
+  const {res} = context;
+  const {dispatch} = store;
 
   const available = await healthcheck();
 
   if (!available) {
-    res.writeHead(302, { location: `${process.env.NEXTAUTH_URL}/maintenance` });
+    res.setHeader('location', '/maintenance');
+    res.statusCode = 302;
     res.end();
+  }
+
+  const session = await getSession(context);
+
+  if (!session) {
+    res.setHeader('location', '/');
+    res.statusCode = 302;
+    res.end();
+  }
+
+  const anonymous = Boolean(session?.user.anonymous);
+  const userId = session?.user.id as string;
+  const username = session?.user.name as string;
+
+  //TODO: this process should call thunk action creator instead of dispatch thunk acion
+  //ISSUE: state not hydrated when using thunk action creator
+  if (anonymous) {
+    dispatch(setAnonymous(username));
+  } else {
+    const user = await UserAPI.getUserDetail(userId);
+
+    dispatch(setUser(user));
   }
 
   return {
     props: {
-      session
-    }
+      session,
+    },
   };
-};
+});

@@ -1,73 +1,35 @@
-import { useState } from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
-import { useUser, UserActionType } from 'src/context/user.context';
-import { SocialsEnum } from 'src/interfaces';
-import { ExtendedUser } from 'src/interfaces/user';
-import { User } from 'src/interfaces/user';
-import * as UserAPI from 'src/lib/api/user';
-import { firebaseCloudMessaging } from 'src/lib/firebase';
+import {SocialsEnum} from 'src/interfaces';
+import {User} from 'src/interfaces/user';
+import {firebaseCloudMessaging} from 'src/lib/firebase';
+import {RootState} from 'src/reducers';
+import {updateUser, deleteSocial} from 'src/reducers/user/actions';
+import {UserState} from 'src/reducers/user/reducer';
 
-export const useUserHook = (userId?: string) => {
-  const { state: userState, dispatch } = useUser();
+export const useUserHook = () => {
+  const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const load = async () => {
-    if (!userId) return;
-
-    setLoading(true);
-
-    try {
-      const detail: ExtendedUser = await UserAPI.getUserDetail(userId);
-
-      if (!detail.userCredentials) {
-        detail.userCredentials = [];
-      }
-
-      dispatch({
-        type: UserActionType.USER_LOADED,
-        payload: detail
-      });
-    } catch (error) {
-      setError(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const setAsAnonymous = () => {
-    dispatch({
-      type: UserActionType.SET_ANONYMOUS
-    });
-  };
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
 
   const disconnectSocial = async (social: SocialsEnum): Promise<void> => {
-    const credential = userState.user?.userCredentials.find(credential => credential.people.platform === social);
+    if (!user) return;
 
-    if (credential) {
-      await UserAPI.disconnectSocial(credential.id);
+    if (user.userCredentials && user.userCredentials.length > 0) {
+      const credential = user.userCredentials.find(
+        credential => credential.people.platform === social,
+      );
 
-      load();
+      if (credential) {
+        dispatch(deleteSocial(credential.id));
+      }
     }
   };
 
-  const updateUser = async (values: Partial<User>) => {
-    if (!userId) return;
+  const updateUserDetail = async (values: Partial<User>) => {
+    if (!user) return;
 
-    await UserAPI.updateUser(userId, values);
-
-    if (userState.user) {
-      dispatch({
-        type: UserActionType.USER_LOADED,
-        payload: {
-          ...userState.user,
-          ...values
-        }
-      });
-    } else {
-      load();
-    }
+    dispatch(updateUser(values));
   };
 
   const loadFcmToken = async () => {
@@ -76,19 +38,15 @@ export const useUserHook = (userId?: string) => {
     const token = await firebaseCloudMessaging.tokenInlocalforage();
 
     if (token) {
-      updateUser({
-        fcmTokens: [token as string]
+      updateUserDetail({
+        fcmTokens: [token as string],
       });
     }
   };
 
   return {
-    error,
-    loading,
-    setAsAnonymous,
-    getUserDetail: load,
     disconnectSocial,
-    updateUser,
-    loadFcmToken
+    loadFcmToken,
+    updateUser: updateUserDetail,
   };
 };

@@ -12,18 +12,18 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import { useStyles } from './experience-detail.style';
+import {useStyles} from './experience-detail.style';
 
 import PhotoLayoutIcon from 'src/images/photo-layout-light.svg';
 import TimelineLayoutIcon from 'src/images/timeline-layout-light.svg';
-import { Experience, LayoutType } from 'src/interfaces/experience';
+import {Experience, LayoutType} from 'src/interfaces/experience';
 
 type Props = {
   data: Experience;
   onSave?: (experience: Experience) => void;
 };
 
-export default function ExperienceDetail({ data, onSave }: Props) {
+export default function ExperienceDetail({data, onSave}: Props) {
   const style = useStyles();
 
   const [experience, setExperience] = React.useState<Experience>(data);
@@ -31,21 +31,21 @@ export default function ExperienceDetail({ data, onSave }: Props) {
   const setLayout = (layout: LayoutType) => {
     setExperience({
       ...experience,
-      layout
+      layout,
     });
   };
 
   const setTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setExperience({
       ...experience,
-      name: e.target.value
+      name: e.target.value,
     });
   };
 
   const setDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
     setExperience({
       ...experience,
-      description: e.target.value
+      description: e.target.value,
     });
   };
 
@@ -62,7 +62,12 @@ export default function ExperienceDetail({ data, onSave }: Props) {
               <Typography>Topics</Typography>
               <Box className={style.avatar}>
                 {experience.tags.map((tag, i) => (
-                  <Chip key={i} size="small" label={tag.id} color={tag.hide ? 'secondary' : 'primary'} />
+                  <Chip
+                    key={i}
+                    size="small"
+                    label={tag.id}
+                    color={tag.hide ? 'secondary' : 'primary'}
+                  />
                 ))}
               </Box>
             </Grid>
@@ -73,7 +78,9 @@ export default function ExperienceDetail({ data, onSave }: Props) {
                   <Avatar
                     key={i}
                     alt={people.username}
-                    src={`https://res.cloudinary.com/dsget80gs/image/${people.platform || 'facebook'}/${people.platform_account_id}.jpg`}
+                    src={`https://res.cloudinary.com/dsget80gs/image/${
+                      people.platform || 'facebook'
+                    }/${people.platform_account_id}.jpg`}
                     className={style.inline}
                   />
                 ))}
@@ -82,7 +89,13 @@ export default function ExperienceDetail({ data, onSave }: Props) {
 
             <Grid item md={6}>
               <form className={style.form} noValidate autoComplete="off">
-                <TextField onChange={setTitle} value={experience.name} variant="filled" color="secondary" label="Experience Name" />
+                <TextField
+                  onChange={setTitle}
+                  value={experience.name}
+                  variant="filled"
+                  color="secondary"
+                  label="Experience Name"
+                />
                 <TextField
                   onChange={setDescription}
                   autoFocus
@@ -114,7 +127,11 @@ export default function ExperienceDetail({ data, onSave }: Props) {
                     checked={experience.layout === 'photo'}
                     onChange={() => setLayout('photo')}
                     control={
-                      <Checkbox icon={<PhotoLayoutIcon />} checkedIcon={<PhotoLayoutIcon className={style.active} />} name="checkedH" />
+                      <Checkbox
+                        icon={<PhotoLayoutIcon />}
+                        checkedIcon={<PhotoLayoutIcon className={style.active} />}
+                        name="checkedH"
+                      />
                     }
                     label=""
                   />

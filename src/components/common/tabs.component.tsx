@@ -1,6 +1,6 @@
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import { fade, Theme, withStyles, createStyles } from '@material-ui/core/styles';
+import {fade, Theme, withStyles, createStyles} from '@material-ui/core/styles';
 
 interface StyledTabsProps {
   value: number;
@@ -12,15 +12,15 @@ export const StyledTabs = withStyles((theme: Theme) =>
     indicator: {
       display: 'flex',
       justifyContent: 'center',
-      backgroundColor: 'transparent'
+      backgroundColor: 'transparent',
     },
     root: {
       position: 'relative',
       top: theme.spacing(2),
-      left: theme.spacing(2)
-    }
-  })
-)((props: StyledTabsProps) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
+      left: theme.spacing(2),
+    },
+  }),
+)((props: StyledTabsProps) => <Tabs {...props} TabIndicatorProps={{children: <span />}} />);
 
 interface StyledTabProps {
   label: string;
@@ -40,8 +40,8 @@ export const StyledTab = withStyles((theme: Theme) =>
       '&:focus': {
         opacity: 1,
         backgroundColor: fade('#8629e9', 0.2),
-        color: '#8629e9'
-      }
-    }
-  })
+        color: '#8629e9',
+      },
+    },
+  }),
 )((props: StyledTabProps) => <Tab aria-label={props.ariaLabel} disableRipple {...props} />);

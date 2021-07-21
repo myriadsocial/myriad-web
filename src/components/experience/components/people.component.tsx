@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, {useMemo} from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
@@ -24,14 +24,14 @@ import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import Autocomplete, { AutocompleteRenderOptionState } from '@material-ui/lab/Autocomplete';
+import Autocomplete, {AutocompleteRenderOptionState} from '@material-ui/lab/Autocomplete';
 
-import { usePeople } from '../use-people.hooks';
-import { useStyles } from './topic.style';
+import {usePeople} from '../use-people.hooks';
+import {useStyles} from './topic.style';
 
 import StyledBadge from 'src/components/common/Badge.component';
 import ShowIf from 'src/components/common/show-if.component';
-import { People } from 'src/interfaces/people';
+import {People} from 'src/interfaces/people';
 
 type Props = {
   people: People[];
@@ -39,10 +39,10 @@ type Props = {
   onRemoveItem: (people: People) => void;
 };
 
-export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Props) {
+export default function PeopleComponent({people, onAddItem, onRemoveItem}: Props) {
   const style = useStyles();
 
-  const { people: options, search } = usePeople();
+  const {people: options, search} = usePeople();
   const [selectedPeople, setSelectedPeople] = React.useState<People[]>([]);
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -51,9 +51,9 @@ export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Pro
     () => ({
       facebook: <FacebookIcon />,
       twitter: <TwitterIcon />,
-      reddit: <RedditIcon />
+      reddit: <RedditIcon />,
     }),
-    []
+    [],
   );
 
   React.useEffect(() => {
@@ -95,7 +95,7 @@ export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Pro
         }
 
         return item;
-      })
+      }),
     ]);
   };
 
@@ -105,7 +105,11 @@ export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Pro
 
   return (
     <Card className={style.root}>
-      <CardHeader disableTypography className={style.header} title={<Typography variant="h5">People</Typography>} />
+      <CardHeader
+        disableTypography
+        className={style.header}
+        title={<Typography variant="h5">People</Typography>}
+      />
       <CardContent className={style.content}>
         <Autocomplete
           className={style.search}
@@ -117,7 +121,9 @@ export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Pro
           onClose={() => {
             setOpen(false);
           }}
-          getOptionDisabled={option => !!selectedPeople.some(selectedPerson => selectedPerson.username === option.username)} //disable option already found in selectedPeople
+          getOptionDisabled={option =>
+            !!selectedPeople.some(selectedPerson => selectedPerson.username === option.username)
+          } //disable option already found in selectedPeople
           getOptionSelected={(option, value) => option === value}
           getOptionLabel={option => option.username}
           options={options}
@@ -137,7 +143,7 @@ export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Pro
                     {loading ? <CircularProgress color="inherit" size={20} /> : null}
                     {params.InputProps.endAdornment}
                   </React.Fragment>
-                )
+                ),
               }}
             />
           )}
@@ -159,26 +165,40 @@ export default function PeopleComponent({ people, onAddItem, onRemoveItem }: Pro
             return (
               <ListItem key={i} dense button>
                 <ListItemIcon>
-                  <StyledBadge badgeContent={socials[people.platform]} className={style[people.platform]} color="default">
+                  <StyledBadge
+                    badgeContent={socials[people.platform]}
+                    className={style[people.platform]}
+                    color="default">
                     <Avatar
                       aria-label="avatar"
-                      src={`https://res.cloudinary.com/dsget80gs/image/${people.platform || 'facebook'}/${people.platform_account_id}.jpg`}
+                      src={`https://res.cloudinary.com/dsget80gs/image/${
+                        people.platform || 'facebook'
+                      }/${people.platform_account_id}.jpg`}
                     />
                   </StyledBadge>
                 </ListItemIcon>
                 <ListItemText id={labelId} primary={people.username} />
                 <ListItemSecondaryAction>
                   {people.hide ? (
-                    <IconButton edge="end" aria-label="hide-from-experience" onClick={() => toggleVisible(people)}>
+                    <IconButton
+                      edge="end"
+                      aria-label="hide-from-experience"
+                      onClick={() => toggleVisible(people)}>
                       <VisibilityOffIcon />
                     </IconButton>
                   ) : (
-                    <IconButton edge="end" aria-label="show-on-experience" onClick={() => toggleVisible(people)}>
+                    <IconButton
+                      edge="end"
+                      aria-label="show-on-experience"
+                      onClick={() => toggleVisible(people)}>
                       <VisibilityIcon />
                     </IconButton>
                   )}
 
-                  <IconButton edge="end" aria-label="comments" onClick={() => removeFromExperience(people)}>
+                  <IconButton
+                    edge="end"
+                    aria-label="comments"
+                    onClick={() => removeFromExperience(people)}>
                     <DeleteForeverIcon />
                   </IconButton>
                 </ListItemSecondaryAction>

@@ -2,7 +2,7 @@ import React from 'react';
 
 import dynamic from 'next/dynamic';
 
-import { Language, People, Notifications } from '@material-ui/icons';
+import {Language, People, Notifications} from '@material-ui/icons';
 
 const TopicComponent = dynamic(() => import('../topic/topic.component'));
 const FriendComponent = dynamic(() => import('../friends/friend.component'));
@@ -20,23 +20,23 @@ export const useSidebarTabs = () => {
       title: 'Worldwide',
       icon: Language,
       component: TopicComponent,
-      default: true
+      default: true,
     },
     {
       title: 'Friends',
       icon: People,
       component: FriendComponent,
-      default: false
+      default: false,
     },
     {
       title: 'Notifications',
       icon: Notifications,
       component: TopicComponent,
-      default: false
-    }
+      default: false,
+    },
   ];
 
   return {
-    tabElements
+    tabElements,
   };
 };

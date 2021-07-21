@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
+import React, {useState, forwardRef, useImperativeHandle, useEffect} from 'react';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -17,22 +17,38 @@ import Typography from '@material-ui/core/Typography';
 import SendIcon from '@material-ui/icons/Send';
 
 import DialogTitle from '../DialogTitle.component';
-import { useStyles, TableCell } from './send-tips.style';
+import {useStyles, TableCell} from './send-tips.style';
 
-import { useAlertHook } from 'src/hooks/use-alert.hook';
-import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
-import { InputState, InputErrorState, SendTipConfirmed, Props } from 'src/interfaces/send-tips/send-tips';
+import {useAlertHook} from 'src/hooks/use-alert.hook';
+import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
+import {
+  InputState,
+  InputErrorState,
+  SendTipConfirmed,
+  Props,
+} from 'src/interfaces/send-tips/send-tips';
 
 enum ContentType {
   POST = 'postContent',
-  COMMENT = 'commentContent'
+  COMMENT = 'commentContent',
 }
 
 //TODO: move codes to different files, too big!
 
 const SendTipModal = forwardRef(
-  ({ balanceDetails, walletReceiverDetail, userAddress, postId, receiverId, success, availableTokens }: Props, ref) => {
-    const { sendTip, load, trxHash, sendTipSuccess, error } = usePolkadotApi();
+  (
+    {
+      balanceDetails,
+      walletReceiverDetail,
+      userAddress,
+      postId,
+      receiverId,
+      success,
+      availableTokens,
+    }: Props,
+    ref,
+  ) => {
+    const {sendTip, load, trxHash, sendTipSuccess, error} = usePolkadotApi();
     const [showSendTipModal, setShowSendTipModal] = useState(false);
     const [selectedToken, setSelectedToken] = useState('');
     const [senderAddress, setSenderAddress] = useState('');
@@ -42,14 +58,14 @@ const SendTipModal = forwardRef(
     const [selectedTokenDecimals, setSelectedTokenDecimals] = useState(0);
     const [sendTipClicked, setSendTipClicked] = useState(false);
     const [tokenBalance, setTokenBalance] = useState('');
-    const { showTipAlert, showAlert } = useAlertHook();
+    const {showTipAlert, showAlert} = useAlertHook();
 
     useEffect(() => {
       if (sendTipSuccess) {
         showTipAlert({
           severity: 'success',
           title: 'Tip sent!',
-          message: `${trxHash}`
+          message: `${trxHash}`,
         });
       }
     }, [sendTipSuccess]);
@@ -59,7 +75,7 @@ const SendTipModal = forwardRef(
         showAlert({
           severity: 'error',
           title: 'Error!',
-          message: `Something is wrong`
+          message: `Something is wrong`,
         });
       }
     }, [error]);
@@ -67,22 +83,22 @@ const SendTipModal = forwardRef(
     useImperativeHandle(ref, () => ({
       triggerSendTipModal: () => {
         setShowSendTipModal(true);
-      }
+      },
     }));
 
     const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
       isConfirmed: false,
-      message: ''
+      message: '',
     });
 
     const [inputError, setInputError] = useState<InputErrorState>({
       isErrorInput: false,
       isTextChanged: false,
       isInsufficientBalance: false,
-      errorMessage: 'Please input a number larger than 0!'
+      errorMessage: 'Please input a number larger than 0!',
     });
     const [values, setValues] = useState<InputState>({
-      amount: ''
+      amount: '',
     });
 
     useEffect(() => {
@@ -97,12 +113,12 @@ const SendTipModal = forwardRef(
       if (trxHash.length > 0) {
         setSendTipConfirmed({
           isConfirmed: true,
-          message: 'Tip sent successfully!'
+          message: 'Tip sent successfully!',
         });
         setShowSendTipModal(false);
         setValues({
           ...values,
-          amount: ''
+          amount: '',
         });
         load(userAddress, availableTokens);
       }
@@ -125,14 +141,14 @@ const SendTipModal = forwardRef(
         setInputError({
           ...inputError,
           isErrorInput: false,
-          isTextChanged: true
+          isTextChanged: true,
         });
       }
       if (regexValidDigits.test(values.amount)) {
         setInputError({
           ...inputError,
           isErrorInput: false,
-          isTextChanged: true
+          isTextChanged: true,
         });
 
         if (tokenBalance !== undefined && Number(values.amount) >= Number(tokenBalance)) {
@@ -141,7 +157,7 @@ const SendTipModal = forwardRef(
             isErrorInput: true,
             isTextChanged: true,
             isInsufficientBalance: true,
-            errorMessage: 'Insufficient balance'
+            errorMessage: 'Insufficient balance',
           });
         } else {
           // amount valid, reset InputError state
@@ -149,7 +165,7 @@ const SendTipModal = forwardRef(
             isErrorInput: false,
             isTextChanged: true,
             isInsufficientBalance: false,
-            errorMessage: ''
+            errorMessage: '',
           });
 
           const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
@@ -175,7 +191,7 @@ const SendTipModal = forwardRef(
           ...inputError,
           isErrorInput: true,
           isTextChanged: true,
-          isInsufficientBalance: false
+          isInsufficientBalance: false,
         });
       }
     };
@@ -197,7 +213,7 @@ const SendTipModal = forwardRef(
       decimals,
       currencyId,
       postId,
-      wsAddress
+      wsAddress,
     }: SendTipWithPayloadProps) => {
       const sendTipPayload = {
         fromAddress: senderAddress,
@@ -206,7 +222,7 @@ const SendTipModal = forwardRef(
         decimals,
         currencyId,
         postId,
-        wsAddress
+        wsAddress,
       };
 
       sendTip(sendTipPayload);
@@ -223,7 +239,7 @@ const SendTipModal = forwardRef(
               decimals: selectedTokenDecimals,
               currencyId: selectedToken,
               postId: '',
-              wsAddress
+              wsAddress,
             });
             break;
           default:
@@ -234,16 +250,17 @@ const SendTipModal = forwardRef(
               decimals: selectedTokenDecimals,
               currencyId: selectedToken,
               postId: walletReceiverDetail.postId,
-              wsAddress
+              wsAddress,
             });
             break;
         }
       }
     }, [sendTipClicked, walletReceiverDetail, tippedContent]);
 
-    const handleChange = (prop: keyof InputState) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValues({ ...values, [prop]: event.target.value });
-    };
+    const handleChange =
+      (prop: keyof InputState) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        setValues({...values, [prop]: event.target.value});
+      };
 
     const handleSetSelectedToken = (event: React.ChangeEvent<HTMLInputElement>) => {
       const clickedToken = (event.target as HTMLInputElement).value;
@@ -283,19 +300,31 @@ const SendTipModal = forwardRef(
             <TableBody>
               {balanceDetails.map(row => (
                 <TableRow key={row.tokenSymbol}>
-                  <RadioGroup aria-label="gender" name="gender1" value={selectedToken} onChange={handleSetSelectedToken}>
+                  <RadioGroup
+                    aria-label="gender"
+                    name="gender1"
+                    value={selectedToken}
+                    onChange={handleSetSelectedToken}>
                     <TableCell component="th" scope="row">
                       {row.tokenSymbol === 'MYR' ? (
                         <></>
                       ) : (
                         <>
-                          <FormControlLabel value={row.tokenSymbol} control={<Radio />} label={row.tokenSymbol} />
+                          <FormControlLabel
+                            value={row.tokenSymbol}
+                            control={<Radio />}
+                            label={row.tokenSymbol}
+                          />
                         </>
                       )}
                     </TableCell>
                   </RadioGroup>
                   <TableCell align="right">
-                    {row.tokenSymbol === 'MYR' ? <></> : <Typography className={styles.balanceText}>{row.freeBalance}</Typography>}
+                    {row.tokenSymbol === 'MYR' ? (
+                      <></>
+                    ) : (
+                      <Typography className={styles.balanceText}>{row.freeBalance}</Typography>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -307,7 +336,11 @@ const SendTipModal = forwardRef(
 
     return (
       <>
-        <Dialog open={showSendTipModal} onClose={closeSendTipModal} aria-labelledby="send-tips-window" maxWidth="md">
+        <Dialog
+          open={showSendTipModal}
+          onClose={closeSendTipModal}
+          aria-labelledby="send-tips-window"
+          maxWidth="md">
           <DialogTitle id="name" onClose={closeSendTipModal}>
             {' '}
             Send Tip
@@ -325,14 +358,23 @@ const SendTipModal = forwardRef(
                 id="sendTipAmount"
                 label={`How many ${selectedToken}`}
                 helperText={
-                  inputError.isErrorInput ? (inputError.isInsufficientBalance ? inputError.errorMessage : 'Invalid input') : 'Digits only'
+                  inputError.isErrorInput
+                    ? inputError.isInsufficientBalance
+                      ? inputError.errorMessage
+                      : 'Invalid input'
+                    : 'Digits only'
                 }
                 variant="outlined"
               />
             </form>
           </DialogContent>
           <DialogActions>
-            <Button className={styles.whiteLightButton} fullWidth={true} size="large" variant="contained" onClick={closeSendTipModal}>
+            <Button
+              className={styles.whiteLightButton}
+              fullWidth={true}
+              size="large"
+              variant="contained"
+              onClick={closeSendTipModal}>
               Cancel
             </Button>
             <Button
@@ -349,7 +391,7 @@ const SendTipModal = forwardRef(
         </Dialog>
       </>
     );
-  }
+  },
 );
 
 export default SendTipModal;

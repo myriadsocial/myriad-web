@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { useSelector } from 'react-redux';
+import React, {useState, useEffect} from 'react';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import {useSelector} from 'react-redux';
 
-import { signOut } from 'next-auth/client';
+import {signOut} from 'next-auth/client';
 
-import { SvgIcon } from '@material-ui/core';
+import {SvgIcon} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -17,28 +17,27 @@ import Typography from '@material-ui/core/Typography';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import MuiAlert, {AlertProps} from '@material-ui/lab/Alert';
 
-import { encodeAddress } from '@polkadot/util-crypto';
+import {encodeAddress} from '@polkadot/util-crypto';
 
-import { useStyles } from './header.style';
-import { useFriendHook } from './use-friend.hook';
+import {ProfileEditComponent} from '../edit/profile-edit.component';
+import {useFriendHook} from '../use-profile-friend.hook';
+import {useStyles} from './header.style';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
-import { ProfileEditComponent } from 'src/components/profile/profile-edit.component';
-import { useProfile } from 'src/components/profile/profile.context';
-import { SocialListComponent } from 'src/components/user/social-list.component';
-import { acronym } from 'src/helpers/string';
+import {SocialListComponent} from 'src/components/user/social-list.component';
+import {acronym} from 'src/helpers/string';
 import RemoveUser from 'src/images/user-minus2.svg';
-import { FriendStatus } from 'src/interfaces/friend';
-import { ExtendedUserPost } from 'src/interfaces/user';
-import { RootState } from 'src/reducers';
-import { UserState } from 'src/reducers/user/reducer';
+import {FriendStatus} from 'src/interfaces/friend';
+import {ExtendedUser} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
-type Props = {
+type ProfileHeaderProps = {
   isAnonymous: boolean;
-  profile: ExtendedUserPost | null;
+  profile: ExtendedUser;
   loading: boolean;
   isGuest: boolean;
 };
@@ -47,21 +46,19 @@ function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export default function Header({ isAnonymous, profile, loading, isGuest }: Props) {
+const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, profile, isGuest}) => {
   const style = useStyles();
 
-  const { user } = useSelector<RootState, UserState>(state => state.userState);
+  const {friendStatus, makeFriend, checkFriendStatus, cancelFriendRequest, toggleRequest} =
+    useFriendHook();
+
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);
 
-  const {
-    state: { friendStatus }
-  } = useProfile();
-  const { makeFriend, checkFriendStatus, cancelFriendRequest, toggleRequest } = useFriendHook(user);
-
   useEffect(() => {
-    checkFriendStatus(profile?.id);
+    checkFriendStatus(profile.id);
   }, []);
 
   const profileInfo =
@@ -79,7 +76,7 @@ export default function Header({ isAnonymous, profile, loading, isGuest }: Props
 
   // FRIEND REQUEST
   const handleSendFriendRequest = () => {
-    makeFriend({ friendId: profile?.id });
+    makeFriend(profile);
   };
 
   const handleUnFriendRequest = () => {
@@ -112,67 +109,44 @@ export default function Header({ isAnonymous, profile, loading, isGuest }: Props
   const handleSignOut = async () => {
     await signOut({
       callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
-      redirect: true
+      redirect: true,
     });
   };
-
-  if (profile === null) {
-    return (
-      <div className={style.root}>
-        <div className={style.header}>
-          <div style={{ width: 500 }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar className={style.avatar} src={''}>
-                {acronym('')}
-              </Avatar>
-              <Typography className={style.name}>{''}</Typography>
-            </div>
-            <div style={{ marginTop: '24px' }}>
-              <Typography variant="body1" className={style.subtitle}>
-                Bio
-              </Typography>
-              <Typography variant="body2" style={{ fontWeight: 400, fontSize: 16, marginTop: 8 }}>
-                {profileInfo}
-              </Typography>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={style.root}>
       <div className={style.header}>
-        <div style={{ width: 500 }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{width: 500}}>
+          <div style={{display: 'flex', alignItems: 'center'}}>
             <Avatar className={style.avatar} src={profile.profilePictureURL}>
               {acronym(profile.name || '')}
             </Avatar>
             <Typography className={style.name}>{profile.name || ''}</Typography>
           </div>
-          <div style={{ marginTop: '24px' }}>
+          <div style={{marginTop: '24px'}}>
             <Typography variant="body1" className={style.subtitle}>
               Bio
             </Typography>
-            <Typography variant="body2" style={{ fontWeight: 400, fontSize: 16, marginTop: 8 }}>
+            <Typography variant="body2" style={{fontWeight: 400, fontSize: 16, marginTop: 8}}>
               {profile.bio || profileInfo}
             </Typography>
           </div>
-          <div style={{ marginTop: '24px' }}>
+          <div style={{marginTop: '24px'}}>
             <Typography variant="body1" className={style.subtitle}>
               Public Key
             </Typography>
             <Input
               className={style.input}
-              style={{ width: 400, border: '1px solid #8629E9' }}
+              style={{width: 400, border: '1px solid #8629E9'}}
               name="publickey"
               disabled={true}
               defaultValue={encodeAddress(profile.id)}
-              inputProps={{ 'aria-label': 'description' }}
+              inputProps={{'aria-label': 'description'}}
               endAdornment={
                 <InputAdornment position="end">
-                  <CopyToClipboard text={encodeAddress(profile.id) || ''} onCopy={onPublicKeyCopied}>
+                  <CopyToClipboard
+                    text={encodeAddress(profile.id) || ''}
+                    onCopy={onPublicKeyCopied}>
                     <IconButton aria-label="toggle password visibility">
                       <FileCopyIcon />
                     </IconButton>
@@ -182,12 +156,12 @@ export default function Header({ isAnonymous, profile, loading, isGuest }: Props
             />
           </div>
           <ShowIf condition={isGuest === true}>
-            <div style={{ marginTop: '24px' }}>
+            <div style={{marginTop: '24px'}}>
               <ShowIf condition={friendStatus?.status == null}>
                 <Button
                   disabled={isAnonymous}
                   className={style.button2}
-                  style={{ marginRight: 24 }}
+                  style={{marginRight: 24}}
                   color="primary"
                   variant="contained"
                   size="medium"
@@ -197,10 +171,13 @@ export default function Header({ isAnonymous, profile, loading, isGuest }: Props
                 </Button>
               </ShowIf>
 
-              <ShowIf condition={friendStatus?.status === 'pending' && friendStatus.requestorId == profile.id}>
+              <ShowIf
+                condition={
+                  friendStatus?.status === 'pending' && friendStatus.requestorId == profile.id
+                }>
                 <Button
                   className={style.button}
-                  style={{ marginRight: 12 }}
+                  style={{marginRight: 12}}
                   color="default"
                   variant="contained"
                   size="medium"
@@ -209,7 +186,7 @@ export default function Header({ isAnonymous, profile, loading, isGuest }: Props
                 </Button>
                 <Button
                   className={style.button}
-                  style={{ marginRight: 24 }}
+                  style={{marginRight: 24}}
                   color="primary"
                   variant="contained"
                   size="medium"
@@ -218,13 +195,21 @@ export default function Header({ isAnonymous, profile, loading, isGuest }: Props
                 </Button>
               </ShowIf>
 
-              <ShowIf condition={friendStatus?.status === 'pending' && friendStatus.friendId == profile.id}>
-                <Button className={style.button} variant="contained" size="medium" disabled style={{ background: 'gray', marginRight: 12 }}>
+              <ShowIf
+                condition={
+                  friendStatus?.status === 'pending' && friendStatus.friendId == profile.id
+                }>
+                <Button
+                  className={style.button}
+                  variant="contained"
+                  size="medium"
+                  disabled
+                  style={{background: 'gray', marginRight: 12}}>
                   Pending
                 </Button>
                 <Button
                   className={style.button}
-                  style={{ marginRight: 24 }}
+                  style={{marginRight: 24}}
                   color="primary"
                   variant="contained"
                   size="medium"
@@ -236,7 +221,7 @@ export default function Header({ isAnonymous, profile, loading, isGuest }: Props
               <ShowIf condition={friendStatus?.status === 'approved'}>
                 <Button
                   className={style.button2}
-                  style={{ marginRight: 24 }}
+                  style={{marginRight: 24}}
                   color="primary"
                   variant="contained"
                   size="medium"
@@ -259,12 +244,12 @@ export default function Header({ isAnonymous, profile, loading, isGuest }: Props
           </ShowIf>
         </div>
 
-        <div style={{ width: 315 }}>
+        <div style={{width: 315}}>
           <ShowIf condition={isGuest === false}>
-            <div style={{ textAlign: 'right' }}>
+            <div style={{textAlign: 'right'}}>
               <Button
                 className={style.button}
-                style={{ marginRight: 24 }}
+                style={{marginRight: 24}}
                 size="medium"
                 variant="contained"
                 color="primary"
@@ -276,12 +261,12 @@ export default function Header({ isAnonymous, profile, loading, isGuest }: Props
                 size="medium"
                 variant="outlined"
                 color="primary"
-                style={{ marginRight: 8 }}
+                style={{marginRight: 8}}
                 onClick={handleSignOut}>
                 Logout
               </Button>
             </div>
-            <div style={{ marginTop: '30px' }}>
+            <div style={{marginTop: '30px'}}>
               <SocialListComponent isAnonymous={isAnonymous} />
             </div>
           </ShowIf>
@@ -289,7 +274,7 @@ export default function Header({ isAnonymous, profile, loading, isGuest }: Props
       </div>
 
       {/* MODAL */}
-      {user && <ProfileEditComponent toggleProfileForm={toggleProfileForm} open={openEditModal} user={user} />}
+      {user && <ProfileEditComponent toggleProfileForm={toggleProfileForm} open={openEditModal} />}
 
       <Dialog open={openRemoveModal} aria-labelledby="no-extension-installed">
         <DialogTitle id="name" onClose={toggleRemoveAlert}>
@@ -303,7 +288,8 @@ export default function Header({ isAnonymous, profile, loading, isGuest }: Props
             <Typography className={style.subtitle1} variant="h2" color="error">
               Unfriend {profile.name}
             </Typography>
-            <Typography className={`${style.subtitle2} ${style.alertMessage}  ${style.center} ${style['m-vertical2']}`}>
+            <Typography
+              className={`${style.subtitle2} ${style.alertMessage}  ${style.center} ${style['m-vertical2']}`}>
               Are you sure want to remove this person from your friend list? You will{' '}
               <Typography variant="inherit" color="error">
                 no longer see posts
@@ -329,4 +315,6 @@ export default function Header({ isAnonymous, profile, loading, isGuest }: Props
       </Snackbar>
     </div>
   );
-}
+};
+
+export default ProfileHeaderComponent;

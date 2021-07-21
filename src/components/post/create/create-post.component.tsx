@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -12,13 +12,13 @@ import Typography from '@material-ui/core/Typography';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import VideocamIcon from '@material-ui/icons/Videocam';
 
-import { CreatePostExpandedComponent } from './create-post-expanded.component';
-import { useStyles } from './create-post.style';
+import {CreatePostExpandedComponent} from './create-post-expanded.component';
+import {useStyles} from './create-post.style';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
-import { usePostHook } from 'src/hooks/use-post.hook';
-import { Experience } from 'src/interfaces/experience';
-import { User } from 'src/interfaces/user';
+import {usePostHook} from 'src/hooks/use-post.hook';
+import {Experience} from 'src/interfaces/experience';
+import {User} from 'src/interfaces/user';
 import theme from 'src/themes/default';
 
 type Props = {
@@ -26,10 +26,10 @@ type Props = {
   experiences: Experience[];
 };
 
-export default function CreatePostComponent({ user, experiences }: Props) {
+export default function CreatePostComponent({user, experiences}: Props) {
   const styles = useStyles();
 
-  const { addPost, loading } = usePostHook(user);
+  const {addPost, loading} = usePostHook(user);
   const [postText, setPostText] = useState('');
   const [showCreatePost, setCreatePost] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -64,8 +64,8 @@ export default function CreatePostComponent({ user, experiences }: Props) {
 
   return (
     <div className={styles.root} id="create-post">
-      <div style={{ padding: theme.spacing(0, 0, 1, 0), position: 'relative' }}>
-        <Typography variant="h4" style={{ marginBottom: 8, fontWeight: 500 }}>
+      <div style={{padding: theme.spacing(0, 0, 1, 0), position: 'relative'}}>
+        <Typography variant="h4" style={{marginBottom: 8, fontWeight: 500}}>
           {'Post Something'}
         </Typography>
       </div>
@@ -80,24 +80,48 @@ export default function CreatePostComponent({ user, experiences }: Props) {
           />
         </CardContent>
         <CardActions className={styles.cardPostAction}>
-          <Button variant="outlined" color="primary" className={styles.button} onClick={toggleCreatePost} startIcon={<CameraAltIcon />}>
+          <Button
+            variant="outlined"
+            color="primary"
+            className={styles.button}
+            onClick={toggleCreatePost}
+            startIcon={<CameraAltIcon />}>
             Post Photos
           </Button>
-          <Button variant="outlined" color="primary" disabled className={styles.button} startIcon={<VideocamIcon />}>
+          <Button
+            variant="outlined"
+            color="primary"
+            disabled
+            className={styles.button}
+            startIcon={<VideocamIcon />}>
             Post Videos
           </Button>
-          <Button variant="contained" color="primary" className={styles.createPost} onClick={toggleCreatePost}>
+          <Button
+            variant="contained"
+            color="primary"
+            className={styles.createPost}
+            onClick={toggleCreatePost}>
             Create A Post
           </Button>
         </CardActions>
       </Card>
 
-      <Dialog className={styles.dialog} open={showCreatePost} aria-labelledby="no-extension-installed" maxWidth="lg">
+      <Dialog
+        className={styles.dialog}
+        open={showCreatePost}
+        aria-labelledby="no-extension-installed"
+        maxWidth="lg">
         <DialogTitle id="name" onClose={toggleCreatePost}>
           Post Something
         </DialogTitle>
         <DialogContent>
-          <CreatePostExpandedComponent ref={expandRef} text={postText} onSubmit={savePost} user={user} experiences={[]} />
+          <CreatePostExpandedComponent
+            ref={expandRef}
+            text={postText}
+            onSubmit={savePost}
+            user={user}
+            experiences={[]}
+          />
         </DialogContent>
 
         {submitting && <CircularProgress size={40} className={styles.buttonProgress} />}

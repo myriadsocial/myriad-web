@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -11,12 +11,12 @@ import Typography from '@material-ui/core/Typography';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import ShowIf from 'src/components/common/show-if.component';
-import { useStyles } from 'src/components/wallet/transactions/transactionList-style';
-import { transformTokenValue } from 'src/helpers/transformTokenValue';
-import { useFriendsHook } from 'src/hooks/use-friends-hook';
-import { FriendStatus } from 'src/interfaces/friend';
-import { Transaction } from 'src/interfaces/transaction';
-import { User } from 'src/interfaces/user';
+import {useStyles} from 'src/components/wallet/transactions/transactionList-style';
+import {transformTokenValue} from 'src/helpers/transformTokenValue';
+import {useFriendsHook} from 'src/hooks/use-friends-hook';
+import {FriendStatus} from 'src/interfaces/friend';
+import {Transaction} from 'src/interfaces/transaction';
+import {User} from 'src/interfaces/user';
 
 interface Props {
   transactions: Transaction[];
@@ -25,10 +25,10 @@ interface Props {
   sortDirection?: string;
 }
 
-export default function TransactionListComponent({ transactions, user }: Props) {
+export default function TransactionListComponent({transactions, user}: Props) {
   const style = useStyles();
 
-  const { friended, sendRequest } = useFriendsHook(user);
+  const {friended, sendRequest} = useFriendsHook();
   const [expandable, setExpandable] = useState(true);
 
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
@@ -71,8 +71,8 @@ export default function TransactionListComponent({ transactions, user }: Props) 
     return found ? found.status : null;
   };
 
-  const sendFriendRequest = (receiverId: string) => {
-    sendRequest(receiverId);
+  const sendFriendRequest = (receiver: User) => {
+    sendRequest(receiver);
   };
 
   const RenderPrimaryText = (txHistory: Transaction) => {
@@ -81,12 +81,13 @@ export default function TransactionListComponent({ transactions, user }: Props) 
       <div>
         {user.id === txHistory.from ? (
           <Typography>
-            You sent tips to {txHistory.toUser?.name ?? defaultUserName}'s post with {transformTokenValue(txHistory)} {txHistory.tokenId}{' '}
-            coins
+            You sent tips to {txHistory.toUser?.name ?? defaultUserName}'s post with{' '}
+            {transformTokenValue(txHistory)} {txHistory.tokenId} coins
           </Typography>
         ) : (
           <Typography>
-            {txHistory.fromUser?.name ?? defaultUserName} tipped your post with {transformTokenValue(txHistory)} {txHistory.tokenId} coins
+            {txHistory.fromUser?.name ?? defaultUserName} tipped your post with{' '}
+            {transformTokenValue(txHistory)} {txHistory.tokenId} coins
           </Typography>
         )}
       </div>
@@ -110,12 +111,12 @@ export default function TransactionListComponent({ transactions, user }: Props) 
     to?: User;
   };
 
-  const getRequesteeId = (from: User, to?: User) => {
-    if (from.id === userId && to !== undefined) return to.id;
-    return from.id;
+  const getRequestee = (from: User, to?: User) => {
+    if (from.id === userId && to !== undefined) return to;
+    return from;
   };
 
-  const CardActionButtons: React.FC<CardActionProps> = ({ from, to }) => {
+  const CardActionButtons: React.FC<CardActionProps> = ({from, to}) => {
     if (!from) return null;
 
     const isBefriendable = to?.id !== userId ? true : false;
@@ -128,23 +129,23 @@ export default function TransactionListComponent({ transactions, user }: Props) 
       disableRequest = [FriendStatus.PENDING, FriendStatus.APPROVED].includes(status);
     }
 
-    let requesteeId: string;
+    let requestee: User;
 
     if (to !== undefined) {
-      requesteeId = getRequesteeId(from, to);
+      requestee = getRequestee(from, to);
     } else {
-      requesteeId = getRequesteeId(from);
+      requestee = getRequestee(from);
     }
 
     return (
       <CardActions>
-        <div style={{ width: '100%', textAlign: 'center' }}>
+        <div style={{width: '100%', textAlign: 'center'}}>
           <Button size="medium" variant="contained" color="default" className={style.iconButton}>
             Visit Profile
           </Button>
           {(!status || isBefriendable) && (
             <Button
-              onClick={() => sendFriendRequest(requesteeId)}
+              onClick={() => sendFriendRequest(requestee)}
               size="medium"
               variant="contained"
               color="primary"
@@ -182,7 +183,9 @@ export default function TransactionListComponent({ transactions, user }: Props) 
                         <Avatar
                           aria-label="avatar"
                           src={
-                            txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL
+                            txHistory?.toUser?.id === userId
+                              ? txHistory?.fromUser?.profilePictureURL
+                              : txHistory?.toUser?.profilePictureURL
                           }
                         />
                       }
@@ -203,7 +206,9 @@ export default function TransactionListComponent({ transactions, user }: Props) 
                         <Avatar
                           aria-label="avatar"
                           src={
-                            txHistory?.toUser?.id === userId ? txHistory?.fromUser?.profilePictureURL : txHistory?.toUser?.profilePictureURL
+                            txHistory?.toUser?.id === userId
+                              ? txHistory?.fromUser?.profilePictureURL
+                              : txHistory?.toUser?.profilePictureURL
                           }
                         />
                       }

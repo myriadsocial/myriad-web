@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import {useSelector} from 'react-redux';
 
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
@@ -7,59 +8,60 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
-import { ConnectSuccessComponent } from '../connect/connect-success.component';
-import { ConnectComponent } from '../connect/connect.component';
+import {ConnectSuccessComponent} from '../connect/connect-success.component';
+import {ConnectComponent} from '../connect/connect.component';
 
-import { ConfirmDialog } from 'src/components/common/confirm-dialog.component';
-import { useShareSocial } from 'src/hooks/use-share-social';
-import { useUserHook } from 'src/hooks/use-user.hook';
-import { SocialsEnum } from 'src/interfaces';
-import { ExtendedUser } from 'src/interfaces/user';
+import {ConfirmDialog} from 'src/components/common/confirm-dialog.component';
+import {useShareSocial} from 'src/hooks/use-share-social';
+import {useUserHook} from 'src/hooks/use-user.hook';
+import {SocialsEnum} from 'src/interfaces';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
       maxWidth: 360,
-      backgroundColor: theme.palette.background.paper
+      backgroundColor: theme.palette.background.paper,
     },
     subheader: {
       fontSize: 16,
       fontWeight: 500,
-      color: theme.palette.text.primary
+      color: theme.palette.text.primary,
     },
     facebook: {
       color: '#3b5998',
-      minWidth: 40
+      minWidth: 40,
     },
     twitter: {
       color: '#1DA1F2',
-      minWidth: 40
+      minWidth: 40,
     },
     reddit: {
       color: '#FF5700',
-      minWidth: 40
-    }
-  })
+      minWidth: 40,
+    },
+  }),
 );
 
 type SocialListProps = {
   isAnonymous: boolean;
-  user?: ExtendedUser;
 };
 
-export const SocialListComponent: React.FC<SocialListProps> = ({ isAnonymous, user }) => {
+export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) => {
   const classes = useStyles();
 
-  const { isShared, verifyPublicKeyShared } = useShareSocial(user?.id);
-  const { disconnectSocial } = useUserHook(user?.id);
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {isShared, verifyPublicKeyShared} = useShareSocial(user?.id);
+  const {disconnectSocial} = useUserHook();
   const [connecting, setConnecting] = useState(false);
   const [unlink, setUnlink] = useState<SocialsEnum | null>(null);
 
@@ -67,7 +69,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ isAnonymous, us
   const connected: Record<SocialsEnum, boolean> = {
     [SocialsEnum.FACEBOOK]: false,
     [SocialsEnum.TWITTER]: false,
-    [SocialsEnum.REDDIT]: false
+    [SocialsEnum.REDDIT]: false,
   };
 
   useEffect(() => {
@@ -77,9 +79,15 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ isAnonymous, us
   }, [isShared]);
 
   if (user && user.userCredentials && user.userCredentials.length > 0) {
-    const twitterCredential = user.userCredentials.find(item => item.people.platform === SocialsEnum.TWITTER);
-    const facebookCredential = user.userCredentials.find(item => item.people.platform === SocialsEnum.FACEBOOK);
-    const redditCredential = user.userCredentials.find(item => item.people.platform === SocialsEnum.REDDIT);
+    const twitterCredential = user.userCredentials.find(
+      item => item.people.platform === SocialsEnum.TWITTER,
+    );
+    const facebookCredential = user.userCredentials.find(
+      item => item.people.platform === SocialsEnum.FACEBOOK,
+    );
+    const redditCredential = user.userCredentials.find(
+      item => item.people.platform === SocialsEnum.REDDIT,
+    );
 
     if (twitterCredential) {
       connected[SocialsEnum.TWITTER] = true;
@@ -101,8 +109,10 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ isAnonymous, us
   const connectSocial = (social: SocialsEnum) => () => {
     if (!connected[social]) {
       setConnecting(true);
+      console.log('openConnectForm', connectRef.current);
       connectRef.current?.openConnectForm(social);
     } else {
+      console.log('setUnlink');
       setUnlink(social);
     }
   };
@@ -122,7 +132,9 @@ export const SocialListComponent: React.FC<SocialListProps> = ({ isAnonymous, us
     <>
       <List
         id="social-list"
-        subheader={<ListSubheader className={classes.subheader}>Claim social media accounts</ListSubheader>}
+        subheader={
+          <ListSubheader className={classes.subheader}>Claim social media accounts</ListSubheader>
+        }
         className={classes.root}>
         <ListItem disabled={isAnonymous}>
           <ListItemIcon>

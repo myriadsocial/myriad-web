@@ -4,7 +4,7 @@ import Providers from 'next-auth/providers';
 import APIAdapter from '../../../adapters/api';
 
 import * as UserAPI from 'src/lib/api/user';
-import { userToSession } from 'src/lib/serializers/session';
+import {userToSession} from 'src/lib/serializers/session';
 
 type Credentials = {
   platform: string;
@@ -21,17 +21,17 @@ export default NextAuth({
   providers: [
     Providers.Twitter({
       clientId: process.env.TWITTER_API_KEY as string,
-      clientSecret: process.env.TWITTER_API_KEY_SECRET as string
+      clientSecret: process.env.TWITTER_API_KEY_SECRET as string,
     }),
     Providers.Facebook({
       clientId: process.env.FACEBOKK_APP_ID as string,
       clientSecret: process.env.FACEBOOK_APP_SECRET as string,
-      scope: 'user_posts,user_friends'
+      scope: 'user_posts,user_friends',
     }),
     Providers.Reddit({
       clientId: process.env.REDDIT_APP_ID as string,
       clientSecret: process.env.REDDIT_SECRET as string,
-      scope: 'identity read'
+      scope: 'identity read',
     }),
     Providers.Credentials({
       // The name to display on the sign in form (e.g. 'Sign in with...')
@@ -40,8 +40,8 @@ export default NextAuth({
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        name: { label: 'Name', type: 'text' },
-        address: { label: 'Address', type: 'text' }
+        name: {label: 'Name', type: 'text'},
+        address: {label: 'Address', type: 'text'},
       },
       async authorize(credentials: Record<string, string>) {
         console.log('[next-auth][debug][authorize] credentials', credentials);
@@ -62,14 +62,17 @@ export default NextAuth({
                 profilePictureURL: '',
                 anonymous: false,
                 bio: '',
-                createdAt: new Date()
+                createdAt: new Date(),
               });
 
               console.log('[next-auth][debug][authorize] user create', user);
 
               return userToSession(user);
             } catch (error) {
-              console.error('[next-auth][debug][authorize] user create error', error.response.data.error);
+              console.error(
+                '[next-auth][debug][authorize] user create error',
+                error.response.data.error,
+              );
               throw new Error('Failed to login');
             }
           }
@@ -79,10 +82,10 @@ export default NextAuth({
           userId: credentials.address,
           name: credentials.name,
           address: credentials.address,
-          anonymous: credentials.anonymous === 'true'
+          anonymous: credentials.anonymous === 'true',
         };
-      }
-    })
+      },
+    }),
   ],
   // Database optional. MySQL, Maria DB, Postgres and MongoDB are supported.
   // https://next-auth.js.org/configuration/databases
@@ -101,7 +104,7 @@ export default NextAuth({
     // Use JSON Web Tokens for session instead of database sessions.
     // This option can be used with or without a database for users/accounts.
     // Note: `jwt` is automatically set to `true` if no database is specified.
-    jwt: true
+    jwt: true,
 
     // Seconds - How long until an idle session expires and is no longer valid.
     // maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -134,7 +137,7 @@ export default NextAuth({
   pages: {
     signIn: '/', // Displays signin buttons
     signOut: '/', // Displays form with sign out button
-    error: '/' // Error code passed in query string as ?error=
+    error: '/', // Error code passed in query string as ?error=
 
     // verifyRequest: '/auth/verify-request', // Used for check email page
     // newUser: null // If set, new users will be directed here on first sign in
@@ -152,11 +155,11 @@ export default NextAuth({
 
       return {
         ...session,
-        user
+        user,
       };
     },
     async jwt(token, user, account, profile, isNewUser) {
-      token = { ...token, ...user };
+      token = {...token, ...user};
 
       if (account && account.type === 'credentials') {
         token.userId = profile.address;
@@ -170,7 +173,7 @@ export default NextAuth({
           platformUserId: account.id,
           username: profile.username || profile.name,
           accessToken: account.accessToken,
-          refreshToken: account.refreshToken
+          refreshToken: account.refreshToken,
         };
         //@ts-ignore
         if (!token.userCredentials || token.userCredentials.length === 0) {
@@ -183,7 +186,7 @@ export default NextAuth({
       }
 
       return token;
-    }
+    },
   },
 
   // Events are useful for logging
@@ -191,7 +194,7 @@ export default NextAuth({
   events: {
     async error(message) {
       console.error(message);
-    }
+    },
   },
 
   // Enable debug messages in the console if you are having problems
@@ -205,6 +208,6 @@ export default NextAuth({
     },
     debug(code, ...message) {
       console.log(code, message);
-    }
-  }
+    },
+  },
 });

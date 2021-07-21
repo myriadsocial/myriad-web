@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { SocialsEnum } from 'src/interfaces/index';
-import { LayoutFilterType } from 'src/interfaces/setting';
-import { SidebarTab } from 'src/interfaces/sidebar';
+import {SocialsEnum} from 'src/interfaces/index';
+import {LayoutFilterType} from 'src/interfaces/setting';
+import {SidebarTab} from 'src/interfaces/sidebar';
 
 export enum LayoutSettingActionType {
   TOGGLE_FOCUS = 'TOGGLE_FOCUS',
   CHANGE_SETTING = 'CHANGE_SETTING',
-  CHANGE_SELECTED_SIDEBAR = 'CHANGE_SELECTED_SIDEBAR'
+  CHANGE_SELECTED_SIDEBAR = 'CHANGE_SELECTED_SIDEBAR',
 }
 
 interface ToggleFocus {
@@ -27,7 +27,7 @@ interface ChageSelectedSidebar {
 
 type Action = ToggleFocus | ChageSetting | ChageSelectedSidebar;
 type Dispatch = (action: Action) => void;
-type LayoutSettingProviderProps = { children: React.ReactNode };
+type LayoutSettingProviderProps = {children: React.ReactNode};
 
 type State = Record<LayoutFilterType, boolean> &
   Record<SocialsEnum, boolean> & {
@@ -41,29 +41,31 @@ const initalState: State = {
   [SocialsEnum.FACEBOOK]: true,
   [SocialsEnum.REDDIT]: true,
   [SocialsEnum.TWITTER]: true,
-  selectedSidebarMenu: SidebarTab.FRIENDS
+  selectedSidebarMenu: SidebarTab.FRIENDS,
 };
 
-const LayoutSettingContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
+const LayoutSettingContext = React.createContext<{state: State; dispatch: Dispatch} | undefined>(
+  undefined,
+);
 
 function layoutSettingReducer(state: State, action: Action) {
   switch (action.type) {
     case LayoutSettingActionType.CHANGE_SETTING: {
       return {
         ...state,
-        [action.key]: action.value
+        [action.key]: action.value,
       };
     }
     case LayoutSettingActionType.TOGGLE_FOCUS: {
       return {
         ...state,
-        focus: !state.focus
+        focus: !state.focus,
       };
     }
     case LayoutSettingActionType.CHANGE_SELECTED_SIDEBAR: {
       return {
         ...state,
-        selectedSidebarMenu: action.value
+        selectedSidebarMenu: action.value,
       };
     }
 
@@ -83,11 +85,11 @@ export const useLayoutSetting = () => {
   return context;
 };
 
-export const LayoutSettingProvider = ({ children }: LayoutSettingProviderProps) => {
+export const LayoutSettingProvider = ({children}: LayoutSettingProviderProps) => {
   const [state, dispatch] = React.useReducer(layoutSettingReducer, initalState);
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
-  const value = { state, dispatch };
+  const value = {state, dispatch};
 
   return <LayoutSettingContext.Provider value={value}>{children}</LayoutSettingContext.Provider>;
 };

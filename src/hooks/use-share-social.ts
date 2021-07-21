@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
-import { useAlertHook } from './use-alert.hook';
+import {useAlertHook} from './use-alert.hook';
 
-import Axios, { AxiosError } from 'axios';
-import { SocialsEnum } from 'src/interfaces/index';
+import Axios, {AxiosError} from 'axios';
+import {SocialsEnum} from 'src/interfaces/index';
 
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 export const useShareSocial = (publicKey?: string) => {
-  const { showAlert } = useAlertHook();
+  const {showAlert} = useAlertHook();
 
   const [sharing, setSharing] = useState(false);
   const [isShared, setShared] = useState(false);
@@ -22,7 +22,7 @@ export const useShareSocial = (publicKey?: string) => {
           showAlert({
             title: 'Error',
             message: 'Profile already used',
-            severity: 'error'
+            severity: 'error',
           });
           break;
 
@@ -30,7 +30,7 @@ export const useShareSocial = (publicKey?: string) => {
           showAlert({
             title: 'Error',
             message: 'Profile already used',
-            severity: 'error'
+            severity: 'error',
           });
           break;
       }
@@ -49,8 +49,8 @@ export const useShareSocial = (publicKey?: string) => {
         data: {
           username,
           publicKey,
-          platform
-        }
+          platform,
+        },
       });
 
       setShared(true);
@@ -75,8 +75,8 @@ export const useShareSocial = (publicKey?: string) => {
         data: {
           username,
           publicKey,
-          platform: SocialsEnum.FACEBOOK
-        }
+          platform: SocialsEnum.FACEBOOK,
+        },
       });
       setShared(true);
     } catch (error) {
@@ -100,8 +100,8 @@ export const useShareSocial = (publicKey?: string) => {
         data: {
           username,
           publicKey,
-          platform: SocialsEnum.REDDIT
-        }
+          platform: SocialsEnum.REDDIT,
+        },
       });
 
       setShared(true);
@@ -126,8 +126,8 @@ export const useShareSocial = (publicKey?: string) => {
         data: {
           username,
           publicKey,
-          platform: SocialsEnum.TWITTER
-        }
+          platform: SocialsEnum.TWITTER,
+        },
       });
 
       setShared(true);
@@ -146,6 +146,6 @@ export const useShareSocial = (publicKey?: string) => {
     verifyPublicKeyShared,
     shareOnFacebook,
     shareOnReddit,
-    shareOnTwitter
+    shareOnTwitter,
   };
 };

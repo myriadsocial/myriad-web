@@ -1,4 +1,4 @@
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -10,25 +10,25 @@ export const useStyles = makeStyles((theme: Theme) =>
       scrollbarColor: 'transparent transparent',
       '& ::-webkit-scrollbar': {
         display: 'none',
-        width: '0 !important'
-      }
+        width: '0 !important',
+      },
     },
     scroll: {
       height: '100%',
       width: '100%',
       overflowY: 'auto',
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
     },
     child: {
       '& > *': {
-        margin: theme.spacing(1)
-      }
+        margin: theme.spacing(1),
+      },
     },
     loading: {
       position: 'absolute',
       top: 100,
-      left: 'calc(50% - 20px)'
-    }
-  })
+      left: 'calc(50% - 20px)',
+    },
+  }),
 );

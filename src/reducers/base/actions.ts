@@ -1,7 +1,7 @@
-import { RootState } from '../index';
+import {RootState} from '../index';
 import * as constants from './constants';
 
-import { Action } from 'redux';
+import {Action} from 'redux';
 
 /**
  * Action Types
@@ -35,10 +35,10 @@ export type Actions = LoadingAction | FailedAction | HydrateStateAction;
 
 export const setLoading = (loading: boolean): LoadingAction => ({
   type: constants.ACTION_LOADING,
-  loading
+  loading,
 });
 
 export const setError = (error: string): FailedAction => ({
   type: constants.ACTION_FAILED,
-  error
+  error,
 });

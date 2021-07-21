@@ -4,9 +4,9 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, fade } from '@material-ui/core/styles';
+import {makeStyles, fade} from '@material-ui/core/styles';
 
-import { CreateAccountComponent } from 'src/components/login/create-account.component';
+import {CreateAccountComponent} from 'src/components/login/create-account.component';
 
 const useStyles = makeStyles({
   root: {
@@ -19,12 +19,12 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
 
   button: {
-    padding: '4px 12px'
-  }
+    padding: '4px 12px',
+  },
 });
 
 export default function Overlay() {
@@ -39,8 +39,9 @@ export default function Overlay() {
           </Typography>
           <CreateAccountComponent />
           <Typography variant="body1" gutterBottom>
-            Once you're signed in, you can send tips to anyone you like, and not only those on Myriad - just import their social media post,
-            tip it, then the owner will collect the tip as soon as they've joined Myriad!
+            Once you're signed in, you can send tips to anyone you like, and not only those on
+            Myriad - just import their social media post, tip it, then the owner will collect the
+            tip as soon as they've joined Myriad!
           </Typography>
         </CardContent>
       </Card>

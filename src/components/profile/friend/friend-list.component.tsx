@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 
 import Link from 'next/link';
 
-// import { useRouter } from 'next/router';
-import { SvgIcon } from '@material-ui/core';
+import {SvgIcon} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -19,46 +18,46 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
-import { useProfile } from 'src/components/profile/profile.context';
-import { useFriendHook } from 'src/components/profile/use-friend.hook';
-import { acronym } from 'src/helpers/string';
+import {acronym} from 'src/helpers/string';
 import RemoveUser from 'src/images/user-minus.svg';
-import { ExtendedFriend } from 'src/interfaces/friend';
-import { User } from 'src/interfaces/user';
-import { RootState } from 'src/reducers';
-import { UserState } from 'src/reducers/user/reducer';
+import {ExtendedFriend} from 'src/interfaces/friend';
+import {User} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
-type Props = {
+type FriendListProps = {
   profile: User;
+  friends: ExtendedFriend[];
+  cancelFriendRequest: (requestor: ExtendedFriend) => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      margin: '8px 0'
+      margin: '8px 0',
     },
     header: {
       marginBottom: theme.spacing(2),
-      display: 'flex'
+      display: 'flex',
     },
     content: {
       '&:last-child': {
-        paddingBottom: 0
-      }
+        paddingBottom: 0,
+      },
     },
     noContent: {
       fontWeight: 500,
       fontSize: 14,
       textAlign: 'center',
       padding: '16px 0',
-      color: '#B1AEB7'
+      color: '#B1AEB7',
     },
     list: {
       // marginLeft: theme.spacing(-2),
@@ -68,80 +67,81 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingLeft: theme.spacing(0.5),
       paddingRight: theme.spacing(0.5),
       '& .MuiListItemText-root': {
-        alignSelf: 'center'
-      }
+        alignSelf: 'center',
+      },
     },
     avatar: {
       width: 56,
       height: 56,
       marginRight: 16,
-      background: '#424242'
+      background: '#424242',
     },
     danger: {
       color: '#F83D3D',
       marginBottom: 0,
       '&:hover': {
-        background: 'none'
-      }
+        background: 'none',
+      },
     },
     dialogRoot: {
       width: '413px',
-      textAlign: 'center'
+      textAlign: 'center',
     },
     icon: {
-      fontSize: 80
+      fontSize: 80,
     },
     subtitle1: {
       fontSize: 18,
-      fontWeight: 700
+      fontWeight: 700,
     },
     subtitle2: {
       fontSize: 16,
-      fontWeight: 400
+      fontWeight: 400,
     },
     alertMessage: {
       color: '#4B4851',
-      width: 236
+      width: 236,
     },
     'm-vertical1': {
       marginBottom: 16,
-      marginTop: 16
+      marginTop: 16,
     },
     'm-vertical2': {
       marginBottom: 24,
-      marginTop: 24
+      marginTop: 24,
     },
     center: {
       marginRight: 'auto',
-      marginLeft: 'auto'
+      marginLeft: 'auto',
     },
     'flex-center': {
       display: 'flex',
-      justifyContent: 'space-evenly'
-    }
-  })
+      justifyContent: 'space-evenly',
+    },
+  }),
 );
 
-const FriendsList = ({ profile }: Props) => {
+const FriendsListComponent: React.FC<FriendListProps> = ({
+  profile,
+  friends,
+  cancelFriendRequest,
+}) => {
+  const style = useStyles();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  // alert remove friend
   const [openModal, setOpenModal] = useState(false);
-
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [selectedProfileId, setSelectedProfileId] = useState('');
   const [selectedFriendName, setSelectedFriendName] = useState('');
   const [selectedFriend, setSelectedFriend] = useState<ExtendedFriend | null>(null);
 
-  const style = useStyles();
-  // const router = useRouter();
-
-  const {
-    state: { friends }
-  } = useProfile();
-  const { user } = useSelector<RootState, UserState>(state => state.userState);
-  const { cancelFriendRequest } = useFriendHook(profile);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>, id: string, name: string, request: ExtendedFriend) => {
+  const handleClick = (
+    event: React.MouseEvent<HTMLElement>,
+    id: string,
+    name: string,
+    request: ExtendedFriend,
+  ) => {
     setAnchorEl(event.currentTarget);
     console.log(id);
     setSelectedProfileId(id);
@@ -152,10 +152,6 @@ const FriendsList = ({ profile }: Props) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  // const visitProfile = (id: string) => {
-  //   router.push(`/${id}`);
-  // };
 
   const toggleRemoveAlert = () => {
     setOpenModal(!openModal);
@@ -175,7 +171,8 @@ const FriendsList = ({ profile }: Props) => {
         <div className={style.content}>
           <ShowIf condition={friends.length === 0}>
             <Typography variant="h4" color="textPrimary" className={style.noContent}>
-              You don't have any Myriad friends yet. Search for people or tell your friends about Myriad!
+              You don't have any Myriad friends yet. Search for people or tell your friends about
+              Myriad!
             </Typography>
           </ShowIf>
 
@@ -184,15 +181,22 @@ const FriendsList = ({ profile }: Props) => {
               return (
                 <>
                   {profile.id !== request.friendId && (
-                    <ListItem key={request.id} className={style.item} alignItems="center" divider={true}>
+                    <ListItem
+                      key={request.id}
+                      className={style.item}
+                      alignItems="center"
+                      divider={true}>
                       <ListItemAvatar>
-                        <Avatar className={style.avatar} alt={request.friend.name} src={request.friend.profilePictureURL || ''}>
+                        <Avatar
+                          className={style.avatar}
+                          alt={request.friend.name}
+                          src={request.friend.profilePictureURL || ''}>
                           {acronym(request.friend.name || '')}
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText>
                         <Link href={`/${request.friendId}`}>
-                          <a>
+                          <a href={`/${request.friendId}`}>
                             <Typography component="span" variant="h4" color="textPrimary">
                               {request.friend.name}
                             </Typography>
@@ -206,7 +210,9 @@ const FriendsList = ({ profile }: Props) => {
                             aria-label="more"
                             aria-controls="long-menu"
                             aria-haspopup="true"
-                            onClick={event => handleClick(event, request.friendId, request.friend.name, request)}>
+                            onClick={event =>
+                              handleClick(event, request.friendId, request.friend.name, request)
+                            }>
                             <MoreVertIcon />
                           </IconButton>
                         )}
@@ -214,15 +220,22 @@ const FriendsList = ({ profile }: Props) => {
                     </ListItem>
                   )}
                   {profile.id !== request.requestorId && (
-                    <ListItem key={request.id} className={style.item} alignItems="center" divider={true}>
+                    <ListItem
+                      key={request.id}
+                      className={style.item}
+                      alignItems="center"
+                      divider={true}>
                       <ListItemAvatar>
-                        <Avatar className={style.avatar} alt={request.requestor.name} src={request.requestor.profilePictureURL || ''}>
+                        <Avatar
+                          className={style.avatar}
+                          alt={request.requestor.name}
+                          src={request.requestor.profilePictureURL || ''}>
                           {acronym(request.requestor.name || '')}
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText>
                         <Link href={`/${request.requestorId}`}>
-                          <a>
+                          <a href={`/${request.requestorId}`}>
                             <Typography component="span" variant="h4" color="textPrimary">
                               {request.requestor.name}
                             </Typography>
@@ -236,7 +249,14 @@ const FriendsList = ({ profile }: Props) => {
                             aria-label="more"
                             aria-controls="long-menu"
                             aria-haspopup="true"
-                            onClick={event => handleClick(event, request.requestorId, request.requestor.name, request)}>
+                            onClick={event =>
+                              handleClick(
+                                event,
+                                request.requestorId,
+                                request.requestor.name,
+                                request,
+                              )
+                            }>
                             <MoreVertIcon />
                           </IconButton>
                         )}
@@ -282,7 +302,8 @@ const FriendsList = ({ profile }: Props) => {
                 <Typography className={style.subtitle1} variant="h2" color="error">
                   Unfriend {selectedFriendName}
                 </Typography>
-                <Typography className={`${style.subtitle2} ${style.alertMessage}  ${style.center} ${style['m-vertical2']}`}>
+                <Typography
+                  className={`${style.subtitle2} ${style.alertMessage}  ${style.center} ${style['m-vertical2']}`}>
                   Are you sure want to remove this person from your friend list? You will{' '}
                   <Typography variant="inherit" color="error">
                     no longer see posts
@@ -293,7 +314,10 @@ const FriendsList = ({ profile }: Props) => {
                   <Button variant="text" onClick={toggleRemoveAlert}>
                     Cancel
                   </Button>
-                  <Button variant="contained" color="primary" onClick={() => handleUnFriendRequest(selectedFriend)}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleUnFriendRequest(selectedFriend)}>
                     Remove
                   </Button>
                 </div>
@@ -306,4 +330,4 @@ const FriendsList = ({ profile }: Props) => {
   );
 };
 
-export default FriendsList;
+export default FriendsListComponent;

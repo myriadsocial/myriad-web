@@ -2,7 +2,7 @@ import React from 'react';
 
 import Link from 'next/link';
 
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 
 type CardTitleProps = {
   text: string;
@@ -15,12 +15,12 @@ export const useStyles = makeStyles((theme: Theme) =>
     link: {
       fontSize: 14,
       lineHeight: '18px',
-      color: theme.palette.text.primary
-    }
-  })
+      color: theme.palette.text.primary,
+    },
+  }),
 );
 
-const CardTitle = ({ text, url }: CardTitleProps) => {
+const CardTitle = ({text, url}: CardTitleProps) => {
   const style = useStyles();
 
   return (

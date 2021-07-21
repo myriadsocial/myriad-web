@@ -1,6 +1,6 @@
 export const usePolkadotExtension = () => {
   const enablePolkadotExtension = async () => {
-    const { web3Enable } = await import('@polkadot/extension-dapp');
+    const {web3Enable} = await import('@polkadot/extension-dapp');
 
     const extensions = await web3Enable(process.env.NEXT_PUBLIC_APP_NAME as string);
 
@@ -10,19 +10,21 @@ export const usePolkadotExtension = () => {
   };
 
   const getPolkadotAccounts = async () => {
-    const { web3Accounts } = await import('@polkadot/extension-dapp');
+    const {web3Accounts} = await import('@polkadot/extension-dapp');
 
-    const format = process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX ? Number(process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX) : 214;
+    const format = process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX
+      ? Number(process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX)
+      : 214;
 
     const allAccounts = await web3Accounts({
-      ss58Format: format
+      ss58Format: format,
     });
 
     return allAccounts;
   };
 
   const unsubscribeFromAccounts = async () => {
-    const { web3AccountsSubscribe } = await import('@polkadot/extension-dapp');
+    const {web3AccountsSubscribe} = await import('@polkadot/extension-dapp');
 
     //// we subscribe to any account change and log the new list.
     //// note that `web3AccountsSubscribe` returns the function to unsubscribe
@@ -39,6 +41,6 @@ export const usePolkadotExtension = () => {
   return {
     enablePolkadotExtension,
     getPolkadotAccounts,
-    unsubscribeFromAccounts
+    unsubscribeFromAccounts,
   };
 };

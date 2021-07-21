@@ -2,13 +2,13 @@ import React from 'react';
 
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 
 import AngryIcon from 'src/images/facebook/angry.svg';
 import HahaIcon from 'src/images/facebook/haha.svg';
 import SadIcon from 'src/images/facebook/sad.svg';
 import WowIcon from 'src/images/facebook/wow.svg';
-import { SocialMetric } from 'src/interfaces/post';
+import {SocialMetric} from 'src/interfaces/post';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -16,17 +16,17 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(2),
       '& > *': {
         margin: 0,
-        padding: 0
-      }
-    }
-  })
+        padding: 0,
+      },
+    },
+  }),
 );
 
 type Props = {
   metric: SocialMetric;
 };
 
-export default function FacebookReactionComponent({ metric }: Props) {
+export default function FacebookReactionComponent({metric}: Props) {
   const style = useStyles();
 
   return (

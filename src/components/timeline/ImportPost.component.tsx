@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 //@ts-ignore
-import { FacebookProvider, EmbeddedPost } from 'react-facebook';
-import { Tweet } from 'react-twitter-widgets';
+import {FacebookProvider, EmbeddedPost} from 'react-facebook';
+import {Tweet} from 'react-twitter-widgets';
 
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -16,21 +16,21 @@ import InputLabel from '@material-ui/core/InputLabel';
 //import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import DialogTitle from '../common/DialogTitle.component';
 
 import ShowIf from 'src/components/common/show-if.component';
-import { usePostHook } from 'src/hooks/use-post.hook';
-import { Experience } from 'src/interfaces/experience';
-import { SocialsEnum } from 'src/interfaces/index';
-import { User } from 'src/interfaces/user';
+import {usePostHook} from 'src/hooks/use-post.hook';
+import {Experience} from 'src/interfaces/experience';
+import {SocialsEnum} from 'src/interfaces/index';
+import {User} from 'src/interfaces/user';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       margin: theme.spacing(1),
-      overflow: 'visible'
+      overflow: 'visible',
     },
     label: {
       backgroundColor: theme.palette.primary.main,
@@ -40,44 +40,44 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingBottom: theme.spacing(0.5),
       marginBottom: theme.spacing(2),
       borderRadius: theme.spacing(1),
-      cursor: 'pointer'
+      cursor: 'pointer',
     },
     post: {
       marginLeft: 'auto !important',
-      marginTop: theme.spacing(2)
+      marginTop: theme.spacing(2),
     },
     cardActions: {
       justifyContent: 'center',
-      background: theme.palette.background.default
+      background: theme.palette.background.default,
     },
     postContent: {
       width: 600,
       padding: theme.spacing(1, 0),
-      boxShadow: 'none'
+      boxShadow: 'none',
     },
     postURL: {
       width: '100%',
       padding: theme.spacing(1),
       border: 0,
       borderRadius: 2,
-      fontSize: 16
+      fontSize: 16,
     },
     subtitle: {
       paddingLeft: 0,
-      fontSize: 14
+      fontSize: 14,
     },
     tag: {
-      margin: theme.spacing(2, 0)
+      margin: theme.spacing(2, 0),
     },
     button: {
       display: 'block',
-      marginTop: theme.spacing(2)
+      marginTop: theme.spacing(2),
     },
     formControl: {
       margin: theme.spacing(1),
-      minWidth: 120
-    }
-  })
+      minWidth: 120,
+    },
+  }),
 );
 
 type Props = {
@@ -87,14 +87,15 @@ type Props = {
 
 const regex = {
   [SocialsEnum.TWITTER]: /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/,
-  [SocialsEnum.FACEBOOK]: /^(?:https?:\/\/)?(?:www\.|m\.|mobile\.|touch\.|mbasic\.)?(?:facebook\.com|fb(?:\.me|\.com))\/(?!$)(?:(?:\w)*#!\/)?(?:pages\/)?(?:photo\.php\?fbid=)?(?:[\w\-]*\/)*?(?:\/)?(?:profile\.php\?id=)?([^\/?&\s]*)(?:\/|&|\?)?.*$/g,
-  [SocialsEnum.REDDIT]: /(?:^.+?)(?:reddit.com\/r)(?:\/[\w\d]+){2}(?:\/)([\w\d]*)/g
+  [SocialsEnum.FACEBOOK]:
+    /^(?:https?:\/\/)?(?:www\.|m\.|mobile\.|touch\.|mbasic\.)?(?:facebook\.com|fb(?:\.me|\.com))\/(?!$)(?:(?:\w)*#!\/)?(?:pages\/)?(?:photo\.php\?fbid=)?(?:[\w\-]*\/)*?(?:\/)?(?:profile\.php\?id=)?([^\/?&\s]*)(?:\/|&|\?)?.*$/g,
+  [SocialsEnum.REDDIT]: /(?:^.+?)(?:reddit.com\/r)(?:\/[\w\d]+){2}(?:\/)([\w\d]*)/g,
 };
 
-export default function ImportPostComponent({ user, experiences }: Props) {
+export default function ImportPostComponent({user, experiences}: Props) {
   const styles = useStyles();
 
-  const { importPost } = usePostHook(user);
+  const {importPost} = usePostHook(user);
   const [showImportPost, setCreatePost] = useState(false);
 
   const [postURL, setPostURL] = useState('');
@@ -180,7 +181,7 @@ export default function ImportPostComponent({ user, experiences }: Props) {
         <DialogContent>
           <Card className={styles.postContent}>
             <CardContent>
-              <Typography variant="caption" style={{ marginRight: 24 }}>
+              <Typography variant="caption" style={{marginRight: 24}}>
                 Paste URL Link
               </Typography>
               <TextField
@@ -197,7 +198,7 @@ export default function ImportPostComponent({ user, experiences }: Props) {
                 type="text"
                 id="username"
                 InputProps={{
-                  color: 'primary'
+                  color: 'primary',
                 }}
               />
 
@@ -215,9 +216,11 @@ export default function ImportPostComponent({ user, experiences }: Props) {
                 <ShowIf condition={social === SocialsEnum.REDDIT}>
                   <iframe
                     id="reddit-embed"
-                    src={`${generateRedditUrl(postURL)}/?ref_source=embed&amp;ref=share&amp;embed=true&amp;theme=dark`}
+                    src={`${generateRedditUrl(
+                      postURL,
+                    )}/?ref_source=embed&amp;ref=share&amp;embed=true&amp;theme=dark`}
                     sandbox="allow-scripts allow-same-origin allow-popups"
-                    style={{ border: 'none' }}
+                    style={{border: 'none'}}
                     height="500"
                     width="580"
                     scrolling="yes"
@@ -257,7 +260,7 @@ export default function ImportPostComponent({ user, experiences }: Props) {
                 disabled={social === null}
                 size="large"
                 color="primary"
-                style={{ width: 300 }}
+                style={{width: 300}}
                 onClick={confirmImport}>
                 Post now
               </Button>

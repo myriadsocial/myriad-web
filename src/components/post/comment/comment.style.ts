@@ -1,32 +1,32 @@
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
     media: {
       height: 0,
-      paddingTop: '56.25%' // 16:9
+      paddingTop: '56.25%', // 16:9
     },
     expand: {
       transform: 'rotate(0deg)',
       marginLeft: 'auto',
       transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest
-      })
+        duration: theme.transitions.duration.shortest,
+      }),
     },
     expandOpen: {
-      transform: 'rotate(180deg)'
+      transform: 'rotate(180deg)',
     },
     comment: {
       backgroundColor: '#C4C4C4',
       borderRadius: 8,
-      marginBottom: theme.spacing(1)
+      marginBottom: theme.spacing(1),
     },
     reply: {
-      backgroundColor: '#C4C4C4'
+      backgroundColor: '#C4C4C4',
     },
     action: {
-      marginTop: 16
-    }
-  })
+      marginTop: 16,
+    },
+  }),
 );

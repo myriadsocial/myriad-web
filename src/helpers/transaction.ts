@@ -1,6 +1,6 @@
-import { TipsReceived } from 'src/interfaces/post';
-import { Token } from 'src/interfaces/token';
-import { Transaction } from 'src/interfaces/transaction';
+import {TipsReceived} from 'src/interfaces/post';
+import {Token} from 'src/interfaces/token';
+import {Transaction} from 'src/interfaces/transaction';
 
 const UNKNOWN_ACCOUNT = 'unknown';
 

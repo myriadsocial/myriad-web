@@ -1,25 +1,23 @@
-import React, { useEffect } from 'react';
-import { CookiesProvider } from 'react-cookie';
+import React, {useEffect} from 'react';
+import {CookiesProvider} from 'react-cookie';
 
-import { Provider as AuthProvider } from 'next-auth/client';
-import { AppProps, NextWebVitalsMetric } from 'next/app';
+import {Provider as AuthProvider} from 'next-auth/client';
+import {AppProps, NextWebVitalsMetric} from 'next/app';
 import Head from 'next/head';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/core/styles';
+import {ThemeProvider} from '@material-ui/core/styles';
 
-import { BalanceProvider } from '../src/components/wallet/balance.context';
-import { wrapper } from '../src/store';
+import {BalanceProvider} from '../src/components/wallet/balance.context';
+import {wrapper} from '../src/store';
 import theme from '../src/themes/light';
 
-import { WalletAddressProvider } from 'src/components/common/sendtips/send-tip.context';
-import { ProfileProvider } from 'src/components/profile/profile.context';
-import { SearchProvider } from 'src/components/search/search.context';
-import { TokenProvider } from 'src/components/wallet/token.context';
-import { AlertProvider } from 'src/context/Alert.context';
-import { UserProvider } from 'src/context/user.context';
+import {WalletAddressProvider} from 'src/components/common/sendtips/send-tip.context';
+import {SearchProvider} from 'src/components/search/search.context';
+import {TokenProvider} from 'src/components/wallet/token.context';
+import {AlertProvider} from 'src/context/alert.context';
 
-const App = ({ Component, pageProps }: AppProps) => {
+const App = ({Component, pageProps}: AppProps) => {
   useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
@@ -64,19 +62,15 @@ const App = ({ Component, pageProps }: AppProps) => {
                   //
                   // Note: If a session has expired when keep alive is triggered, all open
                   // windows / tabs will be updated to reflect the user is signed out.
-                  keepAlive: 0
+                  keepAlive: 0,
                 }}
                 session={pageProps.session}>
                 <CookiesProvider>
-                  <UserProvider>
-                    <ProfileProvider>
-                      <AlertProvider>
-                        <SearchProvider>
-                          <Component {...pageProps} />
-                        </SearchProvider>
-                      </AlertProvider>
-                    </ProfileProvider>
-                  </UserProvider>
+                  <AlertProvider>
+                    <SearchProvider>
+                      <Component {...pageProps} />
+                    </SearchProvider>
+                  </AlertProvider>
                 </CookiesProvider>
               </AuthProvider>
             </WalletAddressProvider>

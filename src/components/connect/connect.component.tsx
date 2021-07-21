@@ -1,5 +1,5 @@
-import React, { forwardRef, useState, useImperativeHandle } from 'react';
-import { FacebookShareButton, RedditShareButton, TwitterShareButton } from 'react-share';
+import React, {forwardRef, useState, useImperativeHandle} from 'react';
+import {FacebookShareButton, RedditShareButton, TwitterShareButton} from 'react-share';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -15,17 +15,17 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { useTheme } from '@material-ui/core/styles';
+import {useTheme} from '@material-ui/core/styles';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
-import { useStyles } from './conntect.style';
+import {useStyles} from './conntect.style';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
-import { parsePostUrl } from 'src/helpers/url';
-import { SocialsEnum } from 'src/interfaces';
+import {parsePostUrl} from 'src/helpers/url';
+import {SocialsEnum} from 'src/interfaces';
 
 export type ConnectComponentRefProps = {
   openConnectForm: (social: SocialsEnum) => void;
@@ -39,212 +39,258 @@ type ConnectComponentProps = {
 const prefix: Record<SocialsEnum, string> = {
   [SocialsEnum.TWITTER]: 'https://twitter.com/',
   [SocialsEnum.FACEBOOK]: 'https://www.facebook.com/',
-  [SocialsEnum.REDDIT]: 'https://www.reddit.com/user/'
+  [SocialsEnum.REDDIT]: 'https://www.reddit.com/user/',
 };
 
-export const ConnectComponent = forwardRef(({ publicKey, verify }: ConnectComponentProps, ref: React.Ref<ConnectComponentRefProps>) => {
-  const styles = useStyles();
-  const theme = useTheme();
+export const ConnectComponent = forwardRef(
+  ({publicKey, verify}: ConnectComponentProps, ref: React.Ref<ConnectComponentRefProps>) => {
+    const styles = useStyles();
+    const theme = useTheme();
 
-  const [open, setOpen] = useState(false);
-  const [social, setSocial] = useState<SocialsEnum | null>(null);
-  const [socialName, setSocialName] = useState('');
-  const [shared, setShared] = useState(false);
-  const [termApproved, setTermApproved] = useState(false);
-  const [validUrl, setUrlValid] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [social, setSocial] = useState<SocialsEnum | null>(null);
+    const [socialName, setSocialName] = useState('');
+    const [shared, setShared] = useState(false);
+    const [termApproved, setTermApproved] = useState(false);
+    const [validUrl, setUrlValid] = useState(false);
 
-  const message = `I'm part of the Myriad ${publicKey}`;
-  const APP_URL = 'https://app.myriad.systems';
+    const message = `I'm part of the Myriad ${publicKey}`;
+    const APP_URL = 'https://app.myriad.systems';
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      openConnectForm(social: SocialsEnum) {
-        setSocial(social);
-        setOpen(true);
-        setShared(false);
-        setSocialName('');
-      }
-    }),
-    [social]
-  );
+    useImperativeHandle(
+      ref,
+      () => ({
+        openConnectForm(social: SocialsEnum) {
+          setSocial(social);
+          setOpen(true);
+          setShared(false);
+          setSocialName('');
+        },
+      }),
+      [social],
+    );
 
-  const handleSocialNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const text = e.target.value;
-
-    if (social === SocialsEnum.FACEBOOK) {
-      setSocialName(text);
-    } else {
-      const name = text.substring(text.lastIndexOf('/') + 1);
-      setSocialName(name);
-    }
-
-    setUrlValid(text.trim().length > 0);
-  };
-
-  const handleSocialNamePasted = (e: React.ClipboardEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const text = e.clipboardData.getData('Text');
-
-    if (social === SocialsEnum.FACEBOOK) {
-      const match = parsePostUrl(social, text);
-
-      setUrlValid(match !== null);
-      if (match) {
-        const name = text.replace(prefix.facebook, '');
-        setSocialName(name);
-      }
-    } else {
-      const name = text.substring(text.lastIndexOf('/') + 1);
-
-      setSocialName(name);
-      setUrlValid(true);
-    }
-  };
-
-  const onSharedAttempt = () => {
-    setShared(true);
-  };
-
-  const handleShared = () => {
-    if (social && socialName) {
-      let username = socialName;
+    const handleSocialNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const text = e.target.value;
 
       if (social === SocialsEnum.FACEBOOK) {
-        username = `${prefix.facebook}/${socialName}`;
+        setSocialName(text);
+      } else {
+        const name = text.substring(text.lastIndexOf('/') + 1);
+        setSocialName(name);
       }
 
-      verify(social, username);
+      setUrlValid(text.trim().length > 0);
+    };
 
-      close();
-    }
-  };
+    const handleSocialNamePasted = (e: React.ClipboardEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      const text = e.clipboardData.getData('Text');
 
-  const close = () => {
-    setOpen(false);
-    setShared(false);
-    setTermApproved(false);
-  };
+      if (social === SocialsEnum.FACEBOOK) {
+        const match = parsePostUrl(social, text);
 
-  if (!social) return null;
+        setUrlValid(match !== null);
+        if (match) {
+          const name = text.replace(prefix.facebook, '');
+          setSocialName(name);
+        }
+      } else {
+        const name = text.substring(text.lastIndexOf('/') + 1);
 
-  return (
-    <div>
-      <Dialog open={open} maxWidth="md" onClose={close} aria-labelledby="link-social-accounts-window">
-        <DialogTitle onClose={close} id="link-account">
-          Social Media Link
-        </DialogTitle>
-        <DialogContent className={styles.root}>
-          <List component="div" aria-label="connect social steps">
-            <ListItem>
-              <ListItemIcon style={{ alignSelf: 'flex-start' }}>
-                <Avatar className={styles.icon}>1.</Avatar>
-              </ListItemIcon>
-              <ListItemText disableTypography>
-                <Typography variant="caption">Copy and post the following to your {social} timeline</Typography>
-                <TextField
-                  disabled
-                  margin="dense"
-                  className={styles.message}
-                  multiline
-                  color="primary"
-                  variant="outlined"
-                  rows={6}
-                  fullWidth={true}
-                  value={message}
-                  InputProps={{
-                    notched: true
-                  }}
-                />
-              </ListItemText>
-            </ListItem>
+        setSocialName(name);
+        setUrlValid(true);
+      }
+    };
 
-            <ListItem>
-              <ListItemIcon style={{ alignSelf: 'flex-start' }}>
-                <Avatar className={styles.icon}>2.</Avatar>
-              </ListItemIcon>
-              <ListItemText disableTypography>
-                <Typography variant="caption">
-                  Alternatively, you can click the Share button below and just click the Post button in the pop-up!
-                </Typography>
-                <div className={styles.linkAction}>
-                  <ShowIf condition={social === SocialsEnum.FACEBOOK}>
-                    <FacebookShareButton url={APP_URL} quote={message} beforeOnClick={onSharedAttempt}>
-                      <Button variant="outlined" size="large" startIcon={<FacebookIcon />} className={styles.facebook}>
-                        Share
-                      </Button>
-                    </FacebookShareButton>
-                  </ShowIf>
+    const onSharedAttempt = () => {
+      setShared(true);
+    };
 
-                  <ShowIf condition={social === SocialsEnum.TWITTER}>
-                    <TwitterShareButton url={APP_URL} title={message} beforeOnClick={onSharedAttempt}>
-                      <Button variant="outlined" size="large" startIcon={<TwitterIcon />} className={styles.twitter}>
-                        Tweet Now
-                      </Button>
-                    </TwitterShareButton>
-                  </ShowIf>
+    const handleShared = () => {
+      if (social && socialName) {
+        let username = socialName;
 
-                  <ShowIf condition={social === SocialsEnum.REDDIT}>
-                    <RedditShareButton url={APP_URL} title={message} beforeOnClick={onSharedAttempt}>
-                      <Button variant="outlined" size="large" startIcon={<RedditIcon />} className={styles.reddit}>
-                        Share
-                      </Button>
-                    </RedditShareButton>
-                  </ShowIf>
+        if (social === SocialsEnum.FACEBOOK) {
+          username = `${prefix.facebook}/${socialName}`;
+        }
 
-                  <FormControlLabel
-                    className={styles.term}
-                    control={<Checkbox checked={termApproved} onChange={() => setTermApproved(!termApproved)} name="term" />}
-                    label="Please Check this box if you agree with our Privacy and Policy"
+        verify(social, username);
+
+        close();
+      }
+    };
+
+    const close = () => {
+      setOpen(false);
+      setShared(false);
+      setTermApproved(false);
+    };
+
+    if (!social) return null;
+
+    return (
+      <div>
+        <Dialog
+          open={open}
+          maxWidth="md"
+          onClose={close}
+          aria-labelledby="link-social-accounts-window">
+          <DialogTitle onClose={close} id="link-account">
+            Social Media Link
+          </DialogTitle>
+          <DialogContent className={styles.root}>
+            <List component="div" aria-label="connect social steps">
+              <ListItem>
+                <ListItemIcon style={{alignSelf: 'flex-start'}}>
+                  <Avatar className={styles.icon}>1.</Avatar>
+                </ListItemIcon>
+                <ListItemText disableTypography>
+                  <Typography variant="caption">
+                    Copy and post the following to your {social} timeline
+                  </Typography>
+                  <TextField
+                    disabled
+                    margin="dense"
+                    className={styles.message}
+                    multiline
+                    color="primary"
+                    variant="outlined"
+                    rows={6}
+                    fullWidth={true}
+                    value={message}
+                    InputProps={{
+                      notched: true,
+                    }}
                   />
-                </div>
-              </ListItemText>
-            </ListItem>
-            <ListItem>
-              <ListItemIcon style={{ alignSelf: 'flex-start' }}>
-                <Avatar className={styles.icon}>3.</Avatar>
-              </ListItemIcon>
-              <ListItemText disableTypography>
-                {social === SocialsEnum.FACEBOOK ? (
-                  <Typography variant="caption">Copy and paste the URL of the post (make sure it's public!) here:</Typography>
-                ) : (
-                  <Typography variant="caption">Tell us your {social} username here:</Typography>
-                )}
+                </ListItemText>
+              </ListItem>
 
-                <TextField
-                  className={styles.account}
-                  hiddenLabel
-                  value={socialName}
-                  onChange={handleSocialNameChange}
-                  onPaste={handleSocialNamePasted}
-                  color="primary"
-                  margin="dense"
-                  error={true}
-                  required
-                  fullWidth
-                  name="username"
-                  type="text"
-                  id="username"
-                  InputProps={{
-                    disableUnderline: true,
-                    color: 'primary',
-                    startAdornment: (
-                      <InputAdornment position="start" disableTypography style={{ color: theme.palette.primary.dark }}>
-                        {prefix[social]}
-                      </InputAdornment>
-                    )
-                  }}
-                />
-              </ListItemText>
-            </ListItem>
-          </List>
-        </DialogContent>
-        <DialogActions className={styles.done}>
-          <Button onClick={handleShared} disabled={!shared || !termApproved || !validUrl} size="large" variant="contained" color="primary">
-            Verify My {social} Account
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-});
+              <ListItem>
+                <ListItemIcon style={{alignSelf: 'flex-start'}}>
+                  <Avatar className={styles.icon}>2.</Avatar>
+                </ListItemIcon>
+                <ListItemText disableTypography>
+                  <Typography variant="caption">
+                    Alternatively, you can click the Share button below and just click the Post
+                    button in the pop-up!
+                  </Typography>
+                  <div className={styles.linkAction}>
+                    <ShowIf condition={social === SocialsEnum.FACEBOOK}>
+                      <FacebookShareButton
+                        url={APP_URL}
+                        quote={message}
+                        beforeOnClick={onSharedAttempt}>
+                        <Button
+                          variant="outlined"
+                          size="large"
+                          startIcon={<FacebookIcon />}
+                          className={styles.facebook}>
+                          Share
+                        </Button>
+                      </FacebookShareButton>
+                    </ShowIf>
+
+                    <ShowIf condition={social === SocialsEnum.TWITTER}>
+                      <TwitterShareButton
+                        url={APP_URL}
+                        title={message}
+                        beforeOnClick={onSharedAttempt}>
+                        <Button
+                          variant="outlined"
+                          size="large"
+                          startIcon={<TwitterIcon />}
+                          className={styles.twitter}>
+                          Tweet Now
+                        </Button>
+                      </TwitterShareButton>
+                    </ShowIf>
+
+                    <ShowIf condition={social === SocialsEnum.REDDIT}>
+                      <RedditShareButton
+                        url={APP_URL}
+                        title={message}
+                        beforeOnClick={onSharedAttempt}>
+                        <Button
+                          variant="outlined"
+                          size="large"
+                          startIcon={<RedditIcon />}
+                          className={styles.reddit}>
+                          Share
+                        </Button>
+                      </RedditShareButton>
+                    </ShowIf>
+
+                    <FormControlLabel
+                      className={styles.term}
+                      control={
+                        <Checkbox
+                          checked={termApproved}
+                          onChange={() => setTermApproved(!termApproved)}
+                          name="term"
+                        />
+                      }
+                      label="Please Check this box if you agree with our Privacy and Policy"
+                    />
+                  </div>
+                </ListItemText>
+              </ListItem>
+              <ListItem>
+                <ListItemIcon style={{alignSelf: 'flex-start'}}>
+                  <Avatar className={styles.icon}>3.</Avatar>
+                </ListItemIcon>
+                <ListItemText disableTypography>
+                  {social === SocialsEnum.FACEBOOK ? (
+                    <Typography variant="caption">
+                      Copy and paste the URL of the post (make sure it's public!) here:
+                    </Typography>
+                  ) : (
+                    <Typography variant="caption">Tell us your {social} username here:</Typography>
+                  )}
+
+                  <TextField
+                    className={styles.account}
+                    hiddenLabel
+                    value={socialName}
+                    onChange={handleSocialNameChange}
+                    onPaste={handleSocialNamePasted}
+                    color="primary"
+                    margin="dense"
+                    error={true}
+                    required
+                    fullWidth
+                    name="username"
+                    type="text"
+                    id="username"
+                    InputProps={{
+                      disableUnderline: true,
+                      color: 'primary',
+                      startAdornment: (
+                        <InputAdornment
+                          position="start"
+                          disableTypography
+                          style={{color: theme.palette.primary.dark}}>
+                          {prefix[social]}
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </ListItemText>
+              </ListItem>
+            </List>
+          </DialogContent>
+          <DialogActions className={styles.done}>
+            <Button
+              onClick={handleShared}
+              disabled={!shared || !termApproved || !validUrl}
+              size="large"
+              variant="contained"
+              color="primary">
+              Verify My {social} Account
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  },
+);

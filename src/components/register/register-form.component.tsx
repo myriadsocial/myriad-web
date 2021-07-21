@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import React, {useState} from 'react';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import Link from 'next/link';
 
-import { IconButton } from '@material-ui/core';
+import {IconButton} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
@@ -14,17 +14,17 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 import CaptchaComponent from '../common/captcha.component';
-import { useStyles } from './register.style';
+import {useStyles} from './register.style';
 
-import { useAuthHook } from 'src/hooks/auth.hook';
-import { generateKey } from 'src/lib/crypto';
+import {useAuthHook} from 'src/hooks/auth.hook';
+import {generateKey} from 'src/lib/crypto';
 
 type RegisterComponentProps = {};
 
 export const RegisterFormComponent: React.FC<RegisterComponentProps> = props => {
   const style = useStyles();
 
-  const { register } = useAuthHook();
+  const {register} = useAuthHook();
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const [username, setUsername] = useState('');
   const [seed, setSeed] = useState('');
@@ -51,7 +51,7 @@ export const RegisterFormComponent: React.FC<RegisterComponentProps> = props => 
     const valid = username && username.length >= 6;
 
     if (valid && captchaVerified) {
-      const { mnemonic, key } = generateKey(username);
+      const {mnemonic, key} = generateKey(username);
 
       setSeed(mnemonic);
       setKey(key);
@@ -65,7 +65,7 @@ export const RegisterFormComponent: React.FC<RegisterComponentProps> = props => 
         name: username,
         username: username.replace(/\s/g, ''),
         anonymous: false,
-        id: key
+        id: key,
       });
     }
   };
@@ -91,7 +91,11 @@ export const RegisterFormComponent: React.FC<RegisterComponentProps> = props => 
                 id="public_key"
                 onChange={handleNameChange}
                 error={submitted && username.length < 6}
-                helperText={submitted && username.length < 6 ? 'Username must be filled and has 6 character or more' : ''}
+                helperText={
+                  submitted && username.length < 6
+                    ? 'Username must be filled and has 6 character or more'
+                    : ''
+                }
                 fullWidth
                 hiddenLabel
                 placeholder="Username"
@@ -140,17 +144,29 @@ export const RegisterFormComponent: React.FC<RegisterComponentProps> = props => 
                     <FileCopyIcon />
                   </IconButton>
                 </CopyToClipboard>
-              )
+              ),
             }}
           />
 
           <FormControlLabel
             className={style.copy}
-            control={<Checkbox checked={mnemonicCopied} onChange={toggleMnemonicCopied} name="copy-mnemonic" />}
+            control={
+              <Checkbox
+                checked={mnemonicCopied}
+                onChange={toggleMnemonicCopied}
+                name="copy-mnemonic"
+              />
+            }
             label="i’ve copy my mnemonic"
           />
 
-          <Button variant="contained" color="primary" size="large" fullWidth className={style.signIn} onClick={signIn}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            fullWidth
+            className={style.signIn}
+            onClick={signIn}>
             Get Started
           </Button>
         </div>

@@ -1,9 +1,9 @@
-import { State as BaseState } from '../base/state';
-import { Actions } from './actions';
+import {State as BaseState} from '../base/state';
+import {Actions} from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import { Token } from 'src/interfaces/token';
+import {Token} from 'src/interfaces/token';
 
 export interface ConfigState extends BaseState {
   tokens: Token[];
@@ -18,8 +18,8 @@ const initalState: ConfigState = {
   tokens: [],
   layout: {
     mobile: false,
-    focus: false
-  }
+    focus: false,
+  },
 };
 
 export const ConfigReducer: Redux.Reducer<ConfigState, Actions> = (state = initalState, action) => {
@@ -27,7 +27,7 @@ export const ConfigReducer: Redux.Reducer<ConfigState, Actions> = (state = inita
     case constants.FETCH_AVAILABLE_TOKEN: {
       return {
         ...state,
-        tokens: action.payload
+        tokens: action.payload,
       };
     }
 

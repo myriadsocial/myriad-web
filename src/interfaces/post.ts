@@ -1,5 +1,5 @@
-import { PostOrigin } from './timeline';
-import { User } from './user';
+import {PostOrigin} from './timeline';
+import {User} from './user';
 
 export type PostReaction = {
   name: string;

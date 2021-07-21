@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 import dynamic from 'next/dynamic';
 
-import { LoadingTransactionComponent } from '../transactions/LoadingTransaction.component';
-import { StyledTab } from './styledTab.component';
-import { StyledTabs } from './styledTabs.component';
-import { useStylesForTabs } from './tabs.styles';
+import {LoadingTransactionComponent} from '../transactions/LoadingTransaction.component';
+import {StyledTab} from './styledTab.component';
+import {StyledTabs} from './styledTabs.component';
+import {useStylesForTabs} from './tabs.styles';
 
-import { TabPanel } from 'src/components/common/tab-panel.component';
-import { Transaction } from 'src/interfaces/transaction';
-import { User } from 'src/interfaces/user';
+import {TabPanel} from 'src/components/common/tab-panel.component';
+import {Transaction} from 'src/interfaces/transaction';
+import {User} from 'src/interfaces/user';
 
 const TransactionListComponent = dynamic(() => import('../transactions/transactionList.component'));
 
@@ -20,7 +20,12 @@ interface ActionTabsComponentProps {
   user: User;
 }
 
-export const ActionTabsComponent = ({ transactions, inboundTxs, outboundTxs, user }: ActionTabsComponentProps) => {
+export const ActionTabsComponent = ({
+  transactions,
+  inboundTxs,
+  outboundTxs,
+  user,
+}: ActionTabsComponentProps) => {
   const classes = useStylesForTabs();
   const [value, setValue] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -45,13 +50,25 @@ export const ActionTabsComponent = ({ transactions, inboundTxs, outboundTxs, use
           <StyledTab label="Sent Tip" />
         </StyledTabs>
         <TabPanel value={value} index={0}>
-          {loading ? <LoadingTransactionComponent /> : <TransactionListComponent transactions={transactions} user={user} />}
+          {loading ? (
+            <LoadingTransactionComponent />
+          ) : (
+            <TransactionListComponent transactions={transactions} user={user} />
+          )}
         </TabPanel>
         <TabPanel value={value} index={1}>
-          {loading ? <LoadingTransactionComponent /> : <TransactionListComponent transactions={inboundTxs} user={user} />}
+          {loading ? (
+            <LoadingTransactionComponent />
+          ) : (
+            <TransactionListComponent transactions={inboundTxs} user={user} />
+          )}
         </TabPanel>
         <TabPanel value={value} index={2}>
-          {loading ? <LoadingTransactionComponent /> : <TransactionListComponent transactions={outboundTxs} user={user} />}
+          {loading ? (
+            <LoadingTransactionComponent />
+          ) : (
+            <TransactionListComponent transactions={outboundTxs} user={user} />
+          )}
         </TabPanel>
       </div>
     </div>

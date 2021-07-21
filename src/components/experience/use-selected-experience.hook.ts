@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect} from 'react';
 
-import { useExperience as baseUseExperience, ExperienceActionType } from './experience.context';
+import {useExperience as baseUseExperience, ExperienceActionType} from './experience.context';
 
-import { Tag, LayoutType } from 'src/interfaces/experience';
-import { People } from 'src/interfaces/people';
+import {Tag, LayoutType} from 'src/interfaces/experience';
+import {People} from 'src/interfaces/people';
 
 export const useSelectedExperience = (userId: string) => {
-  const { state, dispatch } = baseUseExperience();
+  const {state, dispatch} = baseUseExperience();
   const [edited, setEdited] = useState(false);
 
   useEffect(() => {
@@ -22,8 +22,8 @@ export const useSelectedExperience = (userId: string) => {
       type: ExperienceActionType.UPDATE_SELECTED_EXPERIENCE,
       experience: {
         ...state.selected,
-        layout: type
-      }
+        layout: type,
+      },
     });
 
     setEdited(true);
@@ -38,8 +38,8 @@ export const useSelectedExperience = (userId: string) => {
       type: ExperienceActionType.UPDATE_SELECTED_EXPERIENCE,
       experience: {
         ...state.selected,
-        people: [...state.selected.people, people]
-      }
+        people: [...state.selected.people, people],
+      },
     });
 
     setEdited(true);
@@ -54,8 +54,8 @@ export const useSelectedExperience = (userId: string) => {
       type: ExperienceActionType.UPDATE_SELECTED_EXPERIENCE,
       experience: {
         ...state.selected,
-        people: state.selected.people.filter(item => item.id !== people.id)
-      }
+        people: state.selected.people.filter(item => item.id !== people.id),
+      },
     });
 
     setEdited(true);
@@ -70,8 +70,8 @@ export const useSelectedExperience = (userId: string) => {
       type: ExperienceActionType.UPDATE_SELECTED_EXPERIENCE,
       experience: {
         ...state.selected,
-        tags: [...state.selected.tags, tag]
-      }
+        tags: [...state.selected.tags, tag],
+      },
     });
 
     setEdited(true);
@@ -86,8 +86,8 @@ export const useSelectedExperience = (userId: string) => {
       type: ExperienceActionType.UPDATE_SELECTED_EXPERIENCE,
       experience: {
         ...state.selected,
-        tags: state.selected.tags.filter(item => item.id !== tag.id)
-      }
+        tags: state.selected.tags.filter(item => item.id !== tag.id),
+      },
     });
 
     setEdited(true);
@@ -100,6 +100,6 @@ export const useSelectedExperience = (userId: string) => {
     removePeopleFromExperience,
     addTopicToExperience,
     removeTopicFromExperience,
-    changeSelectedLayout
+    changeSelectedLayout,
   };
 };

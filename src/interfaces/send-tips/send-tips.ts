@@ -1,6 +1,6 @@
-import { BalanceDetail } from 'src/interfaces/balance';
-import { Token } from 'src/interfaces/token';
-import { WalletDetail } from 'src/interfaces/wallet';
+import {BalanceDetail} from 'src/interfaces/balance';
+import {Token} from 'src/interfaces/token';
+import {WalletDetail} from 'src/interfaces/wallet';
 
 export interface InputState {
   amount: string;

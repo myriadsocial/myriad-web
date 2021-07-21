@@ -1,5 +1,5 @@
 import Badge from '@material-ui/core/Badge';
-import { Theme, withStyles, createStyles } from '@material-ui/core/styles';
+import {Theme, withStyles, createStyles} from '@material-ui/core/styles';
 
 const StyledBadge = withStyles((theme: Theme) =>
   createStyles({
@@ -9,9 +9,9 @@ const StyledBadge = withStyles((theme: Theme) =>
       width: 22,
       height: 22,
       border: `1px solid ${theme.palette.background.paper}`,
-      padding: '0 4px'
-    }
-  })
+      padding: '0 4px',
+    },
+  }),
 )(Badge);
 
 export default StyledBadge;

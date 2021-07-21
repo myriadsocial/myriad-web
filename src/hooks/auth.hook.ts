@@ -1,18 +1,18 @@
-import { signIn, signOut } from 'next-auth/client';
+import {signIn, signOut} from 'next-auth/client';
 
-import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
-import { useAlertHook } from './use-alert.hook';
+import {useAlertHook} from './use-alert.hook';
 
-import { usePolkadotExtension } from 'src/hooks/use-polkadot-app.hook';
-import { User } from 'src/interfaces/user';
+import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
+import {User} from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
-import { toHexPublicKey } from 'src/lib/crypto';
-import { uniqueNamesGenerator, adjectives, colors } from 'unique-names-generator';
+import {toHexPublicKey} from 'src/lib/crypto';
+import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
 export const useAuthHook = () => {
-  const { getPolkadotAccounts, unsubscribeFromAccounts } = usePolkadotExtension();
-  const { showAlert } = useAlertHook();
+  const {getPolkadotAccounts, unsubscribeFromAccounts} = usePolkadotExtension();
+  const {showAlert} = useAlertHook();
 
   const getUserByAccounts = async (accounts: InjectedAccountWithMeta[]): Promise<User[] | null> => {
     try {
@@ -35,7 +35,7 @@ export const useAuthHook = () => {
         address: registered.id,
         name: registered.name,
         anonymous: registered.anonymous,
-        callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home'
+        callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
       });
 
       return registered;
@@ -49,14 +49,14 @@ export const useAuthHook = () => {
   const anonymous = async (): Promise<void> => {
     const name: string = uniqueNamesGenerator({
       dictionaries: [adjectives, colors],
-      separator: ' '
+      separator: ' ',
     });
 
     await signIn('credentials', {
       address: null,
       name: name,
       anonymous: true,
-      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home'
+      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
     });
   };
 
@@ -65,7 +65,7 @@ export const useAuthHook = () => {
       address: toHexPublicKey(account),
       name: account.meta.name,
       anonymous: false,
-      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home'
+      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
     });
   };
 
@@ -77,7 +77,7 @@ export const useAuthHook = () => {
       showAlert({
         severity: 'error',
         title: 'Login',
-        message: 'No account found on polkadot extension'
+        message: 'No account found on polkadot extension',
       });
       return;
     }
@@ -89,26 +89,28 @@ export const useAuthHook = () => {
       showAlert({
         severity: 'error',
         title: 'Login',
-        message: 'No registered user match with polkadot accounts'
+        message: 'No registered user match with polkadot accounts',
       });
       return;
     }
 
-    const selected = users.find(user => user.username.toLocaleLowerCase() === username.toLocaleLowerCase());
+    const selected = users.find(
+      user => user.username.toLocaleLowerCase() === username.toLocaleLowerCase(),
+    );
 
     if (selected) {
       signIn('credentials', {
         address: selected.id,
         name: username,
         anonymous,
-        callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home'
+        callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
       });
     } else {
       console.log('[useAuthHook][login][info]', 'No registered user matched with username');
       showAlert({
         severity: 'error',
         title: 'Login',
-        message: 'No registered user matched with username'
+        message: 'No registered user matched with username',
       });
       return;
     }
@@ -118,7 +120,7 @@ export const useAuthHook = () => {
     await unsubscribeFromAccounts();
     await signOut({
       callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
-      redirect: true
+      redirect: true,
     });
   };
 
@@ -127,6 +129,6 @@ export const useAuthHook = () => {
     logout,
     signInWithAccount,
     register,
-    anonymous
+    anonymous,
   };
 };

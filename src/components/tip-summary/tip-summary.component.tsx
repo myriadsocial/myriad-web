@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -18,24 +18,24 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
-import { useTipSummaryHook } from './tip-summar.hook';
-import { useStyles } from './tip-summary.style';
-import { useTransactionHistory } from './use-transaction-history.hooks';
+import {useTipSummaryHook} from './tip-summar.hook';
+import {useStyles} from './tip-summary.style';
+import {useTransactionHistory} from './use-transaction-history.hooks';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
-import { useToken } from 'src/components/wallet/token.context';
-import { timeAgo } from 'src/helpers/date';
-import { formatTipBalance, getTipperUserName } from 'src/helpers/transaction';
+import {useToken} from 'src/components/wallet/token.context';
+import {timeAgo} from 'src/helpers/date';
+import {formatTipBalance, getTipperUserName} from 'src/helpers/transaction';
 
 export const TipSummaryComponent: React.FC = () => {
   const styles = useStyles();
 
   const {
-    state: { userTokens }
+    state: {userTokens},
   } = useToken();
 
-  const { post, clearTipSummary } = useTipSummaryHook();
-  const { postDetail, transactions, loadTransaction } = useTransactionHistory();
+  const {post, clearTipSummary} = useTipSummaryHook();
+  const {postDetail, transactions, loadTransaction} = useTransactionHistory();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export const TipSummaryComponent: React.FC = () => {
           Tip Received
         </DialogTitle>
         <DialogContent className={styles.root}>
-          <Typography variant="h5" style={{ marginTop: 8, marginBottom: 24 }}>
+          <Typography variant="h5" style={{marginTop: 8, marginBottom: 24}}>
             This post has received:
           </Typography>
 
@@ -90,17 +90,22 @@ export const TipSummaryComponent: React.FC = () => {
             </Table>
           </TableContainer>
 
-          <Typography variant="caption" style={{ marginTop: 24, marginBottom: 16 }} component="div">
+          <Typography variant="caption" style={{marginTop: 24, marginBottom: 16}} component="div">
             Tipper list ({transactions.length})
           </Typography>
           <List className={styles.list}>
             {transactions.map(transaction => (
               <ListItem key={transaction.trxHash}>
                 <ListItemAvatar>
-                  <Avatar alt={getTipperUserName(transaction)} src={transaction.fromUser?.profilePictureURL} />
+                  <Avatar
+                    alt={getTipperUserName(transaction)}
+                    src={transaction.fromUser?.profilePictureURL}
+                  />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={`${getTipperUserName(transaction)} tipped ${transaction.value} ${transaction.tokenId}`}
+                  primary={`${getTipperUserName(transaction)} tipped ${transaction.value} ${
+                    transaction.tokenId
+                  }`}
                   secondary={timeAgo(transaction.createdAt)}
                 />
               </ListItem>
@@ -108,7 +113,12 @@ export const TipSummaryComponent: React.FC = () => {
           </List>
         </DialogContent>
         <DialogActions className={styles.done}>
-          <Button onClick={toggleOpen} size="large" variant="contained" color="primary" style={{ width: 200 }}>
+          <Button
+            onClick={toggleOpen}
+            size="large"
+            variant="contained"
+            color="primary"
+            style={{width: 200}}>
             Close
           </Button>
         </DialogActions>
@@ -116,3 +126,5 @@ export const TipSummaryComponent: React.FC = () => {
     </div>
   );
 };
+
+export default TipSummaryComponent;

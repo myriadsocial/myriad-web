@@ -1,34 +1,56 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 
-import { Session } from 'next-auth';
-import { getSession } from 'next-auth/client';
+import {Session} from 'next-auth';
+import {getSession} from 'next-auth/client';
 
-import { wrapper } from '../src/store';
+import Typography from '@material-ui/core/Typography';
+
+import {wrapper} from '../src/store';
 
 import Layout from 'src/components/Layout/Layout.container';
 import ProfileTimeline from 'src/components/profile/profile.component';
-import { ExtendedUserPost } from 'src/interfaces/user';
-import { healthcheck } from 'src/lib/api/healthcheck';
+import {ExtendedUser} from 'src/interfaces/user';
+import {healthcheck} from 'src/lib/api/healthcheck';
 import * as ProfileAPI from 'src/lib/api/profile';
 import * as UserAPI from 'src/lib/api/user';
-import { setAnonymous, setUser } from 'src/reducers/user/actions';
+import {RootState} from 'src/reducers';
+import {setProfile} from 'src/reducers/profile/actions';
+import {ProfileState} from 'src/reducers/profile/reducer';
+import {setAnonymous, setUser, fetchToken} from 'src/reducers/user/actions';
 
 type ProfilePageProps = {
   session: Session;
-  profile: ExtendedUserPost;
+  profile: ExtendedUser | null;
 };
 
-const ProfilePageComponent: React.FC<ProfilePageProps> = ({ profile }) => {
+const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
+  const dispatch = useDispatch();
+
+  const {detail: profileDetail} = useSelector<RootState, ProfileState>(state => state.profileState);
+
+  useEffect(() => {
+    // load current authenticated user tokens
+    dispatch(fetchToken());
+  }, [dispatch]);
+
   return (
     <Layout>
-      <ProfileTimeline profile={profile} loading={false} />
+      {profile === null || !profileDetail ? (
+        <div style={{textAlign: 'center'}}>
+          <h1>This account doesn’t exist</h1>
+          <Typography>Try searching for another.</Typography>
+        </div>
+      ) : (
+        <ProfileTimeline profile={profileDetail} loading={false} />
+      )}
     </Layout>
   );
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const { res, params } = context;
-  const { dispatch } = store;
+  const {res, params} = context;
+  const {dispatch} = store;
 
   const available = await healthcheck();
 
@@ -63,11 +85,15 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const profile = await ProfileAPI.getUserProfile(profileId);
 
+  if (profile) {
+    dispatch(setProfile(profile));
+  }
+
   return {
     props: {
       session,
-      profile
-    }
+      profile,
+    },
   };
 });
 

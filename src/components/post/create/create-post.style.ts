@@ -1,22 +1,22 @@
-import { createStyles, makeStyles, Theme, lighten } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme, lighten} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       margin: theme.spacing(0, 1),
-      overflow: 'visible'
+      overflow: 'visible',
     },
     dialog: {
       '&. MuiPaper-root': {
-        minWidth: 800
-      }
+        minWidth: 800,
+      },
     },
     button: {
-      margin: theme.spacing(1)
+      margin: theme.spacing(1),
     },
     createPost: {
       marginLeft: 'auto !important',
-      marginRight: 8
+      marginRight: 8,
     },
     label: {
       backgroundColor: lighten(theme.palette.background.paper, 0.3),
@@ -24,7 +24,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingTop: theme.spacing(0.5),
       paddingBottom: theme.spacing(0.5),
       marginBottom: theme.spacing(2),
-      cursor: 'pointer'
+      cursor: 'pointer',
     },
     postTextArea: {
       resize: 'none',
@@ -37,42 +37,42 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: 16,
       height: 56,
       '&:focus-visible': {
-        outline: 'none'
-      }
+        outline: 'none',
+      },
     },
 
     tags: {
       '& .MuiInputBase-root': {
         background: '#FFFFFF',
-        border: 0
-      }
+        border: 0,
+      },
     },
 
     card: {
       width: 800,
       padding: theme.spacing(1, 0),
-      boxShadow: 'none'
+      boxShadow: 'none',
     },
     cardPost: {
       background: lighten(theme.palette.background.default, 0.2),
-      filter: 'drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.08))'
+      filter: 'drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.08))',
     },
     cardPostAction: {
-      background: lighten(theme.palette.background.default, 0.2)
+      background: lighten(theme.palette.background.default, 0.2),
     },
     cardHeader: {
       padding: theme.spacing(1),
       borderBottom: 'none',
       '& .MuiCardHeader-title': {
         fontSize: 18,
-        fontWeight: 400
+        fontWeight: 400,
       },
       '& .MuiCardHeader-action': {
         flex: '0 1 auto',
         marginTop: 0,
         marginRight: 0,
-        alignSelf: 'center'
-      }
+        alignSelf: 'center',
+      },
     },
 
     additionalAction: {
@@ -81,15 +81,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 1),
       margin: theme.spacing(2, 0),
       width: 458,
-      height: 44
+      height: 44,
     },
     postButton: {
       width: 320,
       margin: '0 auto',
-      marginTop: theme.spacing(2)
+      marginTop: theme.spacing(2),
     },
     action: {
-      background: theme.palette.background.default
+      background: theme.palette.background.default,
     },
 
     buttonProgress: {
@@ -98,7 +98,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       top: '50%',
       left: '50%',
       marginTop: -12,
-      marginLeft: -12
-    }
-  })
+      marginLeft: -12,
+    },
+  }),
 );

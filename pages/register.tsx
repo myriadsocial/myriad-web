@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 
-import { GetServerSideProps } from 'next';
-import { useSession, getSession } from 'next-auth/client';
-import { useRouter } from 'next/router';
+import {GetServerSideProps} from 'next';
+import {useSession, getSession} from 'next-auth/client';
+import {useRouter} from 'next/router';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import AlertComponent from 'src/components/alert/Alert.component';
-import { RegisterFormComponent } from 'src/components/register/register-form.component';
-import { useAlertHook } from 'src/hooks/use-alert.hook';
+import {RegisterFormComponent} from 'src/components/register/register-form.component';
+import {useAlertHook} from 'src/hooks/use-alert.hook';
 import LogoImage from 'src/images/header-logo.svg';
-import { healthcheck } from 'src/lib/api/healthcheck';
+import {healthcheck} from 'src/lib/api/healthcheck';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,29 +21,29 @@ const useStyles = makeStyles((theme: Theme) =>
       minHeight: '100vh',
       backgroundImage: 'url(/images/login-background.png)',
       backgroundRepeat: 'no-repeat',
-      backgroundSize: 'cover'
+      backgroundSize: 'cover',
     },
     header: {
-      textAlign: 'center'
+      textAlign: 'center',
     },
     logo: {
       marginTop: 64,
-      height: 56
+      height: 56,
     },
     title: {
       fontSize: 24,
       fontWeight: 700,
       lineHeight: '30px',
       marginBottom: 40,
-      color: theme.palette.text.secondary
+      color: theme.palette.text.secondary,
     },
     login: {
       marginTop: 140,
       width: 320,
-      marginRight: 65
+      marginRight: 65,
     },
-    timeline: {}
-  })
+    timeline: {},
+  }),
 );
 
 export default function Index() {
@@ -51,7 +51,7 @@ export default function Index() {
 
   const [session, loading] = useSession();
   const router = useRouter();
-  const { showAlert } = useAlertHook();
+  const {showAlert} = useAlertHook();
 
   useEffect(() => {
     if (session && !loading) {
@@ -64,7 +64,7 @@ export default function Index() {
       showAlert({
         message: 'Something went wrong when trying to log in.',
         severity: 'error',
-        title: 'Login failed'
+        title: 'Login failed',
       });
     }
   }, [router.query.error]);
@@ -92,18 +92,27 @@ export default function Index() {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { res } = context;
+  const {res} = context;
 
   const available = await healthcheck();
 
   if (!available) {
-    res.writeHead(302, { location: `${process.env.NEXTAUTH_URL}/maintenance` });
+    res.setHeader('location', '/maintenance');
+    res.statusCode = 302;
+    res.end();
+  }
+
+  const session = await getSession(context);
+
+  if (session) {
+    res.setHeader('location', '/home');
+    res.statusCode = 302;
     res.end();
   }
 
   return {
     props: {
-      session: await getSession(context)
-    }
+      session,
+    },
   };
 };

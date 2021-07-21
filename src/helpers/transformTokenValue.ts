@@ -1,8 +1,8 @@
-import { Transaction } from 'src/interfaces/transaction';
+import {Transaction} from 'src/interfaces/transaction';
 
 enum TokenID {
   MYR = 'MYR',
-  AUSD = 'AUSD'
+  AUSD = 'AUSD',
 }
 
 const basicTransform = (txHistory: Transaction) => {

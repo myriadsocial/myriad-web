@@ -304,4 +304,6 @@ UJmnvgtIepwkTomHZePi/ysAMDz+v54T0k6Ph6fg/PUuIoqtXb2KKLb6VsfLNgLYfUfZoI2++itg
 xrkAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjEtMDYtMTdUMTI6MDA6MjArMDM6MDAgqX4FAAAAAElF
 TkSuQmCC`;
 
-export const MyriadIcon = () => <img style={{ height: '100%' }} src={`data:image/png;base64, ${encodedImage}`} />;
+export const MyriadIcon = () => (
+  <img style={{height: '100%'}} src={`data:image/png;base64, ${encodedImage}`} />
+);

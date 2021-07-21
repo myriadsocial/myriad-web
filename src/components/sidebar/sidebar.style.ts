@@ -1,14 +1,14 @@
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, Theme} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
     width: 331,
-    minHeight: '100%'
+    minHeight: '100%',
   },
   tabHeader: {
     background: '#C4C4C4',
-    borderRadius: 8
+    borderRadius: 8,
   },
   tabItem: {
     width: 85,
@@ -24,25 +24,25 @@ export const useStyles = makeStyles((theme: Theme) => ({
       '& .MuiTypography-root': {
         display: 'block',
         textTransform: 'capitalize',
-        fontSize: 15
-      }
+        fontSize: 15,
+      },
     },
 
     '& .MuiTypography-root': {
-      display: 'none'
+      display: 'none',
     },
 
     '& .MuiTab-wrapper': {
       flexDirection: 'row',
       '& >*:first-child': {
-        marginBottom: 0
-      }
+        marginBottom: 0,
+      },
     },
 
     '& .MuiSvgIcon-root': {
       paddingRight: theme.spacing(0.5),
       width: 24,
-      height: 24
-    }
-  }
+      height: 24,
+    },
+  },
 }));

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useImperativeHandle } from 'react';
+import React, {useState, useEffect, useImperativeHandle} from 'react';
 
-import { useSession } from 'next-auth/client';
+import {useSession} from 'next-auth/client';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -14,23 +14,23 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import InfoIcon from '@material-ui/icons/Info';
 
-import { useStyles, TableCell, StyledBadge } from './balance.style';
+import {useStyles, TableCell, StyledBadge} from './balance.style';
 
-import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
-import { Token } from 'src/interfaces/token';
+import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
+import {Token} from 'src/interfaces/token';
 
 interface BalanceProps {
   forwardedRef: React.ForwardedRef<any>;
   availableTokens: Token[];
 }
 
-const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, availableTokens }) => {
+const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, availableTokens}) => {
   const style = useStyles();
 
   const [session] = useSession();
   const userAddress = session?.user.address as string;
 
-  const { loading, error, tokensReady, load } = usePolkadotApi();
+  const {loading, error, tokensReady, load} = usePolkadotApi();
 
   useEffect(() => {
     load(userAddress, availableTokens);
@@ -40,7 +40,7 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, availableToken
     triggerRefresh: () => {
       setIsHidden(false);
       load(userAddress, availableTokens);
-    }
+    },
   }));
 
   const [isHidden, setIsHidden] = useState(true);
@@ -52,7 +52,9 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, availableToken
     return (
       <div className={style.tooltipContentRoot}>
         <Typography className={style.tooltipContentHeader}>Myria</Typography>{' '}
-        <Typography>A reward token you earn by sending a tip to a post you think is valuable.</Typography>
+        <Typography>
+          A reward token you earn by sending a tip to a post you think is valuable.
+        </Typography>
       </div>
     );
   };
@@ -90,7 +92,9 @@ const BalanceComponent: React.FC<BalanceProps> = ({ forwardedRef, availableToken
                         // TODO: move to single file constant or enum
                       }
                       {row.tokenSymbol === 'MYR' ? (
-                        <StyledBadge badgeContent={<StyledTooltip />}>{row.tokenSymbol}</StyledBadge>
+                        <StyledBadge badgeContent={<StyledTooltip />}>
+                          {row.tokenSymbol}
+                        </StyledBadge>
                       ) : (
                         row.tokenSymbol
                       )}

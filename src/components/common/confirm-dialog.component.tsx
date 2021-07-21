@@ -17,14 +17,22 @@ type ConfirmDialogProps = {
   handleSubmit: () => void;
 };
 
-export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ title, description, open, handleClose, handleSubmit }) => {
+export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
+  title,
+  description,
+  open,
+  handleClose,
+  handleSubmit,
+}) => {
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="dialog-title">
-      <DialogTitle style={{ cursor: 'move' }} id="-dialog-title">
+      <DialogTitle style={{cursor: 'move'}} id="-dialog-title">
         {title}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText style={{ color: theme.palette.primary.dark }}>{description}</DialogContentText>
+        <DialogContentText style={{color: theme.palette.primary.dark}}>
+          {description}
+        </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleClose} variant="contained" color="secondary">

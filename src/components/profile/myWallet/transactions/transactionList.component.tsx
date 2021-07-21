@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -8,11 +8,11 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles, withStyles } from '@material-ui/core/styles';
+import {createStyles, Theme, makeStyles, withStyles} from '@material-ui/core/styles';
 
-import { transformTokenValue } from 'src/helpers/transformTokenValue';
-import { Transaction } from 'src/interfaces/transaction';
-import { User } from 'src/interfaces/user';
+import {transformTokenValue} from 'src/helpers/transformTokenValue';
+import {Transaction} from 'src/interfaces/transaction';
+import {User} from 'src/interfaces/user';
 
 type Props = {
   transactions: Transaction[];
@@ -32,12 +32,12 @@ const useStyles = makeStyles(() =>
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'center'
+      justifyContent: 'center',
     },
     expandButton: {
-      justifyContent: 'center'
-    }
-  })
+      justifyContent: 'center',
+    },
+  }),
 );
 
 const useStylesListItemContent = makeStyles((theme: Theme) =>
@@ -48,47 +48,47 @@ const useStylesListItemContent = makeStyles((theme: Theme) =>
         margin: '4px 2px',
         textAlign: 'right',
         height: theme.spacing(2),
-        textTransform: 'uppercase'
-      }
+        textTransform: 'uppercase',
+      },
     },
     green: {
-      color: '#4caf50'
+      color: '#4caf50',
     },
     red: {
-      color: '#b9210d'
-    }
-  })
+      color: '#b9210d',
+    },
+  }),
 );
 
 const StyledAvatar = withStyles({
   root: {
     width: 56,
-    height: 56
-  }
+    height: 56,
+  },
 })(Avatar);
 
 const StyledListItemAvatar = withStyles({
   root: {
     minWidth: 56,
     minHeight: 56,
-    margin: '0 12px'
-  }
+    margin: '0 12px',
+  },
 })(ListItemAvatar);
 
 const StyledListItemText = withStyles({
   primary: {
     color: '#4b4851',
     fontWeight: 'bold',
-    fontSize: 16
+    fontSize: 16,
   },
   secondary: {
     color: '#9e9e9e',
     fontWeight: 'normal',
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 })(ListItemText);
 
-const ListItemContent = ({ txHistory, userId }: ListItemContentProps) => {
+const ListItemContent = ({txHistory, userId}: ListItemContentProps) => {
   const style = useStylesListItemContent();
 
   const defaultUserName = 'Unknown Myrian';
@@ -126,10 +126,17 @@ const ListItemContent = ({ txHistory, userId }: ListItemContentProps) => {
         <StyledListItemAvatar>
           <StyledAvatar
             aria-label="avatar"
-            src={txHistory.toUser?.id === userId ? txHistory.fromUser?.profilePictureURL : txHistory.toUser?.profilePictureURL}
+            src={
+              txHistory.toUser?.id === userId
+                ? txHistory.fromUser?.profilePictureURL
+                : txHistory.toUser?.profilePictureURL
+            }
           />
         </StyledListItemAvatar>
-        <StyledListItemText primary={RenderPrimaryText(txHistory)} secondary={RenderSecondaryText(txHistory)} />
+        <StyledListItemText
+          primary={RenderPrimaryText(txHistory)}
+          secondary={RenderSecondaryText(txHistory)}
+        />
         <ListItemSecondaryAction>
           <div className={style.badge}>
             <Typography className={userId === txHistory.from ? style.red : style.green}>
@@ -142,7 +149,7 @@ const ListItemContent = ({ txHistory, userId }: ListItemContentProps) => {
   );
 };
 
-const TransactionListComponent: React.FC<Props> = ({ transactions, user }) => {
+const TransactionListComponent: React.FC<Props> = ({transactions, user}) => {
   const style = useStyles();
   const [expandable, setExpandable] = useState(true);
 
@@ -173,8 +180,14 @@ const TransactionListComponent: React.FC<Props> = ({ transactions, user }) => {
     <>
       <List className={style.root}>
         {expandable
-          ? allTransactions.slice(0, 2).map(txHistory => <ListItemContent key={txHistory.trxHash} txHistory={txHistory} userId={userId} />)
-          : allTransactions.map(txHistory => <ListItemContent key={txHistory.trxHash} txHistory={txHistory} userId={userId} />)}
+          ? allTransactions
+              .slice(0, 2)
+              .map(txHistory => (
+                <ListItemContent key={txHistory.trxHash} txHistory={txHistory} userId={userId} />
+              ))
+          : allTransactions.map(txHistory => (
+              <ListItemContent key={txHistory.trxHash} txHistory={txHistory} userId={userId} />
+            ))}
       </List>
       {expandable ? (
         <ExpandMore />

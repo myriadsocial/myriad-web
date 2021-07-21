@@ -1,5 +1,5 @@
-import { People } from './people';
-import { Post } from './post';
+import {People} from './people';
+import {Post} from './post';
 
 export interface UserCredential {
   id: string;

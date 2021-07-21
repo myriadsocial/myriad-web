@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
-import { useSearch as baseUseSearch, SearchActionType } from 'src/components/search/search.context';
+import {useSearch as baseUseSearch, SearchActionType} from 'src/components/search/search.context';
 import * as UserAPI from 'src/lib/api/user';
 
 export const useMyriadUser = () => {
-  const { state, dispatch } = baseUseSearch();
+  const {state, dispatch} = baseUseSearch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const load = () => {
     dispatch({
-      type: SearchActionType.RESET_STATE
+      type: SearchActionType.RESET_STATE,
     });
   };
 
@@ -25,7 +25,7 @@ export const useMyriadUser = () => {
 
         dispatch({
           type: SearchActionType.LOAD_USER,
-          payload: users
+          payload: users,
         });
       } catch (error) {
         setError(error);
@@ -39,7 +39,7 @@ export const useMyriadUser = () => {
 
   const backToTimeline = () => {
     dispatch({
-      type: SearchActionType.ABORT_SEARCH
+      type: SearchActionType.ABORT_SEARCH,
     });
   };
 
@@ -50,6 +50,6 @@ export const useMyriadUser = () => {
     users: state.users,
     search,
     searching: state.isSearching,
-    backToTimeline
+    backToTimeline,
   };
 };

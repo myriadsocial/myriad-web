@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 
 import SearchComponent from '../common/search.component';
 
@@ -14,21 +14,21 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       margin: theme.spacing(1),
-      maxWidth: '100%'
+      maxWidth: '100%',
     },
     optionItem: {
       position: 'relative',
-      flex: 1
+      flex: 1,
     },
     addButton: {
       position: 'absolute',
       top: 0,
-      right: 0
-    }
-  })
+      right: 0,
+    },
+  }),
 );
 
-const SearchUser: React.FC<SearchProps> = ({ placeholder }) => {
+const SearchUser: React.FC<SearchProps> = ({placeholder}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 

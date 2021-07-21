@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 
 import Link from 'next/link';
 
@@ -10,21 +10,21 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
-import { useStyles } from './notification.style';
-import { useConversationHook } from './use-conversation-hook';
+import {useStyles} from './notification.style';
+import {useConversationHook} from './use-conversation-hook';
 
 import ShowIf from 'src/components/common/show-if.component';
-import { Post } from 'src/interfaces/post';
-import { User } from 'src/interfaces/user';
+import {Post} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
 
 type Props = {
   user: User;
 };
 
-export default function NotificationListComponent({ user }: Props) {
+export default function NotificationListComponent({user}: Props) {
   const classes = useStyles();
 
-  const { conversations, loadConversation } = useConversationHook(user);
+  const {conversations, loadConversation} = useConversationHook(user);
 
   useEffect(() => {
     loadConversation();
@@ -56,10 +56,21 @@ export default function NotificationListComponent({ user }: Props) {
               component="nav"
               className={conversation.read ? classes.notification : classes.notificationActive}>
               <ListItemAvatar>
-                <Avatar alt={conversation.user.name} src={conversation.user.profilePictureURL || ''} />
+                <Avatar
+                  alt={conversation.user.name}
+                  src={conversation.user.profilePictureURL || ''}
+                />
               </ListItemAvatar>
-              <ListItemText primary={getPostText(conversation.post)} secondary={getPostReply(conversation.post)} />
-              <Badge className={classes.notificationBadge} color="secondary" hidden={false} badgeContent={conversation.unreadMessage} />
+              <ListItemText
+                primary={getPostText(conversation.post)}
+                secondary={getPostReply(conversation.post)}
+              />
+              <Badge
+                className={classes.notificationBadge}
+                color="secondary"
+                hidden={false}
+                badgeContent={conversation.unreadMessage}
+              />
             </ListItem>
           </Link>
         );

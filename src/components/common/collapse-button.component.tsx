@@ -1,7 +1,7 @@
 import React from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import clsx from 'clsx';
@@ -14,23 +14,23 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      marginLeft: 'auto'
+      marginLeft: 'auto',
     },
     expand: {
       transform: 'rotate(0deg)',
       marginLeft: 'auto',
       padding: theme.spacing(1),
       transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest
-      })
+        duration: theme.transitions.duration.shortest,
+      }),
     },
     expandOpen: {
-      transform: 'rotate(180deg)'
-    }
-  })
+      transform: 'rotate(180deg)',
+    },
+  }),
 );
 
-export const ToggleCollapseButton = ({ className, onClick }: Props) => {
+export const ToggleCollapseButton = ({className, onClick}: Props) => {
   const styles = useStyles();
 
   const [expanded, setExpanded] = React.useState(false);
@@ -45,7 +45,7 @@ export const ToggleCollapseButton = ({ className, onClick }: Props) => {
     <div className={[className || '', styles.root].join(' ')}>
       <IconButton
         className={clsx(styles.expand, {
-          [styles.expandOpen]: expanded
+          [styles.expandOpen]: expanded,
         })}
         onClick={handleExpandClick}
         aria-expanded={expanded}

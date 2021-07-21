@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import LanguageIcon from '@material-ui/icons/Language';
 
-import { TopicListComponent } from './topic-list.component';
+import {TopicListComponent} from './topic-list.component';
 
 import ExpandablePanel from 'src/components/common/panel-expandable.component';
-import { useTopic } from 'src/hooks/use-topic.hooks';
+import {useTopic} from 'src/hooks/use-topic.hooks';
 
 interface TopicProps {}
 
@@ -16,19 +16,19 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       flex: '1 1 auto',
       marginTop: theme.spacing(1),
-      background: 'transparent'
+      background: 'transparent',
     },
     content: {
       padding: theme.spacing(0, 2),
-      background: theme.palette.background.paper
-    }
-  })
+      background: theme.palette.background.paper,
+    },
+  }),
 );
 
 const TopicComponent: React.FC<TopicProps> = props => {
   const styles = useStyles();
 
-  const { popularTopics, loadPopularTopic } = useTopic();
+  const {popularTopics, loadPopularTopic} = useTopic();
 
   useEffect(() => {
     loadPopularTopic();
@@ -38,8 +38,8 @@ const TopicComponent: React.FC<TopicProps> = props => {
     <div className={styles.root} id="worldwide">
       <ExpandablePanel expanded={true} title="Worldwide" startIcon={<LanguageIcon />}>
         <div className={styles.content}>
-          <div style={{ paddingTop: 24, paddingBottom: 8 }}>
-            <Typography variant="h4" style={{ marginBottom: 8 }}>
+          <div style={{paddingTop: 24, paddingBottom: 8}}>
+            <Typography variant="h4" style={{marginBottom: 8}}>
               {'Trending Now'}
             </Typography>
           </div>

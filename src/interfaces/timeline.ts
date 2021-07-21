@@ -1,9 +1,10 @@
-import { LayoutType } from './experience';
+import {LayoutType} from './experience';
 
 export enum TimelineType {
   DEFAULT = 'DEFAULT',
   ANONYMOUS = 'ANONYMOUS',
-  TRENDING = 'TRENDING'
+  TRENDING = 'TRENDING',
+  OWNED = 'OWNED',
 }
 
 export type PostOrigin = 'facebook' | 'twitter' | 'reddit' | 'myriad';
@@ -15,4 +16,6 @@ export type TimelineFilter = {
   people?: string[];
   layout?: LayoutType;
   platform?: PostOrigin[];
+  owner?: string;
+  importer?: string;
 };

@@ -1,8 +1,8 @@
 //@ts-ignore
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type {NextApiRequest, NextApiResponse} from 'next';
 import nextConnect from 'next-connect';
 
-import { v2 as cloudinary } from 'cloudinary';
+import {v2 as cloudinary} from 'cloudinary';
 import DatauriParser from 'datauri/parser';
 import multer from 'multer';
 import path from 'path';
@@ -15,14 +15,14 @@ type ResponseImageUpload = {
 // Multer config
 const storage = multer.memoryStorage();
 const upload = multer({
-  storage
+  storage,
 });
 
 // cloudinary config
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET
+  api_secret: process.env.CLOUDINARY_SECRET,
 });
 
 //@ts-ignore
@@ -37,8 +37,8 @@ const formatBufferTo64 = (file: any) => {
 
 export const config = {
   api: {
-    bodyParser: false
-  }
+    bodyParser: false,
+  },
 };
 
 //@ts-ignore
@@ -49,7 +49,7 @@ const handler = nextConnect()
 
     const uploadResult = await cloudinaryUpload(file.content);
 
-    return res.json({ url: uploadResult.secure_url });
+    return res.json({url: uploadResult.secure_url});
   });
 
 export default handler;

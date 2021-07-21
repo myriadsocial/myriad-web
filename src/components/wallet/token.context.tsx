@@ -1,11 +1,11 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, {createContext, useContext, useReducer} from 'react';
 
-import { Token } from 'src/interfaces/token';
+import {Token} from 'src/interfaces/token';
 
 export enum TokenActionType {
   INIT_TOKEN = 'INIT_TOKEN',
   INIT_USER_TOKEN = 'INIT_USER_TOKEN',
-  ADD_TOKEN = 'ADD_TOKEN'
+  ADD_TOKEN = 'ADD_TOKEN',
 }
 
 export interface InitToken {
@@ -25,7 +25,7 @@ export interface AddToken {
 
 export type Action = InitToken | InitUserToken | AddToken;
 type Dispatch = (action: Action) => void;
-type TokenProviderProps = { children: React.ReactNode };
+type TokenProviderProps = {children: React.ReactNode};
 type State = {
   init: boolean;
   tokens: Token[];
@@ -35,10 +35,10 @@ type State = {
 const initialState = {
   init: true,
   tokens: [],
-  userTokens: []
+  userTokens: [],
 };
 
-const TokenContext = createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
+const TokenContext = createContext<{state: State; dispatch: Dispatch} | undefined>(undefined);
 
 function tokenReducer(state: State, action: Action) {
   switch (action.type) {
@@ -46,14 +46,14 @@ function tokenReducer(state: State, action: Action) {
       return {
         ...state,
         tokens: action.payload,
-        init: false
+        init: false,
       };
     }
 
     case TokenActionType.INIT_USER_TOKEN: {
       return {
         ...state,
-        userTokens: action.payload
+        userTokens: action.payload,
       };
     }
 
@@ -73,11 +73,11 @@ export const useToken = () => {
   return context;
 };
 
-export const TokenProvider = ({ children }: TokenProviderProps) => {
+export const TokenProvider = ({children}: TokenProviderProps) => {
   const [state, dispatch] = useReducer(tokenReducer, initialState);
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
-  const value = { state, dispatch };
+  const value = {state, dispatch};
 
   return <TokenContext.Provider value={value}>{children}</TokenContext.Provider>;
 };

@@ -1,23 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 
-import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
-import { ChooseAccountComponent } from './modal-accounts.component';
-import { NoExtensionComponent } from './modal-no-extension.component';
+import {ChooseAccountComponent} from './modal-accounts.component';
+import {NoExtensionComponent} from './modal-no-extension.component';
 
-import { useAuthHook } from 'src/hooks/auth.hook';
-import { usePolkadotExtension } from 'src/hooks/use-polkadot-app.hook';
+import {useAuthHook} from 'src/hooks/auth.hook';
+import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: 678,
-      background: 'linear-gradient(117.69deg, rgba(112, 112, 112, 0.2) 60.66%, rgba(203, 203, 203, 0) 114.57%)',
+      background:
+        'linear-gradient(117.69deg, rgba(112, 112, 112, 0.2) 60.66%, rgba(203, 203, 203, 0) 114.57%)',
       backdropFilter: 'blur(24px)',
       /* Note: backdrop-filter has minimal browser support */
       borderColor: '#696969',
@@ -26,24 +27,24 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       flexDirection: 'column',
       padding: 8,
-      marginBottom: 42
+      marginBottom: 42,
     },
     form: {
       width: 444,
-      padding: 24
+      padding: 24,
     },
     signIn: {
       padding: theme.spacing(1),
       height: 48,
       fontSize: 16,
-      fontWeight: 600
+      fontWeight: 600,
     },
     anonymous: {
       background: theme.palette.background.paper,
       color: '#2998E9',
       height: 48,
       fontSize: 16,
-      fontWeight: 600
+      fontWeight: 600,
     },
     help: {
       padding: theme.spacing(1),
@@ -57,12 +58,12 @@ const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '20px',
       color: theme.palette.background.paper,
       textDecoration: 'underline',
-      marginBottom: 40
+      marginBottom: 40,
     },
     polkadot: {
-      color: 'rgb(255, 140, 0)'
-    }
-  })
+      color: 'rgb(255, 140, 0)',
+    },
+  }),
 );
 
 type LoginComponentProps = {};
@@ -70,8 +71,8 @@ type LoginComponentProps = {};
 export const LoginComponent: React.FC<LoginComponentProps> = props => {
   const style = useStyles();
 
-  const { enablePolkadotExtension, getPolkadotAccounts } = usePolkadotExtension();
-  const { signInWithAccount, anonymous } = useAuthHook();
+  const {enablePolkadotExtension, getPolkadotAccounts} = usePolkadotExtension();
+  const {signInWithAccount, anonymous} = useAuthHook();
 
   const [extensionInstalled, setExtensionInstalled] = useState(false);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
@@ -103,11 +104,22 @@ export const LoginComponent: React.FC<LoginComponentProps> = props => {
   return (
     <div className={style.root}>
       <div className={style.form}>
-        <Button onClick={checkExtensionInstalled} variant="contained" color="primary" size="large" fullWidth className={style.signIn}>
+        <Button
+          onClick={checkExtensionInstalled}
+          variant="contained"
+          color="primary"
+          size="large"
+          fullWidth
+          className={style.signIn}>
           Sign in
         </Button>
 
-        <Button className={style.anonymous} variant="contained" fullWidth size="large" onClick={anonymous}>
+        <Button
+          className={style.anonymous}
+          variant="contained"
+          fullWidth
+          size="large"
+          onClick={anonymous}>
           Anonymous Login
         </Button>
       </div>

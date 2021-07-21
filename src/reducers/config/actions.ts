@@ -1,11 +1,11 @@
-import { Actions as BaseAction, setLoading, setError } from '../base/actions';
-import { RootState } from '../index';
+import {Actions as BaseAction, setLoading, setError} from '../base/actions';
+import {RootState} from '../index';
 import * as constants from './constants';
 
-import { Action } from 'redux';
-import { Token } from 'src/interfaces/token';
+import {Action} from 'redux';
+import {Token} from 'src/interfaces/token';
 import * as TokenAPI from 'src/lib/api/token';
-import { ThunkActionCreator } from 'src/types/thunk';
+import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
  * Action Types
@@ -38,7 +38,7 @@ export const fetchToken: ThunkActionCreator<Actions, RootState> = () => async di
 
     dispatch({
       type: constants.FETCH_AVAILABLE_TOKEN,
-      payload: tokens
+      payload: tokens,
     });
   } catch (error) {
     dispatch(setError(error.message));

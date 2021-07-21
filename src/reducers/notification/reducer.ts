@@ -1,9 +1,9 @@
-import { State as BaseState } from '../base/state';
-import { Actions } from './actions';
+import {State as BaseState} from '../base/state';
+import {Actions} from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import { ExtendedNotification } from 'src/interfaces/notification';
+import {ExtendedNotification} from 'src/interfaces/notification';
 
 export interface NotificationState extends BaseState {
   notifications: ExtendedNotification[];
@@ -11,15 +11,18 @@ export interface NotificationState extends BaseState {
 
 const initalState: NotificationState = {
   loading: false,
-  notifications: []
+  notifications: [],
 };
 
-export const NotificationReducer: Redux.Reducer<NotificationState, Actions> = (state = initalState, action) => {
+export const NotificationReducer: Redux.Reducer<NotificationState, Actions> = (
+  state = initalState,
+  action,
+) => {
   switch (action.type) {
     case constants.FETCH_NOTIFICATIION: {
       return {
         ...state,
-        notifications: action.notifications
+        notifications: action.notifications,
       };
     }
 

@@ -1,9 +1,9 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      height: 'auto'
+      height: 'auto',
       //marginBottom: theme.spacing(2)
     },
     action: {
@@ -17,12 +17,12 @@ export const useStyles = makeStyles((theme: Theme) =>
         textTransform: 'capitalize',
         marginRight: theme.spacing(1),
         '&:last-item': {
-          marginRight: 0
-        }
-      }
+          marginRight: 0,
+        },
+      },
     },
     extendedIcon: {
-      marginRight: theme.spacing(1)
-    }
-  })
+      marginRight: theme.spacing(1),
+    },
+  }),
 );

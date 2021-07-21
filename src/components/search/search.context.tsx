@@ -1,11 +1,11 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, {createContext, useContext, useReducer} from 'react';
 
-import { User } from 'src/interfaces/user';
+import {User} from 'src/interfaces/user';
 
 export enum SearchActionType {
   RESET_STATE = 'RESET_STATE',
   LOAD_USER = 'USER_LOADED',
-  ABORT_SEARCH = 'ABORT_SEARCH'
+  ABORT_SEARCH = 'ABORT_SEARCH',
 }
 
 export interface ResetState {
@@ -23,7 +23,7 @@ export interface AbortSearch {
 
 export type Action = LoadUser | AbortSearch | ResetState;
 type Dispatch = (action: Action) => void;
-type SearchProviderProps = { children: React.ReactNode };
+type SearchProviderProps = {children: React.ReactNode};
 type State = {
   users: User[];
   isSearching: boolean;
@@ -31,29 +31,29 @@ type State = {
 
 const initialState = {
   isSearching: false,
-  users: []
+  users: [],
 };
 
-const SearchContext = createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
+const SearchContext = createContext<{state: State; dispatch: Dispatch} | undefined>(undefined);
 
 function searchReducer(state: State, action: Action) {
   switch (action.type) {
     case SearchActionType.RESET_STATE: {
       return {
-        ...initialState
+        ...initialState,
       };
     }
     case SearchActionType.LOAD_USER: {
       return {
         ...state,
         users: action.payload,
-        isSearching: true
+        isSearching: true,
       };
     }
     case SearchActionType.ABORT_SEARCH: {
       return {
         ...state,
-        isSearching: false
+        isSearching: false,
       };
     }
     default: {
@@ -72,11 +72,11 @@ export const useSearch = () => {
   return context;
 };
 
-export const SearchProvider = ({ children }: SearchProviderProps) => {
+export const SearchProvider = ({children}: SearchProviderProps) => {
   const [state, dispatch] = useReducer(searchReducer, initialState);
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
-  const value = { state, dispatch };
+  const value = {state, dispatch};
 
   return <SearchContext.Provider value={value}>{children}</SearchContext.Provider>;
 };

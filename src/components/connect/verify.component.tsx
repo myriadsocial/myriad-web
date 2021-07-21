@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, {useCallback, useState} from 'react';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -8,13 +8,13 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 
-import { SocialsEnum } from '../../interfaces';
+import {SocialsEnum} from '../../interfaces';
 import ShowIf from '../common/show-if.component';
-import { useStyles } from './conntect.style';
+import {useStyles} from './conntect.style';
 
 import DialogTitleCustom from 'src/components/common/DialogTitle.component';
-import { useShareSocial } from 'src/hooks/use-share-social';
-import { User } from 'src/interfaces/user';
+import {useShareSocial} from 'src/hooks/use-share-social';
+import {User} from 'src/interfaces/user';
 
 export type Props = {
   open: boolean;
@@ -26,14 +26,14 @@ export type Props = {
 const prefix: Record<SocialsEnum, string> = {
   [SocialsEnum.TWITTER]: 'https://twitter.com/',
   [SocialsEnum.FACEBOOK]: 'https://www.facebook.com/',
-  [SocialsEnum.REDDIT]: 'https://www.reddit.com/user/'
+  [SocialsEnum.REDDIT]: 'https://www.reddit.com/user/',
 };
 
-export default function VerifyComponent({ user, social, open, onClose }: Props) {
+export default function VerifyComponent({user, social, open, onClose}: Props) {
   const classes = useStyles();
 
   const [username, setUsername] = useState('');
-  const { shareOnTwitter, shareOnReddit, shareOnFacebook } = useShareSocial(user.id);
+  const {shareOnTwitter, shareOnReddit, shareOnFacebook} = useShareSocial(user.id);
 
   const share = useCallback(
     (username: string) => {
@@ -51,7 +51,7 @@ export default function VerifyComponent({ user, social, open, onClose }: Props) 
           break;
       }
     },
-    [social]
+    [social],
   );
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,13 +82,16 @@ export default function VerifyComponent({ user, social, open, onClose }: Props) 
     onClose();
   };
 
-  const helperTextCopyURL = 'Copy and paste the complete url of your account (e.g. https://twitter.com/myAccount)';
+  const helperTextCopyURL =
+    'Copy and paste the complete url of your account (e.g. https://twitter.com/myAccount)';
 
   return (
     <div>
       <Dialog open={open} onClose={onClose} maxWidth="sm" disableBackdropClick disableEscapeKeyDown>
         <DialogTitleCustom id="user-title" onClose={onClose}>
-          {social !== SocialsEnum.FACEBOOK ? `Fill your username in ${social}` : 'Copy Facebook shared url to verify'}
+          {social !== SocialsEnum.FACEBOOK
+            ? `Fill your username in ${social}`
+            : 'Copy Facebook shared url to verify'}
         </DialogTitleCustom>
         <DialogContent>
           <ShowIf condition={social !== SocialsEnum.FACEBOOK}>
@@ -106,7 +109,7 @@ export default function VerifyComponent({ user, social, open, onClose }: Props) 
               type="text"
               id="username"
               InputProps={{
-                startAdornment: <InputAdornment position="start">{prefix[social]}</InputAdornment>
+                startAdornment: <InputAdornment position="start">{prefix[social]}</InputAdornment>,
               }}
             />
             <FormHelperText>{helperTextCopyURL}</FormHelperText>
@@ -125,14 +128,19 @@ export default function VerifyComponent({ user, social, open, onClose }: Props) 
               type="text"
               id="posturl"
               InputProps={{
-                startAdornment: <InputAdornment position="start">{prefix[social]}</InputAdornment>
+                startAdornment: <InputAdornment position="start">{prefix[social]}</InputAdornment>,
               }}
             />
             <FormHelperText>{helperTextCopyURL}</FormHelperText>
           </ShowIf>
         </DialogContent>
         <DialogActions className={classes.done}>
-          <Button onClick={setShared} fullWidth={true} size="large" variant="contained" color="secondary">
+          <Button
+            onClick={setShared}
+            fullWidth={true}
+            size="large"
+            variant="contained"
+            color="secondary">
             {' '}
             Verify
           </Button>

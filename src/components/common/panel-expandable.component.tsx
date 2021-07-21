@@ -3,25 +3,25 @@ import React from 'react';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      background: 'transparent'
+      background: 'transparent',
     },
     icon: {
-      marginRight: theme.spacing(1)
+      marginRight: theme.spacing(1),
     },
     toolbar: {
-      padding: '0 12px'
+      padding: '0 12px',
     },
     title: {
-      flexGrow: 1
-    }
-  })
+      flexGrow: 1,
+    },
+  }),
 );
 
 type Props = {
@@ -32,7 +32,13 @@ type Props = {
   startIcon?: React.ReactElement;
 };
 
-export default function ExpandablePanel({ children, title, expanded = false, actions, startIcon }: Props) {
+export default function ExpandablePanel({
+  children,
+  title,
+  expanded = false,
+  actions,
+  startIcon,
+}: Props) {
   const classes = useStyles();
 
   return (

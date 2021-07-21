@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, {createContext, useContext, useReducer} from 'react';
 
-import { Transaction } from 'src/interfaces/transaction';
+import {Transaction} from 'src/interfaces/transaction';
 
 export enum TransactionActionType {
-  INIT_TRANSACTION = 'INIT_TRANSACTION'
+  INIT_TRANSACTION = 'INIT_TRANSACTION',
 }
 
 export interface InitTransaction {
@@ -15,7 +15,7 @@ export interface InitTransaction {
 
 export type Action = InitTransaction;
 type Dispatch = (action: Action) => void;
-type TransactionProviderProps = { children: React.ReactNode };
+type TransactionProviderProps = {children: React.ReactNode};
 type State = {
   init: boolean;
   transactions: Transaction[];
@@ -27,10 +27,10 @@ const initialState = {
   init: true,
   transactions: [],
   inboundTxs: [],
-  outboundTxs: []
+  outboundTxs: [],
 };
 
-const TransactionContext = createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
+const TransactionContext = createContext<{state: State; dispatch: Dispatch} | undefined>(undefined);
 
 function transactionReducer(state: State, action: Action) {
   switch (action.type) {
@@ -40,7 +40,7 @@ function transactionReducer(state: State, action: Action) {
         transactions: action.transactions,
         inboundTxs: action.inboundTxs,
         outboundTxs: action.outboundTxs,
-        init: false
+        init: false,
       };
     }
 
@@ -60,11 +60,11 @@ export const useTransaction = () => {
   return context;
 };
 
-export const TransactionProvider = ({ children }: TransactionProviderProps) => {
+export const TransactionProvider = ({children}: TransactionProviderProps) => {
   const [state, dispatch] = useReducer(transactionReducer, initialState);
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
-  const value = { state, dispatch };
+  const value = {state, dispatch};
 
   return <TransactionContext.Provider value={value}>{children}</TransactionContext.Provider>;
 };

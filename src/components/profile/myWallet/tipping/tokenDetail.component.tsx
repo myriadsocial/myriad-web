@@ -1,18 +1,18 @@
 import React from 'react';
 
-import { CurrencyDetails } from './currencyDetail.component';
-import { StyledTab } from './styledTab.component';
-import { StyledTabs } from './styledTabs.component';
-import { useStylesForTabs } from './tabs.styles';
+import {CurrencyDetails} from './currencyDetail.component';
+import {StyledTab} from './styledTab.component';
+import {StyledTabs} from './styledTabs.component';
+import {useStylesForTabs} from './tabs.styles';
 
-import { TabPanel } from 'src/components/common/tab-panel.component';
-import { Token } from 'src/interfaces/token';
+import {TabPanel} from 'src/components/common/tab-panel.component';
+import {Token} from 'src/interfaces/token';
 
 interface TokenDetailComponentProps {
   tokens: Token[];
 }
 
-export const TokenDetailComponent = ({ tokens }: TokenDetailComponentProps) => {
+export const TokenDetailComponent = ({tokens}: TokenDetailComponentProps) => {
   const classes = useStylesForTabs();
   const [value, setValue] = React.useState(0);
 

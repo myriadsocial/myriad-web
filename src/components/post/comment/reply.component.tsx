@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import SendIcon from '@material-ui/icons/Send';
 
-import { useStyles } from './reply.style';
+import {useStyles} from './reply.style';
 
 import ShowIf from 'src/components/common/show-if.component';
 import LoginOverlayComponent from 'src/components/login/overlay.component';
@@ -18,19 +18,19 @@ type Props = {
 
 const CHARACTER_LIMIT = 2000;
 
-export default function ReplyComponent({ isAnonymous, close, onSubmit }: Props) {
+export default function ReplyComponent({isAnonymous, close, onSubmit}: Props) {
   const style = useStyles();
 
   const [comment, setValues] = React.useState({
-    text: ''
+    text: '',
   });
 
   const handleChange = (text: string) => (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValues({ ...comment, [text]: event.target.value.substring(0, CHARACTER_LIMIT) });
+    setValues({...comment, [text]: event.target.value.substring(0, CHARACTER_LIMIT)});
   };
 
   const discard = () => {
-    setValues({ ...comment, text: '' });
+    setValues({...comment, text: ''});
   };
 
   const reply = () => {
