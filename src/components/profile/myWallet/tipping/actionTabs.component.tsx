@@ -41,13 +41,19 @@ const ActionTabsComponent = ({
     setValue(newValue);
   };
 
+  const TabSections = ['All', 'Received Tip', 'Sent Tip'];
+
   return (
     <div className={classes.root}>
       <div className={classes.demo2}>
         <StyledTabsComponent value={value} onChange={handleChange} aria-label="styled tabs example">
-          <StyledTab label="All" />
-          <StyledTab label="Received Tip" />
-          <StyledTab label="Sent Tip" />
+          {TabSections.map((section, index) => (
+            <StyledTab
+              label={section}
+              id={`simple-tab-${index}-${section}`}
+              key={`simple-tab-${index}-${section}`}
+            />
+          ))}
         </StyledTabsComponent>
         <TabPanel value={value} index={0}>
           {loading ? (
