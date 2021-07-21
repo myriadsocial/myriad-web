@@ -6,6 +6,8 @@ import {fade, withStyles, createStyles} from '@material-ui/core/styles';
 interface StyledTabProps {
   label: string;
   ariaLabel?: string;
+  id: string;
+  key: string;
 }
 
 export const StyledTab = withStyles(() =>
@@ -27,5 +29,12 @@ export const StyledTab = withStyles(() =>
     },
   }),
 )((props: StyledTabProps) => (
-  <Tab aria-label={props.ariaLabel} disableRipple {...props} label={props.label} />
+  <Tab
+    aria-label={props.ariaLabel}
+    disableRipple
+    {...props}
+    label={props.label}
+    id={props.id}
+    key={props.key}
+  />
 ));
