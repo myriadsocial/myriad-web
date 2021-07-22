@@ -34,8 +34,18 @@ export interface LikePost extends Action {
   postId: string;
 }
 
+export interface UnlikePost extends Action {
+  type: constants.UNLIKE_POST;
+  postId: string;
+}
+
 export interface DislikePost extends Action {
   type: constants.DISLIKE_POST;
+  postId: string;
+}
+
+export interface UndislikePost extends Action {
+  type: constants.UNDISLIKE_POST;
   postId: string;
 }
 
@@ -54,6 +64,8 @@ export type Actions =
   | UpdateTimelineFilter
   | LikePost
   | DislikePost
+  | UnlikePost
+  | UndislikePost
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -195,19 +207,38 @@ export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
       }
 
       if (like) {
+        let likeList = await PostAPI.getLikes(postId);
+
+        likeList = likeList.filter(likeStatus => likeStatus.userId === user.id);
+        if (likeList[0].status === false || !likeList.length) {
+          dispatch({
+            type: constants.LIKE_POST,
+            postId,
+          });
+        } else {
+          dispatch({
+            type: constants.UNLIKE_POST,
+            postId,
+          });
+        }
         await PostAPI.like(user.id, postId);
-
-        dispatch({
-          type: constants.LIKE_POST,
-          postId,
-        });
       } else {
-        await PostAPI.dislike(user.id, postId);
+        let dislikeList = await PostAPI.getDislikes(postId);
 
-        dispatch({
-          type: constants.DISLIKE_POST,
-          postId,
-        });
+        dislikeList = dislikeList.filter(dislikeStatus => dislikeStatus.userId === user.id);
+        if (dislikeList[0].status === false || !dislikeList.length) {
+          dispatch({
+            type: constants.DISLIKE_POST,
+            postId,
+          });
+        } else {
+          dispatch({
+            type: constants.UNDISLIKE_POST,
+            postId,
+          });
+        }
+
+        await PostAPI.dislike(user.id, postId);
       }
     } catch (error) {
       dispatch(setError(error.message));
