@@ -28,6 +28,7 @@ import SendTipModal from 'src/components/common/sendtips/SendTipModal';
 import {useWalletAddress} from 'src/components/common/sendtips/use-wallet.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
+import {usePostHook} from 'src/hooks/use-post.hook';
 import {useSocialDetail} from 'src/hooks/use-social.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {ImageData} from 'src/interfaces/post';
@@ -64,12 +65,15 @@ const PostComponent: React.FC<PostComponentProps> = ({
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {loading, detail} = useSocialDetail(post);
 
+  const {likePost, dislikePost} = usePostHook();
   const {openTipSummary} = useTipSummaryHook();
   const [expanded, setExpanded] = useState(defaultExpanded);
   const {loadWalletDetails, walletDetails} = useWalletAddress(post.id);
   const [walletReceiverDetail, setWalletReceiverDetail] = useState<WalletDetail>();
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const headerRef = useRef<any>();
   const sendTipRef = useRef<any>();
+  /* eslint-disable @typescript-eslint/no-explicit-any */
 
   const defineWalletReceiverDetail = () => {
     const tempWalletDetail = walletDetails.filter(walletDetail => {
@@ -167,12 +171,14 @@ const PostComponent: React.FC<PostComponentProps> = ({
     );
   };
 
-  const likePost = () => {
+  const likePostHandle = () => {
     console.log('liked Post!');
+    likePost(post.id);
   };
 
-  const dislikePost = () => {
+  const dislikePostHandle = () => {
     console.log('disliked Post!');
+    dislikePost(post.id);
   };
 
   if (loading) return null;
@@ -242,8 +248,8 @@ const PostComponent: React.FC<PostComponentProps> = ({
             detail={detail}
             expandComment={handleExpandClick}
             commentExpanded={expanded}
-            likePost={likePost}
-            dislikePost={dislikePost}
+            likePost={likePostHandle}
+            dislikePost={dislikePostHandle}
             tipOwner={tipPostUser}
           />
         </CardActions>
