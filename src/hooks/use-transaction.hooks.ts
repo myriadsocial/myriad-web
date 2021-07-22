@@ -35,8 +35,10 @@ export const useTransaction = () => {
         url: '/transactions',
         method: 'GET',
         params: {
-          ...params,
-          where: {or: [{to: user.id}, {from: user.id}]},
+          filter: {
+            ...params,
+            where: {or: [{to: user.id}, {from: user.id}]},
+          },
         },
       });
 
