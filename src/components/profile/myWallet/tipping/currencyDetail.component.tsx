@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,6 +8,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles, fade, createStyles, withStyles, Theme} from '@material-ui/core/styles';
+
+import {BalanceDetail} from 'src/interfaces/balance';
+import {UserTransactionDetail} from 'src/interfaces/user';
 
 const useStylesForCurrencyDetails = makeStyles((theme: Theme) =>
   createStyles({
@@ -98,14 +101,47 @@ const TableCell = withStyles({
   },
 })(MuiTableCell);
 
-export const CurrencyDetails = () => {
+interface CurrencyDetailComponentProps {
+  userTransactionDetails: UserTransactionDetail[];
+  balanceDetail: BalanceDetail;
+}
+
+interface TokenDetail {
+  id: string;
+  sentToMe: number;
+  sentToThem: number;
+  userId: string;
+  tokenId: string;
+}
+
+export const CurrencyDetails = ({
+  userTransactionDetails,
+  balanceDetail,
+}: CurrencyDetailComponentProps) => {
+  const [tokenDetail, setTokenDetail] = useState<TokenDetail>();
   const style = useStylesForCurrencyDetails();
 
-  function createData(currency: string, balance: string) {
-    return {currency, balance};
-  }
+  useEffect(() => {
+    const temp = getCommonTransactionDetail(userTransactionDetails, balanceDetail);
+    setTokenDetail(temp);
+  }, [balanceDetail]);
 
-  const rows = [createData('Total received', '+82.31'), createData('Total sent', '-12.4123')];
+  const getCommonTransactionDetail = (
+    userTransactionDetails: UserTransactionDetail[],
+    balanceDetail: BalanceDetail,
+  ) => {
+    return userTransactionDetails.find(detail => detail.tokenId === balanceDetail.tokenSymbol);
+  };
+
+  const convertMYRValue = (valueReceivedOrSent: number) => {
+    if (!balanceDetail.tokenDecimals) return 'DECIMALS N/A';
+    const MYR_DECIMALS = balanceDetail.tokenDecimals;
+    const BASE_NUMBER = 10;
+    const convertedValue = valueReceivedOrSent / BASE_NUMBER ** MYR_DECIMALS;
+    return convertedValue;
+  };
+
+  if (!tokenDetail) return null;
 
   return (
     <TableContainer>
@@ -113,26 +149,38 @@ export const CurrencyDetails = () => {
         <TableHead>
           <TableRow>
             <TableCell>
-              <Typography className={style.balanceText}>ACA</Typography>
+              <Typography className={style.balanceText}>{balanceDetail.tokenSymbol}</Typography>
             </TableCell>
             <TableCell align="right">
-              <Typography className={style.balanceText}>20</Typography>
+              <Typography className={style.balanceText}>{balanceDetail.freeBalance}</Typography>
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
-            <TableRow key={row.currency}>
-              <TableCell component="th" scope="row">
-                <Typography className={style.balanceText}>{row.currency}</Typography>
-              </TableCell>
-              <TableCell align="right">
-                <Typography className={row.currency === 'Total received' ? style.green : style.red}>
-                  {row.balance}
-                </Typography>
-              </TableCell>
-            </TableRow>
-          ))}
+          <TableRow key={`${tokenDetail.id}-received`}>
+            <TableCell component="th" scope="row">
+              <Typography className={style.balanceText}>Total Received:</Typography>
+            </TableCell>
+            <TableCell align="right">
+              <Typography className={style.green}>
+                {tokenDetail.tokenId === 'MYR'
+                  ? convertMYRValue(tokenDetail.sentToMe)
+                  : tokenDetail.sentToMe}
+              </Typography>
+            </TableCell>
+          </TableRow>
+          <TableRow key={`${tokenDetail.id}-sent`}>
+            <TableCell component="th" scope="row">
+              <Typography className={style.balanceText}>Total Sent:</Typography>
+            </TableCell>
+            <TableCell align="right">
+              <Typography className={style.red}>
+                {tokenDetail.tokenId === 'MYR'
+                  ? convertMYRValue(tokenDetail.sentToThem)
+                  : tokenDetail.sentToThem}
+              </Typography>
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </TableContainer>
