@@ -24,7 +24,6 @@ import {useStyles} from './conntect.style';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
-import {parsePostUrl} from 'src/helpers/url';
 import {SocialsEnum} from 'src/interfaces';
 
 export type ConnectComponentRefProps = {
@@ -88,13 +87,10 @@ export const ConnectComponent = forwardRef(
       const text = e.clipboardData.getData('Text');
 
       if (social === SocialsEnum.FACEBOOK) {
-        const match = parsePostUrl(social, text);
+        setUrlValid(true);
 
-        setUrlValid(match !== null);
-        if (match) {
-          const name = text.replace(prefix.facebook, '');
-          setSocialName(name);
-        }
+        const name = text.replace(prefix.facebook, '');
+        setSocialName(name);
       } else {
         const name = text.substring(text.lastIndexOf('/') + 1);
 
@@ -242,7 +238,7 @@ export const ConnectComponent = forwardRef(
                 <ListItemText disableTypography>
                   {social === SocialsEnum.FACEBOOK ? (
                     <Typography variant="caption">
-                      Copy and paste the URL of the post (make sure it's public!) here:
+                      Copy and paste the URL of the post (make sure it&apos;s public!) here:
                     </Typography>
                   ) : (
                     <Typography variant="caption">Tell us your {social} username here:</Typography>
@@ -294,3 +290,5 @@ export const ConnectComponent = forwardRef(
     );
   },
 );
+
+ConnectComponent.displayName = 'ConnectComponent';
