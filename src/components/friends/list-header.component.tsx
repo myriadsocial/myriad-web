@@ -12,7 +12,7 @@ export const ListHeaderComponent: React.FC<ListHeaderProps> = props => {
 
   return (
     <div style={{marginBottom: 16}}>
-      <Typography variant="caption" style={{fontWeight: 500, fontSize: 14}}>
+      <Typography variant="caption" style={{fontWeight: 700, fontSize: 16}}>
         {title}
       </Typography>
       {children}
