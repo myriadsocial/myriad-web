@@ -16,6 +16,7 @@ import {ExperienceProvider} from '../experience/experience.context';
 import TipAlertComponent from 'src/components/alert/TipAlert.component';
 import {LayoutSettingProvider} from 'src/context/layout.context';
 import {TransactionProvider} from 'src/context/transaction.context';
+import {useUserHook} from 'src/hooks/use-user.hook';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 import TourComponent from 'src/tour/Tour.component';
@@ -41,7 +42,14 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const {updateUser} = useUserHook();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+
+  const handleFinishTour = (skip: boolean) => {
+    updateUser({
+      skip_tour: skip,
+    });
+  };
 
   if (!user) return null;
 
@@ -54,7 +62,10 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
 
       <LayoutSettingProvider>
         <NoSsr>
-          <TourComponent disable={anonymous} userId={user.id} />
+          <TourComponent
+            disabled={anonymous || Boolean(user.skip_tour)}
+            onFinished={handleFinishTour}
+          />
         </NoSsr>
         <TransactionProvider>
           <ExperienceProvider>

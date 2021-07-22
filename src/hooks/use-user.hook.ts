@@ -7,7 +7,13 @@ import {RootState} from 'src/reducers';
 import {updateUser, deleteSocial} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
-export const useUserHook = () => {
+type UserHookProps = {
+  disconnectSocial: (social: SocialsEnum) => void;
+  loadFcmToken: () => void;
+  updateUser: (values: Partial<User>) => void;
+};
+
+export const useUserHook = (): UserHookProps => {
   const dispatch = useDispatch();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);

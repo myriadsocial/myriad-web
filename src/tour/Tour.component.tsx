@@ -1,25 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Joyride, {CallBackProps, STATUS, Step} from 'react-joyride';
-import {useSelector} from 'react-redux';
 
 import {Button} from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
-import {useUserHook} from 'src/hooks/use-user.hook';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
 import theme from 'src/themes/light';
 
 type TourComponentProps = {
-  disable: boolean;
-  userId: string;
+  disabled: boolean;
+  onFinished: (skip: boolean) => void;
 };
 
-const TourComponent: React.FC<TourComponentProps> = ({disable, userId}) => {
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {updateUser} = useUserHook();
-  const [run, setRun] = useState(false);
-
+const TourComponent: React.FC<TourComponentProps> = ({disabled, onFinished}) => {
   const steps: Step[] = [
     {
       target: '#user-profile',
@@ -70,36 +62,18 @@ const TourComponent: React.FC<TourComponentProps> = ({disable, userId}) => {
     },
   ];
 
-  useEffect(() => {
-    const skip = Boolean(user?.skip_tour);
-
-    if (!disable && !skip) {
-      setRun(true);
-    }
-  }, [user, disable]);
-
   const handleJoyrideCallback = (data: CallBackProps) => {
     const {status} = data;
 
     if (([STATUS.FINISHED] as string[]).includes(status)) {
-      // Need to set our running state to false, so we can restart if we click start again.
-
-      setRun(false);
-
-      if (!disable) {
-        updateUser({
-          skip_tour: true,
-        });
-      }
+      onFinished(true);
     }
   };
-
-  if (!user) return null;
 
   return (
     <>
       <Joyride
-        run={run}
+        run={!disabled}
         steps={steps}
         continuous={true}
         scrollToFirstStep={true}
