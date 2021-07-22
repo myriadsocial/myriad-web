@@ -47,7 +47,8 @@ const TransactionComponent: React.FC<TransactionProps> = ({forwardedRef, detaile
   const {loading, error, transactions, inboundTxs, outboundTxs, loadInitTransaction} =
     useTransaction();
 
-  const {load, loading: loadingTokens, error: errorTokens, tokensReady} = usePolkadotApi();
+  // TODO: Need to migrate to redux
+  const {load, tokensReady} = usePolkadotApi();
 
   const dispatch = useDispatch();
 
