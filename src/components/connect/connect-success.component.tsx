@@ -9,6 +9,8 @@ import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
+import {capitalize} from 'src/helpers/string';
+import {SocialsEnum} from 'src/interfaces/social';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,10 +42,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type ConnectSuccessProps = {
   open: boolean;
+  social: SocialsEnum;
   onClose: () => void;
 };
 
-export const ConnectSuccessComponent: React.FC<ConnectSuccessProps> = ({open, onClose}) => {
+export const ConnectSuccessComponent: React.FC<ConnectSuccessProps> = ({open, social, onClose}) => {
   const styles = useStyles();
 
   return (
@@ -60,11 +63,11 @@ export const ConnectSuccessComponent: React.FC<ConnectSuccessProps> = ({open, on
           <CheckCircleOutlineIcon className={styles.icon} />
           <div className={styles.message}>
             <Typography variant="h4" color="textPrimary">
-              Twitter Account has successfully linked
+              {capitalize(social)} Account has successfully linked
             </Typography>
 
             <Typography variant="subtitle1" color="textPrimary">
-              Now you can collect your tip and import post from Twitter
+              Now you can collect your tip and import post from {capitalize(social)}
             </Typography>
           </div>
         </DialogContent>
