@@ -4,7 +4,7 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {Token} from 'src/interfaces/token';
-import {ExtendedUser, User} from 'src/interfaces/user';
+import {ExtendedUser, User, UserTransactionDetail} from 'src/interfaces/user';
 import * as TokenAPI from 'src/lib/api/token';
 import * as UserAPI from 'src/lib/api/user';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -28,6 +28,11 @@ export interface FetchUserToken extends Action {
   payload: Token[];
 }
 
+export interface FetchUserTransactionDetails extends Action {
+  type: constants.FETCH_USER_TRANSACTION_DETAILS;
+  payload: UserTransactionDetail[];
+}
+
 export interface UpdateUser extends Action {
   type: constants.UPDATE_USER;
   user: ExtendedUser;
@@ -37,7 +42,13 @@ export interface UpdateUser extends Action {
  * Union Action Types
  */
 
-export type Actions = FetchUser | FetchUserToken | SetUserAsAnonymous | UpdateUser | BaseAction;
+export type Actions =
+  | FetchUser
+  | FetchUserToken
+  | SetUserAsAnonymous
+  | UpdateUser
+  | FetchUserTransactionDetails
+  | BaseAction;
 
 /**
  *
@@ -93,6 +104,30 @@ export const fetchToken: ThunkActionCreator<Actions, RootState> =
       dispatch({
         type: constants.FETCH_USER_TOKEN,
         payload: tokens,
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const fetchUserTransactionDetails: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    const {
+      userState: {user},
+    } = getState();
+
+    if (!user) return;
+
+    try {
+      const transactionDetails = await UserAPI.getUserTransactionDetails(user.id);
+
+      dispatch({
+        type: constants.FETCH_USER_TRANSACTION_DETAILS,
+        payload: transactionDetails,
       });
     } catch (error) {
       dispatch(setError(error.message));

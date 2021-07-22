@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import {User, ExtendedUser, UserCredential} from 'src/interfaces/user';
+import {User, ExtendedUser, UserCredential, UserTransactionDetail} from 'src/interfaces/user';
 
 const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -111,6 +111,15 @@ export const search = async (query: string): Promise<User[]> => {
         },
       },
     },
+  });
+
+  return data;
+};
+
+export const getUserTransactionDetails = async (id: string): Promise<UserTransactionDetail[]> => {
+  const {data} = await MyriadAPI.request<UserTransactionDetail[]>({
+    url: `/users/${id}/detail-transactions`,
+    method: 'GET',
   });
 
   return data;

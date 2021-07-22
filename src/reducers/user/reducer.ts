@@ -6,11 +6,12 @@ import * as constants from './constants';
 
 import * as Redux from 'redux';
 import {Token} from 'src/interfaces/token';
-import {ExtendedUser} from 'src/interfaces/user';
+import {ExtendedUser, UserTransactionDetail} from 'src/interfaces/user';
 
 export interface UserState extends BaseState {
   user?: ExtendedUser;
   tokens: Token[];
+  transactionDetails: UserTransactionDetail[];
   anonymous: boolean;
   alias: string;
 }
@@ -19,6 +20,7 @@ const initalState: UserState = {
   loading: false,
   anonymous: false,
   tokens: [],
+  transactionDetails: [],
   alias: '',
 };
 
@@ -54,6 +56,13 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       return {
         ...state,
         tokens: action.payload,
+      };
+    }
+
+    case constants.FETCH_USER_TRANSACTION_DETAILS: {
+      return {
+        ...state,
+        transactionDetails: action.payload,
       };
     }
 
