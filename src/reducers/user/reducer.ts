@@ -50,6 +50,13 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       };
     }
 
+    case constants.FETCH_USER_TOKEN: {
+      return {
+        ...state,
+        tokens: action.payload,
+      };
+    }
+
     default: {
       return state;
     }
