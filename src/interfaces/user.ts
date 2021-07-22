@@ -33,3 +33,11 @@ export interface ExtendedUser extends User {
 export interface ExtendedUserPost extends User {
   posts: Post[];
 }
+
+export interface UserTransactionDetail {
+  id: string;
+  sentToMe: number;
+  sentToThem: number;
+  userId: string;
+  tokenId: string;
+}
