@@ -1,6 +1,5 @@
 import React from 'react';
 
-// TODO: use CurrencyDetails to list the Total Received, Total Sent of each token
 import {CurrencyDetails} from './currencyDetail.component';
 import {StyledTab} from './styledTab.component';
 import StyledTabsComponent from './styledTabs.component';
