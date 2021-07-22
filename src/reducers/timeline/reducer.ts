@@ -61,12 +61,38 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       };
     }
 
+    case constants.UNLIKE_POST: {
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post.id === action.postId && post.publicMetric) {
+            post.publicMetric.liked -= 1;
+          }
+
+          return post;
+        }),
+      };
+    }
+
     case constants.DISLIKE_POST: {
       return {
         ...state,
         posts: state.posts.map(post => {
           if (post.id === action.postId && post.publicMetric) {
             post.publicMetric.disliked += 1;
+          }
+
+          return post;
+        }),
+      };
+    }
+
+    case constants.UNDISLIKE_POST: {
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post.id === action.postId && post.publicMetric) {
+            post.publicMetric.disliked -= 1;
           }
 
           return post;

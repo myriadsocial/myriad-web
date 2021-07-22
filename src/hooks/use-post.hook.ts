@@ -3,11 +3,11 @@ import {useDispatch} from 'react-redux';
 
 import {useAlertHook} from './use-alert.hook';
 
-import {User} from 'src/interfaces/user';
 import * as LocalAPI from 'src/lib/api/local';
 import {createPost, importPost, toggleLikePost} from 'src/reducers/timeline/actions';
 
-export const usePostHook = (user: User) => {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const usePostHook = () => {
   const dispatch = useDispatch();
   const {showAlert} = useAlertHook();
   const [loading, setLoading] = useState(true);
