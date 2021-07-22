@@ -9,6 +9,7 @@ const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useShareSocial = (publicKey?: string) => {
   const {showAlert} = useAlertHook();
 
@@ -16,12 +17,50 @@ export const useShareSocial = (publicKey?: string) => {
   const [isShared, setShared] = useState(false);
 
   const handleError = (error: AxiosError) => {
+    console.log('error: ', error.response);
     if (error.response) {
       switch (error.response.status) {
         case 404:
+          switch (error.response.data.error.name) {
+            case 'Error':
+              showAlert({
+                title: 'Error',
+                message: 'Please enter the correct account address',
+                severity: 'error',
+              });
+              break;
+            default:
+              switch (error.response.data.error.message) {
+                case 'This twitter/facebook/reddit does not belong to you!':
+                  showAlert({
+                    title: 'Error',
+                    message: 'Sorry, this account has been claimed by somebody else',
+                    severity: 'error',
+                  });
+                  break;
+                case 'Credential Invalid':
+                  showAlert({
+                    title: 'Error',
+                    message: 'Invalid credentials',
+                    severity: 'error',
+                  });
+                  break;
+                default:
+                  showAlert({
+                    title: 'Error',
+                    message: error.response.data.error.message,
+                    severity: 'error',
+                  });
+                  break;
+              }
+              break;
+          }
+          break;
+
+        case 400:
           showAlert({
             title: 'Error',
-            message: 'Profile already used',
+            message: 'Please enter the correct account address',
             severity: 'error',
           });
           break;
@@ -29,7 +68,7 @@ export const useShareSocial = (publicKey?: string) => {
         default:
           showAlert({
             title: 'Error',
-            message: 'Profile already used',
+            message: 'Please enter the correct account address',
             severity: 'error',
           });
           break;
