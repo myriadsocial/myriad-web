@@ -5,7 +5,6 @@ import * as constants from './constants';
 import {Action} from 'redux';
 import {Post} from 'src/interfaces/post';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
-import * as LocalAPI from 'src/lib/api/local';
 import * as PostAPI from 'src/lib/api/post';
 import {ThunkActionCreator} from 'src/types/thunk';
 
@@ -110,9 +109,8 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
   };
 
 export const createPost: ThunkActionCreator<Actions, RootState> =
-  (text: string, tags: string[], files: File[]) => async (dispatch, getState) => {
-    const images: string[] = [];
-    const hasMedia = files.length > 0;
+  (text: string, tags: string[], images: string[]) => async (dispatch, getState) => {
+    const hasMedia = images.length > 0;
     const {
       userState: {user},
     } = getState();
@@ -122,17 +120,6 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
     try {
       if (!user) {
         throw new Error('User not found');
-      }
-
-      if (hasMedia) {
-        // TODO: upload multiple file
-        const uploadedURLs = await Promise.all(files.map(file => LocalAPI.uploadImage(file)));
-
-        uploadedURLs.forEach(url => {
-          if (url) {
-            images.push(url);
-          }
-        });
       }
 
       // TODO: simplify this

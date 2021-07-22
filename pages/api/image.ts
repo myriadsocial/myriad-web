@@ -1,4 +1,3 @@
-//@ts-ignore
 import type {NextApiRequest, NextApiResponse} from 'next';
 import nextConnect from 'next-connect';
 
@@ -6,6 +5,11 @@ import {v2 as cloudinary} from 'cloudinary';
 import DatauriParser from 'datauri/parser';
 import multer from 'multer';
 import path from 'path';
+import * as sharp from 'sharp';
+
+type NextApiRequestWithFormData = NextApiRequest & {
+  file: any;
+};
 
 type ResponseImageUpload = {
   url?: string;
@@ -25,31 +29,58 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
-//@ts-ignore
-const cloudinaryUpload = (file: any) => cloudinary.uploader.upload(file);
+const cloudinaryUpload = (file: string) =>
+  cloudinary.uploader.upload(file, {
+    transformation: {
+      width: 1024,
+    },
+  });
 
-//@ts-ignore
-const formatBufferTo64 = (file: any) => {
+const formatBufferTo64 = (name: string, file: Buffer): DatauriParser => {
   const parser = new DatauriParser();
 
-  return parser.format(path.extname(file.originalname).toString(), file.buffer);
+  return parser.format(path.extname(name).toString(), file);
 };
 
+// Doc on custom API configuration:
+// https://nextjs.org/docs/api-routes/api-middlewares#custom-config
 export const config = {
   api: {
     bodyParser: false,
   },
 };
 
-//@ts-ignore
 const handler = nextConnect()
   .use(upload.single('image'))
-  .post(async (req: any, res: NextApiResponse<ResponseImageUpload>) => {
-    const file = formatBufferTo64(req.file);
+  .post(async (req: NextApiRequestWithFormData, res: NextApiResponse<ResponseImageUpload>) => {
+    const fileName = req.file.originalname;
+    const image = req.file.buffer as Buffer;
 
-    const uploadResult = await cloudinaryUpload(file.content);
+    // resize image based on width and keep the aspect ratio
+    // store as buffer to keep server clean from additional file
+    // @ts-expect-error
+    const resized = await sharp(image)
+      .resize({
+        width: 2048,
+      })
+      .toBuffer({resolveWithObject: true});
 
-    return res.json({url: uploadResult.secure_url});
+    // format file as string
+    const file = formatBufferTo64(fileName, resized.data);
+
+    if (!file.content) {
+      throw new Error('Failed to parse file');
+    }
+
+    try {
+      const uploadResult = await cloudinaryUpload(file.content);
+
+      return res.json({url: uploadResult.secure_url});
+    } catch (error) {
+      console.log('[next-api][upload-image][error]', error);
+
+      throw error;
+    }
   });
 
 export default handler;
