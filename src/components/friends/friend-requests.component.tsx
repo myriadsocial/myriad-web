@@ -91,7 +91,7 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest}) => {
         <Typography
           variant="caption"
           component="div"
-          style={{fontWeight: 500, fontSize: 14, lineHeight: '36px'}}>
+          style={{fontWeight: 700, fontSize: 16, lineHeight: '36px'}}>
           Friend Requests ({totalRequest})
         </Typography>
 
@@ -110,7 +110,7 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest}) => {
                 color: '#B1AEB7',
                 padding: '16px 0',
               }}>
-              You don't have any friend requests
+              You don&apos;t have any friend requests
             </Typography>
           </ShowIf>
 

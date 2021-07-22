@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import Collapse from '@material-ui/core/Collapse';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -14,9 +13,7 @@ import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 import {ListHeaderComponent} from './list-header.component';
-import {ListSubHeaderComponent} from './list-sub-header.component';
 
-import {ToggleCollapseButton} from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {RootState} from 'src/reducers';
 import {FriendState} from 'src/reducers/friend/reducer';
@@ -51,6 +48,10 @@ const useStyles = makeStyles((theme: Theme) =>
       '& .MuiListItemText-root': {
         alignSelf: 'center',
       },
+      '& .MuiTypography-root': {
+        fontSize: 16,
+        fontWeight: 400,
+      },
     },
     online: {
       color: '#06960C',
@@ -64,108 +65,75 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({showOnlineStatus = fa
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {friends, totalFriend} = useSelector<RootState, FriendState>(state => state.friendState);
 
-  const [openOnlineFriends, setOpenOnlineFriends] = useState(true);
-  const [openOtherFriends] = useState(false);
-
-  const toggleOnlineFriends = () => {
-    setOpenOnlineFriends(!openOnlineFriends);
-  };
-
   if (!user) return null;
 
   return (
     <Box className={style.root}>
       <ListHeaderComponent title={`Friends (${totalFriend})`} />
 
-      <div>
-        <div className={style.header}>
-          <ListSubHeaderComponent title={`Online (${totalFriend})`} />
-          {friends.length > 0 && <ToggleCollapseButton onClick={toggleOnlineFriends} />}
-        </div>
-        <Collapse in={openOnlineFriends} timeout="auto" unmountOnExit>
-          <div className={style.content}>
-            <ShowIf condition={friends.length === 0}>
-              <Typography
-                variant="h4"
-                color="textPrimary"
-                style={{
-                  fontWeight: 500,
-                  fontSize: 14,
-                  textAlign: 'center',
-                  padding: '16px 0',
-                  color: '#B1AEB7',
-                }}>
-                You don't have any Myriad friends yet. Search for people or tell your friends about
-                Myriad!
-              </Typography>
-            </ShowIf>
+      <div className={style.content}>
+        <ShowIf condition={friends.length === 0}>
+          <Typography
+            variant="h4"
+            color="textPrimary"
+            style={{
+              fontWeight: 500,
+              fontSize: 14,
+              textAlign: 'center',
+              padding: '16px 0',
+              color: '#B1AEB7',
+            }}>
+            You don&apos;t have any Myriad friends yet. Search for people or tell your friends about
+            Myriad!
+          </Typography>
+        </ShowIf>
 
-            <List className={style.list}>
-              {friends.map(request => {
-                return (
-                  <div key={request.id}>
-                    {user.id !== request.requestorId && (
-                      <ListItem className={style.item} alignItems="flex-start">
-                        <ListItemAvatar>
-                          <Avatar
-                            alt={request.requestor.name}
-                            src={request.requestor.profilePictureURL}
-                          />
-                        </ListItemAvatar>
-                        <ListItemText>
-                          <Typography
-                            component="span"
-                            variant="h4"
-                            color="textPrimary"
-                            style={{fontSize: 16}}>
-                            {request.requestor.name}
-                          </Typography>
-                        </ListItemText>
-                        {showOnlineStatus && (
-                          <ListItemSecondaryAction>
-                            <FiberManualRecordIcon className={style.online} />
-                          </ListItemSecondaryAction>
-                        )}
-                      </ListItem>
+        <List className={style.list}>
+          {friends.map(request => {
+            return (
+              <>
+                {user.id !== request.requestorId && (
+                  <ListItem key={request.id} className={style.item} alignItems="flex-start">
+                    <ListItemAvatar>
+                      <Avatar
+                        alt={request.requestor.name}
+                        src={request.requestor.profilePictureURL}
+                      />
+                    </ListItemAvatar>
+                    <ListItemText>
+                      <Typography component="span" variant="h4" color="textPrimary">
+                        {request.requestor.name}
+                      </Typography>
+                    </ListItemText>
+                    {showOnlineStatus && (
+                      <ListItemSecondaryAction>
+                        <FiberManualRecordIcon className={style.online} />
+                      </ListItemSecondaryAction>
                     )}
+                  </ListItem>
+                )}
 
-                    {user.id !== request.friendId && (
-                      <ListItem className={style.item} alignItems="flex-start">
-                        <ListItemAvatar>
-                          <Avatar
-                            alt={request.friend.name}
-                            src={request.friend.profilePictureURL}
-                          />
-                        </ListItemAvatar>
-                        <ListItemText>
-                          <Typography
-                            component="span"
-                            variant="h4"
-                            color="textPrimary"
-                            style={{fontSize: 16}}>
-                            {request.friend.name}
-                          </Typography>
-                        </ListItemText>
-                        {showOnlineStatus && (
-                          <ListItemSecondaryAction>
-                            <FiberManualRecordIcon className={style.online} />
-                          </ListItemSecondaryAction>
-                        )}
-                      </ListItem>
+                {user.id !== request.friendId && (
+                  <ListItem key={request.id} className={style.item} alignItems="flex-start">
+                    <ListItemAvatar>
+                      <Avatar alt={request.friend.name} src={request.friend.profilePictureURL} />
+                    </ListItemAvatar>
+                    <ListItemText>
+                      <Typography component="span" variant="h4" color="textPrimary">
+                        {request.friend.name}
+                      </Typography>
+                    </ListItemText>
+                    {showOnlineStatus && (
+                      <ListItemSecondaryAction>
+                        <FiberManualRecordIcon className={style.online} />
+                      </ListItemSecondaryAction>
                     )}
-                  </div>
-                );
-              })}
-            </List>
-          </div>
-        </Collapse>
-      </div>
-
-      <div>
-        <div className={style.header}>
-          <ListSubHeaderComponent title={`Others (0)`} />
-          {openOtherFriends && <ToggleCollapseButton onClick={console.log} />}
-        </div>
+                  </ListItem>
+                )}
+              </>
+            );
+          })}
+        </List>
       </div>
     </Box>
   );
