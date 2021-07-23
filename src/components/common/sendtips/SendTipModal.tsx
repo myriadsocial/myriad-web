@@ -94,13 +94,13 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
     },
   }));
 
-  console.log({
-    walletReceiverDetail,
-    userAddress,
-    postId,
-    receiverId,
-    success,
-  });
+  //console.log({
+  //walletReceiverDetail,
+  //userAddress,
+  //postId,
+  //receiverId,
+  //success,
+  //});
 
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
@@ -149,65 +149,90 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
     }
   }, [tokenProperties.tokenId, balanceDetails]);
 
+  const handleInputEmpty = () => {
+    setInputError({
+      ...inputError,
+      isErrorInput: false,
+      isTextChanged: true,
+    });
+  };
+
+  const handleInsufficientBalance = () => {
+    setInputError({
+      ...inputError,
+      isErrorInput: true,
+      isTextChanged: true,
+      isInsufficientBalance: true,
+      errorMessage: 'Insufficient balance',
+    });
+  };
+
+  const handleResetInputError = () => {
+    // amount valid, reset InputError state
+    setInputError({
+      isErrorInput: false,
+      isTextChanged: true,
+      isInsufficientBalance: false,
+      errorMessage: '',
+    });
+  };
+
+  const findDecimals = () => {
+    const idx = balanceDetails.findIndex(item => item.tokenSymbol === tokenProperties.tokenId);
+    const decimals = balanceDetails[idx].tokenDecimals ?? 0;
+
+    return decimals;
+  };
+
+  const defineTipAmount = (decimals: number) => {
+    const amountStr = values.amount as string;
+    const amountSent = Number(amountStr) * 10 ** decimals;
+    setTipAmount(amountSent);
+  };
+
+  const checkPostId = () => {
+    if (postId === undefined) {
+      setTippedContent(ContentType.COMMENT);
+    } else {
+      setTippedContent(ContentType.POST);
+    }
+  };
+
+  const handleInputError = () => {
+    setInputError({
+      ...inputError,
+      isErrorInput: true,
+      isTextChanged: true,
+      isInsufficientBalance: false,
+    });
+  };
+
   const checkAmountThenSend = () => {
-    // TODO: this function needs to be separated into smaller chunks for the love of God!
     const regexValidDigits = /^\d*(\.\d+)?$/;
 
     if (values.amount === '') {
-      setInputError({
-        ...inputError,
-        isErrorInput: false,
-        isTextChanged: true,
-      });
+      handleInputEmpty();
     }
     if (regexValidDigits.test(values.amount)) {
-      setInputError({
-        ...inputError,
-        isErrorInput: false,
-        isTextChanged: true,
-      });
+      handleInputEmpty();
 
       if (tokenBalance !== undefined && Number(values.amount) >= Number(tokenBalance)) {
-        setInputError({
-          ...inputError,
-          isErrorInput: true,
-          isTextChanged: true,
-          isInsufficientBalance: true,
-          errorMessage: 'Insufficient balance',
-        });
+        handleInsufficientBalance();
       } else {
-        // amount valid, reset InputError state
-        setInputError({
-          isErrorInput: false,
-          isTextChanged: true,
-          isInsufficientBalance: false,
-          errorMessage: '',
-        });
+        handleResetInputError();
 
-        const idx = balanceDetails.findIndex(item => item.tokenSymbol === tokenProperties.tokenId);
-        const decimals = balanceDetails[idx].tokenDecimals ?? 0;
+        const decimals = findDecimals();
 
-        const amountStr = values.amount as string;
-        const amountSent = Number(amountStr) * 10 ** decimals;
-        setTipAmount(amountSent);
+        defineTipAmount(decimals);
 
         // sendTip will open a pop-up from polkadot.js extension,
         // tx signing is done by supplying a password
         setSenderAddress(userAddress);
 
-        if (postId === undefined) {
-          setTippedContent(ContentType.COMMENT);
-        } else {
-          setTippedContent(ContentType.POST);
-        }
+        checkPostId();
       }
     } else {
-      setInputError({
-        ...inputError,
-        isErrorInput: true,
-        isTextChanged: true,
-        isInsufficientBalance: false,
-      });
+      handleInputError();
     }
   };
 
@@ -233,34 +258,42 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
     sendTip(sendTipPayload);
   };
 
-  //useEffect(() => {
-  //if (walletReceiverDetail && sendTipClicked && tippedContent) {
-  //switch (tippedContent) {
-  //case ContentType.COMMENT:
-  //sendTipWithPayload({
-  //senderAddress,
-  //toAddress: receiverId as string,
-  //amountSent: tipAmount,
-  //decimals: selectedTokenDecimals,
-  //currencyId: selectedToken,
-  //postId: '',
-  //wsAddress,
-  //});
-  //break;
-  //default:
-  //sendTipWithPayload({
-  //senderAddress,
-  //toAddress: walletReceiverDetail.walletAddress,
-  //amountSent: tipAmount,
-  //decimals: selectedTokenDecimals,
-  //currencyId: selectedToken,
-  //postId: walletReceiverDetail.postId,
-  //wsAddress,
-  //});
-  //break;
-  //}
-  //}
-  //}, [sendTipClicked]);
+  const sendTipFromComment = () => {
+    sendTipWithPayload({
+      senderAddress,
+      toAddress: receiverId as string,
+      amountSent: tipAmount,
+      decimals: selectedTokenDecimals,
+      currencyId: selectedToken,
+      postId: '',
+      wsAddress,
+    });
+  };
+
+  const sendTipFromPost = () => {
+    sendTipWithPayload({
+      senderAddress,
+      toAddress: walletReceiverDetail.walletAddress,
+      amountSent: tipAmount,
+      decimals: selectedTokenDecimals,
+      currencyId: selectedToken,
+      postId: walletReceiverDetail.postId,
+      wsAddress,
+    });
+  };
+
+  useEffect(() => {
+    if (walletReceiverDetail && sendTipClicked && tippedContent) {
+      switch (tippedContent) {
+        case ContentType.COMMENT:
+          sendTipFromComment();
+          break;
+        default:
+          sendTipFromPost();
+          break;
+      }
+    }
+  }, [sendTipClicked]);
 
   const handleChange = (prop: keyof InputState) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({...values, [prop]: event.target.value});
