@@ -78,3 +78,10 @@ export type Like = {
   postId: string;
   userId: string;
 };
+
+export type Dislike = {
+  id: string;
+  status: boolean;
+  postId: string;
+  userId: string;
+};
