@@ -33,18 +33,81 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
   forwardedRef,
 }) => {
   const {sendTip, load, trxHash, sendTipSuccess, error} = usePolkadotApi();
+
+  const styles = useStyles();
+
   const [showSendTipModal, setShowSendTipModal] = useState(false);
   const [senderAddress, setSenderAddress] = useState('');
-  const [tokenProperties, setTokenProperties] = useState({
-    wsAddress: '',
-    tokenDecimals: 0,
-    tokenId: '',
-  });
   const [tipAmount, setTipAmount] = useState(0);
   const [tippedContent, setTippedContent] = useState<ContentType>();
   const [sendTipClicked, setSendTipClicked] = useState(false);
   const [tokenBalance, setTokenBalance] = useState('');
   const {showTipAlert, showAlert} = useAlertHook();
+
+  const [tokenProperties, setTokenProperties] = useState({
+    wsAddress: '',
+    tokenDecimals: 0,
+    tokenId: '',
+  });
+
+  const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
+    isConfirmed: false,
+    message: '',
+  });
+
+  const [inputError, setInputError] = useState<InputErrorState>({
+    isErrorInput: false,
+    isTextChanged: false,
+    isInsufficientBalance: false,
+    errorMessage: 'Please input a number larger than 0!',
+  });
+  const [values, setValues] = useState<InputState>({
+    amount: '',
+  });
+
+  useEffect(() => {
+    if (sendTipSuccess) {
+      handleAlertTippingSuccess();
+    }
+  }, [sendTipSuccess]);
+
+  useEffect(() => {
+    if (error) {
+      handleAlertTippingError();
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (sendTipConfirmed.isConfirmed) {
+      success(postId);
+    }
+  }, [sendTipConfirmed]);
+
+  useEffect(() => {
+    if (walletReceiverDetail && sendTipClicked && tippedContent) {
+      switch (tippedContent) {
+        case ContentType.COMMENT:
+          sendTipFromComment();
+          break;
+        default:
+          sendTipFromPost();
+          break;
+      }
+    }
+  }, [sendTipClicked, walletReceiverDetail, tippedContent, tokenProperties, tipAmount]);
+
+  useEffect(() => {
+    if (trxHash.length > 0) {
+      handleAfterTipSentSuccess();
+      load(userAddress, availableTokens);
+    }
+  }, [trxHash]);
+
+  useEffect(() => {
+    if (balanceDetails?.length > 0) {
+      handleChangeTokenBalance();
+    }
+  }, [tokenProperties.tokenId, balanceDetails]);
 
   const handleAlertTippingError = () => {
     showAlert({
@@ -62,46 +125,11 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
     });
   };
 
-  useEffect(() => {
-    if (sendTipSuccess) {
-      handleAlertTippingSuccess();
-    }
-  }, [sendTipSuccess]);
-
-  useEffect(() => {
-    if (error) {
-      handleAlertTippingError();
-    }
-  }, [error]);
-
   useImperativeHandle(forwardedRef, () => ({
     triggerSendTipModal() {
       setShowSendTipModal(true);
     },
   }));
-
-  const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
-    isConfirmed: false,
-    message: '',
-  });
-
-  const [inputError, setInputError] = useState<InputErrorState>({
-    isErrorInput: false,
-    isTextChanged: false,
-    isInsufficientBalance: false,
-    errorMessage: 'Please input a number larger than 0!',
-  });
-  const [values, setValues] = useState<InputState>({
-    amount: '',
-  });
-
-  const styles = useStyles();
-
-  useEffect(() => {
-    if (sendTipConfirmed.isConfirmed) {
-      success(postId);
-    }
-  }, [sendTipConfirmed]);
 
   const handleSentTipConfirmed = () => {
     setSendTipConfirmed({
@@ -119,16 +147,8 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
 
   const handleAfterTipSentSuccess = () => {
     handleSentTipConfirmed();
-    setShowSendTipModal(false);
     handleClearValue();
   };
-
-  useEffect(() => {
-    if (trxHash.length > 0) {
-      handleAfterTipSentSuccess();
-      load(userAddress, availableTokens);
-    }
-  }, [trxHash]);
 
   const handleChangeTokenBalance = () => {
     const idx = balanceDetails.findIndex(item => item.tokenSymbol === tokenProperties.tokenId);
@@ -136,12 +156,6 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
       setTokenBalance(balanceDetails[idx]?.freeBalance.toString() ?? '');
     }
   };
-
-  useEffect(() => {
-    if (balanceDetails?.length > 0) {
-      handleChangeTokenBalance();
-    }
-  }, [tokenProperties.tokenId, balanceDetails]);
 
   const handleInputEmpty = () => {
     setInputError({
@@ -224,6 +238,7 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
         setSenderAddress(userAddress);
 
         checkPostId();
+        setSendTipClicked(true);
       }
     } else {
       handleInputError();
@@ -278,19 +293,6 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
     });
   };
 
-  useEffect(() => {
-    if (walletReceiverDetail && sendTipClicked && tippedContent) {
-      switch (tippedContent) {
-        case ContentType.COMMENT:
-          sendTipFromComment();
-          break;
-        default:
-          sendTipFromPost();
-          break;
-      }
-    }
-  }, [sendTipClicked]);
-
   const handleChange = (prop: keyof InputState, event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({...values, [prop]: event.target.value});
   };
@@ -302,7 +304,6 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
 
   const handleSendTip = () => {
     checkAmountThenSend();
-    setSendTipClicked(true);
   };
 
   const handleChangeTokenProperties = (
