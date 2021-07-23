@@ -34,7 +34,7 @@ export interface LikePost extends Action {
   postId: string;
 }
 
-export interface UnlikePost extends Action {
+export interface UnLikePost extends Action {
   type: constants.UNLIKE_POST;
   postId: string;
 }
@@ -44,7 +44,7 @@ export interface DislikePost extends Action {
   postId: string;
 }
 
-export interface UndislikePost extends Action {
+export interface UnDislikePost extends Action {
   type: constants.UNDISLIKE_POST;
   postId: string;
 }
@@ -64,8 +64,8 @@ export type Actions =
   | UpdateTimelineFilter
   | LikePost
   | DislikePost
-  | UnlikePost
-  | UndislikePost
+  | UnLikePost
+  | UnDislikePost
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
