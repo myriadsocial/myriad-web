@@ -4,12 +4,12 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
 
 import DialogTitle from '../DialogTitle.component';
 import {CurrencyTableComponent} from './currencyTable.component';
 import {useStyles} from './send-tips.style';
+import {TipAmountFieldComponent} from './tipAmountField.component';
 
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
@@ -289,7 +289,7 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
     }
   }, [sendTipClicked]);
 
-  const handleChange = (prop: keyof InputState) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (prop: keyof InputState, event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({...values, [prop]: event.target.value});
   };
 
@@ -336,24 +336,39 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
           />
         </DialogContent>
         <DialogContent dividers>
-          <form noValidate autoComplete="off">
-            <TextField
-              value={values.amount}
-              onChange={handleChange('amount')}
-              required
-              error={inputError.isErrorInput ? true : false}
-              id="sendTipAmount"
-              label={`How many ${tokenProperties.tokenId}`}
-              helperText={
-                inputError.isErrorInput
-                  ? inputError.isInsufficientBalance
-                    ? inputError.errorMessage
-                    : 'Invalid input'
-                  : 'Digits only'
-              }
-              variant="outlined"
-            />
-          </form>
+          <TipAmountFieldComponent
+            values={values.amount}
+            onChange={e => handleChange('amount', e)}
+            isError={inputError.isErrorInput ? true : false}
+            fieldLabel={`How many ${tokenProperties.tokenId}`}
+            helperTextField={
+              inputError.isErrorInput
+                ? inputError.isInsufficientBalance
+                  ? inputError.errorMessage
+                  : 'Invalid input'
+                : 'Digits only'
+            }
+          />
+          {
+            //<form noValidate autoComplete="off">
+            //<TextField
+            //value={values.amount}
+            //onChange={handleChange('amount')}
+            //required
+            //error={inputError.isErrorInput ? true : false}
+            //id="sendTipAmount"
+            //label={`How many ${tokenProperties.tokenId}`}
+            //helperText={
+            //inputError.isErrorInput
+            //? inputError.isInsufficientBalance
+            //? inputError.errorMessage
+            //: 'Invalid input'
+            //: 'Digits only'
+            //}
+            //variant="outlined"
+            ///>
+            //</form>
+          }
         </DialogContent>
         <DialogActions>
           <Button
