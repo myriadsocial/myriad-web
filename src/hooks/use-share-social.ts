@@ -1,17 +1,20 @@
 import {useState} from 'react';
+import {useDispatch} from 'react-redux';
 
 import {useAlertHook} from './use-alert.hook';
 
 import Axios, {AxiosError} from 'axios';
 import {SocialsEnum} from 'src/interfaces/index';
+import {fetchUser} from 'src/reducers/user/actions';
 
 const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useShareSocial = (publicKey?: string) => {
+export const useShareSocial = (userId?: string) => {
   const {showAlert} = useAlertHook();
+  const dispatch = useDispatch();
 
   const [sharing, setSharing] = useState(false);
   const [isShared, setShared] = useState(false);
@@ -76,8 +79,8 @@ export const useShareSocial = (publicKey?: string) => {
     }
   };
 
-  const verifyPublicKeyShared = async (platform: SocialsEnum, username: string) => {
-    if (!publicKey) return;
+  const verifyPublicKeyShared = async (platform: SocialsEnum, username: string): Promise<void> => {
+    if (!userId) return;
 
     setSharing(true);
 
@@ -87,12 +90,13 @@ export const useShareSocial = (publicKey?: string) => {
         url: '/verify',
         data: {
           username,
-          publicKey,
           platform,
+          publicKey: userId,
         },
       });
 
       setShared(true);
+      dispatch(fetchUser(userId));
     } catch (error) {
       const err = error as AxiosError;
 
@@ -102,8 +106,8 @@ export const useShareSocial = (publicKey?: string) => {
     }
   };
 
-  const shareOnFacebook = async (username: string) => {
-    if (!publicKey) return;
+  const shareOnFacebook = async (username: string): Promise<void> => {
+    if (!userId) return;
 
     setSharing(true);
 
@@ -113,7 +117,7 @@ export const useShareSocial = (publicKey?: string) => {
         url: '/verify',
         data: {
           username,
-          publicKey,
+          publicKey: userId,
           platform: SocialsEnum.FACEBOOK,
         },
       });
@@ -127,8 +131,8 @@ export const useShareSocial = (publicKey?: string) => {
     }
   };
 
-  const shareOnReddit = async (username: string) => {
-    if (!publicKey) return;
+  const shareOnReddit = async (username: string): Promise<void> => {
+    if (!userId) return;
 
     setSharing(true);
 
@@ -138,7 +142,7 @@ export const useShareSocial = (publicKey?: string) => {
         url: '/verify',
         data: {
           username,
-          publicKey,
+          publicKey: userId,
           platform: SocialsEnum.REDDIT,
         },
       });
@@ -153,8 +157,8 @@ export const useShareSocial = (publicKey?: string) => {
     }
   };
 
-  const shareOnTwitter = async (username: string) => {
-    if (!publicKey) return;
+  const shareOnTwitter = async (username: string): Promise<void> => {
+    if (!userId) return;
 
     setSharing(true);
 
@@ -164,7 +168,7 @@ export const useShareSocial = (publicKey?: string) => {
         url: '/verify',
         data: {
           username,
-          publicKey,
+          publicKey: userId,
           platform: SocialsEnum.TWITTER,
         },
       });

@@ -121,6 +121,8 @@ export const ConnectComponent = forwardRef(
       setOpen(false);
       setShared(false);
       setTermApproved(false);
+      setUrlValid(false);
+      setSocialName('');
     };
 
     if (!social) return null;
