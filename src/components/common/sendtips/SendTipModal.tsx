@@ -264,6 +264,8 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
     });
   };
 
+  if (!walletReceiverDetail) return null;
+
   const sendTipFromPost = () => {
     sendTipWithPayload({
       senderAddress,
@@ -337,7 +339,7 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
         </DialogContent>
         <DialogContent dividers>
           <TipAmountFieldComponent
-            values={values.amount}
+            value={values.amount}
             onChange={e => handleChange('amount', e)}
             isError={inputError.isErrorInput ? true : false}
             fieldLabel={`How many ${tokenProperties.tokenId}`}
@@ -349,26 +351,6 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
                 : 'Digits only'
             }
           />
-          {
-            //<form noValidate autoComplete="off">
-            //<TextField
-            //value={values.amount}
-            //onChange={handleChange('amount')}
-            //required
-            //error={inputError.isErrorInput ? true : false}
-            //id="sendTipAmount"
-            //label={`How many ${tokenProperties.tokenId}`}
-            //helperText={
-            //inputError.isErrorInput
-            //? inputError.isInsufficientBalance
-            //? inputError.errorMessage
-            //: 'Invalid input'
-            //: 'Digits only'
-            //}
-            //variant="outlined"
-            ///>
-            //</form>
-          }
         </DialogContent>
         <DialogActions>
           <Button

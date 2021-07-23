@@ -33,7 +33,6 @@ import {ImageData} from 'src/interfaces/post';
 import {Post} from 'src/interfaces/post';
 import {Props} from 'src/interfaces/send-tips/send-tips';
 import {Token} from 'src/interfaces/token';
-import {WalletDetail} from 'src/interfaces/wallet';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 import {v4 as uuid} from 'uuid';
@@ -96,7 +95,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
   const [expanded, setExpanded] = useState(defaultExpanded);
   const {loadWalletDetails, walletDetails} = useWalletAddress(post.id);
   const headerRef = useRef<any>();
-  const sendTipRef = useRef<React.ElementRef<typeof SendTipModal>>(null);
+  const sendTipRef = useRef<any>();
 
   const defineWalletReceiverDetail = () => {
     const tempWalletDetail = walletDetails.filter(walletDetail => {
@@ -302,7 +301,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
           ref={sendTipRef}
           postId={post.id as string}
           balanceDetails={balanceDetails}
-          walletReceiverDetail={defineWalletReceiverDetail(walletDetails)}
+          walletReceiverDetail={defineWalletReceiverDetail()}
         />
       )}{' '}
     </>
