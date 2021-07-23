@@ -95,27 +95,43 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
     }
   }, [sendTipConfirmed]);
 
+  const handleSentTipConfirmed = () => {
+    setSendTipConfirmed({
+      isConfirmed: true,
+      message: 'Tip sent successfully!',
+    });
+  };
+
+  const handleClearValue = () => {
+    setValues({
+      ...values,
+      amount: '',
+    });
+  };
+
+  const handleAfterTipSentSuccess = () => {
+    handleSentTipConfirmed();
+    setShowSendTipModal(false);
+    handleClearValue();
+  };
+
   useEffect(() => {
     if (trxHash.length > 0) {
-      setSendTipConfirmed({
-        isConfirmed: true,
-        message: 'Tip sent successfully!',
-      });
-      setShowSendTipModal(false);
-      setValues({
-        ...values,
-        amount: '',
-      });
+      handleAfterTipSentSuccess();
       load(userAddress, availableTokens);
     }
   }, [trxHash]);
 
+  const handleChangeTokenBalance = () => {
+    const idx = balanceDetails.findIndex(item => item.tokenSymbol === tokenProperties.tokenId);
+    if (typeof idx === 'number') {
+      setTokenBalance(balanceDetails[idx]?.freeBalance.toString() ?? '');
+    }
+  };
+
   useEffect(() => {
     if (balanceDetails?.length > 0) {
-      const idx = balanceDetails.findIndex(item => item.tokenSymbol === tokenProperties.tokenId);
-      if (typeof idx === 'number') {
-        setTokenBalance(balanceDetails[idx]?.freeBalance.toString() ?? '');
-      }
+      handleChangeTokenBalance();
     }
   }, [tokenProperties.tokenId, balanceDetails]);
 
