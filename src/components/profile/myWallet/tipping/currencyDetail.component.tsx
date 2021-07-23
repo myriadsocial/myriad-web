@@ -101,7 +101,7 @@ const TableCell = withStyles({
   },
 })(MuiTableCell);
 
-interface CurrencyDetailComponentProps {
+interface Props {
   userTransactionDetails: UserTransactionDetail[];
   balanceDetail: BalanceDetail;
 }
@@ -114,10 +114,7 @@ interface TokenDetail {
   tokenId: string;
 }
 
-export const CurrencyDetails = ({
-  userTransactionDetails,
-  balanceDetail,
-}: CurrencyDetailComponentProps) => {
+export const CurrencyDetails = ({userTransactionDetails, balanceDetail}: Props) => {
   const [tokenDetail, setTokenDetail] = useState<TokenDetail>();
   const style = useStylesForCurrencyDetails();
 
