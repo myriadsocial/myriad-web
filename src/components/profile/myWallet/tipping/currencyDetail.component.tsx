@@ -106,7 +106,7 @@ interface Props {
   balanceDetail: BalanceDetail;
 }
 
-interface TokenDetail {
+interface CurrencyObj {
   id: string;
   sentToMe: number;
   sentToThem: number;
@@ -115,12 +115,12 @@ interface TokenDetail {
 }
 
 export const CurrencyDetails = ({userTransactionDetails, balanceDetail}: Props) => {
-  const [tokenDetail, setTokenDetail] = useState<TokenDetail>();
+  const [currencyDetail, setCurrencyDetail] = useState<CurrencyObj>();
   const style = useStylesForCurrencyDetails();
 
   useEffect(() => {
     const temp = getCommonTransactionDetail(userTransactionDetails, balanceDetail);
-    setTokenDetail(temp);
+    setCurrencyDetail(temp);
   }, [balanceDetail]);
 
   const getCommonTransactionDetail = (
@@ -138,7 +138,7 @@ export const CurrencyDetails = ({userTransactionDetails, balanceDetail}: Props) 
     return convertedValue;
   };
 
-  if (!tokenDetail) return null;
+  if (!currencyDetail) return null;
 
   return (
     <TableContainer>
@@ -154,27 +154,27 @@ export const CurrencyDetails = ({userTransactionDetails, balanceDetail}: Props) 
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow key={`${tokenDetail.id}-received`}>
+          <TableRow key={`${currencyDetail.id}-received`}>
             <TableCell component="th" scope="row">
               <Typography className={style.balanceText}>Total Received:</Typography>
             </TableCell>
             <TableCell align="right">
               <Typography className={style.green}>
-                {tokenDetail.tokenId === 'MYR'
-                  ? convertMYRValue(tokenDetail.sentToMe)
-                  : tokenDetail.sentToMe}
+                {currencyDetail.tokenId === 'MYR'
+                  ? convertMYRValue(currencyDetail.sentToMe)
+                  : currencyDetail.sentToMe}
               </Typography>
             </TableCell>
           </TableRow>
-          <TableRow key={`${tokenDetail.id}-sent`}>
+          <TableRow key={`${currencyDetail.id}-sent`}>
             <TableCell component="th" scope="row">
               <Typography className={style.balanceText}>Total Sent:</Typography>
             </TableCell>
             <TableCell align="right">
               <Typography className={style.red}>
-                {tokenDetail.tokenId === 'MYR'
-                  ? convertMYRValue(tokenDetail.sentToThem)
-                  : tokenDetail.sentToThem}
+                {currencyDetail.tokenId === 'MYR'
+                  ? convertMYRValue(currencyDetail.sentToThem)
+                  : currencyDetail.sentToThem}
               </Typography>
             </TableCell>
           </TableRow>
