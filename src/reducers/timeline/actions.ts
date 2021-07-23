@@ -206,16 +206,31 @@ export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      if (like) {
-        let likeList = await PostAPI.getLikes(postId);
+      let likeList = await PostAPI.getLikes(postId);
+      likeList = likeList.filter(
+        likeStatus => likeStatus.userId === user.id && likeStatus.status == true,
+      );
+      let dislikeList = await PostAPI.getDislikes(postId);
+      dislikeList = dislikeList.filter(
+        dislikeStatus => dislikeStatus.userId === user.id && dislikeStatus.status == true,
+      );
 
-        likeList = likeList.filter(likeStatus => likeStatus.userId === user.id);
-        if (likeList[0].status === false || !likeList.length) {
+      if (like) {
+        if (!likeList.length && !dislikeList.length) {
           dispatch({
             type: constants.LIKE_POST,
             postId,
           });
-        } else {
+        } else if (!likeList.length && dislikeList.length) {
+          dispatch({
+            type: constants.LIKE_POST,
+            postId,
+          });
+          dispatch({
+            type: constants.UNDISLIKE_POST,
+            postId,
+          });
+        } else if (likeList.length) {
           dispatch({
             type: constants.UNLIKE_POST,
             postId,
@@ -223,15 +238,21 @@ export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
         }
         await PostAPI.like(user.id, postId);
       } else {
-        let dislikeList = await PostAPI.getDislikes(postId);
-
-        dislikeList = dislikeList.filter(dislikeStatus => dislikeStatus.userId === user.id);
-        if (dislikeList[0].status === false || !dislikeList.length) {
+        if (!likeList.length && !dislikeList.length) {
           dispatch({
             type: constants.DISLIKE_POST,
             postId,
           });
-        } else {
+        } else if (!dislikeList.length && likeList.length) {
+          dispatch({
+            type: constants.DISLIKE_POST,
+            postId,
+          });
+          dispatch({
+            type: constants.UNLIKE_POST,
+            postId,
+          });
+        } else if (dislikeList.length) {
           dispatch({
             type: constants.UNDISLIKE_POST,
             postId,
