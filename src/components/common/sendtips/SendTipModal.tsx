@@ -39,8 +39,6 @@ interface SendTipWithPayloadProps {
   wsAddress: string;
 }
 
-//TODO: move codes to different files, too big!
-
 const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
   balanceDetails,
   walletReceiverDetail,
@@ -54,9 +52,6 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
   const {sendTip, load, trxHash, sendTipSuccess, error} = usePolkadotApi();
   const [showSendTipModal, setShowSendTipModal] = useState(false);
   const [senderAddress, setSenderAddress] = useState('');
-  // TODO: change selectedTokenDecimals to tokenProperties.tokenDecimals
-  // change wsAddress to tokenProperties.wsAddress
-  // change selectedToken to tokenProperties.tokenName
   const [tokenProperties, setTokenProperties] = useState({
     wsAddress: '',
     tokenDecimals: 0,
@@ -93,14 +88,6 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
       setShowSendTipModal(true);
     },
   }));
-
-  //console.log({
-  //walletReceiverDetail,
-  //userAddress,
-  //postId,
-  //receiverId,
-  //success,
-  //});
 
   const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
     isConfirmed: false,
@@ -263,10 +250,10 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
       senderAddress,
       toAddress: receiverId as string,
       amountSent: tipAmount,
-      decimals: selectedTokenDecimals,
-      currencyId: selectedToken,
+      decimals: tokenProperties.tokenDecimals,
+      currencyId: tokenProperties.tokenId,
       postId: '',
-      wsAddress,
+      wsAddress: tokenProperties.wsAddress,
     });
   };
 
@@ -275,10 +262,10 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
       senderAddress,
       toAddress: walletReceiverDetail.walletAddress,
       amountSent: tipAmount,
-      decimals: selectedTokenDecimals,
-      currencyId: selectedToken,
+      decimals: tokenProperties.tokenDecimals,
+      currencyId: tokenProperties.tokenId,
       postId: walletReceiverDetail.postId,
-      wsAddress,
+      wsAddress: tokenProperties.wsAddress,
     });
   };
 
