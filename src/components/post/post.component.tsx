@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, forwardRef, useEffect} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 import {useSelector} from 'react-redux';
@@ -24,7 +24,6 @@ import {useStyles} from './post.style';
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import CardTitle from 'src/components/common/CardTitle.component';
-import SendTipModal from 'src/components/common/sendtips/SendTipModal';
 import {useWalletAddress} from 'src/components/common/sendtips/use-wallet.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
@@ -32,6 +31,7 @@ import {useSocialDetail} from 'src/hooks/use-social.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {ImageData} from 'src/interfaces/post';
 import {Post} from 'src/interfaces/post';
+import {Props} from 'src/interfaces/send-tips/send-tips';
 import {Token} from 'src/interfaces/token';
 import {WalletDetail} from 'src/interfaces/wallet';
 import {RootState} from 'src/reducers';
@@ -39,6 +39,34 @@ import {UserState} from 'src/reducers/user/reducer';
 import {v4 as uuid} from 'uuid';
 
 const CommentComponent = dynamic(() => import('./comment/comment.component'));
+
+const SendTipModal = dynamic(() => import('src/components/common/sendtips/SendTipModal'));
+
+const ForwardedSendTipModal = forwardRef(
+  (
+    {
+      userAddress,
+      success,
+      postId,
+      balanceDetails,
+      receiverId,
+      availableTokens,
+      walletReceiverDetail,
+    }: Props,
+    ref,
+  ) => (
+    <SendTipModal
+      userAddress={userAddress}
+      success={success}
+      postId={postId}
+      balanceDetails={balanceDetails}
+      receiverId={receiverId}
+      availableTokens={availableTokens}
+      walletReceiverDetail={walletReceiverDetail}
+      forwardedRef={ref}
+    />
+  ),
+);
 
 const FACEBOOK_APP_ID = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID as string;
 
@@ -67,15 +95,15 @@ const PostComponent: React.FC<PostComponentProps> = ({
   const {openTipSummary} = useTipSummaryHook();
   const [expanded, setExpanded] = useState(defaultExpanded);
   const {loadWalletDetails, walletDetails} = useWalletAddress(post.id);
-  const [walletReceiverDetail, setWalletReceiverDetail] = useState<WalletDetail>();
-  const headerRef = useRef<any>();
+  const headerRef = useRef<React.ElementRef<typeof SendTipModal>>(null);
   const sendTipRef = useRef<any>();
 
   const defineWalletReceiverDetail = () => {
     const tempWalletDetail = walletDetails.filter(walletDetail => {
       return walletDetail.postId === post.id;
     });
-    setWalletReceiverDetail(tempWalletDetail[0]);
+    const matchingWalletDetail = tempWalletDetail[0];
+    return matchingWalletDetail;
   };
 
   useEffect(() => {
@@ -85,18 +113,22 @@ const PostComponent: React.FC<PostComponentProps> = ({
 
   if (!detail && !user && !anonymous) return null;
 
+  if (!walletDetails) return null;
+
   if (post.text === '[removed]' && post.platform === 'reddit') return null;
 
   const handleExpandClick = (): void => {
     setExpanded(!expanded);
   };
 
-  const tipPostUser = (): void => {
+  const tipPostUser = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (disable) {
       return;
     }
 
-    sendTipRef.current.triggerSendTipModal();
+    e.stopPropagation();
+
+    sendTipRef.current?.triggerSendTipModal();
   };
 
   const openContentSource = (): void => {
@@ -262,18 +294,17 @@ const PostComponent: React.FC<PostComponentProps> = ({
           </Collapse>
         </ShowIf>
       </Card>
-
-      {user && walletReceiverDetail && (
-        <SendTipModal
+      {user && (
+        <ForwardedSendTipModal
           availableTokens={availableTokens}
           success={postId => handleTipSentSuccess(postId)}
           userAddress={user.id}
           ref={sendTipRef}
           postId={post.id as string}
           balanceDetails={balanceDetails}
-          walletReceiverDetail={walletReceiverDetail}
+          walletReceiverDetail={defineWalletReceiverDetail(walletDetails)}
         />
-      )}
+      )}{' '}
     </>
   );
 };
