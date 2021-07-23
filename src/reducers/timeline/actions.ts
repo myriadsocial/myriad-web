@@ -64,8 +64,8 @@ export type Actions =
   | UpdateTimelineFilter
   | LikePost
   | DislikePost
-  | UnlikePost
-  | UndislikePost
+  | UnLikePost
+  | UnDislikePost
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
