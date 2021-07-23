@@ -10,11 +10,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import MuiAlert, {AlertProps} from '@material-ui/lab/Alert';
 
 import {encodeAddress} from '@polkadot/util-crypto';
 
@@ -27,6 +25,7 @@ import {ImageUpload} from 'src/components/common/ImageUpload.component';
 import {SocialListComponent} from 'src/components/user/social-list.component';
 import {acronym} from 'src/helpers/string';
 import {useConfig} from 'src/hooks/config.hook';
+import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -35,21 +34,16 @@ type ProfileEditProps = {
   open: boolean;
 };
 
-//TODO: remove, use global alert
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
 export const ProfileEditComponent: React.FC<ProfileEditProps> = ({toggleProfileForm, open}) => {
   const style = useStyles();
   const config = useConfig();
+  const {showAlert} = useAlertHook();
 
   const {loading, updateProfile, updateProfileBanner, updateProfilePicture} = useProfileHook();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [uploadingBanner, setUploadingBanner] = useState(false);
-  const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
   const [profile, setProfile] = useState<Record<string, string>>({
     name: user?.name ?? '',
     bio: user?.bio ?? '',
@@ -99,12 +93,12 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({toggleProfileF
     updateProfile(profile);
   };
 
-  const onPublicKeyCopied = () => {
-    setPublicKeyCopied(true);
-  };
-
-  const closeNotify = () => {
-    setPublicKeyCopied(false);
+  const handleAlert = () => {
+    showAlert({
+      message: 'PublicKey copied!',
+      severity: 'success',
+      title: 'Success',
+    });
   };
 
   if (!user) return null;
@@ -195,9 +189,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({toggleProfileF
                   inputProps={{'aria-label': 'public-key'}}
                   endAdornment={
                     <InputAdornment position="end">
-                      <CopyToClipboard
-                        text={encodeAddress(user.id) || ''}
-                        onCopy={onPublicKeyCopied}>
+                      <CopyToClipboard text={encodeAddress(user.id) || ''} onCopy={handleAlert}>
                         <IconButton aria-label="toggle password visibility">
                           <FileCopyIcon />
                         </IconButton>
@@ -231,13 +223,6 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({toggleProfileF
             </Button>
           </div>
         </DialogContent>
-
-        {/* TODO: remove, use global alert */}
-        <Snackbar open={isPublicKeyCopied} autoHideDuration={6000} onClose={closeNotify}>
-          <Alert onClose={closeNotify} severity="success">
-            PublicKey copied!
-          </Alert>
-        </Snackbar>
       </Dialog>
     </>
   );

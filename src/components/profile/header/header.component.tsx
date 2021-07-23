@@ -12,12 +12,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
-import MuiAlert, {AlertProps} from '@material-ui/lab/Alert';
 
 import {encodeAddress} from '@polkadot/util-crypto';
 
@@ -29,6 +27,7 @@ import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {SocialListComponent} from 'src/components/user/social-list.component';
 import {acronym} from 'src/helpers/string';
+import {useAlertHook} from 'src/hooks/use-alert.hook';
 import RemoveUser from 'src/images/user-minus2.svg';
 import {FriendStatus} from 'src/interfaces/friend';
 import {ExtendedUser} from 'src/interfaces/user';
@@ -43,18 +42,14 @@ type ProfileHeaderProps = {
   isGuest: boolean;
 };
 
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
 const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, profile, isGuest}) => {
   const style = useStyles();
 
   const {friendStatus, makeFriend, checkFriendStatus, cancelFriendRequest, toggleRequest} =
     useFriendHook();
+  const {showAlert} = useAlertHook();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const [isPublicKeyCopied, setPublicKeyCopied] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);
 
@@ -98,12 +93,12 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
   };
 
   // PUBLICKEY;
-  const onPublicKeyCopied = () => {
-    setPublicKeyCopied(true);
-  };
-
-  const closeNotify = () => {
-    setPublicKeyCopied(false);
+  const handleAlert = () => {
+    showAlert({
+      message: 'PublicKey copied!',
+      severity: 'success',
+      title: 'Success',
+    });
   };
 
   // Handle LOGOUT
@@ -146,9 +141,7 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
               inputProps={{'aria-label': 'description'}}
               endAdornment={
                 <InputAdornment position="end">
-                  <CopyToClipboard
-                    text={encodeAddress(profile.id) || ''}
-                    onCopy={onPublicKeyCopied}>
+                  <CopyToClipboard text={encodeAddress(profile.id) || ''} onCopy={handleAlert}>
                     <IconButton aria-label="toggle password visibility">
                       <FileCopyIcon />
                     </IconButton>
@@ -309,12 +302,6 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
           </div>
         </DialogContent>
       </Dialog>
-
-      <Snackbar open={isPublicKeyCopied} autoHideDuration={6000} onClose={closeNotify}>
-        <Alert onClose={closeNotify} severity="success">
-          PublicKey copied!
-        </Alert>
-      </Snackbar>
     </div>
   );
 };
