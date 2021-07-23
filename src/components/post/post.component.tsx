@@ -203,12 +203,10 @@ const PostComponent: React.FC<PostComponentProps> = ({
   };
 
   const likePostHandle = () => {
-    console.log('liked Post!');
     likePost(post.id);
   };
 
   const dislikePostHandle = () => {
-    console.log('disliked Post!');
     dislikePost(post.id);
   };
 
