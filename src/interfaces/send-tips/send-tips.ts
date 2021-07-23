@@ -27,3 +27,22 @@ export type Props = {
   availableTokens: Token[];
   walletReceiverDetail?: WalletDetail;
 };
+
+export interface ExtendedSendTipModalProps extends Props {
+  forwardedRef: React.ForwardedRef<any>;
+}
+
+export interface SendTipWithPayloadProps {
+  senderAddress: string;
+  toAddress: string;
+  amountSent: number;
+  decimals: number;
+  currencyId: string;
+  postId: string;
+  wsAddress: string;
+}
+
+export enum ContentType {
+  POST = 'postContent',
+  COMMENT = 'commentContent',
+}

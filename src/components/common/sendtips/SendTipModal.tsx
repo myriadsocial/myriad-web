@@ -17,27 +17,10 @@ import {
   InputState,
   InputErrorState,
   SendTipConfirmed,
-  Props,
+  ExtendedSendTipModalProps,
+  SendTipWithPayloadProps,
+  ContentType,
 } from 'src/interfaces/send-tips/send-tips';
-
-enum ContentType {
-  POST = 'postContent',
-  COMMENT = 'commentContent',
-}
-
-interface ExtendedSendTipModalProps extends Props {
-  forwardedRef: React.ForwardedRef<any>;
-}
-
-interface SendTipWithPayloadProps {
-  senderAddress: string;
-  toAddress: string;
-  amountSent: number;
-  decimals: number;
-  currencyId: string;
-  postId: string;
-  wsAddress: string;
-}
 
 const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
   balanceDetails,
