@@ -46,23 +46,31 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
   const [tokenBalance, setTokenBalance] = useState('');
   const {showTipAlert, showAlert} = useAlertHook();
 
+  const handleAlertTippingError = () => {
+    showAlert({
+      severity: 'error',
+      title: 'Error!',
+      message: `Something is wrong`,
+    });
+  };
+
+  const handleAlertTippingSuccess = () => {
+    showTipAlert({
+      severity: 'success',
+      title: 'Tip sent!',
+      message: `${trxHash}`,
+    });
+  };
+
   useEffect(() => {
     if (sendTipSuccess) {
-      showTipAlert({
-        severity: 'success',
-        title: 'Tip sent!',
-        message: `${trxHash}`,
-      });
+      handleAlertTippingSuccess();
     }
   }, [sendTipSuccess]);
 
   useEffect(() => {
     if (error) {
-      showAlert({
-        severity: 'error',
-        title: 'Error!',
-        message: `Something is wrong`,
-      });
+      handleAlertTippingError();
     }
   }, [error]);
 
