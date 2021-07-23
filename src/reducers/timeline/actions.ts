@@ -35,7 +35,7 @@ export interface LikePost extends Action {
   postId: string;
 }
 
-export interface UnlikePost extends Action {
+export interface UnLikePost extends Action {
   type: constants.UNLIKE_POST;
   postId: string;
 }
