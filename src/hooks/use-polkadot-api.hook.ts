@@ -180,6 +180,10 @@ export const usePolkadotApi = () => {
 
             const correctedValue = amountSent / 10 ** decimals;
 
+            // TODO: Recheck again if the values below are correct!
+            //console.log('fromAdrress: ', fromAddress);
+            //console.log('toAddress: ', toAddress);
+
             if (txInfo) {
               // Record the transaction
               await storeTransaction({
