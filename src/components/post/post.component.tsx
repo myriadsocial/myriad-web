@@ -95,8 +95,8 @@ const PostComponent: React.FC<PostComponentProps> = ({
   const {openTipSummary} = useTipSummaryHook();
   const [expanded, setExpanded] = useState(defaultExpanded);
   const {loadWalletDetails, walletDetails} = useWalletAddress(post.id);
-  const headerRef = useRef<React.ElementRef<typeof SendTipModal>>(null);
-  const sendTipRef = useRef<any>();
+  const headerRef = useRef<any>();
+  const sendTipRef = useRef<React.ElementRef<typeof SendTipModal>>(null);
 
   const defineWalletReceiverDetail = () => {
     const tempWalletDetail = walletDetails.filter(walletDetail => {
