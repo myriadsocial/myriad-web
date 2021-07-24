@@ -31,7 +31,9 @@ import {UserState} from 'src/reducers/user/reducer';
 const TipSummaryComponent = dynamic(
   () => import('src/components/tip-summary/tip-summary.component'),
 );
-const ImportPostComponent = dynamic(() => import('./ImportPost.component'));
+const ImportPostComponent = dynamic(
+  () => import('src/components/import-post/import-post.component'),
+);
 
 type TimelineComponentProps = {
   isAnonymous: boolean;
