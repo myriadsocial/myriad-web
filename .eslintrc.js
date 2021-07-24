@@ -26,6 +26,7 @@ module.exports = {
     ],
     ignorePatterns: ['**/public/*.js'],
     rules: {
+        'no-useless-escape': ['warn'],
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/ban-types': ['warn'],
         '@typescript-eslint/no-empty-interface': ['warn'],
