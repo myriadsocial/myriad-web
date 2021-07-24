@@ -32,6 +32,7 @@ import {acronym} from 'src/helpers/string';
 import RemoveUser from 'src/images/user-minus2.svg';
 import {FriendStatus} from 'src/interfaces/friend';
 import {ExtendedUser} from 'src/interfaces/user';
+import {firebaseCloudMessaging} from 'src/lib/firebase';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -107,6 +108,7 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
 
   // Handle LOGOUT
   const handleSignOut = async () => {
+    await firebaseCloudMessaging.removeToken();
     await signOut({
       callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
       redirect: true,

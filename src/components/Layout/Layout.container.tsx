@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
@@ -17,6 +17,7 @@ import TipAlertComponent from 'src/components/alert/TipAlert.component';
 import {LayoutSettingProvider} from 'src/context/layout.context';
 import {TransactionProvider} from 'src/context/transaction.context';
 import {useUserHook} from 'src/hooks/use-user.hook';
+import {firebaseCloudMessaging} from 'src/lib/firebase';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 import TourComponent from 'src/tour/Tour.component';
@@ -44,6 +45,12 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
 
   const {updateUser} = useUserHook();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+
+  useEffect(() => {
+    window.addEventListener('load', function () {
+      firebaseCloudMessaging.init();
+    });
+  }, []);
 
   const handleFinishTour = (skip: boolean) => {
     updateUser({

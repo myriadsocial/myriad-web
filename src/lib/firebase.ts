@@ -3,8 +3,12 @@ import 'firebase/messaging';
 import localforage from 'localforage';
 
 const firebaseCloudMessaging = {
-  tokenInlocalforage: async (): Promise<string | null> => {
+  getToken: async (): Promise<string | null> => {
     return localforage.getItem('fcm_token');
+  },
+
+  removeToken: async (): Promise<void> => {
+    await localforage.removeItem('fcm_token');
   },
 
   init: async function (): Promise<void | boolean> {
@@ -18,14 +22,14 @@ const firebaseCloudMessaging = {
     }
 
     try {
-      if ((await this.tokenInlocalforage()) !== null) {
+      if ((await this.getToken()) !== null) {
         return false;
       }
 
       const messaging = firebase.messaging();
 
-      messaging.onMessage(payload => {
-        console.log('Message received. ', payload);
+      messaging.onMessage(function (payload) {
+        console.log('Message received', payload);
       });
 
       await Notification.requestPermission();
@@ -33,7 +37,6 @@ const firebaseCloudMessaging = {
       const token = await messaging.getToken();
 
       localforage.setItem('fcm_token', token);
-      console.log('fcm_token', token);
     } catch (error) {
       console.error(error);
     }
