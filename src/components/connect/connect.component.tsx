@@ -22,6 +22,7 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 
 import {useStyles} from './conntect.style';
 
+import {isValid} from 'date-fns';
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {SocialsEnum} from 'src/interfaces';
@@ -87,15 +88,15 @@ export const ConnectComponent = forwardRef(
       const text = e.clipboardData.getData('Text');
 
       if (social === SocialsEnum.FACEBOOK) {
-        setUrlValid(true);
-
         const name = text.replace(prefix.facebook, '');
+
         setSocialName(name);
+        setUrlValid(name.trim().length > 0);
       } else {
         const name = text.substring(text.lastIndexOf('/') + 1);
 
         setSocialName(name);
-        setUrlValid(true);
+        setUrlValid(name.trim().length > 0);
       }
     };
 
@@ -180,6 +181,7 @@ export const ConnectComponent = forwardRef(
                         quote={message}
                         beforeOnClick={onSharedAttempt}>
                         <Button
+                          component="div"
                           variant="outlined"
                           size="large"
                           startIcon={<FacebookIcon />}
@@ -195,6 +197,7 @@ export const ConnectComponent = forwardRef(
                         title={message}
                         beforeOnClick={onSharedAttempt}>
                         <Button
+                          component="div"
                           variant="outlined"
                           size="large"
                           startIcon={<TwitterIcon />}
@@ -210,6 +213,7 @@ export const ConnectComponent = forwardRef(
                         title={message}
                         beforeOnClick={onSharedAttempt}>
                         <Button
+                          component="div"
                           variant="outlined"
                           size="large"
                           startIcon={<RedditIcon />}
@@ -254,7 +258,7 @@ export const ConnectComponent = forwardRef(
                     onPaste={handleSocialNamePasted}
                     color="primary"
                     margin="dense"
-                    error={true}
+                    error={!isValid}
                     required
                     fullWidth
                     name="username"
