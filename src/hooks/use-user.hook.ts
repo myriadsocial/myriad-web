@@ -39,9 +39,7 @@ export const useUserHook = (): UserHookProps => {
   };
 
   const loadFcmToken = async () => {
-    await firebaseCloudMessaging.init();
-
-    const token = await firebaseCloudMessaging.tokenInlocalforage();
+    const token = await firebaseCloudMessaging.getToken();
 
     if (token) {
       updateUserDetail({
