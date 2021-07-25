@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState, forwardRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
@@ -20,6 +20,7 @@ import ReplyCommentComponent from './reply.component';
 import CardTitle from 'src/components/common/CardTitle.component';
 import DateFormat from 'src/components/common/DateFormat';
 import SendTipModal from 'src/components/common/sendtips/SendTipModal';
+import {useModal} from 'src/components/common/sendtips/use-modal.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
@@ -41,32 +42,6 @@ const StyledBadge = withStyles((theme: Theme) =>
   }),
 )(Badge);
 
-const ForwardedSendTipModal = forwardRef(
-  (
-    {
-      userAddress,
-      success,
-      postId,
-      balanceDetails,
-      receiverId,
-      availableTokens,
-      walletReceiverDetail,
-    }: Props,
-    ref,
-  ) => (
-    <SendTipModal
-      userAddress={userAddress}
-      success={success}
-      postId={postId}
-      balanceDetails={balanceDetails}
-      receiverId={receiverId}
-      availableTokens={availableTokens}
-      walletReceiverDetail={walletReceiverDetail}
-      forwardedRef={ref}
-    />
-  ),
-);
-
 type CommentComponentProps = {
   post: Post;
   disableReply: boolean;
@@ -87,8 +62,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
   const router = useRouter();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {comments, loadInitComment, reply} = useCommentHook(post);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const sendTipRef = useRef<any>();
+  const {isShown, toggle} = useModal();
 
   useEffect(() => {
     loadInitComment();
@@ -97,7 +71,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
   const tipPostUser = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
-    sendTipRef.current?.triggerSendTipModal();
+    toggle();
   };
 
   const replyPost = (comment: string) => {
@@ -171,12 +145,13 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
                   </Typography>
                 </CardContent>
                 {user && (
-                  <ForwardedSendTipModal
+                  <SendTipModal
+                    isShown={isShown}
+                    hide={toggle}
                     availableTokens={availableTokens}
                     success={postId => handleTipSentSuccess(postId)}
                     postId={post?.id as string}
                     userAddress={user.id}
-                    ref={sendTipRef}
                     receiverId={comment?.user?.id as string}
                     balanceDetails={balanceDetails}
                   />
