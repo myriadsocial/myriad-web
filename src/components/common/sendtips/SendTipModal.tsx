@@ -33,6 +33,7 @@ const SendTipModal: React.FC<Props> = ({
   isShown,
   hide,
 }) => {
+  //TODO: move to redux
   const {sendTip, load, trxHash, sendTipSuccess, error} = usePolkadotApi();
 
   const styles = useStyles();

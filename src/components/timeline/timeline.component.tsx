@@ -45,6 +45,7 @@ const TimelineComponent: React.FC<TimelineComponentProps> = ({availableTokens}) 
   const {query} = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  //TODO: move to redux
   const {load, tokensReady} = usePolkadotApi();
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {posts, hasMore, sort, nextPage, sortTimeline} = useTimelineHook();

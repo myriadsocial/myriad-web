@@ -117,6 +117,7 @@ export default function ProfileTimeline({profile, loading}: Props) {
   const theme = useTheme();
   const dispatch = useDispatch();
 
+  // TODO: move to redux
   const {load, tokensReady} = usePolkadotApi();
 
   const {
