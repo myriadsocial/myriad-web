@@ -26,11 +26,9 @@ export type Props = {
   receiverId?: string;
   availableTokens: Token[];
   walletReceiverDetail?: WalletDetail;
+  isShown: boolean;
+  hide: () => void;
 };
-
-export interface ExtendedSendTipModalProps extends Props {
-  forwardedRef: React.ForwardedRef<any>;
-}
 
 export interface SendTipWithPayloadProps {
   senderAddress: string;
