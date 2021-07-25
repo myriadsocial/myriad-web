@@ -102,8 +102,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
     e.stopPropagation();
 
     toggle();
-
-    //sendTipRef.current?.triggerSendTipModal();
   };
 
   const openContentSource = (): void => {
