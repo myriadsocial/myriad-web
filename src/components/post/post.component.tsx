@@ -1,4 +1,4 @@
-import React, {useState, useRef, forwardRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 import {useSelector} from 'react-redux';
@@ -24,6 +24,7 @@ import {useStyles} from './post.style';
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import CardTitle from 'src/components/common/CardTitle.component';
+import {useModal} from 'src/components/common/sendtips/use-modal.hook';
 import {useWalletAddress} from 'src/components/common/sendtips/use-wallet.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
@@ -31,7 +32,6 @@ import {useSocialDetail} from 'src/hooks/use-social.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {ImageData} from 'src/interfaces/post';
 import {Post} from 'src/interfaces/post';
-import {Props} from 'src/interfaces/send-tips/send-tips';
 import {Token} from 'src/interfaces/token';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -40,32 +40,6 @@ import {v4 as uuid} from 'uuid';
 const CommentComponent = dynamic(() => import('./comment/comment.component'));
 
 const SendTipModal = dynamic(() => import('src/components/common/sendtips/SendTipModal'));
-
-const ForwardedSendTipModal = forwardRef(
-  (
-    {
-      userAddress,
-      success,
-      postId,
-      balanceDetails,
-      receiverId,
-      availableTokens,
-      walletReceiverDetail,
-    }: Props,
-    ref,
-  ) => (
-    <SendTipModal
-      userAddress={userAddress}
-      success={success}
-      postId={postId}
-      balanceDetails={balanceDetails}
-      receiverId={receiverId}
-      availableTokens={availableTokens}
-      walletReceiverDetail={walletReceiverDetail}
-      forwardedRef={ref}
-    />
-  ),
-);
 
 const FACEBOOK_APP_ID = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID as string;
 
@@ -92,10 +66,10 @@ const PostComponent: React.FC<PostComponentProps> = ({
   const {loading, detail} = useSocialDetail(post);
 
   const {openTipSummary} = useTipSummaryHook();
+  const {isShown, toggle} = useModal();
   const [expanded, setExpanded] = useState(defaultExpanded);
   const {loadWalletDetails, walletDetails} = useWalletAddress(post.id);
   const headerRef = useRef<any>();
-  const sendTipRef = useRef<any>();
 
   const defineWalletReceiverDetail = () => {
     const tempWalletDetail = walletDetails.filter(walletDetail => {
@@ -127,7 +101,9 @@ const PostComponent: React.FC<PostComponentProps> = ({
 
     e.stopPropagation();
 
-    sendTipRef.current?.triggerSendTipModal();
+    toggle();
+
+    //sendTipRef.current?.triggerSendTipModal();
   };
 
   const openContentSource = (): void => {
@@ -294,11 +270,12 @@ const PostComponent: React.FC<PostComponentProps> = ({
         </ShowIf>
       </Card>
       {user && (
-        <ForwardedSendTipModal
+        <SendTipModal
+          isShown={isShown}
+          hide={toggle}
           availableTokens={availableTokens}
           success={postId => handleTipSentSuccess(postId)}
           userAddress={user.id}
-          ref={sendTipRef}
           postId={post.id as string}
           balanceDetails={balanceDetails}
           walletReceiverDetail={defineWalletReceiverDetail()}
