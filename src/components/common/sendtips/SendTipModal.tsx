@@ -1,4 +1,4 @@
-import React, {useState, useImperativeHandle, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -17,12 +17,12 @@ import {
   InputState,
   InputErrorState,
   SendTipConfirmed,
-  ExtendedSendTipModalProps,
+  Props,
   SendTipWithPayloadProps,
   ContentType,
 } from 'src/interfaces/send-tips/send-tips';
 
-const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
+const SendTipModal: React.FC<Props> = ({
   balanceDetails,
   walletReceiverDetail,
   userAddress,
@@ -30,18 +30,19 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
   receiverId,
   success,
   availableTokens,
-  forwardedRef,
+  isShown,
+  hide,
 }) => {
   const {sendTip, load, trxHash, sendTipSuccess, error} = usePolkadotApi();
 
   const styles = useStyles();
 
-  const [showSendTipModal, setShowSendTipModal] = useState(false);
   const [senderAddress, setSenderAddress] = useState('');
   const [tipAmount, setTipAmount] = useState(0);
   const [tippedContent, setTippedContent] = useState<ContentType>();
   const [sendTipClicked, setSendTipClicked] = useState(false);
   const [tokenBalance, setTokenBalance] = useState('');
+  //TODO: make alert only appear once
   const {showTipAlert, showAlert} = useAlertHook();
 
   const [tokenProperties, setTokenProperties] = useState({
@@ -124,12 +125,6 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
       message: `${trxHash}`,
     });
   };
-
-  useImperativeHandle(forwardedRef, () => ({
-    triggerSendTipModal() {
-      setShowSendTipModal(true);
-    },
-  }));
 
   const handleSentTipConfirmed = () => {
     setSendTipConfirmed({
@@ -297,11 +292,6 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
     setValues({...values, [prop]: event.target.value});
   };
 
-  const closeSendTipModal = () => {
-    setShowSendTipModal(false);
-    setSendTipClicked(false);
-  };
-
   const handleSendTip = () => {
     checkAmountThenSend();
   };
@@ -320,12 +310,8 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
 
   return (
     <>
-      <Dialog
-        open={showSendTipModal}
-        onClose={closeSendTipModal}
-        aria-labelledby="send-tips-window"
-        maxWidth="md">
-        <DialogTitle id="name" onClose={closeSendTipModal}>
+      <Dialog open={isShown} aria-labelledby="send-tips-window" maxWidth="md">
+        <DialogTitle id="name" onClose={hide}>
           {' '}
           Send Tip
         </DialogTitle>
@@ -359,7 +345,7 @@ const SendTipModal: React.FC<ExtendedSendTipModalProps> = ({
             fullWidth={true}
             size="large"
             variant="contained"
-            onClick={closeSendTipModal}>
+            onClick={hide}>
             Cancel
           </Button>
           <Button
