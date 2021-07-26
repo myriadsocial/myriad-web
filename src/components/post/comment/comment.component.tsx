@@ -25,7 +25,6 @@ import ShowIf from 'src/components/common/show-if.component';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Post, Comment} from 'src/interfaces/post';
-import {Props} from 'src/interfaces/send-tips/send-tips';
 import {Token} from 'src/interfaces/token';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
@@ -68,9 +67,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
     loadInitComment();
   }, []);
 
-  const tipPostUser = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-
+  const tipPostUser = () => {
     toggle();
   };
 
