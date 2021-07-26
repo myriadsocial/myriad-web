@@ -234,6 +234,7 @@ export const usePolkadotApi = () => {
     load,
     tokensReady: state.balanceDetails,
     sendTip,
+    sendTipSuccess: walletAddressState.success,
     trxHash: walletAddressState.trxHash,
   };
 };

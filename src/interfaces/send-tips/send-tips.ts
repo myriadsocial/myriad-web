@@ -13,11 +13,6 @@ export interface InputErrorState {
   errorMessage: string;
 }
 
-export interface SendTipConfirmed {
-  isConfirmed: boolean;
-  message: string;
-}
-
 export type Props = {
   userAddress: string;
   success: (postId: string) => void;
