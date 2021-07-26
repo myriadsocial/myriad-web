@@ -2,6 +2,7 @@ import {signIn, signOut} from 'next-auth/client';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
+import {firebaseCloudMessaging} from '../lib/firebase';
 import {useAlertHook} from './use-alert.hook';
 
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
@@ -118,6 +119,7 @@ export const useAuthHook = () => {
 
   const logout = async () => {
     await unsubscribeFromAccounts();
+    await firebaseCloudMessaging.removeToken();
     await signOut({
       callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
       redirect: true,

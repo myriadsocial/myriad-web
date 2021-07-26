@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 
 import {unsubscribeFromAccounts} from '../../helpers/extension';
+import {firebaseCloudMessaging} from '../../lib/firebase';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,16 +20,17 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-interface Props {
+interface LogoutProps {
   isAnonymous?: boolean;
 }
 
-export default function Logout({isAnonymous}: Props) {
+export const LogoutComponent: React.FC<LogoutProps> = ({isAnonymous}) => {
   const styles = useStyles();
 
   const handleSignOut = async () => {
     if (isAnonymous === false) {
       await unsubscribeFromAccounts();
+      await firebaseCloudMessaging.removeToken();
     }
     await signOut({
       callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
@@ -46,4 +48,6 @@ export default function Logout({isAnonymous}: Props) {
       Logout
     </Button>
   );
-}
+};
+
+export default LogoutComponent;
