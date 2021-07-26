@@ -66,9 +66,10 @@ const PostComponent: React.FC<PostComponentProps> = ({
   const {loading, detail} = useSocialDetail(post);
 
   const {openTipSummary} = useTipSummaryHook();
-  const {isShown, toggle} = useModal();
+  //const {isShown, toggle} = useModal();
   const [expanded, setExpanded] = useState(defaultExpanded);
   const {loadWalletDetails, walletDetails} = useWalletAddress(post.id);
+  const sendTipRef = useRef<React.ElementRef<typeof SendTipModal>>(null);
   const headerRef = useRef<any>();
 
   const defineWalletReceiverDetail = () => {
@@ -101,7 +102,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
 
     e.stopPropagation();
 
-    toggle();
+    sendTipRef.current?.triggerSendTipModal();
   };
 
   const openContentSource = (): void => {
@@ -269,8 +270,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
       </Card>
       {user && (
         <SendTipModal
-          isShown={isShown}
-          hide={toggle}
+          ref={sendTipRef}
           availableTokens={availableTokens}
           success={postId => handleTipSentSuccess(postId)}
           userAddress={user.id}
