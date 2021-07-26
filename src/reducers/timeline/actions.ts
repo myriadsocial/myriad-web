@@ -53,6 +53,11 @@ export interface UnDislikePost extends Action {
   postId: string;
 }
 
+export interface RemovePost extends Action {
+  type: constants.REMOVE_POST;
+  postId: string;
+}
+
 export interface UpdateTimelineFilter extends Action {
   type: constants.UPDATE_TIMELINE_FILTER;
   filter: TimelineFilter;
@@ -76,6 +81,7 @@ export type Actions =
   | UnLikePost
   | UnDislikePost
   | FetchWalletDetails
+  | RemovePost
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -325,5 +331,30 @@ export const fetchWalletDetails: ThunkActionCreator<Actions, RootState> =
       setError(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+export const deletePost: ThunkActionCreator<Actions, RootState> =
+  (postId: string) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      await PostAPI.removePost(postId);
+      dispatch({
+        type: constants.REMOVE_POST,
+        postId,
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
     }
   };

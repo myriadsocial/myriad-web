@@ -90,6 +90,7 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       };
     }
 
+<<<<<<< HEAD
     case constants.UNDISLIKE_POST: {
       return {
         ...state,
@@ -99,10 +100,18 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
           }
 
           return post;
+=======
+    case constants.REMOVE_POST: {
+      return {
+        ...state,
+        posts: state.posts.filter(post => {
+          return post.id !== action.postId;
+>>>>>>> MYR-442: Added delete post function
         }),
       };
     }
 
+<<<<<<< HEAD
     case constants.FETCH_WALLET_DETAILS: {
       return {
         ...state,
@@ -110,6 +119,8 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       };
     }
 
+=======
+>>>>>>> MYR-442: Added delete post function
     default: {
       return state;
     }
