@@ -279,7 +279,7 @@ const SendTipModal = forwardRef(
     return (
       <>
         <Dialog open={isShown} aria-labelledby="send-tips-window" maxWidth="md">
-          <DialogTitle id="name" onClose={hide}>
+          <DialogTitle id="name" onClose={() => setIsShown(false)}>
             {' '}
             Send Tip
           </DialogTitle>
@@ -313,7 +313,7 @@ const SendTipModal = forwardRef(
               fullWidth={true}
               size="large"
               variant="contained"
-              onClick={hide}>
+              onClick={() => setIsShown(false)}>
               Cancel
             </Button>
             <Button
