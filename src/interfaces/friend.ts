@@ -1,7 +1,7 @@
-import { User } from './user';
+import {User} from './user';
 
 export interface Friend {
-  status: string;
+  status: FriendStatus;
   friendId: string;
   requestorId: string;
 }
@@ -16,13 +16,5 @@ export interface ExtendedFriend extends Friend {
 export enum FriendStatus {
   PENDING = 'pending',
   APPROVED = 'approved',
-  REJECTED = 'rejected'
-}
-
-export interface FriendRequest {
-  id: string;
-  status: string;
-  friendId: string;
-  requestorId: string;
-  createdAt: string;
+  REJECTED = 'rejected',
 }

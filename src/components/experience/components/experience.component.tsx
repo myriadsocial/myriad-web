@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -13,11 +13,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { useStyles } from './experience.style';
+import {useStyles} from './experience.style';
 
 import ShowIf from 'src/components/common/show-if.component';
 import MyriadIcon from 'src/images/myriad-alternative.svg';
-import { Experience } from 'src/interfaces/experience';
+import {Experience} from 'src/interfaces/experience';
 
 type Props = {
   title: string;
@@ -28,7 +28,14 @@ type Props = {
   loadMore: () => void;
 };
 
-export default function ExperienceComponent({ experiences, selected, selectExperience, removeExperience, title, loadMore }: Props) {
+export default function ExperienceComponent({
+  experiences,
+  selected,
+  selectExperience,
+  removeExperience,
+  title,
+  loadMore,
+}: Props) {
   const style = useStyles();
 
   const [showMore, setShowMore] = useState(false);
@@ -54,7 +61,11 @@ export default function ExperienceComponent({ experiences, selected, selectExper
 
   return (
     <Card className={style.root}>
-      <CardHeader disableTypography className={style.header} title={<Typography variant="caption">{title}</Typography>} />
+      <CardHeader
+        disableTypography
+        className={style.header}
+        title={<Typography variant="caption">{title}</Typography>}
+      />
       <CardContent className={style.content}>
         <List>
           {showedExperience.map(experience => (

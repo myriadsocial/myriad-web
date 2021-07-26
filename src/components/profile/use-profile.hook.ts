@@ -1,57 +1,56 @@
-// @ts-nocheck
-import { useState, useEffect } from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
-import { ExtendedUserPost } from 'src/interfaces/user';
-import { User } from 'src/interfaces/user';
-import * as ProfileAPI from 'src/lib/api/profile';
+import {useImageUpload} from 'src/hooks/use-image-upload.hook';
+import {User} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
+import {fetchProfileDetail} from 'src/reducers/profile/actions';
+import {ProfileState} from 'src/reducers/profile/reducer';
+import {updateUser} from 'src/reducers/user/actions';
+import {UserState} from 'src/reducers/user/reducer';
 
-export const useProfileHook = id => {
-  const [profile, setProfile] = useState<ExtendedUserPost | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+export const useProfileHook = () => {
+  const dispatch = useDispatch();
+  const {uploadImage} = useImageUpload();
 
-  const getProfile = async () => {
-    setLoading(true);
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {detail: profileDetail, loading} = useSelector<RootState, ProfileState>(
+    state => state.profileState,
+  );
 
-    try {
-      let detail: ExtendedUser = await ProfileAPI.getUserProfile(id as string);
-      let posts = await ProfileAPI.getPostProfile(id as string);
+  const updateProfile = (attributes: Partial<User>) => {
+    dispatch(updateUser(attributes));
 
-      posts = posts.map((item: Post) => ({ ...item, comments: item.comments || [] }));
-
-      setProfile({
-        ...detail,
-        posts: [...posts]
-      });
-    } catch (error) {
-      setError(error);
-    } finally {
-      setLoading(false);
+    if (user && profileDetail?.id === user.id) {
+      dispatch(fetchProfileDetail(user.id));
     }
   };
 
-  const updateProfile = async (attributes: Partial<User>) => {
-    setLoading(true);
+  const updateProfilePicture = (url: string) => {
+    dispatch(
+      updateUser({
+        profilePictureURL: url,
+      }),
+    );
 
-    try {
-      const data = ProfileAPI.updateUserProfile(id as string, attributes);
-
-      setProfile({
-        ...profile,
-        ...attributes
-      });
-    } catch (error) {
-      setError(error);
-    } finally {
-      setLoading(false);
+    if (user && profileDetail?.id === user.id) {
+      dispatch(fetchProfileDetail(user.id));
     }
+  };
+
+  const updateProfileBanner = async (image: File): Promise<void> => {
+    const url = await uploadImage(image);
+
+    dispatch(
+      updateUser({
+        bannerImageUrl: url,
+      }),
+    );
   };
 
   return {
-    error,
     loading,
-    profile,
     updateProfile,
-    getProfile
+    updateProfilePicture,
+    updateProfileBanner,
   };
 };

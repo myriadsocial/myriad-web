@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { useState } from 'react';
+import {useState} from 'react';
 
-import { People } from 'src/interfaces/experience';
+import {People} from 'src/interfaces/experience';
 import * as PeopleAPI from 'src/lib/api/people';
 
 export const usePeople = () => {
@@ -34,6 +34,6 @@ export const usePeople = () => {
     error,
     loading,
     people,
-    search
+    search,
   };
 };

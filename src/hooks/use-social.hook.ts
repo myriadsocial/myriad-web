@@ -1,19 +1,19 @@
 import React from 'react';
 
 import Axios from 'axios';
-import { format } from 'date-fns';
-import { Post } from 'src/interfaces/post';
-import { parseTwitter, PostDetail } from 'src/lib/parse-social.util';
+import {format} from 'date-fns';
+import {Post} from 'src/interfaces/post';
+import {parseTwitter, PostDetail} from 'src/lib/parse-social.util';
 
 const client = Axios.create({
-  baseURL: process.env.NEXTAUTH_URL
+  baseURL: process.env.NEXTAUTH_URL,
 });
 
-const createPostContent = (post: Post): string => {
+const createMarkdownContent = (post: Post): string => {
   let content = '';
 
   if (post.title) {
-    content += `## ${post.title}`;
+    content += `## ${post.title}\n\n`;
   }
 
   if (post.text) {
@@ -24,23 +24,26 @@ const createPostContent = (post: Post): string => {
 };
 
 export const useSocialDetail = (post: Post) => {
+  const [loading, setLoading] = React.useState(true);
   const [detail, setDetail] = React.useState<PostDetail | null>(null);
 
   const loadPost = async () => {
     try {
-      const { data } = await client({
+      const {data} = await client({
         method: 'GET',
         url: '/api/content/twitter',
         params: {
           id: post.textId,
-          type: 'twitter'
-        }
+          type: 'twitter',
+        },
       });
 
       if (!data.errors) {
         const lookup = parseTwitter(data);
 
         setDetail(lookup);
+
+        setLoading(false);
       }
     } catch (error) {
       setDetail(null);
@@ -52,24 +55,27 @@ export const useSocialDetail = (post: Post) => {
       loadPost();
     } else {
       setDetail({
-        text: createPostContent(post),
+        text: createMarkdownContent(post),
         createdOn: format(new Date(post.platformCreatedAt || post.createdAt), 'dd MMMM yyyy'),
         videos: [],
         images: [],
         metric: {
           like: 0,
-          retweet: 0
+          retweet: 0,
         },
         user: {
           name: post.platformUser?.username || '',
           avatar: post.platformUser?.profilePictureURL || '',
-          username: post.platformUser?.username || ''
-        }
+          username: post.platformUser?.username || '',
+        },
       });
+
+      setLoading(false);
     }
   }, [post]);
 
   return {
-    detail
+    loading,
+    detail,
   };
 };

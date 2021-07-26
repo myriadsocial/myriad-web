@@ -7,7 +7,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-type Props = {
+import theme from 'src/themes/light';
+
+type ConfirmDialogProps = {
   title: string;
   description: string;
   open: boolean;
@@ -15,14 +17,22 @@ type Props = {
   handleSubmit: () => void;
 };
 
-export default function ConfirmDialog({ title, description, open, handleClose, handleSubmit }: Props) {
+export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
+  title,
+  description,
+  open,
+  handleClose,
+  handleSubmit,
+}) => {
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="dialog-title">
-      <DialogTitle style={{ cursor: 'move' }} id="-dialog-title">
+      <DialogTitle style={{cursor: 'move'}} id="-dialog-title">
         {title}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>{description}</DialogContentText>
+        <DialogContentText style={{color: theme.palette.primary.dark}}>
+          {description}
+        </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleClose} variant="contained" color="secondary">
@@ -34,4 +44,4 @@ export default function ConfirmDialog({ title, description, open, handleClose, h
       </DialogActions>
     </Dialog>
   );
-}
+};

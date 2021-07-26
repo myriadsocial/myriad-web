@@ -1,42 +1,84 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
-import Axios, { AxiosError } from 'axios';
-import { useAlertHook } from 'src/components/alert/use-alert.hook';
-import { SocialsEnum } from 'src/interfaces/index';
+import {useAlertHook} from './use-alert.hook';
+
+import Axios, {AxiosError} from 'axios';
+import {SocialsEnum} from 'src/interfaces/index';
 
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
-export const useShareSocial = (publicKey: string) => {
-  const { showAlert } = useAlertHook();
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const useShareSocial = (publicKey?: string) => {
+  const {showAlert} = useAlertHook();
 
   const [sharing, setSharing] = useState(false);
   const [isShared, setShared] = useState(false);
 
   const handleError = (error: AxiosError) => {
+    console.log('error: ', error.response);
     if (error.response) {
       switch (error.response.status) {
         case 404:
+          switch (error.response.data.error.name) {
+            case 'Error':
+              showAlert({
+                title: 'Error',
+                message: 'Please enter the correct account address',
+                severity: 'error',
+              });
+              break;
+            default:
+              switch (error.response.data.error.message) {
+                case 'This twitter/facebook/reddit does not belong to you!':
+                  showAlert({
+                    title: 'Error',
+                    message: 'Sorry, this account has been claimed by somebody else',
+                    severity: 'error',
+                  });
+                  break;
+                case 'Credential Invalid':
+                  showAlert({
+                    title: 'Error',
+                    message: 'Invalid credentials',
+                    severity: 'error',
+                  });
+                  break;
+                default:
+                  showAlert({
+                    title: 'Error',
+                    message: error.response.data.error.message,
+                    severity: 'error',
+                  });
+                  break;
+              }
+              break;
+          }
+          break;
+
+        case 400:
           showAlert({
             title: 'Error',
-            message: 'Profile already used',
-            severity: 'error'
+            message: 'Please enter the correct account address',
+            severity: 'error',
           });
           break;
 
         default:
           showAlert({
             title: 'Error',
-            message: 'Profile already used',
-            severity: 'error'
+            message: 'Please enter the correct account address',
+            severity: 'error',
           });
           break;
       }
     }
   };
 
-  const shareOnFacebook = async (username: string) => {
+  const verifyPublicKeyShared = async (platform: SocialsEnum, username: string) => {
+    if (!publicKey) return;
+
     setSharing(true);
 
     try {
@@ -46,8 +88,34 @@ export const useShareSocial = (publicKey: string) => {
         data: {
           username,
           publicKey,
-          platform: SocialsEnum.FACEBOOK
-        }
+          platform,
+        },
+      });
+
+      setShared(true);
+    } catch (error) {
+      const err = error as AxiosError;
+
+      handleError(err);
+    } finally {
+      setSharing(false);
+    }
+  };
+
+  const shareOnFacebook = async (username: string) => {
+    if (!publicKey) return;
+
+    setSharing(true);
+
+    try {
+      await MyriadAPI.request({
+        method: 'POST',
+        url: '/verify',
+        data: {
+          username,
+          publicKey,
+          platform: SocialsEnum.FACEBOOK,
+        },
       });
       setShared(true);
     } catch (error) {
@@ -60,6 +128,8 @@ export const useShareSocial = (publicKey: string) => {
   };
 
   const shareOnReddit = async (username: string) => {
+    if (!publicKey) return;
+
     setSharing(true);
 
     try {
@@ -69,8 +139,8 @@ export const useShareSocial = (publicKey: string) => {
         data: {
           username,
           publicKey,
-          platform: SocialsEnum.REDDIT
-        }
+          platform: SocialsEnum.REDDIT,
+        },
       });
 
       setShared(true);
@@ -84,6 +154,8 @@ export const useShareSocial = (publicKey: string) => {
   };
 
   const shareOnTwitter = async (username: string) => {
+    if (!publicKey) return;
+
     setSharing(true);
 
     try {
@@ -93,8 +165,8 @@ export const useShareSocial = (publicKey: string) => {
         data: {
           username,
           publicKey,
-          platform: SocialsEnum.TWITTER
-        }
+          platform: SocialsEnum.TWITTER,
+        },
       });
 
       setShared(true);
@@ -110,8 +182,9 @@ export const useShareSocial = (publicKey: string) => {
   return {
     sharing,
     isShared,
+    verifyPublicKeyShared,
     shareOnFacebook,
     shareOnReddit,
-    shareOnTwitter
+    shareOnTwitter,
   };
 };

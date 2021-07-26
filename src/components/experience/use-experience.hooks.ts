@@ -1,19 +1,23 @@
-import { useState } from 'react';
+import {useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
-import { useTimeline, TimelineActionType } from '../timeline/timeline.context';
-import { useExperience as baseUseExperience, ExperienceActionType } from './experience.context';
+import {useExperience as baseUseExperience, ExperienceActionType} from './experience.context';
 
 import Axios from 'axios';
-import { omit } from 'lodash';
-import { Experience } from 'src/interfaces/experience';
+import {omit} from 'lodash';
+import {Experience} from 'src/interfaces/experience';
+import {RootState} from 'src/reducers';
+import {updateFilter} from 'src/reducers/timeline/actions';
+import {TimelineState} from 'src/reducers/timeline/reducer';
 
 const axios = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 export const useExperience = (userId: string) => {
-  const { state, dispatch } = baseUseExperience();
-  const { state: timelineState, dispatch: dispatchTimeline } = useTimeline();
+  const {state, dispatch} = baseUseExperience();
+  const timelineState = useSelector<RootState, TimelineState>(state => state.timelineState);
+  const dispatchThunk = useDispatch();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -21,7 +25,7 @@ export const useExperience = (userId: string) => {
     offset: 0,
     limit: 10,
     where: {},
-    include: ['user']
+    include: ['user'],
   });
 
   const load = async (type: ExperienceActionType = ExperienceActionType.INIT_EXPERIENCE) => {
@@ -32,20 +36,20 @@ export const useExperience = (userId: string) => {
       filter = {
         ...filter,
         where: {
-          userId
-        }
+          userId,
+        },
       };
     }
 
     setLoading(true);
 
     try {
-      const { data } = await axios.request<Experience[]>({
+      const {data} = await axios.request<Experience[]>({
         url: '/experiences',
         method: 'GET',
         params: {
-          filter
-        }
+          filter,
+        },
       });
 
       dispatch({
@@ -55,9 +59,9 @@ export const useExperience = (userId: string) => {
           return {
             ...experience,
             // @ts-ignore
-            layout: experience.layout ? experience.layout : 'timeline'
+            layout: experience.layout ? experience.layout : 'timeline',
           };
-        })
+        }),
       });
     } catch (error) {
       setError(error);
@@ -69,18 +73,18 @@ export const useExperience = (userId: string) => {
   const loadMoreExperience = async () => {
     const filter = {
       ...params,
-      offset: (params.offset + 1) * params.limit
+      offset: (params.offset + 1) * params.limit,
     };
 
     setLoading(true);
 
     try {
-      const { data } = await axios.request<Experience[]>({
+      const {data} = await axios.request<Experience[]>({
         url: `/users/${userId}/experiences`,
         method: 'GET',
         params: {
-          filter
-        }
+          filter,
+        },
       });
 
       setParams(filter);
@@ -92,9 +96,9 @@ export const useExperience = (userId: string) => {
             return {
               ...experience,
               // @ts-ignore
-              layout: !experience.layout || experience.layout === '' ? 'timeline' : 'photo'
+              layout: !experience.layout || experience.layout === '' ? 'timeline' : 'photo',
             };
-          })
+          }),
         });
       }
     } catch (error) {
@@ -110,7 +114,7 @@ export const useExperience = (userId: string) => {
     if (experience) {
       dispatch({
         type: ExperienceActionType.SELECT_EXPERIENCE,
-        experience
+        experience,
       });
     }
   };
@@ -119,20 +123,20 @@ export const useExperience = (userId: string) => {
     dispatch({
       type: ExperienceActionType.EDIT_EXPERIENCE,
       experience_id: data.id,
-      experience: data
+      experience: data,
     });
   };
 
   const storeExperience = async (experience: Experience) => {
-    const { data } = await axios({
+    const {data} = await axios({
       url: `users/${userId}/experiences`,
       method: 'POST',
-      data: omit(experience, ['id', 'user', 'description', 'layout'])
+      data: omit(experience, ['id', 'user', 'description', 'layout']),
     });
 
     dispatch({
       type: ExperienceActionType.ADD_EXPERIENCE,
-      payload: data
+      payload: data,
     });
 
     selectExperience(data.id);
@@ -145,8 +149,8 @@ export const useExperience = (userId: string) => {
         method: 'POST',
         data: {
           ...omit(experience, ['id', 'user']),
-          userId: userId
-        }
+          userId: userId,
+        },
       });
     }
 
@@ -163,41 +167,40 @@ export const useExperience = (userId: string) => {
         layout: experience.layout,
         description: experience.description,
         name: experience.name,
-        userId
-      }
+        userId,
+      },
     });
 
     console.log('UPDATE SELECTED EXPERIENCE', experience);
     dispatch({
       type: ExperienceActionType.UPDATE_SELECTED_EXPERIENCE,
-      experience
+      experience,
     });
 
-    dispatchTimeline({
-      type: TimelineActionType.UPDATE_FILTER,
-      filter: {
+    dispatchThunk(
+      updateFilter({
         tags: experience.tags.filter(tag => !tag.hide).map(tag => tag.id),
         people: experience.people.filter(person => !person.hide).map(person => person.username),
-        layout: experience.layout || timelineState.filter.layout,
-        platform: timelineState.filter.platform
-      }
-    });
+        layout: experience.layout || timelineState.filter?.layout,
+        platform: timelineState.filter?.platform,
+      }),
+    );
   };
 
   const removeExperience = async (id: string) => {
     await axios({
       url: `/experiences/${id}`,
-      method: 'DELETE'
+      method: 'DELETE',
     });
 
     dispatch({
       type: ExperienceActionType.REMOVE_EXPERIENCE,
-      experience_id: id
+      experience_id: id,
     });
   };
 
   const searchExperience = async (query: string) => {
-    const { data } = await axios.request<Experience[]>({
+    const {data} = await axios.request<Experience[]>({
       url: '/experiences',
       method: 'GET',
       params: {
@@ -209,14 +212,14 @@ export const useExperience = (userId: string) => {
           where: {
             name: {
               like: `.*${query}*`,
-              options: 'i'
+              options: 'i',
             },
             id: {
-              nin: state.experiences.map(i => i.id)
-            }
-          }
-        }
-      }
+              nin: state.experiences.map(i => i.id),
+            },
+          },
+        },
+      },
     });
 
     dispatch({
@@ -225,16 +228,16 @@ export const useExperience = (userId: string) => {
         return {
           ...experience,
           // @ts-ignore
-          layout: !experience.layout || experience.layout === '' ? 'timeline' : 'photo'
+          layout: !experience.layout || experience.layout === '' ? 'timeline' : 'photo',
         };
-      })
+      }),
     });
   };
 
   const prependExperience = (experience: Experience) => {
     dispatch({
       type: ExperienceActionType.ADD_EXPERIENCE,
-      payload: experience
+      payload: experience,
     });
 
     selectExperience(experience.id);
@@ -256,6 +259,6 @@ export const useExperience = (userId: string) => {
     selectExperience,
     editExperience,
     removeExperience,
-    prependExperience
+    prependExperience,
   };
 };

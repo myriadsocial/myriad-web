@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type {NextApiRequest, NextApiResponse} from 'next';
 
 import fetch from 'node-fetch';
 
@@ -11,14 +11,14 @@ const sleep = () => {
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { body, method } = req;
-  const { captcha } = body;
+  const {body, method} = req;
+  const {captcha} = body;
 
   // Only process the API call if the method is POST
   if (method === 'POST') {
     if (!captcha)
       return res.status(422).json({
-        message: 'Unprocessable request, please provide the required fields'
+        message: 'Unprocessable request, please provide the required fields',
       });
 
     try {
@@ -26,10 +26,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         `${process.env.NEXT_PUBLIC_RECAPTCHA_API_URL}?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${captcha}`,
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+            'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
           },
-          method: 'POST'
-        }
+          method: 'POST',
+        },
       );
 
       const captchaValidation = await response.json();
@@ -50,11 +50,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       return res.status(422).json({
-        message: 'Unprocessable request, Invalid captcha code'
+        message: 'Unprocessable request, Invalid captcha code',
       });
     } catch (error) {
       console.log(error);
-      return res.status(422).json({ message: 'Something went wrong!' });
+      return res.status(422).json({message: 'Something went wrong!'});
     }
   }
 

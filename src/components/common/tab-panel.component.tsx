@@ -10,7 +10,7 @@ interface TabPanelProps {
 }
 
 export const TabPanel: React.FC<TabPanelProps> = (props: TabPanelProps) => {
-  const { children, value, index, ...other } = props;
+  const {children, value, index, ...other} = props;
 
   return (
     <div
@@ -20,7 +20,7 @@ export const TabPanel: React.FC<TabPanelProps> = (props: TabPanelProps) => {
       aria-labelledby={`full-width-tab-${index}`}
       {...other}>
       {value === index && (
-        <Box p={3} style={{ padding: 8 }}>
+        <Box p={3} style={{padding: 8}}>
           {children}
         </Box>
       )}

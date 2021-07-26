@@ -1,120 +1,133 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
-import { GetServerSideProps } from 'next';
-import { useSession, getSession } from 'next-auth/client';
-import { useRouter } from 'next/router';
+import {getSession} from 'next-auth/client';
 
 import Grid from '@material-ui/core/Grid';
 import NoSsr from '@material-ui/core/NoSsr';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import Layout from 'src/components/Layout/Layout.container';
-import ShowIf from 'src/components/common/show-if.component';
-import { FriendsProvider } from 'src/components/friends/friends.context';
 import Timeline from 'src/components/timeline/timeline.component';
 import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
-import { useUser } from 'src/components/user/user.context';
-import { Wallet } from 'src/components/wallet/wallet.component';
-import { healthcheck } from 'src/lib/api/healthcheck';
+import {Wallet} from 'src/components/wallet/wallet.component';
+import {healthcheck} from 'src/lib/api/healthcheck';
+import * as UserAPI from 'src/lib/api/user';
+import {RootState} from 'src/reducers';
+import {setAnonymous, setUser, fetchToken} from 'src/reducers/user/actions';
+import {UserState} from 'src/reducers/user/reducer';
+import {wrapper} from 'src/store';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
     user: {
+      width: 327,
       flex: '0 0 327px',
       marginRight: 0,
       'scrollbar-color': '#A942E9 #171717',
-      'scrollbar-width': 'thin !important'
+      'scrollbar-width': 'thin !important',
     },
     wallet: {
-      width: 327
+      width: 327,
+    },
+    fullwidth: {
+      width: 327,
     },
     fullheight: {
-      height: '100vh'
+      height: '100vh',
     },
     profile: {
-      flexGrow: 1
+      flexGrow: 1,
     },
     content: {
-      // flex: '1 1 auto',
+      flex: 1,
       marginLeft: 'auto',
       marginRight: 'auto',
       padding: '0 24px 0 24px',
       height: '100vh',
       maxWidth: 726,
       [theme.breakpoints.up('xl')]: {
-        maxWidth: 926
-      }
-    }
-  })
+        maxWidth: 926,
+      },
+    },
+  }),
 );
 
-export default function Home() {
+const Home: React.FC = () => {
   const style = useStyles();
 
-  const [session, loading] = useSession();
-  const router = useRouter();
-
-  const {
-    state: { user }
-  } = useUser();
+  const {anonymous, tokens} = useSelector<RootState, UserState>(state => state.userState);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!session && !loading) {
-      router.push('/');
-    }
-  }, [loading, session]);
-
-  // When rendering client side don't display anything until loading is complete
-  if (typeof window !== 'undefined' && loading) return null;
-
-  if (!session?.user) return null;
+    // load current authenticated user tokens
+    dispatch(fetchToken());
+  }, [dispatch]);
 
   return (
-    <Layout session={session}>
-      {user && (
-        <>
-          <Grid item className={style.user}>
-            <Grid className={style.fullheight} container direction="row" justify="flex-start" alignContent="flex-start">
-              <Grid item className={style.profile}>
-                <UserDetail user={user} />
-              </Grid>
-              <Grid item className={style.wallet}>
-                <FriendsProvider>
-                  <ShowIf condition={!user.anonymous}>
-                    <NoSsr>
-                      <Wallet />
-                    </NoSsr>
-                  </ShowIf>
-                </FriendsProvider>
+    <Layout>
+      <Grid item className={style.user}>
+        <Grid container direction="row" justify="flex-start" alignContent="flex-start">
+          <Grid item className={style.fullwidth}>
+            <UserDetail isAnonymous={anonymous} />
+          </Grid>
+          <Grid item className={style.fullwidth}>
+            <NoSsr>
+              <Wallet />
+            </NoSsr>
 
-                <TopicComponent />
-              </Grid>
-            </Grid>
+            <TopicComponent />
           </Grid>
-          <Grid item className={style.content}>
-            <Timeline user={user} />
-          </Grid>
-        </>
-      )}
+        </Grid>
+      </Grid>
+      <Grid item className={style.content}>
+        <Timeline isAnonymous={anonymous} availableTokens={tokens} />
+      </Grid>
     </Layout>
   );
-}
+};
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const { res } = context;
+export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
+  const {dispatch} = store;
+  const {res} = context;
 
   const available = await healthcheck();
 
   if (!available) {
-    res.writeHead(302, { location: `${process.env.NEXTAUTH_URL}/maintenance` });
+    res.setHeader('location', '/maintenance');
+    res.statusCode = 302;
     res.end();
+  }
+
+  const session = await getSession(context);
+
+  if (!session) {
+    res.setHeader('location', '/');
+    res.statusCode = 302;
+    res.end();
+  }
+
+  const anonymous = Boolean(session?.user.anonymous);
+  const userId = session?.user.id as string;
+  const username = session?.user.name as string;
+
+  //TODO: this process should call thunk action creator instead of dispatch thunk acion
+  //ISSUE: state not hydrated when using thunk action creator
+  if (anonymous) {
+    dispatch(setAnonymous(username));
+  } else {
+    const user = await UserAPI.getUserDetail(userId);
+
+    dispatch(setUser(user));
   }
 
   return {
     props: {
-      session: await getSession(context)
-    }
+      session,
+    },
   };
-};
+});
+
+export default Home;

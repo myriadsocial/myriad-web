@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
-import { useConversation, ConversationActionType } from 'src/components/conversation/conversation.context';
-import { ExtendedConversation } from 'src/interfaces/conversation';
-import { Comment, Post } from 'src/interfaces/post';
-import { User } from 'src/interfaces/user';
+import {
+  useConversation,
+  ConversationActionType,
+} from 'src/components/conversation/conversation.context';
+import {ExtendedConversation} from 'src/interfaces/conversation';
+import {Comment, Post} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
 import * as ConversationAPI from 'src/lib/api/conversation';
 import * as LocalAPI from 'src/lib/api/local';
 import * as PostAPI from 'src/lib/api/post';
 
 export const useConversationHook = (user: User) => {
-  const { state, dispatch } = useConversation();
+  const {state, dispatch} = useConversation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -35,12 +38,12 @@ export const useConversationHook = (user: User) => {
           }
 
           return conversation;
-        })
+        }),
       );
 
       dispatch({
         type: ConversationActionType.LOAD_CONVERSATION,
-        payload: posts
+        payload: posts,
       });
     } catch (error) {
       setError(error);
@@ -52,7 +55,7 @@ export const useConversationHook = (user: User) => {
   const setPost = (post: Post) => {
     dispatch({
       type: ConversationActionType.LOAD_CONVERSATION_DETAIL,
-      payload: post
+      payload: post,
     });
   };
 
@@ -63,8 +66,8 @@ export const useConversationHook = (user: User) => {
       type: ConversationActionType.REPLY_CONVERSATION,
       payload: {
         ...data,
-        user
-      }
+        user,
+      },
     });
   };
 
@@ -73,7 +76,7 @@ export const useConversationHook = (user: User) => {
 
     dispatch({
       type: ConversationActionType.LOAD_REPLY,
-      payload: data
+      payload: data,
     });
   };
 
@@ -84,6 +87,6 @@ export const useConversationHook = (user: User) => {
     loadConversation: load,
     setPost,
     reply,
-    loadComments
+    loadComments,
   };
 };

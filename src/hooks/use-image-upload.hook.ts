@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
 import Axios from 'axios';
 
 const client = Axios.create({
-  baseURL: process.env.NEXTAUTH_URL
+  baseURL: process.env.NEXTAUTH_URL,
 });
 
 type ResponseImageUpload = {
@@ -20,10 +20,10 @@ export const useImageUpload = () => {
     formData.append('image', file);
 
     try {
-      const { data } = await client.request<ResponseImageUpload>({
+      const {data} = await client.request<ResponseImageUpload>({
         method: 'POST',
         url: '/api/image',
-        data: formData
+        data: formData,
       });
 
       setImage(data.url);
@@ -38,6 +38,6 @@ export const useImageUpload = () => {
 
   return {
     image,
-    uploadImage
+    uploadImage,
   };
 };

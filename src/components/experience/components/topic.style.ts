@@ -1,13 +1,13 @@
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       backgroundColor: '#424242',
-      color: '#E0E0E0'
+      color: '#E0E0E0',
     },
     inline: {
-      display: 'inline'
+      display: 'inline',
     },
     chip: {
       display: 'flex',
@@ -15,16 +15,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexWrap: 'wrap',
       marginBottom: theme.spacing(2),
       '& > *': {
-        margin: theme.spacing(0.5)
-      }
+        margin: theme.spacing(0.5),
+      },
     },
     avatar: {
       display: 'flex',
       justifyContent: 'center',
       '& > *': {
-        margin: theme.spacing(1)
+        margin: theme.spacing(1),
       },
-      marginBottom: theme.spacing(2)
+      marginBottom: theme.spacing(2),
     },
     header: {
       // padding: '0 16px'
@@ -32,49 +32,49 @@ export const useStyles = makeStyles((theme: Theme) =>
     content: {
       padding: '0 8px',
       '&:last-child': {
-        paddingBottom: theme.spacing(1.5)
-      }
+        paddingBottom: theme.spacing(1.5),
+      },
     },
     action: {
       width: 265,
       marginBottom: 10,
       textAlign: 'left',
-      borderRadius: 20
+      borderRadius: 20,
     },
     more: {
       display: 'flex',
-      justifyContent: 'flex-end'
+      justifyContent: 'flex-end',
     },
     show: {
-      color: '#E849BD'
+      color: '#E849BD',
     },
 
     search: {
-      margin: theme.spacing(1)
+      margin: theme.spacing(1),
     },
     optionItem: {
       position: 'relative',
-      flex: 1
+      flex: 1,
     },
     addButton: {
       position: 'absolute',
       top: 0,
-      right: 0
+      right: 0,
     },
     facebook: {
       '& .MuiBadge-badge': {
-        backgroundColor: '#3b5998'
-      }
+        backgroundColor: '#3b5998',
+      },
     },
     twitter: {
       '& .MuiBadge-badge': {
-        backgroundColor: '#1DA1F2'
-      }
+        backgroundColor: '#1DA1F2',
+      },
     },
     reddit: {
       '& .MuiBadge-badge': {
-        backgroundColor: '#FF5700'
-      }
-    }
-  })
+        backgroundColor: '#FF5700',
+      },
+    },
+  }),
 );

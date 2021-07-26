@@ -4,11 +4,11 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import Autocomplete, { AutocompleteRenderOptionState } from '@material-ui/lab/Autocomplete';
+import Autocomplete, {AutocompleteRenderOptionState} from '@material-ui/lab/Autocomplete';
 
-import { Experience } from 'src/interfaces/experience';
+import {Experience} from 'src/interfaces/experience';
 
 //@ts-ignore
 type Props = {
@@ -21,21 +21,26 @@ type Props = {
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      margin: theme.spacing(1)
+      margin: theme.spacing(1),
     },
     optionItem: {
       position: 'relative',
-      flex: 1
+      flex: 1,
     },
     addButton: {
       position: 'absolute',
       top: 0,
-      right: 0
-    }
-  })
+      right: 0,
+    },
+  }),
 );
 
-export default function SearchExperience({ title = 'Search..', data = [], search, onSelected }: Props) {
+export default function SearchExperience({
+  title = 'Search..',
+  data = [],
+  search,
+  onSelected,
+}: Props) {
   const style = useStyles();
 
   const [open, setOpen] = React.useState(false);
@@ -97,7 +102,7 @@ export default function SearchExperience({ title = 'Search..', data = [], search
                 {loading ? <CircularProgress color="inherit" size={20} /> : null}
                 {params.InputProps.endAdornment}
               </React.Fragment>
-            )
+            ),
           }}
         />
       )}

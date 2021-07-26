@@ -7,7 +7,7 @@
 export enum SocialsEnum {
   FACEBOOK = 'facebook',
   TWITTER = 'twitter',
-  REDDIT = 'reddit'
+  REDDIT = 'reddit',
 }
 
 export type SocialsEnumType = typeof SocialsEnum;
@@ -15,5 +15,5 @@ export type SocialsEnumType = typeof SocialsEnum;
 export type LoopbackParams = {
   limit: number;
   offset: number;
-  [key: string]: number | string | object;
+  [key: string]: number | string | Record<string, string>;
 };

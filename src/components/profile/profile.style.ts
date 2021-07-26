@@ -1,4 +1,4 @@
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -14,8 +14,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       scrollbarColor: 'transparent transparent',
       '& ::-webkit-scrollbar': {
         display: 'none',
-        width: '0 !important'
-      }
+        width: '0 !important',
+      },
+    },
+    flex: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     scroll: {
       height: '100%',
@@ -23,29 +28,30 @@ export const useStyles = makeStyles((theme: Theme) =>
       overflowY: 'auto',
       overflowX: 'hidden',
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
     },
     child: {
       '& > *': {
         // margin: theme.spacing(1)
-        marginTop: theme.spacing(1)
-      }
+        marginTop: theme.spacing(1),
+      },
     },
     loading: {
       position: 'absolute',
       top: 100,
-      left: 'calc(50% - 20px)'
+      left: 'calc(50% - 20px)',
     },
     // TAB
     root2: {
       // backgroundColor: theme.palette.background.paper,
       width: 678,
-      height: '100%'
+      height: '100%',
+      marginBottom: theme.spacing(1),
     },
 
     tabContent: {
       filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.16))',
-      background: theme.palette.background.paper
+      // background: theme.palette.background.paper
     },
     tabHeader: {
       // background: '#C4C4C4'
@@ -62,32 +68,32 @@ export const useStyles = makeStyles((theme: Theme) =>
         // background: 'white',
         borderRadius: 8,
         background: theme.palette.primary.main,
-        color: theme.palette.text.secondary,
+        color: '#FFFFFF',
         // width: 157,
 
         '& .MuiTypography-root': {
           display: 'block',
           textTransform: 'capitalize',
-          fontSize: 15
-        }
+          fontSize: 15,
+        },
       },
 
       '& .MuiTypography-root': {
-        display: 'none'
+        display: 'none',
       },
 
       '& .MuiTab-wrapper': {
         flexDirection: 'row',
         '& >*:first-child': {
-          marginBottom: 0
-        }
+          marginBottom: 0,
+        },
       },
 
       '& .MuiSvgIcon-root': {
         paddingRight: theme.spacing(0.5),
         width: 24,
-        height: 24
-      }
-    }
-  })
+        height: 24,
+      },
+    },
+  }),
 );

@@ -1,12 +1,12 @@
 import Axios from 'axios';
-import { ExtendedConversation } from 'src/interfaces/conversation';
+import {ExtendedConversation} from 'src/interfaces/conversation';
 
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000'
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 export const load = async (accountId: string): Promise<ExtendedConversation[]> => {
-  const { data: converstions } = await MyriadAPI.request<ExtendedConversation[]>({
+  const {data: converstions} = await MyriadAPI.request<ExtendedConversation[]>({
     url: `/conversations`,
     method: 'GET',
     params: {
@@ -14,8 +14,8 @@ export const load = async (accountId: string): Promise<ExtendedConversation[]> =
         limit: 5,
         where: {
           userId: {
-            eq: accountId
-          }
+            eq: accountId,
+          },
         },
         include: [
           {
@@ -25,17 +25,17 @@ export const load = async (accountId: string): Promise<ExtendedConversation[]> =
                 {
                   relation: 'comments',
                   order: 'createdAt DESC',
-                  limit: 2
-                }
-              ]
-            }
+                  limit: 2,
+                },
+              ],
+            },
           },
           {
-            relation: 'user'
-          }
-        ]
-      }
-    }
+            relation: 'user',
+          },
+        ],
+      },
+    },
   });
 
   return converstions;

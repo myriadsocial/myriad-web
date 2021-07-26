@@ -1,5 +1,5 @@
-import { People } from './people';
-import { Post } from './post';
+import {People} from './people';
+import {Post} from './post';
 
 export interface UserCredential {
   id: string;
@@ -19,16 +19,25 @@ export interface User {
   name: string;
   username: string;
   profilePictureURL?: string;
+  bannerImageUrl?: string;
   anonymous: boolean;
-  fcm_token?: string[];
+  fcmTokens?: string[];
   skip_tour?: boolean;
   createdAt?: Date;
 }
 
 export interface ExtendedUser extends User {
-  userCredentials: ExtendedUserCredential[];
+  userCredentials?: ExtendedUserCredential[];
 }
 
 export interface ExtendedUserPost extends User {
   posts: Post[];
+}
+
+export interface UserTransactionDetail {
+  id: string;
+  sentToMe: number;
+  sentToThem: number;
+  userId: string;
+  tokenId: string;
 }

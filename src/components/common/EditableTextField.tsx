@@ -1,17 +1,17 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef} from 'react';
 
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Clear from '@material-ui/icons/Clear';
 import Edit from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      flexDirection: 'row'
+      flexDirection: 'row',
     },
     textField: {
       marginTop: theme.spacing(1),
@@ -21,30 +21,30 @@ const useStyles = makeStyles((theme: Theme) =>
       opacity: 1,
       borderBottom: 0,
       '&:before': {
-        borderBottom: 0
-      }
+        borderBottom: 0,
+      },
     },
     disabled: {
       color: theme.palette.text.disabled,
       borderBottom: 0,
       '&:before': {
-        borderBottom: 0
-      }
+        borderBottom: 0,
+      },
     },
     inlineButtonsLayout: {
       flexDirection: 'row',
-      marginBottom: '4px'
+      marginBottom: '4px',
     },
     cancelButton: {
       color: 'red',
-      justifyContent: 'space-around'
+      justifyContent: 'space-around',
     },
     confirmButton: {
       backgroundColor: '#A942E9',
       color: 'white',
-      justifyContent: 'space-around'
-    }
-  })
+      justifyContent: 'space-around',
+    },
+  }),
 );
 
 type Props = {
@@ -57,7 +57,15 @@ type Props = {
   onChange: (value: string) => void;
 };
 
-export const EditableTextField = ({ onChange, value, name, multiline, rows, fullWidth = false, style }: Props) => {
+export const EditableTextField = ({
+  onChange,
+  value,
+  name,
+  multiline,
+  rows,
+  fullWidth = false,
+  style,
+}: Props) => {
   const styles = useStyles();
 
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -126,7 +134,7 @@ export const EditableTextField = ({ onChange, value, name, multiline, rows, full
           InputProps={{
             style,
             classes: {
-              disabled: styles.disabled
+              disabled: styles.disabled,
             },
             endAdornment: isMouseOver ? (
               <InputAdornment position="start">
@@ -148,7 +156,7 @@ export const EditableTextField = ({ onChange, value, name, multiline, rows, full
               </InputAdornment>
             ) : (
               ''
-            )
+            ),
           }}
         />
       </form>

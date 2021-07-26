@@ -1,17 +1,5 @@
-import { LayoutType } from './experience';
-import { SocialsEnum } from './index';
-import { User } from './user';
-
-export type PostOrigin = 'facebook' | 'twitter' | 'reddit' | 'myriad';
-
-export type PostSortMethod = 'created' | 'like' | 'comment' | 'trending';
-
-export type PostFilter = {
-  tags: string[];
-  people: string[];
-  layout: LayoutType;
-  platform: SocialsEnum[];
-};
+import {PostOrigin} from './timeline';
+import {User} from './user';
 
 export type PostReaction = {
   name: string;
@@ -28,6 +16,11 @@ export type SocialMetric = {
   like: number;
   retweet: number;
 };
+
+export interface TipsReceived {
+  tokenId: string;
+  totalTips: number;
+}
 
 export interface Post {
   id: string;
@@ -53,15 +46,21 @@ export interface Post {
     disliked: number;
     comment: number;
   };
+  importBy?: string[];
+  importer?: User;
+  tipsReceived?: TipsReceived[];
 }
 
 export interface Comment {
+  id: string;
   text: string;
   postId: string;
   userId: string;
   createdAt: Date;
   user?: User;
 }
+
+export type CreateCommentProps = Omit<Comment, 'id'>;
 
 export type UserReplies = Comment & {
   id: string;
@@ -70,5 +69,5 @@ export type UserReplies = Comment & {
 
 export type ImportPost = {
   url: string;
-  importer?: string;
+  importer: string;
 };

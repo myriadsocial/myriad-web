@@ -3,7 +3,7 @@ import 'firebase/messaging';
 import localforage from 'localforage';
 
 const firebaseCloudMessaging = {
-  tokenInlocalforage: async () => {
+  tokenInlocalforage: async (): Promise<string | null> => {
     return localforage.getItem('fcm_token');
   },
 
@@ -13,7 +13,7 @@ const firebaseCloudMessaging = {
         apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
         projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
         messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-        appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+        appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
       });
     }
 
@@ -23,7 +23,13 @@ const firebaseCloudMessaging = {
       }
 
       const messaging = firebase.messaging();
+
+      messaging.onMessage(payload => {
+        console.log('Message received. ', payload);
+      });
+
       await Notification.requestPermission();
+
       const token = await messaging.getToken();
 
       localforage.setItem('fcm_token', token);
@@ -31,7 +37,7 @@ const firebaseCloudMessaging = {
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 };
 
-export { firebaseCloudMessaging };
+export {firebaseCloudMessaging};

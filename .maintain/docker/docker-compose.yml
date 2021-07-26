@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  web:
+    container_name: myriad-web
+    image: myriadsocial/myriad-web
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    volumes:
+      - ../../:/home/myriad/app
+      - /home/myriad/app/node_modules
+      - /home/myriad/app/.next
+    env_file:
+      - ../../.env
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3000
+    ports:
+      - 3002:3000
+    networks:
+      myriad:
+        ipv4_address: 172.27.1.5
+        aliases:
+          - web
+
+networks:
+  myriad:
+    external: true

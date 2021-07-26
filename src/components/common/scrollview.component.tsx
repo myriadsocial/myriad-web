@@ -5,7 +5,7 @@ export interface Props {
   background?: string;
 }
 
-const ScrollView: React.FC<Props> = ({ children, className, background }) => {
+const ScrollView: React.FC<Props> = ({children, className, background}) => {
   const style: React.CSSProperties = {
     overflowY: 'scroll',
     WebkitOverflowScrolling: 'touch',
@@ -14,7 +14,7 @@ const ScrollView: React.FC<Props> = ({ children, className, background }) => {
     left: 0,
     right: 0,
     bottom: 0,
-    background
+    background,
   };
 
   return (

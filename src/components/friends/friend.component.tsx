@@ -1,39 +1,51 @@
-import React, { useState } from 'react';
+import React, {useState, useEffect} from 'react';
+import {useSelector} from 'react-redux';
 
 import DividerComponent from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
+import {useFriendsHook} from '../../hooks/use-friends-hook';
 import FriendListComponent from './friend-list.component';
 import FriendRequestComponent from './friend-requests.component';
-import { useFriendsHook } from './use-friends-hook';
 
-import { debounce } from 'lodash';
+import {debounce} from 'lodash';
 import SearchComponent from 'src/components/common/search.component';
-import { useUser } from 'src/components/user/user.context';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
-interface TopicProps {
+interface FriendComponentProps {
   title?: string;
 }
 
-const FriendComponent: React.FC<TopicProps> = props => {
-  const { title } = props;
+const FriendComponent: React.FC<FriendComponentProps> = props => {
+  const {title} = props;
 
-  const { state } = useUser();
+  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const [search, setSearchQuery] = useState('');
 
-  if (!state.user) return null;
-  //@ts-ignore
-  const { searchFriend } = useFriendsHook(state.user);
+  const {searchFriend, loadFriends, loadRequests, toggleRequest} = useFriendsHook();
+
+  useEffect(() => {
+    loadFriends();
+    loadRequests();
+  }, []);
 
   const handleSearchFriend = debounce((query: string) => {
-    console.log('SEARCH', query), setSearchQuery(query);
-    searchFriend(query);
+    setSearchQuery(query);
+
+    if (query.length) {
+      searchFriend(query);
+    } else {
+      loadFriends();
+    }
   }, 300);
 
+  if (!user && !anonymous) return null;
+
   return (
-    <div style={{ padding: 8 }}>
-      <div style={{ paddingTop: 16, paddingBottom: 8 }}>
-        <Typography variant="h4" style={{ marginBottom: 16 }}>
+    <div style={{padding: 8}}>
+      <div style={{paddingTop: 16, paddingBottom: 8}}>
+        <Typography variant="h4" style={{marginBottom: 16}}>
           {' '}
           {title || 'Your Friends'}
         </Typography>
@@ -41,9 +53,9 @@ const FriendComponent: React.FC<TopicProps> = props => {
         <SearchComponent value={search} placeholder="Find a Friend" onSubmit={handleSearchFriend} />
       </div>
 
-      <FriendRequestComponent user={state.user} />
+      <FriendRequestComponent toggleRequest={toggleRequest} />
       <DividerComponent />
-      <FriendListComponent user={state.user} />
+      <FriendListComponent />
     </div>
   );
 };

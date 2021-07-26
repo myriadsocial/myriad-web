@@ -1,62 +1,64 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 
 import ShowIf from '../common/show-if.component';
-import LoginComponent from '../login/login.component';
 
-import { ProfileEditComponent } from 'src/components/profile/profile-edit.component';
-import { User } from 'src/interfaces/user';
+import Logout from 'src/components/logout/logout.component';
 
 const useStyles = makeStyles({
-  root: {}
+  root: {},
 });
 
 type ProfileActionProps = {
   anonymous: boolean;
-  user?: User;
+  userId: string | null;
+  onEditProfileClicked: () => void;
+  onLoginClicked: () => void;
 };
 
-export const ProfileActionComponent: React.FC<ProfileActionProps> = ({ anonymous, user }) => {
+export const ProfileActionComponent: React.FC<ProfileActionProps> = ({
+  anonymous,
+  userId,
+  onEditProfileClicked,
+}) => {
   const styles = useStyles();
-
-  const router = useRouter();
-  const [loginOpened, openLogin] = useState(false);
-
-  const toggleLogin = () => {
-    openLogin(!loginOpened);
-  };
-
-  const viewProfile = () => {
-    if (!user) return;
-
-    router.push(`/${user.id}`);
-  };
 
   return (
     <div className={styles.root}>
       <ShowIf condition={anonymous}>
-        <Button disableRipple={true} disableFocusRipple={true} variant="contained" size="medium" color="primary">
-          Get a name, Login or Register
-        </Button>
+        <Logout isAnonymous={anonymous} />
       </ShowIf>
 
-      {user && (
+      {!anonymous && (
         <>
-          <ProfileEditComponent user={user} />
-          <Button disableRipple={true} disableFocusRipple={true} variant="contained" size="medium" color="primary" onClick={viewProfile}>
-            View Profile
+          <Button
+            id="#edit-profile"
+            disableRipple={true}
+            disableFocusRipple={true}
+            variant="contained"
+            size="medium"
+            color="primary"
+            onClick={onEditProfileClicked}>
+            Edit Profile
           </Button>
+
+          <Link href={`/${userId}`}>
+            <Button
+              id="#view-profile"
+              disableRipple={true}
+              disableFocusRipple={true}
+              variant="contained"
+              size="medium"
+              color="primary">
+              View Profile
+            </Button>
+          </Link>
         </>
       )}
-
-      <Dialog open={loginOpened} onClose={toggleLogin} maxWidth="xs">
-        <LoginComponent allowAnonymous={false} />
-      </Dialog>
     </div>
   );
 };

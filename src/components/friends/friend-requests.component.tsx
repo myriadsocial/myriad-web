@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
@@ -10,42 +11,40 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 
-import { useFriendsHook } from './use-friends-hook';
-
-import { ToggleCollapseButton } from 'src/components/common/collapse-button.component';
+import {ToggleCollapseButton} from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
-import { useFriends } from 'src/components/friends/friends.context';
-import { ExtendedFriend, FriendStatus } from 'src/interfaces/friend';
-import { User } from 'src/interfaces/user';
+import {ExtendedFriend, FriendStatus} from 'src/interfaces/friend';
+import {RootState} from 'src/reducers';
+import {FriendState} from 'src/reducers/friend/reducer';
 
-type Props = {
-  user: User;
+type FriendRequestsProps = {
+  toggleRequest: (requestor: ExtendedFriend, status: FriendStatus) => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      margin: '8px 0'
+      margin: '8px 0',
     },
     header: {
       marginBottom: theme.spacing(2),
-      display: 'flex'
+      display: 'flex',
     },
     content: {
       '&:last-child': {
-        paddingBottom: 0
-      }
+        paddingBottom: 0,
+      },
     },
     list: {
       marginLeft: theme.spacing(-2),
-      marginRight: theme.spacing(-2)
+      marginRight: theme.spacing(-2),
     },
     item: {
       marginBottom: theme.spacing(0.5),
-      paddingRight: theme.spacing(0.5)
+      paddingRight: theme.spacing(0.5),
     },
     action: {
       display: 'flex',
@@ -58,30 +57,25 @@ const useStyles = makeStyles((theme: Theme) =>
       '&& > .MuiButton-root': {
         marginLeft: theme.spacing(2),
         '&:first-child': {
-          marginLeft: 0
-        }
-      }
+          marginLeft: 0,
+        },
+      },
     },
     more: {
       display: 'block',
       fontSize: 16,
       margin: '0 auto',
       color: '#000000',
-      marginBottom: 16
-    }
-  })
+      marginBottom: 16,
+    },
+  }),
 );
 
-const FriendRequests = ({ user }: Props) => {
+const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest}) => {
   const style = useStyles();
 
-  const { state } = useFriends();
-  const { loadRequests, toggleRequest } = useFriendsHook(user);
+  const {requests, totalRequest} = useSelector<RootState, FriendState>(state => state.friendState);
   const [openFriends, setOpenFriends] = useState(true);
-
-  useEffect(() => {
-    loadRequests();
-  }, []);
 
   const approveFriendRequest = (friend: ExtendedFriend) => {
     toggleRequest(friend, FriendStatus.APPROVED);
@@ -94,29 +88,48 @@ const FriendRequests = ({ user }: Props) => {
   return (
     <Box className={style.root}>
       <div className={style.header}>
-        <Typography variant="caption" component="div" style={{ fontWeight: 500, fontSize: 14, lineHeight: '36px' }}>
-          Friend Requests ({state.requests.length})
+        <Typography
+          variant="caption"
+          component="div"
+          style={{fontWeight: 700, fontSize: 16, lineHeight: '36px'}}>
+          Friend Requests ({totalRequest})
         </Typography>
 
         <ToggleCollapseButton onClick={setOpenFriends} />
       </div>
       <div className={style.content}>
         <Collapse in={openFriends} timeout="auto" unmountOnExit>
-          <ShowIf condition={state.requests.length === 0}>
-            <Typography variant="h4" color="textPrimary" style={{ textAlign: 'center', padding: '16px 0' }}>
-              No Friend Request
+          <ShowIf condition={requests.length === 0}>
+            <Typography
+              variant="h4"
+              color="textPrimary"
+              style={{
+                fontWeight: 500,
+                textAlign: 'center',
+                fontSize: 14,
+                color: '#B1AEB7',
+                padding: '16px 0',
+              }}>
+              You don&apos;t have any friend requests
             </Typography>
           </ShowIf>
 
           <List className={style.list}>
-            {state.requests.map(request => {
+            {requests.map(request => {
               return (
                 <ListItem key={request.id} className={style.item} alignItems="flex-start">
                   <ListItemAvatar>
-                    <Avatar alt={request.requestor.name} src={request.requestor.profilePictureURL} />
+                    <Avatar
+                      alt={request.requestor.name}
+                      src={request.requestor.profilePictureURL}
+                    />
                   </ListItemAvatar>
                   <ListItemText>
-                    <Typography component="span" variant="h4" color="textPrimary" style={{ color: '#000000', fontSize: 16 }}>
+                    <Typography
+                      component="span"
+                      variant="h4"
+                      color="textPrimary"
+                      style={{color: '#000000', fontSize: 16}}>
                       {request.requestor.name}
                     </Typography>
 
@@ -144,14 +157,16 @@ const FriendRequests = ({ user }: Props) => {
             })}
           </List>
 
-          <Link
-            className={style.more}
-            component="button"
-            onClick={() => {
-              console.info("I'm a button.");
-            }}>
-            (show all request)
-          </Link>
+          <ShowIf condition={totalRequest > requests.length}>
+            <Link
+              className={style.more}
+              component="button"
+              onClick={() => {
+                console.info("I'm a button.");
+              }}>
+              (show all request)
+            </Link>
+          </ShowIf>
         </Collapse>
       </div>
     </Box>

@@ -1,151 +1,85 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 
-import { GetServerSideProps } from 'next';
-import { useSession, getSession } from 'next-auth/client';
-import { useRouter } from 'next/router';
+import {GetServerSideProps} from 'next';
+import {getSession} from 'next-auth/client';
+import {useRouter} from 'next/router';
 
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import AlertComponent from 'src/components/alert/Alert.component';
-import { useAlertHook } from 'src/components/alert/use-alert.hook';
-import LoginForm from 'src/components/login/login.component';
-import { CommentProvider } from 'src/components/timeline/comment/comment.context';
-import PostComponent from 'src/components/timeline/post/post.component';
-import Logo from 'src/images/logo.svg';
-import { Post } from 'src/interfaces/post';
-import { healthcheck } from 'src/lib/api/healthcheck';
+import {LoginInfoComponent} from 'src/components/login/login-info.component';
+import {LoginComponent} from 'src/components/login/login.component';
+import {useAlertHook} from 'src/hooks/use-alert.hook';
+import LogoImage from 'src/images/myriad-logo.svg';
+import {healthcheck} from 'src/lib/api/healthcheck';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      background: 'linear-gradient(110.43deg, #A942E9 0%, rgba(255, 255, 255, 0) 100.48%), #FFFFFF',
-      padding: '24px 36px',
-      minHeight: '100vh'
+      // background: 'linear-gradient(110.43deg, #A942E9 0%, rgba(255, 255, 255, 0) 100.48%), #FFFFFF',
+      minHeight: '100vh',
+      backgroundImage: 'url(/images/login-background.png)',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    header: {
+      textAlign: 'center',
     },
     logo: {
-      marginRight: theme.spacing(1.5)
+      marginTop: 48,
+      height: 87,
     },
-    info: {
-      width: 328,
-      background: 'rgba(255, 255, 255, 0.41)',
-      borderRadius: 15,
-      padding: theme.spacing(2),
-      color: '#000000'
+    title: {
+      fontSize: 24,
+      fontWeight: 700,
+      lineHeight: '30px',
+      marginBottom: 59,
+      color: theme.palette.background.paper,
+    },
+    titlePrimary: {
+      color: theme.palette.primary.main,
     },
     login: {
       marginTop: 140,
       width: 320,
-      marginRight: 65
+      marginRight: 65,
     },
-    timeline: {
-      padding: '16px 24px!important',
-      position: 'relative',
-      backgroundImage: 'url(/images/timeline.svg)',
-      backgroundSize: 'cover',
-      '& > div': {
-        marginBottom: 10
-      }
-    }
-  })
+  }),
 );
 
 export default function Index() {
   const style = useStyles();
 
-  const [session, loading] = useSession();
-  const router = useRouter();
-  const { showAlert } = useAlertHook();
+  const {query} = useRouter();
+  const {showAlert} = useAlertHook();
 
   useEffect(() => {
-    if (session && !loading) {
-      router.push('/home');
-    }
-  }, [loading, session]);
-
-  useEffect(() => {
-    if (router.query.error) {
+    if (query.error) {
       showAlert({
         message: 'Something wrong when try to loggedin.',
         severity: 'error',
-        title: 'Login failed'
+        title: 'Login failed',
       });
     }
-  }, [router.query.error]);
-
-  const posts: Post[] = [
-    {
-      id: '1',
-      link: 'https://twitter.com/DocumentingBTC/status/1376217381186457601',
-      textId: '1376217381186457601',
-      platform: 'twitter',
-      tags: ['bitcoin'],
-      hasMedia: false,
-      platformCreatedAt: new Date(),
-      comments: [
-        {
-          text: 'hear! hear!',
-          postId: '1',
-          userId: '1',
-          createdAt: new Date()
-        }
-      ],
-      publicMetric: {
-        liked: 0,
-        disliked: 0,
-        comment: 1
-      },
-      createdAt: new Date()
-    },
-    {
-      id: '2',
-      link: 'https://twitter.com/CharmaineSChua/status/1375868552129863681',
-      textId: '1375868552129863681',
-      platform: 'twitter',
-      tags: ['politic', 'viral'],
-      hasMedia: false,
-      platformCreatedAt: new Date(),
-      comments: [],
-      publicMetric: {
-        liked: 0,
-        disliked: 0,
-        comment: 0
-      },
-      createdAt: new Date()
-    }
-  ];
-
-  // When rendering client side don't display anything until loading is complete
-  if (typeof window !== 'undefined' && loading) return null;
+  }, [query.error]);
 
   return (
     <div className={style.root}>
-      <Grid container spacing={3} justify="space-around">
-        <Grid container item md={6} lg={6} direction="column" spacing={3}>
-          <Grid container item direction="row">
-            <Logo className={style.logo} />
-            <Paper className={style.info}>
-              <Typography>
-                A social platform that’s entirely under your control. Remain anonymous, look for your own topics, choose your interface and
-                control what you see.
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item className={style.timeline}>
-            <CommentProvider>
-              {posts.map(post => (
-                <PostComponent post={post} open={true} disable key={post.id} />
-              ))}
-            </CommentProvider>
-          </Grid>
-        </Grid>
-        <Grid item>
-          <div className={style.login}>
-            <LoginForm />
-          </div>
-        </Grid>
+      <Grid container direction="column" alignItems="center">
+        <div className={style.header}>
+          <LogoImage className={style.logo} />
+          <Typography variant="h1" className={style.title}>
+            Social Media with <span className={style.titlePrimary}>no boundaries</span>
+          </Typography>
+        </div>
+
+        <LoginComponent />
+
+        <LoginInfoComponent />
       </Grid>
 
       <AlertComponent />
@@ -154,18 +88,25 @@ export default function Index() {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { res } = context;
+  const {res} = context;
 
   const available = await healthcheck();
 
   if (!available) {
-    res.writeHead(302, { location: `${process.env.NEXTAUTH_URL}/maintenance` });
+    res.setHeader('location', '/maintenance');
+    res.statusCode = 302;
+    res.end();
+  }
+
+  const session = await getSession(context);
+
+  if (session) {
+    res.setHeader('location', '/home');
+    res.statusCode = 302;
     res.end();
   }
 
   return {
-    props: {
-      session: await getSession(context)
-    }
+    props: {},
   };
 };

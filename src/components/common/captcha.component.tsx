@@ -1,13 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
-import { useStyles } from './captcha.style';
+import {useStyles} from './captcha.style';
 
 type Props = {
   getCaptchaVerification: (isVerified: boolean) => void;
 };
 
-export default function CaptchaComponent({ getCaptchaVerification }: Props) {
+export default function CaptchaComponent({getCaptchaVerification}: Props) {
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const styles = useStyles();
 
@@ -29,10 +29,10 @@ export default function CaptchaComponent({ getCaptchaVerification }: Props) {
     try {
       const response = await fetch('/api/captcha', {
         method: 'POST',
-        body: JSON.stringify({ captcha: captchaCode }),
+        body: JSON.stringify({captcha: captchaCode}),
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       });
 
       if (response.ok) {

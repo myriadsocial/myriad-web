@@ -1,5 +1,5 @@
-import { People } from './people';
-import { User } from './user';
+import {People} from './people';
+import {User} from './user';
 
 export type LayoutType = 'timeline' | 'photo';
 

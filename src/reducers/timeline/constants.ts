@@ -1,0 +1,14 @@
+export const LOAD_TIMELINE = 'LOAD_TIMELINE';
+export type LOAD_TIMELINE = typeof LOAD_TIMELINE;
+
+export const ADD_POST_TO_TIMELINE = 'ADD_POST_TO_TIMELINE';
+export type ADD_POST_TO_TIMELINE = typeof ADD_POST_TO_TIMELINE;
+
+export const UPDATE_TIMELINE_FILTER = 'UPDATE_TIMELINE_FILTER';
+export type UPDATE_TIMELINE_FILTER = typeof UPDATE_TIMELINE_FILTER;
+
+export const LIKE_POST = 'LIKE_POST';
+export type LIKE_POST = typeof LIKE_POST;
+
+export const DISLIKE_POST = 'DISLIKE_POST';
+export type DISLIKE_POST = typeof DISLIKE_POST;

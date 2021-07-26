@@ -1,53 +1,70 @@
-import React, { createRef, useCallback, useEffect } from 'react';
+import React, {createRef, useCallback, useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import {useSelector} from 'react-redux';
+
+import dynamic from 'next/dynamic';
+import {useRouter} from 'next/router';
 
 import Fab from '@material-ui/core/Fab';
-import Grow from '@material-ui/core/Grow';
+import {useTheme} from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import DividerWithText from '../common/divider-w-text';
-import { LoadingPage } from '../common/loading.component';
-import { useExperience } from '../experience/use-experience.hooks';
-import ImportPostComponent from './ImportPost.component';
-import { CommentProvider } from './comment/comment.context';
-import CreatePostComponent from './create-post/create-post.component';
+import {LoadingPage} from '../common/loading.component';
 import FilterTimelineComponent from './filter/filter.component';
-import PostComponent from './post/post.component';
-import { useTimeline } from './timeline.context';
-import { useStyles } from './timeline.style';
-import { usePost } from './use-post.hook';
+import {useStyles} from './timeline.style';
+import {useTimelineFilter} from './use-timeline-filter.hook';
 
-import { ScrollTop } from 'src/components/common/ScrollToTop.component';
-import ShowIf from 'src/components/common/show-if.component';
-import { Post, PostSortMethod } from 'src/interfaces/post';
-import { User } from 'src/interfaces/user';
+import {ScrollTop} from 'src/components/common/ScrollToTop.component';
+import CreatePostComponent from 'src/components/post/create/create-post.component';
+import PostComponent from 'src/components/post/post.component';
+import {TipSummaryProvider} from 'src/components/tip-summary/tip-summary.context';
+import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
+import {useTimelineHook} from 'src/hooks/use-timeline.hook';
+import {Post} from 'src/interfaces/post';
+import {TimelineFilter} from 'src/interfaces/timeline';
+import {Token} from 'src/interfaces/token';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
-type TimelineProps = {
-  user: User;
+const TipSummaryComponent = dynamic(
+  () => import('src/components/tip-summary/tip-summary.component'),
+);
+const ImportPostComponent = dynamic(() => import('./ImportPost.component'));
+
+type TimelineComponentProps = {
+  isAnonymous: boolean;
+  availableTokens: Token[];
+  filter?: TimelineFilter;
 };
 
-const Timeline: React.FC<TimelineProps> = ({ user }) => {
+const TimelineComponent: React.FC<TimelineComponentProps> = ({availableTokens}) => {
   const style = useStyles();
+  const theme = useTheme();
+  const {query} = useRouter();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const { state } = useTimeline();
-  const { hasMore, loadUserPost, loadMorePost, sortBy, addPost, importPost } = usePost(user);
-  const { experiences } = useExperience(user.id);
+  const {load, tokensReady} = usePolkadotApi();
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {posts, hasMore, sort, nextPage, sortTimeline} = useTimelineHook();
+  const {filterTimeline} = useTimelineFilter();
+
   const scrollRoot = createRef<HTMLDivElement>();
-
-  const isOwnPost = (post: Post) => {
-    if (post.walletAddress === user.id) {
-      return true;
-    }
-    return false;
-  };
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, true);
   }, []);
 
   useEffect(() => {
-    loadUserPost();
-  }, []);
+    filterTimeline(query);
+  }, [query]);
+
+  useEffect(() => {
+    if (user?.id) {
+      load(user.id, availableTokens);
+    }
+  }, [user]);
 
   const handleScroll = useCallback(() => {
     const distance = window.scrollY;
@@ -61,58 +78,60 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
     });
   }, []);
 
-  const nextPage = () => {
-    loadMorePost();
-  };
+  const isOwnPost = (post: Post) => {
+    if (!user) return false;
 
-  const sortTimeline = (sort: PostSortMethod) => {
-    sortBy(sort);
-  };
+    if (post.platformUser?.platform_account_id === user.id) {
+      return true;
+    }
 
-  const submitPost = (text: string, tags: string[], files: File[]) => {
-    addPost(text, tags, files);
+    return false;
   };
-
-  const submitImportPost = (URL: string) => {
-    importPost(URL);
-  };
-
-  console.log('TIMELINE COMPONENT LOAD');
 
   return (
-    <div className={style.root}>
+    <div className={style.root} id="timeline">
       <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
-        <ShowIf condition={!user.anonymous}>
-          <CreatePostComponent onSubmit={submitPost} experiences={experiences} user={user} />
+        {user && (
+          <>
+            <CreatePostComponent user={user} experiences={[]} />
 
-          <DividerWithText>or</DividerWithText>
+            <DividerWithText>or</DividerWithText>
 
-          <ImportPostComponent onSubmit={submitImportPost} experiences={experiences} />
-        </ShowIf>
+            <ImportPostComponent user={user} experiences={[]} />
+          </>
+        )}
 
-        <FilterTimelineComponent selected={state.sort} onChange={sortTimeline} />
+        {!isMobile && <FilterTimelineComponent selected={sort} onChange={sortTimeline} />}
 
-        <CommentProvider>
-          <InfiniteScroll
-            scrollableTarget="scrollable-timeline"
-            className={style.child}
-            dataLength={state.posts.length + 100}
-            next={nextPage}
-            hasMore={hasMore}
-            loader={<LoadingPage />}>
-            {state.posts.map((post: Post, i: number) => (
-              <Grow key={i}>
-                <PostComponent post={post} open={false} postOwner={isOwnPost(post)} />
-              </Grow>
-            ))}
+        <TipSummaryProvider>
+          <div>
+            <InfiniteScroll
+              scrollableTarget="scrollable-timeline"
+              className={style.child}
+              dataLength={posts.length}
+              next={nextPage}
+              hasMore={hasMore}
+              loader={<LoadingPage />}>
+              {posts.map((post: Post, i: number) => (
+                <div key={post.id} id={`post-detail-${i}`}>
+                  <PostComponent
+                    post={post}
+                    postOwner={isOwnPost(post)}
+                    balanceDetails={tokensReady.length > 0 ? tokensReady : []}
+                    availableTokens={availableTokens}
+                  />
+                </div>
+              ))}
+            </InfiniteScroll>
+          </div>
 
-            <ScrollTop>
-              <Fab color="secondary" size="small" aria-label="scroll back to top">
-                <KeyboardArrowUpIcon />
-              </Fab>
-            </ScrollTop>
-          </InfiniteScroll>
-        </CommentProvider>
+          <TipSummaryComponent />
+        </TipSummaryProvider>
+        <ScrollTop>
+          <Fab color="secondary" size="small" aria-label="scroll back to top">
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </ScrollTop>
       </div>
 
       <div id="fb-root" />
@@ -120,4 +139,4 @@ const Timeline: React.FC<TimelineProps> = ({ user }) => {
   );
 };
 
-export default Timeline;
+export default TimelineComponent;

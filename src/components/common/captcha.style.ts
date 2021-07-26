@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 
 import theme from '../../themes/default';
 
@@ -7,6 +7,6 @@ export const useStyles = makeStyles({
     margin: theme.spacing(1.5),
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
 });
