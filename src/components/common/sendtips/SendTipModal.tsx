@@ -15,7 +15,6 @@ import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {
   InputState,
   InputErrorState,
-  SendTipConfirmed,
   Props,
   SendTipWithPayloadProps,
   ContentType,
@@ -33,7 +32,7 @@ const SendTipModal: React.FC<Props> = ({
   hide,
 }) => {
   //TODO: move to redux
-  const {sendTip, load, trxHash} = usePolkadotApi();
+  const {sendTip, sendTipSuccess, load} = usePolkadotApi();
 
   const styles = useStyles();
 
@@ -47,11 +46,6 @@ const SendTipModal: React.FC<Props> = ({
     wsAddress: '',
     tokenDecimals: 0,
     tokenId: '',
-  });
-
-  const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
-    isConfirmed: false,
-    message: '',
   });
 
   const [inputError, setInputError] = useState<InputErrorState>({
@@ -71,10 +65,10 @@ const SendTipModal: React.FC<Props> = ({
 
   useEffect(() => {
     // TODO: move the state to redux so that tip-summary can be shown properly
-    if (sendTipConfirmed.isConfirmed) {
+    if (sendTipSuccess) {
       success(postId);
     }
-  }, [sendTipConfirmed]);
+  }, [sendTipSuccess]);
 
   useEffect(() => {
     if (walletReceiverDetail && sendTipClicked && tippedContent) {
