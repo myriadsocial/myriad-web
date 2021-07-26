@@ -1,6 +1,7 @@
 import {useState} from 'react';
 
 import Axios from 'axios';
+import {useAlertHook} from 'src/hooks/use-alert.hook';
 
 const client = Axios.create({
   baseURL: process.env.NEXTAUTH_URL,
@@ -11,8 +12,10 @@ type ResponseImageUpload = {
   error?: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useImageUpload = () => {
   const [image, setImage] = useState<string | null>(null);
+  const {showAlert} = useAlertHook();
 
   const uploadImage = async (file: File) => {
     const formData = new FormData();
@@ -31,7 +34,11 @@ export const useImageUpload = () => {
       return data.url;
     } catch (error) {
       console.error(error);
-
+      showAlert({
+        message: 'Your internet connection is unstable',
+        severity: 'error',
+        title: 'Error',
+      });
       return null;
     }
   };
