@@ -11,7 +11,6 @@ import {CurrencyTableComponent} from './currencyTable.component';
 import {useStyles} from './send-tips.style';
 import {TipAmountFieldComponent} from './tipAmountField.component';
 
-import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {
   InputState,
@@ -34,7 +33,7 @@ const SendTipModal: React.FC<Props> = ({
   hide,
 }) => {
   //TODO: move to redux
-  const {sendTip, load, trxHash, sendTipSuccess, error} = usePolkadotApi();
+  const {sendTip, load, trxHash} = usePolkadotApi();
 
   const styles = useStyles();
 
@@ -43,8 +42,6 @@ const SendTipModal: React.FC<Props> = ({
   const [tippedContent, setTippedContent] = useState<ContentType>();
   const [sendTipClicked, setSendTipClicked] = useState(false);
   const [tokenBalance, setTokenBalance] = useState('');
-  //TODO: make alert only appear once
-  const {showTipAlert, showAlert} = useAlertHook();
 
   const [tokenProperties, setTokenProperties] = useState({
     wsAddress: '',
@@ -68,18 +65,12 @@ const SendTipModal: React.FC<Props> = ({
   });
 
   useEffect(() => {
-    if (sendTipSuccess) {
-      handleAlertTippingSuccess();
-    }
-  }, [sendTipSuccess]);
+    load(userAddress, availableTokens);
+    handleClearValue();
+  }, []);
 
   useEffect(() => {
-    if (error) {
-      handleAlertTippingError();
-    }
-  }, [error]);
-
-  useEffect(() => {
+    // TODO: move the state to redux so that tip-summary can be shown properly
     if (sendTipConfirmed.isConfirmed) {
       success(postId);
     }
@@ -99,51 +90,16 @@ const SendTipModal: React.FC<Props> = ({
   }, [sendTipClicked, walletReceiverDetail, tippedContent, tokenProperties, tipAmount]);
 
   useEffect(() => {
-    if (trxHash.length > 0) {
-      handleAfterTipSentSuccess();
-      load(userAddress, availableTokens);
-    }
-  }, [trxHash]);
-
-  useEffect(() => {
     if (balanceDetails?.length > 0) {
       handleChangeTokenBalance();
     }
   }, [tokenProperties.tokenId, balanceDetails]);
-
-  const handleAlertTippingError = () => {
-    showAlert({
-      severity: 'error',
-      title: 'Error!',
-      message: `Something is wrong`,
-    });
-  };
-
-  const handleAlertTippingSuccess = () => {
-    showTipAlert({
-      severity: 'success',
-      title: 'Tip sent!',
-      message: `${trxHash}`,
-    });
-  };
-
-  const handleSentTipConfirmed = () => {
-    setSendTipConfirmed({
-      isConfirmed: true,
-      message: 'Tip sent successfully!',
-    });
-  };
 
   const handleClearValue = () => {
     setValues({
       ...values,
       amount: '',
     });
-  };
-
-  const handleAfterTipSentSuccess = () => {
-    handleSentTipConfirmed();
-    handleClearValue();
   };
 
   const handleChangeTokenBalance = () => {
