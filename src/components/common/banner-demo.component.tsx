@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Link from 'next/link';
+
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -7,7 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
-import MailOutlineIcon from '@material-ui/icons/MailOutline';
+// import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 
 import BannerImage from 'src/images/banner-image.svg';
@@ -120,22 +122,26 @@ const BannerDemo: React.FC = () => {
             Feel free to click around, and don{"'"}t forget to join our:
           </Typography>
           <div className={`${style.mb} ${style['flex-col']}`}>
-            <Button
+            {/* <Button
               className={`${style.button} ${style.mb}`}
               variant="outlined"
               color="primary"
               startIcon={<MailOutlineIcon />}
               disabled>
               Mailing list
-            </Button>
-            <Button
-              className={style.button}
-              variant="outlined"
-              color="primary"
-              startIcon={<SendOutlinedIcon />}
-              disabled>
-              Telegram group
-            </Button>
+            </Button> */}
+            <Link href="https://t.me/myriadsocial">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a target="_blank">
+                <Button
+                  className={style.button}
+                  variant="outlined"
+                  color="primary"
+                  startIcon={<SendOutlinedIcon />}>
+                  Telegram channel
+                </Button>
+              </a>
+            </Link>
           </div>
           <Typography className={`${style.paragraph} ${style.mb}`}>
             Contact us if you have any queries, feedback, bug reports or if you just want to say
