@@ -267,3 +267,10 @@ export const updateTips = async (
     console.log('error from updateTips: ', error);
   }
 };
+
+export const removePost = async (postId: string): Promise<void> => {
+  await MyriadAPI.request({
+    url: `/posts/${postId}`,
+    method: 'DELETE',
+  });
+};

@@ -6,17 +6,19 @@ import Fade from '@material-ui/core/Fade';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
+import {makeStyles, createStyles} from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ReportProblemIcon from '@material-ui/icons/ReportProblem';
+
+import {usePostHook} from 'src/hooks/use-post.hook';
 
 type PostOptionsProps = {
   ownPost: boolean;
   postId: string;
 };
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       display: 'block',
@@ -42,6 +44,7 @@ type MenuOptions = {
 
 export const PostOptionsComponent: React.FC<PostOptionsProps> = ({postId, ownPost}) => {
   const styles = useStyles();
+  const {removePost} = usePostHook();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -71,8 +74,7 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({postId, ownPos
   };
 
   const handleDeletePost = () => {
-    handleClose();
-    console.log('post deleted!');
+    removePost(postId);
   };
 
   const handleReportPost = () => {

@@ -21,3 +21,6 @@ export type UNDISLIKE_POST = typeof UNDISLIKE_POST;
 
 export const FETCH_WALLET_DETAILS = 'FETCH_WALLET_DETAILS';
 export type FETCH_WALLET_DETAILS = typeof FETCH_WALLET_DETAILS;
+
+export const REMOVE_POST = 'REMOVE_POST';
+export type REMOVE_POST = typeof REMOVE_POST;
