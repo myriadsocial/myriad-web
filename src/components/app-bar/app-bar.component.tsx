@@ -94,7 +94,8 @@ export default function HeaderBar(): JSX.Element {
         <Toolbar>
           <div className={classes.logo}>
             <Link href="/home">
-              <a href="#top">{isMobile ? <LogoImageCompact /> : <LogoImage />}</a>
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a>{isMobile ? <LogoImageCompact /> : <LogoImage />}</a>
             </Link>
           </div>
           <div className={classes.grow} />
