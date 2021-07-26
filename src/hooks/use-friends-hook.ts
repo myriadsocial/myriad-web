@@ -14,6 +14,7 @@ import {
 } from 'src/reducers/friend/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useFriendsHook = () => {
   const dispatch = useDispatch();
   const {user} = useSelector<RootState, UserState>(state => state.userState);
@@ -35,7 +36,8 @@ export const useFriendsHook = () => {
   };
 
   const sendRequest = async (destination: User) => {
-    dispatch(createFriendRequest(destination));
+    await dispatch(createFriendRequest(destination));
+    if (user) checkFriendStatus([user]);
   };
 
   const checkFriendStatus = async (people: User[]) => {
