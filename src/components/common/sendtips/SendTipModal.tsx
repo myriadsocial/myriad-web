@@ -1,39 +1,28 @@
-import React, {useState, forwardRef, useImperativeHandle, useEffect} from 'react';
+import React, {useState, useEffect, useImperativeHandle, forwardRef} from 'react';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import SendIcon from '@material-ui/icons/Send';
 
 import DialogTitle from '../DialogTitle.component';
-import {useStyles, TableCell} from './send-tips.style';
+import {CurrencyTableComponent} from './currencyTable.component';
+import {useStyles} from './send-tips.style';
+import {TipAmountFieldComponent} from './tipAmountField.component';
 
-import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {
   InputState,
   InputErrorState,
-  SendTipConfirmed,
   Props,
+  SendTipWithPayloadProps,
+  ContentType,
 } from 'src/interfaces/send-tips/send-tips';
 
-enum ContentType {
-  POST = 'postContent',
-  COMMENT = 'commentContent',
-}
-
-//TODO: move codes to different files, too big!
+export type SendTipModalRefProps = {
+  triggerSendTipModal: () => void;
+};
 
 const SendTipModal = forwardRef(
   (
@@ -46,49 +35,34 @@ const SendTipModal = forwardRef(
       success,
       availableTokens,
     }: Props,
-    ref,
+    ref: React.Ref<SendTipModalRefProps>,
   ) => {
-    const {sendTip, load, trxHash, sendTipSuccess, error} = usePolkadotApi();
-    const [showSendTipModal, setShowSendTipModal] = useState(false);
-    const [selectedToken, setSelectedToken] = useState('');
+    //TODO: move to redux
+    const {sendTip, sendTipSuccess, load} = usePolkadotApi();
+    const styles = useStyles();
+
+    const [isShown, setIsShown] = useState(false);
+
+    useImperativeHandle(
+      ref,
+      () => ({
+        triggerSendTipModal() {
+          setIsShown(!isShown);
+        },
+      }),
+      [isShown],
+    );
+
     const [senderAddress, setSenderAddress] = useState('');
     const [tipAmount, setTipAmount] = useState(0);
-    const [wsAddress, setWSAddress] = useState('');
     const [tippedContent, setTippedContent] = useState<ContentType>();
-    const [selectedTokenDecimals, setSelectedTokenDecimals] = useState(0);
     const [sendTipClicked, setSendTipClicked] = useState(false);
     const [tokenBalance, setTokenBalance] = useState('');
-    const {showTipAlert, showAlert} = useAlertHook();
 
-    useEffect(() => {
-      if (sendTipSuccess) {
-        showTipAlert({
-          severity: 'success',
-          title: 'Tip sent!',
-          message: `${trxHash}`,
-        });
-      }
-    }, [sendTipSuccess]);
-
-    useEffect(() => {
-      if (error) {
-        showAlert({
-          severity: 'error',
-          title: 'Error!',
-          message: `Something is wrong`,
-        });
-      }
-    }, [error]);
-
-    useImperativeHandle(ref, () => ({
-      triggerSendTipModal: () => {
-        setShowSendTipModal(true);
-      },
-    }));
-
-    const [sendTipConfirmed, setSendTipConfirmed] = useState<SendTipConfirmed>({
-      isConfirmed: false,
-      message: '',
+    const [tokenProperties, setTokenProperties] = useState({
+      wsAddress: '',
+      tokenDecimals: 0,
+      tokenId: '',
     });
 
     const [inputError, setInputError] = useState<InputErrorState>({
@@ -102,109 +76,137 @@ const SendTipModal = forwardRef(
     });
 
     useEffect(() => {
-      if (sendTipConfirmed.isConfirmed) {
-        success(postId);
-      }
-    }, [sendTipConfirmed]);
-
-    const styles = useStyles();
+      load(userAddress, availableTokens);
+      handleClearValue();
+    }, []);
 
     useEffect(() => {
-      if (trxHash.length > 0) {
-        setSendTipConfirmed({
-          isConfirmed: true,
-          message: 'Tip sent successfully!',
-        });
-        setShowSendTipModal(false);
-        setValues({
-          ...values,
-          amount: '',
-        });
-        load(userAddress, availableTokens);
+      // TODO: move the state to redux so that tip-summary can be shown properly
+      if (sendTipSuccess) {
+        success(postId);
       }
-    }, [trxHash]);
+    }, [sendTipSuccess]);
+
+    useEffect(() => {
+      if (walletReceiverDetail && sendTipClicked && tippedContent) {
+        switch (tippedContent) {
+          case ContentType.COMMENT:
+            sendTipFromComment();
+            break;
+          default:
+            sendTipFromPost();
+            break;
+        }
+      }
+    }, [sendTipClicked, walletReceiverDetail, tippedContent, tokenProperties, tipAmount]);
 
     useEffect(() => {
       if (balanceDetails?.length > 0) {
-        const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
-        if (typeof idx === 'number') {
-          setTokenBalance(balanceDetails[idx]?.freeBalance.toString() ?? '');
-        }
+        handleChangeTokenBalance();
       }
-    }, [selectedToken, balanceDetails]);
+    }, [tokenProperties.tokenId, balanceDetails]);
+
+    const handleClearValue = () => {
+      setValues({
+        ...values,
+        amount: '',
+      });
+    };
+
+    const handleChangeTokenBalance = () => {
+      const idx = balanceDetails.findIndex(item => item.tokenSymbol === tokenProperties.tokenId);
+      if (typeof idx === 'number') {
+        setTokenBalance(balanceDetails[idx]?.freeBalance.toString() ?? '');
+      }
+    };
+
+    const handleInputEmpty = () => {
+      setInputError({
+        ...inputError,
+        isErrorInput: false,
+        isTextChanged: true,
+      });
+    };
+
+    const handleInsufficientBalance = () => {
+      setInputError({
+        ...inputError,
+        isErrorInput: true,
+        isTextChanged: true,
+        isInsufficientBalance: true,
+        errorMessage: 'Insufficient balance',
+      });
+    };
+
+    const handleResetInputError = () => {
+      // amount valid, reset InputError state
+      setInputError({
+        isErrorInput: false,
+        isTextChanged: true,
+        isInsufficientBalance: false,
+        errorMessage: '',
+      });
+    };
+
+    const findDecimals = () => {
+      const idx = balanceDetails.findIndex(item => item.tokenSymbol === tokenProperties.tokenId);
+      const decimals = balanceDetails[idx].tokenDecimals ?? 0;
+
+      return decimals;
+    };
+
+    const defineTipAmount = (decimals: number) => {
+      const amountStr = values.amount as string;
+      const amountSent = Number(amountStr) * 10 ** decimals;
+      setTipAmount(amountSent);
+    };
+
+    const checkPostId = () => {
+      if (postId === undefined) {
+        setTippedContent(ContentType.COMMENT);
+      } else {
+        setTippedContent(ContentType.POST);
+      }
+    };
+
+    const handleInputError = () => {
+      setInputError({
+        ...inputError,
+        isErrorInput: true,
+        isTextChanged: true,
+        isInsufficientBalance: false,
+      });
+    };
 
     const checkAmountThenSend = () => {
-      // TODO: this function needs to be separated into smaller chunks for the love of God!
       const regexValidDigits = /^\d*(\.\d+)?$/;
 
       if (values.amount === '') {
-        setInputError({
-          ...inputError,
-          isErrorInput: false,
-          isTextChanged: true,
-        });
+        handleInputEmpty();
       }
       if (regexValidDigits.test(values.amount)) {
-        setInputError({
-          ...inputError,
-          isErrorInput: false,
-          isTextChanged: true,
-        });
+        handleInputEmpty();
 
         if (tokenBalance !== undefined && Number(values.amount) >= Number(tokenBalance)) {
-          setInputError({
-            ...inputError,
-            isErrorInput: true,
-            isTextChanged: true,
-            isInsufficientBalance: true,
-            errorMessage: 'Insufficient balance',
-          });
+          handleInsufficientBalance();
         } else {
-          // amount valid, reset InputError state
-          setInputError({
-            isErrorInput: false,
-            isTextChanged: true,
-            isInsufficientBalance: false,
-            errorMessage: '',
-          });
+          handleResetInputError();
 
-          const idx = balanceDetails.findIndex(item => item.tokenSymbol === selectedToken);
-          const decimals = balanceDetails[idx].tokenDecimals ?? 0;
-          setSelectedTokenDecimals(decimals);
+          const decimals = findDecimals();
 
-          const amountStr = values.amount as string;
-          const amountSent = Number(amountStr) * 10 ** decimals;
-          setTipAmount(amountSent);
+          defineTipAmount(decimals);
 
           // sendTip will open a pop-up from polkadot.js extension,
           // tx signing is done by supplying a password
           setSenderAddress(userAddress);
 
-          if (postId === undefined) {
-            setTippedContent(ContentType.COMMENT);
-          } else {
-            setTippedContent(ContentType.POST);
-          }
+          checkPostId();
+          setSendTipClicked(true);
         }
       } else {
-        setInputError({
-          ...inputError,
-          isErrorInput: true,
-          isTextChanged: true,
-          isInsufficientBalance: false,
-        });
+        handleInputError();
       }
     };
-
-    interface SendTipWithPayloadProps {
-      senderAddress: string;
-      toAddress: string;
-      amountSent: number;
-      decimals: number;
-      currencyId: string;
-      postId: string;
-      wsAddress: string;
-    }
 
     const sendTipWithPayload = ({
       senderAddress,
@@ -228,145 +230,82 @@ const SendTipModal = forwardRef(
       sendTip(sendTipPayload);
     };
 
-    useEffect(() => {
-      if (walletReceiverDetail && sendTipClicked && tippedContent) {
-        switch (tippedContent) {
-          case ContentType.COMMENT:
-            sendTipWithPayload({
-              senderAddress,
-              toAddress: receiverId as string,
-              amountSent: tipAmount,
-              decimals: selectedTokenDecimals,
-              currencyId: selectedToken,
-              postId: '',
-              wsAddress,
-            });
-            break;
-          default:
-            sendTipWithPayload({
-              senderAddress,
-              toAddress: walletReceiverDetail.walletAddress,
-              amountSent: tipAmount,
-              decimals: selectedTokenDecimals,
-              currencyId: selectedToken,
-              postId: walletReceiverDetail.postId,
-              wsAddress,
-            });
-            break;
-        }
-      }
-    }, [sendTipClicked, walletReceiverDetail, tippedContent]);
-
-    const handleChange =
-      (prop: keyof InputState) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValues({...values, [prop]: event.target.value});
-      };
-
-    const handleSetSelectedToken = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const clickedToken = (event.target as HTMLInputElement).value;
-      setSelectedToken(clickedToken);
-
-      availableTokens.forEach(token => {
-        if (token.id === clickedToken) {
-          setWSAddress(token.rpc_address);
-        }
+    if (!receiverId) return null;
+    const sendTipFromComment = () => {
+      sendTipWithPayload({
+        senderAddress,
+        toAddress: receiverId as string,
+        amountSent: tipAmount,
+        decimals: tokenProperties.tokenDecimals,
+        currencyId: tokenProperties.tokenId,
+        postId: '',
+        wsAddress: tokenProperties.wsAddress,
       });
     };
 
-    const closeSendTipModal = () => {
-      setShowSendTipModal(false);
-      setSendTipClicked(false);
+    if (!walletReceiverDetail) return null;
+    const sendTipFromPost = () => {
+      sendTipWithPayload({
+        senderAddress,
+        toAddress: walletReceiverDetail.walletAddress,
+        amountSent: tipAmount,
+        decimals: tokenProperties.tokenDecimals,
+        currencyId: tokenProperties.tokenId,
+        postId: walletReceiverDetail.postId,
+        wsAddress: tokenProperties.wsAddress,
+      });
+    };
+
+    const handleChange = (prop: keyof InputState, event: React.ChangeEvent<HTMLInputElement>) => {
+      setValues({...values, [prop]: event.target.value});
     };
 
     const handleSendTip = () => {
       checkAmountThenSend();
-      setSendTipClicked(true);
     };
 
-    const CurrencyTable = () => {
-      return (
-        <TableContainer>
-          <Table size="small" aria-label="balance-table">
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <Typography className={styles.balanceText}>Currency Selection</Typography>
-                </TableCell>
-                <TableCell align="right">
-                  <Typography className={styles.balanceText}>Your Balance</Typography>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {balanceDetails.map(row => (
-                <TableRow key={row.tokenSymbol}>
-                  <RadioGroup
-                    aria-label="gender"
-                    name="gender1"
-                    value={selectedToken}
-                    onChange={handleSetSelectedToken}>
-                    <TableCell component="th" scope="row">
-                      {row.tokenSymbol === 'MYR' ? (
-                        <></>
-                      ) : (
-                        <>
-                          <FormControlLabel
-                            value={row.tokenSymbol}
-                            control={<Radio />}
-                            label={row.tokenSymbol}
-                          />
-                        </>
-                      )}
-                    </TableCell>
-                  </RadioGroup>
-                  <TableCell align="right">
-                    {row.tokenSymbol === 'MYR' ? (
-                      <></>
-                    ) : (
-                      <Typography className={styles.balanceText}>{row.freeBalance}</Typography>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      );
+    const handleChangeTokenProperties = (
+      wsAddress: string,
+      tokenDecimals: number,
+      tokenId: string,
+    ) => {
+      setTokenProperties({
+        wsAddress,
+        tokenDecimals,
+        tokenId,
+      });
     };
 
     return (
       <>
-        <Dialog
-          open={showSendTipModal}
-          onClose={closeSendTipModal}
-          aria-labelledby="send-tips-window"
-          maxWidth="md">
-          <DialogTitle id="name" onClose={closeSendTipModal}>
+        <Dialog open={isShown} aria-labelledby="send-tips-window" maxWidth="md">
+          <DialogTitle id="name" onClose={() => setIsShown(false)}>
             {' '}
             Send Tip
           </DialogTitle>
           <DialogContent dividers>
-            <CurrencyTable />
+            <CurrencyTableComponent
+              balanceDetails={balanceDetails}
+              availableTokens={availableTokens}
+              onChange={(wsAddress, tokenDecimals, tokenId) =>
+                handleChangeTokenProperties(wsAddress, tokenDecimals, tokenId)
+              }
+            />
           </DialogContent>
           <DialogContent dividers>
-            <form noValidate autoComplete="off">
-              <TextField
-                value={values.amount}
-                onChange={handleChange('amount')}
-                required
-                error={inputError.isErrorInput ? true : false}
-                id="sendTipAmount"
-                label={`How many ${selectedToken}`}
-                helperText={
-                  inputError.isErrorInput
-                    ? inputError.isInsufficientBalance
-                      ? inputError.errorMessage
-                      : 'Invalid input'
-                    : 'Digits only'
-                }
-                variant="outlined"
-              />
-            </form>
+            <TipAmountFieldComponent
+              value={values.amount}
+              onChange={e => handleChange('amount', e)}
+              isError={inputError.isErrorInput ? true : false}
+              fieldLabel={`How many ${tokenProperties.tokenId}`}
+              helperTextField={
+                inputError.isErrorInput
+                  ? inputError.isInsufficientBalance
+                    ? inputError.errorMessage
+                    : 'Invalid input'
+                  : 'Digits only'
+              }
+            />
           </DialogContent>
           <DialogActions>
             <Button
@@ -374,7 +313,7 @@ const SendTipModal = forwardRef(
               fullWidth={true}
               size="large"
               variant="contained"
-              onClick={closeSendTipModal}>
+              onClick={() => setIsShown(false)}>
               Cancel
             </Button>
             <Button

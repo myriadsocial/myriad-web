@@ -25,6 +25,7 @@ import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import CardTitle from 'src/components/common/CardTitle.component';
 import SendTipModal from 'src/components/common/sendtips/SendTipModal';
+//import {useModal} from 'src/components/common/sendtips/use-modal.hook';
 import {useWalletAddress} from 'src/components/common/sendtips/use-wallet.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
@@ -33,7 +34,6 @@ import {BalanceDetail} from 'src/interfaces/balance';
 import {ImageData} from 'src/interfaces/post';
 import {Post} from 'src/interfaces/post';
 import {Token} from 'src/interfaces/token';
-import {WalletDetail} from 'src/interfaces/wallet';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 import {v4 as uuid} from 'uuid';
@@ -65,17 +65,19 @@ const PostComponent: React.FC<PostComponentProps> = ({
   const {loading, detail} = useSocialDetail(post);
 
   const {openTipSummary} = useTipSummaryHook();
+  //const {isShown, toggle} = useModal();
   const [expanded, setExpanded] = useState(defaultExpanded);
+  const [recipientId, setRecipientId] = useState('');
   const {loadWalletDetails, walletDetails} = useWalletAddress(post.id);
-  const [walletReceiverDetail, setWalletReceiverDetail] = useState<WalletDetail>();
+  const sendTipRef = useRef<React.ElementRef<typeof SendTipModal>>(null);
   const headerRef = useRef<any>();
-  const sendTipRef = useRef<any>();
 
   const defineWalletReceiverDetail = () => {
     const tempWalletDetail = walletDetails.filter(walletDetail => {
       return walletDetail.postId === post.id;
     });
-    setWalletReceiverDetail(tempWalletDetail[0]);
+    const matchingWalletDetail = tempWalletDetail[0];
+    return matchingWalletDetail;
   };
 
   useEffect(() => {
@@ -85,18 +87,26 @@ const PostComponent: React.FC<PostComponentProps> = ({
 
   if (!detail && !user && !anonymous) return null;
 
+  if (!walletDetails) return null;
+
   if (post.text === '[removed]' && post.platform === 'reddit') return null;
 
   const handleExpandClick = (): void => {
     setExpanded(!expanded);
   };
 
-  const tipPostUser = (): void => {
+  const tipPostUser = (e: React.MouseEvent<HTMLButtonElement>, receiverId?: string) => {
     if (disable) {
       return;
     }
 
-    sendTipRef.current.triggerSendTipModal();
+    e.stopPropagation();
+
+    if (receiverId) {
+      setRecipientId(receiverId);
+    }
+
+    sendTipRef.current?.triggerSendTipModal();
   };
 
   const openContentSource = (): void => {
@@ -255,23 +265,32 @@ const PostComponent: React.FC<PostComponentProps> = ({
                 post={post}
                 disableReply={disable}
                 hide={handleExpandClick}
-                balanceDetails={balanceDetails}
-                availableTokens={availableTokens}
+                toggleSendTip={(e: React.MouseEvent<HTMLButtonElement>) => tipPostUser(e)}
               />
             </CardContent>
           </Collapse>
         </ShowIf>
       </Card>
-
-      {user && walletReceiverDetail && (
+      {user && (
         <SendTipModal
+          ref={sendTipRef}
           availableTokens={availableTokens}
           success={postId => handleTipSentSuccess(postId)}
           userAddress={user.id}
-          ref={sendTipRef}
           postId={post.id as string}
           balanceDetails={balanceDetails}
-          walletReceiverDetail={walletReceiverDetail}
+          walletReceiverDetail={defineWalletReceiverDetail()}
+        />
+      )}{' '}
+      {user && recipientId && (
+        <SendTipModal
+          ref={sendTipRef}
+          availableTokens={availableTokens}
+          success={postId => handleTipSentSuccess(postId)}
+          userAddress={user.id}
+          postId={post.id as string}
+          balanceDetails={balanceDetails}
+          receiverId={recipientId}
         />
       )}
     </>

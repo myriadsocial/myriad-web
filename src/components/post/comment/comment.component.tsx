@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
@@ -19,12 +19,9 @@ import ReplyCommentComponent from './reply.component';
 
 import CardTitle from 'src/components/common/CardTitle.component';
 import DateFormat from 'src/components/common/DateFormat';
-import SendTipModal from 'src/components/common/sendtips/SendTipModal';
 import ShowIf from 'src/components/common/show-if.component';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
-import {BalanceDetail} from 'src/interfaces/balance';
 import {Post, Comment} from 'src/interfaces/post';
-import {Token} from 'src/interfaces/token';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -44,31 +41,28 @@ type CommentComponentProps = {
   post: Post;
   disableReply: boolean;
   hide: () => void;
-  balanceDetails: BalanceDetail[];
-  availableTokens: Token[];
+  toggleSendTip: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const CommentComponent: React.FC<CommentComponentProps> = ({
-  balanceDetails,
   post,
   disableReply,
   hide,
-  availableTokens,
+  toggleSendTip,
 }) => {
   const style = useStyles();
 
   const router = useRouter();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {comments, loadInitComment, reply} = useCommentHook(post);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const childRef = useRef<any>();
 
   useEffect(() => {
     loadInitComment();
   }, []);
 
-  const tipPostUser = () => {
-    childRef.current.triggerSendTipModal();
+  const tipPostUser = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    toggleSendTip(e);
   };
 
   const replyPost = (comment: string) => {
@@ -105,14 +99,6 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
     return null;
   };
 
-  const [, setTippedPost] = useState<Post>();
-  const handleTipSentSuccess = (postId: string) => {
-    if (post.id === postId) {
-      setTippedPost(post);
-      //setOpenTipSummary(true);
-    }
-  };
-
   return (
     <div>
       <Grid container spacing={2} direction="column" className={style.comment}>
@@ -141,17 +127,6 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
                     {comment.text}
                   </Typography>
                 </CardContent>
-                {user && (
-                  <SendTipModal
-                    availableTokens={availableTokens}
-                    success={postId => handleTipSentSuccess(postId)}
-                    postId={post?.id as string}
-                    userAddress={user.id}
-                    ref={childRef}
-                    receiverId={comment?.user?.id as string}
-                    balanceDetails={balanceDetails}
-                  />
-                )}
               </Card>
             </Grid>
           );

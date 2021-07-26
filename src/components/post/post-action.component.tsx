@@ -44,7 +44,7 @@ type PostActionProps = {
   expandComment: () => void;
   likePost: () => void;
   dislikePost: () => void;
-  tipOwner: () => void;
+  tipOwner: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 export const PostActionComponent: React.FC<PostActionProps> = ({

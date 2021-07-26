@@ -13,11 +13,6 @@ export interface InputErrorState {
   errorMessage: string;
 }
 
-export interface SendTipConfirmed {
-  isConfirmed: boolean;
-  message: string;
-}
-
 export type Props = {
   userAddress: string;
   success: (postId: string) => void;
@@ -27,3 +22,18 @@ export type Props = {
   availableTokens: Token[];
   walletReceiverDetail?: WalletDetail;
 };
+
+export interface SendTipWithPayloadProps {
+  senderAddress: string;
+  toAddress: string;
+  amountSent: number;
+  decimals: number;
+  currencyId: string;
+  postId: string;
+  wsAddress: string;
+}
+
+export enum ContentType {
+  POST = 'postContent',
+  COMMENT = 'commentContent',
+}

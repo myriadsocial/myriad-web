@@ -14,6 +14,7 @@ import {
   BalanceActionType,
 } from '../components/wallet/balance.context';
 
+import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {Token} from 'src/interfaces/token';
 import {updateTips} from 'src/lib/api/post';
 import {storeTransaction} from 'src/lib/api/transaction';
@@ -37,6 +38,7 @@ const formatNumber = (number: number, decimals: number) => {
 // params mungkin butuh address sama tipe wsProvider
 export const usePolkadotApi = () => {
   const {state, dispatch} = baseUseBalance();
+  const {showAlert, showTipAlert} = useAlertHook();
   const {state: walletAddressState, dispatch: walletAddressDispatch} = baseUseWalletAddress();
 
   const [loading, setLoading] = useState(false);
@@ -202,6 +204,12 @@ export const usePolkadotApi = () => {
                 tokenId: currencyId,
                 success: true,
               });
+
+              showTipAlert({
+                severity: 'success',
+                title: 'Tip sent!',
+                message: `${txInfo.toHex()}`,
+              });
             }
 
             await api.disconnect();
@@ -210,6 +218,11 @@ export const usePolkadotApi = () => {
       }
     } catch (error) {
       setError(error);
+      showAlert({
+        severity: 'error',
+        title: 'Error!',
+        message: `Something is wrong`,
+      });
     } finally {
       setLoading(false);
     }
@@ -221,7 +234,7 @@ export const usePolkadotApi = () => {
     load,
     tokensReady: state.balanceDetails,
     sendTip,
-    trxHash: walletAddressState.trxHash,
     sendTipSuccess: walletAddressState.success,
+    trxHash: walletAddressState.trxHash,
   };
 };

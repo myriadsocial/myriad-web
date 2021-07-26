@@ -30,6 +30,7 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, availableTokens
   const [session] = useSession();
   const userAddress = session?.user.address as string;
 
+  //TODO: move to redux
   const {loading, error, tokensReady, load} = usePolkadotApi();
 
   useEffect(() => {
