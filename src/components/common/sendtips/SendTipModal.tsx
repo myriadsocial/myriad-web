@@ -20,9 +20,9 @@ import {
   ContentType,
 } from 'src/interfaces/send-tips/send-tips';
 
-interface SendTipModalRefProps {
+export type SendTipModalRefProps = {
   triggerSendTipModal: () => void;
-}
+};
 
 const SendTipModal = forwardRef(
   (
@@ -230,6 +230,7 @@ const SendTipModal = forwardRef(
       sendTip(sendTipPayload);
     };
 
+    if (!receiverId) return null;
     const sendTipFromComment = () => {
       sendTipWithPayload({
         senderAddress,
@@ -243,7 +244,6 @@ const SendTipModal = forwardRef(
     };
 
     if (!walletReceiverDetail) return null;
-
     const sendTipFromPost = () => {
       sendTipWithPayload({
         senderAddress,
