@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
@@ -97,14 +97,6 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
         </Button>
       );
     return null;
-  };
-
-  const [, setTippedPost] = useState<Post>();
-  const handleTipSentSuccess = (postId: string) => {
-    if (post.id === postId) {
-      setTippedPost(post);
-      //setOpenTipSummary(true);
-    }
   };
 
   return (
