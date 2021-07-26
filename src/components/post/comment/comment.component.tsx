@@ -20,7 +20,6 @@ import ReplyCommentComponent from './reply.component';
 import CardTitle from 'src/components/common/CardTitle.component';
 import DateFormat from 'src/components/common/DateFormat';
 import SendTipModal from 'src/components/common/sendtips/SendTipModal';
-import {useModal} from 'src/components/common/sendtips/use-modal.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
@@ -61,14 +60,17 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
   const router = useRouter();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {comments, loadInitComment, reply} = useCommentHook(post);
-  const {isShown, toggle} = useModal();
+  //const {isShown, toggle} = useModal();
+
+  const sendTipRef = useRef<React.ElementRef<typeof SendTipModal>>(null);
 
   useEffect(() => {
     loadInitComment();
   }, []);
 
-  const tipPostUser = () => {
-    toggle();
+  const tipPostUser = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    sendTipRef.current?.triggerSendTipModal();
   };
 
   const replyPost = (comment: string) => {
@@ -143,8 +145,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
                 </CardContent>
                 {user && (
                   <SendTipModal
-                    isShown={isShown}
-                    hide={toggle}
+                    ref={sendTipRef}
                     availableTokens={availableTokens}
                     success={postId => handleTipSentSuccess(postId)}
                     postId={post?.id as string}
