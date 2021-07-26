@@ -63,6 +63,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) =>
   const {isShared, verifyPublicKeyShared} = useShareSocial(user?.id);
   const {disconnectSocial} = useUserHook();
   const [connecting, setConnecting] = useState(false);
+  const [selected, setSelected] = useState<SocialsEnum | null>(null);
   const [unlink, setUnlink] = useState<SocialsEnum | null>(null);
 
   const connectRef = useRef<React.ElementRef<typeof ConnectComponent>>(null);
@@ -104,15 +105,15 @@ export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) =>
 
   const toggleConnect = () => {
     setConnecting(!connecting);
+    setSelected(null);
   };
 
   const connectSocial = (social: SocialsEnum) => () => {
     if (!connected[social]) {
       setConnecting(true);
-      console.log('openConnectForm', connectRef.current);
+      setSelected(social);
       connectRef.current?.openConnectForm(social);
     } else {
-      console.log('setUnlink');
       setUnlink(social);
     }
   };
@@ -184,7 +185,15 @@ export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) =>
       </List>
 
       {user && <ConnectComponent ref={connectRef} publicKey={user.id} verify={verifyShared} />}
-      <ConnectSuccessComponent open={connecting && isShared} onClose={toggleConnect} />
+
+      {selected && (
+        <ConnectSuccessComponent
+          open={connecting && isShared}
+          social={selected}
+          onClose={toggleConnect}
+        />
+      )}
+
       <ConfirmDialog
         open={unlink !== null}
         handleClose={() => setUnlink(null)}

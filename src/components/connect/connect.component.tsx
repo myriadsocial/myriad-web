@@ -22,9 +22,9 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 
 import {useStyles} from './conntect.style';
 
+import {isValid} from 'date-fns';
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
-import {parsePostUrl} from 'src/helpers/url';
 import {SocialsEnum} from 'src/interfaces';
 
 export type ConnectComponentRefProps = {
@@ -88,18 +88,15 @@ export const ConnectComponent = forwardRef(
       const text = e.clipboardData.getData('Text');
 
       if (social === SocialsEnum.FACEBOOK) {
-        const match = parsePostUrl(social, text);
+        const name = text.replace(prefix.facebook, '');
 
-        setUrlValid(match !== null);
-        if (match) {
-          const name = text.replace(prefix.facebook, '');
-          setSocialName(name);
-        }
+        setSocialName(name);
+        setUrlValid(name.trim().length > 0);
       } else {
         const name = text.substring(text.lastIndexOf('/') + 1);
 
         setSocialName(name);
-        setUrlValid(true);
+        setUrlValid(name.trim().length > 0);
       }
     };
 
@@ -125,6 +122,8 @@ export const ConnectComponent = forwardRef(
       setOpen(false);
       setShared(false);
       setTermApproved(false);
+      setUrlValid(false);
+      setSocialName('');
     };
 
     if (!social) return null;
@@ -182,6 +181,7 @@ export const ConnectComponent = forwardRef(
                         quote={message}
                         beforeOnClick={onSharedAttempt}>
                         <Button
+                          component="div"
                           variant="outlined"
                           size="large"
                           startIcon={<FacebookIcon />}
@@ -197,6 +197,7 @@ export const ConnectComponent = forwardRef(
                         title={message}
                         beforeOnClick={onSharedAttempt}>
                         <Button
+                          component="div"
                           variant="outlined"
                           size="large"
                           startIcon={<TwitterIcon />}
@@ -212,6 +213,7 @@ export const ConnectComponent = forwardRef(
                         title={message}
                         beforeOnClick={onSharedAttempt}>
                         <Button
+                          component="div"
                           variant="outlined"
                           size="large"
                           startIcon={<RedditIcon />}
@@ -242,7 +244,7 @@ export const ConnectComponent = forwardRef(
                 <ListItemText disableTypography>
                   {social === SocialsEnum.FACEBOOK ? (
                     <Typography variant="caption">
-                      Copy and paste the URL of the post (make sure it's public!) here:
+                      Copy and paste the URL of the post (make sure it&apos;s public!) here:
                     </Typography>
                   ) : (
                     <Typography variant="caption">Tell us your {social} username here:</Typography>
@@ -256,7 +258,7 @@ export const ConnectComponent = forwardRef(
                     onPaste={handleSocialNamePasted}
                     color="primary"
                     margin="dense"
-                    error={true}
+                    error={!isValid}
                     required
                     fullWidth
                     name="username"
@@ -294,3 +296,5 @@ export const ConnectComponent = forwardRef(
     );
   },
 );
+
+ConnectComponent.displayName = 'ConnectComponent';
