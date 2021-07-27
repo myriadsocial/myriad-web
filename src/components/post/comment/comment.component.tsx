@@ -41,7 +41,7 @@ type CommentComponentProps = {
   post: Post;
   disableReply: boolean;
   hide: () => void;
-  toggleSendTip: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  toggleSendTip: (comment: Comment) => void;
 };
 
 const CommentComponent: React.FC<CommentComponentProps> = ({
@@ -60,9 +60,9 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
     loadInitComment();
   }, []);
 
-  const tipPostUser = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const tipPostUser = (e: React.MouseEvent<HTMLButtonElement>, comment: Comment) => {
     e.stopPropagation();
-    toggleSendTip(e);
+    toggleSendTip(comment);
   };
 
   const replyPost = (comment: string) => {
@@ -87,7 +87,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
       return (
         <Button
           className={style.action}
-          onClick={tipPostUser}
+          onClick={e => tipPostUser(e, comment)}
           aria-label="tip-post-user"
           color="primary"
           variant="contained"
