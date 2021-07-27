@@ -19,10 +19,6 @@ import {
   SendTipWithPayloadProps,
 } from 'src/interfaces/send-tips/send-tips';
 
-//export type SendTipModalRefProps = {
-//triggerSendTipModal: () => void;
-//};
-
 const SendTipModal = ({
   isShown,
   hide,
@@ -67,13 +63,13 @@ const SendTipModal = ({
     // TODO: move the state to redux so that tip-summary can be shown properly
     if (sendTipSuccess) {
       success(postId);
-      hide();
+      handleCloseModal();
+      setSendTipClicked(false);
     }
   }, [sendTipSuccess]);
 
   useEffect(() => {
     if (walletReceiverDetail && sendTipClicked) {
-      console.log({walletReceiverDetail});
       dispatchSendTip();
     }
   }, [sendTipClicked, walletReceiverDetail, tokenProperties, tipAmount]);
@@ -177,6 +173,10 @@ const SendTipModal = ({
     }
   };
 
+  const handleCloseModal = () => {
+    hide();
+  };
+
   const sendTipWithPayload = ({
     senderAddress,
     toAddress,
@@ -238,7 +238,7 @@ const SendTipModal = ({
   return (
     <>
       <Dialog open={isShown} aria-labelledby="send-tips-window" maxWidth="md">
-        <DialogTitle id="name" onClose={hide}>
+        <DialogTitle id="name" onClose={handleCloseModal}>
           {' '}
           Send Tip
         </DialogTitle>
@@ -272,7 +272,7 @@ const SendTipModal = ({
             fullWidth={true}
             size="large"
             variant="contained"
-            onClick={hide}>
+            onClick={handleCloseModal}>
             Cancel
           </Button>
           <Button
