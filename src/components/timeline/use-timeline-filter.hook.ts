@@ -6,6 +6,7 @@ import {RootState} from 'src/reducers';
 import {loadTimeline} from 'src/reducers/timeline/actions';
 import {TimelineState} from 'src/reducers/timeline/reducer';
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useTimelineFilter = () => {
   const {filter} = useSelector<RootState, TimelineState>(state => state.timelineState);
   const dispatch = useDispatch();
@@ -45,7 +46,23 @@ export const useTimelineFilter = () => {
     dispatch(loadTimeline(1, timelineSort, newFilter, timelineType));
   };
 
+  const filterSearchTimeline = async (query: ParsedUrlQuery) => {
+    let tags: string[] = [];
+    const timelineSort: TimelineSortMethod = 'created';
+    const timelineType = TimelineType.TRENDING;
+
+    if (query.q) {
+      tags = Array.isArray(query.q) ? query.q : [query.q];
+    }
+
+    const newFilter: TimelineFilter = {
+      tags,
+    };
+    dispatch(loadTimeline(1, timelineSort, newFilter, timelineType));
+  };
+
   return {
     filterTimeline,
+    filterSearchTimeline,
   };
 };

@@ -51,6 +51,13 @@ export const useStyles = makeStyles((theme: Theme) =>
     iconButton: {
       margin: theme.spacing(1),
     },
+    content: {
+      textAlign: 'center',
+      lineHeight: '20px',
+      color: '#9E9E9E',
+      fontSize: '16px',
+      width: '282px',
+    },
   }),
 );
 
@@ -157,7 +164,9 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({options}) => {
   const EmptySearchResultComponent = () => {
     return (
       <Grid container justify="center">
-        <Typography>No results found!</Typography>
+        <Typography className={styles.content}>
+          Sorry we can’t find anything with your keyword, you can try again with another keyword
+        </Typography>
       </Grid>
     );
   };
