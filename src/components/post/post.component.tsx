@@ -34,6 +34,7 @@ import {BalanceDetail} from 'src/interfaces/balance';
 import {ImageData} from 'src/interfaces/post';
 import {Post, Comment} from 'src/interfaces/post';
 import {Token} from 'src/interfaces/token';
+import {ContentType} from 'src/interfaces/wallet';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 import {v4 as uuid} from 'uuid';
@@ -71,6 +72,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
   const [recipientDetail, setRecipientDetail] = useState({
     postId: '',
     walletAddress: '',
+    contentType: ContentType.POST,
   });
   const {loadWalletDetails, walletDetails} = useWalletAddress(post.id);
   const headerRef = useRef<any>();
@@ -112,6 +114,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
     const recipientDetail = {
       postId: comment.id,
       walletAddress: comment.userId,
+      contentType: ContentType.COMMENT,
     };
 
     return recipientDetail;
