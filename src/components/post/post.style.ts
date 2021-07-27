@@ -5,7 +5,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       fontSize: 14,
       position: 'relative',
-      width: 670,
+      width: '100%',
     },
     media: {
       height: 0,

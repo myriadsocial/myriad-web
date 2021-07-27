@@ -1,21 +1,18 @@
 // SEARCH PAGE
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
-import {useRouter} from 'next/router';
 
 import Grid from '@material-ui/core/Grid';
 import NoSsr from '@material-ui/core/NoSsr';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import Layout from 'src/components/Layout/Layout.container';
-import {LoadingBasic} from 'src/components/common/LoadingBasic.component';
-import SearchResultComponent from 'src/components/search/search-result.component';
+import SearchTimeline from 'src/components/search/search-timeline.component';
 import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
 import {Wallet} from 'src/components/wallet/wallet.component';
-import {useMyriadUser} from 'src/hooks/use-myriad-users.hooks';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
@@ -97,57 +94,6 @@ export default function Search() {
     </Layout>
   );
 }
-
-type SearchTimelineProps = {
-  isAnonymous: boolean;
-};
-
-const SearchTimeline: React.FC<SearchTimelineProps> = () => {
-  const router = useRouter();
-
-  const {searching, backToTimeline, users: options, search} = useMyriadUser();
-  const [loading, setLoading] = useState(false);
-
-  const delayLoading = 2000;
-
-  useEffect(() => {
-    if (searching) {
-      loadingSequence();
-    }
-  }, [searching]);
-
-  useEffect(() => {
-    search(`${router.query.q}`);
-  }, [router.query.q]);
-
-  const handleClick = () => {
-    backToTimeline();
-    router.push('/home');
-  };
-
-  const loadingSequence = () => {
-    setLoading(true);
-    const timeoutID = setTimeout(() => {
-      setLoading(false);
-    }, delayLoading);
-
-    return () => {
-      clearTimeout(timeoutID);
-    };
-  };
-
-  return (
-    <>
-      <div id="search-result">
-        {loading ? (
-          <LoadingBasic />
-        ) : (
-          <SearchResultComponent loading={loading} options={options} clickBack={handleClick} />
-        )}
-      </div>
-    </>
-  );
-};
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {res} = context;

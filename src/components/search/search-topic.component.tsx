@@ -1,38 +1,68 @@
-import React from 'react';
+import React, {createRef, useCallback, useEffect} from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import {useSelector} from 'react-redux';
 
-// import React, { useEffect } from 'react';
-// import InfiniteScroll from 'react-infinite-scroll-component';
-import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
+import {useRouter} from 'next/router';
 
+import Fab from '@material-ui/core/Fab';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
-// import { LoadingPage } from 'src/components/common/loading.component';
-// import PostComponent from 'src/components/post/post.component';
-// import { useTimelineFilter } from 'src/components/timeline/use-timeline-filter.hook';
-// import { useTimeline } from 'src/context/timeline.context';
+import {ScrollTop} from 'src/components/common/ScrollToTop.component';
+import {LoadingPage} from 'src/components/common/loading.component';
+import PostComponent from 'src/components/post/post.component';
+import {useTimelineFilter} from 'src/components/timeline/use-timeline-filter.hook';
+import {TipSummaryProvider} from 'src/components/tip-summary/tip-summary.context';
+import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
+import {useTimelineHook} from 'src/hooks/use-timeline.hook';
+import {Post} from 'src/interfaces/post';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
-// import { useUser } from 'src/context/user.context';
-// import { usePolkadotApi } from 'src/hooks/use-polkadot-api.hook';
-// import { useTimelineHook } from 'src/hooks/use-timeline.hook';
-// import { useToken } from 'src/hooks/use-token.hook';
-// import { Post } from 'src/interfaces/post';
-// import { Token } from 'src/interfaces/token';
+const TipSummaryComponent = dynamic(
+  () => import('src/components/tip-summary/tip-summary.component'),
+);
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      height: '100vh',
-      [theme.breakpoints.up('xl')]: {
-        maxWidth: 926
-      }
+      height: '1200px',
+      overflow: 'hidden',
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',
+      scrollbarColor: 'transparent transparent',
+      '& ::-webkit-scrollbar': {
+        display: 'none',
+        width: '0 !important',
+      },
+    },
+    scroll: {
+      height: '100%',
+      width: '100%',
+      overflowY: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
     },
     child: {
       '& > *': {
-        margin: theme.spacing(1)
-      }
-    }
-  })
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+      },
+    },
+    mt: {
+      marginTop: theme.spacing(2),
+    },
+    content: {
+      textAlign: 'center',
+      lineHeight: '20px',
+      fontSize: '16px',
+      color: '#9E9E9E',
+      width: '282px',
+    },
+  }),
 );
 
 type TopicSearchResultProps = {
@@ -40,65 +70,95 @@ type TopicSearchResultProps = {
 };
 
 const TopicSearchComponent: React.FC<TopicSearchResultProps> = () => {
+  const {user, tokens: availableTokens} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
+  const scrollRoot = createRef<HTMLDivElement>();
   const style = useStyles();
-  const { query } = useRouter();
+  const {query} = useRouter();
 
-  // const { state } = useTimeline();
-  // const {
-  //   state: { user }
-  // } = useUser();
-  // const { hasMore, nextPosts, sortTimeline } = useTimelineHook();
-  // const { filterTimeline } = useTimelineFilter();
-  // const { load, tokensReady } = usePolkadotApi();
-  // const userId = user?.id as string;
-  // const { loadAllUserTokens, userTokens: availableTokens } = useToken(userId);
+  const {load, tokensReady} = usePolkadotApi();
+  const {hasMore, nextPage, posts} = useTimelineHook();
+  const {filterSearchTimeline} = useTimelineFilter();
 
-  // useEffect(() => {
-  //   loadAllUserTokens();
-  // }, []);
+  useEffect(() => {
+    filterSearchTimeline(query);
+  }, [query]);
 
-  // // useEffect(() => {
-  // //   filterTimeline(query);
-  // // }, [query]);
+  useEffect(() => {
+    if (user?.id) {
+      load(user.id, availableTokens);
+    }
+  }, [user]);
 
-  // const nextPage = () => {
-  //   nextPosts();
-  // };
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, true);
+  }, []);
 
-  // const isOwnPost = (post: Post) => {
-  //   if (!user) return false;
+  const handleScroll = useCallback(() => {
+    const distance = window.scrollY;
 
-  //   if (post.platformUser?.platform_account_id === user.id) {
-  //     return true;
-  //   }
+    if (distance <= 0) return;
 
-  //   return false;
-  // };
+    window.requestAnimationFrame(() => {
+      if (scrollRoot.current) {
+        scrollRoot.current.scroll(0, distance);
+      }
+    });
+  }, []);
+
+  const isOwnPost = (post: Post) => {
+    if (!user) return false;
+
+    if (post.platformUser?.platform_account_id === user.id) {
+      return true;
+    }
+
+    return false;
+  };
+
+  if (!posts.length)
+    return (
+      <Grid container justify="center" className={style.mt}>
+        <Typography className={style.content}>
+          Sorry we can’t find anything with your keyword, you can try again with another keyword
+        </Typography>
+      </Grid>
+    );
 
   return (
     <div className={style.root}>
-      <h1>Topic list component</h1>
-      <Typography>{query.q}</Typography>
-      {/* <div>
-        <InfiniteScroll
-          scrollableTarget="scrollable-timeline"
-          className={style.child}
-          dataLength={state.posts.length}
-          next={nextPage}
-          hasMore={hasMore}
-          loader={<LoadingPage />}>
-          {state.posts.map((post: Post, i: number) => (
-            <div key={post.id} id={`post-detail-${i}`}>
-              <PostComponent
-                post={post}
-                postOwner={isOwnPost(post)}
-                balanceDetails={tokensReady.length > 0 ? tokensReady : []}
-                availableTokens={availableTokens}
-              />
-            </div>
-          ))}
-        </InfiniteScroll>
-      </div> */}
+      <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
+        <TipSummaryProvider>
+          <div>
+            <InfiniteScroll
+              scrollableTarget="scrollable-timeline"
+              className={style.child}
+              dataLength={posts.length}
+              next={nextPage}
+              hasMore={hasMore}
+              loader={<LoadingPage />}>
+              {posts.map((post: Post, i: number) => (
+                <div key={post.id} id={`post-detail-${i}`}>
+                  <PostComponent
+                    post={post}
+                    postOwner={isOwnPost(post)}
+                    balanceDetails={tokensReady.length > 0 ? tokensReady : []}
+                    availableTokens={availableTokens}
+                  />
+                </div>
+              ))}
+            </InfiniteScroll>
+          </div>
+
+          <TipSummaryComponent />
+        </TipSummaryProvider>
+        <ScrollTop>
+          <Fab color="secondary" size="small" aria-label="scroll back to top">
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </ScrollTop>
+      </div>
     </div>
   );
 };
