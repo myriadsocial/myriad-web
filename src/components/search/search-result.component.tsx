@@ -87,8 +87,6 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({options, clickBack}
 
   const sendFriendRequest = (destination: User) => {
     sendRequest(destination);
-
-    if (user) checkFriendStatus([user]);
   };
 
   type CardActionProps = {
