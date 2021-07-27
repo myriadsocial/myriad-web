@@ -1,6 +1,6 @@
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Token} from 'src/interfaces/token';
-import {WalletDetail} from 'src/interfaces/wallet';
+import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 
 export interface InputState {
   amount: string;
@@ -13,15 +13,17 @@ export interface InputErrorState {
   errorMessage: string;
 }
 
-export type Props = {
+export interface Props {
+  isShown: boolean;
+  hide: () => void;
   userAddress: string;
   success: (postId: string) => void;
   postId: string;
-  balanceDetails: BalanceDetail[];
   receiverId?: string;
+  balanceDetails: BalanceDetail[];
   availableTokens: Token[];
-  walletReceiverDetail?: WalletDetail;
-};
+  walletReceiverDetail: WalletDetail;
+}
 
 export interface SendTipWithPayloadProps {
   senderAddress: string;
@@ -30,10 +32,6 @@ export interface SendTipWithPayloadProps {
   decimals: number;
   currencyId: string;
   postId: string;
+  contentType: ContentType;
   wsAddress: string;
-}
-
-export enum ContentType {
-  POST = 'postContent',
-  COMMENT = 'commentContent',
 }
