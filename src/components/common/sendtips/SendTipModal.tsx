@@ -22,7 +22,6 @@ import {
 const SendTipModal = ({
   isShown,
   hide,
-  balanceDetails,
   walletReceiverDetail,
   userAddress,
   postId,
@@ -30,7 +29,7 @@ const SendTipModal = ({
   availableTokens,
 }: Props) => {
   //TODO: move to redux
-  const {sendTip, sendTipSuccess, load} = usePolkadotApi();
+  const {sendTip, load, tokensReady: balanceDetails} = usePolkadotApi();
   const styles = useStyles();
 
   const [senderAddress, setSenderAddress] = useState('');
@@ -54,19 +53,17 @@ const SendTipModal = ({
     amount: '',
   });
 
+  // reset form
   useEffect(() => {
-    load(userAddress, availableTokens);
     handleClearValue();
   }, []);
 
+  // load balance detail only when component need to be shown
   useEffect(() => {
-    // TODO: move the state to redux so that tip-summary can be shown properly
-    if (sendTipSuccess) {
-      success(postId);
-      handleCloseModal();
-      setSendTipClicked(false);
+    if (isShown) {
+      load(userAddress, availableTokens);
     }
-  }, [sendTipSuccess]);
+  }, [isShown]);
 
   useEffect(() => {
     if (walletReceiverDetail && sendTipClicked) {
@@ -198,7 +195,11 @@ const SendTipModal = ({
       wsAddress,
     };
 
-    sendTip(sendTipPayload);
+    sendTip(sendTipPayload, () => {
+      handleCloseModal();
+      setSendTipClicked(false);
+      success(postId);
+    });
   };
 
   const dispatchSendTip = () => {

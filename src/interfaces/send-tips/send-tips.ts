@@ -1,4 +1,3 @@
-import {BalanceDetail} from 'src/interfaces/balance';
 import {Token} from 'src/interfaces/token';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 
@@ -20,7 +19,6 @@ export interface Props {
   success: (postId: string) => void;
   postId: string;
   receiverId?: string;
-  balanceDetails: BalanceDetail[];
   availableTokens: Token[];
   walletReceiverDetail: WalletDetail;
 }
