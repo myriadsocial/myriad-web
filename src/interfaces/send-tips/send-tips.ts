@@ -13,15 +13,17 @@ export interface InputErrorState {
   errorMessage: string;
 }
 
-export type Props = {
+export interface Props {
+  isShown: boolean;
+  hide: () => void;
   userAddress: string;
   success: (postId: string) => void;
   postId: string;
-  balanceDetails: BalanceDetail[];
   receiverId?: string;
+  balanceDetails: BalanceDetail[];
   availableTokens: Token[];
-  walletReceiverDetail?: WalletDetail;
-};
+  walletReceiverDetail: WalletDetail;
+}
 
 export interface SendTipWithPayloadProps {
   senderAddress: string;
