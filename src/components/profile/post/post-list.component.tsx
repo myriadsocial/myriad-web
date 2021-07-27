@@ -14,20 +14,16 @@ import {LoadingPage} from 'src/components/common/loading.component';
 import PostComponent from 'src/components/post/post.component';
 import {TipSummaryProvider} from 'src/components/tip-summary/tip-summary.context';
 import {useTimelineHook} from 'src/hooks/use-timeline.hook';
-import {BalanceDetail} from 'src/interfaces/balance';
 import {Post} from 'src/interfaces/post';
-import {Token} from 'src/interfaces/token';
 import {ExtendedUser} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 type Props = {
   profile: ExtendedUser;
-  balanceDetails: BalanceDetail[];
-  availableTokens: Token[];
 };
 
-export default function PostList({profile, balanceDetails, availableTokens}: Props) {
+export default function PostList({profile}: Props) {
   const style = useStyles();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
@@ -66,12 +62,7 @@ export default function PostList({profile, balanceDetails, availableTokens}: Pro
           loader={<LoadingPage />}>
           {posts.map((post: Post, i: number) => (
             <Grow key={i}>
-              <PostComponent
-                post={post}
-                postOwner={isOwnPost(post)}
-                balanceDetails={balanceDetails}
-                availableTokens={availableTokens}
-              />
+              <PostComponent post={post} postOwner={isOwnPost(post)} />
             </Grow>
           ))}
 

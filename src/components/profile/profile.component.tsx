@@ -15,7 +15,6 @@ import {TippingComponent} from './myWallet/tipping/tipping.component';
 import {WalletComponent} from './myWallet/wallet/wallet.component';
 import {useStyles} from './profile.style';
 
-import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {ExtendedUser} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';
@@ -117,14 +116,7 @@ export default function ProfileTimeline({profile, loading}: Props) {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  // TODO: move to redux
-  const {load, tokensReady} = usePolkadotApi();
-
-  const {
-    anonymous,
-    user,
-    tokens: userTokens,
-  } = useSelector<RootState, UserState>(state => state.userState);
+  const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
   const {totalFriends} = useSelector<RootState, ProfileState>(state => state.profileState);
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [isGuest, setIsGuest] = useState<boolean>(false);
@@ -140,11 +132,7 @@ export default function ProfileTimeline({profile, loading}: Props) {
     if (user) {
       setIsGuest(user.id !== profile.id);
     }
-
-    if (user && userTokens) {
-      load(user.id, userTokens);
-    }
-  }, [user, userTokens]);
+  }, [user]);
 
   const handleChange = (event: React.ChangeEvent<{}>, tab: number) => {
     setSelectedTab(tab);
@@ -178,18 +166,10 @@ export default function ProfileTimeline({profile, loading}: Props) {
             {isGuest == false && <Tab className={style.tabItem} label={'My Wallet'} />}
           </Tabs>
           <TabPanel value={selectedTab} index={0} dir={theme.direction}>
-            <PostList
-              profile={profile}
-              balanceDetails={tokensReady.length > 0 ? tokensReady : []}
-              availableTokens={userTokens}
-            />
+            <PostList profile={profile} />
           </TabPanel>
           <TabPanel value={selectedTab} index={1} dir={theme.direction}>
-            <ImportedPostList
-              profile={profile}
-              balanceDetails={tokensReady.length > 0 ? tokensReady : []}
-              availableTokens={userTokens}
-            />
+            <ImportedPostList profile={profile} />
           </TabPanel>
           <TabPanel value={selectedTab} index={2} dir={theme.direction}>
             <FriendComponent profile={profile} />

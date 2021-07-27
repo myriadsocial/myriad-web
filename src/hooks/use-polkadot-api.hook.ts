@@ -69,9 +69,9 @@ export const usePolkadotApi = () => {
     try {
       for (let i = 0; i < availableTokens.length; i++) {
         const provider = availableTokens[i].rpc_address;
-
+        console.log('provider', provider);
         const api = await connectToBlockchain(provider);
-
+        console.log('api', api);
         if (api) {
           switch (availableTokens[i].id) {
             // TODO: move to single file constant or enum
@@ -112,22 +112,26 @@ export const usePolkadotApi = () => {
         balanceDetails: tokenBalances,
       });
     } catch (error) {
+      console.error('error', error);
       setError(error);
     } finally {
       setLoading(false);
     }
   };
 
-  const sendTip = async ({
-    fromAddress,
-    toAddress,
-    amountSent,
-    decimals,
-    currencyId,
-    postId,
-    contentType,
-    wsAddress,
-  }: Props) => {
+  const sendTip = async (
+    {
+      fromAddress,
+      toAddress,
+      amountSent,
+      decimals,
+      currencyId,
+      postId,
+      contentType,
+      wsAddress,
+    }: Props,
+    callback?: () => void,
+  ) => {
     walletAddressDispatch({
       type: WalletAddressActionType.INIT_SEND_TIPS,
     });
@@ -216,6 +220,8 @@ export const usePolkadotApi = () => {
                 title: 'Tip sent!',
                 message: `${txInfo.toHex()}`,
               });
+
+              callback && callback();
             }
 
             await api.disconnect();

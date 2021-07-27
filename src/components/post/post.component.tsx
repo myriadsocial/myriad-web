@@ -30,10 +30,8 @@ import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
 import {useModal} from 'src/hooks/use-modal.hook';
 import {usePostHook} from 'src/hooks/use-post.hook';
 import {useSocialDetail} from 'src/hooks/use-social.hook';
-import {BalanceDetail} from 'src/interfaces/balance';
 import {ImageData} from 'src/interfaces/post';
 import {Post, Comment} from 'src/interfaces/post';
-import {Token} from 'src/interfaces/token';
 import {ContentType} from 'src/interfaces/wallet';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -48,20 +46,20 @@ type PostComponentProps = {
   disable?: boolean;
   post: Post;
   postOwner?: boolean;
-  balanceDetails: BalanceDetail[];
-  availableTokens: Token[];
 };
 
 const PostComponent: React.FC<PostComponentProps> = ({
-  balanceDetails,
   post,
   defaultExpanded = false,
   disable = false,
-  availableTokens,
 }) => {
   const style = useStyles();
   const router = useRouter();
-  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const {
+    user,
+    anonymous,
+    tokens: availableTokens,
+  } = useSelector<RootState, UserState>(state => state.userState);
   const {loading, detail} = useSocialDetail(post);
   const {isShown, toggle, hide} = useModal();
 
@@ -301,7 +299,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
           success={postId => handleTipSentSuccess(postId)}
           userAddress={user.id}
           postId={post.id as string}
-          balanceDetails={balanceDetails}
           walletReceiverDetail={recipientDetail}
         />
       )}{' '}
