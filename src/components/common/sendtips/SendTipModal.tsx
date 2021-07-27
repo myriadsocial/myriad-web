@@ -200,7 +200,6 @@ const SendTipModal = ({
   };
 
   const dispatchSendTip = () => {
-    console.log({walletReceiverDetail});
     sendTipWithPayload({
       senderAddress,
       toAddress: walletReceiverDetail.walletAddress,
