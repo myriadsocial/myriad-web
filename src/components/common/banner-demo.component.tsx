@@ -9,7 +9,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
-// import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 
 import BannerImage from 'src/images/banner-image.svg';
@@ -91,7 +90,7 @@ const BannerDemo: React.FC = () => {
           <Typography component="span" onClick={handleClickOpen} className={style.decoration}>
             Myriad Demo Version
           </Typography>{' '}
-          right now
+          right now, not audited, use at your own risk!
         </Typography>
       </div>
       <Dialog
@@ -122,14 +121,6 @@ const BannerDemo: React.FC = () => {
             Feel free to click around, and don{"'"}t forget to join our:
           </Typography>
           <div className={`${style.mb} ${style['flex-col']}`}>
-            {/* <Button
-              className={`${style.button} ${style.mb}`}
-              variant="outlined"
-              color="primary"
-              startIcon={<MailOutlineIcon />}
-              disabled>
-              Mailing list
-            </Button> */}
             <Link href="https://t.me/myriadsocial">
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a target="_blank">
