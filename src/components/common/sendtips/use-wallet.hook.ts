@@ -5,6 +5,7 @@ import {
   WalletAddressActionType,
 } from './send-tip.context';
 
+import {ContentType} from 'src/interfaces/wallet';
 import * as WalletAddressAPI from 'src/lib/api/wallet';
 
 export const useWalletAddress = (postId: string) => {
@@ -21,6 +22,7 @@ export const useWalletAddress = (postId: string) => {
       const walletDetailPayload = {
         walletAddress,
         postId,
+        contentType: ContentType.POST,
       };
 
       dispatch({

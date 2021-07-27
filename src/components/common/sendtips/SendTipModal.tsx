@@ -184,6 +184,7 @@ const SendTipModal = ({
     decimals,
     currencyId,
     postId,
+    contentType,
     wsAddress,
   }: SendTipWithPayloadProps) => {
     const sendTipPayload = {
@@ -193,6 +194,7 @@ const SendTipModal = ({
       decimals,
       currencyId,
       postId,
+      contentType,
       wsAddress,
     };
 
@@ -207,6 +209,7 @@ const SendTipModal = ({
       decimals: tokenProperties.tokenDecimals,
       currencyId: tokenProperties.tokenId,
       postId: walletReceiverDetail.postId,
+      contentType: walletReceiverDetail.contentType,
       wsAddress: tokenProperties.wsAddress,
     });
   };

@@ -16,6 +16,7 @@ import {
 
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {Token} from 'src/interfaces/token';
+import {ContentType} from 'src/interfaces/wallet';
 import {updateTips} from 'src/lib/api/post';
 import {storeTransaction} from 'src/lib/api/transaction';
 
@@ -26,6 +27,7 @@ type Props = {
   decimals: number;
   currencyId: string;
   postId: string;
+  contentType: ContentType;
   wsAddress: string;
 };
 
@@ -123,6 +125,7 @@ export const usePolkadotApi = () => {
     decimals,
     currencyId,
     postId,
+    contentType,
     wsAddress,
   }: Props) => {
     walletAddressDispatch({
@@ -177,8 +180,11 @@ export const usePolkadotApi = () => {
               signer: injector.signer,
             });
 
-            // Update the tip sent to a post
-            await updateTips(currencyId, amountSent, postId);
+            // Only update the tip sent to a post, but
+            // not to a comment
+            if (contentType === ContentType.POST) {
+              await updateTips(currencyId, amountSent, postId);
+            }
 
             const correctedValue = amountSent / 10 ** decimals;
 
