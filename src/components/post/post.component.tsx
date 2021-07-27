@@ -125,6 +125,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
     setRecipientDetail({
       postId,
       walletAddress,
+      contentType: ContentType.POST,
     });
 
     toggle();
