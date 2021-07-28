@@ -56,16 +56,15 @@ export const useToken = (userId: string) => {
         userId,
       });
 
-      //console.log('the data is: ', data);
       if (data) {
         setIsTokenAddSuccess(true);
         setErrorUserTokens(null);
-      }
 
-      dispatch({
-        type: TokenActionType.ADD_TOKEN,
-        payload: data,
-      });
+        dispatch({
+          type: TokenActionType.ADD_TOKEN,
+          payload: data,
+        });
+      }
     } catch (error) {
       setErrorUserTokens(error.response.status);
     } finally {
@@ -77,8 +76,13 @@ export const useToken = (userId: string) => {
     setErrorUserTokens(null);
   };
 
+  const resetIsTokenAddSuccess = () => {
+    setIsTokenAddSuccess(false);
+  };
+
   return {
     isTokenAddSuccess,
+    resetIsTokenAddSuccess,
     resetErrorUserTokens,
     errorUserTokens,
     errorTokens,
