@@ -76,6 +76,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 'bold',
     },
     tooltipContentRoot: {display: 'flex', flexDirection: 'column'},
+    backdrop: {
+      zIndex: 2000,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
+      color: '#fff',
+    },
   }),
 );
 
