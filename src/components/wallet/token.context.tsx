@@ -57,6 +57,13 @@ function tokenReducer(state: State, action: Action) {
       };
     }
 
+    case TokenActionType.ADD_TOKEN: {
+      return {
+        ...state,
+        userTokens: action.payload,
+      };
+    }
+
     default: {
       throw new Error(`Unhandled action type on tokenReducer`);
     }
