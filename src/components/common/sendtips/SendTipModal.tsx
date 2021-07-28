@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 
+import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -29,7 +31,7 @@ const SendTipModal = ({
   availableTokens,
 }: Props) => {
   //TODO: move to redux
-  const {sendTip, load, tokensReady: balanceDetails} = usePolkadotApi();
+  const {sendTip, loading, load, tokensReady: balanceDetails} = usePolkadotApi();
   const styles = useStyles();
 
   const [senderAddress, setSenderAddress] = useState('');
@@ -236,11 +238,22 @@ const SendTipModal = ({
     });
   };
 
+  useEffect(() => {
+    setOpen(!open);
+  }, [loading]);
+
+  const [open, setOpen] = useState(false);
+
   if (!isShown) return null;
 
   return (
     <>
       <Dialog open={isShown} aria-labelledby="send-tips-window" maxWidth="md">
+        {loading && (
+          <Backdrop className={styles.backdrop} open={open}>
+            <CircularProgress color="inherit" />
+          </Backdrop>
+        )}
         <DialogTitle id="name" onClose={handleCloseModal}>
           {' '}
           Send Tip
