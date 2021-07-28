@@ -183,17 +183,23 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
           Wallet Setting
         </DialogTitle>
         <StyledTabs value={idx} onChange={handleChange} aria-label="tabs-for-wallet-or-tipping">
-          <StyledTab label="Search" />
-          <StyledTab label="Custom Asset" />
+          <StyledTab label="Available Assets" />
+          {
+            //TODO: next task for adding custom asset with rpc address
+            //<StyledTab label="Custom Asset" />
+          }
         </StyledTabs>
         <TabPanel value={idx} index={0}>
-          <DialogContent>
-            <SearchComponent
-              value={value}
-              placeholder="Search by Asset ID, Name or Ticker Symbol"
-              onSubmit={submitSearch}
-            />
-          </DialogContent>
+          {
+            //TODO: next task, searchable assets
+            //<DialogContent>
+            //<SearchComponent
+            //value={value}
+            //placeholder="Search by Asset ID, Name or Ticker Symbol"
+            //onSubmit={submitSearch}
+            ///>
+            //</DialogContent>
+          }
           <DialogContent className={styles.walletSettingDialog}>
             <List>
               {loading && <LoadingComponent />}
@@ -218,16 +224,19 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
             </List>
           </DialogContent>
         </TabPanel>
-        <TabPanel value={idx} index={1}>
-          <DialogContent>
-            <SearchComponent
-              value={RPCAddress}
-              placeholder="RPC Address (wss://rpc.myriad.systems) - Under maintenance, coming soon!"
-              onSubmit={submitSearchRPCAdress}
-              isDisabled={true}
-            />
-          </DialogContent>
-        </TabPanel>
+        {
+          //TODO: next task custom assets with rpc address
+          //<TabPanel value={idx} index={1}>
+          //<DialogContent>
+          //<SearchComponent
+          //value={RPCAddress}
+          //placeholder="RPC Address (wss://rpc.myriad.systems) - Under maintenance, coming soon!"
+          //onSubmit={submitSearchRPCAdress}
+          //isDisabled={true}
+          ///>
+          //</DialogContent>
+          //</TabPanel>
+        }
         <DialogActions>
           <Button
             color="primary"
