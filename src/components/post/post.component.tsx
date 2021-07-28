@@ -16,7 +16,6 @@ import Typography from '@material-ui/core/Typography';
 import {PostActionComponent} from './post-action.component';
 import PostAvatarComponent from './post-avatar.component';
 import PostImageComponent from './post-image.component';
-import {PostOptionsComponent} from './post-options.component';
 import {PostSubHeader} from './post-sub-header.component';
 import PostVideoComponent from './post-video.component';
 import {useStyles} from './post.style';
@@ -58,7 +57,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
   post,
   defaultExpanded = false,
   disable = false,
-  postOwner,
   availableTokens,
 }) => {
   const style = useStyles();
@@ -220,7 +218,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
           disableTypography
           ref={headerRef}
           avatar={renderPostAvatar()}
-          action={<PostOptionsComponent postId={post.id} ownPost={postOwner || false} />}
           title={<CardTitle text={detail.user.name} url={getPlatformUrl()} />}
           subheader={
             <PostSubHeader
