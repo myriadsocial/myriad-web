@@ -20,7 +20,7 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import DialogTitle from '../common/DialogTitle.component';
-import SearchComponent from '../common/search.component';
+//import SearchComponent from '../common/search.component';
 import {TabPanel} from '../common/tab-panel.component';
 import {StyledTabs, StyledTab} from '../common/tabs.component';
 
@@ -95,8 +95,8 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
   const [idx, setIdx] = React.useState(0);
   const [showSetting, setShowSetting] = useState(false);
 
-  const [value, setValue] = useState('');
-  const [RPCAddress, setRPCAddress] = useState('');
+  //const [value, setValue] = useState('');
+  //const [RPCAddress, setRPCAddress] = useState('');
 
   useImperativeHandle(forwardedRef, () => ({
     triggerShowSetting: () => {
@@ -113,13 +113,13 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
     setIdx(newValue);
   };
 
-  const submitSearch = (newValue: string) => {
-    setValue(newValue);
-  };
+  //const submitSearch = (newValue: string) => {
+  //setValue(newValue);
+  //};
 
-  const submitSearchRPCAdress = (newValue: string) => {
-    setRPCAddress(newValue);
-  };
+  //const submitSearchRPCAdress = (newValue: string) => {
+  //setRPCAddress(newValue);
+  //};
 
   const handleCloseError = () => {
     setErrorPopup(false);
