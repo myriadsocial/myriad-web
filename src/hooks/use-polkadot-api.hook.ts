@@ -227,12 +227,14 @@ export const usePolkadotApi = () => {
         }
       }
     } catch (error) {
+      if (error.message === 'Cancelled') {
+        showAlert({
+          severity: 'warning',
+          title: 'Aborted!',
+          message: 'Transaction signing cancelled',
+        });
+      }
       setError(error);
-      showAlert({
-        severity: 'error',
-        title: 'Error!',
-        message: `Something is wrong`,
-      });
     } finally {
       setLoading(false);
     }
