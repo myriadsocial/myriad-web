@@ -16,7 +16,6 @@ import Typography from '@material-ui/core/Typography';
 import {PostActionComponent} from './post-action.component';
 import PostAvatarComponent from './post-avatar.component';
 import PostImageComponent from './post-image.component';
-import {PostOptionsComponent} from './post-options.component';
 import {PostSubHeader} from './post-sub-header.component';
 import PostVideoComponent from './post-video.component';
 import {useStyles} from './post.style';
@@ -29,6 +28,7 @@ import {useWalletAddress} from 'src/components/common/sendtips/use-wallet.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
 import {useModal} from 'src/hooks/use-modal.hook';
+import {usePostHook} from 'src/hooks/use-post.hook';
 import {useSocialDetail} from 'src/hooks/use-social.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {ImageData} from 'src/interfaces/post';
@@ -57,7 +57,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
   post,
   defaultExpanded = false,
   disable = false,
-  postOwner,
   availableTokens,
 }) => {
   const style = useStyles();
@@ -66,6 +65,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
   const {loading, detail} = useSocialDetail(post);
   const {isShown, toggle, hide} = useModal();
 
+  const {likePost, dislikePost} = usePostHook();
   const {openTipSummary} = useTipSummaryHook();
   const [expanded, setExpanded] = useState(defaultExpanded);
   // pindah ke redux
@@ -75,6 +75,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
     contentType: ContentType.POST,
   });
   const {loadWalletDetails, walletDetails} = useWalletAddress(post.id);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const headerRef = useRef<any>();
 
   const defineWalletReceiverDetail = () => {
@@ -199,12 +200,12 @@ const PostComponent: React.FC<PostComponentProps> = ({
     );
   };
 
-  const likePost = () => {
-    console.log('liked Post!');
+  const likePostHandle = () => {
+    likePost(post.id);
   };
 
-  const dislikePost = () => {
-    console.log('disliked Post!');
+  const dislikePostHandle = () => {
+    dislikePost(post.id);
   };
 
   if (loading) return null;
@@ -217,7 +218,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
           disableTypography
           ref={headerRef}
           avatar={renderPostAvatar()}
-          action={<PostOptionsComponent postId={post.id} ownPost={postOwner || false} />}
           title={<CardTitle text={detail.user.name} url={getPlatformUrl()} />}
           subheader={
             <PostSubHeader
@@ -274,8 +274,8 @@ const PostComponent: React.FC<PostComponentProps> = ({
             detail={detail}
             expandComment={handleExpandClick}
             commentExpanded={expanded}
-            likePost={likePost}
-            dislikePost={dislikePost}
+            likePost={likePostHandle}
+            dislikePost={dislikePostHandle}
             tipOwner={tipPostUser}
           />
         </CardActions>

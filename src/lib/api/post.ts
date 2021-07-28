@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import {Post, Comment, CreateCommentProps, ImportPost} from 'src/interfaces/post';
+import {Post, Comment, CreateCommentProps, ImportPost, Like, Dislike} from 'src/interfaces/post';
 import {TimelineSortMethod, TimelineFilter} from 'src/interfaces/timeline';
 
 const MyriadAPI = Axios.create({
@@ -27,6 +27,7 @@ export const getPost = async (
       break;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const where: Record<string, any> = {};
 
   if (filters && filters.tags && filters.tags.length) {
@@ -216,6 +217,24 @@ export const like = async (userId: string, postId: string): Promise<void> => {
       postId,
     },
   });
+};
+
+export const getLikes = async (postId: string): Promise<Like[]> => {
+  const {data} = await MyriadAPI.request({
+    url: `/posts/${postId}/likes`,
+    method: 'GET',
+  });
+
+  return data;
+};
+
+export const getDislikes = async (postId: string): Promise<Dislike[]> => {
+  const {data} = await MyriadAPI.request({
+    url: `/posts/${postId}/dislikes`,
+    method: 'GET',
+  });
+
+  return data;
 };
 
 export const dislike = async (userId: string, postId: string): Promise<void> => {

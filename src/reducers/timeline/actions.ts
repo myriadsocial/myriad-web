@@ -34,8 +34,18 @@ export interface LikePost extends Action {
   postId: string;
 }
 
+export interface UnLikePost extends Action {
+  type: constants.UNLIKE_POST;
+  postId: string;
+}
+
 export interface DislikePost extends Action {
   type: constants.DISLIKE_POST;
+  postId: string;
+}
+
+export interface UnDislikePost extends Action {
+  type: constants.UNDISLIKE_POST;
   postId: string;
 }
 
@@ -54,6 +64,8 @@ export type Actions =
   | UpdateTimelineFilter
   | LikePost
   | DislikePost
+  | UnLikePost
+  | UnDislikePost
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -194,20 +206,60 @@ export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
+      let likeList = await PostAPI.getLikes(postId);
+      likeList = likeList.filter(
+        likeStatus => likeStatus.userId === user.id && likeStatus.status == true,
+      );
+      let dislikeList = await PostAPI.getDislikes(postId);
+      dislikeList = dislikeList.filter(
+        dislikeStatus => dislikeStatus.userId === user.id && dislikeStatus.status == true,
+      );
+
       if (like) {
+        if (!likeList.length && !dislikeList.length) {
+          dispatch({
+            type: constants.LIKE_POST,
+            postId,
+          });
+        } else if (!likeList.length && dislikeList.length) {
+          dispatch({
+            type: constants.LIKE_POST,
+            postId,
+          });
+          dispatch({
+            type: constants.UNDISLIKE_POST,
+            postId,
+          });
+        } else if (likeList.length) {
+          dispatch({
+            type: constants.UNLIKE_POST,
+            postId,
+          });
+        }
         await PostAPI.like(user.id, postId);
-
-        dispatch({
-          type: constants.LIKE_POST,
-          postId,
-        });
       } else {
-        await PostAPI.dislike(user.id, postId);
+        if (!likeList.length && !dislikeList.length) {
+          dispatch({
+            type: constants.DISLIKE_POST,
+            postId,
+          });
+        } else if (!dislikeList.length && likeList.length) {
+          dispatch({
+            type: constants.DISLIKE_POST,
+            postId,
+          });
+          dispatch({
+            type: constants.UNLIKE_POST,
+            postId,
+          });
+        } else if (dislikeList.length) {
+          dispatch({
+            type: constants.UNDISLIKE_POST,
+            postId,
+          });
+        }
 
-        dispatch({
-          type: constants.DISLIKE_POST,
-          postId,
-        });
+        await PostAPI.dislike(user.id, postId);
       }
     } catch (error) {
       dispatch(setError(error.message));

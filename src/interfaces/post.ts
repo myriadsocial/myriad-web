@@ -71,3 +71,17 @@ export type ImportPost = {
   url: string;
   importer: string;
 };
+
+export type Like = {
+  id: string;
+  status: boolean;
+  postId: string;
+  userId: string;
+};
+
+export type Dislike = {
+  id: string;
+  status: boolean;
+  postId: string;
+  userId: string;
+};
