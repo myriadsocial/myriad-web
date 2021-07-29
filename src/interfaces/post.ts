@@ -25,10 +25,11 @@ export interface TipsReceived {
 export interface Post {
   id: string;
   tags: string[];
-  platformUser?: {
+  platformUser: {
+    name?: string;
     username: string;
     platform_account_id: string;
-    profilePictureURL?: string;
+    profile_image_url: string;
   };
   platform: PostOrigin;
   title?: string;

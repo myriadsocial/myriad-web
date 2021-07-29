@@ -26,7 +26,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const PostSubHeader = ({date, platform, importer}: PostSubHeaderProps) => {
+export const PostSubHeader: React.FC<PostSubHeaderProps> = ({date, platform, importer}) => {
   const style = useStyles();
 
   return (
