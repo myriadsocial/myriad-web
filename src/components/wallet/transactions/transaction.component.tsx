@@ -47,7 +47,9 @@ const TransactionComponent: React.FC<TransactionProps> = ({forwardedRef, detaile
         <Typography variant="h4" className={styles.panelHeader}>
           {'My Tipping Jar'}
         </Typography>
-        <ActionButtonComponent className={styles.panelButtons} />
+        {
+          //<ActionButtonComponent className={styles.panelButtons} />
+        }
       </div>
     );
   };
@@ -68,26 +70,26 @@ const TransactionComponent: React.FC<TransactionProps> = ({forwardedRef, detaile
     );
   };
 
-  const ActionButtonComponent = ({className}: StyledComponentProps) => {
-    return (
-      <div className={className}>
-        <Button
-          variant="contained"
-          color="primary"
-          size="medium"
-          className={styles.iconButton}
-          startIcon={<SortIcon />}>
-          Sort by
-        </Button>
-        <Button variant="contained" color="default" size="medium" className={styles.iconButton}>
-          Amount
-        </Button>
-        <Button variant="contained" color="default" size="medium" className={styles.iconButton}>
-          Date
-        </Button>
-      </div>
-    );
-  };
+  //const ActionButtonComponent = ({className}: StyledComponentProps) => {
+  //return (
+  //<div className={className}>
+  //<Button
+  //variant="contained"
+  //color="primary"
+  //size="medium"
+  //className={styles.iconButton}
+  //startIcon={<SortIcon />}>
+  //Sort by
+  //</Button>
+  //<Button variant="contained" color="default" size="medium" className={styles.iconButton}>
+  //Amount
+  //</Button>
+  //<Button variant="contained" color="default" size="medium" className={styles.iconButton}>
+  //Date
+  //</Button>
+  //</div>
+  //);
+  //};
 
   const EmptyTransactionComponent = () => {
     return (
