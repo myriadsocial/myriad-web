@@ -10,6 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import {createStyles, Theme, makeStyles, withStyles} from '@material-ui/core/styles';
 
+import {format} from 'date-fns';
 import {transformTokenValue} from 'src/helpers/transformTokenValue';
 import {Transaction} from 'src/interfaces/transaction';
 import {User} from 'src/interfaces/user';
@@ -113,8 +114,7 @@ const ListItemContent = ({txHistory, userId}: ListItemContentProps) => {
 
   const RenderSecondaryText = (txHistory: Transaction) => {
     const formatDate = () => {
-      const formattedDate = new Date(txHistory.createdAt);
-      return formattedDate.toUTCString();
+      return format(new Date(txHistory.createdAt), 'E, d MMM yyyy p');
     };
 
     return <>{formatDate()}</>;
