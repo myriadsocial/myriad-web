@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 
+import Link from 'next/link';
+
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
-import Link from '@material-ui/core/Link';
+import LinkComponent from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -118,21 +120,28 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest}) => {
             {requests.map(request => {
               return (
                 <ListItem key={request.id} className={style.item} alignItems="flex-start">
-                  <ListItemAvatar>
-                    <Avatar
-                      alt={request.requestor.name}
-                      src={request.requestor.profilePictureURL}
-                    />
-                  </ListItemAvatar>
+                  <Link href={`/${request.requestor.id}`}>
+                    <a href={`/${request.requestor.id}`}>
+                      <ListItemAvatar>
+                        <Avatar
+                          alt={request.requestor.name}
+                          src={request.requestor.profilePictureURL}
+                        />
+                      </ListItemAvatar>
+                    </a>
+                  </Link>
                   <ListItemText>
-                    <Typography
-                      component="span"
-                      variant="h4"
-                      color="textPrimary"
-                      style={{color: '#000000', fontSize: 16}}>
-                      {request.requestor.name}
-                    </Typography>
-
+                    <Link href={`/${request.requestor.id}`}>
+                      <a href={`/${request.requestor.id}`}>
+                        <Typography
+                          component="span"
+                          variant="h4"
+                          color="textPrimary"
+                          style={{color: '#000000', fontSize: 16}}>
+                          {request.requestor.name}
+                        </Typography>
+                      </a>
+                    </Link>
                     <div className={style.action}>
                       <Button
                         onClick={() => rejectFriendRequest(request)}
@@ -158,14 +167,14 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest}) => {
           </List>
 
           <ShowIf condition={totalRequest > requests.length}>
-            <Link
+            <LinkComponent
               className={style.more}
               component="button"
               onClick={() => {
                 console.info("I'm a button.");
               }}>
               (show all request)
-            </Link>
+            </LinkComponent>
           </ShowIf>
         </Collapse>
       </div>
