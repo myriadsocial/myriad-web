@@ -50,7 +50,12 @@ const FriendComponent: React.FC<FriendComponentProps> = props => {
           {title || 'Your Friends'}
         </Typography>
 
-        <SearchComponent value={search} placeholder="Find a Friend" onSubmit={handleSearchFriend} />
+        <SearchComponent
+          value={search}
+          placeholder="Find a Friend"
+          onSubmit={handleSearchFriend}
+          isDebounce
+        />
       </div>
 
       <FriendRequestComponent toggleRequest={toggleRequest} />
