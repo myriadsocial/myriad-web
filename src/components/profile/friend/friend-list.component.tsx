@@ -169,10 +169,10 @@ const FriendsListComponent: React.FC<FriendListProps> = ({
     <Box className={style.root}>
       <div>
         <div className={style.content}>
-          <ShowIf condition={friends.length === 0}>
+          <ShowIf condition={!friends.length}>
             <Typography variant="h4" color="textPrimary" className={style.noContent}>
-              You don't have any Myriad friends yet. Search for people or tell your friends about
-              Myriad!
+              You don&apos;t have any Myriad friends yet. Search for people or tell your friends
+              about Myriad!
             </Typography>
           </ShowIf>
 
@@ -269,6 +269,7 @@ const FriendsListComponent: React.FC<FriendListProps> = ({
           </List>
           <Menu id="long-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
             <Link href={`/${selectedProfileId}`}>
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a>
                 <MenuItem>Visit Profile</MenuItem>
               </a>
