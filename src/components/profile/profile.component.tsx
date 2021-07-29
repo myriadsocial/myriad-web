@@ -126,7 +126,7 @@ export default function ProfileTimeline({profile, loading}: Props) {
     setSelectedTab(0);
 
     return undefined;
-  }, []);
+  }, [profile.id]);
 
   useEffect(() => {
     if (user) {
