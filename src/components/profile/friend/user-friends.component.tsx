@@ -38,7 +38,12 @@ const UserFriendComponent: React.FC<UserFriendProps> = ({profile}) => {
           Friends with {totalFriends} people
         </Typography>
 
-        <SearchComponent value={search} placeholder="Find a Friend" onSubmit={handleSearchFriend} />
+        <SearchComponent
+          value={search}
+          placeholder="Find a Friend"
+          onSubmit={handleSearchFriend}
+          isDebounce
+        />
       </div>
 
       <FriendList profile={profile} friends={friends} cancelFriendRequest={cancelFriendRequest} />
