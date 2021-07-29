@@ -12,14 +12,17 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 
+const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME;
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
     wrapper: {
       width: 400,
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'center',
       flexWrap: 'wrap',
     },
     icon: {
@@ -33,12 +36,16 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       padding: 8,
-      width: 250,
+      width: 280,
       textAlign: 'center',
       lineHeight: '24px',
     },
     polkadot: {
       color: 'rgb(255, 140, 0)',
+    },
+    myriad: {
+      color: theme.palette.primary.main,
+      fontWeight: 600,
     },
     actions: {
       display: 'flex',
@@ -103,6 +110,13 @@ export const NoExtensionComponent: React.FC<NoExtensionComponentProps> = ({isOpe
                 Polkadot.js
               </Link>{' '}
               extension on your browser before sign in
+            </Typography>
+          </div>
+
+          <div className={style.content}>
+            <Typography style={{fontSize: 16, fontWeight: 400}}>
+              If you already installed the extension, make sure you allow website access to &nbsp;
+              <span className={style.myriad}>{APP_NAME}</span>.
             </Typography>
           </div>
 
