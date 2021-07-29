@@ -114,7 +114,7 @@ export const CreatePostExpandedComponent = forwardRef(
       value: (string | string[])[],
       reason: AutocompleteChangeReason,
     ) => {
-      if (reason === 'clear') {
+      if (reason === 'remove-option') {
         if (typeof value === 'string') {
           setTags([value]);
         }
@@ -187,7 +187,7 @@ export const CreatePostExpandedComponent = forwardRef(
             style={{paddingTop: 8}}
             value={tags}
             options={[]}
-            forcePopupIcon={false}
+            disableClearable
             onChange={handleTagsChange}
             renderInput={params => (
               <TextField
@@ -242,7 +242,7 @@ export const CreatePostExpandedComponent = forwardRef(
             variant="contained"
             size="large"
             color="primary"
-            disabled={submitting}
+            disabled={submitting || postText.length === 0}
             className={styles.postButton}
             onClick={savePost}>
             Post Now

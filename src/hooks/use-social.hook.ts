@@ -65,7 +65,7 @@ export const useSocialDetail = (post: Post) => {
         },
         user: {
           name: post.platformUser?.username || '',
-          avatar: post.platformUser?.profilePictureURL || '',
+          avatar: post.platformUser?.profile_image_url || '',
           username: post.platformUser?.username || '',
         },
       });
