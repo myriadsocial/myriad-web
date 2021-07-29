@@ -1,11 +1,9 @@
 import React, {useEffect, useImperativeHandle} from 'react';
 import {useSelector} from 'react-redux';
 
-import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import SortIcon from '@material-ui/icons/Sort';
 
 import {useStyles} from './transaction-style';
 import TransactionListComponent from './transactionList.component';
@@ -14,9 +12,9 @@ import {useTransaction} from 'src/hooks/use-transaction.hooks';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
-type StyledComponentProps = {
-  className?: string;
-};
+//type StyledComponentProps = {
+//className?: string;
+//};
 
 interface TransactionProps {
   forwardedRef: React.ForwardedRef<any>;
