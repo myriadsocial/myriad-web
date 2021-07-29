@@ -260,12 +260,10 @@ const PostComponent: React.FC<PostComponentProps> = ({
               {detail.text}
             </ReactMarkdown>
 
-            {post.assets && post.assets.length > 0 && (
-              <PostImageComponent images={post.assets.map(urlToImageData)} />
+            {post.asset?.images && post.asset.images.length > 0 && (
+              <PostImageComponent images={post.asset.images.map(urlToImageData)} />
             )}
-            {detail.videos && detail.videos.length > 0 && (
-              <PostVideoComponent url={detail.videos[0]} />
-            )}
+            {post.videos && post.videos.length > 0 && <PostVideoComponent url={post.videos[0]} />}
           </ShowIf>
 
           <ShowIf condition={post.platform === 'myriad'}>
@@ -282,8 +280,8 @@ const PostComponent: React.FC<PostComponentProps> = ({
             <Typography variant="body1" color="textPrimary" component="p">
               {detail.text}
             </Typography>
-            {post.assets && post.assets.length > 0 && (
-              <PostImageComponent images={post.assets.map(urlToImageData)} />
+            {post.asset?.images && post.asset?.images.length > 0 && (
+              <PostImageComponent images={post.asset.images.map(urlToImageData)} />
             )}
           </ShowIf>
 
