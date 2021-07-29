@@ -20,6 +20,7 @@ interface Props {
   sortDirection?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function TransactionListComponent({transactions, user}: Props) {
   const style = useStyles();
 
@@ -63,7 +64,7 @@ export default function TransactionListComponent({transactions, user}: Props) {
       <div>
         {user.id === txHistory.from ? (
           <Typography>
-            You sent tips to {txHistory.toUser?.name ?? defaultUserName}'s post with{' '}
+            You sent tips to {txHistory.toUser?.name ?? defaultUserName}&apost;s post with{' '}
             {transformTokenValue(txHistory)} {txHistory.tokenId} coins
           </Typography>
         ) : (
