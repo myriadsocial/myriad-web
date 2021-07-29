@@ -101,7 +101,9 @@ export default function HeaderBar(): JSX.Element {
           <div className={classes.grow} />
           <div className={classes.search}>
             <SearchUserComponent
-              placeholder={isMobile ? 'Search Myria...' : 'Search for people or posts on Myriad...'}
+              placeholder={
+                isMobile ? 'Search Myria...' : 'Search for people or topics on Myriad...'
+              }
             />
           </div>
           <div className={classes.grow} />
