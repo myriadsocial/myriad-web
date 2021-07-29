@@ -77,7 +77,7 @@ const TopicSearchComponent: React.FC<TopicSearchResultProps> = () => {
   const style = useStyles();
   const {query} = useRouter();
 
-  const {load, tokensReady} = usePolkadotApi();
+  const {load} = usePolkadotApi();
   const {hasMore, nextPage, posts} = useTimelineHook();
   const {filterSearchTimeline} = useTimelineFilter();
 
@@ -140,12 +140,7 @@ const TopicSearchComponent: React.FC<TopicSearchResultProps> = () => {
               loader={<LoadingPage />}>
               {posts.map((post: Post, i: number) => (
                 <div key={post.id} id={`post-detail-${i}`}>
-                  <PostComponent
-                    post={post}
-                    postOwner={isOwnPost(post)}
-                    balanceDetails={tokensReady.length > 0 ? tokensReady : []}
-                    availableTokens={availableTokens}
-                  />
+                  <PostComponent post={post} postOwner={isOwnPost(post)} />
                 </div>
               ))}
             </InfiniteScroll>
