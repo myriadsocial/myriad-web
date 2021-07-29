@@ -89,7 +89,6 @@ export const searchProfileFriend: ThunkActionCreator<Actions, RootState> =
 
     try {
       const friends: ExtendedFriend[] = await FriendAPI.searchFriend(userId, query);
-
       dispatch({
         type: constants.FILTER_PROFILE_FRIEND,
         friends,
