@@ -8,6 +8,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 
+import {format} from 'date-fns';
 import {useStyles} from 'src/components/wallet/transactions/transactionList-style';
 import {transformTokenValue} from 'src/helpers/transformTokenValue';
 import {Transaction} from 'src/interfaces/transaction';
@@ -80,8 +81,7 @@ export default function TransactionListComponent({transactions, user}: Props) {
   const RenderSecondaryText = (txHistory: Transaction) => {
     if (!txHistory) return null;
     const formatDate = () => {
-      const formattedDate = new Date(txHistory.createdAt);
-      return formattedDate.toUTCString();
+      return format(new Date(txHistory.createdAt), 'E, d MMM yyyy p');
     };
 
     return <Typography variant="subtitle2">{formatDate()}</Typography>;
