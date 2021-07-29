@@ -83,9 +83,16 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, availableTokens
             </TableRow>
           </TableHead>
           <TableBody>
+            {tokensReady.length === 0 && (
+              <TableRow key="loading-row">
+                <TableCell rowSpan={4} colSpan={2}>
+                  <CircularProgress className={style.spinner} size={20} />
+                </TableCell>
+              </TableRow>
+            )}
             {tokensReady.map(row => (
               <TableRow key={row.tokenSymbol}>
-                <TableCell component="th" scope="row">
+                <TableCell>
                   <div className={style.tokenColumn}>
                     <Avatar alt={row.tokenSymbol} src={row.tokenImage} />
                     <Typography className={style.balanceText}>
