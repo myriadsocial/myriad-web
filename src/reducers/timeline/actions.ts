@@ -6,6 +6,7 @@ import {Action} from 'redux';
 import {Post} from 'src/interfaces/post';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
 import * as PostAPI from 'src/lib/api/post';
+import * as UserAPI from 'src/lib/api/user';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -102,6 +103,21 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
         posts = await PostAPI.getPost(page, timelineSort, timelineFilter);
       }
 
+      // TODO: change this to include from API
+      for await (const post of posts) {
+        if (post.importBy && post.importBy.length > 0) {
+          const user = await UserAPI.getUserDetail(post.importBy[0]);
+
+          post.importer = user;
+        }
+
+        if (post.platform === 'myriad' && post.platformUser) {
+          const user = await UserAPI.getUserDetail(post.platformUser.platform_account_id);
+
+          post.platformUser.profile_image_url = user.profilePictureURL || '';
+        }
+      }
+
       dispatch({
         type: constants.LOAD_TIMELINE,
         posts,
@@ -156,6 +172,7 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
         type: constants.ADD_POST_TO_TIMELINE,
         post: {
           ...data,
+          importer: user,
           comments: [],
         },
       });
@@ -183,6 +200,8 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
         url: postUrl,
         importer: user.id,
       });
+
+      post.importer = user;
 
       dispatch({
         type: constants.ADD_POST_TO_TIMELINE,
