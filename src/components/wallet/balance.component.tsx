@@ -99,7 +99,7 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, availableTokens
                       {
                         // TODO: move to single file constant or enum
                       }
-                      {row.tokenSymbol === 'MYR' ? (
+                      {row.tokenSymbol === 'MYRIA' ? (
                         <StyledBadge badgeContent={<StyledTooltip />}>
                           {row.tokenSymbol}
                         </StyledBadge>

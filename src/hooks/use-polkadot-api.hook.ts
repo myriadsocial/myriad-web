@@ -74,7 +74,7 @@ export const usePolkadotApi = () => {
         if (api) {
           switch (availableTokens[i].id) {
             // TODO: move to single file constant or enum
-            case 'MYR': {
+            case 'MYRIA': {
               const {data: balance} = await api.query.system.account(address);
               const tempBalance = balance.free as unknown;
               tokenBalances.push({
