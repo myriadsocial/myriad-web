@@ -45,6 +45,13 @@ export const ProfileReducer: Redux.Reducer<ProfileState, Actions> = (
       };
     }
 
+    case constants.FILTER_PROFILE_FRIEND: {
+      return {
+        ...state,
+        friends: action.friends,
+      };
+    }
+
     default: {
       return state;
     }
