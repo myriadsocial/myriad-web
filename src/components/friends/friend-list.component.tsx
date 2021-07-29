@@ -1,6 +1,8 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
+import Link from 'next/link';
+
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import List from '@material-ui/core/List';
@@ -94,16 +96,24 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({showOnlineStatus = fa
               <>
                 {user.id !== request.requestorId && (
                   <ListItem key={request.id} className={style.item} alignItems="flex-start">
-                    <ListItemAvatar>
-                      <Avatar
-                        alt={request.requestor.name}
-                        src={request.requestor.profilePictureURL}
-                      />
-                    </ListItemAvatar>
+                    <Link href={`/${request.requestor.id}`}>
+                      <a href={`/${request.requestor.id}`}>
+                        <ListItemAvatar>
+                          <Avatar
+                            alt={request.requestor.name}
+                            src={request.requestor.profilePictureURL}
+                          />
+                        </ListItemAvatar>
+                      </a>
+                    </Link>
                     <ListItemText>
-                      <Typography component="span" variant="h4" color="textPrimary">
-                        {request.requestor.name}
-                      </Typography>
+                      <Link href={`/${request.requestor.id}`}>
+                        <a href={`/${request.requestor.id}`}>
+                          <Typography component="span" variant="h4" color="textPrimary">
+                            {request.requestor.name}
+                          </Typography>
+                        </a>
+                      </Link>
                     </ListItemText>
                     {showOnlineStatus && (
                       <ListItemSecondaryAction>
@@ -115,13 +125,24 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({showOnlineStatus = fa
 
                 {user.id !== request.friendId && (
                   <ListItem key={request.id} className={style.item} alignItems="flex-start">
-                    <ListItemAvatar>
-                      <Avatar alt={request.friend.name} src={request.friend.profilePictureURL} />
-                    </ListItemAvatar>
+                    <Link href={`/${request.friend.id}`}>
+                      <a href={`/${request.friend.id}`}>
+                        <ListItemAvatar>
+                          <Avatar
+                            alt={request.friend.name}
+                            src={request.friend.profilePictureURL}
+                          />
+                        </ListItemAvatar>
+                      </a>
+                    </Link>
                     <ListItemText>
-                      <Typography component="span" variant="h4" color="textPrimary">
-                        {request.friend.name}
-                      </Typography>
+                      <Link href={`/${request.friend.id}`}>
+                        <a href={`/${request.friend.id}`}>
+                          <Typography component="span" variant="h4" color="textPrimary">
+                            {request.friend.name}
+                          </Typography>
+                        </a>
+                      </Link>
                     </ListItemText>
                     {showOnlineStatus && (
                       <ListItemSecondaryAction>
