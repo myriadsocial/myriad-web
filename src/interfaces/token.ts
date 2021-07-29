@@ -2,7 +2,7 @@ export enum TokenId {
   AUSD = 'AUSD',
   DOT = 'DOT',
   ACA = 'ACA',
-  MYR = 'MYR',
+  MYRIA = 'MYRIA',
 }
 
 export interface Token {

@@ -130,11 +130,11 @@ export const CurrencyDetails = ({userTransactionDetails, balanceDetail}: Props) 
     return userTransactionDetails.find(detail => detail.tokenId === balanceDetail.tokenSymbol);
   };
 
-  const convertMYRValue = (valueReceivedOrSent: number) => {
+  const convertMYRIAValue = (valueReceivedOrSent: number) => {
     if (!balanceDetail.tokenDecimals) return 'DECIMALS N/A';
-    const MYR_DECIMALS = balanceDetail.tokenDecimals;
+    const MYRIA_DECIMALS = balanceDetail.tokenDecimals;
     const BASE_NUMBER = 10;
-    const convertedValue = valueReceivedOrSent / BASE_NUMBER ** MYR_DECIMALS;
+    const convertedValue = valueReceivedOrSent / BASE_NUMBER ** MYRIA_DECIMALS;
     return convertedValue;
   };
 
@@ -160,8 +160,8 @@ export const CurrencyDetails = ({userTransactionDetails, balanceDetail}: Props) 
             </TableCell>
             <TableCell align="right">
               <Typography className={style.green}>
-                {currencyDetail.tokenId === 'MYR'
-                  ? convertMYRValue(currencyDetail.sentToMe)
+                {currencyDetail.tokenId === 'MYRIA'
+                  ? convertMYRIAValue(currencyDetail.sentToMe)
                   : currencyDetail.sentToMe}
               </Typography>
             </TableCell>
@@ -172,8 +172,8 @@ export const CurrencyDetails = ({userTransactionDetails, balanceDetail}: Props) 
             </TableCell>
             <TableCell align="right">
               <Typography className={style.red}>
-                {currencyDetail.tokenId === 'MYR'
-                  ? convertMYRValue(currencyDetail.sentToThem)
+                {currencyDetail.tokenId === 'MYRIA'
+                  ? convertMYRIAValue(currencyDetail.sentToThem)
                   : currencyDetail.sentToThem}
               </Typography>
             </TableCell>

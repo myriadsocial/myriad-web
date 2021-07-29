@@ -1,7 +1,7 @@
 import {Transaction} from 'src/interfaces/transaction';
 
 enum TokenID {
-  MYR = 'MYR',
+  MYRIA = 'MYRIA',
   AUSD = 'AUSD',
 }
 
@@ -11,7 +11,7 @@ const basicTransform = (txHistory: Transaction) => {
   return temp;
 };
 
-const transformValueForMYR = (txHistory: Transaction) => {
+const transformValueForMYRIA = (txHistory: Transaction) => {
   let temp = '';
   const BASE_NUMBER = 10;
   if (!txHistory.token) {
@@ -30,7 +30,7 @@ export const transformTokenValue = (txHistory: Transaction) => {
       tokenValue = basicTransform(txHistory);
       break;
     default:
-      tokenValue = transformValueForMYR(txHistory);
+      tokenValue = transformValueForMYRIA(txHistory);
   }
 
   return tokenValue;

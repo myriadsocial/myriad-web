@@ -58,7 +58,7 @@ export const CurrencyTableComponent = ({availableTokens, balanceDetails, onChang
                 value={selectedToken}
                 onChange={handleSetSelectedToken}>
                 <TableCell component="th" scope="row">
-                  {row.tokenSymbol === 'MYR' ? (
+                  {row.tokenSymbol === 'MYRIA' ? (
                     <></>
                   ) : (
                     <>
@@ -72,7 +72,7 @@ export const CurrencyTableComponent = ({availableTokens, balanceDetails, onChang
                 </TableCell>
               </RadioGroup>
               <TableCell align="right">
-                {row.tokenSymbol === 'MYR' ? (
+                {row.tokenSymbol === 'MYRIA' ? (
                   <></>
                 ) : (
                   <Typography className={styles.balanceText}>{row.freeBalance}</Typography>
