@@ -51,7 +51,6 @@ export interface Post {
   hasMedia: boolean;
   link?: string;
   asset?: PostAsset;
-  videos?: string[];
   platformCreatedAt: Date;
   createdAt: Date;
   walletAddress?: string;

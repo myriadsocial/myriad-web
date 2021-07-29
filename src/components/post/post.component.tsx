@@ -263,7 +263,9 @@ const PostComponent: React.FC<PostComponentProps> = ({
             {post.asset?.images && post.asset.images.length > 0 && (
               <PostImageComponent images={post.asset.images.map(urlToImageData)} />
             )}
-            {post.videos && post.videos.length > 0 && <PostVideoComponent url={post.videos[0]} />}
+            {post.asset?.videos && post.asset.videos.length > 0 && (
+              <PostVideoComponent url={post.asset.videos[0]} />
+            )}
           </ShowIf>
 
           <ShowIf condition={post.platform === 'myriad'}>
