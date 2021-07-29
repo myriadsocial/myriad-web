@@ -22,31 +22,41 @@ export interface TipsReceived {
   totalTips: number;
 }
 
+export interface PostAsset {
+  images: string[];
+  videos: string[];
+}
+
+export interface PostOriginUser {
+  name?: string;
+  username: string;
+  platform_account_id: string;
+  profile_image_url: string;
+}
+
+export interface PostMetric {
+  liked: number;
+  disliked: number;
+  comment: number;
+}
+
 export interface Post {
   id: string;
   tags: string[];
-  platformUser: {
-    name?: string;
-    username: string;
-    platform_account_id: string;
-    profile_image_url: string;
-  };
+  platformUser: PostOriginUser;
   platform: PostOrigin;
   title?: string;
   text?: string;
   textId?: string;
   hasMedia: boolean;
   link?: string;
-  assets?: string[];
+  asset?: PostAsset;
+  videos?: string[];
   platformCreatedAt: Date;
   createdAt: Date;
   walletAddress?: string;
   comments: Comment[];
-  publicMetric?: {
-    liked: number;
-    disliked: number;
-    comment: number;
-  };
+  publicMetric?: PostMetric;
   importBy?: string[];
   importer?: User;
   tipsReceived?: TipsReceived[];
