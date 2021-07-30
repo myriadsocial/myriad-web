@@ -33,6 +33,10 @@ export const WelcomeBannerComponent = forwardRef(
       setShowWelcomeBanner(false);
     };
 
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+    };
+
     return (
       <>
         <Dialog
@@ -51,7 +55,7 @@ export const WelcomeBannerComponent = forwardRef(
               <br />
               <Link
                 href={'https://wiki.acala.network/learn/get-started#get-test-tokens'}
-                onClick={e => e.preventDefault()}>
+                onClick={(e: any) => handleClick(e)}>
                 Get more free testnet aUSD
               </Link>
             </Typography>
