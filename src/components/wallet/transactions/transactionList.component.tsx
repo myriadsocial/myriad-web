@@ -73,14 +73,19 @@ export default function TransactionListComponent({transactions, user}: Props) {
                 {txHistory.toUser?.name ?? defaultUserName}&apost;s
               </a>
             </Link>{' '}
-            post with {transformTokenValue(txHistory)} {txHistory.tokenId} coins
+            post with {transformTokenValue(txHistory)} {txHistory.tokenId}
+          </Typography>
+        ) : txHistory.fromUser?.name === 'Myriad' ? (
+          <Typography>
+            You get tipping reward in the form of {transformTokenValue(txHistory)}{' '}
+            {txHistory.tokenId}
           </Typography>
         ) : (
           <Typography>
             <Link href={`/${direction(txHistory)}`}>
               <a href={`/${direction(txHistory)}`}>{txHistory.fromUser?.name ?? defaultUserName}</a>
             </Link>{' '}
-            tipped your post with {transformTokenValue(txHistory)} {txHistory.tokenId} coins
+            tipped your post with {transformTokenValue(txHistory)} {txHistory.tokenId}
           </Typography>
         )}
       </div>
