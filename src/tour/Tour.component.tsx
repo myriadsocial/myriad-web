@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Joyride, {CallBackProps, STATUS, Step} from 'react-joyride';
 
 import {Button} from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
+import {WelcomeBannerComponent} from 'src/components/welcome-banner/welcomeBanner.component';
 import theme from 'src/themes/light';
 
 type TourComponentProps = {
@@ -62,11 +63,14 @@ const TourComponent: React.FC<TourComponentProps> = ({disabled, onFinished}) => 
     },
   ];
 
+  const [isFinish, setIsFinish] = useState(false);
+
   const handleJoyrideCallback = (data: CallBackProps) => {
     const {status} = data;
 
     if (([STATUS.FINISHED] as string[]).includes(status)) {
       onFinished(true);
+      setIsFinish(true);
     }
   };
 
@@ -104,6 +108,7 @@ const TourComponent: React.FC<TourComponentProps> = ({disabled, onFinished}) => 
         }}
         callback={handleJoyrideCallback}
       />
+      {isFinish && <WelcomeBannerComponent />}
     </>
   );
 };

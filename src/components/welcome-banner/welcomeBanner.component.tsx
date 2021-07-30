@@ -10,13 +10,16 @@ import Typography from '@material-ui/core/Typography';
 import DialogTitle from '../common/DialogTitle.component';
 import {useStyles} from './welcomeBanner.style';
 
+import BannerImage from 'src/images/banner-welcome.svg';
+
 export type WelcomeBannerComponentProps = {
   triggerWelcomeBanner: () => void;
 };
 
+// eslint-disable-next-line react/display-name
 export const WelcomeBannerComponent = forwardRef(
   (_, ref: React.Ref<WelcomeBannerComponentProps>) => {
-    const [showWelcomeBanner, setShowWelcomeBanner] = useState(false);
+    const [showWelcomeBanner, setShowWelcomeBanner] = useState(true);
     const styles = useStyles();
 
     useImperativeHandle(
@@ -33,10 +36,6 @@ export const WelcomeBannerComponent = forwardRef(
       setShowWelcomeBanner(false);
     };
 
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-    };
-
     return (
       <>
         <Dialog
@@ -45,18 +44,29 @@ export const WelcomeBannerComponent = forwardRef(
           aria-labelledby="welcome-banner-dialog"
           maxWidth="md">
           <DialogTitle id="name" onClose={closeWelcomeBanner}>
-            ''
+            {''}
           </DialogTitle>
           <DialogContent dividers>
-            <Typography>Welcome to Myriad Demo</Typography>
-            <Typography>
+            <div className={styles.center}>
+              <BannerImage />
+            </div>
+            <Typography className={`${styles.paragraph} ${styles.primary} ${styles.center}`}>
+              Welcome to Myriad Demo
+            </Typography>
+            <Typography className={`${styles.paragraph} ${styles.center}`}>
               <br /> Thanks for trying this app, you get free 10 aUSD test token.
               <br /> Claim your freedom. Become the master of your own social media experience.{' '}
               <br />
-              <Link
-                href={'https://wiki.acala.network/learn/get-started#get-test-tokens'}
-                onClick={(e: any) => handleClick(e)}>
-                Get more free testnet aUSD
+              <br />
+            </Typography>
+            <Typography className={`${styles.paragraph} ${styles.center} ${styles.mb2}`}>
+              <Link href={'https://wiki.acala.network/learn/get-started#get-test-tokens'}>
+                <a
+                  href={'https://wiki.acala.network/learn/get-started#get-test-tokens'}
+                  target="_blank"
+                  rel="noreferrer">
+                  Get more free testnet aUSD
+                </a>
               </Link>
             </Typography>
           </DialogContent>
@@ -67,7 +77,7 @@ export const WelcomeBannerComponent = forwardRef(
               color="primary"
               style={{width: 300}}
               onClick={closeWelcomeBanner}>
-              Let's get started!
+              Let{"'"}s get started!
             </Button>
           </DialogActions>
         </Dialog>
