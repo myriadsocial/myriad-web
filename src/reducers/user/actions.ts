@@ -5,6 +5,7 @@ import * as constants from './constants';
 import {Action} from 'redux';
 import {Token} from 'src/interfaces/token';
 import {ExtendedUser, User, UserTransactionDetail} from 'src/interfaces/user';
+import {WalletDetail} from 'src/interfaces/wallet';
 import * as TokenAPI from 'src/lib/api/token';
 import * as UserAPI from 'src/lib/api/user';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -38,6 +39,11 @@ export interface UpdateUser extends Action {
   user: ExtendedUser;
 }
 
+export interface SetRecipientDetail extends Action {
+  type: constants.SET_RECIPIENT_DETAIL;
+  recipientDetail: WalletDetail;
+}
+
 /**
  * Union Action Types
  */
@@ -48,6 +54,7 @@ export type Actions =
   | SetUserAsAnonymous
   | UpdateUser
   | FetchUserTransactionDetails
+  | SetRecipientDetail
   | BaseAction;
 
 /**
@@ -62,6 +69,11 @@ export const setUser = (user: ExtendedUser): FetchUser => ({
 export const setAnonymous = (alias: string): SetUserAsAnonymous => ({
   type: constants.SET_USER_AS_ANONYMOUS,
   alias,
+});
+
+export const setRecipientDetail = (recipientDetail: WalletDetail): SetRecipientDetail => ({
+  type: constants.SET_RECIPIENT_DETAIL,
+  recipientDetail,
 });
 
 /**
