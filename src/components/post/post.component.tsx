@@ -33,8 +33,10 @@ import {usePostHook} from 'src/hooks/use-post.hook';
 import {useSocialDetail} from 'src/hooks/use-social.hook';
 import {ImageData} from 'src/interfaces/post';
 import {Post, Comment} from 'src/interfaces/post';
+import {WalletDetail} from 'src/interfaces/wallet';
 import {ContentType} from 'src/interfaces/wallet';
 import {RootState} from 'src/reducers';
+import {TimelineState} from 'src/reducers/timeline/reducer';
 import {setRecipientDetail} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {v4 as uuid} from 'uuid';
@@ -68,6 +70,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
     anonymous,
     tokens: availableTokens,
   } = useSelector<RootState, UserState>(state => state.userState);
+  const {walletDetails} = useSelector<RootState, TimelineState>(state => state.timelineState);
   const {loading, detail} = useSocialDetail(post);
   const {isShown, toggle, hide} = useModal();
 
@@ -75,12 +78,12 @@ const PostComponent: React.FC<PostComponentProps> = ({
   const {openTipSummary} = useTipSummaryHook();
   const [expanded, setExpanded] = useState(defaultExpanded);
   //Move to redux
-  const {loadWalletDetails, walletDetails} = useWalletAddress(post.id);
+  const {loadWalletDetails} = useWalletAddress(post.id);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const headerRef = useRef<any>();
 
   const defineWalletReceiverDetail = () => {
-    const tempWalletDetail = walletDetails.filter(walletDetail => {
+    const tempWalletDetail = walletDetails.filter((walletDetail: WalletDetail) => {
       return walletDetail.postId === post.id;
     });
     const matchingWalletDetail = tempWalletDetail[0];
