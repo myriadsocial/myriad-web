@@ -2,6 +2,7 @@ import React, {useState, useEffect, useImperativeHandle} from 'react';
 
 import {useSession} from 'next-auth/client';
 
+import {Tooltip} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -87,6 +88,9 @@ const useStyles = makeStyles((theme: Theme) =>
       '&:active': {
         backgroundColor: '#fff',
         color: theme.palette.primary.main,
+      },
+      '&.Mui-disabled': {
+        color: '#FFF',
       },
     },
     tokenColumn: {
@@ -191,10 +195,9 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, hidden}) => {
       <CurrencyTable />
       <div className={style.buttonContainer}>
         {!hidden && (
-          <Button className={style.button} disabled>
-            {' '}
-            Add more currency{' '}
-          </Button>
+          <Tooltip title="Coming soon" arrow>
+            <Button className={style.button}> Add more currency </Button>
+          </Tooltip>
         )}
       </div>
     </div>

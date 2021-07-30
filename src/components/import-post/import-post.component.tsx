@@ -161,17 +161,24 @@ const ImportPostComponent: React.FC<ImportPostProps> = ({user}) => {
                     scrolling="yes"
                   />
                 </ShowIf>
+
+                <ShowIf condition={social === SocialsEnum.FACEBOOK || social === null}>
+                  <Typography color="textSecondary" style={{margin: '16px 0'}}>
+                    Sorry, this feature is in development. You can still import Reddit and Twitter
+                    posts though.
+                  </Typography>
+                </ShowIf>
               </div>
             </CardContent>
             <CardActions className={styles.cardActions}>
               <Button
                 variant="contained"
-                disabled={social === null}
+                disabled={social === SocialsEnum.FACEBOOK || social === null}
                 size="large"
                 color="primary"
                 style={{width: 300}}
                 onClick={confirmImport}>
-                Post now
+                Import now
               </Button>
             </CardActions>
           </Card>
