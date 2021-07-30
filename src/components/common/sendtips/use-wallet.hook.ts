@@ -1,8 +1,6 @@
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 
-import {ContentType} from 'src/interfaces/wallet';
-import * as WalletAddressAPI from 'src/lib/api/wallet';
 import {fetchWalletDetails} from 'src/reducers/timeline/actions';
 
 export const useWalletAddress = (postId: string) => {
@@ -14,15 +12,7 @@ export const useWalletAddress = (postId: string) => {
   const loadWalletDetails = async () => {
     setLoading(true);
     try {
-      const {walletAddress} = await WalletAddressAPI.getWalletAddress(postId);
-
-      const walletDetailPayload = {
-        walletAddress,
-        postId,
-        contentType: ContentType.POST,
-      };
-
-      dispatch(fetchWalletDetails(walletDetailPayload));
+      dispatch(fetchWalletDetails(postId));
     } catch (error) {
       setError(error);
     } finally {
