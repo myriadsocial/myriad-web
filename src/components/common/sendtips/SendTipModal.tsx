@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useSelector} from 'react-redux';
 
 import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
@@ -20,18 +21,13 @@ import {
   Props,
   SendTipWithPayloadProps,
 } from 'src/interfaces/send-tips/send-tips';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
-const SendTipModal = ({
-  isShown,
-  hide,
-  walletReceiverDetail,
-  userAddress,
-  postId,
-  success,
-  availableTokens,
-}: Props) => {
+const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTokens}: Props) => {
   //TODO: move to redux
   const {sendTip, loading, load, tokensReady: balanceDetails} = usePolkadotApi();
+  const {recipientDetail} = useSelector<RootState, UserState>(state => state.userState);
   const styles = useStyles();
 
   const [senderAddress, setSenderAddress] = useState('');
@@ -58,6 +54,7 @@ const SendTipModal = ({
   // reset form
   useEffect(() => {
     handleClearValue();
+    console.log({loading});
   }, []);
 
   // load balance detail only when component need to be shown
@@ -68,10 +65,11 @@ const SendTipModal = ({
   }, [isShown]);
 
   useEffect(() => {
-    if (walletReceiverDetail && sendTipClicked) {
+    console.log({recipientDetail});
+    if (recipientDetail && sendTipClicked) {
       dispatchSendTip();
     }
-  }, [sendTipClicked, walletReceiverDetail, tokenProperties, tipAmount]);
+  }, [sendTipClicked, recipientDetail, tokenProperties, tipAmount]);
 
   useEffect(() => {
     if (balanceDetails?.length > 0) {
@@ -207,12 +205,12 @@ const SendTipModal = ({
   const dispatchSendTip = () => {
     sendTipWithPayload({
       senderAddress,
-      toAddress: walletReceiverDetail.walletAddress,
+      toAddress: recipientDetail.walletAddress,
       amountSent: tipAmount,
       decimals: tokenProperties.tokenDecimals,
       currencyId: tokenProperties.tokenId,
-      postId: walletReceiverDetail.postId,
-      contentType: walletReceiverDetail.contentType,
+      postId: recipientDetail.postId,
+      contentType: recipientDetail.contentType,
       wsAddress: tokenProperties.wsAddress,
     });
   };
