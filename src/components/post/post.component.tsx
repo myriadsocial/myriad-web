@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -35,6 +35,7 @@ import {ImageData} from 'src/interfaces/post';
 import {Post, Comment} from 'src/interfaces/post';
 import {ContentType} from 'src/interfaces/wallet';
 import {RootState} from 'src/reducers';
+import {setRecipientDetail} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {v4 as uuid} from 'uuid';
 
@@ -61,6 +62,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
 }) => {
   const style = useStyles();
   const router = useRouter();
+  const dispatch = useDispatch();
   const {
     user,
     anonymous,
@@ -72,12 +74,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
   const {likePost, dislikePost} = usePostHook();
   const {openTipSummary} = useTipSummaryHook();
   const [expanded, setExpanded] = useState(defaultExpanded);
-  // pindah ke redux
-  const [recipientDetail, setRecipientDetail] = useState({
-    postId: '',
-    walletAddress: '',
-    contentType: ContentType.POST,
-  });
+  //Move to redux
   const {loadWalletDetails, walletDetails} = useWalletAddress(post.id);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const headerRef = useRef<any>();
@@ -87,7 +84,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
       return walletDetail.postId === post.id;
     });
     const matchingWalletDetail = tempWalletDetail[0];
-    setRecipientDetail(matchingWalletDetail);
+    dispatch(setRecipientDetail(matchingWalletDetail));
   };
 
   useEffect(() => {
@@ -327,7 +324,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
           success={postId => handleTipSentSuccess(postId)}
           userAddress={user.id}
           postId={post.id as string}
-          walletReceiverDetail={recipientDetail}
         />
       )}{' '}
     </>
