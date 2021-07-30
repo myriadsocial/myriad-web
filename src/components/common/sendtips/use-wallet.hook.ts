@@ -1,15 +1,12 @@
 import {useState} from 'react';
-
-import {
-  useWalletAddress as baseUseWalletAddress,
-  WalletAddressActionType,
-} from './send-tip.context';
+import {useDispatch} from 'react-redux';
 
 import {ContentType} from 'src/interfaces/wallet';
 import * as WalletAddressAPI from 'src/lib/api/wallet';
+import {fetchWalletDetails} from 'src/reducers/timeline/actions';
 
 export const useWalletAddress = (postId: string) => {
-  const {state, dispatch} = baseUseWalletAddress();
+  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,10 +22,7 @@ export const useWalletAddress = (postId: string) => {
         contentType: ContentType.POST,
       };
 
-      dispatch({
-        type: WalletAddressActionType.INIT_WALLET_ADDRESS,
-        payload: walletDetailPayload,
-      });
+      dispatch(fetchWalletDetails(walletDetailPayload));
     } catch (error) {
       setError(error);
     } finally {
@@ -39,7 +33,6 @@ export const useWalletAddress = (postId: string) => {
   return {
     error,
     loading,
-    walletDetails: state.walletDetails,
     loadWalletDetails,
   };
 };

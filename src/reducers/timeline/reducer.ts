@@ -6,6 +6,7 @@ import update from 'immutability-helper';
 import * as Redux from 'redux';
 import {Post} from 'src/interfaces/post';
 import {TimelineType, TimelineSortMethod, TimelineFilter} from 'src/interfaces/timeline';
+import {WalletDetail} from 'src/interfaces/wallet';
 
 export interface TimelineState extends BaseState {
   type: TimelineType;
@@ -14,6 +15,7 @@ export interface TimelineState extends BaseState {
   hasMore: boolean;
   page: number;
   posts: Post[];
+  walletDetails: WalletDetail[];
 }
 
 const initalState: TimelineState = {
@@ -23,6 +25,7 @@ const initalState: TimelineState = {
   sort: 'created',
   hasMore: true,
   posts: [],
+  walletDetails: [],
 };
 
 export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
@@ -97,6 +100,13 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
 
           return post;
         }),
+      };
+    }
+
+    case constants.FETCH_WALLET_DETAILS: {
+      return {
+        ...state,
+        walletDetails: [...state.walletDetails, action.payload],
       };
     }
 

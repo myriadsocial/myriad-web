@@ -5,8 +5,10 @@ import * as constants from './constants';
 import {Action} from 'redux';
 import {Post} from 'src/interfaces/post';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
+import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 import * as PostAPI from 'src/lib/api/post';
 import * as UserAPI from 'src/lib/api/user';
+import * as WalletAddressAPI from 'src/lib/api/wallet';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -55,6 +57,11 @@ export interface UpdateTimelineFilter extends Action {
   filter: TimelineFilter;
 }
 
+export interface FetchWalletDetails extends Action {
+  type: constants.FETCH_WALLET_DETAILS;
+  payload: WalletDetail;
+}
+
 /**
  * Union Action Types
  */
@@ -67,6 +74,7 @@ export type Actions =
   | DislikePost
   | UnLikePost
   | UnDislikePost
+  | FetchWalletDetails
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -287,5 +295,28 @@ export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
       dispatch(setError(error.message));
     } finally {
       dispatch(setLoading(false));
+    }
+  };
+
+export const fetchWalletDetails: ThunkActionCreator<Actions, RootState> =
+  (postId: string) => async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      const {walletAddress} = await WalletAddressAPI.getWalletAddress(postId);
+
+      const walletDetailPayload = {
+        walletAddress,
+        postId,
+        contentType: ContentType.POST,
+      };
+
+      dispatch({
+        type: constants.FETCH_WALLET_DETAILS,
+        payload: walletDetailPayload,
+      });
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
     }
   };
