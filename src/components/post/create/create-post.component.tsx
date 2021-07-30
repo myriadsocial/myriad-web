@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 
+import {Tooltip} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -88,14 +89,16 @@ export default function CreatePostComponent({user, experiences}: Props) {
             startIcon={<CameraAltIcon />}>
             Post Photos
           </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            disabled
-            className={styles.button}
-            startIcon={<VideocamIcon />}>
-            Post Videos
-          </Button>
+
+          <Tooltip title="Coming soon" arrow>
+            <Button
+              variant="outlined"
+              color="primary"
+              className={styles.button}
+              startIcon={<VideocamIcon />}>
+              Post Videos
+            </Button>
+          </Tooltip>
           <Button
             variant="contained"
             color="primary"

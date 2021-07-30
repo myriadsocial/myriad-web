@@ -1,5 +1,6 @@
 import React, {forwardRef, useImperativeHandle, useState, useRef} from 'react';
 
+import {Tooltip} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -162,9 +163,11 @@ export const CreatePostExpandedComponent = forwardRef(
             </Avatar>
           }
           action={
-            <Button aria-label="post-settings" variant="contained" size="medium" color="primary">
-              Post Setting
-            </Button>
+            <Tooltip title="Coming soon" arrow>
+              <Button aria-label="post-settings" variant="contained" size="medium" color="primary">
+                Post Setting
+              </Button>
+            </Tooltip>
           }
           title={user.name}
           subheader=""
@@ -222,15 +225,21 @@ export const CreatePostExpandedComponent = forwardRef(
               style={{display: 'none'}}
               accept="image/*"
             />
-            <IconButton color="primary" aria-label="upload-video" disabled onClick={selectVideo}>
-              <VideocamIcon />
-            </IconButton>
-            <IconButton color="primary" disabled aria-label="add-people">
-              <PeopleIcon />
-            </IconButton>
-            <IconButton color="primary" disabled aria-label="add-link">
-              <LinkIcon />
-            </IconButton>
+            <Tooltip title="Coming soon" arrow>
+              <IconButton color="primary" aria-label="upload-video" onClick={selectVideo}>
+                <VideocamIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Coming soon" arrow>
+              <IconButton color="primary" aria-label="add-people">
+                <PeopleIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Coming soon" arrow>
+              <IconButton color="primary" aria-label="add-link">
+                <LinkIcon />
+              </IconButton>
+            </Tooltip>
           </div>
 
           <ShowIf condition={files.length > 0}>
