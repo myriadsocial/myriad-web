@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
+import Link from 'next/link';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
@@ -101,11 +103,18 @@ const ListItemContent = ({txHistory, userId}: ListItemContentProps) => {
       <>
         {userId === txHistory.from ? (
           <>
-            You tipped {txHistory.toUser?.name ?? defaultUserName} with {txHistory.tokenId}
+            You tipped{' '}
+            <Link href={`/${direction(txHistory)}`}>
+              <a href={`/${direction(txHistory)}`}>{txHistory.toUser?.name ?? defaultUserName}</a>
+            </Link>{' '}
+            with {txHistory.tokenId}
           </>
         ) : (
           <>
-            {txHistory.fromUser?.name ?? defaultUserName} tipped you {txHistory.tokenId}
+            <Link href={`/${direction(txHistory)}`}>
+              <a href={`/${direction(txHistory)}`}>{txHistory.fromUser?.name ?? defaultUserName}</a>
+            </Link>{' '}
+            tipped you {txHistory.tokenId}
           </>
         )}
       </>
@@ -120,18 +129,27 @@ const ListItemContent = ({txHistory, userId}: ListItemContentProps) => {
     return <>{formatDate()}</>;
   };
 
+  const direction = (history: Transaction) => {
+    if (userId === history.fromUser?.id) return history.toUser?.id;
+    else return history.fromUser?.id;
+  };
+
   return (
     <div key={txHistory.id}>
       <ListItem>
         <StyledListItemAvatar>
-          <StyledAvatar
-            aria-label="avatar"
-            src={
-              txHistory.toUser?.id === userId
-                ? txHistory.fromUser?.profilePictureURL
-                : txHistory.toUser?.profilePictureURL
-            }
-          />
+          <Link href={`/${direction(txHistory)}`}>
+            <a href={`/${direction(txHistory)}`}>
+              <StyledAvatar
+                aria-label="avatar"
+                src={
+                  txHistory.toUser?.id === userId
+                    ? txHistory.fromUser?.profilePictureURL
+                    : txHistory.toUser?.profilePictureURL
+                }
+              />
+            </a>
+          </Link>
         </StyledListItemAvatar>
         <StyledListItemText
           primary={RenderPrimaryText(txHistory)}
