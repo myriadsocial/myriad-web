@@ -20,7 +20,6 @@ export interface Props {
   postId: string;
   receiverId?: string;
   availableTokens: Token[];
-  walletReceiverDetail: WalletDetail;
 }
 
 export interface SendTipWithPayloadProps {
