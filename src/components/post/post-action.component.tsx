@@ -8,13 +8,9 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
 import {usePostActionHook} from './post-action.hook';
-import RedditReactionComponent from './reactions/reddit.component';
-import TwitterReactionComponent from './reactions/twitter.component';
 
 import clsx from 'clsx';
-import ShowIf from 'src/components/common/show-if.component';
 import {Post} from 'src/interfaces/post';
-import {PostDetail} from 'src/lib/parse-social.util';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,7 +35,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type PostActionProps = {
   post: Post;
-  detail: PostDetail;
   commentExpanded: boolean;
   expandComment: () => void;
   likePost: () => void;
@@ -49,7 +44,6 @@ type PostActionProps = {
 
 export const PostActionComponent: React.FC<PostActionProps> = ({
   post,
-  detail,
   expandComment,
   commentExpanded,
   likePost,
@@ -62,13 +56,6 @@ export const PostActionComponent: React.FC<PostActionProps> = ({
 
   return (
     <>
-      <ShowIf condition={post.platform === 'twitter' && false}>
-        <TwitterReactionComponent metric={detail.metric} />
-      </ShowIf>
-      <ShowIf condition={post.platform === 'reddit' && false}>
-        <RedditReactionComponent metric={detail.metric} />
-      </ShowIf>
-
       <Button aria-label="like post" startIcon={<ThumbUpIcon />} onClick={likePost}>
         ({post.publicMetric?.liked || 0})
       </Button>

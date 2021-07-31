@@ -101,7 +101,7 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({showOnlineStatus = fa
                         <ListItemAvatar>
                           <Avatar
                             alt={request.requestor.name}
-                            src={request.requestor.profilePictureURL}
+                            src={request.requestor.profile_picture?.sizes.thumbnail}
                           />
                         </ListItemAvatar>
                       </a>
@@ -130,7 +130,7 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({showOnlineStatus = fa
                         <ListItemAvatar>
                           <Avatar
                             alt={request.friend.name}
-                            src={request.friend.profilePictureURL}
+                            src={request.friend.profile_picture?.sizes.thumbnail}
                           />
                         </ListItemAvatar>
                       </a>

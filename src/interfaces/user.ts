@@ -1,3 +1,4 @@
+import {Sizes} from './assets';
 import {People} from './people';
 import {Post} from './post';
 
@@ -19,6 +20,9 @@ export interface User {
   name: string;
   username: string;
   profilePictureURL?: string;
+  profile_picture?: {
+    sizes: Sizes;
+  };
   bannerImageUrl?: string;
   anonymous: boolean;
   fcmTokens?: string[];

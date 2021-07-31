@@ -3,6 +3,7 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
+import {generateImageSizes} from 'src/helpers/cloudinary';
 import {ExtendedFriend, FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
@@ -69,7 +70,21 @@ export const fetchFriend: ThunkActionCreator<Actions, RootState> =
 
       dispatch({
         type: constants.FETCH_FRIEND,
-        friends,
+        friends: friends.map(friend => {
+          if (friend.requestor && friend.requestor.profilePictureURL) {
+            friend.requestor.profile_picture = {
+              sizes: generateImageSizes(friend.requestor.profilePictureURL),
+            };
+          }
+
+          if (friend.friend && friend.friend.profilePictureURL) {
+            friend.friend.profile_picture = {
+              sizes: generateImageSizes(friend.friend.profilePictureURL),
+            };
+          }
+
+          return friend;
+        }),
       });
     } catch (error) {
       dispatch(setError(error.message));

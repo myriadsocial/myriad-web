@@ -3,6 +3,7 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
+import {generateImageSizes} from 'src/helpers/cloudinary';
 import {Post} from 'src/interfaces/post';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
@@ -122,7 +123,12 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
         if (post.platform === 'myriad' && post.platformUser) {
           const user = await UserAPI.getUserDetail(post.platformUser.platform_account_id);
 
-          post.platformUser.profile_image_url = user.profilePictureURL || '';
+          if (user.profilePictureURL) {
+            const sizes = generateImageSizes(user.profilePictureURL);
+            post.platformUser.profile_image_url = sizes.thumbnail;
+          } else {
+            post.platformUser.profile_image_url = '';
+          }
         }
       }
 
@@ -169,6 +175,7 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
           videos: [],
         },
         platformUser: {
+          name: user.name,
           username: user.name,
           platform_account_id: user.id,
           profile_image_url: user.profilePictureURL || '',
