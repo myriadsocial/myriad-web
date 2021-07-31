@@ -28,7 +28,7 @@ export interface PostAsset {
 }
 
 export interface PostOriginUser {
-  name?: string;
+  name: string;
   username: string;
   platform_account_id: string;
   profile_image_url: string;
@@ -46,7 +46,7 @@ export interface Post {
   platformUser: PostOriginUser;
   platform: PostOrigin;
   title?: string;
-  text?: string;
+  text: string;
   textId?: string;
   hasMedia: boolean;
   link?: string;

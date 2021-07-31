@@ -12,6 +12,7 @@ import Timeline from 'src/components/timeline/timeline.component';
 import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
 import {Wallet} from 'src/components/wallet/wallet.component';
+import {generateImageSizes} from 'src/helpers/cloudinary';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
@@ -119,6 +120,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     dispatch(setAnonymous(username));
   } else {
     const user = await UserAPI.getUserDetail(userId);
+
+    if (user.profilePictureURL) {
+      user.profile_picture = {
+        sizes: generateImageSizes(user.profilePictureURL),
+      };
+    }
 
     dispatch(setUser(user));
   }

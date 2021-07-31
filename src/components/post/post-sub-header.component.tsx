@@ -4,11 +4,12 @@ import Typography from '@material-ui/core/Typography';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
+import DateFormat from 'src/components/common/DateFormat';
 import {User} from 'src/interfaces/user';
 
 type PostSubHeaderProps = {
   platform: string;
-  date: string;
+  date: Date;
   importer?: User;
 };
 
@@ -31,7 +32,7 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({date, platform, imp
 
   return (
     <Typography component="div" className={style.root}>
-      {date}
+      <DateFormat date={date} />
 
       {importer && (
         <>

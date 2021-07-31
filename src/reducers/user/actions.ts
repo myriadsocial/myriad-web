@@ -3,6 +3,7 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
+import {generateImageSizes} from 'src/helpers/cloudinary';
 import {Token} from 'src/interfaces/token';
 import {ExtendedUser, User, UserTransactionDetail} from 'src/interfaces/user';
 import {WalletDetail} from 'src/interfaces/wallet';
@@ -90,6 +91,11 @@ export const fetchUser: ThunkActionCreator<Actions, RootState> =
         user.userCredentials = [];
       }
 
+      if (user.profilePictureURL) {
+        user.profile_picture = {
+          sizes: generateImageSizes(user.profilePictureURL),
+        };
+      }
       dispatch(setUser(user));
     } catch (error) {
       dispatch(setError(error.message));
@@ -124,6 +130,7 @@ export const fetchToken: ThunkActionCreator<Actions, RootState> =
     }
   };
 
+// TODO: move this to transaction reducer
 export const fetchUserTransactionDetails: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {
     dispatch(setLoading(true));

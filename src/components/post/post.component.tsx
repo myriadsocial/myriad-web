@@ -30,8 +30,6 @@ import ShowIf from 'src/components/common/show-if.component';
 import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
 import {useModal} from 'src/hooks/use-modal.hook';
 import {usePostHook} from 'src/hooks/use-post.hook';
-import {useSocialDetail} from 'src/hooks/use-social.hook';
-import {ImageData} from 'src/interfaces/post';
 import {Post, Comment} from 'src/interfaces/post';
 import {WalletDetail} from 'src/interfaces/wallet';
 import {ContentType} from 'src/interfaces/wallet';
@@ -71,7 +69,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
     tokens: availableTokens,
   } = useSelector<RootState, UserState>(state => state.userState);
   const {walletDetails} = useSelector<RootState, TimelineState>(state => state.timelineState);
-  const {loading, detail} = useSocialDetail(post);
   const {isShown, toggle, hide} = useModal();
 
   const {likePost, dislikePost} = usePostHook();
@@ -94,7 +91,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
     loadWalletDetails();
   }, [post.id]);
 
-  if (!detail && !user && !anonymous) return null;
+  if (!user && !anonymous) return null;
 
   if (!walletDetails) return null;
 
@@ -176,32 +173,10 @@ const PostComponent: React.FC<PostComponentProps> = ({
     return url;
   };
 
-  const urlToImageData = (url: string): ImageData => {
-    return {
-      src: url,
-      height: 400,
-      width: 400,
-    };
-  };
-
-  if (!detail || !post) return null;
-
   const handleTipSentSuccess = (postId: string) => {
     if (post.id === postId) {
       openTipSummary(post);
     }
-  };
-
-  const renderPostAvatar = () => {
-    let avatarUrl: string = post.platformUser.profile_image_url;
-
-    if (post.platform === 'myriad' && post.platformUser?.platform_account_id === user?.id) {
-      avatarUrl = user?.profilePictureURL as string;
-    }
-
-    return (
-      <PostAvatarComponent origin={post.platform} avatar={avatarUrl} onClick={openContentSource} />
-    );
   };
 
   const likePostHandle = () => {
@@ -218,8 +193,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
     });
   };
 
-  if (loading) return null;
-
   return (
     <>
       <Card className={style.root}>
@@ -227,11 +200,17 @@ const PostComponent: React.FC<PostComponentProps> = ({
           className={style.header}
           disableTypography
           ref={headerRef}
-          avatar={renderPostAvatar()}
-          title={<CardTitle text={detail.user.name} url={getPlatformUrl()} />}
+          avatar={
+            <PostAvatarComponent
+              origin={post.platform}
+              avatar={post.platformUser.profile_image_url}
+              onClick={openContentSource}
+            />
+          }
+          title={<CardTitle text={post.platformUser.name} url={getPlatformUrl()} />}
           subheader={
             <PostSubHeader
-              date={detail.createdOn}
+              date={post.createdAt}
               importer={post.importer}
               platform={post.platform}
             />
@@ -240,32 +219,17 @@ const PostComponent: React.FC<PostComponentProps> = ({
         <CardContent className={style.content}>
           <ShowIf condition={['twitter'].includes(post.platform)}>
             <Linkify
-              text={detail.text}
+              text={post.text}
               handleClick={onHashtagClicked}
               variant="body1"
               color="textPrimary"
             />
-
-            {detail.images && detail.images.length > 0 && (
-              <PostImageComponent images={detail.images} />
-            )}
-
-            {detail.videos && detail.videos.length > 0 && (
-              <PostVideoComponent url={detail.videos[0]} />
-            )}
           </ShowIf>
 
           <ShowIf condition={['reddit'].includes(post.platform)}>
             <ReactMarkdown skipHtml remarkPlugins={[remarkGFM, remarkHTML]}>
-              {detail.text}
+              {post.text}
             </ReactMarkdown>
-
-            {post.asset?.images && post.asset.images.length > 0 && (
-              <PostImageComponent images={post.asset.images.map(urlToImageData)} />
-            )}
-            {post.asset?.videos && post.asset.videos.length > 0 && (
-              <PostVideoComponent url={post.asset.videos[0]} />
-            )}
           </ShowIf>
 
           <ShowIf condition={post.platform === 'myriad'}>
@@ -278,13 +242,9 @@ const PostComponent: React.FC<PostComponentProps> = ({
                 </div>
               ))}
             </div>
-
             <Typography variant="body1" color="textPrimary" component="p">
-              {detail.text}
+              {post.text}
             </Typography>
-            {post.asset?.images && post.asset?.images.length > 0 && (
-              <PostImageComponent images={post.asset.images.map(urlToImageData)} />
-            )}
           </ShowIf>
 
           <ShowIf condition={post.platform === 'facebook'}>
@@ -292,12 +252,19 @@ const PostComponent: React.FC<PostComponentProps> = ({
               <EmbeddedPost href={post.link} width="700" />
             </FacebookProvider>
           </ShowIf>
+
+          {post.asset?.images && post.asset?.images.length > 0 && (
+            <PostImageComponent platform={post.platform} images={post.asset.images} />
+          )}
+
+          {post.asset?.videos && post.asset.videos.length > 0 && (
+            <PostVideoComponent url={post.asset.videos[0]} />
+          )}
         </CardContent>
 
         <CardActions disableSpacing className={style.action}>
           <PostActionComponent
             post={post}
-            detail={detail}
             expandComment={handleExpandClick}
             commentExpanded={expanded}
             likePost={likePostHandle}

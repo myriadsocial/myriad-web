@@ -72,12 +72,6 @@ const UserComponent: React.FC<UserComponentProps> = ({isAnonymous}) => {
     setEditProfile(!editProfile);
   };
 
-  const getProfilePicture = (): string => {
-    const avatar = user?.profilePictureURL as string;
-
-    return avatar || '';
-  };
-
   if (!isAnonymous && !user) return null;
 
   return (
@@ -88,7 +82,7 @@ const UserComponent: React.FC<UserComponentProps> = ({isAnonymous}) => {
           avatar={
             <Avatar
               aria-label={`${user?.name || alias} avatar`}
-              src={getProfilePicture()}
+              src={user?.profile_picture?.sizes.thumbnail}
               variant="circular"
               sizes="lg"
               style={{width: 72, height: 72}}>

@@ -11,7 +11,7 @@ type Props = {
 
 const DateFormat = ({date, dateFormat = 'dd MMMM yyyy'}: Props) => {
   return (
-    <Typography variant="body2" color="textSecondary" component="p">
+    <Typography variant="body2" color="textSecondary" component="span">
       {format(new Date(date), dateFormat)}
     </Typography>
   );

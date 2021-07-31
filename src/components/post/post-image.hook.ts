@@ -1,5 +1,10 @@
+import {generateImageSizes} from 'src/helpers/cloudinary';
+import {Sizes} from 'src/interfaces/assets';
+import {PostOrigin} from 'src/interfaces/timeline';
+
 type ImageListItem = {
   src: string;
+  sizes: Sizes;
   rows: number;
   cols: number;
 };
@@ -11,7 +16,7 @@ type ImageList = {
 };
 
 export const useImageHooks = () => {
-  const buildList = (source: string[]): ImageList => {
+  const buildList = (source: string[], platform: PostOrigin): ImageList => {
     let listCols = 1;
     let itemCols = 1;
     let ROWS = 1;
@@ -36,6 +41,7 @@ export const useImageHooks = () => {
         cols: itemCols,
         rows: ROWS,
         src: source[index],
+        sizes: generateImageSizes(source[index], platform !== 'myriad'),
       });
     }
 

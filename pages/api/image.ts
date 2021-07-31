@@ -32,7 +32,7 @@ cloudinary.config({
 const cloudinaryUpload = (file: string) =>
   cloudinary.uploader.upload(file, {
     transformation: {
-      width: 1024,
+      width: 2560,
     },
   });
 
@@ -61,7 +61,7 @@ const handler = nextConnect()
     // @ts-expect-error
     const resized = await sharp(image)
       .resize({
-        width: 2048,
+        width: 2560, // 30inch monitor resolution 2560 x 1600
       })
       .toBuffer({resolveWithObject: true});
 

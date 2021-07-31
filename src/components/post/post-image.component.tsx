@@ -15,7 +15,7 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import {useImageHooks} from './post-image.hook';
 
-import {ImageData} from 'src/interfaces/post';
+import {PostOrigin} from 'src/interfaces/timeline';
 import theme from 'src/themes/light';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -53,10 +53,11 @@ const carouselStyle: CarouselStyles = {
 };
 
 type Props = {
-  images: ImageData[];
+  images: string[];
+  platform: PostOrigin;
 };
 
-export default function ImageListComponent({images}: Props) {
+export default function ImageListComponent({images, platform}: Props) {
   const style = useStyles();
   const theme = useTheme();
 
@@ -65,7 +66,7 @@ export default function ImageListComponent({images}: Props) {
   const {buildList} = useImageHooks();
   const [index, setIndex] = useState(0);
 
-  const list = buildList(images.map(i => i.src));
+  const list = buildList(images, platform);
 
   const openLightbox = (i: number) => {
     setIndex(i);
@@ -82,11 +83,14 @@ export default function ImageListComponent({images}: Props) {
         <GridList cellHeight={list.cellHeight} cols={list.cols}>
           {list.images.slice(0, 4).map((image, i) => (
             <GridListTile
-              key={image.src}
+              key={image.sizes.thumbnail}
               cols={image.cols}
               rows={image.rows}
               onClick={() => openLightbox(i)}>
-              <img src={image.src} alt={image.src} />
+              <img
+                src={image.cols === 1 ? image.sizes.small : image.sizes.medium}
+                alt={image.src}
+              />
               {images.length > 4 && i === 3 && (
                 <GridListTileBar
                   title={`+ ${list.images.length - 4} more`}
@@ -109,7 +113,7 @@ export default function ImageListComponent({images}: Props) {
           <Carousel
             styles={carouselStyle}
             currentIndex={index}
-            views={images.map((image, i) => ({source: image.src, key: i}))}
+            views={list.images.map((image, i) => ({source: image.sizes.large, key: i}))}
           />
         </Dialog>
       </NoSsr>
