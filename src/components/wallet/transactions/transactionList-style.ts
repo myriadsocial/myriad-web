@@ -67,7 +67,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1),
     },
     expandButton: {
-      justifyContent: 'center',
+      marginTop: 24,
+      fontSize: 16,
     },
     typography: {
       padding: theme.spacing(2),

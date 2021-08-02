@@ -118,67 +118,43 @@ export default function TransactionListComponent({transactions, user}: Props) {
   return (
     <>
       <List>
-        {expandable
-          ? allTransactions.slice(0, 2).map(txHistory => (
-              <div key={txHistory?.id}>
-                <ListItem className={style.transactionItem}>
-                  <Card>
-                    <CardHeader
-                      avatar={
-                        <Link href={`/${direction(txHistory)}`}>
-                          <a href={`/${direction(txHistory)}`}>
-                            <Avatar
-                              aria-label="avatar"
-                              src={
-                                txHistory?.toUser?.id === userId
-                                  ? txHistory?.fromUser?.profilePictureURL
-                                  : txHistory?.toUser?.profilePictureURL
-                              }
-                            />
-                          </a>
-                        </Link>
-                      }
-                      title={RenderPrimaryText(txHistory)}
-                      subheader={RenderSecondaryText(txHistory)}
-                    />
-                  </Card>
-                </ListItem>
-              </div>
-            ))
-          : allTransactions.map(txHistory => (
-              <div key={txHistory?.id}>
-                <ListItem className={style.transactionItem}>
-                  <Card>
-                    <CardHeader
-                      avatar={
-                        <Link href={`/${direction(txHistory)}`}>
-                          <a href={`/${direction(txHistory)}`}>
-                            <Avatar
-                              aria-label="avatar"
-                              src={
-                                txHistory?.toUser?.id === userId
-                                  ? txHistory?.fromUser?.profilePictureURL
-                                  : txHistory?.toUser?.profilePictureURL
-                              }
-                            />
-                          </a>
-                        </Link>
-                      }
-                      title={RenderPrimaryText(txHistory)}
-                      subheader={RenderSecondaryText(txHistory)}
-                    />
-                  </Card>
-                </ListItem>
-              </div>
-            ))}
-      </List>
-      {expandable ? (
-        <ExpandMore />
-      ) : (
-        <ListItem className={style.expandButton}>
-          <Button onClick={handleClick}>See less</Button>
+        {allTransactions.map(txHistory => (
+          <div key={txHistory?.id}>
+            <ListItem className={style.transactionItem}>
+              <Card>
+                <CardHeader
+                  avatar={
+                    <Link href={`/${direction(txHistory)}`}>
+                      <a href={`/${direction(txHistory)}`}>
+                        <Avatar
+                          aria-label="avatar"
+                          src={
+                            txHistory?.toUser?.id === userId
+                              ? txHistory?.fromUser?.profilePictureURL
+                              : txHistory?.toUser?.profilePictureURL
+                          }
+                        />
+                      </a>
+                    </Link>
+                  }
+                  title={RenderPrimaryText(txHistory)}
+                  subheader={RenderSecondaryText(txHistory)}
+                />
+              </Card>
+            </ListItem>
+          </div>
+        ))}
+        <ListItem>
+          <Button
+            className={style.expandButton}
+            onClick={handleClick}
+            variant="contained"
+            color="primary"
+            fullWidth>
+            See Wallet Details
+          </Button>
         </ListItem>
-      )}
+      </List>
     </>
   );
 }
