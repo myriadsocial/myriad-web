@@ -101,7 +101,7 @@ export default function TransactionListComponent({transactions, user}: Props) {
 
   return (
     <>
-      <List style={{maxHeight: 540, overflow: 'auto'}}>
+      <List className={style.list}>
         {allTransactions.map(txHistory => (
           <div key={txHistory?.id}>
             <ListItem className={style.transactionItem}>
