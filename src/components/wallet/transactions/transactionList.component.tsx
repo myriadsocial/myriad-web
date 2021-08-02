@@ -27,8 +27,6 @@ interface Props {
 export default function TransactionListComponent({transactions, user}: Props) {
   const style = useStyles();
 
-  const [expandable, setExpandable] = useState(true);
-
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
 
   const [requestableIds, setRequestableIds] = useState<string[]>([]);
@@ -106,14 +104,6 @@ export default function TransactionListComponent({transactions, user}: Props) {
   };
 
   const defaultUserName = 'Unknown Myrian';
-
-  const ExpandMore = () => {
-    return (
-      <ListItem className={style.expandButton}>
-        <Button onClick={handleClick}>See more</Button>
-      </ListItem>
-    );
-  };
 
   const direction = (history: Transaction) => {
     if (user.id === history.fromUser?.id) return history.toUser?.id;
