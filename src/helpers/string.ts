@@ -1,5 +1,7 @@
 import {SyntheticEvent} from 'react';
 
+import parse from 'html-react-parser';
+
 export const acronym = (value: string): string => {
   if (!value) return '';
   return value.split(/\s/).reduce((response, word) => (response += word.slice(0, 1)), '');
@@ -31,7 +33,7 @@ export const parseHashtag = (
         return urlRenderer(text);
       }
 
-      return text;
+      return parse(text);
     });
   });
 };
