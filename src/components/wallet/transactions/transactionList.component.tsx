@@ -36,6 +36,7 @@ export default function TransactionListComponent({transactions, user}: Props) {
   const userId = user?.id as string;
 
   useEffect(() => {
+    console.log({transactions});
     setAllTransactions(transactions);
     const ids = transactions.reduce((result, item) => {
       if (item.from === userId) {
@@ -69,11 +70,9 @@ export default function TransactionListComponent({transactions, user}: Props) {
           <Typography>
             You sent tips to{' '}
             <Link href={`/${direction(txHistory)}`}>
-              <a href={`/${direction(txHistory)}`}>
-                {txHistory.toUser?.name ?? defaultUserName}&apost;s
-              </a>
-            </Link>{' '}
-            post with {transformTokenValue(txHistory)} {txHistory.tokenId}
+              <a href={`/${direction(txHistory)}`}>{txHistory.toUser?.name ?? defaultUserName}</a>
+            </Link>
+            's post with {transformTokenValue(txHistory)} {txHistory.tokenId}
           </Typography>
         ) : txHistory.fromUser?.name === 'Myriad' ? (
           <Typography>
