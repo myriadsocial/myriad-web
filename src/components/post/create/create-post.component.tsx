@@ -51,7 +51,6 @@ export default function CreatePostComponent({user, experiences}: Props) {
   const toggleCreatePost = () => {
     setCreatePost(!showCreatePost);
     setSubmitting(false);
-    setPostText('');
   };
 
   const updatePostText = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -79,6 +78,7 @@ export default function CreatePostComponent({user, experiences}: Props) {
         <CardContent>
           <TextareaAutosize
             rowsMin={2}
+            value={postText}
             placeholder={`A penny for your thoughts?`}
             className={styles.postTextArea}
             onChange={updatePostText}
