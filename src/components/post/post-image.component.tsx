@@ -88,7 +88,7 @@ export default function ImageListComponent({images, platform}: Props) {
               rows={image.rows}
               onClick={() => openLightbox(i)}>
               <img
-                src={image.rows === 1 ? image.sizes.medium : image.sizes.small}
+                src={image.rows === 2 || list.cols === 1 ? image.sizes.medium : image.sizes.small}
                 alt={image.src}
               />
               {images.length > 4 && i === 3 && (
