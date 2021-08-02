@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -60,9 +60,8 @@ export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) =>
   const classes = useStyles();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {isShared, verifyPublicKeyShared} = useShareSocial(user?.id);
+  const {isVerifying, isVerified, resetVerification, verifyPublicKeyShared} = useShareSocial();
   const {disconnectSocial} = useUserHook();
-  const [connecting, setConnecting] = useState(false);
   const [selected, setSelected] = useState<SocialsEnum | null>(null);
   const [unlink, setUnlink] = useState<SocialsEnum | null>(null);
 
@@ -72,12 +71,6 @@ export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) =>
     [SocialsEnum.TWITTER]: false,
     [SocialsEnum.REDDIT]: false,
   };
-
-  useEffect(() => {
-    if (!isShared) {
-      toggleConnect();
-    }
-  }, [isShared]);
 
   if (user && user.userCredentials && user.userCredentials.length > 0) {
     const twitterCredential = user.userCredentials.find(
@@ -104,13 +97,12 @@ export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) =>
   }
 
   const toggleConnect = () => {
-    setConnecting(!connecting);
     setSelected(null);
+    resetVerification();
   };
 
   const connectSocial = (social: SocialsEnum) => () => {
     if (!connected[social]) {
-      setConnecting(true);
       setSelected(social);
       connectRef.current?.openConnectForm(social);
     } else {
@@ -126,7 +118,9 @@ export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) =>
   };
 
   const verifyShared = (social: SocialsEnum, username: string) => {
-    verifyPublicKeyShared(social, username);
+    verifyPublicKeyShared(social, username, () => {
+      connectRef.current?.closeConnectForm();
+    });
   };
 
   return (
@@ -184,14 +178,17 @@ export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) =>
         </ListItem>
       </List>
 
-      {user && <ConnectComponent ref={connectRef} publicKey={user.id} verify={verifyShared} />}
-
-      {selected && (
-        <ConnectSuccessComponent
-          open={connecting && isShared}
-          social={selected}
-          onClose={toggleConnect}
+      {user && selected && (
+        <ConnectComponent
+          ref={connectRef}
+          publicKey={user.id}
+          verify={verifyShared}
+          loading={isVerifying}
         />
+      )}
+
+      {isVerified && selected && (
+        <ConnectSuccessComponent open={isVerified} social={selected} onClose={toggleConnect} />
       )}
 
       <ConfirmDialog

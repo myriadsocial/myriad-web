@@ -4,6 +4,7 @@ import {FacebookShareButton, RedditShareButton, TwitterShareButton} from 'react-
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -29,9 +30,11 @@ import {SocialsEnum} from 'src/interfaces';
 
 export type ConnectComponentRefProps = {
   openConnectForm: (social: SocialsEnum) => void;
+  closeConnectForm: () => void;
 };
 
 type ConnectComponentProps = {
+  loading: boolean;
   publicKey: string;
   verify: (social: SocialsEnum, socialName: string) => void;
 };
@@ -43,7 +46,10 @@ const prefix: Record<SocialsEnum, string> = {
 };
 
 export const ConnectComponent = forwardRef(
-  ({publicKey, verify}: ConnectComponentProps, ref: React.Ref<ConnectComponentRefProps>) => {
+  (
+    {loading, publicKey, verify}: ConnectComponentProps,
+    ref: React.Ref<ConnectComponentRefProps>,
+  ) => {
     const styles = useStyles();
     const theme = useTheme();
 
@@ -65,6 +71,9 @@ export const ConnectComponent = forwardRef(
           setOpen(true);
           setShared(false);
           setSocialName('');
+        },
+        closeConnectForm() {
+          close();
         },
       }),
       [social],
@@ -113,8 +122,6 @@ export const ConnectComponent = forwardRef(
         }
 
         verify(social, username);
-
-        close();
       }
     };
 
@@ -280,11 +287,13 @@ export const ConnectComponent = forwardRef(
                 </ListItemText>
               </ListItem>
             </List>
+
+            {loading && <CircularProgress size={40} className={styles.buttonProgress} />}
           </DialogContent>
           <DialogActions className={styles.done}>
             <Button
               onClick={handleShared}
-              disabled={!shared || !termApproved || !validUrl}
+              disabled={!shared || !termApproved || !validUrl || loading}
               size="large"
               variant="contained"
               color="primary">

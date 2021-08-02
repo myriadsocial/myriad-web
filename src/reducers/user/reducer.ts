@@ -1,5 +1,6 @@
 import {HYDRATE} from 'next-redux-wrapper';
 
+import {ACTION_FAILED} from '../base/constants';
 import {State as BaseState} from '../base/state';
 import {Actions} from './actions';
 import * as constants from './constants';
@@ -16,6 +17,7 @@ export interface UserState extends BaseState {
   recipientDetail: WalletDetail;
   anonymous: boolean;
   alias: string;
+  verifying: boolean;
 }
 
 const initalState: UserState = {
@@ -29,6 +31,7 @@ const initalState: UserState = {
     contentType: ContentType.POST,
   },
   alias: '',
+  verifying: false,
 };
 
 export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalState, action) => {
@@ -77,6 +80,27 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       return {
         ...state,
         recipientDetail: action.recipientDetail,
+      };
+    }
+
+    case constants.SET_VERIFYING_SOCIAL_ACCOUNT: {
+      return {
+        ...state,
+        verifying: true,
+      };
+    }
+
+    case constants.RESET_VERIFYING_SOCIAL_ACCOUNT: {
+      return {
+        ...state,
+        verifying: false,
+      };
+    }
+
+    case ACTION_FAILED: {
+      return {
+        ...state,
+        error: action.error,
       };
     }
 
