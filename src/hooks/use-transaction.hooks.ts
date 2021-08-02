@@ -21,7 +21,6 @@ export const useTransaction = () => {
   const [error, setError] = useState(null);
   const [params] = useState<Record<string, any>>({
     offset: 0,
-    limit: 20,
     include: ['toUser', 'fromUser', 'token'],
   });
 
