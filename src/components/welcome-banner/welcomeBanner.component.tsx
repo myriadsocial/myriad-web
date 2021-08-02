@@ -77,7 +77,7 @@ export const WelcomeBannerComponent = forwardRef(
               color="primary"
               style={{width: 300}}
               onClick={closeWelcomeBanner}>
-              Let{"'"}s get started!
+              {"Let's get started!"}
             </Button>
           </DialogActions>
         </Dialog>
