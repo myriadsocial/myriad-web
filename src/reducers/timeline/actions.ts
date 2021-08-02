@@ -193,7 +193,6 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
         type: constants.ADD_POST_TO_TIMELINE,
         post: {
           ...data,
-          importer: user,
           comments: [],
         },
       });

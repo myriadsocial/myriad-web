@@ -43,12 +43,15 @@ export default function CreatePostComponent({user, experiences}: Props) {
       toggleCreatePost();
     }
 
-    return undefined;
+    return () => {
+      expandRef.current?.clearForm();
+    };
   }, [submitting, loading]);
 
   const toggleCreatePost = () => {
     setCreatePost(!showCreatePost);
     setSubmitting(false);
+    setPostText('');
   };
 
   const updatePostText = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -61,6 +64,8 @@ export default function CreatePostComponent({user, experiences}: Props) {
     setSubmitting(true);
 
     addPost(text, tags, files);
+
+    setPostText('');
   };
 
   return (
