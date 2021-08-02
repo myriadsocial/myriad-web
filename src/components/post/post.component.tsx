@@ -227,6 +227,9 @@ const PostComponent: React.FC<PostComponentProps> = ({
           </ShowIf>
 
           <ShowIf condition={['reddit'].includes(post.platform)}>
+            <Typography variant="h4" component="h1">
+              {post.title}
+            </Typography>
             <ReactMarkdown skipHtml remarkPlugins={[remarkGFM, remarkHTML]}>
               {post.text}
             </ReactMarkdown>
