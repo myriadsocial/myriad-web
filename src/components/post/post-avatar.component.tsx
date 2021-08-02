@@ -3,12 +3,12 @@ import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import {makeStyles, createStyles} from '@material-ui/core/styles';
-import FacebookIcon from '@material-ui/icons/Facebook';
 import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
 import StyledBadge from 'src/components/common/Badge.component';
 import {MyriadIcon} from 'src/components/common/MyriadIcon';
+import FacebookIcon from 'src/images/facebook-svgrepo-com_1.svg';
 import {PostOrigin} from 'src/interfaces/timeline';
 
 const useStyles = makeStyles(() =>
@@ -35,6 +35,7 @@ const useStyles = makeStyles(() =>
     myriad: {
       '& .MuiBadge-badge': {
         backgroundColor: '#8629E9',
+        overflow: 'hidden',
       },
     },
   }),
@@ -46,6 +47,7 @@ type Props = {
   onClick: () => void;
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function PostAvatar({origin, avatar, onClick}: Props) {
   const style = useStyles();
 
