@@ -129,6 +129,8 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
         if (post.platform === 'myriad' && post.platformUser) {
           const user = await UserAPI.getUserDetail(post.platformUser.platform_account_id);
 
+          post.platformUser.name = user.name;
+
           if (user.profilePictureURL) {
             const sizes = generateImageSizes(user.profilePictureURL);
             post.platformUser.profile_image_url = sizes.thumbnail;
