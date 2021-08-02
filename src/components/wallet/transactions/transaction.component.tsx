@@ -1,6 +1,9 @@
-import React, {useEffect, useImperativeHandle} from 'react';
+import React, {useEffect, useState, useImperativeHandle} from 'react';
 import {useSelector} from 'react-redux';
 
+import Link from 'next/link';
+
+import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -22,6 +25,11 @@ const TransactionComponent: React.FC<TransactionProps> = ({forwardedRef, detaile
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {loading, error, transactions, loadInitTransaction} = useTransaction();
+  const [walletTabIdx, setWalletTabIdx] = useState(0);
+
+  useEffect(() => {
+    window.localStorage.setItem('walletTabIdx', String(walletTabIdx));
+  }, [walletTabIdx]);
 
   useEffect(() => {
     loadInitTransaction();
@@ -32,6 +40,10 @@ const TransactionComponent: React.FC<TransactionProps> = ({forwardedRef, detaile
       loadInitTransaction();
     },
   }));
+
+  const handleClick = () => {
+    setWalletTabIdx(1);
+  };
 
   if (!user) return null;
 
@@ -79,7 +91,18 @@ const TransactionComponent: React.FC<TransactionProps> = ({forwardedRef, detaile
       ) : transactions.length === 0 ? (
         <EmptyTransactionComponent />
       ) : (
-        <TransactionListComponent transactions={transactions} user={user} />
+        <>
+          <TransactionListComponent transactions={transactions} user={user} />
+          <Link href={`/${user.id}`} passHref>
+            <Button
+              className={styles.expandButton}
+              onClick={handleClick}
+              variant="contained"
+              color="primary">
+              See Wallet Details
+            </Button>
+          </Link>
+        </>
       )}
     </div>
   );

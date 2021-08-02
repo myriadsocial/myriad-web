@@ -18,6 +18,13 @@ export const useStyles = makeStyles((theme: Theme) =>
         textTransform: 'uppercase',
       },
     },
+    expandButton: {
+      width: 295,
+      marginLeft: 16,
+      marginRight: 16,
+      marginBottom: 24,
+      fontSize: 16,
+    },
     avatar: {
       minWidth: 40,
     },
