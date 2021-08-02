@@ -43,7 +43,7 @@ const LinkifyComponent: React.FC<LinkifyProps> = ({text, handleClick, ...props})
 
   return (
     <Typography {...props}>
-      {parseHashtag(text, hashtagRenderer, urlRenderer, onHashtagClicked)},
+      {parseHashtag(text, hashtagRenderer, urlRenderer, onHashtagClicked)}
     </Typography>
   );
 };
