@@ -32,6 +32,7 @@ type Props = {
 // WALLET TAB
 interface StyledTabsProps {
   value: number;
+  // eslint-disable-next-line @typescript-eslint/ban-types
   onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
 }
 
@@ -88,6 +89,7 @@ function MyWalletTabs() {
   const classes = useStylesForTabs();
   const [value, setValue] = React.useState(0);
 
+  // eslint-disable-next-line @typescript-eslint/ban-types
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
@@ -111,6 +113,7 @@ function MyWalletTabs() {
 }
 // WALLET TAB
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function ProfileTimeline({profile, loading}: Props) {
   const style = useStyles();
   const theme = useTheme();
@@ -134,6 +137,7 @@ export default function ProfileTimeline({profile, loading}: Props) {
     }
   }, [user]);
 
+  // eslint-disable-next-line @typescript-eslint/ban-types
   const handleChange = (event: React.ChangeEvent<{}>, tab: number) => {
     setSelectedTab(tab);
   };
@@ -160,7 +164,7 @@ export default function ProfileTimeline({profile, loading}: Props) {
             onChange={handleChange}
             indicatorColor="primary"
             textColor="primary">
-            <Tab className={style.tabItem} label={'My Post'} />
+            <Tab className={style.tabItem} label={isGuest ? 'Post' : 'My Post'} />
             <Tab className={style.tabItem} label={'Imported Post'} />
             <Tab className={style.tabItem} label={`Friends(${totalFriends})`} />
             {isGuest == false && <Tab className={style.tabItem} label={'My Wallet'} />}

@@ -170,10 +170,16 @@ const FriendsListComponent: React.FC<FriendListProps> = ({
       <div>
         <div className={style.content}>
           <ShowIf condition={!friends.length}>
-            <Typography variant="h4" color="textPrimary" className={style.noContent}>
-              You don&apos;t have any Myriad friends yet. Search for people or tell your friends
-              about Myriad!
-            </Typography>
+            {user?.id === profile.id ? (
+              <Typography variant="h4" color="textPrimary" className={style.noContent}>
+                You don&apos;t have any Myriad friends yet. Search for people or tell your friends
+                about Myriad!
+              </Typography>
+            ) : (
+              <Typography variant="h4" color="textPrimary" className={style.noContent}>
+                {profile.name} don&apos;t have any Myriad friends yet.
+              </Typography>
+            )}
           </ShowIf>
 
           <List className={style.list}>
