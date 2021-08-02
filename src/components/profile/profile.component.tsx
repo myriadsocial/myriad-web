@@ -121,12 +121,28 @@ export default function ProfileTimeline({profile, loading}: Props) {
 
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
   const {totalFriends} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const [isWalletTabActivated, setIsWalletTabActivated] = useState(false);
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [isGuest, setIsGuest] = useState<boolean>(false);
 
   useEffect(() => {
+    const walletDetailsPointer = JSON.parse(window.localStorage.getItem('walletTabIdx') ?? '0');
+    if (walletDetailsPointer === 1) {
+      setIsWalletTabActivated(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isWalletTabActivated) {
+      setSelectedTab(3);
+      window.localStorage.setItem('walletTabIdx', '0');
+    } else {
+      setSelectedTab(0);
+    }
+  }, [isWalletTabActivated]);
+
+  useEffect(() => {
     dispatch(fetchProfileFriend(profile.id));
-    setSelectedTab(0);
 
     return undefined;
   }, [profile.id]);
