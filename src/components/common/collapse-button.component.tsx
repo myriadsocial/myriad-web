@@ -8,6 +8,7 @@ import clsx from 'clsx';
 
 interface Props {
   onClick: (expanded: boolean) => void;
+  defaultExpanded?: boolean;
   className?: string;
 }
 
@@ -30,13 +31,12 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const ToggleCollapseButton = ({className, onClick}: Props) => {
+export const ToggleCollapseButton = ({className, defaultExpanded = false, onClick}: Props) => {
   const styles = useStyles();
 
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(defaultExpanded);
 
   const handleExpandClick = () => {
-    console.log('expand', !expanded);
     setExpanded(!expanded);
     onClick(!expanded);
   };

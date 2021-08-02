@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
@@ -13,6 +13,7 @@ import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
 import {Wallet} from 'src/components/wallet/wallet.component';
 import {generateImageSizes} from 'src/helpers/cloudinary';
+import {useResize} from 'src/hooks/use-resize.hook';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
@@ -30,24 +31,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       'scrollbar-color': '#A942E9 #171717',
       'scrollbar-width': 'thin !important',
     },
-    wallet: {
-      width: 327,
-    },
     fullwidth: {
       width: 327,
-    },
-    fullheight: {
-      height: '100vh',
-    },
-    profile: {
-      flexGrow: 1,
     },
     content: {
       flex: 1,
       marginLeft: 'auto',
       marginRight: 'auto',
       padding: '0 24px 0 24px',
-      height: '100vh',
+      minHeight: '100vh',
       maxWidth: 726,
       [theme.breakpoints.up('xl')]: {
         maxWidth: 926,
@@ -59,8 +51,12 @@ export const useStyles = makeStyles((theme: Theme) =>
 const Home: React.FC = () => {
   const style = useStyles();
 
-  const {anonymous, tokens} = useSelector<RootState, UserState>(state => state.userState);
   const dispatch = useDispatch();
+
+  const {anonymous, tokens} = useSelector<RootState, UserState>(state => state.userState);
+  const sourceRef = useRef<HTMLDivElement | null>(null);
+
+  const height = useResize(sourceRef);
 
   useEffect(() => {
     // load current authenticated user tokens
@@ -70,7 +66,12 @@ const Home: React.FC = () => {
   return (
     <Layout>
       <Grid item className={style.user}>
-        <Grid container direction="row" justify="flex-start" alignContent="flex-start">
+        <Grid
+          container
+          direction="row"
+          justify="flex-start"
+          alignContent="flex-start"
+          ref={sourceRef}>
           <Grid item className={style.fullwidth}>
             <UserDetail isAnonymous={anonymous} />
           </Grid>
@@ -83,7 +84,7 @@ const Home: React.FC = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item className={style.content}>
+      <Grid item className={style.content} style={{height}}>
         <Timeline isAnonymous={anonymous} availableTokens={tokens} />
       </Grid>
     </Layout>

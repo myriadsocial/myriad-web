@@ -3,23 +3,26 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      maxHeight: '100vh',
       overflow: 'auto',
+      position: 'relative',
     },
     appWrapper: {
       display: 'flex',
-      margin: '0 32px  0 32px',
-      maxHeight: '100vh',
+      margin: theme.spacing(0, 4),
+      marginRight: 342,
     },
     contentWrapper: {
       display: 'flex',
       flex: '1 1 auto',
       marginTop: 32,
     },
-    experience: {
-      minHeight: '100vh',
+    sidebarWrapper: {
+      position: 'fixed',
+      right: 32,
+      top: 124,
+      // minHeight: '100vh',
+      // flex: '0 0 331px',
       filter: 'drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.16))',
-      flex: '0 0 331px',
       'scrollbar-color': '#A942E9 #171717 ',
       'scrollbar-width': 'thin !important',
     },

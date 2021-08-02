@@ -56,6 +56,10 @@ const TimelineComponent: React.FC<TimelineComponentProps> = () => {
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, true);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   useEffect(() => {

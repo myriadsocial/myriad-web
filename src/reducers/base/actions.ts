@@ -22,6 +22,13 @@ export interface HydrateStateAction extends Action {
   payload: RootState;
 }
 
+export interface PaginationAction extends Action {
+  meta: {
+    page: number;
+    totalPage: number;
+  };
+}
+
 /**
  * Union Action Types
  */

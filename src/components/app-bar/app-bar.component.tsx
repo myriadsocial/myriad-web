@@ -90,7 +90,7 @@ export default function HeaderBar(): JSX.Element {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <div className={classes.logo}>
             <Link href="/home">

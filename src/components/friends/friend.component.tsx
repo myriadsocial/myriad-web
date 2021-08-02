@@ -7,9 +7,11 @@ import Typography from '@material-ui/core/Typography';
 import {useFriendsHook} from '../../hooks/use-friends-hook';
 import FriendListComponent from './friend-list.component';
 import FriendRequestComponent from './friend-requests.component';
+import {useStyles} from './friend.style';
 
 import {debounce} from 'lodash';
 import SearchComponent from 'src/components/common/search.component';
+import {useToggle} from 'src/hooks/use-toggle.hook';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -17,13 +19,15 @@ interface FriendComponentProps {
   title?: string;
 }
 
-const FriendComponent: React.FC<FriendComponentProps> = props => {
-  const {title} = props;
+const FriendComponent: React.FC<FriendComponentProps> = ({title}) => {
+  const style = useStyles();
 
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const [expandFriends, toggleExpandFriends] = useToggle(true);
   const [search, setSearchQuery] = useState('');
 
-  const {searchFriend, loadFriends, loadRequests, toggleRequest} = useFriendsHook();
+  const {searchFriend, loadFriends, loadMoreFriends, loadRequests, toggleRequest} =
+    useFriendsHook();
 
   useEffect(() => {
     loadFriends();
@@ -40,12 +44,20 @@ const FriendComponent: React.FC<FriendComponentProps> = props => {
     }
   }, 300);
 
+  const showAllFriendRequest = () => {
+    toggleExpandFriends();
+  };
+
+  const handleMinimizeFriendRequest = () => {
+    toggleExpandFriends();
+  };
+
   if (!user && !anonymous) return null;
 
   return (
-    <div style={{padding: 8}}>
-      <div style={{paddingTop: 16, paddingBottom: 8}}>
-        <Typography variant="h4" style={{marginBottom: 16}}>
+    <div className={style.root}>
+      <div className={style.header}>
+        <Typography variant="h4" className={style.title}>
           {' '}
           {title || 'Your Friends'}
         </Typography>
@@ -58,9 +70,13 @@ const FriendComponent: React.FC<FriendComponentProps> = props => {
         />
       </div>
 
-      <FriendRequestComponent toggleRequest={toggleRequest} />
+      <FriendRequestComponent
+        toggleRequest={toggleRequest}
+        onShowAll={showAllFriendRequest}
+        onMinimize={handleMinimizeFriendRequest}
+      />
       <DividerComponent />
-      <FriendListComponent />
+      <FriendListComponent showMore={loadMoreFriends} expand={expandFriends} />
     </div>
   );
 };
