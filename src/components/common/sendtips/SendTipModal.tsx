@@ -54,7 +54,6 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
   // reset form
   useEffect(() => {
     handleClearValue();
-    console.log({loading});
   }, []);
 
   // load balance detail only when component need to be shown
@@ -65,7 +64,6 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
   }, [isShown]);
 
   useEffect(() => {
-    console.log({recipientDetail});
     if (recipientDetail && sendTipClicked) {
       dispatchSendTip();
     }
