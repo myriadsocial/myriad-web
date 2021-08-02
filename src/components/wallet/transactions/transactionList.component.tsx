@@ -3,7 +3,6 @@ import React, {useState, useEffect} from 'react';
 import Link from 'next/link';
 
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import List from '@material-ui/core/List';
@@ -33,12 +32,6 @@ export default function TransactionListComponent({transactions, user}: Props) {
 
   const userId = user?.id as string;
 
-  const [walletTabIdx, setWalletTabIdx] = useState(0);
-
-  useEffect(() => {
-    window.localStorage.setItem('walletTabIdx', String(walletTabIdx));
-  }, [walletTabIdx]);
-
   useEffect(() => {
     setAllTransactions(transactions);
     const ids = transactions.reduce((result, item) => {
@@ -60,10 +53,6 @@ export default function TransactionListComponent({transactions, user}: Props) {
   }, [requestableIds]);
 
   if (transactions.length === 0) return null;
-
-  const handleClick = () => {
-    setWalletTabIdx(1);
-  };
 
   const RenderPrimaryText = (txHistory: Transaction) => {
     if (!txHistory) return null;
@@ -112,7 +101,7 @@ export default function TransactionListComponent({transactions, user}: Props) {
 
   return (
     <>
-      <List>
+      <List style={{maxHeight: 540, overflow: 'auto'}}>
         {allTransactions.map(txHistory => (
           <div key={txHistory?.id}>
             <ListItem className={style.transactionItem}>
@@ -139,18 +128,6 @@ export default function TransactionListComponent({transactions, user}: Props) {
             </ListItem>
           </div>
         ))}
-        <Link href={`/${user.id}`} passHref>
-          <ListItem>
-            <Button
-              className={style.expandButton}
-              onClick={handleClick}
-              variant="contained"
-              color="primary"
-              fullWidth>
-              See Wallet Details
-            </Button>
-          </ListItem>
-        </Link>
       </List>
     </>
   );

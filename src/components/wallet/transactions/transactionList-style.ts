@@ -66,10 +66,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     iconButton: {
       margin: theme.spacing(1),
     },
-    expandButton: {
-      marginTop: 24,
-      fontSize: 16,
-    },
     typography: {
       padding: theme.spacing(2),
     },
