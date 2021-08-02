@@ -23,6 +23,7 @@ type Props = {
   profile: ExtendedUser;
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function PostList({profile}: Props) {
   const style = useStyles();
 
@@ -44,8 +45,10 @@ export default function PostList({profile}: Props) {
   if (posts.length === 0) {
     return (
       <div style={{textAlign: 'center', padding: 16, backgroundColor: 'white', borderRadius: 8}}>
-        <h2>You haven’t any post yet</h2>
-        <p>When you post in them, it will show up here.</p>
+        <h2>{user?.id === profile.id ? 'You' : profile.name} haven’t any post yet</h2>
+        <p>
+          When {user?.id === profile.id ? 'you' : profile.name} post in them, it will show up here.
+        </p>
       </div>
     );
   }
