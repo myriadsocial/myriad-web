@@ -90,6 +90,22 @@ export const verifyCredentials = async (userId: string, peopleId: string): Promi
   });
 };
 
+export const verifySocialAccount = async (
+  username: string,
+  platform: string,
+  publicKey: string,
+): Promise<void> => {
+  await MyriadAPI.request({
+    method: 'POST',
+    url: '/verify',
+    data: {
+      username,
+      platform,
+      publicKey,
+    },
+  });
+};
+
 export const disconnectSocial = async (credentialId: string): Promise<void> => {
   await MyriadAPI.request({
     method: 'DELETE',
