@@ -35,8 +35,13 @@ export default function TransactionListComponent({transactions, user}: Props) {
 
   const userId = user?.id as string;
 
+  const [walletTabIdx, setWalletTabIdx] = useState(0);
+
   useEffect(() => {
-    console.log({transactions});
+    window.localStorage.setItem('walletTabIdx', String(walletTabIdx));
+  }, [walletTabIdx]);
+
+  useEffect(() => {
     setAllTransactions(transactions);
     const ids = transactions.reduce((result, item) => {
       if (item.from === userId) {
@@ -59,7 +64,7 @@ export default function TransactionListComponent({transactions, user}: Props) {
   if (transactions.length === 0) return null;
 
   const handleClick = () => {
-    setExpandable(!expandable);
+    setWalletTabIdx(1);
   };
 
   const RenderPrimaryText = (txHistory: Transaction) => {
@@ -144,16 +149,18 @@ export default function TransactionListComponent({transactions, user}: Props) {
             </ListItem>
           </div>
         ))}
-        <ListItem>
-          <Button
-            className={style.expandButton}
-            onClick={handleClick}
-            variant="contained"
-            color="primary"
-            fullWidth>
-            See Wallet Details
-          </Button>
-        </ListItem>
+        <Link href={`/${user.id}`} passHref>
+          <ListItem>
+            <Button
+              className={style.expandButton}
+              onClick={handleClick}
+              variant="contained"
+              color="primary"
+              fullWidth>
+              See Wallet Details
+            </Button>
+          </ListItem>
+        </Link>
       </List>
     </>
   );
