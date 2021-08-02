@@ -51,6 +51,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1),
       minWidth: 120,
     },
+    list: {
+      maxHeight: 530,
+      overflow: 'auto',
+    },
     transactionItem: {
       background: '#DDDDDD',
       '& .MuiCardHeader-root, & .MuiCardActions-root': {
