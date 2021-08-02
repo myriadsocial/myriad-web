@@ -1,26 +1,25 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 
 import AppBar from '../app-bar/app-bar.component';
-import ShowIf from '../common/show-if.component';
 import SidebarComponent from '../sidebar/sidebar.component';
 import {useStyles} from './layout.style';
 
 import BannerDemo from 'src/components/common/banner-demo.component';
 import {NotifProvider} from 'src/context/notif.context';
-import {useLayout} from 'src/hooks/use-layout.hook';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {ExtendedUser} from 'src/interfaces/user';
 
-type Props = {
+type DesktopLayoutProps = {
   children: React.ReactNode;
   user: ExtendedUser;
 };
 
-const DesktopLayoutComponent = ({children, user}: Props) => {
+const DesktopLayoutComponent: React.FC<DesktopLayoutProps> = ({children, user}) => {
   const style = useStyles();
-  const {setting} = useLayout();
 
   const {loadFcmToken} = useUserHook();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [top, setTop] = useState(124);
 
   useEffect(() => {
     // TODO: this should be only loaded once on layout container
@@ -31,19 +30,38 @@ const DesktopLayoutComponent = ({children, user}: Props) => {
     return undefined;
   }, []);
 
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, true);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    const scroll = ref.current?.getBoundingClientRect().top;
+
+    if (scroll) {
+      const scrolled = Math.min(68, 68 - scroll);
+
+      setTop(124 - scrolled);
+    }
+  }, []);
+
   return (
     <>
       <NotifProvider>
         <AppBar />
-        <BannerDemo />
 
-        <div className={style.appWrapper}>
-          <div className={style.contentWrapper}>{children}</div>
+        <div style={{marginTop: 68}} ref={ref}>
+          <BannerDemo />
 
-          <div className={style.experience}>
-            <ShowIf condition={!setting.focus}>
+          <div className={style.appWrapper}>
+            <div className={style.contentWrapper}>{children}</div>
+
+            <div className={style.sidebarWrapper} style={{top}}>
               <SidebarComponent isAnonymous={user.anonymous} />
-            </ShowIf>
+            </div>
           </div>
         </div>
       </NotifProvider>

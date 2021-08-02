@@ -7,6 +7,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       color: '#E0E0E0',
+      maxHeight: 400,
+      overflowY: 'scroll',
+    },
+    scrollable: {
+      maxHeight: 420,
+      overflowY: 'auto',
+      padding: 0,
     },
     textSecondary: {
       color: '#E0E0E0',

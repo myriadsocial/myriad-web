@@ -5,6 +5,8 @@ const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
+const LIMIT = 10;
+
 export const getSentRequests = async (userId: string): Promise<ExtendedFriend[]> => {
   const {data} = await MyriadAPI.request<ExtendedFriend[]>({
     url: `/friends`,
@@ -38,11 +40,13 @@ export const getFriendRequests = async (userId: string): Promise<ExtendedFriend[
   return data;
 };
 
-export const getFriends = async (userId: string): Promise<ExtendedFriend[]> => {
+export const getFriends = async (userId: string, page = 1): Promise<ExtendedFriend[]> => {
   const {data} = await MyriadAPI.request<ExtendedFriend[]>({
     url: `/friends`,
     method: 'GET',
     params: {
+      offset: Math.max(page - 1, 0) * LIMIT,
+      limit: LIMIT,
       filter: {
         where: {
           or: [{friendId: userId}, {requestorId: userId}],

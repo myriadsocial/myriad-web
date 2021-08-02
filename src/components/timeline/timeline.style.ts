@@ -3,7 +3,7 @@ import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      height: '1200px',
+      height: '100%',
       overflow: 'hidden',
       scrollbarWidth: 'none',
       msOverflowStyle: 'none',

@@ -4,7 +4,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
     width: 331,
-    minHeight: '100%',
+    minHeight: '100vh',
   },
   tabHeader: {
     background: '#C4C4C4',

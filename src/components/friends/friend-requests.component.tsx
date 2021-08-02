@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux';
 
 import Link from 'next/link';
@@ -15,14 +15,18 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 
+import clsx from 'clsx';
 import {ToggleCollapseButton} from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
+import {useToggle} from 'src/hooks/use-toggle.hook';
 import {ExtendedFriend, FriendStatus} from 'src/interfaces/friend';
 import {RootState} from 'src/reducers';
 import {FriendState} from 'src/reducers/friend/reducer';
 
 type FriendRequestsProps = {
   toggleRequest: (requestor: ExtendedFriend, status: FriendStatus) => void;
+  onShowAll?: () => void;
+  onMinimize?: () => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -31,8 +35,11 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       margin: '8px 0',
     },
+    expanded: {
+      flexGrow: 1,
+    },
     header: {
-      marginBottom: theme.spacing(2),
+      marginBottom: theme.spacing(1),
       display: 'flex',
     },
     content: {
@@ -41,12 +48,19 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     list: {
+      marginTop: 0,
+      marginBottom: 0,
       marginLeft: theme.spacing(-2),
       marginRight: theme.spacing(-2),
     },
     item: {
       marginBottom: theme.spacing(0.5),
       paddingRight: theme.spacing(0.5),
+
+      '& .MuiTypography-root': {
+        fontSize: 16,
+        fontWeight: 400,
+      },
     },
     action: {
       display: 'flex',
@@ -65,19 +79,19 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     more: {
       display: 'block',
-      fontSize: 16,
+      fontSize: 14,
       margin: '0 auto',
-      color: '#000000',
-      marginBottom: 16,
+      marginBottom: 8,
     },
   }),
 );
 
-const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest}) => {
+const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest, onShowAll, onMinimize}) => {
   const style = useStyles();
 
   const {requests, totalRequest} = useSelector<RootState, FriendState>(state => state.friendState);
-  const [openFriends, setOpenFriends] = useState(true);
+  const [expanded, toggleExpand] = useToggle(true);
+  const [showAll, toggleShowAll] = useToggle(false);
 
   const approveFriendRequest = (friend: ExtendedFriend) => {
     toggleRequest(friend, FriendStatus.APPROVED);
@@ -87,8 +101,25 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest}) => {
     toggleRequest(friend, FriendStatus.REJECTED);
   };
 
+  const handleToggleExpand = () => {
+    if (showAll && onMinimize) {
+      onMinimize();
+      toggleShowAll();
+    }
+
+    toggleExpand();
+  };
+
+  const handleShowAll = () => {
+    toggleShowAll();
+    onShowAll && onShowAll();
+  };
+
   return (
-    <Box className={style.root}>
+    <Box
+      className={clsx(style.root, {
+        [`${style.expanded} ${style.root}`]: showAll,
+      })}>
       <div className={style.header}>
         <Typography
           variant="caption"
@@ -97,10 +128,10 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest}) => {
           Friend Requests ({totalRequest})
         </Typography>
 
-        <ToggleCollapseButton onClick={setOpenFriends} />
+        <ToggleCollapseButton defaultExpanded={expanded} onClick={handleToggleExpand} />
       </div>
       <div className={style.content}>
-        <Collapse in={openFriends} timeout="auto" unmountOnExit>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
           <ShowIf condition={requests.length === 0}>
             <Typography
               variant="h4"
@@ -117,7 +148,7 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest}) => {
           </ShowIf>
 
           <List className={style.list}>
-            {requests.map(request => {
+            {requests.slice(0, showAll ? totalRequest : 2).map(request => {
               return (
                 <ListItem key={request.id} className={style.item} alignItems="flex-start">
                   <Link href={`/${request.requestor.id}`}>
@@ -133,11 +164,7 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest}) => {
                   <ListItemText>
                     <Link href={`/${request.requestor.id}`}>
                       <a href={`/${request.requestor.id}`}>
-                        <Typography
-                          component="span"
-                          variant="h4"
-                          color="textPrimary"
-                          style={{color: '#000000', fontSize: 16}}>
+                        <Typography component="span" variant="h4" color="textPrimary">
                           {request.requestor.name}
                         </Typography>
                       </a>
@@ -170,10 +197,9 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest}) => {
             <LinkComponent
               className={style.more}
               component="button"
-              onClick={() => {
-                console.info("I'm a button.");
-              }}>
-              (show all request)
+              color="textPrimary"
+              onClick={handleShowAll}>
+              (show {showAll ? 'less' : 'all'} request)
             </LinkComponent>
           </ShowIf>
         </Collapse>

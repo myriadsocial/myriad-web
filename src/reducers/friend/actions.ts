@@ -1,4 +1,4 @@
-import {Actions as BaseAction, setLoading, setError} from '../base/actions';
+import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 
@@ -13,7 +13,7 @@ import {ThunkActionCreator} from 'src/types/thunk';
  * Action Types
  */
 
-export interface LoadFriends extends Action {
+export interface LoadFriends extends PaginationAction {
   type: constants.FETCH_FRIEND;
   friends: ExtendedFriend[];
 }
@@ -54,9 +54,9 @@ export type Actions =
  * Action Creator
  */
 export const fetchFriend: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
+  (page = 1) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
-
     try {
       const {
         userState: {user},
@@ -66,25 +66,31 @@ export const fetchFriend: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const friends: ExtendedFriend[] = await FriendAPI.getFriends(user.id);
+      const friends: ExtendedFriend[] = await FriendAPI.getFriends(user.id, page);
+
+      friends.map(friend => {
+        if (friend.requestor && friend.requestor.profilePictureURL) {
+          friend.requestor.profile_picture = {
+            sizes: generateImageSizes(friend.requestor.profilePictureURL),
+          };
+        }
+
+        if (friend.friend && friend.friend.profilePictureURL) {
+          friend.friend.profile_picture = {
+            sizes: generateImageSizes(friend.friend.profilePictureURL),
+          };
+        }
+
+        return friend;
+      });
 
       dispatch({
         type: constants.FETCH_FRIEND,
-        friends: friends.map(friend => {
-          if (friend.requestor && friend.requestor.profilePictureURL) {
-            friend.requestor.profile_picture = {
-              sizes: generateImageSizes(friend.requestor.profilePictureURL),
-            };
-          }
-
-          if (friend.friend && friend.friend.profilePictureURL) {
-            friend.friend.profile_picture = {
-              sizes: generateImageSizes(friend.friend.profilePictureURL),
-            };
-          }
-
-          return friend;
-        }),
+        friends,
+        meta: {
+          page,
+          totalPage: friends.length,
+        },
       });
     } catch (error) {
       dispatch(setError(error.message));
