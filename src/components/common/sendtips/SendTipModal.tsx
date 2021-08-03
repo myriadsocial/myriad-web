@@ -240,6 +240,11 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
 
   const [open, setOpen] = useState(false);
 
+  const isSendTipFilled = () => {
+    if (tokenBalance.length > 0 && tipAmount > 0) return true;
+    return false;
+  };
+
   if (!isShown) return null;
 
   return (
@@ -284,6 +289,7 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
             fullWidth={true}
             size="large"
             variant="contained"
+            disabled={!isSendTipFilled}
             onClick={handleCloseModal}>
             Cancel
           </Button>
