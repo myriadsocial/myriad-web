@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {forwardRef, useEffect, useState, useImperativeHandle} from 'react';
 import {useSelector} from 'react-redux';
 
 import Backdrop from '@material-ui/core/Backdrop';
@@ -14,6 +14,7 @@ import {CurrencyTableComponent} from './currencyTable.component';
 import {useStyles} from './send-tips.style';
 import {TipAmountFieldComponent} from './tipAmountField.component';
 
+import {useWalletAddress} from 'src/components/common/sendtips/use-wallet.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {
   InputState,
@@ -24,9 +25,19 @@ import {
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
+export type RefProps = {
+  openSendTipModal: () => void;
+  closeSendTipModal: () => void;
+};
+//TODO: remove anything related to ref and switch back to useModal hooks
 const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTokens}: Props) => {
   //TODO: move to redux
   const {sendTip, loading, load, tokensReady: balanceDetails} = usePolkadotApi();
+  //const {
+  //error: errorWalletDetails,
+  //loading: loadingWalletDetails,
+  //getRecipientDetail,
+  //} = useWalletAddress(postId);
   const {recipientDetail} = useSelector<RootState, UserState>(state => state.userState);
   const styles = useStyles();
 
@@ -52,9 +63,13 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
   });
   const [disabled, setDisabled] = useState(true);
 
+  //const [openModal, setOpenModal] = useState(false);
+
   // reset form
   useEffect(() => {
     handleClearValue();
+    setSendTipClicked(false);
+    console.log('called');
   }, []);
 
   // load balance detail only when component need to be shown
@@ -62,13 +77,16 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
     if (isShown) {
       load(userAddress, availableTokens);
     }
+    console.log('called here');
   }, [isShown]);
 
   useEffect(() => {
-    if (recipientDetail && sendTipClicked) {
+    if (sendTipClicked) {
+      console.log('here you are: ', {recipientDetail});
       dispatchSendTip();
     }
-  }, [sendTipClicked, recipientDetail, tokenProperties, tipAmount]);
+    console.log('called over here');
+  }, [sendTipClicked]);
 
   useEffect(() => {
     if (balanceDetails?.length > 0) {
@@ -77,6 +95,7 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
   }, [tokenProperties.tokenId, balanceDetails]);
 
   useEffect(() => {
+    console.log('called instead');
     if (tokenBalance.length > 0 && values.amount.length > 0) {
       setDisabled(false);
     } else {
@@ -86,7 +105,6 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
 
   const handleClearValue = () => {
     setValues({
-      ...values,
       amount: '',
     });
   };
@@ -178,8 +196,14 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
   };
 
   const handleCloseModal = () => {
+    handleClearValue();
     hide();
+    setSendTipClicked(false);
   };
+
+  //const closeModal = () => {
+  //setOpenModal(false);
+  //};
 
   const sendTipWithPayload = ({
     senderAddress,
@@ -204,6 +228,7 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
 
     sendTip(sendTipPayload, () => {
       handleCloseModal();
+      //closeModal();
       setSendTipClicked(false);
       success(postId);
     });
@@ -311,5 +336,4 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
     </>
   );
 };
-
 export default SendTipModal;
