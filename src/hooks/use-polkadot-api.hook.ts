@@ -130,7 +130,6 @@ export const usePolkadotApi = () => {
     }: Props,
     callback?: () => void,
   ) => {
-    console.log('sendTip', toAddress);
     walletAddressDispatch({
       type: WalletAddressActionType.INIT_SEND_TIPS,
     });
@@ -141,7 +140,6 @@ export const usePolkadotApi = () => {
       const {web3FromSource} = await import('@polkadot/extension-dapp');
 
       const allAccounts = await enableExtension();
-      console.log('allAccounts', allAccounts);
       // We select the first account found by using fromAddress
       // `account` is of type InjectedAccountWithMeta
       const keyring = new Keyring();
@@ -229,7 +227,6 @@ export const usePolkadotApi = () => {
         }
       }
     } catch (error) {
-      console.log('ERROR', error);
       if (error.message === 'Cancelled') {
         showAlert({
           severity: 'warning',
