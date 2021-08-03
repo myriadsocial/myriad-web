@@ -5,16 +5,15 @@ on:
     branches:
       - main
 
+concurrency:
+  group: publish-docker-image-alpha
+  cancel-in-progress: true
+
 jobs:
   build-docker:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
-        with:
-          access_token: ${{ github.token }}
-
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
