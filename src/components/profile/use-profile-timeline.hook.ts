@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {TimelineFilter, TimelineType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
-import {loadTimeline} from 'src/reducers/timeline/actions';
+import {loadTimeline, clearTimeline} from 'src/reducers/timeline/actions';
 import {TimelineState} from 'src/reducers/timeline/reducer';
 
 export const useProfileTimeline = (people: User) => {
@@ -28,8 +28,13 @@ export const useProfileTimeline = (people: User) => {
     dispatch(loadTimeline(1, sort, filter, TimelineType.TRENDING));
   };
 
+  const clearPosts = () => {
+    dispatch(clearTimeline());
+  };
+
   return {
     filterOriginalPost,
     filterImportedPost,
+    clearPosts,
   };
 };

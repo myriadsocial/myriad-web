@@ -1,11 +1,19 @@
+import type {ACTION_LOADING} from '../base/constants';
+
 export const LOAD_TIMELINE = 'LOAD_TIMELINE';
 export type LOAD_TIMELINE = typeof LOAD_TIMELINE;
+
+export const TIMELINE_LOADING = 'TIMELINE_LOADING';
+export type TIMELINE_LOADING = ACTION_LOADING;
 
 export const ADD_POST_TO_TIMELINE = 'ADD_POST_TO_TIMELINE';
 export type ADD_POST_TO_TIMELINE = typeof ADD_POST_TO_TIMELINE;
 
 export const UPDATE_TIMELINE_FILTER = 'UPDATE_TIMELINE_FILTER';
 export type UPDATE_TIMELINE_FILTER = typeof UPDATE_TIMELINE_FILTER;
+
+export const CLEAR_TIMELINE = 'CLEAR_TIMELINE';
+export type CLEAR_TIMELINE = typeof CLEAR_TIMELINE;
 
 export const LIKE_POST = 'LIKE_POST';
 export type LIKE_POST = typeof LIKE_POST;
