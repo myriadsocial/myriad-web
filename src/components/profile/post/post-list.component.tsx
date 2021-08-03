@@ -2,7 +2,9 @@ import React, {useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useSelector} from 'react-redux';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
+import Grid from '@material-ui/core/Grid';
 import Grow from '@material-ui/core/Grow';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
@@ -28,11 +30,15 @@ export default function PostList({profile}: Props) {
   const style = useStyles();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {posts, hasMore, nextPage} = useTimelineHook();
-  const {filterOriginalPost} = useProfileTimeline(profile);
+  const {loading, posts, hasMore, nextPage} = useTimelineHook();
+  const {filterOriginalPost, clearPosts} = useProfileTimeline(profile);
 
   useEffect(() => {
     filterOriginalPost();
+
+    return () => {
+      clearPosts();
+    };
   }, []);
 
   const isOwnPost = (post: Post) => {
@@ -42,7 +48,7 @@ export default function PostList({profile}: Props) {
     return false;
   };
 
-  if (posts.length === 0) {
+  if (posts.length === 0 && !loading) {
     return (
       <div style={{textAlign: 'center', padding: 16, backgroundColor: 'white', borderRadius: 8}}>
         <h2>{user?.id === profile.id ? 'You' : profile.name} haven’t any post yet</h2>
@@ -68,6 +74,12 @@ export default function PostList({profile}: Props) {
               <PostComponent post={post} postOwner={isOwnPost(post)} />
             </Grow>
           ))}
+
+          {loading && (
+            <Grid container item xs={12} justify="center">
+              <CircularProgress color="secondary" />
+            </Grid>
+          )}
 
           <ScrollTop>
             <Fab color="secondary" size="small" aria-label="scroll back to top">

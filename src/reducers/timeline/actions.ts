@@ -68,6 +68,10 @@ export interface FetchWalletDetails extends Action {
   payload: WalletDetail;
 }
 
+export interface ClearTimeline extends Action {
+  type: constants.CLEAR_TIMELINE;
+}
+
 /**
  * Union Action Types
  */
@@ -82,11 +86,16 @@ export type Actions =
   | UnDislikePost
   | FetchWalletDetails
   | RemovePost
+  | ClearTimeline
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
   type: constants.UPDATE_TIMELINE_FILTER,
   filter,
+});
+
+export const clearTimeline = (): ClearTimeline => ({
+  type: constants.CLEAR_TIMELINE,
 });
 
 /**
