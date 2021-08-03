@@ -77,7 +77,6 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
   }, [tokenProperties.tokenId, balanceDetails]);
 
   useEffect(() => {
-    console.log({tokenBalance, values});
     if (tokenBalance.length > 0 && values.amount.length > 0) {
       setDisabled(false);
     } else {
