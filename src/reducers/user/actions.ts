@@ -8,9 +8,10 @@ import {generateImageSizes} from 'src/helpers/cloudinary';
 import {SocialsEnum} from 'src/interfaces/index';
 import {Token} from 'src/interfaces/token';
 import {ExtendedUser, User, UserTransactionDetail} from 'src/interfaces/user';
-import {WalletDetail} from 'src/interfaces/wallet';
+import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 import * as TokenAPI from 'src/lib/api/token';
 import * as UserAPI from 'src/lib/api/user';
+import * as WalletAddressAPI from 'src/lib/api/wallet';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -42,6 +43,11 @@ export interface UpdateUser extends Action {
   user: ExtendedUser;
 }
 
+export interface FetchRecipientDetail extends Action {
+  type: constants.FETCH_RECIPIENT_DETAIL;
+  payload: WalletDetail;
+}
+
 export interface SetRecipientDetail extends Action {
   type: constants.SET_RECIPIENT_DETAIL;
   recipientDetail: WalletDetail;
@@ -65,6 +71,7 @@ export type Actions =
   | SetUserAsAnonymous
   | UpdateUser
   | FetchUserTransactionDetails
+  | FetchRecipientDetail
   | SetRecipientDetail
   | SetVerifyingSocial
   | ResetVerifyingSocial
@@ -143,6 +150,27 @@ export const fetchToken: ThunkActionCreator<Actions, RootState> =
         type: constants.FETCH_USER_TOKEN,
         payload: tokens,
       });
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const fetchRecipientDetail: ThunkActionCreator<Actions, RootState> =
+  (postId: string) => async dispatch => {
+    dispatch(setLoading(true));
+
+    try {
+      const {walletAddress} = await WalletAddressAPI.getWalletAddress(postId);
+
+      const walletDetailPayload = {
+        walletAddress,
+        postId,
+        contentType: ContentType.POST,
+      };
+
+      dispatch(setRecipientDetail(walletDetailPayload));
     } catch (error) {
       dispatch(setError(error.message));
     } finally {
