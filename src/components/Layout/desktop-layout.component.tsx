@@ -9,6 +9,9 @@ import {NotifProvider} from 'src/context/notif.context';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {ExtendedUser} from 'src/interfaces/user';
 
+const HEADER_HEIGHT = 68;
+const DEMO_BANNER_HEIGHT = 56;
+
 type DesktopLayoutProps = {
   children: React.ReactNode;
   user: ExtendedUser;
@@ -42,9 +45,9 @@ const DesktopLayoutComponent: React.FC<DesktopLayoutProps> = ({children, user}) 
     const scroll = ref.current?.getBoundingClientRect().top;
 
     if (scroll) {
-      const scrolled = Math.min(68, 68 - scroll);
+      const scrolled = Math.min(HEADER_HEIGHT, HEADER_HEIGHT - scroll);
 
-      setTop(124 - scrolled);
+      setTop(HEADER_HEIGHT + DEMO_BANNER_HEIGHT - scrolled);
     }
   }, []);
 
@@ -53,7 +56,7 @@ const DesktopLayoutComponent: React.FC<DesktopLayoutProps> = ({children, user}) 
       <NotifProvider>
         <AppBar />
 
-        <div style={{marginTop: 68}} ref={ref}>
+        <div style={{marginTop: HEADER_HEIGHT}} ref={ref}>
           <BannerDemo />
 
           <div className={style.appWrapper}>
