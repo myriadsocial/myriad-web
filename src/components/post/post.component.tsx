@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useImperativeHandle, useEffect} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,17 +24,17 @@ import {useStyles} from './post.style';
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import CardTitle from 'src/components/common/CardTitle.component';
-import SendTipModal from 'src/components/common/sendtips/SendTipModal';
+//import SendTipModal from 'src/components/common/sendtips/SendTipModal';
 import {useWalletAddress} from 'src/components/common/sendtips/use-wallet.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
-import {useModal} from 'src/hooks/use-modal.hook';
 import {usePostHook} from 'src/hooks/use-post.hook';
 import {Post, Comment} from 'src/interfaces/post';
 import {WalletDetail} from 'src/interfaces/wallet';
 import {ContentType} from 'src/interfaces/wallet';
 import {RootState} from 'src/reducers';
 import {TimelineState} from 'src/reducers/timeline/reducer';
+import {fetchRecipientDetail} from 'src/reducers/user/actions';
 import {setRecipientDetail} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {v4 as uuid} from 'uuid';
@@ -53,43 +53,27 @@ type PostComponentProps = {
   disable?: boolean;
   post: Post;
   postOwner?: boolean;
+  tippingClicked: () => void;
 };
 
 const PostComponent: React.FC<PostComponentProps> = ({
   post,
   defaultExpanded = false,
   disable = false,
+  tippingClicked,
 }) => {
   const style = useStyles();
   const router = useRouter();
   const dispatch = useDispatch();
-  const {
-    user,
-    anonymous,
-    tokens: availableTokens,
-  } = useSelector<RootState, UserState>(state => state.userState);
+  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {walletDetails} = useSelector<RootState, TimelineState>(state => state.timelineState);
-  const {isShown, toggle, hide} = useModal();
 
   const {likePost, dislikePost} = usePostHook();
   const {openTipSummary} = useTipSummaryHook();
   const [expanded, setExpanded] = useState(defaultExpanded);
-  //Move to redux
-  const {loadWalletDetails} = useWalletAddress(post.id);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const headerRef = useRef<any>();
-
-  const defineWalletReceiverDetail = () => {
-    const tempWalletDetail = walletDetails.filter((walletDetail: WalletDetail) => {
-      return walletDetail.postId === post.id;
-    });
-    const matchingWalletDetail = tempWalletDetail[0];
-    dispatch(setRecipientDetail(matchingWalletDetail));
-  };
-
-  useEffect(() => {
-    loadWalletDetails();
-  }, [post.id]);
 
   if (!user && !anonymous) return null;
 
@@ -107,9 +91,9 @@ const PostComponent: React.FC<PostComponentProps> = ({
     }
 
     e.stopPropagation();
-    defineWalletReceiverDetail();
 
-    toggle();
+    dispatch(fetchRecipientDetail(post.id));
+    tippingClicked();
   };
 
   const defineRecipientDetail = (comment: Comment) => {
@@ -123,14 +107,10 @@ const PostComponent: React.FC<PostComponentProps> = ({
   };
 
   const tipCommentUser = (comment: Comment) => {
-    const {postId, walletAddress} = defineRecipientDetail(comment);
-    setRecipientDetail({
-      postId,
-      walletAddress,
-      contentType: ContentType.POST,
-    });
+    const recipientDetail = defineRecipientDetail(comment);
+    dispatch(setRecipientDetail(recipientDetail));
 
-    toggle();
+    tippingClicked();
   };
 
   const openContentSource = (): void => {
@@ -272,7 +252,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
             commentExpanded={expanded}
             likePost={likePostHandle}
             dislikePost={dislikePostHandle}
-            tipOwner={tipPostUser}
+            tipOwner={e => tipPostUser(e)}
           />
         </CardActions>
 
@@ -289,16 +269,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
           </Collapse>
         </ShowIf>
       </Card>
-      {user && (
-        <SendTipModal
-          isShown={isShown}
-          hide={hide}
-          availableTokens={availableTokens}
-          success={postId => handleTipSentSuccess(postId)}
-          userAddress={user.id}
-          postId={post.id as string}
-        />
-      )}{' '}
     </>
   );
 };
