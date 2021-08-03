@@ -1,4 +1,4 @@
-name: Publish Docker image for new development
+name: Publish docker image alpha
 
 on:
   push:
