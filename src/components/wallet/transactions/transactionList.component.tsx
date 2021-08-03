@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {format} from 'date-fns';
 import {useStyles} from 'src/components/wallet/transactions/transactionList-style';
+//TODO: transformTokenValue should be removed, value fetched from BE
 import {transformTokenValue} from 'src/helpers/transformTokenValue';
 import {Transaction} from 'src/interfaces/transaction';
 import {User} from 'src/interfaces/user';
@@ -64,10 +65,16 @@ export default function TransactionListComponent({transactions, user}: Props) {
             <Link href={`/${direction(txHistory)}`}>
               <a href={`/${direction(txHistory)}`}>{txHistory.toUser?.name ?? defaultUserName}</a>
             </Link>
+            {
+              //TODO: transformTokenValue should be removed, value fetched from BE
+            }
             's post with {transformTokenValue(txHistory)} {txHistory.tokenId}
           </Typography>
         ) : txHistory.fromUser?.name === 'Myriad' ? (
           <Typography>
+            {
+              //TODO: transformTokenValue should be removed, value fetched from BE
+            }
             You get tipping reward in the form of {transformTokenValue(txHistory)}{' '}
             {txHistory.tokenId}
           </Typography>
@@ -76,6 +83,9 @@ export default function TransactionListComponent({transactions, user}: Props) {
             <Link href={`/${direction(txHistory)}`}>
               <a href={`/${direction(txHistory)}`}>{txHistory.fromUser?.name ?? defaultUserName}</a>
             </Link>{' '}
+            {
+              //TODO: transformTokenValue should be removed, value fetched from BE
+            }
             tipped your post with {transformTokenValue(txHistory)} {txHistory.tokenId}
           </Typography>
         )}
