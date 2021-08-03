@@ -50,6 +50,7 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
   const [values, setValues] = useState<InputState>({
     amount: '',
   });
+  const [disabled, setDisabled] = useState(true);
 
   // reset form
   useEffect(() => {
@@ -74,6 +75,15 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
       handleChangeTokenBalance();
     }
   }, [tokenProperties.tokenId, balanceDetails]);
+
+  useEffect(() => {
+    console.log({tokenBalance, values});
+    if (tokenBalance.length > 0 && values.amount.length > 0) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  }, [tokenBalance, values.amount]);
 
   const handleClearValue = () => {
     setValues({
@@ -240,11 +250,6 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
 
   const [open, setOpen] = useState(false);
 
-  const isSendTipFilled = () => {
-    if (tokenBalance.length > 0 && tipAmount > 0) return true;
-    return false;
-  };
-
   if (!isShown) return null;
 
   return (
@@ -289,7 +294,6 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
             fullWidth={true}
             size="large"
             variant="contained"
-            disabled={!isSendTipFilled}
             onClick={handleCloseModal}>
             Cancel
           </Button>
@@ -299,7 +303,7 @@ const SendTipModal = ({isShown, hide, userAddress, postId, success, availableTok
             size="large"
             variant="contained"
             startIcon={<SendIcon />}
-            disabled={balanceDetails === undefined}
+            disabled={disabled}
             onClick={e => handleSendTip(e)}>
             Send
           </Button>
