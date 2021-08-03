@@ -1,5 +1,7 @@
 import {Transaction} from 'src/interfaces/transaction';
 
+//TODO: we might need to remove this file, MYRIA will be converted w/o decimals on the latest API
+
 enum TokenID {
   MYRIA = 'MYRIA',
   AUSD = 'AUSD',
