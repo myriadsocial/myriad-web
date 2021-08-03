@@ -2,10 +2,6 @@
   "name": "myriad-web",
   "version": "1.0.0",
   "description": "myriad-web",
-  "engines": {
-    "node": ">=14.0.0",
-    "yarn": ">=1.21.1"
-  },
   "private": true,
   "license": "UNLICENSED",
   "author": "Myriad Dev Team <myriad.dev@blocksphere.id>",
