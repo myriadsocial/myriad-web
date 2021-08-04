@@ -48,7 +48,6 @@ export const usePolkadotApi = () => {
   const [error, setError] = useState(null);
 
   const connectToBlockchain = async (wsProvider: string) => {
-    setLoading(true);
     let api: ApiPromise;
     try {
       const provider = new WsProvider(wsProvider);
@@ -58,33 +57,6 @@ export const usePolkadotApi = () => {
     } catch (error) {
       setError(error);
       return;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const multiQueries = async () => {
-    setLoading(true);
-
-    try {
-      const api = await connectToBlockchain('wss://acala-mandala.api.onfinality.io/public-ws');
-      const address = '0x443765fd2a8eff908ffbf8b0fdb45e404fc9cf19cd0003d37203f12d81926859';
-
-      if (api) {
-        //@ts-ignore
-        const test = await Promise.all([
-          api.query.tokens.accounts(address, {TOKEN: 'AUSD'}),
-          api.query.tokens.accounts(address, {TOKEN: 'DOT'}),
-        ]);
-
-        //@ts-ignore
-        console.log(test.forEach(({free}) => console.log(`the freeBalance are: ${free}`)));
-      }
-    } catch (error) {
-      console.log({error});
-      setError(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -112,8 +84,8 @@ export const usePolkadotApi = () => {
               break;
             }
 
+            //TODO: make enum based on rpc_address, collect the api calls and use multiqueries
             case TokenId.ACA: {
-              //@t
               const {data: balance} = await api.query.system.account(address);
               const tempBalance = balance.free as unknown;
               tokenBalances.push({
@@ -126,6 +98,7 @@ export const usePolkadotApi = () => {
               break;
             }
 
+            // should be for tokens of Acala, e.g. AUSD, DOT
             default: {
               const tokenData: any = await api.query.tokens.accounts(address, {
                 TOKEN: availableTokens[i].id,
@@ -289,6 +262,5 @@ export const usePolkadotApi = () => {
     sendTip,
     sendTipSuccess: walletAddressState.success,
     trxHash: walletAddressState.trxHash,
-    multiQueries,
   };
 };
