@@ -9,7 +9,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     appWrapper: {
       display: 'flex',
       margin: theme.spacing(0, 4),
-      marginRight: 342,
+      marginRight: 363,
     },
     contentWrapper: {
       display: 'flex',
