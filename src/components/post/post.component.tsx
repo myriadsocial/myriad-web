@@ -59,7 +59,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
   defaultExpanded = false,
   disable = false,
   tippingClicked,
-  selectedPost,
 }) => {
   const style = useStyles();
   const router = useRouter();
@@ -67,7 +66,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
   const {likePost, dislikePost} = usePostHook();
-  const {openTipSummary} = useTipSummaryHook();
   const [expanded, setExpanded] = useState(defaultExpanded);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -90,7 +88,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
 
     dispatch(fetchRecipientDetail(post.id));
     tippingClicked();
-    selectedPost(post);
   };
 
   const defineRecipientDetail = (comment: Comment) => {

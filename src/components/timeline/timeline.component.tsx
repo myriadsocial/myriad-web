@@ -18,7 +18,6 @@ import {useTimelineFilter} from './use-timeline-filter.hook';
 
 import {ScrollTop} from 'src/components/common/ScrollToTop.component';
 import CreatePostComponent from 'src/components/post/create/create-post.component';
-import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
 import {TipSummaryProvider} from 'src/components/tip-summary/tip-summary.context';
 import {useModal} from 'src/hooks/use-modal.hook';
 import {useTimelineHook} from 'src/hooks/use-timeline.hook';
@@ -58,7 +57,6 @@ const TimelineComponent: React.FC<TimelineComponentProps> = () => {
   const {posts, hasMore, sort, nextPage, sortTimeline} = useTimelineHook();
   const {isShown, toggle, hide} = useModal();
   const {filterTimeline} = useTimelineFilter();
-  const {openTipSummary} = useTipSummaryHook();
 
   const scrollRoot = createRef<HTMLDivElement>();
 
@@ -96,10 +94,6 @@ const TimelineComponent: React.FC<TimelineComponentProps> = () => {
     return false;
   };
 
-  const handleTipSentSuccess = (post: Post) => {
-    openTipSummary(post);
-  };
-
   return (
     <div className={style.root} id="timeline">
       <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
@@ -115,7 +109,6 @@ const TimelineComponent: React.FC<TimelineComponentProps> = () => {
               isShown={isShown}
               hide={hide}
               availableTokens={availableTokens}
-              success={postId => handleTipSentSuccess(postId)}
               userAddress={user.id}
             />
           </>
@@ -123,25 +116,23 @@ const TimelineComponent: React.FC<TimelineComponentProps> = () => {
 
         {!isMobile && <FilterTimelineComponent selected={sort} onChange={sortTimeline} />}
 
-        <TipSummaryProvider>
-          <div>
-            <InfiniteScroll
-              scrollableTarget="scrollable-timeline"
-              className={style.child}
-              dataLength={posts.length}
-              next={nextPage}
-              hasMore={hasMore}
-              loader={<LoadingPage />}>
-              {posts.map((post: Post, i: number) => (
-                <div key={post.id} id={`post-detail-${i}`}>
-                  <PostComponent post={post} postOwner={isOwnPost(post)} tippingClicked={toggle} />
-                </div>
-              ))}
-            </InfiniteScroll>
-          </div>
+        <div>
+          <InfiniteScroll
+            scrollableTarget="scrollable-timeline"
+            className={style.child}
+            dataLength={posts.length}
+            next={nextPage}
+            hasMore={hasMore}
+            loader={<LoadingPage />}>
+            {posts.map((post: Post, i: number) => (
+              <div key={post.id} id={`post-detail-${i}`}>
+                <PostComponent post={post} postOwner={isOwnPost(post)} tippingClicked={toggle} />
+              </div>
+            ))}
+          </InfiniteScroll>
+        </div>
 
-          <TipSummaryComponent />
-        </TipSummaryProvider>
+        <TipSummaryComponent />
         <ScrollTop>
           <Fab color="secondary" size="small" aria-label="scroll back to top">
             <KeyboardArrowUpIcon />
