@@ -1,0 +1,5 @@
+export const SET_TIPPED_POST = 'SET_TIPPED_POST';
+export type SET_TIPPED_POST = typeof SET_TIPPED_POST;
+
+export const CLEAR_TIPPED_POST = 'CLEAR_TIPPED_POST';
+export type CLEAR_TIPPED_POST = typeof CLEAR_TIPPED_POST;
