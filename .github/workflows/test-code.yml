@@ -34,3 +34,9 @@ jobs:
 
       - name: Test Code
         run: yarn test
+
+      - name: Check Link Markdown
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'yes'
+          config-file: '.github/workflows/mlc_config.json'
