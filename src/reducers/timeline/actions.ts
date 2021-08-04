@@ -72,6 +72,11 @@ export interface ClearTimeline extends Action {
   type: constants.CLEAR_TIMELINE;
 }
 
+export interface FetchDedicatedPost extends Action {
+  type: constants.FETCH_DEDICATED_POST;
+  post: Post;
+}
+
 /**
  * Union Action Types
  */
@@ -87,6 +92,7 @@ export type Actions =
   | FetchWalletDetails
   | RemovePost
   | ClearTimeline
+  | FetchDedicatedPost
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -102,6 +108,10 @@ export const clearTimeline = (): ClearTimeline => ({
  *
  * Actions
  */
+export const setPost = (post: Post): FetchDedicatedPost => ({
+  type: constants.FETCH_DEDICATED_POST,
+  post,
+});
 
 /**
  * Action Creator
@@ -362,6 +372,27 @@ export const deletePost: ThunkActionCreator<Actions, RootState> =
         type: constants.REMOVE_POST,
         postId,
       });
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const getDedicatedPost: ThunkActionCreator<Actions, RootState> =
+  (postId: string) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+      console.log('masuk');
+      const post = await PostAPI.getPostDetail(postId);
+      dispatch(setPost(post));
     } catch (error) {
       dispatch(setError(error.message));
     } finally {
