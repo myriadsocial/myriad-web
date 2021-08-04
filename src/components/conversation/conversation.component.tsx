@@ -31,7 +31,7 @@ const Conversation = ({post, user}: Props) => {
 
   return (
     <div>
-      <PostComponent post={state.viewed} />
+      <PostComponent post={state.viewed} tippingClicked={() => console.log('clicked')} />
     </div>
   );
 };

@@ -14,7 +14,7 @@ import {useProfileTimeline} from '../use-profile-timeline.hook';
 import {ScrollTop} from 'src/components/common/ScrollToTop.component';
 import {LoadingPage} from 'src/components/common/loading.component';
 import PostComponent from 'src/components/post/post.component';
-import {TipSummaryProvider} from 'src/components/tip-summary/tip-summary.context';
+import {useModal} from 'src/hooks/use-modal.hook';
 import {useTimelineHook} from 'src/hooks/use-timeline.hook';
 import {Post} from 'src/interfaces/post';
 import {ExtendedUser} from 'src/interfaces/user';
@@ -32,6 +32,7 @@ export default function PostList({profile}: Props) {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {loading, posts, hasMore, nextPage} = useTimelineHook();
   const {filterOriginalPost, clearPosts} = useProfileTimeline(profile);
+  const {toggle} = useModal();
 
   useEffect(() => {
     filterOriginalPost();
@@ -61,33 +62,31 @@ export default function PostList({profile}: Props) {
 
   return (
     <>
-      <TipSummaryProvider>
-        <InfiniteScroll
-          scrollableTarget="scrollable-timeline"
-          className={style.child}
-          dataLength={posts.length || 100}
-          next={nextPage}
-          hasMore={hasMore}
-          loader={<LoadingPage />}>
-          {posts.map((post: Post, i: number) => (
-            <Grow key={i}>
-              <PostComponent post={post} postOwner={isOwnPost(post)} />
-            </Grow>
-          ))}
+      <InfiniteScroll
+        scrollableTarget="scrollable-timeline"
+        className={style.child}
+        dataLength={posts.length || 100}
+        next={nextPage}
+        hasMore={hasMore}
+        loader={<LoadingPage />}>
+        {posts.map((post: Post, i: number) => (
+          <Grow key={i}>
+            <PostComponent post={post} postOwner={isOwnPost(post)} tippingClicked={toggle} />
+          </Grow>
+        ))}
 
-          {loading && (
-            <Grid container item xs={12} justify="center">
-              <CircularProgress color="secondary" />
-            </Grid>
-          )}
+        {loading && (
+          <Grid container item xs={12} justify="center">
+            <CircularProgress color="secondary" />
+          </Grid>
+        )}
 
-          <ScrollTop>
-            <Fab color="secondary" size="small" aria-label="scroll back to top">
-              <KeyboardArrowUpIcon />
-            </Fab>
-          </ScrollTop>
-        </InfiniteScroll>
-      </TipSummaryProvider>
+        <ScrollTop>
+          <Fab color="secondary" size="small" aria-label="scroll back to top">
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </ScrollTop>
+      </InfiniteScroll>
     </>
   );
 }

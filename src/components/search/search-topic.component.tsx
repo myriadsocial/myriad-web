@@ -15,7 +15,7 @@ import {ScrollTop} from 'src/components/common/ScrollToTop.component';
 import {LoadingPage} from 'src/components/common/loading.component';
 import PostComponent from 'src/components/post/post.component';
 import {useTimelineFilter} from 'src/components/timeline/use-timeline-filter.hook';
-import {TipSummaryProvider} from 'src/components/tip-summary/tip-summary.context';
+import {useModal} from 'src/hooks/use-modal.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {useTimelineHook} from 'src/hooks/use-timeline.hook';
 import {Post} from 'src/interfaces/post';
@@ -80,6 +80,7 @@ const TopicSearchComponent: React.FC<TopicSearchResultProps> = () => {
   const {load} = usePolkadotApi();
   const {hasMore, nextPage, posts} = useTimelineHook();
   const {filterSearchTimeline} = useTimelineFilter();
+  const {toggle} = useModal();
 
   useEffect(() => {
     filterSearchTimeline(query);
@@ -129,25 +130,23 @@ const TopicSearchComponent: React.FC<TopicSearchResultProps> = () => {
   return (
     <div className={style.root}>
       <div className={style.scroll} ref={scrollRoot} id="scrollable-timeline">
-        <TipSummaryProvider>
-          <div>
-            <InfiniteScroll
-              scrollableTarget="scrollable-timeline"
-              className={style.child}
-              dataLength={posts.length}
-              next={nextPage}
-              hasMore={hasMore}
-              loader={<LoadingPage />}>
-              {posts.map((post: Post, i: number) => (
-                <div key={post.id} id={`post-detail-${i}`}>
-                  <PostComponent post={post} postOwner={isOwnPost(post)} />
-                </div>
-              ))}
-            </InfiniteScroll>
-          </div>
+        <div>
+          <InfiniteScroll
+            scrollableTarget="scrollable-timeline"
+            className={style.child}
+            dataLength={posts.length}
+            next={nextPage}
+            hasMore={hasMore}
+            loader={<LoadingPage />}>
+            {posts.map((post: Post, i: number) => (
+              <div key={post.id} id={`post-detail-${i}`}>
+                <PostComponent post={post} postOwner={isOwnPost(post)} tippingClicked={toggle} />
+              </div>
+            ))}
+          </InfiniteScroll>
+        </div>
 
-          <TipSummaryComponent />
-        </TipSummaryProvider>
+        <TipSummaryComponent />
         <ScrollTop>
           <Fab color="secondary" size="small" aria-label="scroll back to top">
             <KeyboardArrowUpIcon />

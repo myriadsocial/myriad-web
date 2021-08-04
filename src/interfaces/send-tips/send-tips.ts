@@ -1,4 +1,3 @@
-import {Post} from 'src/interfaces/post';
 import {Token} from 'src/interfaces/token';
 import {ContentType} from 'src/interfaces/wallet';
 
