@@ -1,5 +1,9 @@
-import {useTipSummary, TipSummaryActionType} from 'src/components/tip-summary/tip-summary.context';
+import {useSelector, useDispatch} from 'react-redux';
+
 import {Post} from 'src/interfaces/post';
+import {RootState} from 'src/reducers';
+import {setTippedPost, clearTippedPost} from 'src/reducers/tip-summary/actions';
+import {TipSummaryState} from 'src/reducers/tip-summary/reducer';
 
 type TipSummaryHookProps = {
   post: Post | null;
@@ -8,22 +12,16 @@ type TipSummaryHookProps = {
 };
 
 export const useTipSummaryHook = (): TipSummaryHookProps => {
-  const {
-    state: {post},
-    dispatch,
-  } = useTipSummary();
+  const dispatch = useDispatch();
+
+  const {post} = useSelector<RootState, TipSummaryState>(state => state.tipSummaryState);
 
   const openTipSummary = (post: Post): void => {
-    dispatch({
-      type: TipSummaryActionType.SET_TIPPED_POST,
-      payload: post,
-    });
+    dispatch(setTippedPost(post));
   };
 
   const clearTipSummary = (): void => {
-    dispatch({
-      type: TipSummaryActionType.CLEAR_TIPPED_POST,
-    });
+    dispatch(clearTippedPost());
   };
 
   return {
