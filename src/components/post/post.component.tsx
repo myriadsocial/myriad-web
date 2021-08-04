@@ -1,4 +1,4 @@
-import React, {useState, useRef, useImperativeHandle, useEffect} from 'react';
+import React, {useState, useRef} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,13 +24,10 @@ import {useStyles} from './post.style';
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import CardTitle from 'src/components/common/CardTitle.component';
-//import SendTipModal from 'src/components/common/sendtips/SendTipModal';
-import {useWalletAddress} from 'src/components/common/sendtips/use-wallet.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
 import {usePostHook} from 'src/hooks/use-post.hook';
 import {Post, Comment} from 'src/interfaces/post';
-import {WalletDetail} from 'src/interfaces/wallet';
 import {ContentType} from 'src/interfaces/wallet';
 import {RootState} from 'src/reducers';
 import {TimelineState} from 'src/reducers/timeline/reducer';
@@ -54,6 +51,7 @@ type PostComponentProps = {
   post: Post;
   postOwner?: boolean;
   tippingClicked: () => void;
+  selectedPost: (post: Post) => void;
 };
 
 const PostComponent: React.FC<PostComponentProps> = ({
@@ -61,12 +59,12 @@ const PostComponent: React.FC<PostComponentProps> = ({
   defaultExpanded = false,
   disable = false,
   tippingClicked,
+  selectedPost,
 }) => {
   const style = useStyles();
   const router = useRouter();
   const dispatch = useDispatch();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const {walletDetails} = useSelector<RootState, TimelineState>(state => state.timelineState);
 
   const {likePost, dislikePost} = usePostHook();
   const {openTipSummary} = useTipSummaryHook();
@@ -76,8 +74,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
   const headerRef = useRef<any>();
 
   if (!user && !anonymous) return null;
-
-  if (!walletDetails) return null;
 
   if (post.text === '[removed]' && post.platform === 'reddit') return null;
 
@@ -94,6 +90,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
 
     dispatch(fetchRecipientDetail(post.id));
     tippingClicked();
+    selectedPost(post);
   };
 
   const defineRecipientDetail = (comment: Comment) => {
@@ -151,12 +148,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
     }
 
     return url;
-  };
-
-  const handleTipSentSuccess = (postId: string) => {
-    if (post.id === postId) {
-      openTipSummary(post);
-    }
   };
 
   const likePostHandle = () => {

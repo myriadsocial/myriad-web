@@ -1,3 +1,4 @@
+import {Post} from 'src/interfaces/post';
 import {Token} from 'src/interfaces/token';
 import {ContentType} from 'src/interfaces/wallet';
 
@@ -16,8 +17,8 @@ export interface Props {
   isShown: boolean;
   hide: () => void;
   userAddress: string;
-  success: (postId: string) => void;
-  postId: string;
+  selectedPost: Post;
+  success: (post: Post) => void;
   receiverId?: string;
   availableTokens: Token[];
 }
