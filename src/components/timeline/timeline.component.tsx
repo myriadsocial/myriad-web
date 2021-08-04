@@ -18,6 +18,7 @@ import {useTimelineFilter} from './use-timeline-filter.hook';
 
 import {ScrollTop} from 'src/components/common/ScrollToTop.component';
 import CreatePostComponent from 'src/components/post/create/create-post.component';
+import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
 import {TipSummaryProvider} from 'src/components/tip-summary/tip-summary.context';
 import {useModal} from 'src/hooks/use-modal.hook';
 import {useTimelineHook} from 'src/hooks/use-timeline.hook';
@@ -57,6 +58,7 @@ const TimelineComponent: React.FC<TimelineComponentProps> = () => {
   const {posts, hasMore, sort, nextPage, sortTimeline} = useTimelineHook();
   const {isShown, toggle, hide} = useModal();
   const {filterTimeline} = useTimelineFilter();
+  const {openTipSummary} = useTipSummaryHook();
 
   const scrollRoot = createRef<HTMLDivElement>();
 
@@ -94,8 +96,8 @@ const TimelineComponent: React.FC<TimelineComponentProps> = () => {
     return false;
   };
 
-  const handleTipSentSuccess = (postId: string) => {
-    console.log({postId});
+  const handleTipSentSuccess = (post: Post) => {
+    openTipSummary(post);
   };
 
   return (
@@ -112,11 +114,9 @@ const TimelineComponent: React.FC<TimelineComponentProps> = () => {
             <SendTipModal
               isShown={isShown}
               hide={hide}
-              //ref={sendTipRef}
               availableTokens={availableTokens}
               success={postId => handleTipSentSuccess(postId)}
               userAddress={user.id}
-              //postId={post.id as string}
             />
           </>
         )}
