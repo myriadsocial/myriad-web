@@ -1,4 +1,4 @@
-import React, {forwardRef, useEffect, useState, useImperativeHandle} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import Backdrop from '@material-ui/core/Backdrop';
