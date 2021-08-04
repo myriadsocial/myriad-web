@@ -25,12 +25,10 @@ import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import CardTitle from 'src/components/common/CardTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
-import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
 import {usePostHook} from 'src/hooks/use-post.hook';
 import {Post, Comment} from 'src/interfaces/post';
 import {ContentType} from 'src/interfaces/wallet';
 import {RootState} from 'src/reducers';
-import {TimelineState} from 'src/reducers/timeline/reducer';
 import {fetchRecipientDetail} from 'src/reducers/user/actions';
 import {setRecipientDetail} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
@@ -51,7 +49,6 @@ type PostComponentProps = {
   post: Post;
   postOwner?: boolean;
   tippingClicked: () => void;
-  selectedPost: (post: Post) => void;
 };
 
 const PostComponent: React.FC<PostComponentProps> = ({
