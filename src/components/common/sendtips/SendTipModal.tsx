@@ -14,6 +14,7 @@ import {CurrencyTableComponent} from './currencyTable.component';
 import {useStyles} from './send-tips.style';
 import {TipAmountFieldComponent} from './tipAmountField.component';
 
+import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {
   InputState,
@@ -22,6 +23,7 @@ import {
   SendTipWithPayloadProps,
 } from 'src/interfaces/send-tips/send-tips';
 import {RootState} from 'src/reducers';
+import {TimelineState} from 'src/reducers/timeline/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 export type RefProps = {
@@ -29,17 +31,12 @@ export type RefProps = {
   closeSendTipModal: () => void;
 };
 //TODO: remove anything related to ref and switch back to useModal hooks
-const SendTipModal = ({
-  isShown,
-  hide,
-  userAddress,
-  selectedPost,
-  success,
-  availableTokens,
-}: Props) => {
+const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
   //TODO: move to redux
   const {sendTip, loading, load, tokensReady: balanceDetails} = usePolkadotApi();
+  const {openTipSummary} = useTipSummaryHook();
   const {recipientDetail} = useSelector<RootState, UserState>(state => state.userState);
+  const {posts} = useSelector<RootState, TimelineState>(state => state.timelineState);
   const styles = useStyles();
 
   const [senderAddress, setSenderAddress] = useState('');
@@ -219,7 +216,11 @@ const SendTipModal = ({
     sendTip(sendTipPayload, () => {
       handleCloseModal();
       setSendTipClicked(false);
-      success(postId);
+      const contentPayload = posts.find(({id}) => id === recipientDetail.postId);
+
+      if (contentPayload) {
+        openTipSummary(contentPayload);
+      }
     });
   };
 
