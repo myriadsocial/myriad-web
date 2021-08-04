@@ -178,8 +178,7 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
   };
 
 export const createPost: ThunkActionCreator<Actions, RootState> =
-  (text: string, tags: string[], images: string[]) => async (dispatch, getState) => {
-    const hasMedia = images.length > 0;
+  (post: Partial<Post>, images: string[]) => async (dispatch, getState) => {
     const {
       userState: {user},
     } = getState();
@@ -191,14 +190,15 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
+      const hasMedia = images.length > 0;
+
       // TODO: simplify this
       const data = await PostAPI.createPost({
-        text,
-        tags,
-        hasMedia,
+        ...post,
         platform: 'myriad',
+        hasMedia,
         asset: {
-          images: hasMedia ? images : [],
+          images,
           videos: [],
         },
         platformUser: {

@@ -1,4 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
+
+import dynamic from 'next/dynamic';
 
 import {Tooltip} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -13,38 +15,40 @@ import Typography from '@material-ui/core/Typography';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import VideocamIcon from '@material-ui/icons/Videocam';
 
-import {CreatePostExpandedComponent} from './create-post-expanded.component';
 import {useStyles} from './create-post.style';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import {usePostHook} from 'src/hooks/use-post.hook';
 import {Experience} from 'src/interfaces/experience';
+import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import theme from 'src/themes/default';
 
-type Props = {
+const CreatePostExpandedComponent = dynamic(() => import('./create-post-expanded.component'), {
+  ssr: false,
+});
+
+type CreatePostProps = {
   user: User;
-  experiences: Experience[];
+  experiences?: Experience[];
 };
 
-export default function CreatePostComponent({user, experiences}: Props) {
+const CreatePostComponent: React.FC<CreatePostProps> = ({user}) => {
   const styles = useStyles();
 
   const {addPost, loading} = usePostHook(user);
-  const [postText, setPostText] = useState('');
+  const [post, setPost] = useState<Partial<Post> | null>(null);
+
   const [showCreatePost, setCreatePost] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const expandRef = useRef<React.ElementRef<typeof CreatePostExpandedComponent>>(null);
 
   useEffect(() => {
     if (submitting && !loading) {
-      expandRef.current?.clearForm();
-
       toggleCreatePost();
     }
 
     return () => {
-      expandRef.current?.clearForm();
+      setPost(null);
     };
   }, [submitting, loading]);
 
@@ -56,15 +60,16 @@ export default function CreatePostComponent({user, experiences}: Props) {
   const updatePostText = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = event.target.value;
 
-    setPostText(text);
+    setPost(prevPost => ({
+      ...prevPost,
+      text,
+    }));
   };
 
-  const savePost = (text: string, tags: string[], files: File[]) => {
+  const savePost = (post: Partial<Post>, images: File[]) => {
     setSubmitting(true);
 
-    addPost(text, tags, files);
-
-    setPostText('');
+    addPost(post, images);
   };
 
   return (
@@ -78,7 +83,7 @@ export default function CreatePostComponent({user, experiences}: Props) {
         <CardContent>
           <TextareaAutosize
             rowsMin={2}
-            value={postText}
+            value={post?.text}
             placeholder={`A penny for your thoughts?`}
             className={styles.postTextArea}
             onChange={updatePostText}
@@ -122,18 +127,15 @@ export default function CreatePostComponent({user, experiences}: Props) {
         <DialogTitle id="name" onClose={toggleCreatePost}>
           Post Something
         </DialogTitle>
+
         <DialogContent>
-          <CreatePostExpandedComponent
-            ref={expandRef}
-            text={postText}
-            onSubmit={savePost}
-            user={user}
-            experiences={[]}
-          />
+          <CreatePostExpandedComponent post={post} user={user} onSubmit={savePost} />
         </DialogContent>
 
         {submitting && <CircularProgress size={40} className={styles.buttonProgress} />}
       </Dialog>
     </div>
   );
-}
+};
+
+export default CreatePostComponent;

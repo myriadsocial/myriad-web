@@ -95,3 +95,8 @@ export type Dislike = {
   postId: string;
   userId: string;
 };
+
+export type UpoadedFile = {
+  file: File;
+  preview: string;
+};

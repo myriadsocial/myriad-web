@@ -95,8 +95,12 @@ export default function SearchComponent({
           'aria-label': 'search',
         }}
         endAdornment={
-          <IconButton aria-label="search friend" color="primary" disableRipple>
-            <SearchIcon className={classes.searchIcon} onClick={() => onSubmit(search)} />
+          <IconButton
+            aria-label="search friend"
+            color="primary"
+            disableRipple
+            onClick={() => onSubmit(search)}>
+            <SearchIcon className={classes.searchIcon} />
           </IconButton>
         }
         disabled={isDisabled}
