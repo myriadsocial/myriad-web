@@ -1,3 +1,5 @@
+import {HYDRATE} from 'next-redux-wrapper';
+
 import * as BaseConstants from '../base/constants';
 import {State as BaseState} from '../base/state';
 import {Actions} from './actions';
@@ -17,6 +19,7 @@ export interface TimelineState extends BaseState {
   page: number;
   posts: Post[];
   walletDetails: WalletDetail[];
+  post?: Post;
 }
 
 const initalState: TimelineState = {
@@ -34,6 +37,10 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
   action,
 ) => {
   switch (action.type) {
+    case HYDRATE: {
+      return action.payload.timelineState;
+    }
+
     case constants.LOAD_TIMELINE: {
       return {
         ...state,
@@ -124,6 +131,13 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       return {
         ...state,
         walletDetails: [...state.walletDetails, action.payload],
+      };
+    }
+
+    case constants.FETCH_DEDICATED_POST: {
+      return {
+        ...state,
+        post: action.post,
       };
     }
 
