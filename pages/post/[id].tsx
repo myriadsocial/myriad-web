@@ -14,10 +14,10 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import Layout from 'src/components/Layout/Layout.container';
-import {TipSummaryProvider} from 'src/components/tip-summary/tip-summary.context';
 import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
 import {Wallet} from 'src/components/wallet/wallet.component';
+import {useModal} from 'src/hooks/use-modal.hook';
 import {useResize} from 'src/hooks/use-resize.hook';
 import {Post} from 'src/interfaces/post';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -30,6 +30,7 @@ import {setAnonymous, setUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
 
+const SendTipModal = dynamic(() => import('src/components/common/sendtips/SendTipModal'));
 const TipSummaryComponent = dynamic(
   () => import('src/components/tip-summary/tip-summary.component'),
 );
@@ -123,8 +124,11 @@ const PostPageComponent: React.FC<PostPageProps> = () => {
 };
 
 const DedicatedPost = () => {
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, tokens: availableTokens} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const {post} = useSelector<RootState, TimelineState>(state => state.timelineState);
+  const {isShown, toggle, hide} = useModal();
   const style = useStyles();
   const router = useRouter();
 
@@ -141,16 +145,23 @@ const DedicatedPost = () => {
   if (!post) return null;
   return (
     <div className={style.root}>
+      {user && (
+        <SendTipModal
+          isShown={isShown}
+          hide={hide}
+          availableTokens={availableTokens}
+          userAddress={user.id}
+        />
+      )}
       <div className={style.flex}>
         <IconButton onClick={backtoTimeline} color="primary" aria-label="delete">
           <ArrowBackIcon />
         </IconButton>
         <Typography className={style.text}>{'Myriad Post'}</Typography>
       </div>
-      <TipSummaryProvider>
-        <PostComponent post={post} postOwner={isOwnPost(post)} />
-        <TipSummaryComponent />
-      </TipSummaryProvider>
+
+      <PostComponent post={post} postOwner={isOwnPost(post)} tippingClicked={toggle} />
+      <TipSummaryComponent />
     </div>
   );
 };
