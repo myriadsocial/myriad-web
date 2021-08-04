@@ -15,6 +15,7 @@ import {
 } from '../components/wallet/balance.context';
 
 import {useAlertHook} from 'src/hooks/use-alert.hook';
+import {TokenId} from 'src/interfaces/token';
 import {Token} from 'src/interfaces/token';
 import {ContentType} from 'src/interfaces/wallet';
 import {updateTips} from 'src/lib/api/post';
@@ -62,6 +63,31 @@ export const usePolkadotApi = () => {
     }
   };
 
+  const multiQueries = async () => {
+    setLoading(true);
+
+    try {
+      const api = await connectToBlockchain('wss://acala-mandala.api.onfinality.io/public-ws');
+      const address = '0x443765fd2a8eff908ffbf8b0fdb45e404fc9cf19cd0003d37203f12d81926859';
+
+      if (api) {
+        //@ts-ignore
+        const test = await Promise.all([
+          api.query.tokens.accounts(address, {TOKEN: 'AUSD'}),
+          api.query.tokens.accounts(address, {TOKEN: 'DOT'}),
+        ]);
+
+        //@ts-ignore
+        console.log(test.forEach(({free}) => console.log(`the freeBalance are: ${free}`)));
+      }
+    } catch (error) {
+      console.log({error});
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const load = async (address: string, availableTokens: Token[]) => {
     setLoading(true);
     const tokenBalances = [];
@@ -73,8 +99,7 @@ export const usePolkadotApi = () => {
 
         if (api) {
           switch (availableTokens[i].id) {
-            // TODO: move to single file constant or enum
-            case 'MYRIA': {
+            case TokenId.MYRIA: {
               const {data: balance} = await api.query.system.account(address);
               const tempBalance = balance.free as unknown;
               tokenBalances.push({
@@ -86,6 +111,21 @@ export const usePolkadotApi = () => {
               });
               break;
             }
+
+            case TokenId.ACA: {
+              //@t
+              const {data: balance} = await api.query.system.account(address);
+              const tempBalance = balance.free as unknown;
+              tokenBalances.push({
+                freeBalance: formatNumber(tempBalance as number, availableTokens[i].token_decimal),
+                tokenSymbol: availableTokens[i].id,
+                tokenDecimals: availableTokens[i].token_decimal,
+                rpcAddress: provider,
+                tokenImage: availableTokens[i].token_image,
+              });
+              break;
+            }
+
             default: {
               const tokenData: any = await api.query.tokens.accounts(address, {
                 TOKEN: availableTokens[i].id,
@@ -111,6 +151,7 @@ export const usePolkadotApi = () => {
         balanceDetails: tokenBalances,
       });
     } catch (error) {
+      console.log({error});
       setError(error);
     } finally {
       setLoading(false);
@@ -248,5 +289,6 @@ export const usePolkadotApi = () => {
     sendTip,
     sendTipSuccess: walletAddressState.success,
     trxHash: walletAddressState.trxHash,
+    multiQueries,
   };
 };
