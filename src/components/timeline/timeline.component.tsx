@@ -18,7 +18,6 @@ import {useTimelineFilter} from './use-timeline-filter.hook';
 
 import {ScrollTop} from 'src/components/common/ScrollToTop.component';
 import CreatePostComponent from 'src/components/post/create/create-post.component';
-import {TipSummaryProvider} from 'src/components/tip-summary/tip-summary.context';
 import {useModal} from 'src/hooks/use-modal.hook';
 import {useTimelineHook} from 'src/hooks/use-timeline.hook';
 import {Post} from 'src/interfaces/post';
