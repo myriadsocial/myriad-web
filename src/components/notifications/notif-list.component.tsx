@@ -18,6 +18,7 @@ import {useNotif} from 'src/context/notif.context';
 import {acronym} from 'src/helpers/string';
 import {useNotifHook} from 'src/hooks/use-notif.hook';
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 type NotificationListProps = {};
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -53,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const NotificationListComponent: React.FC<NotificationListProps> = props => {
+const NotificationListComponent: React.FC<NotificationListProps> = () => {
   const style = useStyles();
   const {state} = useNotif();
   const {loadNotifications} = useNotifHook();
@@ -74,7 +75,7 @@ const NotificationListComponent: React.FC<NotificationListProps> = props => {
                 variant="h5"
                 color="textPrimary"
                 style={{textAlign: 'center', padding: '16px 40px'}}>
-                You don't have any notifications, start posting!
+                {"You don't have any notifications, start posting!"}
               </Typography>
             </ShowIf>
             <List className={style.list}>
@@ -90,7 +91,7 @@ const NotificationListComponent: React.FC<NotificationListProps> = props => {
                     </ListItemAvatar>
                     <ListItemText>
                       <Typography variant="body1" color="textPrimary" style={{fontWeight: 400}}>
-                        {notif.message}
+                        {notif.fromUserId.name} {notif.message}
                       </Typography>
                       <Typography variant="body2" color="textPrimary">
                         {formatDistance(subDays(new Date(notif.createdAt), 0), new Date(), {
