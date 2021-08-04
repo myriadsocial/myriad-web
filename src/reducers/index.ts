@@ -4,6 +4,7 @@ import {NotificationReducer} from './notification/reducer';
 import {PopularReducer} from './popular/reducer';
 import {ProfileReducer} from './profile/reducer';
 import {TimelineReducer} from './timeline/reducer';
+import {TipSummaryReducer} from './tip-summary/reducer';
 import {UserReducer} from './user/reducer';
 
 import {combineReducers} from 'redux';
@@ -16,6 +17,7 @@ const reducers = {
   profileState: ProfileReducer,
   timelineState: TimelineReducer,
   userState: UserReducer,
+  tipSummaryState: TipSummaryReducer,
 };
 
 export const combinedReducers = combineReducers(reducers);
