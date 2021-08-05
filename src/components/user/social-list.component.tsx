@@ -183,7 +183,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) =>
         </ListItem>
       </List>
 
-      {user && selected && (
+      {user && (
         <ConnectComponent
           ref={connectRef}
           publicKey={user.id}
