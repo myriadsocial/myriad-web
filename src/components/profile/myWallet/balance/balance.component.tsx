@@ -148,6 +148,16 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, hidden}) => {
     setIsHidden(!isHidden);
   };
 
+  const LoadingComponent = () => {
+    return (
+      <TableRow>
+        <TableCell>
+          <CircularProgress className={style.spinner} size={20} />
+        </TableCell>
+      </TableRow>
+    );
+  };
+
   const CurrencyTable = () => {
     return (
       <TableContainer>
@@ -163,6 +173,7 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, hidden}) => {
             </TableRow>
           </TableHead>
           <TableBody>
+            {tokensReady.length === 0 && <LoadingComponent />}
             {tokensReady.map(row => (
               <TableRow key={row.tokenSymbol}>
                 <TableCell component="th" scope="row">
