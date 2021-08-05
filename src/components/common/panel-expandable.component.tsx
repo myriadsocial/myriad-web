@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 type Props = {
   children: React.ReactNode;
   title: string;
+  isDisabled?: boolean;
   expanded?: boolean;
   actions?: React.ReactElement;
   startIcon?: React.ReactElement;
@@ -38,12 +39,13 @@ export default function ExpandablePanel({
   expanded = false,
   actions,
   startIcon,
+  isDisabled,
 }: Props) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <Accordion defaultExpanded={expanded}>
+      <Accordion defaultExpanded={expanded} disabled={isDisabled}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-label="Expand"
