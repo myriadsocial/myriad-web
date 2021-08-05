@@ -1,5 +1,5 @@
 import React, {useEffect, useImperativeHandle} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
@@ -14,10 +14,8 @@ import {ErrorTransactionComponent} from './ErrorTransaction.component';
 import {LoadingTransactionComponent} from './LoadingTransaction.component';
 import {useStyles} from './transaction.style';
 
-import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {Token} from 'src/interfaces/token';
 import {RootState} from 'src/reducers';
-import {fetchUserTransactionDetails} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 const TransactionListComponent = dynamic(() => import('./transactionList.component'));
@@ -39,29 +37,15 @@ type TippingJarComponentProps = {
 const TransactionComponent: React.FC<TransactionProps> = ({forwardedRef, detailed}) => {
   const styles = useStyles();
 
-  const {
-    user,
-    tokens: userTokens,
-    transactionDetails: userTransactionDetails,
-  } = useSelector<RootState, UserState>(state => state.userState);
+  const {user, tokens: userTokens} = useSelector<RootState, UserState>(state => state.userState);
   const {loading, error, transactions, inboundTxs, outboundTxs, loadInitTransaction} =
     useTransaction();
-
-  // TODO: Need to migrate to redux
-  const {load, tokensReady} = usePolkadotApi();
-
-  const dispatch = useDispatch();
 
   if (!user) return null;
 
   useEffect(() => {
     loadInitTransaction();
-    load(user.id, userTokens);
   }, []);
-
-  useEffect(() => {
-    dispatch(fetchUserTransactionDetails());
-  }, [dispatch]);
 
   useImperativeHandle(forwardedRef, () => ({
     triggerRefresh: () => {
@@ -112,12 +96,7 @@ const TransactionComponent: React.FC<TransactionProps> = ({forwardedRef, detaile
 
   return (
     <div ref={forwardedRef}>
-      {detailed && (
-        <TokenDetailComponent
-          balanceDetails={tokensReady}
-          userTransactionDetails={userTransactionDetails}
-        />
-      )}
+      {detailed && <TokenDetailComponent />}
       {loading ? (
         <LoadingTransactionComponent />
       ) : error ? (
