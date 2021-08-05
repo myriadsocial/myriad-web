@@ -1,4 +1,5 @@
 import React, {createRef, useEffect, forwardRef} from 'react';
+import {useSelector} from 'react-redux';
 
 import {useSession} from 'next-auth/client';
 import dynamic from 'next/dynamic';
@@ -15,6 +16,8 @@ import {useStyles} from './wallet.style';
 
 import {useToken} from 'src/hooks/use-token.hook';
 import {Token} from 'src/interfaces/token';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 const BalanceComponent = dynamic(() => import('./balance.component'));
 
@@ -46,6 +49,8 @@ export const Wallet = React.memo(function Wallet() {
   const balanceRef = createRef<any>();
 
   const walletSettingRef = createRef<any>();
+
+  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
   const [session, sessionLoading] = useSession();
   let userId = session?.user.userId as string;
@@ -104,21 +109,30 @@ export const Wallet = React.memo(function Wallet() {
 
   if (loading)
     return (
-      <ExpandablePanel title="My Wallet" actions={<WalletAction disabled={true} />}>
+      <ExpandablePanel
+        title="My Wallet"
+        actions={<WalletAction disabled={true} />}
+        isDisabled={anonymous}>
         <LoadingPage />
       </ExpandablePanel>
     );
 
   if (errorUserTokens)
     return (
-      <ExpandablePanel title="My Wallet" actions={<WalletAction disabled={false} />}>
+      <ExpandablePanel
+        title="My Wallet"
+        actions={<WalletAction disabled={false} />}
+        isDisabled={anonymous}>
         <Typography>Error, please try again!</Typography>
       </ExpandablePanel>
     );
 
   return (
     <div id="wallet">
-      <ExpandablePanel title="My Wallet" actions={<WalletAction disabled={false} />}>
+      <ExpandablePanel
+        title="My Wallet"
+        actions={<WalletAction disabled={false} />}
+        isDisabled={anonymous}>
         <ForwardedBalanceComponent ref={balanceRef} availableTokens={userTokens} />
         <Divider variant="middle" />
         <ForwardedTransactionComponent ref={transactionRef} />
