@@ -10,11 +10,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-docker:
+  build-and-publish-docker-image:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -39,8 +39,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Info
+      - name: Compute build info
         id: build-info
+        shell: bash
         run: |
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
           echo "::set-output name=date::$(date +'%Y%m%d')"
@@ -51,8 +52,7 @@ jobs:
           push: true
           file: .maintain/docker/Dockerfile
           tags: |
-            myriadsocial/myriad-web:latest-alpha
-            myriadsocial/myriad-web:${{ steps.build-info.sha_short }}-${{ steps.build-info.date }}
+            ${{ github.repository }}:latest-alpha
           build-args: |
             VCS_REF=${{ steps.build-info.sha_short }}
             BUILD_DATE=${{ steps.build-info.date }}
