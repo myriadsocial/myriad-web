@@ -3,7 +3,7 @@ import {useState} from 'react';
 import {useToken as baseUseToken, TokenActionType} from 'src/components/wallet/token.context';
 import * as TokenAPI from 'src/lib/api/token';
 
-export const useToken = (userId: string) => {
+export const useToken = () => {
   const {state, dispatch} = baseUseToken();
 
   const [loading, setLoading] = useState(true);
@@ -28,7 +28,7 @@ export const useToken = (userId: string) => {
     }
   };
 
-  const loadAllUserTokens = async () => {
+  const loadAllUserTokens = async (userId: string) => {
     setLoading(true);
 
     try {

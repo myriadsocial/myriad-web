@@ -63,7 +63,7 @@ export default function ReplyComponent({isAnonymous, close, onSubmit}: Props) {
       </ShowIf>
 
       <ShowIf condition={isAnonymous}>
-        <TextField multiline variant="outlined" className={style.write} rows={4} fullWidth={true} />
+        <TextField multiline variant="outlined" className={style.write} rows={8} fullWidth={true} />
         <LoginOverlayComponent />
       </ShowIf>
     </div>

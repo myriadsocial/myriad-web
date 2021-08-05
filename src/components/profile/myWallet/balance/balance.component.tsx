@@ -121,13 +121,13 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, hidden}) => {
   const userAddress = session?.user.address as string;
   const userId = session?.user.userId as string;
 
-  const {loadAllUserTokens, userTokens} = useToken(userId);
+  const {loadAllUserTokens, userTokens} = useToken();
 
   //TODO: move to redux
   const {loading, error, tokensReady, load} = usePolkadotApi();
 
   useEffect(() => {
-    loadAllUserTokens();
+    loadAllUserTokens(userId);
   }, []);
 
   useEffect(() => {
