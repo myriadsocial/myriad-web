@@ -35,6 +35,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Build Info
+        id: build-info
+        run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+          echo "::set-output name=date::$(date +'%Y%m%d')"
+
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -44,8 +50,8 @@ jobs:
             myriadsocial/myriad-web:latest
             myriadsocial/myriad-web:${{ github.event.release.tag_name }}
           build-args: |
-            VCS_REF=${{ github.ref }}
-            BUILD_DATE=${{ github.event.release.published_at }}
+            VCS_REF=${{ steps.build-info.sha_short }}
+            BUILD_DATE=${{ steps.build-info.date }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
