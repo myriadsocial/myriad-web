@@ -8,6 +8,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
+import Tooltip from '@material-ui/core/Tooltip';
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
@@ -123,6 +124,8 @@ export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) =>
     });
   };
 
+  const disableForDemo = true;
+
   return (
     <>
       <List
@@ -131,21 +134,23 @@ export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) =>
           <ListSubheader className={classes.subheader}>Claim social media accounts</ListSubheader>
         }
         className={classes.root}>
-        <ListItem disabled={isAnonymous}>
-          <ListItemIcon>
-            <FacebookIcon className={classes.facebook} />
-          </ListItemIcon>
-          <ListItemText id="social-facebook" primary="Facebook" />
-          <ListItemSecondaryAction>
-            <IconButton
-              disabled={isAnonymous}
-              onClick={connectSocial(SocialsEnum.FACEBOOK)}
-              aria-label="social-list-item-facebook"
-              size="medium">
-              {connected[SocialsEnum.FACEBOOK] ? <CheckIcon /> : <AddIcon />}
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
+        <Tooltip title={<h1 style={{color: 'white'}}>Coming soon</h1>} arrow>
+          <ListItem disabled={disableForDemo ? true : isAnonymous}>
+            <ListItemIcon>
+              <FacebookIcon className={classes.facebook} />
+            </ListItemIcon>
+            <ListItemText id="social-facebook" primary="Facebook" />
+            <ListItemSecondaryAction>
+              <IconButton
+                disabled={disableForDemo ? true : isAnonymous}
+                onClick={connectSocial(SocialsEnum.FACEBOOK)}
+                aria-label="social-list-item-facebook"
+                size="medium">
+                {connected[SocialsEnum.FACEBOOK] ? <CheckIcon /> : <AddIcon />}
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        </Tooltip>
         <ListItem disabled={isAnonymous}>
           <ListItemIcon>
             <TwitterIcon className={classes.twitter} />
