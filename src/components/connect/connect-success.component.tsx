@@ -63,11 +63,7 @@ export const ConnectSuccessComponent: React.FC<ConnectSuccessProps> = ({open, so
           <CheckCircleOutlineIcon className={styles.icon} />
           <div className={styles.message}>
             <Typography variant="h4" color="textPrimary">
-              {capitalize(social)} Account has successfully linked
-            </Typography>
-
-            <Typography variant="subtitle1" color="textPrimary">
-              Now you can collect your tip and import post from {capitalize(social)}
+              {capitalize(social)} account has been successfully linked
             </Typography>
           </div>
         </DialogContent>
