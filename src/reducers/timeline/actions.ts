@@ -197,6 +197,7 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
         ...post,
         platform: 'myriad',
         hasMedia,
+        tags: post.tags || [],
         asset: {
           images,
           videos: [],
