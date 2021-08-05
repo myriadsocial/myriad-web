@@ -115,12 +115,20 @@ interface CurrencyObj {
 }
 
 export const CurrencyDetails = ({userTransactionDetails, balanceDetail}: Props) => {
-  const [currencyDetail, setCurrencyDetail] = useState<CurrencyObj>();
+  const [currencyDetail, setCurrencyDetail] = useState<CurrencyObj>({
+    id: '',
+    sentToMe: 0,
+    sentToThem: 0,
+    userId: '',
+    tokenId: '',
+  });
   const style = useStylesForCurrencyDetails();
 
   useEffect(() => {
     const temp = getCommonTransactionDetail(userTransactionDetails, balanceDetail);
-    setCurrencyDetail(temp);
+    if (temp) {
+      setCurrencyDetail(temp);
+    }
   }, [balanceDetail]);
 
   const getCommonTransactionDetail = (
@@ -138,7 +146,9 @@ export const CurrencyDetails = ({userTransactionDetails, balanceDetail}: Props) 
     return convertedValue;
   };
 
-  if (!currencyDetail) return null;
+  if (!currencyDetail) {
+    return <Typography>Data not available</Typography>;
+  }
 
   return (
     <TableContainer>
