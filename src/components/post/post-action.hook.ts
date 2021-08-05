@@ -24,6 +24,16 @@ export const usePostActionHook = (post: Post) => {
 
     if (user) {
       setTippingEnabled(user.id !== post.platformUser?.platform_account_id);
+
+      // disable tipping for imported posts that he/she owns
+      if (user.userCredentials) {
+        user.userCredentials.forEach(credential => {
+          if (credential.people.platform_account_id === post.platformUser?.platform_account_id) {
+            console.count('found post!');
+            setTippingEnabled(false);
+          }
+        });
+      }
     } else {
       setTippingEnabled(false);
     }
