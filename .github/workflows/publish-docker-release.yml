@@ -1,4 +1,4 @@
-name: Publish docker image for new releases
+name: Publish docker image for new release
 
 on:
   release:
@@ -6,11 +6,11 @@ on:
       - published
 
 jobs:
-  build-docker:
+  build-and-publish-docker-image:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -35,8 +35,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Info
+      - name: Compute build info
         id: build-info
+        shell: bash
         run: |
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
           echo "::set-output name=date::$(date +'%Y%m%d')"
@@ -47,8 +48,8 @@ jobs:
           push: true
           file: .maintain/docker/Dockerfile
           tags: |
-            myriadsocial/myriad-web:latest
-            myriadsocial/myriad-web:${{ github.event.release.tag_name }}
+            ${{ github.repository }}:latest
+            ${{ github.repository }}:${{ github.event.release.tag_name }}
           build-args: |
             VCS_REF=${{ steps.build-info.sha_short }}
             BUILD_DATE=${{ steps.build-info.date }}

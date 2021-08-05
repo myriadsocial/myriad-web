@@ -3,28 +3,28 @@ name: Publish draft release
 on:
   push:
     tags:
-      - v[0-9]+.[0-9]+.[0-9]+*
+      - '[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   publish-draft-release:
     runs-on: ubuntu-latest
 
-    outputs:
-      release_url: ${{ steps.create-release.outputs.html_url }}
-      asset_upload_url: ${{ steps.create-release.outputs.upload_url }}
-
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: Create draft release
-        id: create-release
-        uses: actions/create-release@v1
+      - name: Build changelog
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
+          configuration: '.github/workflows/rcb_config.json'
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{ steps.build_changelog.outputs.changelog }}
           draft: true
