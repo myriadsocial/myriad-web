@@ -3,7 +3,6 @@ import React, {useState, useEffect} from 'react';
 import Link from 'next/link';
 
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -32,10 +31,8 @@ type ListItemContentProps = {
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
+      maxHeight: 300,
+      overflow: 'auto',
     },
     expandButton: {
       justifyContent: 'center',
@@ -169,10 +166,8 @@ const ListItemContent = ({txHistory, userId}: ListItemContentProps) => {
 
 const TransactionListComponent: React.FC<Props> = ({transactions, user}) => {
   const style = useStyles();
-  const [expandable, setExpandable] = useState(true);
 
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
-  //const { sendRequest } = useFriendsHook(user);
 
   const userId = user?.id as string;
 
@@ -182,38 +177,13 @@ const TransactionListComponent: React.FC<Props> = ({transactions, user}) => {
 
   if (transactions.length === 0) return null;
 
-  const handleClick = () => {
-    setExpandable(!expandable);
-  };
-
-  const ExpandMore = () => {
-    return (
-      <ListItem className={style.expandButton}>
-        <Button onClick={handleClick}>See more</Button>
-      </ListItem>
-    );
-  };
-
   return (
     <>
       <List className={style.root}>
-        {expandable
-          ? allTransactions
-              .slice(0, 2)
-              .map(txHistory => (
-                <ListItemContent key={txHistory.trxHash} txHistory={txHistory} userId={userId} />
-              ))
-          : allTransactions.map(txHistory => (
-              <ListItemContent key={txHistory.trxHash} txHistory={txHistory} userId={userId} />
-            ))}
+        {allTransactions.map(txHistory => (
+          <ListItemContent key={txHistory.trxHash} txHistory={txHistory} userId={userId} />
+        ))}
       </List>
-      {expandable ? (
-        <ExpandMore />
-      ) : (
-        <ListItem className={style.expandButton}>
-          <Button onClick={handleClick}>See less</Button>
-        </ListItem>
-      )}
     </>
   );
 };
