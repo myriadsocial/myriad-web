@@ -15,22 +15,26 @@ export const usePostHook = (user?: User) => {
   const {showAlert} = useAlertHook();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [faiedUploads, setFailedUpload] = useState<File[]>([]);
 
   const addPost = async (post: Partial<Post>, files: File[]) => {
     const images: string[] = [];
     const hasMedia = files.length > 0;
 
     setLoading(true);
+    setFailedUpload([]);
 
     try {
       if (hasMedia) {
-        const uploadedURLs = await Promise.all(files.map(file => LocalAPI.uploadImage(file)));
+        for (const file of files) {
+          const imageUrl = await LocalAPI.uploadImage(file);
 
-        uploadedURLs.forEach(url => {
-          if (url) {
-            images.push(url);
+          if (imageUrl) {
+            images.push(imageUrl);
+          } else {
+            setFailedUpload(prevFailed => [...prevFailed, file]);
           }
-        });
+        }
       }
 
       dispatch(createPost(post, images));
@@ -90,6 +94,7 @@ export const usePostHook = (user?: User) => {
   return {
     error,
     loading,
+    faiedUploads,
     addPost,
     importPost: importPostUrl,
     likePost,
