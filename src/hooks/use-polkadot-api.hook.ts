@@ -5,6 +5,7 @@ import {useState} from 'react';
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {Keyring} from '@polkadot/keyring';
 
+//TODO: migrate these two contexts to redux
 import {
   useWalletAddress as baseUseWalletAddress,
   WalletAddressActionType,
@@ -124,7 +125,6 @@ export const usePolkadotApi = () => {
         balanceDetails: tokenBalances,
       });
     } catch (error) {
-      console.log({error});
       setError(error);
     } finally {
       setLoading(false);
