@@ -48,7 +48,7 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
     errorUserTokens,
     addUserToken,
     tokens,
-  } = useToken(userId);
+  } = useToken();
 
   useEffect(() => {
     if (session !== null && !sessionLoading) {

@@ -56,10 +56,10 @@ export const Wallet = React.memo(function Wallet() {
     }
   }, [sessionLoading]);
 
-  const {loadAllUserTokens, loading, userTokens, errorUserTokens} = useToken(userId);
+  const {loadAllUserTokens, loading, userTokens, errorUserTokens} = useToken();
 
   useEffect(() => {
-    loadAllUserTokens();
+    loadAllUserTokens(userId);
   }, []);
 
   const handleRefresh = (e: React.MouseEvent<HTMLButtonElement>) => {

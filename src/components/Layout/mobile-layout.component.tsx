@@ -9,10 +9,8 @@ import {TabPanel} from '../common/tab-panel.component';
 
 import {NotifProvider} from 'src/context/notif.context';
 import {useLayout} from 'src/hooks/use-layout.hook';
-import {useToken} from 'src/hooks/use-token.hook';
-import {useUserHook} from 'src/hooks/use-user.hook';
 import {SidebarTab} from 'src/interfaces/sidebar';
-import {ExtendedUser} from 'src/interfaces/user';
+import {Token} from 'src/interfaces/token';
 
 const FriendComponent = dynamic(() => import('../friends/friend.component'));
 const NotificationComponent = dynamic(() => import('../notifications/notif.component'));
@@ -22,20 +20,16 @@ const WalletComponent = dynamic(() => import('../topic/topic.component'));
 
 type Props = {
   children: React.ReactNode;
-  user: ExtendedUser;
+  anonymous: boolean;
+  userTokens: Token[];
 };
 
-const MobileLayoutComponent = ({user}: Props) => {
+const MobileLayoutComponent = ({anonymous, userTokens}: Props) => {
   const theme = useTheme();
 
   const {selectedSidebar, changeSelectedSidebar} = useLayout();
-  const {loadFcmToken} = useUserHook();
-  const {loadAllUserTokens, userTokens} = useToken(user.id);
-  const [value, setValue] = React.useState(0);
 
-  useEffect(() => {
-    loadAllUserTokens();
-  }, []);
+  const [value, setValue] = React.useState(0);
 
   useEffect(() => {
     if (value !== selectedSidebar) {
@@ -46,10 +40,6 @@ const MobileLayoutComponent = ({user}: Props) => {
   useEffect(() => {
     changeSelectedSidebar(SidebarTab.HOME);
 
-    // TODO: this should be only loaded once on layout container
-    if (!user.anonymous) {
-      loadFcmToken();
-    }
     return undefined;
   }, []);
 
@@ -58,7 +48,7 @@ const MobileLayoutComponent = ({user}: Props) => {
       <NotifProvider>
         <AppBar />
         <TabPanel value={value} index={SidebarTab.HOME} dir={theme.direction}>
-          <TimelineComponent isAnonymous={user.anonymous} availableTokens={userTokens} />
+          <TimelineComponent isAnonymous={anonymous} availableTokens={userTokens} />
         </TabPanel>
         <TabPanel value={value} index={SidebarTab.WALLET} dir={theme.direction}>
           <WalletComponent />

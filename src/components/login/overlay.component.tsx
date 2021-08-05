@@ -4,14 +4,14 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles, fade} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 
 import {CreateAccountComponent} from 'src/components/login/create-account.component';
 
 const useStyles = makeStyles({
   root: {
     position: 'absolute',
-    backgroundColor: fade('#FFF', 0.5),
+    backgroundColor: '#FFF',
     width: '100%',
     left: 0,
     top: 0,

@@ -168,11 +168,11 @@ const PostComponent: React.FC<PostComponentProps> = ({
           avatar={
             <PostAvatarComponent
               origin={post.platform}
-              avatar={post.platformUser.profile_image_url}
+              avatar={post.platformUser?.profile_image_url}
               onClick={openContentSource}
             />
           }
-          title={<CardTitle text={post.platformUser.name} url={getPlatformUrl()} />}
+          title={<CardTitle text={post.platformUser?.name} url={getPlatformUrl()} />}
           subheader={
             <PostSubHeader
               date={post.createdAt}

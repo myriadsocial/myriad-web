@@ -92,7 +92,7 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({
 }) => {
   const style = useStyles();
 
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const [expanded, toggleExpand] = useToggle(true);
   const {friends, totalFriend, hasMore} = useSelector<RootState, FriendState>(
     state => state.friendState,
@@ -109,7 +109,7 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({
     onExpand && onExpand();
   };
 
-  if (!user) return null;
+  if (!user && !anonymous) return null;
 
   return (
     <Box
@@ -142,7 +142,7 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({
             {friends.map(request => {
               return (
                 <>
-                  {user.id !== request.requestorId && (
+                  {user && user.id !== request.requestorId && (
                     <ListItem key={request.id} className={style.item} alignItems="flex-start">
                       <Link href={`/${request.requestor.id}`}>
                         <a href={`/${request.requestor.id}`}>
@@ -171,7 +171,7 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({
                     </ListItem>
                   )}
 
-                  {user.id !== request.friendId && (
+                  {user && user.id !== request.friendId && (
                     <ListItem key={request.id} className={style.item} alignItems="flex-start">
                       <Link href={`/${request.friend.id}`}>
                         <a href={`/${request.friend.id}`}>

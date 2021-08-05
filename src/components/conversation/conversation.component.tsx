@@ -20,11 +20,11 @@ const Conversation = ({post, user}: Props) => {
   const {setPost} = useConversationHook(user);
   const [session] = useSession();
   const userId = session?.user.userId as string;
-  const {loadAllUserTokens} = useToken(userId);
+  const {loadAllUserTokens} = useToken();
 
   useEffect(() => {
     setPost(post);
-    loadAllUserTokens();
+    loadAllUserTokens(userId);
   }, []);
 
   if (!state.viewed) return null;

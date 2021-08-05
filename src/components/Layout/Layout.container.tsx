@@ -16,6 +16,7 @@ import {ExperienceProvider} from '../experience/experience.context';
 import TipAlertComponent from 'src/components/alert/TipAlert.component';
 import {LayoutSettingProvider} from 'src/context/layout.context';
 import {TransactionProvider} from 'src/context/transaction.context';
+import {useToken} from 'src/hooks/use-token.hook';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
 import {RootState} from 'src/reducers';
@@ -43,14 +44,23 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const {updateUser} = useUserHook();
+  const {updateUser, loadFcmToken} = useUserHook();
+  const {loadAllUserTokens, userTokens} = useToken();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
   useEffect(() => {
     window.addEventListener('load', function () {
       firebaseCloudMessaging.init();
     });
+
+    loadFcmToken();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      loadAllUserTokens(user.id);
+    }
+  }, [user]);
 
   const handleFinishTour = (skip: boolean) => {
     updateUser({
@@ -58,7 +68,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
     });
   };
 
-  if (!user) return null;
+  if (!user && !anonymous) return null;
 
   return (
     <div className={style.root}>
@@ -70,7 +80,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
       <LayoutSettingProvider>
         <NoSsr>
           <TourComponent
-            disabled={anonymous || Boolean(user.skip_tour)}
+            disabled={anonymous || Boolean(user?.skip_tour)}
             onFinished={handleFinishTour}
           />
         </NoSsr>
@@ -78,9 +88,11 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
           <ExperienceProvider>
             <ConverstionProvider>
               {isMobile ? (
-                <MobileLayoutComponent user={user}>{children}</MobileLayoutComponent>
+                <MobileLayoutComponent anonymous={anonymous} userTokens={userTokens}>
+                  {children}
+                </MobileLayoutComponent>
               ) : (
-                <DektopLayoutComponent user={user}>{children}</DektopLayoutComponent>
+                <DektopLayoutComponent anonymous={anonymous}>{children}</DektopLayoutComponent>
               )}
             </ConverstionProvider>
           </ExperienceProvider>
