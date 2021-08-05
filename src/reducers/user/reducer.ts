@@ -94,6 +94,7 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       return {
         ...state,
         verifying: true,
+        error: undefined,
       };
     }
 
@@ -101,6 +102,7 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       return {
         ...state,
         verifying: false,
+        error: undefined,
       };
     }
 
