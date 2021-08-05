@@ -7,7 +7,6 @@ import {useTheme} from '@material-ui/core/styles';
 import AppBar from '../app-bar/app-bar.component';
 import {TabPanel} from '../common/tab-panel.component';
 
-import {NotifProvider} from 'src/context/notif.context';
 import {useLayout} from 'src/hooks/use-layout.hook';
 import {SidebarTab} from 'src/interfaces/sidebar';
 import {Token} from 'src/interfaces/token';
@@ -24,7 +23,7 @@ type Props = {
   userTokens: Token[];
 };
 
-const MobileLayoutComponent = ({anonymous, userTokens}: Props) => {
+const MobileLayoutComponent: React.FC<Props> = ({anonymous, userTokens}: Props) => {
   const theme = useTheme();
 
   const {selectedSidebar, changeSelectedSidebar} = useLayout();
@@ -45,24 +44,22 @@ const MobileLayoutComponent = ({anonymous, userTokens}: Props) => {
 
   return (
     <>
-      <NotifProvider>
-        <AppBar />
-        <TabPanel value={value} index={SidebarTab.HOME} dir={theme.direction}>
-          <TimelineComponent isAnonymous={anonymous} availableTokens={userTokens} />
-        </TabPanel>
-        <TabPanel value={value} index={SidebarTab.WALLET} dir={theme.direction}>
-          <WalletComponent />
-        </TabPanel>
-        <TabPanel value={value} index={SidebarTab.TRENDING} dir={theme.direction}>
-          <TopicComponent />
-        </TabPanel>
-        <TabPanel value={value} index={SidebarTab.FRIENDS} dir={theme.direction}>
-          <FriendComponent />
-        </TabPanel>
-        <TabPanel value={value} index={SidebarTab.NOTIFICATION} dir={theme.direction}>
-          <NotificationComponent />
-        </TabPanel>
-      </NotifProvider>
+      <AppBar />
+      <TabPanel value={value} index={SidebarTab.HOME} dir={theme.direction}>
+        <TimelineComponent isAnonymous={anonymous} availableTokens={userTokens} />
+      </TabPanel>
+      <TabPanel value={value} index={SidebarTab.WALLET} dir={theme.direction}>
+        <WalletComponent />
+      </TabPanel>
+      <TabPanel value={value} index={SidebarTab.TRENDING} dir={theme.direction}>
+        <TopicComponent />
+      </TabPanel>
+      <TabPanel value={value} index={SidebarTab.FRIENDS} dir={theme.direction}>
+        <FriendComponent />
+      </TabPanel>
+      <TabPanel value={value} index={SidebarTab.NOTIFICATION} dir={theme.direction}>
+        <NotificationComponent />
+      </TabPanel>
     </>
   );
 };

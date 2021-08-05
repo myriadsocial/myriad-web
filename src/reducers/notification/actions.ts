@@ -16,11 +16,15 @@ export interface FetchNotification extends Action {
   notifications: ExtendedNotification[];
 }
 
+export interface ReadNotification extends Action {
+  type: constants.READ_NOTIFICATIION;
+}
+
 /**
  * Union Action Types
  */
 
-export type Actions = FetchNotification | BaseAction;
+export type Actions = FetchNotification | ReadNotification | BaseAction;
 
 /**
  *
@@ -55,6 +59,29 @@ export const fetchNotification: ThunkActionCreator<Actions, RootState> =
           message: error.message,
         }),
       );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const readAllNotifications: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      dispatch({
+        type: constants.READ_NOTIFICATIION,
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
     } finally {
       dispatch(setLoading(false));
     }

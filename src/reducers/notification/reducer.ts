@@ -7,10 +7,12 @@ import {ExtendedNotification} from 'src/interfaces/notification';
 
 export interface NotificationState extends BaseState {
   notifications: ExtendedNotification[];
+  total: number;
 }
 
 const initalState: NotificationState = {
   loading: false,
+  total: 0,
   notifications: [],
 };
 
@@ -23,6 +25,14 @@ export const NotificationReducer: Redux.Reducer<NotificationState, Actions> = (
       return {
         ...state,
         notifications: action.notifications,
+        total: action.notifications.length,
+      };
+    }
+
+    case constants.READ_NOTIFICATIION: {
+      return {
+        ...state,
+        total: 0,
       };
     }
 

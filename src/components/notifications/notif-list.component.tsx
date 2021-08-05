@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import {useSelector} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
@@ -14,9 +15,10 @@ import {ListHeaderComponent} from './list-header.component';
 
 import {formatDistance, subDays} from 'date-fns';
 import ShowIf from 'src/components/common/show-if.component';
-import {useNotif} from 'src/context/notif.context';
 import {acronym} from 'src/helpers/string';
 import {useNotifHook} from 'src/hooks/use-notif.hook';
+import {RootState} from 'src/reducers';
+import {NotificationState} from 'src/reducers/notification/reducer';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type NotificationListProps = {};
@@ -56,21 +58,25 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const NotificationListComponent: React.FC<NotificationListProps> = () => {
   const style = useStyles();
-  const {state} = useNotif();
-  const {loadNotifications} = useNotifHook();
+  const {notifications, total} = useSelector<RootState, NotificationState>(
+    state => state.notificationState,
+  );
+  const {readNotifications} = useNotifHook();
 
   useEffect(() => {
-    loadNotifications();
+    return () => {
+      readNotifications();
+    };
   }, []);
 
   return (
     <>
-      <ListHeaderComponent title={`New Notification (${state.total})`} />
+      <ListHeaderComponent title={`New Notification (${total})`} />
       <DividerComponent />
       <Box className={style.root}>
         <div>
           <div className={style.content}>
-            <ShowIf condition={state.total == 0}>
+            <ShowIf condition={!notifications.length}>
               <Typography
                 variant="h5"
                 color="textPrimary"
@@ -79,7 +85,7 @@ const NotificationListComponent: React.FC<NotificationListProps> = () => {
               </Typography>
             </ShowIf>
             <List className={style.list}>
-              {state.notifications.map(notif => {
+              {notifications.map(notif => {
                 return (
                   <ListItem key={notif.id} className={style.item} alignItems="center">
                     <ListItemAvatar>
