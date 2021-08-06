@@ -55,7 +55,7 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
 
   useEffect(() => {
     checkFriendStatus(profile.id);
-  }, []);
+  }, [profile.id]);
 
   const profileInfo =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae nibh eu tellus tincidunt luctus hendrerit in orci. Phasellus vitae tristique nulla. Nam magna massa, sollicitudin sed turpis eros.';
