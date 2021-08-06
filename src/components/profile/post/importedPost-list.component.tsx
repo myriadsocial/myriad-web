@@ -2,6 +2,8 @@ import React, {useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useSelector} from 'react-redux';
 
+import dynamic from 'next/dynamic';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
@@ -21,6 +23,12 @@ import {ExtendedUser} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
+const SendTipModal = dynamic(() => import('src/components/common/sendtips/SendTipModal'));
+
+const TipSummaryComponent = dynamic(
+  () => import('src/components/tip-summary/tip-summary.component'),
+);
+
 type Props = {
   profile: ExtendedUser;
 };
@@ -29,9 +37,11 @@ type Props = {
 export default function ImportedPostList({profile}: Props) {
   const style = useStyles();
 
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, tokens: availableTokens} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const {loading, posts, hasMore, nextPage} = useTimelineHook();
-  const {toggle} = useModal();
+  const {isShown, hide, toggle} = useModal();
   const {filterImportedPost, clearPosts} = useProfileTimeline(profile);
 
   useEffect(() => {
@@ -61,6 +71,17 @@ export default function ImportedPostList({profile}: Props) {
 
   return (
     <>
+      {user && (
+        <SendTipModal
+          isShown={isShown}
+          hide={hide}
+          availableTokens={availableTokens}
+          userAddress={user.id}
+        />
+      )}
+
+      <TipSummaryComponent />
+
       <InfiniteScroll
         scrollableTarget="scrollable-timeline"
         className={style.child}
