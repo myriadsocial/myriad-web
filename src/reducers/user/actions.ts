@@ -228,7 +228,7 @@ export const setUserAsAnonymous: ThunkActionCreator<Actions, RootState> =
   };
 
 export const updateUser: ThunkActionCreator<Actions, RootState> =
-  (attributes: Partial<User>) => async (dispatch, getState) => {
+  (attributes: Partial<User>, callback?: () => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     const {
@@ -245,8 +245,15 @@ export const updateUser: ThunkActionCreator<Actions, RootState> =
         user: {
           ...user,
           ...attributes,
+          profile_picture: attributes.profilePictureURL
+            ? {
+                sizes: generateImageSizes(attributes.profilePictureURL),
+              }
+            : user.profile_picture,
         },
       });
+
+      callback && callback();
     } catch (error) {
       dispatch(setError(error.message));
     } finally {

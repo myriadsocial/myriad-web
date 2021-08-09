@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useImageUpload} from 'src/hooks/use-image-upload.hook';
@@ -12,43 +13,67 @@ export const useProfileHook = () => {
   const dispatch = useDispatch();
   const {uploadImage} = useImageUpload();
 
+  const [uploadingBanner, setUploadingBanner] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {detail: profileDetail, loading} = useSelector<RootState, ProfileState>(
     state => state.profileState,
   );
 
   const updateProfile = (attributes: Partial<User>) => {
-    dispatch(updateUser(attributes));
-
-    if (user && profileDetail?.id === user.id) {
-      dispatch(fetchProfileDetail(user.id));
-    }
+    dispatch(
+      updateUser(attributes, () => {
+        if (user && profileDetail?.id === user.id) {
+          dispatch(fetchProfileDetail(user.id));
+        }
+      }),
+    );
   };
 
   const updateProfilePicture = (url: string) => {
-    dispatch(
-      updateUser({
-        profilePictureURL: url,
-      }),
-    );
+    setUploadingAvatar(true);
 
-    if (user && profileDetail?.id === user.id) {
-      dispatch(fetchProfileDetail(user.id));
-    }
+    dispatch(
+      updateUser(
+        {
+          profilePictureURL: url,
+        },
+        () => {
+          if (user && profileDetail?.id === user.id) {
+            dispatch(fetchProfileDetail(user.id));
+          }
+
+          setUploadingAvatar(false);
+        },
+      ),
+    );
   };
 
   const updateProfileBanner = async (image: File): Promise<void> => {
+    setUploadingBanner(true);
+
     const url = await uploadImage(image);
 
-    dispatch(
-      updateUser({
-        bannerImageUrl: url,
-      }),
-    );
+    if (url) {
+      dispatch(
+        updateUser(
+          {
+            bannerImageUrl: url,
+          },
+          () => {
+            setUploadingBanner(false);
+          },
+        ),
+      );
+    } else {
+      setUploadingBanner(false);
+    }
   };
 
   return {
     loading,
+    uploadingAvatar,
+    uploadingBanner,
     updateProfile,
     updateProfilePicture,
     updateProfileBanner,

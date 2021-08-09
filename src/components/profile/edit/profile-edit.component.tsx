@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {useSelector} from 'react-redux';
 
@@ -39,39 +39,30 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({toggleProfileF
   const config = useConfig();
   const {showAlert} = useAlertHook();
 
-  const {loading, updateProfile, updateProfileBanner, updateProfilePicture} = useProfileHook();
+  const {
+    loading,
+    uploadingAvatar,
+    uploadingBanner,
+    updateProfile,
+    updateProfileBanner,
+    updateProfilePicture,
+  } = useProfileHook();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const [uploadingAvatar, setUploadingAvatar] = useState(false);
-  const [uploadingBanner, setUploadingBanner] = useState(false);
   const [profile, setProfile] = useState<Record<string, string>>({
     name: user?.name ?? '',
     bio: user?.bio ?? '',
   });
-
-  useEffect(() => {
-    if (uploadingAvatar && !loading) {
-      setUploadingAvatar(false);
-    }
-
-    if (uploadingBanner && !loading) {
-      setUploadingBanner(false);
-    }
-  }, [loading, uploadingAvatar, uploadingBanner]);
 
   const getProfilePicture = (): string => {
     return user?.profilePictureURL || '';
   };
 
   const handleUpdateProfilePicture = (preview: string): void => {
-    setUploadingAvatar(true);
-
     updateProfilePicture(preview);
   };
 
   const hanleUpdateBannerImage = async (image: File): Promise<void> => {
-    setUploadingBanner(true);
-
     updateProfileBanner(image);
   };
 
@@ -126,7 +117,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({toggleProfileF
                   value={getProfilePicture()}
                   title={acronym(user.name)}
                   onImageSelected={handleUpdateProfilePicture}
-                  loading={uploadingAvatar && loading}
+                  loading={uploadingAvatar}
                 />
                 <div className={style.bannerUploadWrapper}>
                   <ButtonUpload

@@ -35,9 +35,9 @@ export const useImageUpload = () => {
     } catch (error) {
       console.error(error);
       showAlert({
-        message: 'Your internet connection is unstable',
+        message: 'Failed to upload image, please try again later',
         severity: 'error',
-        title: 'Error',
+        title: 'Upload Error',
       });
       return null;
     }
