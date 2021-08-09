@@ -76,20 +76,6 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       };
     }
 
-    case constants.FETCH_RECIPIENT_DETAIL: {
-      return {
-        ...state,
-        payload: action.payload,
-      };
-    }
-
-    case constants.SET_RECIPIENT_DETAIL: {
-      return {
-        ...state,
-        recipientDetail: action.recipientDetail,
-      };
-    }
-
     case constants.SET_VERIFYING_SOCIAL_ACCOUNT: {
       return {
         ...state,
