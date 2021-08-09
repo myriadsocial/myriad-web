@@ -16,6 +16,9 @@ type ResponseImageUpload = {
   error?: string;
 };
 
+const MAX_IMAGE_WIDTH = 2560; // 30inch monitor resolution 2560 x 1600
+const MAX_IMAGE_SIZE = MAX_IMAGE_WIDTH * 1000;
+
 // Multer config
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -32,7 +35,7 @@ cloudinary.config({
 const cloudinaryUpload = (file: string) =>
   cloudinary.uploader.upload(file, {
     transformation: {
-      width: 2560,
+      width: MAX_IMAGE_WIDTH,
     },
   });
 
@@ -55,18 +58,23 @@ const handler = nextConnect()
   .post(async (req: NextApiRequestWithFormData, res: NextApiResponse<ResponseImageUpload>) => {
     const fileName = req.file.originalname;
     const image = req.file.buffer as Buffer;
+    let file: DatauriParser;
 
     // resize image based on width and keep the aspect ratio
     // store as buffer to keep server clean from additional file
-    // @ts-expect-error
-    const resized = await sharp(image)
-      .resize({
-        width: 2560, // 30inch monitor resolution 2560 x 1600
-      })
-      .toBuffer({resolveWithObject: true});
+    if (req.file.size > MAX_IMAGE_SIZE) {
+      // @ts-expect-error
+      const resized = await sharp(image)
+        .resize({
+          width: MAX_IMAGE_WIDTH,
+        })
+        .toBuffer({resolveWithObject: true});
 
-    // format file as string
-    const file = formatBufferTo64(fileName, resized.data);
+      // format file as string
+      file = formatBufferTo64(fileName, resized.data);
+    } else {
+      file = formatBufferTo64(fileName, image);
+    }
 
     if (!file.content) {
       throw new Error('Failed to parse file');
