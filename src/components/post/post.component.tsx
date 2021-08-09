@@ -29,9 +29,9 @@ import {usePostHook} from 'src/hooks/use-post.hook';
 import {Post, Comment} from 'src/interfaces/post';
 import {ContentType} from 'src/interfaces/wallet';
 import {RootState} from 'src/reducers';
-import {fetchRecipientDetail} from 'src/reducers/user/actions';
-import {setRecipientDetail} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
+import {setRecipientDetail} from 'src/reducers/wallet/actions';
+import {fetchRecipientDetail} from 'src/reducers/wallet/actions';
 import {v4 as uuid} from 'uuid';
 
 const CommentComponent = dynamic(() => import('./comment/comment.component'), {
