@@ -7,6 +7,7 @@ import {ProfileReducer} from './profile/reducer';
 import {TimelineReducer} from './timeline/reducer';
 import {TipSummaryReducer} from './tip-summary/reducer';
 import {UserReducer} from './user/reducer';
+import {WalletReducer} from './wallet/reducer';
 
 import {combineReducers} from 'redux';
 
@@ -20,6 +21,7 @@ const reducers = {
   userState: UserReducer,
   tipSummaryState: TipSummaryReducer,
   balanceState: BalanceReducer,
+  walletState: WalletReducer,
 };
 
 export const combinedReducers = combineReducers(reducers);
