@@ -23,8 +23,9 @@ import {
   SendTipWithPayloadProps,
 } from 'src/interfaces/send-tips/send-tips';
 import {RootState} from 'src/reducers';
+import {BalanceState} from 'src/reducers/balance/reducer';
 import {TimelineState} from 'src/reducers/timeline/reducer';
-import {UserState} from 'src/reducers/user/reducer';
+import {WalletState} from 'src/reducers/wallet/reducer';
 
 export type RefProps = {
   openSendTipModal: () => void;
@@ -32,10 +33,10 @@ export type RefProps = {
 };
 //TODO: remove anything related to ref and switch back to useModal hooks
 const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
-  //TODO: move to redux
-  const {sendTip, loading, load, tokensReady: balanceDetails} = usePolkadotApi();
+  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
+  const {sendTip, loading, load} = usePolkadotApi();
   const {openTipSummary} = useTipSummaryHook();
-  const {recipientDetail} = useSelector<RootState, UserState>(state => state.userState);
+  const {recipientDetail} = useSelector<RootState, WalletState>(state => state.walletState);
   const {posts} = useSelector<RootState, TimelineState>(state => state.timelineState);
   const styles = useStyles();
 
