@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useImperativeHandle} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
 import {useSession} from 'next-auth/client';
 
@@ -18,6 +19,9 @@ import {useStyles, TableCell, StyledBadge} from './balance.style';
 
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {Token} from 'src/interfaces/token';
+import {RootState} from 'src/reducers';
+import {fetchBalances} from 'src/reducers/balance/actions';
+import {BalanceState} from 'src/reducers/balance/reducer';
 
 interface BalanceProps {
   forwardedRef: React.ForwardedRef<any>;
@@ -25,22 +29,29 @@ interface BalanceProps {
 }
 
 const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, availableTokens}) => {
+  const {balanceDetails: tokensReady} = useSelector<RootState, BalanceState>(
+    state => state.balanceState,
+  );
+  const dispatch = useDispatch();
   const style = useStyles();
 
   const [session] = useSession();
   const userAddress = session?.user.address as string;
 
   //TODO: move to redux
-  const {loading, error, tokensReady, load} = usePolkadotApi();
+  const {loadingBalance, loading, error, load} = usePolkadotApi();
 
   useEffect(() => {
-    load(userAddress, availableTokens);
-  }, []);
+    if (tokensReady.length === 0) {
+      load(userAddress, availableTokens);
+    }
+  }, [tokensReady]);
 
   useImperativeHandle(forwardedRef, () => ({
     triggerRefresh: () => {
       setIsHidden(false);
-      load(userAddress, availableTokens);
+      dispatch(fetchBalances(userAddress, availableTokens));
+      //load(userAddress, availableTokens);
     },
   }));
 
@@ -112,7 +123,7 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, availableTokens
                 <TableCell align="right">
                   {isHidden ? (
                     <Button onClick={handleIsHidden}>Show balance</Button>
-                  ) : loading ? (
+                  ) : loadingBalance ? (
                     <CircularProgress className={style.spinner} size={20} />
                   ) : error ? (
                     <Typography className={style.errorText}>Error, try again!</Typography>
