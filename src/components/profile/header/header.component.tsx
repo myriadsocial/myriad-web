@@ -4,7 +4,6 @@ import {useSelector} from 'react-redux';
 
 import {signOut} from 'next-auth/client';
 
-import {SvgIcon} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -15,20 +14,20 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Typography from '@material-ui/core/Typography';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 
 import {encodeAddress} from '@polkadot/util-crypto';
 
 import {ProfileEditComponent} from '../edit/profile-edit.component';
 import {useFriendHook} from '../use-profile-friend.hook';
+import FriendButton from './friend-button.component';
 import {useStyles} from './header.style';
+import RespondFriendButton from './respond-button.component';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {SocialListComponent} from 'src/components/user/social-list.component';
 import {acronym} from 'src/helpers/string';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
-import RemoveUser from 'src/images/user-minus2.svg';
 import {FriendStatus} from 'src/interfaces/friend';
 import {ExtendedUser} from 'src/interfaces/user';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
@@ -80,9 +79,9 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
     toggleRemoveAlert();
   };
 
-  const handlecancelFriendRequest = () => {
-    if (friendStatus) cancelFriendRequest(friendStatus);
-  };
+  // const handlecancelFriendRequest = () => {
+  //   if (friendStatus) cancelFriendRequest(friendStatus);
+  // };
 
   const handleApproveFriendRequest = () => {
     if (friendStatus) toggleRequest(friendStatus, FriendStatus.APPROVED);
@@ -152,7 +151,10 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
           </div>
           <ShowIf condition={isGuest === true}>
             <div style={{marginTop: '24px'}}>
-              <ShowIf condition={friendStatus?.status == null}>
+              <ShowIf
+                condition={
+                  friendStatus?.status == null || friendStatus.status == FriendStatus.REJECTED
+                }>
                 <Button
                   disabled={isAnonymous}
                   className={style.button2}
@@ -170,24 +172,12 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
                 condition={
                   friendStatus?.status === 'pending' && friendStatus.requestorId == profile.id
                 }>
-                <Button
-                  className={style.button}
-                  style={{marginRight: 12}}
-                  color="default"
-                  variant="contained"
-                  size="medium"
-                  onClick={handleRejectFriendRequest}>
-                  Ignore
-                </Button>
-                <Button
-                  className={style.button}
-                  style={{marginRight: 24}}
-                  color="primary"
-                  variant="contained"
-                  size="medium"
-                  onClick={handleApproveFriendRequest}>
-                  Accept
-                </Button>
+                <div style={{display: 'inline-block', marginRight: 16}}>
+                  <RespondFriendButton
+                    handleReject={handleRejectFriendRequest}
+                    handleApprove={handleApproveFriendRequest}
+                  />
+                </div>
               </ShowIf>
 
               <ShowIf
@@ -195,35 +185,19 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
                   friendStatus?.status === 'pending' && friendStatus.friendId == profile.id
                 }>
                 <Button
-                  className={style.button}
+                  className={style.button2}
                   variant="contained"
                   size="medium"
                   disabled
-                  style={{background: 'gray', marginRight: 12}}>
-                  Pending
-                </Button>
-                <Button
-                  className={style.button}
-                  style={{marginRight: 24}}
-                  color="primary"
-                  variant="contained"
-                  size="medium"
-                  onClick={handlecancelFriendRequest}>
-                  Cancel
+                  style={{background: 'gray', marginRight: 12, color: 'white'}}>
+                  Request sent
                 </Button>
               </ShowIf>
 
               <ShowIf condition={friendStatus?.status === 'approved'}>
-                <Button
-                  className={style.button2}
-                  style={{marginRight: 24}}
-                  color="primary"
-                  variant="contained"
-                  size="medium"
-                  startIcon={<RemoveUser />}
-                  onClick={toggleRemoveAlert}>
-                  Unfriend
-                </Button>
+                <div style={{display: 'inline-block', marginRight: 16}}>
+                  <FriendButton handleUnfriend={toggleRemoveAlert} />
+                </div>
               </ShowIf>
 
               <Button
@@ -273,30 +247,28 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
 
       <Dialog open={openRemoveModal} aria-labelledby="no-extension-installed">
         <DialogTitle id="name" onClose={toggleRemoveAlert}>
-          Remove Friend
+          Unfriend
         </DialogTitle>
         <DialogContent>
           <div className={style.dialogRoot}>
-            <SvgIcon className={style.icon} fontSize="inherit" color="error">
-              <WarningRoundedIcon />
-            </SvgIcon>
-            <Typography className={style.subtitle1} variant="h2" color="error">
-              Unfriend {profile.name}
-            </Typography>
             <Typography
               className={`${style.subtitle2} ${style.alertMessage}  ${style.center} ${style['m-vertical2']}`}>
-              Are you sure want to remove this person from your friend list? You will{' '}
-              <Typography variant="inherit" color="error">
-                no longer see posts
-              </Typography>{' '}
-              from this person.
+              Are you sure want to unfriend{' '}
+              <Typography variant="inherit" color="primary" className={style.bold}>
+                John Doe
+              </Typography>
+              ? you will no longer see post from this person
             </Typography>
             <div className={`${style['flex-center']} ${style['m-vertical1']}`}>
-              <Button variant="text" onClick={toggleRemoveAlert}>
+              <Button size="large" variant="contained" onClick={toggleRemoveAlert}>
                 Cancel
               </Button>
-              <Button variant="contained" color="primary" onClick={handleUnFriendRequest}>
-                Remove
+              <Button
+                className={style.errorColor}
+                size="large"
+                variant="contained"
+                onClick={handleUnFriendRequest}>
+                Unfriend
               </Button>
             </div>
           </div>

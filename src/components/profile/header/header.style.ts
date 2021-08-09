@@ -103,7 +103,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     // modalremovealert
     dialogRoot: {
-      width: '413px',
+      width: '444px',
       textAlign: 'center',
     },
     icon: {
@@ -117,9 +117,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: 16,
       fontWeight: 400,
     },
+    bold: {
+      fontWeight: 'bold',
+    },
     alertMessage: {
       color: '#4B4851',
-      width: 236,
+      width: 320,
+    },
+    errorColor: {
+      color: '#DC0404',
     },
     'm-vertical1': {
       marginBottom: 16,
