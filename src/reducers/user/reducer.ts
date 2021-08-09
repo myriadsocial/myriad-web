@@ -8,13 +8,11 @@ import * as constants from './constants';
 import * as Redux from 'redux';
 import {Token} from 'src/interfaces/token';
 import {ExtendedUser, UserTransactionDetail} from 'src/interfaces/user';
-import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 
 export interface UserState extends BaseState {
   user?: ExtendedUser;
   tokens: Token[];
   transactionDetails: UserTransactionDetail[];
-  recipientDetail: WalletDetail;
   anonymous: boolean;
   alias: string;
   verifying: boolean;
@@ -25,11 +23,6 @@ const initalState: UserState = {
   anonymous: false,
   tokens: [],
   transactionDetails: [],
-  recipientDetail: {
-    postId: '',
-    walletAddress: '',
-    contentType: ContentType.POST,
-  },
   alias: '',
   verifying: false,
 };
