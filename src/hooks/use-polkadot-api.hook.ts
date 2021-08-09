@@ -1,6 +1,7 @@
 import {options} from '@acala-network/api';
 
 import {useState} from 'react';
+import {useDispatch} from 'react-redux';
 
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {Keyring} from '@polkadot/keyring';
@@ -10,10 +11,6 @@ import {
   useWalletAddress as baseUseWalletAddress,
   WalletAddressActionType,
 } from '../components/common/sendtips/send-tip.context';
-import {
-  useBalance as baseUseBalance,
-  BalanceActionType,
-} from '../components/wallet/balance.context';
 
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {TokenId} from 'src/interfaces/token';
@@ -21,6 +18,7 @@ import {Token} from 'src/interfaces/token';
 import {ContentType} from 'src/interfaces/wallet';
 import {updateTips} from 'src/lib/api/post';
 import {storeTransaction} from 'src/lib/api/transaction';
+import {fetchBalances} from 'src/reducers/balance/actions';
 
 type Props = {
   fromAddress: string;
@@ -41,7 +39,8 @@ const formatNumber = (number: number, decimals: number) => {
 
 // params mungkin butuh address sama tipe wsProvider
 export const usePolkadotApi = () => {
-  const {state, dispatch} = baseUseBalance();
+  //const {state, dispatch} = baseUseBalance();
+  const dispatch = useDispatch();
   const {showAlert, showTipAlert} = useAlertHook();
   const {state: walletAddressState, dispatch: walletAddressDispatch} = baseUseWalletAddress();
 
@@ -120,10 +119,7 @@ export const usePolkadotApi = () => {
           await api.disconnect();
         }
       }
-      dispatch({
-        type: BalanceActionType.INIT_BALANCE,
-        balanceDetails: tokenBalances,
-      });
+      dispatch(fetchBalances(tokenBalances));
     } catch (error) {
       setError(error);
     } finally {
