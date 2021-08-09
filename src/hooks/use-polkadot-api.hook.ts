@@ -1,9 +1,6 @@
-import {options} from '@acala-network/api';
-
 import {useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
-import {ApiPromise, WsProvider} from '@polkadot/api';
 import {Keyring} from '@polkadot/keyring';
 
 //TODO: migrate these two contexts to redux
@@ -13,12 +10,13 @@ import {
 } from '../components/common/sendtips/send-tip.context';
 
 import {useAlertHook} from 'src/hooks/use-alert.hook';
-import {TokenId} from 'src/interfaces/token';
 import {Token} from 'src/interfaces/token';
 import {ContentType} from 'src/interfaces/wallet';
 import {updateTips} from 'src/lib/api/post';
 import {storeTransaction} from 'src/lib/api/transaction';
+import {RootState} from 'src/reducers';
 import {fetchBalances} from 'src/reducers/balance/actions';
+import {BalanceState} from 'src/reducers/balance/reducer';
 
 type Props = {
   fromAddress: string;
@@ -31,100 +29,18 @@ type Props = {
   wsAddress: string;
 };
 
-const formatNumber = (number: number, decimals: number) => {
-  if (number.toString() === '0') return 0;
-  const result = Number((Number(number.toString()) / 10 ** decimals).toFixed(5));
-  return result;
-};
-
 // params mungkin butuh address sama tipe wsProvider
 export const usePolkadotApi = () => {
-  //const {state, dispatch} = baseUseBalance();
   const dispatch = useDispatch();
+  const balanceState = useSelector<RootState, BalanceState>(state => state.balanceState);
   const {showAlert, showTipAlert} = useAlertHook();
   const {state: walletAddressState, dispatch: walletAddressDispatch} = baseUseWalletAddress();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const connectToBlockchain = async (wsProvider: string) => {
-    let api: ApiPromise;
-    try {
-      const provider = new WsProvider(wsProvider);
-      api = new ApiPromise(options({provider}));
-      await api.isReadyOrError;
-      return api;
-    } catch (error) {
-      setError(error);
-      return;
-    }
-  };
-
   const load = async (address: string, availableTokens: Token[]) => {
-    setLoading(true);
-    const tokenBalances = [];
-
-    try {
-      for (let i = 0; i < availableTokens.length; i++) {
-        const provider = availableTokens[i].rpc_address;
-        const api = await connectToBlockchain(provider);
-
-        if (api) {
-          switch (availableTokens[i].id) {
-            case TokenId.MYRIA: {
-              const {data: balance} = await api.query.system.account(address);
-              const tempBalance = balance.free as unknown;
-              tokenBalances.push({
-                freeBalance: formatNumber(tempBalance as number, availableTokens[i].token_decimal),
-                tokenSymbol: availableTokens[i].id,
-                tokenDecimals: availableTokens[i].token_decimal,
-                rpcAddress: provider,
-                tokenImage: availableTokens[i].token_image,
-              });
-              break;
-            }
-
-            //TODO: make enum based on rpc_address, collect the api calls and use multiqueries
-            case TokenId.ACA: {
-              const {data: balance} = await api.query.system.account(address);
-              const tempBalance = balance.free as unknown;
-              tokenBalances.push({
-                freeBalance: formatNumber(tempBalance as number, availableTokens[i].token_decimal),
-                tokenSymbol: availableTokens[i].id,
-                tokenDecimals: availableTokens[i].token_decimal,
-                rpcAddress: provider,
-                tokenImage: availableTokens[i].token_image,
-              });
-              break;
-            }
-
-            // should be for tokens of Acala, e.g. AUSD, DOT
-            default: {
-              const tokenData: any = await api.query.tokens.accounts(address, {
-                TOKEN: availableTokens[i].id,
-              });
-              tokenBalances.push({
-                freeBalance: formatNumber(
-                  tokenData.free as number,
-                  availableTokens[i].token_decimal,
-                ),
-                tokenSymbol: availableTokens[i].id,
-                tokenDecimals: availableTokens[i].token_decimal,
-                rpcAddress: provider,
-                tokenImage: availableTokens[i].token_image,
-              });
-            }
-          }
-
-          await api.disconnect();
-        }
-      }
-      dispatch(fetchBalances(tokenBalances));
-    } catch (error) {
-      setError(error);
-    } finally {
-      setLoading(false);
-    }
+    dispatch(fetchBalances(address, availableTokens));
   };
 
   const sendTip = async (
@@ -251,10 +167,10 @@ export const usePolkadotApi = () => {
   };
 
   return {
+    loadingBalance: balanceState.loading,
     loading,
     error,
     load,
-    tokensReady: state.balanceDetails,
     sendTip,
     sendTipSuccess: walletAddressState.success,
     trxHash: walletAddressState.trxHash,
