@@ -1,6 +1,7 @@
 import React, {ReactNode, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
+import {signout, useSession} from 'next-auth/client';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
@@ -44,6 +45,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const [, loading] = useSession();
   const {updateUser, loadFcmToken} = useUserHook();
   const {loadAllUserTokens, userTokens} = useToken();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
@@ -57,6 +59,16 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
   }, []);
 
   useEffect(() => {
+    // if authenticated & user record not found
+    if (!loading && !user && !anonymous) {
+      signout({
+        callbackUrl: '/',
+        redirect: true,
+      });
+    }
+  }, [loading, user, anonymous]);
+
+  useEffect(() => {
     if (user) {
       loadAllUserTokens(user.id);
     }
@@ -68,7 +80,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
     });
   };
 
-  if (!user && !anonymous) return null;
+  if (loading) return null;
 
   return (
     <div className={style.root}>
