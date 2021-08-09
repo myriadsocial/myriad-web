@@ -1,3 +1,4 @@
+import {BalanceReducer} from './balance/reducer';
 import {ConfigReducer} from './config/reducer';
 import {FriendReducer} from './friend/reducer';
 import {NotificationReducer} from './notification/reducer';
@@ -18,6 +19,7 @@ const reducers = {
   timelineState: TimelineReducer,
   userState: UserReducer,
   tipSummaryState: TipSummaryReducer,
+  balanceState: BalanceReducer,
 };
 
 export const combinedReducers = combineReducers(reducers);
