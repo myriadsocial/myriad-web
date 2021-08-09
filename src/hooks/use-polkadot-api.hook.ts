@@ -1,17 +1,17 @@
 import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {Keyring} from '@polkadot/keyring';
-
 //TODO: migrate these two contexts to redux
 import {
   useWalletAddress as baseUseWalletAddress,
   WalletAddressActionType,
 } from '../components/common/sendtips/send-tip.context';
 
+import _ from 'lodash';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {Token} from 'src/interfaces/token';
 import {ContentType} from 'src/interfaces/wallet';
+import {signAndSendExtrinsic} from 'src/lib/api/polkadot-js';
 import {updateTips} from 'src/lib/api/post';
 import {storeTransaction} from 'src/lib/api/transaction';
 import {RootState} from 'src/reducers';
@@ -34,6 +34,7 @@ export const usePolkadotApi = () => {
   const dispatch = useDispatch();
   const balanceState = useSelector<RootState, BalanceState>(state => state.balanceState);
   const {showAlert, showTipAlert} = useAlertHook();
+  //TODO: move to transaction redux
   const {state: walletAddressState, dispatch: walletAddressDispatch} = baseUseWalletAddress();
 
   const [loading, setLoading] = useState(false);
@@ -62,95 +63,49 @@ export const usePolkadotApi = () => {
 
     setLoading(true);
     try {
-      const {enableExtension} = await import('../helpers/extension');
-      const {web3FromSource} = await import('@polkadot/extension-dapp');
-
-      const allAccounts = await enableExtension();
-      // We select the first account found by using fromAddress
-      // `account` is of type InjectedAccountWithMeta
-      const keyring = new Keyring();
-      const baseAddress = keyring.encodeAddress(
+      const txHash = await signAndSendExtrinsic({
         fromAddress,
-        Number(process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX),
-      );
-      const account = allAccounts?.find(function (account) {
-        // address from session must match address on polkadot extension
-        return account.address === baseAddress;
+        toAddress,
+        amount: amountSent,
+        currencyId,
+        wsAddress,
       });
 
-      // if account has not yet been imported to Polkadot.js extension
-      if (account === undefined) {
+      if (_.isEmpty(txHash)) {
         throw {
-          Error: 'Please import your account first!',
+          message: 'Cancelled',
         };
       }
 
-      // otherwise
-      if (account) {
-        const api = await connectToBlockchain(wsAddress);
-
-        if (api) {
-          // here we use the api to create a balance transfer to some account of a value of 12345678
-          const transferExtrinsic =
-            currencyId === 'ACA'
-              ? api?.tx.balances.transfer(toAddress, amountSent)
-              : api?.tx.currencies.transfer(toAddress, {TOKEN: currencyId}, amountSent);
-
-          // to be able to retrieve the signer interface from this account
-          // we can use web3FromSource which will return an InjectedExtension type
-          const injector = await web3FromSource(account.meta.source);
-
-          if (transferExtrinsic) {
-            // passing the injected account address as the first argument of signAndSend
-            // will allow the api to retrieve the signer and the user will see the extension
-            // popup asking to sign the balance transfer transaction
-            const txInfo = await transferExtrinsic.signAndSend(fromAddress, {
-              signer: injector.signer,
-            });
-
-            // Only update the tip sent to a post, but
-            // not to a comment
-            if (contentType === ContentType.POST) {
-              await updateTips(currencyId, amountSent, postId);
-            }
-
-            const correctedValue = amountSent / 10 ** decimals;
-
-            if (txInfo) {
-              // Record the transaction
-              await storeTransaction({
-                trxHash: txInfo.toHex(),
-                from: fromAddress,
-                to: toAddress,
-                value: correctedValue,
-                state: 'success',
-                tokenId: currencyId,
-                createdAt: new Date().toISOString(),
-                postId,
-              });
-
-              walletAddressDispatch({
-                type: WalletAddressActionType.SEND_TIPS_SUCCESS,
-                amountSent: correctedValue,
-                from: baseAddress,
-                to: toAddress,
-                trxHash: txInfo.toHex(),
-                tokenId: currencyId,
-                success: true,
-              });
-
-              showTipAlert({
-                severity: 'success',
-                title: 'Tip sent!',
-                message: `${txInfo.toHex()}`,
-              });
-
-              callback && callback();
-            }
-
-            await api.disconnect();
-          }
+      if (txHash) {
+        // Only update the tip sent to a post, but
+        // not to a comment
+        // TODO: try sending tip from comment
+        if (contentType === ContentType.POST) {
+          await updateTips(currencyId, amountSent, postId);
         }
+
+        const correctedValue = amountSent / 10 ** decimals;
+        // Record the transaction
+        // TODO: adjust to the new DB scheme
+        await storeTransaction({
+          trxHash: txHash,
+          from: fromAddress,
+          to: toAddress,
+          value: correctedValue,
+          state: 'success',
+          tokenId: currencyId,
+          createdAt: new Date().toISOString(),
+          postId,
+        });
+
+        showTipAlert({
+          severity: 'success',
+          title: 'Tip sent!',
+          message: `${txHash}`,
+        });
+
+        callback && callback();
       }
     } catch (error) {
       if (error.message === 'Cancelled') {
@@ -172,6 +127,7 @@ export const usePolkadotApi = () => {
     error,
     load,
     sendTip,
+    // TODO: define sendTipSuccess and txHash on transaction redux
     sendTipSuccess: walletAddressState.success,
     trxHash: walletAddressState.trxHash,
   };

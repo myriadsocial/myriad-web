@@ -1,10 +1,94 @@
 import {options} from '@acala-network/api';
 
 import {ApiPromise, WsProvider} from '@polkadot/api';
+import {Keyring} from '@polkadot/keyring';
 
 export const connectToBlockchain = async (wsProvider: string): Promise<ApiPromise> => {
   const provider = new WsProvider(wsProvider);
   const api: ApiPromise = new ApiPromise(options({provider}));
   await api.isReadyOrError;
   return api;
+};
+
+interface signAndSendExtrinsicProps {
+  fromAddress: string;
+  toAddress: string;
+  amount: number;
+  currencyId: string;
+  wsAddress: string;
+}
+
+export const signAndSendExtrinsic = async ({
+  fromAddress,
+  toAddress,
+  amount,
+  currencyId,
+  wsAddress,
+}: signAndSendExtrinsicProps): Promise<string | null> => {
+  try {
+    const {enableExtension} = await import('../../helpers/extension');
+    const {web3FromSource} = await import('@polkadot/extension-dapp');
+
+    const allAccounts = await enableExtension();
+
+    const keyring = new Keyring();
+
+    const baseAddress = keyring.encodeAddress(
+      fromAddress,
+      Number(process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX),
+    );
+
+    if (allAccounts) {
+      // We select the first account matching baseAddress
+      // `account` is of type InjectedAccountWithMeta
+      const account = allAccounts.find(account => {
+        // address from session must match address on polkadot extension
+        return account.address === baseAddress;
+      });
+
+      // if account has not yet been imported to Polkadot.js extension
+      if (!account) {
+        throw {
+          Error: 'Please import your account first!',
+        };
+      }
+
+      // otherwise if account found
+      if (account) {
+        const api = await connectToBlockchain(wsAddress);
+
+        if (api) {
+          // here we use the api to create a balance transfer to some account of a value of 12345678
+          const transferExtrinsic =
+            currencyId === 'ACA'
+              ? api.tx.balances.transfer(toAddress, amount)
+              : api.tx.currencies.transfer(toAddress, {TOKEN: currencyId}, amount);
+
+          // to be able to retrieve the signer interface from this account
+          // we can use web3FromSource which will return an InjectedExtension type
+          const injector = await web3FromSource(account.meta.source);
+
+          if (transferExtrinsic) {
+            // passing the injected account address as the first argument of signAndSend
+            // will allow the api to retrieve the signer and the user will see the extension
+            // popup asking to sign the balance transfer transaction
+            const txInfo = await transferExtrinsic.signAndSend(fromAddress, {
+              signer: injector.signer,
+            });
+
+            if (txInfo) {
+              return txInfo.toHex();
+            }
+
+            await api.disconnect();
+          }
+        }
+      }
+    }
+
+    // return null if no txHash is produced
+    return null;
+  } catch (error) {
+    return error;
+  }
 };
