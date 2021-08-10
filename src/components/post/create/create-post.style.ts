@@ -100,5 +100,14 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: -12,
       marginLeft: -12,
     },
+    screen: {
+      width: '100%',
+      height: '100%',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      borderRadius: 8,
+      cursor: 'pointer',
+    },
   }),
 );

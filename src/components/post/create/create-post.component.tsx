@@ -117,6 +117,13 @@ const CreatePostComponent: React.FC<CreatePostProps> = ({user}) => {
             Create A Post
           </Button>
         </CardActions>
+        <div
+          onClick={toggleCreatePost}
+          role="button"
+          tabIndex={0}
+          aria-hidden="true"
+          className={styles.screen}
+        />
       </Card>
 
       <Dialog
