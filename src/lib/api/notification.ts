@@ -11,6 +11,7 @@ export const getMyNotification = async (userId: string): Promise<ExtendedNotific
     method: 'GET',
     params: {
       filter: {
+        order: `createdAt DESC`,
         where: {
           and: [{to: userId}],
         },
