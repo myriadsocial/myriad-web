@@ -16,12 +16,7 @@ import {TipAmountFieldComponent} from './tipAmountField.component';
 
 import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
-import {
-  InputState,
-  InputErrorState,
-  Props,
-  SendTipWithPayloadProps,
-} from 'src/interfaces/send-tips/send-tips';
+import {InputState, InputErrorState, Props, SendTipProps} from 'src/interfaces/send-tips/send-tips';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {TimelineState} from 'src/reducers/timeline/reducer';
@@ -194,19 +189,19 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
   };
 
   const sendTipWithPayload = ({
-    senderAddress,
-    toAddress,
-    amountSent,
+    from,
+    to,
+    value,
     decimals,
     currencyId,
     postId,
     contentType,
     wsAddress,
-  }: SendTipWithPayloadProps) => {
+  }: SendTipProps) => {
     const sendTipPayload = {
-      fromAddress: senderAddress,
-      toAddress,
-      amountSent,
+      from,
+      to,
+      value,
       decimals,
       currencyId,
       postId,
@@ -227,9 +222,9 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
 
   const dispatchSendTip = () => {
     sendTipWithPayload({
-      senderAddress,
-      toAddress: recipientDetail.walletAddress,
-      amountSent: tipAmount,
+      from: senderAddress,
+      to: recipientDetail.walletAddress,
+      value: tipAmount,
       decimals: tokenProperties.tokenDecimals,
       currencyId: tokenProperties.tokenId,
       postId: recipientDetail.postId,
