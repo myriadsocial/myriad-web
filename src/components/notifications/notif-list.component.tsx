@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
+import Link from 'next/link';
+
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import DividerComponent from '@material-ui/core/Divider';
@@ -64,6 +66,7 @@ const NotificationListComponent: React.FC<NotificationListProps> = () => {
   const {readNotifications} = useNotifHook();
 
   useEffect(() => {
+    console.log(notifications[0]);
     return () => {
       readNotifications();
     };
@@ -97,7 +100,10 @@ const NotificationListComponent: React.FC<NotificationListProps> = () => {
                     </ListItemAvatar>
                     <ListItemText>
                       <Typography variant="body1" color="textPrimary" style={{fontWeight: 400}}>
-                        {notif.fromUserId.name} {notif.message}
+                        <Link href={`/${notif.from}`}>
+                          <a href={`/${notif.from}`}>{notif.fromUserId.name}</a>
+                        </Link>{' '}
+                        {notif.message}
                       </Typography>
                       <Typography variant="body2" color="textPrimary">
                         {formatDistance(subDays(new Date(notif.createdAt), 0), new Date(), {
