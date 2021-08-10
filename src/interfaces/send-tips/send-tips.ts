@@ -20,10 +20,10 @@ export interface Props {
   availableTokens: Token[];
 }
 
-export interface SendTipWithPayloadProps {
-  senderAddress: string;
-  toAddress: string;
-  amountSent: number;
+export interface SendTipProps {
+  from: string;
+  to: string;
+  value: number;
   decimals: number;
   currencyId: string;
   postId: string;
