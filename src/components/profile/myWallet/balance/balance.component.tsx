@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useImperativeHandle} from 'react';
+import {useSelector} from 'react-redux';
 
 import {useSession} from 'next-auth/client';
 
@@ -17,6 +18,8 @@ import {createStyles, fade, Theme, makeStyles, withStyles} from '@material-ui/co
 
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {useToken} from 'src/hooks/use-token.hook';
+import {RootState} from 'src/reducers';
+import {BalanceState} from 'src/reducers/balance/reducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -115,6 +118,11 @@ interface BalanceProps {
 }
 
 const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, hidden}) => {
+  const {
+    loading: loadingBalance,
+    error: errorBalance,
+    balanceDetails,
+  } = useSelector<RootState, BalanceState>(state => state.balanceState);
   const style = useStyles();
 
   const [session] = useSession();
@@ -123,8 +131,7 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, hidden}) => {
 
   const {loadAllUserTokens, userTokens} = useToken();
 
-  //TODO: move to redux
-  const {loading, error, tokensReady, load} = usePolkadotApi();
+  const {load} = usePolkadotApi();
 
   useEffect(() => {
     loadAllUserTokens(userId);
@@ -173,8 +180,8 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, hidden}) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {tokensReady.length === 0 && <LoadingComponent />}
-            {tokensReady.map(row => (
+            {balanceDetails.length === 0 && <LoadingComponent />}
+            {balanceDetails.map(row => (
               <TableRow key={row.tokenSymbol}>
                 <TableCell component="th" scope="row">
                   <div className={style.tokenColumn}>
@@ -185,9 +192,9 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, hidden}) => {
                 <TableCell align="right">
                   {isHidden ? (
                     <Button onClick={handleIsHidden}>Show balance</Button>
-                  ) : loading ? (
+                  ) : loadingBalance ? (
                     <CircularProgress className={style.spinner} size={20} />
-                  ) : error ? (
+                  ) : errorBalance ? (
                     <Typography className={style.errorText}>Error, try again!</Typography>
                   ) : (
                     <Button onClick={handleIsHidden}>{row.freeBalance}</Button>

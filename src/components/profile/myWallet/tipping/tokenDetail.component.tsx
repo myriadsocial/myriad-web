@@ -12,6 +12,7 @@ import {useStylesForTabs} from './tabs.styles';
 import {TabPanel} from 'src/components/common/tab-panel.component';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {RootState} from 'src/reducers';
+import {BalanceState} from 'src/reducers/balance/reducer';
 import {fetchUserTransactionDetails} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -25,8 +26,11 @@ const TokenDetailComponent = () => {
     transactionDetails: userTransactionDetails,
   } = useSelector<RootState, UserState>(state => state.userState);
 
-  // TODO: Need to migrate to redux
-  const {loading, load, tokensReady} = usePolkadotApi();
+  const {loading: loadingBalance, balanceDetails} = useSelector<RootState, BalanceState>(
+    state => state.balanceState,
+  );
+
+  const {load} = usePolkadotApi();
 
   if (!user) return null;
 
@@ -56,8 +60,8 @@ const TokenDetailComponent = () => {
     <div className={classes.root}>
       <div className={classes.demo2}>
         <StyledTabsComponent value={value} onChange={handleChange} aria-label="styled tabs example">
-          {loading && tokensReady.length === 0 && <LoadingComponent />}
-          {tokensReady.map((token, index) => (
+          {loadingBalance && balanceDetails.length === 0 && <LoadingComponent />}
+          {balanceDetails.map((token, index) => (
             <StyledTab
               label={token.tokenSymbol.toUpperCase()}
               id={`simple-tab-${index}`}
@@ -65,7 +69,7 @@ const TokenDetailComponent = () => {
             />
           ))}
         </StyledTabsComponent>
-        {tokensReady.map((token, index) => (
+        {balanceDetails.map((token, index) => (
           <TabPanel value={value} index={index} key={`simple-tab-${index}`}>
             <CurrencyDetails
               userTransactionDetails={userTransactionDetails}
