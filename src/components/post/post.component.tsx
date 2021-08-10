@@ -192,9 +192,15 @@ const PostComponent: React.FC<PostComponentProps> = ({
           </ShowIf>
 
           <ShowIf condition={['reddit'].includes(post.platform)}>
-            <Typography variant="h4" component="h1">
-              {post.title}
-            </Typography>
+            {post.title && (
+              <Linkify
+                text={post.title}
+                handleClick={onHashtagClicked}
+                variant="h4"
+                color="textPrimary"
+              />
+            )}
+
             <ReactMarkdown skipHtml remarkPlugins={[remarkGFM, remarkHTML]}>
               {post.text}
             </ReactMarkdown>
