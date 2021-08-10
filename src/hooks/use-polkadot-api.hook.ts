@@ -1,14 +1,9 @@
 import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-//TODO: migrate these two contexts to redux
-import {
-  useWalletAddress as baseUseWalletAddress,
-  WalletAddressActionType,
-} from '../components/common/sendtips/send-tip.context';
-
 import _ from 'lodash';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
+import {SendTipProps} from 'src/interfaces/send-tips/send-tips';
 import {Token} from 'src/interfaces/token';
 import {ContentType} from 'src/interfaces/wallet';
 import {signAndSendExtrinsic} from 'src/lib/api/polkadot-js';
@@ -18,24 +13,10 @@ import {RootState} from 'src/reducers';
 import {fetchBalances} from 'src/reducers/balance/actions';
 import {BalanceState} from 'src/reducers/balance/reducer';
 
-type Props = {
-  fromAddress: string;
-  toAddress: string;
-  amountSent: number;
-  decimals: number;
-  currencyId: string;
-  postId: string;
-  contentType: ContentType;
-  wsAddress: string;
-};
-
-// params mungkin butuh address sama tipe wsProvider
 export const usePolkadotApi = () => {
   const dispatch = useDispatch();
   const balanceState = useSelector<RootState, BalanceState>(state => state.balanceState);
   const {showAlert, showTipAlert} = useAlertHook();
-  //TODO: move to transaction redux
-  const {state: walletAddressState, dispatch: walletAddressDispatch} = baseUseWalletAddress();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -45,28 +26,15 @@ export const usePolkadotApi = () => {
   };
 
   const sendTip = async (
-    {
-      fromAddress,
-      toAddress,
-      amountSent,
-      decimals,
-      currencyId,
-      postId,
-      contentType,
-      wsAddress,
-    }: Props,
+    {from, to, value, decimals, currencyId, postId, contentType, wsAddress}: SendTipProps,
     callback?: () => void,
   ) => {
-    walletAddressDispatch({
-      type: WalletAddressActionType.INIT_SEND_TIPS,
-    });
-
     setLoading(true);
     try {
       const txHash = await signAndSendExtrinsic({
-        fromAddress,
-        toAddress,
-        amount: amountSent,
+        from,
+        to,
+        value,
         currencyId,
         wsAddress,
       });
@@ -82,16 +50,16 @@ export const usePolkadotApi = () => {
         // not to a comment
         // TODO: try sending tip from comment
         if (contentType === ContentType.POST) {
-          await updateTips(currencyId, amountSent, postId);
+          await updateTips(currencyId, value, postId);
         }
 
-        const correctedValue = amountSent / 10 ** decimals;
+        const correctedValue = value / 10 ** decimals;
         // Record the transaction
         // TODO: adjust to the new DB scheme
         await storeTransaction({
           trxHash: txHash,
-          from: fromAddress,
-          to: toAddress,
+          from,
+          to,
           value: correctedValue,
           state: 'success',
           tokenId: currencyId,
@@ -127,8 +95,5 @@ export const usePolkadotApi = () => {
     error,
     load,
     sendTip,
-    // TODO: define sendTipSuccess and txHash on transaction redux
-    sendTipSuccess: walletAddressState.success,
-    trxHash: walletAddressState.trxHash,
   };
 };
