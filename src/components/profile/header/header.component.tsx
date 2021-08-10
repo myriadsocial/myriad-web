@@ -79,10 +79,6 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
     toggleRemoveAlert();
   };
 
-  // const handlecancelFriendRequest = () => {
-  //   if (friendStatus) cancelFriendRequest(friendStatus);
-  // };
-
   const handleApproveFriendRequest = () => {
     if (friendStatus) toggleRequest(friendStatus, FriendStatus.APPROVED);
   };
