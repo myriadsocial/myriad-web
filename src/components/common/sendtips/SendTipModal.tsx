@@ -28,7 +28,9 @@ export type RefProps = {
 };
 //TODO: remove anything related to ref and switch back to useModal hooks
 const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
-  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
+  const {loading: loadingBalance, balanceDetails} = useSelector<RootState, BalanceState>(
+    state => state.balanceState,
+  );
   const {sendTip, loading, load} = usePolkadotApi();
   const {openTipSummary} = useTipSummaryHook();
   const {recipientDetail} = useSelector<RootState, WalletState>(state => state.walletState);
@@ -265,11 +267,12 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
   return (
     <>
       <Dialog open={isShown} aria-labelledby="send-tips-window" maxWidth="md">
-        {loading && (
-          <Backdrop className={styles.backdrop} open={open}>
-            <CircularProgress color="inherit" />
-          </Backdrop>
-        )}
+        {loading ||
+          (loadingBalance && (
+            <Backdrop className={styles.backdrop} open={open}>
+              <CircularProgress color="inherit" />
+            </Backdrop>
+          ))}
         <DialogTitle id="name" onClose={handleCloseModal}>
           {' '}
           Send Tip
@@ -277,6 +280,7 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
         <DialogContent dividers>
           <CurrencyTableComponent
             balanceDetails={balanceDetails}
+            isLoading={loadingBalance}
             availableTokens={availableTokens}
             onChange={(wsAddress, tokenDecimals, tokenId) =>
               handleChangeTokenProperties(wsAddress, tokenDecimals, tokenId)

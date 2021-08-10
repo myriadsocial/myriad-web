@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -17,11 +18,17 @@ import {Token} from 'src/interfaces/token';
 
 interface Props {
   balanceDetails: BalanceDetail[];
+  isLoading: boolean;
   availableTokens: Token[];
   onChange: (wsAddress: string, tokenDecimals: number, tokenId: string) => void;
 }
 
-export const CurrencyTableComponent = ({availableTokens, balanceDetails, onChange}: Props) => {
+export const CurrencyTableComponent = ({
+  isLoading,
+  availableTokens,
+  balanceDetails,
+  onChange,
+}: Props) => {
   const styles = useStyles();
   const [selectedToken, setSelectedToken] = useState('');
 
@@ -74,6 +81,8 @@ export const CurrencyTableComponent = ({availableTokens, balanceDetails, onChang
               <TableCell align="right">
                 {row.tokenSymbol === 'MYRIA' ? (
                   <></>
+                ) : isLoading ? (
+                  <CircularProgress className={styles.spinner} size={20} />
                 ) : (
                   <Typography className={styles.balanceText}>{row.freeBalance}</Typography>
                 )}
