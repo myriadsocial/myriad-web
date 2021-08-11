@@ -9,10 +9,12 @@ import {Post} from 'src/interfaces/post';
 
 export interface TipSummaryState extends BaseState {
   post: Post | null;
+  show: boolean;
 }
 
 const initialState: TipSummaryState = {
   post: null,
+  show: false,
   loading: false,
 };
 
@@ -29,6 +31,7 @@ export const TipSummaryReducer: Redux.Reducer<TipSummaryState, Actions> = (
       return {
         ...state,
         post: action.payload,
+        show: true,
       };
     }
 

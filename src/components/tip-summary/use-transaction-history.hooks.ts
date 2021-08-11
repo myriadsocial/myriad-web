@@ -15,6 +15,7 @@ type useTransactionHistoryProps = {
   hasMore: boolean;
   postDetail: Post | null;
   transactions: Transaction[];
+  clearTransaction: () => void;
   loadTransaction: (post: Post, page?: number) => void;
   loadNextTransaction: (post: Post) => void;
 };
@@ -89,12 +90,22 @@ export const useTransactionHistory = (): useTransactionHistoryProps => {
     }
   };
 
+  const clearTransaction = () => {
+    setTransactions([]);
+    setHasMore(false);
+    setPaginationMeta(prevMeta => ({
+      ...prevMeta,
+      page: 1,
+    }));
+  };
+
   return {
     error,
     loading,
     hasMore,
     postDetail,
     transactions,
+    clearTransaction,
     loadTransaction,
     loadNextTransaction,
   };

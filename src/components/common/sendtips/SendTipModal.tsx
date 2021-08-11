@@ -14,7 +14,7 @@ import {CurrencyTableComponent} from './currencyTable.component';
 import {useStyles} from './send-tips.style';
 import {TipAmountFieldComponent} from './tipAmountField.component';
 
-import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
+import {useTipSummaryHook} from 'src/components/tip-summary/use-tip-summary.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {InputState, InputErrorState, Props, SendTipProps} from 'src/interfaces/send-tips/send-tips';
 import {RootState} from 'src/reducers';
