@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -35,17 +37,24 @@ export const TipSummaryComponent: React.FC = () => {
   } = useToken();
 
   const {post, clearTipSummary} = useTipSummaryHook();
-  const {postDetail, transactions, loadTransaction} = useTransactionHistory();
+  const {hasMore, postDetail, transactions, loadTransaction, loadNextTransaction} =
+    useTransactionHistory();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (post) {
+    if (post?.id) {
       loadTransaction(post);
       setOpen(true);
     } else {
       setOpen(false);
     }
-  }, [post]);
+  }, [post?.id]);
+
+  const nextPage = () => {
+    if (post) {
+      loadNextTransaction(post);
+    }
+  };
 
   const toggleOpen = () => {
     setOpen(!open);
@@ -93,23 +102,34 @@ export const TipSummaryComponent: React.FC = () => {
           <Typography variant="caption" style={{marginTop: 24, marginBottom: 16}} component="div">
             Tipper list ({transactions.length})
           </Typography>
-          <List className={styles.list}>
-            {transactions.map(transaction => (
-              <ListItem key={transaction.trxHash}>
-                <ListItemAvatar>
-                  <Avatar
-                    alt={getTipperUserName(transaction)}
-                    src={transaction.fromUser?.profilePictureURL}
+          <List className={styles.list} id="scrollable-transaction">
+            <InfiniteScroll
+              scrollableTarget="scrollable-transaction"
+              dataLength={transactions.length}
+              next={nextPage}
+              hasMore={hasMore}
+              loader={
+                <ListItem>
+                  <CircularProgress color="primary" size={24} style={{margin: '0 auto'}} />
+                </ListItem>
+              }>
+              {transactions.map(transaction => (
+                <ListItem key={transaction.trxHash}>
+                  <ListItemAvatar>
+                    <Avatar
+                      alt={getTipperUserName(transaction)}
+                      src={transaction.fromUser?.profilePictureURL}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={`${getTipperUserName(transaction)} tipped ${transaction.value} ${
+                      transaction.tokenId
+                    }`}
+                    secondary={timeAgo(transaction.createdAt)}
                   />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={`${getTipperUserName(transaction)} tipped ${transaction.value} ${
-                    transaction.tokenId
-                  }`}
-                  secondary={timeAgo(transaction.createdAt)}
-                />
-              </ListItem>
-            ))}
+                </ListItem>
+              ))}
+            </InfiniteScroll>
           </List>
         </DialogContent>
         <DialogActions className={styles.done}>
