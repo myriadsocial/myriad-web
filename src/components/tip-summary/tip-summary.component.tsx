@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -20,8 +20,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
-import {useTipSummaryHook} from './tip-summar.hook';
 import {useStyles} from './tip-summary.style';
+import {useTipSummaryHook} from './use-tip-summary.hook';
 import {useTransactionHistory} from './use-transaction-history.hooks';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
@@ -36,17 +36,19 @@ export const TipSummaryComponent: React.FC = () => {
     state: {userTokens},
   } = useToken();
 
-  const {post, clearTipSummary} = useTipSummaryHook();
-  const {hasMore, postDetail, transactions, loadTransaction, loadNextTransaction} =
-    useTransactionHistory();
-  const [open, setOpen] = useState(false);
+  const {show, post, clearTipSummary} = useTipSummaryHook();
+  const {
+    hasMore,
+    postDetail,
+    transactions,
+    clearTransaction,
+    loadTransaction,
+    loadNextTransaction,
+  } = useTransactionHistory();
 
   useEffect(() => {
     if (post?.id) {
       loadTransaction(post);
-      setOpen(true);
-    } else {
-      setOpen(false);
     }
   }, [post?.id]);
 
@@ -57,18 +59,15 @@ export const TipSummaryComponent: React.FC = () => {
   };
 
   const toggleOpen = () => {
-    setOpen(!open);
-
-    if (open) {
-      clearTipSummary();
-    }
+    clearTipSummary();
+    clearTransaction();
   };
 
   if (!postDetail) return null;
 
   return (
     <div>
-      <Dialog open={open} maxWidth="md" onClose={close}>
+      <Dialog open={show} maxWidth="md" onClose={close}>
         <DialogTitle onClose={toggleOpen} id="tip-summary">
           Tip Received
         </DialogTitle>
