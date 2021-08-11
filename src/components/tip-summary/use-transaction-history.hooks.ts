@@ -12,21 +12,26 @@ const axios = Axios.create({
 type useTransactionHistoryProps = {
   error: string | null;
   loading: boolean;
+  hasMore: boolean;
   postDetail: Post | null;
   transactions: Transaction[];
-  loadTransaction: (post: Post) => void;
+  loadTransaction: (post: Post, page?: number) => void;
+  loadNextTransaction: (post: Post) => void;
 };
 
 export const useTransactionHistory = (): useTransactionHistoryProps => {
   const [postDetail, setPostDetail] = useState<Post | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
   const [error, setError] = useState(null);
-
+  const [paginationMeta, setPaginationMeta] = useState({
+    page: 1,
+    limit: 10,
+  });
   const [params] = useState({
-    offset: 0,
-    limit: 20,
     include: ['fromUser'],
+    order: `createdAt DESC`,
   });
 
   const loadPostDetail = async (post: Post): Promise<void> => {
@@ -35,8 +40,17 @@ export const useTransactionHistory = (): useTransactionHistoryProps => {
     setPostDetail(detail);
   };
 
-  const loadTransaction = async (post: Post): Promise<void> => {
+  const loadNextTransaction = async (post: Post): Promise<void> => {
+    const {page} = paginationMeta;
+
+    if (!loading) {
+      await loadTransaction(post, page + 1);
+    }
+  };
+
+  const loadTransaction = async (post: Post, page?: number): Promise<void> => {
     const filter = params;
+    const currentPage = page ? page : paginationMeta.page;
 
     setLoading(true);
 
@@ -47,6 +61,8 @@ export const useTransactionHistory = (): useTransactionHistoryProps => {
         params: {
           filter: {
             ...filter,
+            limit: paginationMeta.limit,
+            offset: (currentPage - 1) * paginationMeta.limit,
             where: {
               postId: post.id,
             },
@@ -54,8 +70,15 @@ export const useTransactionHistory = (): useTransactionHistoryProps => {
         },
       });
 
+      setPaginationMeta(prevMeta => ({
+        ...prevMeta,
+        page: currentPage,
+      }));
+
+      setHasMore(data.length >= 10);
+
       if (data.length > 0) {
-        setTransactions(data);
+        setTransactions(prevTransaction => [...prevTransaction, ...data]);
 
         await loadPostDetail(post);
       }
@@ -69,8 +92,10 @@ export const useTransactionHistory = (): useTransactionHistoryProps => {
   return {
     error,
     loading,
+    hasMore,
     postDetail,
     transactions,
     loadTransaction,
+    loadNextTransaction,
   };
 };
