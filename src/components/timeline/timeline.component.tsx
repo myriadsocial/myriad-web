@@ -132,6 +132,7 @@ const TimelineComponent: React.FC<TimelineComponentProps> = () => {
         </div>
 
         <TipSummaryComponent />
+
         <ScrollTop>
           <Fab color="secondary" size="small" aria-label="scroll back to top">
             <KeyboardArrowUpIcon />
