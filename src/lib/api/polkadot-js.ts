@@ -18,13 +18,15 @@ interface signAndSendExtrinsicProps {
   wsAddress: string;
 }
 
-export const signAndSendExtrinsic = async ({
-  from,
-  to,
-  value,
-  currencyId,
-  wsAddress,
-}: signAndSendExtrinsicProps): Promise<string | null> => {
+interface SignTransactionCallbackProps {
+  apiConnected?: boolean;
+  signerOpened?: boolean;
+}
+
+export const signAndSendExtrinsic = async (
+  {from, to, value, currencyId, wsAddress}: signAndSendExtrinsicProps,
+  callback?: (param: SignTransactionCallbackProps) => void,
+): Promise<string | null> => {
   try {
     const {enableExtension} = await import('../../helpers/extension');
     const {web3FromSource} = await import('@polkadot/extension-dapp');
@@ -57,6 +59,10 @@ export const signAndSendExtrinsic = async ({
       if (account) {
         const api = await connectToBlockchain(wsAddress);
 
+        callback &&
+          callback({
+            apiConnected: true,
+          });
         if (api) {
           // here we use the api to create a balance transfer to some account of a value of 12345678
           const transferExtrinsic =
@@ -68,6 +74,11 @@ export const signAndSendExtrinsic = async ({
           // we can use web3FromSource which will return an InjectedExtension type
           const injector = await web3FromSource(account.meta.source);
 
+          callback &&
+            callback({
+              apiConnected: true,
+              signerOpened: true,
+            });
           if (transferExtrinsic) {
             // passing the injected account address as the first argument of signAndSend
             // will allow the api to retrieve the signer and the user will see the extension
