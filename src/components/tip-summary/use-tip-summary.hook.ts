@@ -1,4 +1,3 @@
-import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {Post} from 'src/interfaces/post';
