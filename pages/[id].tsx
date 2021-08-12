@@ -18,6 +18,7 @@ import {RootState} from 'src/reducers';
 import {setProfile} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {setAnonymous, setUser, fetchToken} from 'src/reducers/user/actions';
+import {UserState} from 'src/reducers/user/reducer';
 
 type ProfilePageProps = {
   session: Session;
@@ -27,6 +28,7 @@ type ProfilePageProps = {
 const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
   const dispatch = useDispatch();
 
+  const {tokens} = useSelector<RootState, UserState>(state => state.userState);
   const {detail: profileDetail} = useSelector<RootState, ProfileState>(state => state.profileState);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
           <Typography>Try searching for another.</Typography>
         </div>
       ) : (
-        <ProfileTimeline profile={profileDetail} loading={false} />
+        <ProfileTimeline profile={profileDetail} loading={false} tokens={tokens} />
       )}
     </Layout>
   );

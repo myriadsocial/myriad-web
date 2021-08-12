@@ -19,6 +19,7 @@ import PostComponent from 'src/components/post/post.component';
 import {useModal} from 'src/hooks/use-modal.hook';
 import {useTimelineHook} from 'src/hooks/use-timeline.hook';
 import {Post} from 'src/interfaces/post';
+import {Token} from 'src/interfaces/token';
 import {ExtendedUser} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -31,15 +32,14 @@ const TipSummaryComponent = dynamic(
 
 type Props = {
   profile: ExtendedUser;
+  tokens: Token[];
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function ImportedPostList({profile}: Props) {
+export default function ImportedPostList({profile, tokens}: Props) {
   const style = useStyles();
 
-  const {user, tokens: availableTokens} = useSelector<RootState, UserState>(
-    state => state.userState,
-  );
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {loading, posts, hasMore, nextPage} = useTimelineHook();
   const {isShown, hide, toggle} = useModal();
   const {filterImportedPost, clearPosts} = useProfileTimeline(profile);
@@ -75,7 +75,7 @@ export default function ImportedPostList({profile}: Props) {
         <SendTipModal
           isShown={isShown}
           hide={hide}
-          availableTokens={availableTokens}
+          availableTokens={tokens}
           userAddress={user.id}
         />
       )}
