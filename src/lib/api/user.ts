@@ -1,30 +1,14 @@
 import Axios from 'axios';
-import {User, ExtendedUser, UserCredential, UserTransactionDetail} from 'src/interfaces/user';
+import {User, ExtendedUser, UserSocialMedia, UserTransactionDetail} from 'src/interfaces/user';
 
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_LATEST_API_URL,
 });
 
 export const getUserDetail = async (id: string): Promise<ExtendedUser> => {
   const {data} = await MyriadAPI.request<ExtendedUser>({
     url: `users/${id}`,
     method: 'GET',
-    params: {
-      filter: {
-        include: [
-          {
-            relation: 'userCredentials',
-            scope: {
-              include: [
-                {
-                  relation: 'people',
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
   });
 
   return data;
@@ -70,7 +54,7 @@ export const updateUser = async (userId: string, values: Partial<User>): Promise
 
 export const addUserCredential = async (
   userId: string,
-  values: Partial<UserCredential>,
+  values: Partial<UserSocialMedia>,
 ): Promise<void> => {
   await MyriadAPI({
     url: `/users/${userId}/user-credentials`,
