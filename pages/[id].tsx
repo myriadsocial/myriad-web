@@ -26,15 +26,15 @@ type ProfilePageProps = {
 };
 
 const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
 
-  const {tokens} = useSelector<RootState, UserState>(state => state.userState);
+  //const {tokens} = useSelector<RootState, UserState>(state => state.userState);
   const {detail: profileDetail} = useSelector<RootState, ProfileState>(state => state.profileState);
 
-  useEffect(() => {
-    // load current authenticated user tokens
-    dispatch(fetchToken());
-  }, [dispatch]);
+  //useEffect(() => {
+  //// load current authenticated user tokens
+  //dispatch(fetchToken());
+  //}, [dispatch]);
 
   return (
     <Layout>
@@ -44,7 +44,7 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
           <Typography>Try searching for another.</Typography>
         </div>
       ) : (
-        <ProfileTimeline profile={profileDetail} loading={false} tokens={tokens} />
+        <ProfileTimeline profile={profileDetail} loading={false} />
       )}
     </Layout>
   );
