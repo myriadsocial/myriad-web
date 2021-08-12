@@ -228,7 +228,7 @@ export const setUserAsAnonymous: ThunkActionCreator<Actions, RootState> =
   };
 
 export const updateUser: ThunkActionCreator<Actions, RootState> =
-  (attributes: Partial<User>, callback?: () => void) => async (dispatch, getState) => {
+  (attributes: Partial<User>, callback?: (error?: any) => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     const {
@@ -256,6 +256,7 @@ export const updateUser: ThunkActionCreator<Actions, RootState> =
       callback && callback();
     } catch (error) {
       dispatch(setError(error.message));
+      callback && callback(error);
     } finally {
       dispatch(setLoading(false));
     }
