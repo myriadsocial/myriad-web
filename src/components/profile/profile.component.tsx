@@ -20,6 +20,7 @@ import {ExtendedUser} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
+import {fetchToken} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 const PostList = dynamic(() => import('./post/post-list.component'));
@@ -29,7 +30,6 @@ const FriendComponent = dynamic(() => import('./friend/user-friends.component'))
 type Props = {
   profile: ExtendedUser;
   loading: boolean;
-  tokens: Token[];
 };
 // WALLET TAB
 interface StyledTabsProps {
@@ -116,12 +116,12 @@ function MyWalletTabs() {
 // WALLET TAB
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function ProfileTimeline({profile, loading, tokens}: Props) {
+export default function ProfileTimeline({profile, loading}: Props) {
   const style = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
+  const {anonymous, user, tokens} = useSelector<RootState, UserState>(state => state.userState);
   const {totalFriends} = useSelector<RootState, ProfileState>(state => state.profileState);
   const [isWalletTabActivated, setIsWalletTabActivated] = useState(false);
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -145,6 +145,9 @@ export default function ProfileTimeline({profile, loading, tokens}: Props) {
 
   useEffect(() => {
     dispatch(fetchProfileFriend(profile.id));
+
+    // load current authenticated user tokens
+    dispatch(fetchToken());
 
     return undefined;
   }, [profile.id]);
