@@ -15,6 +15,7 @@ import {TippingComponent} from './myWallet/tipping/tipping.component';
 import {WalletComponent} from './myWallet/wallet/wallet.component';
 import {useStyles} from './profile.style';
 
+import {Token} from 'src/interfaces/token';
 import {ExtendedUser} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';
@@ -28,6 +29,7 @@ const FriendComponent = dynamic(() => import('./friend/user-friends.component'))
 type Props = {
   profile: ExtendedUser;
   loading: boolean;
+  tokens: Token[];
 };
 // WALLET TAB
 interface StyledTabsProps {
@@ -114,7 +116,7 @@ function MyWalletTabs() {
 // WALLET TAB
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function ProfileTimeline({profile, loading}: Props) {
+export default function ProfileTimeline({profile, loading, tokens}: Props) {
   const style = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -186,10 +188,10 @@ export default function ProfileTimeline({profile, loading}: Props) {
             {isGuest == false && <Tab className={style.tabItem} label={'My Wallet'} />}
           </Tabs>
           <TabPanel value={selectedTab} index={0} dir={theme.direction}>
-            <PostList profile={profile} />
+            <PostList profile={profile} tokens={tokens} />
           </TabPanel>
           <TabPanel value={selectedTab} index={1} dir={theme.direction}>
-            <ImportedPostList profile={profile} />
+            <ImportedPostList profile={profile} tokens={tokens} />
           </TabPanel>
           <TabPanel value={selectedTab} index={2} dir={theme.direction}>
             <FriendComponent profile={profile} />
