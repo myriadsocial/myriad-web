@@ -2,6 +2,8 @@ import React, {useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useSelector} from 'react-redux';
 
+import dynamic from 'next/dynamic';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
@@ -21,6 +23,12 @@ import {ExtendedUser} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
+const TipSummaryComponent = dynamic(
+  () => import('src/components/tip-summary/tip-summary.component'),
+);
+
+const SendTipModal = dynamic(() => import('src/components/common/sendtips/SendTipModal'));
+
 type Props = {
   profile: ExtendedUser;
 };
@@ -29,10 +37,12 @@ type Props = {
 export default function PostList({profile}: Props) {
   const style = useStyles();
 
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, tokens: availableTokens} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const {loading, posts, hasMore, nextPage} = useTimelineHook();
   const {filterOriginalPost, clearPosts} = useProfileTimeline(profile);
-  const {toggle} = useModal();
+  const {hide, toggle, isShown} = useModal();
 
   useEffect(() => {
     filterOriginalPost();
@@ -87,6 +97,17 @@ export default function PostList({profile}: Props) {
           </Fab>
         </ScrollTop>
       </InfiniteScroll>
+
+      {user && (
+        <SendTipModal
+          isShown={isShown}
+          hide={hide}
+          availableTokens={availableTokens}
+          userAddress={user.id}
+        />
+      )}
+
+      <TipSummaryComponent />
     </>
   );
 }
