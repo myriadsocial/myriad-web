@@ -37,7 +37,6 @@ export const useAuthHook = () => {
       await signIn('credentials', {
         address: registered.id,
         name: registered.name,
-        anonymous: registered.anonymous,
         callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
       });
 
