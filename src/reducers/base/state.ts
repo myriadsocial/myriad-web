@@ -1,4 +1,9 @@
+import {Color} from '@material-ui/lab/Alert';
+
 export interface State {
   loading: boolean;
-  error?: string;
+  error?: {
+    severity: Color;
+    message: string;
+  };
 }

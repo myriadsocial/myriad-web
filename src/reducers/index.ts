@@ -1,4 +1,5 @@
 import {BalanceReducer} from './balance/reducer';
+import {BaseReducer} from './base/reducer';
 import {ConfigReducer} from './config/reducer';
 import {FriendReducer} from './friend/reducer';
 import {NotificationReducer} from './notification/reducer';
@@ -12,6 +13,7 @@ import {WalletReducer} from './wallet/reducer';
 import {combineReducers} from 'redux';
 
 const reducers = {
+  baseState: BaseReducer,
   configState: ConfigReducer,
   friendState: FriendReducer,
   notificationState: NotificationReducer,

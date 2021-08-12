@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useSelector} from 'react-redux';
 
 import Snackbar from '@material-ui/core/Snackbar';
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
@@ -6,6 +7,8 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import {useAlertHook} from 'src/hooks/use-alert.hook';
+import {RootState} from 'src/reducers';
+import {State as BaseState} from 'src/reducers/base/state';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,7 +39,25 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const AlertComponent: React.FC = () => {
   const style = useStyles();
-  const {error, clearAlert} = useAlertHook();
+
+  // TODO: remove usage of alert context, use base error
+  const {error, clearAlert, showAlert} = useAlertHook();
+
+  const {error: globalError} = useSelector<RootState, BaseState>(state => state.baseState);
+
+  useEffect(() => {
+    if (globalError) {
+      if (error.open) {
+        clearAlert();
+      }
+
+      showAlert({
+        title: 'Error',
+        severity: globalError.severity,
+        message: globalError.message,
+      });
+    }
+  }, [globalError]);
 
   return (
     <div className={style.root}>
