@@ -8,14 +8,12 @@ export const userToSession = (user: User | ExtendedUser): UserSession => {
     name: user.name,
     profilePictureURL: user.profilePictureURL || '',
     address: user.id,
-    userCredentials: [],
+    userSocialMedias: [],
   };
 
-  if ('userCredentials' in user && user.userCredentials) {
-    for (const credential of user.userCredentials) {
-      session.userCredentials.push({
-        accessToken: credential.access_token,
-        refreshToken: credential.refresh_token,
+  if ('userSocialMedias' in user && user.userSocialMedias) {
+    for (const credential of user.userSocialMedias) {
+      session.userSocialMedias.push({
         platform: credential.people.platform,
         platformUserId: credential.people.platform_account_id,
         username: credential.people.username,
@@ -32,7 +30,7 @@ export const credentialToSession = (credential: SignInCredential): UserSession =
     name: credential.name,
     profilePictureURL: '',
     address: credential.address,
-    userCredentials: [],
+    userSocialMedias: [],
   };
 
   return session;
