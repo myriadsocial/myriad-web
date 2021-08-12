@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const TipAlertComponent: React.FC = () => {
   const style = useStyles();
-  const {error, isTipping, clearAlert} = useAlertHook();
+  const {alert, isTipping, clearAlert} = useAlertHook();
 
   return (
     <div className={style.root}>
@@ -49,16 +49,16 @@ const TipAlertComponent: React.FC = () => {
         }}
         autoHideDuration={6000}
         onClose={clearAlert}>
-        <Alert className={style.alert} severity={error.severity || 'info'}>
-          <AlertTitle>{error.title}</AlertTitle>
-          {error.severity === 'success' && error.message ? (
+        <Alert className={style.alert} severity={alert.severity || 'info'}>
+          <AlertTitle>{alert.title}</AlertTitle>
+          {alert.severity === 'success' && alert.message ? (
             <Button
               target="_blank"
-              href={`https://acala-testnet.subscan.io/extrinsic/${error.message}`}>
-              TxHash: {error.message.substring(0, 5)}....{' '}
+              href={`https://acala-testnet.subscan.io/extrinsic/${alert.message}`}>
+              TxHash: {alert.message.substring(0, 5)}....{' '}
             </Button>
           ) : (
-            error.message
+            alert.message
           )}
         </Alert>
       </Snackbar>

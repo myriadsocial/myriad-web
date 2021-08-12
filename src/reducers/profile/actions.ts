@@ -59,7 +59,11 @@ export const fetchProfileDetail: ThunkActionCreator<Actions, RootState> =
         detail,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -77,7 +81,11 @@ export const fetchProfileFriend: ThunkActionCreator<Actions, RootState> =
         friends,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -95,7 +103,11 @@ export const searchProfileFriend: ThunkActionCreator<Actions, RootState> =
         query,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }

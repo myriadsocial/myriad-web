@@ -59,6 +59,19 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       });
     }
 
+    case constants.UPDATE_POST_PLATFORM_USER: {
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post.platformUser.platform_account_id === action.platformAccountId) {
+            post.platformUser = action.platformUser;
+          }
+
+          return post;
+        }),
+      };
+    }
+
     case constants.CLEAR_TIMELINE: {
       return update(state, {
         loading: {$set: true},

@@ -25,7 +25,7 @@ export const useAlertHook = () => {
   };
 
   return {
-    error: state,
+    alert: state,
     isTipping: state.isTipping,
     showAlert,
     showTipAlert,

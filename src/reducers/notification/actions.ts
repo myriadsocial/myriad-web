@@ -50,7 +50,11 @@ export const fetchNotification: ThunkActionCreator<Actions, RootState> =
         notifications,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
