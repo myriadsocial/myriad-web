@@ -70,7 +70,6 @@ function Adapter() {
       providerId: SocialsEnum,
       providerType: string,
       providerAccountId: string,
-      accessTokenExpires: number,
     ): Promise<void> {
       let username = '';
       _debug('userId', userId);
@@ -92,7 +91,6 @@ function Adapter() {
           const {data: facebookProfile} = await FacebookGraph({
             url: '/v10.0/me',
             params: {
-              access_token: accessToken,
               fields: 'id,name',
             },
           });
@@ -129,14 +127,7 @@ function Adapter() {
         _debug('Adapter linkAccount error: ', error.response.data);
       }
 
-      _debug(
-        'Adapter linkAccount',
-        userId,
-        providerId,
-        providerType,
-        providerAccountId,
-        accessTokenExpires,
-      );
+      _debug('Adapter linkAccount', userId, providerId, providerType, providerAccountId);
     }
 
     async function createSession(user: User) {
