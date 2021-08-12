@@ -10,8 +10,6 @@ interface SessionCredential {
   platform: SocialsEnum;
   platformUserId: string;
   username: string;
-  accessToken: string;
-  refreshToken?: string;
 }
 
 export interface UserSession {
@@ -20,5 +18,5 @@ export interface UserSession {
   profilePictureURL: string;
   address: string;
   anonymous: boolean;
-  userCredentials: SessionCredential[];
+  userSocialMedias: SessionCredential[];
 }
