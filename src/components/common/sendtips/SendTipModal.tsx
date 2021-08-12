@@ -26,7 +26,7 @@ export type RefProps = {
   openSendTipModal: () => void;
   closeSendTipModal: () => void;
 };
-//TODO: remove anything related to ref and switch back to useModal hooks
+
 const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
   const {loading: loadingBalance, balanceDetails} = useSelector<RootState, BalanceState>(
     state => state.balanceState,
