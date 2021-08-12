@@ -1,8 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {useAlertHook} from './use-alert.hook';
-
 import {SocialsEnum} from 'src/interfaces/index';
 import {RootState} from 'src/reducers';
 import {verifySocialMediaConnected, resetVerifyingSocial} from 'src/reducers/user/actions';
@@ -10,25 +8,11 @@ import {UserState} from 'src/reducers/user/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useShareSocial = () => {
-  const {showAlert} = useAlertHook();
   const dispatch = useDispatch();
 
   const {user, verifying, error} = useSelector<RootState, UserState>(state => state.userState);
   const [platform, setPlatform] = useState<SocialsEnum | null>(null);
   const [isVerified, setVerified] = useState(false);
-
-  // show error when verification fail
-  useEffect(() => {
-    if (verifying && error) {
-      showAlert({
-        message: error,
-        severity: 'error',
-        title: 'Error',
-      });
-
-      dispatch(resetVerifyingSocial());
-    }
-  }, [error, verifying]);
 
   useEffect(() => {
     if (verifying && !error) {

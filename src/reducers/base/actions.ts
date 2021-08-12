@@ -3,6 +3,11 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 
+interface ErrorData {
+  title?: string;
+  message: string;
+}
+
 /**
  * Action Types
  */
@@ -14,7 +19,7 @@ export interface LoadingAction extends Action {
 
 export interface FailedAction extends Action {
   type: constants.ACTION_FAILED;
-  error: string;
+  payload: ErrorData;
 }
 
 export interface HydrateStateAction extends Action {
@@ -45,7 +50,7 @@ export const setLoading = (loading: boolean): LoadingAction => ({
   loading,
 });
 
-export const setError = (error: string): FailedAction => ({
+export const setError = (payload: ErrorData): FailedAction => ({
   type: constants.ACTION_FAILED,
-  error,
+  payload,
 });

@@ -1,6 +1,5 @@
 import {HYDRATE} from 'next-redux-wrapper';
 
-import {ACTION_FAILED} from '../base/constants';
 import {State as BaseState} from '../base/state';
 import {Actions} from './actions';
 import * as constants from './constants';
@@ -82,13 +81,6 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
         ...state,
         verifying: false,
         error: undefined,
-      };
-    }
-
-    case ACTION_FAILED: {
-      return {
-        ...state,
-        error: action.error,
       };
     }
 

@@ -40,11 +40,6 @@ export const usePostHook = (user?: User) => {
       dispatch(createPost(post, images));
     } catch (error) {
       setError(error);
-      showAlert({
-        title: 'Error!',
-        message: 'Failed to create post, try again later',
-        severity: 'error',
-      });
     } finally {
       setLoading(false);
     }
@@ -54,20 +49,17 @@ export const usePostHook = (user?: User) => {
     setLoading(true);
 
     try {
-      await dispatch(importPost(url));
-
-      showAlert({
-        title: 'Success!',
-        message: 'Post successfully imported',
-        severity: 'success',
-      });
+      dispatch(
+        importPost(url, () => {
+          showAlert({
+            title: 'Success!',
+            message: 'Post successfully imported',
+            severity: 'success',
+          });
+        }),
+      );
     } catch (error) {
       setError(error);
-      showAlert({
-        title: 'Error!',
-        message: 'Post already imported',
-        severity: 'error',
-      });
     } finally {
       setLoading(false);
     }

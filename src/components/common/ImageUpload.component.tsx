@@ -76,13 +76,15 @@ export const ImageUpload = ({onImageSelected, value, loading, title}: Props) => 
     uploadField.click();
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const image = event.target.files[0];
 
       setUploading(true);
 
-      uploadImage(image);
+      await uploadImage(image);
+
+      setUploading(false);
     }
   };
 

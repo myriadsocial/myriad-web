@@ -1,19 +1,21 @@
+import {useDispatch} from 'react-redux';
+
 import {signIn, signOut} from 'next-auth/client';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {firebaseCloudMessaging} from '../lib/firebase';
-import {useAlertHook} from './use-alert.hook';
 
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {User} from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 import {toHexPublicKey} from 'src/lib/crypto';
+import {setError} from 'src/reducers/base/actions';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
 export const useAuthHook = () => {
   const {getPolkadotAccounts, unsubscribeFromAccounts} = usePolkadotExtension();
-  const {showAlert} = useAlertHook();
+  const dispatch = useDispatch();
 
   const getUserByAccounts = async (accounts: InjectedAccountWithMeta[]): Promise<User[] | null> => {
     try {
@@ -75,11 +77,13 @@ export const useAuthHook = () => {
 
     if (accounts.length === 0) {
       console.log('[useAuthHook][login][info]', 'No account found on polkadot extension');
-      showAlert({
-        severity: 'error',
-        title: 'Login',
-        message: 'No account found on polkadot extension',
-      });
+      dispatch(
+        setError({
+          title: 'Login Error',
+          message: 'No account found on polkadot extension',
+        }),
+      );
+
       return;
     }
 
@@ -87,11 +91,14 @@ export const useAuthHook = () => {
 
     if (!users || users.length === 0) {
       console.log('[useAuthHook][login][info]', 'No registered user match with polkadot accounts');
-      showAlert({
-        severity: 'error',
-        title: 'Login',
-        message: 'No registered user match with polkadot accounts',
-      });
+
+      dispatch(
+        setError({
+          title: 'Login Error',
+          message: 'No registered user match with polkadot accounts',
+        }),
+      );
+
       return;
     }
 
@@ -108,11 +115,14 @@ export const useAuthHook = () => {
       });
     } else {
       console.log('[useAuthHook][login][info]', 'No registered user matched with username');
-      showAlert({
-        severity: 'error',
-        title: 'Login',
-        message: 'No registered user matched with username',
-      });
+
+      dispatch(
+        setError({
+          title: 'Login Error',
+          message: 'No registered user matched with username',
+        }),
+      );
+
       return;
     }
   };

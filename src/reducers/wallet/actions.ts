@@ -56,7 +56,11 @@ export const fetchRecipientDetail: ThunkActionCreator<Actions, RootState> =
 
       dispatch(setRecipientDetail(walletDetailPayload));
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }

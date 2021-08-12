@@ -106,7 +106,11 @@ export const fetchUser: ThunkActionCreator<Actions, RootState> =
       }
       dispatch(setUser(user));
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -132,7 +136,11 @@ export const fetchToken: ThunkActionCreator<Actions, RootState> =
         payload: tokens,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -159,8 +167,14 @@ export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> 
       if (axios.isAxiosError(error)) {
         dispatch(handleVerifyError(error));
       } else {
-        dispatch(setError(error.message));
+        dispatch(
+          setError({
+            message: error.message,
+          }),
+        );
       }
+
+      dispatch(resetVerifyingSocial());
     }
   };
 
@@ -171,18 +185,36 @@ export const handleVerifyError: ThunkActionCreator<Actions, RootState> =
         case 404:
           switch (error.response.data.error.name) {
             case 'Error':
-              dispatch(setError('Please enter the correct account address'));
+              dispatch(
+                setError({
+                  message: 'Please enter the correct account address',
+                }),
+              );
+
               break;
             default:
               switch (error.response.data.error.message) {
                 case 'This twitter/facebook/reddit does not belong to you!':
-                  dispatch(setError('Sorry, this account has been claimed by somebody else'));
+                  dispatch(
+                    setError({
+                      message: 'Sorry, this account has been claimed by somebody else',
+                    }),
+                  );
                   break;
                 case 'Credential Invalid':
-                  dispatch(setError('Invalid credentials'));
+                  dispatch(
+                    setError({
+                      message: 'Invalid credentials',
+                    }),
+                  );
+
                   break;
                 default:
-                  dispatch(setError(error.response.data.error.message));
+                  dispatch(
+                    setError({
+                      message: error.response.data.error.message,
+                    }),
+                  );
                   break;
               }
               break;
@@ -191,7 +223,11 @@ export const handleVerifyError: ThunkActionCreator<Actions, RootState> =
 
         case 400:
         default:
-          dispatch(setError('Please enter the correct account address'));
+          dispatch(
+            setError({
+              message: 'Please enter the correct account address',
+            }),
+          );
           break;
       }
     }
@@ -216,7 +252,11 @@ export const fetchUserTransactionDetails: ThunkActionCreator<Actions, RootState>
         payload: transactionDetails,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -228,7 +268,7 @@ export const setUserAsAnonymous: ThunkActionCreator<Actions, RootState> =
   };
 
 export const updateUser: ThunkActionCreator<Actions, RootState> =
-  (attributes: Partial<User>, callback?: (error?: any) => void) => async (dispatch, getState) => {
+  (attributes: Partial<User>, callback?: () => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     const {
@@ -252,13 +292,16 @@ export const updateUser: ThunkActionCreator<Actions, RootState> =
             : user.profile_picture,
         },
       });
-
-      callback && callback();
     } catch (error) {
-      dispatch(setError(error.message));
-      callback && callback(error);
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
+
+      callback && callback();
     }
   };
 
@@ -277,7 +320,11 @@ export const deleteSocial: ThunkActionCreator<Actions, RootState> =
 
       dispatch(fetchUser(user.id));
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }

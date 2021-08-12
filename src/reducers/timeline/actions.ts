@@ -2,9 +2,10 @@ import {Actions as BaseAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 
+import axios from 'axios';
 import {Action} from 'redux';
 import {generateImageSizes} from 'src/helpers/cloudinary';
-import {Post} from 'src/interfaces/post';
+import {Post, PostOriginUser} from 'src/interfaces/post';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 import * as PostAPI from 'src/lib/api/post';
@@ -77,6 +78,12 @@ export interface FetchDedicatedPost extends Action {
   post: Post;
 }
 
+export interface UpdatePostPlatformUser extends Action {
+  type: constants.UPDATE_POST_PLATFORM_USER;
+  platformAccountId: string;
+  platformUser: PostOriginUser;
+}
+
 /**
  * Union Action Types
  */
@@ -93,6 +100,7 @@ export type Actions =
   | RemovePost
   | ClearTimeline
   | FetchDedicatedPost
+  | UpdatePostPlatformUser
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -171,7 +179,11 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
         },
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -219,14 +231,18 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
         },
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: 'Failed to create post, try again later',
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
   };
 
 export const importPost: ThunkActionCreator<Actions, RootState> =
-  (postUrl: string) => async (dispatch, getState) => {
+  (postUrl: string, callback?: () => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
@@ -249,10 +265,46 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
         type: constants.ADD_POST_TO_TIMELINE,
         post,
       });
+
+      callback && callback();
     } catch (error) {
-      dispatch(setError(error.message));
+      let message = error.message;
+
+      if (axios.isAxiosError(error) && error.response?.status === 422) {
+        message = 'Post already imported';
+      }
+
+      dispatch(
+        setError({
+          message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
+    }
+  };
+
+export const updatePostPlatformUser: ThunkActionCreator<Actions, RootState> =
+  (url: string) => async (dispatch, getState) => {
+    const {
+      userState: {user},
+    } = getState();
+
+    const sizes = generateImageSizes(url);
+
+    if (user) {
+      const platformUser: PostOriginUser = {
+        name: user.name,
+        username: user.name,
+        platform_account_id: user.id,
+        profile_image_url: sizes.thumbnail,
+      };
+
+      dispatch({
+        type: constants.UPDATE_POST_PLATFORM_USER,
+        platformAccountId: user.id,
+        platformUser,
+      });
     }
   };
 
@@ -326,7 +378,11 @@ export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
         await PostAPI.dislike(user.id, postId);
       }
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -349,7 +405,11 @@ export const fetchWalletDetails: ThunkActionCreator<Actions, RootState> =
         payload: walletDetailPayload,
       });
     } catch (error) {
-      setError(error);
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       setLoading(false);
     }
@@ -374,7 +434,11 @@ export const deletePost: ThunkActionCreator<Actions, RootState> =
         postId,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -391,11 +455,15 @@ export const getDedicatedPost: ThunkActionCreator<Actions, RootState> =
       if (!user) {
         throw new Error('User not found');
       }
-      console.log('masuk');
+
       const post = await PostAPI.getPostDetail(postId);
       dispatch(setPost(post));
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }

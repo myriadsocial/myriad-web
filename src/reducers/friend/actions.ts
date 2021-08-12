@@ -93,7 +93,11 @@ export const fetchFriend: ThunkActionCreator<Actions, RootState> =
         },
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -117,7 +121,11 @@ export const fetchFriendRequest: ThunkActionCreator<Actions, RootState> =
         requests,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -138,13 +146,33 @@ export const searchFriend: ThunkActionCreator<Actions, RootState> =
 
       const friends: ExtendedFriend[] = await FriendAPI.searchFriend(user.id, query);
 
+      friends.map(friend => {
+        if (friend.requestor && friend.requestor.profilePictureURL) {
+          friend.requestor.profile_picture = {
+            sizes: generateImageSizes(friend.requestor.profilePictureURL),
+          };
+        }
+
+        if (friend.friend && friend.friend.profilePictureURL) {
+          friend.friend.profile_picture = {
+            sizes: generateImageSizes(friend.friend.profilePictureURL),
+          };
+        }
+
+        return friend;
+      });
+
       dispatch({
         type: constants.FILTER_FRIEND,
         friends,
         query,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -167,7 +195,11 @@ export const createFriendRequest: ThunkActionCreator<Actions, RootState> =
 
       dispatch(fetchFriendRequest());
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -190,7 +222,11 @@ export const deleteFriendRequest: ThunkActionCreator<Actions, RootState> =
 
       dispatch(fetchFriendRequest());
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -217,7 +253,11 @@ export const toggleFriendRequest: ThunkActionCreator<Actions, RootState> =
 
       dispatch(fetchFriendRequest());
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }

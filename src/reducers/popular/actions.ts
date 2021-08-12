@@ -41,7 +41,11 @@ export const fetchPopularTopic: ThunkActionCreator<Actions, RootState> = () => a
       topics,
     });
   } catch (error) {
-    dispatch(setError(error.message));
+    dispatch(
+      setError({
+        message: error.message,
+      }),
+    );
   } finally {
     dispatch(setLoading(false));
   }

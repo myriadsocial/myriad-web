@@ -15,7 +15,8 @@ export const BaseReducer: Redux.Reducer<BaseState, Actions> = (state = initalSta
         ...state,
         error: {
           severity: 'error',
-          message: action.error,
+          title: action.payload.title,
+          message: action.payload.message,
         },
       };
     }

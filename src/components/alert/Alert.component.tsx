@@ -40,19 +40,17 @@ const useStyles = makeStyles((theme: Theme) =>
 const AlertComponent: React.FC = () => {
   const style = useStyles();
 
-  // TODO: remove usage of alert context, use base error
-  const {error, clearAlert, showAlert} = useAlertHook();
-
+  const {alert, clearAlert, showAlert} = useAlertHook();
   const {error: globalError} = useSelector<RootState, BaseState>(state => state.baseState);
 
   useEffect(() => {
     if (globalError) {
-      if (error.open) {
+      if (alert.open) {
         clearAlert();
       }
 
       showAlert({
-        title: 'Error',
+        title: globalError?.title || 'Error',
         severity: globalError.severity,
         message: globalError.message,
       });
@@ -62,16 +60,16 @@ const AlertComponent: React.FC = () => {
   return (
     <div className={style.root}>
       <Snackbar
-        open={error.open}
+        open={alert.open}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'center',
         }}
-        autoHideDuration={6000}
+        autoHideDuration={2000}
         onClose={clearAlert}>
-        <Alert className={style.alert} severity={error.severity || 'info'}>
-          <AlertTitle>{error.title}</AlertTitle>
-          {error.message}
+        <Alert className={style.alert} severity={alert.severity || 'info'}>
+          <AlertTitle>{alert.title}</AlertTitle>
+          {alert.message}
         </Alert>
       </Snackbar>
     </div>
