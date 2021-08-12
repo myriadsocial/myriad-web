@@ -58,9 +58,7 @@ export default NextAuth({
               const user = await UserAPI.createUser({
                 id: credentials.address,
                 name: credentials.name,
-                username: credentials.name.replace(/\s/g, ''),
                 profilePictureURL: '',
-                anonymous: false,
                 bio: '',
                 createdAt: new Date(),
               });
