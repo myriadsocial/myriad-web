@@ -73,8 +73,6 @@ function Adapter() {
       providerId: SocialsEnum,
       providerType: string,
       providerAccountId: string,
-      refreshToken: string,
-      accessToken: string,
       accessTokenExpires: number,
     ): Promise<void> {
       let username = '';
@@ -85,8 +83,6 @@ function Adapter() {
           const twitterClient = new TwitterClient({
             apiKey: process.env.TWITTER_API_KEY as string,
             apiSecret: process.env.TWITTER_API_KEY_SECRET as string,
-            accessToken: accessToken,
-            accessTokenSecret: refreshToken,
           });
 
           const twitterProfile = await twitterClient.accountsAndUsers.accountVerifyCredentials({
@@ -111,7 +107,6 @@ function Adapter() {
             userAgent: 'myriad',
             clientId: process.env.REDDIT_APP_ID as string,
             clientSecret: process.env.REDDIT_SECRET as string,
-            accessToken,
           });
 
           //@ts-ignore
@@ -130,8 +125,6 @@ function Adapter() {
         });
 
         await UserAPI.addUserCredential(userId, {
-          access_token: accessToken,
-          refresh_token: refreshToken,
           peopleId: people.id,
           userId,
         });
@@ -145,8 +138,6 @@ function Adapter() {
         providerId,
         providerType,
         providerAccountId,
-        refreshToken,
-        accessToken,
         accessTokenExpires,
       );
     }
