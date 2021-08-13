@@ -19,6 +19,7 @@ export const usePolkadotApi = () => {
   const {showAlert, showTipAlert} = useAlertHook();
 
   const [loading, setLoading] = useState(false);
+  const [isSignerLoading, setSignerLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const load = async (address: string, availableTokens: Token[]) => {
@@ -30,14 +31,24 @@ export const usePolkadotApi = () => {
     callback?: () => void,
   ) => {
     setLoading(true);
+
     try {
-      const txHash = await signAndSendExtrinsic({
-        from,
-        to,
-        value,
-        currencyId,
-        wsAddress,
-      });
+      setSignerLoading(true);
+
+      const txHash = await signAndSendExtrinsic(
+        {
+          from,
+          to,
+          value,
+          currencyId,
+          wsAddress,
+        },
+        params => {
+          if (params.signerOpened) {
+            setSignerLoading(false);
+          }
+        },
+      );
 
       if (_.isEmpty(txHash)) {
         throw {
@@ -86,12 +97,14 @@ export const usePolkadotApi = () => {
       setError(error);
     } finally {
       setLoading(false);
+      setSignerLoading(false);
     }
   };
 
   return {
     loadingBalance: balanceState.loading,
     loading,
+    isSignerLoading,
     error,
     load,
     sendTip,

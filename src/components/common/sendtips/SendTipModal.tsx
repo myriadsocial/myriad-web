@@ -14,7 +14,7 @@ import {CurrencyTableComponent} from './currencyTable.component';
 import {useStyles} from './send-tips.style';
 import {TipAmountFieldComponent} from './tipAmountField.component';
 
-import {useTipSummaryHook} from 'src/components/tip-summary/tip-summar.hook';
+import {useTipSummaryHook} from 'src/components/tip-summary/use-tip-summary.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {InputState, InputErrorState, Props, SendTipProps} from 'src/interfaces/send-tips/send-tips';
 import {RootState} from 'src/reducers';
@@ -31,7 +31,7 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
   const {loading: loadingBalance, balanceDetails} = useSelector<RootState, BalanceState>(
     state => state.balanceState,
   );
-  const {sendTip, loading, load} = usePolkadotApi();
+  const {sendTip, loading, isSignerLoading, load} = usePolkadotApi();
   const {openTipSummary} = useTipSummaryHook();
   const {recipientDetail} = useSelector<RootState, WalletState>(state => state.walletState);
   const {posts} = useSelector<RootState, TimelineState>(state => state.timelineState);
@@ -39,7 +39,6 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
 
   const [senderAddress, setSenderAddress] = useState('');
   const [tipAmount, setTipAmount] = useState(0);
-  const [sendTipClicked, setSendTipClicked] = useState(false);
   const [tokenBalance, setTokenBalance] = useState('');
 
   const [tokenProperties, setTokenProperties] = useState({
@@ -62,7 +61,6 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
   // reset form
   useEffect(() => {
     handleClearValue();
-    setSendTipClicked(false);
   }, []);
 
   // load balance detail only when component need to be shown
@@ -71,12 +69,6 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
       load(userAddress, availableTokens);
     }
   }, [isShown]);
-
-  useEffect(() => {
-    if (sendTipClicked) {
-      dispatchSendTip();
-    }
-  }, [sendTipClicked]);
 
   useEffect(() => {
     if (balanceDetails?.length > 0) {
@@ -155,12 +147,15 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
     });
   };
 
-  const checkAmountThenSend = () => {
+  const checkAmount = (): boolean => {
+    let valid = false;
+
     const regexValidDigits = /^\d*(\.\d+)?$/;
 
     if (values.amount === '') {
       handleInputEmpty();
     }
+
     if (regexValidDigits.test(values.amount)) {
       handleInputEmpty();
 
@@ -173,7 +168,7 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
 
         defineTipAmount(decimals);
 
-        setSendTipClicked(true);
+        valid = true;
 
         // sendTip will open a pop-up from polkadot.js extension,
         // tx signing is done by supplying a password
@@ -182,12 +177,13 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
     } else {
       handleInputError();
     }
+
+    return valid;
   };
 
   const handleCloseModal = () => {
     handleClearValue();
     hide();
-    setSendTipClicked(false);
   };
 
   const sendTipWithPayload = ({
@@ -213,7 +209,7 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
 
     sendTip(sendTipPayload, () => {
       handleCloseModal();
-      setSendTipClicked(false);
+
       const contentPayload = posts.find(({id}) => id === recipientDetail.postId);
 
       if (contentPayload) {
@@ -241,7 +237,11 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
 
   const handleSendTip = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    checkAmountThenSend();
+    const validAmount = checkAmount();
+
+    if (validAmount) {
+      dispatchSendTip();
+    }
   };
 
   const handleChangeTokenProperties = (
@@ -256,25 +256,12 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
     });
   };
 
-  useEffect(() => {
-    setOpen(!open);
-  }, [loading]);
-
-  const [open, setOpen] = useState(false);
-
   if (!isShown) return null;
 
   return (
     <>
       <Dialog open={isShown} aria-labelledby="send-tips-window" maxWidth="md">
-        {loading ||
-          (loadingBalance && (
-            <Backdrop className={styles.backdrop} open={open}>
-              <CircularProgress color="inherit" />
-            </Backdrop>
-          ))}
         <DialogTitle id="name" onClose={handleCloseModal}>
-          {' '}
           Send Tip
         </DialogTitle>
         <DialogContent dividers>
@@ -317,12 +304,16 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
             size="large"
             variant="contained"
             startIcon={<SendIcon />}
-            disabled={disabled}
+            disabled={disabled || loading}
             onClick={e => handleSendTip(e)}>
             Send
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Backdrop className={styles.backdrop} open={isSignerLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 };

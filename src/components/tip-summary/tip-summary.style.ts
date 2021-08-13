@@ -7,7 +7,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(2),
     },
     table: {},
-    list: {},
+    list: {
+      maxHeight: 360,
+      overflowY: 'auto',
+    },
     item: {
       '& .MuiListItemText-primary': {
         fontWeight: 400,
