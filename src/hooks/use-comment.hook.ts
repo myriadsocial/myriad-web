@@ -1,6 +1,7 @@
 import {useState} from 'react';
 
-import {Post, Comment, CreateCommentProps} from 'src/interfaces/post';
+import {Comment, CommentProps} from 'src/interfaces/comment';
+import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import * as PostAPI from 'src/lib/api/post';
 
@@ -10,7 +11,7 @@ type useCommentHookProps = {
   comments: Comment[];
   loadInitComment: () => void;
   loadMoreComment: () => void;
-  reply: (user: User, comment: CreateCommentProps) => void;
+  reply: (user: User, comment: CommentProps) => void;
 };
 
 export const useCommentHook = (post: Post): useCommentHookProps => {
@@ -44,8 +45,8 @@ export const useCommentHook = (post: Post): useCommentHookProps => {
     }
   };
 
-  const reply = async (user: User, comment: CreateCommentProps) => {
-    const data = await PostAPI.reply(post.id, comment);
+  const reply = async (user: User, comment: CommentProps) => {
+    const data = await PostAPI.reply(comment);
 
     setComments([
       ...comments,

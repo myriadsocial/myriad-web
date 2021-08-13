@@ -1,7 +1,7 @@
 import {BaseList} from './interfaces/base-list.interface';
 
 import Axios from 'axios';
-import {CommentProps} from 'src/interfaces/comment';
+import {Comment, CommentProps} from 'src/interfaces/comment';
 import {Post, PostProps, ImportPostProps, Like, Dislike} from 'src/interfaces/post';
 import {TimelineSortMethod, TimelineFilter} from 'src/interfaces/timeline';
 
@@ -184,7 +184,9 @@ export const getPostDetail = async (id: string): Promise<Post> => {
 };
 
 export const loadComments = async (postId: string, excludeUser?: string): Promise<Comment[]> => {
-  let where = {};
+  let where: Record<string, any> = {
+    postId,
+  };
 
   if (excludeUser) {
     where = {
@@ -194,8 +196,9 @@ export const loadComments = async (postId: string, excludeUser?: string): Promis
       },
     };
   }
+
   const {data} = await MyriadAPI.request<Comment[]>({
-    url: `/posts/${postId}/comments`,
+    url: `/comments`,
     params: {
       filter: {
         where,
@@ -208,9 +211,9 @@ export const loadComments = async (postId: string, excludeUser?: string): Promis
   return data;
 };
 
-export const reply = async (postId: string, comment: CommentProps): Promise<Comment> => {
+export const reply = async (comment: CommentProps): Promise<Comment> => {
   const {data} = await MyriadAPI.request<Comment>({
-    url: `/posts/${postId}/comments`,
+    url: `/comments`,
     method: 'POST',
     data: comment,
   });
