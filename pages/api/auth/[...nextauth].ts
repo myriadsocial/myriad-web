@@ -14,7 +14,7 @@ type Credentials = {
   accessToken: string;
 };
 
-const {serverRuntimeConfig, publicRuntimeConfig} = getConfig();
+const {serverRuntimeConfig} = getConfig();
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -22,20 +22,6 @@ export default NextAuth({
   adapter: APIAdapter.Adapter(),
   // https://next-auth.js.org/configuration/providers
   providers: [
-    Providers.Twitter({
-      clientId: process.env.TWITTER_API_KEY as string,
-      clientSecret: process.env.TWITTER_API_KEY_SECRET as string,
-    }),
-    Providers.Facebook({
-      clientId: publicRuntimeConfig.facebookAppId,
-      clientSecret: process.env.FACEBOOK_APP_SECRET as string,
-      scope: 'user_posts,user_friends',
-    }),
-    Providers.Reddit({
-      clientId: process.env.REDDIT_APP_ID as string,
-      clientSecret: process.env.REDDIT_SECRET as string,
-      scope: 'identity read',
-    }),
     Providers.Credentials({
       // The name to display on the sign in form (e.g. 'Sign in with...')
       name: 'Address',

@@ -4,11 +4,11 @@ import {
   useConversation,
   ConversationActionType,
 } from 'src/components/conversation/conversation.context';
+import {Comment} from 'src/interfaces/comment';
 import {ExtendedConversation} from 'src/interfaces/conversation';
-import {Comment, Post} from 'src/interfaces/post';
+import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import * as ConversationAPI from 'src/lib/api/conversation';
-import * as LocalAPI from 'src/lib/api/local';
 import * as PostAPI from 'src/lib/api/post';
 
 export const useConversationHook = (user: User) => {
@@ -25,17 +25,11 @@ export const useConversationHook = (user: User) => {
       //TODO: change this when post have text
       const posts = await Promise.all(
         conversations.map(async conversation => {
-          if (conversation.post.platform === 'twitter' && conversation.post.textId) {
-            const content = await LocalAPI.loadtTwitterPost(conversation.post.textId);
+          // if (conversation.post.id) {
+          //   const comments = await PostAPI.loadComments(conversation.post.id);
 
-            conversation.post.text = content.full_text;
-          }
-
-          if (conversation.post.id) {
-            const comments = await PostAPI.loadComments(conversation.post.id);
-
-            conversation.post.comments = comments;
-          }
+          //   conversation.post.comments = comments;
+          // }
 
           return conversation;
         }),
