@@ -16,11 +16,11 @@ import {useProfileTimeline} from '../use-profile-timeline.hook';
 import {ScrollTop} from 'src/components/common/ScrollToTop.component';
 import {LoadingPage} from 'src/components/common/loading.component';
 import PostComponent from 'src/components/post/post.component';
+import {isOwnPost} from 'src/helpers/post';
 import {useModal} from 'src/hooks/use-modal.hook';
 import {useTimelineHook} from 'src/hooks/use-timeline.hook';
 import {Post} from 'src/interfaces/post';
-import {Token} from 'src/interfaces/token';
-import {ExtendedUser} from 'src/interfaces/user';
+import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -31,8 +31,7 @@ const TipSummaryComponent = dynamic(
 const SendTipModal = dynamic(() => import('src/components/common/sendtips/SendTipModal'));
 
 type Props = {
-  profile: ExtendedUser;
-  tokens: Token[];
+  profile: User;
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -51,13 +50,6 @@ export default function PostList({profile, tokens}: Props) {
       clearPosts();
     };
   }, []);
-
-  const isOwnPost = (post: Post) => {
-    if (user && post.platformUser?.platform_account_id === user.id) {
-      return true;
-    }
-    return false;
-  };
 
   if (posts.length === 0 && !loading) {
     return (
@@ -84,7 +76,7 @@ export default function PostList({profile, tokens}: Props) {
         loader={<LoadingPage />}>
         {posts.map((post: Post, i: number) => (
           <Grow key={i}>
-            <PostComponent post={post} postOwner={isOwnPost(post)} tippingClicked={toggle} />
+            <PostComponent post={post} postOwner={isOwnPost(post, user)} tippingClicked={toggle} />
           </Grow>
         ))}
 

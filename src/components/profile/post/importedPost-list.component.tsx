@@ -16,6 +16,7 @@ import {useProfileTimeline} from '../use-profile-timeline.hook';
 
 import {ScrollTop} from 'src/components/common/ScrollToTop.component';
 import PostComponent from 'src/components/post/post.component';
+import {isOwnPost} from 'src/helpers/post';
 import {useModal} from 'src/hooks/use-modal.hook';
 import {useTimelineHook} from 'src/hooks/use-timeline.hook';
 import {Post} from 'src/interfaces/post';
@@ -51,11 +52,6 @@ export default function ImportedPostList({profile, tokens}: Props) {
       clearPosts();
     };
   }, []);
-
-  const isOwnPost = (post: Post) => {
-    if (user && post.walletAddress === user.id) return true;
-    return false;
-  };
 
   if (posts.length === 0 && !loading) {
     return (
@@ -93,7 +89,7 @@ export default function ImportedPostList({profile, tokens}: Props) {
         loader={<LoadingPage />}>
         {posts.map((post: Post, i: number) => (
           <Grow key={i}>
-            <PostComponent post={post} postOwner={isOwnPost(post)} tippingClicked={toggle} />
+            <PostComponent post={post} postOwner={isOwnPost(post, user)} tippingClicked={toggle} />
           </Grow>
         ))}
 
