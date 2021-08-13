@@ -43,7 +43,7 @@ const useStyles = makeStyles(() =>
 
 type Props = {
   origin: PostOrigin;
-  avatar: string;
+  avatar?: string;
   onClick: () => void;
 };
 

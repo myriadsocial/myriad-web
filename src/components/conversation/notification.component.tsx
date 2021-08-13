@@ -35,6 +35,8 @@ export default function NotificationListComponent({user}: Props) {
   };
 
   const getPostReply = (post: Post) => {
+    if (!post.comments) return null;
+
     return (
       <React.Fragment>
         <Typography component="span" variant="body2" className={classes.inline} color="textPrimary">

@@ -30,7 +30,7 @@ export const uploadImage = async (file: File): Promise<string | null> => {
 };
 
 /* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
-export const loadtTwitterPost = async (postId: string): Promise<any> => {
+export const loadTwitterPost = async (postId: string): Promise<any> => {
   const {data} = await client.request({
     method: 'GET',
     url: '/api/content/twitter',
