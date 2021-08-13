@@ -184,7 +184,7 @@ export default function ProfileTimeline({profile, loading}: Props) {
             onChange={handleChange}
             indicatorColor="primary"
             textColor="primary">
-            <Tab className={style.tabItem} label={isGuest ? 'Post' : 'My Post'} />
+            <Tab className={style.tabItem} label={'Myriad Post'} />
             <Tab className={style.tabItem} label={'Imported Post'} />
             <Tab className={style.tabItem} label={`Friends(${totalFriends})`} />
             {isGuest == false && <Tab className={style.tabItem} label={'My Wallet'} />}

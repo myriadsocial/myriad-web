@@ -62,9 +62,12 @@ export default function PostList({profile, tokens}: Props) {
   if (posts.length === 0 && !loading) {
     return (
       <div style={{textAlign: 'center', padding: 16, backgroundColor: 'white', borderRadius: 8}}>
-        <h2>{user?.id === profile.id ? 'You' : profile.name} haven’t any post yet</h2>
+        <h2>
+          {user?.id === profile.id ? 'You haven’t' : `${profile.name} hasn't`} made any Myriad posts
+        </h2>
         <p>
-          When {user?.id === profile.id ? 'you' : profile.name} post in them, it will show up here.
+          When {user?.id === profile.id ? 'you create' : `${profile.name} creates`} a post, it will
+          show up here.
         </p>
       </div>
     );
