@@ -21,18 +21,24 @@ export const NotificationReducer: Redux.Reducer<NotificationState, Actions> = (
   action,
 ) => {
   switch (action.type) {
-    case constants.FETCH_NOTIFICATIION: {
+    case constants.FETCH_NOTIFICATION: {
       return {
         ...state,
         notifications: action.notifications,
-        total: action.notifications.length,
       };
     }
 
-    case constants.READ_NOTIFICATIION: {
+    case constants.READ_NOTIFICATION: {
       return {
         ...state,
         total: 0,
+      };
+    }
+
+    case constants.TOTAL_NEW_NOTIFICATION: {
+      return {
+        ...state,
+        total: action.total,
       };
     }
 

@@ -13,3 +13,7 @@ export interface ExtendedNotification extends Notification {
   fromUserId: User;
   toUserId: User;
 }
+
+export interface TotalNewNotification {
+  count: number;
+}
