@@ -51,6 +51,7 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);
+  const [isrequestSent, setIsRequestSent] = useState(false);
 
   useEffect(() => {
     checkFriendStatus(profile.id);
@@ -72,11 +73,24 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
   // FRIEND REQUEST
   const handleSendFriendRequest = () => {
     makeFriend(profile);
+
+    setIsRequestSent(true);
+    const timeoutID = setTimeout(() => {
+      setIsRequestSent(false);
+    }, 1500);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
   };
 
   const handleUnFriendRequest = () => {
     if (friendStatus) cancelFriendRequest(friendStatus);
     toggleRemoveAlert();
+  };
+
+  const handlecancelFriendRequest = () => {
+    if (friendStatus) cancelFriendRequest(friendStatus);
   };
 
   const handleApproveFriendRequest = () => {
@@ -180,14 +194,25 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
                 condition={
                   friendStatus?.status === 'pending' && friendStatus.friendId == profile.id
                 }>
-                <Button
-                  className={style.button2}
-                  variant="contained"
-                  size="medium"
-                  disabled
-                  style={{background: 'gray', marginRight: 12, color: 'white'}}>
-                  Request sent
-                </Button>
+                {isrequestSent ? (
+                  <Button
+                    className={style.button2}
+                    variant="contained"
+                    size="medium"
+                    disabled
+                    style={{background: 'gray', marginRight: 12, color: 'white'}}>
+                    Request sent
+                  </Button>
+                ) : (
+                  <Button
+                    className={style.button2}
+                    variant="contained"
+                    size="medium"
+                    onClick={handlecancelFriendRequest}
+                    style={{background: 'white', marginRight: 12, color: '#DC0404'}}>
+                    Cancel request
+                  </Button>
+                )}
               </ShowIf>
 
               <ShowIf condition={friendStatus?.status === 'approved'}>
