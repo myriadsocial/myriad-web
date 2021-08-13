@@ -13,7 +13,9 @@ export const useShareSocial = () => {
   const {showAlert} = useAlertHook();
   const dispatch = useDispatch();
 
-  const {user, verifying, error} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, socials, verifying, error} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const [platform, setPlatform] = useState<SocialsEnum | null>(null);
   const [isVerified, setVerified] = useState(false);
 
@@ -42,8 +44,8 @@ export const useShareSocial = () => {
   };
 
   const checkIsVerified = () => {
-    const found = user?.userCredentials?.find(credential => {
-      return credential.people.platform === platform;
+    const found = socials.find(social => {
+      return social.platform === platform;
     });
 
     const verified = Boolean(found);

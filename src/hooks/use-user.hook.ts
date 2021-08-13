@@ -16,18 +16,16 @@ type UserHookProps = {
 export const useUserHook = (): UserHookProps => {
   const dispatch = useDispatch();
 
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, socials} = useSelector<RootState, UserState>(state => state.userState);
 
   const disconnectSocial = async (social: SocialsEnum): Promise<void> => {
     if (!user) return;
 
-    if (user.userCredentials && user.userCredentials.length > 0) {
-      const credential = user.userCredentials.find(
-        credential => credential.people.platform === social,
-      );
+    if (socials.length > 0) {
+      const match = socials.find(item => item.platform === social);
 
-      if (credential) {
-        dispatch(deleteSocial(credential.id));
+      if (match) {
+        dispatch(deleteSocial(match.id));
       }
     }
   };
