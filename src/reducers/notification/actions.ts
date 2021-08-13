@@ -12,19 +12,24 @@ import {ThunkActionCreator} from 'src/types/thunk';
  */
 
 export interface FetchNotification extends Action {
-  type: constants.FETCH_NOTIFICATIION;
+  type: constants.FETCH_NOTIFICATION;
   notifications: ExtendedNotification[];
 }
 
 export interface ReadNotification extends Action {
-  type: constants.READ_NOTIFICATIION;
+  type: constants.READ_NOTIFICATION;
+}
+
+export interface TotalNewNotification extends Action {
+  type: constants.TOTAL_NEW_NOTIFICATION;
+  total: number;
 }
 
 /**
  * Union Action Types
  */
 
-export type Actions = FetchNotification | ReadNotification | BaseAction;
+export type Actions = FetchNotification | ReadNotification | TotalNewNotification | BaseAction;
 
 /**
  *
@@ -50,7 +55,7 @@ export const fetchNotification: ThunkActionCreator<Actions, RootState> =
       const notifications: ExtendedNotification[] = await NotifAPI.getMyNotification(user.id);
 
       dispatch({
-        type: constants.FETCH_NOTIFICATIION,
+        type: constants.FETCH_NOTIFICATION,
         notifications,
       });
     } catch (error) {
@@ -78,7 +83,33 @@ export const readAllNotifications: ThunkActionCreator<Actions, RootState> =
       }
 
       dispatch({
-        type: constants.READ_NOTIFICATIION,
+        type: constants.READ_NOTIFICATION,
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const numOfNewNotifications: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const total: number = await NotifAPI.getNumOfNewNotification(user.id);
+
+      dispatch({
+        type: constants.TOTAL_NEW_NOTIFICATION,
+        total,
       });
     } catch (error) {
       dispatch(setError(error.message));
