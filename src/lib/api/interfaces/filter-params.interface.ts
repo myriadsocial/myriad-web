@@ -3,8 +3,7 @@ interface IncludeParam {
   scope?: any;
 }
 
-export interface RequestFilters {
+export interface FilterParams {
   where?: Record<string, any>;
-
   include?: string[] | IncludeParam[];
 }
