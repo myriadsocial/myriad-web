@@ -10,26 +10,32 @@ import * as Redux from 'redux';
 import {Post} from 'src/interfaces/post';
 import {TimelineType, TimelineSortMethod, TimelineFilter} from 'src/interfaces/timeline';
 import {WalletDetail} from 'src/interfaces/wallet';
+import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 
 export interface TimelineState extends BaseState {
   type: TimelineType;
   sort: TimelineSortMethod;
   filter?: TimelineFilter;
   hasMore: boolean;
-  page: number;
   posts: Post[];
   walletDetails: WalletDetail[];
   post?: Post;
+  meta: ListMeta;
 }
 
 const initalState: TimelineState = {
   loading: true,
-  page: 1,
   type: TimelineType.DEFAULT,
   sort: 'created',
-  hasMore: true,
+  hasMore: false,
   posts: [],
   walletDetails: [],
+  meta: {
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItemCount: 0,
+    totalPageCount: 0,
+  },
 };
 
 export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
@@ -44,12 +50,18 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
     case constants.LOAD_TIMELINE: {
       return {
         ...state,
-        posts: action.meta.page === 1 ? action.posts : [...state.posts, ...action.posts],
-        page: action.meta.page,
-        type: action.meta.type ?? state.type,
-        sort: action.meta.sort ?? state.sort,
-        filter: action.meta.filter ?? state.filter,
-        hasMore: action.meta.hasMore,
+        posts:
+          action.payload.meta.currentPage === 1
+            ? action.payload.posts
+            : [...state.posts, ...action.payload.posts],
+        type: action.payload.type ?? state.type,
+        sort: action.payload.sort ?? state.sort,
+        filter: action.payload.filter ?? state.filter,
+        hasMore: action.payload.meta.currentPage < action.payload.meta.totalPageCount,
+        meta: {
+          ...state.meta,
+          currentPage: action.payload.meta.currentPage,
+        },
       };
     }
 
@@ -83,8 +95,8 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       return {
         ...state,
         posts: state.posts.map(post => {
-          if (post.id === action.postId && post.publicMetric) {
-            post.publicMetric.liked += 1;
+          if (post.id === action.postId && post.metric) {
+            post.metric.likes += 1;
           }
 
           return post;
@@ -96,8 +108,8 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       return {
         ...state,
         posts: state.posts.map(post => {
-          if (post.id === action.postId && post.publicMetric) {
-            post.publicMetric.liked -= 1;
+          if (post.id === action.postId && post.metric) {
+            post.metric.likes -= 1;
           }
 
           return post;
@@ -109,8 +121,8 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       return {
         ...state,
         posts: state.posts.map(post => {
-          if (post.id === action.postId && post.publicMetric) {
-            post.publicMetric.disliked += 1;
+          if (post.id === action.postId && post.metric) {
+            post.metric.dislikes += 1;
           }
 
           return post;
@@ -122,8 +134,8 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       return {
         ...state,
         posts: state.posts.map(post => {
-          if (post.id === action.postId && post.publicMetric) {
-            post.publicMetric.disliked -= 1;
+          if (post.id === action.postId && post.metric) {
+            post.metric.dislikes -= 1;
           }
 
           return post;

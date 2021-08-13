@@ -1,3 +1,4 @@
+import {BaseModel} from './base.interface';
 import {PostOrigin} from './timeline';
 import {User} from './user';
 
@@ -22,11 +23,6 @@ export interface TipsReceived {
   totalTips: number;
 }
 
-export interface PostAsset {
-  images: string[];
-  videos: string[];
-}
-
 export interface PostOriginUser {
   name: string;
   username: string;
@@ -34,43 +30,33 @@ export interface PostOriginUser {
   profile_image_url: string;
 }
 
+export interface PostAsset {
+  images: string[];
+  videos: string[];
+}
+
 export interface PostMetric {
-  liked: number;
-  disliked: number;
-  comment: number;
+  likes: number;
+  dislikes: number;
+  comments: number;
 }
 
-export interface Post {
-  id: string;
-  tags: string[];
-  platformUser: PostOriginUser;
-  platform: PostOrigin;
-  title?: string;
-  text: string;
-  textId?: string;
-  hasMedia: boolean;
-  link?: string;
+export interface PostProps {
   asset?: PostAsset;
-  platformCreatedAt: Date;
-  createdAt: Date;
-  walletAddress?: string;
-  comments: Comment[];
-  publicMetric?: PostMetric;
-  importBy?: string[];
-  importer?: User;
-  tipsReceived?: TipsReceived[];
-}
-
-export interface Comment {
-  id: string;
+  createdBy: string;
+  importers: string[];
+  metric: PostMetric;
+  originCreatedAt: Date;
+  originPostId: string;
+  peopleId: string;
+  platform: PostOrigin;
+  tags: string[];
   text: string;
-  postId: string;
-  userId: string;
-  createdAt: Date;
-  user?: User;
+  title?: string;
+  url: string;
 }
 
-export type CreateCommentProps = Omit<Comment, 'id'>;
+export interface Post extends PostProps, BaseModel {}
 
 export type UserReplies = Comment & {
   id: string;
