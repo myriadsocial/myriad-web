@@ -36,8 +36,6 @@ export const usePolkadotApi = () => {
     try {
       setSignerLoading(true);
 
-      console.log({from, to, value, currencyId, wsAddress});
-
       const txHash = await signAndSendExtrinsic(
         {
           from,
@@ -53,10 +51,7 @@ export const usePolkadotApi = () => {
         },
       );
 
-      console.log({txHash});
-
       if (_.isEmpty(txHash)) {
-        //TODO: need to reset this everytime sendTip is called
         throw {
           message: 'Cancelled',
         };
@@ -94,7 +89,6 @@ export const usePolkadotApi = () => {
       }
     } catch (error) {
       if (error.message === 'Cancelled') {
-        console.count('cancelled');
         setError(error.message);
         showAlert({
           severity: 'warning',
