@@ -15,7 +15,6 @@ import {TippingComponent} from './myWallet/tipping/tipping.component';
 import {WalletComponent} from './myWallet/wallet/wallet.component';
 import {useStyles} from './profile.style';
 
-import {Token} from 'src/interfaces/token';
 import {ExtendedUser} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';

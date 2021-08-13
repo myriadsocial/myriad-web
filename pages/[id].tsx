@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React from 'react';
+import {useSelector} from 'react-redux';
 
 import {Session} from 'next-auth';
 import {getSession} from 'next-auth/client';
@@ -17,8 +17,7 @@ import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
 import {setProfile} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
-import {setAnonymous, setUser, fetchToken} from 'src/reducers/user/actions';
-import {UserState} from 'src/reducers/user/reducer';
+import {setAnonymous, setUser} from 'src/reducers/user/actions';
 
 type ProfilePageProps = {
   session: Session;
@@ -26,15 +25,7 @@ type ProfilePageProps = {
 };
 
 const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
-  //const dispatch = useDispatch();
-
-  //const {tokens} = useSelector<RootState, UserState>(state => state.userState);
   const {detail: profileDetail} = useSelector<RootState, ProfileState>(state => state.profileState);
-
-  //useEffect(() => {
-  //// load current authenticated user tokens
-  //dispatch(fetchToken());
-  //}, [dispatch]);
 
   return (
     <Layout>
