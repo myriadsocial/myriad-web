@@ -1,3 +1,4 @@
+import {ImageSizes} from './base.interface';
 import {User} from './user';
 
 export interface Friend {
@@ -9,8 +10,12 @@ export interface Friend {
 export interface ExtendedFriend extends Friend {
   id: string;
   createdAt: Date;
-  requestor: User;
-  friend: User;
+  requestor: User & {
+    profilePicture: ImageSizes;
+  };
+  friend: User & {
+    profilePicture: ImageSizes;
+  };
 }
 
 export enum FriendStatus {

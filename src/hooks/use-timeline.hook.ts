@@ -17,7 +17,7 @@ export const useTimelineHook = () => {
   };
 
   const nextPage = async () => {
-    const page = timelineState.page + 1;
+    const page = timelineState.meta.currentPage + 1;
 
     dispatch(loadTimeline(page));
   };

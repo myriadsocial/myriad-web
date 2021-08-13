@@ -4,7 +4,7 @@ import {User, ExtendedUser} from 'src/interfaces/user';
 export const userToSession = (user: User | ExtendedUser): UserSession => {
   const session: UserSession = {
     id: user.id,
-    anonymous: user.anonymous,
+    anonymous: false,
     name: user.name,
     profilePictureURL: user.profilePictureURL || '',
     address: user.id,
@@ -15,7 +15,7 @@ export const userToSession = (user: User | ExtendedUser): UserSession => {
     for (const credential of user.userSocialMedias) {
       session.userSocialMedias.push({
         platform: credential.people.platform,
-        platformUserId: credential.people.platform_account_id,
+        platformUserId: credential.people.originUserId,
         username: credential.people.username,
       });
     }

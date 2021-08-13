@@ -70,13 +70,13 @@ export const fetchFriend: ThunkActionCreator<Actions, RootState> =
 
       friends.map(friend => {
         if (friend.requestor && friend.requestor.profilePictureURL) {
-          friend.requestor.profile_picture = {
+          friend.requestor.profilePicture = {
             sizes: generateImageSizes(friend.requestor.profilePictureURL),
           };
         }
 
         if (friend.friend && friend.friend.profilePictureURL) {
-          friend.friend.profile_picture = {
+          friend.friend.profilePicture = {
             sizes: generateImageSizes(friend.friend.profilePictureURL),
           };
         }

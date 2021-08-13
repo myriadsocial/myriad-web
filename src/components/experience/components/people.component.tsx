@@ -173,7 +173,7 @@ export default function PeopleComponent({people, onAddItem, onRemoveItem}: Props
                       aria-label="avatar"
                       src={`https://res.cloudinary.com/dsget80gs/image/${
                         people.platform || 'facebook'
-                      }/${people.platform_account_id}.jpg`}
+                      }/${people.originUserId}.jpg`}
                     />
                   </StyledBadge>
                 </ListItemIcon>
