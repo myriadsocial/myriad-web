@@ -25,8 +25,10 @@ import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import CardTitle from 'src/components/common/CardTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
+import {isOwnPost} from 'src/helpers/post';
 import {usePostHook} from 'src/hooks/use-post.hook';
-import {Post, Comment} from 'src/interfaces/post';
+import {Comment} from 'src/interfaces/comment';
+import {Post} from 'src/interfaces/post';
 import {ContentType} from 'src/interfaces/wallet';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -105,15 +107,11 @@ const PostComponent: React.FC<PostComponentProps> = ({
   };
 
   const openContentSource = (): void => {
-    if (!post.platformUser) {
-      return;
-    }
-
     const url = getPlatformUrl();
 
     switch (post.platform) {
       case 'myriad':
-        router.push(post.platformUser.platform_account_id);
+        router.push(post.user?.id);
         break;
       default:
         window.open(url, '_blank');
@@ -124,20 +122,20 @@ const PostComponent: React.FC<PostComponentProps> = ({
   const getPlatformUrl = (): string => {
     let url = '';
 
-    if (!post.platformUser) return url;
+    if (!post.user) return url;
 
     switch (post.platform) {
       case 'twitter':
-        url = `https://twitter.com/${post.platformUser.username}`;
+        url = `https://twitter.com/${post.people.username}`;
         break;
       case 'reddit':
-        url = `https://reddit.com/user/${post.platformUser.username}`;
+        url = `https://reddit.com/user/${post.people.username}`;
         break;
       case 'myriad':
-        url = post.platformUser.platform_account_id;
+        url = post.createdBy;
         break;
       default:
-        url = post.link || '';
+        url = post.url;
         break;
     }
 
@@ -168,15 +166,24 @@ const PostComponent: React.FC<PostComponentProps> = ({
           avatar={
             <PostAvatarComponent
               origin={post.platform}
-              avatar={post.platformUser?.profile_image_url}
+              avatar={
+                post.platform === 'myriad'
+                  ? post.user?.profilePictureURL
+                  : post.people?.profilePictureURL
+              }
               onClick={openContentSource}
             />
           }
-          title={<CardTitle text={post.platformUser?.name} url={getPlatformUrl()} />}
+          title={
+            <CardTitle
+              text={post.platform === 'myriad' ? post.user?.name : post.people?.name}
+              url={getPlatformUrl()}
+            />
+          }
           subheader={
             <PostSubHeader
               date={post.createdAt}
-              importer={post.importer}
+              importer={post.platform !== 'myriad' ? post.user : undefined}
               platform={post.platform}
             />
           }
@@ -223,7 +230,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
 
           <ShowIf condition={post.platform === 'facebook'}>
             <FacebookProvider appId={FACEBOOK_APP_ID}>
-              <EmbeddedPost href={post.link} width="700" />
+              <EmbeddedPost href={post.url} width="700" />
             </FacebookProvider>
           </ShowIf>
 
@@ -238,12 +245,13 @@ const PostComponent: React.FC<PostComponentProps> = ({
 
         <CardActions disableSpacing className={style.action}>
           <PostActionComponent
-            post={post}
-            expandComment={handleExpandClick}
+            metric={post.metric}
             commentExpanded={expanded}
+            tippingEnabled={!isOwnPost(post, user)}
+            expandComment={handleExpandClick}
             likePost={likePostHandle}
             dislikePost={dislikePostHandle}
-            tipOwner={e => tipPostUser(e)}
+            sendTip={e => tipPostUser(e)}
           />
         </CardActions>
 

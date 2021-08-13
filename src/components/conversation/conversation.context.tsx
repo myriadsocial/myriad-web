@@ -1,7 +1,8 @@
 import React from 'react';
 
+import {Comment} from 'src/interfaces/comment';
 import {ExtendedConversation} from 'src/interfaces/conversation';
-import {Comment, Post} from 'src/interfaces/post';
+import {Post} from 'src/interfaces/post';
 
 export enum ConversationActionType {
   LOAD_CONVERSATION = 'LOAD_CONVERSATION',
@@ -71,7 +72,9 @@ function conversationReducer(state: State, action: Action) {
         ...state,
         viewed: {
           ...state.viewed,
-          comments: [...state.viewed.comments, action.payload],
+          comments: state.viewed.comments
+            ? [...state.viewed.comments, action.payload]
+            : [action.payload],
         },
       };
     }
@@ -82,7 +85,9 @@ function conversationReducer(state: State, action: Action) {
         ...state,
         viewed: {
           ...state.viewed,
-          comments: [...state.viewed.comments, ...action.payload],
+          comments: state.viewed.comments
+            ? [...state.viewed.comments, ...action.payload]
+            : [...action.payload],
         },
       };
     }
