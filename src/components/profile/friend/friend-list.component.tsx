@@ -177,7 +177,7 @@ const FriendsListComponent: React.FC<FriendListProps> = ({
               </Typography>
             ) : (
               <Typography variant="h4" color="textPrimary" className={style.noContent}>
-                {profile.name} don&apos;t have any Myriad friends yet.
+                {profile.name} doesn&apos;t have any Myriad friends yet.
               </Typography>
             )}
           </ShowIf>
