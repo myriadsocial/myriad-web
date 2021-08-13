@@ -4,13 +4,11 @@ import * as constants from './constants';
 
 import axios from 'axios';
 import {Action} from 'redux';
-import {generateImageSizes} from 'src/helpers/cloudinary';
-import {Post, PostOriginUser} from 'src/interfaces/post';
+import {Post} from 'src/interfaces/post';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import * as PostAPI from 'src/lib/api/post';
-import * as UserAPI from 'src/lib/api/user';
 import * as WalletAddressAPI from 'src/lib/api/wallet';
 import {ThunkActionCreator} from 'src/types/thunk';
 

@@ -149,7 +149,7 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({
                           <ListItemAvatar>
                             <Avatar
                               alt={request.requestor.name}
-                              src={request.requestor.profile_picture?.sizes.thumbnail}
+                              src={request.requestor.profilePicture.sizes.thumbnail}
                             />
                           </ListItemAvatar>
                         </a>
@@ -178,7 +178,7 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({
                           <ListItemAvatar>
                             <Avatar
                               alt={request.friend.name}
-                              src={request.friend.profile_picture?.sizes.thumbnail}
+                              src={request.friend.profilePicture.sizes.thumbnail}
                             />
                           </ListItemAvatar>
                         </a>

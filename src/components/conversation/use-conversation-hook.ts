@@ -4,12 +4,12 @@ import {
   useConversation,
   ConversationActionType,
 } from 'src/components/conversation/conversation.context';
-import {Comment} from 'src/interfaces/comment';
+import {CommentProps} from 'src/interfaces/comment';
 import {ExtendedConversation} from 'src/interfaces/conversation';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
+import * as CommentAPI from 'src/lib/api/comment';
 import * as ConversationAPI from 'src/lib/api/conversation';
-import * as PostAPI from 'src/lib/api/post';
 
 export const useConversationHook = (user: User) => {
   const {state, dispatch} = useConversation();
@@ -53,8 +53,8 @@ export const useConversationHook = (user: User) => {
     });
   };
 
-  const reply = async (postId: string, comment: Comment) => {
-    const data = await PostAPI.reply(postId, comment);
+  const reply = async (comment: CommentProps) => {
+    const data = await CommentAPI.reply(comment);
 
     dispatch({
       type: ConversationActionType.REPLY_CONVERSATION,
@@ -66,7 +66,7 @@ export const useConversationHook = (user: User) => {
   };
 
   const loadComments = async (postId: string) => {
-    const data = await PostAPI.loadComments(postId);
+    const {data} = await CommentAPI.loadComments(postId);
 
     dispatch({
       type: ConversationActionType.LOAD_REPLY,

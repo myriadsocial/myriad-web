@@ -3,19 +3,12 @@ import {Session, AdapterInstance} from 'next-auth/adapters';
 import jwt from 'next-auth/jwt';
 import getConfig from 'next/config';
 
-import Axios from 'axios';
-import snoowrap from 'snoowrap';
 import {SocialsEnum} from 'src/interfaces/social';
 import * as PeopleAPI from 'src/lib/api/people';
 import * as UserAPI from 'src/lib/api/user';
 import {userToSession} from 'src/lib/serializers/session';
-import {TwitterClient} from 'twitter-api-client';
 
 const {serverRuntimeConfig} = getConfig();
-
-const FacebookGraph = Axios.create({
-  baseURL: 'https://graph.facebook.com',
-});
 
 //@ts-ignore
 function Adapter() {
@@ -74,62 +67,6 @@ function Adapter() {
       providerType: string,
       providerAccountId: string,
     ): Promise<void> {
-      let username = '';
-      _debug('userId', userId);
-
-      switch (providerId) {
-        case 'twitter':
-          const twitterClient = new TwitterClient({
-            apiKey: process.env.TWITTER_API_KEY as string,
-            apiSecret: process.env.TWITTER_API_KEY_SECRET as string,
-          });
-
-          const twitterProfile = await twitterClient.accountsAndUsers.accountVerifyCredentials({
-            include_entities: false,
-          });
-
-          username = twitterProfile.screen_name;
-          break;
-        case 'facebook':
-          const {data: facebookProfile} = await FacebookGraph({
-            url: '/v10.0/me',
-            params: {
-              fields: 'id,name',
-            },
-          });
-
-          username = facebookProfile.name;
-          break;
-        case 'reddit':
-          const reddit = new snoowrap({
-            userAgent: 'myriad',
-            clientId: process.env.REDDIT_APP_ID as string,
-            clientSecret: process.env.REDDIT_SECRET as string,
-          });
-
-          //@ts-ignore
-          const redditProfile = await reddit.getMe();
-
-          username = redditProfile.name;
-          break;
-      }
-
-      try {
-        const people = await PeopleAPI.createPeople({
-          platform: providerId,
-          platform_account_id: providerAccountId,
-          username,
-          hide: false,
-        });
-
-        await UserAPI.addUserCredential(userId, {
-          peopleId: people.id,
-          userId,
-        });
-      } catch (error) {
-        _debug('Adapter linkAccount error: ', error.response.data);
-      }
-
       _debug('Adapter linkAccount', userId, providerId, providerType, providerAccountId);
     }
 

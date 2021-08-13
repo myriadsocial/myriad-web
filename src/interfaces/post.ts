@@ -52,9 +52,11 @@ export interface PostProps {
 }
 
 export interface Post extends PostProps, BaseModel {
-  comments?: Comment[];
   user: User;
   people: People;
+  comments?: Comment[];
+  //TODO: change this on migrating new schema of transaction
+  transactions?: any[];
 }
 
 export type UserReplies = Comment & {

@@ -124,9 +124,7 @@ export const ExperienceComponent = ({userId, anonymous}: Props) => {
 
     setSelectedExperience({
       ...selectedExperience,
-      people: selectedExperience.people.filter(
-        item => item.platform_account_id !== people.platform_account_id,
-      ),
+      people: selectedExperience.people.filter(item => item.originUserId !== people.originUserId),
     });
 
     setEdited(true);
@@ -453,7 +451,7 @@ export const ExperienceComponent = ({userId, anonymous}: Props) => {
               <Button onClick={toggleAlertModal} color="primary">
                 Disagree
               </Button>
-              <Button onClick={deleteExperience} color="secondary" autoFocus>
+              <Button onClick={deleteExperience} color="secondary">
                 Agree
               </Button>
             </DialogActions>

@@ -1,9 +1,9 @@
 import getConfig from 'next/config';
 
+import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
 import Axios from 'axios';
-import {Comment, CommentProps} from 'src/interfaces/comment';
 import {Post, PostProps, ImportPostProps, Like, Dislike} from 'src/interfaces/post';
 import {TimelineSortMethod, TimelineFilter} from 'src/interfaces/timeline';
 
@@ -12,8 +12,6 @@ const {publicRuntimeConfig} = getConfig();
 const MyriadAPI = Axios.create({
   baseURL: publicRuntimeConfig.apiURL,
 });
-
-const LIMIT = 10;
 
 type PostList = BaseList<Post>;
 
@@ -72,8 +70,8 @@ export const getPost = async (
     method: 'GET',
     params: {
       filter: {
-        offset: Math.max(page - 1, 0) * LIMIT,
-        limit: LIMIT,
+        offset: Math.max(page - 1, 0) * PAGINATION_LIMIT,
+        limit: PAGINATION_LIMIT,
         order: `${orderField} DESC`,
         where,
         include: [
@@ -129,7 +127,7 @@ export const getFriendPost = async (
     params: {
       filter: {
         page,
-        limit: LIMIT,
+        limit: PAGINATION_LIMIT,
         orderField,
         include: ['user', 'people'],
       },
@@ -139,7 +137,7 @@ export const getFriendPost = async (
   return data;
 };
 
-export const createPost = async (values: PostProps): Promise<Post> => {
+export const createPost = async (values: Partial<PostProps>): Promise<Post> => {
   const {data} = await MyriadAPI.request<Post>({
     url: '/posts',
     method: 'POST',
@@ -182,44 +180,6 @@ export const getPostDetail = async (id: string): Promise<Post> => {
         ],
       },
     },
-  });
-
-  return data;
-};
-
-export const loadComments = async (postId: string, excludeUser?: string): Promise<Comment[]> => {
-  let where: Record<string, any> = {
-    postId,
-  };
-
-  if (excludeUser) {
-    where = {
-      ...where,
-      userId: {
-        neq: excludeUser,
-      },
-    };
-  }
-
-  const {data} = await MyriadAPI.request<Comment[]>({
-    url: `/comments`,
-    params: {
-      filter: {
-        where,
-        include: ['user'],
-      },
-    },
-    method: 'GET',
-  });
-
-  return data;
-};
-
-export const reply = async (comment: CommentProps): Promise<Comment> => {
-  const {data} = await MyriadAPI.request<Comment>({
-    url: `/comments`,
-    method: 'POST',
-    data: comment,
   });
 
   return data;
