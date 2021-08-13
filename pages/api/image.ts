@@ -33,11 +33,7 @@ cloudinary.config({
 });
 
 const cloudinaryUpload = (file: string) =>
-  cloudinary.uploader.upload(file, {
-    transformation: {
-      width: MAX_IMAGE_WIDTH,
-    },
-  });
+  cloudinary.uploader.upload(file);
 
 const formatBufferTo64 = (name: string, file: Buffer): DatauriParser => {
   const parser = new DatauriParser();
