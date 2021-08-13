@@ -33,7 +33,7 @@ export const useSocialDetail = (post: Post) => {
         method: 'GET',
         url: '/api/content/twitter',
         params: {
-          id: post.textId,
+          id: post.originPostId,
           type: 'twitter',
         },
       });
@@ -56,7 +56,7 @@ export const useSocialDetail = (post: Post) => {
     } else {
       setDetail({
         text: createMarkdownContent(post),
-        createdOn: format(new Date(post.platformCreatedAt || post.createdAt), 'dd MMMM yyyy'),
+        createdOn: format(new Date(post.originCreatedAt || post.createdAt), 'dd MMMM yyyy'),
         videos: [],
         images: [],
         metric: {
@@ -64,9 +64,9 @@ export const useSocialDetail = (post: Post) => {
           retweet: 0,
         },
         user: {
-          name: post.platformUser?.username || '',
-          avatar: post.platformUser?.profile_image_url || '',
-          username: post.platformUser?.username || '',
+          name: post.people?.name || '',
+          avatar: post.people?.profilePictureURL || '',
+          username: post.people?.username || '',
         },
       });
 

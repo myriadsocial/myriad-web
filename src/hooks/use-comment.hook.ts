@@ -3,7 +3,7 @@ import {useState} from 'react';
 import {Comment, CommentProps} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
-import * as PostAPI from 'src/lib/api/post';
+import * as CommentAPI from 'src/lib/api/comment';
 
 type useCommentHookProps = {
   error: any;
@@ -23,7 +23,7 @@ export const useCommentHook = (post: Post): useCommentHookProps => {
     setLoading(true);
 
     try {
-      const comments = await PostAPI.loadComments(post.id);
+      const {data: comments} = await CommentAPI.loadComments(post.id);
 
       setComments(comments);
     } catch (error) {
@@ -35,7 +35,7 @@ export const useCommentHook = (post: Post): useCommentHookProps => {
 
   const loadMore = async () => {
     try {
-      const data = await PostAPI.loadComments(post.id);
+      const {data} = await CommentAPI.loadComments(post.id);
 
       setComments([...comments, ...data]);
     } catch (error) {
@@ -46,7 +46,7 @@ export const useCommentHook = (post: Post): useCommentHookProps => {
   };
 
   const reply = async (user: User, comment: CommentProps) => {
-    const data = await PostAPI.reply(comment);
+    const data = await CommentAPI.reply(comment);
 
     setComments([
       ...comments,

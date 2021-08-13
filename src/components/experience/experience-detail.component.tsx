@@ -80,7 +80,7 @@ export default function ExperienceDetail({data, onSave}: Props) {
                     alt={people.username}
                     src={`https://res.cloudinary.com/dsget80gs/image/${
                       people.platform || 'facebook'
-                    }/${people.platform_account_id}.jpg`}
+                    }/${people.originUserId}.jpg`}
                     className={style.inline}
                   />
                 ))}
@@ -98,7 +98,6 @@ export default function ExperienceDetail({data, onSave}: Props) {
                 />
                 <TextField
                   onChange={setDescription}
-                  autoFocus
                   value={experience.description}
                   multiline
                   rows={6}
