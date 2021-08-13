@@ -60,7 +60,7 @@ type SocialListProps = {
 export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) => {
   const classes = useStyles();
 
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, socials} = useSelector<RootState, UserState>(state => state.userState);
   const {isVerifying, isVerified, resetVerification, verifyPublicKeyShared} = useShareSocial();
   const {disconnectSocial} = useUserHook();
   const [selected, setSelected] = useState<SocialsEnum | null>(null);
@@ -73,16 +73,10 @@ export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) =>
     [SocialsEnum.REDDIT]: false,
   };
 
-  if (user && user.userCredentials && user.userCredentials.length > 0) {
-    const twitterCredential = user.userCredentials.find(
-      item => item.people.platform === SocialsEnum.TWITTER,
-    );
-    const facebookCredential = user.userCredentials.find(
-      item => item.people.platform === SocialsEnum.FACEBOOK,
-    );
-    const redditCredential = user.userCredentials.find(
-      item => item.people.platform === SocialsEnum.REDDIT,
-    );
+  if (socials.length > 0) {
+    const twitterCredential = socials.find(item => item.platform === SocialsEnum.TWITTER);
+    const facebookCredential = socials.find(item => item.platform === SocialsEnum.FACEBOOK);
+    const redditCredential = socials.find(item => item.platform === SocialsEnum.REDDIT);
 
     if (twitterCredential) {
       connected[SocialsEnum.TWITTER] = true;

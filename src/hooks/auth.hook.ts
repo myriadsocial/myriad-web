@@ -102,7 +102,7 @@ export const useAuthHook = () => {
     }
 
     const selected = users.find(
-      user => user.username.toLocaleLowerCase() === username.toLocaleLowerCase(),
+      user => user.name.toLocaleLowerCase() === username.toLocaleLowerCase(),
     );
 
     if (selected) {

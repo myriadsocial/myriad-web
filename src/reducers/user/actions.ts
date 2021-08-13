@@ -4,7 +4,6 @@ import * as constants from './constants';
 
 import axios, {AxiosError} from 'axios';
 import {Action} from 'redux';
-import {generateImageSizes} from 'src/helpers/cloudinary';
 import {SocialsEnum} from 'src/interfaces/index';
 import {Token} from 'src/interfaces/token';
 import {ExtendedUser, User, UserTransactionDetail} from 'src/interfaces/user';
@@ -95,15 +94,6 @@ export const fetchUser: ThunkActionCreator<Actions, RootState> =
     try {
       const user: ExtendedUser = await UserAPI.getUserDetail(userId);
 
-      if (!user.userCredentials) {
-        user.userCredentials = [];
-      }
-
-      if (user.profilePictureURL) {
-        user.profile_picture = {
-          sizes: generateImageSizes(user.profilePictureURL),
-        };
-      }
       dispatch(setUser(user));
     } catch (error) {
       dispatch(
@@ -285,11 +275,6 @@ export const updateUser: ThunkActionCreator<Actions, RootState> =
         user: {
           ...user,
           ...attributes,
-          profile_picture: attributes.profilePictureURL
-            ? {
-                sizes: generateImageSizes(attributes.profilePictureURL),
-              }
-            : user.profile_picture,
         },
       });
     } catch (error) {

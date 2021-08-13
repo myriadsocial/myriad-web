@@ -85,13 +85,15 @@ export const TipSummaryComponent: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {postDetail.tipsReceived &&
-                  postDetail.tipsReceived.map((tip, i) => (
+                {postDetail.transactions &&
+                  postDetail.transactions.map((transactions, i) => (
                     <TableRow key={i}>
                       <TableCell component="th" scope="row">
-                        {tip.tokenId}
+                        {transactions.tokenId}
                       </TableCell>
-                      <TableCell align="right">{formatTipBalance(tip, userTokens)}</TableCell>
+                      <TableCell align="right">
+                        {formatTipBalance(transactions, userTokens)}
+                      </TableCell>
                     </TableRow>
                   ))}
               </TableBody>
