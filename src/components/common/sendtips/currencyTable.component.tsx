@@ -57,6 +57,13 @@ export const CurrencyTableComponent = ({
           </TableRow>
         </TableHead>
         <TableBody>
+          {balanceDetails.length === 0 && (
+            <TableRow key={'loading-row'}>
+              <TableCell colSpan={2}>
+                <CircularProgress className={styles.spinner} size={16} />
+              </TableCell>
+            </TableRow>
+          )}
           {balanceDetails.map(row => (
             <TableRow key={row.tokenSymbol}>
               <RadioGroup
