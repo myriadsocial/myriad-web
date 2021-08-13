@@ -7,6 +7,7 @@ import {generateImageSizes} from 'src/helpers/cloudinary';
 import {Post} from 'src/interfaces/post';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
+import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import * as PostAPI from 'src/lib/api/post';
 import * as UserAPI from 'src/lib/api/user';
 import * as WalletAddressAPI from 'src/lib/api/wallet';
@@ -18,13 +19,12 @@ import {ThunkActionCreator} from 'src/types/thunk';
 
 export interface LoadTimeline extends Action {
   type: constants.LOAD_TIMELINE;
-  posts: Post[];
-  meta: {
-    page: number;
-    hasMore: boolean;
+  payload: {
+    posts: Post[];
     sort?: TimelineSortMethod;
     filter?: TimelineFilter;
     type?: TimelineType;
+    meta: ListMeta;
   };
 }
 
@@ -128,46 +128,30 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
       const timelineSort = sort ?? timelineState.sort;
 
       let posts: Post[] = [];
+      let meta: any;
 
       if (userState.user && timelineType === TimelineType.DEFAULT) {
-        posts = await PostAPI.getFriendPost(userState.user.id, page, timelineSort);
+        ({data: posts, meta} = await PostAPI.getFriendPost(userState.user.id, page, timelineSort));
       }
 
       if (userState.anonymous || timelineType === TimelineType.TRENDING) {
         posts = await PostAPI.getPost(page, timelineSort, timelineFilter);
       }
 
-      // TODO: change this to include from API
       for await (const post of posts) {
-        if (post.importBy && post.importBy.length > 0) {
-          const user = await UserAPI.getUserDetail(post.importBy[0]);
-
-          post.importer = user;
-        }
-
-        if (post.platform === 'myriad' && post.platformUser) {
-          const user = await UserAPI.getUserDetail(post.platformUser.platform_account_id);
-
-          post.platformUser.name = user.name;
-
-          if (user.profilePictureURL) {
-            const sizes = generateImageSizes(user.profilePictureURL);
-            post.platformUser.profile_image_url = sizes.thumbnail;
-          } else {
-            post.platformUser.profile_image_url = '';
-          }
+        if (post.platform !== 'myriad') {
+          //TODO: convert people image url to sizes
         }
       }
 
       dispatch({
         type: constants.LOAD_TIMELINE,
-        posts,
-        meta: {
-          page,
-          hasMore: posts.length > 0,
+        payload: {
+          posts,
           sort,
           filter,
           type,
+          meta,
         },
       });
     } catch (error) {
@@ -190,25 +174,15 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const hasMedia = images.length > 0;
-
       // TODO: simplify this
       const data = await PostAPI.createPost({
         ...post,
         platform: 'myriad',
-        hasMedia,
         tags: post.tags || [],
         asset: {
           images,
           videos: [],
         },
-        platformUser: {
-          name: user.name,
-          username: user.name,
-          platform_account_id: user.id,
-          profile_image_url: user.profilePictureURL || '',
-        },
-        walletAddress: user.id,
       });
 
       dispatch({
@@ -242,8 +216,6 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
         url: postUrl,
         importer: user.id,
       });
-
-      post.importer = user;
 
       dispatch({
         type: constants.ADD_POST_TO_TIMELINE,
