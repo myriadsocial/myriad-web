@@ -6,7 +6,7 @@ import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 
 type CardTitleProps = {
   text: string;
-  url?: string;
+  url: string;
 };
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -24,8 +24,10 @@ const CardTitle = ({text, url}: CardTitleProps) => {
   const style = useStyles();
 
   return (
-    <Link href={url || ''}>
-      <a className={style.link}>{text}</a>
+    <Link href={url}>
+      <a href={url} className={style.link} target="_blank" rel="noreferrer">
+        {text}
+      </a>
     </Link>
   );
 };

@@ -21,7 +21,8 @@ import CardTitle from 'src/components/common/CardTitle.component';
 import DateFormat from 'src/components/common/DateFormat';
 import ShowIf from 'src/components/common/show-if.component';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
-import {Post, Comment} from 'src/interfaces/post';
+import {Comment} from 'src/interfaces/comment';
+import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -72,7 +73,6 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
       text: comment,
       postId: post.id,
       userId: user.id,
-      createdAt: new Date(),
     });
   };
 

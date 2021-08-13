@@ -20,6 +20,7 @@ export interface User {
   profilePictureURL?: string;
   bannerImageUrl?: string;
   fcmTokens?: string[];
+  skipTour?: boolean;
   createdAt?: Date;
 }
 

@@ -1,4 +1,6 @@
 import {BaseModel} from './base.interface';
+import {Comment} from './comment';
+import {People} from './people';
 import {PostOrigin} from './timeline';
 import {User} from './user';
 
@@ -21,13 +23,6 @@ export type SocialMetric = {
 export interface TipsReceived {
   tokenId: string;
   totalTips: number;
-}
-
-export interface PostOriginUser {
-  name: string;
-  username: string;
-  platform_account_id: string;
-  profile_image_url: string;
 }
 
 export interface PostAsset {
@@ -56,7 +51,11 @@ export interface PostProps {
   url: string;
 }
 
-export interface Post extends PostProps, BaseModel {}
+export interface Post extends PostProps, BaseModel {
+  comments?: Comment[];
+  user: User;
+  people: People;
+}
 
 export type UserReplies = Comment & {
   id: string;
