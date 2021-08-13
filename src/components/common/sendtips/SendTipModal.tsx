@@ -31,7 +31,7 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
   const {loading: loadingBalance, balanceDetails} = useSelector<RootState, BalanceState>(
     state => state.balanceState,
   );
-  const {sendTip, loading, isSignerLoading, load} = usePolkadotApi();
+  const {sendTip, loading, isSignerLoading, load, error} = usePolkadotApi();
   const {openTipSummary} = useTipSummaryHook();
   const {recipientDetail} = useSelector<RootState, WalletState>(state => state.walletState);
   const {posts} = useSelector<RootState, TimelineState>(state => state.timelineState);
@@ -64,6 +64,12 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
     handleClearValue();
     setSendTipClicked(false);
   }, []);
+
+  useEffect(() => {
+    if (error !== null && error === 'Cancelled') {
+      handleCloseModal();
+    }
+  }, [error]);
 
   // load balance detail only when component need to be shown
   useEffect(() => {
