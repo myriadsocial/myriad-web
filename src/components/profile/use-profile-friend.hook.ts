@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import Axios from 'axios';
+import {useNotifHook} from 'src/hooks/use-notif.hook';
 import {FriendStatus, ExtendedFriend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
@@ -23,6 +24,7 @@ export const useFriendHook = () => {
 
   const [friendStatus, setFriendStatus] = useState<ExtendedFriend | null>(null);
   const [loading, setLoading] = useState(false);
+  const {loadNotifications} = useNotifHook();
 
   const searchFriend = async (profile: User, query: string) => {
     if (!user) return;
@@ -40,6 +42,7 @@ export const useFriendHook = () => {
     await dispatch(deleteFriendRequest(request));
 
     checkFriendStatus(request.requestorId);
+    loadNotifications();
   };
 
   const toggleRequest = async (request: ExtendedFriend, status: FriendStatus) => {
