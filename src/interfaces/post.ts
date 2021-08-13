@@ -63,9 +63,10 @@ export type UserReplies = Comment & {
   user: User;
 };
 
-export type ImportPost = {
+export type ImportPostProps = {
   url: string;
   importer: string;
+  tags?: string[];
 };
 
 export type Like = {

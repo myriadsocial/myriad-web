@@ -19,7 +19,6 @@ import UserDetail from 'src/components/user/user.component';
 import {Wallet} from 'src/components/wallet/wallet.component';
 import {useModal} from 'src/hooks/use-modal.hook';
 import {useResize} from 'src/hooks/use-resize.hook';
-import {Post} from 'src/interfaces/post';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as PostAPI from 'src/lib/api/post';
 import * as UserAPI from 'src/lib/api/user';
@@ -29,6 +28,7 @@ import {TimelineState} from 'src/reducers/timeline/reducer';
 import {setAnonymous, setUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
+import {isOwnPost} from 'src/helpers/post';
 
 const SendTipModal = dynamic(() => import('src/components/common/sendtips/SendTipModal'));
 const TipSummaryComponent = dynamic(
@@ -132,17 +132,12 @@ const DedicatedPost = () => {
   const style = useStyles();
   const router = useRouter();
 
-  const isOwnPost = (post: Post) => {
-    if (!user) return false;
-    if (post.platformUser?.platform_account_id === user.id) return true;
-    return false;
-  };
-
   const backtoTimeline = () => {
     router.push('/home');
   };
 
   if (!post) return null;
+
   return (
     <div className={style.root}>
       {user && (
@@ -160,7 +155,7 @@ const DedicatedPost = () => {
         <Typography className={style.text}>{'Myriad Post'}</Typography>
       </div>
 
-      <PostComponent post={post} postOwner={isOwnPost(post)} tippingClicked={toggle} />
+      <PostComponent post={post} postOwner={isOwnPost(post, user)} tippingClicked={toggle} />
       <TipSummaryComponent />
     </div>
   );
