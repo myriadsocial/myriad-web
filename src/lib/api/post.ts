@@ -3,7 +3,8 @@ import getConfig from 'next/config';
 import {BaseList} from './interfaces/base-list.interface';
 
 import Axios from 'axios';
-import {Post, ImportPost, Like, Dislike} from 'src/interfaces/post';
+import {CommentProps} from 'src/interfaces/comment';
+import {Post, PostProps, ImportPostProps, Like, Dislike} from 'src/interfaces/post';
 import {TimelineSortMethod, TimelineFilter} from 'src/interfaces/timeline';
 
 const {publicRuntimeConfig} = getConfig();
@@ -138,7 +139,7 @@ export const getFriendPost = async (
   return data;
 };
 
-export const createPost = async (values: Partial<Post>): Promise<Post> => {
+export const createPost = async (values: PostProps): Promise<Post> => {
   const {data} = await MyriadAPI.request<Post>({
     url: '/posts',
     method: 'POST',
@@ -148,7 +149,7 @@ export const createPost = async (values: Partial<Post>): Promise<Post> => {
   return data;
 };
 
-export const importPost = async (values: ImportPost): Promise<Post> => {
+export const importPost = async (values: ImportPostProps): Promise<Post> => {
   const {data} = await MyriadAPI.request<Post>({
     url: `/posts/import`,
     method: 'POST',
@@ -211,7 +212,7 @@ export const loadComments = async (postId: string, excludeUser?: string): Promis
   return data;
 };
 
-export const reply = async (postId: string, comment: CreateCommentProps): Promise<Comment> => {
+export const reply = async (postId: string, comment: CommentProps): Promise<Comment> => {
   const {data} = await MyriadAPI.request<Comment>({
     url: `/posts/${postId}/comments`,
     method: 'POST',
