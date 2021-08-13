@@ -2,6 +2,7 @@ import {options} from '@acala-network/api';
 
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {Keyring} from '@polkadot/keyring';
+import {KeypairType} from '@polkadot/util-crypto/types';
 
 export const connectToBlockchain = async (wsProvider: string): Promise<ApiPromise> => {
   const provider = new WsProvider(wsProvider);
@@ -33,12 +34,16 @@ export const signAndSendExtrinsic = async (
 
     const allAccounts = await enableExtension();
 
-    const keyring = new Keyring();
+    const prefix = process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX
+      ? Number(process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX)
+      : 214;
+    const cryptoType: KeypairType = process.env.NEXT_PUBLIC_POLKADOT_CRYPTO_TYPE
+      ? (process.env.NEXT_PUBLIC_POLKADOT_CRYPTO_TYPE as KeypairType)
+      : 'sr25519';
 
-    const baseAddress = keyring.encodeAddress(
-      from,
-      Number(process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX),
-    );
+    const keyring = new Keyring({type: cryptoType, ss58Format: prefix});
+
+    const baseAddress = keyring.encodeAddress(from);
 
     if (allAccounts) {
       // We select the first account matching baseAddress
