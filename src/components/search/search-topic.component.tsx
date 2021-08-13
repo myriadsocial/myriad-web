@@ -15,6 +15,7 @@ import {ScrollTop} from 'src/components/common/ScrollToTop.component';
 import {LoadingPage} from 'src/components/common/loading.component';
 import PostComponent from 'src/components/post/post.component';
 import {useTimelineFilter} from 'src/components/timeline/use-timeline-filter.hook';
+import {isOwnPost} from 'src/helpers/post';
 import {useModal} from 'src/hooks/use-modal.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {useTimelineHook} from 'src/hooks/use-timeline.hook';
@@ -108,16 +109,6 @@ const TopicSearchComponent: React.FC<TopicSearchResultProps> = () => {
     });
   }, []);
 
-  const isOwnPost = (post: Post) => {
-    if (!user) return false;
-
-    if (post.platformUser?.platform_account_id === user.id) {
-      return true;
-    }
-
-    return false;
-  };
-
   if (!posts.length)
     return (
       <Grid container justify="center" className={style.mt}>
@@ -140,7 +131,11 @@ const TopicSearchComponent: React.FC<TopicSearchResultProps> = () => {
             loader={<LoadingPage />}>
             {posts.map((post: Post, i: number) => (
               <div key={post.id} id={`post-detail-${i}`}>
-                <PostComponent post={post} postOwner={isOwnPost(post)} tippingClicked={toggle} />
+                <PostComponent
+                  post={post}
+                  postOwner={isOwnPost(post, user)}
+                  tippingClicked={toggle}
+                />
               </div>
             ))}
           </InfiniteScroll>
