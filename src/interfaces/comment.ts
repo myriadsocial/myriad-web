@@ -1,4 +1,5 @@
 import {BaseModel} from './base.interface';
+import {User} from './user';
 
 export interface CommentProps {
   text: string;
@@ -6,4 +7,6 @@ export interface CommentProps {
   userId: string;
 }
 
-export interface Comment extends CommentProps, BaseModel {}
+export interface Comment extends CommentProps, BaseModel {
+  user: User;
+}

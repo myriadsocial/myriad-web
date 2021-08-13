@@ -76,7 +76,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
 
   const handleFinishTour = (skip: boolean) => {
     updateUser({
-      skip_tour: skip,
+      skipTour: skip,
     });
   };
 
@@ -92,7 +92,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
       <LayoutSettingProvider>
         <NoSsr>
           <TourComponent
-            disabled={anonymous || Boolean(user?.skip_tour)}
+            disabled={anonymous || Boolean(user?.skipTour)}
             onFinished={handleFinishTour}
           />
         </NoSsr>

@@ -7,10 +7,8 @@ import CommentIcon from '@material-ui/icons/Comment';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
-import {usePostActionHook} from './post-action.hook';
-
 import clsx from 'clsx';
-import {Post} from 'src/interfaces/post';
+import {PostMetric} from 'src/interfaces/post';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,33 +32,33 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type PostActionProps = {
-  post: Post;
+  metric: PostMetric;
+  tippingEnabled: boolean;
   commentExpanded: boolean;
   expandComment: () => void;
   likePost: () => void;
   dislikePost: () => void;
-  tipOwner: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  sendTip: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 export const PostActionComponent: React.FC<PostActionProps> = ({
-  post,
-  expandComment,
+  metric,
   commentExpanded,
+  tippingEnabled,
+  expandComment,
   likePost,
   dislikePost,
-  tipOwner,
+  sendTip,
 }) => {
   const styles = useStyles();
-
-  const {tippingEnabled} = usePostActionHook(post);
 
   return (
     <>
       <Button aria-label="like post" startIcon={<ThumbUpIcon />} onClick={likePost}>
-        ({post.publicMetric?.liked || 0})
+        ({metric.likes})
       </Button>
       <Button aria-label="dislike post" startIcon={<ThumbDownIcon />} onClick={dislikePost}>
-        ({post.publicMetric?.disliked || 0})
+        ({metric.dislikes})
       </Button>
 
       <IconButton
@@ -80,7 +78,7 @@ export const PostActionComponent: React.FC<PostActionProps> = ({
         variant="contained"
         size="medium"
         disabled={!tippingEnabled}
-        onClick={tipOwner}>
+        onClick={sendTip}>
         Send Tip
       </Button>
     </>
