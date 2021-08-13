@@ -48,7 +48,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({toggleProfileF
     updateProfilePicture,
   } = useProfileHook();
 
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const [profile, setProfile] = useState<Record<string, string>>({
     name: user?.name ?? '',
     bio: user?.bio ?? '',
@@ -164,7 +164,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({toggleProfileF
 
             <div style={{width: 360}}>
               <div>
-                <SocialListComponent isAnonymous={user.anonymous} />
+                <SocialListComponent isAnonymous={anonymous} />
               </div>
               <div style={{marginTop: '72px'}}>
                 <Typography variant="body1" className={style.subtitle}>

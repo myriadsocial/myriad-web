@@ -5,11 +5,17 @@ import {Actions} from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
+import {generateImageSizes} from 'src/helpers/cloudinary';
+import {ImageSizes} from 'src/interfaces/base.interface';
+import {SocialMedia} from 'src/interfaces/social';
 import {Token} from 'src/interfaces/token';
-import {ExtendedUser, UserTransactionDetail} from 'src/interfaces/user';
+import {User, UserTransactionDetail} from 'src/interfaces/user';
 
 export interface UserState extends BaseState {
-  user?: ExtendedUser;
+  user?: User & {
+    profilePicture: ImageSizes;
+  };
+  socials: SocialMedia[];
   tokens: Token[];
   transactionDetails: UserTransactionDetail[];
   anonymous: boolean;
@@ -21,6 +27,7 @@ const initalState: UserState = {
   loading: false,
   anonymous: false,
   tokens: [],
+  socials: [],
   transactionDetails: [],
   alias: '',
   verifying: false,
@@ -35,7 +42,12 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
     case constants.FETCH_USER: {
       return {
         ...state,
-        user: action.user,
+        user: {
+          ...action.user,
+          profilePicture: {
+            sizes: generateImageSizes(action.user.profilePictureURL || ''),
+          },
+        },
       };
     }
 
@@ -50,7 +62,12 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
     case constants.UPDATE_USER: {
       return {
         ...state,
-        user: action.user,
+        user: {
+          ...action.user,
+          profilePicture: {
+            sizes: generateImageSizes(action.user.profilePictureURL || ''),
+          },
+        },
       };
     }
 

@@ -82,7 +82,7 @@ const UserComponent: React.FC<UserComponentProps> = ({isAnonymous}) => {
           avatar={
             <Avatar
               aria-label={`${user?.name || alias} avatar`}
-              src={user?.profile_picture?.sizes.thumbnail}
+              src={user?.profilePicture.sizes.thumbnail}
               variant="circular"
               sizes="lg"
               style={{width: 72, height: 72}}>
