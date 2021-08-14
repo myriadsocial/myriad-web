@@ -1,7 +1,7 @@
 import {HYDRATE} from 'next-redux-wrapper';
 
 import * as BaseConstants from '../base/constants';
-import {State as BaseState} from '../base/state';
+import {PaginationState as BasePaginationState} from '../base/state';
 import {Actions} from './actions';
 import * as constants from './constants';
 
@@ -10,9 +10,8 @@ import * as Redux from 'redux';
 import {Post} from 'src/interfaces/post';
 import {TimelineType, TimelineSortMethod, TimelineFilter} from 'src/interfaces/timeline';
 import {WalletDetail} from 'src/interfaces/wallet';
-import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 
-export interface TimelineState extends BaseState {
+export interface TimelineState extends BasePaginationState {
   type: TimelineType;
   sort: TimelineSortMethod;
   filter?: TimelineFilter;
@@ -20,7 +19,6 @@ export interface TimelineState extends BaseState {
   posts: Post[];
   walletDetails: WalletDetail[];
   post?: Post;
-  meta: ListMeta;
 }
 
 const initalState: TimelineState = {
@@ -84,19 +82,8 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
         posts: state.posts.map(post => {
           if (post.id === action.postId && post.metric) {
             post.metric.likes += 1;
-          }
-
-          return post;
-        }),
-      };
-    }
-
-    case constants.UNLIKE_POST: {
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.postId && post.metric) {
-            post.metric.likes -= 1;
+            post.metric.dislikes -= 1;
+            post.likes = [action.like];
           }
 
           return post;
@@ -110,19 +97,7 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
         posts: state.posts.map(post => {
           if (post.id === action.postId && post.metric) {
             post.metric.dislikes += 1;
-          }
-
-          return post;
-        }),
-      };
-    }
-
-    case constants.UNDISLIKE_POST: {
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.postId && post.metric) {
-            post.metric.dislikes -= 1;
+            post.metric.likes -= 1;
           }
 
           return post;

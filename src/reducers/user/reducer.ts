@@ -7,7 +7,7 @@ import * as constants from './constants';
 
 import * as Redux from 'redux';
 import {generateImageSizes} from 'src/helpers/cloudinary';
-import {ImageSizes} from 'src/interfaces/base.interface';
+import {ImageSizes} from 'src/interfaces/assets';
 import {SocialMedia} from 'src/interfaces/social';
 import {Token} from 'src/interfaces/token';
 import {User, UserTransactionDetail} from 'src/interfaces/user';

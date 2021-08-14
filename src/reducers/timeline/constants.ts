@@ -21,12 +21,6 @@ export type LIKE_POST = typeof LIKE_POST;
 export const DISLIKE_POST = 'DISLIKE_POST';
 export type DISLIKE_POST = typeof DISLIKE_POST;
 
-export const UNLIKE_POST = 'UNLIKE_POST';
-export type UNLIKE_POST = typeof UNLIKE_POST;
-
-export const UNDISLIKE_POST = 'UNDISLIKE_POST';
-export type UNDISLIKE_POST = typeof UNDISLIKE_POST;
-
 export const FETCH_WALLET_DETAILS = 'FETCH_WALLET_DETAILS';
 export type FETCH_WALLET_DETAILS = typeof FETCH_WALLET_DETAILS;
 

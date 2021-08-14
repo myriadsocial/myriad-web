@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {ExtendedNotification} from 'src/interfaces/notification';
+import {Notification} from 'src/interfaces/notification';
 
 export enum NotifActionType {
   LOAD_NOTIF = 'LOAD_NOTIF',
@@ -8,7 +8,7 @@ export enum NotifActionType {
 
 interface LoadNotif {
   type: NotifActionType.LOAD_NOTIF;
-  payload: ExtendedNotification[];
+  payload: Notification[];
 }
 
 type Action = LoadNotif;
@@ -17,7 +17,7 @@ type NotifProviderProps = {children: React.ReactNode};
 
 type State = {
   total: number;
-  notifications: ExtendedNotification[];
+  notifications: Notification[];
 };
 
 const initialState: State = {

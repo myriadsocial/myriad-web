@@ -11,8 +11,8 @@ import clsx from 'clsx';
 import {useNotif} from 'src/context/notif.context';
 import {useLayout} from 'src/hooks/use-layout.hook';
 import {SidebarTab} from 'src/interfaces/sidebar';
+import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {RootState} from 'src/reducers';
-import {FriendState} from 'src/reducers/friend/reducer';
 
 interface DesktopMenuProps {}
 
@@ -32,7 +32,9 @@ const useStyles = makeStyles((theme: Theme) =>
 const DesktopMenuComponent: React.FC<DesktopMenuProps> = () => {
   const styles = useStyles();
 
-  const {totalRequest} = useSelector<RootState, FriendState>(state => state.friendState);
+  const {totalItemCount: totalFriendRequest} = useSelector<RootState, ListMeta>(
+    state => state.friendRequestState.meta,
+  );
   const {
     state: {total: totalNotif},
   } = useNotif();
@@ -49,7 +51,7 @@ const DesktopMenuComponent: React.FC<DesktopMenuProps> = () => {
         color="inherit"
         style={{margin: '0 32px'}}
         onClick={() => changeSelectedSidebar(SidebarTab.FRIENDS)}>
-        <Badge badgeContent={totalRequest} color="secondary">
+        <Badge badgeContent={totalFriendRequest} color="secondary">
           <PeopleIcon />
         </Badge>
       </IconButton>
