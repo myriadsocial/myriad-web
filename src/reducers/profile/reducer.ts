@@ -5,13 +5,13 @@ import {Actions} from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {ExtendedFriend} from 'src/interfaces/friend';
+import {Friend} from 'src/interfaces/friend';
 import {ExtendedUser} from 'src/interfaces/user';
 
 export interface ProfileState extends BaseState {
   userId?: string;
   detail?: ExtendedUser;
-  friends: ExtendedFriend[];
+  friends: Friend[];
   totalFriends: number;
 }
 

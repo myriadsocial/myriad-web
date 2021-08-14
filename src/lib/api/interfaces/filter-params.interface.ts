@@ -3,7 +3,7 @@ interface IncludeParam {
   scope?: any;
 }
 
-export interface FilterParams {
-  where?: Record<string, any>;
+export interface FilterParams<T> {
+  where?: Partial<Record<keyof T, any>>;
   include?: string[] | IncludeParam[];
 }

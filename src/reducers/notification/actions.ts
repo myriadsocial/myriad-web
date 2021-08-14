@@ -3,8 +3,8 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
-import {ExtendedNotification} from 'src/interfaces/notification';
-import * as NotifAPI from 'src/lib/api/notification';
+import {Notification} from 'src/interfaces/notification';
+import * as NotificationAPI from 'src/lib/api/notification';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -13,7 +13,7 @@ import {ThunkActionCreator} from 'src/types/thunk';
 
 export interface FetchNotification extends Action {
   type: constants.FETCH_NOTIFICATION;
-  notifications: ExtendedNotification[];
+  notifications: Notification[];
 }
 
 export interface ReadNotification extends Action {
@@ -52,7 +52,7 @@ export const fetchNotification: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const notifications: ExtendedNotification[] = await NotifAPI.getMyNotification(user.id);
+      const notifications: Notification[] = await NotificationAPI.getNotification(user.id);
 
       dispatch({
         type: constants.FETCH_NOTIFICATION,

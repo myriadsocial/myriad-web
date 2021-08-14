@@ -3,7 +3,7 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
-import {ExtendedFriend} from 'src/interfaces/friend';
+import {Friend} from 'src/interfaces/friend';
 import {ExtendedUser} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
 import * as UserAPI from 'src/lib/api/user';
@@ -20,12 +20,12 @@ export interface FetchProfileDetail extends Action {
 
 export interface FetchProfileFriend extends Action {
   type: constants.FETCH_PROFILE_FRIEND;
-  friends: ExtendedFriend[];
+  friends: Friend[];
 }
 
 export interface FilterProfileFriend extends Action {
   type: constants.FILTER_PROFILE_FRIEND;
-  friends: ExtendedFriend[];
+  friends: Friend[];
   query: string;
 }
 
@@ -82,7 +82,7 @@ export const fetchProfileFriend: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const friends: ExtendedFriend[] = await FriendAPI.getFriends(detail.id);
+      const {data: friends} = await FriendAPI.getFriends(detail.id);
 
       dispatch({
         type: constants.FETCH_PROFILE_FRIEND,
@@ -104,7 +104,7 @@ export const searchProfileFriend: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const friends: ExtendedFriend[] = await FriendAPI.searchFriend(userId, query);
+      const {data: friends} = await FriendAPI.searchFriend(userId, query);
       dispatch({
         type: constants.FILTER_PROFILE_FRIEND,
         friends,
