@@ -7,7 +7,7 @@ import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {TokenId} from 'src/interfaces/token';
 import {Token} from 'src/interfaces/token';
-import {connectToBlockchain} from 'src/lib/api/polkadot-js';
+import {connectToBlockchain} from 'src/lib/services/polkadot-js';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**

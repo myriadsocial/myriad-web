@@ -115,7 +115,7 @@ export const TipSummaryComponent: React.FC = () => {
                 </ListItem>
               }>
               {transactions.map(transaction => (
-                <ListItem key={transaction.trxHash}>
+                <ListItem key={transaction.hash}>
                   <ListItemAvatar>
                     <Avatar
                       alt={getTipperUserName(transaction)}
@@ -123,8 +123,8 @@ export const TipSummaryComponent: React.FC = () => {
                     />
                   </ListItemAvatar>
                   <ListItemText
-                    primary={`${getTipperUserName(transaction)} tipped ${transaction.value} ${
-                      transaction.tokenId
+                    primary={`${getTipperUserName(transaction)} tipped ${transaction.amount} ${
+                      transaction.currencyId
                     }`}
                     secondary={timeAgo(transaction.createdAt)}
                   />

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {ExtendedFriend} from 'src/interfaces/friend';
+import {Friend} from 'src/interfaces/friend';
 import {Post} from 'src/interfaces/post';
 import {ExtendedUserPost} from 'src/interfaces/user';
 
@@ -28,12 +28,12 @@ interface FetchProfile {
 
 interface CheckFriendStatus {
   type: ProfileActionType.FRIEND_STATUS;
-  payload: ExtendedFriend;
+  payload: Friend;
 }
 
 interface LoadFriends {
   type: ProfileActionType.LOAD_FRIENDS;
-  payload: ExtendedFriend[];
+  payload: Friend[];
 }
 
 type Action = ProfileLoaded | FetchProfile | ImportedPostLoaded | CheckFriendStatus | LoadFriends;
@@ -44,8 +44,8 @@ type State = {
   profile: ExtendedUserPost | null;
   loading: boolean;
   importedPost: Post[];
-  friendStatus: ExtendedFriend | null;
-  friends: ExtendedFriend[];
+  friendStatus: Friend | null;
+  friends: Friend[];
   totalFriends: number;
 };
 

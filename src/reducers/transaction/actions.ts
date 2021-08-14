@@ -1,8 +1,7 @@
-import {Actions as BaseAction, setLoading, setError} from '../base/actions';
+import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 
-import {Action} from 'redux';
 import {Transaction} from 'src/interfaces/transaction';
 import * as TransactionAPI from 'src/lib/api/transaction';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -11,7 +10,7 @@ import {ThunkActionCreator} from 'src/types/thunk';
  * Action Types
  */
 
-export interface FetchTransaction extends Action {
+export interface FetchTransactions extends PaginationAction {
   type: constants.FETCH_TRANSACTION;
   transactions: Transaction[];
 }
@@ -20,7 +19,7 @@ export interface FetchTransaction extends Action {
  * Union Action Types
  */
 
-export type Actions = FetchTransaction | BaseAction;
+export type Actions = FetchTransactions | BaseAction;
 
 /**
  *
@@ -30,7 +29,7 @@ export type Actions = FetchTransaction | BaseAction;
 /**
  * Action Creator
  */
-export const fetchTransaction: ThunkActionCreator<Actions, RootState> =
+export const fetchTransactions: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
@@ -43,13 +42,14 @@ export const fetchTransaction: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const transactions = await TransactionAPI.getTransaction({
+      const {data: transactions, meta} = await TransactionAPI.getTransactions({
         to: user.id,
       });
 
       dispatch({
         type: constants.FETCH_TRANSACTION,
         transactions,
+        meta,
       });
     } catch (error) {
       dispatch(

@@ -68,7 +68,7 @@ export default function TransactionListComponent({transactions, user}: Props) {
             {
               //TODO: transformTokenValue should be removed, value fetched from BE
             }
-            's post with {transformTokenValue(txHistory)} {txHistory.tokenId}
+            's post with {transformTokenValue(txHistory)} {txHistory.currencyId}
           </Typography>
         ) : txHistory.fromUser?.name === 'Myriad' ? (
           <Typography>
@@ -76,7 +76,7 @@ export default function TransactionListComponent({transactions, user}: Props) {
               //TODO: transformTokenValue should be removed, value fetched from BE
             }
             You get tipping reward in the form of {transformTokenValue(txHistory)}{' '}
-            {txHistory.tokenId}
+            {txHistory.currencyId}
           </Typography>
         ) : (
           <Typography>
@@ -86,7 +86,7 @@ export default function TransactionListComponent({transactions, user}: Props) {
             {
               //TODO: transformTokenValue should be removed, value fetched from BE
             }
-            tipped your post with {transformTokenValue(txHistory)} {txHistory.tokenId}
+            tipped your post with {transformTokenValue(txHistory)} {txHistory.currencyId}
           </Typography>
         )}
       </div>

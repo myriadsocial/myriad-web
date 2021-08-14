@@ -47,6 +47,12 @@ export type PostProps = {
   url: string;
 };
 
+export type ImportPostProps = {
+  url: string;
+  importer: string;
+  tags?: string[];
+};
+
 export interface Post extends PostProps, BaseModel {
   user: User;
   people?: People;
@@ -54,20 +60,8 @@ export interface Post extends PostProps, BaseModel {
   comments?: Comment[];
   //TODO: change this on migrating new schema of transaction
   transactions?: any[];
+  walletAddress?: string;
 }
-
-export type ImportPostProps = {
-  url: string;
-  importer: string;
-  tags?: string[];
-};
-
-export type Dislike = {
-  id: string;
-  status: boolean;
-  postId: string;
-  userId: string;
-};
 
 export type UpoadedFile = {
   file: File;
