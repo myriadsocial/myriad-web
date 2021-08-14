@@ -4,7 +4,7 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
-import * as WalletAddressAPI from 'src/lib/api/wallet';
+import * as PostAPI from 'src/lib/api/post';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -46,7 +46,7 @@ export const fetchRecipientDetail: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const {walletAddress} = await WalletAddressAPI.getWalletAddress(postId);
+      const {walletAddress} = await PostAPI.getWalletAddress(postId);
 
       const walletDetailPayload = {
         walletAddress,

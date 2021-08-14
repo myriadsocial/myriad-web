@@ -12,6 +12,7 @@ export interface PeopleProps {
 
 export interface People extends PeopleProps {
   profilePicture: ImageSizes;
+  walletAddress?: string;
   //TODO: remove later, experience related attribute
   hide?: boolean;
 }

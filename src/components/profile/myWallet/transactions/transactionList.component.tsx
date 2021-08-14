@@ -104,14 +104,14 @@ const ListItemContent = ({txHistory, userId}: ListItemContentProps) => {
             <Link href={`/${direction(txHistory)}`}>
               <a href={`/${direction(txHistory)}`}>{txHistory.toUser?.name ?? defaultUserName}</a>
             </Link>{' '}
-            with {txHistory.tokenId}
+            with {txHistory.currencyId}
           </>
         ) : (
           <>
             <Link href={`/${direction(txHistory)}`}>
               <a href={`/${direction(txHistory)}`}>{txHistory.fromUser?.name ?? defaultUserName}</a>
             </Link>{' '}
-            tipped you {txHistory.tokenId}
+            tipped you {txHistory.currencyId}
           </>
         )}
       </>
@@ -181,7 +181,7 @@ const TransactionListComponent: React.FC<Props> = ({transactions, user}) => {
     <>
       <List className={style.root}>
         {allTransactions.map(txHistory => (
-          <ListItemContent key={txHistory.trxHash} txHistory={txHistory} userId={userId} />
+          <ListItemContent key={txHistory.hash} txHistory={txHistory} userId={userId} />
         ))}
       </List>
     </>

@@ -111,6 +111,7 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
           if (post.id === action.postId && post.metric) {
             post.metric.dislikes += 1;
             post.metric.likes -= 1;
+            post.likes = [];
           }
 
           return post;
