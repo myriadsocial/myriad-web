@@ -2,6 +2,7 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
+import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 
 interface ErrorData {
   title?: string;
@@ -28,10 +29,7 @@ export interface HydrateStateAction extends Action {
 }
 
 export interface PaginationAction extends Action {
-  meta: {
-    page: number;
-    totalPage: number;
-  };
+  meta: ListMeta;
 }
 
 /**

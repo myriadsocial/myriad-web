@@ -1,26 +1,28 @@
 import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {ExtendedFriend, FriendStatus} from 'src/interfaces/friend';
+import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
 import {RootState} from 'src/reducers';
 import {
-  fetchFriend,
   fetchFriendRequest,
   createFriendRequest,
-  searchFriend,
   toggleFriendRequest,
-} from 'src/reducers/friend/actions';
+} from 'src/reducers/friend-request/actions';
+import {fetchFriend, searchFriend} from 'src/reducers/friend/actions';
 import {FriendState} from 'src/reducers/friend/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useFriendsHook = () => {
   const dispatch = useDispatch();
+
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {page} = useSelector<RootState, FriendState>(state => state.friendState);
-  const [friended, setFriended] = useState<ExtendedFriend[]>([]);
+  const {
+    meta: {currentPage: currentFriendPage},
+  } = useSelector<RootState, FriendState>(state => state.friendState);
+  const [friended, setFriended] = useState<Friend[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -33,7 +35,7 @@ export const useFriendsHook = () => {
   };
 
   const loadMoreFriends = () => {
-    dispatch(fetchFriend(page + 1));
+    dispatch(fetchFriend(currentFriendPage + 1));
   };
 
   const searchFriends = (query: string) => {
@@ -51,7 +53,7 @@ export const useFriendsHook = () => {
     setLoading(true);
 
     try {
-      const requests = await FriendAPI.checkFriendStatus(people.map(user => user.id));
+      const {data: requests} = await FriendAPI.checkFriendStatus(people.map(user => user.id));
 
       setFriended(requests);
     } catch (error) {
@@ -61,7 +63,7 @@ export const useFriendsHook = () => {
     }
   };
 
-  const toggleRequest = async (request: ExtendedFriend, status: FriendStatus) => {
+  const toggleRequest = async (request: Friend, status: FriendStatus) => {
     dispatch(toggleFriendRequest(request, status));
   };
 

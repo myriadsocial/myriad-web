@@ -85,7 +85,7 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({options}) => {
 
   const getFriendStatus = (user: User): FriendStatus | null => {
     const friendOrFriendRequested = friendsList.find(friend => {
-      return friend.requestorId === user.id || friend.friendId == user.id;
+      return friend.requestorId === user.id || friend.requesteeId == user.id;
     });
     return friendOrFriendRequested ? friendOrFriendRequested.status : null;
   };

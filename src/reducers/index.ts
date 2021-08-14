@@ -1,6 +1,7 @@
 import {BalanceReducer} from './balance/reducer';
 import {BaseReducer} from './base/reducer';
 import {ConfigReducer} from './config/reducer';
+import {FriendRequestReducer} from './friend-request/reducer';
 import {FriendReducer} from './friend/reducer';
 import {NotificationReducer} from './notification/reducer';
 import {PopularReducer} from './popular/reducer';
@@ -16,6 +17,7 @@ const reducers = {
   baseState: BaseReducer,
   configState: ConfigReducer,
   friendState: FriendReducer,
+  friendRequestState: FriendRequestReducer,
   notificationState: NotificationReducer,
   popularState: PopularReducer,
   profileState: ProfileReducer,
