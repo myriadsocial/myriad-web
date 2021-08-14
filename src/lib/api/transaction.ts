@@ -1,15 +1,12 @@
-import getConfig from 'next/config';
+import MyriadAPI from './base';
+import {PAGINATION_LIMIT} from './constants/pagination';
+import {BaseList} from './interfaces/base-list.interface';
 
-import Axios from 'axios';
-import {Transaction} from 'src/interfaces/transaction';
+import {Transaction, TransactionProps} from 'src/interfaces/transaction';
 
-const {publicRuntimeConfig} = getConfig();
+type TransactionList = BaseList<Transaction>;
 
-const MyriadAPI = Axios.create({
-  baseURL: publicRuntimeConfig.apiURL,
-});
-
-export const storeTransaction = async (values: Transaction): Promise<Transaction> => {
+export const storeTransaction = async (values: TransactionProps): Promise<Transaction> => {
   const {data} = await MyriadAPI.request<Transaction>({
     url: '/transactions',
     method: 'POST',
@@ -19,18 +16,43 @@ export const storeTransaction = async (values: Transaction): Promise<Transaction
   return data;
 };
 
-export const getTransaction = async (options: Partial<Transaction>): Promise<Transaction[]> => {
-  const {to: userId} = options;
+export const getTransactions = async (
+  options: Partial<TransactionProps>,
+  page?: number,
+): Promise<TransactionList> => {
+  const where: Partial<Record<keyof TransactionProps, any>> = {};
 
-  const {data} = await MyriadAPI.request<Transaction[]>({
+  if (options.postId) {
+    where.postId = {eq: options.postId};
+  }
+
+  if (options.to) {
+    where.to = {eq: options.to};
+  }
+
+  if (options.currencyId) {
+    where.currencyId = {eq: options.currencyId};
+  }
+
+  const {data} = await MyriadAPI.request<TransactionList>({
     url: '/transactions',
     method: 'GET',
     params: {
       filter: {
-        where: {to: userId},
+        page,
+        limit: PAGINATION_LIMIT,
+        order: `createdAt DESC`,
+        where,
       },
     },
   });
 
   return data;
+};
+
+export const removeTransaction = async (transactionId: string): Promise<void> => {
+  await MyriadAPI.request({
+    url: `/transactions/${transactionId}`,
+    method: 'DELETE',
+  });
 };

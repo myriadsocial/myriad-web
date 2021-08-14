@@ -11,7 +11,6 @@ import {useTheme} from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import AlertComponent from '../alert/Alert.component';
-import {ConverstionProvider} from '../conversation/conversation.context';
 import {ExperienceProvider} from '../experience/experience.context';
 
 import TipAlertComponent from 'src/components/alert/TipAlert.component';
@@ -98,15 +97,13 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
         </NoSsr>
         <TransactionProvider>
           <ExperienceProvider>
-            <ConverstionProvider>
-              {isMobile ? (
-                <MobileLayoutComponent anonymous={anonymous} userTokens={userTokens}>
-                  {children}
-                </MobileLayoutComponent>
-              ) : (
-                <DektopLayoutComponent anonymous={anonymous}>{children}</DektopLayoutComponent>
-              )}
-            </ConverstionProvider>
+            {isMobile ? (
+              <MobileLayoutComponent anonymous={anonymous} userTokens={userTokens}>
+                {children}
+              </MobileLayoutComponent>
+            ) : (
+              <DektopLayoutComponent anonymous={anonymous}>{children}</DektopLayoutComponent>
+            )}
           </ExperienceProvider>
         </TransactionProvider>
       </LayoutSettingProvider>

@@ -1,13 +1,6 @@
-import getConfig from 'next/config';
+import MyriadAPI from './base';
 
-import Axios from 'axios';
 import {Tag} from 'src/interfaces/experience';
-
-const {publicRuntimeConfig} = getConfig();
-
-const MyriadAPI = Axios.create({
-  baseURL: publicRuntimeConfig.apiURL,
-});
 
 export const trendingTopic = async (limit?: number): Promise<Tag[]> => {
   const {data} = await MyriadAPI.request<Tag[]>({

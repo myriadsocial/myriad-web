@@ -2,12 +2,15 @@ import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
-import {Like} from 'src/interfaces/interaction';
-import {Post, PostProps, ImportPostProps, Dislike} from 'src/interfaces/post';
+import {Dislike, Like} from 'src/interfaces/interaction';
+import {Post, PostProps, ImportPostProps} from 'src/interfaces/post';
 import {SocialsEnum} from 'src/interfaces/social';
 import {TimelineSortMethod, TimelineFilter} from 'src/interfaces/timeline';
 
 type PostList = BaseList<Post>;
+type WalletAddress = {
+  walletAddress: string;
+};
 
 export const getPost = async (
   page: number,
@@ -125,6 +128,7 @@ export const getFriendPost = async (
           'people',
           {
             relation: 'likes',
+            // Get only current user records
             scope: {
               where: {
                 userId: {eq: userId},
@@ -246,4 +250,13 @@ export const removePost = async (postId: string): Promise<void> => {
     url: `/posts/${postId}`,
     method: 'DELETE',
   });
+};
+
+export const getWalletAddress = async (postId: string): Promise<WalletAddress> => {
+  const {data} = await MyriadAPI.request<WalletAddress>({
+    url: `/posts/${postId}/walletaddress`,
+    method: 'GET',
+  });
+
+  return data;
 };

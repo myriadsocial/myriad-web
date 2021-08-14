@@ -12,3 +12,5 @@ export type LikeProps = {
 };
 
 export interface Like extends LikeProps, BaseModel {}
+
+export interface Dislike extends LikeProps, BaseModel {}
