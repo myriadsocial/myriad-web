@@ -1,12 +1,9 @@
-import Axios from 'axios';
-import {ExtendedNotification, TotalNewNotification} from 'src/interfaces/notification';
+import MyriadAPI from './base';
 
-const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-});
+import {Notification, TotalNewNotification} from 'src/interfaces/notification';
 
-export const getMyNotification = async (userId: string): Promise<ExtendedNotification[]> => {
-  const {data} = await MyriadAPI.request<ExtendedNotification[]>({
+export const getNotification = async (userId: string): Promise<Notification[]> => {
+  const {data} = await MyriadAPI.request<Notification[]>({
     url: `/notifications`,
     method: 'GET',
     params: {
@@ -15,7 +12,7 @@ export const getMyNotification = async (userId: string): Promise<ExtendedNotific
         where: {
           and: [{to: userId}],
         },
-        include: ['fromUserId', 'toUserId'],
+        include: ['from', 'to'],
       },
     },
   });

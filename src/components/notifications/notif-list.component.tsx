@@ -88,25 +88,23 @@ const NotificationListComponent: React.FC<NotificationListProps> = () => {
               </Typography>
             </ShowIf>
             <List className={style.list}>
-              {notifications.map(notif => {
+              {notifications.map(notification => {
                 return (
-                  <ListItem key={notif.id} className={style.item} alignItems="center">
+                  <ListItem key={notification.id} className={style.item} alignItems="center">
                     <ListItemAvatar>
-                      <Avatar
-                        className={style.avatar}
-                        src={notif.fromUserId.profilePictureURL || ''}>
-                        {acronym(notif.fromUserId.name ?? '')}
+                      <Avatar className={style.avatar} src={notification.from || ''}>
+                        {acronym(notification.from ?? '')}
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText>
                       <Typography variant="body1" color="textPrimary" style={{fontWeight: 400}}>
-                        <Link href={`/${notif.from}`}>
-                          <a href={`/${notif.from}`}>{notif.fromUserId.name}</a>
+                        <Link href={`/${notification.from}`}>
+                          <a href={`/${notification.from}`}>{notification.fromUserId.name}</a>
                         </Link>{' '}
-                        {notif.message}
+                        {notification.message}
                       </Typography>
                       <Typography variant="body2" color="textPrimary">
-                        {formatDistance(subDays(new Date(notif.createdAt), 0), new Date(), {
+                        {formatDistance(subDays(new Date(notification.createdAt), 0), new Date(), {
                           addSuffix: true,
                         })}
                       </Typography>

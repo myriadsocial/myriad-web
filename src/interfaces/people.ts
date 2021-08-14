@@ -1,4 +1,4 @@
-import {ImageSizes} from './base.interface';
+import {ImageSizes} from './assets';
 import {SocialsEnum} from './social';
 
 export interface PeopleProps {
