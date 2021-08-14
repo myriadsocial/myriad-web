@@ -1,13 +1,9 @@
 import {BaseModel} from './base.interface';
 import {Comment} from './comment';
+import {Like} from './interaction';
 import {People} from './people';
 import {PostOrigin} from './timeline';
 import {User} from './user';
-
-export type PostReaction = {
-  name: string;
-  total: number;
-};
 
 export type ImageData = {
   src: string;
@@ -25,18 +21,18 @@ export interface TipsReceived {
   totalTips: number;
 }
 
-export interface PostAsset {
+export type PostAsset = {
   images: string[];
   videos: string[];
-}
+};
 
-export interface PostMetric {
+export type PostMetric = {
   likes: number;
   dislikes: number;
   comments: number;
-}
+};
 
-export interface PostProps {
+export type PostProps = {
   asset?: PostAsset;
   createdBy: string;
   importers: string[];
@@ -49,32 +45,21 @@ export interface PostProps {
   text: string;
   title?: string;
   url: string;
-}
+};
 
 export interface Post extends PostProps, BaseModel {
   user: User;
-  people: People;
+  people?: People;
+  likes?: Like[];
   comments?: Comment[];
   //TODO: change this on migrating new schema of transaction
   transactions?: any[];
 }
 
-export type UserReplies = Comment & {
-  id: string;
-  user: User;
-};
-
 export type ImportPostProps = {
   url: string;
   importer: string;
   tags?: string[];
-};
-
-export type Like = {
-  id: string;
-  status: boolean;
-  postId: string;
-  userId: string;
 };
 
 export type Dislike = {

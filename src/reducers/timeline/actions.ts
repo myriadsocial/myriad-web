@@ -3,9 +3,11 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
-import {Post} from 'src/interfaces/post';
+import {Like} from 'src/interfaces/interaction';
+import {Post, PostProps} from 'src/interfaces/post';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
+import * as InteractionAPI from 'src/lib/api/interaction';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import * as PostAPI from 'src/lib/api/post';
 import * as WalletAddressAPI from 'src/lib/api/wallet';
@@ -34,20 +36,11 @@ export interface AddPostToTimeline extends Action {
 export interface LikePost extends Action {
   type: constants.LIKE_POST;
   postId: string;
-}
-
-export interface UnLikePost extends Action {
-  type: constants.UNLIKE_POST;
-  postId: string;
+  like: Like;
 }
 
 export interface DislikePost extends Action {
   type: constants.DISLIKE_POST;
-  postId: string;
-}
-
-export interface UnDislikePost extends Action {
-  type: constants.UNDISLIKE_POST;
   postId: string;
 }
 
@@ -85,8 +78,6 @@ export type Actions =
   | UpdateTimelineFilter
   | LikePost
   | DislikePost
-  | UnLikePost
-  | UnDislikePost
   | FetchWalletDetails
   | RemovePost
   | ClearTimeline
@@ -123,6 +114,7 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
       const {timelineState, userState} = getState();
       const timelineType = type ?? timelineState.type;
       const timelineFilter = filter ?? timelineState.filter;
+      console.log('TIMELINE FILTER', timelineFilter);
       const timelineSort = sort ?? timelineState.sort;
 
       let posts: Post[] = [];
@@ -132,9 +124,9 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
         ({data: posts, meta} = await PostAPI.getFriendPost(userState.user.id, page, timelineSort));
       }
 
-      if (userState.anonymous || timelineType === TimelineType.TRENDING) {
-        posts = await PostAPI.getPost(page, timelineSort, timelineFilter);
-      }
+      // if (userState.anonymous || timelineType === TimelineType.TRENDING) {
+      //   posts = await PostAPI.getPost(page, timelineSort, timelineFilter);
+      // }
 
       for await (const post of posts) {
         if (post.platform !== 'myriad') {
@@ -160,7 +152,7 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
   };
 
 export const createPost: ThunkActionCreator<Actions, RootState> =
-  (post: Partial<Post>, images: string[]) => async (dispatch, getState) => {
+  (post: PostProps, images: string[]) => async (dispatch, getState) => {
     const {
       userState: {user},
     } = getState();
@@ -176,6 +168,7 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
       const data = await PostAPI.createPost({
         ...post,
         platform: 'myriad',
+        createdBy: user.id,
         tags: post.tags || [],
         asset: {
           images,
@@ -187,7 +180,7 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
         type: constants.ADD_POST_TO_TIMELINE,
         post: {
           ...data,
-          comments: [],
+          user,
         },
       });
     } catch (error) {
@@ -227,8 +220,9 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
   };
 
 export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
-  (postId: string, like = true) =>
-  async (dispatch, getState) => {
+  (post: Post) => async (dispatch, getState) => {
+    let liked = false;
+
     dispatch(setLoading(true));
 
     try {
@@ -240,60 +234,25 @@ export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      let likeList = await PostAPI.getLikes(postId);
-      likeList = likeList.filter(
-        likeStatus => likeStatus.userId === user.id && likeStatus.status == true,
-      );
-      let dislikeList = await PostAPI.getDislikes(postId);
-      dislikeList = dislikeList.filter(
-        dislikeStatus => dislikeStatus.userId === user.id && dislikeStatus.status == true,
-      );
+      if (post.likes) {
+        liked = post.likes.filter(like => like.userId === user.id).length > 0;
+      }
 
-      if (like) {
-        if (!likeList.length && !dislikeList.length) {
-          dispatch({
-            type: constants.LIKE_POST,
-            postId,
-          });
-        } else if (!likeList.length && dislikeList.length) {
-          dispatch({
-            type: constants.LIKE_POST,
-            postId,
-          });
-          dispatch({
-            type: constants.UNDISLIKE_POST,
-            postId,
-          });
-        } else if (likeList.length) {
-          dispatch({
-            type: constants.UNLIKE_POST,
-            postId,
-          });
-        }
-        await PostAPI.like(user.id, postId);
+      if (liked) {
+        await InteractionAPI.dislike(user.id, post);
+
+        dispatch({
+          type: constants.DISLIKE_POST,
+          postId: post.id,
+        });
       } else {
-        if (!likeList.length && !dislikeList.length) {
-          dispatch({
-            type: constants.DISLIKE_POST,
-            postId,
-          });
-        } else if (!dislikeList.length && likeList.length) {
-          dispatch({
-            type: constants.DISLIKE_POST,
-            postId,
-          });
-          dispatch({
-            type: constants.UNLIKE_POST,
-            postId,
-          });
-        } else if (dislikeList.length) {
-          dispatch({
-            type: constants.UNDISLIKE_POST,
-            postId,
-          });
-        }
+        const like = await InteractionAPI.like(user.id, post);
 
-        await PostAPI.dislike(user.id, postId);
+        dispatch({
+          type: constants.LIKE_POST,
+          postId: post.id,
+          like,
+        });
       }
     } catch (error) {
       dispatch(setError(error.message));

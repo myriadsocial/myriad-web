@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useCallback, useState, useRef} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 import {useDispatch, useSelector} from 'react-redux';
@@ -21,6 +21,7 @@ import {PostSubHeader} from './post-sub-header.component';
 import PostVideoComponent from './post-video.component';
 import {useStyles} from './post.style';
 
+import {debounce} from 'lodash';
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import CardTitle from 'src/components/common/CardTitle.component';
@@ -126,10 +127,10 @@ const PostComponent: React.FC<PostComponentProps> = ({
 
     switch (post.platform) {
       case 'twitter':
-        url = `https://twitter.com/${post.people.username}`;
+        url = `https://twitter.com/${post.people?.username as string}`;
         break;
       case 'reddit':
-        url = `https://reddit.com/user/${post.people.username}`;
+        url = `https://reddit.com/user/${post.people?.username as string}`;
         break;
       case 'myriad':
         url = post.createdBy;
@@ -142,13 +143,13 @@ const PostComponent: React.FC<PostComponentProps> = ({
     return url;
   };
 
-  const likePostHandle = () => {
-    likePost(post.id);
-  };
+  const likePostHandle = debounce(() => {
+    likePost(post);
+  }, 500);
 
-  const dislikePostHandle = () => {
+  const dislikePostHandle = debounce(() => {
     dislikePost(post.id);
-  };
+  }, 500);
 
   const onHashtagClicked = async (hashtag: string) => {
     await router.push(`/home?tag=${hashtag.replace('#', '')}&type=trending`, undefined, {
@@ -176,7 +177,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
           }
           title={
             <CardTitle
-              text={post.platform === 'myriad' ? post.user?.name : post.people?.name}
+              text={post.platform === 'myriad' ? post.user?.name : (post.people?.name as string)}
               url={getPlatformUrl()}
             />
           }

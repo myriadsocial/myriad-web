@@ -1,13 +1,11 @@
+import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
-import Axios from 'axios';
-import {Post, PostProps, ImportPostProps, Like, Dislike} from 'src/interfaces/post';
+import {Like} from 'src/interfaces/interaction';
+import {Post, PostProps, ImportPostProps, Dislike} from 'src/interfaces/post';
+import {SocialsEnum} from 'src/interfaces/social';
 import {TimelineSortMethod, TimelineFilter} from 'src/interfaces/timeline';
-
-const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_LATEST_API_URL,
-});
 
 type PostList = BaseList<Post>;
 
@@ -15,7 +13,7 @@ export const getPost = async (
   page: number,
   sort?: TimelineSortMethod,
   filters?: TimelineFilter,
-): Promise<Post[]> => {
+): Promise<PostList> => {
   let orderField = 'originCreatedAt';
 
   switch (sort) {
@@ -31,7 +29,7 @@ export const getPost = async (
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const where: Record<string, any> = {};
+  const where: Partial<Record<keyof PostProps, any>> = {};
 
   if (filters && filters.tags && filters.tags.length) {
     where.tags = {
@@ -40,7 +38,7 @@ export const getPost = async (
   }
 
   if (filters && filters.layout === 'photo') {
-    where.hasMedia = true;
+    // code
   }
 
   if (filters && filters.platform && filters.platform.length) {
@@ -50,42 +48,39 @@ export const getPost = async (
   }
 
   if (filters && filters.owner) {
-    where.walletAddress = {
-      inq: [filters.owner],
+    where.createdBy = {
+      eq: filters.owner,
     };
   }
 
   if (filters && filters.importer) {
-    where.importBy = {
-      inq: [filters.importer],
+    where.createdBy = {
+      inq: filters.importer,
+    };
+
+    where.platform = {
+      inq: [SocialsEnum.TWITTER, SocialsEnum.FACEBOOK, SocialsEnum.REDDIT],
     };
   }
 
-  const {data} = await MyriadAPI.request<Post[]>({
+  const {data} = await MyriadAPI.request<PostList>({
     url: '/posts',
     method: 'GET',
     params: {
       filter: {
-        offset: Math.max(page - 1, 0) * PAGINATION_LIMIT,
+        page,
         limit: PAGINATION_LIMIT,
         order: `${orderField} DESC`,
         where,
         include: [
           {
-            relation: 'comments',
-            scope: {
-              include: [
-                {
-                  relation: 'user',
-                },
-              ],
-            },
-          },
-          {
             relation: 'user',
           },
           {
             relation: 'people',
+          },
+          {
+            relation: 'likes',
           },
         ],
       },
@@ -101,7 +96,7 @@ export const getFriendPost = async (
   sort?: TimelineSortMethod,
 ): Promise<PostList> => {
   const path = `/posts`;
-  let orderField = 'platformCreatedAt DESC';
+  let orderField = 'originCreatedAt';
 
   if (sort) {
     switch (sort) {
@@ -124,8 +119,19 @@ export const getFriendPost = async (
       filter: {
         page,
         limit: PAGINATION_LIMIT,
-        orderField,
-        include: ['user', 'people'],
+        order: `${orderField} DESC`,
+        include: [
+          'user',
+          'people',
+          {
+            relation: 'likes',
+            scope: {
+              where: {
+                userId: {eq: userId},
+              },
+            },
+          },
+        ],
       },
     },
   });
@@ -133,7 +139,7 @@ export const getFriendPost = async (
   return data;
 };
 
-export const createPost = async (values: Partial<PostProps>): Promise<Post> => {
+export const createPost = async (values: PostProps): Promise<Post> => {
   const {data} = await MyriadAPI.request<Post>({
     url: '/posts',
     method: 'POST',
@@ -161,17 +167,10 @@ export const getPostDetail = async (id: string): Promise<Post> => {
       filter: {
         include: [
           {
-            relation: 'comments',
-            scope: {
-              include: [
-                {
-                  relation: 'user',
-                },
-              ],
-            },
+            relation: 'user',
           },
           {
-            relation: 'publicMetric',
+            relation: 'people',
           },
         ],
       },

@@ -1,15 +1,18 @@
-import {User} from './user';
+import {BaseModel} from './base.interface';
 
-export interface Notification {
-  type: string;
+export enum NotificationType {
+  FRIEND_REQUEST = 'friend_request',
+  FRIEND_ACCEPT = 'friend_accept',
+  POST_COMMENT = 'post_comment',
+}
+
+export type NotificationProps = {
+  referenceId?: string;
+  type: NotificationType;
+  read: boolean;
   from: string;
   to: string;
   message: string;
-}
+};
 
-export interface ExtendedNotification extends Notification {
-  id: string;
-  createdAt: string;
-  fromUserId: User;
-  toUserId: User;
-}
+export interface Notification extends NotificationProps, BaseModel {}

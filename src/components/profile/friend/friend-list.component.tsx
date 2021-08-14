@@ -26,15 +26,15 @@ import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import RemoveUser from 'src/images/user-minus.svg';
-import {ExtendedFriend} from 'src/interfaces/friend';
+import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 type FriendListProps = {
   profile: User;
-  friends: ExtendedFriend[];
-  cancelFriendRequest: (requestor: ExtendedFriend) => void;
+  friends: Friend[];
+  cancelFriendRequest: (requestor: Friend) => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -134,13 +134,13 @@ const FriendsListComponent: React.FC<FriendListProps> = ({
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [selectedProfileId, setSelectedProfileId] = useState('');
   const [selectedFriendName, setSelectedFriendName] = useState('');
-  const [selectedFriend, setSelectedFriend] = useState<ExtendedFriend | null>(null);
+  const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
 
   const handleClick = (
     event: React.MouseEvent<HTMLElement>,
     id: string,
     name: string,
-    request: ExtendedFriend,
+    request: Friend,
   ) => {
     setAnchorEl(event.currentTarget);
     console.log(id);
@@ -157,7 +157,7 @@ const FriendsListComponent: React.FC<FriendListProps> = ({
     setOpenModal(!openModal);
   };
 
-  const handleUnFriendRequest = (friend: ExtendedFriend | null) => {
+  const handleUnFriendRequest = (friend: Friend | null) => {
     if (friend) cancelFriendRequest(friend);
     toggleRemoveAlert();
     handleClose();
@@ -186,7 +186,7 @@ const FriendsListComponent: React.FC<FriendListProps> = ({
             {friends.map(request => {
               return (
                 <>
-                  {profile.id !== request.friendId && (
+                  {profile.id !== request.requesteeId && (
                     <ListItem
                       key={request.id}
                       className={style.item}
@@ -195,16 +195,16 @@ const FriendsListComponent: React.FC<FriendListProps> = ({
                       <ListItemAvatar>
                         <Avatar
                           className={style.avatar}
-                          alt={request.friend.name}
-                          src={request.friend.profilePictureURL || ''}>
-                          {acronym(request.friend.name || '')}
+                          alt={request.requestee.name}
+                          src={request.requestee.profilePictureURL || ''}>
+                          {acronym(request.requestee.name || '')}
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText>
-                        <Link href={`/${request.friendId}`}>
-                          <a href={`/${request.friendId}`}>
+                        <Link href={`/${request.requesteeId}`}>
+                          <a href={`/${request.requesteeId}`}>
                             <Typography component="span" variant="h4" color="textPrimary">
-                              {request.friend.name}
+                              {request.requestee.name}
                             </Typography>
                           </a>
                         </Link>
@@ -217,7 +217,12 @@ const FriendsListComponent: React.FC<FriendListProps> = ({
                             aria-controls="long-menu"
                             aria-haspopup="true"
                             onClick={event =>
-                              handleClick(event, request.friendId, request.friend.name, request)
+                              handleClick(
+                                event,
+                                request.requesteeId,
+                                request.requestee.name,
+                                request,
+                              )
                             }>
                             <MoreVertIcon />
                           </IconButton>

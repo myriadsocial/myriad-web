@@ -178,7 +178,7 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
 
               <ShowIf
                 condition={
-                  friendStatus?.status === 'pending' && friendStatus.friendId == profile.id
+                  friendStatus?.status === 'pending' && friendStatus.requesteeId == profile.id
                 }>
                 <Button
                   className={style.button2}

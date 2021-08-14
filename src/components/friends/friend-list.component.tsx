@@ -94,9 +94,11 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({
 
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const [expanded, toggleExpand] = useToggle(true);
-  const {friends, totalFriend, hasMore} = useSelector<RootState, FriendState>(
-    state => state.friendState,
-  );
+  const {
+    friends,
+    hasMore,
+    meta: {totalItemCount: totalFriend},
+  } = useSelector<RootState, FriendState>(state => state.friendState);
 
   useEffect(() => {
     if (!expand || (!expanded && expand)) {
@@ -149,7 +151,7 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({
                           <ListItemAvatar>
                             <Avatar
                               alt={request.requestor.name}
-                              src={request.requestor.profilePicture.sizes.thumbnail}
+                              src={request.requestor.profilePictureURL}
                             />
                           </ListItemAvatar>
                         </a>
@@ -171,23 +173,23 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({
                     </ListItem>
                   )}
 
-                  {user && user.id !== request.friendId && (
+                  {user && user.id !== request.requesteeId && (
                     <ListItem key={request.id} className={style.item} alignItems="flex-start">
-                      <Link href={`/${request.friend.id}`}>
-                        <a href={`/${request.friend.id}`}>
+                      <Link href={`/${request.requestee.id}`}>
+                        <a href={`/${request.requestee.id}`}>
                           <ListItemAvatar>
                             <Avatar
-                              alt={request.friend.name}
-                              src={request.friend.profilePicture.sizes.thumbnail}
+                              alt={request.requestee.name}
+                              src={request.requestee.profilePictureURL}
                             />
                           </ListItemAvatar>
                         </a>
                       </Link>
                       <ListItemText>
-                        <Link href={`/${request.friend.id}`}>
-                          <a href={`/${request.friend.id}`}>
+                        <Link href={`/${request.requestee.id}`}>
+                          <a href={`/${request.requestee.id}`}>
                             <Typography component="span" variant="h4" color="textPrimary">
-                              {request.friend.name}
+                              {request.requestee.name}
                             </Typography>
                           </a>
                         </Link>

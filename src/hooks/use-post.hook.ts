@@ -73,10 +73,10 @@ export const usePostHook = (user?: User) => {
     }
   };
 
-  const likePost = async (postId: string) => {
+  const likePost = async (post: Post) => {
     setLoading(true);
 
-    dispatch(toggleLikePost(postId));
+    dispatch(toggleLikePost(post));
   };
 
   const dislikePost = async (postId: string) => {
