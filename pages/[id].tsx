@@ -12,7 +12,6 @@ import Layout from 'src/components/Layout/Layout.container';
 import ProfileTimeline from 'src/components/profile/profile.component';
 import {ExtendedUser} from 'src/interfaces/user';
 import {healthcheck} from 'src/lib/api/healthcheck';
-import * as ProfileAPI from 'src/lib/api/profile';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
 import {setProfile} from 'src/reducers/profile/actions';
@@ -83,7 +82,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     dispatch(setUser(user));
   }
 
-  const profile = await ProfileAPI.getUserProfile(profileId);
+  const profile = await UserAPI.getUserDetail(profileId);
 
   if (profile) {
     dispatch(setProfile(profile));

@@ -6,9 +6,9 @@ import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {SendTipProps} from 'src/interfaces/send-tips/send-tips';
 import {Token} from 'src/interfaces/token';
 import {ContentType} from 'src/interfaces/wallet';
-import {signAndSendExtrinsic} from 'src/lib/api/polkadot-js';
 import {updateTips} from 'src/lib/api/post';
 import {storeTransaction} from 'src/lib/api/transaction';
+import {signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {fetchBalances} from 'src/reducers/balance/actions';
 import {BalanceState} from 'src/reducers/balance/reducer';
@@ -68,13 +68,11 @@ export const usePolkadotApi = () => {
         // Record the transaction
         // TODO: adjust to the new DB scheme
         await storeTransaction({
-          trxHash: txHash,
+          hash: txHash,
           from,
           to,
-          value: correctedValue,
-          state: 'success',
-          tokenId: currencyId,
-          createdAt: new Date().toISOString(),
+          amount: correctedValue,
+          currencyId: currencyId,
           postId,
         });
 

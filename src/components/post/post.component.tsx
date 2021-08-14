@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useRef} from 'react';
+import React, {useState, useRef} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 import {useDispatch, useSelector} from 'react-redux';

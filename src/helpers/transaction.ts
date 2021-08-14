@@ -21,11 +21,11 @@ export const formatTipBalance = (tip: TipsReceived, tokens: Token[]): number => 
 };
 
 export const formatTransactionBalance = (transaction: Transaction, tokens: Token[]): number => {
-  const token = tokens.find(item => item.id === transaction.tokenId);
+  const token = tokens.find(item => item.id === transaction.currencyId);
 
-  if (!token) return transaction.value;
+  if (!token) return transaction.amount;
 
-  return formatBalance(transaction.value, token.token_decimal);
+  return formatBalance(transaction.amount, token.token_decimal);
 };
 
 export const getTipperUserName = (transaction: Transaction): string => {
