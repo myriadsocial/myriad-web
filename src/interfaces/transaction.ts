@@ -1,17 +1,22 @@
-import {Token} from 'src/interfaces/token';
+import {BaseModel} from './base.interface';
+
+import {Currency} from 'src/interfaces/currency';
+import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 
-export interface Transaction {
-  id?: string;
-  trxHash: string;
+export type TransactionProps = {
+  hash: string;
+  amount: number;
   from: string;
   to: string;
-  value: number;
-  state: string;
-  tokenId: string;
   postId: string;
-  token?: Token;
-  createdAt: string;
-  fromUser?: User;
-  toUser?: User;
+  currencyId: string;
+};
+
+export interface Transaction extends TransactionProps, BaseModel {
+  fromUser: User;
+  toUser: User;
+  post?: Post;
+  //TODO: change later when implementing currency
+  currency: Currency;
 }

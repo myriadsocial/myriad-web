@@ -10,7 +10,6 @@ import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 import * as InteractionAPI from 'src/lib/api/interaction';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import * as PostAPI from 'src/lib/api/post';
-import * as WalletAddressAPI from 'src/lib/api/wallet';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -265,7 +264,7 @@ export const fetchWalletDetails: ThunkActionCreator<Actions, RootState> =
   (postId: string) => async dispatch => {
     dispatch(setLoading(true));
     try {
-      const {walletAddress} = await WalletAddressAPI.getWalletAddress(postId);
+      const {walletAddress} = await PostAPI.getWalletAddress(postId);
 
       const walletDetailPayload = {
         walletAddress,
