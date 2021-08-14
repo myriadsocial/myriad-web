@@ -4,7 +4,6 @@ import * as constants from './constants';
 
 import * as Redux from 'redux';
 import {Friend} from 'src/interfaces/friend';
-import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 
 export interface FriendRequestState extends BasePaginationState {
   requests: Friend[];
