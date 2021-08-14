@@ -19,12 +19,12 @@ import clsx from 'clsx';
 import {ToggleCollapseButton} from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {useToggle} from 'src/hooks/use-toggle.hook';
-import {ExtendedFriend, FriendStatus} from 'src/interfaces/friend';
+import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {RootState} from 'src/reducers';
-import {FriendState} from 'src/reducers/friend/reducer';
+import {FriendRequestState} from 'src/reducers/friend-request/reducer';
 
 type FriendRequestsProps = {
-  toggleRequest: (requestor: ExtendedFriend, status: FriendStatus) => void;
+  toggleRequest: (requestor: Friend, status: FriendStatus) => void;
   onShowAll?: () => void;
   onMinimize?: () => void;
 };
@@ -89,16 +89,20 @@ const useStyles = makeStyles((theme: Theme) =>
 const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest, onShowAll, onMinimize}) => {
   const style = useStyles();
 
-  const {requests, totalRequest} = useSelector<RootState, FriendState>(state => state.friendState);
+  const {
+    requests,
+    meta: {totalItemCount: totalRequest},
+  } = useSelector<RootState, FriendRequestState>(state => state.friendRequestState);
   const [expanded, toggleExpand] = useToggle(true);
   const [showAll, toggleShowAll] = useToggle(false);
 
-  const approveFriendRequest = (friend: ExtendedFriend) => {
+  console.log('requests', requests);
+  const approveFriendRequest = (friend: Friend) => {
     toggleRequest(friend, FriendStatus.APPROVED);
   };
 
-  const rejectFriendRequest = (friend: ExtendedFriend) => {
-    toggleRequest(friend, FriendStatus.REJECTED);
+  const rejectFriendRequest = (friend: Friend) => {
+    toggleRequest(friend, FriendStatus.PENDING);
   };
 
   const handleToggleExpand = () => {

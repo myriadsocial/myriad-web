@@ -1,5 +1,7 @@
 import getConfig from 'next/config';
 
+import {BaseList} from './interfaces/base-list.interface';
+
 import Axios from 'axios';
 import {User, ExtendedUser, UserSocialMedia, UserTransactionDetail} from 'src/interfaces/user';
 
@@ -8,6 +10,8 @@ const {publicRuntimeConfig} = getConfig();
 const MyriadAPI = Axios.create({
   baseURL: publicRuntimeConfig.apiURL,
 });
+
+type UserList = BaseList<User>;
 
 export const getUserDetail = async (id: string): Promise<ExtendedUser> => {
   const {data} = await MyriadAPI.request<ExtendedUser>({
@@ -101,8 +105,8 @@ export const disconnectSocial = async (credentialId: string): Promise<void> => {
   });
 };
 
-export const search = async (query: string): Promise<User[]> => {
-  const {data} = await MyriadAPI.request<User[]>({
+export const search = async (query: string): Promise<UserList> => {
+  const {data} = await MyriadAPI.request<UserList>({
     url: '/users',
     method: 'GET',
     params: {

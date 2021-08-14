@@ -10,6 +10,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import clsx from 'clsx';
 import {useLayout} from 'src/hooks/use-layout.hook';
 import {SidebarTab} from 'src/interfaces/sidebar';
+import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {RootState} from 'src/reducers';
 import {FriendState} from 'src/reducers/friend/reducer';
 import {NotificationState} from 'src/reducers/notification/reducer';
@@ -33,7 +34,9 @@ const useStyles = makeStyles((theme: Theme) =>
 const DesktopMenuComponent: React.FC<DesktopMenuProps> = () => {
   const styles = useStyles();
 
-  const {totalRequest} = useSelector<RootState, FriendState>(state => state.friendState);
+  const {totalItemCount: totalFriendRequest} = useSelector<RootState, ListMeta>(
+    state => state.friendRequestState.meta,
+  );
   const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
 
   const {selectedSidebar, changeSelectedSidebar} = useLayout();
@@ -48,7 +51,7 @@ const DesktopMenuComponent: React.FC<DesktopMenuProps> = () => {
         color="inherit"
         style={{margin: '0 32px'}}
         onClick={() => changeSelectedSidebar(SidebarTab.FRIENDS)}>
-        <Badge badgeContent={totalRequest} color="secondary">
+        <Badge badgeContent={totalFriendRequest} color="secondary">
           <PeopleIcon />
         </Badge>
       </IconButton>

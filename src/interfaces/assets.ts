@@ -4,3 +4,7 @@ export type Sizes = {
   medium: string;
   large: string;
 };
+
+export type ImageSizes = {
+  sizes: Sizes;
+};

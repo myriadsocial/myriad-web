@@ -6,15 +6,15 @@ import getConfig from 'next/config';
 import Axios from 'axios';
 import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {useNotifHook} from 'src/hooks/use-notif.hook';
-import {FriendStatus, ExtendedFriend} from 'src/interfaces/friend';
+import {FriendStatus, Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {
   createFriendRequest,
   deleteFriendRequest,
   toggleFriendRequest,
-} from 'src/reducers/friend/actions';
-import {searchProfileFriend, fetchProfileFriend} from 'src/reducers/profile/actions';
+} from 'src/reducers/friend-request/actions';
+import {searchProfileFriend} from 'src/reducers/profile/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 const {publicRuntimeConfig} = getConfig();
@@ -27,7 +27,8 @@ const MyriadAPI = Axios.create({
 export const useFriendHook = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const dispatch = useDispatch();
-  const [friendStatus, setFriendStatus] = useState<ExtendedFriend | null>(null);
+
+  const [friendStatus, setFriendStatus] = useState<Friend | null>(null);
   const [loading, setLoading] = useState(false);
   const {loadNotifications} = useNotifHook();
   const {loadFriends} = useFriendsHook();
@@ -42,7 +43,7 @@ export const useFriendHook = () => {
     checkFriendStatus(profile.id);
   };
 
-  const cancelFriendRequest = async (request: ExtendedFriend) => {
+  const cancelFriendRequest = async (request: Friend) => {
     await dispatch(deleteFriendRequest(request));
 
     await loadFriends();
@@ -51,7 +52,9 @@ export const useFriendHook = () => {
     loadNotifications();
   };
 
-  const toggleRequest = async (request: ExtendedFriend, status: FriendStatus) => {
+  const toggleRequest = async (request: Friend, status: FriendStatus) => {
+    setLoading(true);
+
     await dispatch(toggleFriendRequest(request, status));
 
     await dispatch(fetchProfileFriend());
@@ -64,7 +67,7 @@ export const useFriendHook = () => {
     setLoading(true);
 
     try {
-      const {data} = await MyriadAPI.request<ExtendedFriend[]>({
+      const {data} = await MyriadAPI.request<Friend[]>({
         url: `/friends`,
         method: 'GET',
         params: {
