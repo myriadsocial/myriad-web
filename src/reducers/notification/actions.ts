@@ -52,7 +52,7 @@ export const fetchNotification: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const notifications: Notification[] = await NotificationAPI.getNotification(user.id);
+      const {data: notifications, meta} = await NotificationAPI.getNotification(user.id);
 
       dispatch({
         type: constants.FETCH_NOTIFICATION,
