@@ -89,7 +89,7 @@ export const verifySocialAccount = async (
 ): Promise<void> => {
   await MyriadAPI.request({
     method: 'POST',
-    url: '/verify',
+    url: '/user-social-medias/verify',
     data: {
       username,
       platform,
@@ -101,7 +101,7 @@ export const verifySocialAccount = async (
 export const disconnectSocial = async (credentialId: string): Promise<void> => {
   await MyriadAPI.request({
     method: 'DELETE',
-    url: `/user-credentials/${credentialId}`,
+    url: `/user-social-medias/${credentialId}`,
   });
 };
 
