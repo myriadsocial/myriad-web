@@ -2,8 +2,7 @@ import {useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import {useNotif, NotifActionType} from 'src/context/notif.context';
-import {Notification} from 'src/interfaces/notification';
-import * as NotifAPI from 'src/lib/api/notification';
+import * as NotificationAPI from 'src/lib/api/notification';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -21,7 +20,7 @@ export const useNotifHook = () => {
         throw new Error('');
       }
 
-      const {data} = await NotifAPI.getNotification(user.id);
+      const {data} = await NotificationAPI.getNotification(user.id);
 
       dispatch({
         type: NotifActionType.LOAD_NOTIF,

@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
 import Typography from '@material-ui/core/Typography';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
@@ -7,9 +8,9 @@ import LanguageIcon from '@material-ui/icons/Language';
 import {TopicListComponent} from './topic-list.component';
 
 import ExpandablePanel from 'src/components/common/panel-expandable.component';
-import {useTopic} from 'src/hooks/use-topic.hooks';
-
-interface TopicProps {}
+import {RootState} from 'src/reducers';
+import {fetchPopularTopic} from 'src/reducers/tag/actions';
+import {TagState} from 'src/reducers/tag/reducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,13 +26,14 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const TopicComponent: React.FC<TopicProps> = props => {
+const TopicComponent: React.FC = () => {
   const styles = useStyles();
+  const dispatch = useDispatch();
 
-  const {popularTopics, loadPopularTopic} = useTopic();
+  const {trending} = useSelector<RootState, TagState>(state => state.tagState);
 
   useEffect(() => {
-    loadPopularTopic();
+    dispatch(fetchPopularTopic());
   }, []);
 
   return (
@@ -44,7 +46,7 @@ const TopicComponent: React.FC<TopicProps> = props => {
             </Typography>
           </div>
 
-          <TopicListComponent topics={popularTopics} />
+          <TopicListComponent topics={trending} />
         </div>
       </ExpandablePanel>
     </div>
