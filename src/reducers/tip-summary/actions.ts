@@ -1,8 +1,15 @@
-import {Actions as BaseAction} from '../base/actions';
+import {Actions as BaseAction, PaginationAction, setError, setLoading} from '../base/actions';
+import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
 import {Post} from 'src/interfaces/post';
+import {Transaction} from 'src/interfaces/transaction';
+import MyriadAPI from 'src/lib/api/base';
+import {BaseList} from 'src/lib/api/interfaces/base-list.interface';
+import {ThunkActionCreator} from 'src/types/thunk';
+
+type TransactionList = BaseList<Transaction>;
 
 /**
  * Action Types
@@ -13,6 +20,11 @@ export interface SetTippedPost extends Action {
   payload: Post;
 }
 
+export interface LoadTransactionHistory extends PaginationAction {
+  type: constants.FETCH_TRANSACTION_HISTORY;
+  transactions: Transaction[];
+}
+
 export interface ClearTippedPost extends Action {
   type: constants.CLEAR_TIPPED_POST;
 }
@@ -21,7 +33,7 @@ export interface ClearTippedPost extends Action {
  * Union Action Types
  */
 
-export type Actions = SetTippedPost | ClearTippedPost | BaseAction;
+export type Actions = SetTippedPost | LoadTransactionHistory | ClearTippedPost | BaseAction;
 
 /**
  *
@@ -35,3 +47,42 @@ export const setTippedPost = (post: Post): SetTippedPost => ({
 export const clearTippedPost = (): ClearTippedPost => ({
   type: constants.CLEAR_TIPPED_POST,
 });
+
+export const fetchTransactionHistory: ThunkActionCreator<Actions, RootState> =
+  (post: Post, page = 1) =>
+  async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const {data} = await MyriadAPI.request<TransactionList>({
+        url: '/transactions',
+        method: 'GET',
+        params: {
+          filter: {
+            page,
+            where: {
+              postId: post.id,
+            },
+          },
+        },
+      });
+
+      dispatch({
+        type: constants.FETCH_TRANSACTION_HISTORY,
+        transactions: data.data,
+        meta: data.meta,
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };

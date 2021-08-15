@@ -22,7 +22,6 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './tip-summary.style';
 import {useTipSummaryHook} from './use-tip-summary.hook';
-import {useTransactionHistory} from './use-transaction-history.hooks';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import {useToken} from 'src/components/wallet/token.context';
@@ -36,15 +35,8 @@ export const TipSummaryComponent: React.FC = () => {
     state: {userTokens},
   } = useToken();
 
-  const {show, post, clearTipSummary} = useTipSummaryHook();
-  const {
-    hasMore,
-    postDetail,
-    transactions,
-    clearTransaction,
-    loadTransaction,
-    loadNextTransaction,
-  } = useTransactionHistory();
+  const {meta, show, post, transactions, clearTipSummary, loadTransaction, loadNextTransaction} =
+    useTipSummaryHook();
 
   useEffect(() => {
     if (post?.id) {
@@ -60,10 +52,9 @@ export const TipSummaryComponent: React.FC = () => {
 
   const toggleOpen = () => {
     clearTipSummary();
-    clearTransaction();
   };
 
-  if (!postDetail) return null;
+  if (!post) return null;
 
   return (
     <div>
@@ -85,8 +76,8 @@ export const TipSummaryComponent: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {postDetail.transactions &&
-                  postDetail.transactions.map((transactions, i) => (
+                {post.transactions &&
+                  post.transactions.map((transactions, i) => (
                     <TableRow key={i}>
                       <TableCell component="th" scope="row">
                         {transactions.tokenId}
@@ -101,14 +92,14 @@ export const TipSummaryComponent: React.FC = () => {
           </TableContainer>
 
           <Typography variant="caption" style={{marginTop: 24, marginBottom: 16}} component="div">
-            Tipper list ({transactions.length})
+            Tipper list ({meta.totalItemCount})
           </Typography>
           <List className={styles.list} id="scrollable-transaction">
             <InfiniteScroll
               scrollableTarget="scrollable-transaction"
               dataLength={transactions.length}
               next={nextPage}
-              hasMore={hasMore}
+              hasMore={meta.currentPage < meta.totalPageCount}
               loader={
                 <ListItem>
                   <CircularProgress color="primary" size={24} style={{margin: '0 auto'}} />

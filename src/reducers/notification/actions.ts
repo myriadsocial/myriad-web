@@ -1,4 +1,4 @@
-import {Actions as BaseAction, setLoading, setError} from '../base/actions';
+import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 
@@ -11,7 +11,7 @@ import {ThunkActionCreator} from 'src/types/thunk';
  * Action Types
  */
 
-export interface FetchNotification extends Action {
+export interface FetchNotification extends PaginationAction {
   type: constants.FETCH_NOTIFICATION;
   notifications: Notification[];
 }
@@ -57,6 +57,7 @@ export const fetchNotification: ThunkActionCreator<Actions, RootState> =
       dispatch({
         type: constants.FETCH_NOTIFICATION,
         notifications,
+        meta,
       });
     } catch (error) {
       dispatch(
