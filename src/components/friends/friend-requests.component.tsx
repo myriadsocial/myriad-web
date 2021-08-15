@@ -96,7 +96,6 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest, onShowAll
   const [expanded, toggleExpand] = useToggle(true);
   const [showAll, toggleShowAll] = useToggle(false);
 
-  console.log('requests', requests);
   const approveFriendRequest = (friend: Friend) => {
     toggleRequest(friend, FriendStatus.APPROVED);
   };
@@ -152,7 +151,7 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest, onShowAll
           </ShowIf>
 
           <List className={style.list}>
-            {requests.slice(0, showAll ? totalRequest : 2).map(request => {
+            {requests.slice(0, showAll ? requests.length : 2).map(request => {
               return (
                 <ListItem key={request.id} className={style.item} alignItems="flex-start">
                   <Link href={`/${request.requestor.id}`}>

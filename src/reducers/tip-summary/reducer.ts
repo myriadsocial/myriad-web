@@ -1,21 +1,30 @@
 import {HYDRATE} from 'next-redux-wrapper';
 
-import {State as BaseState} from '../base/state';
+import {PaginationState as BasePaginationState} from '../base/state';
 import {Actions} from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
 import {Post} from 'src/interfaces/post';
+import {Transaction} from 'src/interfaces/transaction';
 
-export interface TipSummaryState extends BaseState {
+export interface TipSummaryState extends BasePaginationState {
   post: Post | null;
   show: boolean;
+  transactions: Transaction[];
 }
 
 const initialState: TipSummaryState = {
   post: null,
-  show: false,
   loading: false,
+  show: false,
+  transactions: [],
+  meta: {
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItemCount: 0,
+    totalPageCount: 0,
+  },
 };
 
 export const TipSummaryReducer: Redux.Reducer<TipSummaryState, Actions> = (
@@ -32,6 +41,15 @@ export const TipSummaryReducer: Redux.Reducer<TipSummaryState, Actions> = (
         ...state,
         post: action.payload,
         show: true,
+      };
+    }
+
+    case constants.FETCH_TRANSACTION_HISTORY: {
+      return {
+        ...state,
+        transactions: action.transactions,
+        meta: action.meta,
+        hasMore: action.meta.currentPage < action.meta.totalPageCount,
       };
     }
 

@@ -4,7 +4,7 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {Tag} from 'src/interfaces/experience';
-import * as TrendingAPI from 'src/lib/api/trending';
+import * as TagAPI from 'src/lib/api/tag';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -34,7 +34,7 @@ export const fetchPopularTopic: ThunkActionCreator<Actions, RootState> = () => a
   dispatch(setLoading(true));
 
   try {
-    const topics = await TrendingAPI.trendingTopic();
+    const {data: topics} = await TagAPI.trendingTopic();
 
     dispatch({
       type: constants.FETCH_POPULAR_TOPIC,

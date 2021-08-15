@@ -1,3 +1,4 @@
+import {BaseModel} from './base.interface';
 import {People} from './people';
 import {User} from './user';
 
@@ -7,11 +8,13 @@ export interface Searchable {
   name: string;
 }
 
-export interface Tag {
+export type TagProps = {
   id: string;
-  hide: boolean;
   count: number;
-}
+  hide?: boolean;
+};
+
+export interface Tag extends TagProps, Omit<BaseModel, 'id'> {}
 
 export interface Topic extends Searchable {
   id: string;
