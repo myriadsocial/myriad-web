@@ -119,21 +119,22 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {timelineState, userState} = getState();
+      const userId = userState.user?.id as string;
       const timelineType = type ?? timelineState.type;
       const timelineFilter = filter ?? timelineState.filter;
       console.log('TIMELINE FILTER', timelineFilter);
       const timelineSort = sort ?? timelineState.sort;
 
       let posts: Post[] = [];
-      let meta: any;
+      let meta: ListMeta = timelineState.meta;
 
       if (userState.user && timelineType === TimelineType.DEFAULT) {
-        ({data: posts, meta} = await PostAPI.getFriendPost(userState.user.id, page, timelineSort));
+        ({data: posts, meta} = await PostAPI.getPost(page, userId, timelineSort));
       }
 
-      // if (userState.anonymous || timelineType === TimelineType.TRENDING) {
-      //   posts = await PostAPI.getPost(page, timelineSort, timelineFilter);
-      // }
+      if (userState.anonymous || timelineType === TimelineType.TRENDING) {
+        ({data: posts, meta} = await PostAPI.getPost(page, userId, timelineSort, timelineFilter));
+      }
 
       for await (const post of posts) {
         if (post.platform !== 'myriad') {
