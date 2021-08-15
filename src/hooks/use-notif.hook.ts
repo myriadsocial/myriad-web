@@ -21,7 +21,7 @@ export const useNotifHook = () => {
         throw new Error('');
       }
 
-      const data: Notification[] = await NotifAPI.getNotification(user.id);
+      const {data} = await NotifAPI.getNotification(user.id);
 
       dispatch({
         type: NotifActionType.LOAD_NOTIF,

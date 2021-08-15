@@ -14,6 +14,7 @@ type WalletAddress = {
 
 export const getPost = async (
   page: number,
+  userId: string,
   sort?: TimelineSortMethod,
   filters?: TimelineFilter,
 ): Promise<PostList> => {
@@ -84,6 +85,11 @@ export const getPost = async (
           },
           {
             relation: 'likes',
+            scope: {
+              where: {
+                userId: {eq: userId},
+              },
+            },
           },
         ],
       },
