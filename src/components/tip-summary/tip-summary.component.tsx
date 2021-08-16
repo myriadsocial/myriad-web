@@ -35,8 +35,16 @@ export const TipSummaryComponent: React.FC = () => {
     state: {userTokens},
   } = useToken();
 
-  const {meta, show, post, transactions, clearTipSummary, loadTransaction, loadNextTransaction} =
-    useTipSummaryHook();
+  const {
+    meta,
+    show,
+    post,
+    summary,
+    transactions,
+    clearTipSummary,
+    loadTransaction,
+    loadNextTransaction,
+  } = useTipSummaryHook();
 
   useEffect(() => {
     if (post?.id) {
@@ -76,17 +84,14 @@ export const TipSummaryComponent: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {post.transactions &&
-                  post.transactions.map((transactions, i) => (
-                    <TableRow key={i}>
-                      <TableCell component="th" scope="row">
-                        {transactions.tokenId}
-                      </TableCell>
-                      <TableCell align="right">
-                        {formatTipBalance(transactions, userTokens)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                {summary.map((transaction, i) => (
+                  <TableRow key={i}>
+                    <TableCell component="th" scope="row">
+                      {transaction.currencyId}
+                    </TableCell>
+                    <TableCell align="right">{formatTipBalance(transaction, userTokens)}</TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
