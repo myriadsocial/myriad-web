@@ -10,7 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles, fade, createStyles, withStyles, Theme} from '@material-ui/core/styles';
 
 import {BalanceDetail} from 'src/interfaces/balance';
-import {CurrencyId} from 'src/interfaces/currency';
 import {UserTransactionDetail} from 'src/interfaces/user';
 
 const useStylesForCurrencyDetails = makeStyles((theme: Theme) =>
