@@ -243,11 +243,7 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
 
   const handleSendTip = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    const validAmount = checkAmount();
-
-    if (validAmount) {
-      dispatchSendTip();
-    }
+    checkAmount();
   };
 
   const handleChangeTokenProperties = (
