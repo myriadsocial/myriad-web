@@ -56,10 +56,7 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
         sort: action.payload.sort ?? state.sort,
         filter: action.payload.filter ?? state.filter,
         hasMore: action.payload.meta.currentPage < action.payload.meta.totalPageCount,
-        meta: {
-          ...state.meta,
-          currentPage: action.payload.meta.currentPage,
-        },
+        meta: action.payload.meta,
       };
     }
 
@@ -95,8 +92,23 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
         posts: state.posts.map(post => {
           if (post.id === action.postId && post.metric) {
             post.metric.likes += 1;
-            post.metric.dislikes = Math.max(0, post.metric.likes - 1);
-            post.likes = [action.like];
+            post.likes = post.likes ? [...post.likes, action.like] : [action.like];
+          }
+
+          return post;
+        }),
+      };
+    }
+
+    case constants.REMOVE_LIKE_POST: {
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post.id === action.postId && post.metric) {
+            post.metric.likes = Math.max(0, post.metric.likes - 1);
+            post.likes = post.likes
+              ? post.likes.filter(like => like.referenceId !== action.postId && like.state)
+              : [];
           }
 
           return post;
@@ -110,8 +122,23 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
         posts: state.posts.map(post => {
           if (post.id === action.postId && post.metric) {
             post.metric.dislikes += 1;
-            post.metric.likes = Math.max(0, post.metric.likes - 1);
-            post.likes = [];
+            post.likes = post.likes ? [...post.likes, action.like] : [action.like];
+          }
+
+          return post;
+        }),
+      };
+    }
+
+    case constants.REMOVE_DISLIKE_POST: {
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post.id === action.postId && post.metric) {
+            post.metric.dislikes = Math.max(0, post.metric.likes - 1);
+            post.likes = post.likes
+              ? post.likes.filter(like => like.referenceId !== action.postId && !like.state)
+              : [];
           }
 
           return post;

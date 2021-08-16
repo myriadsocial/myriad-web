@@ -18,6 +18,12 @@ export type CLEAR_TIMELINE = typeof CLEAR_TIMELINE;
 export const LIKE_POST = 'LIKE_POST';
 export type LIKE_POST = typeof LIKE_POST;
 
+export const REMOVE_LIKE_POST = 'REMOVE_LIKE_POST';
+export type REMOVE_LIKE_POST = typeof REMOVE_LIKE_POST;
+
+export const REMOVE_DISLIKE_POST = 'REMOVE_DISLIKE_POST';
+export type REMOVE_DISLIKE_POST = typeof REMOVE_DISLIKE_POST;
+
 export const DISLIKE_POST = 'DISLIKE_POST';
 export type DISLIKE_POST = typeof DISLIKE_POST;
 
