@@ -4,7 +4,7 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {Post} from 'src/interfaces/post';
-import {Transaction} from 'src/interfaces/transaction';
+import {Transaction, TransactionSummary} from 'src/interfaces/transaction';
 import MyriadAPI from 'src/lib/api/base';
 import {BaseList} from 'src/lib/api/interfaces/base-list.interface';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -25,6 +25,11 @@ export interface LoadTransactionHistory extends PaginationAction {
   transactions: Transaction[];
 }
 
+export interface LoadTransactionSummary extends Action {
+  type: constants.FETCH_TRANSACTION_SUMMARY;
+  summary: TransactionSummary[];
+}
+
 export interface ClearTippedPost extends Action {
   type: constants.CLEAR_TIPPED_POST;
 }
@@ -33,7 +38,12 @@ export interface ClearTippedPost extends Action {
  * Union Action Types
  */
 
-export type Actions = SetTippedPost | LoadTransactionHistory | ClearTippedPost | BaseAction;
+export type Actions =
+  | SetTippedPost
+  | LoadTransactionHistory
+  | LoadTransactionSummary
+  | ClearTippedPost
+  | BaseAction;
 
 /**
  *
@@ -79,6 +89,35 @@ export const fetchTransactionHistory: ThunkActionCreator<Actions, RootState> =
         type: constants.FETCH_TRANSACTION_HISTORY,
         transactions: data.data,
         meta: data.meta,
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const fetchTransactionSummary: ThunkActionCreator<Actions, RootState> =
+  (post: Post) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const {data} = await MyriadAPI.request<TransactionSummary[]>({
+        url: `/post/${post.id}/transaction-summary`,
+        method: 'GET',
+      });
+
+      dispatch({
+        type: constants.FETCH_TRANSACTION_SUMMARY,
+        summary: data,
       });
     } catch (error) {
       dispatch(setError(error.message));

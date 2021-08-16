@@ -6,12 +6,13 @@ import * as constants from './constants';
 
 import * as Redux from 'redux';
 import {Post} from 'src/interfaces/post';
-import {Transaction} from 'src/interfaces/transaction';
+import {Transaction, TransactionSummary} from 'src/interfaces/transaction';
 
 export interface TipSummaryState extends BasePaginationState {
   post: Post | null;
   show: boolean;
   transactions: Transaction[];
+  summary: TransactionSummary[];
 }
 
 const initialState: TipSummaryState = {
@@ -19,6 +20,7 @@ const initialState: TipSummaryState = {
   loading: false,
   show: false,
   transactions: [],
+  summary: [],
   meta: {
     currentPage: 1,
     itemsPerPage: 10,
@@ -50,6 +52,13 @@ export const TipSummaryReducer: Redux.Reducer<TipSummaryState, Actions> = (
         transactions: action.transactions,
         meta: action.meta,
         hasMore: action.meta.currentPage < action.meta.totalPageCount,
+      };
+    }
+
+    case constants.FETCH_TRANSACTION_SUMMARY: {
+      return {
+        ...state,
+        summary: action.summary,
       };
     }
 
