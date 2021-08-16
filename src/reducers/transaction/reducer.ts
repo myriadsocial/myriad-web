@@ -7,11 +7,15 @@ import {Transaction} from 'src/interfaces/transaction';
 
 export interface TransactionState extends BasePaginationState {
   transactions: Transaction[];
+  inboundTxs: Transaction[];
+  outboundTxs: Transaction[];
 }
 
 const initalState: TransactionState = {
   loading: false,
   transactions: [],
+  inboundTxs: [],
+  outboundTxs: [],
   meta: {
     currentPage: 1,
     itemsPerPage: 10,
@@ -25,10 +29,12 @@ export const TransactionReducer: Redux.Reducer<TransactionState, Actions> = (
   action,
 ) => {
   switch (action.type) {
-    case constants.FETCH_TRANSACTION: {
+    case constants.FETCH_TRANSACTIONS: {
       return {
         ...state,
         transactions: action.transactions,
+        inboundTxs: action.inboundTxs,
+        outboundTxs: action.outboundTxs,
       };
     }
 

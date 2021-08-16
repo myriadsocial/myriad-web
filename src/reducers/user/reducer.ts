@@ -17,7 +17,7 @@ export interface UserState extends BaseState {
   };
   socials: SocialMedia[];
   tokens: Token[];
-  transactionDetails: UserTransactionDetail[];
+  transactionDetail: UserTransactionDetail;
   anonymous: boolean;
   alias: string;
   verifying: boolean;
@@ -28,7 +28,10 @@ const initalState: UserState = {
   anonymous: false,
   tokens: [],
   socials: [],
-  transactionDetails: [],
+  transactionDetail: {
+    sent: [],
+    received: [],
+  },
   alias: '',
   verifying: false,
 };
@@ -78,10 +81,10 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       };
     }
 
-    case constants.FETCH_USER_TRANSACTION_DETAILS: {
+    case constants.FETCH_USER_TRANSACTION_DETAIL: {
       return {
         ...state,
-        transactionDetails: action.payload,
+        transactionDetail: action.payload,
       };
     }
 

@@ -9,4 +9,11 @@ export type CurrencyProps = {
   native: boolean;
 };
 
+export enum CurrencyId {
+  AUSD = 'AUSD',
+  ACA = 'ACA',
+  DOT = 'DOT',
+  MYRIA = 'MYRIA',
+}
+
 export interface Currency extends CurrencyProps, BaseModel {}

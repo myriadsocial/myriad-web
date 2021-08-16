@@ -1,5 +1,6 @@
 import {People} from './people';
 import {Post} from './post';
+import {TransactionDetail} from './transaction';
 
 export interface UserSocialMedia {
   id: string;
@@ -33,9 +34,6 @@ export interface ExtendedUserPost extends User {
 }
 
 export interface UserTransactionDetail {
-  id: string;
-  sentToMe: number;
-  sentToThem: number;
-  userId: string;
-  tokenId: string;
+  sent: TransactionDetail[];
+  received: TransactionDetail[];
 }
