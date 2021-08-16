@@ -30,9 +30,9 @@ export interface FetchUserToken extends Action {
   payload: Token[];
 }
 
-export interface FetchUserTransactionDetails extends Action {
-  type: constants.FETCH_USER_TRANSACTION_DETAILS;
-  payload: UserTransactionDetail[];
+export interface FetchUserTransactionDetail extends Action {
+  type: constants.FETCH_USER_TRANSACTION_DETAIL;
+  payload: UserTransactionDetail;
 }
 
 export interface UpdateUser extends Action {
@@ -57,7 +57,7 @@ export type Actions =
   | FetchUserToken
   | SetUserAsAnonymous
   | UpdateUser
-  | FetchUserTransactionDetails
+  | FetchUserTransactionDetail
   | SetVerifyingSocial
   | ResetVerifyingSocial
   | BaseAction;
@@ -235,11 +235,11 @@ export const fetchUserTransactionDetails: ThunkActionCreator<Actions, RootState>
     if (!user) return;
 
     try {
-      const transactionDetails = await UserAPI.getUserTransactionDetails(user.id);
+      const transactionDetail = await UserAPI.getUserTransactionDetail(user.id);
 
       dispatch({
-        type: constants.FETCH_USER_TRANSACTION_DETAILS,
-        payload: transactionDetails,
+        type: constants.FETCH_USER_TRANSACTION_DETAIL,
+        payload: transactionDetail,
       });
     } catch (error) {
       dispatch(

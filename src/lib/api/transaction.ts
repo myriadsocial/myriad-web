@@ -21,6 +21,8 @@ export const getTransactions = async (
   page?: number,
 ): Promise<TransactionList> => {
   const where: Partial<Record<keyof TransactionProps, any>> = {};
+  let whereWithOr = {};
+  const include: Array<string> = [];
 
   if (options.postId) {
     where.postId = {eq: options.postId};
@@ -28,6 +30,11 @@ export const getTransactions = async (
 
   if (options.to) {
     where.to = {eq: options.to};
+  }
+
+  if (options.to === options.from) {
+    whereWithOr = {or: [{to: options.to}, {from: options.from}]};
+    include.push('fromUser', 'toUser');
   }
 
   if (options.currencyId) {
@@ -42,7 +49,8 @@ export const getTransactions = async (
         page,
         limit: PAGINATION_LIMIT,
         order: `createdAt DESC`,
-        where,
+        where: options.to === options.from ? whereWithOr : where,
+        include,
       },
     },
   });
