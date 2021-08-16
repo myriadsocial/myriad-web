@@ -26,7 +26,7 @@ export type RefProps = {
   openSendTipModal: () => void;
   closeSendTipModal: () => void;
 };
-//TODO: remove anything related to ref and switch back to useModal hooks
+
 const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
   const {loading: loadingBalance, balanceDetails} = useSelector<RootState, BalanceState>(
     state => state.balanceState,
@@ -57,10 +57,12 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
     amount: '',
   });
   const [disabled, setDisabled] = useState(true);
+  const [sendTipClicked, setSendTipClicked] = useState(false);
 
   // reset form
   useEffect(() => {
     handleClearValue();
+    setSendTipClicked(false);
   }, []);
 
   // load balance detail only when component need to be shown
@@ -83,6 +85,12 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
       setDisabled(true);
     }
   }, [tokenBalance, values.amount]);
+
+  useEffect(() => {
+    if (sendTipClicked) {
+      dispatchSendTip();
+    }
+  }, [sendTipClicked]);
 
   const handleClearValue = () => {
     setValues({
@@ -147,9 +155,7 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
     });
   };
 
-  const checkAmount = (): boolean => {
-    let valid = false;
-
+  const checkAmount = () => {
     const regexValidDigits = /^\d*(\.\d+)?$/;
 
     if (values.amount === '') {
@@ -168,7 +174,7 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
 
         defineTipAmount(decimals);
 
-        valid = true;
+        setSendTipClicked(true);
 
         // sendTip will open a pop-up from polkadot.js extension,
         // tx signing is done by supplying a password
@@ -177,13 +183,12 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
     } else {
       handleInputError();
     }
-
-    return valid;
   };
 
   const handleCloseModal = () => {
     handleClearValue();
     hide();
+    setSendTipClicked(false);
   };
 
   const sendTipWithPayload = ({
@@ -209,6 +214,7 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
 
     sendTip(sendTipPayload, () => {
       handleCloseModal();
+      setSendTipClicked(false);
 
       const contentPayload = posts.find(({id}) => id === recipientDetail.postId);
 

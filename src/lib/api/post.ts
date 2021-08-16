@@ -232,25 +232,6 @@ export const dislike = async (userId: string, postId: string): Promise<void> => 
   });
 };
 
-export const updateTips = async (
-  tokenId: string,
-  tipsReceived: number,
-  postId: string,
-): Promise<void> => {
-  try {
-    await MyriadAPI.request({
-      url: `/posts/${postId}/update-tips`,
-      method: 'POST',
-      data: {
-        tokenId,
-        tipsReceived,
-      },
-    });
-  } catch (error) {
-    console.log('error from updateTips: ', error);
-  }
-};
-
 export const removePost = async (postId: string): Promise<void> => {
   await MyriadAPI.request({
     url: `/posts/${postId}`,

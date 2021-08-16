@@ -31,6 +31,7 @@ export const usePolkadotApi = () => {
     callback?: () => void,
   ) => {
     setLoading(true);
+    setError(null);
 
     try {
       setSignerLoading(true);
@@ -50,6 +51,10 @@ export const usePolkadotApi = () => {
         },
       );
 
+      console.log({from, to, value, currencyId, wsAddress});
+
+      console.log({txHash});
+
       if (_.isEmpty(txHash)) {
         throw {
           message: 'Cancelled',
@@ -57,13 +62,6 @@ export const usePolkadotApi = () => {
       }
 
       if (txHash) {
-        // Only update the tip sent to a post, but
-        // not to a comment
-        // TODO: try sending tip from comment
-        if (contentType === ContentType.POST) {
-          await updateTips(currencyId, value, postId);
-        }
-
         const correctedValue = value / 10 ** decimals;
         // Record the transaction
         // TODO: adjust to the new DB scheme
@@ -85,6 +83,7 @@ export const usePolkadotApi = () => {
         callback && callback();
       }
     } catch (error) {
+      console.log({error});
       if (error.message === 'Cancelled') {
         showAlert({
           severity: 'warning',
