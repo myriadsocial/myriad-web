@@ -5,8 +5,6 @@ import _ from 'lodash';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {SendTipProps} from 'src/interfaces/send-tips/send-tips';
 import {Token} from 'src/interfaces/token';
-import {ContentType} from 'src/interfaces/wallet';
-import {updateTips} from 'src/lib/api/post';
 import {storeTransaction} from 'src/lib/api/transaction';
 import {signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
@@ -51,10 +49,6 @@ export const usePolkadotApi = () => {
         },
       );
 
-      console.log({from, to, value, currencyId, wsAddress});
-
-      console.log({txHash});
-
       if (_.isEmpty(txHash)) {
         throw {
           message: 'Cancelled',
@@ -83,7 +77,6 @@ export const usePolkadotApi = () => {
         callback && callback();
       }
     } catch (error) {
-      console.log({error});
       if (error.message === 'Cancelled') {
         setError(error.message);
         showAlert({
