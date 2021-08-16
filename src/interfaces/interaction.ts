@@ -6,6 +6,7 @@ export enum ReferenceType {
 }
 
 export type LikeProps = {
+  state: boolean;
   type: ReferenceType;
   referenceId: string;
   userId: string;
