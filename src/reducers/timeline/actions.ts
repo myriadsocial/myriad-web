@@ -39,8 +39,19 @@ export interface LikePost extends Action {
   like: Like;
 }
 
+export interface RemoveLikePost extends Action {
+  type: constants.REMOVE_LIKE_POST;
+  postId: string;
+}
+
 export interface DislikePost extends Action {
   type: constants.DISLIKE_POST;
+  postId: string;
+  like: Like;
+}
+
+export interface RemoveDisikePost extends Action {
+  type: constants.REMOVE_DISLIKE_POST;
   postId: string;
 }
 
@@ -83,7 +94,9 @@ export type Actions =
   | AddPostToTimeline
   | UpdateTimelineFilter
   | LikePost
+  | RemoveLikePost
   | DislikePost
+  | RemoveDisikePost
   | FetchWalletDetails
   | RemovePost
   | ClearTimeline
@@ -273,7 +286,7 @@ export const updatePostPlatformUser: ThunkActionCreator<Actions, RootState> =
 
 export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
   (post: Post) => async (dispatch, getState) => {
-    let liked = false;
+    let liked: Like | undefined;
 
     dispatch(setLoading(true));
 
@@ -287,14 +300,16 @@ export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
       }
 
       if (post.likes) {
-        liked = post.likes.filter(like => like.userId === user.id).length > 0;
+        liked = post.likes.find(like => {
+          return like.userId === user.id && like.state;
+        });
       }
 
       if (liked) {
-        await InteractionAPI.dislike(user.id, post);
+        await InteractionAPI.removeLike(liked.id);
 
         dispatch({
-          type: constants.DISLIKE_POST,
+          type: constants.REMOVE_LIKE_POST,
           postId: post.id,
         });
       } else {
@@ -312,6 +327,50 @@ export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
           message: error.message,
         }),
       );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const toggleDislikePost: ThunkActionCreator<Actions, RootState> =
+  (post: Post) => async (dispatch, getState) => {
+    let disliked: Like | undefined;
+
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      if (post.likes) {
+        disliked = post.likes.find(like => {
+          return like.userId === user.id && !like.state;
+        });
+      }
+
+      if (disliked) {
+        await InteractionAPI.removeLike(disliked.id);
+
+        dispatch({
+          type: constants.REMOVE_DISLIKE_POST,
+          postId: post.id,
+        });
+      } else {
+        const like = await InteractionAPI.dislike(user.id, post);
+
+        dispatch({
+          type: constants.DISLIKE_POST,
+          postId: post.id,
+          like,
+        });
+      }
+    } catch (error) {
+      dispatch(setError(error.message));
     } finally {
       dispatch(setLoading(false));
     }
