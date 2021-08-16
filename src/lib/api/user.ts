@@ -120,9 +120,9 @@ export const search = async (query: string): Promise<UserList> => {
   return data;
 };
 
-export const getUserTransactionDetails = async (id: string): Promise<UserTransactionDetail[]> => {
-  const {data} = await MyriadAPI.request<UserTransactionDetail[]>({
-    url: `/users/${id}/detail-transactions`,
+export const getUserTransactionDetail = async (id: string): Promise<UserTransactionDetail> => {
+  const {data} = await MyriadAPI.request<UserTransactionDetail>({
+    url: `/users/${id}/transaction-histories`,
     method: 'GET',
   });
 

@@ -4,6 +4,7 @@ import {useSearch as baseUseSearch, SearchActionType} from 'src/components/searc
 import * as UserAPI from 'src/lib/api/user';
 
 export const useMyriadUser = () => {
+  //TODO: is this file still used?
   const {state, dispatch} = baseUseSearch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

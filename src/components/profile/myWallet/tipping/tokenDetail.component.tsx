@@ -23,7 +23,7 @@ const TokenDetailComponent = () => {
   const {
     user,
     tokens: userTokens,
-    transactionDetails: userTransactionDetails,
+    transactionDetail: userTransactionDetail,
   } = useSelector<RootState, UserState>(state => state.userState);
 
   const {loading: loadingBalance, balanceDetails} = useSelector<RootState, BalanceState>(
@@ -71,10 +71,7 @@ const TokenDetailComponent = () => {
         </StyledTabsComponent>
         {balanceDetails.map((token, index) => (
           <TabPanel value={value} index={index} key={`simple-tab-${index}`}>
-            <CurrencyDetails
-              userTransactionDetails={userTransactionDetails}
-              balanceDetail={token}
-            />
+            <CurrencyDetails userTransactionDetail={userTransactionDetail} balanceDetail={token} />
           </TabPanel>
         ))}
       </div>

@@ -1,6 +1,6 @@
 import {BaseModel} from './base.interface';
 
-import {Currency} from 'src/interfaces/currency';
+import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 
@@ -25,3 +25,8 @@ export type TransactionSummary = {
   currencyId: string;
   amount: number;
 };
+
+export interface TransactionDetail {
+  currencyId: CurrencyId;
+  amount: number;
+}
