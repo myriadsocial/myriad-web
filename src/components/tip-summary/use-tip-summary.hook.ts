@@ -1,13 +1,14 @@
 import {useSelector, useDispatch} from 'react-redux';
 
 import {Post} from 'src/interfaces/post';
-import {Transaction} from 'src/interfaces/transaction';
+import {Transaction, TransactionSummary} from 'src/interfaces/transaction';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {RootState} from 'src/reducers';
 import {
   setTippedPost,
   clearTippedPost,
   fetchTransactionHistory,
+  fetchTransactionSummary,
 } from 'src/reducers/tip-summary/actions';
 import {TipSummaryState} from 'src/reducers/tip-summary/reducer';
 
@@ -16,6 +17,7 @@ type TipSummaryHookProps = {
   show: boolean;
   post: Post | null;
   transactions: Transaction[];
+  summary: TransactionSummary[];
   loadTransaction: (post: Post, page?: number) => void;
   loadNextTransaction: (post: Post) => void;
   openTipSummary: (post: Post) => void;
@@ -25,12 +27,14 @@ type TipSummaryHookProps = {
 export const useTipSummaryHook = (): TipSummaryHookProps => {
   const dispatch = useDispatch();
 
-  const {loading, post, show, transactions, meta} = useSelector<RootState, TipSummaryState>(
-    state => state.tipSummaryState,
-  );
+  const {loading, post, show, summary, transactions, meta} = useSelector<
+    RootState,
+    TipSummaryState
+  >(state => state.tipSummaryState);
 
   const openTipSummary = (post: Post): void => {
     dispatch(setTippedPost(post));
+    dispatch(fetchTransactionSummary(post));
   };
 
   const loadNextTransaction = async (post: Post): Promise<void> => {
@@ -53,6 +57,7 @@ export const useTipSummaryHook = (): TipSummaryHookProps => {
     meta,
     show,
     post,
+    summary,
     transactions,
     loadTransaction,
     loadNextTransaction,
