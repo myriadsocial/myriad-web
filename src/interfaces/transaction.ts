@@ -20,3 +20,8 @@ export interface Transaction extends TransactionProps, BaseModel {
   //TODO: change later when implementing currency
   currency: Currency;
 }
+
+export type TransactionSummary = {
+  currencyId: string;
+  amount: number;
+};
