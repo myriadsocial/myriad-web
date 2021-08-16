@@ -148,7 +148,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
   }, 500);
 
   const dislikePostHandle = debounce(() => {
-    dislikePost(post.id);
+    dislikePost(post);
   }, 500);
 
   const onHashtagClicked = async (hashtag: string) => {

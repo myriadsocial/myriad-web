@@ -6,7 +6,13 @@ import {useAlertHook} from './use-alert.hook';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import * as LocalAPI from 'src/lib/api/local';
-import {createPost, importPost, toggleLikePost, deletePost} from 'src/reducers/timeline/actions';
+import {
+  createPost,
+  importPost,
+  toggleLikePost,
+  toggleDislikePost,
+  deletePost,
+} from 'src/reducers/timeline/actions';
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -79,10 +85,9 @@ export const usePostHook = (user?: User) => {
     dispatch(toggleLikePost(post));
   };
 
-  const dislikePost = async (postId: string) => {
+  const dislikePost = async (post: Post) => {
     setLoading(true);
-
-    dispatch(toggleLikePost(postId, false));
+    dispatch(toggleDislikePost(post));
   };
 
   const removePost = async (postId: string) => {
