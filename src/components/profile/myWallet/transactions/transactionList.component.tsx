@@ -12,7 +12,6 @@ import Typography from '@material-ui/core/Typography';
 import {createStyles, Theme, makeStyles, withStyles} from '@material-ui/core/styles';
 
 import {format} from 'date-fns';
-import {transformTokenValue} from 'src/helpers/transformTokenValue';
 import {Transaction} from 'src/interfaces/transaction';
 import {User} from 'src/interfaces/user';
 
@@ -155,7 +154,7 @@ const ListItemContent = ({txHistory, userId}: ListItemContentProps) => {
         <ListItemSecondaryAction>
           <div className={style.badge}>
             <Typography className={userId === txHistory.from ? style.red : style.green}>
-              {userId === txHistory.from ? '-' : '+'} {transformTokenValue(txHistory)}
+              {userId === txHistory.from ? '-' : '+'} {txHistory.amount}
             </Typography>
           </div>
         </ListItemSecondaryAction>

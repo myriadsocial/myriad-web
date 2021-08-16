@@ -98,6 +98,12 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
     }
   }, [tokenBalance, values.amount]);
 
+  useEffect(() => {
+    if (sendTipClicked) {
+      dispatchSendTip();
+    }
+  }, [sendTipClicked]);
+
   const handleClearValue = () => {
     setValues({
       amount: '',

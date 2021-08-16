@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles, fade, createStyles, withStyles, Theme} from '@material-ui/core/styles';
 
 import {BalanceDetail} from 'src/interfaces/balance';
+import {CurrencyId} from 'src/interfaces/currency';
 import {UserTransactionDetail} from 'src/interfaces/user';
 
 const useStylesForCurrencyDetails = makeStyles((theme: Theme) =>
@@ -102,48 +103,63 @@ const TableCell = withStyles({
 })(MuiTableCell);
 
 interface Props {
-  userTransactionDetails: UserTransactionDetail[];
+  userTransactionDetail: UserTransactionDetail;
   balanceDetail: BalanceDetail;
 }
 
 interface CurrencyObj {
-  id: string;
-  sentToMe: number;
-  sentToThem: number;
-  userId: string;
-  tokenId: string;
+  currencyId: string;
+  sent: number;
+  received: number;
 }
 
-export const CurrencyDetails = ({userTransactionDetails, balanceDetail}: Props) => {
+export const CurrencyDetails = ({userTransactionDetail, balanceDetail}: Props) => {
   const [currencyDetail, setCurrencyDetail] = useState<CurrencyObj>({
-    id: '',
-    sentToMe: 0,
-    sentToThem: 0,
-    userId: '',
-    tokenId: '',
+    sent: 0,
+    received: 0,
+    currencyId: '',
   });
   const style = useStylesForCurrencyDetails();
 
   useEffect(() => {
-    const temp = getCommonTransactionDetail(userTransactionDetails, balanceDetail);
+    const temp = getCommonTransactionDetail(userTransactionDetail, balanceDetail);
     if (temp) {
-      setCurrencyDetail(temp);
+      setCurrencyDetail({
+        ...currencyDetail,
+        sent: temp.sent,
+        received: temp.received,
+        currencyId: temp.currencyId,
+      });
     }
   }, [balanceDetail]);
 
   const getCommonTransactionDetail = (
-    userTransactionDetails: UserTransactionDetail[],
+    userTransactionDetail: UserTransactionDetail,
     balanceDetail: BalanceDetail,
   ) => {
-    return userTransactionDetails.find(detail => detail.tokenId === balanceDetail.tokenSymbol);
-  };
+    const result = {
+      sent: 0,
+      received: 0,
+      currencyId: balanceDetail.tokenSymbol,
+    };
 
-  const convertMYRIAValue = (valueReceivedOrSent: number) => {
-    if (!balanceDetail.tokenDecimals) return 'DECIMALS N/A';
-    const MYRIA_DECIMALS = balanceDetail.tokenDecimals;
-    const BASE_NUMBER = 10;
-    const convertedValue = valueReceivedOrSent / BASE_NUMBER ** MYRIA_DECIMALS;
-    return convertedValue;
+    const receivedObj = userTransactionDetail.received.find(({currencyId}) => {
+      return currencyId === balanceDetail.tokenSymbol;
+    });
+
+    const sentObj = userTransactionDetail.sent.find(({currencyId}) => {
+      return currencyId === balanceDetail.tokenSymbol;
+    });
+
+    if (receivedObj) {
+      result.received = receivedObj.amount;
+    }
+
+    if (sentObj) {
+      result.sent = sentObj.amount;
+    }
+
+    return result;
   };
 
   if (!currencyDetail) {
@@ -164,28 +180,20 @@ export const CurrencyDetails = ({userTransactionDetails, balanceDetail}: Props) 
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow key={`${currencyDetail.id}-received`}>
+          <TableRow key={`${currencyDetail.currencyId}-received`}>
             <TableCell component="th" scope="row">
               <Typography className={style.balanceText}>Total Received:</Typography>
             </TableCell>
             <TableCell align="right">
-              <Typography className={style.green}>
-                {currencyDetail.tokenId === 'MYRIA'
-                  ? convertMYRIAValue(currencyDetail.sentToMe)
-                  : currencyDetail.sentToMe}
-              </Typography>
+              <Typography className={style.green}>{currencyDetail.received}</Typography>
             </TableCell>
           </TableRow>
-          <TableRow key={`${currencyDetail.id}-sent`}>
+          <TableRow key={`${currencyDetail.currencyId}-sent`}>
             <TableCell component="th" scope="row">
               <Typography className={style.balanceText}>Total Sent:</Typography>
             </TableCell>
             <TableCell align="right">
-              <Typography className={style.red}>
-                {currencyDetail.tokenId === 'MYRIA'
-                  ? convertMYRIAValue(currencyDetail.sentToThem)
-                  : currencyDetail.sentToThem}
-              </Typography>
+              <Typography className={style.red}>{currencyDetail.sent}</Typography>
             </TableCell>
           </TableRow>
         </TableBody>

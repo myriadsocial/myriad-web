@@ -8,6 +8,7 @@ import {ProfileReducer} from './profile/reducer';
 import {TagReducer} from './tag/reducer';
 import {TimelineReducer} from './timeline/reducer';
 import {TipSummaryReducer} from './tip-summary/reducer';
+import {TransactionReducer} from './transaction/reducer';
 import {UserReducer} from './user/reducer';
 import {WalletReducer} from './wallet/reducer';
 
@@ -26,6 +27,7 @@ const reducers = {
   tipSummaryState: TipSummaryReducer,
   balanceState: BalanceReducer,
   walletState: WalletReducer,
+  transactionState: TransactionReducer,
 };
 
 export const combinedReducers = combineReducers(reducers);
