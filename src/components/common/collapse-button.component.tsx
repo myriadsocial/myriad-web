@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
@@ -35,6 +35,10 @@ export const ToggleCollapseButton = ({className, defaultExpanded = false, onClic
   const styles = useStyles();
 
   const [expanded, setExpanded] = React.useState(defaultExpanded);
+
+  useEffect(() => {
+    setExpanded(defaultExpanded);
+  }, [defaultExpanded]);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);

@@ -10,7 +10,7 @@ import {wrapper} from '../src/store';
 
 import Layout from 'src/components/Layout/Layout.container';
 import ProfileTimeline from 'src/components/profile/profile.component';
-import {ExtendedUser} from 'src/interfaces/user';
+import {User} from 'src/interfaces/user';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
@@ -20,7 +20,7 @@ import {setAnonymous, setUser} from 'src/reducers/user/actions';
 
 type ProfilePageProps = {
   session: Session;
-  profile: ExtendedUser | null;
+  profile: User | null;
 };
 
 const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
@@ -61,7 +61,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const anonymous = Boolean(session?.user.anonymous);
-  const userId = session?.user.id as string;
+  const userId = session?.user.address as string;
   const username = session?.user.name as string;
   const profileId = params?.id as string;
 

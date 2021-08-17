@@ -18,15 +18,17 @@ import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {ToggleCollapseButton} from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
-import {useToggle} from 'src/hooks/use-toggle.hook';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {RootState} from 'src/reducers';
 import {FriendRequestState} from 'src/reducers/friend-request/reducer';
 
 type FriendRequestsProps = {
+  expand: boolean;
+  showAll: boolean;
   toggleRequest: (requestor: Friend, status: FriendStatus) => void;
-  onShowAll?: () => void;
-  onMinimize?: () => void;
+  onShowAll: () => void;
+  onExpand: () => void;
+  showMore: () => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -52,6 +54,8 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 0,
       marginLeft: theme.spacing(-2),
       marginRight: theme.spacing(-2),
+      overflow: 'auto',
+      maxHeight: 420,
     },
     item: {
       marginBottom: theme.spacing(0.5),
@@ -86,15 +90,22 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest, onShowAll, onMinimize}) => {
+const FriendRequests: React.FC<FriendRequestsProps> = ({
+  expand,
+  showAll,
+  toggleRequest,
+  onShowAll,
+  onExpand,
+  showMore,
+}) => {
   const style = useStyles();
 
   const {
     requests,
+    hasMore,
     meta: {totalItemCount: totalRequest},
   } = useSelector<RootState, FriendRequestState>(state => state.friendRequestState);
-  const [expanded, toggleExpand] = useToggle(true);
-  const [showAll, toggleShowAll] = useToggle(false);
+  const limit = 2;
 
   const approveFriendRequest = (friend: Friend) => {
     toggleRequest(friend, FriendStatus.APPROVED);
@@ -105,17 +116,17 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest, onShowAll
   };
 
   const handleToggleExpand = () => {
-    if (showAll && onMinimize) {
-      onMinimize();
-      toggleShowAll();
-    }
-
-    toggleExpand();
+    onExpand();
   };
 
-  const handleShowAll = () => {
-    toggleShowAll();
-    onShowAll && onShowAll();
+  const handleShowMore = () => {
+    if (!showAll) {
+      onShowAll();
+    }
+
+    if (showAll && hasMore) {
+      showMore();
+    }
   };
 
   return (
@@ -131,10 +142,10 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest, onShowAll
           Friend Requests ({totalRequest})
         </Typography>
 
-        <ToggleCollapseButton defaultExpanded={expanded} onClick={handleToggleExpand} />
+        <ToggleCollapseButton defaultExpanded={expand} onClick={handleToggleExpand} />
       </div>
       <div className={style.content}>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <Collapse in={expand} timeout="auto" unmountOnExit>
           <ShowIf condition={requests.length === 0}>
             <Typography
               variant="h4"
@@ -151,7 +162,7 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest, onShowAll
           </ShowIf>
 
           <List className={style.list}>
-            {requests.slice(0, showAll ? requests.length : 2).map(request => {
+            {requests.slice(0, showAll ? requests.length : limit).map(request => {
               return (
                 <ListItem key={request.id} className={style.item} alignItems="flex-start">
                   <Link href={`/${request.requestor.id}`}>
@@ -196,15 +207,15 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({toggleRequest, onShowAll
             })}
           </List>
 
-          <ShowIf condition={totalRequest > requests.length}>
+          {(!showAll || hasMore) && (
             <LinkComponent
               className={style.more}
               component="button"
               color="textPrimary"
-              onClick={handleShowAll}>
-              (show {showAll ? 'less' : 'all'} request)
+              onClick={handleShowMore}>
+              (show more)
             </LinkComponent>
-          </ShowIf>
+          )}
         </Collapse>
       </div>
     </Box>

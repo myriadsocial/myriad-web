@@ -1,14 +1,7 @@
-import getConfig from 'next/config';
+import MyriadAPI from './base';
 
-import Axios from 'axios';
 import {Token} from 'src/interfaces/token';
 import {User} from 'src/interfaces/user';
-
-const {publicRuntimeConfig} = getConfig();
-
-const MyriadAPI = Axios.create({
-  baseURL: publicRuntimeConfig.apiURL,
-});
 
 type NewAssetProps = {
   userId: string;

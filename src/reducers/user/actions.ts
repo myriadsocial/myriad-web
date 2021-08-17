@@ -5,8 +5,10 @@ import * as constants from './constants';
 import axios, {AxiosError} from 'axios';
 import {Action} from 'redux';
 import {SocialsEnum} from 'src/interfaces/index';
+import {SocialMedia} from 'src/interfaces/social';
 import {Token} from 'src/interfaces/token';
-import {ExtendedUser, User, UserTransactionDetail} from 'src/interfaces/user';
+import {User, UserTransactionDetail} from 'src/interfaces/user';
+import * as SocialAPI from 'src/lib/api/social';
 import * as TokenAPI from 'src/lib/api/token';
 import * as UserAPI from 'src/lib/api/user';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -22,12 +24,17 @@ export interface SetUserAsAnonymous extends Action {
 
 export interface FetchUser extends Action {
   type: constants.FETCH_USER;
-  user: ExtendedUser;
+  user: User;
 }
 
 export interface FetchUserToken extends Action {
   type: constants.FETCH_USER_TOKEN;
   payload: Token[];
+}
+
+export interface FetchConnectedSocials extends Action {
+  type: constants.FETCH_USER_SOCIALS;
+  payload: SocialMedia[];
 }
 
 export interface FetchUserTransactionDetail extends Action {
@@ -37,7 +44,7 @@ export interface FetchUserTransactionDetail extends Action {
 
 export interface UpdateUser extends Action {
   type: constants.UPDATE_USER;
-  user: ExtendedUser;
+  user: User;
 }
 
 export interface SetVerifyingSocial extends Action {
@@ -55,6 +62,7 @@ export interface ResetVerifyingSocial extends Action {
 export type Actions =
   | FetchUser
   | FetchUserToken
+  | FetchConnectedSocials
   | SetUserAsAnonymous
   | UpdateUser
   | FetchUserTransactionDetail
@@ -66,7 +74,7 @@ export type Actions =
  *
  * Actions
  */
-export const setUser = (user: ExtendedUser): FetchUser => ({
+export const setUser = (user: User): FetchUser => ({
   type: constants.FETCH_USER,
   user,
 });
@@ -92,7 +100,7 @@ export const fetchUser: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const user: ExtendedUser = await UserAPI.getUserDetail(userId);
+      const user: User = await UserAPI.getUserDetail(userId);
 
       dispatch(setUser(user));
     } catch (error) {
@@ -136,6 +144,30 @@ export const fetchToken: ThunkActionCreator<Actions, RootState> =
     }
   };
 
+export const fetchConnectedSocials: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    const {
+      userState: {user},
+    } = getState();
+
+    if (!user) return;
+
+    try {
+      const {data} = await SocialAPI.getUserSocials(user.id);
+
+      dispatch({
+        type: constants.FETCH_USER_SOCIALS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
 export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> =
   (platform: SocialsEnum, socialName: string, callback?: () => void) =>
   async (dispatch, getState) => {
@@ -148,9 +180,9 @@ export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> 
     dispatch(setVerifyingSocial());
 
     try {
-      await UserAPI.verifySocialAccount(socialName, platform, user.id);
+      await SocialAPI.verifySocialAccount(socialName, platform, user.id);
 
-      dispatch(fetchUser(user.id));
+      dispatch(fetchConnectedSocials());
 
       callback && callback();
     } catch (error) {
@@ -168,6 +200,7 @@ export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> 
     }
   };
 
+// TODO: handle this on social API
 export const handleVerifyError: ThunkActionCreator<Actions, RootState> =
   (error: AxiosError) => async dispatch => {
     if (error.response) {
@@ -301,9 +334,9 @@ export const deleteSocial: ThunkActionCreator<Actions, RootState> =
     if (!user) return;
 
     try {
-      await UserAPI.disconnectSocial(credentialId);
+      await SocialAPI.disconnectSocial(credentialId);
 
-      dispatch(fetchUser(user.id));
+      dispatch(fetchConnectedSocials());
     } catch (error) {
       dispatch(
         setError({

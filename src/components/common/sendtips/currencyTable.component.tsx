@@ -14,12 +14,12 @@ import Typography from '@material-ui/core/Typography';
 import {TableCell, useStyles} from './send-tips.style';
 
 import {BalanceDetail} from 'src/interfaces/balance';
-import {Token} from 'src/interfaces/token';
+import {Currency} from 'src/interfaces/currency';
 
 interface Props {
   balanceDetails: BalanceDetail[];
   isLoading: boolean;
-  availableTokens: Token[];
+  availableTokens: Currency[];
   onChange: (wsAddress: string, tokenDecimals: number, tokenId: string) => void;
 }
 
@@ -38,7 +38,7 @@ export const CurrencyTableComponent = ({
 
     availableTokens.forEach(token => {
       if (token.id === clickedToken) {
-        onChange(token.rpc_address, token.token_decimal, token.id);
+        onChange(token.rpcURL, token.decimal, token.id);
       }
     });
   };
