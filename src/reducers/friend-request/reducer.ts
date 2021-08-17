@@ -30,9 +30,10 @@ export const FriendRequestReducer: Redux.Reducer<FriendRequestState, Actions> = 
     case constants.FETCH_FRIEND_REQUEST: {
       return {
         ...state,
-        requests: action.requests,
-        // TODO: get total from API pagination response
-        totalRequest: action.requests.length,
+        requests:
+          action.meta.currentPage === 1 ? action.requests : [...state.requests, ...action.requests],
+        meta: action.meta,
+        hasMore: action.meta.currentPage < action.meta.totalPageCount,
       };
     }
 

@@ -12,12 +12,11 @@ import Timeline from 'src/components/timeline/timeline.component';
 import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
 import {Wallet} from 'src/components/wallet/wallet.component';
-//import {generateImageSizes} from 'src/helpers/cloudinary';
 import {useResize} from 'src/hooks/use-resize.hook';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
-import {setAnonymous, setUser, fetchToken} from 'src/reducers/user/actions';
+import {setAnonymous, setUser, fetchToken, fetchConnectedSocials} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
 
@@ -53,7 +52,7 @@ const Home: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const {anonymous, tokens} = useSelector<RootState, UserState>(state => state.userState);
+  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const sourceRef = useRef<HTMLDivElement | null>(null);
 
   const height = useResize(sourceRef);
@@ -61,6 +60,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     // load current authenticated user tokens
     dispatch(fetchToken());
+    dispatch(fetchConnectedSocials());
   }, [dispatch]);
 
   return (
@@ -85,7 +85,7 @@ const Home: React.FC = () => {
         </Grid>
       </Grid>
       <Grid item className={style.content} style={{height}}>
-        <Timeline isAnonymous={anonymous} availableTokens={tokens} />
+        <Timeline isAnonymous={anonymous} />
       </Grid>
     </Layout>
   );
@@ -112,7 +112,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const anonymous = Boolean(session?.user.anonymous);
-  const userId = session?.user.id as string;
+  const userId = session?.user.address as string;
   const username = session?.user.name as string;
 
   //TODO: this process should call thunk action creator instead of dispatch thunk acion

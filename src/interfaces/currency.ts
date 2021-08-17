@@ -16,4 +16,6 @@ export enum CurrencyId {
   MYRIA = 'MYRIA',
 }
 
-export interface Currency extends CurrencyProps, BaseModel {}
+export interface Currency extends CurrencyProps, Omit<BaseModel, 'id'> {
+  id: CurrencyId;
+}

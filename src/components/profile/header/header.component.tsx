@@ -2,8 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {useSelector} from 'react-redux';
 
-import {signOut} from 'next-auth/client';
-
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -27,16 +25,16 @@ import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {SocialListComponent} from 'src/components/user/social-list.component';
 import {acronym} from 'src/helpers/string';
+import {useAuthHook} from 'src/hooks/auth.hook';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {FriendStatus} from 'src/interfaces/friend';
-import {ExtendedUser} from 'src/interfaces/user';
-import {firebaseCloudMessaging} from 'src/lib/firebase';
+import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 type ProfileHeaderProps = {
   isAnonymous: boolean;
-  profile: ExtendedUser;
+  profile: User;
   loading: boolean;
   isGuest: boolean;
 };
@@ -47,6 +45,7 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
   const {friendStatus, makeFriend, checkFriendStatus, cancelFriendRequest, toggleRequest} =
     useFriendHook();
   const {showAlert} = useAlertHook();
+  const {logout} = useAuthHook();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -56,6 +55,7 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
     checkFriendStatus(profile.id);
   }, [profile.id]);
 
+  console.log('friendStatus', friendStatus);
   const profileInfo =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae nibh eu tellus tincidunt luctus hendrerit in orci. Phasellus vitae tristique nulla. Nam magna massa, sollicitudin sed turpis eros.';
 
@@ -93,15 +93,6 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
       message: 'PublicKey copied!',
       severity: 'success',
       title: 'Success',
-    });
-  };
-
-  // Handle LOGOUT
-  const handleSignOut = async () => {
-    await firebaseCloudMessaging.removeToken();
-    await signOut({
-      callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
-      redirect: true,
     });
   };
 
@@ -227,7 +218,7 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
                 variant="outlined"
                 color="primary"
                 style={{marginRight: 8}}
-                onClick={handleSignOut}>
+                onClick={logout}>
                 Logout
               </Button>
             </div>

@@ -23,12 +23,13 @@ export const getSentRequests = async (userId: string): Promise<FriendList> => {
   return data;
 };
 
-export const getFriendRequests = async (userId: string): Promise<FriendRequestList> => {
+export const getFriendRequests = async (userId: string, page = 1): Promise<FriendRequestList> => {
   const {data} = await MyriadAPI.request<FriendRequestList>({
     url: `/friends`,
     method: 'GET',
     params: {
       filter: {
+        page,
         where: {
           and: [{requesteeId: userId}, {status: FriendStatus.PENDING}],
         },
@@ -111,7 +112,10 @@ export const searchFriend = async (userId: string, query: string): Promise<Frien
   return data;
 };
 
-export const checkFriendStatus = async (userIds: string[]): Promise<FriendList> => {
+export const checkFriendStatus = async (
+  userId: string,
+  friendIds: string[],
+): Promise<FriendList> => {
   const {data} = await MyriadAPI.request<FriendList>({
     url: `/friends`,
     method: 'GET',
@@ -121,13 +125,17 @@ export const checkFriendStatus = async (userIds: string[]): Promise<FriendList> 
           or: [
             {
               requesteeId: {
-                inq: userIds,
+                inq: friendIds,
+              },
+              requestorId: {
+                eq: userId,
               },
             },
             {
               requestorId: {
-                inq: userIds,
+                inq: friendIds,
               },
+              requesteeId: userId,
             },
           ],
         },

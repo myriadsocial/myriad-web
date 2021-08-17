@@ -22,7 +22,7 @@ const TokenDetailComponent = () => {
 
   const {
     user,
-    tokens: userTokens,
+    currencies: userTokens,
     transactionDetail: userTransactionDetail,
   } = useSelector<RootState, UserState>(state => state.userState);
 

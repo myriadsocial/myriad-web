@@ -59,24 +59,15 @@ export const usePostHook = (user?: User) => {
   const importPostUrl = async (url: string) => {
     setLoading(true);
 
-    try {
-      await dispatch(importPost(url));
-
-      showAlert({
-        title: 'Success!',
-        message: 'Post successfully imported',
-        severity: 'success',
-      });
-    } catch (error) {
-      setError(error);
-      showAlert({
-        title: 'Error!',
-        message: 'Post already imported',
-        severity: 'error',
-      });
-    } finally {
-      setLoading(false);
-    }
+    await dispatch(
+      importPost(url, () => {
+        showAlert({
+          title: 'Success!',
+          message: 'Post successfully imported',
+          severity: 'success',
+        });
+      }),
+    );
   };
 
   const likePost = async (post: Post) => {

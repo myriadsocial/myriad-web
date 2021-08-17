@@ -6,13 +6,13 @@ import * as constants from './constants';
 
 import * as Redux from 'redux';
 import {Post} from 'src/interfaces/post';
-import {Transaction, TransactionSummary} from 'src/interfaces/transaction';
+import {Transaction, TransactionDetail} from 'src/interfaces/transaction';
 
 export interface TipSummaryState extends BasePaginationState {
   post: Post | null;
   show: boolean;
   transactions: Transaction[];
-  summary: TransactionSummary[];
+  summary: TransactionDetail[];
 }
 
 const initialState: TipSummaryState = {

@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import {useSelector} from 'react-redux';
 
 import DividerComponent from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
@@ -11,9 +10,6 @@ import {useStyles} from './friend.style';
 
 import {debounce} from 'lodash';
 import SearchComponent from 'src/components/common/search.component';
-import {useToggle} from 'src/hooks/use-toggle.hook';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
 
 interface FriendComponentProps {
   title?: string;
@@ -22,12 +18,20 @@ interface FriendComponentProps {
 const FriendComponent: React.FC<FriendComponentProps> = ({title}) => {
   const style = useStyles();
 
-  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const [expandFriends, toggleExpandFriends] = useToggle(true);
+  const [expandFriends, setExpandFriends] = useState(true);
+  const [expandRequest, setExpandRequest] = useState(true);
+  const [showAllRequest, setShowAllRequest] = useState(false);
+
   const [search, setSearchQuery] = useState('');
 
-  const {searchFriend, loadFriends, loadMoreFriends, loadRequests, toggleRequest} =
-    useFriendsHook();
+  const {
+    searchFriend,
+    loadFriends,
+    loadMoreFriends,
+    loadRequests,
+    loadMoreRequests,
+    toggleRequest,
+  } = useFriendsHook();
 
   useEffect(() => {
     loadFriends();
@@ -44,15 +48,27 @@ const FriendComponent: React.FC<FriendComponentProps> = ({title}) => {
     }
   }, 300);
 
-  const showAllFriendRequest = () => {
-    toggleExpandFriends();
+  const onExpandFriendRequest = () => {
+    setExpandRequest(!expandRequest);
+    setShowAllRequest(false);
   };
 
-  const handleMinimizeFriendRequest = () => {
-    toggleExpandFriends();
+  const onShowAllFriendRequest = () => {
+    setShowAllRequest(true);
+    setExpandRequest(true);
+    setExpandFriends(false);
   };
 
-  if (!user && !anonymous) return null;
+  const onFriendlistExpanded = (closeOthers: boolean) => {
+    setExpandFriends(!expandFriends);
+
+    if (closeOthers) {
+      setExpandRequest(false);
+      setShowAllRequest(false);
+    } else {
+      setShowAllRequest(false);
+    }
+  };
 
   return (
     <div className={style.root}>
@@ -71,12 +87,19 @@ const FriendComponent: React.FC<FriendComponentProps> = ({title}) => {
       </div>
 
       <FriendRequestComponent
+        expand={expandRequest}
+        showAll={showAllRequest}
         toggleRequest={toggleRequest}
-        onShowAll={showAllFriendRequest}
-        onMinimize={handleMinimizeFriendRequest}
+        onExpand={onExpandFriendRequest}
+        onShowAll={onShowAllFriendRequest}
+        showMore={loadMoreRequests}
       />
       <DividerComponent />
-      <FriendListComponent showMore={loadMoreFriends} expand={expandFriends} />
+      <FriendListComponent
+        showMore={loadMoreFriends}
+        expand={expandFriends}
+        onExpand={onFriendlistExpanded}
+      />
     </div>
   );
 };

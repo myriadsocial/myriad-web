@@ -10,6 +10,7 @@ import {
   createFriendRequest,
   toggleFriendRequest,
 } from 'src/reducers/friend-request/actions';
+import {FriendRequestState} from 'src/reducers/friend-request/reducer';
 import {fetchFriend, searchFriend} from 'src/reducers/friend/actions';
 import {FriendState} from 'src/reducers/friend/reducer';
 import {UserState} from 'src/reducers/user/reducer';
@@ -22,12 +23,19 @@ export const useFriendsHook = () => {
   const {
     meta: {currentPage: currentFriendPage},
   } = useSelector<RootState, FriendState>(state => state.friendState);
+  const {
+    meta: {currentPage: currentFriendRequestPage},
+  } = useSelector<RootState, FriendRequestState>(state => state.friendRequestState);
   const [friended, setFriended] = useState<Friend[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const loadRequests = () => {
     dispatch(fetchFriendRequest());
+  };
+
+  const loadMoreRequests = () => {
+    dispatch(fetchFriendRequest(currentFriendRequestPage + 1));
   };
 
   const loadFriends = () => {
@@ -53,7 +61,10 @@ export const useFriendsHook = () => {
     setLoading(true);
 
     try {
-      const {data: requests} = await FriendAPI.checkFriendStatus(people.map(user => user.id));
+      const {data: requests} = await FriendAPI.checkFriendStatus(
+        user.id,
+        people.map(user => user.id),
+      );
 
       setFriended(requests);
     } catch (error) {
@@ -75,6 +86,7 @@ export const useFriendsHook = () => {
     loadMoreFriends,
     searchFriend: searchFriends,
     loadRequests,
+    loadMoreRequests,
     sendRequest,
     toggleRequest,
     checkFriendStatus,
