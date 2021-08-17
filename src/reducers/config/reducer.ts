@@ -3,10 +3,10 @@ import {Actions} from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {Token} from 'src/interfaces/token';
+import {Currency} from 'src/interfaces/currency';
 
 export interface ConfigState extends BaseState {
-  tokens: Token[];
+  availableCurrencies: Currency[];
   layout: {
     mobile: boolean;
     focus: boolean;
@@ -15,7 +15,7 @@ export interface ConfigState extends BaseState {
 
 const initalState: ConfigState = {
   loading: false,
-  tokens: [],
+  availableCurrencies: [],
   layout: {
     mobile: false,
     focus: false,
@@ -27,7 +27,7 @@ export const ConfigReducer: Redux.Reducer<ConfigState, Actions> = (state = inita
     case constants.FETCH_AVAILABLE_TOKEN: {
       return {
         ...state,
-        tokens: action.payload,
+        availableCurrencies: action.payload,
       };
     }
 

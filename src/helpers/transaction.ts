@@ -1,4 +1,4 @@
-import {Token} from 'src/interfaces/token';
+import {Currency} from 'src/interfaces/currency';
 import {TransactionDetail} from 'src/interfaces/transaction';
 import {Transaction} from 'src/interfaces/transaction';
 
@@ -12,20 +12,20 @@ const formatBalance = (value: number, decimals: number): number => {
   return result;
 };
 
-export const formatTipBalance = (tip: TransactionDetail, tokens: Token[]): number => {
+export const formatTipBalance = (tip: TransactionDetail, tokens: Currency[]): number => {
   const token = tokens.find(item => item.id === tip.currencyId);
 
   if (!token) return tip.amount;
 
-  return formatBalance(tip.amount, token.token_decimal);
+  return formatBalance(tip.amount, token.decimal);
 };
 
-export const formatTransactionBalance = (transaction: Transaction, tokens: Token[]): number => {
+export const formatTransactionBalance = (transaction: Transaction, tokens: Currency[]): number => {
   const token = tokens.find(item => item.id === transaction.currencyId);
 
   if (!token) return transaction.amount;
 
-  return formatBalance(transaction.amount, token.token_decimal);
+  return formatBalance(transaction.amount, token.decimal);
 };
 
 export const getTipperUserName = (transaction: Transaction): string => {

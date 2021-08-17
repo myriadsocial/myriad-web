@@ -3,7 +3,7 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
-import {Token} from 'src/interfaces/token';
+import {Currency} from 'src/interfaces/currency';
 import * as TokenAPI from 'src/lib/api/token';
 import {ThunkActionCreator} from 'src/types/thunk';
 
@@ -13,7 +13,7 @@ import {ThunkActionCreator} from 'src/types/thunk';
 
 export interface FetchAvailableToken extends Action {
   type: constants.FETCH_AVAILABLE_TOKEN;
-  payload: Token[];
+  payload: Currency[];
 }
 
 /**
@@ -30,15 +30,15 @@ export type Actions = FetchAvailableToken | BaseAction;
 /**
  * Action Creator
  */
-export const fetchToken: ThunkActionCreator<Actions, RootState> = () => async dispatch => {
+export const fetchAvailableToken: ThunkActionCreator<Actions, RootState> = () => async dispatch => {
   dispatch(setLoading(true));
 
   try {
-    const tokens = await TokenAPI.getTokens();
+    const {data: currencies} = await TokenAPI.getTokens();
 
     dispatch({
       type: constants.FETCH_AVAILABLE_TOKEN,
-      payload: tokens,
+      payload: currencies,
     });
   } catch (error) {
     dispatch(setError(error.message));

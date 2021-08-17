@@ -14,9 +14,10 @@ import {User} from 'src/interfaces/user';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
+import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {setProfile} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
-import {setAnonymous, setUser, fetchToken} from 'src/reducers/user/actions';
+import {setAnonymous, setUser, fetchConnectedSocials} from 'src/reducers/user/actions';
 
 type ProfilePageProps = {
   session: Session;
@@ -29,8 +30,8 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
   const {detail: profileDetail} = useSelector<RootState, ProfileState>(state => state.profileState);
 
   useEffect(() => {
-    // load current authenticated user tokens
-    dispatch(fetchToken());
+    dispatch(fetchConnectedSocials());
+    dispatch(fetchAvailableToken());
   }, [dispatch]);
 
   return (
