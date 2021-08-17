@@ -23,7 +23,6 @@ import {useModal} from 'src/hooks/use-modal.hook';
 import {useTimelineHook} from 'src/hooks/use-timeline.hook';
 import {Post} from 'src/interfaces/post';
 import {TimelineFilter} from 'src/interfaces/timeline';
-import {Token} from 'src/interfaces/token';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -41,7 +40,6 @@ const PostComponent = dynamic(() => import('src/components/post/post.component')
 
 type TimelineComponentProps = {
   isAnonymous: boolean;
-  availableTokens: Token[];
   filter?: TimelineFilter;
 };
 
@@ -51,7 +49,7 @@ const TimelineComponent: React.FC<TimelineComponentProps> = () => {
   const {query} = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const {user, tokens: availableTokens} = useSelector<RootState, UserState>(
+  const {user, currencies: availableTokens} = useSelector<RootState, UserState>(
     state => state.userState,
   );
   const {posts, hasMore, sort, nextPage, sortTimeline} = useTimelineHook();

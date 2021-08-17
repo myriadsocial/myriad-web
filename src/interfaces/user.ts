@@ -1,5 +1,5 @@
-import {People} from './people';
-import {Post} from './post';
+import {BaseModel} from './base.interface';
+import {Currency} from './currency';
 import {TransactionDetail} from './transaction';
 
 export interface UserSocialMedia {
@@ -10,27 +10,21 @@ export interface UserSocialMedia {
   userId: string;
 }
 
-export interface ExtendedUserSocialMedia extends UserSocialMedia {
-  people: People;
-}
-
-export interface User {
-  id: string;
-  bio?: string;
+export type BaseUser = {
   name: string;
   profilePictureURL?: string;
+};
+
+export type UserProps = BaseUser & {
+  bio?: string;
   bannerImageUrl?: string;
   fcmTokens?: string[];
   skipTour?: boolean;
-  createdAt?: Date;
-}
+  onTimeline?: string;
+};
 
-export interface ExtendedUser extends User {
-  userSocialMedias?: ExtendedUserSocialMedia[];
-}
-
-export interface ExtendedUserPost extends User {
-  posts: Post[];
+export interface User extends UserProps, BaseModel {
+  currencies: Currency[];
 }
 
 export interface UserTransactionDetail {

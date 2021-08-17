@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux';
 
 import Link from 'next/link';
@@ -17,19 +17,18 @@ import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 import {ListHeaderComponent} from './list-header.component';
+import {useFriendList} from './use-friend-list.hook';
 
 import clsx from 'clsx';
 import {ToggleCollapseButton} from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
-import {useToggle} from 'src/hooks/use-toggle.hook';
 import {RootState} from 'src/reducers';
 import {FriendState} from 'src/reducers/friend/reducer';
-import {UserState} from 'src/reducers/user/reducer';
 
 type FriendsListProps = {
   showOnlineStatus?: boolean;
   expand?: boolean;
-  onExpand?: () => void;
+  onExpand: (closeOthers: boolean) => void;
   showMore: () => void;
 };
 
@@ -92,39 +91,28 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({
 }) => {
   const style = useStyles();
 
-  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const [expanded, toggleExpand] = useToggle(true);
   const {
-    friends,
     hasMore,
     meta: {totalItemCount: totalFriend},
   } = useSelector<RootState, FriendState>(state => state.friendState);
-
-  useEffect(() => {
-    if (!expand || (!expanded && expand)) {
-      toggleExpand();
-    }
-  }, [expand]);
+  const friendList = useFriendList();
 
   const handleExpand = () => {
-    toggleExpand();
-    onExpand && onExpand();
+    onExpand(hasMore);
   };
-
-  if (!user && !anonymous) return null;
 
   return (
     <Box
       className={clsx(style.root, {
-        [`${style.expanded} ${style.root}`]: expanded,
+        [`${style.expanded} ${style.root}`]: expand,
       })}>
       <ListHeaderComponent title={`Friends (${totalFriend})`}>
-        <ToggleCollapseButton defaultExpanded={expanded} onClick={handleExpand} />
+        <ToggleCollapseButton defaultExpanded={expand} onClick={handleExpand} />
       </ListHeaderComponent>
 
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse in={expand} timeout="auto" unmountOnExit>
         <div className={style.content}>
-          <ShowIf condition={friends.length === 0}>
+          <ShowIf condition={friendList.length === 0}>
             <Typography
               variant="h4"
               color="textPrimary"
@@ -141,67 +129,31 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({
           </ShowIf>
 
           <List className={style.list}>
-            {friends.map(request => {
+            {friendList.map(friend => {
               return (
-                <>
-                  {user && user.id !== request.requestorId && (
-                    <ListItem key={request.id} className={style.item} alignItems="flex-start">
-                      <Link href={`/${request.requestor.id}`}>
-                        <a href={`/${request.requestor.id}`}>
-                          <ListItemAvatar>
-                            <Avatar
-                              alt={request.requestor.name}
-                              src={request.requestor.profilePictureURL}
-                            />
-                          </ListItemAvatar>
-                        </a>
-                      </Link>
-                      <ListItemText>
-                        <Link href={`/${request.requestor.id}`}>
-                          <a href={`/${request.requestor.id}`}>
-                            <Typography component="span" variant="h4" color="textPrimary">
-                              {request.requestor.name}
-                            </Typography>
-                          </a>
-                        </Link>
-                      </ListItemText>
-                      {showOnlineStatus && (
-                        <ListItemSecondaryAction>
-                          <FiberManualRecordIcon className={style.online} />
-                        </ListItemSecondaryAction>
-                      )}
-                    </ListItem>
+                <ListItem key={friend.id} className={style.item} alignItems="flex-start">
+                  <Link href={`/${friend.id}`}>
+                    <a href={`/${friend.id}`}>
+                      <ListItemAvatar>
+                        <Avatar alt={friend.name} src={friend.avatar} />
+                      </ListItemAvatar>
+                    </a>
+                  </Link>
+                  <ListItemText>
+                    <Link href={`/${friend.id}`}>
+                      <a href={`/${friend.id}`}>
+                        <Typography component="span" variant="h4" color="textPrimary">
+                          {friend.name}
+                        </Typography>
+                      </a>
+                    </Link>
+                  </ListItemText>
+                  {showOnlineStatus && (
+                    <ListItemSecondaryAction>
+                      <FiberManualRecordIcon className={style.online} />
+                    </ListItemSecondaryAction>
                   )}
-
-                  {user && user.id !== request.requesteeId && (
-                    <ListItem key={request.id} className={style.item} alignItems="flex-start">
-                      <Link href={`/${request.requestee.id}`}>
-                        <a href={`/${request.requestee.id}`}>
-                          <ListItemAvatar>
-                            <Avatar
-                              alt={request.requestee.name}
-                              src={request.requestee.profilePictureURL}
-                            />
-                          </ListItemAvatar>
-                        </a>
-                      </Link>
-                      <ListItemText>
-                        <Link href={`/${request.requestee.id}`}>
-                          <a href={`/${request.requestee.id}`}>
-                            <Typography component="span" variant="h4" color="textPrimary">
-                              {request.requestee.name}
-                            </Typography>
-                          </a>
-                        </Link>
-                      </ListItemText>
-                      {showOnlineStatus && (
-                        <ListItemSecondaryAction>
-                          <FiberManualRecordIcon className={style.online} />
-                        </ListItemSecondaryAction>
-                      )}
-                    </ListItem>
-                  )}
-                </>
+                </ListItem>
               );
             })}
           </List>

@@ -1,10 +1,7 @@
-import Axios from 'axios';
+import MyriadAPI from './base';
+
 import {Token} from 'src/interfaces/token';
 import {User} from 'src/interfaces/user';
-
-const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-});
 
 type NewAssetProps = {
   userId: string;

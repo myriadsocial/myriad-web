@@ -1,7 +1,7 @@
 import {useSelector, useDispatch} from 'react-redux';
 
 import {Post} from 'src/interfaces/post';
-import {Transaction, TransactionSummary} from 'src/interfaces/transaction';
+import {Transaction, TransactionDetail} from 'src/interfaces/transaction';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {RootState} from 'src/reducers';
 import {
@@ -17,7 +17,7 @@ type TipSummaryHookProps = {
   show: boolean;
   post: Post | null;
   transactions: Transaction[];
-  summary: TransactionSummary[];
+  summary: TransactionDetail[];
   loadTransaction: (post: Post, page?: number) => void;
   loadNextTransaction: (post: Post) => void;
   openTipSummary: (post: Post) => void;

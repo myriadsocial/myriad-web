@@ -7,8 +7,8 @@ import * as constants from './constants';
 import * as Redux from 'redux';
 import {generateImageSizes} from 'src/helpers/cloudinary';
 import {ImageSizes} from 'src/interfaces/assets';
+import {Currency} from 'src/interfaces/currency';
 import {SocialMedia} from 'src/interfaces/social';
-import {Token} from 'src/interfaces/token';
 import {User, UserTransactionDetail} from 'src/interfaces/user';
 
 export interface UserState extends BaseState {
@@ -16,7 +16,7 @@ export interface UserState extends BaseState {
     profilePicture: ImageSizes;
   };
   socials: SocialMedia[];
-  tokens: Token[];
+  currencies: Currency[];
   transactionDetail: UserTransactionDetail;
   anonymous: boolean;
   alias: string;
@@ -26,7 +26,7 @@ export interface UserState extends BaseState {
 const initalState: UserState = {
   loading: false,
   anonymous: false,
-  tokens: [],
+  currencies: [],
   socials: [],
   transactionDetail: {
     sent: [],
@@ -51,6 +51,7 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
             sizes: generateImageSizes(action.user.profilePictureURL || ''),
           },
         },
+        currencies: action.user.currencies,
       };
     }
 
@@ -78,6 +79,13 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       return {
         ...state,
         tokens: action.payload,
+      };
+    }
+
+    case constants.FETCH_USER_SOCIALS: {
+      return {
+        ...state,
+        socials: action.payload,
       };
     }
 

@@ -116,7 +116,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const anonymous = Boolean(session?.user.anonymous);
-  const userId = session?.user.id as string;
+  const userId = session?.user.address as string;
   const username = session?.user.name as string;
 
   //TODO: this process should call thunk action creator instead of dispatch thunk acion
