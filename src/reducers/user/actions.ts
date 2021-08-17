@@ -4,9 +4,9 @@ import * as constants from './constants';
 
 import axios, {AxiosError} from 'axios';
 import {Action} from 'redux';
+import {Currency} from 'src/interfaces/currency';
 import {SocialsEnum} from 'src/interfaces/index';
 import {SocialMedia} from 'src/interfaces/social';
-import {Token} from 'src/interfaces/token';
 import {User, UserTransactionDetail} from 'src/interfaces/user';
 import * as SocialAPI from 'src/lib/api/social';
 import * as TokenAPI from 'src/lib/api/token';
@@ -27,9 +27,9 @@ export interface FetchUser extends Action {
   user: User;
 }
 
-export interface FetchUserToken extends Action {
-  type: constants.FETCH_USER_TOKEN;
-  payload: Token[];
+export interface AddUserToken extends Action {
+  type: constants.ADD_USER_TOKEN;
+  payload: Currency;
 }
 
 export interface FetchConnectedSocials extends Action {
@@ -61,8 +61,8 @@ export interface ResetVerifyingSocial extends Action {
 
 export type Actions =
   | FetchUser
-  | FetchUserToken
   | FetchConnectedSocials
+  | AddUserToken
   | SetUserAsAnonymous
   | UpdateUser
   | FetchUserTransactionDetail
@@ -103,36 +103,6 @@ export const fetchUser: ThunkActionCreator<Actions, RootState> =
       const user: User = await UserAPI.getUserDetail(userId);
 
       dispatch(setUser(user));
-    } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-export const fetchToken: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
-    dispatch(setLoading(true));
-
-    const {
-      userState: {user},
-    } = getState();
-
-    if (!user) return;
-
-    try {
-      const tokens = await TokenAPI.getUserTokens({
-        id: user.id,
-      });
-
-      dispatch({
-        type: constants.FETCH_USER_TOKEN,
-        payload: tokens,
-      });
     } catch (error) {
       dispatch(
         setError({
@@ -343,6 +313,42 @@ export const deleteSocial: ThunkActionCreator<Actions, RootState> =
           message: error.message,
         }),
       );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
+  (currencyId: string, callback?: () => void) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+    const {
+      userState: {user},
+    } = getState();
+
+    if (!user) return;
+
+    try {
+      const data = await TokenAPI.addUserToken({
+        currencyId,
+        userId: user.id,
+      });
+
+      dispatch({
+        type: constants.ADD_USER_TOKEN,
+        payload: data,
+      });
+
+      callback && callback();
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 422) {
+        dispatch(
+          setError({
+            message: 'Token is already on your wallet!',
+          }),
+        );
+      } else {
+        dispatch(setError(error.message));
+      }
     } finally {
       dispatch(setLoading(false));
     }

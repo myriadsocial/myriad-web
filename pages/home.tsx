@@ -16,7 +16,8 @@ import {useResize} from 'src/hooks/use-resize.hook';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
-import {setAnonymous, setUser, fetchToken, fetchConnectedSocials} from 'src/reducers/user/actions';
+import {fetchAvailableToken} from 'src/reducers/config/actions';
+import {setAnonymous, setUser, fetchConnectedSocials} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
 
@@ -58,9 +59,8 @@ const Home: React.FC = () => {
   const height = useResize(sourceRef);
 
   useEffect(() => {
-    // load current authenticated user tokens
-    dispatch(fetchToken());
     dispatch(fetchConnectedSocials());
+    dispatch(fetchAvailableToken());
   }, [dispatch]);
 
   return (
