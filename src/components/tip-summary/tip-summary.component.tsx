@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import {useSelector} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -24,16 +25,13 @@ import {useStyles} from './tip-summary.style';
 import {useTipSummaryHook} from './use-tip-summary.hook';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
-import {useToken} from 'src/components/wallet/token.context';
 import {timeAgo} from 'src/helpers/date';
 import {formatTipBalance, getTipperUserName} from 'src/helpers/transaction';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 export const TipSummaryComponent: React.FC = () => {
   const styles = useStyles();
-
-  const {
-    state: {userTokens},
-  } = useToken();
 
   const {
     meta,
@@ -45,6 +43,8 @@ export const TipSummaryComponent: React.FC = () => {
     loadTransaction,
     loadNextTransaction,
   } = useTipSummaryHook();
+
+  const {currencies} = useSelector<RootState, UserState>(state => state.userState);
 
   useEffect(() => {
     if (post?.id) {
@@ -89,7 +89,7 @@ export const TipSummaryComponent: React.FC = () => {
                     <TableCell component="th" scope="row">
                       {transaction.currencyId}
                     </TableCell>
-                    <TableCell align="right">{formatTipBalance(transaction, userTokens)}</TableCell>
+                    <TableCell align="right">{formatTipBalance(transaction, currencies)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
