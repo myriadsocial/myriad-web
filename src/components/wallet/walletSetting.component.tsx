@@ -1,6 +1,5 @@
 import React, {useState, useImperativeHandle, useEffect} from 'react';
-
-import {useSession} from 'next-auth/client';
+import {useSelector, useDispatch} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -25,8 +24,11 @@ import {TabPanel} from '../common/tab-panel.component';
 import {StyledTabs, StyledTab} from '../common/tabs.component';
 
 import {useStyles} from 'src/components/wallet/walletSetting.style';
-import {useToken} from 'src/hooks/use-token.hook';
-import {Token} from 'src/interfaces/token';
+import {capitalize} from 'src/helpers/string';
+import {Currency} from 'src/interfaces/currency';
+import {RootState} from 'src/reducers';
+import {ConfigState} from 'src/reducers/config/reducer';
+import {addUserCurrency} from 'src/reducers/user/actions';
 
 interface Props {
   forwardedRef: React.ForwardedRef<any>;
@@ -35,65 +37,19 @@ interface Props {
 const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
   const styles = useStyles();
 
-  const [session, sessionLoading] = useSession();
-  let userId = session?.user.userId as string;
+  const dispatch = useDispatch();
 
-  const {
-    loadAllTokens,
-    loading,
-    errorTokens,
-    isTokenAddSuccess,
-    resetIsTokenAddSuccess,
-    resetErrorUserTokens,
-    errorUserTokens,
-    addUserToken,
-    tokens,
-  } = useToken();
-
-  useEffect(() => {
-    if (session !== null && !sessionLoading) {
-      userId = session?.user.userId as string;
-    }
-  }, [sessionLoading]);
-
-  const [selectedAsset, setSelectedAsset] = useState<Token | null>(null);
-
-  useEffect(() => {
-    loadAllTokens();
-    setSelectedAsset(null);
-    resetErrorUserTokens();
-  }, []);
-
-  const [errorPopup, setErrorPopup] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState<Currency | null>(null);
+  const {loading, availableCurrencies} = useSelector<RootState, ConfigState>(
+    state => state.configState,
+  );
   const [successPopup, setSuccessPopup] = useState(false);
-
-  //delayReset must be bigger than delayClosePopup!
-  const delayReset = 5250;
-  const delayClosePopup = 5000;
-
-  useEffect(() => {
-    if (errorUserTokens) {
-      setErrorPopup(true);
-    }
-    const timeoutID = setTimeout(() => {
-      resetErrorUserTokens();
-    }, delayReset);
-
-    return () => {
-      clearTimeout(timeoutID);
-    };
-  }, [errorUserTokens]);
-
-  useEffect(() => {
-    if (isTokenAddSuccess) {
-      setSuccessPopup(true);
-      closeSetting();
-      resetIsTokenAddSuccess();
-    }
-  }, [isTokenAddSuccess]);
-
   const [idx, setIdx] = React.useState(0);
   const [showSetting, setShowSetting] = useState(false);
+
+  useEffect(() => {
+    setSelectedAsset(null);
+  }, []);
 
   //const [value, setValue] = useState('');
   //const [RPCAddress, setRPCAddress] = useState('');
@@ -105,7 +61,6 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
   }));
 
   const closeSetting = () => {
-    setErrorPopup(false);
     setShowSetting(false);
   };
 
@@ -121,26 +76,23 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
   //setRPCAddress(newValue);
   //};
 
-  const handleCloseError = () => {
-    setErrorPopup(false);
-  };
-
   const handleCloseSuccess = () => {
     setSuccessPopup(false);
   };
 
-  const handleSelectAsset = (token: Token) => {
+  const handleSelectAsset = (token: Currency) => {
     setSelectedAsset(token);
   };
 
   const addAsset = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (selectedAsset) {
-      addUserToken(selectedAsset?.id, userId);
+      dispatch(
+        addUserCurrency(selectedAsset.id, () => {
+          setSuccessPopup(true);
+          closeSetting();
+        }),
+      );
     }
-  };
-
-  const capitalizeFirstLetter = (str: string, locale = navigator.language) => {
-    return str.replace(/^\p{CWU}/u, char => char.toLocaleUpperCase(locale));
   };
 
   const LoadingComponent = () => {
@@ -151,20 +103,12 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
     );
   };
 
-  const ErrorComponent = () => {
-    return (
-      <Grid container justify="center">
-        <Typography>Error, please try again later!</Typography>
-      </Grid>
-    );
-  };
-
-  const RenderPrimaryText = (token: Token) => {
+  const RenderPrimaryText = (token: Currency) => {
     return <Typography>{token?.id}</Typography>;
   };
 
-  const RenderSecondaryText = (token: Token) => {
-    return <Typography variant="subtitle2">{capitalizeFirstLetter(token?.token_name)}</Typography>;
+  const RenderSecondaryText = (token: Currency) => {
+    return <Typography variant="subtitle2">{capitalize(token.name)}</Typography>;
   };
 
   return (
@@ -203,20 +147,18 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
           <DialogContent className={styles.walletSettingDialog}>
             <List>
               {loading && <LoadingComponent />}
-              {errorTokens && <ErrorComponent />}
               {!loading &&
-                !errorTokens &&
-                tokens.map(token => (
+                availableCurrencies.map(currency => (
                   <ListItem
-                    className={token?.id === selectedAsset?.id ? styles.listItemRootClicked : ''}
-                    key={token?.id}
+                    className={currency.id === selectedAsset?.id ? styles.listItemRootClicked : ''}
+                    key={currency.id}
                     button
-                    onClick={() => handleSelectAsset(token)}>
+                    onClick={() => handleSelectAsset(currency)}>
                     <Card className={styles.listItemToken}>
                       <CardHeader
-                        avatar={<Avatar aria-label="avatar" src={token.token_image} />}
-                        title={RenderPrimaryText(token)}
-                        subheader={RenderSecondaryText(token)}
+                        avatar={<Avatar aria-label="avatar" src={currency.image} />}
+                        title={RenderPrimaryText(currency)}
+                        subheader={RenderSecondaryText(currency)}
                       />
                     </Card>
                   </ListItem>
@@ -250,17 +192,10 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={successPopup} autoHideDuration={delayClosePopup} onClose={handleCloseSuccess}>
+      <Snackbar open={successPopup} autoHideDuration={3000} onClose={handleCloseSuccess}>
         <Alert severity="success">
           <AlertTitle>Token Added!</AlertTitle>
           Please refresh your browser to see the newly added token
-        </Alert>
-      </Snackbar>
-
-      <Snackbar open={errorPopup} autoHideDuration={delayClosePopup} onClose={handleCloseError}>
-        <Alert severity="error">
-          <AlertTitle>Error!</AlertTitle>
-          {errorUserTokens === 422 ? 'Token is already on your wallet!' : errorUserTokens}
         </Alert>
       </Snackbar>
     </>

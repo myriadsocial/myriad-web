@@ -4,6 +4,9 @@ export type FETCH_USER = typeof FETCH_USER;
 export const FETCH_USER_TOKEN = 'FETCH_USER_TOKEN';
 export type FETCH_USER_TOKEN = typeof FETCH_USER_TOKEN;
 
+export const ADD_USER_TOKEN = 'ADD_USER_TOKEN';
+export type ADD_USER_TOKEN = typeof ADD_USER_TOKEN;
+
 export const FETCH_USER_SOCIALS = 'FETCH_USER_SOCIALS';
 export type FETCH_USER_SOCIALS = typeof FETCH_USER_SOCIALS;
 
