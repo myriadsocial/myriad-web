@@ -12,7 +12,7 @@ export const useTimelineFilter = () => {
   const dispatch = useDispatch();
 
   const filterTimeline = async (query: ParsedUrlQuery) => {
-    let timelineType = TimelineType.DEFAULT;
+    let timelineType = TimelineType.FRIEND;
     let timelineSort: TimelineSortMethod = 'created';
     let tags: string[] = [];
 

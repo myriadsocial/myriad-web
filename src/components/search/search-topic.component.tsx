@@ -71,7 +71,7 @@ type TopicSearchResultProps = {
 };
 
 const TopicSearchComponent: React.FC<TopicSearchResultProps> = () => {
-  const {user, tokens: availableTokens} = useSelector<RootState, UserState>(
+  const {user, currencies: availableTokens} = useSelector<RootState, UserState>(
     state => state.userState,
   );
   const scrollRoot = createRef<HTMLDivElement>();

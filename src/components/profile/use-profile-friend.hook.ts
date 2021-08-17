@@ -1,10 +1,10 @@
 import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
-import Axios from 'axios';
 import {useNotifHook} from 'src/hooks/use-notif.hook';
 import {FriendStatus, Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
+import * as FriendAPI from 'src/lib/api/friends';
 import {RootState} from 'src/reducers';
 import {
   createFriendRequest,
@@ -13,10 +13,6 @@ import {
 } from 'src/reducers/friend-request/actions';
 import {searchProfileFriend} from 'src/reducers/profile/actions';
 import {UserState} from 'src/reducers/user/reducer';
-
-const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-});
 
 export const useFriendHook = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
@@ -53,28 +49,17 @@ export const useFriendHook = () => {
     checkFriendStatus(request.requestorId);
   };
 
-  const checkFriendStatus = async (friendId?: string) => {
+  const checkFriendStatus = async (friendId: string) => {
     if (!user) return;
 
     setLoading(true);
 
     try {
-      const {data} = await MyriadAPI.request<Friend[]>({
-        url: `/friends`,
-        method: 'GET',
-        params: {
-          filter: {
-            where: {
-              or: [
-                {friendId: friendId, requestorId: user.id},
-                {friendId: user.id, requestorId: friendId},
-              ],
-            },
-          },
-        },
-      });
+      const {data} = await FriendAPI.checkFriendStatus(user.id, [friendId]);
 
-      setFriendStatus(data[0]);
+      if (data.length > 0) {
+        setFriendStatus(data[0]);
+      }
     } catch (error) {
       console.log(error, '<<<error');
     } finally {

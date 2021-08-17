@@ -6,11 +6,11 @@ import * as constants from './constants';
 
 import * as Redux from 'redux';
 import {Friend} from 'src/interfaces/friend';
-import {ExtendedUser} from 'src/interfaces/user';
+import {User} from 'src/interfaces/user';
 
 export interface ProfileState extends BaseState {
   userId?: string;
-  detail?: ExtendedUser;
+  detail?: User;
   friends: Friend[];
   totalFriends: number;
 }

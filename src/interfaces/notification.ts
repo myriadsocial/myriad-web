@@ -1,4 +1,5 @@
 import {BaseModel} from './base.interface';
+import {User} from './user';
 
 export enum NotificationType {
   FRIEND_REQUEST = 'friend_request',
@@ -15,7 +16,10 @@ export type NotificationProps = {
   message: string;
 };
 
-export interface Notification extends NotificationProps, BaseModel {}
+export interface Notification extends NotificationProps, BaseModel {
+  fromUserId: User;
+  toUserId: User;
+}
 export interface TotalNewNotification {
   count: number;
 }

@@ -14,7 +14,7 @@ import {ErrorTransactionComponent} from './ErrorTransaction.component';
 import {LoadingTransactionComponent} from './LoadingTransaction.component';
 import {useStyles} from './transaction.style';
 
-import {Token} from 'src/interfaces/token';
+import {Currency} from 'src/interfaces/currency';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -27,7 +27,7 @@ interface TransactionProps {
 
 type StyledComponentProps = {
   className?: string;
-  tokens: Token[];
+  tokens: Currency[];
 };
 
 type TippingJarComponentProps = {
@@ -37,7 +37,9 @@ type TippingJarComponentProps = {
 const TransactionComponent: React.FC<TransactionProps> = ({forwardedRef, detailed}) => {
   const styles = useStyles();
 
-  const {user, tokens: userTokens} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, currencies: userTokens} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const {loading, error, transactions, inboundTxs, outboundTxs, loadInitTransaction} =
     useTransaction();
 
@@ -85,10 +87,10 @@ const TransactionComponent: React.FC<TransactionProps> = ({forwardedRef, detaile
           Filter by
         </Button>
         <Button variant="contained" color="default" size="medium" className={styles.iconButton}>
-          {tokens[0].token_name}
+          {tokens[0].name}
         </Button>
         <Button variant="contained" color="default" size="medium" className={styles.iconButton}>
-          {tokens[1].token_name}
+          {tokens[1].name}
         </Button>
       </div>
     );

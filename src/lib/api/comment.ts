@@ -1,12 +1,8 @@
+import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
-import Axios from 'axios';
 import {Comment, CommentProps} from 'src/interfaces/comment';
-
-const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_LATEST_API_URL,
-});
 
 type CommentList = BaseList<Comment>;
 

@@ -1,5 +1,5 @@
 import {Token} from 'src/interfaces/token';
-import {TransactionSummary} from 'src/interfaces/transaction';
+import {TransactionDetail} from 'src/interfaces/transaction';
 import {Transaction} from 'src/interfaces/transaction';
 
 const UNKNOWN_ACCOUNT = 'unknown';
@@ -12,7 +12,7 @@ const formatBalance = (value: number, decimals: number): number => {
   return result;
 };
 
-export const formatTipBalance = (tip: TransactionSummary, tokens: Token[]): number => {
+export const formatTipBalance = (tip: TransactionDetail, tokens: Token[]): number => {
   const token = tokens.find(item => item.id === tip.currencyId);
 
   if (!token) return tip.amount;

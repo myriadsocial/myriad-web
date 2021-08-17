@@ -1,18 +1,19 @@
+import MyriadAPI from './base';
 import {BaseList} from './interfaces/base-list.interface';
 
-import Axios from 'axios';
-import {User, ExtendedUser, UserSocialMedia, UserTransactionDetail} from 'src/interfaces/user';
-
-const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_LATEST_API_URL,
-});
+import {User, UserTransactionDetail} from 'src/interfaces/user';
 
 type UserList = BaseList<User>;
 
-export const getUserDetail = async (id: string): Promise<ExtendedUser> => {
-  const {data} = await MyriadAPI.request<ExtendedUser>({
+export const getUserDetail = async (id: string): Promise<User> => {
+  const {data} = await MyriadAPI.request<User>({
     url: `users/${id}`,
     method: 'GET',
+    params: {
+      filter: {
+        include: ['currencies'],
+      },
+    },
   });
 
   return data;
@@ -54,51 +55,6 @@ export const updateUser = async (userId: string, values: Partial<User>): Promise
   });
 
   return data;
-};
-
-export const addUserCredential = async (
-  userId: string,
-  values: Partial<UserSocialMedia>,
-): Promise<void> => {
-  await MyriadAPI({
-    url: `/users/${userId}/user-credentials`,
-    method: 'POST',
-    data: values,
-  });
-};
-
-export const verifyCredentials = async (userId: string, peopleId: string): Promise<void> => {
-  await MyriadAPI({
-    method: 'POST',
-    url: '/user-credentials/verify',
-    data: {
-      userId,
-      peopleId,
-    },
-  });
-};
-
-export const verifySocialAccount = async (
-  username: string,
-  platform: string,
-  publicKey: string,
-): Promise<void> => {
-  await MyriadAPI.request({
-    method: 'POST',
-    url: '/user-social-medias/verify',
-    data: {
-      username,
-      platform,
-      publicKey,
-    },
-  });
-};
-
-export const disconnectSocial = async (credentialId: string): Promise<void> => {
-  await MyriadAPI.request({
-    method: 'DELETE',
-    url: `/user-social-medias/${credentialId}`,
-  });
 };
 
 export const search = async (query: string): Promise<UserList> => {

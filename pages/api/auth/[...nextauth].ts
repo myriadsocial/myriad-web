@@ -6,13 +6,6 @@ import APIAdapter from '../../../adapters/api';
 import * as UserAPI from 'src/lib/api/user';
 import {userToSession} from 'src/lib/serializers/session';
 
-type Credentials = {
-  platform: string;
-  platformUserId: string;
-  username: string;
-  accessToken: string;
-};
-
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default NextAuth({
@@ -34,6 +27,7 @@ export default NextAuth({
 
         if (credentials.anonymous === 'false') {
           try {
+            console.log('CREDENTIALS', credentials);
             const user = await UserAPI.getUserDetail(credentials.address);
 
             console.log('[next-auth][debug][authorize] user exist', user);
@@ -63,7 +57,6 @@ export default NextAuth({
         }
 
         return {
-          userId: credentials.address,
           name: credentials.name,
           address: credentials.address,
           anonymous: credentials.anonymous === 'true',
@@ -142,32 +135,15 @@ export default NextAuth({
         user,
       };
     },
-    async jwt(token, user, account, profile, isNewUser) {
+    async jwt(token, user, account, profile) {
       token = {...token, ...user};
 
       if (account && account.type === 'credentials') {
-        token.userId = profile.address;
         token.address = profile.address;
         token.anonymous = profile.anonymous;
       }
 
-      if (account && account.type === 'oauth') {
-        const credentials = {
-          platform: account.provider,
-          platformUserId: account.id,
-          username: profile.username || profile.name,
-          accessToken: account.accessToken,
-          refreshToken: account.refreshToken,
-        };
-        //@ts-ignore
-        if (!token.userCredentials || token.userCredentials.length === 0) {
-          token.userCredentials = [] as Credentials[];
-        }
-        //@ts-ignore
-        token.userCredentials.push(credentials);
-
-        console.log('[next-auth][debug][jwt] token', token);
-      }
+      console.log('[next-auth][debug][jwt] token', token);
 
       return token;
     },
