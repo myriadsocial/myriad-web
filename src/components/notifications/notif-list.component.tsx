@@ -92,8 +92,10 @@ const NotificationListComponent: React.FC<NotificationListProps> = () => {
                 return (
                   <ListItem key={notification.id} className={style.item} alignItems="center">
                     <ListItemAvatar>
-                      <Avatar className={style.avatar} src={notification.from || ''}>
-                        {acronym(notification.from ?? '')}
+                      <Avatar
+                        className={style.avatar}
+                        src={notification.fromUserId.profilePictureURL || ''}>
+                        {acronym(notification.fromUserId.name)}
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText>

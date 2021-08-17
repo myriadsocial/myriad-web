@@ -17,9 +17,9 @@ import Typography from '@material-ui/core/Typography';
 import {createStyles, fade, Theme, makeStyles, withStyles} from '@material-ui/core/styles';
 
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
-import {useToken} from 'src/hooks/use-token.hook';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
+import {UserState} from 'src/reducers/user/reducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -123,30 +123,25 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, hidden}) => {
     error: errorBalance,
     balanceDetails,
   } = useSelector<RootState, BalanceState>(state => state.balanceState);
+  const {currencies} = useSelector<RootState, UserState>(state => state.userState);
+
   const style = useStyles();
 
   const [session] = useSession();
   const userAddress = session?.user.address as string;
-  const userId = session?.user.userId as string;
-
-  const {loadAllUserTokens, userTokens} = useToken();
 
   const {load} = usePolkadotApi();
 
   useEffect(() => {
-    loadAllUserTokens(userId);
-  }, []);
-
-  useEffect(() => {
-    if (userTokens.length > 0) {
-      load(userAddress, userTokens);
+    if (currencies.length > 0) {
+      load(userAddress, currencies);
     }
-  }, [userTokens]);
+  }, [currencies]);
 
   useImperativeHandle(forwardedRef, () => ({
     triggerRefresh: () => {
       setIsHidden(false);
-      load(userAddress, userTokens);
+      load(userAddress, currencies);
     },
   }));
 

@@ -90,6 +90,7 @@ const TourComponent: React.FC<TourComponentProps> = ({disabled, onFinished}) => 
               size="medium"
               variant="contained"
               color="primary"
+              component="div"
               endIcon={<NavigateNextIcon />}>
               Next
             </Button>

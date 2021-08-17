@@ -1,4 +1,6 @@
 export interface ErrorResponse<T> {
-  readonly data: T;
-  readonly status: number;
+  readonly message: string;
+  readonly name: string;
+  readonly statusCode: number;
+  readonly data?: T;
 }
