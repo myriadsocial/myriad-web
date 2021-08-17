@@ -20,7 +20,7 @@ import {isOwnPost} from 'src/helpers/post';
 import {useModal} from 'src/hooks/use-modal.hook';
 import {useTimelineHook} from 'src/hooks/use-timeline.hook';
 import {Post} from 'src/interfaces/post';
-import {ExtendedUser} from 'src/interfaces/user';
+import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -31,14 +31,14 @@ const TipSummaryComponent = dynamic(
 );
 
 type Props = {
-  profile: ExtendedUser;
+  profile: User;
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function ImportedPostList({profile}: Props) {
   const style = useStyles();
 
-  const {user, tokens: availableTokens} = useSelector<RootState, UserState>(
+  const {user, currencies: availableTokens} = useSelector<RootState, UserState>(
     state => state.userState,
   );
   const {loading, posts, hasMore, nextPage} = useTimelineHook();

@@ -5,7 +5,7 @@ import {BaseList} from './interfaces/base-list.interface';
 import {Dislike, Like} from 'src/interfaces/interaction';
 import {Post, PostProps, ImportPostProps} from 'src/interfaces/post';
 import {SocialsEnum} from 'src/interfaces/social';
-import {TimelineSortMethod, TimelineFilter} from 'src/interfaces/timeline';
+import {TimelineSortMethod, TimelineFilter, TimelineType} from 'src/interfaces/timeline';
 
 type PostList = BaseList<Post>;
 type WalletAddress = {
@@ -15,6 +15,7 @@ type WalletAddress = {
 export const getPost = async (
   page: number,
   userId: string,
+  type: TimelineType = TimelineType.TRENDING,
   sort?: TimelineSortMethod,
   filters?: TimelineFilter,
 ): Promise<PostList> => {
@@ -75,6 +76,8 @@ export const getPost = async (
         page,
         limit: PAGINATION_LIMIT,
         order: `${orderField} DESC`,
+        // findBy: userId,
+        // sortBy: type,
         where,
         include: [
           {
@@ -85,56 +88,6 @@ export const getPost = async (
           },
           {
             relation: 'likes',
-            scope: {
-              where: {
-                userId: {eq: userId},
-              },
-            },
-          },
-        ],
-      },
-    },
-  });
-
-  return data;
-};
-
-export const getFriendPost = async (
-  userId: string,
-  page: number,
-  sort?: TimelineSortMethod,
-): Promise<PostList> => {
-  const path = `/posts`;
-  let orderField = 'originCreatedAt';
-
-  if (sort) {
-    switch (sort) {
-      case 'comment':
-        orderField = 'comment';
-        break;
-      case 'like':
-        orderField = 'liked';
-        break;
-      case 'trending':
-      default:
-        break;
-    }
-  }
-
-  const {data} = await MyriadAPI.request<PostList>({
-    url: path,
-    method: 'GET',
-    params: {
-      filter: {
-        page,
-        limit: PAGINATION_LIMIT,
-        order: `${orderField} DESC`,
-        include: [
-          'user',
-          'people',
-          {
-            relation: 'likes',
-            // Get only current user records
             scope: {
               where: {
                 userId: {eq: userId},

@@ -8,13 +8,13 @@ import FriendList from './friend-list.component';
 
 import {debounce} from 'lodash';
 import SearchComponent from 'src/components/common/search.component';
-import {ExtendedUser} from 'src/interfaces/user';
+import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 interface UserFriendProps {
-  profile: ExtendedUser;
+  profile: User;
 }
 
 const UserFriendComponent: React.FC<UserFriendProps> = ({profile}) => {

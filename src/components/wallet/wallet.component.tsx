@@ -1,12 +1,10 @@
-import React, {createRef, useEffect, forwardRef} from 'react';
+import React, {createRef, forwardRef} from 'react';
 import {useSelector} from 'react-redux';
 
-import {useSession} from 'next-auth/client';
 import dynamic from 'next/dynamic';
 
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import SettingsIcon from '@material-ui/icons/Settings';
 
@@ -14,8 +12,7 @@ import {LoadingPage} from '../common/loading.component';
 import ExpandablePanel from '../common/panel-expandable.component';
 import {useStyles} from './wallet.style';
 
-import {useToken} from 'src/hooks/use-token.hook';
-import {Token} from 'src/interfaces/token';
+import {Currency} from 'src/interfaces/currency';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -26,7 +23,7 @@ const TransactionComponent = dynamic(() => import('./transactions/transaction.co
 const WalletSettingComponent = dynamic(() => import('./walletSetting.component'));
 
 type Props = {
-  availableTokens: Token[];
+  availableTokens: Currency[];
 };
 
 const ForwardedBalanceComponent = forwardRef(({availableTokens}: Props, ref) => (
@@ -50,22 +47,11 @@ export const Wallet = React.memo(function Wallet() {
 
   const walletSettingRef = createRef<any>();
 
-  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
-
-  const [session, sessionLoading] = useSession();
-  let userId = session?.user.userId as string;
-
-  useEffect(() => {
-    if (session !== null && !sessionLoading) {
-      userId = session?.user.userId as string;
-    }
-  }, [sessionLoading]);
-
-  const {loadAllUserTokens, loading, userTokens, errorUserTokens} = useToken();
-
-  useEffect(() => {
-    loadAllUserTokens(userId);
-  }, []);
+  const {
+    loading,
+    anonymous,
+    currencies: userTokens,
+  } = useSelector<RootState, UserState>(state => state.userState);
 
   const handleRefresh = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -114,16 +100,6 @@ export const Wallet = React.memo(function Wallet() {
         actions={<WalletAction disabled={true} />}
         isDisabled={anonymous}>
         <LoadingPage />
-      </ExpandablePanel>
-    );
-
-  if (errorUserTokens)
-    return (
-      <ExpandablePanel
-        title="My Wallet"
-        actions={<WalletAction disabled={false} />}
-        isDisabled={anonymous}>
-        <Typography>Error, please try again!</Typography>
       </ExpandablePanel>
     );
 

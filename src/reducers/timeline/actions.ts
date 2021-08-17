@@ -127,19 +127,15 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
       const userId = userState.user?.id as string;
       const timelineType = type ?? timelineState.type;
       const timelineFilter = filter ?? timelineState.filter;
-      console.log('TIMELINE FILTER', timelineFilter);
       const timelineSort = sort ?? timelineState.sort;
 
-      let posts: Post[] = [];
-      let meta: ListMeta = timelineState.meta;
-
-      if (userState.user && timelineType === TimelineType.DEFAULT) {
-        ({data: posts, meta} = await PostAPI.getPost(page, userId, timelineSort));
-      }
-
-      if (userState.anonymous || timelineType === TimelineType.TRENDING) {
-        ({data: posts, meta} = await PostAPI.getPost(page, userId, timelineSort, timelineFilter));
-      }
+      const {data: posts, meta} = await PostAPI.getPost(
+        page,
+        userId,
+        timelineType,
+        timelineSort,
+        timelineFilter,
+      );
 
       for await (const post of posts) {
         if (post.platform !== 'myriad') {
@@ -204,7 +200,7 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
   };
 
 export const importPost: ThunkActionCreator<Actions, RootState> =
-  (postUrl: string) => async (dispatch, getState) => {
+  (postUrl: string, callback?: () => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
@@ -225,6 +221,8 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
         type: constants.ADD_POST_TO_TIMELINE,
         post,
       });
+
+      callback && callback();
     } catch (error) {
       dispatch(setError(error.message));
     } finally {

@@ -4,7 +4,7 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {Friend} from 'src/interfaces/friend';
-import {ExtendedUser} from 'src/interfaces/user';
+import {User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
 import * as UserAPI from 'src/lib/api/user';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -15,7 +15,7 @@ import {ThunkActionCreator} from 'src/types/thunk';
 
 export interface FetchProfileDetail extends Action {
   type: constants.FETCH_PROFILE_DETAIL;
-  detail: ExtendedUser;
+  detail: User;
 }
 
 export interface FetchProfileFriend extends Action {
@@ -39,7 +39,7 @@ export type Actions = FetchProfileDetail | FetchProfileFriend | FilterProfileFri
  *
  * Actions
  */
-export const setProfile = (profle: ExtendedUser): FetchProfileDetail => ({
+export const setProfile = (profle: User): FetchProfileDetail => ({
   type: constants.FETCH_PROFILE_DETAIL,
   detail: profle,
 });
@@ -52,7 +52,7 @@ export const fetchProfileDetail: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const detail: ExtendedUser = await UserAPI.getUserDetail(userId);
+      const detail: User = await UserAPI.getUserDetail(userId);
 
       dispatch({
         type: constants.FETCH_PROFILE_DETAIL,

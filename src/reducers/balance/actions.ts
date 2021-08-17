@@ -5,8 +5,7 @@ import * as constants from './constants';
 import {Action} from 'redux';
 import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {TokenId} from 'src/interfaces/token';
-import {Token} from 'src/interfaces/token';
+import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {connectToBlockchain} from 'src/lib/services/polkadot-js';
 import {ThunkActionCreator} from 'src/types/thunk';
 
@@ -30,40 +29,40 @@ export type Actions = FetchBalances | BaseAction;
  */
 
 export const fetchBalances: ThunkActionCreator<Actions, RootState> =
-  (address: string, availableTokens: Token[]) => async dispatch => {
+  (address: string, availableTokens: Currency[]) => async dispatch => {
     dispatch(setLoading(true));
     const tokenBalances = [];
 
     try {
       for (let i = 0; i < availableTokens.length; i++) {
-        const provider = availableTokens[i].rpc_address;
+        const provider = availableTokens[i].rpcURL;
         const api = await connectToBlockchain(provider);
 
         if (api) {
           switch (availableTokens[i].id) {
-            case TokenId.MYRIA: {
+            case CurrencyId.MYRIA: {
               const {data: balance} = await api.query.system.account(address);
               const tempBalance = balance.free as unknown;
               tokenBalances.push({
-                freeBalance: formatNumber(tempBalance as number, availableTokens[i].token_decimal),
+                freeBalance: formatNumber(tempBalance as number, availableTokens[i].decimal),
                 tokenSymbol: availableTokens[i].id,
-                tokenDecimals: availableTokens[i].token_decimal,
+                tokenDecimals: availableTokens[i].decimal,
                 rpcAddress: provider,
-                tokenImage: availableTokens[i].token_image,
+                tokenImage: availableTokens[i].image,
               });
               break;
             }
 
             //TODO: make enum based on rpc_address, collect the api calls and use multiqueries
-            case TokenId.ACA: {
+            case CurrencyId.ACA: {
               const {data: balance} = await api.query.system.account(address);
               const tempBalance = balance.free as unknown;
               tokenBalances.push({
-                freeBalance: formatNumber(tempBalance as number, availableTokens[i].token_decimal),
+                freeBalance: formatNumber(tempBalance as number, availableTokens[i].decimal),
                 tokenSymbol: availableTokens[i].id,
-                tokenDecimals: availableTokens[i].token_decimal,
+                tokenDecimals: availableTokens[i].decimal,
                 rpcAddress: provider,
-                tokenImage: availableTokens[i].token_image,
+                tokenImage: availableTokens[i].image,
               });
               break;
             }
@@ -74,14 +73,11 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
                 TOKEN: availableTokens[i].id,
               });
               tokenBalances.push({
-                freeBalance: formatNumber(
-                  tokenData.free as number,
-                  availableTokens[i].token_decimal,
-                ),
+                freeBalance: formatNumber(tokenData.free as number, availableTokens[i].decimal),
                 tokenSymbol: availableTokens[i].id,
-                tokenDecimals: availableTokens[i].token_decimal,
+                tokenDecimals: availableTokens[i].decimal,
                 rpcAddress: provider,
-                tokenImage: availableTokens[i].token_image,
+                tokenImage: availableTokens[i].image,
               });
             }
           }
@@ -89,6 +85,7 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
           await api.disconnect();
         }
       }
+
       dispatch({
         type: constants.FETCH_BALANCES,
         balanceDetails: tokenBalances,

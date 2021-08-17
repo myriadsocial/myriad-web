@@ -4,7 +4,7 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {Post} from 'src/interfaces/post';
-import {Transaction, TransactionSummary} from 'src/interfaces/transaction';
+import {Transaction, TransactionDetail} from 'src/interfaces/transaction';
 import MyriadAPI from 'src/lib/api/base';
 import {BaseList} from 'src/lib/api/interfaces/base-list.interface';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -27,7 +27,7 @@ export interface LoadTransactionHistory extends PaginationAction {
 
 export interface LoadTransactionSummary extends Action {
   type: constants.FETCH_TRANSACTION_SUMMARY;
-  summary: TransactionSummary[];
+  summary: TransactionDetail[];
 }
 
 export interface ClearTippedPost extends Action {
@@ -110,7 +110,7 @@ export const fetchTransactionSummary: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const {data} = await MyriadAPI.request<TransactionSummary[]>({
+      const {data} = await MyriadAPI.request<TransactionDetail[]>({
         url: `/post/${post.id}/transaction-summary`,
         method: 'GET',
       });

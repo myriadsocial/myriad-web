@@ -15,8 +15,6 @@ import {ExperienceProvider} from '../experience/experience.context';
 
 import TipAlertComponent from 'src/components/alert/TipAlert.component';
 import {LayoutSettingProvider} from 'src/context/layout.context';
-import {TransactionProvider} from 'src/context/transaction.context';
-import {useToken} from 'src/hooks/use-token.hook';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
 import {RootState} from 'src/reducers';
@@ -46,7 +44,6 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
 
   const [, loading] = useSession();
   const {updateUser, loadFcmToken} = useUserHook();
-  const {loadAllUserTokens, userTokens} = useToken();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
   useEffect(() => {
@@ -66,12 +63,6 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
       });
     }
   }, [loading, user, anonymous]);
-
-  useEffect(() => {
-    if (user) {
-      loadAllUserTokens(user.id);
-    }
-  }, [user]);
 
   const handleFinishTour = (skip: boolean) => {
     updateUser({
@@ -95,17 +86,13 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
             onFinished={handleFinishTour}
           />
         </NoSsr>
-        <TransactionProvider>
-          <ExperienceProvider>
-            {isMobile ? (
-              <MobileLayoutComponent anonymous={anonymous} userTokens={userTokens}>
-                {children}
-              </MobileLayoutComponent>
-            ) : (
-              <DektopLayoutComponent anonymous={anonymous}>{children}</DektopLayoutComponent>
-            )}
-          </ExperienceProvider>
-        </TransactionProvider>
+        <ExperienceProvider>
+          {isMobile ? (
+            <MobileLayoutComponent anonymous={anonymous}>{children}</MobileLayoutComponent>
+          ) : (
+            <DektopLayoutComponent anonymous={anonymous}>{children}</DektopLayoutComponent>
+          )}
+        </ExperienceProvider>
       </LayoutSettingProvider>
 
       <AlertComponent />

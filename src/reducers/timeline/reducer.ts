@@ -23,7 +23,7 @@ export interface TimelineState extends BasePaginationState {
 
 const initalState: TimelineState = {
   loading: true,
-  type: TimelineType.DEFAULT,
+  type: TimelineType.FRIEND,
   sort: 'created',
   hasMore: false,
   posts: [],

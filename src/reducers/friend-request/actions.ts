@@ -37,7 +37,8 @@ export type Actions = LoadFriendRequests | CreateFriendRequest | BaseAction;
  * Action Creator
  */
 export const fetchFriendRequest: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
+  (page = 1) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
@@ -47,7 +48,7 @@ export const fetchFriendRequest: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const {data: requests, meta} = await FriendAPI.getFriendRequests(userState.user.id);
+      const {data: requests, meta} = await FriendAPI.getFriendRequests(userState.user.id, page);
 
       dispatch({
         type: constants.FETCH_FRIEND_REQUEST,

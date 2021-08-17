@@ -17,6 +17,7 @@ import Layout from 'src/components/Layout/Layout.container';
 import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
 import {Wallet} from 'src/components/wallet/wallet.component';
+import {isOwnPost} from 'src/helpers/post';
 import {useModal} from 'src/hooks/use-modal.hook';
 import {useResize} from 'src/hooks/use-resize.hook';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -28,7 +29,6 @@ import {TimelineState} from 'src/reducers/timeline/reducer';
 import {setAnonymous, setUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
-import {isOwnPost} from 'src/helpers/post';
 
 const SendTipModal = dynamic(() => import('src/components/common/sendtips/SendTipModal'));
 const TipSummaryComponent = dynamic(
@@ -124,9 +124,7 @@ const PostPageComponent: React.FC<PostPageProps> = () => {
 };
 
 const DedicatedPost = () => {
-  const {user, tokens: availableTokens} = useSelector<RootState, UserState>(
-    state => state.userState,
-  );
+  const {user, currencies} = useSelector<RootState, UserState>(state => state.userState);
   const {post} = useSelector<RootState, TimelineState>(state => state.timelineState);
   const {isShown, toggle, hide} = useModal();
   const style = useStyles();
@@ -144,7 +142,7 @@ const DedicatedPost = () => {
         <SendTipModal
           isShown={isShown}
           hide={hide}
-          availableTokens={availableTokens}
+          availableTokens={currencies}
           userAddress={user.id}
         />
       )}
@@ -182,7 +180,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const anonymous = Boolean(session?.user.anonymous);
-  const userId = session?.user.id as string;
+  const userId = session?.user.address as string;
   const username = session?.user.name as string;
   const postId = params?.id as string;
 

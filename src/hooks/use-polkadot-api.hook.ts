@@ -3,8 +3,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'lodash';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
+import {Currency} from 'src/interfaces/currency';
 import {SendTipProps} from 'src/interfaces/send-tips/send-tips';
-import {Token} from 'src/interfaces/token';
 import {storeTransaction} from 'src/lib/api/transaction';
 import {signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
@@ -20,7 +20,7 @@ export const usePolkadotApi = () => {
   const [isSignerLoading, setSignerLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const load = async (address: string, availableTokens: Token[]) => {
+  const load = async (address: string, availableTokens: Currency[]) => {
     dispatch(fetchBalances(address, availableTokens));
   };
 

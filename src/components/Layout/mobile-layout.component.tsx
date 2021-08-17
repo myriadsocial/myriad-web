@@ -10,7 +10,6 @@ import {TabPanel} from '../common/tab-panel.component';
 import {NotifProvider} from 'src/context/notif.context';
 import {useLayout} from 'src/hooks/use-layout.hook';
 import {SidebarTab} from 'src/interfaces/sidebar';
-import {Token} from 'src/interfaces/token';
 
 const FriendComponent = dynamic(() => import('../friends/friend.component'));
 const NotificationComponent = dynamic(() => import('../notifications/notif.component'));
@@ -21,10 +20,9 @@ const WalletComponent = dynamic(() => import('../topic/topic.component'));
 type Props = {
   children: React.ReactNode;
   anonymous: boolean;
-  userTokens: Token[];
 };
 
-const MobileLayoutComponent = ({anonymous, userTokens}: Props) => {
+const MobileLayoutComponent: React.FC<Props> = ({anonymous}: Props) => {
   const theme = useTheme();
 
   const {selectedSidebar, changeSelectedSidebar} = useLayout();
@@ -48,7 +46,7 @@ const MobileLayoutComponent = ({anonymous, userTokens}: Props) => {
       <NotifProvider>
         <AppBar />
         <TabPanel value={value} index={SidebarTab.HOME} dir={theme.direction}>
-          <TimelineComponent isAnonymous={anonymous} availableTokens={userTokens} />
+          <TimelineComponent isAnonymous={anonymous} />
         </TabPanel>
         <TabPanel value={value} index={SidebarTab.WALLET} dir={theme.direction}>
           <WalletComponent />

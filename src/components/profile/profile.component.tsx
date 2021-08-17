@@ -15,7 +15,7 @@ import {TippingComponent} from './myWallet/tipping/tipping.component';
 import {WalletComponent} from './myWallet/wallet/wallet.component';
 import {useStyles} from './profile.style';
 
-import {ExtendedUser} from 'src/interfaces/user';
+import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
@@ -26,7 +26,7 @@ const ImportedPostList = dynamic(() => import('./post/importedPost-list.componen
 const FriendComponent = dynamic(() => import('./friend/user-friends.component'));
 
 type Props = {
-  profile: ExtendedUser;
+  profile: User;
   loading: boolean;
 };
 // WALLET TAB

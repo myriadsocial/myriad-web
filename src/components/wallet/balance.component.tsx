@@ -18,14 +18,14 @@ import InfoIcon from '@material-ui/icons/Info';
 import {useStyles, TableCell, StyledBadge} from './balance.style';
 
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
-import {Token} from 'src/interfaces/token';
+import {Currency} from 'src/interfaces/currency';
 import {RootState} from 'src/reducers';
 import {fetchBalances} from 'src/reducers/balance/actions';
 import {BalanceState} from 'src/reducers/balance/reducer';
 
 interface BalanceProps {
   forwardedRef: React.ForwardedRef<any>;
-  availableTokens: Token[];
+  availableTokens: Currency[];
 }
 
 const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, availableTokens}) => {
@@ -41,10 +41,10 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, availableTokens
   const {loadingBalance, error, load} = usePolkadotApi();
 
   useEffect(() => {
-    if (tokensReady.length === 0) {
+    if (tokensReady.length === 0 && availableTokens.length > 0) {
       load(userAddress, availableTokens);
     }
-  }, [tokensReady]);
+  }, [tokensReady, availableTokens]);
 
   useImperativeHandle(forwardedRef, () => ({
     triggerRefresh: () => {
