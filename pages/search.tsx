@@ -16,7 +16,8 @@ import {Wallet} from 'src/components/wallet/wallet.component';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
-import {setAnonymous, setUser, fetchToken} from 'src/reducers/user/actions';
+import {fetchAvailableToken} from 'src/reducers/config/actions';
+import {setAnonymous, setUser, fetchConnectedSocials} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
 
@@ -69,8 +70,8 @@ export default function Search() {
   const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
   useEffect(() => {
-    // load current authenticated user tokens
-    dispatch(fetchToken());
+    dispatch(fetchConnectedSocials());
+    dispatch(fetchAvailableToken());
   }, [dispatch]);
 
   return (
