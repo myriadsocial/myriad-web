@@ -6,7 +6,6 @@ import dynamic from 'next/dynamic';
 import Button from '@material-ui/core/Button';
 import SortIcon from '@material-ui/icons/Sort';
 
-import {useTransaction} from '../../../../hooks/use-transaction.hooks';
 import ActionTabsComponent from '../tipping/actionTabs.component';
 import TokenDetailComponent from '../tipping/tokenDetail.component';
 import {EmptyTransactionComponent} from './EmptyTransaction.component';
@@ -14,6 +13,7 @@ import {ErrorTransactionComponent} from './ErrorTransaction.component';
 import {LoadingTransactionComponent} from './LoadingTransaction.component';
 import {useStyles} from './transaction.style';
 
+import {useTransaction} from 'src/hooks/use-transaction.hooks';
 import {Currency} from 'src/interfaces/currency';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
