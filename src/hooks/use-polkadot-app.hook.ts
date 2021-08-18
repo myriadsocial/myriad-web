@@ -30,16 +30,22 @@ export const usePolkadotExtension = () => {
   const unsubscribeFromAccounts = async () => {
     const {web3AccountsSubscribe} = await import('@polkadot/extension-dapp');
 
-    //// we subscribe to any account change and log the new list.
-    //// note that `web3AccountsSubscribe` returns the function to unsubscribe
-    const unsubscribe = await web3AccountsSubscribe(injectedAccounts => {
-      injectedAccounts.map(accounts => {
-        console.log('detail about the unsubscribed accounts: ', accounts);
-      });
-    });
+    const allAccounts = enablePolkadotExtension();
 
-    //// don't forget to unsubscribe when needed, e.g when unmounting a component
-    unsubscribe && unsubscribe();
+    if (allAccounts.length > 0) {
+      //// we subscribe to any account change and log the new list.
+      //// note that `web3AccountsSubscribe` returns the function to unsubscribe
+      const unsubscribe = await web3AccountsSubscribe(injectedAccounts => {
+        injectedAccounts.map(accounts => {
+          console.log('detail about the unsubscribed accounts: ', accounts);
+        });
+      });
+
+      //// don't forget to unsubscribe when needed, e.g when unmounting a component
+      unsubscribe && unsubscribe();
+    } else {
+      return;
+    }
   };
 
   return {
