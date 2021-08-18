@@ -7,6 +7,7 @@ type AuthorizationParams = {
 
 let API: AxiosInstance;
 
+/*eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export const initialize = (params?: AuthorizationParams): AxiosInstance => {
   if (!API) {
     API = axios.create({
@@ -14,7 +15,6 @@ export const initialize = (params?: AuthorizationParams): AxiosInstance => {
     });
 
     API.interceptors.request.use(config => {
-      console.log('add authorization params', params);
       config.headers = {
         // 'Authorization': '<type> <credentials>',
       };
