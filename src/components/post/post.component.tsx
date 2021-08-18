@@ -157,6 +157,15 @@ const PostComponent: React.FC<PostComponentProps> = ({
     });
   };
 
+  const isTippingEnabled = () => {
+    if (anonymous) {
+      return false;
+    } else if (user) {
+      if (!isOwnPost(post, user)) return true;
+      return false;
+    }
+  };
+
   return (
     <>
       <Card className={style.root}>
@@ -248,7 +257,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
           <PostActionComponent
             metric={post.metric}
             commentExpanded={expanded}
-            tippingEnabled={!isOwnPost(post, user)}
+            tippingEnabled={isTippingEnabled()}
             expandComment={handleExpandClick}
             likePost={likePostHandle}
             dislikePost={dislikePostHandle}
