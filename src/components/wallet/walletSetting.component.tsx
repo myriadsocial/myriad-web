@@ -19,7 +19,6 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import DialogTitle from '../common/DialogTitle.component';
-//import SearchComponent from '../common/search.component';
 import {TabPanel} from '../common/tab-panel.component';
 import {StyledTabs, StyledTab} from '../common/tabs.component';
 
@@ -29,6 +28,7 @@ import {Currency} from 'src/interfaces/currency';
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
 import {addUserCurrency} from 'src/reducers/user/actions';
+import {UserState} from 'src/reducers/user/reducer';
 
 interface Props {
   forwardedRef: React.ForwardedRef<any>;
@@ -43,6 +43,8 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
   const {loading, availableCurrencies} = useSelector<RootState, ConfigState>(
     state => state.configState,
   );
+
+  const {currencies} = useSelector<RootState, UserState>(state => state.userState);
   const [successPopup, setSuccessPopup] = useState(false);
   const [idx, setIdx] = React.useState(0);
   const [showSetting, setShowSetting] = useState(false);
@@ -50,9 +52,6 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
   useEffect(() => {
     setSelectedAsset(null);
   }, []);
-
-  //const [value, setValue] = useState('');
-  //const [RPCAddress, setRPCAddress] = useState('');
 
   useImperativeHandle(forwardedRef, () => ({
     triggerShowSetting: () => {
@@ -68,20 +67,12 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
     setIdx(newValue);
   };
 
-  //const submitSearch = (newValue: string) => {
-  //setValue(newValue);
-  //};
-
-  //const submitSearchRPCAdress = (newValue: string) => {
-  //setRPCAddress(newValue);
-  //};
-
   const handleCloseSuccess = () => {
     setSuccessPopup(false);
   };
 
-  const handleSelectAsset = (token: Currency) => {
-    setSelectedAsset(token);
+  const handleSelectAsset = (currency: Currency) => {
+    setSelectedAsset(currency);
   };
 
   const addAsset = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -95,6 +86,15 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
     }
   };
 
+  const isCurrencyAlreadyAdded = (currencyId: string): boolean => {
+    const currencyFound = currencies.find(currency => {
+      return currency.id === currencyId;
+    });
+
+    if (currencyFound) return true;
+    return false;
+  };
+
   const LoadingComponent = () => {
     return (
       <Grid container justify="center">
@@ -103,12 +103,12 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
     );
   };
 
-  const RenderPrimaryText = (token: Currency) => {
-    return <Typography>{token?.id}</Typography>;
+  const RenderPrimaryText = (currency: Currency) => {
+    return <Typography>{currency?.id}</Typography>;
   };
 
-  const RenderSecondaryText = (token: Currency) => {
-    return <Typography variant="subtitle2">{capitalize(token.name)}</Typography>;
+  const RenderSecondaryText = (currency: Currency) => {
+    return <Typography variant="subtitle2">{capitalize(currency.name)}</Typography>;
   };
 
   return (
@@ -153,6 +153,7 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
                     className={currency.id === selectedAsset?.id ? styles.listItemRootClicked : ''}
                     key={currency.id}
                     button
+                    disabled={isCurrencyAlreadyAdded(currency.id)}
                     onClick={() => handleSelectAsset(currency)}>
                     <Card className={styles.listItemToken}>
                       <CardHeader
@@ -195,7 +196,7 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
       <Snackbar open={successPopup} autoHideDuration={3000} onClose={handleCloseSuccess}>
         <Alert severity="success">
           <AlertTitle>Token Added!</AlertTitle>
-          Please refresh your browser to see the newly added token
+          Please refresh your browser to see the newly added currency
         </Alert>
       </Snackbar>
     </>
