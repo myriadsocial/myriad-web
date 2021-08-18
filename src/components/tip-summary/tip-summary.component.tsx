@@ -26,7 +26,7 @@ import {useTipSummaryHook} from './use-tip-summary.hook';
 
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import {timeAgo} from 'src/helpers/date';
-import {formatTipBalance, getTipperUserName} from 'src/helpers/transaction';
+import {getTipperUserName} from 'src/helpers/transaction';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -89,7 +89,7 @@ export const TipSummaryComponent: React.FC = () => {
                     <TableCell component="th" scope="row">
                       {transaction.currencyId}
                     </TableCell>
-                    <TableCell align="right">{formatTipBalance(transaction, currencies)}</TableCell>
+                    <TableCell align="right">{transaction.amount}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
