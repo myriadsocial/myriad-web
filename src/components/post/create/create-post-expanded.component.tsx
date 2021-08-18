@@ -57,15 +57,8 @@ const CreatePostExpandedComponent: React.FC<CreatePostExpandedProps> = ({
     }));
   };
 
-  const selectVideo = (): void => {
-    const uploadField: any = uploadVideoRef?.current;
-
-    if (!uploadField) return;
-
-    uploadField.click();
-  };
-
   const selectImages = (): void => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const uploadField: any = uploadImageRef?.current;
 
     if (!uploadField) return;
@@ -96,6 +89,7 @@ const CreatePostExpandedComponent: React.FC<CreatePostExpandedProps> = ({
   };
 
   const handleTagsChange = (
+    // eslint-disable-next-line @typescript-eslint/ban-types
     event: React.ChangeEvent<{}>,
     value: (string | string[])[],
     reason: AutocompleteChangeReason,
@@ -229,7 +223,7 @@ const CreatePostExpandedComponent: React.FC<CreatePostExpandedProps> = ({
             accept="image/*"
           />
           <Tooltip title="Coming soon" arrow>
-            <IconButton color="primary" aria-label="upload-video" onClick={selectVideo}>
+            <IconButton color="primary" aria-label="upload-video">
               <VideocamIcon />
             </IconButton>
           </Tooltip>
