@@ -1,11 +1,11 @@
 import React from 'react';
 
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import {makeStyles, createStyles} from '@material-ui/core/styles';
 import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
+import {AvatarComponent} from 'src/components/common/Avatar.component';
 import StyledBadge from 'src/components/common/Badge.component';
 import {MyriadIcon} from 'src/components/common/MyriadIcon';
 import FacebookIcon from 'src/images/facebook-svgrepo-com_1.svg';
@@ -64,7 +64,7 @@ export default function PostAvatar({origin, avatar, onClick}: Props) {
   return (
     <IconButton aria-label="avatar-icon" onClick={onClick}>
       <StyledBadge badgeContent={socials[origin]} className={style[origin]} color="default">
-        <Avatar className={style.avatar} aria-label="avatar" src={avatar} />
+        <AvatarComponent className={style.avatar} aria-label="avatar" src={avatar} />
       </StyledBadge>
     </IconButton>
   );

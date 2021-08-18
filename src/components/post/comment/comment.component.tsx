@@ -3,7 +3,6 @@ import {useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
-import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -17,6 +16,7 @@ import {withStyles, createStyles, Theme} from '@material-ui/core/styles';
 import {useStyles} from './comment.style';
 import ReplyCommentComponent from './reply.component';
 
+import {AvatarComponent} from 'src/components/common/Avatar.component';
 import CardTitle from 'src/components/common/CardTitle.component';
 import DateFormat from 'src/components/common/DateFormat';
 import ShowIf from 'src/components/common/show-if.component';
@@ -110,11 +110,11 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
                   avatar={
                     <IconButton aria-label="cart" onClick={() => openCommentProfile(comment.user)}>
                       <StyledBadge color="secondary">
-                        <Avatar
+                        <AvatarComponent
                           aria-label={comment.user?.name}
                           src={comment.user?.profilePictureURL}>
                           {comment.user?.name}
-                        </Avatar>
+                        </AvatarComponent>
                       </StyledBadge>
                     </IconButton>
                   }

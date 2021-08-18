@@ -3,7 +3,6 @@ import {useSelector} from 'react-redux';
 
 import Link from 'next/link';
 
-import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
@@ -16,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 
 import clsx from 'clsx';
+import {AvatarComponent} from 'src/components/common/Avatar.component';
 import {ToggleCollapseButton} from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
@@ -168,7 +168,7 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({
                   <Link href={`/${request.requestor.id}`}>
                     <a href={`/${request.requestor.id}`}>
                       <ListItemAvatar>
-                        <Avatar
+                        <AvatarComponent
                           alt={request.requestor.name}
                           src={request.requestor.profilePictureURL}
                         />
