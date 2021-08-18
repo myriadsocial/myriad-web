@@ -5,16 +5,12 @@ import {Actions} from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {generateImageSizes} from 'src/helpers/cloudinary';
-import {ImageSizes} from 'src/interfaces/assets';
 import {Currency} from 'src/interfaces/currency';
 import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail} from 'src/interfaces/user';
 
 export interface UserState extends BaseState {
-  user?: User & {
-    profilePicture: ImageSizes;
-  };
+  user?: User;
   socials: SocialMedia[];
   currencies: Currency[];
   transactionDetail: UserTransactionDetail;
@@ -45,12 +41,7 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
     case constants.FETCH_USER: {
       return {
         ...state,
-        user: {
-          ...action.user,
-          profilePicture: {
-            sizes: generateImageSizes(action.user.profilePictureURL || ''),
-          },
-        },
+        user: action.user,
         currencies: action.user.currencies,
       };
     }
@@ -66,12 +57,7 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
     case constants.UPDATE_USER: {
       return {
         ...state,
-        user: {
-          ...action.user,
-          profilePicture: {
-            sizes: generateImageSizes(action.user.profilePictureURL || ''),
-          },
-        },
+        user: action.user,
       };
     }
 

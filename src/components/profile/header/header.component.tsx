@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {useSelector} from 'react-redux';
 
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -21,6 +20,7 @@ import FriendButton from './friend-button.component';
 import {useStyles} from './header.style';
 import RespondFriendButton from './respond-button.component';
 
+import {AvatarComponent} from 'src/components/common/Avatar.component';
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {SocialListComponent} from 'src/components/user/social-list.component';
@@ -56,7 +56,6 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
     checkFriendStatus(profile.id);
   }, [profile.id]);
 
-  console.log('friendStatus', friendStatus);
   const profileInfo =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae nibh eu tellus tincidunt luctus hendrerit in orci. Phasellus vitae tristique nulla. Nam magna massa, sollicitudin sed turpis eros.';
 
@@ -115,9 +114,9 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
       <div className={style.header}>
         <div style={{width: 500}}>
           <div style={{display: 'flex', alignItems: 'center'}}>
-            <Avatar className={style.avatar} src={profile.profilePictureURL}>
+            <AvatarComponent className={style.avatar} src={profile.profilePictureURL}>
               {acronym(profile.name || '')}
-            </Avatar>
+            </AvatarComponent>
             <Typography className={style.name}>{profile.name || ''}</Typography>
           </div>
           <div style={{marginTop: '24px'}}>

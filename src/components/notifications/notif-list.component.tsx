@@ -3,7 +3,6 @@ import {useSelector} from 'react-redux';
 
 import Link from 'next/link';
 
-import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import DividerComponent from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
@@ -16,6 +15,7 @@ import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 import {ListHeaderComponent} from './list-header.component';
 
 import {formatDistance, subDays} from 'date-fns';
+import {AvatarComponent} from 'src/components/common/Avatar.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {useNotifHook} from 'src/hooks/use-notif.hook';
@@ -92,11 +92,11 @@ const NotificationListComponent: React.FC<NotificationListProps> = () => {
                 return (
                   <ListItem key={notification.id} className={style.item} alignItems="center">
                     <ListItemAvatar>
-                      <Avatar
+                      <AvatarComponent
                         className={style.avatar}
                         src={notification.fromUserId.profilePictureURL || ''}>
                         {acronym(notification.fromUserId.name)}
-                      </Avatar>
+                      </AvatarComponent>
                     </ListItemAvatar>
                     <ListItemText>
                       <Typography variant="body1" color="textPrimary" style={{fontWeight: 400}}>
