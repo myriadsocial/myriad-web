@@ -1,9 +1,12 @@
 import next from 'next';
 
+import * as dotenv from 'dotenv';
 import fs from 'fs';
 import {createServer as createHttpServer} from 'http';
 import {createServer as createHttpsServer} from 'https';
 import {parse} from 'url';
+
+dotenv.config();
 
 const port = parseInt(process.env.PORT || '3000', 10);
 const https = process.env.USE_HTTPS === 'true';

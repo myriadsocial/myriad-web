@@ -1,5 +1,6 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import nextConnect from 'next-connect';
+import getConfig from 'next/config';
 
 import {v2 as cloudinary} from 'cloudinary';
 import DatauriParser from 'datauri/parser';
@@ -16,6 +17,8 @@ type ResponseImageUpload = {
   error?: string;
 };
 
+const {serverRuntimeConfig, publicRuntimeConfig} = getConfig();
+
 const MAX_IMAGE_WIDTH = 2560; // 30inch monitor resolution 2560 x 1600
 const MAX_IMAGE_SIZE = MAX_IMAGE_WIDTH * 1000;
 
@@ -27,13 +30,12 @@ const upload = multer({
 
 // cloudinary config
 cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET,
+  cloud_name: publicRuntimeConfig.cloudinaryName,
+  api_key: serverRuntimeConfig.cloudinaryAPIKey,
+  api_secret: serverRuntimeConfig.cloudinarySecret,
 });
 
-const cloudinaryUpload = (file: string) =>
-  cloudinary.uploader.upload(file);
+const cloudinaryUpload = (file: string) => cloudinary.uploader.upload(file);
 
 const formatBufferTo64 = (name: string, file: Buffer): DatauriParser => {
   const parser = new DatauriParser();

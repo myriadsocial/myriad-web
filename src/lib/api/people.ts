@@ -1,9 +1,13 @@
+import getConfig from 'next/config';
+
 import Axios from 'axios';
 import {People} from 'src/interfaces/people';
 import {SocialsEnum} from 'src/interfaces/social';
 
+const {publicRuntimeConfig} = getConfig();
+
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: publicRuntimeConfig.apiURL,
 });
 
 export const getPeopleByPlatform = async (

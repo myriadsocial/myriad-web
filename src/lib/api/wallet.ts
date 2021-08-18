@@ -1,7 +1,11 @@
+import getConfig from 'next/config';
+
 import Axios from 'axios';
 
+const {publicRuntimeConfig} = getConfig();
+
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: publicRuntimeConfig.apiURL,
 });
 
 export const getWalletAddress = async (postId: string) => {

@@ -1,8 +1,12 @@
+import getConfig from 'next/config';
+
 import Axios from 'axios';
 import {Transaction} from 'src/interfaces/transaction';
 
+const {publicRuntimeConfig} = getConfig();
+
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://34.101.124.163:3000',
+  baseURL: publicRuntimeConfig.apiURL,
 });
 
 export const storeTransaction = async (values: Transaction): Promise<Transaction> => {

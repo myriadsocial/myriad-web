@@ -1,6 +1,8 @@
 import {useState} from 'react';
 import {useSelector} from 'react-redux';
 
+import getConfig from 'next/config';
+
 import Axios from 'axios';
 import {
   useTransaction as baseUseTransaction,
@@ -10,8 +12,10 @@ import {Transaction} from 'src/interfaces/transaction';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
+const {publicRuntimeConfig} = getConfig();
+
 const axios = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: publicRuntimeConfig.apiURL,
 });
 
 export const useTransaction = () => {

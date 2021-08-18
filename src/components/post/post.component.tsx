@@ -3,6 +3,7 @@ import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 import {useDispatch, useSelector} from 'react-redux';
 
+import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
@@ -41,7 +42,9 @@ const Linkify = dynamic(() => import('src/components/common/Linkify.component'),
   ssr: false,
 });
 
-const FACEBOOK_APP_ID = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID as string;
+const {publicRuntimeConfig} = getConfig();
+
+const FACEBOOK_APP_ID = publicRuntimeConfig.facebookAppId;
 
 type PostComponentProps = {
   defaultExpanded?: boolean;

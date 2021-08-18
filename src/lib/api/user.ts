@@ -1,8 +1,12 @@
+import getConfig from 'next/config';
+
 import Axios from 'axios';
 import {User, ExtendedUser, UserCredential, UserTransactionDetail} from 'src/interfaces/user';
 
+const {publicRuntimeConfig} = getConfig();
+
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: publicRuntimeConfig.apiURL,
 });
 
 export const getUserDetail = async (id: string): Promise<ExtendedUser> => {

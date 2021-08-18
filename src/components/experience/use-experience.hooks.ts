@@ -1,6 +1,8 @@
 import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+import getConfig from 'next/config';
+
 import {useExperience as baseUseExperience, ExperienceActionType} from './experience.context';
 
 import Axios from 'axios';
@@ -10,8 +12,10 @@ import {RootState} from 'src/reducers';
 import {updateFilter} from 'src/reducers/timeline/actions';
 import {TimelineState} from 'src/reducers/timeline/reducer';
 
+const {publicRuntimeConfig} = getConfig();
+
 const axios = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: publicRuntimeConfig.apiURL,
 });
 
 export const useExperience = (userId: string) => {

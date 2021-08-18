@@ -1,3 +1,5 @@
+import getConfig from 'next/config';
+
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {Keyring, decodeAddress} from '@polkadot/keyring';
 import type {KeyringPair} from '@polkadot/keyring/types';
@@ -10,16 +12,18 @@ type KeyDetail = {
   key: string;
 };
 
+const {publicRuntimeConfig} = getConfig();
+
 export const toHexPublicKey = (account: InjectedAccountWithMeta): string => {
   return u8aToHex(decodeAddress(account.address));
 };
 
 export const generateKey = (name: string): KeyDetail => {
-  const prefix = process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX
-    ? Number(process.env.NEXT_PUBLIC_POLKADOT_KEYRING_PREFIX)
+  const prefix = publicRuntimeConfig.myriadAddressPrefix
+    ? Number(publicRuntimeConfig.myriadAddressPrefix)
     : 214;
-  const cyptoType: KeypairType = process.env.NEXT_PUBLIC_POLKADOT_CRYPTO_TYPE
-    ? (process.env.NEXT_PUBLIC_POLKADOT_CRYPTO_TYPE as KeypairType)
+  const cyptoType: KeypairType = publicRuntimeConfig.myriadCryptoType
+    ? (publicRuntimeConfig.myriadCryptoType as KeypairType)
     : 'sr25519';
   const derivationPath = '';
 

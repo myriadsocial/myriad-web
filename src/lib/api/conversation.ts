@@ -1,8 +1,12 @@
+import getConfig from 'next/config';
+
 import Axios from 'axios';
 import {ExtendedConversation} from 'src/interfaces/conversation';
 
+const {publicRuntimeConfig} = getConfig();
+
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: publicRuntimeConfig.apiURL,
 });
 
 export const load = async (accountId: string): Promise<ExtendedConversation[]> => {

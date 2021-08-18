@@ -1,7 +1,11 @@
+import getConfig from 'next/config';
+
+const {publicRuntimeConfig} = getConfig();
+
 export const enableExtension = async () => {
   const {web3Enable, web3Accounts} = await import('@polkadot/extension-dapp');
 
-  const extensions = await web3Enable(process.env.NEXT_PUBLIC_APP_NAME as string);
+  const extensions = await web3Enable(publicRuntimeConfig.appName);
 
   if (extensions.length === 0) {
     // no extension installed, or the user did not accept the authorization
@@ -10,8 +14,8 @@ export const enableExtension = async () => {
   }
 
   // Using proper prefix
-  const prefix = process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX
-    ? Number(process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX)
+  const prefix = publicRuntimeConfig.myriadAddressPrefix
+    ? Number(publicRuntimeConfig.myriadAddressPrefix)
     : 214;
 
   // we are now informed that the user has at least one extension and that we

@@ -1,9 +1,13 @@
+import getConfig from 'next/config';
+
 import Axios from 'axios';
 import {Post, Comment, CreateCommentProps, ImportPost, Like, Dislike} from 'src/interfaces/post';
 import {TimelineSortMethod, TimelineFilter} from 'src/interfaces/timeline';
 
+const {publicRuntimeConfig} = getConfig();
+
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: publicRuntimeConfig.apiURL,
 });
 
 const LIMIT = 10;

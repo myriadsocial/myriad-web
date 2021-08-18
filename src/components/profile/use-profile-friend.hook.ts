@@ -1,6 +1,8 @@
 import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+import getConfig from 'next/config';
+
 import Axios from 'axios';
 import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {useNotifHook} from 'src/hooks/use-notif.hook';
@@ -15,8 +17,10 @@ import {
 import {searchProfileFriend, fetchProfileFriend} from 'src/reducers/profile/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
+const {publicRuntimeConfig} = getConfig();
+
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: publicRuntimeConfig.apiURL,
 });
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
