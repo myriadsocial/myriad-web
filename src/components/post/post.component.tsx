@@ -157,11 +157,13 @@ const PostComponent: React.FC<PostComponentProps> = ({
     });
   };
 
-  const isTippingEnabled = () => {
+  const isTippingEnabled = (): boolean => {
     if (anonymous) {
       return false;
     } else if (user) {
       if (!isOwnPost(post, user)) return true;
+      return false;
+    } else {
       return false;
     }
   };
