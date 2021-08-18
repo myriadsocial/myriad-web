@@ -3,7 +3,6 @@ import {useSelector} from 'react-redux';
 
 import Link from 'next/link';
 
-import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
@@ -20,6 +19,7 @@ import {ListHeaderComponent} from './list-header.component';
 import {useFriendList} from './use-friend-list.hook';
 
 import clsx from 'clsx';
+import {AvatarComponent} from 'src/components/common/Avatar.component';
 import {ToggleCollapseButton} from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {RootState} from 'src/reducers';
@@ -135,7 +135,7 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({
                   <Link href={`/${friend.id}`}>
                     <a href={`/${friend.id}`}>
                       <ListItemAvatar>
-                        <Avatar alt={friend.name} src={friend.avatar} />
+                        <AvatarComponent alt={friend.name} src={friend.avatar} />
                       </ListItemAvatar>
                     </a>
                   </Link>

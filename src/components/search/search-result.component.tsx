@@ -3,7 +3,6 @@ import {useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -16,6 +15,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import ShowIf from '../common/show-if.component';
 
+import {AvatarComponent} from 'src/components/common/Avatar.component';
 import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
@@ -184,7 +184,7 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({options}) => {
               <Grid item xs={12} sm={6} key={people.id}>
                 <Card>
                   <CardHeader
-                    avatar={<Avatar aria-label="avatar" src={people.profilePictureURL} />}
+                    avatar={<AvatarComponent aria-label="avatar" src={people.profilePictureURL} />}
                     title={RenderPrimaryText(people.name)}
                   />
                   <CardActionButtons people={people} />

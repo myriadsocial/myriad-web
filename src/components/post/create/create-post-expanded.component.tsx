@@ -1,7 +1,6 @@
 import React, {useState, useRef} from 'react';
 
 import {Tooltip} from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -20,6 +19,7 @@ import Autocomplete, {AutocompleteChangeReason} from '@material-ui/lab/Autocompl
 import {useStyles} from './create-post.style';
 import {PreviewImageComponent} from './preview-image.component';
 
+import {AvatarComponent} from 'src/components/common/Avatar.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {Experience} from 'src/interfaces/experience';
@@ -152,12 +152,12 @@ const CreatePostExpandedComponent: React.FC<CreatePostExpandedProps> = ({
       <CardHeader
         className={styles.cardHeader}
         avatar={
-          <Avatar
+          <AvatarComponent
             aria-label={user.name}
             src={user.profilePictureURL}
             style={{height: 55, width: 55}}>
             {acronym(user.name)}
-          </Avatar>
+          </AvatarComponent>
         }
         action={
           <Tooltip title="Coming soon" arrow>
