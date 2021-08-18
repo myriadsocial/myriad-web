@@ -32,7 +32,7 @@ export const usePolkadotExtension = () => {
 
     const allAccounts = enablePolkadotExtension();
 
-    if (allAccounts.length > 0) {
+    if (allAccounts) {
       //// we subscribe to any account change and log the new list.
       //// note that `web3AccountsSubscribe` returns the function to unsubscribe
       const unsubscribe = await web3AccountsSubscribe(injectedAccounts => {
