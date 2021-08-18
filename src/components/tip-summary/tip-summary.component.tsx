@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import {useSelector} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -27,8 +26,6 @@ import {useTipSummaryHook} from './use-tip-summary.hook';
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import {timeAgo} from 'src/helpers/date';
 import {getTipperUserName} from 'src/helpers/transaction';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
 
 export const TipSummaryComponent: React.FC = () => {
   const styles = useStyles();
@@ -43,8 +40,6 @@ export const TipSummaryComponent: React.FC = () => {
     loadTransaction,
     loadNextTransaction,
   } = useTipSummaryHook();
-
-  const {currencies} = useSelector<RootState, UserState>(state => state.userState);
 
   useEffect(() => {
     if (post?.id) {
