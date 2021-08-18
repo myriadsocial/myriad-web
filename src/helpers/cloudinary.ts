@@ -3,7 +3,8 @@ import {Sizes} from '../interfaces/assets';
 const CLOUDINARY_BASE_URL = 'https://res.cloudinary.com';
 const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
-export const generateImageSizes = (url: string, external = false, extension = 'jpg'): Sizes => {
+export const generateImageSizes = (url: string, extension = 'jpg'): Sizes => {
+  const external = !url.includes(`/${CLOUDINARY_BASE_URL}/`);
   const filename = url.split(/[\\/]/).pop();
 
   if (!filename)
