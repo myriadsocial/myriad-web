@@ -64,6 +64,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
 
   const {likePost, dislikePost} = usePostHook();
   const [expanded, setExpanded] = useState(defaultExpanded);
+  const [isPaused, setIsPaused] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const headerRef = useRef<any>();
@@ -144,12 +145,29 @@ const PostComponent: React.FC<PostComponentProps> = ({
     return url;
   };
 
+  const pauseHandle = () => {
+    setIsPaused(true);
+    const timeoutID = setTimeout(() => {
+      setIsPaused(false);
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  };
+
   const likePostHandle = () => {
+    if (isPaused) return;
+
     likePost(post.id);
+    pauseHandle();
   };
 
   const dislikePostHandle = () => {
+    if (isPaused) return;
+
     dislikePost(post.id);
+    pauseHandle();
   };
 
   const onHashtagClicked = async (hashtag: string) => {
