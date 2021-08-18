@@ -1,8 +1,12 @@
+import getConfig from 'next/config';
+
 import Axios from 'axios';
 import {ExtendedNotification, TotalNewNotification} from 'src/interfaces/notification';
 
+const {publicRuntimeConfig} = getConfig();
+
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: publicRuntimeConfig.apiURL,
 });
 
 export const getMyNotification = async (userId: string): Promise<ExtendedNotification[]> => {

@@ -1,6 +1,10 @@
+import getConfig from 'next/config';
+
 import firebase from 'firebase/app';
 import 'firebase/messaging';
 import localforage from 'localforage';
+
+const {publicRuntimeConfig} = getConfig();
 
 const firebaseCloudMessaging = {
   getToken: async (): Promise<string | null> => {
@@ -14,10 +18,10 @@ const firebaseCloudMessaging = {
   init: async function (): Promise<void | boolean> {
     if (!firebase.apps.length) {
       firebase.initializeApp({
-        apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-        messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-        appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+        apiKey: publicRuntimeConfig.firebaseAPIKey,
+        projectId: publicRuntimeConfig.firebaseProjectId,
+        messagingSenderId: publicRuntimeConfig.firebaseMessagingSenderId,
+        appId: publicRuntimeConfig.firebaseAppId,
       });
     }
 

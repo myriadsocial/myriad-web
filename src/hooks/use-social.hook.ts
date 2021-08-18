@@ -1,12 +1,16 @@
 import React from 'react';
 
+import getConfig from 'next/config';
+
 import Axios from 'axios';
 import {format} from 'date-fns';
 import {Post} from 'src/interfaces/post';
 import {parseTwitter, PostDetail} from 'src/lib/parse-social.util';
 
+const {serverRuntimeConfig} = getConfig();
+
 const client = Axios.create({
-  baseURL: process.env.NEXTAUTH_URL,
+  baseURL: serverRuntimeConfig.nextAuthURL,
 });
 
 const createMarkdownContent = (post: Post): string => {

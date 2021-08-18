@@ -1,7 +1,11 @@
+import getConfig from 'next/config';
+
 import {Sizes} from '../interfaces/assets';
 
+const {publicRuntimeConfig} = getConfig();
+
 const CLOUDINARY_BASE_URL = 'https://res.cloudinary.com';
-const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+const CLOUD_NAME = publicRuntimeConfig.cloudinaryName;
 
 export const generateImageSizes = (url: string, external = false, extension = 'jpg'): Sizes => {
   const filename = url.split(/[\\/]/).pop();

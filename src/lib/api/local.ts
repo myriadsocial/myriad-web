@@ -1,7 +1,11 @@
+import getConfig from 'next/config';
+
 import Axios from 'axios';
 
+const {serverRuntimeConfig} = getConfig();
+
 const client = Axios.create({
-  baseURL: process.env.NEXTAUTH_URL,
+  baseURL: serverRuntimeConfig.nextAuthURL,
 });
 
 type ResponseImageUpload = {

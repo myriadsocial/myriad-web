@@ -1,8 +1,12 @@
+import getConfig from 'next/config';
+
 import Axios from 'axios';
 import {ExtendedFriend, FriendStatus} from 'src/interfaces/friend';
 
+const {publicRuntimeConfig} = getConfig();
+
 const MyriadAPI = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: publicRuntimeConfig.apiURL,
 });
 
 const LIMIT = 10;

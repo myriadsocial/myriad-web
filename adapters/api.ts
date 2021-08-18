@@ -1,6 +1,7 @@
 import {AppOptions, User} from 'next-auth';
 import {Session, AdapterInstance} from 'next-auth/adapters';
 import jwt from 'next-auth/jwt';
+import getConfig from 'next/config';
 
 import Axios from 'axios';
 import snoowrap from 'snoowrap';
@@ -9,6 +10,8 @@ import * as PeopleAPI from 'src/lib/api/people';
 import * as UserAPI from 'src/lib/api/user';
 import {userToSession} from 'src/lib/serializers/session';
 import {TwitterClient} from 'twitter-api-client';
+
+const {serverRuntimeConfig} = getConfig();
 
 const FacebookGraph = Axios.create({
   baseURL: 'https://graph.facebook.com',
@@ -159,7 +162,7 @@ function Adapter() {
       try {
         const session = jwt.decode({
           token: sessionToken,
-          secret: process.env.SECRET as string,
+          secret: serverRuntimeConfig.secret,
         });
 
         _debug('decoded session', session);

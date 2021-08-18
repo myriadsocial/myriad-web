@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
+import getConfig from 'next/config';
 
 import APIAdapter from '../../../adapters/api';
 
@@ -13,6 +14,8 @@ type Credentials = {
   accessToken: string;
 };
 
+const {serverRuntimeConfig, publicRuntimeConfig} = getConfig();
+
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default NextAuth({
@@ -24,7 +27,7 @@ export default NextAuth({
       clientSecret: process.env.TWITTER_API_KEY_SECRET as string,
     }),
     Providers.Facebook({
-      clientId: process.env.FACEBOKK_APP_ID as string,
+      clientId: publicRuntimeConfig.facebookAppId,
       clientSecret: process.env.FACEBOOK_APP_SECRET as string,
       scope: 'user_posts,user_friends',
     }),
@@ -98,7 +101,7 @@ export default NextAuth({
   // The secret should be set to a reasonably long random string.
   // It is used to sign cookies and to sign and encrypt JSON Web Tokens, unless
   // a separate secret is defined explicitly for encrypting the JWT.
-  secret: process.env.SECRET,
+  secret: serverRuntimeConfig.secret,
   useJwtSession: true,
   session: {
     // Use JSON Web Tokens for session instead of database sessions.

@@ -1,11 +1,14 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
+import getConfig from 'next/config';
 
 import Axios from 'axios';
+
+const {serverRuntimeConfig} = getConfig();
 
 const client = Axios.create({
   baseURL: 'https://api.twitter.com',
   headers: {
-    Authorization: `Bearer ${process.env.TWITTER_BEARER_TOKEN}`,
+    Authorization: `Bearer ${serverRuntimeConfig.twitterBearerToken}`,
   },
 });
 
