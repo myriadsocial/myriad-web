@@ -111,7 +111,7 @@ export const fetchTransactionSummary: ThunkActionCreator<Actions, RootState> =
       }
 
       const {data} = await MyriadAPI.request<TransactionDetail[]>({
-        url: `/post/${post.id}/transaction-summary`,
+        url: `/posts/${post.id}/transaction-histories`,
         method: 'GET',
       });
 
