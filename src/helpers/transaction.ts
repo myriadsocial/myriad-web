@@ -1,5 +1,4 @@
 import {Currency} from 'src/interfaces/currency';
-import {TransactionDetail} from 'src/interfaces/transaction';
 import {Transaction} from 'src/interfaces/transaction';
 
 const UNKNOWN_ACCOUNT = 'unknown';
@@ -10,14 +9,6 @@ const formatBalance = (value: number, decimals: number): number => {
   const result = Number((Number(value.toString()) / 10 ** decimals).toFixed(5));
 
   return result;
-};
-
-export const formatTipBalance = (tip: TransactionDetail, tokens: Currency[]): number => {
-  const token = tokens.find(item => item.id === tip.currencyId);
-
-  if (!token) return tip.amount;
-
-  return formatBalance(tip.amount, token.decimal);
 };
 
 export const formatTransactionBalance = (transaction: Transaction, tokens: Currency[]): number => {
