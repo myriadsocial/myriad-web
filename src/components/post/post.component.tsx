@@ -168,6 +168,18 @@ const PostComponent: React.FC<PostComponentProps> = ({
     }
   };
 
+  const isLiked = (): boolean => {
+    if (!post.likes) return false;
+
+    return post.likes.filter(like => like.state).length > 0;
+  };
+
+  const isDisliked = (): boolean => {
+    if (!post.likes) return false;
+
+    return post.likes.filter(like => !like.state).length > 0;
+  };
+
   return (
     <>
       <Card className={style.root}>
@@ -260,6 +272,8 @@ const PostComponent: React.FC<PostComponentProps> = ({
             metric={post.metric}
             commentExpanded={expanded}
             tippingEnabled={isTippingEnabled()}
+            liked={isLiked()}
+            disliked={isDisliked()}
             expandComment={handleExpandClick}
             likePost={likePostHandle}
             dislikePost={dislikePostHandle}

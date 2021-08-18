@@ -35,6 +35,8 @@ type PostActionProps = {
   metric: PostMetric;
   tippingEnabled: boolean;
   commentExpanded: boolean;
+  liked?: boolean;
+  disliked?: boolean;
   expandComment: () => void;
   likePost: () => void;
   dislikePost: () => void;
@@ -45,6 +47,8 @@ export const PostActionComponent: React.FC<PostActionProps> = ({
   metric,
   commentExpanded,
   tippingEnabled,
+  liked = false,
+  disliked = false,
   expandComment,
   likePost,
   dislikePost,
@@ -54,10 +58,18 @@ export const PostActionComponent: React.FC<PostActionProps> = ({
 
   return (
     <>
-      <Button aria-label="like post" startIcon={<ThumbUpIcon />} onClick={likePost}>
+      <Button
+        aria-label="like post"
+        color={liked ? 'primary' : 'default'}
+        startIcon={<ThumbUpIcon />}
+        onClick={likePost}>
         ({metric.likes})
       </Button>
-      <Button aria-label="dislike post" startIcon={<ThumbDownIcon />} onClick={dislikePost}>
+      <Button
+        aria-label="dislike post"
+        color={disliked ? 'primary' : 'default'}
+        startIcon={<ThumbDownIcon />}
+        onClick={dislikePost}>
         ({metric.dislikes})
       </Button>
 

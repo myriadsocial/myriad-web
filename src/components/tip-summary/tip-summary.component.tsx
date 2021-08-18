@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
@@ -23,6 +22,7 @@ import Typography from '@material-ui/core/Typography';
 import {useStyles} from './tip-summary.style';
 import {useTipSummaryHook} from './use-tip-summary.hook';
 
+import {AvatarComponent} from 'src/components/common/Avatar.component';
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import {timeAgo} from 'src/helpers/date';
 import {getTipperUserName} from 'src/helpers/transaction';
@@ -108,7 +108,7 @@ export const TipSummaryComponent: React.FC = () => {
               {transactions.map(transaction => (
                 <ListItem key={transaction.hash}>
                   <ListItemAvatar>
-                    <Avatar
+                    <AvatarComponent
                       alt={getTipperUserName(transaction)}
                       src={transaction.fromUser?.profilePictureURL}
                     />

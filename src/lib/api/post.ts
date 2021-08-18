@@ -113,10 +113,15 @@ export const createPost = async (values: PostProps): Promise<Post> => {
 };
 
 export const importPost = async (values: ImportPostProps): Promise<Post> => {
+  const attributes: ImportPostProps = {
+    ...values,
+    tags: values.tags ?? [],
+  };
+
   const {data} = await MyriadAPI.request<Post>({
     url: `/posts/import`,
     method: 'POST',
-    data: values,
+    data: attributes,
   });
 
   return data;
