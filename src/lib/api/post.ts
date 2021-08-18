@@ -1,6 +1,7 @@
 import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
+import {LoopbackWhere} from './interfaces/loopback-query.interface';
 
 import {Dislike, Like} from 'src/interfaces/interaction';
 import {Post, PostProps, ImportPostProps} from 'src/interfaces/post';
@@ -18,22 +19,21 @@ export const getPost = async (
   sort?: TimelineSortMethod,
   filters?: TimelineFilter,
 ): Promise<PostList> => {
+  const where: LoopbackWhere<PostProps> = {};
   let orderField = 'originCreatedAt';
 
   switch (sort) {
     case 'comment':
-      orderField = 'metric.comment';
+      orderField = 'metric.comments';
       break;
     case 'like':
-      orderField = 'metric.liked';
+      orderField = 'metric.likes';
       break;
     case 'trending':
+    case 'created':
     default:
       break;
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const where: Partial<Record<keyof PostProps, any>> = {};
 
   if (filters && filters.tags && filters.tags.length) {
     where.tags = {
@@ -63,34 +63,41 @@ export const getPost = async (
     };
   }
 
+  const filterParams: Record<string, any> = {
+    page,
+    limit: PAGINATION_LIMIT,
+    order: `${orderField} DESC`,
+    include: [
+      {
+        relation: 'user',
+      },
+      {
+        relation: 'people',
+      },
+      {
+        relation: 'likes',
+        scope: {
+          where: {
+            userId: {eq: userId},
+          },
+        },
+      },
+    ],
+  };
+
+  if (type === TimelineType.FRIEND) {
+    filterParams.findBy = userId;
+    filterParams.sortBy = type;
+  } else {
+    filterParams.where = where;
+  }
+
+  console.log('FILTER', filterParams);
   const {data} = await MyriadAPI.request<PostList>({
     url: '/posts',
     method: 'GET',
     params: {
-      filter: {
-        page,
-        limit: PAGINATION_LIMIT,
-        order: `${orderField} DESC`,
-        // findBy: userId,
-        // sortBy: type,
-        where,
-        include: [
-          {
-            relation: 'user',
-          },
-          {
-            relation: 'people',
-          },
-          {
-            relation: 'likes',
-            scope: {
-              where: {
-                userId: {eq: userId},
-              },
-            },
-          },
-        ],
-      },
+      filter: filterParams,
     },
   });
 

@@ -1,6 +1,7 @@
 import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
+import {LoopbackWhere} from './interfaces/loopback-query.interface';
 
 import {Transaction, TransactionProps} from 'src/interfaces/transaction';
 
@@ -20,21 +21,23 @@ export const getTransactions = async (
   options: Partial<TransactionProps>,
   page?: number,
 ): Promise<TransactionList> => {
-  const where: Partial<Record<keyof TransactionProps, any>> = {};
-  let whereWithOr = {};
-  const include: Array<string> = [];
+  const where: LoopbackWhere<TransactionProps> = {};
+  const include: Array<string> = ['fromUser', 'toUser'];
 
   if (options.postId) {
     where.postId = {eq: options.postId};
   }
 
-  if (options.to) {
+  if (options.to && options.to !== options.from) {
     where.to = {eq: options.to};
   }
 
+  if (options.from && options.from !== options.to) {
+    where.from = {eq: options.from};
+  }
+
   if (options.to === options.from) {
-    whereWithOr = {or: [{to: options.to}, {from: options.from}]};
-    include.push('fromUser', 'toUser');
+    where.or = [{to: options.to}, {from: options.from}];
   }
 
   if (options.currencyId) {
@@ -49,7 +52,7 @@ export const getTransactions = async (
         page,
         limit: PAGINATION_LIMIT,
         order: `createdAt DESC`,
-        where: options.to === options.from ? whereWithOr : where,
+        where,
         include,
       },
     },
