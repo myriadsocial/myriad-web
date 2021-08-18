@@ -6,14 +6,12 @@ import dynamic from 'next/dynamic';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import {makeStyles, withStyles, Theme, createStyles, fade} from '@material-ui/core/styles';
 import {useTheme} from '@material-ui/core/styles';
 
 import {TabPanel} from '../common/tab-panel.component';
 import Header from './header/header.component';
-import {TippingComponent} from './myWallet/tipping/tipping.component';
-import {WalletComponent} from './myWallet/wallet/wallet.component';
 import {useStyles} from './profile.style';
+import MyWalletTabs from './wallet-tab/wallet-tab';
 
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
@@ -29,89 +27,6 @@ type Props = {
   profile: User;
   loading: boolean;
 };
-// WALLET TAB
-interface StyledTabsProps {
-  value: number;
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
-}
-
-//TODO: move to common component
-const StyledTabs = withStyles({
-  indicator: {
-    display: 'flex',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-})((props: StyledTabsProps) => (
-  <Tabs variant="fullWidth" {...props} TabIndicatorProps={{children: <span />}} />
-));
-
-interface StyledTabProps {
-  label: string;
-  ariaLabel?: string;
-}
-
-//TODO: move to common component
-const StyledTab = withStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      textTransform: 'none',
-      color: '#4b4851',
-      fontWeight: 'bold',
-      fontSize: 18,
-      marginRight: theme.spacing(1),
-      marginBottom: theme.spacing(2),
-      borderRadius: 8,
-      '&:focus': {
-        opacity: 1,
-        backgroundColor: fade('#8629e9', 0.2),
-        color: '#8629e9',
-      },
-    },
-  }),
-)((props: StyledTabProps) => <Tab aria-label={props.ariaLabel} disableRipple {...props} />);
-
-const useStylesForTabs = makeStyles((theme: Theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  padding: {
-    padding: theme.spacing(3),
-  },
-  demo2: {
-    backgroundColor: 'transparent',
-  },
-}));
-
-// TODO: move to single component file
-function MyWalletTabs() {
-  const classes = useStylesForTabs();
-  const [value, setValue] = React.useState(0);
-
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
-  };
-
-  return (
-    <div className={classes.root}>
-      <div className={classes.demo2}>
-        <StyledTabs value={value} onChange={handleChange} aria-label="tabs-for-wallet-or-tipping">
-          <StyledTab label="Wallet" />
-          <StyledTab label="Tipping" />
-        </StyledTabs>
-        <TabPanel value={value} index={0}>
-          <WalletComponent />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <TippingComponent />
-        </TabPanel>
-      </div>
-    </div>
-  );
-}
-// WALLET TAB
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function ProfileTimeline({profile, loading}: Props) {
