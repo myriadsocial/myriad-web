@@ -122,13 +122,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   } else {
     const user = await UserAPI.getUserDetail(userId);
 
-    //TODO: is this still needed?
-    //if (user.profilePictureURL) {
-    //user.profile_picture = {
-    //sizes: generateImageSizes(user.profilePictureURL),
-    //};
-    //}
-
     dispatch(setUser(user));
   }
 
