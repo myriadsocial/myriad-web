@@ -1,7 +1,6 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
-import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -13,6 +12,7 @@ import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {ProfileActionComponent} from './profile-action.component';
 import {SocialListComponent} from './social-list.component';
 
+import {AvatarComponent} from 'src/components/common/Avatar.component';
 import {LoginFormComponent} from 'src/components/login/login-form.component';
 import {ProfileEditComponent} from 'src/components/profile/edit/profile-edit.component';
 import {acronym} from 'src/helpers/string';
@@ -80,14 +80,14 @@ const UserComponent: React.FC<UserComponentProps> = ({isAnonymous}) => {
         <CardHeader
           className={style.cardHeader}
           avatar={
-            <Avatar
+            <AvatarComponent
               aria-label={`${user?.name || alias} avatar`}
-              src={user?.profilePicture.sizes.thumbnail}
+              src={user?.profilePictureURL}
               variant="circular"
               sizes="lg"
               style={{width: 72, height: 72}}>
               {acronym(user?.name || alias)}
-            </Avatar>
+            </AvatarComponent>
           }
           title={
             <Typography variant="h4" style={{marginBottom: 4, fontWeight: 400}}>

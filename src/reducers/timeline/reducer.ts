@@ -79,7 +79,8 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
         posts: state.posts.map(post => {
           if (post.id === action.postId && post.metric) {
             post.metric.likes += 1;
-            post.likes = post.likes ? [...post.likes, action.like] : [action.like];
+            post.metric.dislikes = Math.max(0, post.metric.dislikes - 1);
+            post.likes = [action.like];
           }
 
           return post;
@@ -109,7 +110,8 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
         posts: state.posts.map(post => {
           if (post.id === action.postId && post.metric) {
             post.metric.dislikes += 1;
-            post.likes = post.likes ? [...post.likes, action.like] : [action.like];
+            post.metric.likes = Math.max(0, post.metric.likes - 1);
+            post.likes = [action.like];
           }
 
           return post;

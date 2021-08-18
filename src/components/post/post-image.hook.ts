@@ -41,7 +41,7 @@ export const useImageHooks = () => {
         cols: itemCols,
         rows: ROWS,
         src: source[index],
-        sizes: generateImageSizes(source[index], platform !== 'myriad'),
+        sizes: generateImageSizes(source[index]),
       });
     }
 

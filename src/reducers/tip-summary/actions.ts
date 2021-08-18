@@ -78,9 +78,11 @@ export const fetchTransactionHistory: ThunkActionCreator<Actions, RootState> =
         params: {
           filter: {
             page,
+            order: 'createdAt DESC',
             where: {
               postId: post.id,
             },
+            include: ['fromUser', 'toUser'],
           },
         },
       });

@@ -137,12 +137,6 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
         timelineFilter,
       );
 
-      for await (const post of posts) {
-        if (post.platform !== 'myriad') {
-          //TODO: convert people image url to sizes
-        }
-      }
-
       dispatch({
         type: constants.LOAD_TIMELINE,
         payload: {
@@ -233,6 +227,7 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
 export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
   (post: Post) => async (dispatch, getState) => {
     let liked: Like | undefined;
+    let disliked: Like | undefined;
 
     dispatch(setLoading(true));
 
@@ -249,6 +244,10 @@ export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
         liked = post.likes.find(like => {
           return like.userId === user.id && like.state;
         });
+
+        disliked = post.likes.find(like => {
+          return like.userId === user.id && !like.state;
+        });
       }
 
       if (liked) {
@@ -260,6 +259,10 @@ export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
         });
       } else {
         const like = await InteractionAPI.like(user.id, post);
+
+        if (disliked) {
+          await InteractionAPI.removeLike(disliked.id);
+        }
 
         dispatch({
           type: constants.LIKE_POST,
@@ -277,6 +280,7 @@ export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
 export const toggleDislikePost: ThunkActionCreator<Actions, RootState> =
   (post: Post) => async (dispatch, getState) => {
     let disliked: Like | undefined;
+    let liked: Like | undefined;
 
     dispatch(setLoading(true));
 
@@ -304,6 +308,10 @@ export const toggleDislikePost: ThunkActionCreator<Actions, RootState> =
         });
       } else {
         const like = await InteractionAPI.dislike(user.id, post);
+
+        if (liked) {
+          await InteractionAPI.removeLike(liked.id);
+        }
 
         dispatch({
           type: constants.DISLIKE_POST,

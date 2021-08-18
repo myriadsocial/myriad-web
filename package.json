@@ -35,6 +35,10 @@
     "./src/**/*.{js,ts,tsx,scss}": [
       "eslint --fix",
       "prettier --write"
+    ],
+    "./pages/**/*.{js,ts,tsx,scss}": [
+      "eslint --fix",
+      "prettier --write"
     ]
   },
   "cacheDirectories": [

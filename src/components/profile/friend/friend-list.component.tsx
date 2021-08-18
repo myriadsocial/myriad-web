@@ -4,7 +4,6 @@ import {useSelector} from 'react-redux';
 import Link from 'next/link';
 
 import {SvgIcon} from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -22,6 +21,7 @@ import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 
+import {AvatarComponent} from 'src/components/common/Avatar.component';
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
@@ -193,12 +193,12 @@ const FriendsListComponent: React.FC<FriendListProps> = ({
                       alignItems="center"
                       divider={true}>
                       <ListItemAvatar>
-                        <Avatar
+                        <AvatarComponent
                           className={style.avatar}
                           alt={request.requestee.name}
                           src={request.requestee.profilePictureURL || ''}>
                           {acronym(request.requestee.name || '')}
-                        </Avatar>
+                        </AvatarComponent>
                       </ListItemAvatar>
                       <ListItemText>
                         <Link href={`/${request.requesteeId}`}>
@@ -237,12 +237,12 @@ const FriendsListComponent: React.FC<FriendListProps> = ({
                       alignItems="center"
                       divider={true}>
                       <ListItemAvatar>
-                        <Avatar
+                        <AvatarComponent
                           className={style.avatar}
                           alt={request.requestor.name}
                           src={request.requestor.profilePictureURL || ''}>
                           {acronym(request.requestor.name || '')}
-                        </Avatar>
+                        </AvatarComponent>
                       </ListItemAvatar>
                       <ListItemText>
                         <Link href={`/${request.requestorId}`}>
