@@ -17,7 +17,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "next",
+    "dev:secure": "nodemon",
     "build": "next build && tsc --project tsconfig.server.json",
     "postbuild": "yarn build:env",
     "build:env": "node ./plugins/export-env.js",
