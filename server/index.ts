@@ -14,13 +14,13 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({dev});
 const handle = app.getRequestHandler();
 
-const httpsOptions = {
-  key: fs.readFileSync('./certs/localhost-key.pem'),
-  cert: fs.readFileSync('./certs/localhost.pem'),
-};
-
 app.prepare().then(() => {
   if (https) {
+    const httpsOptions = {
+      key: fs.readFileSync('./certs/localhost-key.pem'),
+      cert: fs.readFileSync('./certs/localhost.pem'),
+    };
+
     createHttpsServer(https ? httpsOptions : {}, (req, res) => {
       const parsedUrl = parse(req.url!, true);
       handle(req, res, parsedUrl);
