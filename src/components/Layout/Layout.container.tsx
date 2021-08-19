@@ -43,7 +43,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [, loading] = useSession();
-  const {updateUser, loadFcmToken} = useUserHook();
+  const {loadFcmToken} = useUserHook();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
   useEffect(() => {
@@ -64,12 +64,6 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
     }
   }, [loading, user, anonymous]);
 
-  const handleFinishTour = (skip: boolean) => {
-    updateUser({
-      skipTour: skip,
-    });
-  };
-
   if (loading) return null;
 
   return (
@@ -81,10 +75,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
 
       <LayoutSettingProvider>
         <NoSsr>
-          <TourComponent
-            disabled={anonymous || Boolean(user?.skipTour)}
-            onFinished={handleFinishTour}
-          />
+          <TourComponent />
         </NoSsr>
         <ExperienceProvider>
           {isMobile ? (

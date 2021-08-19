@@ -16,7 +16,7 @@ export const useProfileTimeline = (people: User) => {
       owner: people.id,
     };
 
-    dispatch(loadTimeline(1, sort, filter, TimelineType.TRENDING));
+    dispatch(loadTimeline(1, sort, filter, TimelineType.ALL));
   };
 
   const filterImportedPost = async () => {
@@ -25,7 +25,7 @@ export const useProfileTimeline = (people: User) => {
       importer: people.id,
     };
 
-    dispatch(loadTimeline(1, sort, filter, TimelineType.TRENDING));
+    dispatch(loadTimeline(1, sort, filter, TimelineType.ALL));
   };
 
   const clearPosts = () => {

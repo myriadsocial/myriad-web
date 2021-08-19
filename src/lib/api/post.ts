@@ -85,14 +85,18 @@ export const getPost = async (
     ],
   };
 
-  if (type === TimelineType.FRIEND) {
-    filterParams.findBy = userId;
-    filterParams.sortBy = type;
-  } else {
-    filterParams.where = where;
+  switch (type) {
+    case TimelineType.FRIEND:
+    case TimelineType.EXPERIENCE:
+    case TimelineType.TRENDING:
+      filterParams.findBy = userId;
+      filterParams.sortBy = type;
+      break;
+    default:
+      filterParams.where = where;
+      break;
   }
 
-  console.log('FILTER', filterParams);
   const {data} = await MyriadAPI.request<PostList>({
     url: '/posts',
     method: 'GET',

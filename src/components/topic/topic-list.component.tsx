@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 
 import {Tag} from 'src/interfaces/experience';
+import {TimelineType} from 'src/interfaces/timeline';
 import {v4 as uuid} from 'uuid';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -63,8 +64,8 @@ export const TopicListComponent: React.FC<TopicListProps> = ({topics, add = fals
               <Typography variant="caption">{i + 1}</Typography>
             </ListItemAvatar>
             <ListItemText disableTypography className={style.text}>
-              <Link href={`?tag=${topic.id}&type=trending`} shallow={true}>
-                <a href={`?tag=${topic.id}&type=trending`}>
+              <Link href={`?tag=${topic.id}&type=${TimelineType.ALL}`} shallow={true}>
+                <a href={`?tag=${topic.id}&type=${TimelineType.ALL}`}>
                   <Typography variant="h4">{`#${topic.id}`}</Typography>
                   <Typography variant="caption">{`${topic.count} Posts`}</Typography>
                 </a>
