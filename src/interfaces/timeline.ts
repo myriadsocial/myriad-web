@@ -1,9 +1,10 @@
 import {LayoutType} from './experience';
 
 export enum TimelineType {
-  FRIEND = 'friend',
+  ALL = 'all',
   EXPERIENCE = 'experience',
   TRENDING = 'trending',
+  FRIEND = 'friend',
 }
 
 export type PostOrigin = 'facebook' | 'twitter' | 'reddit' | 'myriad';
