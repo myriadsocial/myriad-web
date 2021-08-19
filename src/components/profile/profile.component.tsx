@@ -17,7 +17,6 @@ import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
-import {fetchToken} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 const PostList = dynamic(() => import('./post/post-list.component'));
@@ -35,7 +34,7 @@ export default function ProfileTimeline({profile, loading}: Props) {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const {anonymous, user, tokens} = useSelector<RootState, UserState>(state => state.userState);
+  const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
   const {totalFriends} = useSelector<RootState, ProfileState>(state => state.profileState);
   const [isWalletTabActivated, setIsWalletTabActivated] = useState(false);
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -59,9 +58,6 @@ export default function ProfileTimeline({profile, loading}: Props) {
 
   useEffect(() => {
     dispatch(fetchProfileFriend(profile.id));
-
-    // load current authenticated user tokens
-    dispatch(fetchToken());
 
     return undefined;
   }, [profile.id]);
@@ -105,10 +101,10 @@ export default function ProfileTimeline({profile, loading}: Props) {
             {isGuest == false && <Tab className={style.tabItem} label={'My Wallet'} />}
           </Tabs>
           <TabPanel value={selectedTab} index={0} dir={theme.direction}>
-            <PostList profile={profile} tokens={tokens} />
+            <PostList profile={profile} />
           </TabPanel>
           <TabPanel value={selectedTab} index={1} dir={theme.direction}>
-            <ImportedPostList profile={profile} tokens={tokens} />
+            <ImportedPostList profile={profile} />
           </TabPanel>
           <TabPanel value={selectedTab} index={2} dir={theme.direction}>
             <FriendComponent profile={profile} />

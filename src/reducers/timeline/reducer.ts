@@ -70,8 +70,11 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       return {
         ...state,
         posts: state.posts.map(post => {
-          if (post.platformUser.platform_account_id === action.platformAccountId) {
-            post.platformUser = action.platformUser;
+          if (post.user.id === action.userId) {
+            post.user = {
+              ...post.user,
+              ...action.user,
+            };
           }
 
           return post;
