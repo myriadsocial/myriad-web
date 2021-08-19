@@ -14,7 +14,7 @@ import {setError} from 'src/reducers/base/actions';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
 export const useAuthHook = () => {
-  const {getPolkadotAccounts, unsubscribeFromAccounts} = usePolkadotExtension();
+  const {getPolkadotAccounts} = usePolkadotExtension();
   const dispatch = useDispatch();
 
   const getUserByAccounts = async (accounts: InjectedAccountWithMeta[]): Promise<User[] | null> => {
@@ -127,7 +127,6 @@ export const useAuthHook = () => {
   };
 
   const logout = async () => {
-    await unsubscribeFromAccounts();
     await firebaseCloudMessaging.removeToken();
     await signOut({
       callbackUrl: process.env.NEXT_PUBLIC_APP_URL,

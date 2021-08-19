@@ -207,7 +207,7 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({
             })}
           </List>
 
-          {(!showAll || hasMore) && (
+          {(!showAll || hasMore) && requests.length > 0 && (
             <LinkComponent
               className={style.more}
               component="button"
