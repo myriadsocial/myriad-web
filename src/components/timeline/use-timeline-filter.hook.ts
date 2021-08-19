@@ -12,15 +12,24 @@ export const useTimelineFilter = () => {
   const dispatch = useDispatch();
 
   const filterTimeline = async (query: ParsedUrlQuery) => {
-    let timelineType = TimelineType.FRIEND;
+    let timelineType = TimelineType.ALL;
     let timelineSort: TimelineSortMethod = 'created';
     let tags: string[] = [];
 
     if (query.type) {
       const type = Array.isArray(query.type) ? query.type[0] : query.type;
 
-      if (type === 'trending') {
-        timelineType = TimelineType.TRENDING;
+      if (
+        (
+          [
+            TimelineType.ALL,
+            TimelineType.EXPERIENCE,
+            TimelineType.FRIEND,
+            TimelineType.TRENDING,
+          ] as string[]
+        ).includes(type)
+      ) {
+        timelineType = type as TimelineType;
       }
     }
 

@@ -1,18 +1,20 @@
-import React, {useState} from 'react';
-import Joyride, {CallBackProps, STATUS, Step} from 'react-joyride';
+import React, {useState, useEffect} from 'react';
+import Joyride, {CallBackProps, Step, STATUS, ACTIONS, EVENTS} from 'react-joyride';
 
 import {Button} from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
+import localforage from 'localforage';
+import {delay} from 'lodash';
 import {WelcomeBannerComponent} from 'src/components/welcome-banner/welcomeBanner.component';
 import theme from 'src/themes/light';
 
-type TourComponentProps = {
-  disabled: boolean;
-  onFinished: (skip: boolean) => void;
+type TourConfig = {
+  index: number;
+  enabled: boolean;
 };
 
-const TourComponent: React.FC<TourComponentProps> = ({disabled, onFinished}) => {
+const TourComponent: React.FC = () => {
   const steps: Step[] = [
     {
       target: '#user-profile',
@@ -64,24 +66,72 @@ const TourComponent: React.FC<TourComponentProps> = ({disabled, onFinished}) => 
   ];
 
   const [isFinish, setIsFinish] = useState(false);
+  const [run, setRun] = useState(false);
+  const [index, setIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    delay(() => {
+      getConfig();
+    }, 1000);
+  }, []);
+
+  const getConfig = async () => {
+    const config = (await localforage.getItem('tour_enabled')) as TourConfig | null;
+
+    if (config) {
+      setRun(config.enabled);
+      setIndex(config.index);
+    } else {
+      setRun(true);
+      setIndex(0);
+    }
+  };
+
+  const storeConfig = async (config: TourConfig) => {
+    await localforage.setItem('tour_enabled', config);
+  };
 
   const handleJoyrideCallback = (data: CallBackProps) => {
-    const {status} = data;
+    const {status, index, size, action, type} = data;
 
-    if (([STATUS.FINISHED] as string[]).includes(status)) {
-      onFinished(true);
+    if (([STATUS.SKIPPED] as string[]).includes(status)) {
+      storeConfig({
+        enabled: true,
+        index: data.index,
+      });
+    }
+
+    if (
+      ([ACTIONS.NEXT] as string[]).includes(action) &&
+      ([EVENTS.STEP_AFTER] as string[]).includes(type)
+    ) {
+      setIndex(data.index + 1);
+    }
+
+    if (
+      ([ACTIONS.CLOSE] as string[]).includes(action) &&
+      ([EVENTS.STEP_AFTER] as string[]).includes(type) &&
+      index === size - 1
+    ) {
+      storeConfig({
+        enabled: false,
+        index: data.size,
+      });
+
       setIsFinish(true);
     }
   };
 
+  if (index === null) return null;
+
   return (
     <>
       <Joyride
-        run={!disabled}
+        run={run}
         steps={steps}
-        continuous={true}
-        scrollToFirstStep={true}
         showSkipButton={true}
+        continuous={true}
+        stepIndex={index}
         hideBackButton
         locale={{
           skip: 'Skip Tour',
@@ -109,6 +159,7 @@ const TourComponent: React.FC<TourComponentProps> = ({disabled, onFinished}) => 
         }}
         callback={handleJoyrideCallback}
       />
+
       {isFinish && <WelcomeBannerComponent />}
     </>
   );
