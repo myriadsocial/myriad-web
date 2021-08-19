@@ -1,5 +1,5 @@
-import React from 'react';
-import {useSelector} from 'react-redux';
+import React, {useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
 import {Session} from 'next-auth';
 import {getSession} from 'next-auth/client';
@@ -25,6 +25,8 @@ type ProfilePageProps = {
 };
 
 const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
+  const dispatch = useDispatch();
+
   const {detail: profileDetail} = useSelector<RootState, ProfileState>(state => state.profileState);
 
   useEffect(() => {

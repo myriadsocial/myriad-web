@@ -7,6 +7,7 @@ import {Action} from 'redux';
 import {Like} from 'src/interfaces/interaction';
 import {Post, PostProps} from 'src/interfaces/post';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
+import {UserProps} from 'src/interfaces/user';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 import * as InteractionAPI from 'src/lib/api/interaction';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
@@ -81,8 +82,8 @@ export interface FetchDedicatedPost extends Action {
 
 export interface UpdatePostPlatformUser extends Action {
   type: constants.UPDATE_POST_PLATFORM_USER;
-  platformAccountId: string;
-  platformUser: PostOriginUser;
+  userId: string;
+  user: Partial<UserProps>;
 }
 
 /**
@@ -256,20 +257,15 @@ export const updatePostPlatformUser: ThunkActionCreator<Actions, RootState> =
       userState: {user},
     } = getState();
 
-    const sizes = generateImageSizes(url);
-
     if (user) {
-      const platformUser: PostOriginUser = {
-        name: user.name,
-        username: user.name,
-        platform_account_id: user.id,
-        profile_image_url: sizes.thumbnail,
+      const updatedProps: Partial<UserProps> = {
+        profilePictureURL: url,
       };
 
       dispatch({
         type: constants.UPDATE_POST_PLATFORM_USER,
-        platformAccountId: user.id,
-        platformUser,
+        userId: user.id,
+        user: updatedProps,
       });
     }
   };

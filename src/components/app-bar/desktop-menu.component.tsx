@@ -12,7 +12,6 @@ import {useLayout} from 'src/hooks/use-layout.hook';
 import {SidebarTab} from 'src/interfaces/sidebar';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {RootState} from 'src/reducers';
-import {FriendState} from 'src/reducers/friend/reducer';
 import {NotificationState} from 'src/reducers/notification/reducer';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

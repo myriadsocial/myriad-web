@@ -106,7 +106,7 @@ export const numOfNewNotifications: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const total: number = await NotifAPI.getNumOfNewNotification(user.id);
+      const total: number = await NotificationAPI.getNumOfNewNotification(user.id);
 
       dispatch({
         type: constants.TOTAL_NEW_NOTIFICATION,
