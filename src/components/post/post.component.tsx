@@ -70,7 +70,6 @@ const PostComponent: React.FC<PostComponentProps> = ({
 
   const {likePost, dislikePost} = usePostHook();
   const [expanded, setExpanded] = useState(defaultExpanded);
-  const [isPaused, setIsPaused] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const headerRef = useRef<any>();

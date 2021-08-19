@@ -35,10 +35,12 @@ type Props = {
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function PostList({profile, tokens}: Props) {
+export default function PostList({profile}: Props) {
   const style = useStyles();
 
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, currencies: userTokens} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const {loading, posts, hasMore, nextPage} = useTimelineHook();
   const {filterOriginalPost, clearPosts} = useProfileTimeline(profile);
   const {hide, toggle, isShown} = useModal();
@@ -97,7 +99,7 @@ export default function PostList({profile, tokens}: Props) {
         <SendTipModal
           isShown={isShown}
           hide={hide}
-          availableTokens={tokens}
+          availableTokens={userTokens}
           userAddress={user.id}
         />
       )}
