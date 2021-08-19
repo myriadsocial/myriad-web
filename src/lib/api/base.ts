@@ -1,3 +1,5 @@
+import getConfig from 'next/config';
+
 import axios, {AxiosInstance} from 'axios';
 
 type AuthorizationParams = {
@@ -7,11 +9,13 @@ type AuthorizationParams = {
 
 let API: AxiosInstance;
 
+const {publicRuntimeConfig} = getConfig();
+
 /*eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export const initialize = (params?: AuthorizationParams): AxiosInstance => {
   if (!API) {
     API = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL,
+      baseURL: publicRuntimeConfig.apiURL,
     });
 
     API.interceptors.request.use(config => {
