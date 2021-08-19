@@ -143,7 +143,7 @@ export default function ProfileTimeline({profile, loading}: Props) {
   }, [isWalletTabActivated]);
 
   useEffect(() => {
-    dispatch(fetchProfileFriend(profile.id));
+    dispatch(fetchProfileFriend());
 
     // load current authenticated user tokens
     dispatch(fetchToken());

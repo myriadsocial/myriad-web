@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import Axios from 'axios';
+import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {useNotifHook} from 'src/hooks/use-notif.hook';
 import {FriendStatus, ExtendedFriend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
@@ -11,24 +12,23 @@ import {
   deleteFriendRequest,
   toggleFriendRequest,
 } from 'src/reducers/friend/actions';
-import {searchProfileFriend} from 'src/reducers/profile/actions';
+import {searchProfileFriend, fetchProfileFriend} from 'src/reducers/profile/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 const MyriadAPI = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useFriendHook = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const dispatch = useDispatch();
-
   const [friendStatus, setFriendStatus] = useState<ExtendedFriend | null>(null);
   const [loading, setLoading] = useState(false);
   const {loadNotifications} = useNotifHook();
+  const {loadFriends} = useFriendsHook();
 
   const searchFriend = async (profile: User, query: string) => {
-    if (!user) return;
-
     dispatch(searchProfileFriend(profile.id, query));
   };
 
@@ -41,16 +41,17 @@ export const useFriendHook = () => {
   const cancelFriendRequest = async (request: ExtendedFriend) => {
     await dispatch(deleteFriendRequest(request));
 
-    checkFriendStatus(request.requestorId);
+    await loadFriends();
+    await dispatch(fetchProfileFriend());
+    await checkFriendStatus(request.requestorId);
     loadNotifications();
   };
 
   const toggleRequest = async (request: ExtendedFriend, status: FriendStatus) => {
-    setLoading(true);
-
     await dispatch(toggleFriendRequest(request, status));
 
-    checkFriendStatus(request.requestorId);
+    await dispatch(fetchProfileFriend());
+    await checkFriendStatus(request.requestorId);
   };
 
   const checkFriendStatus = async (friendId?: string) => {

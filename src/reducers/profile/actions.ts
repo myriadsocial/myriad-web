@@ -70,11 +70,19 @@ export const fetchProfileDetail: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchProfileFriend: ThunkActionCreator<Actions, RootState> =
-  (userId: string) => async dispatch => {
+  () => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
-      const friends: ExtendedFriend[] = await FriendAPI.getFriends(userId);
+      const {
+        profileState: {detail},
+      } = getState();
+
+      if (!detail) {
+        throw new Error('User not found');
+      }
+
+      const friends: ExtendedFriend[] = await FriendAPI.getFriends(detail.id);
 
       dispatch({
         type: constants.FETCH_PROFILE_FRIEND,
