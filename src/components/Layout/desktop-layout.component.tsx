@@ -17,12 +17,12 @@ type DesktopLayoutProps = {
 
 const DesktopLayoutComponent: React.FC<DesktopLayoutProps> = ({children, anonymous}) => {
   const style = useStyles();
-  const {loadNotifications} = useNotifHook();
+  const {loadNumOfNewNotifications} = useNotifHook();
   const ref = useRef<HTMLDivElement | null>(null);
   const [top, setTop] = useState(124);
 
   useEffect(() => {
-    loadNotifications();
+    loadNumOfNewNotifications();
 
     return undefined;
   }, []);
