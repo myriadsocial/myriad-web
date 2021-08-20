@@ -28,10 +28,8 @@ export const getNumOfNewNotification = async (userId: string): Promise<number> =
     url: `/notifications/count`,
     method: 'GET',
     params: {
-      filter: {
-        where: {
-          and: [{to: userId}, {read: false}],
-        },
+      where: {
+        and: [{to: userId}, {read: false}],
       },
     },
   });

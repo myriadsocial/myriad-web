@@ -66,7 +66,6 @@ const NotificationListComponent: React.FC<NotificationListProps> = () => {
   const {readNotifications} = useNotifHook();
 
   useEffect(() => {
-    console.log(notifications[0]);
     return () => {
       readNotifications();
     };
