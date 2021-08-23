@@ -41,7 +41,8 @@ RUN mkdir -p /home/myriad/app
 WORKDIR /home/myriad/app
 
 # You only need to copy next.config.js if you are NOT using the default configuration
-COPY --from=builder --chown=myriad /app/next.config.js ./app/next.config.js
+COPY --from=builder --chown=myriad /app/next.config.js ./next.config.js
+COPY --from=builder --chown=myriad /app/plugins ./plugins
 COPY --from=builder --chown=myriad /app/public ./public
 COPY --from=builder --chown=myriad /app/.next ./.next
 COPY --from=builder --chown=myriad /app/node_modules ./node_modules
