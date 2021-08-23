@@ -27,6 +27,8 @@ export const loadComments = async (postId: string, excludeUser?: string): Promis
         where,
         include: ['user'],
       },
+      pageNumber: 1,
+      pageLimit: PAGINATION_LIMIT,
     },
   });
 
