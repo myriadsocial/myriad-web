@@ -25,8 +25,6 @@ export const useTimelineHook = () => {
   const sortTimeline = async (sort: TimelineSortMethod) => {
     // shallow push, without rerender page
     router.push(`?sort=${sort}`, undefined, {shallow: true});
-
-    dispatch(loadTimeline(1, sort));
   };
 
   return {
