@@ -34,7 +34,7 @@ export const useFriendHook = () => {
     checkFriendStatus(profile.id);
   };
 
-  const cancelFriendRequest = async (request: Friend) => {
+  const removeFriendRequest = async (request: Friend) => {
     await dispatch(deleteFriendRequest(request));
 
     await loadFriends();
@@ -59,10 +59,8 @@ export const useFriendHook = () => {
 
     try {
       const {data} = await FriendAPI.checkFriendStatus(user.id, [friendId]);
-
-      if (data.length > 0) {
-        setFriendStatus(data[0]);
-      }
+      if (data.length > 0) setFriendStatus(data[0]);
+      else setFriendStatus(null);
     } catch (error) {
       console.log(error, '<<<error');
     } finally {
@@ -75,7 +73,7 @@ export const useFriendHook = () => {
     friendStatus,
     makeFriend,
     searchFriend,
-    cancelFriendRequest,
+    removeFriendRequest,
     checkFriendStatus,
     toggleRequest,
   };

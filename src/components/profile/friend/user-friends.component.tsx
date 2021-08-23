@@ -18,7 +18,7 @@ interface UserFriendProps {
 }
 
 const UserFriendComponent: React.FC<UserFriendProps> = ({profile}) => {
-  const {searchFriend, cancelFriendRequest} = useFriendHook();
+  const {searchFriend, removeFriendRequest} = useFriendHook();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {friends, totalFriends} = useSelector<RootState, ProfileState>(state => state.profileState);
@@ -46,7 +46,7 @@ const UserFriendComponent: React.FC<UserFriendProps> = ({profile}) => {
         />
       </div>
 
-      <FriendList profile={profile} friends={friends} cancelFriendRequest={cancelFriendRequest} />
+      <FriendList profile={profile} friends={friends} removeFriendRequest={removeFriendRequest} />
     </div>
   );
 };

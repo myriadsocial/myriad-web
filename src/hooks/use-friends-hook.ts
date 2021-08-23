@@ -52,7 +52,6 @@ export const useFriendsHook = () => {
 
   const sendRequest = async (destination: User) => {
     await dispatch(createFriendRequest(destination));
-    if (user) checkFriendStatus([user]);
   };
 
   const checkFriendStatus = async (people: User[]) => {

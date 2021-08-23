@@ -34,7 +34,7 @@ import {UserState} from 'src/reducers/user/reducer';
 type FriendListProps = {
   profile: User;
   friends: Friend[];
-  cancelFriendRequest: (requestor: Friend) => void;
+  removeFriendRequest: (requestor: Friend) => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -124,7 +124,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const FriendsListComponent: React.FC<FriendListProps> = ({
   profile,
   friends,
-  cancelFriendRequest,
+  removeFriendRequest,
 }) => {
   const style = useStyles();
 
@@ -158,7 +158,7 @@ const FriendsListComponent: React.FC<FriendListProps> = ({
   };
 
   const handleUnFriendRequest = (friend: Friend | null) => {
-    if (friend) cancelFriendRequest(friend);
+    if (friend) removeFriendRequest(friend);
     toggleRemoveAlert();
     handleClose();
   };
