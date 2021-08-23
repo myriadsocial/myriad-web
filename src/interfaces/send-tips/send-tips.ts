@@ -26,7 +26,7 @@ export interface SendTipProps {
   value: number;
   decimals: number;
   currencyId: string;
-  postId: string;
+  referenceId: string;
   contentType: ContentType;
   wsAddress: string;
 }

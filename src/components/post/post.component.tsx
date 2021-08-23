@@ -95,7 +95,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
 
   const defineRecipientDetail = (comment: Comment) => {
     const recipientDetail = {
-      postId: comment.id,
+      referenceId: comment.id,
       walletAddress: comment.userId,
       contentType: ContentType.COMMENT,
     };

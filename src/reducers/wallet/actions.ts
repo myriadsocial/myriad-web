@@ -50,7 +50,7 @@ export const fetchRecipientDetail: ThunkActionCreator<Actions, RootState> =
 
       const walletDetailPayload = {
         walletAddress,
-        postId,
+        referenceId: postId,
         contentType: ContentType.POST,
       };
 
