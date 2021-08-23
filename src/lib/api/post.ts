@@ -90,7 +90,7 @@ export const getPost = async (
     case TimelineType.EXPERIENCE:
     case TimelineType.TRENDING:
       filterParams.findBy = userId;
-      filterParams.sortBy = type;
+      filterParams.timelineType = type;
       break;
     default:
       filterParams.where = where;
