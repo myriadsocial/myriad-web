@@ -4,7 +4,6 @@ import {User} from './user';
 export enum FriendStatus {
   PENDING = 'pending',
   APPROVED = 'approved',
-  REJECTED = 'rejected',
 }
 
 export type FriendProps = {

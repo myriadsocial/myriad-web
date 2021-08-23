@@ -18,6 +18,7 @@ import clsx from 'clsx';
 import {AvatarComponent} from 'src/components/common/Avatar.component';
 import {ToggleCollapseButton} from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
+import {useFriendHook} from 'src/components/profile/use-profile-friend.hook';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {RootState} from 'src/reducers';
 import {FriendRequestState} from 'src/reducers/friend-request/reducer';
@@ -105,6 +106,7 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({
     hasMore,
     meta: {totalItemCount: totalRequest},
   } = useSelector<RootState, FriendRequestState>(state => state.friendRequestState);
+  const {removeFriendRequest} = useFriendHook();
   const limit = 2;
 
   const approveFriendRequest = (friend: Friend) => {
@@ -112,7 +114,7 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({
   };
 
   const rejectFriendRequest = (friend: Friend) => {
-    toggleRequest(friend, FriendStatus.PENDING);
+    removeFriendRequest(friend);
   };
 
   const handleToggleExpand = () => {

@@ -42,7 +42,7 @@ type ProfileHeaderProps = {
 const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, profile, isGuest}) => {
   const style = useStyles();
 
-  const {friendStatus, makeFriend, checkFriendStatus, cancelFriendRequest, toggleRequest} =
+  const {friendStatus, makeFriend, checkFriendStatus, removeFriendRequest, toggleRequest} =
     useFriendHook();
   const {showAlert} = useAlertHook();
   const {logout} = useAuthHook();
@@ -84,12 +84,12 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
   };
 
   const handleUnFriendRequest = () => {
-    if (friendStatus) cancelFriendRequest(friendStatus);
+    if (friendStatus) removeFriendRequest(friendStatus);
     toggleRemoveAlert();
   };
 
   const handlecancelFriendRequest = () => {
-    if (friendStatus) cancelFriendRequest(friendStatus);
+    if (friendStatus) removeFriendRequest(friendStatus);
   };
 
   const handleApproveFriendRequest = () => {
@@ -97,7 +97,7 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
   };
 
   const handleRejectFriendRequest = () => {
-    if (friendStatus) toggleRequest(friendStatus, FriendStatus.REJECTED);
+    if (friendStatus) removeFriendRequest(friendStatus);
   };
 
   // PUBLICKEY;
@@ -151,10 +151,7 @@ const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, prof
           </div>
           <ShowIf condition={isGuest === true}>
             <div style={{marginTop: '24px'}}>
-              <ShowIf
-                condition={
-                  friendStatus?.status == null || friendStatus.status == FriendStatus.REJECTED
-                }>
+              <ShowIf condition={friendStatus?.status == null}>
                 <Button
                   disabled={isAnonymous}
                   className={style.button2}

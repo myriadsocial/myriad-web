@@ -76,7 +76,7 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({options}) => {
 
   useEffect(() => {
     // list all transaction user id as param
-    if (!anonymous && user) checkFriendStatus([user]);
+    if (!anonymous && user) checkFriendStatus(options);
   }, []);
 
   const redirectToProfilePage = (url: string) => {
@@ -90,8 +90,9 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({options}) => {
     return friendOrFriendRequested ? friendOrFriendRequested.status : null;
   };
 
-  const sendFriendRequest = (destination: User) => {
-    sendRequest(destination);
+  const sendFriendRequest = async (destination: User) => {
+    await sendRequest(destination);
+    checkFriendStatus(options);
   };
 
   type CardActionProps = {
@@ -106,11 +107,7 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({options}) => {
     let disableRequest = false;
 
     if (status) {
-      disableRequest = [
-        FriendStatus.PENDING,
-        FriendStatus.APPROVED,
-        FriendStatus.REJECTED,
-      ].includes(status);
+      disableRequest = [FriendStatus.PENDING, FriendStatus.APPROVED].includes(status);
     }
 
     return (
@@ -142,10 +139,9 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({options}) => {
                   </ShowIf>
                 </>
               }>
-              <ShowIf condition={status === null}>Add Friend</ShowIf>
-              <ShowIf condition={status === FriendStatus.PENDING}>Request Sent</ShowIf>
-              <ShowIf condition={status === FriendStatus.APPROVED}>Friend</ShowIf>
-              <ShowIf condition={status === FriendStatus.REJECTED}>Rejected</ShowIf>
+              <ShowIf condition={status === null}>Add Friend {status}</ShowIf>
+              <ShowIf condition={status === FriendStatus.PENDING}>Request Sent {status}</ShowIf>
+              <ShowIf condition={status === FriendStatus.APPROVED}>Friend {status}</ShowIf>
             </Button>
           )}
         </div>
