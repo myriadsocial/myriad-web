@@ -21,6 +21,7 @@ export type UserProps = BaseUser & {
   fcmTokens?: string[];
   skipTour?: boolean;
   onTimeline?: string;
+  skipWelcome?: boolean;
 };
 
 export interface User extends UserProps, BaseModel {
