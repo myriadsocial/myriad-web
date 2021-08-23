@@ -64,7 +64,7 @@ const TourComponent: React.FC = () => {
     },
   ];
 
-  const [isFinish, setIsFinish] = useState(false);
+  const [, setIsFinish] = useState(false);
   const [run, setRun] = useState(false);
   const [index, setIndex] = useState<number | null>(null);
 
