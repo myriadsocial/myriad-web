@@ -5,6 +5,7 @@ import _ from 'lodash';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {Currency} from 'src/interfaces/currency';
 import {SendTipProps} from 'src/interfaces/send-tips/send-tips';
+import {ContentType} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
 import {signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
@@ -25,7 +26,7 @@ export const usePolkadotApi = () => {
   };
 
   const sendTip = async (
-    {from, to, value, decimals, currencyId, postId, contentType, wsAddress}: SendTipProps,
+    {from, to, value, decimals, currencyId, referenceId, contentType, wsAddress}: SendTipProps,
     callback?: () => void,
   ) => {
     setLoading(true);
@@ -57,16 +58,29 @@ export const usePolkadotApi = () => {
 
       if (txHash) {
         const correctedValue = value / 10 ** decimals;
-        // Record the transaction
-        // TODO: adjust to the new DB scheme
-        await storeTransaction({
-          hash: txHash,
-          from,
-          to,
-          amount: correctedValue,
-          currencyId: currencyId,
-          postId,
-        });
+
+        if (contentType === ContentType.POST) {
+          // Record the transaction
+          await storeTransaction({
+            hash: txHash,
+            amount: correctedValue,
+            type: ContentType.POST,
+            referenceId,
+            from,
+            to,
+            currencyId: currencyId,
+          });
+        } else if (contentType === ContentType.COMMENT) {
+          await storeTransaction({
+            hash: txHash,
+            amount: correctedValue,
+            type: ContentType.COMMENT,
+            referenceId,
+            from,
+            to,
+            currencyId: currencyId,
+          });
+        }
 
         showTipAlert({
           severity: 'success',
