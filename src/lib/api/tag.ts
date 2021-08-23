@@ -12,10 +12,9 @@ export const loadTag = async (page = 1): Promise<TagList> => {
     url: '/tags',
     method: 'GET',
     params: {
-      filter: {
-        page,
-        limit: PAGINATION_LIMIT,
-      },
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
+      filter: {},
     },
   });
 
@@ -27,9 +26,9 @@ export const searchTag = async (query: string, page = 1): Promise<TagList> => {
     url: '/tags',
     method: 'GET',
     params: {
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
       filter: {
-        page,
-        limit: PAGINATION_LIMIT,
         where: {
           id: {
             like: `.*${query}*`,
@@ -48,9 +47,9 @@ export const trendingTopic = async (limit?: number): Promise<TrendingList> => {
     url: '/tags',
     method: 'GET',
     params: {
+      pageLimit: limit || PAGINATION_LIMIT,
       filter: {
         order: `count DESC`,
-        limit: limit || PAGINATION_LIMIT,
       },
     },
   });

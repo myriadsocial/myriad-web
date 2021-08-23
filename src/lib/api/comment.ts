@@ -1,5 +1,4 @@
 import MyriadAPI from './base';
-import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
 import {Comment, CommentProps} from 'src/interfaces/comment';
@@ -25,8 +24,6 @@ export const loadComments = async (postId: string, excludeUser?: string): Promis
     method: 'GET',
     params: {
       filter: {
-        page: 1,
-        limit: PAGINATION_LIMIT,
         where,
         include: ['user'],
       },

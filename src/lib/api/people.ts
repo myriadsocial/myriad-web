@@ -11,8 +11,8 @@ export const getPeopleByPlatform = async (
     url: `/people`,
     method: 'GET',
     params: {
+      pageLimit: 1,
       filter: {
-        limit: 1,
         where: {
           platform: {
             eq: platform,
@@ -43,8 +43,8 @@ export const searchPeople = async (query: string): Promise<People[]> => {
     url: '/people',
     method: 'GET',
     params: {
+      pageLimit: 10,
       filter: {
-        limit: 10,
         where: {
           username: {
             like: query,

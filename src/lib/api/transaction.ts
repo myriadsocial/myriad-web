@@ -48,9 +48,9 @@ export const getTransactions = async (
     url: '/transactions',
     method: 'GET',
     params: {
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
       filter: {
-        page,
-        limit: PAGINATION_LIMIT,
         order: `createdAt DESC`,
         where,
         include,
