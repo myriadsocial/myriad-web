@@ -102,6 +102,12 @@ export const getPost = async (
       pageNumber: page,
       pageLimit: PAGINATION_LIMIT,
       filter: filterParams,
+      pageLimit: PAGINATION_LIMIT,
+      pageNumber: page,
+      //TIMELINE TYPE
+      //timelineType: type,
+      //USERID
+      //userId: userId
     },
   });
 

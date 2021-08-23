@@ -24,8 +24,8 @@ export const getTransactions = async (
   const where: LoopbackWhere<TransactionProps> = {};
   const include: Array<string> = ['fromUser', 'toUser'];
 
-  if (options.postId) {
-    where.postId = {eq: options.postId};
+  if (options.referenceId) {
+    where.referenceId = {eq: options.referenceId};
   }
 
   if (options.to && options.to !== options.from) {
@@ -55,6 +55,8 @@ export const getTransactions = async (
         where,
         include,
       },
+      pageLimit: PAGINATION_LIMIT,
+      pageNumber: page,
     },
   });
 

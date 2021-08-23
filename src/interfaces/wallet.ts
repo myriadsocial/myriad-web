@@ -4,7 +4,7 @@ export enum ContentType {
 }
 
 export interface WalletDetail {
-  postId: string;
+  referenceId: string;
   walletAddress: string;
   contentType: ContentType;
 }
