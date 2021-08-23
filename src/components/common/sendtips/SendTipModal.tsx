@@ -203,7 +203,7 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
     value,
     decimals,
     currencyId,
-    postId,
+    referenceId,
     contentType,
     wsAddress,
   }: SendTipProps) => {
@@ -213,7 +213,7 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
       value,
       decimals,
       currencyId,
-      postId,
+      referenceId,
       contentType,
       wsAddress,
     };
@@ -222,7 +222,7 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
       handleCloseModal();
       setSendTipClicked(false);
 
-      const contentPayload = posts.find(({id}) => id === recipientDetail.postId);
+      const contentPayload = posts.find(({id}) => id === recipientDetail.referenceId);
 
       if (contentPayload) {
         openTipSummary(contentPayload);
@@ -237,7 +237,7 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
       value: tipAmount,
       decimals: tokenProperties.tokenDecimals,
       currencyId: tokenProperties.tokenId,
-      postId: recipientDetail.postId,
+      referenceId: recipientDetail.referenceId,
       contentType: recipientDetail.contentType,
       wsAddress: tokenProperties.wsAddress,
     });

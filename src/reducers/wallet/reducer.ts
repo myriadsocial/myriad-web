@@ -16,7 +16,7 @@ export interface WalletState extends BaseState {
 const initialState: WalletState = {
   loading: false,
   recipientDetail: {
-    postId: '',
+    referenceId: '',
     walletAddress: '',
     contentType: ContentType.POST,
   },
