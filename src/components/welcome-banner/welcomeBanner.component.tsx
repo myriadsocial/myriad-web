@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -13,6 +14,8 @@ import {useStyles} from './welcomeBanner.style';
 import localforage from 'localforage';
 import {delay} from 'lodash';
 import BannerImage from 'src/images/banner-welcome.svg';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 export type WelcomeBannerComponentProps = {
   triggerWelcomeBanner: () => void;
@@ -24,6 +27,7 @@ type WelcomeBannerConfig = {
 
 // eslint-disable-next-line react/display-name
 export const WelcomeBannerComponent = () => {
+  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const [showWelcomeBanner, setShowWelcomeBanner] = useState(false);
   const styles = useStyles();
 
@@ -40,13 +44,9 @@ export const WelcomeBannerComponent = () => {
 
     if (welcomeBannerConfig) {
       setShowWelcomeBanner(welcomeBannerConfig.enabled);
-      console.log('masuk: ', {welcomeBannerConfig});
     } else {
-      console.log('enabled!');
       setShowWelcomeBanner(true);
     }
-
-    console.log({welcomeBannerConfig});
   };
 
   const storeWelcomeBannerConfig = async (config: WelcomeBannerConfig) => {
@@ -59,6 +59,8 @@ export const WelcomeBannerComponent = () => {
       enabled: false,
     });
   };
+
+  if (anonymous) return null;
 
   return (
     <>
@@ -83,14 +85,12 @@ export const WelcomeBannerComponent = () => {
             <br />
           </Typography>
           <Typography className={`${styles.paragraph} ${styles.center} ${styles.mb2}`}>
-            <Link href={'https://wiki.acala.network/learn/get-started#get-test-tokens'}>
-              <a
-                href={'https://wiki.acala.network/learn/get-started#get-test-tokens'}
-                target="_blank"
-                rel="noreferrer">
-                Get more free testnet aUSD
-              </a>
-            </Link>
+            <a
+              href={'https://wiki.acala.network/learn/get-started#get-test-tokens'}
+              target="_blank"
+              rel="noreferrer">
+              Get more free testnet aUSD
+            </a>
           </Typography>
         </DialogContent>
         <DialogActions className={styles.dialogActions}>
