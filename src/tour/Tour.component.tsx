@@ -6,7 +6,6 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 import localforage from 'localforage';
 import {delay} from 'lodash';
-import {WelcomeBannerComponent} from 'src/components/welcome-banner/welcomeBanner.component';
 import theme from 'src/themes/light';
 
 type TourConfig = {
@@ -159,8 +158,6 @@ const TourComponent: React.FC = () => {
         }}
         callback={handleJoyrideCallback}
       />
-
-      {isFinish && <WelcomeBannerComponent />}
     </>
   );
 };
