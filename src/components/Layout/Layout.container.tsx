@@ -14,6 +14,7 @@ import AlertComponent from '../alert/Alert.component';
 import {ExperienceProvider} from '../experience/experience.context';
 
 import TipAlertComponent from 'src/components/alert/TipAlert.component';
+import {WelcomeBannerComponent} from 'src/components/welcome-banner/welcomeBanner.component';
 import {LayoutSettingProvider} from 'src/context/layout.context';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
@@ -44,6 +45,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
 
   const [, loading] = useSession();
   const {loadFcmToken} = useUserHook();
+
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
   useEffect(() => {
@@ -76,6 +78,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
       <LayoutSettingProvider>
         <NoSsr>
           <TourComponent />
+          <WelcomeBannerComponent />
         </NoSsr>
         <ExperienceProvider>
           {isMobile ? (
