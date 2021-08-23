@@ -28,8 +28,9 @@ export const getFriendRequests = async (userId: string, page = 1): Promise<Frien
     url: `/friends`,
     method: 'GET',
     params: {
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
       filter: {
-        page,
         where: {
           and: [{requesteeId: userId}, {status: FriendStatus.PENDING}],
         },
@@ -46,8 +47,8 @@ export const getFriends = async (userId: string, page = 1): Promise<FriendList> 
     url: `/friends`,
     method: 'GET',
     params: {
-      page,
-      limit: PAGINATION_LIMIT,
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
       filter: {
         where: {
           or: [{requesteeId: userId}, {requestorId: userId}],

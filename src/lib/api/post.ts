@@ -64,8 +64,6 @@ export const getPost = async (
   }
 
   const filterParams: Record<string, any> = {
-    page,
-    limit: PAGINATION_LIMIT,
     order: `${orderField} DESC`,
     include: [
       {
@@ -101,6 +99,8 @@ export const getPost = async (
     url: '/posts',
     method: 'GET',
     params: {
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
       filter: filterParams,
     },
   });
