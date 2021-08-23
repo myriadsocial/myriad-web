@@ -77,13 +77,13 @@ export const fetchTransactionHistory: ThunkActionCreator<Actions, RootState> =
         method: 'GET',
         params: {
           filter: {
-            page,
             order: 'createdAt DESC',
             where: {
               postId: post.id,
             },
             include: ['fromUser', 'toUser'],
           },
+          pageNumber: page,
         },
       });
 
@@ -113,7 +113,7 @@ export const fetchTransactionSummary: ThunkActionCreator<Actions, RootState> =
       }
 
       const {data} = await MyriadAPI.request<TransactionDetail[]>({
-        url: `/posts/${post.id}/transaction-histories`,
+        url: `/posts/${post.id}/transaction-summary`,
         method: 'GET',
       });
 

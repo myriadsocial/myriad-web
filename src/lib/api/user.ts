@@ -78,7 +78,7 @@ export const search = async (query: string): Promise<UserList> => {
 
 export const getUserTransactionDetail = async (id: string): Promise<UserTransactionDetail> => {
   const {data} = await MyriadAPI.request<UserTransactionDetail>({
-    url: `/users/${id}/transaction-histories`,
+    url: `/users/${id}/transaction-summary`,
     method: 'GET',
   });
 
