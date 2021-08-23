@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 
 import DialogTitle from '../common/DialogTitle.component';
@@ -25,8 +24,7 @@ type WelcomeBannerConfig = {
   enabled: boolean;
 };
 
-// eslint-disable-next-line react/display-name
-export const WelcomeBannerComponent = () => {
+export const WelcomeBannerComponent = (): JSX.Element | null => {
   const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const [showWelcomeBanner, setShowWelcomeBanner] = useState(false);
   const styles = useStyles();
