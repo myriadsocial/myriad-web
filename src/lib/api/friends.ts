@@ -36,7 +36,6 @@ export const getFriendRequests = async (userId: string, page = 1): Promise<Frien
         },
         include: ['requestee', 'requestor'],
       },
-      pageNumber: page,
     },
   });
 

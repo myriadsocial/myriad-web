@@ -55,8 +55,6 @@ export const getTransactions = async (
         where,
         include,
       },
-      pageLimit: PAGINATION_LIMIT,
-      pageNumber: page,
     },
   });
 
