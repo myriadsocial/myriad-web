@@ -8,7 +8,7 @@ const CLOUDINARY_BASE_URL = 'https://res.cloudinary.com';
 const CLOUD_NAME = publicRuntimeConfig.cloudinaryName;
 
 export const generateImageSizes = (url: string, extension = 'jpg'): Sizes => {
-  const external = !url.includes(`/${CLOUDINARY_BASE_URL}/`);
+  const external = !url.includes(`/${CLOUD_NAME}/`);
   const filename = url.split(/[\\/]/).pop();
 
   if (!filename)
