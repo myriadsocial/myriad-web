@@ -1,4 +1,5 @@
 import MyriadAPI from './base';
+import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
 import {Comment, CommentProps} from 'src/interfaces/comment';
