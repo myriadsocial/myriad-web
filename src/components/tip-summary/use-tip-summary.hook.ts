@@ -1,14 +1,17 @@
 import {useSelector, useDispatch} from 'react-redux';
 
+import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 import {Transaction, TransactionDetail} from 'src/interfaces/transaction';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {RootState} from 'src/reducers';
 import {
   setTippedPost,
-  clearTippedPost,
+  clearTippedContent,
   fetchTransactionHistory,
   fetchTransactionSummary,
+  fetchTransactionHistoryForComment,
+  fetchTransactionSummaryForComment,
 } from 'src/reducers/tip-summary/actions';
 import {TipSummaryState} from 'src/reducers/tip-summary/reducer';
 
@@ -16,18 +19,22 @@ type TipSummaryHookProps = {
   meta: ListMeta;
   show: boolean;
   post: Post | null;
+  comment: Comment | null;
   transactions: Transaction[];
   summary: TransactionDetail[];
   loadTransaction: (post: Post, page?: number) => void;
   loadNextTransaction: (post: Post) => void;
   openTipSummary: (post: Post) => void;
+  loadTransactionForComment: (comment: Comment, page?: number) => void;
+  loadNextTransactionForComment: (comment: Comment) => void;
+  openTipSummaryForComment: () => void;
   clearTipSummary: () => void;
 };
 
 export const useTipSummaryHook = (): TipSummaryHookProps => {
   const dispatch = useDispatch();
 
-  const {loading, post, show, summary, transactions, meta} = useSelector<
+  const {loading, post, comment, show, summary, transactions, meta} = useSelector<
     RootState,
     TipSummaryState
   >(state => state.tipSummaryState);
@@ -49,19 +56,39 @@ export const useTipSummaryHook = (): TipSummaryHookProps => {
     dispatch(fetchTransactionHistory(post, currentPage));
   };
 
+  const openTipSummaryForComment = (): void => {
+    dispatch(fetchTransactionSummaryForComment());
+  };
+
+  const loadNextTransactionForComment = async (comment: Comment): Promise<void> => {
+    if (!loading) {
+      await loadTransactionForComment(comment, meta.currentPage + 1);
+    }
+  };
+
+  const loadTransactionForComment = async (comment: Comment, page?: number): Promise<void> => {
+    const currentPage = page ? page : meta.currentPage;
+
+    dispatch(fetchTransactionHistoryForComment(comment, currentPage));
+  };
+
   const clearTipSummary = (): void => {
-    dispatch(clearTippedPost());
+    dispatch(clearTippedContent());
   };
 
   return {
     meta,
     show,
     post,
+    comment,
     summary,
     transactions,
     loadTransaction,
     loadNextTransaction,
     openTipSummary,
+    loadTransactionForComment,
+    loadNextTransactionForComment,
+    openTipSummaryForComment,
     clearTipSummary,
   };
 };
