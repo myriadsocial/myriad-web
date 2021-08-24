@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'lodash';
+import {useTipSummaryHook} from 'src/components/tip-summary/use-tip-summary.hook';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {Currency} from 'src/interfaces/currency';
 import {SendTipProps} from 'src/interfaces/send-tips/send-tips';
@@ -16,6 +17,7 @@ export const usePolkadotApi = () => {
   const dispatch = useDispatch();
   const balanceState = useSelector<RootState, BalanceState>(state => state.balanceState);
   const {showAlert, showTipAlert} = useAlertHook();
+  const {openTipSummaryForComment} = useTipSummaryHook();
 
   const [loading, setLoading] = useState(false);
   const [isSignerLoading, setSignerLoading] = useState(false);
@@ -80,6 +82,7 @@ export const usePolkadotApi = () => {
             to,
             currencyId: currencyId,
           });
+          openTipSummaryForComment();
         }
 
         showTipAlert({
