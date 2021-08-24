@@ -34,11 +34,14 @@ export const TipSummaryComponent: React.FC = () => {
     meta,
     show,
     post,
+    comment,
     summary,
     transactions,
     clearTipSummary,
     loadTransaction,
     loadNextTransaction,
+    loadTransactionForComment,
+    loadNextTransactionForComment,
   } = useTipSummaryHook();
 
   useEffect(() => {
@@ -47,22 +50,34 @@ export const TipSummaryComponent: React.FC = () => {
     }
   }, [post?.id]);
 
+  useEffect(() => {
+    if (comment?.id) {
+      loadTransactionForComment(comment);
+    }
+  }, [comment?.id]);
+
   const nextPage = () => {
     if (post) {
       loadNextTransaction(post);
     }
   };
 
-  const toggleOpen = () => {
+  const nextPageCommentTransaction = () => {
+    if (comment) {
+      loadNextTransactionForComment(comment);
+    }
+  };
+
+  const toggleClose = () => {
     clearTipSummary();
   };
 
-  if (!post) return null;
+  if (!post && !comment) return null;
 
   return (
     <div>
       <Dialog open={show} maxWidth="md" onClose={close}>
-        <DialogTitle onClose={toggleOpen} id="tip-summary">
+        <DialogTitle onClose={toggleClose} id="tip-summary">
           Tip Received
         </DialogTitle>
         <DialogContent className={styles.root}>
@@ -98,7 +113,7 @@ export const TipSummaryComponent: React.FC = () => {
             <InfiniteScroll
               scrollableTarget="scrollable-transaction"
               dataLength={transactions.length}
-              next={nextPage}
+              next={post && !comment ? nextPage : nextPageCommentTransaction}
               hasMore={meta.currentPage < meta.totalPageCount}
               loader={
                 <ListItem>
@@ -126,7 +141,7 @@ export const TipSummaryComponent: React.FC = () => {
         </DialogContent>
         <DialogActions className={styles.done}>
           <Button
-            onClick={toggleOpen}
+            onClick={toggleClose}
             size="large"
             variant="contained"
             color="primary"
