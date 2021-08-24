@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: 18,
       fontWeight: 700,
     },
+    imageGrid: {
+      height: 'auto !important',
+    },
   }),
 );
 
@@ -80,7 +83,7 @@ export default function ImageListComponent({images, platform}: Props) {
   return (
     <div className={style.root}>
       <NoSsr>
-        <GridList cellHeight={list.cellHeight} cols={list.cols}>
+        <GridList cellHeight={list.cellHeight} cols={list.cols} className={style.imageGrid}>
           {list.images.slice(0, 4).map((image, i) => (
             <GridListTile
               key={image.sizes.thumbnail}
@@ -88,6 +91,7 @@ export default function ImageListComponent({images, platform}: Props) {
               rows={image.rows}
               onClick={() => openLightbox(i)}>
               <img
+                className={style.imageGrid}
                 src={image.rows === 2 || list.cols === 1 ? image.sizes.medium : image.sizes.small}
                 alt={image.src}
               />
