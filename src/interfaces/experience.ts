@@ -31,11 +31,11 @@ export interface ExperienceSetting {
 export interface Experience extends Searchable {
   id: string;
   name: string;
+  tags: Tag[];
+  people: People[];
   description?: string;
   layout?: LayoutType;
-  people: People[];
-  tags: Tag[];
-  userId: string;
+  createdBy: string;
   createdAt: Date;
   user?: User;
 }
