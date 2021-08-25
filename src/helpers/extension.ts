@@ -13,16 +13,9 @@ export const enableExtension = async () => {
     return;
   }
 
-  // Using proper prefix
-  const prefix = publicRuntimeConfig.myriadAddressPrefix
-    ? Number(publicRuntimeConfig.myriadAddressPrefix)
-    : 214;
-
   // we are now informed that the user has at least one extension and that we
   // will be able to show and use accounts
-  const allAccounts = await web3Accounts({
-    ss58Format: prefix,
-  });
+  const allAccounts = await web3Accounts();
   return allAccounts;
 };
 

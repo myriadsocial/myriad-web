@@ -16,13 +16,7 @@ export const usePolkadotExtension = () => {
   const getPolkadotAccounts = async () => {
     const {web3Accounts} = await import('@polkadot/extension-dapp');
 
-    const format = publicRuntimeConfig.myriadAddressPrefix
-      ? Number(publicRuntimeConfig.myriadAddressPrefix)
-      : 214;
-
-    const allAccounts = await web3Accounts({
-      ss58Format: format,
-    });
+    const allAccounts = await web3Accounts();
 
     return allAccounts;
   };
