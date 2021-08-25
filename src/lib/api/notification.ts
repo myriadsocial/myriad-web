@@ -12,9 +12,7 @@ export const getNotification = async (userId: string): Promise<NotificationList>
     params: {
       filter: {
         order: `createdAt DESC`,
-        where: {
-          and: [{to: userId}],
-        },
+        where: {to: userId},
         include: ['fromUserId', 'toUserId'],
       },
     },
