@@ -149,7 +149,7 @@ export const searchPeople: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const SearchTags: ThunkActionCreator<Actions, RootState> =
+export const searchTags: ThunkActionCreator<Actions, RootState> =
   (query: string) => async dispatch => {
     dispatch(setLoading(true));
 
