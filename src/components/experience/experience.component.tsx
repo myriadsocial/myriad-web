@@ -45,6 +45,7 @@ type Props = {
   anonymous: boolean;
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const ExperienceComponent = ({userId, anonymous}: Props) => {
   const style = useStyles();
 
@@ -284,7 +285,7 @@ export const ExperienceComponent = ({userId, anonymous}: Props) => {
                   variant="contained"
                   color="secondary"
                   onClick={editCurrentExperience}
-                  disabled={isEditing || selectedExperience?.userId !== userId}>
+                  disabled={isEditing || selectedExperience?.createdBy !== userId}>
                   Customize
                 </Button>
                 <Button
@@ -391,7 +392,7 @@ export const ExperienceComponent = ({userId, anonymous}: Props) => {
               onRemoveItem={removePeopleFromExperience}
             />
             <Grid className={style.action}>
-              <ShowIf condition={selectedExperience?.userId === userId}>
+              <ShowIf condition={selectedExperience?.createdBy === userId}>
                 <Fab
                   onClick={showEditExperienceModal}
                   className={style.extendedIcon}
@@ -403,7 +404,7 @@ export const ExperienceComponent = ({userId, anonymous}: Props) => {
                   Update
                 </Fab>
               </ShowIf>
-              <ShowIf condition={selectedExperience?.userId !== userId}>
+              <ShowIf condition={selectedExperience?.createdBy !== userId}>
                 <Fab
                   onClick={saveAsNewExperience}
                   className={style.extendedIcon}
