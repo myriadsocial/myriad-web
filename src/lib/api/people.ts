@@ -1,7 +1,10 @@
 import MyriadAPI from './base';
+import {BaseList} from './interfaces/base-list.interface';
 
 import {People} from 'src/interfaces/people';
 import {SocialsEnum} from 'src/interfaces/social';
+
+type PeopleList = BaseList<People>;
 
 export const getPeopleByPlatform = async (
   platform: SocialsEnum,
@@ -38,8 +41,8 @@ export const createPeople = async (values: Partial<People>): Promise<People> => 
   return data;
 };
 
-export const searchPeople = async (query: string): Promise<People[]> => {
-  const {data} = await MyriadAPI.request<People[]>({
+export const searchPeople = async (query: string): Promise<PeopleList> => {
+  const {data} = await MyriadAPI.request<PeopleList>({
     url: '/people',
     method: 'GET',
     params: {
@@ -47,7 +50,7 @@ export const searchPeople = async (query: string): Promise<People[]> => {
       filter: {
         where: {
           username: {
-            like: query,
+            like: `^${query}`,
           },
         },
       },

@@ -31,7 +31,7 @@ export const searchTag = async (query: string, page = 1): Promise<TagList> => {
       filter: {
         where: {
           id: {
-            like: `.*${query}*`,
+            like: `.*${query}`,
             options: 'i',
           },
         },
