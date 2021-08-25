@@ -13,8 +13,6 @@ module.exports = {
     apiURL: process.env.NEXT_PUBLIC_API_URL,
     facebookAppId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
     myriadWsRPC: process.env.NEXT_PUBLIC_MYRIAD_WS_RPC,
-    myriadCryptoType: process.env.NEXT_PUBLIC_MYRIAD_CRYPTO_TYPE,
-    myriadAddressPrefix: process.env.NEXT_PUBLIC_MYRIAD_ADDRESS_PREFIX,
     cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
     firebaseAPIKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     firebaseProjectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,

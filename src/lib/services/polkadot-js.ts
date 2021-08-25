@@ -1,12 +1,7 @@
 import {options} from '@acala-network/api';
 
-import getConfig from 'next/config';
-
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {Keyring} from '@polkadot/keyring';
-import {KeypairType} from '@polkadot/util-crypto/types';
-
-const {publicRuntimeConfig} = getConfig();
 
 export const connectToBlockchain = async (wsProvider: string): Promise<ApiPromise> => {
   const provider = new WsProvider(wsProvider);
@@ -38,14 +33,7 @@ export const signAndSendExtrinsic = async (
 
     const allAccounts = await enableExtension();
 
-    const prefix = publicRuntimeConfig.myriadAddressPrefix
-      ? Number(publicRuntimeConfig.myriadAddressPrefix)
-      : 214;
-    const cryptoType: KeypairType = publicRuntimeConfig.myriadCryptoType
-      ? (publicRuntimeConfig.myriadCryptoType as KeypairType)
-      : 'sr25519';
-
-    const keyring = new Keyring({type: cryptoType, ss58Format: prefix});
+    const keyring = new Keyring();
 
     const baseAddress = keyring.encodeAddress(from);
 
