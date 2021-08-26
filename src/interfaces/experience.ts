@@ -37,5 +37,5 @@ export interface Experience extends Searchable {
   layout?: LayoutType;
   createdBy: string;
   createdAt: Date;
-  user?: User;
+  user: User;
 }
