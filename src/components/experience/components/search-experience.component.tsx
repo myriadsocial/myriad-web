@@ -50,12 +50,18 @@ export default function SearchExperience({
   React.useEffect(() => {
     if (!open) {
       setOptions([]);
+    } else {
+      setOptions(data);
     }
   }, [open]);
 
   React.useEffect(() => {
-    setOptions(data);
-    setLoading(false);
+    if (data.length > 0) {
+      setOptions(data);
+      setLoading(false);
+    } else {
+      setOptions([]);
+    }
   }, [data]);
 
   const handleChange = (e: React.ChangeEvent<{}>, experience: Experience | null) => {
@@ -69,8 +75,12 @@ export default function SearchExperience({
       setLoading(true);
 
       search(value);
+    } else {
+      setLoading(false);
     }
   };
+
+  if (!data.length) return null;
 
   return (
     <Autocomplete
@@ -113,7 +123,7 @@ export default function SearchExperience({
               {option.name}
             </Typography>
             <Typography variant="body1" color="textSecondary">
-              by: {option.user?.name}
+              by: {option.user.name}
             </Typography>
             <Typography variant="body2" color="textSecondary">
               {option.description}
