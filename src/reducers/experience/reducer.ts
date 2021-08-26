@@ -8,6 +8,7 @@ import {People} from 'src/interfaces/people';
 
 export interface ExperienceState extends BasePaginationState {
   experiences: Experience[];
+  allExperiences: Experience[];
   selectedExperience: Experience | null;
   searchExperience: Experience[];
   searchPeople: People[];
@@ -16,9 +17,10 @@ export interface ExperienceState extends BasePaginationState {
   filter?: string;
 }
 
-const initalState: ExperienceState = {
+const initialState: ExperienceState = {
   loading: false,
   experiences: [],
+  allExperiences: [],
   selectedExperience: null,
   searchExperience: [],
   searchPeople: [],
@@ -33,10 +35,17 @@ const initalState: ExperienceState = {
 };
 
 export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
-  state = initalState,
+  state = initialState,
   action,
 ) => {
   switch (action.type) {
+    case constants.FETCH_ALL_EXPERIENCES: {
+      return {
+        ...state,
+        allExperiences: action.allExperiences,
+        meta: action.meta,
+      };
+    }
     case constants.FETCH_EXPERIENCE: {
       if (action.meta.currentPage === 1) {
         return {

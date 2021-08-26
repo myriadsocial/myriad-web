@@ -12,6 +12,11 @@ import {ThunkActionCreator} from 'src/types/thunk';
 /**
  * Action Types
  */
+
+export interface LoadAllExperiences extends PaginationAction {
+  type: constants.FETCH_ALL_EXPERIENCES;
+  allExperiences: Experience[];
+}
 export interface LoadExperience extends PaginationAction {
   type: constants.FETCH_EXPERIENCE;
   experiences: Experience[];
@@ -32,7 +37,13 @@ export interface SearchTags extends PaginationAction {
  * Union Action Types
  */
 
-export type Actions = LoadExperience | SearchExperience | SearchPeople | SearchTags | BaseAction;
+export type Actions =
+  | LoadAllExperiences
+  | LoadExperience
+  | SearchExperience
+  | SearchPeople
+  | SearchTags
+  | BaseAction;
 
 /**
  *
@@ -42,6 +53,35 @@ export type Actions = LoadExperience | SearchExperience | SearchPeople | SearchT
 /**
  * Action Creator
  */
+
+export const fetchAllExperiences: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const {meta, data: allExperiences} = await ExperienceAPI.getAllExperiences();
+      dispatch({
+        type: constants.FETCH_ALL_EXPERIENCES,
+        allExperiences,
+        meta,
+      });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
 
 export const fetchExperience: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {
