@@ -1,16 +1,33 @@
-import {useDispatch} from 'react-redux';
+import {useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
+import {RootState} from 'src/reducers';
 import {
   searchExperience,
   searchPeople,
   searchTags,
   cloneExperience,
   fetchExperience,
+  fetchAllExperiences,
 } from 'src/reducers/experience/actions';
+import {ExperienceState} from 'src/reducers/experience/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useExperienceHook = () => {
   const dispatch = useDispatch();
+
+  const {experiences, allExperiences} = useSelector<RootState, ExperienceState>(
+    state => state.experienceState,
+  );
+
+  useEffect(() => {
+    loadExperience();
+    loadAllExperiences();
+  }, []);
+
+  const loadAllExperiences = () => {
+    dispatch(fetchAllExperiences());
+  };
 
   const loadExperience = () => {
     dispatch(fetchExperience());
@@ -38,5 +55,8 @@ export const useExperienceHook = () => {
     searchTags: findTags,
     followExperience,
     loadExperience,
+    experiences,
+    loadAllExperiences,
+    allExperiences,
   };
 };

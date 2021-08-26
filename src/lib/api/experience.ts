@@ -6,6 +6,20 @@ import {Experience} from 'src/interfaces/experience';
 
 type ExperienceList = BaseList<Experience>;
 
+export const getAllExperiences = async (): Promise<ExperienceList> => {
+  const {data} = await MyriadAPI.request<ExperienceList>({
+    url: `/experiences`,
+    method: 'GET',
+    params: {
+      filter: {
+        include: ['user'],
+      },
+    },
+  });
+
+  return data;
+};
+
 export const searchExperience = async (query: string): Promise<ExperienceList> => {
   const {data} = await MyriadAPI.request<ExperienceList>({
     url: `/experiences`,
