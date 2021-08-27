@@ -18,6 +18,7 @@ const axios = Axios.create({
   baseURL: publicRuntimeConfig.apiURL,
 });
 
+//TODO: move this file to hooks/use-experience.hook and migrate to redux
 export const useExperience = (userId: string) => {
   const {state, dispatch} = baseUseExperience();
   const timelineState = useSelector<RootState, TimelineState>(state => state.timelineState);

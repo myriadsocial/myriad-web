@@ -5,6 +5,7 @@ import {useExperience as baseUseExperience, ExperienceActionType} from './experi
 import {Tag, LayoutType} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
 
+//TODO: move this file to hooks/use-experience.hook and migrate to redux
 export const useSelectedExperience = (userId: string) => {
   const {state, dispatch} = baseUseExperience();
   const [edited, setEdited] = useState(false);

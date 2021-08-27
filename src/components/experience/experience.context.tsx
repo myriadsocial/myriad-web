@@ -1,3 +1,4 @@
+//TODO: migrate to redux, src/reducers/experience
 import React from 'react';
 
 import {Experience} from 'src/interfaces/experience';
