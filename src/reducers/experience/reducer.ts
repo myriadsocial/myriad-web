@@ -62,6 +62,38 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
       }
     }
 
+    case constants.ADD_EXPERIENCE: {
+      //TODO: use this endpoint => POST /user-experiences
+      return {
+        ...state,
+        selectedExperience: action.addedExperience,
+        experiences: [action.addedExperience, ...state.experiences],
+      };
+    }
+
+    case constants.SELECT_EXPERIENCE: {
+      //TODO: use this endpoint => PATCH /user/{userId}/select-experince/{experienceId}
+      return {
+        ...state,
+        selectedExperience: action.selectedExperience,
+      };
+    }
+
+    case constants.UPDATE_SELECTED_EXPERIENCE: {
+      return {
+        ...state,
+        selectedExperience: action.updatedExperience,
+      };
+    }
+
+    case constants.REMOVE_EXPERIENCE: {
+      //TODO: DELETE /user-experiences/{id}
+      return {
+        ...state,
+        removedExperience: action.removedExperience,
+      };
+    }
+
     case constants.SEARCH_EXPERIENCE: {
       return {
         ...state,

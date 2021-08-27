@@ -21,6 +21,22 @@ export interface LoadExperience extends PaginationAction {
   type: constants.FETCH_EXPERIENCE;
   experiences: Experience[];
 }
+export interface SelectExperience extends PaginationAction {
+  type: constants.SELECT_EXPERIENCE;
+  selectedExperience: Experience;
+}
+export interface AddExperience extends PaginationAction {
+  type: constants.ADD_EXPERIENCE;
+  addedExperience: Experience;
+}
+export interface UpdateSelectedExperience extends PaginationAction {
+  type: constants.UPDATE_SELECTED_EXPERIENCE;
+  updatedExperience: Experience;
+}
+export interface RemoveExperience extends PaginationAction {
+  type: constants.REMOVE_EXPERIENCE;
+  removedExperience: Experience;
+}
 export interface SearchExperience extends PaginationAction {
   type: constants.SEARCH_EXPERIENCE;
   experiences: Experience[];
@@ -40,6 +56,10 @@ export interface SearchTags extends PaginationAction {
 export type Actions =
   | LoadAllExperiences
   | LoadExperience
+  | AddExperience
+  | SelectExperience
+  | UpdateSelectedExperience
+  | RemoveExperience
   | SearchExperience
   | SearchPeople
   | SearchTags
