@@ -10,7 +10,6 @@ import {useStyles} from './friend.style';
 
 import {debounce} from 'lodash';
 import SearchComponent from 'src/components/common/search.component';
-import {useExperienceHook} from 'src/hooks/use-experience-hook';
 
 interface FriendComponentProps {
   title?: string;
@@ -25,8 +24,6 @@ const FriendComponent: React.FC<FriendComponentProps> = ({title}) => {
 
   const [search, setSearchQuery] = useState('');
 
-  const [searchExpQuery, setSearchExpQuery] = useState('');
-
   const {
     searchFriend,
     loadFriends,
@@ -36,13 +33,9 @@ const FriendComponent: React.FC<FriendComponentProps> = ({title}) => {
     toggleRequest,
   } = useFriendsHook();
 
-  const {loadExperience, searchExperience} = useExperienceHook();
-
   useEffect(() => {
     loadFriends();
     loadRequests();
-
-    loadExperience();
   }, []);
 
   const handleSearchFriend = debounce((query: string) => {
@@ -77,26 +70,9 @@ const FriendComponent: React.FC<FriendComponentProps> = ({title}) => {
     }
   };
 
-  const handleSearchExperience = debounce((query: string) => {
-    setSearchExpQuery(query);
-
-    if (query.length) {
-      searchExperience(query);
-    } else {
-      loadExperience();
-    }
-  }, 500);
-
   return (
     <div className={style.root}>
       <div className={style.header}>
-        <SearchComponent
-          value={searchExpQuery}
-          placeholder="Find an experience"
-          onSubmit={handleSearchExperience}
-          isDebounce={true}
-        />
-
         <Typography variant="h4" className={style.title}>
           {' '}
           {title || 'Your Friends'}
