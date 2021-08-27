@@ -85,10 +85,11 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
     }
 
     case constants.REMOVE_EXPERIENCE: {
-      //TODO: DELETE /user-experiences/{id}
       return {
         ...state,
-        removedExperience: action.removedExperience,
+        experiences: state.experiences.filter(experience => {
+          return experience.id !== action.removedExperienceId;
+        }),
       };
     }
 

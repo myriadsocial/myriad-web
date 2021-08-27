@@ -30,13 +30,13 @@ export interface AddExperience extends Action {
   type: constants.ADD_EXPERIENCE;
   addedExperience: Experience;
 }
-export interface UpdateSelectedExperience extends PaginationAction {
+export interface UpdateSelectedExperience extends Action {
   type: constants.UPDATE_SELECTED_EXPERIENCE;
   updatedExperience: Experience;
 }
-export interface RemoveExperience extends PaginationAction {
+export interface RemoveExperience extends Action {
   type: constants.REMOVE_EXPERIENCE;
-  removedExperience: Experience;
+  removedExperienceId: string;
 }
 export interface SearchExperience extends PaginationAction {
   type: constants.SEARCH_EXPERIENCE;
@@ -142,6 +142,35 @@ export const addExperience: ThunkActionCreator<Actions, RootState> =
       dispatch({
         type: constants.ADD_EXPERIENCE,
         addedExperience: data,
+      });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const removeExperience: ThunkActionCreator<Actions, RootState> =
+  (experienceId: string) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      await ExperienceAPI.removeExperience(experienceId);
+
+      dispatch({
+        type: constants.REMOVE_EXPERIENCE,
+        removedExperienceId: experienceId,
       });
     } catch (error) {
       dispatch(
