@@ -22,7 +22,7 @@ export interface LoadExperience extends PaginationAction {
   type: constants.FETCH_EXPERIENCE;
   experiences: Experience[];
 }
-export interface SelectExperience extends PaginationAction {
+export interface SelectExperience extends Action {
   type: constants.SELECT_EXPERIENCE;
   selectedExperience: Experience;
 }
@@ -142,6 +142,35 @@ export const addExperience: ThunkActionCreator<Actions, RootState> =
       dispatch({
         type: constants.ADD_EXPERIENCE,
         addedExperience: data,
+      });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const selectExperience: ThunkActionCreator<Actions, RootState> =
+  (experienceId: string) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const data = await ExperienceAPI.chooseExperience(user.id, experienceId);
+
+      dispatch({
+        type: constants.SELECT_EXPERIENCE,
+        selectedExperience: data,
       });
     } catch (error) {
       dispatch(
