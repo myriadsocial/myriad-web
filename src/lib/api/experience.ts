@@ -72,6 +72,17 @@ export const createUserExperience = async (values: ExperienceProps): Promise<Exp
   return data;
 };
 
+export const cloneExperience = async (userId: string, experienceId: string): Promise<void> => {
+  await MyriadAPI.request<Experience>({
+    url: `/clone-user-experiences`,
+    method: 'POST',
+    data: {
+      experienceId,
+      userId,
+    },
+  });
+};
+
 export const chooseExperience = async (
   userId: string,
   experienceId: string,
@@ -85,13 +96,9 @@ export const chooseExperience = async (
   return data;
 };
 
-export const cloneExperience = async (userId: string, experienceId: string): Promise<void> => {
-  await MyriadAPI.request<Experience>({
-    url: `/clone-user-experiences`,
-    method: 'POST',
-    data: {
-      experienceId,
-      userId,
-    },
+export const removeExperience = async (experienceId: string): Promise<void> => {
+  await MyriadAPI.request({
+    url: `/user-experiences/${experienceId}`,
+    method: 'DELETE',
   });
 };
