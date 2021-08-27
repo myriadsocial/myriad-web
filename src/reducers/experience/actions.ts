@@ -2,6 +2,7 @@ import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../
 import {RootState} from '../index';
 import * as constants from './constants';
 
+import {Action} from 'redux';
 import {Experience, Tag} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
 import * as ExperienceAPI from 'src/lib/api/experience';
@@ -25,7 +26,7 @@ export interface SelectExperience extends PaginationAction {
   type: constants.SELECT_EXPERIENCE;
   selectedExperience: Experience;
 }
-export interface AddExperience extends PaginationAction {
+export interface AddExperience extends Action {
   type: constants.ADD_EXPERIENCE;
   addedExperience: Experience;
 }
@@ -120,6 +121,27 @@ export const fetchExperience: ThunkActionCreator<Actions, RootState> =
         type: constants.FETCH_EXPERIENCE,
         experiences,
         meta,
+      });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const addExperience: ThunkActionCreator<Actions, RootState> =
+  (experience: Experience) => async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      const data = await ExperienceAPI.createUserExperience(experience);
+
+      dispatch({
+        type: constants.ADD_EXPERIENCE,
+        addedExperience: data,
       });
     } catch (error) {
       dispatch(
