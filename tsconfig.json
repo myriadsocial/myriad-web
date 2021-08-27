@@ -20,7 +20,12 @@
     "noEmit": true,
     "module": "esnext",
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "paths": {
+      "@components/*": ["components/*"],
+      "@pages/*": ["pages/*"],
+      "@hooks/*": ["hooks/*"]
+    }
   },
   "typeRoots": ["./node_modules/@polkadot/ts", "./node_modules/@types", "./src/types"],
   "exclude": ["node_modules", "./src/helpers/polkadotApi.js"],
