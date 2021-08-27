@@ -72,6 +72,19 @@ export const createUserExperience = async (values: ExperienceProps): Promise<Exp
   return data;
 };
 
+export const chooseExperience = async (
+  userId: string,
+  experienceId: string,
+): Promise<Experience> => {
+  const {data} = await MyriadAPI.request<Experience>({
+    // NOTE: this endpoint returns 204 code (no return)
+    url: `/users/${userId}/select-experience/${experienceId}`,
+    method: 'PATCH',
+  });
+
+  return data;
+};
+
 export const cloneExperience = async (userId: string, experienceId: string): Promise<void> => {
   await MyriadAPI.request<Experience>({
     url: `/clone-user-experiences`,

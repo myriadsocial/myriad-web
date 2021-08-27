@@ -71,7 +71,6 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
     }
 
     case constants.SELECT_EXPERIENCE: {
-      //TODO: use this endpoint => PATCH /user/{userId}/select-experince/{experienceId}
       return {
         ...state,
         selectedExperience: action.selectedExperience,
