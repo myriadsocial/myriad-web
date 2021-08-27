@@ -63,7 +63,6 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
     }
 
     case constants.ADD_EXPERIENCE: {
-      //TODO: use this endpoint => POST /user-experiences
       return {
         ...state,
         selectedExperience: action.addedExperience,

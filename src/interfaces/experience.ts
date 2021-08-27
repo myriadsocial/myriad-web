@@ -28,6 +28,15 @@ export interface ExperienceSetting {
   people: User[];
 }
 
+export type ExperienceProps = {
+  name: string;
+  tags: Tag[];
+  people: People[];
+  description?: string;
+  layout?: LayoutType;
+  user: User;
+};
+
 export interface Experience extends Searchable {
   id: string;
   name: string;

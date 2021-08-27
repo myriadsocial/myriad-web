@@ -2,7 +2,7 @@ import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
-import {Experience} from 'src/interfaces/experience';
+import {Experience, ExperienceProps} from 'src/interfaces/experience';
 
 type ExperienceList = BaseList<Experience>;
 
@@ -57,6 +57,16 @@ export const getUserExperience = async (userId: string): Promise<ExperienceList>
         include: ['user'],
       },
     },
+  });
+
+  return data;
+};
+
+export const createUserExperience = async (values: ExperienceProps): Promise<Experience> => {
+  const {data} = await MyriadAPI.request<Experience>({
+    url: '/user-experiences',
+    method: 'POST',
+    data: values,
   });
 
   return data;
