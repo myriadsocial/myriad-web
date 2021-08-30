@@ -96,8 +96,12 @@ const BannerDemo: React.FC = () => {
         <InfoOutlinedIcon className={style.mr} />
         <Typography className={style.span} component="span">
           You’re on{' '}
-          <Typography component="span" onClick={handleClickOpen} className={style.decoration}>
-            Myriad Demo v1.0.0
+          <Typography
+            component="span"
+            onClick={handleClickOpen}
+            className={style.decoration}
+            data-testid="show-banner">
+            Myriad Demo v0.1.0
           </Typography>{' '}
           right now, not audited, use at your own risk!
         </Typography>
