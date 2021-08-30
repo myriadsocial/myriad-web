@@ -100,6 +100,8 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
       };
     }
 
+    //TODO: implement update selected experience and edit experience
+
     case constants.SEARCH_PEOPLE: {
       return {
         ...state,
