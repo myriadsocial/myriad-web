@@ -101,7 +101,7 @@ const BannerDemo: React.FC = () => {
             onClick={handleClickOpen}
             className={style.decoration}
             data-testid="show-banner">
-            Myriad Demo v0.1.0
+            Myriad Demo v1.0.0
           </Typography>{' '}
           right now, not audited, use at your own risk!
         </Typography>
