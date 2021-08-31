@@ -14,9 +14,13 @@ export const Default = () => (
   </Button>
 );
 
-export const Primary = () => (
-  <Button color="primary" onClick={action('Primary button clicked')} variant="contained">
-    Primary
+export const PrimaryLarge = () => (
+  <Button
+    color="primary"
+    onClick={action('Primary button clicked')}
+    variant="contained"
+    size="large">
+    Primary Large
   </Button>
 );
 
