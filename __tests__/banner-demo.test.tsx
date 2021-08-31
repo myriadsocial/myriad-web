@@ -14,7 +14,7 @@ describe('Banner demo test', () => {
     const bannerDemoText = screen.getByText((content: string, node) => {
       const hasText = node =>
         node.textContent ===
-        'You’re on Myriad Demo v0.1.0 right now, not audited, use at your own risk!';
+        'You’re on Myriad Demo v1.0.0 right now, not audited, use at your own risk!';
       const nodeHasText = hasText(node);
       const childrenDontHaveText = Array.from(node.children).every(child => !hasText(child));
 
