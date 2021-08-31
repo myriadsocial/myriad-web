@@ -39,6 +39,17 @@ const primaryGreen = '#39BF87';
 const primaryRed = '#FE3333';
 const primaryBlue = '#1070CA';
 
+const textRegular = 400;
+const textMedium = 600;
+
+const textXs = 10;
+const textSm = 12;
+const textBs = 14;
+const textLg = 18;
+const textXl = 22;
+const text2Xl = 28;
+const text3Xl = 34;
+
 const theme = createTheme({
   status: {
     success: {
@@ -63,11 +74,35 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: ['Mulish', 'serif'].join(','),
+    fontWeightRegular: textRegular,
+    fontWeightMedium: textMedium,
+    subtitle1: {
+      fontSize: textXs,
+    },
+    caption: {
+      fontSize: textSm,
+    },
+    body1: {
+      fontSize: textBs,
+    },
+    h4: {
+      fontSize: textLg,
+    },
+    h3: {
+      fontSize: textXl,
+    },
+    h2: {
+      fontSize: text2Xl,
+    },
+    h1: {
+      fontSize: text3Xl,
+    },
   },
   overrides: {
     MuiButton: {
       root: {
         textTransform: 'none',
+        fontSize: 14,
       },
     },
   },
