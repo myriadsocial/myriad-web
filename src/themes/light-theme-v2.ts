@@ -1,30 +1,31 @@
-import green from '@material-ui/core/colors/green';
-import purple from '@material-ui/core/colors/purple';
+import '@fontsource/mulish';
+
 import {createTheme} from '@material-ui/core/styles';
 
-const primaryGreen = green[500];
-const accentGreen = green.A200;
-const darkGreen = green[900];
-const primaryPurple = purple[500];
-const accentPurple = purple.A200;
-const darkPurple = purple[900];
+const primaryPurple = '#6E3FC3';
+const primaryOrange = '#FFC857';
 
-export const overridings = {
-  name: 'Light Theme v2',
+const theme = createTheme({
   palette: {
     primary: {
-      light: accentGreen,
-      main: primaryGreen,
-      dark: darkGreen,
-      contrastText: '#fff',
+      main: primaryPurple,
+      contrastText: '#FFFFF',
     },
     secondary: {
-      light: accentPurple,
-      main: primaryPurple,
-      dark: darkPurple,
-      contrastText: '#fff',
+      main: primaryOrange,
+      contrastText: '#FFFFF',
     },
   },
-};
+  typography: {
+    fontFamily: ['Mulish', 'serif'].join(','),
+  },
+  overrides: {
+    MuiButton: {
+      root: {
+        textTransform: 'none',
+      },
+    },
+  },
+});
 
-export default createTheme(overridings);
+export default theme;
