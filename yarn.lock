@@ -2036,6 +2036,11 @@
   resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.5.1.tgz#a64d1af3c62e3bb89576ec58af880980a562bf4e"
   integrity sha512-dZMzN0uAjwJXWYYAcnxIwXqRTZw3o14hGe7O6uhwjD1ZQWPVYA5lASgnNskEBra0knVBsOXB4KXg+HnlKewN/A==
 
+"@fontsource/mulish@^4.5.1":
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/@fontsource/mulish/-/mulish-4.5.1.tgz#75be2efb8d20e602d4b8b416422ca782bff48c09"
+  integrity sha512-0CcAyvf1y0E74jAWLRjBEMw5ud3AKJFTfrFFsJn4E1OJZ3eLzKmb7MKM3GilhFvqTA00uz/22ZPxp1Z1J3f9sw==
+
 "@gar/promisify@^1.0.1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
