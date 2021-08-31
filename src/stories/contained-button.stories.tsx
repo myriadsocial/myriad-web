@@ -5,7 +5,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 export default {
-  title: 'UI Revamp v2.0',
+  title: 'UI Revamp v2.0/Button',
 };
 
 export const Default = () => (
