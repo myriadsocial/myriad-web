@@ -4,7 +4,7 @@ import {ThemeProvider, StylesProvider} from '@material-ui/styles';
 import {ThemeProvider as StyledThemeProvider} from 'styled-components';
 
 
-import LightTheme from '../src/themes/light-theme';
+import LightTheme from '../src/themes/light-theme-v2';
 
 // Global decorator to apply the styles to all stories
 export const decorators = [
