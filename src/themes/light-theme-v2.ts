@@ -42,19 +42,19 @@ const primaryBlue = '#1070CA';
 
 //Surface colors
 const surfacePurple = '#EBE0FF';
-const surfaceOrange = '#FFF2CC';
+// const surfaceOrange = '#FFF2CC';
 
-const surfaceGreen = '#DAF1E6';
-const surfaceRed = '#FFD7D7';
-const surfaceBlue = '#CFE2F4';
+// const surfaceGreen = '#DAF1E6';
+// const surfaceRed = '#FFD7D7';
+// const surfaceBlue = '#CFE2F4';
 
 //Border colors
 const borderPurple = '#DECCFF';
-const borderOrange = '#FFECB2';
+// const borderOrange = '#FFECB2';
 
-const borderGreen = '#C2E7D5';
-const borderRed = '#FFBCBC';
-const borderBlue = '#AFCFED';
+// const borderGreen = '#C2E7D5';
+// const borderRed = '#FFBCBC';
+// const borderBlue = '#AFCFED';
 
 //Font weight
 const textRegular = 400;
@@ -154,11 +154,6 @@ const theme = createTheme({
         backgroundColor: '#FFF',
       },
     },
-  },
-  props: {
-    MuiButton: {
-      disableElevation: true,
-    },
 
     MuiIconButton: {
       root: {
@@ -170,6 +165,11 @@ const theme = createTheme({
           backgroundColor: 'inherit',
         },
       },
+    },
+  },
+  props: {
+    MuiButton: {
+      disableElevation: true,
     },
   },
 });
