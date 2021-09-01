@@ -13,8 +13,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '17.57px',
     },
     'm-vertical1': {
-      marginBottom: 16,
-      marginTop: 16,
+      marginBottom: 20,
+      marginTop: 20,
     },
     'flex-center': {
       display: 'flex',
@@ -24,6 +24,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiPaper-rounded': {
         borderRadius: '20px',
       },
+    },
+    icon: {
+      fontSize: 60,
+      marginTop: '20px',
     },
   }),
 );

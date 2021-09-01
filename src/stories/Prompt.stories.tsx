@@ -2,16 +2,17 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {Prompt} from '../components-v2/prompt/prompt.component';
+import {Prompt as PromptComponent} from '../components-v2/prompt/prompt.component';
 
 export default {
-  title: 'MaterialUI/Prompt',
-  component: Prompt,
-} as ComponentMeta<typeof Prompt>;
+  title: 'UI Revamp v2.0/component',
+  component: PromptComponent,
+} as ComponentMeta<typeof PromptComponent>;
 
-const Template: ComponentStory<typeof Prompt> = args => <Prompt {...args} />;
+const Template: ComponentStory<typeof PromptComponent> = args => <PromptComponent {...args} />;
 
-export const Alert = Template.bind({});
-Alert.args = {
+export const Prompt = Template.bind({});
+Prompt.args = {
   open: true,
+  variant: 'careful',
 };
