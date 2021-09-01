@@ -40,6 +40,10 @@ const primaryGreen = '#39BF87';
 const primaryRed = '#FE3333';
 const primaryBlue = '#1070CA';
 
+// text colors
+const textPrimary = '#12130F';
+const textSecondary = '#898888';
+
 //Surface colors
 const surfacePurple = '#EBE0FF';
 // const surfaceOrange = '#FFF2CC';
@@ -64,6 +68,7 @@ const textMedium = 600;
 const textXs = 10;
 const textSm = 12;
 const textBs = 14;
+const textMd = 16;
 const textLg = 18;
 const textXl = 22;
 const text2Xl = 28;
@@ -93,6 +98,10 @@ const theme = createTheme({
       main: primaryOrange,
       contrastText: '#FFFFF',
     },
+    text: {
+      primary: textPrimary,
+      secondary: textSecondary,
+    },
   },
   typography: {
     fontFamily: ['Mulish', 'serif'].join(','),
@@ -106,6 +115,9 @@ const theme = createTheme({
     },
     body1: {
       fontSize: textBs,
+    },
+    h5: {
+      fontSize: textMd,
     },
     h4: {
       fontSize: textLg,

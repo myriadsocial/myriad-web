@@ -8,9 +8,7 @@ import {SocialsEnum} from '../../interfaces/social';
 export default {
   title: 'UI Revamp v2.0/component/social-media',
   component: SocialMediaList,
-  argTypes: {
-    backgroundColor: {control: 'color'},
-  },
+  argTypes: {},
 } as ComponentMeta<typeof SocialMediaList>;
 
 const Template: ComponentStory<typeof SocialMediaList> = args => <SocialMediaList {...args} />;
@@ -23,7 +21,7 @@ SocialMedia.args = {
       peopleId: '1',
       platform: SocialsEnum.FACEBOOK,
       userId: '1',
-      verified: false,
+      verified: true,
       createdAt: new Date(),
       updatedAt: new Date(),
     },
