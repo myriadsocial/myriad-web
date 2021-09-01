@@ -82,6 +82,9 @@ const theme = createTheme({
     },
   },
   palette: {
+    background: {
+      default: '#121212',
+    },
     primary: {
       main: primaryPurple,
       contrastText: '#FFFFF',
@@ -155,6 +158,18 @@ const theme = createTheme({
   props: {
     MuiButton: {
       disableElevation: true,
+    },
+
+    MuiIconButton: {
+      root: {
+        fontSize: '1.2rem',
+      },
+
+      colorPrimary: {
+        '&:hover': {
+          backgroundColor: 'inherit',
+        },
+      },
     },
   },
 });
