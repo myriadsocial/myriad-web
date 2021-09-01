@@ -5,7 +5,7 @@ import React from 'react';
 import {WalletBalances} from '.';
 
 export default {
-  title: 'UI Revamp v2.0/component/wallet',
+  title: 'UI Revamp v2.0/component',
   component: WalletBalances,
   argTypes: {
     backgroundColor: {control: 'color'},
