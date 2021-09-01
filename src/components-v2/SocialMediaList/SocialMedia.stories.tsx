@@ -6,9 +6,11 @@ import {SocialMediaList} from '.';
 import {SocialsEnum} from '../../interfaces/social';
 
 export default {
-  title: 'UI Revamp v2.0/component',
+  title: 'UI Revamp v2.0/components/social-media',
   component: SocialMediaList,
-  argTypes: {},
+  argTypes: {
+    backgroundColor: {control: 'color'},
+  },
 } as ComponentMeta<typeof SocialMediaList>;
 
 const Template: ComponentStory<typeof SocialMediaList> = args => <SocialMediaList {...args} />;
