@@ -76,5 +76,11 @@ export const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: '#FF5700',
       },
     },
+    instagram: {},
+    wechat: {},
+    telegram: {},
+    '4chan': {},
+    vk: {},
+    weibo: {},
   }),
 );
