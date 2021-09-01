@@ -4,11 +4,11 @@ import {useRouter} from 'next/router';
 
 import {Typography} from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {BalanceDetail} from '../../interfaces/balance';
 import {BoxComponent} from '../atoms/Box';
 import {ListItemComponent} from '../atoms/ListItem';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 type WalletProps = {
   balances: Array<BalanceDetail>;
