@@ -86,3 +86,6 @@ prisma
 # next.js
 .next
 /public/sw-env.js
+
+# storybook
+/storybook-static

@@ -37,4 +37,5 @@ module.exports = {
     'react/no-unescaped-entities': ['warn'],
     'prettier/prettier': ['error', {}, {usePrettierrc: true}], // Use our .prettierrc file as source
   },
+  plugins: ['import'],
 };

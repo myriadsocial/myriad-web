@@ -4,6 +4,12 @@ export enum SocialsEnum {
   FACEBOOK = 'facebook',
   TWITTER = 'twitter',
   REDDIT = 'reddit',
+  INSTAGRAM = 'instagram',
+  WECHAT = 'wechat',
+  FOURCHAN = '4chan',
+  TELEGRAM = 'telegram',
+  VK = 'vk',
+  WEIBO = 'weibo',
 }
 
 export interface SocialMedia extends BaseModel {
