@@ -8,7 +8,7 @@ import {BoxComponent} from '.';
 import FacebookIcon from '../../../images/socials/facebook.svg';
 
 export default {
-  title: 'UI Revamp v2.0/core/Box',
+  title: 'UI Revamp v2.0/atoms/Box',
   component: BoxComponent,
   argTypes: {},
 } as ComponentMeta<typeof BoxComponent>;

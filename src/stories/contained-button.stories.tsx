@@ -11,7 +11,7 @@ const buttonSizes: ButtonSizeValue[] = Object.values(ButtonSize);
 const buttonColors: ButtonColorValue[] = Object.values(ButtonColor);
 
 export default {
-  title: 'UI Revamp v2.0/Contained Button',
+  title: 'UI Revamp v2.0/atoms/Contained Button',
   component: ContainedButton,
   argTypes: {
     color: {
