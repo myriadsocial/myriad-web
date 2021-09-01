@@ -22,7 +22,7 @@
     "build": "next build && tsc --project tsconfig.server.json",
     "postbuild": "yarn build:env",
     "build:env": "node ./plugins/export-env.js",
-    "start": "yarn build:env && next start -p $PORT",
+    "start": "yarn storybook",
     "start-docker": "yarn build:env && next start",
     "start-custom-server": "yarn build:env && node dist/index.js",
     "type-check": "tsc",
