@@ -1,5 +1,6 @@
 import {default as ContainedButton} from './ContainedButton';
-import {ButtonSize, ButtonColor} from './ContainedButton-interfaces';
+import {default as OutlinedButton} from './OutlinedButton';
 import {default as StyledButton} from './StyledButton';
+import {ButtonSize, ButtonColor} from './button.interfaces';
 
-export {ContainedButton, StyledButton, ButtonSize, ButtonColor};
+export {ContainedButton, OutlinedButton, StyledButton, ButtonSize, ButtonColor};
