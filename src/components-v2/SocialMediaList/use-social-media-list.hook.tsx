@@ -26,12 +26,12 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
 
   const icons: Record<SocialsEnum, JSX.Element> = useMemo(
     () => ({
-      facebook: <FacebookIcon />,
-      reddit: <RedditIcon />,
-      twitter: <TwitterIcon />,
-      instagram: <InstagramIcon />,
-      wechat: <WeChatIcon />,
-      telegram: <TelegramIcon />,
+      [SocialsEnum.FACEBOOK]: <FacebookIcon />,
+      [SocialsEnum.REDDIT]: <RedditIcon />,
+      [SocialsEnum.TWITTER]: <TwitterIcon />,
+      [SocialsEnum.INSTAGRAM]: <InstagramIcon />,
+      [SocialsEnum.WECHAT]: <WeChatIcon />,
+      [SocialsEnum.TELEGRAM]: <TelegramIcon />,
       [SocialsEnum.FOURCHAN]: <FourChanIcon />,
       [SocialsEnum.VK]: <VKIcon />,
       [SocialsEnum.WEIBO]: <WeiboIcon />,
@@ -40,7 +40,9 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
   );
 
   const isSocialConnected = (social: SocialsEnum): boolean => {
-    return connected.filter(item => item.platform === social).length > 0;
+    const match = connected.find(item => item.platform === social);
+
+    return !!match && match.verified;
   };
 
   for (const key of enumKeys(SocialsEnum)) {
