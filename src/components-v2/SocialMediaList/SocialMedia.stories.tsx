@@ -6,7 +6,7 @@ import {SocialMediaList} from '.';
 import {SocialsEnum} from '../../interfaces/social';
 
 export default {
-  title: 'UI Revamp v2.0/component/social-media',
+  title: 'UI Revamp v2.0/component',
   component: SocialMediaList,
   argTypes: {},
 } as ComponentMeta<typeof SocialMediaList>;
