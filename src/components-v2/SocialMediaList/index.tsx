@@ -17,13 +17,23 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {},
     list: {
       display: 'flex',
+      '* >': {
+        marginRight: theme.spacing(1),
+      },
     },
     icon: {
-      borderRadius: 5,
-      background: theme.palette.primary.main,
-      marginRight: theme.spacing(1),
-      width: 24,
-      height: 24,
+      '& rect': {
+        fill: theme.palette.text.secondary,
+      },
+      '&.MuiIconButton-colorPrimary': {
+        '& rect': {
+          fill: theme.palette.primary.main,
+        },
+      },
+      '& .MuiIconButton-label': {
+        width: 24,
+        height: 24,
+      },
     },
   }),
 );
@@ -44,7 +54,7 @@ export const SocialMediaList: React.FC<SocialMediaListProps> = ({connected, togg
           <IconButton
             key={social.id}
             size="small"
-            color={social.connected ? 'primary' : 'secondary'}
+            color={social.connected ? 'primary' : 'default'}
             onClick={handleSocialClicked(social.id)}
             className={styles.icon}>
             {social.icon}

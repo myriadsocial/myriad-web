@@ -41,7 +41,7 @@ export const BoxComponent: React.FC<BoxComponentProps> = props => {
         <Typography variant="h4">{title}</Typography>
 
         <IconButton color="primary" size="medium" className={styles.action}>
-          <ChevronRightIcon fontSize="large" />
+          <ChevronRightIcon fontSize="medium" />
         </IconButton>
       </div>
 
