@@ -10,9 +10,7 @@ import FacebookIcon from '../../../images/socials/facebook.svg';
 export default {
   title: 'UI Revamp v2.0/core/Box',
   component: BoxComponent,
-  argTypes: {
-    backgroundColor: {control: 'color'},
-  },
+  argTypes: {},
 } as ComponentMeta<typeof BoxComponent>;
 
 const Template: ComponentStory<typeof BoxComponent> = args => <BoxComponent {...args} />;
