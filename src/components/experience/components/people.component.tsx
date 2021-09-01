@@ -20,6 +20,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FacebookIcon from '@material-ui/icons/Facebook';
+import ImageIcon from '@material-ui/icons/Image';
 import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -52,6 +53,12 @@ export default function PeopleComponent({people, onAddItem, onRemoveItem}: Props
       facebook: <FacebookIcon />,
       twitter: <TwitterIcon />,
       reddit: <RedditIcon />,
+      instagram: <ImageIcon />,
+      wechat: <ImageIcon />,
+      telegram: <ImageIcon />,
+      '4chan': <ImageIcon />,
+      vk: <ImageIcon />,
+      weibo: <ImageIcon />,
     }),
     [],
   );
