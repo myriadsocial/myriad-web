@@ -1,6 +1,6 @@
 const path = require('path');
 
-const AppSourceDir = path.join(__dirname, '..', 'src');
+const AppSourceDir = path.join(__dirname, '..', 'src/images');
 
 module.exports = {
   typescript: {
@@ -28,7 +28,7 @@ module.exports = {
       include: [AppSourceDir],
       use: ["@svgr/webpack"],
     });
-    console.log('baseConfig', baseConfig.module.rules)
+
     return baseConfig;
   },
 };

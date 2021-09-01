@@ -2,7 +2,7 @@ import React from 'react';
 
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import {BoxComponent} from 'src/componentsV2/common/Box';
+import {BoxComponent} from 'src/components-v2/common/Box';
 import {BalanceDetail} from 'src/interfaces/balance';
 
 type WalletProps = {
@@ -18,5 +18,9 @@ const useStyles = makeStyles((theme: Theme) =>
 export const WalletBalances: React.FC<WalletProps> = ({balances}) => {
   const styles = useStyles();
 
-  return <BoxComponent title="Wallet">hi</BoxComponent>;
+  return (
+    <BoxComponent title="Wallet" className={styles.root}>
+      hi
+    </BoxComponent>
+  );
 };
