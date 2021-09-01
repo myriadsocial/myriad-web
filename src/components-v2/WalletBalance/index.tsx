@@ -53,9 +53,4 @@ export const WalletBalances: React.FC<WalletProps> = ({balances}) => {
       ))}
     </BoxComponent>
   );
-  return (
-    <BoxComponent title="Wallet" className={styles.root}>
-      hi
-    </BoxComponent>
-  );
 };
