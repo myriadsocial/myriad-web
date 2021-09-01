@@ -27,7 +27,7 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
   const styles = useStyles();
 
   return (
-    <ListItem component="div">
+    <ListItem component="div" className={styles.root}>
       {avatar && (
         <ListItemAvatar>
           <Avatar alt="Remy Sharp" src={avatar} variant={avatarVariant} />
