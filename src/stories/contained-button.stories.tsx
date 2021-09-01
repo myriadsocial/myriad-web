@@ -1,4 +1,3 @@
-import {action} from '@storybook/addon-actions';
 import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
@@ -37,7 +36,6 @@ export const PrimarySmall = Template.bind({});
 PrimarySmall.args = {
   color: ButtonColor.PRIMARY,
   size: ButtonSize.SMALL,
-  onClick: action('Primary small button clicked!'),
   children: 'Primary Small',
 };
 
