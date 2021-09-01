@@ -5,7 +5,7 @@ import React from 'react';
 import {PromptComponent} from '../components-v2/prompt/prompt.component';
 
 export default {
-  title: 'UI Revamp v2.0/component',
+  title: 'UI Revamp v2.0/components/Prompt',
   component: PromptComponent,
 } as ComponentMeta<typeof PromptComponent>;
 
