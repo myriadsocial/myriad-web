@@ -17,8 +17,10 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {},
     list: {
       display: 'flex',
-      '* >': {
+      flexWrap: 'wrap',
+      '& * >': {
         marginRight: theme.spacing(1),
+        marginBottom: theme.spacing(1),
       },
     },
     icon: {
