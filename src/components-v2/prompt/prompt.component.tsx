@@ -11,15 +11,10 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import WarningIcon from '@material-ui/icons/Warning';
 
+import {Prompt} from './prompt';
 import {useStyles} from './prompt.style';
 
-type Prompt = {
-  togglePromt: () => void;
-  open: boolean;
-  variant?: 'sure' | 'careful' | 'success';
-};
-
-export const Prompt: React.FC<Prompt> = ({togglePromt, open, variant = 'careful'}) => {
+export const PromptComponent: React.FC<Prompt> = ({togglePromt, open, variant = 'careful'}) => {
   const style = useStyles();
 
   const Sure = () => {
@@ -128,4 +123,4 @@ export const Prompt: React.FC<Prompt> = ({togglePromt, open, variant = 'careful'
   );
 };
 
-Prompt.defaultProps = {};
+PromptComponent.defaultProps = {};

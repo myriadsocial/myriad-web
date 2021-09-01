@@ -2,7 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {Prompt as PromptComponent} from '../components-v2/prompt/prompt.component';
+import {PromptComponent} from '../components-v2/prompt/prompt.component';
 
 export default {
   title: 'UI Revamp v2.0/component',
