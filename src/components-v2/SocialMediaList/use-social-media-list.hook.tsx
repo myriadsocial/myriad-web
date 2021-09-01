@@ -11,12 +11,19 @@ import WeChatIcon from '../../images/socials/wechat.svg';
 import WeiboIcon from '../../images/socials/weibo.svg';
 import {SocialsEnum, SocialMedia} from '../../interfaces/social';
 
+<<<<<<< HEAD
 export type SocialDetail = {
   id: SocialsEnum;
   icon: React.ReactElement | React.FC;
   originId: string | null;
   connected: boolean;
   username: string | null;
+=======
+type SocialDetail = {
+  id: SocialsEnum;
+  icon: React.ReactElement | React.FC;
+  connected: boolean;
+>>>>>>> da15b546 (MYR-703: box component)
 };
 
 function enumKeys<E>(e: E): (keyof E)[] {
@@ -28,12 +35,21 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
 
   const icons: Record<SocialsEnum, JSX.Element> = useMemo(
     () => ({
+<<<<<<< HEAD
       [SocialsEnum.FACEBOOK]: <FacebookIcon />,
       [SocialsEnum.REDDIT]: <RedditIcon />,
       [SocialsEnum.TWITTER]: <TwitterIcon />,
       [SocialsEnum.INSTAGRAM]: <InstagramIcon />,
       [SocialsEnum.WECHAT]: <WeChatIcon />,
       [SocialsEnum.TELEGRAM]: <TelegramIcon />,
+=======
+      facebook: <FacebookIcon />,
+      reddit: <RedditIcon />,
+      twitter: <TwitterIcon />,
+      instagram: <InstagramIcon />,
+      wechat: <WeChatIcon />,
+      telegram: <TelegramIcon />,
+>>>>>>> da15b546 (MYR-703: box component)
       [SocialsEnum.FOURCHAN]: <FourChanIcon />,
       [SocialsEnum.VK]: <VKIcon />,
       [SocialsEnum.WEIBO]: <WeiboIcon />,
@@ -42,6 +58,7 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
   );
 
   const isSocialConnected = (social: SocialsEnum): boolean => {
+<<<<<<< HEAD
     const match = connected.find(item => item.platform === social);
 
     return !!match && match.verified;
@@ -57,6 +74,9 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
     const match = connected.find(item => item.platform === social);
 
     return match && match.people ? match.people?.username : null;
+=======
+    return connected.filter(item => item.platform === social).length > 0;
+>>>>>>> da15b546 (MYR-703: box component)
   };
 
   for (const key of enumKeys(SocialsEnum)) {
@@ -65,9 +85,13 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
     socials.push({
       id: social,
       icon: icons[social],
+<<<<<<< HEAD
       originId: getSocialOrigin(social),
       connected: isSocialConnected(social),
       username: getSocialUsername(social),
+=======
+      connected: isSocialConnected(social),
+>>>>>>> da15b546 (MYR-703: box component)
     });
   }
 
