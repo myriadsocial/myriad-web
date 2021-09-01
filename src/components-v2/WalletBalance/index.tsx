@@ -1,9 +1,11 @@
 import React from 'react';
 
+import {Typography} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import {BoxComponent} from 'src/components-v2/common/Box';
-import {BalanceDetail} from 'src/interfaces/balance';
+import {BalanceDetail} from '../../interfaces/balance';
+import {BoxComponent} from '../common/Box';
+import {ListItemComponent} from '../common/ListItem';
 
 type WalletProps = {
   balances: Array<BalanceDetail>;
@@ -20,7 +22,14 @@ export const WalletBalances: React.FC<WalletProps> = ({balances}) => {
 
   return (
     <BoxComponent title="Wallet" className={styles.root}>
-      hi
+      {balances.map(balance => (
+        <ListItemComponent
+          key={balance.tokenSymbol}
+          title={balance.tokenSymbol}
+          avatar={balance.tokenImage}
+          action={<Typography variant="h5">{balance.freeBalance}</Typography>}
+        />
+      ))}
     </BoxComponent>
   );
 };
