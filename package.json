@@ -20,6 +20,8 @@
     "export-env": "node ./plugins/export-env.js",
     "clean": "rm -rf .next dist plugins/sv-env.js",
     "build": "next build && tsc --project tsconfig.server.json",
+    "build:env": "node ./plugins/export-env.js",
+    "build-storybook": "build-storybook",
     "postbuild": "yarn run export-env",
     "rebuild": "yarn run clean && yarn run build",
     "eslint:cli": "eslint",
@@ -41,7 +43,7 @@
     "start": "next start",
     "start:docker": "yarn export-env && next start",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "type-check": "tsc"
   },
   "lint-staged": {
     "./src/**/*.{js,ts,tsx,scss}": [
