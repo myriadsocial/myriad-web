@@ -3,10 +3,17 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 import React from 'react';
 
 import {VotingComponent} from '.';
+import {voteType} from './voting.interface';
 
 export default {
-  title: 'UI Revamp v2.0/component/vote',
+  title: 'UI Revamp v2.0/atoms/vote',
   component: VotingComponent,
+  argTypes: {
+    variant: {
+      options: [...voteType],
+      control: {type: 'radio'},
+    },
+  },
 } as ComponentMeta<typeof VotingComponent>;
 
 const Template: ComponentStory<typeof VotingComponent> = args => <VotingComponent {...args} />;

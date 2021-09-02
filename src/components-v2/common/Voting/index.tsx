@@ -2,12 +2,14 @@ import React, {useState} from 'react';
 
 import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import {createStyles, makeStyles} from '@material-ui/core/styles';
 import ForwardIcon from '@material-ui/icons/Forward';
+
+import {VoteProps} from './voting.interface';
 
 import {debounce} from 'lodash';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       display: 'inline-block',
@@ -30,10 +32,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   }),
 );
-
-type VoteProps = {
-  variant?: 'type1' | 'type2';
-};
 
 export const VotingComponent: React.FC<VoteProps> = ({variant = 'type1'}) => {
   const styles = useStyles();
