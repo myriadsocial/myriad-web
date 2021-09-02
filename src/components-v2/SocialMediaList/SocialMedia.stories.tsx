@@ -6,7 +6,7 @@ import {SocialMediaList} from '.';
 import {SocialsEnum} from '../../interfaces/social';
 
 export default {
-  title: 'UI Revamp v2.0/components/social-media',
+  title: 'UI Revamp v2.0/components',
   component: SocialMediaList,
   argTypes: {
     backgroundColor: {control: 'color'},
