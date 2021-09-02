@@ -1,15 +1,23 @@
-export enum ButtonSize {
+enum ButtonSize {
   SMALL = 'small',
   MEDIUM = 'medium',
   LARGE = 'large',
 }
 
-export enum ButtonColor {
+type ButtonSizeKey = keyof typeof ButtonSize;
+type ButtonSizeValue = typeof ButtonSize[ButtonSizeKey];
+const buttonSizes: ButtonSizeValue[] = Object.values(ButtonSize);
+
+enum ButtonColor {
   PRIMARY = 'primary',
   SECONDARY = 'secondary',
 }
 
-export interface ButtonProps {
+type ButtonColorKey = keyof typeof ButtonColor;
+type ButtonColorValue = typeof ButtonColor[ButtonColorKey];
+const buttonColors: ButtonColorValue[] = Object.values(ButtonColor);
+
+interface ButtonProps {
   /**
    * Define the base color of the button
    */
@@ -40,3 +48,6 @@ export interface ButtonProps {
    */
   onClick?: () => void;
 }
+
+export {ButtonSize, ButtonColor, buttonSizes, buttonColors};
+export type {ButtonProps};

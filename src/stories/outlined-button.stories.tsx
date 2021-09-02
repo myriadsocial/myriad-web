@@ -2,13 +2,13 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {OutlinedButton, ButtonSize, ButtonColor} from '../../src/components-v2/button';
-
-type ButtonSizeValue = `${ButtonSize}`;
-type ButtonColorValue = `${ButtonColor}`;
-
-const buttonSizes: ButtonSizeValue[] = Object.values(ButtonSize);
-const buttonColors: ButtonColorValue[] = Object.values(ButtonColor);
+import {
+  OutlinedButton,
+  ButtonSize,
+  ButtonColor,
+  buttonSizes,
+  buttonColors,
+} from '../../src/components-v2/button';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Outlined Button',
