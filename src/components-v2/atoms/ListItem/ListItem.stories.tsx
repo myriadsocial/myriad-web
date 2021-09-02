@@ -10,7 +10,7 @@ export default {
   component: ListItemComponent,
   argTypes: {
     variant: {
-      options: ['square', 'circle', 'rounded', 'circular'],
+      options: ['square', 'rounded', 'circular'],
       control: {type: 'radio'},
     },
     size: {
