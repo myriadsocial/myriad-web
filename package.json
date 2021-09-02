@@ -23,7 +23,7 @@
     "build:torybook": "build-storybook",
     "postbuild": "yarn build:env",
     "build:env": "node ./plugins/export-env.js",
-    "start": "start-storybook -p $PORT",
+    "start": "start-storybook -p 6006",
     "start-docker": "yarn build:env && next start",
     "start-custom-server": "yarn build:env && node dist/index.js",
     "type-check": "tsc",
