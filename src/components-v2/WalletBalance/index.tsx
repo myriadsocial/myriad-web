@@ -4,8 +4,8 @@ import {Typography} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {BalanceDetail} from '../../interfaces/balance';
-import {BoxComponent} from '../common/Box';
-import {ListItemComponent} from '../common/ListItem';
+import {BoxComponent} from '../atoms/Box';
+import {ListItemComponent} from '../atoms/ListItem';
 
 type WalletProps = {
   balances: Array<BalanceDetail>;
