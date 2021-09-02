@@ -8,7 +8,7 @@ import {
   ButtonColor,
   buttonSizes,
   buttonColors,
-} from '../../src/components-v2/button';
+} from '../../src/components-v2/atoms/button';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Contained Button',
