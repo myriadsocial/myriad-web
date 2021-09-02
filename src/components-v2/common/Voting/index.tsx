@@ -3,10 +3,9 @@ import React, {useState} from 'react';
 import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ForwardIcon from '@material-ui/icons/Forward';
 
-type Voting = {};
+import {debounce} from 'lodash';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,9 +14,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     flex: {
       display: 'flex',
-      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    flexColumn: {
+      flexDirection: 'column',
     },
     action: {
       padding: 0,
@@ -30,25 +31,32 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const VotingComponent: React.FC<Voting> = () => {
+type VoteProps = {
+  variant?: 'type1' | 'type2';
+};
+
+export const VotingComponent: React.FC<VoteProps> = ({variant = 'type1'}) => {
   const styles = useStyles();
   const [voting, setVoting] = useState<number>(0);
 
-  const handleUpVote = () => {
-    setVoting(voting + 1);
-  };
+  const mode = () => (variant == 'type2' ? '' : styles.flexColumn);
 
-  const handleDownVote = () => {
+  const handleUpVote = debounce(() => {
+    setVoting(voting + 1);
+  }, 500);
+
+  const handleDownVote = debounce(() => {
+    // open debate section -> down
     setVoting(voting - 1);
-  };
+  }, 500);
 
   return (
     <div className={styles.root}>
-      <div className={styles.flex}>
+      <div className={`${styles.flex} ${mode()}`}>
         <IconButton onClick={handleUpVote} color="primary" size="medium" className={styles.action}>
           <ForwardIcon fontSize="large" color="primary" />
         </IconButton>
-        <Typography variant="h5" component="span">
+        <Typography variant="h6" component="span">
           {voting}
         </Typography>
         <IconButton
