@@ -7,16 +7,18 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 type ListItemComponentProps = ListItemProps & {
-  icon?: React.ReactNode;
+  icon?: any;
   avatar?: string;
   variant?: AvatarProps['variant'];
   size?: 'small' | 'medium' | 'large';
   title: string;
   subtitle?: string | React.ReactNode;
   action?: string | React.ReactNode;
+  active?: boolean;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -29,8 +31,14 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: 20,
     },
     icon: {
-      minWidth: theme.spacing(3.75),
+      minWidth: 24,
       marginRight: 20,
+      padding: 6,
+      color: 'transparent',
+    },
+    active: {
+      background: theme.palette.secondary.main,
+      borderRadius: 6,
     },
     small: {
       width: theme.spacing(3.75),
@@ -51,8 +59,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
-  const {icon, avatar, variant = 'circle', size = 'small', title, subtitle, action} = props;
+  const {icon, avatar, variant = 'circle', size = 'small', title, subtitle, action, active} = props;
   const styles = useStyles();
+
+  const iconSyles = [styles.icon];
+
+  if (active) {
+    iconSyles.push(styles.active);
+  }
 
   return (
     <ListItem component="div" className={styles.root} ContainerComponent="div">
@@ -62,7 +76,11 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
         </ListItemAvatar>
       )}
 
-      {icon && !avatar && <ListItemIcon className={styles.icon}>{icon}</ListItemIcon>}
+      {icon && !avatar && (
+        <ListItemIcon className={iconSyles.join(' ')}>
+          <SvgIcon component={icon} />
+        </ListItemIcon>
+      )}
 
       <ListItemText
         primary={
