@@ -229,11 +229,26 @@ const theme = createTheme({
         },
       },
     },
+
+    MuiSnackbarContent: {
+      root: {
+        backgroundColor: '#FFF',
+        boxShadow: `0px 2px 10px rgba(71, 184, 129, 0.1)`,
+        borderRadius: 10,
+      },
+    },
   },
 
   props: {
     MuiButton: {
       disableElevation: true,
+    },
+
+    MuiSnackbar: {
+      anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'right',
+      },
     },
   },
 });
