@@ -7,7 +7,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 type BoxComponentProps = BoxProps & {
-  title: string;
+  title?: string;
   children: React.ReactNode;
   action?: React.ReactNode;
 };
@@ -37,13 +37,15 @@ export const BoxComponent: React.FC<BoxComponentProps> = props => {
 
   return (
     <Box {...restProps} className={styles.root}>
-      <div className={styles.header}>
-        <Typography variant="h4">{title}</Typography>
+      {title && (
+        <div className={styles.header}>
+          <Typography variant="h4">{title}</Typography>
 
-        <IconButton color="primary" size="medium" className={styles.action}>
-          <ChevronRightIcon fontSize="medium" />
-        </IconButton>
-      </div>
+          <IconButton color="primary" size="medium" className={styles.action}>
+            <ChevronRightIcon fontSize="medium" />
+          </IconButton>
+        </div>
+      )}
 
       {children}
     </Box>
