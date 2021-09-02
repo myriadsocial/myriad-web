@@ -5,7 +5,7 @@ import React from 'react';
 import {SortComponent} from '../components-v2/common/Sort';
 
 export default {
-  title: 'UI Revamp v2.0/component/Sort',
+  title: 'UI Revamp v2.0/components/Sort',
   component: SortComponent,
 } as ComponentMeta<typeof SortComponent>;
 
