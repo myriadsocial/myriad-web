@@ -6,7 +6,7 @@ import {ListItemComponent} from '.';
 import FacebookIcon from '../../../images/socials/facebook.svg';
 
 export default {
-  title: 'UI Revamp v2.0/core/ListItem',
+  title: 'UI Revamp v2.0/atoms/ListItem',
   component: ListItemComponent,
   argTypes: {
     variant: {
