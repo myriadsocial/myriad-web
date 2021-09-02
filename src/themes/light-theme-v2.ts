@@ -39,7 +39,7 @@ const neutral50 = '#C2C2C2';
 
 //Primary colors
 const primaryPurple = '#7342CC';
-const primaryPurpleHover = '#7647CC';
+//const primaryPurpleHover = '#7647CC';
 const primaryOrange = '#FFD24D';
 
 const primaryGreen = '#39BF87';
