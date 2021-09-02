@@ -99,9 +99,7 @@ const theme = createTheme({
       main: primaryBlue,
     },
   },
-  button: {
-    '&:disabled': DISABLED_PROPS,
-  },
+
   palette: {
     background: {
       default: '#121212',
@@ -119,6 +117,7 @@ const theme = createTheme({
       secondary: textSecondary,
     },
   },
+
   typography: {
     fontFamily: ['Mulish', 'serif'].join(','),
     fontWeightRegular: textRegular,
@@ -148,6 +147,7 @@ const theme = createTheme({
       fontSize: text3Xl,
     },
   },
+
   overrides: {
     MuiButton: {
       root: {
@@ -218,17 +218,6 @@ const theme = createTheme({
         backgroundColor: '#FFF',
       },
     },
-  },
-  props: {
-    Mui: {
-      disabled: {
-        backgroundColor: neutral50,
-      },
-    },
-    MuiButton: {
-      disableElevation: true,
-    },
-
     MuiIconButton: {
       root: {
         fontSize: '1.2rem',
@@ -239,6 +228,12 @@ const theme = createTheme({
           backgroundColor: 'inherit',
         },
       },
+    },
+  },
+
+  props: {
+    MuiButton: {
+      disableElevation: true,
     },
   },
 });
