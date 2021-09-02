@@ -45,3 +45,11 @@ SecondaryLarge.args = {
   size: ButtonSize.LARGE,
   children: 'Secondary Large',
 };
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+  color: ButtonColor.SECONDARY,
+  size: ButtonSize.LARGE,
+  children: 'Disabled',
+  isDisabled: true,
+};

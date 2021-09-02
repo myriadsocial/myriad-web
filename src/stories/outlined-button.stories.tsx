@@ -26,10 +26,15 @@ export default {
 } as ComponentMeta<typeof OutlinedButton>;
 
 const Template: ComponentStory<typeof OutlinedButton> = args => <OutlinedButton {...args} />;
-
 export const Default = Template.bind({});
 Default.args = {
   children: 'Default',
+};
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+  isDisabled: true,
+  children: 'Disabled',
 };
 
 export const PrimarySmall = Template.bind({});

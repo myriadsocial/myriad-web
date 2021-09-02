@@ -32,8 +32,14 @@ declare module '@material-ui/core/styles' {
   }
 }
 
+//Neutral colors
+const neutral20 = '#F5F5F5';
+const neutral30 = '#EDEDED';
+const neutral50 = '#C2C2C2';
+
 //Primary colors
 const primaryPurple = '#7342CC';
+const primaryPurpleHover = '#7647CC';
 const primaryOrange = '#FFD24D';
 
 const primaryGreen = '#39BF87';
@@ -74,6 +80,13 @@ const textXl = 22;
 const text2Xl = 28;
 const text3Xl = 34;
 
+//Button State Properties
+const DISABLED_PROPS = {
+  backgroundColor: neutral50,
+  border: 'none',
+  color: '#FFF',
+};
+
 const theme = createTheme({
   status: {
     success: {
@@ -85,6 +98,9 @@ const theme = createTheme({
     info: {
       main: primaryBlue,
     },
+  },
+  button: {
+    '&:disabled': DISABLED_PROPS,
   },
   palette: {
     background: {
@@ -153,20 +169,64 @@ const theme = createTheme({
         border: `1px solid ${primaryPurple}`,
         backgroundColor: primaryPurple,
         color: '#FFF',
+        '&:hover': {
+          backgroundColor: primaryPurple,
+        },
+        '&:focus': {
+          backgroundColor: '#7647CC',
+          border: `3px solid rgba(115, 66, 204, 0.2)`,
+        },
+        '&:active': {
+          backgroundColor: '#452680',
+        },
+        '&:disabled': DISABLED_PROPS,
       },
       containedSecondary: {
         border: `1px solid ${borderPurple}`,
         backgroundColor: `${surfacePurple}`,
         color: primaryPurple,
+        '&:hover': {
+          backgroundColor: surfacePurple,
+        },
+        '&:focus': {
+          border: `3px solid rgba(115, 66, 204, 0.2)`,
+        },
+        '&:active': {
+          backgroundColor: `rgba(115, 66, 204, 0.2)`,
+        },
+        '&:disabled': DISABLED_PROPS,
       },
       outlinedPrimary: {
-        border: `1px solid ${primaryPurple}`,
+        border: `2px solid ${borderPurple}`,
         backgroundColor: '#FFF',
+        '&:hover': {
+          backgroundColor: neutral20,
+          border: `2px solid ${borderPurple}`,
+        },
+        '&:focus': {
+          backgroundColor: neutral20,
+          border: `3px solid rgba(115, 66, 204, 0.2)`,
+        },
+        '&:active': {
+          backgroundColor: neutral30,
+          border: `2px solid ${borderPurple}`,
+        },
+        '&:disabled': DISABLED_PROPS,
       },
       outlinedSecondary: {
         border: `1px solid ${primaryOrange}`,
         backgroundColor: '#FFF',
       },
+    },
+  },
+  props: {
+    Mui: {
+      disabled: {
+        backgroundColor: neutral50,
+      },
+    },
+    MuiButton: {
+      disableElevation: true,
     },
 
     MuiIconButton: {
@@ -179,11 +239,6 @@ const theme = createTheme({
           backgroundColor: 'inherit',
         },
       },
-    },
-  },
-  props: {
-    MuiButton: {
-      disableElevation: true,
     },
   },
 });
