@@ -1,5 +1,5 @@
-node_modules/
-dist/
 .next/
-coverage/
+dist/
+node_modules/
 .eslintrc.js
+*.tsbuildinfo
