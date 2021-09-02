@@ -31,6 +31,11 @@ export interface ButtonProps {
   children: React.ReactNode;
 
   /**
+   * Button disabled?
+   */
+  isDisabled?: boolean;
+
+  /**
    * Optional click handler
    */
   onClick?: () => void;

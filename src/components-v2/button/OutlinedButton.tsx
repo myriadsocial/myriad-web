@@ -10,6 +10,7 @@ const OutlinedButton = ({
   color = ButtonColor.PRIMARY,
   size = ButtonSize.MEDIUM,
   ariaLabel = 'contained-button',
+  isDisabled = false,
   children,
   ...props
 }: ButtonProps): JSX.Element => {
@@ -18,6 +19,7 @@ const OutlinedButton = ({
       color={color}
       size={size}
       aria-label={ariaLabel}
+      disabled={isDisabled}
       variant="outlined"
       onClick={action('clicked')}>
       {children}
