@@ -2,7 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {SortComponent} from '../components-v2/common/Sort';
+import {SortComponent} from '../components-v2/atoms/Sort';
 
 export default {
   title: 'UI Revamp v2.0/components/Sort',
