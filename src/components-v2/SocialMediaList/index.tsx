@@ -3,7 +3,7 @@ import React from 'react';
 import {IconButton} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import {BoxComponent} from '../../components-v2/common/Box';
+import {BoxComponent} from '../../components-v2/atoms/Box';
 import {SocialMedia, SocialsEnum} from '../../interfaces/social';
 import {useSocialMediaList} from './use-social-media-list.hook';
 
