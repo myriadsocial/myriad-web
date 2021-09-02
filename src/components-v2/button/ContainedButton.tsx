@@ -11,6 +11,7 @@ const ContainedButton = ({
   size = ButtonSize.MEDIUM,
   ariaLabel = 'contained-button',
   children,
+  isDisabled = false,
   ...props
 }: ButtonProps): JSX.Element => {
   return (
@@ -18,6 +19,7 @@ const ContainedButton = ({
       color={color}
       size={size}
       aria-label={ariaLabel}
+      disabled={isDisabled}
       variant="contained"
       onClick={action('clicked')}>
       {children}
