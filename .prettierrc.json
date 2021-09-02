@@ -1,0 +1,21 @@
+{
+  "printWidth": 100,
+  "tabWidth": 2,
+  "semi": true,
+  "singleQuote": true,
+  "jsxSingleQuote": true,
+  "trailingComma": "all",
+  "bracketSpacing": false,
+  "jsxBracketSameLine": true,
+  "arrowParens": "avoid",
+  "endOfLine": "lf",
+  "importOrder": [
+    "^(react)([-a-zA-Z]+)?$",
+    "^(next)([-a-zA-Z/]+)?$",
+    "^@material-ui/(.*)$",
+    "^@polkadot/(.*)$",
+    "^[./]",
+    "^[-a-zA-Z/]+"
+  ],
+  "importOrderSeparation": true
+}

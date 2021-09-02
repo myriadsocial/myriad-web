@@ -13,33 +13,33 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "prepare": "husky install",
     "dev": "next",
     "dev:secure": "nodemon",
+    "dev:custom-server": "node .",
+    "export-env": "node ./plugins/export-env.js",
+    "clean": "rm -rf .next dist plugins/sv-env.js",
     "build": "next build && tsc --project tsconfig.server.json",
-    "postbuild": "yarn build:env",
-    "build:env": "node ./plugins/export-env.js",
-    "start": "yarn build:env && next start -p $PORT",
-    "start-docker": "yarn build:env && next start",
-    "start-custom-server": "yarn build:env && node dist/index.js",
-    "type-check": "tsc",
-    "lint": "eslint --fix .",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
-    "prepare": "husky install",
-    "test": "yarn build && yarn lint-staged",
-    "test:watch": "jest --watch",
+    "postbuild": "yarn run export-env",
+    "rebuild": "yarn run clean && yarn run build",
+    "eslint:cli": "eslint",
+    "eslint:check": "yarn run eslint:cli --report-unused-disable-directives .",
+    "eslint:fix": "yarn run eslint:cli --fix .",
+    "prettier:cli": "prettier",
+    "prettier:check": "yarn run prettier:cli -l .",
+    "prettier:fix": "yarn run prettier:cli --write .",
+    "lint": "yarn run eslint:check && yarn run prettier:check",
+    "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
+    "pretest": "yarn run rebuild",
+    "test": "jest --watch",
+    "posttest": "yarn run lint",
+    "test:dev": "jest --watch && yarn run posttest",
     "docker:build": "./.maintain/docker/build-image.sh",
     "docker:run": "./.maintain/docker/start-docker-compose.sh",
-    "docker:down": "./.maintain/docker/stop-docker-compose.sh"
-  },
-  "lint-staged": {
-    "./src/**/*.{js,ts,tsx,scss}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "./pages/**/*.{js,ts,tsx,scss}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
+    "docker:down": "./.maintain/docker/stop-docker-compose.sh",
+    "prestart": "yarn run rebuild",
+    "start": "next start",
+    "start:docker": "yarn export-env && next start"
   },
   "cacheDirectories": [
     ".next/cache"
