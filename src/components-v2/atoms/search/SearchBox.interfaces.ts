@@ -1,20 +1,20 @@
-enum InputBaseColor {
+enum SearchBoxColor {
   PRIMARY = 'primary',
   SECONDARY = 'secondary',
 }
 
-type InputBaseColorKey = keyof typeof InputBaseColor;
-type InputBaseColorValue = typeof InputBaseColor[InputBaseColorKey];
-const inputBaseColors: InputBaseColorValue[] = Object.values(InputBaseColor);
+type SearchBoxColorKey = keyof typeof SearchBoxColor;
+type SearchBoxColorValue = typeof SearchBoxColor[SearchBoxColorKey];
+const searchBoxColors: SearchBoxColorValue[] = Object.values(SearchBoxColor);
 
-interface InputBaseProps {
+interface SearchBoxProps {
   /**
-   * Define the base color of the InputBase
+   * Define the base color of the SearchBox
    */
-  color?: InputBaseColor;
+  color?: SearchBoxColor;
 
   /**
-   * InputBase accessibility label
+   * SearchBox accessibility label
    */
   ariaLabel?: string;
 
@@ -24,10 +24,12 @@ interface InputBaseProps {
   placeholder: string;
 
   /**
-   * InputBase disabled?
+   * SearchBox disabled?
    */
   isDisabled?: boolean;
+
+  onSubmit: (value: string) => void;
 }
 
-export {InputBaseColor, inputBaseColors};
-export type {InputBaseProps};
+export {SearchBoxColor, searchBoxColors};
+export type {SearchBoxProps};
