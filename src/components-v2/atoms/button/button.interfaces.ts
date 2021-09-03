@@ -17,11 +17,22 @@ type ButtonColorKey = keyof typeof ButtonColor;
 type ButtonColorValue = typeof ButtonColor[ButtonColorKey];
 const buttonColors: ButtonColorValue[] = Object.values(ButtonColor);
 
+enum ButtonVariant {
+  CONTAINED = 'contained',
+  OUTLINED = 'outlined',
+}
+
+type ButtonVariantKey = keyof typeof ButtonVariant;
+type ButtonVariantValue = typeof ButtonVariant[ButtonVariantKey];
+const buttonVariants: ButtonVariantValue[] = Object.values(ButtonVariant);
+
 interface ButtonProps {
   /**
    * Define the base color of the button
    */
   color?: ButtonColor;
+
+  variant: ButtonVariant;
 
   /**
    * How large should the button be?
@@ -49,5 +60,5 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-export {ButtonSize, ButtonColor, buttonSizes, buttonColors};
+export {ButtonSize, ButtonColor, ButtonVariant, buttonSizes, buttonColors, buttonVariants};
 export type {ButtonProps};
