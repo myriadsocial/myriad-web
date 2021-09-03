@@ -1,7 +1,14 @@
-import {default as ContainedButton} from './ContainedButton';
-import {default as OutlinedButton} from './OutlinedButton';
-import {ButtonSize, ButtonColor, buttonSizes, buttonColors, ButtonProps} from './button.interfaces';
+import {default as Button} from './Button';
+import {
+  ButtonSize,
+  ButtonColor,
+  ButtonVariant,
+  buttonSizes,
+  buttonColors,
+  buttonVariants,
+  ButtonProps,
+} from './button.interfaces';
 
-export {ContainedButton, OutlinedButton, ButtonSize, ButtonColor, buttonSizes, buttonColors};
+export {Button, ButtonSize, ButtonColor, ButtonVariant, buttonSizes, buttonColors, buttonVariants};
 
 export type {ButtonProps};
