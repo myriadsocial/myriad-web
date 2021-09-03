@@ -1,30 +1,29 @@
-import {action} from '@storybook/addon-actions';
-
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
+import MuiButton from '@material-ui/core/Button';
 
-import {ButtonSize, ButtonColor, ButtonProps} from './button.interfaces';
+import {ButtonSize, ButtonColor, ButtonVariant, ButtonProps} from './button.interfaces';
 
-const ContainedButton = ({
+const Button = ({
   color = ButtonColor.PRIMARY,
   size = ButtonSize.MEDIUM,
   ariaLabel = 'contained-button',
+  variant = ButtonVariant.CONTAINED,
   children,
   isDisabled = false,
   ...props
 }: ButtonProps): JSX.Element => {
   return (
-    <Button
+    <MuiButton
       color={color}
       size={size}
       aria-label={ariaLabel}
       disabled={isDisabled}
-      variant="contained"
-      onClick={action('clicked')}>
+      variant={variant}
+      {...props}>
       {children}
-    </Button>
+    </MuiButton>
   );
 };
 
-export default ContainedButton;
+export default Button;
