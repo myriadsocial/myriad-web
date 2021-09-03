@@ -1,3 +1,5 @@
+import {XIcon} from '@heroicons/react/outline';
+
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
@@ -10,8 +12,8 @@ import {useTheme} from '@material-ui/core/styles';
 
 import {ToasterProps, Status} from './';
 
-const Toaster = ({status, message}: ToasterProps): JSX.Element => {
-  const theme = useTheme();
+const Toaster = ({toasterStatus, message}: ToasterProps): JSX.Element => {
+  const {palette, status} = useTheme();
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -24,6 +26,30 @@ const Toaster = ({status, message}: ToasterProps): JSX.Element => {
     }
 
     setOpen(false);
+  };
+
+  const defineBG = (toasterStatus: string) => {
+    switch (toasterStatus) {
+      case Status.SUCCESS: {
+        return status.success.main;
+      }
+
+      case Status.WARNING: {
+        return palette.secondary.main;
+      }
+
+      case Status.DANGER: {
+        return status.warning.main;
+      }
+
+      case Status.INFO: {
+        return status.info.main;
+      }
+
+      default: {
+        return palette.primary.main;
+      }
+    }
   };
 
   return (
@@ -40,14 +66,7 @@ const Toaster = ({status, message}: ToasterProps): JSX.Element => {
                 width: 8,
                 borderBottomLeftRadius: 10,
                 borderTopLeftRadius: 10,
-                backgroundColor:
-                  status === Status.SUCCESS
-                    ? theme.status.success.main
-                    : status === Status.WARNING
-                    ? theme.status.warning.main
-                    : status === Status.INFO
-                    ? theme.status.info.main
-                    : 'purple',
+                backgroundColor: defineBG(toasterStatus),
               }}></div>
             <div
               style={{
@@ -59,20 +78,8 @@ const Toaster = ({status, message}: ToasterProps): JSX.Element => {
                 justifyContent: 'center',
               }}>
               <Typography style={{marginLeft: 12}}>{message}</Typography>
-              <IconButton aria-label="close" style={{color: '#66788A'}} onClick={handleClose}>
-                <SvgIcon
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </SvgIcon>
+              <IconButton aria-label="close" onClick={handleClose}>
+                <SvgIcon component={XIcon} viewBox="0 0 24 24" />
               </IconButton>
             </div>
           </div>

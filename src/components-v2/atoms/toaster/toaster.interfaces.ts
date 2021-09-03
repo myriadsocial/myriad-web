@@ -1,6 +1,7 @@
 enum Status {
   SUCCESS = 'success',
   WARNING = 'warning',
+  DANGER = 'danger',
   INFO = 'info',
 }
 
@@ -9,7 +10,7 @@ type ToasterStatusValue = typeof Status[ToasterStatusKey];
 const toasterStatuses: ToasterStatusValue[] = Object.values(Status);
 
 interface ToasterProps {
-  status: Status;
+  toasterStatus: Status;
 
   message: string;
 }

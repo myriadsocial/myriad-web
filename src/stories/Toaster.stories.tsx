@@ -8,7 +8,7 @@ export default {
   title: 'UI Revamp v2.0/atoms/Toaster',
   component: Toaster,
   argTypes: {
-    status: {
+    toasterStatus: {
       options: [...toasterStatuses],
       control: {type: 'radio'},
     },
@@ -19,6 +19,6 @@ const Template: ComponentStory<typeof Toaster> = args => <Toaster {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  status: Status.SUCCESS,
+  toasterStatus: Status.SUCCESS,
   message: 'Changes saved successfully',
 };
