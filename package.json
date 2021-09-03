@@ -64,6 +64,7 @@
     "@ant-design/icons": "^4.2.1",
     "@emotion/core": "^11.0.0",
     "@fontsource/mulish": "^4.5.1",
+    "@heroicons/react": "^1.0.4",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
