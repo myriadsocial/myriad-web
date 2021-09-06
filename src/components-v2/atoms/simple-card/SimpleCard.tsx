@@ -6,7 +6,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import {useTheme} from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import {useStyles, SimpleCardProps} from './';
@@ -15,7 +14,6 @@ import classNames from 'classnames';
 
 const SimpleCard = ({activated, imgUrl, isOwner, ...props}: SimpleCardProps): JSX.Element => {
   const classes = useStyles();
-  const {palette} = useTheme();
 
   const [selected, setSelected] = useState(false);
 
@@ -23,16 +21,11 @@ const SimpleCard = ({activated, imgUrl, isOwner, ...props}: SimpleCardProps): JS
     setSelected(!selected);
   };
 
-  const defineBG = (selected: boolean) => {
-    switch (selected) {
-      case true: {
-        return palette.primary.main;
-      }
+  const handleClickSettings = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
 
-      default: {
-        return 'inherit';
-      }
-    }
+    console.log('clicked!');
+    //TODO: open drop down component
   };
 
   const parseImageFilename = (url: string) => {
@@ -54,12 +47,9 @@ const SimpleCard = ({activated, imgUrl, isOwner, ...props}: SimpleCardProps): JS
       })}
       {...props}>
       <div
-        style={{
-          width: 8,
-          borderBottomLeftRadius: 10,
-          borderTopLeftRadius: 10,
-          backgroundColor: defineBG(selected),
-        }}></div>
+        className={classNames(classes.indicator, {
+          [classes.indicatorActivated]: selected === true,
+        })}></div>
       <CardActionArea onClick={handleClick}>
         <div className={classes.details}>
           <CardMedia
@@ -77,7 +67,7 @@ const SimpleCard = ({activated, imgUrl, isOwner, ...props}: SimpleCardProps): JS
               {isOwner ? `(you)` : ''}
             </Typography>
           </CardContent>
-          <IconButton aria-label="settings">
+          <IconButton aria-label="settings" onClick={handleClickSettings}>
             <MoreVertIcon />
           </IconButton>
         </div>
