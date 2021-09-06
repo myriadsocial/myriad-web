@@ -6,11 +6,7 @@ services:
     image: myriadsocial/myriad-web
     build:
       context: ../../
-      dockerfile: Dockerfile
-    volumes:
-      - ../../:/home/myriad/app
-      - /home/myriad/app/node_modules
-      - /home/myriad/app/.next
+      dockerfile: .maintain/docker/Dockerfile
     env_file:
       - ../../.env
     environment:
@@ -20,9 +16,9 @@ services:
       - 3002:3000
     networks:
       myriad:
-        ipv4_address: 172.27.1.5
+        ipv4_address: 172.27.1.4
         aliases:
-          - web
+          - myriad-web
 
 networks:
   myriad:
