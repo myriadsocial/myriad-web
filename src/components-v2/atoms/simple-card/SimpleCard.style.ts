@@ -1,6 +1,6 @@
-import {createStyles, makeStyles} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
@@ -13,6 +13,15 @@ const useStyles = makeStyles(() =>
     activated: {
       border: `1px solid #6E3FC3`,
       boxSizing: `border-box`,
+    },
+    indicator: {
+      width: 8,
+      borderBottomLeftRadius: 10,
+      borderTopLeftRadius: 10,
+      backgroundColor: 'inherit',
+    },
+    indicatorActivated: {
+      backgroundColor: theme.palette.primary.main,
     },
     details: {
       display: 'flex',
