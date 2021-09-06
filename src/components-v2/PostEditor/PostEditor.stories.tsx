@@ -19,12 +19,12 @@ const Template: ComponentStory<typeof PostEditorComponent> = args => (
 const mentionables: MentionNodeData[] = [
   {
     value: '0',
-    name: 'Aayla Secura',
+    name: 'Myriad User',
     avatar: 'https://res.cloudinary.com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg',
   },
   {
     value: '1',
-    name: 'Adi Gallia',
+    name: 'Other User',
     avatar: 'https://res.cloudinary.com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg',
   },
 ];
@@ -56,6 +56,9 @@ PostEditor.args = {
           ...mentionables[0],
         },
         {
+          text: ' ',
+        },
+        {
           children: [
             {
               text: '',
@@ -63,6 +66,9 @@ PostEditor.args = {
           ],
           type: ELEMENT_HASHTAG,
           hashtag: 'hashtag',
+        },
+        {
+          text: ' ',
         },
       ],
     },

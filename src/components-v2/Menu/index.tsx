@@ -3,8 +3,8 @@ import React from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import MyriadIcon from '../../images/web/myriad.svg';
-import {BoxComponent} from '../common/Box';
-import {ListItemComponent} from '../common/ListItem';
+import {BoxComponent} from '../atoms/Box';
+import {ListItemComponent} from '../atoms/ListItem';
 import {useMenuList, MenuDetail} from './use-menu-list';
 
 type MenuProps = {

@@ -26,7 +26,7 @@ import {ToolbarLink} from '@udecode/plate-link-ui';
 import {ELEMENT_MENTION, MentionNodeData, useMentionPlugin} from '@udecode/plate-mention';
 import {HeadingToolbar} from '@udecode/plate-toolbar';
 
-import React, {useMemo, useEffect} from 'react';
+import React, {useMemo, useEffect, useState} from 'react';
 
 import Box from '@material-ui/core/Box';
 import {Image, Link} from '@material-ui/icons';
@@ -40,23 +40,35 @@ import {ToolbarButtonsList} from './Toolbar/ToolbarList';
 import {ToolbarButtonsMarks, plugins as markPlugins} from './Toolbar/ToolbarMark';
 import {createHashtagPlugin, ELEMENT_HASHTAG} from './plugins/hashtag';
 
-const editableProps = {
-  placeholder: 'Type…',
-  style: {
-    padding: 20,
-    background: '#FFFFFF',
-  },
-};
-
 export type PostEditorProps = {
   value: TNode[];
+  debug?: boolean;
+  placeholder?: string;
   mentionable: MentionNodeData[];
   onSearchMention: (query: string) => void;
+  onChange?: (value: TNode[]) => void;
 };
 
-export const PostEditor: React.FC<PostEditorProps> = ({mentionable, value, onSearchMention}) => {
+export const PostEditor: React.FC<PostEditorProps> = props => {
   const styles = useStyles();
   const options = createPlateOptions();
+
+  const {
+    debug = false,
+    placeholder = 'Type…',
+    mentionable,
+    value,
+    onSearchMention,
+    onChange,
+  } = props;
+
+  const editableProps = {
+    placeholder,
+    style: {
+      padding: 20,
+      background: '#FFFFFF',
+    },
+  };
 
   const components = createPlateComponents({
     [ELEMENT_MENTION]: withProps(MentionElement, {
@@ -128,7 +140,11 @@ export const PostEditor: React.FC<PostEditorProps> = ({mentionable, value, onSea
   }, [mentionQuery]);
 
   const onChangeDebug = (value: TNode[]) => {
-    console.log('[DEBUG]:', value);
+    if (debug) {
+      console.log('[DEBUG]:', value);
+    }
+
+    onChange && onChange(value);
   };
 
   return (

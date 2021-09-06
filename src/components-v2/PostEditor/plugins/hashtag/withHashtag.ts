@@ -47,6 +47,8 @@ export const insertHashtag = (editor: SPEditor, value: string | ArrayBuffer, at:
       focus: newSelection.focus,
     },
   });
+
+  insertNodes(editor, text);
 };
 
 export const withHashtag = (): WithOverride<ReactEditor & SPEditor> => editor => {
