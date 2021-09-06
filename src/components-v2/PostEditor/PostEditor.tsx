@@ -26,7 +26,7 @@ import {ToolbarLink} from '@udecode/plate-link-ui';
 import {ELEMENT_MENTION, MentionNodeData, useMentionPlugin} from '@udecode/plate-mention';
 import {HeadingToolbar} from '@udecode/plate-toolbar';
 
-import React, {useMemo, useEffect, useState} from 'react';
+import React, {useMemo, useEffect} from 'react';
 
 import Box from '@material-ui/core/Box';
 import {Image, Link} from '@material-ui/icons';
