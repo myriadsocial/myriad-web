@@ -2,17 +2,36 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
+nameOverride: ""
+fullnameOverride: ""
 
 image:
-  repository: nginx
+  repository: myriadsocial/myriad-web
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+
+config:
+  appName: ""
+  nextAuthURL: ""
+  nextSecret: ""
+  apiURL: ""
+  rpcWSURL: ""
+  facebook:
+    appId: ""
+  twitter:
+    bearerToken: ""
+  cloudinary:
+    cloudName: ""
+    apiKey: ""
+    secret: ""
+  firebase:
+    projectId: ""
+    apiKey: ""
+    messagingSenderId: ""
+    appId: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -28,13 +47,13 @@ podAnnotations: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
   # capabilities:
   #   drop:
   #   - ALL
   # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+  runAsNonRoot: true
+  runAsUser: 1001
 
 service:
   type: ClusterIP
@@ -43,18 +62,18 @@ service:
 ingress:
   enabled: false
   className: ""
-  annotations: {}
+  annotations:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: chart-example.local
+    - host: app.example.com
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls: []
-  #  - secretName: chart-example-tls
+  #  - secretName: app-example-tls
   #    hosts:
-  #      - chart-example.local
+  #      - app.example.com
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -67,6 +86,8 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
+
+replicaCount: 1
 
 autoscaling:
   enabled: false
