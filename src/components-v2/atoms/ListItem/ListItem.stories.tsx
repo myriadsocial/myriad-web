@@ -24,7 +24,7 @@ const Template: ComponentStory<typeof ListItemComponent> = args => <ListItemComp
 
 export const WithIcon = Template.bind({});
 WithIcon.args = {
-  icon: <FacebookIcon />,
+  icon: FacebookIcon,
   title: 'Item with icon',
 };
 
