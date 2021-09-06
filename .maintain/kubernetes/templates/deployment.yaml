@@ -33,18 +33,78 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: NEXT_PUBLIC_APP_NAME
+              value: {{ .Values.config.appName }}
+            - name: NEXTAUTH_URL
+              value: {{ .Values.config.nextAuthURL }}
+            - name: SECRET
+              value: {{ .Values.config.nextSecret }}
+            - name: NEXT_PUBLIC_API_URL
+              value: {{ .Values.config.apiURL }}
+            - name: NEXT_PUBLIC_MYRIAD_WS_RPC
+              value: {{ .Values.config.rpcWSURL }}
+            - name: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "myriad-web.firebaseSecretName" . }}
+                  key: projectId
+            - name: NEXT_PUBLIC_FIREBASE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "myriad-web.firebaseSecretName" . }}
+                  key: apiKey
+            - name: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "myriad-web.firebaseSecretName" . }}
+                  key: messagingSenderId
+            - name: NEXT_PUBLIC_FIREBASE_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "myriad-web.firebaseSecretName" . }}
+                  key: appId
+            - name: NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "myriad-web.cloudinarySecretName" . }}
+                  key: cloudName
+            - name: CLOUDINARY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "myriad-web.cloudinarySecretName" . }}
+                  key: apiKey
+            - name: CLOUDINARY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "myriad-web.cloudinarySecretName" . }}
+                  key: secret
+            - name: NEXT_PUBLIC_FACEBOOK_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "myriad-web.facebookSecretName" . }}
+                  key: appId
+            - name: TWITTER_BEARER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "myriad-web.twitterSecretName" . }}
+                  key: bearerToken
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 3000
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /healthcheck
               port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
           readinessProbe:
             httpGet:
-              path: /
+              path: /healthcheck
               port: http
+            initialDelaySeconds: 25
+            periodSeconds: 30
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
