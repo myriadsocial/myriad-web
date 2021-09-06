@@ -4,6 +4,10 @@ import {ELEMENT_HASHTAG} from './default';
 import {withHashtag} from './withHashtag';
 
 const getHashtagRenderElement = () => {
+<<<<<<< HEAD
+=======
+  console.log('getHashtagRenderElement');
+>>>>>>> 2181b09b (MYR-717: init editor)
   return getRenderElement(ELEMENT_HASHTAG);
 };
 

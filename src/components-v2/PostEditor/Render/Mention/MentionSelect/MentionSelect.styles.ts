@@ -4,7 +4,11 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       position: 'absolute',
+<<<<<<< HEAD
       zIndex: 2000,
+=======
+      zIndex: 1,
+>>>>>>> 2181b09b (MYR-717: init editor)
       top: -9999,
       left: -9999,
       background: '#FFFFFF',

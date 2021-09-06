@@ -6,10 +6,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#FFF',
       border: '1px solid #F6F6F6',
       borderRadius: 10,
+<<<<<<< HEAD
 
       '& .MuiSvgIcon-root': {
         fill: 'currentColor',
       },
+=======
+>>>>>>> 2181b09b (MYR-717: init editor)
     },
     header: {
       padding: '12px 24px!important',
