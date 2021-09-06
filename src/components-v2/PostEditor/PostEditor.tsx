@@ -17,6 +17,7 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_MEDIA_EMBED,
   withProps,
+<<<<<<< HEAD
   useStoreEditorState,
   TNode,
   getPlatePluginType,
@@ -42,11 +43,30 @@ import {Modal} from '../atoms/Modal';
 import {useStyles} from './PostEditor.styles';
 import {HashtagElement} from './Render/Hashtag';
 import {MediaEmbedElement} from './Render/MediaEmbed';
+=======
+  TNode,
+} from '@udecode/plate';
+import {ELEMENT_IMAGE, createImagePlugin} from '@udecode/plate-image';
+import {ToolbarImage} from '@udecode/plate-image-ui';
+import {createLinkPlugin} from '@udecode/plate-link';
+import {ToolbarLink} from '@udecode/plate-link-ui';
+import {ELEMENT_MENTION, MentionNodeData, useMentionPlugin} from '@udecode/plate-mention';
+import {HeadingToolbar} from '@udecode/plate-toolbar';
+
+import React, {useMemo, useEffect} from 'react';
+
+import Box from '@material-ui/core/Box';
+import {Image, Link} from '@material-ui/icons';
+
+import {useStyles} from './PostEditor.styles';
+import {HashtagElement} from './Render/Hashtag';
+>>>>>>> 2181b09b (MYR-717: init editor)
 import {MentionElement, MentionSelect, renderMentionLabel} from './Render/Mention';
 import {ToolbarButtonsAlign} from './Toolbar/ToolbarAlign';
 import {ToolbarElementList} from './Toolbar/ToolbarElement';
 import {ToolbarButtonsList} from './Toolbar/ToolbarList';
 import {ToolbarButtonsMarks, plugins as markPlugins} from './Toolbar/ToolbarMark';
+<<<<<<< HEAD
 import {ToolbarMedia} from './Toolbar/ToolbarMedia';
 import {createHashtagPlugin, ELEMENT_HASHTAG} from './plugins/hashtag';
 
@@ -88,6 +108,28 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     },
   };
 
+=======
+import {createHashtagPlugin, ELEMENT_HASHTAG} from './plugins/hashtag';
+
+const editableProps = {
+  placeholder: 'Type…',
+  style: {
+    padding: 20,
+    background: '#FFFFFF',
+  },
+};
+
+export type PostEditorProps = {
+  value: TNode[];
+  mentionable: MentionNodeData[];
+  onSearchMention: (query: string) => void;
+};
+
+export const PostEditor: React.FC<PostEditorProps> = ({mentionable, value, onSearchMention}) => {
+  const styles = useStyles();
+  const options = createPlateOptions();
+
+>>>>>>> 2181b09b (MYR-717: init editor)
   const components = createPlateComponents({
     [ELEMENT_MENTION]: withProps(MentionElement, {
       renderLabel: renderMentionLabel,
@@ -96,6 +138,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     [ELEMENT_HASHTAG]: withProps(HashtagElement, {
       prefix: '#',
     }),
+<<<<<<< HEAD
     [ELEMENT_MEDIA_EMBED]: withProps(MediaEmbedElement, {}),
     [ELEMENT_LINK]: withProps(LinkElement, {
       styles: {
@@ -105,6 +148,8 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         },
       },
     }),
+=======
+>>>>>>> 2181b09b (MYR-717: init editor)
   });
 
   const mentionPluginOptions = {
@@ -149,9 +194,13 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
 
       // others
       createTrailingBlockPlugin({type: ELEMENT_PARAGRAPH}),
+<<<<<<< HEAD
       createSelectOnBackspacePlugin({
         allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED, ELEMENT_MENTION, ELEMENT_HASHTAG],
       }),
+=======
+      createSelectOnBackspacePlugin({allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED]}),
+>>>>>>> 2181b09b (MYR-717: init editor)
       createSoftBreakPlugin(),
       createExitBreakPlugin(),
 
@@ -162,6 +211,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     return pluginsBasic;
   }, [mentionPlugin]);
 
+<<<<<<< HEAD
   const editor = useStoreEditorState('main');
   const [setImageUrl, setImageUrlPromise] = useState<any>();
   const [showImageUpload, toggleImageUpload] = useState(false);
@@ -171,6 +221,8 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   const [showVideoUpload, toggleVideoUpload] = useState(false);
   const [currentSelection, setCurrentSelection] = useState<Selection | null>(null);
 
+=======
+>>>>>>> 2181b09b (MYR-717: init editor)
   useEffect(() => {
     if (mentionQuery.length > 0) {
       onSearchMention && onSearchMention(mentionQuery);
@@ -178,6 +230,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   }, [mentionQuery]);
 
   const onChangeDebug = (value: TNode[]) => {
+<<<<<<< HEAD
     if (debug) {
       console.log('[DEBUG]:', value);
     }
@@ -299,6 +352,9 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     }
 
     toggleModalLink(false);
+=======
+    console.log('[DEBUG]:', value);
+>>>>>>> 2181b09b (MYR-717: init editor)
   };
 
   return (
@@ -311,16 +367,26 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         components={components}
         options={options}>
         <HeadingToolbar className={styles.header}>
+<<<<<<< HEAD
           <ToolbarElementList />
           <ToolbarButtonsMarks />
           <ToolbarButtonsAlign />
           <ToolbarButtonsList />
           <ToolbarLink icon={<Link />} onMouseDown={openLinkEditor} />
           <ToolbarMedia getImageUrl={getImageUrl} openVideoUpload={getVideoUrl} />
+=======
+          <ToolbarButtonsMarks />
+          <ToolbarElementList />
+          <ToolbarButtonsAlign />
+          <ToolbarButtonsList />
+          <ToolbarLink icon={<Link />} />
+          <ToolbarImage icon={<Image />} />
+>>>>>>> 2181b09b (MYR-717: init editor)
         </HeadingToolbar>
 
         <MentionSelect {...getMentionSelectProps()} renderLabel={renderMentionLabel} />
       </Plate>
+<<<<<<< HEAD
 
       <Modal
         title="Upload Picture"
@@ -366,6 +432,8 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         onClose={closeImageLinkModal}>
         <EmbedURL onConfirm={handleImageLinkSelected} />
       </Modal>
+=======
+>>>>>>> 2181b09b (MYR-717: init editor)
     </Box>
   );
 };
