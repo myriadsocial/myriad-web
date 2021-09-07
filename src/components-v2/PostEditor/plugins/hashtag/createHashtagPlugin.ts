@@ -4,7 +4,6 @@ import {ELEMENT_HASHTAG} from './default';
 import {withHashtag} from './withHashtag';
 
 const getHashtagRenderElement = () => {
-  console.log('getHashtagRenderElement');
   return getRenderElement(ELEMENT_HASHTAG);
 };
 
