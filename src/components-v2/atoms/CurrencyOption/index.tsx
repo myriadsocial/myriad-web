@@ -11,23 +11,13 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+import {Props} from './currencyOption.interface';
 import {useStyles} from './currencyOption.style';
 
 import {debounce} from 'lodash';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Props = {};
-
-// TODO CHANGE TEMP DATA. CAN GET DATA FROM STATE MANAGEMENT
-const Currencies = [
-  {key: 1, tokenSymbol: 'aUSD', tokenImage: 'A', balance: '$452.02'},
-  {key: 2, tokenSymbol: 'ACA', tokenImage: 'A', balance: '$452.02'},
-  {key: 3, tokenSymbol: 'Myria', tokenImage: 'M', balance: '$452.02'},
-  {key: 4, tokenSymbol: 'ETH', tokenImage: 'E', balance: '$452.02'},
-  {key: 5, tokenSymbol: 'BTC', tokenImage: 'B', balance: '$452.02'},
-];
-
-export const CurrencyOptionComponent: React.FC<Props> = () => {
+export const CurrencyOptionComponent: React.FC<Props> = props => {
+  const {currencies} = props;
   const [search, setSearch] = useState('');
   const style = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -97,19 +87,20 @@ export const CurrencyOptionComponent: React.FC<Props> = () => {
           <Typography component="span">Coin</Typography>
           <Typography component="span">Balance</Typography>
         </div>
-        {Currencies.map(item => (
-          <MenuItem key={item.key} onClick={() => handleSelect(item.tokenSymbol)}>
-            <div className={style.flex}>
-              <div className={style.tokenColumn}>
-                <Avatar className={`${style.avatar} ${style.text}`} alt={'aUSD'} src={''}>
-                  {item.tokenImage}
-                </Avatar>
-                <Typography color="textSecondary">{item.tokenSymbol}</Typography>
+        {currencies &&
+          currencies.map(item => (
+            <MenuItem key={item.key} onClick={() => handleSelect(item.tokenSymbol)}>
+              <div className={style.flex}>
+                <div className={style.tokenColumn}>
+                  <Avatar className={`${style.avatar} ${style.text}`} alt={'aUSD'} src={''}>
+                    {item.tokenImage}
+                  </Avatar>
+                  <Typography color="textSecondary">{item.tokenSymbol}</Typography>
+                </div>
+                <Typography component="span">{item.balance}</Typography>
               </div>
-              <Typography component="span">{item.balance}</Typography>
-            </div>
-          </MenuItem>
-        ))}
+            </MenuItem>
+          ))}
       </Menu>
     </div>
   );
