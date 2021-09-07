@@ -148,7 +148,7 @@ jobs:
             --set-string clusterIssuer.tlsCertificateIssuerEmail=dev.myriad@blocksphere.id \
             --set certificate.createTLSCertificate=true \
             --set ingress.enabled=true \
-            --set-string ingress.className=nginx \
+            --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
             --set-string ingress.host=app.dev.myriad.systems \
             --set ingress.tls=true \
             --set autoscaling.enabled=true
