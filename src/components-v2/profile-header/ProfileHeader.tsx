@@ -1,39 +1,57 @@
+import {BellIcon} from '@heroicons/react/outline';
+
 import React from 'react';
 
+import IconButton from '@material-ui/core/IconButton';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import {useTheme} from '@material-ui/core/styles';
 
+import {useStyles} from '.';
 import {BoxComponent} from '../atoms/Box';
+import {CustomAvatar, CustomAvatarProps, CustomAvatarSize} from '../atoms/avatar';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      position: 'relative',
-      width: 311,
-      height: 110,
+interface ProfileHeaderProps extends CustomAvatarProps {
+  name: string;
+  username: string;
+}
 
-      '&::after': {
-        content: '""',
-        position: 'absolute',
-        top: 35,
-        right: 0,
-        width: 8,
-        height: 40,
-        borderRadius: theme.spacing(1.25, 0, 0, 1.25),
-        background: theme.palette.primary.main,
-      },
-    },
-  }),
-);
-
-const ProfileHeader = (): JSX.Element => {
+const ProfileHeader = ({
+  name = 'Aaron Ting',
+  username = '@aaronting8',
+  avatar = 'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg',
+}: ProfileHeaderProps): JSX.Element => {
+  const theme = useTheme();
   const classes = useStyles();
+
+  //CONSTANTS
+  const BORDER_RADIUS = theme.spacing(0, 0, 1.25, 1.25);
 
   return (
     <div className={classes.root}>
-      <BoxComponent>
-        <Typography>Aaron Ting</Typography>
-        <Typography>@aaronting8</Typography>
+      <BoxComponent radiusStr={BORDER_RADIUS}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+          }}>
+          <div style={{position: 'absolute', left: 0, paddingLeft: 15}}>
+            <IconButton aria-label="avatar">
+              <SvgIcon component={BellIcon} viewBox="0 0 24 24" />
+            </IconButton>
+          </div>
+          <div>
+            <Typography variant="h5">{name}</Typography>
+            <Typography variant="caption" color="textSecondary">
+              {username}
+            </Typography>
+          </div>
+          <div style={{padding: 12}}>
+            <CustomAvatar avatar={avatar} size={CustomAvatarSize.MEDIUM} />
+          </div>
+        </div>
       </BoxComponent>
     </div>
   );
