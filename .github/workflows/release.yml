@@ -19,10 +19,15 @@ jobs:
           fetch-depth: 0
 
       - name: Compute build info
+        id: build-info
         shell: bash
         run: |
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
           echo "::set-output name=date::$(date +'%Y%m%d')"
+
+    outputs:
+      sha_short: ${{ steps.build-info.outputs.sha_short }}
+      date: ${{ steps.build-info.outputs.date }}
 
   build-and-publish-docker-image:
     runs-on: ubuntu-latest
