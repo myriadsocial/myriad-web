@@ -7,7 +7,7 @@ spec:
   secretName: {{ include "myriad-web.tlsSecretName" . }}
   issuerRef:
     name: letsencrypt
-    kind: ClusterIssuer
+    kind: Issuer
   dnsNames:
     - {{ .Values.ingress.host -}}
 {{ end }}
