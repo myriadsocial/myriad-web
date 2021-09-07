@@ -31,7 +31,7 @@
     "lint": "yarn run eslint:check && yarn run prettier:check",
     "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
     "pretest": "yarn run rebuild",
-    "test": "jest --watch",
+    "test": "jest --ci",
     "posttest": "yarn run lint",
     "test:dev": "jest --watch && yarn run posttest",
     "docker:build": "./.maintain/docker/build-image.sh",
