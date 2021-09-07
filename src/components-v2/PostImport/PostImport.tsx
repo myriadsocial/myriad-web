@@ -8,12 +8,19 @@ import {Embed} from '../atoms/Embed';
 import {useStyles} from './PostImport.styles';
 
 type PostImportProps = {
+<<<<<<< HEAD
   value?: string;
   onChange: (url: string | null) => void;
 };
 
 export const PostImport: React.FC<PostImportProps> = props => {
   const {value = '', onChange} = props;
+=======
+  value: string;
+};
+
+export const PostImport: React.FC<PostImportProps> = ({value}) => {
+>>>>>>> 9f86ed4f (MYR-718: add embed component)
   const styles = useStyles();
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -38,7 +45,10 @@ export const PostImport: React.FC<PostImportProps> = props => {
 
     if (isUrl(url)) {
       setPreviewUrl(url);
+<<<<<<< HEAD
       onChange(url);
+=======
+>>>>>>> 9f86ed4f (MYR-718: add embed component)
     } else {
       setPreviewUrl('');
     }
@@ -58,7 +68,11 @@ export const PostImport: React.FC<PostImportProps> = props => {
           </Typography>
 
           <div className={styles.preview}>
+<<<<<<< HEAD
             <Embed url={previewUrl} options={{facebookAppId: '1349208398779551'}} />
+=======
+            <Embed url={previewUrl} options={{facebookAppId: ''}} />
+>>>>>>> 9f86ed4f (MYR-718: add embed component)
           </div>
         </div>
       )}
