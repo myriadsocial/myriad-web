@@ -14,6 +14,7 @@ const Template: ComponentStory<typeof HeaderComponent> = args => <HeaderComponen
 
 export const MyriadPost = Template.bind({});
 MyriadPost.args = {
+  disable: true,
   post: {
     id: '6123614bf6c45c2728e43aca',
     tags: ['song'],

@@ -8,42 +8,14 @@ import {useRouter} from 'next/router';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import {createStyles, makeStyles} from '@material-ui/core/styles';
 
-import {Post} from '../../../interfaces/post';
-import CardTitle from './CardTitle.component';
-import PostAvatarComponent from './post-avatar.component';
-import {PostSubHeader} from './post-sub-header.component';
+import PostAvatarComponent from './avatar/post-avatar.component';
+import CardTitle from './cardTitle/CardTitle.component';
+import {PostComponentProps, Platform} from './postHeader.interface';
+import {useStyles} from './postHeader.style';
+import {PostSubHeader} from './subHeader/post-sub-header.component';
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      display: 'inline-block',
-    },
-    action: {
-      display: 'block',
-      position: 'relative',
-      top: 10,
-    },
-    header: {
-      position: 'relative',
-      background: '#FFF',
-
-      '& .MuiCardHeader-title': {
-        fontSize: 18,
-        lineHeight: '24px',
-        fontWeight: 'bold',
-      },
-    },
-  }),
-);
-
-type PostComponentProps = {
-  disable?: boolean;
-  post: Post;
-};
-
-export const HeaderComponent: React.FC<PostComponentProps> = ({post}) => {
+export const HeaderComponent: React.FC<PostComponentProps> = ({post, disable}) => {
   const style = useStyles();
   const router = useRouter();
 
@@ -51,7 +23,7 @@ export const HeaderComponent: React.FC<PostComponentProps> = ({post}) => {
     const url = getPlatformUrl();
 
     switch (post.platform) {
-      case 'myriad':
+      case Platform.myriad:
         router.push(post.user?.id);
         break;
       default:
@@ -66,13 +38,13 @@ export const HeaderComponent: React.FC<PostComponentProps> = ({post}) => {
     if (!post.user) return url;
 
     switch (post.platform) {
-      case 'twitter':
+      case Platform.twitter:
         url = `https://twitter.com/${post.people?.username as string}`;
         break;
-      case 'reddit':
+      case Platform.reddit:
         url = `https://reddit.com/user/${post.people?.username as string}`;
         break;
-      case 'myriad':
+      case Platform.myriad:
         url = post.createdBy;
         break;
       default:
@@ -91,7 +63,7 @@ export const HeaderComponent: React.FC<PostComponentProps> = ({post}) => {
         <PostAvatarComponent
           origin={post.platform}
           avatar={
-            post.platform === 'myriad'
+            post.platform === Platform.myriad
               ? post.user?.profilePictureURL
               : post.people?.profilePictureURL
           }
@@ -100,27 +72,29 @@ export const HeaderComponent: React.FC<PostComponentProps> = ({post}) => {
       }
       title={
         <CardTitle
-          text={post.platform === 'myriad' ? post.user?.name : (post.people?.name as string)}
+          text={post.platform === Platform.myriad ? post.user?.name : (post.people?.name as string)}
           url={getPlatformUrl()}
         />
       }
       subheader={
         <PostSubHeader
           date={post.createdAt}
-          importer={post.platform !== 'myriad' ? post.user : undefined}
+          importer={post.platform !== Platform.myriad ? post.user : undefined}
           platform={post.platform}
         />
       }
       action={
-        <IconButton
-          aria-label="post-setting"
-          onClick={action('open-menu-option')}
-          className={style.action}
-          disableRipple={true}
-          disableFocusRipple={true}
-          disableTouchRipple>
-          <SvgIcon component={DotsVerticalIcon} viewBox="0 0 20 20" />
-        </IconButton>
+        !disable && (
+          <IconButton
+            aria-label="post-setting"
+            onClick={action('open-menu-option')}
+            className={style.action}
+            disableRipple={true}
+            disableFocusRipple={true}
+            disableTouchRipple>
+            <SvgIcon component={DotsVerticalIcon} viewBox="0 0 20 20" />
+          </IconButton>
+        )
       }
     />
   );
