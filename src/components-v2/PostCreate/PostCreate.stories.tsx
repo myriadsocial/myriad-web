@@ -7,9 +7,7 @@ import {PostCreate as PostCreateComponent} from './PostCreate';
 export default {
   title: 'UI Revamp v2.0/components/Post Create',
   component: PostCreateComponent,
-  argTypes: {
-    backgroundColor: {control: 'color'},
-  },
+  argTypes: {},
 } as ComponentMeta<typeof PostCreateComponent>;
 
 const Template: ComponentStory<typeof PostCreateComponent> = args => (
@@ -18,5 +16,6 @@ const Template: ComponentStory<typeof PostCreateComponent> = args => (
 
 export const PostCreate = Template.bind({});
 PostCreate.args = {
-  value: 'text',
+  value:
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tristique eget quam a auctor. Etiam eu tincidunt massa. Nam tincidunt dignissim varius. Cras suscipit suscipit dolor in hendrerit. In quis aliquam dolor, eget porta purus.',
 };
