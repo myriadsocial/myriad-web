@@ -1,26 +1,8 @@
 import React from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import {CustomAvatarProps, CustomAvatarSize} from './';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    small: {
-      width: theme.spacing(3.75),
-      height: theme.spacing(3.75),
-    },
-    medium: {
-      width: theme.spacing(6),
-      height: theme.spacing(6),
-    },
-    large: {
-      width: theme.spacing(9),
-      height: theme.spacing(9),
-    },
-  }),
-);
+import {CustomAvatarProps, CustomAvatarSize, useStyles} from './';
 
 const CustomAvatar = ({
   avatar,
