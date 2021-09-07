@@ -9,8 +9,14 @@ concurrency:
   group: release-candidate-automation
 
 jobs:
-  compute-next-rc-tag:
+  compute-build-info:
     runs-on: ubuntu-latest
+
+    outputs:
+      sha_short: ${{ steps.build-info.outputs.sha_short }}
+      date: ${{ steps.build-info.outputs.date }}
+      new_tag: ${{ steps.build-info.outputs.new_tag }}
+      first_rc: ${{ steps.build-info.outputs.first_rc }}
 
     steps:
       - name: Checkout code
@@ -18,10 +24,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Compute next RC tag
-        id: compute-rc-tag
+      - name: Compute build info
+        id: build-info
         shell: bash
         run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+          echo "::set-output name=date::$(date +'%Y%m%d')"
           # Get last rc tag if exists, else set it to {version}-rc1
           version=${GITHUB_REF#refs/heads/release-}
           echo "$version"
@@ -40,14 +48,10 @@ jobs:
             echo "::set-output name=first_rc::true"
           fi
 
-    outputs:
-      new_tag: ${{ steps.compute-rc-tag.outputs.new_tag }}
-      first_rc: ${{ steps.compute-rc-tag.outputs.first_rc }}
-
   apply-rc-tag:
     runs-on: ubuntu-latest
 
-    needs: ['compute-next-rc-tag']
+    needs: compute-build-info
 
     steps:
       - name: Checkout code
@@ -60,12 +64,12 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_prefix: ''
-          custom_tag: ${{ needs.compute-next-rc-tag.outputs.new_tag }}
+          custom_tag: ${{ needs.compute-build-info.outputs.new_tag }}
 
   build-and-publish-docker-image:
     runs-on: ubuntu-latest
 
-    needs: ['apply-rc-tag']
+    needs: apply-rc-tag
 
     steps:
       - name: Checkout code
@@ -93,13 +97,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Compute build info
-        id: build-info
-        shell: bash
-        run: |
-          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-          echo "::set-output name=date::$(date +'%Y%m%d')"
-
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -108,9 +105,6 @@ jobs:
           tags: |
             ${{ github.repository }}:${{ needs.apply-rc-tag.outputs.new_tag }}
             ${{ github.repository }}:latest-rc
-          build-args: |
-            VCS_REF=${{ steps.build-info.sha_short }}
-            BUILD_DATE=${{ steps.build-info.date }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
@@ -128,7 +122,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    needs: ['compute-next-rc-tag', 'build-and-publish-docker-image']
+    needs: [compute-build-info, build-and-publish-docker-image]
 
     steps:
       - name: Checkout code
@@ -172,7 +166,7 @@ jobs:
         run: |
           helm upgrade myriad-web .maintain/kubernetes \
             --install \
-            --set-string image.tag=${{ needs.compute-next-rc-tag.outputs.new_tag }} \
+            --set-string image.tag=${{ needs.compute-build-info.outputs.new_tag }} \
             --set-string config.appName=myriad-staging \
             --set-string config.nextAuthURL=https://app.stg.myriad.systems \
             --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
