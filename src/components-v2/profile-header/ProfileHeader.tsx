@@ -25,7 +25,7 @@ const ProfileHeader = ({
   const classes = useStyles();
 
   //CONSTANTS
-  const BORDER_RADIUS = theme.spacing(0, 0, 1.25, 1.25);
+  const BORDER_RADIUS = theme.spacing(0, 0, 2.5, 2.5);
 
   return (
     <div className={classes.root}>
