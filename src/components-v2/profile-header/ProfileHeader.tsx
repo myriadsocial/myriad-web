@@ -7,14 +7,9 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 import {useTheme} from '@material-ui/core/styles';
 
-import {useStyles} from '.';
+import {useStyles, ProfileHeaderProps} from '.';
 import {BoxComponent} from '../atoms/Box';
-import {CustomAvatar, CustomAvatarProps, CustomAvatarSize} from '../atoms/avatar';
-
-interface ProfileHeaderProps extends CustomAvatarProps {
-  name: string;
-  username: string;
-}
+import {CustomAvatar, CustomAvatarSize} from '../atoms/avatar';
 
 const ProfileHeader = ({
   name = 'Aaron Ting',
