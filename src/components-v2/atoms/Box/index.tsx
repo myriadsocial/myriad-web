@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     background: '#FFF',
     boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
+    // @ts-ignore
     borderRadius: props => props.radiusStr ?? theme.spacing(2.5),
     padding: theme.spacing(3, 3.75),
   },
