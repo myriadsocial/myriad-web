@@ -19,6 +19,7 @@ jobs:
           fetch-depth: 0
 
       - name: Compute next RC tag
+        id: compute-rc-tag
         shell: bash
         run: |
           # Get last rc tag if exists, else set it to {version}-rc1
@@ -38,6 +39,10 @@ jobs:
             echo "::set-output name=new_tag::$version-rc1"
             echo "::set-output name=first_rc::true"
           fi
+
+    outputs:
+      new_tag: ${{ steps.compute-rc-tag.outputs.new_tag }}
+      first_rc: ${{ steps.compute-rc-tag.outputs.first_rc }}
 
   apply-rc-tag:
     runs-on: ubuntu-latest
