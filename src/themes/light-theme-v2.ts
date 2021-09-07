@@ -237,6 +237,12 @@ const theme = createTheme({
         borderRadius: 10,
       },
     },
+
+    MuiSvgIcon: {
+      root: {
+        fill: 'none',
+      },
+    },
   },
 
   props: {
