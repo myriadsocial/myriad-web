@@ -6,29 +6,11 @@ import React, {useState} from 'react';
 import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import {createStyles, makeStyles} from '@material-ui/core/styles';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {},
-    section: {
-      display: 'inline-block',
-      marginLeft: '5px',
-      marginRight: '5px',
-    },
-    action: {
-      padding: 0,
-    },
-    text: {
-      fontSize: '12px',
-    },
-  }),
-);
+import {useStyles} from './postAction.style';
 
-type Props = {};
-
-export const PostActionComponent: React.FC<Props> = () => {
+export const PostActionComponent: React.FC = () => {
   const styles = useStyles();
   const [share] = useState(98);
   const [comment] = useState(840);
