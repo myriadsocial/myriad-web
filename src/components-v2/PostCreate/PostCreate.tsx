@@ -1,14 +1,16 @@
-import {ELEMENT_PARAGRAPH} from '@udecode/plate-paragraph';
-
-import React from 'react';
+import React, {useState} from 'react';
 
 import Paper from '@material-ui/core/Paper';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
-import {PostEditor} from '../PostEditor';
+import {PostEditor, formatStringToNode} from '../PostEditor';
+import {PostImport} from '../PostImport';
+import {PostTags} from '../PostTag/PostTags';
+import {DropdownMenu} from '../atoms/DropdownMenu';
 import {TabPanel} from '../atoms/TabPanel';
 import {useStyles} from './PostCreate.styles';
+import {tagOptions, menuOptions} from './default';
 
 type SocialMediaListProps = {
   value: string;
@@ -17,7 +19,10 @@ type SocialMediaListProps = {
 export const PostCreate: React.FC<SocialMediaListProps> = props => {
   const styles = useStyles();
 
-  const [activeTab, setActiveTab] = React.useState(0);
+  const {value} = props;
+  const [activeTab, setActiveTab] = useState(0);
+
+  const node = formatStringToNode(value);
 
   const handleTabChange = (event: React.ChangeEvent<{}>, tab: number) => {
     setActiveTab(tab);
@@ -36,25 +41,18 @@ export const PostCreate: React.FC<SocialMediaListProps> = props => {
       </Tabs>
 
       <TabPanel value={activeTab} index={0}>
-        <PostEditor
-          mentionable={[]}
-          onSearchMention={console.log}
-          value={[
-            {
-              type: ELEMENT_PARAGRAPH,
-              children: [
-                {
-                  text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tristique eget quam a auctor. Etiam eu tincidunt massa. Nam tincidunt dignissim varius. Cras suscipit suscipit dolor in hendrerit. In quis aliquam dolor, eget porta purus.',
-                },
-              ],
-            },
-          ]}
-        />
+        <PostEditor mentionable={[]} onSearchMention={console.log} value={[node]} />
       </TabPanel>
 
       <TabPanel value={activeTab} index={1}>
-        Link
+        <PostImport value="" />
       </TabPanel>
+
+      <div className={styles.action}>
+        <PostTags selected={['profanity', 'pornography']} options={tagOptions} />
+
+        <DropdownMenu title="Visibility" options={menuOptions} />
+      </div>
     </Paper>
   );
 };
