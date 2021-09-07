@@ -94,8 +94,8 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@master
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ secrets.DEV_GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.DEV_GCP_SA_KEY }}
           export_default_credentials: true
 
       - name: Get the GKE credentials
@@ -109,15 +109,15 @@ jobs:
         uses: google-github-actions/get-secretmanager-secrets@main
         with:
           secrets: |-
-            firebaseProjectId:${{ secrets.GCP_PROJECT_ID }}/firebaseProjectId
-            firebaseAPIkey:${{ secrets.GCP_PROJECT_ID }}/firebaseAPIkey
-            firebaseMessagingSenderId:${{ secrets.GCP_PROJECT_ID }}/firebaseMessagingSenderId
-            firebaseAppId:${{ secrets.GCP_PROJECT_ID }}/firebaseAppId
-            cloudinaryCloudName:${{ secrets.GCP_PROJECT_ID }}/cloudinaryCloudName
-            cloudinaryAPIKey:${{ secrets.GCP_PROJECT_ID }}/cloudinaryAPIKey
-            cloudinarySecret:${{ secrets.GCP_PROJECT_ID }}/cloudinarySecret
-            facebookAppId:${{ secrets.GCP_PROJECT_ID }}/facebookAppId
-            twitterBearerToken:${{ secrets.GCP_PROJECT_ID }}/twitterBearerToken
+            firebaseProjectId:${{ secrets.DEV_GCP_PROJECT_ID }}/firebaseProjectId
+            firebaseAPIkey:${{ secrets.DEV_GCP_PROJECT_ID }}/firebaseAPIkey
+            firebaseMessagingSenderId:${{ secrets.DEV_GCP_PROJECT_ID }}/firebaseMessagingSenderId
+            firebaseAppId:${{ secrets.DEV_GCP_PROJECT_ID }}/firebaseAppId
+            cloudinaryCloudName:${{ secrets.DEV_GCP_PROJECT_ID }}/cloudinaryCloudName
+            cloudinaryAPIKey:${{ secrets.DEV_GCP_PROJECT_ID }}/cloudinaryAPIKey
+            cloudinarySecret:${{ secrets.DEV_GCP_PROJECT_ID }}/cloudinarySecret
+            facebookAppId:${{ secrets.DEV_GCP_PROJECT_ID }}/facebookAppId
+            twitterBearerToken:${{ secrets.DEV_GCP_PROJECT_ID }}/twitterBearerToken
 
       - name: Install Helm
         run: |
