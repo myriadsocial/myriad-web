@@ -55,7 +55,7 @@ service:
   type: ClusterIP
   port: 80
 
-clusterIssuer:
+issuer:
   createTLSCertificateIssuer: false
   tlsCertificateIssuerEmail: "dev@example.com"
 
