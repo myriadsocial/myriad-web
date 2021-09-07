@@ -9,6 +9,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiTabs-flexContainer': {
         justifyContent: 'space-evenly',
       },
+
+      '& .MuiTab-wrapper': {
+        textTransform: 'capitalize',
+        fontWeight: 'normal',
+        fontSize: 16,
+        lineHeight: '20px',
+      },
+    },
+    action: {
+      padding: 30,
     },
   }),
 );

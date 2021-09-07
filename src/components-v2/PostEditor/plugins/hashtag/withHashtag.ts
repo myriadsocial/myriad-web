@@ -1,11 +1,4 @@
-import {
-  someNode,
-  isCollapsed,
-  getRangeBefore,
-  getText,
-  unwrapNodes,
-  wrapNodes,
-} from '@udecode/plate-common';
+import {isCollapsed, getRangeBefore, getText, unwrapNodes, wrapNodes} from '@udecode/plate-common';
 import {insertNodes} from '@udecode/plate-common';
 import {getPlatePluginType, SPEditor, WithOverride, TElement} from '@udecode/plate-core';
 
@@ -52,9 +45,7 @@ export const insertHashtag = (editor: SPEditor, value: string | ArrayBuffer, at:
 };
 
 export const withHashtag = (): WithOverride<ReactEditor & SPEditor> => editor => {
-  const {insertData, insertText} = editor;
-  const type = getPlatePluginType(editor, ELEMENT_HASHTAG);
-  console.log('withHashtag');
+  const {insertText} = editor;
 
   editor.insertText = (text: string) => {
     const selection = editor.selection as Range;
@@ -79,22 +70,6 @@ export const withHashtag = (): WithOverride<ReactEditor & SPEditor> => editor =>
     }
 
     insertText(text);
-  };
-
-  editor.insertData = (data: DataTransfer) => {
-    const text = data.getData('text/plain');
-    console.log('insertData', text);
-    if (text) {
-      if (someNode(editor, {match: {type}})) {
-        return insertText(text);
-      }
-
-      // if (isUrl(text)) {
-      //   return upsertLinkAtSelection(editor, {url: text});
-      // }
-    }
-
-    insertData(data);
   };
 
   return editor;
