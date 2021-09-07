@@ -95,16 +95,16 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /healthcheck
+              path: /api/healthcheck
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/healthcheck
               port: http
             initialDelaySeconds: 15
             periodSeconds: 20
-          readinessProbe:
-            httpGet:
-              path: /healthcheck
-              port: http
-            initialDelaySeconds: 25
-            periodSeconds: 30
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

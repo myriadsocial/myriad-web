@@ -1,0 +1,13 @@
+{{ if .Values.certificate.createTLSCertificate -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "myriad-web.fullname" . }}
+spec:
+  secretName: {{ include "myriad-web.tlsSecretName" . }}
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  dnsNames:
+    - {{ .Values.ingress.host -}}
+{{ end }}
