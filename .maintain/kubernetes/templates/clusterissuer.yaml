@@ -1,4 +1,4 @@
-{{ if .Values.issuer.createCertificateIssuer -}}
+{{ if .Values.issuer.createTLSCertificateIssuer -}}
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
