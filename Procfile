@@ -1,1 +1,1 @@
-web: yarn build:storybook && npx http-server storybook-static
+web: npx http-server storybook-static
