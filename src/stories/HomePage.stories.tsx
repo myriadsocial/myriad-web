@@ -2,58 +2,14 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {SidebarMenu} from '../../src/components-v2/Menu/Menu.stories';
-import {SocialMedia} from '../../src/components-v2/SocialMediaList/SocialMedia.stories';
-import {HomePage} from '../../src/components-v2/template/home/HomePage';
+import {SidebarMenu} from '../components-v2/Menu/Menu.stories';
+import {DefaultRichText} from '../components-v2/Richtext/RichText.stories';
+import {SocialMedia} from '../components-v2/SocialMediaList/SocialMedia.stories';
 import {BalanceSummary} from '../components-v2/WalletBalance/WalletBalance.stories';
-import DollarIcon from '../images/web/dollar.svg';
-import HomeIcon from '../images/web/home.svg';
-import NftIcon from '../images/web/nft.svg';
-import SettingsIcon from '../images/web/settings.svg';
-import UserIcon from '../images/web/users.svg';
-import {SocialsEnum} from '../interfaces/social';
+import {HomePage} from '../components-v2/template/home/HomePage';
 import {DefaultProfileHeader} from './ProfileHeader.stories';
 import {DefaultSearchBox} from './SearchBox.stories';
-
-const icons = [DollarIcon, HomeIcon, NftIcon, SettingsIcon, UserIcon];
-
-const connected = [
-  {
-    id: '1',
-    peopleId: '1',
-    platform: SocialsEnum.FACEBOOK,
-    userId: '1',
-    verified: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: '1',
-    peopleId: '1',
-    platform: SocialsEnum.INSTAGRAM,
-    userId: '1',
-    verified: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-];
-
-const balances = [
-  {
-    freeBalance: 58.4,
-    tokenSymbol: 'AUSD',
-    tokenDecimals: 12,
-    rpcAddress: 'wss://acala-mandala.api.onfinality.io/public-ws',
-    tokenImage: 'https://res.cloudinary.com/dsget80gs/coins/ausd.png',
-  },
-  {
-    freeBalance: 0,
-    tokenSymbol: 'MYRIA',
-    tokenDecimals: 18,
-    rpcAddress: 'wss://rpc.dev.myriad.systems',
-    tokenImage: 'https://res.cloudinary.com/dsget80gs/coins/myriad.jpg',
-  },
-];
+import {Sort} from './Sort.stories';
 
 export default {
   title: 'UI Revamp v2.0/templates/HomePage',
@@ -73,13 +29,16 @@ OneItem.args = {
         rowGap: 12,
       }}>
       <div>
-        <SidebarMenu icons={icons} />
+        <SidebarMenu icons={SidebarMenu.args?.icons ?? []} />
       </div>
       <div>
-        <SocialMedia connected={connected} toggleVerify={social => console.log(social)} />
+        <SocialMedia
+          connected={SocialMedia.args?.connected ?? []}
+          toggleVerify={social => console.log(social)}
+        />
       </div>
       <div>
-        <BalanceSummary balances={balances} />
+        <BalanceSummary balances={BalanceSummary.args?.balances ?? []} />
       </div>
     </div>
   ),
@@ -88,9 +47,22 @@ OneItem.args = {
       style={{
         display: 'flex',
         flexDirection: 'column',
+        flexWrap: 'wrap',
+        alignItems: 'center',
         rowGap: 12,
       }}>
-      <DefaultSearchBox onSubmit={value => console.log(value)} placeholder={'Search Myriad'} />
+      <div>
+        <DefaultSearchBox
+          onSubmit={value => console.log(value)}
+          placeholder={DefaultSearchBox.args?.placeholder ?? ''}
+        />
+      </div>
+      <div>
+        <DefaultRichText userProfilePict={DefaultRichText.args?.userProfilePict ?? ''} />
+      </div>
+      <div style={{display: 'flex', width: '100%', alignItems: 'flex-end'}}>
+        <Sort />
+      </div>
     </div>
   ),
   thirdColumn: (
@@ -101,9 +73,12 @@ OneItem.args = {
         rowGap: 12,
       }}>
       <DefaultProfileHeader
-        name={'Aaron Ting'}
-        username={'@aaronting8'}
-        avatar={'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg'}
+        name={DefaultProfileHeader.args?.name ?? 'Name'}
+        username={DefaultProfileHeader.args?.username ?? 'Username'}
+        avatar={
+          DefaultProfileHeader.args?.avatar ??
+          'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg'
+        }
       />
     </div>
   ),
