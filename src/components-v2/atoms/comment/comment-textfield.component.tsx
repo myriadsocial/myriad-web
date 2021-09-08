@@ -41,8 +41,8 @@ export const CommentTextFieldComponent: React.FC<Props> = props => {
   };
 
   return (
-    <div style={{display: 'flex'}}>
-      <Avatar style={{marginRight: 12}} src={avatar || ''}>
+    <div className={style.flex}>
+      <Avatar className={style.avatar} src={avatar || ''}>
         {acronym(username)}
       </Avatar>
       <div className={style.root}>
@@ -56,7 +56,7 @@ export const CommentTextFieldComponent: React.FC<Props> = props => {
           maxLength={CHARACTER_LIMIT}
         />
         <CardActions disableSpacing>
-          <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
+          <div className={style.container}>
             <div>
               <Tooltip title="Coming soon" arrow>
                 <IconButton className={style.action} aria-label="reply">
