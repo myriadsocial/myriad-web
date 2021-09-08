@@ -12,7 +12,7 @@ export default {
 
 const Template: ComponentStory<typeof SearchBox> = args => <SearchBox {...args} />;
 
-export const Default = Template.bind({});
-Default.args = {
+export const DefaultSearchBox = Template.bind({});
+DefaultSearchBox.args = {
   placeholder: 'Search Myriad',
 };
