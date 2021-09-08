@@ -14,7 +14,7 @@ const Template: ComponentStory<typeof RichTextComponent> = args => <RichTextComp
 const pictURL =
   'https://res.cloudinary.com/dsget80gs/image/upload/v1626794503/znraavovkot3qbjxqbvv.jpg';
 
-export const Default = Template.bind({});
-Default.args = {
+export const DefaultRichText = Template.bind({});
+DefaultRichText.args = {
   userProfilePict: pictURL,
 };
