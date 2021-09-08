@@ -16,4 +16,6 @@ const Template: ComponentStory<typeof CommentTextFieldComponent> = args => (
 export const Default = Template.bind({});
 Default.args = {
   onSubmit: console.log,
+  username: 'Test',
+  avatar: 'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
 };
