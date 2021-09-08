@@ -3,7 +3,7 @@ import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: '555px',
+      width: '100%',
       position: 'relative',
       backgroundColor: theme.palette.background.paper,
       borderRadius: theme.spacing(1),
@@ -35,6 +35,17 @@ export const useStyles = makeStyles((theme: Theme) =>
     replyIcon: {
       color: theme.palette.primary.main,
       transform: 'rotate(-45deg)',
+    },
+    avatar: {
+      marginRight: 12,
+    },
+    flex: {
+      display: 'flex',
+    },
+    container: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      width: '100%',
     },
   }),
 );
