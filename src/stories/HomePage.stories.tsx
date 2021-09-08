@@ -7,6 +7,7 @@ import {DefaultRichText} from '../components-v2/Richtext/RichText.stories';
 import {SocialMedia} from '../components-v2/SocialMediaList/SocialMedia.stories';
 import {BalanceSummary} from '../components-v2/WalletBalance/WalletBalance.stories';
 import {HomePage} from '../components-v2/template/home/HomePage';
+import {ExperienceList} from './ExperienceList.stories';
 import {DefaultProfileHeader} from './ProfileHeader.stories';
 import {DefaultSearchBox} from './SearchBox.stories';
 import {Sort} from './Sort.stories';
@@ -24,6 +25,7 @@ OneItem.args = {
     //TODO: each column should be grouped into its own organism
     <div
       style={{
+        maxWidth: 360,
         display: 'flex',
         flexDirection: 'column',
         rowGap: 12,
@@ -60,7 +62,7 @@ OneItem.args = {
       <div>
         <DefaultRichText userProfilePict={DefaultRichText.args?.userProfilePict ?? ''} />
       </div>
-      <div style={{display: 'flex', width: '100%', alignItems: 'flex-end'}}>
+      <div style={{display: 'flex', width: '100%', justifyContent: 'flex-end'}}>
         <Sort />
       </div>
     </div>
@@ -68,6 +70,7 @@ OneItem.args = {
   thirdColumn: (
     <div
       style={{
+        maxWidth: 360,
         display: 'flex',
         flexDirection: 'column',
         rowGap: 12,
@@ -80,6 +83,7 @@ OneItem.args = {
           'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg'
         }
       />
+      <ExperienceList experiences={ExperienceList.args?.experiences ?? []} />
     </div>
   ),
 };
