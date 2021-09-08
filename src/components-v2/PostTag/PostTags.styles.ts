@@ -14,13 +14,16 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     list: {
       display: 'flex',
+      flexWrap: 'wrap',
 
       '& .MuiListItem-root': {
+        height: 36,
         width: 'auto',
         border: '1px solid',
         borderColor: '#E5E5E5',
         borderRadius: 5,
         marginRight: theme.spacing(1),
+        marginBottom: theme.spacing(1),
         padding: theme.spacing(1, 1.5),
 
         '&.Mui-selected': {

@@ -17,8 +17,13 @@ export const useStyles = makeStyles((theme: Theme) =>
         lineHeight: '20px',
       },
     },
-    action: {
+    option: {
       padding: 30,
+    },
+    action: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
   }),
 );
