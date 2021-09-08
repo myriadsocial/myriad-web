@@ -144,11 +144,9 @@ jobs:
             --set-string config.cloudinary.secret=${{ steps.secrets.outputs.cloudinarySecret }} \
             --set-string config.facebook.appId=${{ steps.secrets.outputs.facebookAppId }} \
             --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.twitterBearerToken }} \
-            --set certificate.createTLSCertificateIssuer=true \
-            --set-string certificate.tlsCertificateIssuerEmail=myriad.dev@blocksphere.id \
-            --set certificate.createTLSCertificate=true \
             --set ingress.enabled=true \
             --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
+            --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
             --set-string ingress.host=app.myriad.systems \
             --set ingress.tls=true \
             --set autoscaling.enabled=true
