@@ -9,13 +9,17 @@ import CropOriginalRoundedIcon from '@material-ui/icons/CropOriginalRounded';
 import SendRoundedIcon from '@material-ui/icons/SendRounded';
 import VideoCallOutlinedIcon from '@material-ui/icons/VideoCallOutlined';
 
+import {acronym} from '../../../helpers/string';
 import {useStyles} from './comment-textfield.style';
 
 type Props = {
   onSubmit: (comment: string) => void;
+  username: string;
+  avatar: string;
 };
 
-export const CommentTextFieldComponent: React.FC<Props> = ({onSubmit}) => {
+export const CommentTextFieldComponent: React.FC<Props> = props => {
+  const {onSubmit, username, avatar} = props;
   const style = useStyles();
   const CHARACTER_LIMIT = 2000;
 
@@ -38,8 +42,8 @@ export const CommentTextFieldComponent: React.FC<Props> = ({onSubmit}) => {
 
   return (
     <div style={{display: 'flex'}}>
-      <Avatar style={{marginRight: 12}} src={''}>
-        {'A'}
+      <Avatar style={{marginRight: 12}} src={avatar || ''}>
+        {acronym(username)}
       </Avatar>
       <div className={style.root}>
         <TextareaAutosize
