@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 
+import {Button} from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -48,10 +49,16 @@ export const PostCreate: React.FC<SocialMediaListProps> = props => {
         <PostImport value="" />
       </TabPanel>
 
-      <div className={styles.action}>
+      <div className={styles.option}>
         <PostTags selected={['profanity', 'pornography']} options={tagOptions} />
 
-        <DropdownMenu title="Visibility" options={menuOptions} />
+        <div className={styles.action}>
+          <DropdownMenu title="Visibility" options={menuOptions} />
+
+          <Button variant="contained" color="primary" size="small">
+            Create Post
+          </Button>
+        </div>
       </div>
     </Paper>
   );
