@@ -5,5 +5,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
     },
+    expand: {
+      marginLeft: theme.spacing(1),
+      padding: 0,
+    },
   }),
 );

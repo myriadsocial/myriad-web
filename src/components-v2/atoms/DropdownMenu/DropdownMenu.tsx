@@ -35,18 +35,32 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
     handleClose();
   };
 
+  const getSelectedText = (): string => {
+    const match = options.find(option => option.id === selected);
+
+    return match?.title ?? '';
+  };
+
   return (
     <div className={styles.root}>
-      <Typography component="span">
+      <div>
         <Typography component="span" color="textSecondary">
-          {title}:
-        </Typography>{' '}
-        {selected}
-      </Typography>
+          {title}:&nbsp;
+        </Typography>
 
-      <IconButton onClick={handleClick} color="primary" aria-label="expand">
+        <Typography component="span" color="textPrimary">
+          {getSelectedText()}
+        </Typography>
+      </div>
+
+      <IconButton
+        onClick={handleClick}
+        color="primary"
+        aria-label="expand"
+        className={styles.expand}>
         <ExpandMoreIcon />
       </IconButton>
+
       <Menu
         anchorEl={anchorEl}
         getContentAnchorEl={null}
