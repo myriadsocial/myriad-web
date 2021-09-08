@@ -7,11 +7,7 @@ import {SimpleCard} from '../../src/components-v2/atoms/simple-card';
 export default {
   title: 'UI Revamp v2.0/atoms/Simple Card',
   component: SimpleCard,
-  argTypes: {
-    activated: {
-      options: [true, false],
-    },
-  },
+  argTypes: {},
 } as ComponentMeta<typeof SimpleCard>;
 
 const Template: ComponentStory<typeof SimpleCard> = args => <SimpleCard {...args} />;
@@ -21,7 +17,6 @@ const stonks =
 
 export const Default = Template.bind({});
 Default.args = {
-  activated: true,
   imgUrl: stonks,
-  isOwner: true,
+  creator: 'Lara Schoffield',
 };

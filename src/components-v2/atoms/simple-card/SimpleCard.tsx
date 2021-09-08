@@ -12,7 +12,7 @@ import {useStyles, SimpleCardProps} from './';
 
 import classNames from 'classnames';
 
-const SimpleCard = ({activated, imgUrl, isOwner, ...props}: SimpleCardProps): JSX.Element => {
+const SimpleCard = ({creator, title, imgUrl, ...props}: SimpleCardProps): JSX.Element => {
   const classes = useStyles();
 
   const [selected, setSelected] = useState(false);
@@ -40,6 +40,13 @@ const SimpleCard = ({activated, imgUrl, isOwner, ...props}: SimpleCardProps): JS
     return filename[0];
   };
 
+  const checkCreator = (name: string) => {
+    if (name === 'Lara Schoffield') {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <Card
       className={classNames(classes.root, {
@@ -59,12 +66,12 @@ const SimpleCard = ({activated, imgUrl, isOwner, ...props}: SimpleCardProps): JS
             title={`${parseImageFilename(imgUrl)} Experience image`}
           />
           <CardContent className={classes.content}>
-            <Typography variant="body1">Cryptowatcher</Typography>
+            <Typography variant="body1">{title}</Typography>
             <Typography variant="caption" color="primary">
-              Lara Schoffield: {activated}
+              {creator}
             </Typography>
             <Typography variant="caption" color="textSecondary">
-              {isOwner ? `(you)` : ''}
+              {checkCreator(creator) ? `(you)` : ''}
             </Typography>
           </CardContent>
           <IconButton aria-label="settings" onClick={handleClickSettings}>

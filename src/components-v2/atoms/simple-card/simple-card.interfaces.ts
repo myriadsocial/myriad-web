@@ -1,14 +1,14 @@
 interface SimpleCardProps {
-  activated: boolean;
+  title: string;
   /*
    * imgUrl can be a local path or an external url
    */
   imgUrl: string;
 
   /*
-   * check if user owned this experience card
+   * creator if this experience
    */
-  isOwner: boolean;
+  creator: string;
 
   onClick: () => void;
 }
