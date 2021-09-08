@@ -2,36 +2,12 @@ import React, {useState} from 'react';
 
 import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
-import {createStyles, makeStyles} from '@material-ui/core/styles';
 import ForwardIcon from '@material-ui/icons/Forward';
 
 import {VoteProps} from './voting.interface';
+import {useStyles} from './voting.style';
 
 import {debounce} from 'lodash';
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      display: 'inline-block',
-    },
-    flex: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    flexColumn: {
-      flexDirection: 'column',
-    },
-    action: {
-      padding: 0,
-      transform: 'rotate(-90deg)',
-    },
-    action2: {
-      padding: 0,
-      transform: 'rotate(90deg)',
-    },
-  }),
-);
 
 export const VotingComponent: React.FC<VoteProps> = ({variant = 'type1'}) => {
   const styles = useStyles();
@@ -52,9 +28,9 @@ export const VotingComponent: React.FC<VoteProps> = ({variant = 'type1'}) => {
     <div className={styles.root}>
       <div className={`${styles.flex} ${mode()}`}>
         <IconButton onClick={handleUpVote} color="primary" size="medium" className={styles.action}>
-          <ForwardIcon fontSize="large" color="primary" />
+          <ForwardIcon fontSize="medium" color="primary" />
         </IconButton>
-        <Typography variant="h6" component="span">
+        <Typography className={styles.text} component="span">
           {voting}
         </Typography>
         <IconButton
@@ -62,7 +38,7 @@ export const VotingComponent: React.FC<VoteProps> = ({variant = 'type1'}) => {
           color="primary"
           size="medium"
           className={styles.action2}>
-          <ForwardIcon fontSize="large" color="disabled" />
+          <ForwardIcon fontSize="medium" color="disabled" />
         </IconButton>
       </div>
     </div>
