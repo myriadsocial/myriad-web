@@ -10,7 +10,7 @@ import SendRoundedIcon from '@material-ui/icons/SendRounded';
 import VideoCallOutlinedIcon from '@material-ui/icons/VideoCallOutlined';
 
 import {acronym} from '../../../helpers/string';
-import {useStyles} from './comment-textfield.style';
+import {useStyles} from './CommentEditor.style';
 
 type Props = {
   onSubmit: (comment: string) => void;
@@ -18,7 +18,7 @@ type Props = {
   avatar: string;
 };
 
-export const CommentTextFieldComponent: React.FC<Props> = props => {
+export const CommentEditor: React.FC<Props> = props => {
   const {onSubmit, username, avatar} = props;
   const style = useStyles();
   const CHARACTER_LIMIT = 2000;

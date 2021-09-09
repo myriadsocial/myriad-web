@@ -14,28 +14,32 @@ import {useStyles} from './postAction.style';
 type PostActionProps = {
   metrics: {
     share: number;
-    comment: number;
+    comments: number;
     vote: number;
   };
+  onUpvote: () => void;
+  onDownVote: () => void;
 };
 
 export const PostActionComponent: React.FC<PostActionProps> = props => {
   const styles = useStyles();
 
   const {
-    metrics: {share, comment},
+    metrics: {share, comments, vote},
+    onUpvote,
+    onDownVote,
   } = props;
 
   return (
     <div className={styles.root}>
-      <VotingComponent variant="row" />
+      <VotingComponent variant="row" vote={vote} onUpvote={onUpvote} onDownVote={onDownVote} />
 
       <div className={styles.section}>
         <IconButton onClick={action('comment')} className={styles.action} color="primary">
           <ChatBubbleOutlineIcon />
         </IconButton>
         <Typography component="span" color="textPrimary" variant="caption">
-          {comment} Comments
+          {comments} Comments
         </Typography>
       </div>
 

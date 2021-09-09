@@ -8,6 +8,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.background.paper,
       borderRadius: theme.spacing(1),
       marginBottom: theme.spacing(1),
+      border: '1px solid',
+      borderColor: '#E5E5E5',
+      padding: theme.spacing(2),
     },
     write: {
       width: '100%',

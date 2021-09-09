@@ -1,6 +1,11 @@
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles<Theme, {variant: 'row' | 'column'}>(() =>
+type VotingStyleProp = {
+  variant: 'row' | 'column';
+  size: 'small' | 'medium';
+};
+
+export const useStyles = makeStyles<Theme, VotingStyleProp>(() =>
   createStyles({
     root: {
       display: 'inline-block',
@@ -15,7 +20,7 @@ export const useStyles = makeStyles<Theme, {variant: 'row' | 'column'}>(() =>
       padding: 0,
 
       '& .MuiSvgIcon-fontSizeLarge': {
-        fontSize: 32,
+        fontSize: props => (props.size === 'small' ? 24 : 32),
       },
     },
   }),

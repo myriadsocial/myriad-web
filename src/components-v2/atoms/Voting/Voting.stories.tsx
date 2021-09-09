@@ -19,10 +19,16 @@ const Template: ComponentStory<typeof VotingComponent> = args => <VotingComponen
 
 export const Row = Template.bind({});
 Row.args = {
+  vote: 1032,
   variant: 'row',
+  onUpvote: console.log,
+  onDownVote: console.log,
 };
 
 export const Column = Template.bind({});
 Column.args = {
+  vote: 1032,
   variant: 'column',
+  onUpvote: console.log,
+  onDownVote: console.log,
 };

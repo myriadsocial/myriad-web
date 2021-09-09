@@ -30,6 +30,8 @@ export type PostMetric = {
   likes: number;
   dislikes: number;
   comments: number;
+  share: number;
+  vote: number;
 };
 
 export type PostProps = {

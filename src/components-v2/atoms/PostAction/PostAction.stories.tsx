@@ -16,9 +16,10 @@ const Template: ComponentStory<typeof PostActionComponent> = args => (
 export const Default = Template.bind({});
 Default.args = {
   metrics: {
-    comment: 1210,
+    comments: 1210,
     share: 24,
-    upvote: 45,
-    downvote: 2,
+    vote: 45,
   },
+  onDownVote: console.log,
+  onUpvote: console.log,
 };
