@@ -154,7 +154,7 @@ const theme = createTheme({
         textTransform: 'none',
         boxSizing: 'border-box',
         borderRadius: 20,
-        width: 288,
+        width: 280,
         height: 40,
       },
       sizeSmall: {
