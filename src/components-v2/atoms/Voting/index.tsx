@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
@@ -9,17 +9,16 @@ import {useStyles} from './voting.style';
 
 import {debounce} from 'lodash';
 
-export const VotingComponent: React.FC<VoteProps> = ({variant = 'row'}) => {
-  const styles = useStyles({variant});
-  const [voting, setVoting] = useState<number>(0);
+export const VotingComponent: React.FC<VoteProps> = props => {
+  const {vote, variant = 'row', size = 'medium', onDownVote, onUpvote} = props;
+  const styles = useStyles({variant, size});
 
   const handleUpVote = debounce(() => {
-    setVoting(voting + 1);
+    onUpvote();
   }, 500);
 
   const handleDownVote = debounce(() => {
-    // open debate section -> down
-    setVoting(voting - 1);
+    onDownVote();
   }, 500);
 
   return (
@@ -33,7 +32,7 @@ export const VotingComponent: React.FC<VoteProps> = ({variant = 'row'}) => {
           <ForwardIcon fontSize="large" color="primary" />
         </IconButton>
         <Typography variant="caption" component="span">
-          {voting}
+          {vote}
         </Typography>
         <IconButton
           onClick={handleDownVote}

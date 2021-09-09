@@ -11,13 +11,13 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 import DateFormat from '../../../components/common/DateFormat';
 import {acronym} from '../../../helpers/string';
+import {CommentEditor} from '../CommentEditor';
+import {CommentList} from '../CommentList';
 import {VotingComponent} from '../Voting';
-import {CommentTextFieldComponent} from './comment-textfield.component';
-import {CommentComponent} from './comment.component';
-import {CommentDisplayProps} from './comment.interface';
-import {useStyles} from './comment.style';
+import {CommentDetailProps} from './CommentDetail.interface';
+import {useStyles} from './CommentDetail.styles';
 
-export const CommentDisplayComponent: React.FC<CommentDisplayProps> = props => {
+export const CommentDetail: React.FC<CommentDetailProps> = props => {
   const {comment, deep} = props;
   const style = useStyles();
   const [isReply, setIsReply] = React.useState(false);
@@ -25,29 +25,36 @@ export const CommentDisplayComponent: React.FC<CommentDisplayProps> = props => {
   const handleOpenReply = () => {
     setIsReply(!isReply);
   };
+
   return (
     <div className={style.flex}>
-      <Avatar className={style.avatar} src={comment.avatar || ''}>
-        {acronym(comment.username)}
+      <Avatar className={style.avatar} src={comment.user?.profilePictureURL || ''}>
+        {acronym(comment.user?.name)}
       </Avatar>
       <div className={style.fullWidth}>
         <Card className={style.comment}>
           <CardHeader
             title={
               <Typography className={style.text}>
-                {comment.username}
+                {comment.user.name}
                 <FiberManualRecordIcon className={style.circle} />
                 <DateFormat date={comment.createdAt} />
               </Typography>
             }
           />
-          <CardContent>
+          <CardContent className={style.content}>
             <Typography variant="body1" color="textPrimary" component="p">
               {comment.text}
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <VotingComponent variant={'type2'} />
+            <VotingComponent
+              variant="row"
+              vote={1}
+              size="small"
+              onDownVote={console.log}
+              onUpvote={console.log}
+            />
             {deep < 3 && (
               <Button
                 onClick={handleOpenReply}
@@ -68,10 +75,8 @@ export const CommentDisplayComponent: React.FC<CommentDisplayProps> = props => {
             </Button>
           </CardActions>
         </Card>
-        {comment && <CommentComponent deep={deep + 1} comments={comment.comments} />}
-        {isReply && (
-          <CommentTextFieldComponent avatar={''} username={'User Login'} onSubmit={console.log} />
-        )}
+        {comment && <CommentList deep={deep + 1} comments={comment.replies || []} />}
+        {isReply && <CommentEditor avatar={''} username={'User Login'} onSubmit={console.log} />}
       </div>
     </div>
   );
