@@ -1,28 +1,22 @@
-import {createStyles, makeStyles} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() =>
+export const useStyles = makeStyles<Theme, {variant: 'row' | 'column'}>(() =>
   createStyles({
     root: {
       display: 'inline-block',
     },
-    flex: {
+    icon: {
       display: 'flex',
+      flexDirection: props => props.variant,
       alignItems: 'center',
       justifyContent: 'center',
     },
-    flexColumn: {
-      flexDirection: 'column',
-    },
     action: {
-      padding: 2,
-      transform: 'rotate(-90deg)',
-    },
-    action2: {
-      padding: 2,
-      transform: 'rotate(90deg)',
-    },
-    text: {
-      fontSize: '14px',
+      padding: 0,
+
+      '& .MuiSvgIcon-fontSizeLarge': {
+        fontSize: 32,
+      },
     },
   }),
 );

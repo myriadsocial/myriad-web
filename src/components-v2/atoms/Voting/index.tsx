@@ -9,11 +9,9 @@ import {useStyles} from './voting.style';
 
 import {debounce} from 'lodash';
 
-export const VotingComponent: React.FC<VoteProps> = ({variant = 'type1'}) => {
-  const styles = useStyles();
+export const VotingComponent: React.FC<VoteProps> = ({variant = 'row'}) => {
+  const styles = useStyles({variant});
   const [voting, setVoting] = useState<number>(0);
-
-  const mode = () => (variant == 'type2' ? '' : styles.flexColumn);
 
   const handleUpVote = debounce(() => {
     setVoting(voting + 1);
@@ -26,19 +24,23 @@ export const VotingComponent: React.FC<VoteProps> = ({variant = 'type1'}) => {
 
   return (
     <div className={styles.root}>
-      <div className={`${styles.flex} ${mode()}`}>
-        <IconButton onClick={handleUpVote} color="primary" size="medium" className={styles.action}>
-          <ForwardIcon fontSize="medium" color="primary" />
+      <div className={styles.icon}>
+        <IconButton
+          onClick={handleUpVote}
+          color="primary"
+          className={styles.action}
+          style={{transform: 'rotate(-90deg)'}}>
+          <ForwardIcon fontSize="large" color="primary" />
         </IconButton>
-        <Typography className={styles.text} component="span">
+        <Typography variant="caption" component="span">
           {voting}
         </Typography>
         <IconButton
           onClick={handleDownVote}
           color="primary"
-          size="medium"
-          className={styles.action2}>
-          <ForwardIcon fontSize="medium" color="disabled" />
+          className={styles.action}
+          style={{transform: 'rotate(90deg)'}}>
+          <ForwardIcon fontSize="large" color="disabled" />
         </IconButton>
       </div>
     </div>

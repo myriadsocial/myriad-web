@@ -35,6 +35,7 @@ module.exports = {
     'jsx-a11y/click-events-have-key-events': ['warn'],
     'jsx-a11y/interactive-supports-focus': ['warn'],
     'jsx-a11y/no-static-element-interactions': ['warn'],
+    'jsx-a11y/no-noninteractive-element-interactions': ['warn'],
     'react/prop-types': ['off'],
     'react/display-name': ['warn'],
     'react/no-unescaped-entities': ['warn'],

@@ -2,7 +2,7 @@ import React from 'react';
 
 import Typography, {TypographyProps} from '@material-ui/core/Typography';
 
-import {parseHashtag} from 'src/helpers/string';
+import {parseHashtag} from '../../helpers/string';
 
 type LinkifyProps = TypographyProps & {
   text: string;
