@@ -1,5 +1,7 @@
 export type VoteProps = {
   variant?: 'row' | 'column';
-  onUpvote?: () => void;
-  onDownVote?: () => void;
+  vote: number;
+  size?: 'small' | 'medium';
+  onUpvote: () => void;
+  onDownVote: () => void;
 };
