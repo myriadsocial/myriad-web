@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 
@@ -14,28 +14,45 @@ import {Post} from '../../interfaces/post';
 import {Gallery} from '../atoms/Gallery';
 import {PostActionComponent} from '../atoms/PostAction';
 import {HeaderComponent} from '../atoms/PostHeader';
+import {TabsComponent} from '../atoms/Tabs';
 import {Video} from '../atoms/Video';
 import {useStyles} from './PostDetail.styles';
+import {useCommentTabs, CommentTabs} from './hooks/use-comment-tabs';
 
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import {v4 as uuid} from 'uuid';
 
-type SocialMediaListProps = {
+type PostDetailListProps = {
   post: Post;
 };
 
-export const PostDetail: React.FC<SocialMediaListProps> = props => {
+export const PostDetail: React.FC<PostDetailListProps> = props => {
   const styles = useStyles();
+  const router = useRouter();
 
   const {post} = props;
-
-  const router = useRouter();
+  const tabs = useCommentTabs(post.comments);
+  const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
+  const [, setDownvoting] = useState(false);
 
   const onHashtagClicked = async (hashtag: string) => {
     await router.push(`/home?tag=${hashtag.replace('#', '')}&type=trending`, undefined, {
       shallow: true,
     });
+  };
+
+  const handleUpvote = async () => {
+    // code
+  };
+
+  const handleDownVote = async () => {
+    setDownvoting(true);
+    setActiveTab('debate');
+  };
+
+  const handleChangeTab = (tab: string) => {
+    setActiveTab(tab as CommentTabs);
   };
 
   return (
@@ -108,17 +125,17 @@ export const PostDetail: React.FC<SocialMediaListProps> = props => {
 
       <div className={styles.action}>
         <PostActionComponent
-          metrics={{
-            comment: 1210,
-            share: 24,
-            vote: 45,
-          }}
+          metrics={post.metric}
+          onUpvote={handleUpvote}
+          onDownVote={handleDownVote}
         />
 
         <Button variant="contained" color="secondary" size="small">
           Send Tip
         </Button>
       </div>
+
+      <TabsComponent tabs={tabs} active={activeTab} onChangeTab={handleChangeTab} />
     </Paper>
   );
 };

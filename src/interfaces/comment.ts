@@ -9,4 +9,6 @@ export interface CommentProps {
 
 export interface Comment extends CommentProps, BaseModel {
   user: User;
+
+  replies?: Comment[];
 }
