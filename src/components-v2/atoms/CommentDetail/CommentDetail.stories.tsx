@@ -1,0 +1,84 @@
+import {ComponentStory, ComponentMeta} from '@storybook/react';
+
+import React from 'react';
+
+import {CommentDetail as CommentDetailComponent} from './CommentDetail';
+
+import {Comment} from 'src/interfaces/comment';
+
+export default {
+  title: 'UI Revamp v2.0/atoms/Comment Detail',
+  component: CommentDetailComponent,
+} as ComponentMeta<typeof CommentDetailComponent>;
+
+const Template: ComponentStory<typeof CommentDetailComponent> = args => (
+  <CommentDetailComponent {...args} />
+);
+
+const comment: Comment = {
+  id: '6123614bf6c45c2728e43aca',
+  text: 'pertamax',
+  postId: '6123614bf6c45c2728e43aca',
+  userId: '6123614bf6c45c2728e43aca',
+  createdAt: new Date('2021-07-15T03:40:23.000Z'),
+  updatedAt: new Date('2021-07-15T03:40:23.000Z'),
+  user: {
+    id: '6123614bf6c45c2728e43aca',
+    name: 'Storybook User',
+    profilePictureURL:
+      'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
+    bannerImageUrl: '',
+    createdAt: new Date('2021-07-15T03:40:23.000Z'),
+    updatedAt: new Date('2021-07-15T03:40:23.000Z'),
+    currencies: [],
+  },
+
+  replies: [
+    {
+      id: '6123614bf6c45c2728e43aca',
+      text: 'Drop comment',
+      postId: '6123614bf6c45c2728e43aca',
+      userId: '6123614bf6c45c2728e43aca',
+      createdAt: new Date('2021-07-15T03:40:23.000Z'),
+      updatedAt: new Date('2021-07-15T03:40:23.000Z'),
+      user: {
+        id: '6123614bf6c45c2728e43aca',
+        name: 'Reply one',
+        profilePictureURL:
+          'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
+        bannerImageUrl: '',
+        createdAt: new Date('2021-07-15T03:40:23.000Z'),
+        updatedAt: new Date('2021-07-15T03:40:23.000Z'),
+        currencies: [],
+      },
+
+      replies: [
+        {
+          id: '6123614bf6c45c2728e43aca',
+          text: 'What the comment?',
+          postId: '6123614bf6c45c2728e43aca',
+          userId: '6123614bf6c45c2728e43aca',
+          createdAt: new Date('2021-07-15T03:40:23.000Z'),
+          updatedAt: new Date('2021-07-15T03:40:23.000Z'),
+          user: {
+            id: '6123614bf6c45c2728e43aca',
+            name: 'Reply two',
+            profilePictureURL:
+              'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
+            bannerImageUrl: '',
+            createdAt: new Date('2021-07-15T03:40:23.000Z'),
+            updatedAt: new Date('2021-07-15T03:40:23.000Z'),
+            currencies: [],
+          },
+        },
+      ],
+    },
+  ],
+};
+
+export const CommentDetail = Template.bind({});
+
+CommentDetail.args = {
+  comment,
+  deep: 0,
+};
