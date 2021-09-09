@@ -14,4 +14,11 @@ const Template: ComponentStory<typeof PostActionComponent> = args => (
 );
 
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+  metrics: {
+    comment: 1210,
+    share: 24,
+    upvote: 45,
+    downvote: 2,
+  },
+};
