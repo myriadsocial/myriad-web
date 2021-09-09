@@ -14,12 +14,14 @@ export const useCommentTabs = (
   return [
     {
       id: 'discussion',
-      title: 'Discussion',
+      title: `Discussion (${comments?.length || 0})`,
+      icon: '🤔 ',
       component: <CommentList comments={comments || []} />,
     },
     {
       id: 'debate',
-      title: 'Debate',
+      title: `Debate (${debates?.length || 0})`,
+      icon: '😡 ',
       component: <CommentList comments={debates || []} />,
     },
   ];
