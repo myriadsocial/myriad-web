@@ -240,7 +240,7 @@ const theme = createTheme({
 
     MuiSvgIcon: {
       root: {
-        fill: 'none',
+        fill: 'currentColor',
       },
     },
   },
