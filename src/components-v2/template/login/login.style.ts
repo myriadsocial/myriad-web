@@ -22,9 +22,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     background: {
       backgroundColor: '#FFC857',
       position: 'relative',
-      // background: 'url(../../../images/background.svg)',
+      // backgroundImage: `url("../../../images/background.svg")`,
       // backgroundRepeat: 'no-repeat',
-      // backgroundSize: '100% 100%',
+      // backgroundSize: 'cover',
     },
     logo: {
       marginTop: '100px',
@@ -48,6 +48,48 @@ export const useStyles = makeStyles((theme: Theme) =>
     link: {
       textDecoration: 'none',
       color: theme.palette.primary.main,
+    },
+    imagePurple: {
+      position: 'absolute',
+      top: '200px',
+      left: '-55px',
+    },
+    imageYellow: {
+      position: 'absolute',
+      top: '50px',
+      left: '165px',
+    },
+    carousel: {
+      position: 'absolute',
+      width: '400px',
+      height: '100px',
+      bottom: '100px',
+      '& .rec.rec-arrow': {
+        visibility: 'hidden',
+        display: 'none',
+      },
+      '& .rec.rec-dot': {
+        background: theme.palette.background.paper,
+      },
+      '& .rec.rec-dot:focus': {
+        background: theme.palette.primary.main,
+        width: '28px',
+        borderRadius: 20,
+      },
+      '& .rec.rec-pagination': {
+        paddingLeft: '8px',
+      },
+      '& .rec-carousel-wrapper': {
+        alignItems: 'flex-start',
+      },
+    },
+    caption: {
+      fontSize: '24px',
+      lineHeight: '36px',
+    },
+    subtitle: {
+      fontSize: '20px',
+      lineHeight: '36px',
     },
   }),
 );
