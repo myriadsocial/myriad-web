@@ -2,7 +2,9 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {},
+    root: {
+      borderRadius: 10,
+    },
     content: {
       padding: theme.spacing(0.5, 2.5),
     },

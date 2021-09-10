@@ -25,6 +25,7 @@ import {v4 as uuid} from 'uuid';
 
 type PostDetailListProps = {
   post: Post;
+  anonymous: boolean;
 };
 
 export const PostDetail: React.FC<PostDetailListProps> = props => {
