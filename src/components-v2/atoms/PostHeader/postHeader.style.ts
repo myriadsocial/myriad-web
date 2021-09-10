@@ -13,6 +13,7 @@ export const useStyles = makeStyles(() =>
     header: {
       position: 'relative',
       background: '#FFF',
+      borderRadius: 10,
 
       '& .MuiCardHeader-title': {
         fontSize: 18,
