@@ -1,4 +1,5 @@
 import React from 'react';
+import Carousel from 'react-elastic-carousel';
 
 import Link from 'next/link';
 
@@ -58,8 +59,34 @@ export const LoginComponent: React.FC = () => {
         </Grid>
         <Grid item xs={5}>
           <div className={`${style.paper} ${style.background}`}>
-            <Yellow style={{position: 'absolute', top: '50', left: '165'}} />
-            <Purple style={{position: 'absolute', top: '200px', left: '-55px'}} />
+            <Yellow className={style.imageYellow} />
+            <Purple className={style.imagePurple} />
+            <div className={style.carousel}>
+              <Carousel isRTL={false} itemsToShow={1}>
+                <div>
+                  <Typography className={style.caption} component="span" color="textPrimary">
+                    <Typography className={style.caption} component="span" color="primary">
+                      Limitless
+                    </Typography>{' '}
+                    Conversation
+                  </Typography>
+                  <Typography className={style.subtitle} component="p" color="textPrimary">
+                    No limitation on what you said in Myriad Fredom of Speech is Our Vision
+                  </Typography>
+                </div>
+                <div>
+                  <Typography className={style.caption} component="span" color="textPrimary">
+                    <Typography className={style.caption} component="span" color="primary">
+                      Monetize
+                    </Typography>{' '}
+                    your Idea
+                  </Typography>
+                  <Typography className={style.subtitle} component="p" color="textPrimary">
+                    Speak what inside your mind and get a chance to earn coins
+                  </Typography>
+                </div>
+              </Carousel>
+            </div>
           </div>
         </Grid>
       </Grid>
