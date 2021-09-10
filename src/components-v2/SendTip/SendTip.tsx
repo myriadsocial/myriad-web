@@ -17,6 +17,7 @@ import {ListItemComponent} from '../atoms/ListItem/';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/avatar/';
 import {Button, ButtonVariant} from '../atoms/button/';
 
+//TODO: split this component into sub-components
 export const SendTip = (): JSX.Element => {
   const [tipAmount, setTipAmount] = useState('');
   const classes = useStyles();
