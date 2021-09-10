@@ -7,6 +7,7 @@ export const TableCell = withStyles({
   },
 })(MuiTableCell);
 
+//TODO: split this fx into sub-components
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
