@@ -1,88 +1,41 @@
 import React, {useState} from 'react';
 
-//import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 
+import {useStyles, TableCell} from '.';
 import {ListItemComponent} from '../atoms/ListItem/';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/avatar/';
 import {Button, ButtonVariant} from '../atoms/button/';
 
-export const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: 340,
-      position: 'relative',
-      height: 680,
-      background: '#FFFFFF',
-      boxShadow: `0px 2px 10px rgba(0, 0, 0, 0.05)`,
-      borderRadius: 10,
-    },
-    header: {
-      fontWeight: 700,
-      paddingTop: 30,
-      textAlign: 'center',
-    },
-    description: {
-      textAlign: 'center',
-      paddingTop: 12,
-    },
-    subHeader: {
-      fontWeight: 700,
-    },
-    subHeaderSection: {
-      padding: '0 8%',
-      marginTop: 30,
-    },
-    formRoot: {
-      marginTop: 12,
-      textAlign: 'center',
-      '& > input:nth-child(1)': {
-        margin: 0,
-      },
-    },
-    formInput: {
-      zIndex: 10,
-      backgroundColor: '#FFF',
-    },
-    formStreak: {
-      content: '""',
-      position: 'absolute',
-      width: 340,
-      height: 24,
-      left: 0,
-      top: 228,
-
-      background: theme.palette.secondary.main,
-    },
-    receiverSummary: {
-      display: 'flex',
-      marginTop: 12,
-      '& > *': {
-        margin: 2,
-      },
-      '& > p': {
-        padding: '2% 0',
-      },
-    },
-    amountText: {
-      color: theme.palette.primary.main,
-    },
-  }),
-);
-
 export const SendTip = (): JSX.Element => {
+  const [tipAmount, setTipAmount] = useState('');
   const classes = useStyles();
-  const [tipAmount, setTipAmount] = useState(0);
 
   const changeCurrency = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
     console.log('changing currency!');
+  };
+
+  const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const input = e.target.value;
+    console.log(input);
+    //TODO: tipAmount input validation goes here
+    setTipAmount(input);
+  };
+
+  const handleSendTip = () => {
+    console.log('sending tip!');
   };
 
   return (
@@ -96,8 +49,8 @@ export const SendTip = (): JSX.Element => {
       <div className={classes.subHeaderSection}>
         <Typography className={classes.subHeader}>Balance</Typography>
         <ListItemComponent
-          avatar={'https://res.cloudinary.com/dsget80gs/coins/ausd.png'}
-          title={'AUSD'}
+          avatar={'https://res.cloudinary.com/dsget80gs/coins/aca.svg'}
+          title={'ACA'}
           subtitle={'200'}
           action={
             <Typography>
@@ -111,6 +64,8 @@ export const SendTip = (): JSX.Element => {
             id="send-tip-amount"
             aria-label="send-tip-amount"
             label="Tip amount"
+            value={tipAmount}
+            onChange={handleChangeAmount}
             variant="outlined"
           />
           <div className={classes.receiverSummary}>
@@ -118,24 +73,89 @@ export const SendTip = (): JSX.Element => {
               avatar={
                 'https://res.cloudinary.com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg'
               }
+              size={CustomAvatarSize.XSMALL}
             />
             <Typography variant="body1">
-              King Lion will receive <span className={classes.amountText}>0.70 ACA</span>{' '}
+              King Lion will receive <span className={classes.clickableText}>0.70 ACA</span>{' '}
             </Typography>
           </div>
-
-          <div style={{marginTop: 12}}>
-            <Typography className={classes.subHeader}>Balance</Typography>
+          <div style={{marginTop: 30, width: '100%'}}>
+            <Typography className={classes.subHeader}>Tip Summary</Typography>
+            <TableContainer>
+              <Table size="small" aria-label="tip summary table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell></TableCell>
+                    <TableCell align="right"></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell component="th" scope="row">
+                      <Typography variant="body1" color="textSecondary">
+                        Tip
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography variant="body1" color="textPrimary">
+                        0.70 ACA
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell component="th" scope="row">
+                      <Typography variant="body1" color="textSecondary">
+                        Gas fee
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography variant="body1" color="textSecondary">
+                        0.01 ACA
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell component="th" scope="row">
+                      <Typography variant="body1" color="textSecondary">
+                        Total
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography className={classes.subHeader}>
+                        <span className={classes.clickableText}>0.71 ACA</span>
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell component="th" scope="row">
+                      <Typography variant="body1" color="textSecondary">
+                        Tip Reward
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography variant="body1" color="textPrimary">
+                        12 Myria
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
           </div>
-          <FormControlLabel
-            control={<Checkbox name="checkedB" color="primary" />}
-            label={'Anonymous tipping'}
-          />
-          <FormControlLabel
-            control={<Checkbox name="checkedB" color="primary" />}
-            label={'I agree to the Myriad Terms of Service about Tipping'}
-          />
-          <Button variant={ButtonVariant.CONTAINED}>Send my tip</Button>
+          <div className={classes.formControls}>
+            <FormControlLabel
+              control={<Checkbox name="check-tipping-agreement" color="primary" />}
+              label={
+                <Typography>
+                  I agree to the Myriad{' '}
+                  <span className={classes.clickableText}>Terms of Service</span> about Tipping
+                </Typography>
+              }
+            />
+            <Button variant={ButtonVariant.CONTAINED} onClick={handleSendTip}>
+              Send my tip
+            </Button>
+          </div>
         </form>
         <div className={classes.formStreak}></div>
       </div>
