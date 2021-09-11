@@ -1,14 +1,7 @@
 import React from 'react';
 
-export type TabList<T> = {
-  id: T;
-  title?: string;
-  icon?: string | React.ReactElement;
+import {TabListItem} from '../TabList';
+
+export type TabItems<T> = TabListItem<T> & {
   component: React.ReactNode;
 };
-
-export type TabPosition = 'left' | 'right' | 'center' | 'space-around' | 'space-evenly';
-
-export type TabMark = 'underline' | 'cover';
-
-export type TabSize = 'small' | 'medium';
