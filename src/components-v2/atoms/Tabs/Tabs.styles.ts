@@ -1,13 +1,21 @@
-import {createStyles, makeStyles} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() =>
+import {TabPosition, TabMark, TabSize} from '.';
+
+type StylesProps = {
+  position: TabPosition;
+  mark: TabMark;
+  size: TabSize;
+};
+
+export const useStyles = makeStyles<Theme, StylesProps>(theme =>
   createStyles({
     root: {},
     tabs: {
       borderBottom: '1px solid #E5E5E5',
 
       '& .MuiTabs-flexContainer': {
-        justifyContent: 'space-evenly',
+        justifyContent: props => props.position,
       },
 
       '& .MuiTab-wrapper': {
@@ -16,6 +24,19 @@ export const useStyles = makeStyles(() =>
         fontSize: 16,
         lineHeight: '20px',
       },
+      '& .Mui-selected': {
+        backgroundColor: props =>
+          props.mark === 'underline' ? 'transparent' : theme.palette.secondary.main,
+      },
+      '& .MuiTabs-indicator': {
+        display: props => (props.mark === 'underline' ? 'block' : 'none'),
+      },
+    },
+    tab: {
+      marginRight: 20,
+      minHeight: props => (props.size === 'small' ? 36 : 48),
+      minWidth: props => (props.size === 'small' ? 36 : 48),
+      padding: theme.spacing(0.5),
     },
   }),
 );
