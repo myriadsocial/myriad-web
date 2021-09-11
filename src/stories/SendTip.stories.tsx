@@ -3,14 +3,16 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 import React from 'react';
 
 import {SendTip} from '../components-v2/SendTip/SendTip';
+import {Default as CurrencyOptionComponent} from '../components-v2/atoms/CurrencyOption/CurrencyOption.stories';
 
 export default {
   title: 'UI Revamp v2.0/components/SendTip',
   component: SendTip,
 } as ComponentMeta<typeof SendTip>;
 
-//@ts-ignore
 const Template: ComponentStory<typeof SendTip> = args => <SendTip {...args} />;
 
 export const SendTipModal = Template.bind({});
-SendTipModal.args = {};
+SendTipModal.args = {
+  currencies: CurrencyOptionComponent.args?.currencies ?? [],
+};
