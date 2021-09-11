@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -13,19 +12,16 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles, TableCell} from '.';
+import {CurrencyOptionComponent} from '../atoms/CurrencyOption/';
+import {Props as CurrencyOptionProps} from '../atoms/CurrencyOption/currencyOption.interface';
 import {ListItemComponent} from '../atoms/ListItem/';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/avatar/';
-import {Button, ButtonVariant} from '../atoms/button/';
+import {Button, ButtonVariant, ButtonColor} from '../atoms/button/';
 
 //TODO: split this component into sub-components
-export const SendTip = (): JSX.Element => {
+export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
   const [tipAmount, setTipAmount] = useState('');
   const classes = useStyles();
-
-  const changeCurrency = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    e.preventDefault();
-    console.log('changing currency!');
-  };
 
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -37,6 +33,10 @@ export const SendTip = (): JSX.Element => {
 
   const handleSendTip = () => {
     console.log('sending tip!');
+  };
+
+  const cancelSendTip = () => {
+    console.log('cancelling send tip!');
   };
 
   return (
@@ -53,11 +53,7 @@ export const SendTip = (): JSX.Element => {
           avatar={'https://res.cloudinary.com/dsget80gs/coins/aca.svg'}
           title={'ACA'}
           subtitle={'200'}
-          action={
-            <Typography>
-              <Link onClick={changeCurrency}>Change currency</Link>
-            </Typography>
-          }
+          action={<CurrencyOptionComponent currencies={currencies} />}
         />
         <form className={classes.formRoot} autoComplete="off">
           <TextField
@@ -153,6 +149,12 @@ export const SendTip = (): JSX.Element => {
                 </Typography>
               }
             />
+            <Button
+              color={ButtonColor.SECONDARY}
+              variant={ButtonVariant.OUTLINED}
+              onClick={cancelSendTip}>
+              Cancel
+            </Button>
             <Button variant={ButtonVariant.CONTAINED} onClick={handleSendTip}>
               Send my tip
             </Button>
