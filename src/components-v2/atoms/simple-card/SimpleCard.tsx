@@ -57,8 +57,8 @@ const SimpleCard = ({creator, title, imgUrl, ...props}: SimpleCardProps): JSX.El
         className={classNames(classes.indicator, {
           [classes.indicatorActivated]: selected === true,
         })}></div>
-      <CardActionArea onClick={handleClick}>
-        <div className={classes.details}>
+      <div className={classes.details}>
+        <CardActionArea className={classes.cardClickable} onClick={handleClick}>
           <CardMedia
             component={'img'}
             className={classes.cover}
@@ -74,11 +74,11 @@ const SimpleCard = ({creator, title, imgUrl, ...props}: SimpleCardProps): JSX.El
               {checkCreator(creator) ? `(you)` : ''}
             </Typography>
           </CardContent>
-          <IconButton aria-label="settings" onClick={handleClickSettings}>
-            <MoreVertIcon />
-          </IconButton>
-        </div>
-      </CardActionArea>
+        </CardActionArea>
+        <IconButton aria-label="settings" onClick={handleClickSettings}>
+          <MoreVertIcon />
+        </IconButton>
+      </div>
     </Card>
   );
 };

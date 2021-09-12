@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'row',
     },
+    cardClickable: {
+      display: 'flex',
+    },
     content: {
       flex: '1 0 auto',
       alignSelf: 'center',
