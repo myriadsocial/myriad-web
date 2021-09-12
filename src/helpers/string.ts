@@ -37,3 +37,7 @@ export const parseHashtag = (
     });
   });
 };
+
+export const validateImageUrl = (url: string) => {
+  return url.match(/^http[^\?]*.(jpg|jpeg|png)(\?(.*))?$/gim) != null;
+};
