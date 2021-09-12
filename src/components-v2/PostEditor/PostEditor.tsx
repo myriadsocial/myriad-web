@@ -22,15 +22,16 @@ import {
 import {ELEMENT_IMAGE, createImagePlugin} from '@udecode/plate-image';
 import {ToolbarImage} from '@udecode/plate-image-ui';
 import {createLinkPlugin} from '@udecode/plate-link';
-import {ToolbarLink} from '@udecode/plate-link-ui';
 import {ELEMENT_MENTION, MentionNodeData, useMentionPlugin} from '@udecode/plate-mention';
 import {HeadingToolbar} from '@udecode/plate-toolbar';
 
-import React, {useMemo, useEffect} from 'react';
+import React, {useMemo, useEffect, useState} from 'react';
 
 import Box from '@material-ui/core/Box';
-import {Image, Link} from '@material-ui/icons';
+import {Image} from '@material-ui/icons';
 
+import {Upload} from '../Upload';
+import {Modal} from '../atoms/Modal';
 import {useStyles} from './PostEditor.styles';
 import {HashtagElement} from './Render/Hashtag';
 import {MentionElement, MentionSelect, renderMentionLabel} from './Render/Mention';
@@ -47,6 +48,7 @@ export type PostEditorProps = {
   mentionable: MentionNodeData[];
   onSearchMention: (query: string) => void;
   onChange?: (value: TNode[]) => void;
+  onFileUploaded?: (file: File) => Promise<string>;
 };
 
 export const PostEditor: React.FC<PostEditorProps> = props => {
@@ -60,6 +62,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     value,
     onSearchMention,
     onChange,
+    onFileUploaded,
   } = props;
 
   const editableProps = {
@@ -133,6 +136,9 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     return pluginsBasic;
   }, [mentionPlugin]);
 
+  const [setImageUrl, setImageUrlPromise] = useState<any>();
+  const [showImageUpload, toggleImageUpload] = useState(false);
+
   useEffect(() => {
     if (mentionQuery.length > 0) {
       onSearchMention && onSearchMention(mentionQuery);
@@ -147,6 +153,41 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     onChange && onChange(value);
   };
 
+  const closeImageUpload = () => {
+    toggleImageUpload(prevState => !prevState);
+  };
+
+  const getImageUrl = async (): Promise<string> => {
+    let resolve;
+
+    toggleImageUpload(prevState => !prevState);
+
+    const promise = new Promise<string>(_resolve => {
+      resolve = _resolve;
+    });
+
+    /* @ts-expect-error */
+    promise.resolve = resolve;
+
+    setImageUrlPromise(promise);
+
+    return promise;
+  };
+
+  const handleImageSelected = async (result: File[] | string) => {
+    if (typeof result === 'string') {
+      setImageUrl.resolve(result);
+    }
+
+    if (Array.isArray(result) && onFileUploaded) {
+      const url = await onFileUploaded(result[0]);
+
+      setImageUrl.resolve(url);
+    }
+
+    toggleImageUpload(prevState => !prevState);
+  };
+
   return (
     <Box className={styles.root}>
       <Plate
@@ -157,16 +198,23 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         components={components}
         options={options}>
         <HeadingToolbar className={styles.header}>
-          <ToolbarButtonsMarks />
           <ToolbarElementList />
+          <ToolbarButtonsMarks />
           <ToolbarButtonsAlign />
           <ToolbarButtonsList />
-          <ToolbarLink icon={<Link />} />
-          <ToolbarImage icon={<Image />} />
+          <ToolbarImage icon={<Image />} getImageUrl={getImageUrl} />
         </HeadingToolbar>
 
         <MentionSelect {...getMentionSelectProps()} renderLabel={renderMentionLabel} />
       </Plate>
+
+      <Modal title="Upload file" maxWidth="xl" open={showImageUpload} onClose={closeImageUpload}>
+        <Upload title="Image" onFileSelected={handleImageSelected} accept={['image/*']} />
+      </Modal>
+
+      <Modal title="Upload file" maxWidth="xl" open={showImageUpload} onClose={closeImageUpload}>
+        <Upload title="Video" onFileSelected={handleImageSelected} accept={['video/*']} />
+      </Modal>
     </Box>
   );
 };

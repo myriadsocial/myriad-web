@@ -98,4 +98,7 @@ PostEditor.args = {
       avatar: 'https://res.cloudinary.com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg',
     });
   },
+  onFileUploaded: async (file: File) => {
+    return 'https://res.cloudinary.com/dsget80gs/lu2f67ljt0oqnaacuu7y.jpg';
+  },
 };
