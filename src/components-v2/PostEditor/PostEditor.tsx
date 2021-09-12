@@ -211,10 +211,6 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
       <Modal title="Upload file" maxWidth="xl" open={showImageUpload} onClose={closeImageUpload}>
         <Upload title="Image" onFileSelected={handleImageSelected} accept={['image/*']} />
       </Modal>
-
-      <Modal title="Upload file" maxWidth="xl" open={showImageUpload} onClose={closeImageUpload}>
-        <Upload title="Video" onFileSelected={handleImageSelected} accept={['video/*']} />
-      </Modal>
     </Box>
   );
 };
