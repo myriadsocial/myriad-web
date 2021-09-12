@@ -4,15 +4,16 @@ import MuiButton from '@material-ui/core/Button';
 
 import {ButtonSize, ButtonColor, ButtonVariant, ButtonProps} from './button.interfaces';
 
-const Button = ({
-  color = ButtonColor.PRIMARY,
-  size = ButtonSize.MEDIUM,
-  ariaLabel = 'contained-button',
-  variant = ButtonVariant.CONTAINED,
-  children,
-  isDisabled = false,
-  ...props
-}: ButtonProps): JSX.Element => {
+const Button: React.FC<ButtonProps> = props => {
+  const {
+    color = ButtonColor.PRIMARY,
+    size = ButtonSize.MEDIUM,
+    ariaLabel = 'contained-button',
+    variant = ButtonVariant.CONTAINED,
+    children,
+    isDisabled = false,
+    ...restProps
+  } = props;
   return (
     <MuiButton
       color={color}
@@ -20,7 +21,7 @@ const Button = ({
       aria-label={ariaLabel}
       disabled={isDisabled}
       variant={variant}
-      {...props}>
+      {...restProps}>
       {children}
     </MuiButton>
   );
