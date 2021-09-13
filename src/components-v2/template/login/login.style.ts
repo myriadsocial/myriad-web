@@ -22,9 +22,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     background: {
       backgroundColor: '#FFC857',
       position: 'relative',
-      // backgroundImage: `url("../../../images/background.svg")`,
-      // backgroundRepeat: 'no-repeat',
-      // backgroundSize: 'cover',
     },
     logo: {
       marginTop: '100px',
