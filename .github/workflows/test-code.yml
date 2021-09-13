@@ -45,3 +45,31 @@ jobs:
         with:
           use-quiet-mode: 'yes'
           config-file: '.github/workflows/mlc_config.json'
+
+  jira:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Login
+        uses: atlassian/gajira-login@master
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+      - name: Find issue in commit messages
+        uses: atlassian/gajira-find-issue-key@master
+        id: find-issue
+        with:
+          from: commits
+
+      - name: Transition issue
+        uses: atlassian/gajira-transition@master
+        with:
+          issue: ${{ steps.find-issue.outputs.issue }}
+          transition: "UNDER REVIEW"
