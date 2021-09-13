@@ -8,11 +8,6 @@ on:
 concurrency:
   group: main-automation
 
-env:
-  JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-  JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
-  JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-
 jobs:
   compute-build-info:
     runs-on: ubuntu-latest
@@ -169,20 +164,20 @@ jobs:
           fetch-depth: 0
 
       - name: Login
-        uses: atlassian/gajira-login@master
+        uses: atlassian/gajira-login@v2.0.0
         env:
-          JIRA_BASE_URL: ${{ env.JIRA_BASE_URL }}
-          JIRA_USER_EMAIL: ${{ env.JIRA_USER_EMAIL }}
-          JIRA_API_TOKEN: ${{ env.JIRA_API_TOKEN }}
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
       - name: Find issue in commit messages
-        uses: atlassian/gajira-find-issue-key@master
+        uses: atlassian/gajira-find-issue-key@v2.0.2
         id: find-issue
         with:
           from: commits
 
       - name: Transition issue
-        uses: atlassian/gajira-transition@master
+        uses: atlassian/gajira-transition@v2.0.2
         with:
           issue: ${{ steps.find-issue.outputs.issue }}
           transition: "READY TO TEST"
