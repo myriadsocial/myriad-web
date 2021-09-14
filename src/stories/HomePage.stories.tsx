@@ -78,15 +78,19 @@ OneItem.args = {
         flexDirection: 'column',
         rowGap: 12,
       }}>
-      <DefaultProfileHeader
-        name={DefaultProfileHeader.args?.name ?? 'Name'}
-        username={DefaultProfileHeader.args?.username ?? 'Username'}
-        avatar={
-          DefaultProfileHeader.args?.avatar ??
-          'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg'
-        }
-      />
-      <ExperienceList experiences={ExperienceList.args?.experiences ?? []} />
+      <div>
+        <DefaultProfileHeader
+          name={DefaultProfileHeader.args?.name ?? 'Name'}
+          username={DefaultProfileHeader.args?.username ?? 'Username'}
+          avatar={
+            DefaultProfileHeader.args?.avatar ??
+            'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg'
+          }
+        />
+      </div>
+      <div>
+        <ExperienceList experiences={ExperienceList.args?.experiences ?? []} />
+      </div>
     </div>
   ),
 };
