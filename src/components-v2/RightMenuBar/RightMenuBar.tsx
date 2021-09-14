@@ -37,7 +37,12 @@ export const RightMenuBar: React.FC<RightMenuBarProps> = props => {
 
   return (
     <div>
-      <TabsComponent active={iconTabs[0].id} tabs={iconTabs} onChangeTab={handleChangeTab} />
+      <TabsComponent
+        active={iconTabs[0].id}
+        tabs={iconTabs}
+        position={'left'}
+        onChangeTab={handleChangeTab}
+      />
     </div>
   );
 };
