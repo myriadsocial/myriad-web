@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: '2px 4px',
       display: 'flex',
       alignItems: 'center',
-      width: 643,
       height: 52,
       borderRadius: 10,
     },
