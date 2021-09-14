@@ -6,7 +6,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       position: 'relative',
       boxSizing: 'border-box',
       padding: '20px 30px',
-      width: '643px',
       height: '90px',
       borderRadius: '10px',
       background: theme.palette.background.paper,
