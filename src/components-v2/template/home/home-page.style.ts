@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
     },
     firstCol: {
-      width: 312,
+      minWidth: 312,
     },
 
     secondCol: {
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
 
     thirdCol: {
-      width: 312,
+      minWidth: 312,
     },
   }),
 );
