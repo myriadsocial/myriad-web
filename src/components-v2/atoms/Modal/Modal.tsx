@@ -4,6 +4,7 @@ import {IconButton, Typography} from '@material-ui/core';
 import Dialog, {DialogProps} from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+// TODO move icon to HEROICONS
 import CloseIcon from '@material-ui/icons/CloseOutlined';
 
 import {useStyles} from './Modal.styles';

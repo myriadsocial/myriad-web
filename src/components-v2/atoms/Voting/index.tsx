@@ -2,6 +2,7 @@ import React from 'react';
 
 import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
+// TODO move icon to HEROICONS
 import ForwardIcon from '@material-ui/icons/Forward';
 
 import {VoteProps} from './voting.interface';

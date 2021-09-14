@@ -5,6 +5,7 @@ import Avatar from '@material-ui/core/Avatar';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+// TODO move icon to HEROICONS
 import CropOriginalRoundedIcon from '@material-ui/icons/CropOriginalRounded';
 import SendRoundedIcon from '@material-ui/icons/SendRounded';
 import VideoCallOutlinedIcon from '@material-ui/icons/VideoCallOutlined';

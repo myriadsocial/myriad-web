@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Typography from '@material-ui/core/Typography';
+// TODO move icon to HEROICONS
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 import DateFormat from '../../../../components/common/DateFormat';
