@@ -5,12 +5,12 @@ import React from 'react';
 import {SidebarMenu} from '../components-v2/Menu/Menu.stories';
 import {DefaultRichText} from '../components-v2/Richtext/RichText.stories';
 import {SocialMedia} from '../components-v2/SocialMediaList/SocialMedia.stories';
+import {Timeline} from '../components-v2/Timeline/Timeline.stories';
 import {BalanceSummary} from '../components-v2/WalletBalance/WalletBalance.stories';
 import {HomePage} from '../components-v2/template/home/HomePage';
 import {ExperienceList} from './ExperienceList.stories';
 import {DefaultProfileHeader} from './ProfileHeader.stories';
 import {DefaultSearchBox} from './SearchBox.stories';
-import {Sort} from './Sort.stories';
 
 export default {
   title: 'UI Revamp v2.0/templates/HomePage',
@@ -62,8 +62,11 @@ OneItem.args = {
       <div style={{width: '100%'}}>
         <DefaultRichText userProfilePict={DefaultRichText.args?.userProfilePict ?? ''} />
       </div>
-      <div style={{display: 'flex', width: '100%', justifyContent: 'flex-end'}}>
-        <Sort />
+      <div style={{width: '100%'}}>
+        <Timeline
+          posts={Timeline.args?.posts ?? []}
+          anonymous={Timeline.args?.anonymous ?? false}
+        />
       </div>
     </div>
   ),
