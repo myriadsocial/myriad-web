@@ -3,6 +3,7 @@ import React from 'react';
 // TODO change Avatar to tumbnail size
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+// TODO move icon to HEROICONS
 import RedditIcon from '@material-ui/icons/Reddit';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
