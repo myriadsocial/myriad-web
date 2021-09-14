@@ -38,7 +38,7 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
     <div className={classes.root}>
       <div className={classes.rootHeader}>
         <div className={classes.myriadLogoWrapper}>
-          <MyriadPurple />
+          <MyriadPurple role="img" aria-label="Myriad purple logo" />
         </div>
         <Typography variant="h4">Hi there, welcome to Myriad!</Typography>
       </div>
