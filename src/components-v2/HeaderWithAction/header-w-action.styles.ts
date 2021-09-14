@@ -7,6 +7,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       justifyContent: 'space-between',
       width: '100%',
+      '& .MuiBox-root': {
+        paddingLeft: 0,
+        paddingRight: 24,
+        paddingTop: 24,
+        paddingBottom: 24,
+      },
     },
     actionText: {
       fontFamily: ['Mulish', 'serif'].join(','),
