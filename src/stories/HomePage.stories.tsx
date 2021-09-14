@@ -53,13 +53,13 @@ OneItem.args = {
         alignItems: 'center',
         rowGap: 12,
       }}>
-      <div>
+      <div style={{width: '100%'}}>
         <DefaultSearchBox
           onSubmit={value => console.log(value)}
           placeholder={DefaultSearchBox.args?.placeholder ?? ''}
         />
       </div>
-      <div>
+      <div style={{width: '100%'}}>
         <DefaultRichText userProfilePict={DefaultRichText.args?.userProfilePict ?? ''} />
       </div>
       <div style={{display: 'flex', width: '100%', justifyContent: 'flex-end'}}>
