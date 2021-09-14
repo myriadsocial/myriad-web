@@ -100,5 +100,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     fill: {
       fill: 'none',
     },
+    text: {
+      display: 'inline-block',
+      marginRight: '20px',
+    },
   }),
 );
