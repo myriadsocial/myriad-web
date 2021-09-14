@@ -6,6 +6,9 @@ export const useStyles = makeStyles(() =>
       width: 311,
       height: 110,
       position: 'relative',
+      '& .MuiListItem-gutters': {
+        paddingLeft: 0,
+      },
     },
   }),
 );

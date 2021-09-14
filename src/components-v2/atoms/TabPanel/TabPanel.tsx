@@ -11,7 +11,11 @@ type TabPanelProps = {
 
 const useStyles = makeStyles(() =>
   createStyles({
-    root: {},
+    root: {
+      '& .MuiBox-root': {
+        padding: '24px 0',
+      },
+    },
   }),
 );
 
