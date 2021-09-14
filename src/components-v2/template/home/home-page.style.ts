@@ -7,16 +7,16 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
     },
     firstCol: {
-      flex: `1 1 0`,
+      width: 312,
     },
 
     secondCol: {
-      flex: `1 2 0`,
+      flexGrow: 2,
       margin: 20,
     },
 
     thirdCol: {
-      flex: `2 1 0`,
+      width: 312,
     },
   }),
 );
