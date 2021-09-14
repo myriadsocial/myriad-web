@@ -5,6 +5,7 @@ import React, {useState} from 'react';
 import {IconButton} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+// TODO move icon to HEROICONS
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 import {acronym} from '../../helpers/string';
