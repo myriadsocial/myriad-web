@@ -5,14 +5,9 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from '.';
+import {useStyles, WelcomeModuleProps} from '.';
 import MyriadPurple from '../../images/Myriad-purple-logo.svg';
 import {Button, ButtonVariant, ButtonSize} from '../atoms/button/';
-
-interface WelcomeModuleProps {
-  displayName: string;
-  username: string;
-}
 
 export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
   const {displayName, username} = props;
