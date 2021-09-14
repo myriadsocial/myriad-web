@@ -8,4 +8,4 @@ interface ExperienceListProps {
   experiences: ExperienceDummy[];
 }
 
-export type {ExperienceListProps};
+export type {ExperienceDummy, ExperienceListProps};
