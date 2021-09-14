@@ -4,6 +4,7 @@ import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
 import Box, {BoxProps} from '@material-ui/core/Box';
 import {makeStyles, Theme} from '@material-ui/core/styles';
+// TODO move icon to HEROICONS
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 type BoxComponentProps = BoxProps & {

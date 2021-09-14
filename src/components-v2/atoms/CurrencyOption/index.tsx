@@ -9,6 +9,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
+// TODO move icon to HEROICONS
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import {Props} from './currencyOption.interface';
