@@ -40,7 +40,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 {user.name}
               </Typography>
               <Typography className={style.username} component="p">
-                @{user.username ? user.username : 'username'}
+                @{'username'}
               </Typography>
             </div>
           </div>
@@ -71,7 +71,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         </Typography>
         <div className={`${style.mt15} ${style.flexEnd}`}>
           <div>
-            <div style={{display: 'inline-block', marginRight: '20px'}}>
+            <div className={style.text}>
               <Typography className={`${style.username}`} component="p">
                 Post
               </Typography>
@@ -79,7 +79,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 13k
               </Typography>
             </div>
-            <div style={{display: 'inline-block', marginRight: '20px'}}>
+            <div className={style.text}>
               <Typography className={`${style.username}`} component="p">
                 Kudos
               </Typography>
@@ -87,7 +87,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 103k
               </Typography>
             </div>
-            <div style={{display: 'inline-block', marginRight: '20px'}}>
+            <div className={style.text}>
               <Typography className={`${style.username}`} component="p">
                 Friends
               </Typography>
@@ -95,7 +95,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 96
               </Typography>
             </div>
-            <div style={{display: 'inline-block', marginRight: '20px'}}>
+            <div className={style.text}>
               <Typography className={`${style.username}`} component="p">
                 Experience
               </Typography>
