@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '.';
-import MyriadPurple from '../../../storybook-static/static/media/MyriadPurple.svg';
+import MyriadPurple from '../../images/Myriad-purple-logo.svg';
 import {Button, ButtonVariant, ButtonSize} from '../atoms/button/';
 
 interface WelcomeModuleProps {
@@ -38,7 +38,7 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
     <div className={classes.root}>
       <div className={classes.rootHeader}>
         <div className={classes.myriadLogoWrapper}>
-          <img src={MyriadPurple} alt="Myriad purple logo" />
+          <MyriadPurple />
         </div>
         <Typography variant="h4">Hi there, welcome to Myriad!</Typography>
       </div>
