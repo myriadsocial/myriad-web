@@ -4,6 +4,7 @@ import {Typography} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+// TODO move icon to HEROICONS
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 // eslint-disable-next-line @typescript-eslint/ban-types

@@ -6,6 +6,7 @@ import React from 'react';
 import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
+// TODO move icon to HEROICONS
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 
 import {VotingComponent} from '../Voting';
