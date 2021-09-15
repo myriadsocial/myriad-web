@@ -15,6 +15,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     iconButton: {
       padding: 10,
+      '& .MuiSvgIcon-root': {
+        fill: 'none',
+      },
     },
     divider: {
       height: 28,
