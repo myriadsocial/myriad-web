@@ -15,6 +15,7 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
     },
     tabs: {
       minHeight: props => (props.size === 'small' ? 36 : 48),
+      borderBottom: '1px solid #E5E5E5',
 
       '& .MuiTabs-flexContainer': {
         justifyContent: props => props.position,
@@ -38,6 +39,9 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
 
       '& .MuiTabs-indicator': {
         display: props => (props.mark === 'underline' ? 'block' : 'none'),
+        height: theme.spacing(0.5),
+        borderTopLeftRadius: theme.spacing(0.25),
+        borderTopRightRadius: theme.spacing(0.25),
       },
     },
     tab: {
