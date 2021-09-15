@@ -2,8 +2,8 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {ProfileHeader} from '../../src/components-v2/profile-header/';
-import {CustomAvatarSize} from '../components-v2/atoms/avatar/';
+import {ProfileHeader} from '.';
+import {CustomAvatarSize} from '../atoms/avatar';
 
 export default {
   title: 'UI Revamp v2.0/components',
