@@ -1,5 +1,3 @@
-import {SearchIcon} from '@heroicons/react/solid';
-
 import React, {useState} from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -7,6 +5,7 @@ import InputBase from '@material-ui/core/InputBase';
 import Paper from '@material-ui/core/Paper';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
+import SearchIcon from '../../../images/Icons/magnifierIcon.svg';
 import {SearchBoxProps, SearchBoxColor, useStyles} from './';
 
 import {debounce} from 'lodash';
