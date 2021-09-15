@@ -35,7 +35,7 @@ type ExperienceEditorProps = {
 };
 
 export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
-  const {experience, people, onSave, onImageUpload} = props;
+  const {experience, people, tags, onSave, onImageUpload} = props;
   const styles = useStyles();
 
   const [newExperience, setNewExperience] = useState<Partial<Experience>>();
@@ -68,32 +68,43 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const handleTagsChange = (
     // eslint-disable-next-line @typescript-eslint/ban-types
     event: React.ChangeEvent<{}>,
-    value: (string | string[])[],
+    value: string[],
     reason: AutocompleteChangeReason,
   ) => {
     if (reason === 'remove-option') {
-      if (typeof value === 'string') {
-        setTags([value]);
-      }
-
-      if (typeof value === 'object') {
-        setTags(value.flat());
-      }
+      setTags(value);
     }
 
     if (reason === 'create-option') {
-      const createdTags: string[] = [];
-
-      if (typeof value === 'string') {
-        createdTags.push(value);
-      }
-
-      if (typeof value === 'object') {
-        createdTags.push(...value.flat());
-      }
-
-      setTags(createdTags);
+      setTags(value);
     }
+
+    if (reason === 'select-option') {
+      setTags(value);
+    }
+  };
+
+  const handlePeopleChange = (
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    event: React.ChangeEvent<{}>,
+    value: People[],
+    reason: AutocompleteChangeReason,
+  ) => {
+    if (reason === 'select-option') {
+      setNewExperience(prevExperience => ({
+        ...prevExperience,
+        people: value,
+      }));
+    }
+  };
+
+  const removeSelectedPeople = (selected: People) => () => {
+    setNewExperience(prevExperience => ({
+      ...prevExperience,
+      people: prevExperience?.people
+        ? prevExperience?.people.filter(people => people.id != selected.id)
+        : [],
+    }));
   };
 
   const saveExperience = () => {
@@ -113,7 +124,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         <OutlinedInput
           id="experience-name"
           placeholder="Experience Name"
-          value={experience?.name}
+          value={newExperience?.name}
           onChange={handleChange('name')}
           labelWidth={110}
         />
@@ -124,88 +135,111 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         <OutlinedInput
           id="experience-description"
           placeholder="Description"
-          value={experience?.description}
+          value={newExperience?.description}
           onChange={handleChange('description')}
           labelWidth={70}
         />
       </FormControl>
 
       <FormControl fullWidth variant="outlined">
+        <InputLabel htmlFor="experience-picture" shrink={true} className={styles.label}>
+          Picture
+        </InputLabel>
         <Dropzone onImageSelected={handleImageUpload} value={image} />
       </FormControl>
 
-      <FormControl fullWidth variant="outlined">
-        <Autocomplete
-          id="post-tags"
-          freeSolo
-          multiple
-          value={newTags}
-          options={[]}
-          disableClearable
-          onChange={handleTagsChange}
-          renderInput={params => (
-            <TextField
-              {...params}
-              label="Tags"
-              variant="outlined"
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
-              }}
-            />
-          )}
-        />
-      </FormControl>
+      <Autocomplete
+        id="post-tags"
+        freeSolo
+        multiple
+        value={newTags}
+        options={tags.map(tag => tag.id)}
+        disableClearable
+        onChange={handleTagsChange}
+        getOptionLabel={option => `#${option}`}
+        renderInput={params => (
+          <TextField
+            {...params}
+            label="Tags"
+            variant="outlined"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
+            }}
+          />
+        )}
+      />
 
-      <FormControl fullWidth variant="outlined">
-        <Autocomplete
-          id="post-people"
-          className={styles.people}
-          value={newExperience?.people}
-          multiple
-          options={people}
-          getOptionSelected={(option, value) => option === value}
-          getOptionLabel={option => option.name}
-          disableClearable
-          popupIcon={<SvgIcon component={SearchIcon} />}
-          renderInput={params => (
-            <TextField
-              {...params}
-              label="People"
-              placeholder="Search people here"
-              variant="outlined"
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
-              }}
+      <Autocomplete
+        id="post-people"
+        className={styles.people}
+        value={newExperience?.people}
+        multiple
+        options={people}
+        getOptionSelected={(option, value) => option === value}
+        getOptionLabel={option => option.name}
+        disableClearable
+        autoHighlight={false}
+        popupIcon={<SvgIcon component={SearchIcon} />}
+        onChange={handlePeopleChange}
+        renderTags={() => null}
+        renderInput={params => (
+          <TextField
+            {...params}
+            label="People"
+            placeholder="Search people here"
+            variant="outlined"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
+            }}
+          />
+        )}
+        renderOption={(option, state: AutocompleteRenderOptionState) => {
+          return (
+            <ListItemComponent
+              title={option.name}
+              subtitle={
+                <Typography variant="caption">
+                  5 followers on <b className={styles.social}>{option.platform}</b>
+                </Typography>
+              }
+              avatar={option.profilePictureURL}
+              size="medium"
+              action={
+                <IconButton>
+                  {state.selected ? (
+                    <SvgIcon component={XCircleIcon} color="error" />
+                  ) : (
+                    <SvgIcon component={PlusCircleIcon} />
+                  )}
+                </IconButton>
+              }
             />
-          )}
-          renderOption={(option, state: AutocompleteRenderOptionState) => {
-            return (
-              <ListItemComponent
-                title={option.name}
-                subtitle={
-                  <Typography>
-                    5 followers on <b>{option.platform}</b>
-                  </Typography>
-                }
-                avatar={option.profilePictureURL}
-                size="medium"
-                action={
-                  <IconButton>
-                    {state.selected ? (
-                      <SvgIcon component={XCircleIcon} color="error" />
-                    ) : (
-                      <SvgIcon component={PlusCircleIcon} />
-                    )}
-                  </IconButton>
-                }
-              />
-            );
-          }}
-        />
-      </FormControl>
+          );
+        }}
+      />
 
+      <div className={styles.preview}>
+        {newExperience?.people?.map(people => (
+          <ListItemComponent
+            key={people.id}
+            title={people.name}
+            subtitle={
+              <Typography variant="caption">
+                5 followers on <b className={styles.social}>{people.platform}</b>
+              </Typography>
+            }
+            avatar={people.profilePictureURL}
+            size="medium"
+            action={
+              <IconButton onClick={removeSelectedPeople(people)}>
+                <SvgIcon component={XCircleIcon} color="error" />
+              </IconButton>
+            }
+          />
+        ))}
+      </div>
       <FormControl fullWidth variant="outlined">
         <Button
           variant="contained"

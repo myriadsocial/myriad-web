@@ -280,8 +280,14 @@ const theme = createTheme({
         backgroundColor: 'none',
         border: `1px solid ${primaryPurple}`,
       },
+      label: {
+        fontSize: 14,
+        fontWeight: 600,
+        lineHeight: 18,
+      },
       deleteIcon: {
         color: '#FE3636',
+        marginTop: 2,
       },
     },
   },
