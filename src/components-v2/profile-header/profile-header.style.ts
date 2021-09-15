@@ -7,6 +7,10 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 311,
       height: 110,
 
+      '& .MuiSvgIcon-root': {
+        fill: 'none',
+      },
+
       '&::after': {
         content: '""',
         position: 'absolute',
@@ -17,20 +21,29 @@ const useStyles = makeStyles((theme: Theme) =>
         borderRadius: theme.spacing(1.25, 0, 0, 1.25),
         background: theme.palette.primary.main,
       },
+    },
 
-      '&::before': {
-        content: '""',
-        position: 'absolute',
-        top: '90%',
-        right: '50%',
-        border: `solid ${theme.palette.primary.main}`,
-        transform: `rotate(45deg)`,
-        webkitTransform: `rotate(45deg)`,
-        borderWidth: `0 3px 3px 0`,
-        padding: `2px 2px 4px 4px`,
-        marginBottom: 10,
-        display: 'inline-block',
-      },
+    vectorDownIconWrapper: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    secondRoot: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+    },
+
+    iconButtonWrapper: {
+      position: 'absolute',
+      left: 0,
+      paddingLeft: 15,
+    },
+
+    customAvatarWrapper: {
+      padding: 12,
     },
   }),
 );
