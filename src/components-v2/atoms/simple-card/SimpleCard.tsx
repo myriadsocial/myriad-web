@@ -1,3 +1,5 @@
+import {DotsVerticalIcon} from '@heroicons/react/outline';
+
 import React, {useState} from 'react';
 
 import Card from '@material-ui/core/Card';
@@ -5,9 +7,8 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import IconButton from '@material-ui/core/IconButton';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
-// TODO move icon to HEROICONS
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import {useStyles, SimpleCardProps} from './';
 
@@ -89,7 +90,7 @@ const SimpleCard = ({creator, title, imgUrl, ...props}: SimpleCardProps): JSX.El
           }}
           aria-label="settings"
           onClick={handleClickSettings}>
-          <MoreVertIcon />
+          <SvgIcon component={DotsVerticalIcon} viewBox="0 0 24 24" />
         </IconButton>
       </div>
     </Card>
