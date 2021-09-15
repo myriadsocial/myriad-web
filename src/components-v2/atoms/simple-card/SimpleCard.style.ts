@@ -4,8 +4,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
-      width: '100%',
-
+      minWidth: 311,
+      width: 'max-content',
       /* Drop shadow */
       boxShadow: `0px 2px 10px rgba(0, 0, 0, 0.05)`,
       borderRadius: 10,
