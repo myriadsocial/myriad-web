@@ -1,13 +1,14 @@
-import {BellIcon} from '@heroicons/react/outline';
-
 import React from 'react';
 
+import ButtonBase from '@material-ui/core/ButtonBase';
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 import {useTheme} from '@material-ui/core/styles';
 
 import {useStyles, ProfileHeaderProps} from '.';
+import BellIconDefault from '../../images/Icons/notif-default.svg';
+import VectorDownIcon from '../../images/Icons/vectorDownIcon.svg';
 import {BoxComponent} from '../atoms/Box';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/avatar';
 
@@ -25,16 +26,15 @@ const ProfileHeader = ({
   return (
     <div className={classes.root}>
       <BoxComponent radiusStr={BORDER_RADIUS}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-          }}>
-          <div style={{position: 'absolute', left: 0, paddingLeft: 15}}>
+        <div className={classes.secondRoot}>
+          <ButtonBase focusRipple>
+            <div className={classes.vectorDownIconWrapper}>
+              <SvgIcon component={VectorDownIcon} viewBox="0 0 24 24" />
+            </div>
+          </ButtonBase>
+          <div className={classes.iconButtonWrapper}>
             <IconButton aria-label="avatar">
-              <SvgIcon component={BellIcon} viewBox="0 0 24 24" />
+              <SvgIcon component={BellIconDefault} viewBox="0 0 24 24" />
             </IconButton>
           </div>
           <div>
@@ -43,7 +43,7 @@ const ProfileHeader = ({
               {username}
             </Typography>
           </div>
-          <div style={{padding: 12}}>
+          <div className={classes.customAvatarWrapper}>
             <CustomAvatar avatar={avatar} size={CustomAvatarSize.MEDIUM} />
           </div>
         </div>
