@@ -19,6 +19,20 @@ CreateExperience.args = {
   onImageUpload: async (files: File[]) => {
     return 'https://res.cloudinary.com/dsget80gs/lu2f67ljt0oqnaacuu7y.jpg';
   },
+  tags: [
+    {
+      id: 'crypto',
+      count: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: 'nsfw',
+      count: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ],
   people: [
     {
       id: '1',
@@ -54,7 +68,7 @@ EditExperience.args = {
     people: [],
     tags: [
       {
-        id: 'example',
+        id: 'developer',
         count: 0,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -75,6 +89,20 @@ EditExperience.args = {
       currencies: [],
     },
   },
+  tags: [
+    {
+      id: 'crypto',
+      count: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: 'nsfw',
+      count: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ],
   people: [
     {
       id: '1',
