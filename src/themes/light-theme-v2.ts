@@ -259,6 +259,31 @@ const theme = createTheme({
         fill: 'currentColor',
       },
     },
+
+    MuiFormControl: {
+      root: {
+        marginBottom: 30,
+      },
+    },
+
+    MuiListItem: {
+      container: {
+        width: '100%',
+      },
+    },
+
+    MuiChip: {
+      root: {
+        borderRadius: 5,
+        paddingLeft: 8,
+        paddingRight: 8,
+        backgroundColor: 'none',
+        border: `1px solid ${primaryPurple}`,
+      },
+      deleteIcon: {
+        color: '#FE3636',
+      },
+    },
   },
 
   props: {
