@@ -2,8 +2,8 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
+import {ExperienceList} from '../components-v2/ExperienceList/ExperienceList.stories';
 import {RightMenuBar} from '../components-v2/RightMenuBar/RightMenuBar';
-import {ExperienceList} from './ExperienceList.stories';
 
 export default {
   title: 'UI Revamp v2.0/components/Right Menu Bar',

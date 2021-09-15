@@ -1,15 +1,11 @@
 import React, {useState} from 'react';
 
+import {RightMenuBarProps} from '.';
 import ChatIcon from '../../images/Icons/ChatTabIcon.svg';
 import ExperienceIcon from '../../images/Icons/ExperienceTabIcon.svg';
 import TrendingIcon from '../../images/Icons/TrendingTabIcon.svg';
-import {ExperienceDummy} from '../ExperienceList/';
 import {ExperienceTabMenu} from '../ExperienceTabMenu/ExperienceTabMenu';
 import {TabsComponent} from '../atoms/Tabs/';
-
-interface RightMenuBarProps {
-  experiences: ExperienceDummy[];
-}
 
 export const RightMenuBar: React.FC<RightMenuBarProps> = props => {
   const {experiences} = props;

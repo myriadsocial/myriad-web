@@ -2,7 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {SearchBox} from '../../src/components-v2/atoms/search';
+import {SearchBox} from '.';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Search Box',

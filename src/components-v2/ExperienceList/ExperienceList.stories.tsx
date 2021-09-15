@@ -2,7 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import SimpleList from '../components-v2/ExperienceList/ExperienceList';
+import SimpleList from './ExperienceList';
 
 export default {
   title: 'UI Revamp v2.0/components/ExperienceList',
