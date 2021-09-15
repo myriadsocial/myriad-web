@@ -71,6 +71,7 @@ const borderPurple = '#DECCFF';
 //Font weight
 const textRegular = 400;
 const textMedium = 600;
+const textBold = 700;
 
 //Font size
 const textXs = 10;
@@ -124,6 +125,7 @@ const theme = createTheme({
     fontFamily: ['Mulish', 'serif'].join(','),
     fontWeightRegular: textRegular,
     fontWeightMedium: textMedium,
+    fontWeightBold: textBold,
     subtitle1: {
       fontSize: textXs,
     },
