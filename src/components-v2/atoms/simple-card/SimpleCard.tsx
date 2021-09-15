@@ -59,7 +59,13 @@ const SimpleCard = ({creator, title, imgUrl, ...props}: SimpleCardProps): JSX.El
           [classes.indicatorActivated]: selected === true,
         })}></div>
       <div className={classes.details}>
-        <CardActionArea className={classes.cardClickable} onClick={handleClick}>
+        <CardActionArea
+          disableRipple
+          classes={{
+            root: classes.actionArea,
+            focusHighlight: classes.focusHighlight,
+          }}
+          onClick={handleClick}>
           <CardMedia
             component={'img'}
             className={classes.cover}
@@ -76,7 +82,13 @@ const SimpleCard = ({creator, title, imgUrl, ...props}: SimpleCardProps): JSX.El
             </Typography>
           </CardContent>
         </CardActionArea>
-        <IconButton aria-label="settings" onClick={handleClickSettings}>
+        <IconButton
+          disableRipple
+          classes={{
+            root: classes.iconButton,
+          }}
+          aria-label="settings"
+          onClick={handleClickSettings}>
           <MoreVertIcon />
         </IconButton>
       </div>
