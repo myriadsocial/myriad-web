@@ -2,15 +2,15 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {SidebarMenu} from '../components-v2/Menu/Menu.stories';
-import {DefaultRichText} from '../components-v2/Richtext/RichText.stories';
-import {SocialMedia} from '../components-v2/SocialMediaList/SocialMedia.stories';
-import {Timeline} from '../components-v2/Timeline/Timeline.stories';
-import {BalanceSummary} from '../components-v2/WalletBalance/WalletBalance.stories';
-import {HomePage} from '../components-v2/template/home/HomePage';
-import {ExperienceList} from './ExperienceList.stories';
-import {DefaultProfileHeader} from './ProfileHeader.stories';
-import {DefaultSearchBox} from './SearchBox.stories';
+import {ExperienceList} from '../../ExperienceList/ExperienceList.stories';
+import {SidebarMenu} from '../../Menu/Menu.stories';
+import {DefaultRichText} from '../../Richtext/RichText.stories';
+import {SocialMedia} from '../../SocialMediaList/SocialMedia.stories';
+import {Timeline} from '../../Timeline/Timeline.stories';
+import {BalanceSummary} from '../../WalletBalance/WalletBalance.stories';
+import {DefaultSearchBox} from '../../atoms/search/SearchBox.stories';
+import {DefaultProfileHeader} from '../../profile-header/ProfileHeader.stories';
+import {HomePage} from './HomePage';
 
 export default {
   title: 'UI Revamp v2.0/templates/HomePage',
