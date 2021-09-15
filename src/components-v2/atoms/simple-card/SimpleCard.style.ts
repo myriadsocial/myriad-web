@@ -9,6 +9,14 @@ const useStyles = makeStyles((theme: Theme) =>
       /* Drop shadow */
       boxShadow: `0px 2px 10px rgba(0, 0, 0, 0.05)`,
       borderRadius: 10,
+
+      '& .MuiCardActionArea-focusVisible': {
+        backgroundColor: '#FFF',
+      },
+
+      '&:hover': {
+        backgroundColor: '#FFF',
+      },
     },
     activated: {
       border: `1px solid #6E3FC3`,
@@ -27,8 +35,17 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'row',
     },
-    cardClickable: {
+    actionArea: {
       display: 'flex',
+      '&:hover $focusHighlight': {
+        opacity: 0,
+      },
+    },
+    focusHighlight: {},
+    iconButton: {
+      '&:hover': {
+        backgroundColor: 'transparent',
+      },
     },
     content: {
       flex: '1 0 auto',
