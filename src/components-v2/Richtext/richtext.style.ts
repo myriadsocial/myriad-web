@@ -32,6 +32,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     action: {
       padding: 0,
+      '& .MuiSvgIcon-root': {
+        fill: 'none',
+        fontSize: 30,
+      },
     },
     screen: {
       width: '100%',
