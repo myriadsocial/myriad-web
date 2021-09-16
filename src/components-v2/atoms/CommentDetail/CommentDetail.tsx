@@ -122,7 +122,8 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
                 onClick={handleOpenReply}
                 classes={{root: style.button}}
                 size="small"
-                variant="text">
+                variant="text"
+              >
                 Reply
               </Button>
             )}
@@ -130,21 +131,24 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
               classes={{root: style.button}}
               size="small"
               variant="text"
-              onClick={handleSendTip}>
+              onClick={handleSendTip}
+            >
               Send tip
             </Button>
             <Button
               classes={{root: style.button}}
               size="small"
               variant="text"
-              onClick={handleOpenTipHistory}>
+              onClick={handleOpenTipHistory}
+            >
               Tip history
             </Button>
             <Button
               classes={{root: style.button}}
               size="small"
               variant="text"
-              onClick={handleReport}>
+              onClick={handleReport}
+            >
               Report
             </Button>
           </CardActions>
