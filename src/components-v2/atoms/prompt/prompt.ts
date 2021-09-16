@@ -1,5 +1,6 @@
 export type Prompt = {
-  togglePromt: () => void;
+  onConfirm: () => void;
+  onCancel: () => void;
   open: boolean;
   variant?: 'sure' | 'careful' | 'success';
 };
