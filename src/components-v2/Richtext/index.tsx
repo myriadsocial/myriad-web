@@ -1,12 +1,12 @@
+import {PlusCircleIcon} from '@heroicons/react/outline';
 import {action} from '@storybook/addon-actions';
 
 import React, {useState} from 'react';
 
 import {IconButton} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-// TODO move icon to HEROICONS
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 import {acronym} from '../../helpers/string';
 import {Props} from './richText.interface';
@@ -44,7 +44,7 @@ export const RichTextComponent: React.FC<Props> = props => {
           />
         </div>
         <IconButton color="primary" size="medium" className={style.action}>
-          <AddCircleOutlineIcon fontSize="large" color="primary" />
+          <SvgIcon classes={{root: style.fill}} component={PlusCircleIcon} viewBox="0 0 24 24" />
         </IconButton>
       </div>
       <div
