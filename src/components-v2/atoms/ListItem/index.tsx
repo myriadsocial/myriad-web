@@ -14,7 +14,7 @@ type ListItemComponentProps = ListItemProps & {
   icon?: any;
   avatar?: string;
   variant?: AvatarProps['variant'];
-  size?: 'small' | 'medium' | 'large';
+  size?: 'tiny' | 'small' | 'medium' | 'large';
   title: string;
   subtitle?: string | React.ReactNode;
   action?: string | React.ReactNode;
@@ -39,6 +39,10 @@ const useStyles = makeStyles((theme: Theme) =>
     active: {
       background: theme.palette.secondary.main,
       borderRadius: 6,
+    },
+    tiny: {
+      width: 12,
+      height: 12,
     },
     small: {
       width: theme.spacing(3.75),
