@@ -15,7 +15,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '23px',
       letterSpacing: '0em',
     },
-    action: {},
     item: {
       paddingLeft: theme.spacing(0.5),
       paddingRight: theme.spacing(0.5),
@@ -29,7 +28,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginRight: 16,
       background: '#424242',
     },
-    list: {},
     link: {textDecoration: 'none'},
     name: {
       fontSize: '16px',
@@ -41,18 +39,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '15.06px',
       fontWeight: 400,
     },
-    button: {
-      width: 'auto',
-      '& .MuiSvgIcon-root': {
-        fill: 'none',
-      },
-    },
+    button: {width: 'auto'},
+    fill: {fill: 'none'},
     buttonText: {
       fontWeight: 600,
       fontSize: '14px',
     },
-    error: {
-      color: '#FE3636',
-    },
+    error: {color: '#FE3636'},
   }),
 );
