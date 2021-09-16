@@ -5,7 +5,7 @@ type VotingStyleProp = {
   size: 'small' | 'medium';
 };
 
-export const useStyles = makeStyles<Theme, VotingStyleProp>(() =>
+export const useStyles = makeStyles<Theme, VotingStyleProp>(theme =>
   createStyles({
     root: {
       display: 'inline-block',
@@ -22,6 +22,18 @@ export const useStyles = makeStyles<Theme, VotingStyleProp>(() =>
       '& .MuiSvgIcon-fontSizeLarge': {
         fontSize: props => (props.size === 'small' ? 24 : 32),
       },
+    },
+    mr1: {
+      marginRight: props => (props.variant === 'row' ? theme.spacing(0.5) : ''),
+    },
+    fill: {
+      fill: 'none',
+    },
+    red: {
+      color: 'red',
+    },
+    default: {
+      color: 'rgba(0, 0, 0, 0.54)',
     },
   }),
 );
