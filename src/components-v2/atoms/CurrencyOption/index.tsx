@@ -95,8 +95,11 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
               onClick={() => handleSelect(item.tokenSymbol)}>
               <div className={style.flex}>
                 <div className={style.tokenColumn}>
-                  <Avatar className={`${style.avatar} ${style.text}`} alt={'aUSD'} src={''}>
-                    {item.tokenImage}
+                  <Avatar
+                    className={`${style.avatar} ${style.text}`}
+                    alt={'aUSD'}
+                    src={item.tokenImage}>
+                    {item.tokenSymbol}
                   </Avatar>
                   <Typography color="textSecondary">{item.tokenSymbol}</Typography>
                 </div>
