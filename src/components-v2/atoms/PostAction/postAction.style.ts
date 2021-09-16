@@ -22,5 +22,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     text: {
       fontSize: '12px',
     },
+    fill: {
+      fill: 'none',
+    },
   }),
 );

@@ -26,8 +26,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
     },
     avatar: {
-      width: theme.spacing(1.5),
-      height: theme.spacing(1.5),
+      width: theme.spacing(2),
+      height: theme.spacing(2),
       marginRight: theme.spacing(1),
     },
     text: {
