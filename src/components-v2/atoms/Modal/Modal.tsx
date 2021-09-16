@@ -1,15 +1,15 @@
+import {XCircleIcon} from '@heroicons/react/outline';
+
 import React from 'react';
 
-import {IconButton, Typography} from '@material-ui/core';
+import {IconButton, SvgIcon, Typography} from '@material-ui/core';
 import Dialog, {DialogProps} from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-// TODO move icon to HEROICONS
-import CloseIcon from '@material-ui/icons/CloseOutlined';
 
 import {useStyles} from './Modal.styles';
 
-type ModalProps = DialogProps & {
+export type ModalProps = DialogProps & {
   title: string;
   subtitle?: string;
   children: React.ReactNode;
@@ -36,7 +36,7 @@ export const Modal: React.FC<ModalProps> = props => {
           size="small"
           className={styles.close}
           onClick={onClose}>
-          <CloseIcon color="primary" />
+          <SvgIcon component={XCircleIcon} color="primary" fontSize="medium" />
         </IconButton>
       </DialogTitle>
       <DialogContent> {children} </DialogContent>
