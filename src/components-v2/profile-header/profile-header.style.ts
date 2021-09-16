@@ -24,9 +24,20 @@ const useStyles = makeStyles((theme: Theme) =>
     },
 
     vectorDownIconWrapper: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+      position: 'absolute',
+      textAlign: 'center',
+      width: 311,
+      top: '80%',
+    },
+
+    downIconButton: {
+      width: 10,
+      height: 7,
+    },
+
+    downSvgIcon: {
+      width: 10,
+      height: 7,
     },
 
     secondRoot: {
