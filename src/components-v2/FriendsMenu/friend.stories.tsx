@@ -2,7 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {FriendComponent} from './friend';
+import {FriendComponent} from './friendMenu';
 
 export default {
   title: 'UI Revamp v2.0/components/Friend',
