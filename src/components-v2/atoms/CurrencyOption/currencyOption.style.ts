@@ -5,6 +5,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: '200px',
       borderRadius: '10px',
+      marginLeft: '-20px',
     },
     header: {
       boxSizing: 'border-box',
@@ -40,6 +41,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '20px',
       paddingLeft: theme.spacing(1),
       paddingRight: theme.spacing(1),
+    },
+    hover: {
+      '&:hover': {
+        backgroundColor: 'rgba(255, 200, 87, 0.15)',
+      },
     },
   }),
 );

@@ -1,3 +1,4 @@
+import {ChevronDownIcon} from '@heroicons/react/solid';
 import {SearchIcon} from '@heroicons/react/solid';
 
 import React, {useState} from 'react';
@@ -9,8 +10,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
-// TODO move icon to HEROICONS
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import {Props} from './currencyOption.interface';
 import {useStyles} from './currencyOption.style';
@@ -58,7 +57,7 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
       <Typography component="span">Change currency</Typography>
 
       <IconButton style={{padding: 0}} onClick={handleClick} color="primary" aria-label="expand">
-        <ExpandMoreIcon />
+        <SvgIcon component={ChevronDownIcon} viewBox="0 0 20 20" />
       </IconButton>
       <Menu
         classes={{
@@ -90,7 +89,10 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
         </div>
         {currencies &&
           currencies.map(item => (
-            <MenuItem key={item.key} onClick={() => handleSelect(item.tokenSymbol)}>
+            <MenuItem
+              classes={{root: style.hover}}
+              key={item.key}
+              onClick={() => handleSelect(item.tokenSymbol)}>
               <div className={style.flex}>
                 <div className={style.tokenColumn}>
                   <Avatar className={`${style.avatar} ${style.text}`} alt={'aUSD'} src={''}>

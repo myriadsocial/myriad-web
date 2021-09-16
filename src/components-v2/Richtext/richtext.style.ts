@@ -42,5 +42,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderRadius: 8,
       cursor: 'pointer',
     },
+    fill: {
+      fill: 'none',
+      fontSize: '35px',
+    },
   }),
 );
