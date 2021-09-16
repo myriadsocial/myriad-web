@@ -16,6 +16,7 @@ const Button: React.FC<ButtonProps> = props => {
   } = props;
   return (
     <MuiButton
+      disableRipple
       color={color}
       size={size}
       aria-label={ariaLabel}

@@ -37,6 +37,7 @@ const neutral20 = '#F5F5F5';
 const neutral30 = '#EDEDED';
 const neutral50 = '#C2C2C2';
 const neutral70 = '#757575';
+const neutral90 = '#404040';
 
 //Primary colors
 const primaryPurple = '#7342CC';
@@ -234,6 +235,16 @@ const theme = createTheme({
       outlinedSecondary: {
         border: `1px solid ${primaryOrange}`,
         backgroundColor: '#FFF',
+        color: neutral90,
+        '&:hover': {
+          backgroundColor: '#FFC85733',
+          border: `2px solid ${primaryOrange}`,
+        },
+        '&:active': {
+          backgroundColor: '#EBCF7A',
+          border: `2px solid ${primaryOrange}`,
+        },
+        '&:disabled': DISABLED_PROPS,
       },
     },
     MuiIconButton: {
