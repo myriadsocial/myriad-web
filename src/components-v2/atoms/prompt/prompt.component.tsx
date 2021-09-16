@@ -1,3 +1,6 @@
+import {CheckCircleIcon} from '@heroicons/react/solid';
+import {ExclamationCircleIcon} from '@heroicons/react/solid';
+import {ExclamationIcon} from '@heroicons/react/solid';
 import {action} from '@storybook/addon-actions';
 
 import React from 'react';
@@ -7,10 +10,6 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
-// TODO move icon to HEROICONS
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ErrorIcon from '@material-ui/icons/Error';
-import WarningIcon from '@material-ui/icons/Warning';
 
 import {Prompt} from './prompt';
 import {useStyles} from './prompt.style';
@@ -26,7 +25,7 @@ export const PromptComponent: React.FC<Prompt> = ({togglePromt, open, variant = 
           style={{color: '#FFD24D'}}
           fontSize="inherit"
           color="inherit">
-          <WarningIcon />
+          <ExclamationIcon />
         </SvgIcon>
         <Typography variant="h5">Are you sure?</Typography>
         <Typography className={`${style.text} ${style['m-vertical1']}`} variant="body1">
@@ -56,7 +55,7 @@ export const PromptComponent: React.FC<Prompt> = ({togglePromt, open, variant = 
     return (
       <div className={style.prompt}>
         <SvgIcon className={style.icon} fontSize="inherit" color="error">
-          <ErrorIcon />
+          <ExclamationCircleIcon />
         </SvgIcon>
         <Typography variant="h5">Careful!</Typography>
         <Typography className={`${style.text} ${style['m-vertical1']}`} variant="body1">

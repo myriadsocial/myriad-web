@@ -1,4 +1,4 @@
-import {ChevronDownIcon} from '@heroicons/react/outline';
+import {ChevronDownIcon} from '@heroicons/react/solid';
 
 import React, {useState} from 'react';
 
@@ -11,9 +11,7 @@ import {makeStyles, Theme} from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   action: {
-    '& .MuiSvgIcon-root': {
-      fill: 'none',
-    },
+    paddingLeft: theme.spacing(1),
   },
 }));
 
