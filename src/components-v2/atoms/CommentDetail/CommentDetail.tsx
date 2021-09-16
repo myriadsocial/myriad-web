@@ -50,6 +50,8 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
           </CardContent>
           <CardActions disableSpacing>
             <VotingComponent
+              isUpVote={true}
+              isDownVote={false}
               variant="row"
               vote={1}
               size="small"
