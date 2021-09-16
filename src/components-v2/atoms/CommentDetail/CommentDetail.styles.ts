@@ -10,6 +10,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(0, 0.5),
       color: theme.palette.text.secondary,
       fontSize: 10,
+      '& .MuiSvgIcon-root': {
+        fill: 'red',
+      },
     },
     content: {
       padding: theme.spacing(1, 2),

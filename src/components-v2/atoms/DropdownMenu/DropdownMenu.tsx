@@ -1,11 +1,12 @@
+import {ChevronDownIcon} from '@heroicons/react/solid';
+
 import React, {useState} from 'react';
 
 import {Typography} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-// TODO move icon to HEROICONS
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 import {useStyles} from './DropdownMenu.styles';
 import {MenuOptions} from './DropdownMenu.types';
@@ -59,7 +60,9 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
         color="primary"
         aria-label="expand"
         className={styles.expand}>
-        <ExpandMoreIcon />
+        <SvgIcon fontSize="inherit" color="inherit">
+          <ChevronDownIcon />
+        </SvgIcon>
       </IconButton>
 
       <Menu
