@@ -8,7 +8,6 @@ import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import ChatBubbleOutlineIcon from '../../../images/Icons/ChatBubbleOutlineIcon.svg';
 import {VotingComponent} from '../Voting';
 import {useStyles} from './postAction.style';
 

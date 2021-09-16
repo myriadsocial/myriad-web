@@ -47,6 +47,5 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: '14px',
     },
     error: {color: '#FE3636'},
-    list: {},
   }),
 );
