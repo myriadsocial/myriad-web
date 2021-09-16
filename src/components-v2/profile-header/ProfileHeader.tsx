@@ -1,6 +1,5 @@
 import React from 'react';
 
-import ButtonBase from '@material-ui/core/ButtonBase';
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
@@ -23,15 +22,23 @@ const ProfileHeader = ({
   //CONSTANTS
   const BORDER_RADIUS = theme.spacing(0, 0, 2.5, 2.5);
 
+  const handleMenuProfileHeader = () => {
+    console.log('opening menu!');
+  };
+
   return (
     <div className={classes.root}>
+      <div className={classes.vectorDownIconWrapper}>
+        <IconButton
+          centerRipple
+          disableRipple
+          className={classes.downIconButton}
+          onClick={handleMenuProfileHeader}>
+          <SvgIcon className={classes.downSvgIcon} component={VectorDownIcon} viewBox="0 0 10 7" />
+        </IconButton>
+      </div>
       <BoxComponent radiusStr={BORDER_RADIUS}>
         <div className={classes.secondRoot}>
-          <ButtonBase focusRipple>
-            <div className={classes.vectorDownIconWrapper}>
-              <SvgIcon component={VectorDownIcon} viewBox="0 0 24 24" />
-            </div>
-          </ButtonBase>
           <div className={classes.iconButtonWrapper}>
             <IconButton aria-label="avatar">
               <SvgIcon component={BellIconDefault} viewBox="0 0 24 24" />
