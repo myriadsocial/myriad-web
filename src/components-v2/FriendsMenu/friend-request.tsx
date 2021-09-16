@@ -28,7 +28,7 @@ export const FriendRequestComponent: React.FC = () => {
   return (
     <div>
       <SearchComponent onSubmit={handleSubmit} placeholder={'Search friend'} />
-      <List className={style.list}>
+      <List>
         <ListItem className={style.item} alignItems="center">
           <ListItemAvatar>
             <Avatar className={style.avatar} alt={'name'} src={''}>
@@ -52,14 +52,22 @@ export const FriendRequestComponent: React.FC = () => {
               className={style.button}
               color="primary"
               variant="text"
-              startIcon={<SvgIcon component={CheckCircleIcon} viewBox="0 0 24 24" />}>
+              startIcon={
+                <SvgIcon
+                  classes={{root: style.fill}}
+                  component={CheckCircleIcon}
+                  viewBox="0 0 24 24"
+                />
+              }>
               <Typography className={style.buttonText}>Accept</Typography>
             </Button>
             <Button
               className={`${style.button} ${style.error}`}
               color="inherit"
               variant="text"
-              startIcon={<SvgIcon component={XCircleIcon} viewBox="0 0 24 24" />}>
+              startIcon={
+                <SvgIcon classes={{root: style.fill}} component={XCircleIcon} viewBox="0 0 24 24" />
+              }>
               <Typography className={style.buttonText}>Decline</Typography>
             </Button>
           </ListItemSecondaryAction>
