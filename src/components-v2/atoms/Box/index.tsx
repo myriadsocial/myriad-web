@@ -1,11 +1,12 @@
+import {ChevronRightIcon} from '@heroicons/react/outline';
+
 import React from 'react';
 
 import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
 import Box, {BoxProps} from '@material-ui/core/Box';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import {makeStyles, Theme} from '@material-ui/core/styles';
-// TODO move icon to HEROICONS
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 type BoxComponentProps = BoxProps & {
   title?: string;
@@ -29,6 +30,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   action: {
     padding: 0,
+    '& .MuiSvgIcon-root': {
+      fill: 'none',
+    },
   },
 }));
 
@@ -43,7 +47,7 @@ export const BoxComponent: React.FC<BoxComponentProps> = props => {
           <Typography variant="h4">{title}</Typography>
 
           <IconButton color="primary" size="medium" className={styles.action}>
-            <ChevronRightIcon fontSize="medium" />
+            <SvgIcon component={ChevronRightIcon} viewBox="0 0 24 24" />
           </IconButton>
         </div>
       )}
