@@ -1,6 +1,6 @@
 import '@fontsource/mulish';
 
-import {createTheme} from '@material-ui/core/styles';
+import {createTheme, alpha} from '@material-ui/core/styles';
 
 declare module '@material-ui/core/styles' {
   interface Theme {
@@ -288,6 +288,14 @@ const theme = createTheme({
       deleteIcon: {
         color: '#FE3636',
         marginTop: 2,
+      },
+    },
+
+    MuiMenuItem: {
+      root: {
+        '&:hover': {
+          backgroundColor: alpha('#FFC857', 0.15),
+        },
       },
     },
   },

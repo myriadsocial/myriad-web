@@ -17,6 +17,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       position: 'absolute',
       right: 30,
       top: 30,
+
+      '& .MuiSvgIcon-colorPrimary': {
+        fill: 'none',
+      },
     },
   }),
 );
