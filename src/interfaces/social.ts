@@ -1,4 +1,5 @@
 import {BaseModel} from './base.interface';
+import {People} from './people';
 
 export enum SocialsEnum {
   FACEBOOK = 'facebook',
@@ -17,4 +18,6 @@ export interface SocialMedia extends BaseModel {
   platform: SocialsEnum;
   peopleId: string;
   userId: string;
+
+  people?: People;
 }

@@ -1,7 +1,6 @@
 import {CheckCircleIcon} from '@heroicons/react/solid';
 import {ExclamationCircleIcon} from '@heroicons/react/solid';
 import {ExclamationIcon} from '@heroicons/react/solid';
-import {action} from '@storybook/addon-actions';
 
 import React from 'react';
 
@@ -14,7 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import {Prompt} from './prompt';
 import {useStyles} from './prompt.style';
 
-export const PromptComponent: React.FC<Prompt> = ({togglePromt, open, variant = 'careful'}) => {
+export const PromptComponent: React.FC<Prompt> = props => {
+  const {onConfirm, onCancel, open, variant = 'careful'} = props;
+
   const style = useStyles();
 
   const Sure = () => {
@@ -32,18 +33,10 @@ export const PromptComponent: React.FC<Prompt> = ({togglePromt, open, variant = 
           Experience deleted can’t be restored
         </Typography>
         <div className={`${style['flex-center']} ${style['m-vertical1']}`}>
-          <Button
-            size="small"
-            variant="outlined"
-            onClick={action('Primary button clicked')}
-            color="primary">
+          <Button size="small" variant="outlined" onClick={onCancel} color="primary">
             No, keep experience
           </Button>
-          <Button
-            size="small"
-            variant="contained"
-            onClick={action('Primary button clicked')}
-            color="primary">
+          <Button size="small" variant="contained" onClick={onConfirm} color="primary">
             Yes, delete experience
           </Button>
         </div>
@@ -62,18 +55,10 @@ export const PromptComponent: React.FC<Prompt> = ({togglePromt, open, variant = 
           This action cannot be undone
         </Typography>
         <div className={`${style['flex-center']} ${style['m-vertical1']}`}>
-          <Button
-            size="small"
-            variant="outlined"
-            onClick={action('Primary button clicked')}
-            color="primary">
+          <Button size="small" variant="outlined" onClick={onCancel} color="primary">
             No, let me rethink
           </Button>
-          <Button
-            size="small"
-            variant="contained"
-            onClick={action('Primary button clicked')}
-            color="primary">
+          <Button size="small" variant="contained" onClick={onConfirm} color="primary">
             Yes, proceed to delete
           </Button>
         </div>
@@ -96,11 +81,7 @@ export const PromptComponent: React.FC<Prompt> = ({togglePromt, open, variant = 
           Tip to Jenny Chang sent successfully
         </Typography>
         <div className={`${style['flex-center']} ${style['m-vertical1']}`}>
-          <Button
-            size="small"
-            variant="contained"
-            onClick={action('Primary button clicked')}
-            color="primary">
+          <Button size="small" variant="contained" onClick={onConfirm} color="primary">
             Return
           </Button>
         </div>
@@ -111,7 +92,7 @@ export const PromptComponent: React.FC<Prompt> = ({togglePromt, open, variant = 
   return (
     <Dialog
       className={style.root}
-      onClose={togglePromt}
+      onClose={onCancel}
       aria-labelledby="simple-dialog-title"
       open={open}>
       <DialogContent>

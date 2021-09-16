@@ -15,4 +15,6 @@ export const Prompt = Template.bind({});
 Prompt.args = {
   open: true,
   variant: 'careful',
+  onCancel: console.log,
+  onConfirm: console.log,
 };
