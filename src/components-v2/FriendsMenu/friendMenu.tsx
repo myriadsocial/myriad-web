@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 import {TabsComponent} from '../atoms/Tabs/Tabs';
+import {friends} from './default';
 import {FriendListComponent} from './friend-list';
 import {FriendRequestComponent} from './friend-request';
 import {useStyles} from './friend.style';
@@ -14,7 +15,7 @@ export const FriendComponent: React.FC = () => {
     {
       id: '0',
       title: 'Friend List',
-      component: <FriendListComponent background />,
+      component: <FriendListComponent background friends={friends} />,
     },
     {
       id: '1',
