@@ -15,6 +15,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '23px',
       letterSpacing: '0em',
     },
+    list: {},
     item: {
       paddingLeft: theme.spacing(0.5),
       paddingRight: theme.spacing(0.5),
