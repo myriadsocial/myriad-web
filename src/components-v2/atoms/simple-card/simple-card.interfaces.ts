@@ -6,9 +6,14 @@ interface SimpleCardProps {
   imgUrl: string;
 
   /*
-   * creator if this experience
+   * creator of this experience
    */
   creator: string;
+
+  /*
+   * is the card selectable
+   */
+  isSelectable?: boolean;
 
   onClick: () => void;
 }

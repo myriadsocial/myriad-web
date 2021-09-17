@@ -14,7 +14,13 @@ import {useStyles, SimpleCardProps} from './';
 
 import classNames from 'classnames';
 
-const SimpleCard = ({creator, title, imgUrl, ...props}: SimpleCardProps): JSX.Element => {
+const SimpleCard = ({
+  creator,
+  title,
+  imgUrl,
+  isSelectable,
+  ...props
+}: SimpleCardProps): JSX.Element => {
   const classes = useStyles();
 
   const [selected, setSelected] = useState(false);
@@ -60,39 +66,60 @@ const SimpleCard = ({creator, title, imgUrl, ...props}: SimpleCardProps): JSX.El
           [classes.indicatorActivated]: selected === true,
         })}></div>
       <div className={classes.details}>
-        <CardActionArea
-          disableRipple
-          classes={{
-            root: classes.actionArea,
-            focusHighlight: classes.focusHighlight,
-          }}
-          onClick={handleClick}>
-          <CardMedia
-            component={'img'}
-            className={classes.cover}
-            image={imgUrl}
-            title={`${parseImageFilename(imgUrl)} Experience image`}
-          />
-          <CardContent className={classes.content}>
-            <Typography variant="body1">{title}</Typography>
-            <Typography variant="caption" color="primary">
-              {creator}
-            </Typography>
-            <Typography variant="caption" color="textSecondary">
-              {checkCreator(creator) ? `(you)` : ''}
-            </Typography>
+        {isSelectable && (
+          <CardActionArea
+            disableRipple
+            classes={{
+              root: classes.actionArea,
+              focusHighlight: classes.focusHighlight,
+            }}
+            onClick={handleClick}>
+            <CardMedia
+              component={'img'}
+              className={classes.cover}
+              image={imgUrl}
+              title={`${parseImageFilename(imgUrl)} Experience image`}
+            />
+            <CardContent className={classes.content}>
+              <Typography variant="body1">{title}</Typography>
+              <Typography variant="caption" color="primary">
+                {creator}
+              </Typography>
+              <Typography variant="caption" color="textSecondary">
+                {checkCreator(creator) ? `(you)` : ''}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        )}
+        {!isSelectable && (
+          <CardContent className={classes.staticContent}>
+            <CardMedia
+              component={'img'}
+              className={classes.cover}
+              image={imgUrl}
+              title={`${parseImageFilename(imgUrl)} Experience image`}
+            />
+            <div className={classes.content}>
+              <Typography variant="body1">{title}</Typography>
+              <Typography variant="caption" color="primary">
+                {creator}
+              </Typography>
+              <Typography variant="caption" color="textSecondary">
+                {checkCreator(creator) ? `(you)` : ''}
+              </Typography>
+            </div>
           </CardContent>
-        </CardActionArea>
-        <IconButton
-          disableRipple
-          classes={{
-            root: classes.iconButton,
-          }}
-          aria-label="settings"
-          onClick={handleClickSettings}>
-          <SvgIcon component={DotsVerticalIcon} viewBox="0 0 24 24" />
-        </IconButton>
+        )}
       </div>
+      <IconButton
+        disableRipple
+        classes={{
+          root: classes.iconButton,
+        }}
+        aria-label="settings"
+        onClick={handleClickSettings}>
+        <SvgIcon component={DotsVerticalIcon} viewBox="0 0 24 24" />
+      </IconButton>
     </Card>
   );
 };
