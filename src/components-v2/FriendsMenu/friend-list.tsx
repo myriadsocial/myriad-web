@@ -13,7 +13,12 @@ import {acronym} from '../../helpers/string';
 import SearchComponent from '../atoms/search/SearchBox';
 import {useStyles} from './friend.style';
 
-export const FriendListComponent: React.FC = () => {
+type Props = {
+  background?: boolean;
+};
+
+export const FriendListComponent: React.FC<Props> = props => {
+  const {background = false} = props;
   const style = useStyles();
   const handleSubmit = () => {
     return;
@@ -23,7 +28,10 @@ export const FriendListComponent: React.FC = () => {
     <div>
       <SearchComponent onSubmit={handleSubmit} placeholder={'Search friend'} />
       <List className={style.list}>
-        <ListItem className={style.item} alignItems="center">
+        <ListItem
+          classes={{root: background ? style.backgroundEven : ''}}
+          className={style.item}
+          alignItems="center">
           <ListItemAvatar>
             <Avatar className={style.avatar} alt={'name'} src={''}>
               {acronym('Jenny Chang')}
@@ -42,7 +50,10 @@ export const FriendListComponent: React.FC = () => {
             </Typography>
           </ListItemText>
         </ListItem>
-        <ListItem className={style.item} alignItems="center">
+        <ListItem
+          classes={{root: background ? style.backgroundEven : ''}}
+          className={style.item}
+          alignItems="center">
           <ListItemAvatar>
             <Avatar className={style.avatar} alt={'name'} src={''}>
               {acronym('Erin Herwitz')}

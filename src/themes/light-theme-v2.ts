@@ -155,17 +155,8 @@ const theme = createTheme({
 
   overrides: {
     MuiListItem: {
-      root: {
-        '&:nth-child(even)': {
-          backgroundColor: '#F2F2F4',
-        },
-      },
       container: {
         width: '100%',
-
-        '&:nth-child(even)': {
-          backgroundColor: '#F2F2F4',
-        },
       },
     },
     MuiButton: {

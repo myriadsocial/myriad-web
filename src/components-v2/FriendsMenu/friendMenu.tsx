@@ -14,7 +14,7 @@ export const FriendComponent: React.FC = () => {
     {
       id: '0',
       title: 'Friend List',
-      component: <FriendListComponent />,
+      component: <FriendListComponent background />,
     },
     {
       id: '1',
