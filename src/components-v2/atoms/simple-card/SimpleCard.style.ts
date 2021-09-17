@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme: Theme) =>
     details: {
       display: 'flex',
       flexDirection: 'row',
+      '& > div:last-child': {
+        marginLeft: 'auto',
+      },
     },
     actionArea: {
       display: 'flex',
@@ -43,8 +46,17 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     focusHighlight: {},
     iconButton: {
+      flex: '1 0 auto',
       '&:hover': {
         backgroundColor: 'transparent',
+      },
+    },
+    staticContent: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      '&:last-child': {
+        padding: 0,
       },
     },
     content: {
