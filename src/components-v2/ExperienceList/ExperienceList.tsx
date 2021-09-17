@@ -6,7 +6,7 @@ import ListItem from '@material-ui/core/ListItem';
 import {ExperienceListProps, useStyles} from '.';
 import {SimpleCard} from '../atoms/simple-card/';
 
-const ExperienceList = ({experiences}: ExperienceListProps): JSX.Element => {
+const ExperienceList = ({experiences, isOnHomePage = false}: ExperienceListProps): JSX.Element => {
   const classes = useStyles();
   const [selected, setSelected] = useState(false);
 
@@ -25,6 +25,8 @@ const ExperienceList = ({experiences}: ExperienceListProps): JSX.Element => {
               title={name}
               creator={user.name}
               imgUrl={user.profilePictureURL || ''}
+              isSelectable={isOnHomePage}
+              onClick={handleClick}
             />
           </ListItem>
         ))}
