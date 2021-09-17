@@ -1,8 +1,8 @@
 import {CalendarIcon} from '@heroicons/react/outline';
 import {GlobeAltIcon} from '@heroicons/react/outline';
-import {CurrencyDollarIcon} from '@heroicons/react/solid';
+import {CurrencyDollarIcon} from '@heroicons/react/outline';
+import {UserAddIcon} from '@heroicons/react/outline';
 import {DotsVerticalIcon} from '@heroicons/react/solid';
-import {UserAddIcon} from '@heroicons/react/solid';
 
 import React from 'react';
 
@@ -106,7 +106,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           </div>
           <div>
             <Button
-              startIcon={<SvgIcon component={UserAddIcon} viewBox="0 0 20 20" />}
+              startIcon={
+                <SvgIcon classes={{root: style.fill}} component={UserAddIcon} viewBox="0 0 22 22" />
+              }
               classes={{root: style.button}}
               className={style.mr12}
               variant="contained"
@@ -115,7 +117,13 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               Add Friend
             </Button>
             <Button
-              startIcon={<SvgIcon component={CurrencyDollarIcon} viewBox="0 0 20 20" />}
+              startIcon={
+                <SvgIcon
+                  classes={{root: style.fill}}
+                  component={CurrencyDollarIcon}
+                  viewBox="2 2 21 21"
+                />
+              }
               classes={{root: style.button}}
               variant="contained"
               color="primary"
