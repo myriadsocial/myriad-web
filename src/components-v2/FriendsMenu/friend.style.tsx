@@ -23,6 +23,11 @@ export const useStyles = makeStyles((theme: Theme) =>
         alignSelf: 'center',
       },
     },
+    backgroundEven: {
+      '&:nth-child(even)': {
+        backgroundColor: '#F2F2F4',
+      },
+    },
     avatar: {
       width: 40,
       height: 40,
