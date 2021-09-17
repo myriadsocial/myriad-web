@@ -160,6 +160,8 @@ const theme = createTheme({
         },
       },
       container: {
+        width: '100%',
+
         '&:nth-child(even)': {
           backgroundColor: '#F2F2F4',
         },
@@ -263,12 +265,6 @@ const theme = createTheme({
     MuiFormControl: {
       root: {
         marginBottom: 30,
-      },
-    },
-
-    MuiListItem: {
-      container: {
-        width: '100%',
       },
     },
 
