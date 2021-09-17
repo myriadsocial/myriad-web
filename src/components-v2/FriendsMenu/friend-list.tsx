@@ -11,14 +11,11 @@ import Typography from '@material-ui/core/Typography';
 
 import {acronym} from '../../helpers/string';
 import SearchComponent from '../atoms/search/SearchBox';
+import {FriendListProps} from './default';
 import {useStyles} from './friend.style';
 
-type Props = {
-  background?: boolean;
-};
-
-export const FriendListComponent: React.FC<Props> = props => {
-  const {background = false} = props;
+export const FriendListComponent: React.FC<FriendListProps> = props => {
+  const {background = false, friends} = props;
   const style = useStyles();
   const handleSubmit = () => {
     return;
@@ -28,50 +25,35 @@ export const FriendListComponent: React.FC<Props> = props => {
     <div>
       <SearchComponent onSubmit={handleSubmit} placeholder={'Search friend'} />
       <List className={style.list}>
-        <ListItem
-          classes={{root: background ? style.backgroundEven : ''}}
-          className={style.item}
-          alignItems="center">
-          <ListItemAvatar>
-            <Avatar className={style.avatar} alt={'name'} src={''}>
-              {acronym('Jenny Chang')}
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText>
-            <Link href={`/#`}>
-              <a href={`/#`} className={style.link}>
-                <Typography className={style.name} component="span" color="textPrimary">
-                  Jenny Chang
+        {friends &&
+          friends.map(friend => (
+            <ListItem
+              key={friend.id}
+              classes={{root: background ? style.backgroundEven : ''}}
+              className={style.item}
+              alignItems="center">
+              <ListItemAvatar>
+                <Avatar
+                  className={style.avatar}
+                  alt={'name'}
+                  src={friend.requestee.profilePictureURL}>
+                  {acronym(friend.requestee.name)}
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText>
+                <Link href={`/#`}>
+                  <a href={`/#`} className={style.link}>
+                    <Typography className={style.name} component="span" color="textPrimary">
+                      {friend.requestee.name}
+                    </Typography>
+                  </a>
+                </Link>
+                <Typography className={style.friend} component="p" color="textSecondary">
+                  1 mutual friends
                 </Typography>
-              </a>
-            </Link>
-            <Typography className={style.friend} component="p" color="textSecondary">
-              1 mutual friends
-            </Typography>
-          </ListItemText>
-        </ListItem>
-        <ListItem
-          classes={{root: background ? style.backgroundEven : ''}}
-          className={style.item}
-          alignItems="center">
-          <ListItemAvatar>
-            <Avatar className={style.avatar} alt={'name'} src={''}>
-              {acronym('Erin Herwitz')}
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText>
-            <Link href={`/#`}>
-              <a href={`/#`} className={style.link}>
-                <Typography className={style.name} component="span" color="textPrimary">
-                  Erin Herwitz
-                </Typography>
-              </a>
-            </Link>
-            <Typography className={style.friend} component="p" color="textSecondary">
-              No mutual friends
-            </Typography>
-          </ListItemText>
-        </ListItem>
+              </ListItemText>
+            </ListItem>
+          ))}
       </List>
     </div>
   );
