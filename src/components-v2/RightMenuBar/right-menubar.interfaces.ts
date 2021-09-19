@@ -1,7 +1,7 @@
-import {ExperienceDummy} from '../ExperienceList/';
+import {Experience} from '../../interfaces/experience';
 
 interface RightMenuBarProps {
-  experiences: ExperienceDummy[];
+  experiences: Experience[];
 }
 
 export type {RightMenuBarProps};

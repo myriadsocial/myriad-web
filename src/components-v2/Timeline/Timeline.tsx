@@ -11,10 +11,11 @@ import {Post} from 'src/interfaces/post';
 type TimelineProps = {
   posts: Post[];
   anonymous: boolean;
+  allowFilter?: boolean;
 };
 
 export const Timeline: React.FC<TimelineProps> = props => {
-  const {posts, anonymous} = props;
+  const {posts, anonymous, allowFilter = true} = props;
 
   const styles = useStyles();
 
@@ -24,19 +25,21 @@ export const Timeline: React.FC<TimelineProps> = props => {
 
   return (
     <div className={styles.root}>
-      <div className={styles.action}>
-        <TabList
-          tabs={filterOptions}
-          mark="underline"
-          size="small"
-          active="all"
-          position="left"
-          onChangeTab={handleFilter}
-          className={styles.filter}
-        />
+      {allowFilter && (
+        <div className={styles.action}>
+          <TabList
+            tabs={filterOptions}
+            mark="underline"
+            size="small"
+            active="all"
+            position="left"
+            onChangeTab={handleFilter}
+            className={styles.filter}
+          />
 
-        <DropdownMenu title="Sort by" options={sortOptions} />
-      </div>
+          <DropdownMenu title="Sort by" options={sortOptions} />
+        </div>
+      )}
 
       {posts.map(post => (
         <PostDetail key={`post-${post.id}`} post={post} anonymous={anonymous} />
