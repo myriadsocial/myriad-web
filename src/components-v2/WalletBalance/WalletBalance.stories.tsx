@@ -2,20 +2,22 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {WalletBalances} from '.';
+import {WalletBalances as WalletBalancesComponent} from '.';
 
 export default {
-  title: 'UI Revamp v2.0/components',
-  component: WalletBalances,
+  title: 'UI Revamp v2.0/components/Wallet Balances',
+  component: WalletBalancesComponent,
   argTypes: {
     backgroundColor: {control: 'color'},
   },
-} as ComponentMeta<typeof WalletBalances>;
+} as ComponentMeta<typeof WalletBalancesComponent>;
 
-const Template: ComponentStory<typeof WalletBalances> = args => <WalletBalances {...args} />;
+const Template: ComponentStory<typeof WalletBalancesComponent> = args => (
+  <WalletBalancesComponent {...args} />
+);
 
-export const BalanceSummary = Template.bind({});
-BalanceSummary.args = {
+export const WalletBalances = Template.bind({});
+WalletBalances.args = {
   balances: [
     {
       freeBalance: 58.4,

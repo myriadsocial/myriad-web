@@ -2,21 +2,23 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {SocialMediaList} from '.';
+import {SocialMediaList as SocialMediaListComponent} from '.';
 import {SocialsEnum} from '../../interfaces/social';
 
 export default {
-  title: 'UI Revamp v2.0/components',
-  component: SocialMediaList,
+  title: 'UI Revamp v2.0/components/Social Media List',
+  component: SocialMediaListComponent,
   argTypes: {
     backgroundColor: {control: 'color'},
   },
-} as ComponentMeta<typeof SocialMediaList>;
+} as ComponentMeta<typeof SocialMediaListComponent>;
 
-const Template: ComponentStory<typeof SocialMediaList> = args => <SocialMediaList {...args} />;
+const Template: ComponentStory<typeof SocialMediaListComponent> = args => (
+  <SocialMediaListComponent {...args} />
+);
 
-export const SocialMedia = Template.bind({});
-SocialMedia.args = {
+export const SocialMediaList = Template.bind({});
+SocialMediaList.args = {
   connected: [
     {
       id: '1',

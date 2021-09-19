@@ -1,11 +1,11 @@
 import React from 'react';
 
-import {ExperienceDummy} from '../ExperienceList/';
+import {Experience} from '../../interfaces/experience';
 import {ExperienceList} from '../ExperienceList/';
 import {HeaderWithAction} from '../HeaderWithAction/';
 
 interface ExperienceTabMenuProps {
-  experiences: ExperienceDummy[];
+  experiences: Experience[];
 }
 
 export const ExperienceTabMenu: React.FC<ExperienceTabMenuProps> = props => {

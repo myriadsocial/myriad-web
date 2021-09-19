@@ -18,9 +18,14 @@ const ExperienceList = ({experiences}: ExperienceListProps): JSX.Element => {
   return (
     <div className={classes.root}>
       <List component="nav" aria-label="experience tab menu">
-        {experiences.map(({title, creator, imgUrl}) => (
+        {experiences.map(({name, user}) => (
           <ListItem key={`list-item-title`}>
-            <SimpleCard onClick={handleClick} title={title} creator={creator} imgUrl={imgUrl} />
+            <SimpleCard
+              onClick={handleClick}
+              title={name}
+              creator={user.name}
+              imgUrl={user.profilePictureURL || ''}
+            />
           </ListItem>
         ))}
       </List>

@@ -5,11 +5,11 @@ import React from 'react';
 import {ExperienceList} from '../../ExperienceList/ExperienceList.stories';
 import {SidebarMenu} from '../../Menu/Menu.stories';
 import {DefaultRichText} from '../../Richtext/RichText.stories';
-import {SocialMedia} from '../../SocialMediaList/SocialMedia.stories';
+import {SocialMediaList} from '../../SocialMediaList/SocialMedia.stories';
 import {Timeline} from '../../Timeline/Timeline.stories';
-import {BalanceSummary} from '../../WalletBalance/WalletBalance.stories';
+import {WalletBalances} from '../../WalletBalance/WalletBalance.stories';
 import {DefaultSearchBox} from '../../atoms/search/SearchBox.stories';
-import {DefaultProfileHeader} from '../../profile-header/ProfileHeader.stories';
+import {ProfileHeader} from '../../profile-header/ProfileHeader.stories';
 import {HomePage} from './HomePage';
 
 export default {
@@ -34,13 +34,13 @@ OneItem.args = {
         <SidebarMenu icons={SidebarMenu.args?.icons ?? []} />
       </div>
       <div>
-        <SocialMedia
-          connected={SocialMedia.args?.connected ?? []}
+        <SocialMediaList
+          connected={SocialMediaList.args?.connected ?? []}
           toggleVerify={social => console.log(social)}
         />
       </div>
       <div>
-        <BalanceSummary balances={BalanceSummary.args?.balances ?? []} />
+        <WalletBalances balances={WalletBalances.args?.balances ?? []} />
       </div>
     </div>
   ),
@@ -79,11 +79,11 @@ OneItem.args = {
         rowGap: 12,
       }}>
       <div>
-        <DefaultProfileHeader
-          name={DefaultProfileHeader.args?.name ?? 'Name'}
-          username={DefaultProfileHeader.args?.username ?? 'Username'}
+        <ProfileHeader
+          name={ProfileHeader.args?.name ?? 'Name'}
+          username={ProfileHeader.args?.username ?? 'Username'}
           avatar={
-            DefaultProfileHeader.args?.avatar ??
+            ProfileHeader.args?.avatar ??
             'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg'
           }
         />
