@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import Paper from '@material-ui/core/Paper';
 
 import {Experience} from '../../interfaces/experience';
+import {Friend} from '../../interfaces/friend';
 import {Post} from '../../interfaces/post';
 import {SocialMedia} from '../../interfaces/social';
 import {User} from '../../interfaces/user';
@@ -17,14 +18,15 @@ type UserMenuProps = {
   experiences?: Experience[];
   socials?: SocialMedia[];
   user: User;
+  friends?: Friend[];
 };
 
 export const UserMenu: React.FC<UserMenuProps> = props => {
-  const {selected, user, posts = [], experiences = [], socials = []} = props;
+  const {selected, user, posts = [], experiences = [], socials = [], friends = []} = props;
 
   const styles = useStyles();
 
-  const tabs = useUserTabs({posts, experiences, user, socials});
+  const tabs = useUserTabs({posts, experiences, user, socials, friends});
   const [activeTab, setActiveTab] = useState<UserMenuTabs>(selected);
 
   const handleTabChange = (tab: string) => {
