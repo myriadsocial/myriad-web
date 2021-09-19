@@ -33,6 +33,7 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       },
 
       '& .Mui-selected': {
+        color: theme.palette.text.primary,
         backgroundColor: props =>
           props.mark === 'underline' ? 'transparent' : theme.palette.secondary.main,
       },

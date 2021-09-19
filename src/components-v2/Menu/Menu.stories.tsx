@@ -5,7 +5,7 @@ import React from 'react';
 import {Menu} from '.';
 
 export default {
-  title: 'UI Revamp v2.0/components',
+  title: 'UI Revamp v2.0/components/Sidebar Menu',
   component: Menu,
   argTypes: {},
 } as ComponentMeta<typeof Menu>;
