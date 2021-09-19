@@ -1,11 +1,7 @@
-interface ExperienceDummy {
-  title: string;
-  creator: string;
-  imgUrl: string;
-}
+import {Experience} from '../../interfaces/experience';
 
 interface ExperienceListProps {
-  experiences: ExperienceDummy[];
+  experiences: Experience[];
 }
 
-export type {ExperienceDummy, ExperienceListProps};
+export type {ExperienceListProps};
