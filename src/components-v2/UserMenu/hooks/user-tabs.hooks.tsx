@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
 
 import {Experience} from '../../../interfaces/experience';
+import {Friend} from '../../../interfaces/friend';
 import {Post} from '../../../interfaces/post';
 import {SocialMedia} from '../../../interfaces/social';
 import {User} from '../../../interfaces/user';
@@ -18,6 +19,7 @@ type UserTabsProps = {
   experiences: Experience[];
   user: User;
   socials: SocialMedia[];
+  friends: Friend[];
 };
 
 export const useUserTabs = ({
@@ -25,6 +27,7 @@ export const useUserTabs = ({
   experiences,
   user,
   socials,
+  friends,
 }: UserTabsProps): TabItems<UserMenuTabs>[] => {
   const tabs: TabItems<UserMenuTabs>[] = useMemo(() => {
     return [
@@ -46,7 +49,7 @@ export const useUserTabs = ({
       {
         id: 'friend',
         title: `Friends`,
-        component: <FriendListComponent />,
+        component: <FriendListComponent friends={friends} />,
       },
       {
         id: 'setting',
