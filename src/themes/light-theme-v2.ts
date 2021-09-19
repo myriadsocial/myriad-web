@@ -296,6 +296,12 @@ const theme = createTheme({
         },
       },
     },
+
+    MuiPaper: {
+      elevation1: {
+        boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
+      },
+    },
   },
 
   props: {
