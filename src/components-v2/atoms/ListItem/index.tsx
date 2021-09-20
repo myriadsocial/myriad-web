@@ -19,6 +19,7 @@ type ListItemComponentProps = ListItemProps & {
   subtitle?: string | React.ReactNode;
   action?: string | React.ReactNode;
   active?: boolean;
+  url?: string;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -63,17 +64,32 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
-  const {icon, avatar, variant = 'circle', size = 'small', title, subtitle, action, active} = props;
+  const {
+    icon,
+    avatar,
+    variant = 'circle',
+    size = 'small',
+    url,
+    title,
+    subtitle,
+    action,
+    active,
+  } = props;
   const styles = useStyles();
 
   const iconSyles = [styles.icon];
+  const listProps: any = {};
+
+  if (url) {
+    listProps.button = true;
+  }
 
   if (active) {
     iconSyles.push(styles.active);
   }
 
   return (
-    <ListItem component="div" className={styles.root} ContainerComponent="div">
+    <ListItem component="div" className={styles.root} ContainerComponent="div" {...listProps}>
       {avatar && (
         <ListItemAvatar className={styles.avatar}>
           <Avatar alt="Remy Sharp" src={avatar} variant={variant} className={styles[size]} />
