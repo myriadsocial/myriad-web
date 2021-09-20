@@ -56,6 +56,7 @@ export const Menu: React.FC<MenuProps> = () => {
             icon={item.icon}
             active={item.active}
             onClick={openMenu(item)}
+            url={item.url}
           />
         ))}
       </BoxComponent>

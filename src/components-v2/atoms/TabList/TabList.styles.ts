@@ -30,14 +30,14 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
         fontWeight: 'normal',
         fontSize: props => (props.size === 'small' ? 14 : 16),
         lineHeight: '20px',
-        color: '#404040',
       },
 
       '& .Mui-selected': {
-        color: theme.palette.text.primary,
         backgroundColor: props =>
           props.mark === 'underline' ? 'transparent' : theme.palette.secondary.main,
         borderRadius: 5,
+        fontWeight: 600,
+        color: '#12130F',
       },
 
       '& .MuiTabs-indicator': {
@@ -52,6 +52,8 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       minHeight: props => (props.size === 'small' ? 36 : 48),
       minWidth: props => (props.size === 'small' ? 36 : 48),
       padding: theme.spacing(0.5),
+      color: props =>
+        props.mark === 'underline' ? theme.palette.text.secondary : theme.palette.text.primary,
     },
   }),
 );
