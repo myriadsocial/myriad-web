@@ -4,7 +4,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     prompt: {
       width: '480px',
-      height: '280px',
+      height: '260px',
       textAlign: 'center',
     },
     text: {
@@ -13,8 +13,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '17.57px',
     },
     'm-vertical1': {
-      marginBottom: 20,
-      marginTop: 20,
+      marginBottom: 50,
+      marginTop: 12,
     },
     'flex-center': {
       display: 'flex',
@@ -25,9 +25,26 @@ export const useStyles = makeStyles((theme: Theme) =>
         borderRadius: '20px',
       },
     },
+    content: {
+      padding: 0,
+    },
     icon: {
       fontSize: 60,
-      marginTop: '20px',
+      marginTop: '30px',
+    },
+    title: {
+      fontSize: '18px',
+      fontWeight: 700,
+      lineHeight: '22.59px',
+    },
+    danger: {
+      color: '#FE3636',
+    },
+    warning: {
+      color: '#FFC857',
+    },
+    success: {
+      color: '#39BF87',
     },
   }),
 );
