@@ -1,2 +1,2 @@
-export * from './gallery.types';
+export * from './Gallery.types';
 export * from './Gallery';
