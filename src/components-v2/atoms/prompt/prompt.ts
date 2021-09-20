@@ -1,6 +1,7 @@
 export type Prompt = {
-  onConfirm: () => void;
-  onCancel: () => void;
   open: boolean;
-  variant?: 'sure' | 'careful' | 'success';
+  icon: 'danger' | 'warning' | 'success';
+  title: string;
+  subtitle: string;
+  onCancel: () => void;
 };
