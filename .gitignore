@@ -89,3 +89,6 @@ prisma
 
 # storybook
 /storybook-static
+/docs/*
+# exception to the rule
+!docs/.gitkeep

@@ -6,7 +6,7 @@ import {getSession} from 'next-auth/client';
 
 import Typography from '@material-ui/core/Typography';
 
-import {wrapper} from '../src/store';
+import {wrapper} from '../../src/store';
 
 import Layout from 'src/components/Layout/Layout.container';
 import ProfileTimeline from 'src/components/profile/profile.component';
