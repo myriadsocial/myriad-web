@@ -108,17 +108,7 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
         </ShowIf>
 
         {post.asset?.images && post.asset?.images.length > 0 && (
-          <Gallery
-            images={[
-              {
-                medium: 'https://res.cloudinary.com/dsget80gs/lhyhjgd8v46cxeqzw5tp.png',
-                small: 'https://res.cloudinary.com/dsget80gs/lhyhjgd8v46cxeqzw5tp.png',
-                thumbnail: 'https://res.cloudinary.com/dsget80gs/lhyhjgd8v46cxeqzw5tp.png',
-                large: 'https://res.cloudinary.com/dsget80gs/lhyhjgd8v46cxeqzw5tp.png',
-              },
-            ]}
-            onImageClick={console.log}
-          />
+          <Gallery images={post.asset?.images} onImageClick={console.log} cloudName="dsget80gs" />
         )}
 
         {post.asset?.videos && post.asset.videos.length > 0 && <Video url={post.asset.videos[0]} />}
