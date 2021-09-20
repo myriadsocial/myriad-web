@@ -1,7 +1,7 @@
-import {Sizes} from '../../../interfaces/assets';
-import {ImageList, ImageListItem} from './gallery.types';
+import {generateImageSizes} from '../../../helpers/cloudinary';
+import {ImageList, ImageListItem, GalleryType} from './Gallery.types';
 
-export const buildList = (source: Sizes[]): ImageList => {
+export const buildList = (source: string[], variant: GalleryType, cloudName: string): ImageList => {
   let listCols = 1;
   let itemCols = 1;
   let ROWS = 1;
@@ -22,11 +22,13 @@ export const buildList = (source: Sizes[]): ImageList => {
       itemCols = index === 0 ? listCols : listCols / Math.min(source.length - 1, 3);
     }
 
+    const sizes = generateImageSizes(source[index], cloudName);
+
     images.push({
       cols: itemCols,
       rows: ROWS,
-      src: ROWS === 1 ? source[index].small : source[index].medium,
-      sizes: source[index],
+      src: ROWS === 1 ? sizes.small : sizes.medium,
+      sizes: sizes,
     });
   }
 

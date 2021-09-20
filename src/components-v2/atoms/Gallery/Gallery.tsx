@@ -4,19 +4,23 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 
-import {Sizes} from '../../../interfaces/assets';
-import {useStyles} from './gallery.styles';
+import {useStyles} from './Gallery.styles';
+import {GalleryType} from './Gallery.types';
 import {buildList} from './util';
 
 type GalleryProps = {
-  images: Sizes[];
+  images: string[];
+  variant?: GalleryType;
+  cloudName: string;
   onImageClick: (index: number) => void;
 };
 
-export const Gallery: React.FC<GalleryProps> = ({images, onImageClick}) => {
+export const Gallery: React.FC<GalleryProps> = props => {
+  const {images, cloudName, variant = 'horizontal', onImageClick} = props;
+
   const style = useStyles();
 
-  const list = buildList(images);
+  const list = buildList(images, variant, cloudName);
 
   const handleImageClick = (index: number) => () => {
     onImageClick(index);

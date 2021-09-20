@@ -12,3 +12,5 @@ export type ImageList = {
   cellHeight: number;
   images: ImageListItem[];
 };
+
+export type GalleryType = 'vertical' | 'horizontal';

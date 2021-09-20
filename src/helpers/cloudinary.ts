@@ -1,14 +1,9 @@
-import getConfig from 'next/config';
-
 import {Sizes} from '../interfaces/assets';
 
-const {publicRuntimeConfig} = getConfig();
-
 const CLOUDINARY_BASE_URL = 'https://res.cloudinary.com';
-const CLOUD_NAME = publicRuntimeConfig.cloudinaryName;
 
-export const generateImageSizes = (url: string, extension = 'jpg'): Sizes => {
-  const external = !url.includes(`/${CLOUD_NAME}/`);
+export const generateImageSizes = (url: string, cloudName: string, extension = 'jpg'): Sizes => {
+  const external = !url.includes(CLOUDINARY_BASE_URL);
   const filename = url.split(/[\\/]/).pop();
 
   if (!filename)
@@ -24,9 +19,9 @@ export const generateImageSizes = (url: string, extension = 'jpg'): Sizes => {
   const prefix = external ? 'image/fetch' : '';
 
   return {
-    thumbnail: `${CLOUDINARY_BASE_URL}/${CLOUD_NAME}/${prefix}/w_150,h_150,c_thumb/${filepath}`,
-    small: `${CLOUDINARY_BASE_URL}/${CLOUD_NAME}/${prefix}/w_400,c_limit/${filepath}`,
-    medium: `${CLOUDINARY_BASE_URL}/${CLOUD_NAME}/${prefix}/w_800,c_limit/${filepath}`,
-    large: `${CLOUDINARY_BASE_URL}/${CLOUD_NAME}/${prefix}/w_1200,c_limit/${filepath}`,
+    thumbnail: `${CLOUDINARY_BASE_URL}/${cloudName}/${prefix}/w_150,h_150,c_thumb/${filepath}`,
+    small: `${CLOUDINARY_BASE_URL}/${cloudName}/${prefix}/w_400,c_fit/${filepath}`,
+    medium: `${CLOUDINARY_BASE_URL}/${cloudName}/${prefix}/w_800,c_fit/${filepath}`,
+    large: `${CLOUDINARY_BASE_URL}/${cloudName}/${prefix}/w_1200,c_limit/${filepath}`,
   };
 };

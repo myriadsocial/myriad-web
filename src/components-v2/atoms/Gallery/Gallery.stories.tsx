@@ -11,30 +11,23 @@ export default {
 
 const Template: ComponentStory<typeof GalleryComponent> = args => <GalleryComponent {...args} />;
 
-export const Gallery = Template.bind({});
-Gallery.args = {
+export const DefaultGallery = Template.bind({});
+DefaultGallery.args = {
+  cloudName: 'dsget80gs',
   images: [
-    {
-      medium: 'https://res.cloudinary.com/dsget80gs/lhyhjgd8v46cxeqzw5tp.png',
-      small: 'https://res.cloudinary.com/dsget80gs/lhyhjgd8v46cxeqzw5tp.png',
-      thumbnail: 'https://res.cloudinary.com/dsget80gs/lhyhjgd8v46cxeqzw5tp.png',
-      large: 'https://res.cloudinary.com/dsget80gs/lhyhjgd8v46cxeqzw5tp.png',
-    },
-
-    {
-      medium: 'https://res.cloudinary.com/dsget80gs/aqzylqjxopgf23nqypac.jpg',
-      small: 'https://res.cloudinary.com/dsget80gs/aqzylqjxopgf23nqypac.jpg',
-      thumbnail: 'https://res.cloudinary.com/dsget80gs/aqzylqjxopgf23nqypac.jpg',
-      large: 'https://res.cloudinary.com/dsget80gs/aqzylqjxopgf23nqypac.jpg',
-    },
-
-    {
-      medium: 'https://res.cloudinary.com/dsget80gs/i1rhvyusrvlszdsamcsf.jpg',
-      small: 'https://res.cloudinary.com/dsget80gs/i1rhvyusrvlszdsamcsf.jpg',
-      thumbnail: 'https://res.cloudinary.com/dsget80gs/i1rhvyusrvlszdsamcsf.jpg',
-      large: 'https://res.cloudinary.com/dsget80gs/i1rhvyusrvlszdsamcsf.jpg',
-    },
+    'https://res.cloudinary.com/dsget80gs/lhyhjgd8v46cxeqzw5tp.png',
+    'https://res.cloudinary.com/dsget80gs/aqzylqjxopgf23nqypac.jpg',
+    'https://res.cloudinary.com/dsget80gs/i1rhvyusrvlszdsamcsf.jpg',
   ],
+  onImageClick: (index: number) => {
+    console.log('Image clicked', index);
+  },
+};
+
+export const SmallImages = Template.bind({});
+SmallImages.args = {
+  cloudName: 'dsget80gs',
+  images: ['https://res.cloudinary.com/dsget80gs/dsccp9uljwazyfudyeew.jpg'],
   onImageClick: (index: number) => {
     console.log('Image clicked', index);
   },
