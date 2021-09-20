@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 
 import {Button} from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
+import Popover from '@material-ui/core/Popover';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
@@ -9,57 +10,114 @@ import {PostEditor, formatStringToNode} from '../PostEditor';
 import {PostImport} from '../PostImport';
 import {PostTags} from '../PostTag/PostTags';
 import {DropdownMenu} from '../atoms/DropdownMenu';
+import {Modal} from '../atoms/Modal';
 import {TabPanel} from '../atoms/TabPanel';
 import {useStyles} from './PostCreate.styles';
 import {tagOptions, menuOptions} from './default';
 
-type SocialMediaListProps = {
+type PostCreateProps = {
   value: string;
+  url?: string;
+  open: boolean;
+  onClose: () => void;
 };
 
-export const PostCreate: React.FC<SocialMediaListProps> = props => {
+type PostCreateType = 'create' | 'import';
+
+export const PostCreate: React.FC<PostCreateProps> = props => {
+  const {value, url, open, onClose} = props;
   const styles = useStyles();
 
-  const {value} = props;
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState<PostCreateType>('create');
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const nswTagOpen = Boolean(anchorEl);
+  const header: Record<PostCreateType, {title: string; subtitle: string}> = {
+    create: {
+      title: 'Create Post',
+      subtitle: 'Create your own post',
+    },
+    import: {
+      title: 'Import Post',
+      subtitle: 'Import post from another social media',
+    },
+  };
 
   const node = formatStringToNode(value);
 
-  const handleTabChange = (event: React.ChangeEvent<{}>, tab: number) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleTabChange = (event: React.ChangeEvent<{}>, tab: PostCreateType) => {
     setActiveTab(tab);
   };
 
   return (
-    <Paper square className={styles.root}>
+    <Modal
+      title={header[activeTab].title}
+      subtitle={header[activeTab].subtitle}
+      onClose={onClose}
+      open={open}
+      maxWidth="lg"
+      className={styles.root}>
       <Tabs
         value={activeTab}
         indicatorColor="secondary"
-        textColor="primary"
         onChange={handleTabChange}
         className={styles.tabs}>
-        <Tab label="Post" />
-        <Tab label="Link" />
+        <Tab label="Post" value="create" />
+        <Tab label="Link" value="import" />
       </Tabs>
 
-      <TabPanel value={activeTab} index={0}>
+      <TabPanel value={activeTab} index="create">
         <PostEditor mentionable={[]} onSearchMention={console.log} value={[node]} />
       </TabPanel>
 
-      <TabPanel value={activeTab} index={1}>
-        <PostImport value="" />
+      <TabPanel value={activeTab} index="import">
+        <PostImport value={url || ''} />
       </TabPanel>
 
-      <div className={styles.option}>
-        <PostTags selected={['profanity', 'pornography']} options={tagOptions} />
-
-        <div className={styles.action}>
+      <div className={styles.action}>
+        <div className={styles.option}>
           <DropdownMenu title="Visibility" options={menuOptions} />
 
-          <Button variant="contained" color="primary" size="small">
-            Create Post
+          <Button size="small" onClick={handleClick} className={styles.nsfw}>
+            NSFW
+          </Button>
+
+          <Popover
+            open={nswTagOpen}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}>
+            <PostTags
+              selected={['profanity', 'pornography']}
+              options={tagOptions}
+              onClose={handleClose}
+              onConfirm={handleClose}
+            />
+          </Popover>
+
+          <Button color="primary" size="small">
+            Markdown Mode
           </Button>
         </div>
+
+        <Button variant="contained" color="primary" size="small">
+          Create Post
+        </Button>
       </div>
-    </Paper>
+    </Modal>
   );
 };
