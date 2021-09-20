@@ -30,12 +30,14 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
         fontWeight: 'normal',
         fontSize: props => (props.size === 'small' ? 14 : 16),
         lineHeight: '20px',
+        color: '#404040',
       },
 
       '& .Mui-selected': {
         color: theme.palette.text.primary,
         backgroundColor: props =>
           props.mark === 'underline' ? 'transparent' : theme.palette.secondary.main,
+        borderRadius: 5,
       },
 
       '& .MuiTabs-indicator': {
