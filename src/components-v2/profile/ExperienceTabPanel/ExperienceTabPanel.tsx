@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 
-import {ExperienceDummy} from '../../ExperienceList/';
+import {Experience} from '../../../interfaces/experience';
 import {ExperienceList} from '../../ExperienceList/';
 import {DropdownMenu, MenuOptions} from '../../atoms/DropdownMenu/';
 
 type ExperienceTabPanelProps = {
-  experiences: ExperienceDummy[];
+  experiences: Experience[];
   isOnHomePage?: boolean;
 };
 
