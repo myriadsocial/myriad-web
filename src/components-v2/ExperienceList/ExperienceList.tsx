@@ -26,7 +26,6 @@ const ExperienceList = ({experiences, isOnHomePage = false}: ExperienceListProps
               creator={user.name}
               imgUrl={user.profilePictureURL || ''}
               isSelectable={isOnHomePage}
-              onClick={handleClick}
             />
           </ListItem>
         ))}
