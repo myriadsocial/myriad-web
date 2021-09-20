@@ -78,8 +78,8 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             </Button>
           </CardActions>
         </Card>
-        {comment && <CommentList deep={deep + 1} comments={comment.replies || []} />}
         {isReply && <CommentEditor avatar={''} username={'User Login'} onSubmit={console.log} />}
+        {comment && <CommentList deep={deep + 1} comments={comment.replies || []} />}
       </div>
     </div>
   );
