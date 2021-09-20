@@ -9,6 +9,7 @@ import {CommentEditor} from '../CommentEditor';
 type CommentListProps = {
   comments: Comment[];
   deep?: number;
+  placeholder?: string;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const CommentList: React.FC<CommentListProps> = props => {
-  const {comments, deep = 0} = props;
+  const {comments, deep = 0, placeholder} = props;
 
   const styles = useStyles();
 
@@ -29,7 +30,12 @@ export const CommentList: React.FC<CommentListProps> = props => {
   return (
     <div className={styles.root}>
       {deep === 0 && (
-        <CommentEditor onSubmit={handleSubmitCommit} username={'asda'} avatar={'asdas'} />
+        <CommentEditor
+          placeholder={placeholder || ''}
+          onSubmit={handleSubmitCommit}
+          username={'asda'}
+          avatar={'asdas'}
+        />
       )}
 
       {comments.map(comment => (

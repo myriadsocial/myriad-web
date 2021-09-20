@@ -17,16 +17,20 @@ type Props = {
   onSubmit: (comment: string) => void;
   username: string;
   avatar: string;
+  placeholder?: string;
 };
 
 export const CommentEditor: React.FC<Props> = props => {
-  const {onSubmit, username, avatar} = props;
+  const {onSubmit, username, avatar, placeholder} = props;
   const style = useStyles();
   const CHARACTER_LIMIT = 2000;
+  const [toggle, setToggle] = React.useState<boolean>(false);
 
   const [comment, setValues] = React.useState({
     text: '',
   });
+
+  const openComment = () => setToggle(true);
 
   const handleChange = (text: string) => (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValues({...comment, [text]: event.target.value.substring(0, CHARACTER_LIMIT)});
@@ -48,37 +52,40 @@ export const CommentEditor: React.FC<Props> = props => {
       </Avatar>
       <div className={style.root}>
         <TextareaAutosize
+          onClick={openComment}
           rowsMin={1}
           value={comment.text}
-          placeholder="Write a Comment..."
+          placeholder={placeholder || 'Write a Comment...'}
           className={style.write}
           onChange={handleChange('text')}
           spellCheck={false}
           maxLength={CHARACTER_LIMIT}
         />
-        <CardActions disableSpacing>
-          <div className={style.container}>
-            <div>
-              <Tooltip title="Coming soon" arrow>
-                <IconButton className={style.action} aria-label="reply">
-                  <CropOriginalRoundedIcon color="primary" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Coming soon" arrow>
-                <IconButton className={style.action} aria-label="reply">
-                  <VideoCallOutlinedIcon color="primary" />
-                </IconButton>
-              </Tooltip>
+        {toggle && (
+          <CardActions disableSpacing>
+            <div className={style.container}>
+              <div>
+                <Tooltip title="Coming soon" arrow>
+                  <IconButton className={style.action} aria-label="reply">
+                    <CropOriginalRoundedIcon color="primary" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Coming soon" arrow>
+                  <IconButton className={style.action} aria-label="reply">
+                    <VideoCallOutlinedIcon color="primary" />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              <IconButton
+                aria-label="reply"
+                disabled={comment.text.length === 0}
+                onClick={reply}
+                className={style.action}>
+                <SendRoundedIcon className={style.replyIcon} />
+              </IconButton>
             </div>
-            <IconButton
-              aria-label="reply"
-              disabled={comment.text.length === 0}
-              onClick={reply}
-              className={style.action}>
-              <SendRoundedIcon className={style.replyIcon} />
-            </IconButton>
-          </div>
-        </CardActions>
+          </CardActions>
+        )}
       </div>
     </div>
   );

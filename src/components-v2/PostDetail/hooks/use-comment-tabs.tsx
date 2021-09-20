@@ -22,7 +22,12 @@ export const useCommentTabs = (
       id: 'debate',
       title: `Debate (${debates?.length || 0})`,
       icon: '😡 ',
-      component: <CommentList comments={debates || []} />,
+      component: (
+        <CommentList
+          placeholder={'Your downvote will be submitted when you post a comment'}
+          comments={debates || []}
+        />
+      ),
     },
   ];
 };
