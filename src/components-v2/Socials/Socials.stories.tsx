@@ -15,6 +15,21 @@ const Template: ComponentStory<typeof SocialsComponent> = args => <SocialsCompon
 
 export const Socials = Template.bind({});
 Socials.args = {
+  user: {
+    id: '0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127',
+    name: 'Ms. Sara Bellum',
+    profilePictureURL:
+      'https://res.cloudinary.com/dsget80gs/image/upload/v1629910582/dnpyoli9d0jiyqejokqo.png',
+    bannerImageUrl:
+      'https://res.cloudinary.com/dsget80gs/image/upload/v1630031967/lfygmfzthrvh5ea8uqef.jpg',
+    bio: 'Hello :D',
+    fcmTokens: [
+      'fkNm2JA4qGSxN0vD3NX-NR:APA91bH0J1xlFEe1FkJdrU_681NBcGRKotFsamek4wLq-pExBf9h8weY6EWPMM-01U-HRA07nZwZUegfrC3PRq6uCQHydXOA9qYB8i9PC1u-XRG-D_i_8iDxW-1wudzyzOkj1JGEcqWW',
+    ],
+    createdAt: new Date('2021-07-29T14:47:06.000Z'),
+    updatedAt: new Date('2021-09-02T03:11:28.000Z'),
+    currencies: [],
+  },
   socials: [
     {
       createdAt: new Date(),

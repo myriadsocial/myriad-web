@@ -24,7 +24,7 @@ import {SocialsEnum} from '../../interfaces/social';
 import {Modal, ModalProps} from '../atoms/Modal';
 import {useStyles} from './AddSocialMedia.styles';
 
-type AddSocialMediaProps = ModalProps & {
+type AddSocialMediaProps = Pick<ModalProps, 'onClose' | 'open'> & {
   social: SocialsEnum;
   publicKey: string;
   verify: (social: SocialsEnum, username: string) => void;

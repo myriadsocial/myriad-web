@@ -18,19 +18,22 @@ import {
 
 import {capitalize} from '../../helpers/string';
 import {SocialMedia, SocialsEnum} from '../../interfaces/social';
+import {User} from '../../interfaces/user';
+import {AddSocialMedia} from '../AddSocialMedia';
 import {useSocialMediaList} from '../SocialMediaList/use-social-media-list.hook';
 import {ListItemComponent} from '../atoms/ListItem';
 import {PromptComponent} from '../atoms/prompt/prompt.component';
 import {useStyles} from './Socials.styles';
 
 type SocialsProps = {
+  user: User;
   socials: SocialMedia[];
   anonymous?: boolean;
-  onDisconnectSocial: (peopleId: string) => void;
+  onDisconnectSocial: (people: SocialMedia) => void;
 };
 
 export const Socials: React.FC<SocialsProps> = props => {
-  const {socials, onDisconnectSocial} = props;
+  const {socials, user, onDisconnectSocial} = props;
   const styles = useStyles();
 
   const socialList = useSocialMediaList(socials);
@@ -39,7 +42,8 @@ export const Socials: React.FC<SocialsProps> = props => {
   const [people, setPeople] = useState<SocialMedia[]>([]);
   const [selectedPeople, setSelectedPeople] = useState<string | null>(null);
   const [removing, setRemoving] = useState(false);
-  const [peopleToRemove, setPeopleToRemove] = useState<string | null>(null);
+  const [peopleToRemove, setPeopleToRemove] = useState<SocialMedia | null>(null);
+  const [addSocial, setAddSocial] = useState(false);
 
   useEffect(() => {
     getPeopleList();
@@ -65,9 +69,17 @@ export const Socials: React.FC<SocialsProps> = props => {
     return classname;
   };
 
-  const handleDisconnectSocial = (peopleId: string) => {
+  const handleDisconnectSocial = (social: SocialMedia) => {
     setRemoving(true);
-    setPeopleToRemove(peopleId);
+    setPeopleToRemove(social);
+  };
+
+  const toggleAddSocialMedia = () => {
+    setAddSocial(prevStatus => !prevStatus);
+  };
+
+  const verifySocialMedia = (social: SocialsEnum, username: string) => {
+    toggleAddSocialMedia();
   };
 
   const handleClosePrompt = (): void => {
@@ -144,7 +156,7 @@ export const Socials: React.FC<SocialsProps> = props => {
                     edge="end"
                     aria-label="remove"
                     className={styles.remove}
-                    onClick={() => handleDisconnectSocial(account.peopleId)}>
+                    onClick={() => handleDisconnectSocial(account)}>
                     <SvgIcon component={XCircleIcon} color="error" fontSize="medium" />
                   </IconButton>
                 </ListItemSecondaryAction>
@@ -153,7 +165,7 @@ export const Socials: React.FC<SocialsProps> = props => {
           })}
           <ListItem role={undefined} disableGutters>
             <ListItemText disableTypography className={styles.action}>
-              <Button color="primary" disableRipple variant="text">
+              <Button color="primary" disableRipple variant="text" onClick={toggleAddSocialMedia}>
                 + Add {capitalize(selectedSocial)} account
               </Button>
             </ListItemText>
@@ -161,12 +173,33 @@ export const Socials: React.FC<SocialsProps> = props => {
         </List>
       </div>
 
-      <PromptComponent
-        open={removing}
-        variant="careful"
-        onCancel={handleClosePrompt}
-        onConfirm={confirmDisconnectSocial}
+      <AddSocialMedia
+        open={addSocial}
+        social={selectedSocial}
+        publicKey={user.id}
+        onClose={toggleAddSocialMedia}
+        verify={verifySocialMedia}
       />
+
+      <PromptComponent
+        title={'Disconnect social account'}
+        subtitle={`Are you sure to remove ${peopleToRemove?.people?.name}?`}
+        open={removing}
+        icon="danger"
+        onCancel={handleClosePrompt}>
+        <div>
+          <Button size="small" variant="outlined" color="secondary" onClick={handleClosePrompt}>
+            No, let me rethink
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={confirmDisconnectSocial}>
+            Yes, proceed to delete
+          </Button>
+        </div>
+      </PromptComponent>
     </Box>
   );
 };
