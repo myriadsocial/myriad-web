@@ -1,14 +1,15 @@
+import {PhotographIcon} from '@heroicons/react/outline';
+import {FilmIcon} from '@heroicons/react/outline';
+import {PaperAirplaneIcon} from '@heroicons/react/outline';
+
 import React from 'react';
 
-import {Tooltip} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-// TODO move icon to HEROICONS
-import CropOriginalRoundedIcon from '@material-ui/icons/CropOriginalRounded';
-import SendRoundedIcon from '@material-ui/icons/SendRounded';
-import VideoCallOutlinedIcon from '@material-ui/icons/VideoCallOutlined';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import {acronym} from '../../../helpers/string';
 import {useStyles} from './CommentEditor.style';
@@ -18,10 +19,12 @@ type Props = {
   username: string;
   avatar: string;
   placeholder?: string;
+  focus?: boolean;
+  expand?: boolean;
 };
 
 export const CommentEditor: React.FC<Props> = props => {
-  const {onSubmit, username, avatar, placeholder} = props;
+  const {onSubmit, username, avatar, placeholder, focus, expand} = props;
   const style = useStyles();
   const CHARACTER_LIMIT = 2000;
   const [toggle, setToggle] = React.useState<boolean>(false);
@@ -29,6 +32,12 @@ export const CommentEditor: React.FC<Props> = props => {
   const [comment, setValues] = React.useState({
     text: '',
   });
+  const inputRef = React.useRef() as React.MutableRefObject<HTMLTextAreaElement>;
+
+  React.useEffect(() => {
+    if (expand) setToggle(true);
+    if (focus) inputRef.current.focus();
+  }, []);
 
   const openComment = () => setToggle(true);
 
@@ -52,6 +61,7 @@ export const CommentEditor: React.FC<Props> = props => {
       </Avatar>
       <div className={style.root}>
         <TextareaAutosize
+          ref={inputRef}
           onClick={openComment}
           rowsMin={1}
           value={comment.text}
@@ -66,13 +76,23 @@ export const CommentEditor: React.FC<Props> = props => {
             <div className={style.container}>
               <div>
                 <Tooltip title="Coming soon" arrow>
-                  <IconButton className={style.action} aria-label="reply">
-                    <CropOriginalRoundedIcon color="primary" />
+                  <IconButton className={style.action} aria-label="photo">
+                    <SvgIcon
+                      classes={{root: style.fill}}
+                      component={PhotographIcon}
+                      color="primary"
+                      viewBox="0 0 24 24"
+                    />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Coming soon" arrow>
-                  <IconButton className={style.action} aria-label="reply">
-                    <VideoCallOutlinedIcon color="primary" />
+                  <IconButton className={style.action} aria-label="video">
+                    <SvgIcon
+                      classes={{root: style.fill}}
+                      color="primary"
+                      component={FilmIcon}
+                      viewBox="0 0 24 24"
+                    />
                   </IconButton>
                 </Tooltip>
               </div>
@@ -81,7 +101,12 @@ export const CommentEditor: React.FC<Props> = props => {
                 disabled={comment.text.length === 0}
                 onClick={reply}
                 className={style.action}>
-                <SendRoundedIcon className={style.replyIcon} />
+                <SvgIcon
+                  classes={{root: style.fill}}
+                  className={style.replyIcon}
+                  component={PaperAirplaneIcon}
+                  viewBox="0 0 24 24"
+                />
               </IconButton>
             </div>
           </CardActions>
