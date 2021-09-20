@@ -86,7 +86,7 @@ Timeline.args = {
         images: [],
         videos: [],
       },
-      originCreatedAt: new Date('2021-08-26T10:08:46.000Z'),
+      originCreatedAt: new Date(),
       importers: ['0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127'],
       metric: {
         likes: 1,
@@ -95,8 +95,8 @@ Timeline.args = {
         vote: 435,
         share: 400,
       },
-      createdAt: new Date('Fri Aug 27 2021 13:39:48 GMT+0000 (Coordinated Universal Time)'),
-      updatedAt: new Date('Fri Aug 27 2021 13:39:48 GMT+0000 (Coordinated Universal Time)'),
+      createdAt: new Date(),
+      updatedAt: new Date(),
       createdBy: '0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127',
       peopleId: '6128695ae2f915a7f64ee94e',
       user: {
