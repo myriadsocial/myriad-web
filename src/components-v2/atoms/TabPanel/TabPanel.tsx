@@ -7,6 +7,7 @@ type TabPanelProps = {
   value: string | number;
   index: string | number;
   children: React.ReactNode;
+  optionalPadding?: number;
 };
 
 const useStyles = makeStyles(() =>
@@ -17,11 +18,11 @@ const useStyles = makeStyles(() =>
 
 export const TabPanel: React.FC<TabPanelProps> = props => {
   const styles = useStyles();
-  const {children, value, index} = props;
+  const {children, value, index, optionalPadding = 3} = props;
 
   return (
     <div className={styles.root} hidden={value !== index} role="tabpanel">
-      {value === index && <Box p={3}>{children}</Box>}
+      {value === index && <Box p={optionalPadding}>{children}</Box>}
     </div>
   );
 };

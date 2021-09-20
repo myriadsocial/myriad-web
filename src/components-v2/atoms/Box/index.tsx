@@ -13,6 +13,8 @@ type BoxComponentProps = BoxProps & {
   children: React.ReactNode;
   action?: React.ReactNode;
   radiusStr?: string;
+  isWithChevronRightIcon?: boolean;
+  isFitContent?: boolean;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -21,6 +23,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
     // @ts-ignore
     borderRadius: props => props.radiusStr ?? theme.spacing(2.5),
+    // @ts-ignore
+    width: props => (props.isFitContent ? 'fit-content' : 'unset'),
     padding: theme.spacing(3, 3.75),
   },
   header: {
@@ -37,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export const BoxComponent: React.FC<BoxComponentProps> = props => {
-  const {children, title, ...restProps} = props;
+  const {children, title, isWithChevronRightIcon = true, ...restProps} = props;
   const styles = useStyles(props);
 
   return (
@@ -46,9 +50,13 @@ export const BoxComponent: React.FC<BoxComponentProps> = props => {
         <div className={styles.header}>
           <Typography variant="h4">{title}</Typography>
 
-          <IconButton color="primary" size="medium" className={styles.action}>
-            <SvgIcon component={ChevronRightIcon} viewBox="0 0 24 24" />
-          </IconButton>
+          {isWithChevronRightIcon && (
+            <IconButton color="primary" size="medium" className={styles.action}>
+              <SvgIcon component={ChevronRightIcon} viewBox="0 0 24 24" />
+            </IconButton>
+          )}
+
+          {!isWithChevronRightIcon && <></>}
         </div>
       )}
 

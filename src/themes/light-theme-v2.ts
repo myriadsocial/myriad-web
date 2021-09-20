@@ -176,7 +176,6 @@ const theme = createTheme({
         height: 40,
       },
       containedPrimary: {
-        border: `1px solid ${primaryPurple}`,
         backgroundColor: primaryPurple,
         color: '#FFF',
         '&:hover': {
@@ -192,7 +191,6 @@ const theme = createTheme({
         '&:disabled': DISABLED_PROPS,
       },
       containedSecondary: {
-        border: `1px solid ${borderPurple}`,
         backgroundColor: `${surfacePurple}`,
         color: primaryPurple,
         '&:hover': {
@@ -224,7 +222,7 @@ const theme = createTheme({
         '&:disabled': DISABLED_PROPS,
       },
       outlinedSecondary: {
-        border: `1px solid ${primaryOrange}`,
+        border: `2px solid ${primaryOrange}`,
         backgroundColor: '#FFF',
         color: neutral90,
         '&:hover': {
