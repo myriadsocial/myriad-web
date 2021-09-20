@@ -1,9 +1,8 @@
+import {ChatAlt2Icon, HashtagIcon, VariableIcon} from '@heroicons/react/outline';
+
 import React, {useState} from 'react';
 
 import {RightMenuBarProps} from '.';
-import ChatIcon from '../../images/Icons/ChatTabIcon.svg';
-import ExperienceIcon from '../../images/Icons/ExperienceTabIcon.svg';
-import TrendingIcon from '../../images/Icons/TrendingTabIcon.svg';
 import {ExperienceTabMenu} from '../ExperienceTabMenu/ExperienceTabMenu';
 import {TabsComponent} from '../atoms/Tabs/';
 
@@ -12,17 +11,17 @@ export const RightMenuBar: React.FC<RightMenuBarProps> = props => {
   const [iconTabs] = useState([
     {
       id: 'first',
-      icon: <ExperienceIcon />,
+      icon: <VariableIcon />,
       component: <ExperienceTabMenu experiences={experiences} />,
     },
     {
       id: 'second',
-      icon: <TrendingIcon />,
+      icon: <HashtagIcon />,
       component: 'Second Tab Content',
     },
     {
       id: 'third',
-      icon: <ChatIcon />,
+      icon: <ChatAlt2Icon />,
       component: 'Third Tab Content',
     },
   ]);
