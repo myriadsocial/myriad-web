@@ -5,6 +5,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
     },
+    selected: {
+      fontWeight: 600,
+    },
     expand: {
       marginLeft: theme.spacing(1),
       padding: 0,

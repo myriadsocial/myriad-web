@@ -50,7 +50,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
           {title}:&nbsp;
         </Typography>
 
-        <Typography component="span" color="textPrimary">
+        <Typography component="span" color="textPrimary" className={styles.selected}>
           {getSelectedText()}
         </Typography>
       </div>

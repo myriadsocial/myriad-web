@@ -55,7 +55,7 @@ export const PostImport: React.FC<PostImportProps> = ({value}) => {
           </Typography>
 
           <div className={styles.preview}>
-            <Embed url={previewUrl} options={{facebookAppId: ''}} />
+            <Embed url={previewUrl} options={{facebookAppId: '1349208398779551'}} />
           </div>
         </div>
       )}
