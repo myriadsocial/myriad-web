@@ -37,7 +37,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     replyIcon: {
       color: theme.palette.primary.main,
-      transform: 'rotate(-45deg)',
+      transform: 'rotate(45deg)',
     },
     avatar: {
       marginRight: 12,
@@ -49,6 +49,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'space-between',
       width: '100%',
+    },
+    fill: {
+      fill: 'none',
     },
   }),
 );

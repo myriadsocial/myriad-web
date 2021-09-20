@@ -10,6 +10,8 @@ type CommentListProps = {
   comments: Comment[];
   deep?: number;
   placeholder?: string;
+  focus?: boolean;
+  expand?: boolean;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const CommentList: React.FC<CommentListProps> = props => {
-  const {comments, deep = 0, placeholder} = props;
+  const {comments, deep = 0, placeholder, focus, expand} = props;
 
   const styles = useStyles();
 
@@ -35,6 +37,8 @@ export const CommentList: React.FC<CommentListProps> = props => {
           onSubmit={handleSubmitCommit}
           username={'asda'}
           avatar={'asdas'}
+          focus={focus}
+          expand={expand}
         />
       )}
 

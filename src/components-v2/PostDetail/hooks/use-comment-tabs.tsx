@@ -26,6 +26,8 @@ export const useCommentTabs = (
         <CommentList
           placeholder={'Your downvote will be submitted when you post a comment'}
           comments={debates || []}
+          focus
+          expand
         />
       ),
     },
