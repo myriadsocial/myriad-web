@@ -39,7 +39,7 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
         color: '#12130F',
 
         '& .MuiTab-wrapper': {
-          fontWeight: 500,
+          fontWeight: 600,
         },
       },
 
