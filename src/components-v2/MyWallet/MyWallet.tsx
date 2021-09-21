@@ -1,20 +1,10 @@
 import React, {useState} from 'react';
 
-import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
-
+import {TransactionHistoryDetail} from '../../interfaces/transaction';
 import {BalanceDetailList} from '../BalanceDetailList/BalanceDetailList';
+import {HistoryDetailList} from '../HistoryDetailList/HistoryDetailList';
 import {BoxComponent} from '../atoms/Box/';
 import {TabsComponent} from '../atoms/Tabs/';
-import {Button, ButtonVariant, ButtonColor} from '../atoms/button/';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    balanceTabActions: {
-      display: 'flex',
-      columnGap: theme.spacing(2.875),
-    },
-  }),
-);
 
 // TODO: move this to interfaces/balance.ts when rewiring data
 type CurrencyDetail = {
@@ -32,11 +22,11 @@ export type BalanceDetail = CurrencyDetail & {
 type MyWalletProps = {
   headerTitle: string;
   balanceDetails: BalanceDetail[];
+  historyDetails: TransactionHistoryDetail[];
 };
 
 export const MyWallet: React.FC<MyWalletProps> = props => {
-  const classes = useStyles();
-  const {headerTitle, balanceDetails} = props;
+  const {headerTitle, balanceDetails, historyDetails} = props;
 
   const [tabTexts] = useState([
     {
@@ -44,7 +34,11 @@ export const MyWallet: React.FC<MyWalletProps> = props => {
       title: 'Balance',
       component: <BalanceDetailList balanceDetails={balanceDetails} />,
     },
-    {id: 'second-tab', title: 'History', component: 'History component'},
+    {
+      id: 'second-tab',
+      title: 'History',
+      component: <HistoryDetailList historyDetails={historyDetails} />,
+    },
   ]);
 
   const handleChangeTab = () => {
@@ -52,7 +46,11 @@ export const MyWallet: React.FC<MyWalletProps> = props => {
   };
 
   return (
-    <BoxComponent isWithChevronRightIcon={false} title={headerTitle} isFitContent={true}>
+    <BoxComponent
+      isWithChevronRightIcon={false}
+      title={headerTitle}
+      isFitContent={true}
+      minWidth={643}>
       <TabsComponent
         active={tabTexts[0].id}
         tabs={tabTexts}
@@ -62,12 +60,6 @@ export const MyWallet: React.FC<MyWalletProps> = props => {
         onChangeTab={handleChangeTab}
         optionalPadding={0}
       />
-      <div className={classes.balanceTabActions}>
-        <Button variant={ButtonVariant.OUTLINED} color={ButtonColor.SECONDARY}>
-          Set coin priority
-        </Button>
-        <Button variant={ButtonVariant.CONTAINED}>+ Add coin</Button>
-      </div>
     </BoxComponent>
   );
 };
