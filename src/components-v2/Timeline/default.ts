@@ -31,6 +31,31 @@ export const balanceSortOptions: MenuOptions[] = [
   },
 ];
 
+export const historyAmountSortOptions: MenuOptions[] = [
+  {
+    id: 'highestAmount',
+    title: 'Highest Amount',
+  },
+];
+
+export const historyCoinSortOptions: MenuOptions[] = [
+  {
+    id: 'allCoin',
+    title: 'All Coins',
+  },
+  {
+    id: 'aToZ',
+    title: 'A-Z',
+  },
+];
+
+export const historyTransactionSortOptions: MenuOptions[] = [
+  {
+    id: 'all',
+    title: 'All',
+  },
+];
+
 export const filterOptions: TabListItem<string>[] = [
   {
     id: 'all',
