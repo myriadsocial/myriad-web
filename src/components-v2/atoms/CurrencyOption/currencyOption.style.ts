@@ -41,6 +41,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '20px',
       paddingLeft: theme.spacing(1),
       paddingRight: theme.spacing(1),
+      marginTop: '6px',
     },
     hover: {
       '&:hover': {
