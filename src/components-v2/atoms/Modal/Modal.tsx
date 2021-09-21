@@ -48,7 +48,8 @@ export const Modal: React.FC<ModalProps> = props => {
           aria-label="close"
           size="small"
           className={styles.close}
-          onClick={onClose}>
+          onClick={onClose}
+        >
           <SvgIcon component={XIcon} color="primary" fontSize="medium" />
         </IconButton>
       </DialogTitle>
