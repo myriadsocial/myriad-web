@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme: Theme) =>
       minWidth: 24,
       marginRight: 20,
       padding: 6,
-      color: 'transparent',
     },
     active: {
       background: theme.palette.secondary.main,

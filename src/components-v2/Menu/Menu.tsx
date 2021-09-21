@@ -1,45 +1,25 @@
 import React from 'react';
 
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
-
 import MyriadIcon from '../../images/web/myriad.svg';
 import {BoxComponent} from '../atoms/Box';
 import {ListItemComponent} from '../atoms/ListItem';
-import {useMenuList, MenuDetail} from './use-menu-list';
+import {useStyles} from './Menu.styles';
+import {useMenuList, MenuDetail, MenuId} from './use-menu-list';
 
 type MenuProps = {
-  icons: string[];
+  selected: MenuId;
+  onChange: (path: string) => void;
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      position: 'relative',
+export const Menu: React.FC<MenuProps> = props => {
+  const {selected, onChange} = props;
 
-      '&::before': {
-        content: '""',
-        position: 'absolute',
-        top: 46,
-        width: 10,
-        height: 60,
-        borderRadius: theme.spacing(0, 1.25, 1.25, 0),
-        background: theme.palette.primary.main,
-      },
-    },
-    head: {
-      marginTop: 30,
-      marginBottom: 32,
-    },
-  }),
-);
-
-export const Menu: React.FC<MenuProps> = () => {
   const styles = useStyles();
 
-  const menu = useMenuList();
+  const menu = useMenuList(selected);
 
   const openMenu = (item: MenuDetail) => () => {
-    console.log(item);
+    onChange(item.url);
   };
 
   return (
