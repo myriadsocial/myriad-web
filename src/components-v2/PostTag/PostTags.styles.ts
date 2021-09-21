@@ -10,6 +10,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     list: {
       display: 'flex',
       flexWrap: 'wrap',
+      padding: 0,
+      marginBottom: 60,
 
       '& .MuiListItem-root': {
         height: 36,
