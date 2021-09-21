@@ -50,7 +50,7 @@ export const MyWallet: React.FC<MyWalletProps> = props => {
       isWithChevronRightIcon={false}
       title={headerTitle}
       isFitContent={true}
-      minWidth={643}>
+      minWidth={583}>
       <TabsComponent
         active={tabTexts[0].id}
         tabs={tabTexts}

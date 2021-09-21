@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     // @ts-ignore
     width: props => (props.isFitContent ? 'fit-content' : 'unset'),
     // @ts-ignore
-    minWidth: props => props.minWidth ?? 643,
+    minWidth: props => props.minWidth ?? 640,
     padding: theme.spacing(3, 3.75),
   },
   header: {
