@@ -5,6 +5,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     backdrop: {
       zIndex: theme.zIndex.drawer + 1,
       color: '#fff',
+      background: 'rgba(0, 0, 0, 0.25)',
     },
   }),
 );
