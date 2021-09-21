@@ -30,13 +30,13 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     <>
       <div className={classes.headerActionWrapper}>
         <DropdownMenu title={'Sort'} options={historyAmountSortOptions} />
-        <DropdownMenu title={'Coin'} options={historyCoinSortOptions} />
-        <div className={classes.transactionSort}>
+        <div className={classes.leftJustifiedWrapper}>
+          <DropdownMenu title={'Coin'} options={historyCoinSortOptions} />
           <DropdownMenu title={'Transaction'} options={historyTransactionSortOptions} />
         </div>
       </div>
       <TableContainer component={List}>
-        <Table className={classes.root} aria-label="simple table">
+        <Table className={classes.root} aria-label="history details table">
           <TableBody>
             {historyDetails.map(historyDetail => (
               <TableRow key={historyDetail.id} className={classes.tableRow}>
@@ -84,7 +84,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                         </Typography>
                       )}
                       <Typography variant="caption" color="textSecondary">
-                        {'USD 15.25'}
+                        {'~15.25 USD'}
                       </Typography>
                     </div>
                     <div>
