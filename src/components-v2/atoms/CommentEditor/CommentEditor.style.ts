@@ -53,5 +53,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     fill: {
       fill: 'none',
     },
+    text: {
+      fontWeight: theme.typography.fontWeightRegular,
+      fontFamily: theme.typography.fontFamily,
+    },
   }),
 );
