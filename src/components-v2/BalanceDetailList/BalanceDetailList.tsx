@@ -30,6 +30,8 @@ const useStyles = makeStyles((theme: Theme) =>
       '& .MuiTableCell-root': {
         borderBottom: 'none',
         paddingRight: 0,
+        paddingTop: theme.spacing(1.25),
+        paddingBottom: theme.spacing(1.25),
       },
     },
     tableCell: {
@@ -61,6 +63,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     balanceTabActions: {
       display: 'flex',
+      justifyContent: 'space-between',
       columnGap: theme.spacing(2.875),
     },
   }),
@@ -96,7 +99,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
         </IconButton>
       </div>
       <TableContainer component={List}>
-        <Table className={classes.root} aria-label="simple table">
+        <Table className={classes.root} aria-label="Balance Detail Table">
           <TableBody>
             {balanceDetails.map(balanceDetail => (
               <TableRow key={balanceDetail.id} className={classes.tableRow}>
