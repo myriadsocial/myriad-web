@@ -75,7 +75,7 @@ export const CommentEditor: React.FC<Props> = props => {
           <CardActions disableSpacing>
             <div className={style.container}>
               <div>
-                <Tooltip title="Coming soon" arrow>
+                <Tooltip classes={{tooltip: style.text}} title="Coming soon" arrow>
                   <IconButton className={style.action} aria-label="photo">
                     <SvgIcon
                       classes={{root: style.fill}}
@@ -85,7 +85,7 @@ export const CommentEditor: React.FC<Props> = props => {
                     />
                   </IconButton>
                 </Tooltip>
-                <Tooltip title="Coming soon" arrow>
+                <Tooltip classes={{tooltip: style.text}} title="Coming soon" arrow>
                   <IconButton className={style.action} aria-label="video">
                     <SvgIcon
                       classes={{root: style.fill}}
