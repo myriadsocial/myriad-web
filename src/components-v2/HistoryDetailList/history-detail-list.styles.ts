@@ -12,6 +12,8 @@ export const useStyles = makeStyles((theme: Theme) =>
         borderBottom: 'none',
         paddingRight: 0,
       },
+      paddingTop: theme.spacing(1.25),
+      paddingBottom: theme.spacing(1.25),
     },
     tableCell: {
       display: 'flex',
