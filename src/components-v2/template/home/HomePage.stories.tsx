@@ -31,7 +31,7 @@ OneItem.args = {
         rowGap: 12,
       }}>
       <div>
-        <SidebarMenu icons={SidebarMenu.args?.icons ?? []} />
+        <SidebarMenu selected={'home'} onChange={SidebarMenu.args?.onChange || console.log} />
       </div>
       <div>
         <SocialMediaList
