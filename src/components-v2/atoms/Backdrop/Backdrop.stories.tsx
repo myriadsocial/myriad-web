@@ -16,7 +16,7 @@ const Template: ComponentStory<typeof BackdropComponent> = args => <BackdropComp
 export const Default = Template.bind({});
 Default.args = {
   open: true,
-  children: <p>backdrop</p>,
+  children: <p>backdrop black opacity 25%</p>,
 };
 
 export const Loading = Template.bind({});
