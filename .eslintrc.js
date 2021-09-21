@@ -28,6 +28,7 @@ module.exports = {
   ],
   ignorePatterns: ['**/public/*.js', '**/plugins/*.js'],
   rules: {
+    'no-unused-vars': ['error', {vars: 'local', args: 'none'}],
     'no-useless-escape': ['warn'],
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/ban-types': ['warn'],
