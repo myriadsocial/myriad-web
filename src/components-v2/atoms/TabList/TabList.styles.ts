@@ -36,8 +36,11 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
         backgroundColor: props =>
           props.mark === 'underline' ? 'transparent' : theme.palette.secondary.main,
         borderRadius: 5,
-        fontWeight: 600,
         color: '#12130F',
+
+        '& .MuiTab-wrapper': {
+          fontWeight: 500,
+        },
       },
 
       '& .MuiTabs-indicator': {
