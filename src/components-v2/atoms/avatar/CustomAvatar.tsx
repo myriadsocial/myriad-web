@@ -8,13 +8,12 @@ const CustomAvatar = ({
   avatar,
   variant = 'circle',
   size = CustomAvatarSize.SMALL,
+  ...restProps
 }: CustomAvatarProps): JSX.Element => {
   const styles = useStyles();
   return (
     <>
-      {avatar && (
-        <Avatar alt="Remy Sharp" src={avatar} variant={variant} className={styles[size]} />
-      )}
+      {avatar && <Avatar {...restProps} src={avatar} variant={variant} className={styles[size]} />}
     </>
   );
 };
