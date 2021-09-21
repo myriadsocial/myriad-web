@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
     tableRow: {
       '& .MuiTableCell-root': {
         borderBottom: 'none',
+        paddingRight: 0,
       },
     },
     tableCell: {
