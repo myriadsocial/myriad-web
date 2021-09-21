@@ -33,10 +33,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'flex-end',
       alignItems: 'center',
-      columnGap: theme.spacing(2.5),
+      columnGap: theme.spacing(1.5),
     },
-    transactionSort: {
-      marginLeft: theme.spacing(10.125),
+    leftJustifiedWrapper: {
+      marginLeft: 'auto',
+      display: 'flex',
+      columnGap: theme.spacing(4.375),
     },
     tipStatusGreen: {
       width: 80,
