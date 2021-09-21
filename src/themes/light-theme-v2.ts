@@ -7,9 +7,13 @@ declare module '@material-ui/core/styles' {
     status: {
       success: {
         main: string;
+        surface: string;
+        pressed: string;
       };
-      warning: {
+      danger: {
         main: string;
+        surface: string;
+        pressed: string;
       };
       info: {
         main: string;
@@ -21,9 +25,13 @@ declare module '@material-ui/core/styles' {
     status?: {
       success?: {
         main: string;
+        surface: string;
+        pressed: string;
       };
-      warning?: {
+      danger?: {
         main: string;
+        surface: string;
+        pressed: string;
       };
       info?: {
         main: string;
@@ -57,9 +65,13 @@ const textSecondary = neutral70;
 const surfacePurple = '#EBE0FF';
 // const surfaceOrange = '#FFF2CC';
 
-// const surfaceGreen = '#DAF1E6';
-// const surfaceRed = '#FFD7D7';
+const surfaceGreen = '#DAF1E6';
+const surfaceRed = '#FFD7D7';
 // const surfaceBlue = '#CFE2F4';
+
+// Pressed colors
+const pressedGreen = '#268054';
+const pressedRed = '#A62121';
 
 //Border colors
 const borderPurple = '#DECCFF';
@@ -95,9 +107,13 @@ const theme = createTheme({
   status: {
     success: {
       main: primaryGreen,
+      surface: surfaceGreen,
+      pressed: pressedGreen,
     },
-    warning: {
+    danger: {
       main: primaryRed,
+      surface: surfaceRed,
+      pressed: pressedRed,
     },
     info: {
       main: primaryBlue,

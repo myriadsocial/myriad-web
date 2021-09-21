@@ -17,6 +17,7 @@ import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 import {BalanceDetail} from '../MyWallet/MyWallet';
 import {balanceSortOptions} from '../Timeline/default';
 import {DropdownMenu} from '../atoms/DropdownMenu/';
+import {Button, ButtonVariant, ButtonColor} from '../atoms/button/';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,6 +58,10 @@ const useStyles = makeStyles((theme: Theme) =>
       },
       fontSize: 13,
       marginLeft: 'auto',
+    },
+    balanceTabActions: {
+      display: 'flex',
+      columnGap: theme.spacing(2.875),
     },
   }),
 );
@@ -116,6 +121,12 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
           </TableBody>
         </Table>
       </TableContainer>
+      <div className={classes.balanceTabActions}>
+        <Button variant={ButtonVariant.OUTLINED} color={ButtonColor.SECONDARY}>
+          Set coin priority
+        </Button>
+        <Button variant={ButtonVariant.CONTAINED}>+ Add coin</Button>
+      </div>
     </>
   );
 };
