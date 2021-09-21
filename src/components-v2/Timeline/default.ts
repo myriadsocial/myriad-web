@@ -20,6 +20,17 @@ export const sortOptions: MenuOptions[] = [
   },
 ];
 
+export const balanceSortOptions: MenuOptions[] = [
+  {
+    id: 'all',
+    title: 'All',
+  },
+  {
+    id: 'aToZ',
+    title: 'A-Z',
+  },
+];
+
 export const filterOptions: TabListItem<string>[] = [
   {
     id: 'all',
