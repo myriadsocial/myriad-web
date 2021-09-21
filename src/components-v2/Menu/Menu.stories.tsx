@@ -2,7 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {Menu} from '.';
+import {Menu} from './';
 
 export default {
   title: 'UI Revamp v2.0/components/Sidebar Menu',
@@ -13,4 +13,7 @@ export default {
 const Template: ComponentStory<typeof Menu> = args => <Menu {...args} />;
 
 export const SidebarMenu = Template.bind({});
-SidebarMenu.args = {};
+SidebarMenu.args = {
+  selected: 'friends',
+  onChange: (route: string) => console.log(route),
+};
