@@ -15,6 +15,7 @@ type BoxComponentProps = BoxProps & {
   radiusStr?: string;
   isWithChevronRightIcon?: boolean;
   isFitContent?: boolean;
+  minWidth?: number;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -25,6 +26,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: props => props.radiusStr ?? theme.spacing(2.5),
     // @ts-ignore
     width: props => (props.isFitContent ? 'fit-content' : 'unset'),
+    // @ts-ignore
+    minWidth: props => props.minWidth ?? 643,
     padding: theme.spacing(3, 3.75),
   },
   header: {
