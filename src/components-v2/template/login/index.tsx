@@ -24,7 +24,7 @@ export const LoginComponent: React.FC = () => {
             <Typography variant="h1" className={style.title}>
               Social Media with <span className={style.titlePrimary}>no boundaries</span>
             </Typography>
-            <Button className={style.button} color="primary" variant="contained">
+            <Button className={style.button} color="default" variant="contained">
               Sign in
             </Button>
             <Typography className={style.span} component="span">
@@ -64,23 +64,27 @@ export const LoginComponent: React.FC = () => {
             <div className={style.carousel}>
               <Carousel isRTL={false} itemsToShow={1}>
                 <div>
-                  <Typography className={style.caption} component="span" color="textPrimary">
-                    <Typography className={style.caption} component="span" color="primary">
-                      Limitless
-                    </Typography>{' '}
-                    Conversation
-                  </Typography>
+                  <div className={`${style.mb1}`}>
+                    <Typography className={`${style.caption}`} component="span" color="textPrimary">
+                      <Typography className={style.caption} component="span" color="primary">
+                        Limitless
+                      </Typography>{' '}
+                      Conversation
+                    </Typography>
+                  </div>
                   <Typography className={style.subtitle} component="p" color="textPrimary">
                     No limitation on what you said in Myriad Fredom of Speech is Our Vision
                   </Typography>
                 </div>
                 <div>
-                  <Typography className={style.caption} component="span" color="textPrimary">
-                    <Typography className={style.caption} component="span" color="primary">
-                      Monetize
-                    </Typography>{' '}
-                    your Idea
-                  </Typography>
+                  <div className={`${style.mb1}`}>
+                    <Typography className={style.caption} component="span" color="textPrimary">
+                      <Typography className={style.caption} component="span" color="primary">
+                        Monetize
+                      </Typography>{' '}
+                      your Idea
+                    </Typography>
+                  </div>
                   <Typography className={style.subtitle} component="p" color="textPrimary">
                     Speak what inside your mind and get a chance to earn coins
                   </Typography>
