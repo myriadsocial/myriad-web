@@ -1,7 +1,8 @@
+import {ChevronDownIcon} from '@heroicons/react/outline';
+
 import React, {useState} from 'react';
 
-import {Button} from '@material-ui/core';
-import Popover from '@material-ui/core/Popover';
+import {Button, IconButton, SvgIcon} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
@@ -28,8 +29,9 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const styles = useStyles();
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const nswTagOpen = Boolean(anchorEl);
+  const [openTags, setOpenTags] = useState(false);
+  const [nsfwTags, setNsfwTags] = useState<string[]>([]);
+
   const header: Record<PostCreateType, {title: string; subtitle: string}> = {
     create: {
       title: 'Create Post',
@@ -44,15 +46,30 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const node = formatStringToNode(value);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
+    setOpenTags(true);
   };
 
   const handleTabChange = (event: React.ChangeEvent<{}>, tab: PostCreateType) => {
     setActiveTab(tab);
+  };
+
+  const handleConfirmTags = (tags: string[]) => {
+    setNsfwTags(tags);
+    handleCloseTags();
+  };
+
+  const handleCloseTags = () => {
+    setOpenTags(false);
+  };
+
+  const getTagsStyle = () => {
+    const classes = [styles.nsfw];
+
+    if (nsfwTags.length) {
+      classes.push(styles.danger);
+    }
+
+    return classes.join(' ');
   };
 
   return (
@@ -84,31 +101,30 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
         <div className={styles.option}>
           <DropdownMenu title="Visibility" options={menuOptions} />
 
-          <Button size="small" onClick={handleClick} className={styles.nsfw}>
-            NSFW
-          </Button>
+          <div>
+            <Button size="small" onClick={handleClick} className={getTagsStyle()}>
+              NSFW
+              <IconButton
+                onClick={handleClick}
+                color="primary"
+                aria-label="expand"
+                size="small"
+                className={styles.expand}>
+                <SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />
+              </IconButton>
+            </Button>
 
-          <Popover
-            open={nswTagOpen}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}>
-            <PostTags
-              selected={['profanity', 'pornography']}
-              options={tagOptions}
-              onClose={handleClose}
-              onConfirm={handleClose}
-            />
-          </Popover>
+            <Modal
+              title="NSFW tags"
+              align="left"
+              titleSize="small"
+              open={openTags}
+              onClose={handleCloseTags}>
+              <PostTags selected={nsfwTags} options={tagOptions} onConfirm={handleConfirmTags} />
+            </Modal>
+          </div>
 
-          <Button color="primary" size="small">
+          <Button color="primary" size="small" className={styles.markdown}>
             Markdown Mode
           </Button>
         </div>

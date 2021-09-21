@@ -8,18 +8,29 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import {useStyles} from './Modal.styles';
+import {AllignTitle, TitleSize} from './Modal.types';
 
 export type ModalProps = DialogProps & {
   title: string;
   subtitle?: string;
   children: React.ReactNode;
+  align?: AllignTitle;
+  titleSize?: TitleSize;
   onClose: () => void;
 };
 
 export const Modal: React.FC<ModalProps> = props => {
-  const {title, subtitle, children, onClose, ...otherProps} = props;
+  const {
+    title,
+    subtitle,
+    children,
+    onClose,
+    align = 'center',
+    titleSize = 'medium',
+    ...otherProps
+  } = props;
 
-  const styles = useStyles();
+  const styles = useStyles({align, titleSize});
 
   const handleClose = () => {
     onClose();
@@ -39,7 +50,7 @@ export const Modal: React.FC<ModalProps> = props => {
           <SvgIcon component={XCircleIcon} color="primary" fontSize="medium" />
         </IconButton>
       </DialogTitle>
-      <DialogContent> {children} </DialogContent>
+      <DialogContent className={styles.content}> {children} </DialogContent>
     </Dialog>
   );
 };

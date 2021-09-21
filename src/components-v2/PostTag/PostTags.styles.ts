@@ -6,20 +6,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       width: 386,
-      padding: 30,
-    },
-    title: {
-      marginBottom: 30,
-      fontSize: 16,
-    },
-    close: {
-      position: 'absolute',
-      right: 30,
-      top: 30,
-
-      '& .MuiSvgIcon-colorPrimary': {
-        fill: 'none',
-      },
     },
     list: {
       display: 'flex',
