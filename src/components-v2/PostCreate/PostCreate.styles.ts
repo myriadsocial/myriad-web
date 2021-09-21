@@ -49,5 +49,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginLeft: 30,
       marginRight: 30,
     },
+    danger: {
+      color: theme.status.warning.main,
+    },
+    expand: {
+      marginLeft: theme.spacing(1),
+      padding: 0,
+    },
+    markdown: {
+      width: 120,
+    },
   }),
 );

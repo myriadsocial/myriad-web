@@ -1,4 +1,4 @@
-import {ChevronDownIcon} from '@heroicons/react/solid';
+import {ChevronDownIcon} from '@heroicons/react/outline';
 
 import React, {useState} from 'react';
 
@@ -60,9 +60,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
         color="primary"
         aria-label="expand"
         className={styles.expand}>
-        <SvgIcon fontSize="inherit" color="inherit">
-          <ChevronDownIcon />
-        </SvgIcon>
+        <SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />
       </IconButton>
 
       <Menu
