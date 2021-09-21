@@ -52,7 +52,7 @@ DefaultMyWallet.args = {
       },
       currency: {
         id: CurrencyId.AUSD,
-        name: 'ausd',
+        name: 'aUSD',
         image: 'https://res.cloudinary.com/dsget80gs/coins/ausd.png',
         decimal: 12,
         addressType: 42,
@@ -79,7 +79,7 @@ DefaultMyWallet.args = {
       },
       currency: {
         id: CurrencyId.AUSD,
-        name: 'ausd',
+        name: 'aUSD',
         image: 'https://res.cloudinary.com/dsget80gs/coins/ausd.png',
         decimal: 12,
         addressType: 42,

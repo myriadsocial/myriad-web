@@ -10,6 +10,9 @@ declare module '@material-ui/core/styles' {
         surface: string;
         pressed: string;
       };
+      warning: {
+        main: string;
+      };
       danger: {
         main: string;
         surface: string;
@@ -27,6 +30,9 @@ declare module '@material-ui/core/styles' {
         main: string;
         surface: string;
         pressed: string;
+      };
+      warning?: {
+        main: string;
       };
       danger?: {
         main: string;
@@ -109,6 +115,9 @@ const theme = createTheme({
       main: primaryGreen,
       surface: surfaceGreen,
       pressed: pressedGreen,
+    },
+    warning: {
+      main: primaryOrange,
     },
     danger: {
       main: primaryRed,
