@@ -11,10 +11,10 @@ import Typography from '@material-ui/core/Typography';
 import {TransactionHistoryDetail, TipStatus} from '../../interfaces/transaction';
 import {
   historyAmountSortOptions,
-  historyCoinSortOptions,
   historyTransactionSortOptions,
+  historyCoinSortOptions,
 } from '../Timeline/default';
-import {MenuOptions} from '../atoms/DropdownMenu';
+import {MenuOptions} from '../atoms/DropdownMenu/';
 import {DropdownMenu} from '../atoms/DropdownMenu/';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/avatar/';
 import {useStyles} from './history-detail-list.styles';
@@ -33,12 +33,14 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     }));
     const updatedSortOptions = getUniqueListBy(newArray, 'id');
 
-    setSortOptions(oldSortOptions => [...oldSortOptions, ...updatedSortOptions]);
+    //@ts-ignore
+    setSortOptions((oldSortOptions: MenuOptions[]) => [...oldSortOptions, ...updatedSortOptions]);
   }, []);
 
   const [sortOptions, setSortOptions] = useState(historyCoinSortOptions);
 
-  const getUniqueListBy = (arr: MenuOptions[], key: string) => {
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  const getUniqueListBy = (arr: Array<any>, key: string) => {
     return [...new Map(arr.map(item => [item[key], item])).values()];
   };
 
