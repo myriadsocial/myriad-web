@@ -81,14 +81,15 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type DraggableBalanceCardProps = {
   balanceDetail: BalanceDetail;
+  index: number;
 };
 
 const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props => {
-  const {balanceDetail} = props;
+  const {balanceDetail, index} = props;
   const classes = useStyles();
 
   return (
-    <Card className={classes.cardRoot} key={balanceDetail.id}>
+    <Card className={classes.cardRoot}>
       <CardContent>
         <div className={classes.cardContentWrapper}>
           <div className={classes.leftJustifiedWrapper}>
@@ -113,7 +114,7 @@ const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props => {
             </div>
 
             <SvgIcon
-              style={{transform: 'rotate(180deg)'}}
+              style={index === 0 ? {transform: 'rotate(180deg)'} : {transform: 'rotate(0deg)'}}
               component={FullVectorIcon}
               viewBox="0 0 18 20"
             />
@@ -173,14 +174,30 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
                   {coins.map((coin, index) => {
                     return (
                       <Draggable key={coin.id} draggableId={coin.id} index={index}>
-                        {provided => (
-                          <ListItem
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}>
-                            <DraggableBalanceCard balanceDetail={coin} />
-                          </ListItem>
-                        )}
+                        {provided =>
+                          index === 1 ? (
+                            <>
+                              <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                                Favorite coin
+                              </Typography>
+                              <ListItem
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}>
+                                <DraggableBalanceCard balanceDetail={coin} index={index} />
+                              </ListItem>
+                            </>
+                          ) : (
+                            <>
+                              <ListItem
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}>
+                                <DraggableBalanceCard balanceDetail={coin} index={index} />
+                              </ListItem>
+                            </>
+                          )
+                        }
                       </Draggable>
                     );
                   })}
