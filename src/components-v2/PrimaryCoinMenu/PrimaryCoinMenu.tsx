@@ -171,6 +171,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
                   className={classes.listRoot}
                   {...provided.droppableProps}
                   ref={provided.innerRef}>
+                  {provided.placeholder}
                   {coins.map((coin, index) => {
                     return (
                       <Draggable key={coin.id} draggableId={coin.id} index={index}>

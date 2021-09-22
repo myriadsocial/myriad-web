@@ -42,8 +42,6 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     return [...new Map(arr.map(item => [item[key], item])).values()];
   };
 
-  console.log({sortOptions});
-
   const classes = useStyles();
   return (
     <>
