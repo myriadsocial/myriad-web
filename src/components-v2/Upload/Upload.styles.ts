@@ -5,28 +5,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       padding: theme.spacing(1, 1, 3),
       background: '#FFF',
+      width: 580,
     },
-    header: {
-      marginBottom: 20,
-      display: 'flex',
-      justifyContent: 'left',
-      alignItems: 'center',
-    },
-    icon: {
-      width: 38,
-      marginRight: 20,
-    },
-    action: {
-      marginBottom: 20,
-    },
-    option: {
-      marginTop: 8,
-      '& > *': {
-        marginRight: 8,
-      },
-    },
-    input: {
-      marginBottom: 30,
+    confirm: {
+      marginTop: 60,
     },
   }),
 );
