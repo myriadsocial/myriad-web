@@ -20,17 +20,17 @@ export default function PostAvatar({origin, avatar, onClick}: Props) {
   const socials = React.useMemo(
     () => ({
       facebook: (
-        <SvgIcon>
+        <SvgIcon viewBox="0 0 20 20">
           <FacebookIcon />
         </SvgIcon>
       ),
       twitter: (
-        <SvgIcon>
+        <SvgIcon viewBox="0 0 20 20">
           <TwitterIcon />
         </SvgIcon>
       ),
       reddit: (
-        <SvgIcon>
+        <SvgIcon viewBox="0 0 20 20">
           <RedditIcon />
         </SvgIcon>
       ),
