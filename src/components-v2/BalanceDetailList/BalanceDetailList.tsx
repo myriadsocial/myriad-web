@@ -1,6 +1,6 @@
 import {RefreshIcon} from '@heroicons/react/outline';
 
-import React from 'react';
+import React, {useState} from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 
 import {BalanceDetail} from '../MyWallet/MyWallet';
+import {PrimaryCoinMenu} from '../PrimaryCoinMenu/PrimaryCoinMenu';
 import {balanceSortOptions} from '../Timeline/default';
 import {DropdownMenu} from '../atoms/DropdownMenu/';
 import {Button, ButtonVariant, ButtonColor} from '../atoms/button/';
@@ -76,11 +77,28 @@ type BalanceDetailListProps = {
 export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   const {balanceDetails} = props;
 
+  const [isOnPrimaryCoinMenu, setIsOnPrimaryCoinMenu] = useState(false);
+
   const handleRefresh = () => {
     console.log('refreshed!');
   };
 
+  const togglePrimaryCoinMenu = () => {
+    setIsOnPrimaryCoinMenu(!isOnPrimaryCoinMenu);
+  };
+
   const classes = useStyles();
+
+  if (isOnPrimaryCoinMenu)
+    return (
+      <>
+        <PrimaryCoinMenu
+          togglePrimaryCoinMenu={togglePrimaryCoinMenu}
+          balanceDetails={balanceDetails}
+        />
+      </>
+    );
+
   return (
     <>
       <div className={classes.headerActionWrapper}>
@@ -125,7 +143,10 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
         </Table>
       </TableContainer>
       <div className={classes.balanceTabActions}>
-        <Button variant={ButtonVariant.OUTLINED} color={ButtonColor.SECONDARY}>
+        <Button
+          variant={ButtonVariant.OUTLINED}
+          color={ButtonColor.SECONDARY}
+          onClick={togglePrimaryCoinMenu}>
           Set coin priority
         </Button>
         <Button variant={ButtonVariant.CONTAINED}>+ Add coin</Button>
