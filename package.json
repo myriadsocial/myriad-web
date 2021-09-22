@@ -91,6 +91,7 @@
     "next-transpile-modules": "^6.4.0",
     "node-fetch": "^2.6.1",
     "react": "^17.0.0",
+    "react-beautiful-dnd": "^13.1.0",
     "react-cookie": "^4.0.3",
     "react-copy-to-clipboard": "^5.0.3",
     "react-dom": "^17.0.0",
