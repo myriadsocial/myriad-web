@@ -138,6 +138,9 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
   const [coins, updateCoins] = useState(balanceDetails);
 
   const handleOnDragEnd = result => {
+    // Handle if dragging out of bounds
+    if (!result.destination) return;
+
     const items = Array.from(coins);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
