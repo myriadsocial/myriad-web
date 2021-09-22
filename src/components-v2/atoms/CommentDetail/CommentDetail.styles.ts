@@ -5,10 +5,11 @@ export const useStyles = makeStyles((theme: Theme) =>
     comment: {
       marginBottom: theme.spacing(1),
       boxShadow: 'none',
+      backgroundColor: 'rgba(246, 246, 246, 0.5)',
     },
     circle: {
       margin: theme.spacing(0, 0.5),
-      color: theme.palette.text.secondary,
+      color: 'red',
       fontSize: 10,
       '& .MuiSvgIcon-root': {
         fill: 'red',
@@ -18,8 +19,18 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(1, 2),
     },
     text: {
-      fontSize: 14,
-      lineHeight: '18px',
+      fontSize: '14px',
+      fontWeight: 700,
+    },
+    subText: {
+      fontSize: '12px',
+      color: theme.palette.text.secondary,
+      fontWeight: 400,
+    },
+    dot: {
+      color: '#C4C4C4',
+      marginRight: theme.spacing(1),
+      marginLeft: theme.spacing(1),
     },
     button: {
       width: 'auto',
