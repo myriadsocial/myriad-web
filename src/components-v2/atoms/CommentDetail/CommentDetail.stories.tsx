@@ -73,6 +73,24 @@ const comment: Comment = {
         },
       ],
     },
+    {
+      id: '6123614bf6c45c2728e43aca',
+      text: 'Drop comment',
+      postId: '6123614bf6c45c2728e43aca',
+      userId: '6123614bf6c45c2728e43aca',
+      createdAt: new Date('2021-07-15T03:40:23.000Z'),
+      updatedAt: new Date('2021-07-15T03:40:23.000Z'),
+      user: {
+        id: '6123614bf6c45c2728e43aca',
+        name: 'Reply one',
+        profilePictureURL:
+          'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
+        bannerImageUrl: '',
+        createdAt: new Date('2021-07-15T03:40:23.000Z'),
+        updatedAt: new Date('2021-07-15T03:40:23.000Z'),
+        currencies: [],
+      },
+    },
   ],
 };
 
