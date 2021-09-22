@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
+import {DragDropContext, Droppable, Draggable, DropResult} from 'react-beautiful-dnd';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -138,13 +138,13 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
 
   const [coins, updateCoins] = useState(balanceDetails);
 
-  const handleOnDragEnd = result => {
+  const handleOnDragEnd = ({source, destination}: DropResult) => {
     // Handle if dragging out of bounds
-    if (!result.destination) return;
+    if (!destination) return;
 
     const items = Array.from(coins);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
+    const [reorderedItem] = items.splice(source.index, 1);
+    items.splice(destination.index, 0, reorderedItem);
 
     updateCoins(items);
   };
