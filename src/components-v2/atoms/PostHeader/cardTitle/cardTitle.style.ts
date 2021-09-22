@@ -5,8 +5,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {},
     link: {
       fontFamily: theme.typography.fontFamily,
-      fontSize: 20,
-      lineHeight: '18px',
+      fontSize: '18px',
+      fontWeight: 400,
+      lineHeight: '20.08px',
       color: theme.palette.text.primary,
       textDecoration: 'none',
     },

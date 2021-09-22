@@ -7,16 +7,15 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
-// TODO move icon to HEROICONS
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
-import DateFormat from '../../../components/common/DateFormat';
 import {acronym} from '../../../helpers/string';
 import {CommentEditor} from '../CommentEditor';
 import {CommentList} from '../CommentList';
 import {VotingComponent} from '../Voting';
 import {CommentDetailProps} from './CommentDetail.interface';
 import {useStyles} from './CommentDetail.styles';
+
+import {formatDistance, subDays} from 'date-fns';
 
 export const CommentDetail: React.FC<CommentDetailProps> = props => {
   const {comment, deep} = props;
@@ -25,6 +24,13 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
 
   const handleOpenReply = () => {
     setIsReply(!isReply);
+  };
+
+  const getDate = (commentDate: Date) => {
+    const newFormat = formatDistance(subDays(new Date(commentDate), 0), new Date(), {
+      addSuffix: true,
+    });
+    return newFormat;
   };
 
   return (
@@ -38,8 +44,10 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             title={
               <Typography className={style.text}>
                 {comment.user.name}
-                <FiberManualRecordIcon className={style.circle} />
-                <DateFormat date={comment.createdAt} />
+                <span className={style.subText}>
+                  <span className={style.dot}>•</span>
+                  {getDate(comment.createdAt)}
+                </span>
               </Typography>
             }
           />

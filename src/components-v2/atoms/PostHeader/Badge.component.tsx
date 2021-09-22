@@ -10,6 +10,7 @@ const StyledBadge = withStyles((theme: Theme) =>
       height: 20,
       border: `1px solid ${theme.palette.background.paper}`,
       padding: '0 4px',
+      overflow: 'hidden',
     },
   }),
 )(Badge);

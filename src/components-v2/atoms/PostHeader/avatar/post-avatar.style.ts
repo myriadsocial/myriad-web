@@ -3,8 +3,8 @@ import {makeStyles, createStyles} from '@material-ui/core/styles';
 export const useStyles = makeStyles(() =>
   createStyles({
     avatar: {
-      width: 50,
-      height: 50,
+      width: '48px',
+      height: '48px',
     },
     facebook: {
       '& .MuiBadge-badge': {
