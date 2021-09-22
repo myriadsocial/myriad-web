@@ -33,6 +33,14 @@ DefaultMyWallet.args = {
       rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
       freeBalance: 200,
     },
+    {
+      id: 'DOT',
+      name: 'polkadot',
+      image: 'https://res.cloudinary.com/dsget80gs/coins/dot.svg',
+      decimal: 10,
+      rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
+      freeBalance: 300,
+    },
   ],
   historyDetails: [
     {
