@@ -3,7 +3,7 @@ import {createStyles, makeStyles} from '@material-ui/core/styles';
 export const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      border: '1px solid #E5E5E5',
+      border: '1px dashed #E5E5E5',
       padding: 8,
       background: '#FFF',
       borderRadius: 5,
