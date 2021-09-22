@@ -35,9 +35,13 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
 
   return (
     <div className={style.flex}>
-      <Avatar className={style.avatar} src={comment.user?.profilePictureURL || ''}>
-        {acronym(comment.user?.name)}
-      </Avatar>
+      <div className={style.tree}>
+        <Avatar className={style.avatar} src={comment.user?.profilePictureURL || ''}>
+          {acronym(comment.user?.name)}
+        </Avatar>
+        {deep !== 2 && comment.replies && <div className={style.verticalTree} />}
+        {deep !== 0 && <div className={style.horizontalTree} />}
+      </div>
       <div className={style.fullWidth}>
         <Card className={style.comment}>
           <CardHeader
@@ -66,7 +70,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
               onDownVote={console.log}
               onUpvote={console.log}
             />
-            {deep < 3 && (
+            {deep < 2 && (
               <Button
                 onClick={handleOpenReply}
                 classes={{root: style.button}}

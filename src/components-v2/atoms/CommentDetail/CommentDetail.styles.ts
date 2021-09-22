@@ -46,5 +46,27 @@ export const useStyles = makeStyles((theme: Theme) =>
     fullWidth: {
       width: '100%',
     },
+    tree: {
+      display: 'flex',
+      flexDirection: 'column',
+      position: 'relative',
+    },
+    verticalTree: {
+      marginTop: '8px',
+      marginBottom: '8px',
+      width: '20px',
+      height: '100%',
+      borderRight: '1px solid #E5E5E5',
+    },
+    horizontalTree: {
+      position: 'absolute',
+      top: 0,
+      left: '-32px',
+      width: '22px',
+      height: '22px',
+      borderBottom: '1px solid #E5E5E5',
+      borderLeft: '1px solid #E5E5E5',
+      borderBottomLeftRadius: '11px',
+    },
   }),
 );
