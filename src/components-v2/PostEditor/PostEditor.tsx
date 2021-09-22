@@ -17,19 +17,26 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_MEDIA_EMBED,
   withProps,
+  useStoreEditorState,
   TNode,
+  getPlatePluginType,
+  LinkElement,
 } from '@udecode/plate';
+import {isCollapsed, unwrapNodes} from '@udecode/plate-common';
 import {ELEMENT_IMAGE, createImagePlugin} from '@udecode/plate-image';
 import {ToolbarImage} from '@udecode/plate-image-ui';
-import {createLinkPlugin} from '@udecode/plate-link';
+import {createLinkPlugin, ELEMENT_LINK, upsertLinkAtSelection} from '@udecode/plate-link';
+import {ToolbarLink} from '@udecode/plate-link-ui';
 import {ELEMENT_MENTION, MentionNodeData, useMentionPlugin} from '@udecode/plate-mention';
 import {HeadingToolbar} from '@udecode/plate-toolbar';
 
 import React, {useMemo, useEffect, useState} from 'react';
 
 import Box from '@material-ui/core/Box';
-import {Image} from '@material-ui/icons';
+import {Image, Link} from '@material-ui/icons';
 
+import theme from '../../themes/light-theme-v2';
+import {EmbedURL} from '../EmbedURL';
 import {Upload} from '../Upload';
 import {Modal} from '../atoms/Modal';
 import {useStyles} from './PostEditor.styles';
@@ -40,6 +47,9 @@ import {ToolbarElementList} from './Toolbar/ToolbarElement';
 import {ToolbarButtonsList} from './Toolbar/ToolbarList';
 import {ToolbarButtonsMarks, plugins as markPlugins} from './Toolbar/ToolbarMark';
 import {createHashtagPlugin, ELEMENT_HASHTAG} from './plugins/hashtag';
+
+import {Transforms, Selection, Editor} from 'slate';
+import {ReactEditor} from 'slate-react';
 
 export type PostEditorProps = {
   value: TNode[];
@@ -70,6 +80,9 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     style: {
       padding: 20,
       background: '#FFFFFF',
+      fontFamily: theme.typography.fontFamily,
+      lineHeight: '24px',
+      fontSize: 14,
     },
   };
 
@@ -80,6 +93,14 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     }),
     [ELEMENT_HASHTAG]: withProps(HashtagElement, {
       prefix: '#',
+    }),
+    [ELEMENT_LINK]: withProps(LinkElement, {
+      styles: {
+        root: {
+          color: `${theme.palette.primary.main}!important`,
+          fontWeight: 700,
+        },
+      },
     }),
   });
 
@@ -136,8 +157,11 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     return pluginsBasic;
   }, [mentionPlugin]);
 
+  const editor = useStoreEditorState('main');
   const [setImageUrl, setImageUrlPromise] = useState<any>();
   const [showImageUpload, toggleImageUpload] = useState(false);
+  const [showModalLink, toggleModalLink] = useState(false);
+  const [currentSelection, setCurrentSelection] = useState<Selection | null>(null);
 
   useEffect(() => {
     if (mentionQuery.length > 0) {
@@ -157,6 +181,10 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     toggleImageUpload(prevState => !prevState);
   };
 
+  const closeLinkModal = () => {
+    toggleModalLink(prevState => !prevState);
+  };
+
   const getImageUrl = async (): Promise<string> => {
     let resolve;
 
@@ -174,6 +202,16 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     return promise;
   };
 
+  const openLinkEditor = (event: React.MouseEvent<HTMLSpanElement>): void => {
+    if (!editor) return;
+
+    event.preventDefault();
+
+    setCurrentSelection(editor.selection);
+
+    toggleModalLink(prevState => !prevState);
+  };
+
   const handleImageSelected = async (result: File[] | string) => {
     if (typeof result === 'string') {
       setImageUrl.resolve(result);
@@ -186,6 +224,27 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     }
 
     toggleImageUpload(prevState => !prevState);
+  };
+
+  const handleConfirmLink = (url: string | null) => {
+    if (editor && currentSelection) {
+      Transforms.select(editor as Editor, currentSelection);
+      ReactEditor.focus(editor as ReactEditor);
+
+      if (!url) {
+        unwrapNodes(editor, {
+          at: currentSelection,
+          match: {type: getPlatePluginType(editor, ELEMENT_LINK)},
+        });
+
+        return;
+      }
+
+      const shouldWrap: boolean = isCollapsed(currentSelection);
+      upsertLinkAtSelection(editor, {url, wrap: shouldWrap});
+    }
+
+    toggleModalLink(prevState => !prevState);
   };
 
   return (
@@ -202,6 +261,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
           <ToolbarButtonsMarks />
           <ToolbarButtonsAlign />
           <ToolbarButtonsList />
+          <ToolbarLink icon={<Link />} onMouseDown={openLinkEditor} />
           <ToolbarImage icon={<Image />} getImageUrl={getImageUrl} />
         </HeadingToolbar>
 
@@ -209,7 +269,11 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
       </Plate>
 
       <Modal title="Upload file" maxWidth="xl" open={showImageUpload} onClose={closeImageUpload}>
-        <Upload title="Image" onFileSelected={handleImageSelected} accept={['image/*']} />
+        <Upload onFileSelected={handleImageSelected} accept={['image/*']} />
+      </Modal>
+
+      <Modal title="Embed Link" maxWidth="xl" open={showModalLink} onClose={closeLinkModal}>
+        <EmbedURL onConfirm={handleConfirmLink} />
       </Modal>
     </Box>
   );
