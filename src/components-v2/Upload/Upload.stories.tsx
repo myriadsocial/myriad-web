@@ -14,6 +14,5 @@ const Template: ComponentStory<typeof Upload> = args => <Upload {...args} />;
 
 export const ImageUpload = Template.bind({});
 ImageUpload.args = {
-  title: 'Image',
   accept: ['image/*'],
 };
