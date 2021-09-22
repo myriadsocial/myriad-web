@@ -1,7 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
@@ -26,6 +29,16 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       rowGap: theme.spacing(1.5),
     },
+    listRoot: {
+      margin: 0,
+      padding: 0,
+      position: 'relative',
+      listStyle: 'none',
+      '& .MuiListItem-gutters': {
+        paddingLeft: 0,
+        paddingRight: 0,
+      },
+    },
     primaryCoinWrapper: {
       display: 'flex',
       justifyContent: 'flex-start',
@@ -37,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
       columnGap: theme.spacing(2.875),
     },
     cardRoot: {
+      width: '100%',
       border: '1px solid #EDEDED',
       boxSizing: 'border-box',
       borderRadius: 10,
@@ -65,6 +79,53 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+type DraggableBalanceCardProps = {
+  balanceDetail: BalanceDetail;
+};
+
+const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props => {
+  const {balanceDetail} = props;
+  const classes = useStyles();
+
+  return (
+    <Card className={classes.cardRoot} key={balanceDetail.id}>
+      <CardContent>
+        <div className={classes.cardContentWrapper}>
+          <div className={classes.leftJustifiedWrapper}>
+            <CustomAvatar
+              size={CustomAvatarSize.MEDIUM}
+              alt={balanceDetail.id ?? 'Coin'}
+              avatar={balanceDetail.image}
+            />
+            <Typography variant="body1" style={{fontWeight: 'bold'}}>
+              {balanceDetail.id}
+            </Typography>
+          </div>
+
+          <div className={classes.rightJustifiedWrapper}>
+            <div>
+              <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                {balanceDetail.freeBalance}
+              </Typography>
+              <Typography variant="caption" color="textSecondary">
+                {'USD 15.25'}
+              </Typography>
+            </div>
+
+            <SvgIcon
+              style={{transform: 'rotate(180deg)'}}
+              component={FullVectorIcon}
+              viewBox="0 0 18 20"
+            />
+
+            <SvgIcon component={TripleDoubleDotsIcon} viewBox="0 0 18 20" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
 type PrimaryCoinMenuProps = {
   togglePrimaryCoinMenu: () => void;
   balanceDetails: BalanceDetail[];
@@ -73,6 +134,17 @@ type PrimaryCoinMenuProps = {
 export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
   const {togglePrimaryCoinMenu, balanceDetails} = props;
   const classes = useStyles();
+
+  const [coins, updateCoins] = useState(balanceDetails);
+
+  const handleOnDragEnd = result => {
+    const items = Array.from(coins);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    updateCoins(items);
+  };
+
   return (
     <>
       <div className={classes.root}>
@@ -88,81 +160,31 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
             </div>
           </div>
 
-          {balanceDetails.map((balanceDetail, key) => {
-            return key === 1 ? (
-              <>
-                <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                  Favorite coin
-                </Typography>
-                <Card className={classes.cardRoot} key={balanceDetail.id}>
-                  <CardContent>
-                    <div className={classes.cardContentWrapper}>
-                      <div className={classes.leftJustifiedWrapper}>
-                        <CustomAvatar
-                          size={CustomAvatarSize.MEDIUM}
-                          alt={balanceDetail.id ?? 'Coin'}
-                          avatar={balanceDetail.image}
-                        />
-                        <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                          {balanceDetail.id}
-                        </Typography>
-                      </div>
-                      <div className={classes.rightJustifiedWrapper}>
-                        <div>
-                          <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                            {balanceDetail.freeBalance}
-                          </Typography>
-                          <Typography variant="caption" color="textSecondary">
-                            {'USD 15.25'}
-                          </Typography>
-                        </div>
-
-                        <SvgIcon component={FullVectorIcon} viewBox="0 0 18 20" />
-
-                        <SvgIcon component={TripleDoubleDotsIcon} viewBox="0 0 18 20" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </>
-            ) : (
-              <Card className={classes.cardRoot} key={balanceDetail.id}>
-                <CardContent>
-                  <div className={classes.cardContentWrapper}>
-                    <div className={classes.leftJustifiedWrapper}>
-                      <CustomAvatar
-                        size={CustomAvatarSize.MEDIUM}
-                        alt={balanceDetail.id ?? 'Coin'}
-                        avatar={balanceDetail.image}
-                      />
-                      <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                        {balanceDetail.id}
-                      </Typography>
-                    </div>
-
-                    <div className={classes.rightJustifiedWrapper}>
-                      <div>
-                        <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                          {balanceDetail.freeBalance}
-                        </Typography>
-                        <Typography variant="caption" color="textSecondary">
-                          {'USD 15.25'}
-                        </Typography>
-                      </div>
-
-                      <SvgIcon
-                        style={{transform: 'rotate(180deg)'}}
-                        component={FullVectorIcon}
-                        viewBox="0 0 18 20"
-                      />
-
-                      <SvgIcon component={TripleDoubleDotsIcon} viewBox="0 0 18 20" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="balanceCard">
+              {provided => (
+                <List
+                  className={classes.listRoot}
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}>
+                  {coins.map((coin, index) => {
+                    return (
+                      <Draggable key={coin.id} draggableId={coin.id} index={index}>
+                        {provided => (
+                          <ListItem
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}>
+                            <DraggableBalanceCard balanceDetail={coin} />
+                          </ListItem>
+                        )}
+                      </Draggable>
+                    );
+                  })}
+                </List>
+              )}
+            </Droppable>
+          </DragDropContext>
         </div>
 
         <div className={classes.balanceTabActions}>
