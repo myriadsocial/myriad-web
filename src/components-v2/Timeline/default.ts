@@ -29,12 +29,24 @@ export const balanceSortOptions: MenuOptions[] = [
     id: 'aToZ',
     title: 'A-Z',
   },
+  {
+    id: 'highest',
+    title: 'Highest Asset',
+  },
+  {
+    id: 'lowest',
+    title: 'Lowest Asset',
+  },
 ];
 
 export const historyAmountSortOptions: MenuOptions[] = [
   {
     id: 'highestAmount',
     title: 'Highest Amount',
+  },
+  {
+    id: 'latestTransaction',
+    title: 'Latest Transaction',
   },
 ];
 
@@ -43,16 +55,20 @@ export const historyCoinSortOptions: MenuOptions[] = [
     id: 'allCoin',
     title: 'All Coins',
   },
-  {
-    id: 'aToZ',
-    title: 'A-Z',
-  },
 ];
 
 export const historyTransactionSortOptions: MenuOptions[] = [
   {
     id: 'all',
     title: 'All',
+  },
+  {
+    id: 'received',
+    title: 'Received',
+  },
+  {
+    id: 'sent',
+    title: 'Sent',
   },
 ];
 

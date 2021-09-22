@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import List from '@material-ui/core/List';
 import Table from '@material-ui/core/Table';
@@ -14,6 +14,7 @@ import {
   historyCoinSortOptions,
   historyTransactionSortOptions,
 } from '../Timeline/default';
+import {MenuOptions} from '../atoms/DropdownMenu';
 import {DropdownMenu} from '../atoms/DropdownMenu/';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/avatar/';
 import {useStyles} from './history-detail-list.styles';
@@ -25,13 +26,31 @@ type HistoryDetailListProps = {
 export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const {historyDetails} = props;
 
+  useEffect(() => {
+    const newArray = historyDetails.map(historyDetail => ({
+      id: historyDetail.currency.name,
+      title: historyDetail.currency.name,
+    }));
+    const updatedSortOptions = getUniqueListBy(newArray, 'id');
+
+    setSortOptions(oldSortOptions => [...oldSortOptions, ...updatedSortOptions]);
+  }, []);
+
+  const [sortOptions, setSortOptions] = useState(historyCoinSortOptions);
+
+  const getUniqueListBy = (arr: MenuOptions[], key: string) => {
+    return [...new Map(arr.map(item => [item[key], item])).values()];
+  };
+
+  console.log({sortOptions});
+
   const classes = useStyles();
   return (
     <>
       <div className={classes.headerActionWrapper}>
         <DropdownMenu title={'Sort'} options={historyAmountSortOptions} />
         <div className={classes.leftJustifiedWrapper}>
-          <DropdownMenu title={'Coin'} options={historyCoinSortOptions} />
+          <DropdownMenu title={'Coin'} options={sortOptions} />
           <DropdownMenu title={'Transaction'} options={historyTransactionSortOptions} />
         </div>
       </div>
