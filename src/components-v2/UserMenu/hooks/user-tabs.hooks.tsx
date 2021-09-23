@@ -5,12 +5,12 @@ import {Friend} from '../../../interfaces/friend';
 import {Post} from '../../../interfaces/post';
 import {SocialMedia} from '../../../interfaces/social';
 import {User} from '../../../interfaces/user';
-import {ExperienceList} from '../../ExperienceList';
 import {FriendListComponent} from '../../FriendsMenu/friend-list';
 import {Timeline} from '../../Timeline';
 import {UserSettings} from '../../UserSettings';
 import {UserSocials} from '../../UserSocials';
 import {TabItems} from '../../atoms/Tabs';
+import {ExperienceTabPanel} from '../../profile/ExperienceTabPanel/ExperienceTabPanel';
 
 export type UserMenuTabs = 'post' | 'experience' | 'social' | 'friend' | 'setting';
 
@@ -34,22 +34,22 @@ export const useUserTabs = ({
       {
         id: 'post',
         title: `Post`,
-        component: <Timeline posts={posts} anonymous={false} allowFilter={false} />,
+        component: <Timeline posts={posts} anonymous={false} allowFilter={true} />,
       },
       {
         id: 'experience',
         title: `Experience`,
-        component: <ExperienceList experiences={experiences} />,
-      },
-      {
-        id: 'social',
-        title: `Social Media`,
-        component: <UserSocials socials={socials} />,
+        component: <ExperienceTabPanel experiences={experiences} />,
       },
       {
         id: 'friend',
         title: `Friends`,
         component: <FriendListComponent friends={friends} />,
+      },
+      {
+        id: 'social',
+        title: `Social Media`,
+        component: <UserSocials socials={socials} />,
       },
       {
         id: 'setting',

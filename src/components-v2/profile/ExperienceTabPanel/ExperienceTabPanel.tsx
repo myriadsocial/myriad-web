@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 
 import {Experience} from '../../../interfaces/experience';
 import {ExperienceList} from '../../ExperienceList/';
-import {DropdownMenu, MenuOptions} from '../../atoms/DropdownMenu/';
+import {MenuOptions} from '../../atoms/DropdownMenu/';
+import {FilterDropdownMenu} from '../../atoms/FilterDropdownMenu/';
 
 type ExperienceTabPanelProps = {
   experiences: Experience[];
@@ -13,15 +14,16 @@ export const ExperienceTabPanel: React.FC<ExperienceTabPanelProps> = props => {
   const {experiences, isOnHomePage} = props;
 
   const [sortExperienceOptions] = useState<MenuOptions[]>([
-    {id: 'first-option', title: 'All Experience'},
-    {id: 'second-option', title: 'Name'},
+    {id: 'all', title: 'All Experience'},
+    {id: 'personal', title: 'Personal Experience'},
+    {id: 'other', title: 'Other Experience'},
   ]);
-  const [title] = useState('Sort by');
+  const [title] = useState('Filter by');
 
   return (
-    <div style={{display: 'flex', flexDirection: 'column'}}>
-      <DropdownMenu title={title} options={sortExperienceOptions} />
+    <>
+      <FilterDropdownMenu title={title} options={sortExperienceOptions} />
       <ExperienceList isOnHomePage={isOnHomePage} experiences={experiences} />
-    </div>
+    </>
   );
 };
