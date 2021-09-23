@@ -242,6 +242,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
 
       const shouldWrap: boolean = isCollapsed(currentSelection);
       upsertLinkAtSelection(editor, {url, wrap: shouldWrap});
+      setCurrentSelection(null);
     }
 
     toggleModalLink(prevState => !prevState);
@@ -268,11 +269,23 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         <MentionSelect {...getMentionSelectProps()} renderLabel={renderMentionLabel} />
       </Plate>
 
-      <Modal title="Upload file" maxWidth="xl" open={showImageUpload} onClose={closeImageUpload}>
+      <Modal
+        title="Upload Picture"
+        align="left"
+        titleSize="small"
+        maxWidth="xl"
+        open={showImageUpload}
+        onClose={closeImageUpload}>
         <Upload onFileSelected={handleImageSelected} accept={['image/*']} />
       </Modal>
 
-      <Modal title="Embed Link" maxWidth="xl" open={showModalLink} onClose={closeLinkModal}>
+      <Modal
+        title="Embed Link"
+        align="left"
+        titleSize="small"
+        maxWidth="xl"
+        open={showModalLink}
+        onClose={closeLinkModal}>
         <EmbedURL onConfirm={handleConfirmLink} />
       </Modal>
     </Box>
