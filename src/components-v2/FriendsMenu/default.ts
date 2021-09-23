@@ -1,4 +1,17 @@
 import {Friend, FriendStatus} from '../../interfaces/friend';
+import {MenuOptions} from '../atoms/DropdownMenu';
+
+// Filter options
+export const friendFilterOptions: MenuOptions[] = [
+  {
+    id: 'all',
+    title: 'All Friends',
+  },
+  {
+    id: 'mutual',
+    title: 'Mutual Friends',
+  },
+];
 
 export type FriendListProps = {
   background?: boolean;
