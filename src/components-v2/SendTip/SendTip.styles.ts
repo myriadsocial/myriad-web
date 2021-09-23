@@ -13,7 +13,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: 340,
       position: 'relative',
-      height: 680,
+      minHeight: 680,
       background: '#FFFFFF',
       boxShadow: `0px 2px 10px rgba(0, 0, 0, 0.05)`,
       borderRadius: 10,
@@ -66,6 +66,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: 12,
       '& > *': {
         marginTop: 8,
+      },
+    },
+    checkBox: {
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+        color: theme.palette.primary.main,
       },
     },
     balanceSection: {

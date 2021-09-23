@@ -16,11 +16,19 @@ import {CurrencyOptionComponent} from '../atoms/CurrencyOption/';
 import {Props as CurrencyOptionProps} from '../atoms/CurrencyOption/currencyOption.interface';
 import {ListItemComponent} from '../atoms/ListItem/';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/avatar/';
-import {Button, ButtonVariant, ButtonColor} from '../atoms/button/';
+import {Button, ButtonVariant} from '../atoms/button/';
 
 //TODO: split this component into sub-components
 export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
   const [tipAmount, setTipAmount] = useState('');
+
+  const [checked, setChecked] = React.useState(true);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+    console.log({checked});
+  };
+
   const classes = useStyles();
 
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,9 +43,9 @@ export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
     console.log('sending tip!');
   };
 
-  const cancelSendTip = () => {
-    console.log('cancelling send tip!');
-  };
+  //const cancelSendTip = () => {
+  //console.log('cancelling send tip!');
+  //};
 
   return (
     <Paper className={classes.root}>
@@ -141,20 +149,23 @@ export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
           </div>
           <div className={classes.formControls}>
             <FormControlLabel
-              control={<Checkbox name="check-tipping-agreement" color="primary" />}
+              control={
+                <Checkbox
+                  className={classes.checkBox}
+                  checked={checked}
+                  onChange={handleChange}
+                  name="check-tipping-agreement"
+                  color="primary"
+                />
+              }
               label={
                 <Typography>
                   I agree to the Myriad{' '}
-                  <span className={classes.clickableText}>Terms of Service</span> about Tipping
+                  <span className={classes.clickableText}>Terms of Service</span>
+                  about Tipping
                 </Typography>
               }
             />
-            <Button
-              color={ButtonColor.SECONDARY}
-              variant={ButtonVariant.OUTLINED}
-              onClick={cancelSendTip}>
-              Cancel
-            </Button>
             <Button variant={ButtonVariant.CONTAINED} onClick={handleSendTip}>
               Send my tip
             </Button>
