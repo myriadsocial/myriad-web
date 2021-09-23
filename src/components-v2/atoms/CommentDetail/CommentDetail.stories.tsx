@@ -17,7 +17,7 @@ const Template: ComponentStory<typeof CommentDetailComponent> = args => (
 
 const comment: Comment = {
   id: '6123614bf6c45c2728e43aca',
-  text: 'pertamax',
+  text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum voluptatem numquam dolorem esse dolores, provident id, vero laudantium voluptas possimus rem blanditiis atque debitis pariatur minima cumque qui. Nostrum, saepe?',
   postId: '6123614bf6c45c2728e43aca',
   userId: '6123614bf6c45c2728e43aca',
   createdAt: new Date('2021-07-15T03:40:23.000Z'),
@@ -36,7 +36,7 @@ const comment: Comment = {
   replies: [
     {
       id: '6123614bf6c45c2728e43aca',
-      text: 'Drop comment',
+      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum voluptatem numquam dolorem esse dolores, provident id, vero laudantium voluptas possimus rem blanditiis atque debitis pariatur minima cumque qui. Nostrum, saepe?',
       postId: '6123614bf6c45c2728e43aca',
       userId: '6123614bf6c45c2728e43aca',
       createdAt: new Date('2021-07-15T03:40:23.000Z'),
