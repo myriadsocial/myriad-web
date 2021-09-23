@@ -2,7 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {PrimaryCoinMenu} from './PrimaryCoinMenu';
+import {PrimaryCoinMenu} from '.';
 
 export default {
   title: 'UI Revamp v2.0/components/Primary Coin Menu',

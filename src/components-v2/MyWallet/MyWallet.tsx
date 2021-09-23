@@ -1,29 +1,10 @@
 import React, {useState} from 'react';
 
-import {TransactionHistoryDetail} from '../../interfaces/transaction';
+import {MyWalletProps} from '.';
 import {BalanceDetailList} from '../BalanceDetailList/BalanceDetailList';
 import {HistoryDetailList} from '../HistoryDetailList/HistoryDetailList';
 import {BoxComponent} from '../atoms/Box/';
 import {TabsComponent} from '../atoms/Tabs/';
-
-// TODO: move this to interfaces/balance.ts when rewiring data
-type CurrencyDetail = {
-  id: string;
-  name: string;
-  image: string;
-  decimal: number;
-  rpcURL: string;
-};
-
-export type BalanceDetail = CurrencyDetail & {
-  freeBalance: number;
-};
-
-type MyWalletProps = {
-  headerTitle: string;
-  balanceDetails: BalanceDetail[];
-  historyDetails: TransactionHistoryDetail[];
-};
 
 export const MyWallet: React.FC<MyWalletProps> = props => {
   const {headerTitle, balanceDetails, historyDetails} = props;
