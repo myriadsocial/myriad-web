@@ -21,12 +21,12 @@ import {Button, ButtonVariant} from '../atoms/button/';
 //TODO: split this component into sub-components
 export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
   const [tipAmount, setTipAmount] = useState('');
+  const [gasFee] = useState('0.01');
 
   const [checked, setChecked] = React.useState(true);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
-    console.log({checked});
   };
 
   const classes = useStyles();
@@ -34,7 +34,6 @@ export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const input = e.target.value;
-    console.log(input);
     //TODO: tipAmount input validation goes here
     setTipAmount(input);
   };
@@ -81,7 +80,7 @@ export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
               size={CustomAvatarSize.XSMALL}
             />
             <Typography variant="body1">
-              King Lion will receive <span className={classes.clickableText}>0.70 ACA</span>{' '}
+              King Lion will receive <span className={classes.clickableText}>{tipAmount} ACA</span>{' '}
             </Typography>
           </div>
           <div style={{marginTop: 30, width: '100%'}}>
@@ -103,7 +102,7 @@ export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
                     </TableCell>
                     <TableCell align="right">
                       <Typography variant="body1" color="textPrimary">
-                        0.70 ACA
+                        {tipAmount.length === 0 ? '-' : tipAmount} ACA
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -115,7 +114,7 @@ export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
                     </TableCell>
                     <TableCell align="right">
                       <Typography variant="body1" color="textSecondary">
-                        0.01 ACA
+                        {gasFee} ACA
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -127,7 +126,9 @@ export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
                     </TableCell>
                     <TableCell align="right">
                       <Typography className={classes.subHeader}>
-                        <span className={classes.clickableText}>0.71 ACA</span>
+                        <span className={classes.clickableText}>
+                          {`${Number(tipAmount) + Number(gasFee)}`} ACA
+                        </span>
                       </Typography>
                     </TableCell>
                   </TableRow>
