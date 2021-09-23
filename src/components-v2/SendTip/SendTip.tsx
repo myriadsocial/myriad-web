@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 
+import Link from 'next/link';
+
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from '@material-ui/core/Paper';
@@ -23,7 +25,9 @@ export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
   const [tipAmount, setTipAmount] = useState('');
   const [gasFee] = useState('0.01');
 
-  const [checked, setChecked] = React.useState(true);
+  const [checked, setChecked] = useState(true);
+
+  const [url] = useState('https://myriad.social/');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
@@ -162,7 +166,15 @@ export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
               label={
                 <Typography>
                   I agree to the Myriad{' '}
-                  <span className={classes.clickableText}>Terms of Service</span>
+                  <Link href={url}>
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={classes.clickableText}>
+                      Terms of Service
+                    </a>
+                  </Link>{' '}
                   about Tipping
                 </Typography>
               }
