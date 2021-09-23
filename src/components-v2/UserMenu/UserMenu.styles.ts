@@ -9,6 +9,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiTab-root': {
         height: 56,
       },
+      '& .MuiBox-root': {
+        paddingTop: 0,
+      },
     },
   }),
 );
