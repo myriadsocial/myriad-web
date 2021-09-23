@@ -41,6 +41,7 @@ export const PromptComponent: React.FC<Prompt> = props => {
         <div className={style.prompt}>
           <SvgIcon
             className={`${style.icon} ${style[icon]}`}
+            classes={{root: style.fill}}
             component={pickIcon()}
             viewBox="0 0 20 20"
           />
