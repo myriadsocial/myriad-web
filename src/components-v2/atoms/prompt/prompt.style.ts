@@ -32,6 +32,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: 60,
       marginTop: '30px',
     },
+    fill: {
+      fill: 'currentColor',
+    },
     title: {
       fontSize: '18px',
       fontWeight: 700,
