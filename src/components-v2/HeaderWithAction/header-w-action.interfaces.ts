@@ -1,5 +1,4 @@
 interface HeaderWithActionProps {
-  title: string;
   actionText: string;
 }
 
