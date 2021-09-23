@@ -10,7 +10,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
 import {acronym} from '../../helpers/string';
+import {FilterDropdownMenu} from '../atoms/FilterDropdownMenu/';
 import SearchComponent from '../atoms/search/SearchBox';
+import {friendFilterOptions} from './default';
 import {FriendListProps} from './default';
 import {useStyles} from './friend.style';
 
@@ -23,6 +25,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
 
   return (
     <div>
+      <FilterDropdownMenu title="Filter by" options={friendFilterOptions} />
       <SearchComponent onSubmit={handleSubmit} placeholder={'Search friend'} />
       <List className={style.list}>
         {friends &&

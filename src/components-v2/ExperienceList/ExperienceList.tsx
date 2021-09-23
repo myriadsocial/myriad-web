@@ -1,8 +1,5 @@
 import React, {useState} from 'react';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-
 import {ExperienceListProps, useStyles} from '.';
 import {SimpleCard} from '../atoms/simple-card/';
 
@@ -17,19 +14,17 @@ const ExperienceList = ({experiences, isOnHomePage = false}: ExperienceListProps
 
   return (
     <div className={classes.root}>
-      <List component="nav" aria-label="experience tab menu">
-        {experiences.map(({name, user}) => (
-          <ListItem key={`list-item-title`}>
-            <SimpleCard
-              onClick={handleClick}
-              title={name}
-              creator={user.name}
-              imgUrl={user.profilePictureURL || ''}
-              isSelectable={isOnHomePage}
-            />
-          </ListItem>
-        ))}
-      </List>
+      {experiences.map(({name, user}) => (
+        <div key={`list-item-title`}>
+          <SimpleCard
+            onClick={handleClick}
+            title={name}
+            creator={user.name}
+            imgUrl={user.profilePictureURL || ''}
+            isSelectable={isOnHomePage}
+          />
+        </div>
+      ))}
     </div>
   );
 };

@@ -1,6 +1,23 @@
 import {MenuOptions} from '../atoms/DropdownMenu';
 import {TabListItem} from '../atoms/TabList';
 
+// Filter options
+export const postFilterOptions: MenuOptions[] = [
+  {
+    id: 'all',
+    title: 'All Posts',
+  },
+  {
+    id: 'myriad',
+    title: 'Myriad Posts',
+  },
+  {
+    id: 'imported',
+    title: 'Imported Posts',
+  },
+];
+
+// Sort options
 export const sortOptions: MenuOptions[] = [
   {
     id: 'latest',

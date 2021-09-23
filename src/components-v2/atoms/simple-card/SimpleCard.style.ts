@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       minWidth: 311,
-      width: 'max-content',
+      marginBottom: theme.spacing(1),
       /* Drop shadow */
       boxShadow: `0px 2px 10px rgba(0, 0, 0, 0.05)`,
       borderRadius: 10,
@@ -47,6 +47,8 @@ const useStyles = makeStyles((theme: Theme) =>
     focusHighlight: {},
     iconButton: {
       flex: '1 0 auto',
+      justifyContent: 'flex-end',
+      paddingRight: theme.spacing(3.375),
       '&:hover': {
         backgroundColor: 'transparent',
       },
