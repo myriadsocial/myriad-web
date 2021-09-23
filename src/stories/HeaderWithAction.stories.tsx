@@ -13,6 +13,5 @@ const Template: ComponentStory<typeof HeaderWithAction> = args => <HeaderWithAct
 
 export const Default = Template.bind({});
 Default.args = {
-  title: 'Experience',
   actionText: '+ Create new experience',
 };

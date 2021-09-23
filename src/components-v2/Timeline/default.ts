@@ -17,6 +17,11 @@ export const postFilterOptions: MenuOptions[] = [
   },
 ];
 
+export const experienceFilterOptions: MenuOptions[] = [
+  {id: 'all', title: 'All Experience'},
+  {id: 'personal', title: 'Personal Experience'},
+  {id: 'other', title: 'Other Experience'},
+];
 // Sort options
 export const sortOptions: MenuOptions[] = [
   {

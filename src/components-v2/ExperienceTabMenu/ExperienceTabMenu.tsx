@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Typography from '@material-ui/core/Typography';
+
 import {Experience} from '../../interfaces/experience';
 import {ExperienceList} from '../ExperienceList/';
 import {HeaderWithAction} from '../HeaderWithAction/';
@@ -12,9 +14,10 @@ export const ExperienceTabMenu: React.FC<ExperienceTabMenuProps> = props => {
   const {experiences} = props;
 
   return (
-    <div style={{display: 'flex', flexDirection: 'column'}}>
-      <HeaderWithAction title={'Experience'} actionText={'+ Create new experience'} />
+    <>
+      <Typography variant={'h4'}>Experience</Typography>
+      <HeaderWithAction actionText={'+ Create experience'} />
       <ExperienceList experiences={experiences} />
-    </div>
+    </>
   );
 };
