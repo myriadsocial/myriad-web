@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import {acronym} from '../../../helpers/string';
 import {CommentEditor} from '../CommentEditor';
 import {CommentList} from '../CommentList';
+import {ReadMore} from '../ReadMore/ReadMore';
 import {VotingComponent} from '../Voting';
 import {CommentDetailProps} from './CommentDetail.interface';
 import {useStyles} from './CommentDetail.styles';
@@ -57,7 +58,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
           />
           <CardContent className={style.content}>
             <Typography variant="body1" color="textPrimary" component="p">
-              {comment.text}
+              <ReadMore text={comment.text} maxCharacter={180} />
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
