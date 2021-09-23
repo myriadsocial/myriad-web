@@ -284,7 +284,6 @@ const theme = createTheme({
     MuiSvgIcon: {
       root: {
         fill: 'none',
-        color: '#404040',
       },
     },
 
