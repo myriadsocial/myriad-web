@@ -90,6 +90,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     clickableText: {
       color: theme.palette.primary.main,
+      textDecoration: 'none',
     },
   }),
 );
