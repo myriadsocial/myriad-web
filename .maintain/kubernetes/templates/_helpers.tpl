@@ -65,7 +65,7 @@ Create the name of the service account to use
 Create base secret name.
 */}}
 {{- define "myriad-web.baseSecretName" -}}
-{{- printf "%s-%s" .Chart.Name "secret" | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- (include "myriad-web.fullname" .) }}
 {{- end }}
 
 {{/*
