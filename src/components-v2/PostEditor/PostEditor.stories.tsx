@@ -37,7 +37,7 @@ const mentionables: MentionNodeData[] = [
 ];
 
 const client = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'https://app.dev.myriad.systems',
 });
 
 export const PostEditor = Template.bind({});
