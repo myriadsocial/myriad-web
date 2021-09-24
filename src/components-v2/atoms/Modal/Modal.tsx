@@ -1,4 +1,4 @@
-import {XCircleIcon} from '@heroicons/react/outline';
+import {XIcon} from '@heroicons/react/solid';
 
 import React from 'react';
 
@@ -47,7 +47,7 @@ export const Modal: React.FC<ModalProps> = props => {
           size="small"
           className={styles.close}
           onClick={onClose}>
-          <SvgIcon component={XCircleIcon} color="primary" fontSize="medium" />
+          <SvgIcon component={XIcon} color="primary" fontSize="medium" />
         </IconButton>
       </DialogTitle>
       <DialogContent className={styles.content}> {children} </DialogContent>
