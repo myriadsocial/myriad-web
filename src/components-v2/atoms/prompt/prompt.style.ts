@@ -18,7 +18,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     'flex-center': {
       display: 'flex',
-      justifyContent: 'space-evenly',
+      justifyContent: 'center',
     },
     root: {
       '& .MuiPaper-rounded': {
@@ -48,6 +48,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     success: {
       color: '#39BF87',
+    },
+    m1: {
+      marginRight: theme.spacing(2),
     },
   }),
 );
