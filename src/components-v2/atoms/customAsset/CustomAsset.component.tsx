@@ -3,19 +3,8 @@ import React, {useState} from 'react';
 import {Button, FormControl, InputLabel, OutlinedInput} from '@material-ui/core';
 
 import {Modal} from '../Modal';
+import {Props, Asset} from './customAsset.interface';
 import {useStyles} from './customAsset.style';
-
-type Props = {
-  open: boolean;
-  onClose: () => void;
-};
-
-export interface Asset {
-  rpcAddress: string;
-  unitCode: string;
-  prefixAddress: number;
-  prefixDecimal: number;
-}
 
 export const CustomAsset: React.FC<Props> = props => {
   const {open, onClose} = props;
