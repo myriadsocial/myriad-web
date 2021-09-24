@@ -6,6 +6,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
+      margin: '20px 0',
       width: '100%',
       '& .MuiBox-root': {
         paddingLeft: 0,

@@ -112,3 +112,18 @@ export const filterOptions: TabListItem<string>[] = [
     title: 'Experience',
   },
 ];
+
+export const experienceSortOptions: MenuOptions[] = [
+  {
+    id: 'all',
+    title: 'All',
+  },
+  {
+    id: 'aToZ',
+    title: 'A-Z',
+  },
+  {
+    id: 'latest',
+    title: 'Latest',
+  },
+];

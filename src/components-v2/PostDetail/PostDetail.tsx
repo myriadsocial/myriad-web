@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
-import {Button, Typography} from '@material-ui/core';
+import {Typography} from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 
 import LinkifyComponent from '../../components/common/Linkify.component';
@@ -18,6 +18,7 @@ import {HeaderComponent} from '../atoms/PostHeader';
 import {ReadMore} from '../atoms/ReadMore/ReadMore';
 import {TabsComponent} from '../atoms/Tabs';
 import {Video} from '../atoms/Video';
+import {Button, ButtonVariant, ButtonColor, ButtonSize} from '../atoms/button/';
 import {useStyles} from './PostDetail.styles';
 import {useCommentTabs, CommentTabs} from './hooks/use-comment-tabs';
 
@@ -139,7 +140,10 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
           onDownVote={handleDownVote}
         />
 
-        <Button variant="contained" color="secondary" size="small">
+        <Button
+          variant={ButtonVariant.OUTLINED}
+          color={ButtonColor.SECONDARY}
+          size={ButtonSize.SMALL}>
           Send Tip
         </Button>
       </div>

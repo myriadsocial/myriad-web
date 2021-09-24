@@ -4,8 +4,8 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles, HeaderWithActionProps} from '.';
-import {experienceFilterOptions} from '../Timeline/default';
-import {FilterDropdownMenu} from '../atoms/FilterDropdownMenu/';
+import {experienceSortOptions} from '../Timeline/default';
+import {DropdownMenu} from '../atoms/DropdownMenu/';
 
 export const HeaderWithAction: React.FC<HeaderWithActionProps> = props => {
   const {actionText} = props;
@@ -22,7 +22,7 @@ export const HeaderWithAction: React.FC<HeaderWithActionProps> = props => {
           {actionText}
         </Link>
       </Typography>
-      <FilterDropdownMenu title={'Filter by'} options={experienceFilterOptions} />
+      <DropdownMenu title={'Sort by'} options={experienceSortOptions} />
     </div>
   );
 };
