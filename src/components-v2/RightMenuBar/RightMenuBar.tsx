@@ -2,9 +2,21 @@ import {ChatAlt2Icon, HashtagIcon, VariableIcon} from '@heroicons/react/outline'
 
 import React, {useState} from 'react';
 
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
+
 import {RightMenuBarProps} from '.';
 import {ExperienceTabMenu} from '../ExperienceTabMenu/ExperienceTabMenu';
 import {TabsComponent} from '../atoms/Tabs/';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      '& .MuiBox-root': {
+        paddingLeft: 0,
+      },
+    },
+  }),
+);
 
 export const RightMenuBar: React.FC<RightMenuBarProps> = props => {
   const {experiences} = props;
@@ -17,21 +29,23 @@ export const RightMenuBar: React.FC<RightMenuBarProps> = props => {
     {
       id: 'second',
       icon: <HashtagIcon />,
-      component: 'Second Tab Content',
+      component: 'Trending Tab Content',
     },
     {
       id: 'third',
       icon: <ChatAlt2Icon />,
-      component: 'Third Tab Content',
+      component: 'Chat Tab Content',
     },
   ]);
+
+  const classes = useStyles();
 
   const handleChangeTab = () => {
     console.log('changed tab!');
   };
 
   return (
-    <div>
+    <div className={classes.root}>
       <TabsComponent
         active={iconTabs[0].id}
         tabs={iconTabs}
