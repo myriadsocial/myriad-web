@@ -1,11 +1,13 @@
 import React from 'react';
 
+import {useTheme} from '@material-ui/core/styles';
+
 import {ExperienceList} from '../../ExperienceList/ExperienceList.stories';
-import {ExperienceTabMenu} from '../../ExperienceTabMenu/ExperienceTabMenu';
 import {Menu as MenuComponent} from '../../Menu/';
 import {SidebarMenu} from '../../Menu/Menu.stories';
 import {RichTextComponent} from '../../Richtext/';
 import {DefaultRichText} from '../../Richtext/RichText.stories';
+import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
 import {SocialMediaList} from '../../SocialMediaList/SocialMedia.stories';
 import {Timeline as TimelineComponent} from '../../Timeline/';
 import {Timeline} from '../../Timeline/Timeline.stories';
@@ -17,6 +19,8 @@ import useStyles from './home-page.style';
 
 const HomePage = (): JSX.Element => {
   const classes = useStyles();
+
+  const theme = useTheme();
 
   return (
     <div className={classes.root}>
@@ -88,8 +92,8 @@ const HomePage = (): JSX.Element => {
               }
             />
           </div>
-          <div>
-            <ExperienceTabMenu experiences={ExperienceList.args?.experiences ?? []} />
+          <div style={{marginTop: theme.spacing(2.5)}}>
+            <RightMenuBar experiences={ExperienceList.args?.experiences ?? []} />
           </div>
         </div>
       </div>
