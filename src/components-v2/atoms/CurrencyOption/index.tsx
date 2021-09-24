@@ -57,7 +57,7 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
       <Typography component="span">Change currency</Typography>
 
       <IconButton style={{padding: 0}} onClick={handleClick} color="primary" aria-label="expand">
-        <SvgIcon component={ChevronDownIcon} viewBox="0 0 20 20" />
+        <SvgIcon classes={{root: style.fill}} component={ChevronDownIcon} viewBox="0 0 20 20" />
       </IconButton>
       <Menu
         classes={{
@@ -80,7 +80,9 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
             inputProps={{
               'aria-label': 'search',
             }}
-            startAdornment={<SvgIcon component={SearchIcon} viewBox="0 0 24 24" />}
+            startAdornment={
+              <SvgIcon classes={{root: style.fill}} component={SearchIcon} viewBox="0 0 24 24" />
+            }
           />
         </div>
         <div className={style.header}>

@@ -48,5 +48,8 @@ export const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: 'rgba(255, 200, 87, 0.15)',
       },
     },
+    fill: {
+      fill: 'currentColor',
+    },
   }),
 );
