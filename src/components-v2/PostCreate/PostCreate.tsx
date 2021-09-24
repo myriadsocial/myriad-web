@@ -85,8 +85,8 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
         indicatorColor="secondary"
         onChange={handleTabChange}
         className={styles.tabs}>
-        <Tab label="Post" value="create" />
-        <Tab label="Link" value="import" />
+        <Tab label="Create" value="create" />
+        <Tab label="Import" value="import" />
       </Tabs>
 
       <TabPanel value={activeTab} index="create">
