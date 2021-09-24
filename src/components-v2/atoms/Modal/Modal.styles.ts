@@ -28,7 +28,8 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       top: 30,
 
       '& .MuiSvgIcon-colorPrimary': {
-        fill: 'none',
+        fill: 'currentColor',
+        color: 'none',
       },
     },
     content: {
