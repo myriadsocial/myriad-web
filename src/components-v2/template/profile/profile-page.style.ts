@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
     secondCol: {
       flexGrow: 2,
-      margin: 20,
+      margin: `0 20px`,
     },
 
     thirdCol: {
