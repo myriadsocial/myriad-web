@@ -5,6 +5,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       position: 'relative',
 
+      '& .MuiSvgIcon-root': {
+        color: '#404040',
+      },
       '& .MuiListItem-button:hover': {
         backgroundColor: alpha('#FFC857', 0.15),
 
