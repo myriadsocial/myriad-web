@@ -40,5 +40,5 @@ ExperienceTopNavbar.args = {
 export const ProfileTopNavbar = Template.bind({});
 ProfileTopNavbar.args = {
   sectionTitle: SectionTitle.PROFILE,
-  description: 'Louis Liu',
+  description: 'Aaron Ting',
 };
