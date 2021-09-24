@@ -9,7 +9,7 @@ export const ButtonComponent: React.FC = () => {
 
   return (
     <div className={`${style['flex-center']}`}>
-      <Button size="small" variant="outlined" color="secondary">
+      <Button className={style.m1} size="small" variant="outlined" color="secondary">
         No, let me rethink
       </Button>
       <Button size="small" variant="contained" color="primary">
