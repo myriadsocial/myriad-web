@@ -50,7 +50,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginRight: 30,
     },
     danger: {
-      color: theme.status.warning.main,
+      color: theme.status.danger.main,
     },
     expand: {
       marginLeft: theme.spacing(1),
