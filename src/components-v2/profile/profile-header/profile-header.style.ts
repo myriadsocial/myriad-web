@@ -19,7 +19,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingBottom: '20px',
       height: '260px',
       position: 'relative',
-      width: '643px',
+      width: '100%',
       borderTopLeftRadius: '10px',
       borderTopRightRadius: '10px',
       background: 'linear-gradient(180deg, rgba(80,80,80,0) 0%, rgba(80,80,80,0.65) 100%)',
