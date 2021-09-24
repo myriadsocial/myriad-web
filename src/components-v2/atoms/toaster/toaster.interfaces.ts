@@ -11,8 +11,9 @@ const toasterStatuses: ToasterStatusValue[] = Object.values(Status);
 
 interface ToasterProps {
   toasterStatus: Status;
-
+  open: boolean;
   message: string;
+  onClose: () => void;
 }
 
 export {Status, toasterStatuses};

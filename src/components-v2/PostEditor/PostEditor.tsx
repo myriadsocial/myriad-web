@@ -33,7 +33,7 @@ import {HeadingToolbar} from '@udecode/plate-toolbar';
 import React, {useMemo, useEffect, useState} from 'react';
 
 import Box from '@material-ui/core/Box';
-import {Image, Link} from '@material-ui/icons';
+import {Image, Link, VideoLibrary} from '@material-ui/icons';
 
 import theme from '../../themes/light-theme-v2';
 import {EmbedURL} from '../EmbedURL';
@@ -41,6 +41,7 @@ import {Upload} from '../Upload';
 import {Modal} from '../atoms/Modal';
 import {useStyles} from './PostEditor.styles';
 import {HashtagElement} from './Render/Hashtag';
+import {MediaEmbedElement} from './Render/MediaEmbed';
 import {MentionElement, MentionSelect, renderMentionLabel} from './Render/Mention';
 import {ToolbarButtonsAlign} from './Toolbar/ToolbarAlign';
 import {ToolbarElementList} from './Toolbar/ToolbarElement';
@@ -58,7 +59,7 @@ export type PostEditorProps = {
   mentionable: MentionNodeData[];
   onSearchMention: (query: string) => void;
   onChange?: (value: TNode[]) => void;
-  onFileUploaded?: (file: File) => Promise<string>;
+  onFileUploaded?: (file: File, type: 'image' | 'video') => Promise<string>;
 };
 
 export const PostEditor: React.FC<PostEditorProps> = props => {
@@ -94,6 +95,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     [ELEMENT_HASHTAG]: withProps(HashtagElement, {
       prefix: '#',
     }),
+    [ELEMENT_MEDIA_EMBED]: withProps(MediaEmbedElement, {}),
     [ELEMENT_LINK]: withProps(LinkElement, {
       styles: {
         root: {
@@ -146,7 +148,9 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
 
       // others
       createTrailingBlockPlugin({type: ELEMENT_PARAGRAPH}),
-      createSelectOnBackspacePlugin({allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED]}),
+      createSelectOnBackspacePlugin({
+        allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED, ELEMENT_MENTION, ELEMENT_HASHTAG],
+      }),
       createSoftBreakPlugin(),
       createExitBreakPlugin(),
 
@@ -159,8 +163,10 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
 
   const editor = useStoreEditorState('main');
   const [setImageUrl, setImageUrlPromise] = useState<any>();
+  const [setVideoUrl, setVideoUrlPromise] = useState<any>();
   const [showImageUpload, toggleImageUpload] = useState(false);
   const [showModalLink, toggleModalLink] = useState(false);
+  const [showVideoUpload, toggleVideoUpload] = useState(false);
   const [currentSelection, setCurrentSelection] = useState<Selection | null>(null);
 
   useEffect(() => {
@@ -179,6 +185,10 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
 
   const closeImageUpload = () => {
     toggleImageUpload(prevState => !prevState);
+  };
+
+  const closeVideoUpload = () => {
+    toggleVideoUpload(prevState => !prevState);
   };
 
   const closeLinkModal = () => {
@@ -202,6 +212,23 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     return promise;
   };
 
+  const getVideoUrl = async (): Promise<string> => {
+    let resolve;
+
+    toggleVideoUpload(prevState => !prevState);
+
+    const promise = new Promise<string>(_resolve => {
+      resolve = _resolve;
+    });
+
+    /* @ts-expect-error */
+    promise.resolve = resolve;
+
+    setVideoUrlPromise(promise);
+
+    return promise;
+  };
+
   const openLinkEditor = (event: React.MouseEvent<HTMLSpanElement>): void => {
     if (!editor) return;
 
@@ -218,12 +245,26 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     }
 
     if (Array.isArray(result) && onFileUploaded) {
-      const url = await onFileUploaded(result[0]);
+      const url = await onFileUploaded(result[0], 'image');
 
       setImageUrl.resolve(url);
     }
 
     toggleImageUpload(prevState => !prevState);
+  };
+
+  const handleVideoSelected = async (result: File[] | string) => {
+    if (typeof result === 'string') {
+      setVideoUrl.resolve(result);
+    }
+
+    if (Array.isArray(result) && onFileUploaded) {
+      const url = await onFileUploaded(result[0], 'video');
+
+      setVideoUrl.resolve(url);
+    }
+
+    toggleVideoUpload(prevState => !prevState);
   };
 
   const handleConfirmLink = (url: string | null) => {
@@ -264,6 +305,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
           <ToolbarButtonsList />
           <ToolbarLink icon={<Link />} onMouseDown={openLinkEditor} />
           <ToolbarImage icon={<Image />} getImageUrl={getImageUrl} />
+          <ToolbarImage icon={<VideoLibrary />} getImageUrl={getVideoUrl} />
         </HeadingToolbar>
 
         <MentionSelect {...getMentionSelectProps()} renderLabel={renderMentionLabel} />
@@ -277,6 +319,21 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         open={showImageUpload}
         onClose={closeImageUpload}>
         <Upload onFileSelected={handleImageSelected} accept={['image/*']} />
+      </Modal>
+
+      <Modal
+        title="Upload Video"
+        align="left"
+        titleSize="small"
+        maxWidth="xl"
+        open={showVideoUpload}
+        onClose={closeVideoUpload}>
+        <Upload
+          onFileSelected={handleVideoSelected}
+          accept={['video/*']}
+          maxSize={100}
+          placeholder="Upload .mp4 video file with size less than 100Mb"
+        />
       </Modal>
 
       <Modal

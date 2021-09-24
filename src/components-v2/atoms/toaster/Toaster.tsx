@@ -2,7 +2,6 @@ import {XIcon} from '@heroicons/react/outline';
 
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -12,20 +11,15 @@ import {useTheme} from '@material-ui/core/styles';
 
 import {ToasterProps, Status} from './';
 
-const Toaster = ({toasterStatus, message}: ToasterProps): JSX.Element => {
+const Toaster = ({toasterStatus, message, open, onClose}: ToasterProps): JSX.Element => {
   const {palette, status} = useTheme();
-  const [open, setOpen] = React.useState(false);
-
-  const handleClick = () => {
-    setOpen(true);
-  };
 
   const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    setOpen(false);
+    onClose();
   };
 
   const defineBG = (toasterStatus: string) => {
@@ -54,7 +48,6 @@ const Toaster = ({toasterStatus, message}: ToasterProps): JSX.Element => {
 
   return (
     <div>
-      <Button onClick={handleClick}>Open simple snackbar</Button>
       <Snackbar open={open} onClose={handleClose}>
         <Paper
           style={{

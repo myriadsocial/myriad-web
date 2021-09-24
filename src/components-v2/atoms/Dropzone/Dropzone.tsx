@@ -1,16 +1,19 @@
 import React, {useState} from 'react';
-import {useDropzone} from 'react-dropzone';
+import {FileRejection, useDropzone} from 'react-dropzone';
 
 import {Button, Typography} from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import UploadIcon from '../../../images/Icons/Upload.svg';
+import {Status, Toaster} from '../toaster';
 import {useStyles} from './Dropzone.styles';
 
 type DropzoneProps = {
   value?: string;
+  placeholder?: string;
   loading?: boolean;
   accept?: string[];
+  maxSize?: number;
   onImageSelected: (files: File[]) => void;
 };
 
@@ -19,14 +22,22 @@ type FileUploaded = File & {
 };
 
 export const Dropzone: React.FC<DropzoneProps> = props => {
-  const {onImageSelected, loading, value, accept = ['image/*']} = props;
+  const {
+    onImageSelected,
+    loading,
+    value,
+    accept = ['image/*'],
+    maxSize = 20,
+    placeholder = 'File must be .jpeg or .png',
+  } = props;
   const styles = useStyles();
 
   const [, setFiles] = useState<FileUploaded[]>([]);
+  const [error, setError] = useState<FileRejection[] | null>(null);
 
   const {getRootProps, getInputProps, open} = useDropzone({
     accept,
-    maxFiles: 2000000,
+    maxSize: maxSize * 1024 * 1024,
     noClick: true,
     noKeyboard: true,
     onDrop: acceptedFiles => {
@@ -40,10 +51,17 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
 
       onImageSelected(acceptedFiles);
     },
+    onDropRejected: rejection => {
+      setError(rejection);
+    },
   });
 
   const handleReuploadImage = () => {
     open();
+  };
+
+  const closeError = () => {
+    setError(null);
   };
 
   return (
@@ -59,7 +77,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
           <>
             <UploadIcon />
 
-            <Typography>File must be .jpeg or .png</Typography>
+            <Typography>{placeholder}</Typography>
           </>
         )}
 
@@ -69,10 +87,15 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
           variant={value ? 'outlined' : 'contained'}
           color={value ? 'secondary' : 'primary'}
           onClick={handleReuploadImage}>
-          {value ? 'Reupload' : 'Upload'} Picture
+          {value ? 'Reupload' : 'Upload'} File
         </Button>
       </div>
-
+      <Toaster
+        open={Boolean(error)}
+        toasterStatus={Status.DANGER}
+        message="File too large"
+        onClose={closeError}
+      />
       {loading && <CircularProgress color="primary" className={styles.loading} />}
     </div>
   );

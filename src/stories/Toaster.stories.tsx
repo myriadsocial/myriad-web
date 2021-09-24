@@ -19,6 +19,8 @@ const Template: ComponentStory<typeof Toaster> = args => <Toaster {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
+  open: true,
   toasterStatus: Status.SUCCESS,
   message: 'Changes saved successfully',
+  onClose: console.log,
 };

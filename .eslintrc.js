@@ -28,11 +28,11 @@ module.exports = {
   ],
   ignorePatterns: ['**/public/*.js', '**/plugins/*.js'],
   rules: {
-    'no-unused-vars': ['error', {vars: 'local', args: 'none'}],
     'no-useless-escape': ['warn'],
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/ban-types': ['warn'],
     '@typescript-eslint/no-empty-interface': ['warn'],
+    '@typescript-eslint/no-unused-vars': ['error', {vars: 'local', args: 'none'}],
     'jsx-a11y/click-events-have-key-events': ['warn'],
     'jsx-a11y/interactive-supports-focus': ['warn'],
     'jsx-a11y/no-static-element-interactions': ['warn'],

@@ -1,11 +1,18 @@
 import {ComponentStory, ComponentMeta} from '@storybook/react';
-import {ELEMENT_IMAGE, ELEMENT_MENTION, ELEMENT_PARAGRAPH} from '@udecode/plate';
+import {
+  ELEMENT_IMAGE,
+  ELEMENT_MEDIA_EMBED,
+  ELEMENT_MENTION,
+  ELEMENT_PARAGRAPH,
+} from '@udecode/plate';
 import {MentionNodeData} from '@udecode/plate-mention';
 
 import React from 'react';
 
 import {PostEditor as PostEditorComponent} from './PostEditor';
 import {ELEMENT_HASHTAG} from './plugins/hashtag';
+
+import axios from 'axios';
 
 export default {
   title: 'UI Revamp v2.0/components/Post Editor',
@@ -28,6 +35,10 @@ const mentionables: MentionNodeData[] = [
     avatar: 'https://res.cloudinary.com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg',
   },
 ];
+
+const client = axios.create({
+  baseURL: 'http://localhost:3000',
+});
 
 export const PostEditor = Template.bind({});
 PostEditor.args = {
@@ -73,21 +84,26 @@ PostEditor.args = {
       ],
     },
     {
-      children: [
-        {
-          text: '',
-        },
-      ],
+      children: [{text: ''}],
       type: ELEMENT_IMAGE,
-      url: 'https://res.cloudinary.com/dsget80gs//w_800,c_limit/imawb1ogqlxetbz8ddrn.jpg',
+      url: 'https://res.cloudinary.com/dsget80gs/image/upload/v1629982505/jhfcuw4uyxkxxo9n0hgw.jpg',
     },
     {
       type: ELEMENT_PARAGRAPH,
       children: [
         {
-          text: '',
+          text: 'Etiam vulputate ullamcorper quam sed vulputate. Donec urna purus, faucibus vitae convallis ac, tristique auctor sem. Proin porttitor dolor ac semper placerat. Fusce ullamcorper, orci id pharetra consequat, risus augue laoreet massa, a tincidunt augue purus non justo. Aliquam erat volutpat. Nam commodo varius pretium',
         },
       ],
+    },
+    {
+      children: [{text: ''}],
+      type: ELEMENT_MEDIA_EMBED,
+      url: 'https://res.cloudinary.com/dsget80gs/video/upload/v1632409239/mixkit-youtuber-editing-a-video-41273.mp4',
+    },
+    {
+      children: [{text: ''}],
+      type: ELEMENT_PARAGRAPH,
     },
   ],
   mentionable: mentionables,
@@ -98,7 +114,18 @@ PostEditor.args = {
       avatar: 'https://res.cloudinary.com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg',
     });
   },
-  onFileUploaded: async (file: File) => {
-    return 'https://res.cloudinary.com/dsget80gs/lu2f67ljt0oqnaacuu7y.jpg';
+  onFileUploaded: async (file: File, type: 'image' | 'video') => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const {data} = await client.request<{
+      url: string;
+    }>({
+      method: 'POST',
+      url: `/api/${type}`,
+      data: formData,
+    });
+
+    return data.url;
   },
 };

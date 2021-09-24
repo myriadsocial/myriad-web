@@ -6,7 +6,7 @@ import {v2 as cloudinary} from 'cloudinary';
 import DatauriParser from 'datauri/parser';
 import multer from 'multer';
 import path from 'path';
-import * as sharp from 'sharp';
+import sharp from 'sharp';
 
 type NextApiRequestWithFormData = NextApiRequest & {
   file: any;
@@ -61,7 +61,6 @@ const handler = nextConnect()
     // resize image based on width and keep the aspect ratio
     // store as buffer to keep server clean from additional file
     if (req.file.size > MAX_IMAGE_SIZE) {
-      // @ts-expect-error
       const resized = await sharp(image)
         .resize({
           width: MAX_IMAGE_WIDTH,
