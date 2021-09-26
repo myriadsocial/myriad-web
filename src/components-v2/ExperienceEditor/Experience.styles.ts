@@ -22,6 +22,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiAutocomplete-popupIndicatorOpen': {
         transform: 'none',
       },
+
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
     },
     title: {
       marginBottom: 30,
@@ -30,6 +34,25 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     preview: {
       marginBottom: 30,
+
+      '& .MuiListItem-root:hover': {
+        backgroundColor: alpha('#FFC857', 0.15),
+
+        '&::before,&::after': {
+          content: '""',
+          position: 'absolute',
+          width: 30,
+          height: 68,
+          top: 0,
+          backgroundColor: alpha('#FFC857', 0.15),
+        },
+        '&::before': {
+          left: -30,
+        },
+        '&::after': {
+          right: -30,
+        },
+      },
     },
     label: {
       background: '#FFF',
@@ -39,6 +62,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     social: {
       color: theme.palette.primary.main,
     },
-    people: {},
+    people: {
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
+    },
   }),
 );
