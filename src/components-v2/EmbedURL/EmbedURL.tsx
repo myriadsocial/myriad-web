@@ -40,6 +40,7 @@ export const EmbedURL: React.FC<EmbedURLProps> = props => {
         <Input id="link-to-file" onChange={handleUrlChanged} error={error} />
       </FormControl>
       <Button
+        className={styles.confirm}
         variant="contained"
         color="primary"
         fullWidth

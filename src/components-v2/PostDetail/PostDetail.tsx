@@ -143,7 +143,8 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
         <Button
           variant={ButtonVariant.OUTLINED}
           color={ButtonColor.SECONDARY}
-          size={ButtonSize.SMALL}>
+          size={ButtonSize.SMALL}
+          className={styles.sendTips}>
           Send Tip
         </Button>
       </div>

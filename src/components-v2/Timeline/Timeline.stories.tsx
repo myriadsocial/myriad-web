@@ -14,6 +14,7 @@ export default {
 const Template: ComponentStory<typeof TimelineComponent> = args => <TimelineComponent {...args} />;
 
 export const Timeline = Template.bind({});
+
 Timeline.args = {
   posts: [
     {

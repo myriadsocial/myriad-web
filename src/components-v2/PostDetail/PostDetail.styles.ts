@@ -4,6 +4,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       borderRadius: 10,
+      minWidth: 643,
     },
     content: {
       padding: theme.spacing(0.5, 2.5),
@@ -30,6 +31,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         fontSize: 16,
         lineHeight: '20px',
       },
+    },
+    sendTips: {
+      width: 120,
     },
   }),
 );

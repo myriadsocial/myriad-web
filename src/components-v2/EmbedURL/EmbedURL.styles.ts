@@ -8,7 +8,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#FFF',
     },
     input: {
-      marginBottom: 196,
+      marginBottom: 30,
+      paddingTop: 0,
+    },
+    confirm: {
+      marginTop: 15,
     },
   }),
 );
