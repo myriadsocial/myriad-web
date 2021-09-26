@@ -25,11 +25,11 @@ export const useStyles = makeStyles((theme: Theme) =>
 
 type ToolbarMediaProps = {
   getImageUrl: (type: 'upload' | 'link') => Promise<string>;
-  getVideoUrl: () => Promise<string>;
+  openVideoUpload: () => void;
 };
 export const ToolbarMedia: React.FC<ToolbarMediaProps> = props => {
   const styles = useStyles();
-  const {getImageUrl, getVideoUrl} = props;
+  const {getImageUrl, openVideoUpload} = props;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -73,7 +73,7 @@ export const ToolbarMedia: React.FC<ToolbarMediaProps> = props => {
         </MenuItem>
       </Menu>
 
-      <ToolbarImage icon={<VideoLibrary />} getImageUrl={getVideoUrl} />
+      <ToolbarImage icon={<VideoLibrary />} onMouseDown={openVideoUpload} />
     </>
   );
 };
