@@ -44,6 +44,7 @@ export const TabList: React.FC<TabListProps> = props => {
     <Tabs
       value={activeTab}
       indicatorColor={indicatorColor}
+      TabIndicatorProps={{color: 'transparent', children: <span className={styles.indicator} />}}
       textColor={textColor}
       onChange={handleTabChange}
       className={styles.tabs}>

@@ -58,5 +58,12 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       color: props =>
         props.mark === 'underline' ? theme.palette.text.secondary : theme.palette.text.primary,
     },
+    indicator: {
+      marginLeft: 4,
+      width: '50%',
+      height: props => (props.size === 'small' ? 4 : 6),
+      display: 'block',
+      background: '#FFC857',
+    },
   }),
 );
