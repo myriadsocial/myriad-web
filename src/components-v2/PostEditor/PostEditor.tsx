@@ -24,7 +24,6 @@ import {
 } from '@udecode/plate';
 import {isCollapsed, unwrapNodes} from '@udecode/plate-common';
 import {ELEMENT_IMAGE, createImagePlugin} from '@udecode/plate-image';
-import {ToolbarImage} from '@udecode/plate-image-ui';
 import {createLinkPlugin, ELEMENT_LINK, upsertLinkAtSelection} from '@udecode/plate-link';
 import {ToolbarLink} from '@udecode/plate-link-ui';
 import {ELEMENT_MENTION, MentionNodeData, useMentionPlugin} from '@udecode/plate-mention';
@@ -33,7 +32,7 @@ import {HeadingToolbar} from '@udecode/plate-toolbar';
 import React, {useMemo, useEffect, useState} from 'react';
 
 import Box from '@material-ui/core/Box';
-import {Image, Link, VideoLibrary} from '@material-ui/icons';
+import {Link} from '@material-ui/icons';
 
 import theme from '../../themes/light-theme-v2';
 import {EmbedURL} from '../EmbedURL';
@@ -47,6 +46,7 @@ import {ToolbarButtonsAlign} from './Toolbar/ToolbarAlign';
 import {ToolbarElementList} from './Toolbar/ToolbarElement';
 import {ToolbarButtonsList} from './Toolbar/ToolbarList';
 import {ToolbarButtonsMarks, plugins as markPlugins} from './Toolbar/ToolbarMark';
+import {ToolbarMedia} from './Toolbar/ToolbarMedia';
 import {createHashtagPlugin, ELEMENT_HASHTAG} from './plugins/hashtag';
 
 import {Transforms, Selection, Editor} from 'slate';
@@ -165,7 +165,9 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   const [setImageUrl, setImageUrlPromise] = useState<any>();
   const [setVideoUrl, setVideoUrlPromise] = useState<any>();
   const [showImageUpload, toggleImageUpload] = useState(false);
+  const [imageUploadType, setImageUploadType] = useState<'upload' | 'link' | null>(null);
   const [showModalLink, toggleModalLink] = useState(false);
+  const [showModalImageLink, toggleModalImageLink] = useState(false);
   const [showVideoUpload, toggleVideoUpload] = useState(false);
   const [currentSelection, setCurrentSelection] = useState<Selection | null>(null);
 
@@ -184,21 +186,31 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   };
 
   const closeImageUpload = () => {
-    toggleImageUpload(prevState => !prevState);
+    toggleImageUpload(false);
   };
 
   const closeVideoUpload = () => {
-    toggleVideoUpload(prevState => !prevState);
+    toggleVideoUpload(false);
   };
 
   const closeLinkModal = () => {
-    toggleModalLink(prevState => !prevState);
+    toggleModalLink(false);
   };
 
-  const getImageUrl = async (): Promise<string> => {
+  const closeImageLinkModal = () => {
+    toggleModalImageLink(false);
+  };
+
+  const getImageUrl = async (type: 'upload' | 'link'): Promise<string> => {
     let resolve;
 
-    toggleImageUpload(prevState => !prevState);
+    setImageUploadType(type);
+
+    if (type === 'upload') {
+      toggleImageUpload(prevState => !prevState);
+    } else {
+      toggleModalImageLink(prevState => !prevState);
+    }
 
     const promise = new Promise<string>(_resolve => {
       resolve = _resolve;
@@ -239,18 +251,30 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     toggleModalLink(prevState => !prevState);
   };
 
+  const handleImageLinkSelected = (result: string | null) => {
+    if (result) {
+      handleImageSelected(result);
+    }
+  };
+
   const handleImageSelected = async (result: File[] | string) => {
     if (typeof result === 'string') {
       setImageUrl.resolve(result);
     }
 
-    if (Array.isArray(result) && onFileUploaded) {
+    if (imageUploadType === 'upload' && Array.isArray(result) && onFileUploaded) {
       const url = await onFileUploaded(result[0], 'image');
 
       setImageUrl.resolve(url);
     }
 
-    toggleImageUpload(prevState => !prevState);
+    if (imageUploadType === 'link' && typeof result === 'string') {
+      setImageUrl.resolve(result);
+    }
+
+    setImageUploadType(null);
+    toggleImageUpload(false);
+    toggleModalImageLink(false);
   };
 
   const handleVideoSelected = async (result: File[] | string) => {
@@ -264,7 +288,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
       setVideoUrl.resolve(url);
     }
 
-    toggleVideoUpload(prevState => !prevState);
+    toggleVideoUpload(false);
   };
 
   const handleConfirmLink = (url: string | null) => {
@@ -286,7 +310,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
       setCurrentSelection(null);
     }
 
-    toggleModalLink(prevState => !prevState);
+    toggleModalLink(false);
   };
 
   return (
@@ -304,8 +328,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
           <ToolbarButtonsAlign />
           <ToolbarButtonsList />
           <ToolbarLink icon={<Link />} onMouseDown={openLinkEditor} />
-          <ToolbarImage icon={<Image />} getImageUrl={getImageUrl} />
-          <ToolbarImage icon={<VideoLibrary />} getImageUrl={getVideoUrl} />
+          <ToolbarMedia getImageUrl={getImageUrl} getVideoUrl={getVideoUrl} />
         </HeadingToolbar>
 
         <MentionSelect {...getMentionSelectProps()} renderLabel={renderMentionLabel} />
@@ -344,6 +367,16 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         open={showModalLink}
         onClose={closeLinkModal}>
         <EmbedURL onConfirm={handleConfirmLink} />
+      </Modal>
+
+      <Modal
+        title="Embed Image"
+        align="left"
+        titleSize="small"
+        maxWidth="xl"
+        open={showModalImageLink}
+        onClose={closeImageLinkModal}>
+        <EmbedURL onConfirm={handleImageLinkSelected} />
       </Modal>
     </Box>
   );
