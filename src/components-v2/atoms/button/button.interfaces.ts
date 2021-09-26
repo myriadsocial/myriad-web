@@ -55,6 +55,11 @@ interface ButtonProps {
   isDisabled?: boolean;
 
   /**
+   * Override class
+   */
+  className?: string;
+
+  /**
    * Optional click handler
    */
   onClick?: () => void;
