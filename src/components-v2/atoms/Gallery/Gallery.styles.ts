@@ -27,6 +27,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 700,
     },
     imageGrid: {
+      width: '100%',
       height: 'auto !important',
     },
   }),
