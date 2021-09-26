@@ -44,10 +44,11 @@ export const Socials: React.FC<SocialsProps> = props => {
   const [removing, setRemoving] = useState(false);
   const [peopleToRemove, setPeopleToRemove] = useState<SocialMedia | null>(null);
   const [addSocial, setAddSocial] = useState(false);
+  const enabledSocial = [SocialsEnum.FACEBOOK, SocialsEnum.TWITTER, SocialsEnum.REDDIT];
 
   useEffect(() => {
     getPeopleList();
-  }, []);
+  }, [selectedSocial]);
 
   const getPeopleList = (): void => {
     const selected = socials.filter(social => social.platform === selectedSocial);
@@ -55,16 +56,14 @@ export const Socials: React.FC<SocialsProps> = props => {
     setPeople(selected);
   };
 
-  const getStyles = (social: SocialsEnum, connected: boolean): string[] => {
+  const getStyles = (social: SocialsEnum): string[] => {
     const classname: string[] = [];
 
     if (social === selectedSocial) {
       classname.push(styles.selected);
     }
 
-    if (connected) {
-      classname.push(styles[social]);
-    }
+    classname.push(styles[social]);
 
     return classname;
   };
@@ -111,7 +110,8 @@ export const Socials: React.FC<SocialsProps> = props => {
           <IconButton
             key={social.id}
             size="small"
-            className={[styles.icon, ...getStyles(social.id, social.connected)].join(' ')}
+            className={[styles.icon, ...getStyles(social.id)].join(' ')}
+            disabled={!enabledSocial.includes(social.id)}
             onClick={() => setSelectedSocial(social.id)}>
             {social.icon}
           </IconButton>
@@ -139,6 +139,8 @@ export const Socials: React.FC<SocialsProps> = props => {
                     edge="start"
                     color="primary"
                     tabIndex={-1}
+                    checked={selectedPeople === account.peopleId}
+                    value={account.peopleId}
                     disableRipple
                     onChange={() => setSelectedPeople(account.peopleId)}
                     inputProps={{'aria-labelledby': labelId}}
@@ -148,6 +150,7 @@ export const Socials: React.FC<SocialsProps> = props => {
                   <ListItemComponent
                     title={account.people?.name || ''}
                     subtitle={index === 0 ? '(Primary account)' : undefined}
+                    size="medium"
                     avatar={account.people?.profilePictureURL}
                   />
                 </ListItemText>

@@ -27,6 +27,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     listItem: {
       paddingRight: 30,
       paddingLeft: 30,
+      padding: 0,
       '& .MuiListItemText-root': {
         padding: 0,
 
@@ -34,7 +35,9 @@ export const useStyles = makeStyles((theme: Theme) =>
           padding: 0,
         },
       },
-      padding: 0,
+      '&:hover': {
+        backgroundColor: alpha('#FFC857', 0.15),
+      },
     },
     icon: {
       padding: 10,
@@ -76,10 +79,14 @@ export const useStyles = makeStyles((theme: Theme) =>
     '4chan': {},
     itemIcon: {
       minWidth: 42,
+
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
     },
     remove: {
-      '& .MuiSvgIcon-colorPrimary': {
-        fill: 'none',
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
       },
     },
     action: {
