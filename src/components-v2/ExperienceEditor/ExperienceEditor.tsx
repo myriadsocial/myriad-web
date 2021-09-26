@@ -175,7 +175,6 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         className={styles.people}
         value={newExperience?.people}
         multiple
-        open={true}
         options={people}
         getOptionSelected={(option, value) => option === value}
         getOptionLabel={option => option.name}
