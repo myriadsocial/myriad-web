@@ -116,7 +116,7 @@ PostEditor.args = {
   },
   onFileUploaded: async (file: File, type: 'image' | 'video') => {
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append(type, file);
 
     const {data} = await client.request<{
       url: string;
