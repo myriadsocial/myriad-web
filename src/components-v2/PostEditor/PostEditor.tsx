@@ -26,6 +26,7 @@ import {isCollapsed, unwrapNodes} from '@udecode/plate-common';
 import {ELEMENT_IMAGE, createImagePlugin} from '@udecode/plate-image';
 import {createLinkPlugin, ELEMENT_LINK, upsertLinkAtSelection} from '@udecode/plate-link';
 import {ToolbarLink} from '@udecode/plate-link-ui';
+import {insertMediaEmbed} from '@udecode/plate-media-embed';
 import {ELEMENT_MENTION, MentionNodeData, useMentionPlugin} from '@udecode/plate-mention';
 import {HeadingToolbar} from '@udecode/plate-toolbar';
 
@@ -163,7 +164,6 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
 
   const editor = useStoreEditorState('main');
   const [setImageUrl, setImageUrlPromise] = useState<any>();
-  const [setVideoUrl, setVideoUrlPromise] = useState<any>();
   const [showImageUpload, toggleImageUpload] = useState(false);
   const [imageUploadType, setImageUploadType] = useState<'upload' | 'link' | null>(null);
   const [showModalLink, toggleModalLink] = useState(false);
@@ -224,21 +224,10 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     return promise;
   };
 
-  const getVideoUrl = async (): Promise<string> => {
-    let resolve;
+  const getVideoUrl = (): void => {
+    if (!editor) return;
 
     toggleVideoUpload(prevState => !prevState);
-
-    const promise = new Promise<string>(_resolve => {
-      resolve = _resolve;
-    });
-
-    /* @ts-expect-error */
-    promise.resolve = resolve;
-
-    setVideoUrlPromise(promise);
-
-    return promise;
   };
 
   const openLinkEditor = (event: React.MouseEvent<HTMLSpanElement>): void => {
@@ -278,14 +267,13 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   };
 
   const handleVideoSelected = async (result: File[] | string) => {
-    if (typeof result === 'string') {
-      setVideoUrl.resolve(result);
+    if (editor && Array.isArray(result) && onFileUploaded) {
+      const url = await onFileUploaded(result[0], 'video');
+      insertMediaEmbed(editor, {url});
     }
 
-    if (Array.isArray(result) && onFileUploaded) {
-      const url = await onFileUploaded(result[0], 'video');
-
-      setVideoUrl.resolve(url);
+    if (editor && typeof result === 'string') {
+      insertMediaEmbed(editor, {url: result});
     }
 
     toggleVideoUpload(false);
@@ -328,7 +316,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
           <ToolbarButtonsAlign />
           <ToolbarButtonsList />
           <ToolbarLink icon={<Link />} onMouseDown={openLinkEditor} />
-          <ToolbarMedia getImageUrl={getImageUrl} getVideoUrl={getVideoUrl} />
+          <ToolbarMedia getImageUrl={getImageUrl} openVideoUpload={getVideoUrl} />
         </HeadingToolbar>
 
         <MentionSelect {...getMentionSelectProps()} renderLabel={renderMentionLabel} />
