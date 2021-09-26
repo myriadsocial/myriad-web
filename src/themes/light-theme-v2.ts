@@ -285,6 +285,9 @@ const theme = createTheme({
       root: {
         fill: 'none',
       },
+      colorError: {
+        color: primaryRed,
+      },
     },
 
     MuiFormControl: {

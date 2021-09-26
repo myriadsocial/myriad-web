@@ -76,7 +76,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     }
 
     if (reason === 'create-option') {
-      setTags(value);
+      setTags(value.map(item => item.replace('#', '')));
     }
 
     if (reason === 'select-option') {
