@@ -1,3 +1,4 @@
+import {ChevronDownIcon} from '@heroicons/react/outline';
 import {SearchIcon} from '@heroicons/react/solid';
 
 import React, {useState} from 'react';
@@ -13,7 +14,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import Menu from '@material-ui/core/Menu';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import {formatUsd} from '../../helpers/balance';
 import {Currency} from '../../interfaces/currency';
@@ -75,19 +75,20 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
       <div className={styles.root}>
         <div className={styles.options}>
           <DropdownMenu title="Sort by" options={sortOptions} />
+
           <div>
             <Typography component="span">Coin:&nbsp;</Typography>
 
-            <Typography component="span" color="textPrimary">
+            <Typography component="span" color="textPrimary" className={styles.selected}>
               {selected}
             </Typography>
 
             <IconButton
-              style={{padding: 0}}
+              className={styles.expand}
               onClick={handleClick}
               color="primary"
               aria-label="expand">
-              <ExpandMoreIcon />
+              <SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />
             </IconButton>
             <Menu
               id="currency-option"
@@ -143,7 +144,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                       {tip.amount} {tip.currency.id}
                     </Typography>
                     <Typography variant="caption" color="textSecondary">
-                      ~{formatUsd(tip.amount, tip.currency)}$
+                      ~{formatUsd(tip.amount, tip.currency)} USD
                     </Typography>
                   </div>
                   <Avatar src={tip.currency.image} className={styles.logo} />

@@ -4,6 +4,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: 400,
+      maxHeight: 600,
     },
     options: {
       display: 'flex',
@@ -14,6 +15,14 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& . MuiMenu-paper': {
         width: 170,
       },
+    },
+    selected: {
+      marginLeft: 8,
+      fontWeight: 600,
+    },
+    expand: {
+      marginLeft: theme.spacing(1),
+      padding: 0,
     },
     list: {
       '& .MuiListItem-root': {
