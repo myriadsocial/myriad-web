@@ -62,7 +62,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     social: {
       color: theme.palette.primary.main,
     },
-    people: {
+    people: {},
+    removePeople: {
       '& .MuiSvgIcon-root': {
         fill: 'currentColor',
       },
