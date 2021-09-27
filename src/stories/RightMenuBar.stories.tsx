@@ -2,7 +2,6 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {ExperienceList} from '../components-v2/ExperienceList/ExperienceList.stories';
 import {RightMenuBar} from '../components-v2/RightMenuBar/RightMenuBar';
 
 export default {
@@ -10,9 +9,7 @@ export default {
   component: RightMenuBar,
 } as ComponentMeta<typeof RightMenuBar>;
 
-const Template: ComponentStory<typeof RightMenuBar> = args => <RightMenuBar {...args} />;
+const Template: ComponentStory<typeof RightMenuBar> = () => <RightMenuBar />;
 
 export const DefaultRightMenuBar = Template.bind({});
-DefaultRightMenuBar.args = {
-  experiences: ExperienceList.args?.experiences ?? [],
-};
+DefaultRightMenuBar.args = {};

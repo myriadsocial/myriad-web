@@ -2,7 +2,6 @@ import React from 'react';
 
 import {useTheme} from '@material-ui/core/styles';
 
-import {ExperienceList} from '../../ExperienceList/ExperienceList.stories';
 import {Menu as MenuComponent} from '../../Menu/';
 import {SidebarMenu} from '../../Menu/Menu.stories';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
@@ -99,7 +98,7 @@ const ProfilePage = (): JSX.Element => {
             />
           </div>
           <div style={{marginTop: theme.spacing(2.5)}}>
-            <RightMenuBar experiences={ExperienceList.args?.experiences ?? []} />
+            <RightMenuBar />
           </div>
         </div>
       </div>
