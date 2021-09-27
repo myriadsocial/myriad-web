@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {RootState} from 'src/reducers';
+import {RootState} from '../reducers';
 import {
   searchExperience,
   searchPeople,
@@ -9,8 +9,8 @@ import {
   cloneExperience,
   fetchExperience,
   fetchAllExperiences,
-} from 'src/reducers/experience/actions';
-import {ExperienceState} from 'src/reducers/experience/reducer';
+} from '../reducers/experience/actions';
+import {ExperienceState} from '../reducers/experience/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useExperienceHook = () => {

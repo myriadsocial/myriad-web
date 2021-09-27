@@ -1,14 +1,14 @@
+import {Experience, Tag} from '../../interfaces/experience';
+import {People} from '../../interfaces/people';
+import * as ExperienceAPI from '../../lib/api/experience';
+import * as PeopleAPI from '../../lib/api/people';
+import * as TagAPI from '../../lib/api/tag';
+import {ThunkActionCreator} from '../../types/thunk';
 import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
-import {Experience, Tag} from 'src/interfaces/experience';
-import {People} from 'src/interfaces/people';
-import * as ExperienceAPI from 'src/lib/api/experience';
-import * as PeopleAPI from 'src/lib/api/people';
-import * as TagAPI from 'src/lib/api/tag';
-import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
  * Action Types
