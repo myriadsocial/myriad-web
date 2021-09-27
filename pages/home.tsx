@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import NoSsr from '@material-ui/core/NoSsr';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import {RightMenuBarContainer} from '../src/components-v2/RightMenuBar/';
+import {RightMenuBar} from '../src/components-v2/RightMenuBar/';
 
 import Layout from 'src/components/Layout/Layout.container';
 import Timeline from 'src/components/timeline/timeline.component';
@@ -78,7 +78,7 @@ const Home: React.FC = () => {
             <UserDetail isAnonymous={anonymous} />
           </Grid>
           <Grid item className={style.fullwidth}>
-            <RightMenuBarContainer />
+            <RightMenuBar />
 
             <NoSsr>
               <Wallet />
