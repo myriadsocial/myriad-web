@@ -5,6 +5,7 @@ import React, {useState} from 'react';
 import {RightMenuBarProps} from '.';
 import {useStyles} from '.';
 import {ExperienceTabMenu} from '../ExperienceTabMenu/ExperienceTabMenu';
+import {TrendingTabPanelContainer} from '../Trending/TrendingTabPanelContainer';
 import {TabsComponent} from '../atoms/Tabs/';
 
 export const RightMenuBar: React.FC<RightMenuBarProps> = props => {
@@ -18,7 +19,7 @@ export const RightMenuBar: React.FC<RightMenuBarProps> = props => {
     {
       id: 'second',
       icon: <HashtagIcon />,
-      component: 'Trending Tab Content',
+      component: <TrendingTabPanelContainer />,
     },
     {
       id: 'third',

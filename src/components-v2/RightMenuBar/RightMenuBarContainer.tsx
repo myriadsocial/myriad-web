@@ -12,6 +12,5 @@ export const RightMenuBarContainer: React.FC = () => {
     loadExperience();
   }, []);
 
-  console.log({experiences});
   return <RightMenuBar experiences={experiences} />;
 };
