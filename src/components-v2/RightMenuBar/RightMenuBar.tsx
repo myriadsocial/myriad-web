@@ -4,23 +4,21 @@ import React, {useState} from 'react';
 
 import {RightMenuBarProps} from '.';
 import {useStyles} from '.';
-import {ExperienceTabMenu} from '../ExperienceTabMenu/ExperienceTabMenu';
-import {TrendingTabPanel} from '../Trending/TrendingTabPanel';
-import {defaultTrendings} from '../Trending/TrendingTabPanel.stories';
+import {ExperienceTabMenuContainer} from '../ExperienceTabMenu/ExperienceTabMenuContainer';
+import {TrendingTabPanelContainer} from '../Trending/TrendingTabPanelContainer';
 import {TabsComponent} from '../atoms/Tabs/';
 
 export const RightMenuBar: React.FC<RightMenuBarProps> = props => {
-  const {experiences} = props;
   const [iconTabs] = useState([
     {
       id: 'first',
       icon: <VariableIcon />,
-      component: <ExperienceTabMenu experiences={experiences} />,
+      component: <ExperienceTabMenuContainer />,
     },
     {
       id: 'second',
       icon: <HashtagIcon />,
-      component: <TrendingTabPanel trendings={defaultTrendings()} />,
+      component: <TrendingTabPanelContainer />,
     },
     {
       id: 'third',
