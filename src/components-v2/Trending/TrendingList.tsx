@@ -33,8 +33,10 @@ export const TrendingList: React.FC<TrendingListProps> = props => {
             <ListItemText disableTypography className={style.text}>
               <Link href={`?tag=${trending.id}&type=${TimelineType.ALL}`} shallow={true}>
                 <a href={`?tag=${trending.id}&type=${TimelineType.ALL}`}>
-                  <Typography variant="h4">{`#${trending.id}`}</Typography>
-                  <Typography variant="caption">{`${trending.count} Posts`}</Typography>
+                  <Typography variant="body1" color="textPrimary">{`#${trending.id}`}</Typography>
+                  <Typography
+                    variant="caption"
+                    color="textSecondary">{`${trending.count} Posts`}</Typography>
                 </a>
               </Link>
             </ListItemText>
