@@ -4,10 +4,15 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'block',
+      '& .MuiList-padding': {
+        paddingTop: theme.spacing(3.75),
+      },
     },
     list: {
-      marginLeft: theme.spacing(-2),
-      marginRight: theme.spacing(-2),
+      '& .MuiListItem-gutters': {
+        paddingLeft: 0,
+        paddingRight: 0,
+      },
     },
     item: {
       '& .MuiListItemText-primary': {
@@ -26,6 +31,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     text: {
       '& > a': {
         color: theme.palette.text.primary,
+        textDecoration: 'none',
       },
     },
   }),

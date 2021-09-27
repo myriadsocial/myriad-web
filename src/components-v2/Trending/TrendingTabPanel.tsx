@@ -17,13 +17,10 @@ export const TrendingTabPanel: React.FC<TrendingTabPanelProps> = props => {
 
   return (
     <div className={styles.root} id="worldwide">
+      <div style={{marginBottom: 20}}>
+        <Typography variant="h4">{'Trends'}</Typography>
+      </div>
       <div className={styles.content}>
-        <div style={{paddingTop: 24, paddingBottom: 8}}>
-          <Typography variant="h4" style={{marginBottom: 8}}>
-            {'Trends'}
-          </Typography>
-        </div>
-
         <TrendingList trendings={trendings} />
       </div>
     </div>
