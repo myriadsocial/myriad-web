@@ -1,11 +1,11 @@
+import {Tag} from '../../interfaces/experience';
+import * as TagAPI from '../../lib/api/tag';
+import {ThunkActionCreator} from '../../types/thunk';
 import {Actions as BaseAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
-import {Tag} from 'src/interfaces/experience';
-import * as TagAPI from 'src/lib/api/tag';
-import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
  * Action Types
