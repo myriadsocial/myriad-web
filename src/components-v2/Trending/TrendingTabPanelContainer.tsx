@@ -1,19 +1,12 @@
-import React, {useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React from 'react';
 
-import {RootState} from '../../reducers';
-import {fetchPopularTopic} from '../../reducers/tag/actions';
-import {TagState} from '../../reducers/tag/reducer';
 import {TrendingTabPanel} from './TrendingTabPanel';
+import {useTrendingHook} from './use-trending.hooks';
 
 export const TrendingTabPanelContainer: React.FC = () => {
-  const dispatch = useDispatch();
+  const {trending} = useTrendingHook();
 
-  const {trending} = useSelector<RootState, TagState>(state => state.tagState);
+  console.log({trending});
 
-  useEffect(() => {
-    dispatch(fetchPopularTopic());
-  }, []);
-
-  return <TrendingTabPanel trending={trending} />;
+  return <TrendingTabPanel trendings={trending} />;
 };
