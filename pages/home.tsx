@@ -4,13 +4,16 @@ import {useSelector, useDispatch} from 'react-redux';
 import {getSession} from 'next-auth/client';
 
 import Grid from '@material-ui/core/Grid';
+import NoSsr from '@material-ui/core/NoSsr';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {RightMenuBarContainer} from '../src/components-v2/RightMenuBar/';
 
 import Layout from 'src/components/Layout/Layout.container';
 import Timeline from 'src/components/timeline/timeline.component';
+import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
+import {Wallet} from 'src/components/wallet/wallet.component';
 import {useResize} from 'src/hooks/use-resize.hook';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
@@ -76,6 +79,12 @@ const Home: React.FC = () => {
           </Grid>
           <Grid item className={style.fullwidth}>
             <RightMenuBarContainer />
+
+            <NoSsr>
+              <Wallet />
+            </NoSsr>
+
+            <TopicComponent />
           </Grid>
         </Grid>
       </Grid>
