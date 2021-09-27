@@ -2,21 +2,10 @@ import {ChatAlt2Icon, HashtagIcon, VariableIcon} from '@heroicons/react/outline'
 
 import React, {useState} from 'react';
 
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
-
 import {RightMenuBarProps} from '.';
+import {useStyles} from '.';
 import {ExperienceTabMenu} from '../ExperienceTabMenu/ExperienceTabMenu';
 import {TabsComponent} from '../atoms/Tabs/';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      '& .MuiBox-root': {
-        paddingLeft: 0,
-      },
-    },
-  }),
-);
 
 export const RightMenuBar: React.FC<RightMenuBarProps> = props => {
   const {experiences} = props;
