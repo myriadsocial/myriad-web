@@ -2,17 +2,17 @@ import React from 'react';
 
 import Typography from '@material-ui/core/Typography';
 
-import {TopicListComponent} from '../../components/topic/topic-list.component';
+import {TrendingList} from './TrendingList';
 import {useStyles} from './trending-tab-panel.styles';
 
 import {Tag} from 'src/interfaces/experience';
 
 type TrendingTabPanelProps = {
-  trending: Tag[];
+  trendings: Tag[];
 };
 
 export const TrendingTabPanel: React.FC<TrendingTabPanelProps> = props => {
-  const {trending} = props;
+  const {trendings} = props;
   const styles = useStyles();
 
   return (
@@ -24,7 +24,7 @@ export const TrendingTabPanel: React.FC<TrendingTabPanelProps> = props => {
           </Typography>
         </div>
 
-        <TopicListComponent topics={trending} />
+        <TrendingList trendings={trendings} />
       </div>
     </div>
   );
