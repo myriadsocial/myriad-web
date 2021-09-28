@@ -8,22 +8,14 @@ import {TimelineContainer} from '../src/components-v2/Timeline/TimelineContainer
 import {SearchBoxContainer} from '../src/components-v2/atoms/search/SearchBoxContainer';
 import {DefaultLayout} from '../src/components-v2/template/default/DefaultLayout';
 
-//import {useResize} from 'src/hooks/use-resize.hook';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
-//import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {setAnonymous, setUser, fetchConnectedSocials} from 'src/reducers/user/actions';
-//import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
-
-  //const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  //const sourceRef = useRef<HTMLDivElement | null>(null);
-
-  //const height = useResize(sourceRef);
 
   useEffect(() => {
     dispatch(fetchConnectedSocials());
