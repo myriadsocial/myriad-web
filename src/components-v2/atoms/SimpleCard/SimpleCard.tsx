@@ -71,7 +71,8 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
       className={classNames(classes.root, {
         [classes.activated]: selected === true,
       })}
-      {...props}>
+      {...props}
+    >
       <div
         className={classNames(classes.indicator, {
           [classes.indicatorActivated]: selected === true,
@@ -83,7 +84,8 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
         component="div"
         classes={{
           root: classes.actionArea,
-        }}>
+        }}
+      >
         <div className={classes.details}>
           <div className={classes.details}>
             <CardMedia
@@ -116,7 +118,8 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
         anchorOrigin={{vertical: 'top', horizontal: 'center'}}
         transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
         open={Boolean(anchorEl)}
-        onClose={handleClose}>
+        onClose={handleClose}
+      >
         <MenuItem>See details</MenuItem>
         <MenuItem>Edit experience</MenuItem>
         <MenuItem className={classes.delete}>Delete</MenuItem>
