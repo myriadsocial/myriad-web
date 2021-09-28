@@ -22,6 +22,9 @@ const Home: React.FC = () => {
     dispatch(fetchAvailableToken());
   }, [dispatch]);
 
+  //TODO: any logic + components which replace
+  // the middle column of home page should go here
+
   return (
     <DefaultLayout isOnProfilePage={false}>
       <SearchBoxContainer />
