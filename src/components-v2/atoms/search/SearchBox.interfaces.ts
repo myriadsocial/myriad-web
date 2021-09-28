@@ -21,7 +21,7 @@ interface SearchBoxProps {
   /**
    * Button label
    */
-  placeholder: string;
+  placeholder?: string;
 
   /**
    * SearchBox disabled?

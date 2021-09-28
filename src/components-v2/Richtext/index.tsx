@@ -37,7 +37,7 @@ export const RichTextComponent: React.FC<Props> = props => {
           <TextareaAutosize
             rowsMin={1}
             value={post}
-            placeholder={`Whats on your mind?`}
+            placeholder={`What's on your mind?`}
             className={style.postTextArea}
             onChange={updatePostText}
             spellCheck={false}
