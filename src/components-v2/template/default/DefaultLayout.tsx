@@ -4,36 +4,30 @@ import {useTheme} from '@material-ui/core/styles';
 
 import {Menu as MenuComponent} from '../../Menu/';
 import {SidebarMenu} from '../../Menu/Menu.stories';
-import {RichTextComponent} from '../../Richtext/';
-import {DefaultRichText} from '../../Richtext/RichText.stories';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
 import {SocialMediaList} from '../../SocialMediaList/SocialMedia.stories';
-import {Timeline as TimelineComponent} from '../../Timeline/';
-import {Timeline} from '../../Timeline/Timeline.stories';
 import {WalletBalances} from '../../WalletBalance/WalletBalance.stories';
-import {DefaultSearchBox} from '../../atoms/search/SearchBox.stories';
 import {ProfileHeader as ProfileHeaderComponent} from '../../profile-header/';
 import {ProfileHeader} from '../../profile-header/ProfileHeader.stories';
+import useStyles from './default-layout.styles';
 
-{
-  /*import useStyles from './home-page.style';*/
-}
+type DefaultLayoutProps = {
+  isOnProfilePage: boolean;
+  children: React.ReactNode;
+};
 
-const HomePage = (): JSX.Element => {
+export const DefaultLayout: React.FC<DefaultLayoutProps> = props => {
+  const {isOnProfilePage, children} = props;
   const classes = useStyles();
 
   const theme = useTheme();
 
+  console.log({isOnProfilePage});
+
   return (
     <div className={classes.root}>
       <div className={classes.firstCol}>
-        <div
-          style={{
-            maxWidth: 360,
-            display: 'flex',
-            flexDirection: 'column',
-            rowGap: 12,
-          }}>
+        <div className={classes.innerFirstColWrapper}>
           <div>
             <MenuComponent selected={'home'} onChange={SidebarMenu.args?.onChange ?? console.log} />
           </div>
@@ -50,40 +44,11 @@ const HomePage = (): JSX.Element => {
       </div>
 
       <div className={classes.secondCol}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            rowGap: 12,
-          }}>
-          <div style={{width: '100%'}}>
-            <DefaultSearchBox
-              onSubmit={value => console.log(value)}
-              placeholder={DefaultSearchBox.args?.placeholder ?? ''}
-            />
-          </div>
-          <div style={{width: '100%'}}>
-            <RichTextComponent userProfilePict={DefaultRichText.args?.userProfilePict ?? ''} />
-          </div>
-          <div style={{width: '100%'}}>
-            <TimelineComponent
-              posts={Timeline.args?.posts ?? []}
-              anonymous={Timeline.args?.anonymous ?? false}
-            />
-          </div>
-        </div>
+        <div className={classes.innerSecondColWrapper}>{children}</div>
       </div>
 
       <div className={classes.thirdCol}>
-        <div
-          style={{
-            maxWidth: 360,
-            display: 'flex',
-            flexDirection: 'column',
-            rowGap: 12,
-          }}>
+        <div className={classes.innerThirdColWrapper}>
           <div>
             <ProfileHeaderComponent
               name={ProfileHeader.args?.name ?? 'Name'}
@@ -102,5 +67,3 @@ const HomePage = (): JSX.Element => {
     </div>
   );
 };
-
-export {HomePage};
