@@ -5,10 +5,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       paddingLeft: '20px',
       backgroundColor: '#FFC857',
-      minHeight: '100vh',
+      height: '100vh',
     },
     paper: {
-      minHeight: '100vh',
+      minHeight: '768px',
       padding: theme.spacing(2),
       color: theme.palette.text.secondary,
       backgroundColor: theme.palette.background.paper,
@@ -24,7 +24,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       position: 'relative',
     },
     logo: {
-      marginTop: '100px',
+      marginTop: '70px',
+      marginBottom: '10px',
+      fontSize: '500px',
     },
     title: {
       fontSize: 16,
@@ -36,24 +38,18 @@ export const useStyles = makeStyles((theme: Theme) =>
     titlePrimary: {
       color: theme.palette.primary.main,
     },
-    button: {
-      marginBottom: theme.spacing(4),
-    },
-    span: {
-      marginBottom: theme.spacing(25),
-    },
     link: {
       textDecoration: 'none',
       color: theme.palette.primary.main,
     },
     imagePurple: {
       position: 'absolute',
-      top: '200px',
+      top: '250px',
       left: '-55px',
     },
     imageYellow: {
       position: 'absolute',
-      top: '50px',
+      top: '100px',
       left: '165px',
     },
     carousel: {
@@ -67,6 +63,14 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
       '& .rec.rec-dot': {
         background: theme.palette.background.paper,
+        boxShadow: 'none',
+        width: '12px',
+        height: '12px',
+      },
+      '& .rec.rec-dot.jJKuoL': {
+        width: '28px',
+        background: theme.palette.primary.main,
+        borderRadius: 20,
       },
       '& .rec.rec-dot:focus': {
         background: theme.palette.primary.main,
@@ -81,12 +85,20 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     caption: {
-      fontSize: '24px',
-      lineHeight: '36px',
+      fontSize: '28px',
+      lineHeight: '35.14px',
+      fontWeight: 700,
+    },
+    mb1: {
+      marginBottom: theme.spacing(1),
     },
     subtitle: {
-      fontSize: '20px',
-      lineHeight: '36px',
+      fontWeight: theme.typography.fontWeightRegular,
+      fontSize: '18px',
+      lineHeight: '26px',
+    },
+    border: {
+      border: 0,
     },
   }),
 );
