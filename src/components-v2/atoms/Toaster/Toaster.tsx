@@ -9,7 +9,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 import {useTheme} from '@material-ui/core/styles';
 
-import {ToasterProps, Status} from './';
+import {ToasterProps, Status} from '.';
 
 const Toaster = ({toasterStatus, message, open, onClose}: ToasterProps): JSX.Element => {
   const {palette, status} = useTheme();

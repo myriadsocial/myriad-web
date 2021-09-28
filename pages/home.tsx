@@ -5,8 +5,8 @@ import {getSession} from 'next-auth/client';
 
 import {RichTextContainer} from '../src/components-v2/Richtext/RichTextContainer';
 import {TimelineContainer} from '../src/components-v2/Timeline/TimelineContainer';
-import {SearchBoxContainer} from '../src/components-v2/atoms/search/SearchBoxContainer';
-import {DefaultLayout} from '../src/components-v2/template/default/DefaultLayout';
+import {SearchBoxContainer} from '../src/components-v2/atoms/Search/SearchBoxContainer';
+import {DefaultLayout} from '../src/components-v2/template/Default/DefaultLayout';
 
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
