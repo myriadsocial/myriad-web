@@ -2,7 +2,7 @@ import React from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 
-import {CustomAvatarProps, CustomAvatarSize, useStyles} from './';
+import {CustomAvatarProps, CustomAvatarSize, useStyles} from '.';
 
 const CustomAvatar = ({
   avatar,

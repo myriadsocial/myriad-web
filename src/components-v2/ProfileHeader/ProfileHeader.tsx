@@ -8,8 +8,8 @@ import {useTheme} from '@material-ui/core/styles';
 import {useStyles, ProfileHeaderProps} from '.';
 import BellIconDefault from '../../images/Icons/notif-default.svg';
 import VectorDownIcon from '../../images/Icons/vectorDownIcon.svg';
+import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
 import {BoxComponent} from '../atoms/Box';
-import {CustomAvatar, CustomAvatarSize} from '../atoms/avatar';
 
 const ProfileHeader = ({
   name = 'Aaron Ting',

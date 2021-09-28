@@ -4,6 +4,8 @@ import {useTheme} from '@material-ui/core/styles';
 
 import {Menu as MenuComponent} from '../../Menu/';
 import {SidebarMenu} from '../../Menu/Menu.stories';
+import {ProfileHeader as ProfileHeaderComponent} from '../../ProfileHeader';
+import {ProfileHeader} from '../../ProfileHeader/ProfileHeader.stories';
 import {RichTextComponent} from '../../Richtext/';
 import {DefaultRichText} from '../../Richtext/RichText.stories';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
@@ -11,9 +13,7 @@ import {SocialMediaList} from '../../SocialMediaList/SocialMedia.stories';
 import {Timeline as TimelineComponent} from '../../Timeline/';
 import {Timeline} from '../../Timeline/Timeline.stories';
 import {WalletBalances} from '../../WalletBalance/WalletBalance.stories';
-import {DefaultSearchBox} from '../../atoms/search/SearchBox.stories';
-import {ProfileHeader as ProfileHeaderComponent} from '../../profile-header/';
-import {ProfileHeader} from '../../profile-header/ProfileHeader.stories';
+import {DefaultSearchBox} from '../../atoms/Search/SearchBox.stories';
 import useStyles from './home-page.style';
 
 const HomePage = (): JSX.Element => {

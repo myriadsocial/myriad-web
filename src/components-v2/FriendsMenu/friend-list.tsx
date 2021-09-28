@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {acronym} from '../../helpers/string';
 import {FilterDropdownMenu} from '../atoms/FilterDropdownMenu/';
-import SearchComponent from '../atoms/search/SearchBox';
+import SearchComponent from '../atoms/Search/SearchBox';
 import {friendFilterOptions} from './default';
 import {FriendListProps} from './default';
 import {useStyles} from './friend.style';
