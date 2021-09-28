@@ -10,7 +10,6 @@ import {DefaultRichText} from '../src/components-v2/Richtext/RichText.stories';
 import {Timeline as TimelineComponent} from '../src/components-v2/Timeline/';
 import {Timeline} from '../src/components-v2/Timeline/Timeline.stories';
 import {SearchBox as SearchBoxComponent} from '../src/components-v2/atoms/search/';
-import {DefaultSearchBox} from '../src/components-v2/atoms/search/SearchBox.stories';
 import {DefaultLayout} from '../src/components-v2/template/default/DefaultLayout';
 
 //import {useResize} from 'src/hooks/use-resize.hook';
@@ -66,21 +65,12 @@ const Home: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
-      <div>
-        <SearchBoxComponent
-          onSubmit={value => console.log(value)}
-          placeholder={DefaultSearchBox.args?.placeholder ?? ''}
-        />
-      </div>
-      <div>
-        <RichTextComponent userProfilePict={DefaultRichText.args?.userProfilePict ?? ''} />
-      </div>
-      <div>
-        <TimelineComponent
-          posts={Timeline.args?.posts ?? []}
-          anonymous={Timeline.args?.anonymous ?? false}
-        />
-      </div>
+      <SearchBoxComponent onSubmit={value => console.log(value)} />
+      <RichTextComponent userProfilePict={DefaultRichText.args?.userProfilePict ?? ''} />
+      <TimelineComponent
+        posts={Timeline.args?.posts ?? []}
+        anonymous={Timeline.args?.anonymous ?? false}
+      />
     </DefaultLayout>
   );
 };
