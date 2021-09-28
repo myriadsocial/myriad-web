@@ -2,13 +2,11 @@ import React from 'react';
 
 import {useTheme} from '@material-ui/core/styles';
 
-import {Menu as MenuComponent} from '../../Menu/';
-import {SidebarMenu} from '../../Menu/Menu.stories';
+import {MenuContainer} from '../../Menu/MenuContainer';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
-import {SocialMediaList} from '../../SocialMediaList/SocialMedia.stories';
-import {WalletBalances} from '../../WalletBalance/WalletBalance.stories';
-import {ProfileHeader as ProfileHeaderComponent} from '../../profile-header/';
-import {ProfileHeader} from '../../profile-header/ProfileHeader.stories';
+import {SocialMediaListContainer} from '../../SocialMediaList/SocialMediaListContainer';
+import {WalletBalancesContainer} from '../../WalletBalance/WalletBalanceContainer';
+import {ProfileHeaderContainer} from '../../profile-header/ProfileHeaderContainer';
 import useStyles from './default-layout.styles';
 
 type DefaultLayoutProps = {
@@ -29,16 +27,13 @@ export const DefaultLayout: React.FC<DefaultLayoutProps> = props => {
       <div className={classes.firstCol}>
         <div className={classes.innerFirstColWrapper}>
           <div>
-            <MenuComponent selected={'home'} onChange={SidebarMenu.args?.onChange ?? console.log} />
+            <MenuContainer />
           </div>
           <div>
-            <SocialMediaList
-              connected={SocialMediaList.args?.connected ?? []}
-              toggleVerify={social => console.log(social)}
-            />
+            <SocialMediaListContainer />
           </div>
           <div>
-            <WalletBalances balances={WalletBalances.args?.balances ?? []} />
+            <WalletBalancesContainer />
           </div>
         </div>
       </div>
@@ -50,14 +45,7 @@ export const DefaultLayout: React.FC<DefaultLayoutProps> = props => {
       <div className={classes.thirdCol}>
         <div className={classes.innerThirdColWrapper}>
           <div>
-            <ProfileHeaderComponent
-              name={ProfileHeader.args?.name ?? 'Name'}
-              username={ProfileHeader.args?.username ?? 'Username'}
-              avatar={
-                ProfileHeader.args?.avatar ??
-                'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg'
-              }
-            />
+            <ProfileHeaderContainer />
           </div>
           <div style={{marginTop: theme.spacing(2.5)}}>
             <RightMenuBar />

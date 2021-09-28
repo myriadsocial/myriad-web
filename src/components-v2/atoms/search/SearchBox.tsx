@@ -13,7 +13,7 @@ import {debounce} from 'lodash';
 const SearchBox = ({
   color = SearchBoxColor.PRIMARY,
   ariaLabel = 'search-box',
-  placeholder = 'Search something here',
+  placeholder = 'Search for people, topics or experience in Myriad',
   isDisabled = false,
   onSubmit,
   ...props
