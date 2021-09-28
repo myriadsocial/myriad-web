@@ -1,7 +1,6 @@
-import {default as NonSelectableSimpleCard} from './NonSelectableSimpleCard';
 import {default as SimpleCard} from './SimpleCard';
 import {default as useStyles} from './SimpleCard.style';
-import {SimpleCardProps, NonSelectableSimpleCardProps} from './simple-card.interfaces';
+import {SimpleCardProps} from './simple-card.interfaces';
 
-export {SimpleCard, NonSelectableSimpleCard, useStyles};
-export type {SimpleCardProps, NonSelectableSimpleCardProps};
+export {SimpleCard, useStyles};
+export type {SimpleCardProps};

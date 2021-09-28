@@ -2,10 +2,6 @@ import React from 'react';
 
 import {SearchBox as SearchBoxComponent} from '.';
 
-type SearchBoxContainerProps = {
-  onSubmitSearch?: (args: string) => void;
-};
-
-export const SearchBoxContainer: React.FC<SearchBoxContainerProps> = ({onSubmitSearch}) => {
-  return <SearchBoxComponent onSubmit={onSubmitSearch} />;
+export const SearchBoxContainer: React.FC = () => {
+  return <SearchBoxComponent onSubmit={value => console.log(value)} />;
 };
