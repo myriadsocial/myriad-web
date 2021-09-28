@@ -13,7 +13,7 @@ import Header from './header/header.component';
 import {useStyles} from './profile.style';
 import MyWalletTabs from './wallet-tab/wallet-tab';
 
-import {ProfileHeaderContainer} from 'src/components-v2/profile/profile-header/ProfileHeaderContainer';
+import {ProfileHeaderContainer} from 'src/components-v2/Profile/profile-header/ProfileHeaderContainer';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';

@@ -12,8 +12,8 @@ import {useStyles} from '.';
 import FullVectorIcon from '../../images/Icons/FullVectorIcon.svg';
 import TripleDoubleDotsIcon from '../../images/Icons/TripleDoubleDotsIcon.svg';
 import {BalanceDetail} from '../MyWallet/';
-import {CustomAvatar, CustomAvatarSize} from '../atoms/avatar/';
-import {Button, ButtonVariant, ButtonColor} from '../atoms/button/';
+import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
+import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 
 type DraggableBalanceCardProps = {
   balanceDetail: BalanceDetail;

@@ -14,9 +14,9 @@ import {
   historyTransactionSortOptions,
   historyCoinSortOptions,
 } from '../Timeline/default';
+import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
 import {MenuOptions} from '../atoms/DropdownMenu/';
 import {DropdownMenu} from '../atoms/DropdownMenu/';
-import {CustomAvatar, CustomAvatarSize} from '../atoms/avatar/';
 import {useStyles} from './history-detail-list.styles';
 
 type HistoryDetailListProps = {

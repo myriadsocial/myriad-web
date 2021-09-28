@@ -3,11 +3,11 @@ import React from 'react';
 import {useTheme} from '@material-ui/core/styles';
 
 import {MenuContainer} from '../../Menu/MenuContainer';
+import {ProfileHeaderContainer} from '../../ProfileHeader/ProfileHeaderContainer';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
 import {SocialMediaListContainer} from '../../SocialMediaList/SocialMediaListContainer';
 import {WalletBalancesContainer} from '../../WalletBalance/WalletBalanceContainer';
-import {ProfileHeaderContainer} from '../../profile-header/ProfileHeaderContainer';
-import useStyles from './default-layout.styles';
+import useStyles from './DefaultLayout.styles';
 
 type DefaultLayoutProps = {
   isOnProfilePage: boolean;

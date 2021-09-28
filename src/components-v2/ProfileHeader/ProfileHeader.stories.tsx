@@ -3,7 +3,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 import React from 'react';
 
 import {ProfileHeader as ProfileHeaderComponent} from '.';
-import {CustomAvatarSize} from '../atoms/avatar';
+import {CustomAvatarSize} from '../atoms/Avatar';
 
 export default {
   title: 'UI Revamp v2.0/components/Profile Header',

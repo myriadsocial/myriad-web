@@ -15,7 +15,6 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
     },
     tabs: {
       minHeight: props => (props.size === 'small' ? 36 : 48),
-      borderBottom: '1px solid #E5E5E5',
 
       '& .MuiTabs-flexContainer': {
         justifyContent: props => props.position,
