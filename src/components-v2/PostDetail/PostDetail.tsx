@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import LinkifyComponent from '../../components/common/Linkify.component';
 import ShowIf from '../../components/common/show-if.component';
 import {Post} from '../../interfaces/post';
+import {Button, ButtonVariant, ButtonColor, ButtonSize} from '../atoms/Button';
 import {Gallery} from '../atoms/Gallery';
 import {NSFW} from '../atoms/NSFW/NSFW.component';
 import {PostActionComponent} from '../atoms/PostAction';
@@ -18,7 +19,6 @@ import {HeaderComponent} from '../atoms/PostHeader';
 import {ReadMore} from '../atoms/ReadMore/ReadMore';
 import {TabsComponent} from '../atoms/Tabs';
 import {Video} from '../atoms/Video';
-import {Button, ButtonVariant, ButtonColor, ButtonSize} from '../atoms/button/';
 import {useStyles} from './PostDetail.styles';
 import {useCommentTabs, CommentTabs} from './hooks/use-comment-tabs';
 

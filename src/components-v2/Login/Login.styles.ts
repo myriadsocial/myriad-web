@@ -36,6 +36,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       textTransform: 'none',
       lineHeight: '22px',
       minWidth: 'initial',
+      width: 'auto',
     },
   }),
 );

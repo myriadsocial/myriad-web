@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
-import {ProfileHeaderComponent} from 'src/components-v2/profile/profile-header';
+import {ProfileHeaderComponent} from './';
+
 import {useFriendHook} from 'src/components/profile/use-profile-friend.hook';
 import {RootState} from 'src/reducers';
 import {ProfileState} from 'src/reducers/profile/reducer';

@@ -6,11 +6,11 @@ import {Post} from '../../../interfaces/post';
 import {SocialMedia} from '../../../interfaces/social';
 import {User} from '../../../interfaces/user';
 import {FriendListComponent} from '../../FriendsMenu/friend-list';
+import {ExperienceTabPanel} from '../../Profile/ExperienceTabPanel/ExperienceTabPanel';
 import {Timeline} from '../../Timeline';
 import {UserSettings} from '../../UserSettings';
 import {UserSocials} from '../../UserSocials';
 import {TabItems} from '../../atoms/Tabs';
-import {ExperienceTabPanel} from '../../profile/ExperienceTabPanel/ExperienceTabPanel';
 
 export type UserMenuTabs = 'post' | 'experience' | 'social' | 'friend' | 'setting';
 

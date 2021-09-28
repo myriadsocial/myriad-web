@@ -14,11 +14,11 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles, TableCell} from '.';
+import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
+import {Button, ButtonVariant} from '../atoms/Button';
 import {CurrencyOptionComponent} from '../atoms/CurrencyOption/';
 import {Props as CurrencyOptionProps} from '../atoms/CurrencyOption/currencyOption.interface';
 import {ListItemComponent} from '../atoms/ListItem/';
-import {CustomAvatar, CustomAvatarSize} from '../atoms/avatar/';
-import {Button, ButtonVariant} from '../atoms/button/';
 
 //TODO: split this component into sub-components
 export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {

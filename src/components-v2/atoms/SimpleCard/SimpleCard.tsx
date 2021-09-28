@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles, SimpleCardProps} from './';
+import {useStyles, SimpleCardProps} from '.';
 
 import classNames from 'classnames';
 

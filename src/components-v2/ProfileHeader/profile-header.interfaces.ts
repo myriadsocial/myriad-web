@@ -1,4 +1,4 @@
-import {CustomAvatarProps} from '../atoms/avatar';
+import {CustomAvatarProps} from '../atoms/Avatar';
 
 interface ProfileHeaderProps extends CustomAvatarProps {
   name: string;

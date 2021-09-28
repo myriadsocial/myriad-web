@@ -22,7 +22,7 @@ import {User} from '../../interfaces/user';
 import {AddSocialMedia} from '../AddSocialMedia';
 import {useSocialMediaList} from '../SocialMediaList/use-social-media-list.hook';
 import {ListItemComponent} from '../atoms/ListItem';
-import {PromptComponent} from '../atoms/prompt/prompt.component';
+import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {useStyles} from './Socials.styles';
 
 type SocialsProps = {

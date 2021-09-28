@@ -5,13 +5,14 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       justifyContent: 'space-between',
+      padding: '0 30px',
     },
     firstCol: {
-      minWidth: 312,
+      width: 312,
     },
 
     innerFirstColWrapper: {
-      maxWidth: 360,
+      width: 312,
       display: 'flex',
       flexDirection: 'column',
       rowGap: 12,
@@ -34,11 +35,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
 
     thirdCol: {
-      minWidth: 312,
+      width: 312,
     },
 
     innerThirdColWrapper: {
-      maxWidth: 360,
+      width: 312,
       display: 'flex',
       flexDirection: 'column',
       rowGap: 12,

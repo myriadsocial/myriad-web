@@ -17,8 +17,8 @@ import {useStyles} from '.';
 import {BalanceDetail} from '../MyWallet/';
 import {PrimaryCoinMenu} from '../PrimaryCoinMenu/PrimaryCoinMenu';
 import {balanceSortOptions} from '../Timeline/default';
+import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 import {DropdownMenu} from '../atoms/DropdownMenu/';
-import {Button, ButtonVariant, ButtonColor} from '../atoms/button/';
 
 type BalanceDetailListProps = {
   balanceDetails: BalanceDetail[];

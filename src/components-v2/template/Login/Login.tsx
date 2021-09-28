@@ -3,16 +3,19 @@ import Carousel from 'react-elastic-carousel';
 
 import Link from 'next/link';
 
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import Purple from '../../../images/Bank_note_Isometric_1.svg';
 import Yellow from '../../../images/Conversation__Isometric_1.svg';
 import LogoImage from '../../../images/myriad-logo-black.svg';
-import {useStyles} from './login.style';
+import {useStyles} from './Login.styles';
 
-export const LoginComponent: React.FC = () => {
+type LoginProps = {
+  children: React.ReactNode;
+};
+
+export const LoginLayout: React.FC<LoginProps> = ({children}) => {
   const style = useStyles();
 
   return (
@@ -21,25 +24,14 @@ export const LoginComponent: React.FC = () => {
         <Grid item xs={7}>
           <div className={`${style.paper} ${style.flex}`}>
             <LogoImage className={style.logo} />
+
             <Typography variant="h1" className={style.title}>
               Social Media with <span className={style.titlePrimary}>no boundaries</span>
             </Typography>
-            <Button className={style.button} color="default" variant="contained">
-              Sign in
-            </Button>
-            <Typography className={style.span} component="span">
-              Or try our{' '}
-              <Link href={'/#'}>
-                <a href={'/#'} className={style.link}>
-                  demo
-                </a>
-              </Link>{' '}
-              first{' '}
-              <span role="img" aria-label="emoticon-peace">
-                ✌️
-              </span>
-            </Typography>
-            <Typography component="span">
+
+            {children}
+
+            <Typography component="span" variant="h5">
               To access Myriad, you need to use{' '}
               <Link href={'https://polkadot.js.org/extension/'}>
                 <a
@@ -59,8 +51,10 @@ export const LoginComponent: React.FC = () => {
         </Grid>
         <Grid item xs={5}>
           <div className={`${style.paper} ${style.background}`}>
-            <Yellow className={style.imageYellow} />
-            <Purple className={style.imagePurple} />
+            <div>
+              <Yellow className={style.imageYellow} />
+              <Purple className={style.imagePurple} />
+            </div>
             <div className={style.carousel}>
               <Carousel isRTL={false} itemsToShow={1}>
                 <div>

@@ -2,8 +2,8 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {ButtonComponent} from '../components-v2/atoms/prompt/button';
-import {PromptComponent} from '../components-v2/atoms/prompt/prompt.component';
+import {ButtonComponent} from '../components-v2/atoms/Prompt/button';
+import {PromptComponent} from '../components-v2/atoms/Prompt/prompt.component';
 
 export default {
   title: 'UI Revamp v2.0/components/Prompt',

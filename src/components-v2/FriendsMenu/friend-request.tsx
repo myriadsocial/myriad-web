@@ -16,7 +16,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {acronym} from '../../helpers/string';
-import SearchComponent from '../atoms/search/SearchBox';
+import SearchComponent from '../atoms/Search/SearchBox';
 import {useStyles} from './friend.style';
 
 export const FriendRequestComponent: React.FC = () => {

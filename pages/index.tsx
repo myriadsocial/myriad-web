@@ -5,9 +5,9 @@ import {getSession} from 'next-auth/client';
 import {useRouter} from 'next/router';
 
 import {Login} from 'src/components-v2/Login';
+import {LoginLayout} from 'src/components-v2/template/Login';
 import AlertComponent from 'src/components/alert/Alert.component';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
-import {LoginLayout} from 'src/layout/Login';
 import {healthcheck} from 'src/lib/api/healthcheck';
 
 export default function Index() {

@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 
 import {Experience} from '../../../interfaces/experience';
-import {ExperienceList} from '../../ExperienceList/';
+import {ExperienceList} from '../../ExperienceList';
 import {experienceFilterOptions} from '../../Timeline/default';
-import {FilterDropdownMenu} from '../../atoms/FilterDropdownMenu/';
+import {FilterDropdownMenu} from '../../atoms/FilterDropdownMenu';
 
 type ExperienceTabPanelProps = {
   experiences: Experience[];

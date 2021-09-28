@@ -4,10 +4,10 @@ import {Button, Typography} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
-import {ChooseAccountComponent} from '../../components/login/modal-accounts.component';
-import {NoExtensionComponent} from '../../components/login/modal-no-extension.component';
 import {useAuthHook} from '../../hooks/auth.hook';
 import {usePolkadotExtension} from '../../hooks/use-polkadot-app.hook';
+import {PolkadotAccountList} from '../PolkadotAccountList';
+import {PromptComponent as Prompt} from '../atoms/Prompt/prompt.component';
 import {useStyles} from './Login.styles';
 
 export const Login: React.FC = () => {
@@ -63,13 +63,23 @@ export const Login: React.FC = () => {
         </span>
       </Typography>
 
-      <NoExtensionComponent isOpen={signIn && !extensionInstalled} onClose={toggleModal} />
-      <ChooseAccountComponent
+      <PolkadotAccountList
         isOpen={signIn && extensionInstalled}
         accounts={accounts}
         onSelect={signInWithAccount}
         onClose={toggleModal}
       />
+
+      <Prompt
+        title="Account Not Found"
+        icon="warning"
+        open={signIn && !extensionInstalled}
+        onCancel={toggleModal}
+        subtitle="Kindly check if you have Polkadot.js installed on your browser">
+        <Button size="small" variant="contained" color="primary" onClick={toggleModal}>
+          Close
+        </Button>
+      </Prompt>
     </>
   );
 };

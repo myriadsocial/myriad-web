@@ -4,17 +4,17 @@ import {useTheme} from '@material-ui/core/styles';
 
 import {Menu as MenuComponent} from '../../Menu/';
 import {SidebarMenu} from '../../Menu/Menu.stories';
+import {ProfileHeaderComponent} from '../../Profile/profile-header';
+import {Header, user} from '../../Profile/profile-header/profile-header.stories';
+import {ProfileHeader as ProfileHeaderHomeComponent} from '../../ProfileHeader';
+import {ProfileHeader as ProfileHeaderProps} from '../../ProfileHeader/ProfileHeader.stories';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
 import {SocialMediaList} from '../../SocialMediaList/SocialMedia.stories';
 import {UserMenu} from '../../UserMenu/';
 import {UserMenu as UserMenuProps} from '../../UserMenu/UserMenu.stories';
 import {WalletBalances} from '../../WalletBalance/WalletBalance.stories';
-import {TopNavbarComponent, SectionTitle} from '../../atoms/top-navbar/';
-import {ProfileTopNavbar} from '../../atoms/top-navbar/TopNavbar.stories';
-import {ProfileHeader as ProfileHeaderHomeComponent} from '../../profile-header/';
-import {ProfileHeader as ProfileHeaderProps} from '../../profile-header/ProfileHeader.stories';
-import {ProfileHeaderComponent} from '../../profile/profile-header/';
-import {Header, user} from '../../profile/profile-header/profile-header.stories';
+import {TopNavbarComponent, SectionTitle} from '../../atoms/TopNavbar';
+import {ProfileTopNavbar} from '../../atoms/TopNavbar/TopNavbar.stories';
 import useStyles from './profile-page.style';
 
 const ProfilePage = (): JSX.Element => {

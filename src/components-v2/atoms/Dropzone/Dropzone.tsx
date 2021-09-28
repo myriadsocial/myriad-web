@@ -5,7 +5,7 @@ import {Button, Typography} from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import UploadIcon from '../../../images/Icons/Upload.svg';
-import {Status, Toaster} from '../toaster';
+import {Status, Toaster} from '../Toaster';
 import {useStyles} from './Dropzone.styles';
 
 type DropzoneProps = {

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
 import {ExperienceListProps, useStyles} from '.';
-import {SimpleCard} from '../atoms/simple-card/';
+import {SimpleCard} from '../atoms/SimpleCard';
 
 const ExperienceList = ({experiences, isOnHomePage = false}: ExperienceListProps): JSX.Element => {
   const classes = useStyles();

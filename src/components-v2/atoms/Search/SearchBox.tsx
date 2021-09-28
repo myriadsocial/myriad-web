@@ -5,8 +5,8 @@ import InputBase from '@material-ui/core/InputBase';
 import Paper from '@material-ui/core/Paper';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
+import {SearchBoxProps, SearchBoxColor, useStyles} from '.';
 import SearchIcon from '../../../images/Icons/magnifierIcon.svg';
-import {SearchBoxProps, SearchBoxColor, useStyles} from './';
 
 import {debounce} from 'lodash';
 
