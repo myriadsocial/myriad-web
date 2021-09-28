@@ -16,13 +16,33 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import {User} from '../../../interfaces/user';
 import {useStyles} from './profile-header.style';
 
+import {format} from 'date-fns';
+import millify from 'millify';
+import {Friend} from 'src/interfaces/friend';
+
 export type Props = {
   user: User;
+  selfProfile: boolean;
+  status: Friend | null;
 };
 
 export const ProfileHeaderComponent: React.FC<Props> = props => {
-  const {user} = props;
+  const {user, selfProfile, status} = props;
   const style = useStyles();
+
+  const formatNumber = (num: number) => {
+    const vote = millify(num, {
+      precision: 1,
+      lowercase: true,
+    });
+    return vote;
+  };
+
+  const formatDate = (date: Date) => {
+    const newFormat = format(new Date(date), 'd MMMM y');
+    return newFormat;
+  };
+
   return (
     <div>
       <div className={style.root}>
@@ -40,13 +60,15 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 {user.name}
               </Typography>
               <Typography className={style.username} component="p">
-                @{'username'}
+                @{user.username || 'username'}
               </Typography>
             </div>
           </div>
-          <IconButton classes={{root: style.action}} aria-label="profile-setting">
-            <SvgIcon component={DotsVerticalIcon} viewBox="0 0 20 20" />
-          </IconButton>
+          {!selfProfile && (
+            <IconButton classes={{root: style.action}} aria-label="profile-setting">
+              <SvgIcon component={DotsVerticalIcon} viewBox="0 0 20 20" />
+            </IconButton>
+          )}
         </div>
         <Typography className={`${style.username} ${style.mt22}`} component="p">
           {user.bio}
@@ -60,14 +82,14 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             component={GlobeAltIcon}
             viewBox="0 0 24 24"
           />
-          {'oct.network'}
+          {user.websiteURL || 'oct.network'}
           <SvgIcon
             classes={{root: style.fill}}
             className={`${style.icon} ${style.ml20}`}
             component={CalendarIcon}
             viewBox="0 0 24 24"
           />
-          {'18 July 2021'}
+          {formatDate(user.createdAt)}
         </Typography>
         <div className={`${style.mt15} ${style.flexEnd}`}>
           <div>
@@ -76,7 +98,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Post
               </Typography>
               <Typography className={style.total} component="p">
-                13k
+                {formatNumber(13000)}
               </Typography>
             </div>
             <div className={style.text}>
@@ -84,7 +106,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Kudos
               </Typography>
               <Typography className={style.total} component="p">
-                103k
+                {formatNumber(103000)}
               </Typography>
             </div>
             <div className={style.text}>
@@ -92,7 +114,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Friends
               </Typography>
               <Typography className={style.total} component="p">
-                96
+                {formatNumber(96)}
               </Typography>
             </div>
             <div className={style.text}>
@@ -100,36 +122,56 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Experience
               </Typography>
               <Typography className={style.total} component="p">
-                18
+                {formatNumber(18)}
               </Typography>
             </div>
           </div>
           <div>
-            <Button
-              startIcon={
-                <SvgIcon classes={{root: style.fill}} component={UserAddIcon} viewBox="0 0 22 22" />
-              }
-              classes={{root: style.button}}
-              className={style.mr12}
-              variant="contained"
-              color="primary"
-              size="small">
-              Add Friend
-            </Button>
-            <Button
-              startIcon={
-                <SvgIcon
-                  classes={{root: style.fill}}
-                  component={CurrencyDollarIcon}
-                  viewBox="2 2 21 21"
-                />
-              }
-              classes={{root: style.button}}
-              variant="contained"
-              color="primary"
-              size="small">
-              Send Tip
-            </Button>
+            {selfProfile && (
+              <Button
+                classes={{root: style.button}}
+                className={style.mr12}
+                variant="contained"
+                color="primary"
+                size="small">
+                Edit Profile
+              </Button>
+            )}
+            {!selfProfile && (
+              <>
+                {!status && (
+                  <Button
+                    startIcon={
+                      <SvgIcon
+                        classes={{root: style.fill}}
+                        component={UserAddIcon}
+                        viewBox="0 0 22 22"
+                      />
+                    }
+                    classes={{root: style.button}}
+                    className={style.mr12}
+                    variant="contained"
+                    color="primary"
+                    size="small">
+                    Add Friend
+                  </Button>
+                )}
+                <Button
+                  startIcon={
+                    <SvgIcon
+                      classes={{root: style.fill}}
+                      component={CurrencyDollarIcon}
+                      viewBox="2 2 21 21"
+                    />
+                  }
+                  classes={{root: style.button}}
+                  variant="contained"
+                  color="primary"
+                  size="small">
+                  Send Tip
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

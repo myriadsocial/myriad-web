@@ -63,7 +63,11 @@ const ProfilePage = (): JSX.Element => {
             />
           </div>
           <div style={{width: '100%'}}>
-            <ProfileHeaderComponent user={Header.args?.user ?? user} />
+            <ProfileHeaderComponent
+              user={Header.args?.user ?? user}
+              selfProfile={true}
+              status={null}
+            />
           </div>
           <div style={{width: '100%'}}>
             <UserMenu
