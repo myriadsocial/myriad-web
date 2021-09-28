@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react';
 
+import {Tooltip} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs, {TabsProps} from '@material-ui/core/Tabs';
+import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './TabList.styles';
 import {TabListItem, TabPosition, TabMark, TabSize} from './TabList.types';
@@ -40,6 +42,8 @@ export const TabList: React.FC<TabListProps> = props => {
     onChangeTab(tab);
   };
 
+  console.log({props});
+
   return (
     <Tabs
       value={activeTab}
@@ -48,15 +52,35 @@ export const TabList: React.FC<TabListProps> = props => {
       textColor={textColor}
       onChange={handleTabChange}
       className={styles.tabs}>
-      {tabs.map(tab => (
-        <Tab
-          key={`tab-${tab.id}`}
-          label={tab.title}
-          value={tab.id}
-          icon={tab.icon}
-          className={styles.tab}
-        />
-      ))}
+      {tabs.map(tab => {
+        {
+          if (tab.id === 'chatTabPanel')
+            return (
+              <Tooltip title={<Typography>Chat feature, coming soon</Typography>} arrow>
+                <span>
+                  <Tab
+                    key={`tab-${tab.id}`}
+                    label={tab.title}
+                    value={tab.id}
+                    icon={tab.icon}
+                    className={styles.tab}
+                    disabled={true}
+                  />
+                </span>
+              </Tooltip>
+            );
+        }
+
+        return (
+          <Tab
+            key={`tab-${tab.id}`}
+            label={tab.title}
+            value={tab.id}
+            icon={tab.icon}
+            className={styles.tab}
+          />
+        );
+      })}
     </Tabs>
   );
 };
