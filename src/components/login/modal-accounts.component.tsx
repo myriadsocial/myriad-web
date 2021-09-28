@@ -17,9 +17,8 @@ import YouTubeIcon from '@material-ui/icons/YouTube';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import Identicon from '@polkadot/react-identicon';
 
+import DialogTitle from '../../components/common/DialogTitle.component';
 import ShowIf from '../common/show-if.component';
-
-import DialogTitle from 'src/components/common/DialogTitle.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
