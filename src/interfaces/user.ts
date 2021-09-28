@@ -22,6 +22,8 @@ export type UserProps = BaseUser & {
   skipTour?: boolean;
   onTimeline?: string;
   skipWelcome?: boolean;
+  websiteURL?: string;
+  username?: string;
 };
 
 export interface User extends UserProps, BaseModel {
