@@ -15,7 +15,7 @@ type LoginProps = {
   children: React.ReactNode;
 };
 
-export const Login: React.FC<LoginProps> = ({children}) => {
+export const LoginLayout: React.FC<LoginProps> = ({children}) => {
   const style = useStyles();
 
   return (
@@ -31,7 +31,7 @@ export const Login: React.FC<LoginProps> = ({children}) => {
 
             {children}
 
-            <Typography component="span">
+            <Typography component="span" variant="h5">
               To access Myriad, you need to use{' '}
               <Link href={'https://polkadot.js.org/extension/'}>
                 <a
@@ -51,28 +51,34 @@ export const Login: React.FC<LoginProps> = ({children}) => {
         </Grid>
         <Grid item xs={5}>
           <div className={`${style.paper} ${style.background}`}>
-            <Yellow className={style.imageYellow} />
-            <Purple className={style.imagePurple} />
+            <div>
+              <Yellow className={style.imageYellow} />
+              <Purple className={style.imagePurple} />
+            </div>
             <div className={style.carousel}>
               <Carousel isRTL={false} itemsToShow={1}>
                 <div>
-                  <Typography className={style.caption} component="span" color="textPrimary">
-                    <Typography className={style.caption} component="span" color="primary">
-                      Limitless
-                    </Typography>{' '}
-                    Conversation
-                  </Typography>
+                  <div className={`${style.mb1}`}>
+                    <Typography className={`${style.caption}`} component="span" color="textPrimary">
+                      <Typography className={style.caption} component="span" color="primary">
+                        Limitless
+                      </Typography>{' '}
+                      Conversation
+                    </Typography>
+                  </div>
                   <Typography className={style.subtitle} component="p" color="textPrimary">
                     No limitation on what you said in Myriad Fredom of Speech is Our Vision
                   </Typography>
                 </div>
                 <div>
-                  <Typography className={style.caption} component="span" color="textPrimary">
-                    <Typography className={style.caption} component="span" color="primary">
-                      Monetize
-                    </Typography>{' '}
-                    your Idea
-                  </Typography>
+                  <div className={`${style.mb1}`}>
+                    <Typography className={style.caption} component="span" color="textPrimary">
+                      <Typography className={style.caption} component="span" color="primary">
+                        Monetize
+                      </Typography>{' '}
+                      your Idea
+                    </Typography>
+                  </div>
                   <Typography className={style.subtitle} component="p" color="textPrimary">
                     Speak what inside your mind and get a chance to earn coins
                   </Typography>

@@ -47,17 +47,17 @@ export const Login: React.FC = () => {
     <>
       <Button
         className={styles.button}
-        color="primary"
+        color="default"
         variant="contained"
         onClick={checkExtensionInstalled}>
         Sign in
       </Button>
-      <Typography className={styles.span} component="span">
-        Or try our{' '}
-        <Button className={styles.link} onClick={anonymous}>
+      <Typography className={styles.span} component="span" variant="h4" color="textPrimary">
+        Or try our&nbsp;
+        <Button className={styles.link} onClick={anonymous} component="span">
           demo
         </Button>
-        first
+        &nbsp;first&nbsp;
         <span role="img" aria-label="emoticon-peace">
           ✌️
         </span>
