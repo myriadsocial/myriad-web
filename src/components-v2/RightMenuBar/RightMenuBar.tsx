@@ -10,17 +10,17 @@ import {TabsComponent} from '../atoms/Tabs/';
 export const RightMenuBar: React.FC = () => {
   const [iconTabs] = useState([
     {
-      id: 'first',
+      id: 'experienceTabMenu',
       icon: <VariableIcon />,
       component: <ExperienceTabMenuContainer />,
     },
     {
-      id: 'second',
+      id: 'trendingTabPanel',
       icon: <HashtagIcon />,
       component: <TrendingTabPanelContainer />,
     },
     {
-      id: 'third',
+      id: 'chatTabPanel',
       icon: <ChatAlt2Icon />,
       component: 'Chat Tab Content',
     },
