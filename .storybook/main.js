@@ -16,7 +16,7 @@ module.exports = {
   },
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: ['@storybook/addon-links', '@storybook/addon-essentials'],
-  webpackFinal: async (baseConfig) => {
+  webpackFinal: async baseConfig => {
     const rules = baseConfig.module.rules;
 
     // modify storybook's file-loader rule to avoid conflicts with svgr
@@ -24,9 +24,15 @@ module.exports = {
     fileLoaderRule.exclude = [AppSourceDir];
 
     rules.push({
+      test: /\.mjs$/,
+      include: [path.join(__dirname, '..', 'node_modules/@polkadot/extension-dapp/')],
+      type: 'javascript/auto',
+    });
+
+    rules.push({
       test: /\.svg$/,
       include: [AppSourceDir],
-      use: ["@svgr/webpack"],
+      use: ['@svgr/webpack'],
     });
 
     return baseConfig;

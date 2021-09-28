@@ -4,13 +4,13 @@ import {signIn, signOut} from 'next-auth/client';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
+import {usePolkadotExtension} from '../hooks/use-polkadot-app.hook';
+import {User} from '../interfaces/user';
+import * as UserAPI from '../lib/api/user';
+import {toHexPublicKey} from '../lib/crypto';
 import {firebaseCloudMessaging} from '../lib/firebase';
+import {setError} from '../reducers/base/actions';
 
-import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {User} from 'src/interfaces/user';
-import * as UserAPI from 'src/lib/api/user';
-import {toHexPublicKey} from 'src/lib/crypto';
-import {setError} from 'src/reducers/base/actions';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
 export const useAuthHook = () => {

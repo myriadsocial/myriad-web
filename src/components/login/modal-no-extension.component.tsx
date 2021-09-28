@@ -12,7 +12,7 @@ import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import WarningIcon from '@material-ui/icons/Warning';
 
-import DialogTitle from 'src/components/common/DialogTitle.component';
+import DialogTitle from '../../components/common/DialogTitle.component';
 
 const {publicRuntimeConfig} = getConfig();
 
