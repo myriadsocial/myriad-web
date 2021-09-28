@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {CookiesProvider} from 'react-cookie';
 
 import {Provider as AuthProvider} from 'next-auth/client';
@@ -15,13 +15,13 @@ import {SearchProvider} from 'src/components/search/search.context';
 import {AlertProvider} from 'src/context/alert.context';
 
 const App = ({Component, pageProps}: AppProps) => {
-  //useEffect(() => {
-  //// Remove the server-side injected CSS.
-  //const jssStyles = document.querySelector('#jss-server-side');
-  //if (jssStyles) {
-  //jssStyles.parentElement && jssStyles.parentElement.removeChild(jssStyles);
-  //}
-  //}, []);
+  useEffect(() => {
+    // Remove the server-side injected CSS.
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles) {
+      jssStyles.parentElement && jssStyles.parentElement.removeChild(jssStyles);
+    }
+  }, []);
 
   const pageTitle = 'Myriad';
   const description =

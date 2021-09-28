@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles, WelcomeModuleProps} from '.';
 import MyriadPurple from '../../images/Myriad-purple-logo.svg';
-import {Button, ButtonVariant, ButtonSize} from '../atoms/button/';
+import {Button, ButtonVariant, ButtonSize} from '../atoms/Button';
 
 export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
   const {displayName, username} = props;
