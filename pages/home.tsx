@@ -3,13 +3,9 @@ import {useDispatch} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
 
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
-
-import {RichTextComponent} from '../src/components-v2/Richtext/';
-import {DefaultRichText} from '../src/components-v2/Richtext/RichText.stories';
-import {Timeline as TimelineComponent} from '../src/components-v2/Timeline/';
-import {Timeline} from '../src/components-v2/Timeline/Timeline.stories';
-import {SearchBox as SearchBoxComponent} from '../src/components-v2/atoms/search/';
+import {RichTextContainer} from '../src/components-v2/Richtext/RichTextContainer';
+import {TimelineContainer} from '../src/components-v2/Timeline/TimelineContainer';
+import {SearchBoxContainer} from '../src/components-v2/atoms/search/SearchBoxContainer';
 import {DefaultLayout} from '../src/components-v2/template/default/DefaultLayout';
 
 //import {useResize} from 'src/hooks/use-resize.hook';
@@ -21,36 +17,7 @@ import {setAnonymous, setUser, fetchConnectedSocials} from 'src/reducers/user/ac
 //import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
 
-export const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {},
-    user: {
-      width: 327,
-      flex: '0 0 327px',
-      marginRight: 0,
-      'scrollbar-color': '#A942E9 #171717',
-      'scrollbar-width': 'thin !important',
-    },
-    fullwidth: {
-      width: 327,
-    },
-    content: {
-      flex: 1,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      padding: '0 24px 0 24px',
-      minHeight: '100vh',
-      maxWidth: 726,
-      [theme.breakpoints.up('xl')]: {
-        maxWidth: 926,
-      },
-    },
-  }),
-);
-
 const Home: React.FC = () => {
-  //const style = useStyles();
-
   const dispatch = useDispatch();
 
   //const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
@@ -65,12 +32,9 @@ const Home: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
-      <SearchBoxComponent onSubmit={value => console.log(value)} />
-      <RichTextComponent userProfilePict={DefaultRichText.args?.userProfilePict ?? ''} />
-      <TimelineComponent
-        posts={Timeline.args?.posts ?? []}
-        anonymous={Timeline.args?.anonymous ?? false}
-      />
+      <SearchBoxContainer />
+      <RichTextContainer />
+      <TimelineContainer />
     </DefaultLayout>
   );
 };
