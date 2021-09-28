@@ -42,8 +42,6 @@ export const TabList: React.FC<TabListProps> = props => {
     onChangeTab(tab);
   };
 
-  console.log({props});
-
   return (
     <Tabs
       value={activeTab}
