@@ -1,13 +1,8 @@
-import {User} from '../../interfaces/user';
+import {CustomAvatarProps} from '../atoms/Avatar';
 
-interface ProfileHeaderProps {
-  user?: User;
-  alias?: string;
-  notificationCount: number;
-  handleSignOut: () => void;
-  onViewProfile: () => void;
-  onSwitchAccount: () => void;
-  onShowNotificationList: () => void;
+interface ProfileHeaderProps extends CustomAvatarProps {
+  name: string;
+  username: string;
 }
 
 export type {ProfileHeaderProps};

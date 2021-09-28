@@ -1,6 +1,3 @@
-import {TimelineType} from '../../../interfaces/timeline';
-import {User} from '../../../interfaces/user';
-
 interface SimpleCardProps {
   title: string;
   /*
@@ -17,15 +14,8 @@ interface SimpleCardProps {
    * is the card selectable
    */
   isSelectable?: boolean;
-  user?: User;
-  experienceId?: string;
-  filterTimeline: (type: TimelineType) => void;
+
   onClick: () => void;
-  onSubscribe?: (experienceId: string) => void;
-  onFollow?: (experienceId: string) => void;
-  onPreview?: (experienceId: string) => void;
 }
 
-type NonSelectableSimpleCardProps = Omit<SimpleCardProps, 'filterTimeline' | 'onClick'>;
-
-export type {SimpleCardProps, NonSelectableSimpleCardProps};
+export type {SimpleCardProps};

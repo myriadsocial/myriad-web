@@ -67,7 +67,8 @@ const App = (props: MyAppProps) => {
             // windows / tabs will be updated to reflect the user is signed out.
             keepAlive: 0,
           }}
-          session={pageProps.session}>
+          session={pageProps.session}
+        >
           <CookiesProvider>
             <AlertProvider>
               <SearchProvider>
