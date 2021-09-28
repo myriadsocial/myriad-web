@@ -131,7 +131,8 @@ const theme = createTheme({
 
   palette: {
     background: {
-      default: '#121212',
+      default: '#F6F7FC',
+      paper: '#FFF',
     },
     primary: {
       main: primaryPurple,

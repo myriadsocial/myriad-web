@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {CookiesProvider} from 'react-cookie';
 
 import {Provider as AuthProvider} from 'next-auth/client';
@@ -9,19 +9,19 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import {ThemeProvider} from '@material-ui/core/styles';
 
 import {wrapper} from '../src/store';
-import theme from '../src/themes/light';
+import themeV2 from '../src/themes/light-theme-v2';
 
 import {SearchProvider} from 'src/components/search/search.context';
 import {AlertProvider} from 'src/context/alert.context';
 
 const App = ({Component, pageProps}: AppProps) => {
-  useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement && jssStyles.parentElement.removeChild(jssStyles);
-    }
-  }, []);
+  //useEffect(() => {
+  //// Remove the server-side injected CSS.
+  //const jssStyles = document.querySelector('#jss-server-side');
+  //if (jssStyles) {
+  //jssStyles.parentElement && jssStyles.parentElement.removeChild(jssStyles);
+  //}
+  //}, []);
 
   const pageTitle = 'Myriad';
   const description =
@@ -37,7 +37,7 @@ const App = ({Component, pageProps}: AppProps) => {
         <meta property="og:description" content={description} key="ogdesc" />
         <title>{pageTitle}</title>
       </Head>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={themeV2}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <AuthProvider
