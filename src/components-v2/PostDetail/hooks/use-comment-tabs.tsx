@@ -13,6 +13,7 @@ export const useCommentTabs = (
   comments?: Comment[],
   debates?: Comment[],
 ): TabItems<CommentTabs>[] => {
+  return [];
   return [
     {
       id: 'discussion',
