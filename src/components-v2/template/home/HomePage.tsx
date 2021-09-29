@@ -62,12 +62,18 @@ const HomePage = (): JSX.Element => {
             />
           </div>
           <div style={{width: '100%'}}>
-            <RichTextComponent userProfilePict={DefaultRichText.args?.userProfilePict ?? ''} />
+            <RichTextComponent
+              userProfilePict={DefaultRichText.args?.userProfilePict ?? ''}
+              onOpenCreatePost={console.log}
+            />
           </div>
           <div style={{width: '100%'}}>
             <TimelineComponent
               posts={Timeline.args?.posts ?? []}
               anonymous={Timeline.args?.anonymous ?? false}
+              hasMore={false}
+              loadNextPage={console.log}
+              sortTimeline={console.log}
             />
           </div>
         </div>
