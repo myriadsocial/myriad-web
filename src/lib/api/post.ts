@@ -73,7 +73,7 @@ export const getPost = async (
         relation: 'people',
       },
       {
-        relation: 'likes',
+        relation: 'votes',
         scope: {
           where: {
             userId: {eq: userId},
@@ -87,8 +87,6 @@ export const getPost = async (
     case TimelineType.FRIEND:
     case TimelineType.EXPERIENCE:
     case TimelineType.TRENDING:
-      filterParams.findBy = userId;
-      filterParams.timelineType = type;
       break;
     default:
       filterParams.where = where;
@@ -103,9 +101,9 @@ export const getPost = async (
       pageLimit: PAGINATION_LIMIT,
       filter: filterParams,
       //TIMELINE TYPE
-      //timelineType: type,
+      timelineType: type,
       //USERID
-      //userId: userId
+      userId: userId,
     },
   });
 
