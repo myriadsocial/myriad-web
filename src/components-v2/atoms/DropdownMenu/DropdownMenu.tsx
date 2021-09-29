@@ -13,12 +13,13 @@ import {MenuOptions} from './DropdownMenu.types';
 
 type DropdownMenuProps = {
   title: string;
-  options: MenuOptions[];
+  options: MenuOptions<string>[];
   selected?: string;
+  onChange: (selected: string) => void;
 };
 
 export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
-  const {title, options} = props;
+  const {title, options, onChange} = props;
   const styles = useStyles();
 
   const [selected, setSelected] = useState<string>(options[0].id);
@@ -34,6 +35,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
 
   const handleSelected = (option: string) => {
     setSelected(option);
+    onChange(option);
     handleClose();
   };
 

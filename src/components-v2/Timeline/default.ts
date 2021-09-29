@@ -1,8 +1,10 @@
 import {MenuOptions} from '../atoms/DropdownMenu';
 import {TabListItem} from '../atoms/TabList';
 
+import {TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
+
 // Filter options
-export const postFilterOptions: MenuOptions[] = [
+export const postFilterOptions: MenuOptions<string>[] = [
   {
     id: 'all',
     title: 'All Posts',
@@ -17,32 +19,33 @@ export const postFilterOptions: MenuOptions[] = [
   },
 ];
 
-export const experienceFilterOptions: MenuOptions[] = [
+export const experienceFilterOptions: MenuOptions<string>[] = [
   {id: 'all', title: 'All Experience'},
   {id: 'personal', title: 'Personal Experience'},
   {id: 'other', title: 'Other Experience'},
 ];
+
 // Sort options
-export const sortOptions: MenuOptions[] = [
+export const sortOptions: MenuOptions<TimelineSortMethod>[] = [
   {
-    id: 'latest',
+    id: 'created',
     title: 'Latest',
   },
   {
-    id: 'popular',
+    id: 'trending',
     title: 'Popular',
   },
   {
-    id: 'likes',
+    id: 'like',
     title: 'Most like',
   },
   {
-    id: 'comments',
+    id: 'comment',
     title: 'Most commented',
   },
 ];
 
-export const balanceSortOptions: MenuOptions[] = [
+export const balanceSortOptions: MenuOptions<string>[] = [
   {
     id: 'all',
     title: 'All',
@@ -61,7 +64,7 @@ export const balanceSortOptions: MenuOptions[] = [
   },
 ];
 
-export const historyAmountSortOptions: MenuOptions[] = [
+export const historyAmountSortOptions: MenuOptions<string>[] = [
   {
     id: 'highestAmount',
     title: 'Highest Amount',
@@ -72,14 +75,14 @@ export const historyAmountSortOptions: MenuOptions[] = [
   },
 ];
 
-export const historyCoinSortOptions: MenuOptions[] = [
+export const historyCoinSortOptions: MenuOptions<string>[] = [
   {
     id: 'allCoin',
     title: 'All Coins',
   },
 ];
 
-export const historyTransactionSortOptions: MenuOptions[] = [
+export const historyTransactionSortOptions: MenuOptions<string>[] = [
   {
     id: 'all',
     title: 'All',
@@ -94,26 +97,26 @@ export const historyTransactionSortOptions: MenuOptions[] = [
   },
 ];
 
-export const filterOptions: TabListItem<string>[] = [
+export const filterOptions: TabListItem<TimelineType>[] = [
   {
-    id: 'all',
+    id: TimelineType.ALL,
     title: 'All',
   },
   {
-    id: 'friend',
+    id: TimelineType.FRIEND,
     title: 'Friend',
   },
   {
-    id: 'trending',
+    id: TimelineType.TRENDING,
     title: 'Trending',
   },
   {
-    id: 'expreience',
+    id: TimelineType.EXPERIENCE,
     title: 'Experience',
   },
 ];
 
-export const experienceSortOptions: MenuOptions[] = [
+export const experienceSortOptions: MenuOptions<string>[] = [
   {
     id: 'all',
     title: 'All',
