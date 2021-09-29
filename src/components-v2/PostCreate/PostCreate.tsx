@@ -15,17 +15,23 @@ import {TabPanel} from '../atoms/TabPanel';
 import {useStyles} from './PostCreate.styles';
 import {tagOptions, menuOptions} from './default';
 
+import {People} from 'src/interfaces/people';
+
 type PostCreateProps = {
   value: string;
   url?: string;
   open: boolean;
+  people: People[];
   onClose: () => void;
+  onSubmit: () => void;
+  onSearchPeople: (query: string) => void;
+  onUploadFile: (file: File, type: 'image' | 'video') => Promise<string>;
 };
 
 type PostCreateType = 'create' | 'import';
 
 export const PostCreate: React.FC<PostCreateProps> = props => {
-  const {value, url, open, onClose} = props;
+  const {value, url, open, people, onClose, onSubmit, onSearchPeople, onUploadFile} = props;
   const styles = useStyles();
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
@@ -76,6 +82,10 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     return classes.join(' ');
   };
 
+  const handleChange = () => {
+    // code
+  };
+
   return (
     <Modal
       title={header[activeTab].title}
@@ -94,7 +104,17 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       </Tabs>
 
       <TabPanel value={activeTab} index="create">
-        <PostEditor mentionable={[]} onSearchMention={console.log} value={[node]} />
+        <PostEditor
+          mentionable={people.map(item => ({
+            value: item.id,
+            name: item.name,
+            avatar: item.profilePictureURL,
+          }))}
+          value={[node]}
+          onChange={handleChange}
+          onSearchMention={onSearchPeople}
+          onFileUploaded={onUploadFile}
+        />
       </TabPanel>
 
       <TabPanel value={activeTab} index="import">
@@ -137,7 +157,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           </Button>
         </div>
 
-        <Button variant="contained" color="primary" size="small">
+        <Button variant="contained" color="primary" size="small" onClick={onSubmit}>
           Create Post
         </Button>
       </div>

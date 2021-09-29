@@ -6,6 +6,18 @@ import {SocialsEnum} from 'src/interfaces/social';
 
 type PeopleList = BaseList<People>;
 
+export const getPeople = async (page = 1): Promise<PeopleList> => {
+  const {data} = await MyriadAPI.request<PeopleList>({
+    url: `/people`,
+    method: 'GET',
+    params: {
+      pageLimit: 10,
+    },
+  });
+
+  return data;
+};
+
 export const getPeopleByPlatform = async (
   platform: SocialsEnum,
   accountId: string,
