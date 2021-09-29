@@ -28,7 +28,7 @@ export const tagOptions: TagOptions[] = [
   },
 ];
 
-export const menuOptions: MenuOptions[] = [
+export const menuOptions: MenuOptions<string>[] = [
   {
     id: 'public',
     title: 'Public',

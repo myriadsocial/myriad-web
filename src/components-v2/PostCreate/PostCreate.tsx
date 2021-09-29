@@ -58,6 +58,10 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     handleCloseTags();
   };
 
+  const handleVisibilityChange = (visibility: string) => {
+    // code
+  };
+
   const handleCloseTags = () => {
     setOpenTags(false);
   };
@@ -99,7 +103,11 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
       <div className={styles.action}>
         <div className={styles.option}>
-          <DropdownMenu title="Visibility" options={menuOptions} />
+          <DropdownMenu
+            title="Visibility"
+            options={menuOptions}
+            onChange={handleVisibilityChange}
+          />
 
           <div>
             <Button size="small" onClick={handleClick} className={getTagsStyle()}>
