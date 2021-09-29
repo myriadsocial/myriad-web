@@ -8,15 +8,12 @@ import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
+import {PostMetric} from '../../../interfaces/post';
 import {VotingComponent} from '../Voting';
 import {useStyles} from './postAction.style';
 
 type PostActionProps = {
-  metrics: {
-    share: number;
-    comments: number;
-    vote: number;
-  };
+  metrics: PostMetric;
   onUpvote: () => void;
   onDownVote: () => void;
 };
@@ -25,7 +22,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
   const style = useStyles();
 
   const {
-    metrics: {share, comments, vote},
+    metrics: {share = 0, comments, vote = 0},
     onUpvote,
     onDownVote,
   } = props;
