@@ -4,7 +4,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       position: 'absolute',
-      zIndex: 1,
+      zIndex: 2000,
       top: -9999,
       left: -9999,
       background: '#FFFFFF',

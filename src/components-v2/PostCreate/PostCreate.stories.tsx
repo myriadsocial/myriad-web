@@ -18,6 +18,7 @@ export const PostCreate = Template.bind({});
 PostCreate.args = {
   open: true,
   onClose: console.log,
+  onSubmit: console.log,
   url: 'https://www.facebook.com/electronicosfantasticos/videos/1179074382533015',
   value:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tristique eget quam a auctor. Etiam eu tincidunt massa. Nam tincidunt dignissim varius. Cras suscipit suscipit dolor in hendrerit. In quis aliquam dolor, eget porta purus.',
