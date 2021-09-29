@@ -1,5 +1,5 @@
 import createCache from '@emotion/cache';
-import {CacheProvider} from '@emotion/react';
+import {CacheProvider, EmotionCache} from '@emotion/react';
 
 import React from 'react';
 import {CookiesProvider} from 'react-cookie';
@@ -18,13 +18,18 @@ import {SearchProvider} from 'src/components/search/search.context';
 import {AlertProvider} from 'src/context/alert.context';
 
 function createEmotionCache() {
-  return createCache({key: 'css'});
+  // TODO remove prepend: true once JSS is out
+  return createCache({key: 'css', prepend: true});
 }
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
-const App = (props: AppProps) => {
+interface MyAppProps extends AppProps {
+  emotionCache?: EmotionCache;
+}
+
+const App = (props: MyAppProps) => {
   const {Component, emotionCache = clientSideEmotionCache, pageProps} = props;
 
   const pageTitle = 'Myriad';
