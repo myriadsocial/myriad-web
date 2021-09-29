@@ -1,5 +1,4 @@
 import {PlusCircleIcon} from '@heroicons/react/outline';
-import {action} from '@storybook/addon-actions';
 
 import React, {useState} from 'react';
 
@@ -13,7 +12,7 @@ import {Props} from './richText.interface';
 import {useStyles} from './richtext.style';
 
 export const RichTextComponent: React.FC<Props> = props => {
-  const {userProfilePict} = props;
+  const {userProfilePict, onOpenCreatePost} = props;
   const style = useStyles();
   const [post, setPost] = useState<string>('');
 
@@ -48,7 +47,7 @@ export const RichTextComponent: React.FC<Props> = props => {
         </IconButton>
       </div>
       <div
-        onClick={action('open modal')}
+        onClick={onOpenCreatePost}
         role="button"
         tabIndex={0}
         aria-hidden="true"

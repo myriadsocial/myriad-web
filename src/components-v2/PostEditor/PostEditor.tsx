@@ -216,7 +216,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
       resolve = _resolve;
     });
 
-    /* @ts-expect-error */
+    // @ts-ignore
     promise.resolve = resolve;
 
     setImageUrlPromise(promise);

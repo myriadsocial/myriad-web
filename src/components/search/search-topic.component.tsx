@@ -80,11 +80,11 @@ const TopicSearchComponent: React.FC<TopicSearchResultProps> = () => {
 
   const {load} = usePolkadotApi();
   const {hasMore, nextPage, posts} = useTimelineHook();
-  const {filterSearchTimeline} = useTimelineFilter();
+  const {searchTimeline} = useTimelineFilter();
   const {toggle} = useModal();
 
   useEffect(() => {
-    filterSearchTimeline(query);
+    searchTimeline(query);
   }, [query]);
 
   useEffect(() => {
