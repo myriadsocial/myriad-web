@@ -1,4 +1,7 @@
-import React, {useEffect} from 'react';
+import createCache from '@emotion/cache';
+import {CacheProvider} from '@emotion/react';
+
+import React from 'react';
 import {CookiesProvider} from 'react-cookie';
 
 import {Provider as AuthProvider} from 'next-auth/client';
@@ -14,21 +17,22 @@ import themeV2 from '../src/themes/light-theme-v2';
 import {SearchProvider} from 'src/components/search/search.context';
 import {AlertProvider} from 'src/context/alert.context';
 
-const App = ({Component, pageProps}: AppProps) => {
-  useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement && jssStyles.parentElement.removeChild(jssStyles);
-    }
-  }, []);
+function createEmotionCache() {
+  return createCache({key: 'css'});
+}
+
+// Client-side cache, shared for the whole session of the user in the browser.
+const clientSideEmotionCache = createEmotionCache();
+
+const App = (props: AppProps) => {
+  const {Component, emotionCache = clientSideEmotionCache, pageProps} = props;
 
   const pageTitle = 'Myriad';
   const description =
     'A social platform that’s entirely under your control. Remain anonymous, look for your own topics, choose your interface and control what you see.';
 
   return (
-    <React.Fragment>
+    <CacheProvider value={emotionCache}>
       <Head>
         <link rel="shortcut icon" href="/images/favicon.svg" />
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
@@ -68,7 +72,7 @@ const App = ({Component, pageProps}: AppProps) => {
           </CookiesProvider>
         </AuthProvider>
       </ThemeProvider>
-    </React.Fragment>
+    </CacheProvider>
   );
 };
 
