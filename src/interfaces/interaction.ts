@@ -5,6 +5,11 @@ export enum ReferenceType {
   COMMENT = 'comment',
 }
 
+export enum SectionType {
+  DISCUSSION = 'discussion',
+  DEBATE = 'debate',
+}
+
 export type LikeProps = {
   state: boolean;
   type: ReferenceType;
@@ -15,3 +20,7 @@ export type LikeProps = {
 export interface Like extends LikeProps, BaseModel {}
 
 export interface Dislike extends LikeProps, BaseModel {}
+
+export interface Vote extends LikeProps, BaseModel {
+  section?: SectionType;
+}
