@@ -1,8 +1,33 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 
 import {RichTextComponent} from '.';
-import {DefaultRichText} from './RichText.stories';
+import {PostCreate} from '../PostCreate';
+
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 export const RichTextContainer: React.FC = () => {
-  return <RichTextComponent userProfilePict={DefaultRichText.args?.userProfilePict ?? ''} />;
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+
+  const [createPostOpened, setCreatePostOpened] = useState(false);
+
+  const handleOpenCreatePost = () => {
+    setCreatePostOpened(true);
+  };
+
+  const handleCloseCreaePost = () => {
+    setCreatePostOpened(false);
+  };
+
+  return (
+    <>
+      <RichTextComponent
+        userProfilePict={user?.profilePictureURL || ''}
+        onOpenCreatePost={handleOpenCreatePost}
+      />
+
+      <PostCreate open={createPostOpened} value="" onClose={handleCloseCreaePost} />
+    </>
+  );
 };

@@ -70,11 +70,15 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleSortChange = (sort: string) => {
+    // code
+  };
+
   return (
     <Modal title="Tip History" open={open} onClose={onClose} className={styles.root}>
       <div className={styles.root}>
         <div className={styles.options}>
-          <DropdownMenu title="Sort by" options={sortOptions} />
+          <DropdownMenu title="Sort by" options={sortOptions} onChange={handleSortChange} />
 
           <div>
             <Typography component="span">Coin:&nbsp;</Typography>

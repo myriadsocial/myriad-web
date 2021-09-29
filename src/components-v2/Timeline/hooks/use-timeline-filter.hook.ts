@@ -45,6 +45,10 @@ export const useTimelineFilter = () => {
       }
     }
 
+    if (query.q) {
+      tags = Array.isArray(query.q) ? query.q : [query.q];
+    }
+
     const newFilter: TimelineFilter = {
       tags,
       people: filter?.people,
@@ -55,23 +59,7 @@ export const useTimelineFilter = () => {
     dispatch(loadTimeline(1, timelineSort, newFilter, timelineType));
   };
 
-  const filterSearchTimeline = async (query: ParsedUrlQuery) => {
-    let tags: string[] = [];
-    const timelineSort: TimelineSortMethod = 'created';
-    const timelineType = TimelineType.TRENDING;
-
-    if (query.q) {
-      tags = Array.isArray(query.q) ? query.q : [query.q];
-    }
-
-    const newFilter: TimelineFilter = {
-      tags,
-    };
-    dispatch(loadTimeline(1, timelineSort, newFilter, timelineType));
-  };
-
   return {
     filterTimeline,
-    filterSearchTimeline,
   };
 };

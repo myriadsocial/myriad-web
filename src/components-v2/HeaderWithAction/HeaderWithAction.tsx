@@ -15,6 +15,10 @@ export const HeaderWithAction: React.FC<HeaderWithActionProps> = props => {
     console.log('action done!');
   };
 
+  const handleSortChanged = (sort: string) => {
+    // code
+  };
+
   return (
     <div className={classes.root}>
       <Typography variant={'caption'} color={'primary'}>
@@ -22,7 +26,11 @@ export const HeaderWithAction: React.FC<HeaderWithActionProps> = props => {
           {actionText}
         </Link>
       </Typography>
-      <DropdownMenu title={'Sort by'} options={experienceSortOptions} />
+      <DropdownMenu
+        title={'Sort by'}
+        options={experienceSortOptions}
+        onChange={handleSortChanged}
+      />
     </div>
   );
 };

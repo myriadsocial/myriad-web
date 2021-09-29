@@ -19,6 +19,8 @@ Default.args = {
     comments: 1210,
     share: 24,
     vote: 45,
+    likes: 0,
+    dislikes: 0,
   },
   onDownVote: console.log,
   onUpvote: console.log,

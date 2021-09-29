@@ -1,7 +1,7 @@
 import {Friend, FriendStatus} from '../../../interfaces/friend';
 import {MenuOptions} from '../../atoms/DropdownMenu';
 
-export const menuOptions: MenuOptions[] = [
+export const menuOptions: MenuOptions<string>[] = [
   {
     id: 'all',
     title: 'All friends',

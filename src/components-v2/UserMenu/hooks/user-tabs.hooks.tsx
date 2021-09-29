@@ -34,7 +34,17 @@ export const useUserTabs = ({
       {
         id: 'post',
         title: `Post`,
-        component: <Timeline posts={posts} anonymous={false} filter={false} sort="filter" />,
+        component: (
+          <Timeline
+            posts={posts}
+            anonymous={false}
+            filter={false}
+            sort="filter"
+            hasMore={false}
+            loadNextPage={console.log}
+            sortTimeline={console.log}
+          />
+        ),
       },
       {
         id: 'experience',

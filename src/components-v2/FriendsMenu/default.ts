@@ -2,7 +2,7 @@ import {Friend, FriendStatus} from '../../interfaces/friend';
 import {MenuOptions} from '../atoms/DropdownMenu';
 
 // Filter options
-export const friendFilterOptions: MenuOptions[] = [
+export const friendFilterOptions: MenuOptions<string>[] = [
   {
     id: 'all',
     title: 'All Friends',

@@ -33,6 +33,10 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
     console.log('refreshed!');
   };
 
+  const handleSortChanged = (sort: string) => {
+    // code
+  };
+
   const togglePrimaryCoinMenu = () => {
     setIsOnPrimaryCoinMenu(!isOnPrimaryCoinMenu);
   };
@@ -52,7 +56,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   return (
     <>
       <div className={classes.headerActionWrapper}>
-        <DropdownMenu title={'Sort'} options={balanceSortOptions} />
+        <DropdownMenu title={'Sort'} options={balanceSortOptions} onChange={handleSortChanged} />
         <IconButton
           classes={{
             root: classes.refreshIcon,

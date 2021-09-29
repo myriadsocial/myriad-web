@@ -13,7 +13,7 @@ import {useStyles} from './filter-dropdown-menu.styles';
 
 type FilterDropdownMenuProps = {
   title: string;
-  options: MenuOptions[];
+  options: MenuOptions<string>[];
   selected?: string;
 };
 

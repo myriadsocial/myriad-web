@@ -44,14 +44,34 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     return [...new Map(arr.map(item => [item[key], item])).values()];
   };
 
+  const handleSortChange = (sort: string) => {
+    // code
+  };
+
+  const handleTransactionChange = (sort: string) => {
+    // code
+  };
+
+  const handleCoinChange = (coin: string) => {
+    // code
+  };
+
   const classes = useStyles();
   return (
     <>
       <div className={classes.headerActionWrapper}>
-        <DropdownMenu title={'Sort'} options={historyAmountSortOptions} />
+        <DropdownMenu
+          title={'Sort'}
+          options={historyAmountSortOptions}
+          onChange={handleSortChange}
+        />
         <div className={classes.leftJustifiedWrapper}>
-          <DropdownMenu title={'Coin'} options={sortOptions} />
-          <DropdownMenu title={'Transaction'} options={historyTransactionSortOptions} />
+          <DropdownMenu title={'Coin'} options={sortOptions} onChange={handleCoinChange} />
+          <DropdownMenu
+            title={'Transaction'}
+            options={historyTransactionSortOptions}
+            onChange={handleTransactionChange}
+          />
         </div>
       </div>
       <TableContainer component={List}>
