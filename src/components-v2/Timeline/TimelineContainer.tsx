@@ -24,12 +24,10 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
   const handleSortTimeline = (sort: TimelineSortMethod) => {
     push('sort', sort);
-    // push(`?sort=${sort}`, undefined, {shallow: true});
   };
 
   const handleFilterTimeline = (type: TimelineType) => {
     push('type', type);
-    // push(`?type=${type}`, undefined, {shallow: true});
   };
 
   return (

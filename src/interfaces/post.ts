@@ -1,6 +1,6 @@
 import {BaseModel} from './base.interface';
 import {Comment} from './comment';
-import {Like} from './interaction';
+import {Like, Vote} from './interaction';
 import {People} from './people';
 import {PostOrigin} from './timeline';
 import {User} from './user';
@@ -63,6 +63,7 @@ export interface Post extends PostProps, BaseModel {
   //TODO: change this on migrating new schema of transaction
   transactions?: any[];
   walletAddress?: string;
+  vote?: Vote;
 }
 
 export type UpoadedFile = {
