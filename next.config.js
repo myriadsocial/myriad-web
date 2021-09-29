@@ -1,4 +1,7 @@
 module.exports = {
+  future: {
+    webpack5: true,
+  },
   serverRuntimeConfig: {
     // Will only be available on the server side
     nextAuthURL: process.env.NEXTAUTH_URL,
@@ -28,9 +31,6 @@ module.exports = {
 
     config.module.rules.push({
       test: /\.svg$/,
-      issuer: {
-        test: /\.(js|ts)x?$/,
-      },
       use: ['@svgr/webpack'],
     });
 
