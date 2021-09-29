@@ -5,6 +5,7 @@ import {ExperienceReducer} from './experience/reducer';
 import {FriendRequestReducer} from './friend-request/reducer';
 import {FriendReducer} from './friend/reducer';
 import {NotificationReducer} from './notification/reducer';
+import {PeopleReducer} from './people/reducer';
 import {ProfileReducer} from './profile/reducer';
 import {TagReducer} from './tag/reducer';
 import {TimelineReducer} from './timeline/reducer';
@@ -30,6 +31,7 @@ const reducers = {
   walletState: WalletReducer,
   transactionState: TransactionReducer,
   experienceState: ExperienceReducer,
+  peopleState: PeopleReducer,
 };
 
 export const combinedReducers = combineReducers(reducers);

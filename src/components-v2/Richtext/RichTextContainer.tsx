@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import {RichTextComponent} from '.';
-import {PostCreate} from '../PostCreate';
+import {PostCreateContainer} from '../PostCreate';
 
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -16,7 +16,7 @@ export const RichTextContainer: React.FC = () => {
     setCreatePostOpened(true);
   };
 
-  const handleCloseCreaePost = () => {
+  const handleCloseCreatePost = () => {
     setCreatePostOpened(false);
   };
 
@@ -27,7 +27,7 @@ export const RichTextContainer: React.FC = () => {
         onOpenCreatePost={handleOpenCreatePost}
       />
 
-      <PostCreate open={createPostOpened} value="" onClose={handleCloseCreaePost} />
+      <PostCreateContainer open={createPostOpened} onClose={handleCloseCreatePost} />
     </>
   );
 };
