@@ -95,8 +95,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
           anchorEl={shareAnchorEl}
           keepMounted
           open={Boolean(shareAnchorEl)}
-          onClose={handleCloseShare}
-        >
+          onClose={handleCloseShare}>
           <MenuItem onClick={handleOnShare('quick')} disabled>
             Quick Share
           </MenuItem>

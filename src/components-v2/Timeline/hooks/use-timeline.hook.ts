@@ -2,10 +2,17 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
+<<<<<<< HEAD
 import {TimelineFilter, TimelineSortMethod} from '../../../interfaces/timeline';
 import {RootState} from '../../../reducers';
 import {loadTimeline} from '../../../reducers/timeline/actions';
 import {TimelineState} from '../../../reducers/timeline/reducer';
+=======
+import {TimelineFilter, TimelineSortMethod} from 'src/interfaces/timeline';
+import {RootState} from 'src/reducers';
+import {loadTimeline} from 'src/reducers/timeline/actions';
+import {TimelineState} from 'src/reducers/timeline/reducer';
+>>>>>>> 59dc8324 (MYR-870: init timeline)
 
 export const useTimelineHook = () => {
   const timelineState = useSelector<RootState, TimelineState>(state => state.timelineState);

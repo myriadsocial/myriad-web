@@ -48,6 +48,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const styles = useStyles();
   const router = useRouter();
 
+<<<<<<< HEAD
   const {
     user,
     post,
@@ -61,6 +62,10 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   } = props;
   const tabs = useCommentTabs(post);
 
+=======
+  const {post} = props;
+  const tabs = useCommentTabs();
+>>>>>>> 59dc8324 (MYR-870: init timeline)
   const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
   const [shoWcomment, setShowComment] = useState(false);
   const [viewContent, setViewContent] = useState(!post.isNSFW);
