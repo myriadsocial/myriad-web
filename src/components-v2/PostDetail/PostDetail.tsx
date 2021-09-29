@@ -36,7 +36,7 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
   const router = useRouter();
 
   const {post} = props;
-  const tabs = useCommentTabs(post.comments);
+  const tabs = useCommentTabs();
   const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
   const [, setDownvoting] = useState(false);
   const [viewContent, setViewContent] = useState(false);
