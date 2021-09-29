@@ -1,4 +1,4 @@
-export type MenuOptions = {
-  id: string;
+export type MenuOptions<T> = {
+  id: T;
   title: string;
 };

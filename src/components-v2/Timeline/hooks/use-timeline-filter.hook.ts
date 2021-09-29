@@ -55,7 +55,7 @@ export const useTimelineFilter = () => {
     dispatch(loadTimeline(1, timelineSort, newFilter, timelineType));
   };
 
-  const searchTimeline = async (query: ParsedUrlQuery) => {
+  const filterSearchTimeline = async (query: ParsedUrlQuery) => {
     let tags: string[] = [];
     const timelineSort: TimelineSortMethod = 'created';
     const timelineType = TimelineType.TRENDING;
@@ -72,6 +72,6 @@ export const useTimelineFilter = () => {
 
   return {
     filterTimeline,
-    searchTimeline,
+    filterSearchTimeline,
   };
 };

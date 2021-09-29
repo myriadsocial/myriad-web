@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const CommentList: React.FC<CommentListProps> = props => {
-  const {comments, deep = 0, placeholder, focus, expand} = props;
+  const {comments = [], deep = 0, placeholder, focus, expand} = props;
 
   const styles = useStyles();
 
