@@ -31,24 +31,25 @@ export const useProfileHook = () => {
     );
   };
 
-  const updateProfilePicture = (url: string) => {
+  const updateProfilePicture = async (image: File) => {
     setUploadingAvatar(true);
 
-    dispatch(
-      updateUser(
-        {
-          profilePictureURL: url,
-        },
-        () => {
-          if (user && profileDetail?.id === user.id) {
-            dispatch(fetchProfileDetail(user.id));
-          }
+    try {
+      const url = await uploadImage(image);
 
-          dispatch(updatePostPlatformUser(url));
-          setUploadingAvatar(false);
-        },
-      ),
-    );
+      if (url)
+        dispatch(
+          updateUser({profilePictureURL: url}, () => {
+            if (user && profileDetail?.id === user.id) {
+              dispatch(fetchProfileDetail(user.id));
+            }
+
+            dispatch(updatePostPlatformUser(url));
+          }),
+        );
+    } finally {
+      setUploadingAvatar(false);
+    }
   };
 
   const updateProfileBanner = async (image: File): Promise<void> => {
