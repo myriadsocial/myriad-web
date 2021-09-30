@@ -24,16 +24,13 @@ import {DropdownMenu} from '../atoms/DropdownMenu/';
 type BalanceDetailListProps = {
   balanceDetails: BalanceDetail[];
   isLoading: boolean;
+  onClickRefresh: () => void;
 };
 
 export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
-  const {balanceDetails, isLoading} = props;
+  const {balanceDetails, isLoading, onClickRefresh} = props;
 
   const [isOnPrimaryCoinMenu, setIsOnPrimaryCoinMenu] = useState(false);
-
-  const handleRefresh = () => {
-    console.log('refreshed!');
-  };
 
   const handleSortChanged = (sort: string) => {
     // code
@@ -72,7 +69,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
           }}
           disableRipple
           aria-label="refresh"
-          onClick={handleRefresh}>
+          onClick={onClickRefresh}>
           <SvgIcon component={RefreshIcon} color="primary" />
           <Typography variant="body1" color="primary">
             Refresh
