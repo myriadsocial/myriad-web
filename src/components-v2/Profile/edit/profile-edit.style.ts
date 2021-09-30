@@ -75,5 +75,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: theme.spacing(10),
       height: theme.spacing(10),
     },
+    buttonProgress: {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      marginTop: -12,
+      marginLeft: -12,
+    },
   }),
 );
