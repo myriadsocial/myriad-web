@@ -35,7 +35,10 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const styles = useStyles();
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
-  const [post, setPost] = useState<Partial<Post>>({});
+  const [post, setPost] = useState<Partial<Post>>({
+    visibility: PostVisibility.PUBLIC,
+    isNSFW: false,
+  });
   const [importUrl, setImport] = useState<string | null>(null);
 
   const header: Record<PostCreateType, {title: string; subtitle: string}> = {
@@ -64,7 +67,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   };
 
   const handleConfirmNSFWTags = (tags: string[]) => {
-    setPost(prevPost => ({...prevPost, nswTags: tags}));
+    setPost(prevPost => ({...prevPost, NSFWTag: tags.join(',')}));
   };
 
   const handleVisibilityChange = (visibility: string) => {
@@ -124,7 +127,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             onChange={handleVisibilityChange}
           />
 
-          <NSFWTags tags={post.nsfwTags || []} onConfirm={handleConfirmNSFWTags} />
+          <NSFWTags tags={post.NSFWTag?.split(',') || []} onConfirm={handleConfirmNSFWTags} />
 
           <Button color="primary" size="small" className={styles.markdown}>
             Markdown Mode
