@@ -1,28 +1,28 @@
 import React, {useState, useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
-import dynamic from 'next/dynamic';
-
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
-import {useTheme} from '@material-ui/core/styles';
-
-import {TabPanel} from '../common/tab-panel.component';
-import Header from './header/header.component';
+// import dynamic from 'next/dynamic';
+// import CircularProgress from '@material-ui/core/CircularProgress';
+// import Tab from '@material-ui/core/Tab';
+// import Tabs from '@material-ui/core/Tabs';
+// import {useTheme} from '@material-ui/core/styles';
+// import {TabPanel} from '../common/tab-panel.component';
+// import Header from './header/header.component';
 import {useStyles} from './profile.style';
-import MyWalletTabs from './wallet-tab/wallet-tab';
 
+// import {ProfileState} from 'src/reducers/profile/reducer';
+// import {UserState} from 'src/reducers/user/reducer';
+import {ProfileEditContainer} from 'src/components-v2/Profile/edit/ProfileEditContainer';
+// import MyWalletTabs from './wallet-tab/wallet-tab';
 import {ProfileHeaderContainer} from 'src/components-v2/Profile/profile-header/ProfileHeaderContainer';
+import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {User} from 'src/interfaces/user';
-import {RootState} from 'src/reducers';
+// import {RootState} from 'src/reducers';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';
-import {ProfileState} from 'src/reducers/profile/reducer';
-import {UserState} from 'src/reducers/user/reducer';
 
-const PostList = dynamic(() => import('./post/post-list.component'));
-const ImportedPostList = dynamic(() => import('./post/importedPost-list.component'));
-const FriendComponent = dynamic(() => import('./friend/user-friends.component'));
+// const PostList = dynamic(() => import('./post/post-list.component'));
+// const ImportedPostList = dynamic(() => import('./post/importedPost-list.component'));
+// const FriendComponent = dynamic(() => import('./friend/user-friends.component'));
 
 type Props = {
   profile: User;
@@ -32,30 +32,31 @@ type Props = {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function ProfileTimeline({profile, loading}: Props) {
   const style = useStyles();
-  const theme = useTheme();
+  // const theme = useTheme();
   const dispatch = useDispatch();
 
-  const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
-  const {totalFriends} = useSelector<RootState, ProfileState>(state => state.profileState);
-  const [isWalletTabActivated, setIsWalletTabActivated] = useState(false);
-  const [selectedTab, setSelectedTab] = React.useState(0);
-  const [isGuest, setIsGuest] = useState<boolean>(false);
+  // const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
+  // const {totalFriends} = useSelector<RootState, ProfileState>(state => state.profileState);
+  // const [isWalletTabActivated, setIsWalletTabActivated] = useState(false);
+  // const [selectedTab, setSelectedTab] = React.useState(0);
+  // const [isGuest, setIsGuest] = useState<boolean>(false);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
 
-  useEffect(() => {
-    const walletDetailsPointer = JSON.parse(window.localStorage.getItem('walletTabIdx') ?? '0');
-    if (walletDetailsPointer === 1) {
-      setIsWalletTabActivated(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const walletDetailsPointer = JSON.parse(window.localStorage.getItem('walletTabIdx') ?? '0');
+  //   if (walletDetailsPointer === 1) {
+  //     setIsWalletTabActivated(true);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    if (isWalletTabActivated) {
-      setSelectedTab(3);
-      window.localStorage.setItem('walletTabIdx', '0');
-    } else {
-      setSelectedTab(0);
-    }
-  }, [isWalletTabActivated]);
+  // useEffect(() => {
+  //   if (isWalletTabActivated) {
+  //     setSelectedTab(3);
+  //     window.localStorage.setItem('walletTabIdx', '0');
+  //   } else {
+  //     setSelectedTab(0);
+  //   }
+  // }, [isWalletTabActivated]);
 
   useEffect(() => {
     dispatch(fetchProfileFriend());
@@ -63,33 +64,43 @@ export default function ProfileTimeline({profile, loading}: Props) {
     return undefined;
   }, [profile.id]);
 
-  useEffect(() => {
-    if (user) {
-      setIsGuest(user.id !== profile.id);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     setIsGuest(user.id !== profile.id);
+  //   }
+  // }, [user]);
 
   // eslint-disable-next-line @typescript-eslint/ban-types
-  const handleChange = (event: React.ChangeEvent<{}>, tab: number) => {
-    setSelectedTab(tab);
+  // const handleChange = (event: React.ChangeEvent<{}>, tab: number) => {
+  //   setSelectedTab(tab);
+  // };
+  const handleOpenEdit = () => {
+    setIsEdit(true);
   };
 
-  if (loading) {
-    return (
-      <div className={`${style.root} ${style.flex}`}>
-        <CircularProgress color="primary" size={100} />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className={`${style.root} ${style.flex}`}>
+  //       <CircularProgress color="primary" size={100} />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className={style.root}>
       <div className={style.scroll}>
+        {/* TOPBAR */}
+        <div className={style.mb}>
+          <TopNavbarComponent description={profile.name} sectionTitle={SectionTitle.PROFILE} />
+        </div>
+
+        {isEdit && <ProfileEditContainer />}
+        {!isEdit && <ProfileHeaderContainer edit={handleOpenEdit} />}
+
         {/* HEADER */}
-        <Header isAnonymous={anonymous} profile={profile} loading={loading} isGuest={isGuest} />
-        <ProfileHeaderContainer />
+        {/* <Header isAnonymous={anonymous} profile={profile} loading={loading} isGuest={isGuest} /> */}
         {/* TAB */}
-        <div className={style.root2}>
+        {/* <div className={style.root2}>
           <Tabs
             value={selectedTab}
             className={style.tabHeader}
@@ -116,7 +127,7 @@ export default function ProfileTimeline({profile, loading}: Props) {
               <MyWalletTabs />
             </TabPanel>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );

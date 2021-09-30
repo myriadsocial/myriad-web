@@ -8,7 +8,11 @@ import {RootState} from 'src/reducers';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
-export const ProfileHeaderContainer: React.FC = () => {
+type Props = {
+  edit?: () => void;
+};
+
+export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const {detail: profile} = useSelector<RootState, ProfileState>(state => state.profileState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
 
@@ -22,7 +26,12 @@ export const ProfileHeaderContainer: React.FC = () => {
   return (
     <>
       {profile && (
-        <ProfileHeaderComponent user={profile} selfProfile={selfProfile} status={friendStatus} />
+        <ProfileHeaderComponent
+          user={profile}
+          selfProfile={selfProfile}
+          status={friendStatus}
+          onEdit={edit}
+        />
       )}
     </>
   );

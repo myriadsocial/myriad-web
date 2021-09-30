@@ -4,11 +4,9 @@ import {useSelector, useDispatch} from 'react-redux';
 import {Session} from 'next-auth';
 import {getSession} from 'next-auth/client';
 
-import Typography from '@material-ui/core/Typography';
-
+import {DefaultLayout} from '../../src/components-v2/template/Default/DefaultLayout';
 import {wrapper} from '../../src/store';
 
-import Layout from 'src/components/Layout/Layout.container';
 import ProfileTimeline from 'src/components/profile/profile.component';
 import {User} from 'src/interfaces/user';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -35,16 +33,9 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
   }, [dispatch]);
 
   return (
-    <Layout>
-      {profile === null || !profileDetail ? (
-        <div style={{textAlign: 'center'}}>
-          <h1>This account doesn’t exist</h1>
-          <Typography>Try searching for another.</Typography>
-        </div>
-      ) : (
-        <ProfileTimeline profile={profileDetail} loading={false} />
-      )}
-    </Layout>
+    <DefaultLayout isOnProfilePage={true}>
+      {profileDetail && <ProfileTimeline profile={profileDetail} loading={false} />}
+    </DefaultLayout>
   );
 };
 
