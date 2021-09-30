@@ -26,12 +26,17 @@ export const MyWallet: React.FC<MyWalletProps> = props => {
     console.log('changed tab!');
   };
 
+  const handleClick = () => {
+    console.log('open wallet setting!');
+  };
+
   return (
     <BoxComponent
       isWithChevronRightIcon={false}
       title={headerTitle}
       isFitContent={true}
-      minWidth={583}>
+      minWidth={583}
+      onClick={handleClick}>
       <TabsComponent
         active={tabTexts[0].id}
         tabs={tabTexts}
