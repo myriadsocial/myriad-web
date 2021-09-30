@@ -15,6 +15,10 @@ export type BaseUser = {
   profilePictureURL?: string;
 };
 
+export type UserOnTransaction = BaseUser & {
+  id: string;
+};
+
 export type UserProps = BaseUser & {
   bio?: string;
   bannerImageUrl?: string;
