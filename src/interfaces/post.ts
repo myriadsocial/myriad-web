@@ -53,8 +53,8 @@ export type PostProps = {
   text: string;
   title?: string;
   url: string;
-  isNsfw?: boolean;
-  nsfwTags?: string[];
+  isNSFW?: boolean;
+  NSFWTag?: string;
   visibility: PostVisibility;
 };
 
@@ -73,6 +73,7 @@ export interface Post extends PostProps, BaseModel {
   transactions?: any[];
   walletAddress?: string;
   vote?: Vote;
+  mentions?: string[];
 }
 
 export type UpoadedFile = {
