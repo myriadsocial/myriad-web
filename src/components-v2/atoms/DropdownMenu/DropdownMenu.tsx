@@ -19,10 +19,10 @@ type DropdownMenuProps = {
 };
 
 export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
-  const {title, options, onChange} = props;
+  const {title, options, selected, onChange} = props;
   const styles = useStyles();
 
-  const [selected, setSelected] = useState<string>(options[0].id);
+  const [current, setCurrent] = useState<string>(selected || options[0].id);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -34,13 +34,13 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
   };
 
   const handleSelected = (option: string) => {
-    setSelected(option);
+    setCurrent(option);
     onChange(option);
     handleClose();
   };
 
   const getSelectedText = (): string => {
-    const match = options.find(option => option.id === selected);
+    const match = options.find(option => option.id === current);
 
     return match?.title ?? '';
   };

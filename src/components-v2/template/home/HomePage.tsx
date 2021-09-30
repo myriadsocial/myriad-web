@@ -2,6 +2,7 @@ import React from 'react';
 
 import {useTheme} from '@material-ui/core/styles';
 
+import {TimelineType} from '../../../interfaces/timeline';
 import {Menu as MenuComponent} from '../../Menu/';
 import {SidebarMenu} from '../../Menu/Menu.stories';
 import {ProfileHeader as ProfileHeaderComponent} from '../../ProfileHeader';
@@ -69,6 +70,8 @@ const HomePage = (): JSX.Element => {
           </div>
           <div style={{width: '100%'}}>
             <TimelineComponent
+              type={TimelineType.ALL}
+              sort="created"
               posts={Timeline.args?.posts ?? []}
               anonymous={Timeline.args?.anonymous ?? false}
               hasMore={false}
