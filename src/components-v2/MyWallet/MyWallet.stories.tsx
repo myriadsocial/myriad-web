@@ -48,14 +48,20 @@ DefaultMyWallet.args = {
       hash: '0xe69286cd9261616a8847f60538481577fa08f04f433a6276298f62bbe708c048',
       amount: 2.5,
       tipStatus: TipStatus.RECEIVED,
-      createdAt: '2021-07-15T08:01:46.000Z',
-      updatedAt: '2021-07-15T08:01:46.000Z',
-      to: {
-        name: 'Lynn',
+      createdAt: new Date('2021-07-15T08:01:46.000Z'),
+      updatedAt: new Date('2021-07-15T08:01:46.000Z'),
+      fromUser: {
+        id: '0x0a567a34a834112d1685cf6b27bbf743417d8d23615f28aee9a9c62629de8308',
+        name: 'Lynn ',
         profilePictureURL:
           'https://res.cloudinary.com/dsget80gs/image/upload/v1626794503/znraavovkot3qbjxqbvv.jpg',
+        bannerImageUrl:
+          'https://res.cloudinary.com/dsget80gs/image/upload/v1626794533/ht7kamz2sh3cypkoo1ji.jpg',
+        bio: 'Hello, my name is Lynn !',
+        createdAt: new Date('2021-07-19T04:59:26.000Z'),
+        updatedAt: new Date('2021-07-27T03:43:25.000Z'),
       },
-      from: {
+      toUser: {
         name: 'Red Myrian',
       },
       currency: {
@@ -75,8 +81,8 @@ DefaultMyWallet.args = {
       hash: '0x3fab899317f42f68e9911afdebac002ee77111c46baa9555ef38e0a80cee47d8',
       amount: 1.2,
       tipStatus: TipStatus.SENT,
-      createdAt: '2021-07-15T08:15:10.000Z',
-      updatedAt: '2021-07-15T08:15:10.000Z',
+      createdAt: new Date('2021-07-15T08:15:10.000Z'),
+      updatedAt: new Date('2021-07-15T08:15:10.000Z'),
       to: {
         name: 'Kurger Bing',
         profilePictureURL:
