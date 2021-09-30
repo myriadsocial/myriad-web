@@ -1,9 +1,8 @@
 import React from 'react';
 
+import {Comment} from '../../../interfaces/comment';
 import {CommentList} from '../../atoms/CommentList';
 import {TabItems} from '../../atoms/Tabs';
-
-import {Comment} from 'src/interfaces/comment';
 
 export type CommentTabs = 'discussion' | 'debate';
 

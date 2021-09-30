@@ -43,19 +43,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
     },
-    nsfw: {
-      color: theme.palette.text.secondary,
-      width: 80,
-      marginLeft: 30,
-      marginRight: 30,
-    },
-    danger: {
-      color: theme.status.danger.main,
-    },
-    expand: {
-      marginLeft: theme.spacing(1),
-      padding: 0,
-    },
     markdown: {
       width: 120,
     },

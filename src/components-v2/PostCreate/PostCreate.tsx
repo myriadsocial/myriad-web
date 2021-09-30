@@ -1,29 +1,29 @@
-import {ChevronDownIcon} from '@heroicons/react/outline';
+import {TNode} from '@udecode/plate';
 
 import React, {useState} from 'react';
 
-import {Button, IconButton, SvgIcon} from '@material-ui/core';
+import {Button} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
+import {People} from '../../interfaces/people';
+import {Post, PostVisibility} from '../../interfaces/post';
+import {NSFWTags} from '../NSFWTags';
 import {PostEditor, formatStringToNode} from '../PostEditor';
 import {PostImport} from '../PostImport';
-import {PostTags} from '../PostTag/PostTags';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {Modal} from '../atoms/Modal';
 import {TabPanel} from '../atoms/TabPanel';
 import {useStyles} from './PostCreate.styles';
-import {tagOptions, menuOptions} from './default';
-
-import {People} from 'src/interfaces/people';
+import {menuOptions} from './default';
 
 type PostCreateProps = {
-  value: string;
+  value?: string;
   url?: string;
   open: boolean;
   people: People[];
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit: (post: Partial<Post> | string) => void;
   onSearchPeople: (query: string) => void;
   onUploadFile: (file: File, type: 'image' | 'video') => Promise<string>;
 };
@@ -31,12 +31,12 @@ type PostCreateProps = {
 type PostCreateType = 'create' | 'import';
 
 export const PostCreate: React.FC<PostCreateProps> = props => {
-  const {value, url, open, people, onClose, onSubmit, onSearchPeople, onUploadFile} = props;
+  const {value = '', url, open, people, onClose, onSubmit, onSearchPeople, onUploadFile} = props;
   const styles = useStyles();
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
-  const [openTags, setOpenTags] = useState(false);
-  const [nsfwTags, setNsfwTags] = useState<string[]>([]);
+  const [post, setPost] = useState<Partial<Post>>({});
+  const [importUrl, setImport] = useState<string | null>(null);
 
   const header: Record<PostCreateType, {title: string; subtitle: string}> = {
     create: {
@@ -51,39 +51,34 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
   const node = formatStringToNode(value);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setOpenTags(true);
-  };
-
   const handleTabChange = (event: React.ChangeEvent<{}>, tab: PostCreateType) => {
     setActiveTab(tab);
   };
 
-  const handleConfirmTags = (tags: string[]) => {
-    setNsfwTags(tags);
-    handleCloseTags();
+  const handlePostTextChange = (value: TNode[]) => {
+    setPost(prevPost => ({...prevPost, text: JSON.stringify(value)}));
+  };
+
+  const handlePostUrlChange = (url: string | null) => {
+    setImport(url);
+  };
+
+  const handleConfirmNSFWTags = (tags: string[]) => {
+    setPost(prevPost => ({...prevPost, nswTags: tags}));
   };
 
   const handleVisibilityChange = (visibility: string) => {
-    // code
+    setPost(prevPost => ({...prevPost, visibility: visibility as PostVisibility}));
   };
 
-  const handleCloseTags = () => {
-    setOpenTags(false);
-  };
-
-  const getTagsStyle = () => {
-    const classes = [styles.nsfw];
-
-    if (nsfwTags.length) {
-      classes.push(styles.danger);
+  const handleSubmit = () => {
+    if (activeTab === 'import' && importUrl) {
+      onSubmit(importUrl);
     }
 
-    return classes.join(' ');
-  };
-
-  const handleChange = () => {
-    // code
+    if (activeTab === 'create') {
+      onSubmit(post);
+    }
   };
 
   return (
@@ -111,14 +106,14 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             avatar: item.profilePictureURL,
           }))}
           value={[node]}
-          onChange={handleChange}
+          onChange={handlePostTextChange}
           onSearchMention={onSearchPeople}
           onFileUploaded={onUploadFile}
         />
       </TabPanel>
 
       <TabPanel value={activeTab} index="import">
-        <PostImport value={url || ''} />
+        <PostImport value={url} onChange={handlePostUrlChange} />
       </TabPanel>
 
       <div className={styles.action}>
@@ -129,35 +124,14 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             onChange={handleVisibilityChange}
           />
 
-          <div>
-            <Button size="small" onClick={handleClick} className={getTagsStyle()}>
-              NSFW
-              <IconButton
-                onClick={handleClick}
-                color="primary"
-                aria-label="expand"
-                size="small"
-                className={styles.expand}>
-                <SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />
-              </IconButton>
-            </Button>
-
-            <Modal
-              title="NSFW tags"
-              align="left"
-              titleSize="small"
-              open={openTags}
-              onClose={handleCloseTags}>
-              <PostTags selected={nsfwTags} options={tagOptions} onConfirm={handleConfirmTags} />
-            </Modal>
-          </div>
+          <NSFWTags tags={post.nsfwTags || []} onConfirm={handleConfirmNSFWTags} />
 
           <Button color="primary" size="small" className={styles.markdown}>
             Markdown Mode
           </Button>
         </div>
 
-        <Button variant="contained" color="primary" size="small" onClick={onSubmit}>
+        <Button variant="contained" color="primary" size="small" onClick={handleSubmit}>
           Create Post
         </Button>
       </div>
