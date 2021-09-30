@@ -1,6 +1,5 @@
 import {ShareIcon} from '@heroicons/react/outline';
 import {ChatAltIcon} from '@heroicons/react/outline';
-import {action} from '@storybook/addon-actions';
 
 import React from 'react';
 
@@ -39,7 +38,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
       />
 
       <div className={style.section}>
-        <IconButton onClick={action('comment')} className={style.action} color="primary">
+        <IconButton onClick={console.log} className={style.action} color="primary">
           <SvgIcon classes={{root: style.fill}} component={ChatAltIcon} viewBox="0 0 24 24" />
         </IconButton>
         <Typography component="span" color="textPrimary" variant="caption">
@@ -48,7 +47,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
       </div>
 
       <div className={style.section}>
-        <IconButton onClick={action('share')} className={style.action} color="primary">
+        <IconButton onClick={console.log} className={style.action} color="primary">
           <SvgIcon classes={{root: style.fill}} component={ShareIcon} viewBox="0 0 24 24" />
         </IconButton>
         <Typography component="span" color="textPrimary" variant="caption">
