@@ -1,5 +1,4 @@
 import {DotsVerticalIcon} from '@heroicons/react/solid';
-import {action} from '@storybook/addon-actions';
 
 import React from 'react';
 
@@ -87,7 +86,7 @@ export const HeaderComponent: React.FC<PostComponentProps> = ({post, disable}) =
         !disable && (
           <IconButton
             aria-label="post-setting"
-            onClick={action('open-menu-option')}
+            onClick={console.log}
             className={style.action}
             disableRipple={true}
             disableFocusRipple={true}
