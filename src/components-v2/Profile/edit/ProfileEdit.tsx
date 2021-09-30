@@ -1,17 +1,15 @@
-import {CameraIcon} from '@heroicons/react/outline';
-
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 
 import {Typography} from '@material-ui/core';
 import {FormControl, OutlinedInput} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
-import IconButton from '@material-ui/core/IconButton';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import InputLabel from '@material-ui/core/InputLabel';
-import SvgIcon from '@material-ui/core/SvgIcon';
 
 import {IconButtonUpload} from '../../../components/common/IconButtonUpload.component';
+import {ImageButton} from '../../../components/common/ImageButton.component';
 import {User} from '../../../interfaces/user';
 import {useStyles} from './profile-edit.style';
 
@@ -20,19 +18,28 @@ export type Props = {
   onSave: (user: Partial<User>) => void;
   uploadingAvatar: boolean;
   uploadingBanner: boolean;
+  updatingProfile: boolean;
   updateProfileBanner: (image: File) => void;
+  updateProfilePicture: (image: File) => void;
 };
 
 export const ProfileEditComponent: React.FC<Props> = props => {
-  const {user, onSave, uploadingBanner, updateProfileBanner} = props;
-  const [newUser, setNewUser] = useState<Partial<User>>();
+  const {
+    user,
+    onSave,
+    updatingProfile,
+    uploadingBanner,
+    updateProfileBanner,
+    uploadingAvatar,
+    updateProfilePicture,
+  } = props;
+  const [newUser, setNewUser] = useState<Partial<User>>({
+    username: user.username ?? '',
+    name: user.name ?? '',
+    bio: user.bio ?? '',
+    websiteURL: user.websiteURL ?? '',
+  });
   const style = useStyles();
-
-  useEffect(() => {
-    if (user) {
-      setNewUser(user);
-    }
-  }, [user]);
 
   const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewUser(prevUser => ({
@@ -51,6 +58,10 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     updateProfileBanner(image);
   };
 
+  const handleUpdateProfilePicture = (image: File): void => {
+    updateProfilePicture(image);
+  };
+
   return (
     <div className={style.root}>
       <Typography className={style.title}>Edit Profile</Typography>
@@ -67,12 +78,12 @@ export const ProfileEditComponent: React.FC<Props> = props => {
               variant="circle"
               className={style.avatar}
             />
-            <IconButton
-              className={style.position}
-              classes={{root: style.action}}
-              aria-label="profile-setting">
-              <SvgIcon component={CameraIcon} viewBox="0 0 24 24" />
-            </IconButton>
+            <ImageButton
+              title="Edit Image profile"
+              onImageSelected={handleUpdateProfilePicture}
+              loading={uploadingAvatar}
+              accept="image"
+            />
           </div>
         </div>
       </FormControl>
@@ -144,6 +155,9 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         <Button variant="contained" color="primary" disableElevation fullWidth onClick={saveUser}>
           Save changes
         </Button>
+        {updatingProfile && (
+          <CircularProgress size={24} color="primary" className={style.buttonProgress} />
+        )}
       </FormControl>
     </div>
   );

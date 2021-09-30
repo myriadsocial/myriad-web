@@ -45,7 +45,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({toggleProfileF
     uploadingBanner,
     updateProfile,
     updateProfileBanner,
-    updateProfilePicture,
+    // updateProfilePicture,
   } = useProfileHook();
 
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
@@ -59,7 +59,7 @@ export const ProfileEditComponent: React.FC<ProfileEditProps> = ({toggleProfileF
   };
 
   const handleUpdateProfilePicture = (preview: string): void => {
-    updateProfilePicture(preview);
+    // updateProfilePicture(preview);
   };
 
   const hanleUpdateBannerImage = async (image: File): Promise<void> => {
