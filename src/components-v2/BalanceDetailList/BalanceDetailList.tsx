@@ -21,6 +21,8 @@ import {balanceSortOptions} from '../Timeline/default';
 import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 import {DropdownMenu} from '../atoms/DropdownMenu/';
 
+import _ from 'lodash';
+
 type BalanceDetailListProps = {
   balanceDetails: BalanceDetail[];
   isLoading: boolean;
@@ -31,9 +33,32 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   const {balanceDetails, isLoading, onClickRefresh} = props;
 
   const [isOnPrimaryCoinMenu, setIsOnPrimaryCoinMenu] = useState(false);
+  const [defaultBalanceDetails, setDefaultBalanceDetails] = useState(balanceDetails);
 
   const handleSortChanged = (sort: string) => {
-    // code
+    switch (sort) {
+      case 'aToZ': {
+        const sortedAtoZBalances = _.sortBy(defaultBalanceDetails, 'name');
+        setDefaultBalanceDetails(sortedAtoZBalances);
+        break;
+      }
+
+      case 'highest': {
+        const sortedHighestBalances = _.orderBy(defaultBalanceDetails, 'freeBalance', 'desc');
+        setDefaultBalanceDetails(sortedHighestBalances);
+        break;
+      }
+
+      case 'lowest': {
+        const sortedLowestBalances = _.orderBy(defaultBalanceDetails, 'freeBalance', 'asc');
+        setDefaultBalanceDetails(sortedLowestBalances);
+        break;
+      }
+
+      default: {
+        break;
+      }
+    }
   };
 
   const togglePrimaryCoinMenu = () => {
@@ -79,7 +104,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
       <TableContainer component={List}>
         <Table className={classes.root} aria-label="Balance Detail Table">
           <TableBody>
-            {balanceDetails.map(balanceDetail => (
+            {defaultBalanceDetails.map(balanceDetail => (
               <TableRow key={balanceDetail.id} className={classes.tableRow}>
                 <TableCell component="th" scope="row" className={classes.tableCell}>
                   <Avatar alt={balanceDetail.name} src={balanceDetail.image} />
