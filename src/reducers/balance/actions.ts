@@ -45,10 +45,11 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
               const tempBalance = balance.free as unknown;
               tokenBalances.push({
                 freeBalance: formatNumber(tempBalance as number, availableTokens[i].decimal),
-                tokenSymbol: availableTokens[i].id,
-                tokenDecimals: availableTokens[i].decimal,
-                rpcAddress: provider,
-                tokenImage: availableTokens[i].image,
+                id: availableTokens[i].id,
+                name: availableTokens[i].name,
+                decimal: availableTokens[i].decimal,
+                rpcURL: provider,
+                image: availableTokens[i].image,
               });
               break;
             }
@@ -59,10 +60,11 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
               const tempBalance = balance.free as unknown;
               tokenBalances.push({
                 freeBalance: formatNumber(tempBalance as number, availableTokens[i].decimal),
-                tokenSymbol: availableTokens[i].id,
-                tokenDecimals: availableTokens[i].decimal,
-                rpcAddress: provider,
-                tokenImage: availableTokens[i].image,
+                id: availableTokens[i].id,
+                name: availableTokens[i].name,
+                decimal: availableTokens[i].decimal,
+                rpcURL: provider,
+                image: availableTokens[i].image,
               });
               break;
             }
@@ -74,10 +76,11 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
               });
               tokenBalances.push({
                 freeBalance: formatNumber(tokenData.free as number, availableTokens[i].decimal),
-                tokenSymbol: availableTokens[i].id,
-                tokenDecimals: availableTokens[i].decimal,
-                rpcAddress: provider,
-                tokenImage: availableTokens[i].image,
+                id: availableTokens[i].id,
+                name: availableTokens[i].name,
+                decimal: availableTokens[i].decimal,
+                rpcURL: provider,
+                image: availableTokens[i].image,
               });
             }
           }
