@@ -34,6 +34,12 @@ export type PostMetric = {
   vote?: number;
 };
 
+export enum PostVisibility {
+  PUBLIC = 'public',
+  FRIEND = 'friend',
+  ONLY_ME = 'only_me',
+}
+
 export type PostProps = {
   asset?: PostAsset;
   createdBy: string;
@@ -47,6 +53,9 @@ export type PostProps = {
   text: string;
   title?: string;
   url: string;
+  isNsfw?: boolean;
+  nsfwTags?: string[];
+  visibility: PostVisibility;
 };
 
 export type ImportPostProps = {

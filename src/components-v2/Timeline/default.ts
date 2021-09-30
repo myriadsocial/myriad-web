@@ -1,7 +1,6 @@
+import {TimelineSortMethod, TimelineType} from '../../interfaces/timeline';
 import {MenuOptions} from '../atoms/DropdownMenu';
 import {TabListItem} from '../atoms/TabList';
-
-import {TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
 
 // Filter options
 export const postFilterOptions: MenuOptions<string>[] = [

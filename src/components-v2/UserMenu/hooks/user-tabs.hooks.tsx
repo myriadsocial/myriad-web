@@ -4,6 +4,7 @@ import {Experience} from '../../../interfaces/experience';
 import {Friend} from '../../../interfaces/friend';
 import {Post} from '../../../interfaces/post';
 import {SocialMedia} from '../../../interfaces/social';
+import {TimelineType} from '../../../interfaces/timeline';
 import {User} from '../../../interfaces/user';
 import {FriendListComponent} from '../../FriendsMenu/friend-list';
 import {ExperienceTabPanel} from '../../Profile/ExperienceTabPanel/ExperienceTabPanel';
@@ -36,10 +37,12 @@ export const useUserTabs = ({
         title: `Post`,
         component: (
           <Timeline
+            type={TimelineType.ALL}
+            sort="created"
             posts={posts}
             anonymous={false}
-            filter={false}
-            sort="filter"
+            enableFilter={false}
+            sortType="filter"
             hasMore={false}
             loadNextPage={console.log}
             sortTimeline={console.log}

@@ -1,7 +1,8 @@
 import {useSelector, useDispatch} from 'react-redux';
 
+import {TimelineType, TimelineFilter, TimelineSortMethod} from '../../../interfaces/timeline';
+
 import {ParsedUrlQuery} from 'querystring';
-import {TimelineType, TimelineFilter, TimelineSortMethod} from 'src/interfaces/timeline';
 import {RootState} from 'src/reducers';
 import {loadTimeline} from 'src/reducers/timeline/actions';
 import {TimelineState} from 'src/reducers/timeline/reducer';
