@@ -16,7 +16,7 @@ export const MyWalletContainer: React.FC = () => {
 
   useEffect(() => {
     load(user?.id, currencies);
-  }, [currencies]);
+  }, [currencies, user]);
 
   return <MyWallet headerTitle={'Wallet'} />;
 };
