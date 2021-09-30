@@ -15,7 +15,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '.';
-import {BalanceDetail} from '../MyWallet/';
+import {BalanceDetail} from '../../interfaces/balance';
 import {PrimaryCoinMenu} from '../PrimaryCoinMenu/PrimaryCoinMenu';
 import {balanceSortOptions} from '../Timeline/default';
 import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
@@ -45,13 +45,11 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
 
   const classes = useStyles();
 
-  console.log({balanceDetails, isLoading});
-
   if (isLoading || balanceDetails.length === 0)
     return (
-      <>
+      <div className={classes.loading}>
         <CircularProgress />
-      </>
+      </div>
     );
 
   if (isOnPrimaryCoinMenu)
