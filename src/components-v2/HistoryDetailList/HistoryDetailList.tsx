@@ -8,7 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
-import {TransactionHistoryDetail, TipStatus} from '../../interfaces/transaction';
+import {Transaction} from '../../interfaces/transaction';
 import {
   historyAmountSortOptions,
   historyTransactionSortOptions,
@@ -20,16 +20,19 @@ import {DropdownMenu} from '../atoms/DropdownMenu/';
 import {useStyles} from './history-detail-list.styles';
 
 type HistoryDetailListProps = {
-  historyDetails: TransactionHistoryDetail[];
+  allTxs: Transaction[];
+  outboundTxs: Transaction[];
+  inboundTxs: Transaction[];
+  userId: string;
 };
 
 export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
-  const {historyDetails} = props;
+  const {allTxs, userId} = props;
 
   useEffect(() => {
-    const newArray = historyDetails.map(historyDetail => ({
-      id: historyDetail.currency.name,
-      title: historyDetail.currency.name,
+    const newArray = allTxs.map(tx => ({
+      id: tx.currency.name,
+      title: tx.currency.name,
     }));
     const updatedSortOptions = getUniqueListBy(newArray, 'id');
 
@@ -77,18 +80,18 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
       <TableContainer component={List}>
         <Table className={classes.root} aria-label="history details table">
           <TableBody>
-            {historyDetails.map(historyDetail => (
-              <TableRow key={historyDetail.id} className={classes.tableRow}>
+            {allTxs.map(tx => (
+              <TableRow key={tx.id} className={classes.tableRow}>
                 <TableCell component="th" scope="row" className={classes.tableCell}>
                   <CustomAvatar
                     size={CustomAvatarSize.MEDIUM}
-                    alt={historyDetail.to.name}
-                    avatar={historyDetail.to.profilePictureURL ?? ''}
+                    alt={tx.toUser.name}
+                    avatar={tx.toUser.profilePictureURL ?? ''}
                   />
 
                   <div>
                     <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                      {historyDetail.to.name}
+                      {tx.toUser.name}
                     </Typography>
                     <Typography variant="caption" color="textSecondary">
                       20 seconds ago
@@ -100,12 +103,12 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                   {
                     //TODO: define tipStatus by checking if userId is in from or to
                   }
-                  {historyDetail.tipStatus === TipStatus.RECEIVED && (
+                  {tx.toUser.id === userId && (
                     <div className={classes.tipStatusGreen}>
                       <Typography variant="caption">Tipped</Typography>
                     </div>
                   )}
-                  {historyDetail.tipStatus === TipStatus.SENT && (
+                  {tx.fromUser.id === userId && (
                     <div className={classes.tipStatusRed}>
                       <Typography variant="caption">Sent</Typography>
                     </div>
@@ -115,14 +118,14 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                 <TableCell align="right">
                   <div className={classes.currencyDetailWrapper}>
                     <div>
-                      {historyDetail.tipStatus === TipStatus.RECEIVED && (
+                      {tx.toUser.id === userId && (
                         <Typography variant="h5" className={classes.textAmountGreen}>
-                          +{historyDetail.amount} {historyDetail.currency.name}
+                          +{tx.amount} {tx.currency.name}
                         </Typography>
                       )}
-                      {historyDetail.tipStatus === TipStatus.SENT && (
+                      {tx.fromUser.id === userId && (
                         <Typography variant="h5" className={classes.textAmountRed}>
-                          -{historyDetail.amount} {historyDetail.currency.name}
+                          -{tx.amount} {tx.currency.name}
                         </Typography>
                       )}
                       <Typography variant="caption" color="textSecondary">
@@ -132,8 +135,8 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                     <div>
                       <CustomAvatar
                         size={CustomAvatarSize.XSMALL}
-                        alt={historyDetail.currency.name}
-                        avatar={historyDetail.currency.image}
+                        alt={tx.currency.name}
+                        avatar={tx.currency.image}
                       />
                     </div>
                   </div>
