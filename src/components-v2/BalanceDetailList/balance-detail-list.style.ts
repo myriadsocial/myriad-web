@@ -47,5 +47,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
       columnGap: theme.spacing(2.875),
     },
+    loading: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: 360,
+    },
   }),
 );
