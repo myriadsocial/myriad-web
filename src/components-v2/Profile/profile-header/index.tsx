@@ -24,10 +24,11 @@ export type Props = {
   user: User;
   selfProfile: boolean;
   status: Friend | null;
+  onEdit?: () => void;
 };
 
 export const ProfileHeaderComponent: React.FC<Props> = props => {
-  const {user, selfProfile, status} = props;
+  const {user, selfProfile, status, onEdit} = props;
   const style = useStyles();
 
   const formatNumber = (num: number) => {
@@ -43,10 +44,16 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     return newFormat;
   };
 
+  const handleOpenEdit = () => {
+    if (onEdit) onEdit();
+  };
+
   return (
     <div>
       <div className={style.root}>
         <CardMedia className={style.media} image={user.bannerImageUrl} title={user.name} />
+        <div className={style.screen} />
+
         <div className={style.flex}>
           <div className={style.flexCenter}>
             <Avatar
@@ -129,6 +136,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           <div>
             {selfProfile && (
               <Button
+                onClick={handleOpenEdit}
                 classes={{root: style.button}}
                 className={style.mr12}
                 variant="contained"
