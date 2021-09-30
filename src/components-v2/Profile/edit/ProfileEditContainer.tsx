@@ -10,14 +10,25 @@ import {UserState} from 'src/reducers/user/reducer';
 
 export const ProfileEditContainer: React.FC = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {uploadingAvatar, uploadingBanner, updateProfileBanner} = useProfileHook();
+  const {
+    updateProfile,
+    loading,
+    uploadingAvatar,
+    uploadingBanner,
+    updateProfileBanner,
+    updateProfilePicture,
+  } = useProfileHook();
 
   const hanleUpdateBannerImage = async (image: File): Promise<void> => {
     updateProfileBanner(image);
   };
 
+  const handleUpdateProfilePicture = (image: File): void => {
+    updateProfilePicture(image);
+  };
+
   const onSave = (newUser: Partial<User>) => {
-    console.log(newUser);
+    updateProfile(newUser);
   };
 
   return (
@@ -26,9 +37,11 @@ export const ProfileEditContainer: React.FC = () => {
         <ProfileEditComponent
           user={user}
           onSave={onSave}
+          updatingProfile={loading}
           uploadingAvatar={uploadingAvatar}
           uploadingBanner={uploadingBanner}
           updateProfileBanner={hanleUpdateBannerImage}
+          updateProfilePicture={handleUpdateProfilePicture}
         />
       )}
     </>
