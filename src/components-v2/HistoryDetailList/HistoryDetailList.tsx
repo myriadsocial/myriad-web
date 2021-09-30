@@ -97,6 +97,9 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                 </TableCell>
 
                 <TableCell align="center">
+                  {
+                    //TODO: define tipStatus by checking if userId is in from or to
+                  }
                   {historyDetail.tipStatus === TipStatus.RECEIVED && (
                     <div className={classes.tipStatusGreen}>
                       <Typography variant="caption">Tipped</Typography>
