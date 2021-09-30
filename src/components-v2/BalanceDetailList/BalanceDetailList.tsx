@@ -27,10 +27,11 @@ type BalanceDetailListProps = {
   balanceDetails: BalanceDetail[];
   isLoading: boolean;
   onClickRefresh: () => void;
+  onClickAddCoin: () => void;
 };
 
 export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
-  const {balanceDetails, isLoading, onClickRefresh} = props;
+  const {balanceDetails, isLoading, onClickRefresh, onClickAddCoin} = props;
 
   const [isOnPrimaryCoinMenu, setIsOnPrimaryCoinMenu] = useState(false);
   const [defaultBalanceDetails, setDefaultBalanceDetails] = useState(balanceDetails);
@@ -134,7 +135,9 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
           onClick={togglePrimaryCoinMenu}>
           Set coin priority
         </Button>
-        <Button variant={ButtonVariant.CONTAINED}>+ Add coin</Button>
+        <Button onClick={onClickAddCoin} variant={ButtonVariant.CONTAINED}>
+          + Add coin
+        </Button>
       </div>
     </>
   );
