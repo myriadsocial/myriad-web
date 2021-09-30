@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import {BalanceDetailList} from '.';
 
+import {AddCoin} from 'src/components-v2/atoms/AddCoin/AddCoin.component';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
@@ -14,20 +15,30 @@ export const BalanceDetailListContainer: React.FC = () => {
   );
 
   const {user, currencies} = useSelector<RootState, UserState>(state => state.userState);
+  if (!user) return null;
 
   const {load} = usePolkadotApi();
 
-  if (!user) return null;
+  const [showAddCoin, setShowAddCoin] = useState(false);
 
   const handleRefresh = () => {
     load(user?.id, currencies);
   };
 
+  const toggleAddCoinModal = () => {
+    setShowAddCoin(!showAddCoin);
+  };
+
   return (
-    <BalanceDetailList
-      balanceDetails={balanceDetails}
-      isLoading={loading}
-      onClickRefresh={handleRefresh}
-    />
+    <>
+      <BalanceDetailList
+        balanceDetails={balanceDetails}
+        isLoading={loading}
+        onClickRefresh={handleRefresh}
+        onClickAddCoin={toggleAddCoinModal}
+      />
+
+      <AddCoin open={showAddCoin} onClose={toggleAddCoinModal} />
+    </>
   );
 };
