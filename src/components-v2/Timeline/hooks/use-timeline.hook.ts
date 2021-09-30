@@ -2,7 +2,8 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
-import {TimelineFilter, TimelineSortMethod} from 'src/interfaces/timeline';
+import {TimelineFilter, TimelineSortMethod} from '../../../interfaces/timeline';
+
 import {RootState} from 'src/reducers';
 import {loadTimeline} from 'src/reducers/timeline/actions';
 import {TimelineState} from 'src/reducers/timeline/reducer';

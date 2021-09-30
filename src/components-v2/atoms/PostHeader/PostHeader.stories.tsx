@@ -3,6 +3,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 import React from 'react';
 
 import {HeaderComponent} from '.';
+import {PostVisibility} from '../../../interfaces/post';
 import {SocialsEnum} from '../../../interfaces/social';
 
 export default {
@@ -18,6 +19,9 @@ MyriadPost.args = {
   post: {
     id: '6123614bf6c45c2728e43aca',
     tags: ['song'],
+    isNsfw: false,
+    nsfwTags: [],
+    visibility: PostVisibility.PUBLIC,
     platform: 'myriad',
     title: undefined,
     text: 'hamba menyanyi mencinta suara',
@@ -62,6 +66,9 @@ OtherPost.args = {
   post: {
     id: '60efac8c565ab8004ed28bb3',
     tags: [],
+    isNsfw: false,
+    nsfwTags: [],
+    visibility: PostVisibility.PUBLIC,
     platform: 'twitter',
     title: '',
     text: 'Tesla Solar + Powerwall battery enables consumers to be their own utility',

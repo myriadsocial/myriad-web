@@ -13,12 +13,12 @@ import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
+import {Friend} from '../../../interfaces/friend';
 import {User} from '../../../interfaces/user';
 import {useStyles} from './profile-header.style';
 
 import {format} from 'date-fns';
 import millify from 'millify';
-import {Friend} from 'src/interfaces/friend';
 
 export type Props = {
   user: User;

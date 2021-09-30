@@ -2,6 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
+import {PostVisibility} from '../../interfaces/post';
 import {SocialsEnum} from '../../interfaces/social';
 import {PostDetail as PostDetailComponent} from './PostDetail';
 
@@ -29,6 +30,9 @@ MyriadPost.args = {
       images: ['https://res.cloudinary.com/dsget80gs/lhyhjgd8v46cxeqzw5tp.png'],
       videos: [],
     },
+    isNsfw: false,
+    nsfwTags: [],
+    visibility: PostVisibility.PUBLIC,
     originCreatedAt: new Date(),
     originPostId: '',
     importers: [],
@@ -82,6 +86,9 @@ TwitterPost.args = {
   post: {
     id: '612c544caa5264184b2e36d4',
     tags: [],
+    isNsfw: false,
+    nsfwTags: [],
+    visibility: PostVisibility.PUBLIC,
     platform: 'twitter',
     text: 'Recently an unknown individual sold a malware technique to a group of Threat Actors.\n\nThis malcode allowed binaries to be executed by the GPU, and in GPU memory address space, rather the CPUs.\n\nWe will demonstrate this technique soon.',
     originPostId: '1432045849429823488',
@@ -132,6 +139,9 @@ RedditPost.args = {
   post: {
     id: '6128695ae2f9157e3d4ee94f',
     tags: [],
+    isNsfw: false,
+    nsfwTags: [],
+    visibility: PostVisibility.PUBLIC,
     platform: 'reddit',
     title: 'Sunscreen empties review',
     text: '',

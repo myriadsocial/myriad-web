@@ -1,3 +1,4 @@
+import {PostVisibility} from '../../interfaces/post';
 import {TagOptions} from '../PostTag';
 import {MenuOptions} from '../atoms/DropdownMenu';
 
@@ -28,17 +29,17 @@ export const tagOptions: TagOptions[] = [
   },
 ];
 
-export const menuOptions: MenuOptions<string>[] = [
+export const menuOptions: MenuOptions<PostVisibility>[] = [
   {
-    id: 'public',
+    id: PostVisibility.PUBLIC,
     title: 'Public',
   },
   {
-    id: 'friend',
+    id: PostVisibility.FRIEND,
     title: 'Friend Only',
   },
   {
-    id: 'me',
+    id: PostVisibility.ONLY_ME,
     title: 'Only Me',
   },
 ];

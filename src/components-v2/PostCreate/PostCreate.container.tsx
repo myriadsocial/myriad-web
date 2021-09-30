@@ -27,7 +27,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
 
   const handleSearchPeople = debounce((query: string) => {
     dispatch(searchPeople(query));
-  }, 500);
+  }, 300);
 
   const handleFileUpload = async (file: File, type: 'image' | 'video'): Promise<string> => {
     let url = '';
@@ -58,7 +58,6 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   return (
     <PostCreate
       open={open}
-      value=""
       people={people}
       onClose={onClose}
       onSubmit={submitPost}

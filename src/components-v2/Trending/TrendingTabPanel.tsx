@@ -2,10 +2,9 @@ import React from 'react';
 
 import Typography from '@material-ui/core/Typography';
 
+import {Tag} from '../../interfaces/experience';
 import {TrendingList} from './TrendingList';
 import {useStyles} from './trending-tab-panel.styles';
-
-import {Tag} from 'src/interfaces/experience';
 
 type TrendingTabPanelProps = {
   trendings: Tag[];

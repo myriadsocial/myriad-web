@@ -8,10 +8,12 @@ import {Embed} from '../atoms/Embed';
 import {useStyles} from './PostImport.styles';
 
 type PostImportProps = {
-  value: string;
+  value?: string;
+  onChange: (url: string | null) => void;
 };
 
-export const PostImport: React.FC<PostImportProps> = ({value}) => {
+export const PostImport: React.FC<PostImportProps> = props => {
+  const {value = '', onChange} = props;
   const styles = useStyles();
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -36,6 +38,7 @@ export const PostImport: React.FC<PostImportProps> = ({value}) => {
 
     if (isUrl(url)) {
       setPreviewUrl(url);
+      onChange(url);
     } else {
       setPreviewUrl('');
     }

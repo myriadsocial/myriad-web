@@ -3,6 +3,8 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Lottie from 'react-lottie';
 
 import ShowIf from '../../components/common/show-if.component';
+import {Post} from '../../interfaces/post';
+import {TimelineSortMethod, TimelineType} from '../../interfaces/timeline';
 import LoadingAnimation from '../../lottie/loading.json';
 import {PostDetail} from '../PostDetail';
 import {DropdownMenu} from '../atoms/DropdownMenu';
@@ -11,14 +13,13 @@ import {TabList} from '../atoms/TabList';
 import {useStyles} from './Timeline.styles';
 import {filterOptions, sortOptions, postFilterOptions} from './default';
 
-import {Post} from 'src/interfaces/post';
-import {TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
-
 type TimelineProps = {
   posts: Post[];
+  type: TimelineType;
+  sort: TimelineSortMethod;
   anonymous: boolean;
-  filter?: boolean;
-  sort?: 'metric' | 'filter';
+  enableFilter?: boolean;
+  sortType?: 'metric' | 'filter';
   hasMore: boolean;
   loadNextPage: () => void;
   sortTimeline: (sort: TimelineSortMethod) => void;
@@ -28,9 +29,11 @@ type TimelineProps = {
 export const Timeline: React.FC<TimelineProps> = props => {
   const {
     posts,
+    type,
+    sort,
     anonymous,
-    filter = true,
-    sort = 'metric',
+    enableFilter = true,
+    sortType = 'metric',
     hasMore,
     loadNextPage,
     sortTimeline,
@@ -58,24 +61,29 @@ export const Timeline: React.FC<TimelineProps> = props => {
   return (
     <div className={styles.root}>
       <div className={styles.action}>
-        {filter && (
+        {enableFilter && (
           <TabList
             tabs={filterOptions}
+            active={type}
             mark="underline"
             size="small"
-            active="all"
             position="left"
             onChangeTab={handleFilter}
             className={styles.filter}
           />
         )}
 
-        <ShowIf condition={sort == 'metric'}>
-          <DropdownMenu title="Sort by" options={sortOptions} onChange={handleSort} />
+        <ShowIf condition={sortType == 'metric'}>
+          <DropdownMenu
+            title="Sort by"
+            selected={sort}
+            options={sortOptions}
+            onChange={handleSort}
+          />
         </ShowIf>
 
-        <ShowIf condition={sort == 'filter'}>
-          <FilterDropdownMenu title="Filter by" options={postFilterOptions} />
+        <ShowIf condition={sortType == 'filter'}>
+          <FilterDropdownMenu title="Filter by" selected={type} options={postFilterOptions} />
         </ShowIf>
       </div>
 
