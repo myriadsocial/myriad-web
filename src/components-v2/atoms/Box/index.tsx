@@ -16,6 +16,7 @@ type BoxComponentProps = BoxProps & {
   isWithChevronRightIcon?: boolean;
   isFitContent?: boolean;
   minWidth?: number;
+  onClick?: () => void;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -44,8 +45,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export const BoxComponent: React.FC<BoxComponentProps> = props => {
-  const {children, title, isWithChevronRightIcon = true, ...restProps} = props;
+  const {children, title, isWithChevronRightIcon = true, onClick, ...restProps} = props;
   const styles = useStyles(props);
+
+  const handleClick = (): void => {
+    onClick && onClick();
+  };
 
   return (
     <Box {...restProps} className={styles.root}>
@@ -54,7 +59,12 @@ export const BoxComponent: React.FC<BoxComponentProps> = props => {
           <Typography variant="h4">{title}</Typography>
 
           {isWithChevronRightIcon && (
-            <IconButton color="primary" size="medium" className={styles.action}>
+            <IconButton
+              disableRipple
+              onClick={handleClick}
+              color="primary"
+              size="medium"
+              className={styles.action}>
               <SvgIcon component={ChevronRightIcon} viewBox="0 0 24 24" />
             </IconButton>
           )}
