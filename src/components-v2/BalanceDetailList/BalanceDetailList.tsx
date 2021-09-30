@@ -3,6 +3,7 @@ import {RefreshIcon} from '@heroicons/react/outline';
 import React, {useState} from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import SvgIcon from '@material-ui/core/SvgIcon';
@@ -22,10 +23,11 @@ import {DropdownMenu} from '../atoms/DropdownMenu/';
 
 type BalanceDetailListProps = {
   balanceDetails: BalanceDetail[];
+  isLoading: boolean;
 };
 
 export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
-  const {balanceDetails} = props;
+  const {balanceDetails, isLoading} = props;
 
   const [isOnPrimaryCoinMenu, setIsOnPrimaryCoinMenu] = useState(false);
 
@@ -42,6 +44,15 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   };
 
   const classes = useStyles();
+
+  console.log({balanceDetails, isLoading});
+
+  if (isLoading || balanceDetails.length === 0)
+    return (
+      <>
+        <CircularProgress />
+      </>
+    );
 
   if (isOnPrimaryCoinMenu)
     return (

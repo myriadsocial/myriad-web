@@ -1,24 +1,24 @@
 import React, {useState} from 'react';
 
 import {MyWalletProps} from '.';
-import {BalanceDetailList} from '../BalanceDetailList/BalanceDetailList';
-import {HistoryDetailList} from '../HistoryDetailList/HistoryDetailList';
+import {BalanceDetailListContainer} from '../BalanceDetailList/BalanceDetailListContainer';
+import {HistoryDetailListContainer} from '../HistoryDetailList/HistoryDetailListContainer';
 import {BoxComponent} from '../atoms/Box/';
 import {TabsComponent} from '../atoms/Tabs/';
 
 export const MyWallet: React.FC<MyWalletProps> = props => {
-  const {headerTitle, balanceDetails, historyDetails} = props;
+  const {headerTitle} = props;
 
   const [tabTexts] = useState([
     {
       id: 'first-tab',
       title: 'Balance',
-      component: <BalanceDetailList balanceDetails={balanceDetails} />,
+      component: <BalanceDetailListContainer />,
     },
     {
       id: 'second-tab',
       title: 'History',
-      component: <HistoryDetailList historyDetails={historyDetails} />,
+      component: <HistoryDetailListContainer />,
     },
   ]);
 
