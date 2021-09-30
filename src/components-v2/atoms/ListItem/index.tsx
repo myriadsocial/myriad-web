@@ -66,7 +66,7 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
   const {
     icon,
     avatar,
-    variant = 'circle',
+    variant = 'circular',
     size = 'small',
     url,
     title,

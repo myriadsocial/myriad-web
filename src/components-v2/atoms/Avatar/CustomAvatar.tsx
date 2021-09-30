@@ -6,7 +6,7 @@ import {CustomAvatarProps, CustomAvatarSize, useStyles} from '.';
 
 const CustomAvatar = ({
   avatar,
-  variant = 'circle',
+  variant = 'circular',
   size = CustomAvatarSize.SMALL,
   ...restProps
 }: CustomAvatarProps): JSX.Element => {

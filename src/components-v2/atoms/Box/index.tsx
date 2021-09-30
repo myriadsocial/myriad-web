@@ -45,8 +45,17 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export const BoxComponent: React.FC<BoxComponentProps> = props => {
-  const {children, title, isWithChevronRightIcon = true, onClick, ...restProps} = props;
-  const styles = useStyles(props);
+  const {
+    children,
+    title,
+    isWithChevronRightIcon = true,
+    onClick,
+    isFitContent,
+    radiusStr,
+    minWidth,
+    ...restProps
+  } = props;
+  const styles = useStyles({isFitContent, radiusStr, minWidth});
 
   const handleClick = (): void => {
     onClick && onClick();
