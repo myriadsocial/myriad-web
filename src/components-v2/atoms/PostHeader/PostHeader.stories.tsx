@@ -19,8 +19,7 @@ MyriadPost.args = {
   post: {
     id: '6123614bf6c45c2728e43aca',
     tags: ['song'],
-    isNsfw: false,
-    nsfwTags: [],
+    isNSFW: false,
     visibility: PostVisibility.PUBLIC,
     platform: 'myriad',
     title: undefined,
@@ -66,8 +65,7 @@ OtherPost.args = {
   post: {
     id: '60efac8c565ab8004ed28bb3',
     tags: [],
-    isNsfw: false,
-    nsfwTags: [],
+    isNSFW: false,
     visibility: PostVisibility.PUBLIC,
     platform: 'twitter',
     title: '',

@@ -5,9 +5,11 @@ import {PostCreate} from '.';
 import {useUpload} from './hooks/use-upload.hook';
 
 import {debounce} from 'lodash';
+import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
 import {fetchPeople, searchPeople} from 'src/reducers/people/actions';
 import {PeopleState} from 'src/reducers/people/reducer';
+import {createPost, importPost} from 'src/reducers/timeline/actions';
 
 type PostCreateContainerType = {
   open: boolean;
@@ -51,7 +53,13 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     return url;
   };
 
-  const submitPost = () => {
+  const submitPost = (post: string | Partial<Post>) => {
+    if (typeof post === 'string') {
+      dispatch(importPost(post));
+    } else {
+      dispatch(createPost(post));
+    }
+
     onClose();
   };
 

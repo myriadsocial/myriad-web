@@ -23,7 +23,7 @@ export const HeaderComponent: React.FC<PostComponentProps> = ({post, disable}) =
 
     switch (post.platform) {
       case Platform.myriad:
-        router.push(post.user?.id);
+        router.push(`/profile/${post.user?.id}`);
         break;
       default:
         window.open(url, '_blank');
