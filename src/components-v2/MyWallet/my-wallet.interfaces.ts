@@ -1,4 +1,4 @@
-import {TransactionHistoryDetail} from '../../interfaces/transaction';
+import {Transaction} from '../../interfaces/transaction';
 
 // TODO: move this to interfaces/balance.ts when rewiring data
 type CurrencyDetail = {
@@ -16,7 +16,7 @@ type BalanceDetail = CurrencyDetail & {
 type MyWalletProps = {
   headerTitle: string;
   balanceDetails: BalanceDetail[];
-  historyDetails: TransactionHistoryDetail[];
+  historyDetails: Transaction[];
 };
 
 export type {BalanceDetail, MyWalletProps};
