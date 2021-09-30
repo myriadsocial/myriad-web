@@ -1,3 +1,5 @@
+import {TNode} from '@udecode/plate';
+
 import React, {useState} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
@@ -11,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import LinkifyComponent from '../../components/common/Linkify.component';
 import ShowIf from '../../components/common/show-if.component';
 import {Post} from '../../interfaces/post';
+import {PostRender} from '../PostEditor/PostRender';
 import {Button, ButtonVariant, ButtonColor, ButtonSize} from '../atoms/Button';
 import {Gallery} from '../atoms/Gallery';
 import {NSFW} from '../atoms/NSFW/NSFW.component';
@@ -38,8 +41,9 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
   const {post} = props;
   const tabs = useCommentTabs();
   const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
+  const [shoWcomment, setShowComment] = useState(false);
   const [, setDownvoting] = useState(false);
-  const [viewContent, setViewContent] = useState(false);
+  const [viewContent, setViewContent] = useState(!post.isNSFW);
 
   const onHashtagClicked = async (hashtag: string) => {
     await router.push(`/home?tag=${hashtag.replace('#', '')}&type=trending`, undefined, {
@@ -53,6 +57,7 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
 
   const handleDownVote = async () => {
     setDownvoting(true);
+    setShowComment(true);
     setActiveTab('debate');
   };
 
@@ -69,68 +74,66 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
       <HeaderComponent post={post} />
 
       <div className={styles.content}>
-        {!viewContent && <NSFW viewContent={handleViewContent} />}
-        {viewContent && (
-          <>
-            <ShowIf condition={post.platform === 'myriad'}>
-              <Typography variant="body1" color="textPrimary" component="p">
-                <ReadMore text={post.text} maxCharacter={250} />
-              </Typography>
+        <ShowIf condition={!viewContent}>
+          <NSFW viewContent={handleViewContent} />
+        </ShowIf>
 
-              <div className={styles.tags}>
-                {post.tags.map(tag => (
-                  <div style={{marginRight: 4, display: 'inline-block'}} key={uuid()}>
-                    <Link href={`?tag=${tag}&type=trending`} shallow={true}>
-                      <a href={`?tag=${tag}&type=trending`}>#{tag}</a>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </ShowIf>
+        <ShowIf condition={viewContent}>
+          <ShowIf condition={post.platform === 'myriad'}>
+            <Typography variant="body1" color="textPrimary" component="p">
+              <PostRender nodes={JSON.parse(post.text) as TNode[]} />
+              <ReadMore text={''} maxCharacter={250} />
+            </Typography>
 
-            <ShowIf condition={['twitter'].includes(post.platform)}>
+            <div className={styles.tags}>
+              {post.tags.map(tag => (
+                <div style={{marginRight: 4, display: 'inline-block'}} key={uuid()}>
+                  <Link href={`?tag=${tag}&type=trending`} shallow={true}>
+                    <a href={`?tag=${tag}&type=trending`}>#{tag}</a>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </ShowIf>
+
+          <ShowIf condition={['twitter'].includes(post.platform)}>
+            <LinkifyComponent
+              text={post.text}
+              handleClick={onHashtagClicked}
+              variant="body1"
+              color="textPrimary"
+            />
+          </ShowIf>
+
+          <ShowIf condition={['reddit'].includes(post.platform)}>
+            {post.title && (
               <LinkifyComponent
-                text={post.text}
+                text={post.title}
                 handleClick={onHashtagClicked}
-                variant="body1"
+                variant="h4"
                 color="textPrimary"
               />
-            </ShowIf>
-
-            <ShowIf condition={['reddit'].includes(post.platform)}>
-              {post.title && (
-                <LinkifyComponent
-                  text={post.title}
-                  handleClick={onHashtagClicked}
-                  variant="h4"
-                  color="textPrimary"
-                />
-              )}
-
-              <ReactMarkdown skipHtml remarkPlugins={[remarkGFM, remarkHTML]}>
-                {post.text}
-              </ReactMarkdown>
-            </ShowIf>
-
-            <ShowIf condition={post.platform === 'facebook'}>
-              <FacebookProvider appId={'1349208398779551'}>
-                <EmbeddedPost href={post.url} width="700" />
-              </FacebookProvider>
-            </ShowIf>
-
-            {post.asset?.images && post.asset?.images.length > 0 && (
-              <Gallery
-                images={post.asset?.images}
-                onImageClick={console.log}
-                cloudName="dsget80gs"
-              />
             )}
 
-            {post.asset?.videos && post.asset.videos.length > 0 && (
-              <Video url={post.asset.videos[0]} />
-            )}
-          </>
-        )}
+            <ReactMarkdown skipHtml remarkPlugins={[remarkGFM, remarkHTML]}>
+              {post.text}
+            </ReactMarkdown>
+          </ShowIf>
+
+          <ShowIf condition={post.platform === 'facebook'}>
+            <FacebookProvider appId={'1349208398779551'}>
+              <EmbeddedPost href={post.url} width="700" />
+            </FacebookProvider>
+          </ShowIf>
+
+          {post.asset?.images && post.asset?.images.length > 0 && (
+            <Gallery images={post.asset?.images} onImageClick={console.log} cloudName="dsget80gs" />
+          )}
+
+          {post.asset?.videos && post.asset.videos.length > 0 && (
+            <Video url={post.asset.videos[0]} />
+          )}
+        </ShowIf>
       </div>
 
       <div className={styles.action}>
@@ -149,7 +152,9 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
         </Button>
       </div>
 
-      <TabsComponent tabs={tabs} active={activeTab} onChangeTab={handleChangeTab} />
+      <ShowIf condition={shoWcomment}>
+        <TabsComponent tabs={tabs} active={activeTab} onChangeTab={handleChangeTab} />
+      </ShowIf>
     </Paper>
   );
 };
