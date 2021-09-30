@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
+import {IconButtonUpload} from '../../../components/common/IconButtonUpload.component';
 import {User} from '../../../interfaces/user';
 import {useStyles} from './profile-edit.style';
 
@@ -18,10 +19,12 @@ export type Props = {
   user: User;
   onSave: (user: Partial<User>) => void;
   uploadingAvatar: boolean;
+  uploadingBanner: boolean;
+  updateProfileBanner: (image: File) => void;
 };
 
 export const ProfileEditComponent: React.FC<Props> = props => {
-  const {user, onSave} = props;
+  const {user, onSave, uploadingBanner, updateProfileBanner} = props;
   const [newUser, setNewUser] = useState<Partial<User>>();
   const style = useStyles();
 
@@ -42,6 +45,10 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     if (newUser) {
       onSave(newUser);
     }
+  };
+
+  const hanleUpdateBannerImage = (image: File): void => {
+    updateProfileBanner(image);
   };
 
   return (
@@ -76,9 +83,12 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         </InputLabel>
         <div className={style.bgBox}>
           <CardMedia className={style.media} image={user.bannerImageUrl} title={user.name} />
-          <IconButton classes={{root: style.action}} aria-label="profile-setting">
-            <SvgIcon component={CameraIcon} viewBox="0 0 24 24" />
-          </IconButton>
+          <IconButtonUpload
+            title="Edit Banner Image"
+            onImageSelected={hanleUpdateBannerImage}
+            loading={uploadingBanner}
+            accept="image"
+          />
         </div>
       </FormControl>
 
@@ -123,7 +133,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         <InputLabel htmlFor="website">Website</InputLabel>
         <OutlinedInput
           id="website"
-          placeholder="Boct.networkio"
+          placeholder="oct.network"
           value={newUser?.websiteURL}
           onChange={handleChange('websiteURL')}
           labelWidth={110}
