@@ -1,11 +1,11 @@
 import {useSelector, useDispatch} from 'react-redux';
 
 import {TimelineType, TimelineFilter, TimelineSortMethod} from '../../../interfaces/timeline';
+import {RootState} from '../../../reducers';
+import {loadTimeline} from '../../../reducers/timeline/actions';
+import {TimelineState} from '../../../reducers/timeline/reducer';
 
 import {ParsedUrlQuery} from 'querystring';
-import {RootState} from 'src/reducers';
-import {loadTimeline} from 'src/reducers/timeline/actions';
-import {TimelineState} from 'src/reducers/timeline/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useTimelineFilter = () => {

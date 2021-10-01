@@ -11,11 +11,13 @@ import {ParsedUrlQuery} from 'querystring';
 
 type TimelineContainerProps = {
   filter?: TimelineFilter;
+  enableFilter?: boolean;
+  sortType?: 'metric' | 'filter';
   anonymous?: boolean;
 };
 
 export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
-  const {anonymous = false} = props;
+  const {anonymous = false, enableFilter, sortType} = props;
 
   const {posts, hasMore, nextPage} = useTimelineHook();
   const {filterTimeline} = useTimelineFilter();
@@ -47,6 +49,8 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     <TimelineComponent
       type={timelineType}
       sort={timelineSort}
+      sortType={sortType}
+      enableFilter={enableFilter}
       posts={posts}
       anonymous={anonymous}
       loadNextPage={nextPage}

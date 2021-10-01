@@ -2,14 +2,14 @@ import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {PostCreate} from '.';
+import {Post} from '../../interfaces/post';
+import {RootState} from '../../reducers';
+import {fetchPeople, searchPeople} from '../../reducers/people/actions';
+import {PeopleState} from '../../reducers/people/reducer';
+import {createPost, importPost} from '../../reducers/timeline/actions';
 import {useUpload} from './hooks/use-upload.hook';
 
 import {debounce} from 'lodash';
-import {Post} from 'src/interfaces/post';
-import {RootState} from 'src/reducers';
-import {fetchPeople, searchPeople} from 'src/reducers/people/actions';
-import {PeopleState} from 'src/reducers/people/reducer';
-import {createPost, importPost} from 'src/reducers/timeline/actions';
 
 type PostCreateContainerType = {
   open: boolean;

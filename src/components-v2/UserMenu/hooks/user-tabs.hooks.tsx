@@ -2,13 +2,11 @@ import React, {useMemo} from 'react';
 
 import {Experience} from '../../../interfaces/experience';
 import {Friend} from '../../../interfaces/friend';
-import {Post} from '../../../interfaces/post';
 import {SocialMedia} from '../../../interfaces/social';
-import {TimelineType} from '../../../interfaces/timeline';
 import {User} from '../../../interfaces/user';
 import {FriendListComponent} from '../../FriendsMenu/friend-list';
 import {ExperienceTabPanel} from '../../Profile/ExperienceTabPanel/ExperienceTabPanel';
-import {Timeline} from '../../Timeline';
+import {TimelineContainer} from '../../Timeline';
 import {UserSettings} from '../../UserSettings';
 import {UserSocials} from '../../UserSocials';
 import {TabItems} from '../../atoms/Tabs';
@@ -16,38 +14,21 @@ import {TabItems} from '../../atoms/Tabs';
 export type UserMenuTabs = 'post' | 'experience' | 'social' | 'friend' | 'setting';
 
 type UserTabsProps = {
-  posts: Post[];
   experiences: Experience[];
-  user: User;
+  user?: User;
   socials: SocialMedia[];
   friends: Friend[];
 };
 
-export const useUserTabs = ({
-  posts,
-  experiences,
-  user,
-  socials,
-  friends,
-}: UserTabsProps): TabItems<UserMenuTabs>[] => {
+export const useUserTabs = (props: UserTabsProps): TabItems<UserMenuTabs>[] => {
+  const {experiences, user, socials, friends} = props;
+
   const tabs: TabItems<UserMenuTabs>[] = useMemo(() => {
-    return [
+    const items: TabItems<UserMenuTabs>[] = [
       {
         id: 'post',
         title: `Post`,
-        component: (
-          <Timeline
-            type={TimelineType.ALL}
-            sort="created"
-            posts={posts}
-            anonymous={false}
-            enableFilter={false}
-            sortType="filter"
-            hasMore={false}
-            loadNextPage={console.log}
-            sortTimeline={console.log}
-          />
-        ),
+        component: <TimelineContainer enableFilter={false} sortType="filter" />,
       },
       {
         id: 'experience',
@@ -64,13 +45,18 @@ export const useUserTabs = ({
         title: `Social Media`,
         component: <UserSocials socials={socials} />,
       },
-      {
+    ];
+
+    if (user) {
+      items.push({
         id: 'setting',
         title: `Public Key`,
         component: <UserSettings user={user} />,
-      },
-    ];
-  }, []);
+      });
+    }
+
+    return items;
+  }, [props]);
 
   return tabs;
 };
