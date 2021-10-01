@@ -19,6 +19,9 @@ import {MenuOptions} from '../atoms/DropdownMenu/';
 import {DropdownMenu} from '../atoms/DropdownMenu/';
 import {useStyles} from './history-detail-list.styles';
 
+import {formatDistance} from 'date-fns';
+import _ from 'lodash';
+
 type HistoryDetailListProps = {
   allTxs: Transaction[];
   outboundTxs: Transaction[];
@@ -27,12 +30,12 @@ type HistoryDetailListProps = {
 };
 
 export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
-  const {allTxs, userId} = props;
+  const {allTxs, inboundTxs, outboundTxs, userId} = props;
 
   useEffect(() => {
     const newArray = allTxs.map(tx => ({
-      id: tx.currency.name,
-      title: tx.currency.name,
+      id: tx.currency.id,
+      title: tx.currency.id,
     }));
     const updatedSortOptions = getUniqueListBy(newArray, 'id');
 
@@ -42,24 +45,63 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
 
   const [sortOptions, setSortOptions] = useState(historyCoinSortOptions);
 
+  const [defaultTxs, setDefaultTxs] = useState(allTxs);
+
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const getUniqueListBy = (arr: Array<any>, key: string) => {
     return [...new Map(arr.map(item => [item[key], item])).values()];
   };
 
   const handleSortChange = (sort: string) => {
-    // code
+    switch (sort) {
+      case 'highestAmount': {
+        const sortedHighest = _.sortBy(defaultTxs, 'amount');
+        setDefaultTxs(sortedHighest);
+        break;
+      }
+
+      case 'latestTransaction': {
+        const sortedLatest = _.orderBy(defaultTxs, 'createdAt', 'desc');
+        setDefaultTxs(sortedLatest);
+        break;
+      }
+
+      default: {
+        break;
+      }
+    }
   };
 
-  const handleTransactionChange = (sort: string) => {
-    // code
+  const handleTransactionChange = (filterByTransactionDirection: string) => {
+    switch (filterByTransactionDirection) {
+      case 'received': {
+        setDefaultTxs(inboundTxs);
+        break;
+      }
+
+      case 'sent': {
+        setDefaultTxs(outboundTxs);
+        break;
+      }
+
+      default: {
+        break;
+      }
+    }
   };
 
-  const handleCoinChange = (coin: string) => {
-    // code
+  const handleCurrencyChange = (filterByCurrency: string) => {
+    console.log({filterByCurrency});
   };
 
   const classes = useStyles();
+
+  const formatTimeAgo = (ISODate: Date) => {
+    const timeAgoInString = formatDistance(new Date(ISODate), new Date(), {addSuffix: true});
+    //=> "3 days ago"
+    return timeAgoInString;
+  };
+
   return (
     <>
       <div className={classes.headerActionWrapper}>
@@ -69,7 +111,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
           onChange={handleSortChange}
         />
         <div className={classes.leftJustifiedWrapper}>
-          <DropdownMenu title={'Coin'} options={sortOptions} onChange={handleCoinChange} />
+          <DropdownMenu title={'Coin'} options={sortOptions} onChange={handleCurrencyChange} />
           <DropdownMenu
             title={'Transaction'}
             options={historyTransactionSortOptions}
@@ -94,7 +136,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                       {tx.toUser.name}
                     </Typography>
                     <Typography variant="caption" color="textSecondary">
-                      20 seconds ago
+                      {formatTimeAgo(tx.createdAt)}
                     </Typography>
                   </div>
                 </TableCell>
@@ -120,12 +162,12 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                     <div>
                       {tx.toUser.id === userId && (
                         <Typography variant="h5" className={classes.textAmountGreen}>
-                          +{tx.amount} {tx.currency.name}
+                          +{tx.amount} {tx.currency.id}
                         </Typography>
                       )}
                       {tx.fromUser.id === userId && (
                         <Typography variant="h5" className={classes.textAmountRed}>
-                          -{tx.amount} {tx.currency.name}
+                          -{tx.amount} {tx.currency.id}
                         </Typography>
                       )}
                       <Typography variant="caption" color="textSecondary">
@@ -135,7 +177,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                     <div>
                       <CustomAvatar
                         size={CustomAvatarSize.XSMALL}
-                        alt={tx.currency.name}
+                        alt={tx.currency.id}
                         avatar={tx.currency.image}
                       />
                     </div>
