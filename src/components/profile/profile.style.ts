@@ -6,7 +6,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 1024,
       marginTop: '-20px',
       background: theme.palette.background.default,
-      height: '100vh',
       overflow: 'hidden',
       scrollbarWidth: 'none',
       msOverflowStyle: 'none',
