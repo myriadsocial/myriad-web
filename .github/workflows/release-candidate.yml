@@ -69,7 +69,7 @@ jobs:
   build-and-publish-docker-image:
     runs-on: ubuntu-latest
 
-    needs: apply-rc-tag
+    needs: [compute-build-info, apply-rc-tag]
 
     steps:
       - name: Checkout code
@@ -103,7 +103,7 @@ jobs:
           push: true
           file: .maintain/docker/Dockerfile
           tags: |
-            ${{ github.repository }}:${{ needs.apply-rc-tag.outputs.new_tag }}
+            ${{ github.repository }}:${{ needs.compute-build-info.outputs.new_tag }}
             ${{ github.repository }}:latest-rc
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
