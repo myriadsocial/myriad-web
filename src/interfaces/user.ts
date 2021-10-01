@@ -1,5 +1,5 @@
 import {BaseModel} from './base.interface';
-import {Currency} from './currency';
+import {Currency, CurrencyId} from './currency';
 import {TransactionDetail} from './transaction';
 
 export interface UserSocialMedia {
@@ -13,6 +13,7 @@ export interface UserSocialMedia {
 export type BaseUser = {
   name: string;
   profilePictureURL?: string;
+  defaultCurrency?: CurrencyId;
 };
 
 export type UserOnTransaction = BaseUser & {
