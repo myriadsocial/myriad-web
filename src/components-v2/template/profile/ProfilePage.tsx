@@ -6,8 +6,8 @@ import {Menu as MenuComponent} from '../../Menu/';
 import {SidebarMenu} from '../../Menu/Menu.stories';
 import {ProfileHeaderComponent} from '../../Profile/ProfileHeader';
 import {Header, user} from '../../Profile/ProfileHeader/profile-header.stories';
+import {user as userData} from '../../Profile/ProfileHeader/profile-header.stories';
 import {ProfileHeader as ProfileHeaderHomeComponent} from '../../ProfileHeader';
-import {ProfileHeader as ProfileHeaderProps} from '../../ProfileHeader/ProfileHeader.stories';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
 import {SocialMediaList} from '../../SocialMediaList/SocialMedia.stories';
 import {UserMenu} from '../../UserMenu/';
@@ -91,14 +91,7 @@ const ProfilePage = (): JSX.Element => {
             rowGap: 12,
           }}>
           <div>
-            <ProfileHeaderHomeComponent
-              name={ProfileHeaderProps.args?.name ?? 'Name'}
-              username={ProfileHeaderProps.args?.username ?? 'Username'}
-              avatar={
-                ProfileHeaderProps.args?.avatar ??
-                'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg'
-              }
-            />
+            <ProfileHeaderHomeComponent user={userData} handleSignOut={console.log} />
           </div>
           <div style={{marginTop: theme.spacing(2.5)}}>
             <RightMenuBar />
