@@ -7,6 +7,7 @@ import {getSession} from 'next-auth/client';
 import {DefaultLayout} from '../../src/components-v2/template/Default/DefaultLayout';
 import {wrapper} from '../../src/store';
 
+import {UserMenuContainer} from 'src/components-v2/UserMenu';
 import ProfileTimeline from 'src/components/profile/profile.component';
 import {User} from 'src/interfaces/user';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -35,6 +36,7 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
   return (
     <DefaultLayout isOnProfilePage={true}>
       {profileDetail && <ProfileTimeline profile={profileDetail} loading={false} />}
+      <UserMenuContainer />
     </DefaultLayout>
   );
 };
