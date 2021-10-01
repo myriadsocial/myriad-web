@@ -54,6 +54,10 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     }
   };
 
+  const handleRemovePicture = (image: Partial<User>) => {
+    onSave(image);
+  };
+
   const hanleUpdateBannerImage = (image: File): void => {
     updateProfileBanner(image);
   };
@@ -81,6 +85,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
             <ImageButton
               title="Edit Image profile"
               onImageSelected={handleUpdateProfilePicture}
+              removePicture={handleRemovePicture}
               loading={uploadingAvatar}
               accept="image"
             />
