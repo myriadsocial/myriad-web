@@ -35,6 +35,8 @@ module.exports = {
       use: ['@svgr/webpack'],
     });
 
+    baseConfig.resolve.alias['src'] = path.resolve(__dirname, '../src/');
+
     return baseConfig;
   },
 };
