@@ -8,9 +8,9 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InputLabel from '@material-ui/core/InputLabel';
 
-import {IconButtonUpload} from '../../../components/common/IconButtonUpload.component';
-import {ImageButton} from '../../../components/common/ImageButton.component';
 import {User} from '../../../interfaces/user';
+import {IconButtonUpload} from './IconButtonUpload.component';
+import {ImageButton} from './ImageButton.component';
 import {useStyles} from './profile-edit.style';
 
 export type Props = {

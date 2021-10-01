@@ -9,7 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import {User} from '../../interfaces/user';
+import {User} from '../../../interfaces/user';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

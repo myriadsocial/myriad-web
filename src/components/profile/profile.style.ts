@@ -4,8 +4,10 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: 1024,
-      marginTop: '-20px',
       background: theme.palette.background.default,
+      paddingRight: '32px',
+      marginRight: 'auto',
+      height: '100vh',
       overflow: 'hidden',
       scrollbarWidth: 'none',
       msOverflowStyle: 'none',
@@ -14,9 +16,6 @@ export const useStyles = makeStyles((theme: Theme) =>
         display: 'none',
         width: '0 !important',
       },
-    },
-    mb: {
-      marginBottom: '10px',
     },
     flex: {
       display: 'flex',

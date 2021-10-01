@@ -7,7 +7,7 @@ import {getSession} from 'next-auth/client';
 import {DefaultLayout} from '../../src/components-v2/template/Default/DefaultLayout';
 import {wrapper} from '../../src/store';
 
-import ProfileTimeline from 'src/components/profile/profile.component';
+import {ProfileTimeline} from 'src/components-v2/Profile/ProfileComponent';
 import {User} from 'src/interfaces/user';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
