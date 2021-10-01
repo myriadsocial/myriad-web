@@ -108,7 +108,8 @@ const WalletSettingComponent: React.FC<Props> = ({forwardedRef}) => {
   };
 
   const RenderSecondaryText = (currency: Currency) => {
-    return <Typography variant="subtitle2">{capitalize(currency.name)}</Typography>;
+    if (currency.name)
+      return <Typography variant="subtitle2">{capitalize(currency.name)}</Typography>;
   };
 
   return (
