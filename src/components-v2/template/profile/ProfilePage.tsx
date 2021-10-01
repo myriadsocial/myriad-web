@@ -4,8 +4,8 @@ import {useTheme} from '@material-ui/core/styles';
 
 import {Menu as MenuComponent} from '../../Menu/';
 import {SidebarMenu} from '../../Menu/Menu.stories';
-import {ProfileHeaderComponent} from '../../Profile/profile-header';
-import {Header, user} from '../../Profile/profile-header/profile-header.stories';
+import {ProfileHeaderComponent} from '../../Profile/ProfileHeader';
+import {Header, user} from '../../Profile/ProfileHeader/profile-header.stories';
 import {ProfileHeader as ProfileHeaderHomeComponent} from '../../ProfileHeader';
 import {ProfileHeader as ProfileHeaderProps} from '../../ProfileHeader/ProfileHeader.stories';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';

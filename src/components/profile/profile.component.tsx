@@ -3,8 +3,8 @@ import {useDispatch} from 'react-redux';
 
 import {useStyles} from './profile.style';
 
-import {ProfileEditContainer} from 'src/components-v2/Profile/edit/ProfileEditContainer';
-import {ProfileHeaderContainer} from 'src/components-v2/Profile/profile-header/ProfileHeaderContainer';
+import {ProfileEditContainer} from 'src/components-v2/Profile/Edit/ProfileEditContainer';
+import {ProfileHeaderContainer} from 'src/components-v2/Profile/ProfileHeader/ProfileHeaderContainer';
 import {UserMenuContainer} from 'src/components-v2/UserMenu';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {User} from 'src/interfaces/user';
@@ -15,7 +15,7 @@ type Props = {
   loading: boolean;
 };
 
-const ProfileTimeline: React.FC<Props> = ({profile, loading}) => {
+const ProfileTimeline: React.FC<Props> = ({profile}) => {
   const style = useStyles();
   const dispatch = useDispatch();
 
