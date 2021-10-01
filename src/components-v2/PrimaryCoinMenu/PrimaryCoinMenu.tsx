@@ -1,78 +1,55 @@
 import React, {useState} from 'react';
 import {DragDropContext, Droppable, Draggable, DropResult} from 'react-beautiful-dnd';
 
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '.';
-import FullVectorIcon from '../../images/Icons/FullVectorIcon.svg';
-import TripleDoubleDotsIcon from '../../images/Icons/TripleDoubleDotsIcon.svg';
 import {BalanceDetail} from '../MyWallet/';
-import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
 import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
+import {DraggableBalanceCard} from './DraggableBalanceCard';
 
-type DraggableBalanceCardProps = {
-  balanceDetail: BalanceDetail;
-  index: number;
-};
-
-export const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props => {
-  const {balanceDetail, index} = props;
-  const classes = useStyles();
-
-  return (
-    <Card className={classes.cardRoot}>
-      <CardContent>
-        <div className={classes.cardContentWrapper}>
-          <div className={classes.leftJustifiedWrapper}>
-            <CustomAvatar
-              size={CustomAvatarSize.MEDIUM}
-              alt={balanceDetail.id ?? 'Coin'}
-              avatar={balanceDetail.image}
-            />
-            <Typography variant="body1" style={{fontWeight: 'bold'}}>
-              {balanceDetail.id}
-            </Typography>
-          </div>
-
-          <div className={classes.rightJustifiedWrapper}>
-            <div>
-              <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                {balanceDetail.freeBalance}
-              </Typography>
-              <Typography variant="caption" color="textSecondary">
-                {'USD 15.25'}
-              </Typography>
-            </div>
-
-            <SvgIcon
-              style={index === 0 ? {transform: 'rotate(180deg)'} : {transform: 'rotate(0deg)'}}
-              component={FullVectorIcon}
-              viewBox="0 0 18 20"
-            />
-
-            <SvgIcon component={TripleDoubleDotsIcon} viewBox="0 0 18 20" />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
+import _ from 'lodash';
+import {CurrencyId} from 'src/interfaces/currency';
 
 type PrimaryCoinMenuProps = {
-  togglePrimaryCoinMenu: () => void;
   balanceDetails: BalanceDetail[];
+  defaultCurrency: CurrencyId;
+  togglePrimaryCoinMenu: () => void;
 };
 
 export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
-  const {togglePrimaryCoinMenu, balanceDetails} = props;
+  const {togglePrimaryCoinMenu, balanceDetails, defaultCurrency} = props;
   const classes = useStyles();
 
-  const [coins, updateCoins] = useState(balanceDetails);
+  const removeMyriad = (balanceDetails: BalanceDetail[]) => {
+    const newCoins = [...balanceDetails];
+
+    const myriadlessCoins = _.remove(newCoins, function (n) {
+      return n.id !== CurrencyId.MYRIA;
+    });
+
+    return myriadlessCoins;
+  };
+
+  const putDefaultFirst = (balanceDetails: BalanceDetail[]) => {
+    const newDefaultCoins = [...balanceDetails];
+
+    const defaultCoin = _.remove(newDefaultCoins, function (n) {
+      return n.id === defaultCurrency;
+    });
+
+    const myriadlessCoins = removeMyriad(newDefaultCoins);
+
+    const resultDefaultCoins = [...defaultCoin, ...myriadlessCoins];
+
+    return resultDefaultCoins;
+  };
+
+  const [coins, updateCoins] = useState(putDefaultFirst(balanceDetails));
+
+  console.log({coins});
 
   const handleOnDragEnd = ({source, destination}: DropResult) => {
     // Handle if dragging out of bounds

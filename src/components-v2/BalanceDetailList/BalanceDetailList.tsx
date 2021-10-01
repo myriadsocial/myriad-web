@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '.';
 import {BalanceDetail} from '../../interfaces/balance';
-import {PrimaryCoinMenu} from '../PrimaryCoinMenu/PrimaryCoinMenu';
+import {PrimaryCoinMenuContainer} from '../PrimaryCoinMenu/PrimaryCoinMenuContainer';
 import {balanceSortOptions} from '../Timeline/default';
 import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 import {DropdownMenu} from '../atoms/DropdownMenu/';
@@ -78,10 +78,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   if (isOnPrimaryCoinMenu)
     return (
       <>
-        <PrimaryCoinMenu
-          togglePrimaryCoinMenu={togglePrimaryCoinMenu}
-          balanceDetails={balanceDetails}
-        />
+        <PrimaryCoinMenuContainer togglePrimaryCoinMenu={togglePrimaryCoinMenu} />
       </>
     );
 
