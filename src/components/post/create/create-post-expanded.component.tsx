@@ -192,7 +192,7 @@ const CreatePostExpandedComponent: React.FC<CreatePostExpandedProps> = ({
           renderInput={params => (
             <TextField
               {...params}
-              placeholder="# Add Tags"
+              placeholder="Please type your tag (e.g: myriad) without # and then press Enter"
               variant="outlined"
               onKeyDown={addToTags}
             />
