@@ -5,8 +5,8 @@ import {useTheme} from '@material-ui/core/styles';
 import {TimelineType} from '../../../interfaces/timeline';
 import {Menu as MenuComponent} from '../../Menu/';
 import {SidebarMenu} from '../../Menu/Menu.stories';
+import {user as userData} from '../../Profile/ProfileHeader/profile-header.stories';
 import {ProfileHeader as ProfileHeaderComponent} from '../../ProfileHeader';
-import {ProfileHeader} from '../../ProfileHeader/ProfileHeader.stories';
 import {RichTextComponent} from '../../Richtext/';
 import {DefaultRichText} from '../../Richtext/RichText.stories';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
@@ -93,14 +93,7 @@ const HomePage = (): JSX.Element => {
             rowGap: 12,
           }}>
           <div>
-            <ProfileHeaderComponent
-              name={ProfileHeader.args?.name ?? 'Name'}
-              username={ProfileHeader.args?.username ?? 'Username'}
-              avatar={
-                ProfileHeader.args?.avatar ??
-                'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg'
-              }
-            />
+            <ProfileHeaderComponent user={userData} handleSignOut={console.log} />
           </div>
           <div style={{marginTop: theme.spacing(2.5)}}>
             <RightMenuBar />

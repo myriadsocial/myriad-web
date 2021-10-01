@@ -1,8 +1,9 @@
-import {CustomAvatarProps} from '../atoms/Avatar';
+import {User} from '../../interfaces/user';
 
-interface ProfileHeaderProps extends CustomAvatarProps {
-  name: string;
-  username: string;
+interface ProfileHeaderProps {
+  alias?: string;
+  user: User;
+  handleSignOut: () => void;
 }
 
 export type {ProfileHeaderProps};
