@@ -17,12 +17,12 @@ export const storeTransaction = async (values: TransactionProps): Promise<Transa
   return data;
 };
 
-export const getTransactions = async (
+export const getTransactionsIncludingCurrency = async (
   options: Partial<TransactionProps>,
   page?: number,
 ): Promise<TransactionList> => {
   const where: LoopbackWhere<TransactionProps> = {};
-  const include: Array<string> = ['fromUser', 'toUser'];
+  const include: Array<string> = ['fromUser', 'toUser', 'currency'];
 
   if (options.referenceId) {
     where.referenceId = {eq: options.referenceId};
@@ -38,10 +38,6 @@ export const getTransactions = async (
 
   if (options.to === options.from) {
     where.or = [{to: options.to}, {from: options.from}];
-  }
-
-  if (options.currencyId) {
-    where.currencyId = {eq: options.currencyId};
   }
 
   const {data} = await MyriadAPI.request<TransactionList>({
