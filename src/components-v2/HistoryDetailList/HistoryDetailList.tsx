@@ -21,6 +21,7 @@ import {useStyles} from './history-detail-list.styles';
 
 import {formatDistance} from 'date-fns';
 import _ from 'lodash';
+import {CurrencyId} from 'src/interfaces/currency';
 
 type HistoryDetailListProps = {
   allTxs: Transaction[];
@@ -55,7 +56,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const handleSortChange = (sort: string) => {
     switch (sort) {
       case 'highestAmount': {
-        const sortedHighest = _.sortBy(defaultTxs, 'amount');
+        const sortedHighest = _.orderBy(defaultTxs, 'amount', 'desc');
         setDefaultTxs(sortedHighest);
         break;
       }
@@ -85,13 +86,43 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
       }
 
       default: {
+        setDefaultTxs(allTxs);
         break;
       }
     }
   };
 
   const handleCurrencyChange = (filterByCurrency: string) => {
-    console.log({filterByCurrency});
+    switch (filterByCurrency) {
+      case CurrencyId.ACA: {
+        const filteredByACA = _.filter(allTxs, {currencyId: 'ACA'});
+        setDefaultTxs(filteredByACA);
+        break;
+      }
+
+      case CurrencyId.DOT: {
+        const filteredByDOT = _.filter(allTxs, {currencyId: 'DOT'});
+        setDefaultTxs(filteredByDOT);
+        break;
+      }
+
+      case CurrencyId.AUSD: {
+        const filteredByAUSD = _.filter(allTxs, {currencyId: 'AUSD'});
+        setDefaultTxs(filteredByAUSD);
+        break;
+      }
+
+      case CurrencyId.MYRIA: {
+        const filteredByMYRIA = _.filter(allTxs, {currencyId: 'MYRIA'});
+        setDefaultTxs(filteredByMYRIA);
+        break;
+      }
+
+      default: {
+        setDefaultTxs(allTxs);
+        break;
+      }
+    }
   };
 
   const classes = useStyles();
@@ -122,7 +153,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
       <TableContainer component={List}>
         <Table className={classes.root} aria-label="history details table">
           <TableBody>
-            {allTxs.map(tx => (
+            {defaultTxs.map(tx => (
               <TableRow key={tx.id} className={classes.tableRow}>
                 <TableCell component="th" scope="row" className={classes.tableCell}>
                   <CustomAvatar
@@ -142,9 +173,6 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                 </TableCell>
 
                 <TableCell align="center">
-                  {
-                    //TODO: define tipStatus by checking if userId is in from or to
-                  }
                   {tx.toUser.id === userId && (
                     <div className={classes.tipStatusGreen}>
                       <Typography variant="caption">Tipped</Typography>
