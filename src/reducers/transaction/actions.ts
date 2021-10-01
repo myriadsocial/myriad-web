@@ -65,6 +65,63 @@ export const fetchTransactions: ThunkActionCreator<Actions, RootState> =
           return transaction.from === user.id;
         });
 
+        console.log({transactions, inboundTxs, outboundTxs});
+
+        dispatch({
+          type: constants.FETCH_TRANSACTIONS,
+          transactions,
+          inboundTxs,
+          outboundTxs,
+          meta,
+        });
+      }
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const fetchTransactionsIncludingCurrency: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const options = {
+        to: user.id,
+        from: user.id,
+      };
+
+      const {data: transactions, meta} = await TransactionAPI.getTransactionsIncludingCurrency(
+        options,
+      );
+
+      if (transactions.length > 0) {
+        //Get only transaction related to logged-in user
+        const tempData = transactions.filter(function (datum: any) {
+          return datum.from === user.id || datum.to === user.id;
+        });
+
+        const sortedTempData = tempData.slice().sort((a: any, b: any) => b.createdAt - a.createdAt);
+        const inboundTxs = sortedTempData.filter(transaction => {
+          return transaction.to === user.id;
+        });
+        const outboundTxs = sortedTempData.filter(transaction => {
+          return transaction.from === user.id;
+        });
+
         dispatch({
           type: constants.FETCH_TRANSACTIONS,
           transactions,
