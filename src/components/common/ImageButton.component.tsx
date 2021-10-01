@@ -9,6 +9,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
+import {User} from '../../interfaces/user';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -52,9 +54,15 @@ type ButtonUploadProps = {
   accept: 'image' | 'video' | 'file';
   loading?: boolean;
   onImageSelected: (file: File) => void;
+  removePicture: (image: Partial<User>) => void;
 };
 
-export const ImageButton: React.FC<ButtonUploadProps> = ({onImageSelected, accept, loading}) => {
+export const ImageButton: React.FC<ButtonUploadProps> = ({
+  onImageSelected,
+  accept,
+  loading,
+  removePicture,
+}) => {
   const styles = useStyles();
 
   const uploadFieldRef = useRef<HTMLInputElement | null>(null);
@@ -84,6 +92,11 @@ export const ImageButton: React.FC<ButtonUploadProps> = ({onImageSelected, accep
         uploadFieldRef.current.value = '';
       }
     }
+  };
+
+  const handleRemovePicture = () => {
+    removePicture({profilePictureURL: ''});
+    handleClose();
   };
 
   return (
@@ -118,7 +131,9 @@ export const ImageButton: React.FC<ButtonUploadProps> = ({onImageSelected, accep
         open={Boolean(anchorEl)}
         onClose={handleClose}>
         <MenuItem onClick={selectFile}>Change picture</MenuItem>
-        <MenuItem className={styles.delete}>Remove picture</MenuItem>
+        <MenuItem onClick={handleRemovePicture} className={styles.delete}>
+          Remove picture
+        </MenuItem>
       </Menu>
     </div>
   );

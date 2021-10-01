@@ -138,7 +138,6 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               <Button
                 onClick={handleOpenEdit}
                 classes={{root: style.button}}
-                className={style.mr12}
                 variant="contained"
                 color="primary"
                 size="small">
