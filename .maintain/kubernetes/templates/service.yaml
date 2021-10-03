@@ -7,9 +7,9 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - name: http
+      port: {{ .Values.service.port }}
       protocol: TCP
-      name: http
+      targetPort: http
   selector:
     {{- include "myriad-web.selectorLabels" . | nindent 4 }}

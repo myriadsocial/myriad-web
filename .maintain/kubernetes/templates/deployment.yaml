@@ -8,6 +8,8 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  updateStrategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       {{- include "myriad-web.selectorLabels" . | nindent 6 }}
@@ -27,10 +29,24 @@ spec:
       serviceAccountName: {{ include "myriad-web.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
@@ -89,12 +105,19 @@ spec:
                 secretKeyRef:
                   name: {{ include "myriad-web.twitterSecretName" . }}
                   key: bearerToken
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
           ports:
             - name: http
               containerPort: 3000
               protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /api/healthcheck
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
+            successThreshold: 1
           livenessProbe:
             httpGet:
               path: /api/healthcheck
@@ -113,24 +136,3 @@ spec:
             timeoutSeconds: 5
             failureThreshold: 6
             successThreshold: 1
-          startupProbe:
-            httpGet:
-              path: /api/healthcheck
-              port: http
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 30
-            successThreshold: 1
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
