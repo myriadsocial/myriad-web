@@ -62,47 +62,29 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Create base secret name.
-*/}}
-{{- define "myriad-web.baseSecretName" -}}
-{{- (include "myriad-web.fullname" .) }}
-{{- end }}
-
-{{/*
-Create the name of tls secret.
-*/}}
-{{- define "myriad-web.tlsSecretName" -}}
-{{- if .Values.ingress.tlsSecretName }}
-{{- .Values.ingress.tlsSecretName }}
-{{- else }}
-{{- printf "%s-%s" (include "myriad-web.baseSecretName" .) "tls" | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
-
-{{/*
 Create the name of firebase secret.
 */}}
 {{- define "myriad-web.firebaseSecretName" -}}
-{{- printf "%s-%s" (include "myriad-web.baseSecretName" .) "firebase" | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" (include "myriad-web.fullname" .) "firebase" | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create the name of cloudinary secret.
 */}}
 {{- define "myriad-web.cloudinarySecretName" -}}
-{{- printf "%s-%s" (include "myriad-web.baseSecretName" .) "cloudinary" | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" (include "myriad-web.fullname" .) "cloudinary" | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create the name of facebook secret.
 */}}
 {{- define "myriad-web.facebookSecretName" -}}
-{{- printf "%s-%s" (include "myriad-web.baseSecretName" .) "facebook" | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" (include "myriad-web.fullname" .) "facebook" | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create the name of twitter secret.
 */}}
 {{- define "myriad-web.twitterSecretName" -}}
-{{- printf "%s-%s" (include "myriad-web.baseSecretName" .) "twitter" | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" (include "myriad-web.fullname" .) "twitter" | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
