@@ -5,6 +5,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       borderRadius: 10,
       minWidth: 643,
+      marginBottom: 12,
     },
     content: {
       padding: theme.spacing(0.5, 2.5),

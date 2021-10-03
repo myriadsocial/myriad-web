@@ -46,17 +46,19 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
     }
 
     case constants.LOAD_TIMELINE: {
+      const {meta} = action.payload;
+
       return {
         ...state,
         posts:
-          action.payload.meta.currentPage === 1
+          !meta.currentPage || meta.currentPage === 1
             ? action.payload.posts
             : [...state.posts, ...action.payload.posts],
         type: action.payload.type ?? state.type,
         sort: action.payload.sort ?? state.sort,
         filter: action.payload.filter ?? state.filter,
-        hasMore: action.payload.meta.currentPage < action.payload.meta.totalPageCount,
-        meta: action.payload.meta,
+        hasMore: meta.currentPage < meta.totalPageCount,
+        meta,
       };
     }
 

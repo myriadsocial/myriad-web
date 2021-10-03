@@ -2,14 +2,16 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {TimelineType, TimelineFilter, TimelineSortMethod} from '../../../interfaces/timeline';
 import {RootState} from '../../../reducers';
+import {ProfileState} from '../../../reducers/profile/reducer';
 import {loadTimeline} from '../../../reducers/timeline/actions';
 import {TimelineState} from '../../../reducers/timeline/reducer';
 
 import {ParsedUrlQuery} from 'querystring';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useTimelineFilter = () => {
+export const useTimelineFilter = (filters?: TimelineFilter) => {
   const {filter} = useSelector<RootState, TimelineState>(state => state.timelineState);
+  const {detail: people} = useSelector<RootState, ProfileState>(state => state.profileState);
   const dispatch = useDispatch();
 
   const filterTimeline = async (query: ParsedUrlQuery) => {
@@ -52,15 +54,39 @@ export const useTimelineFilter = () => {
 
     const newFilter: TimelineFilter = {
       tags,
-      people: filter?.people,
-      layout: filter?.layout,
-      platform: filter?.platform,
+      ...filter,
+      ...filters,
     };
 
     dispatch(loadTimeline(1, timelineSort, newFilter, timelineType));
   };
 
+  const filterByOrigin = async (origin: string) => {
+    const timelineSort: TimelineSortMethod = 'created';
+
+    if (!people || !filters) return;
+
+    switch (origin) {
+      case 'myriad':
+        filters.platform = ['myriad'];
+        filters.owner = people.id;
+        break;
+      case 'imported':
+        filters.platform = ['facebook', 'reddit', 'twitter'];
+        filters.importer = people.id;
+        break;
+
+      default:
+        filters.importer = people.id;
+        filters.owner = people.id;
+        break;
+    }
+
+    dispatch(loadTimeline(1, timelineSort, filters, TimelineType.ALL));
+  };
+
   return {
     filterTimeline,
+    filterByOrigin,
   };
 };

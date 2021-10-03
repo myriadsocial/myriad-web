@@ -21,9 +21,12 @@ type TimelineProps = {
   enableFilter?: boolean;
   sortType?: 'metric' | 'filter';
   hasMore: boolean;
+  upvote: (refrence: Post | Comment) => void;
   loadNextPage: () => void;
   sortTimeline: (sort: TimelineSortMethod) => void;
   filterTimeline?: (type: TimelineType) => void;
+  filterOrigin?: (origin: string) => void;
+  onSendTip: (post: Post) => void;
 };
 
 export const Timeline: React.FC<TimelineProps> = props => {
@@ -38,6 +41,9 @@ export const Timeline: React.FC<TimelineProps> = props => {
     loadNextPage,
     sortTimeline,
     filterTimeline,
+    filterOrigin,
+    upvote,
+    onSendTip,
   } = props;
 
   const styles = useStyles();
@@ -56,6 +62,10 @@ export const Timeline: React.FC<TimelineProps> = props => {
 
   const handleFilter = (variant: string) => {
     filterTimeline && filterTimeline(variant as TimelineType);
+  };
+
+  const handleFilterOrigin = (origin: string) => {
+    filterOrigin && filterOrigin(origin);
   };
 
   return (
@@ -83,7 +93,12 @@ export const Timeline: React.FC<TimelineProps> = props => {
         </ShowIf>
 
         <ShowIf condition={sortType == 'filter'}>
-          <FilterDropdownMenu title="Filter by" selected={type} options={postFilterOptions} />
+          <FilterDropdownMenu
+            title="Filter by"
+            selected={type}
+            options={postFilterOptions}
+            onChange={handleFilterOrigin}
+          />
         </ShowIf>
       </div>
 
@@ -94,7 +109,13 @@ export const Timeline: React.FC<TimelineProps> = props => {
         next={loadNextPage}
         loader={<Lottie options={lottieLoading} height={50} width={50} />}>
         {posts.map(post => (
-          <PostDetail key={`post-${post.id}`} post={post} anonymous={anonymous} />
+          <PostDetail
+            key={`post-${post.id}`}
+            post={post}
+            anonymous={anonymous}
+            onUpvote={upvote}
+            onSendTip={onSendTip}
+          />
         ))}
       </InfiniteScroll>
     </div>
