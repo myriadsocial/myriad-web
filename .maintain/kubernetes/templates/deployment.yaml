@@ -8,8 +8,6 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
-  updateStrategy:
-    type: RollingUpdate
   selector:
     matchLabels:
       {{- include "myriad-web.selectorLabels" . | nindent 6 }}
