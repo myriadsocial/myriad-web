@@ -147,7 +147,11 @@ jobs:
             --set ingress.enabled=true \
             --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
             --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
-            --set-string ingress.host=app.myriad.systems \
-            --set ingress.tls=true \
+            --set-string ingress.annotations."nginx\.ingress\.kubernetes\.io/limit-rps"="10" \
+            --set-string ingress.hosts[0].host=app.myriad.systems \
+            --set-string ingress.hosts[0].paths[0].path=/ \
+            --set-string ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
+            --set-string ingress.tls[0].secretName=myriad-app-tls \
+            --set-string ingress.tls[0].hosts[0]=app.myriad.systems \
             --set autoscaling.enabled=true
           kubectl rollout status deployment/myriad-web
