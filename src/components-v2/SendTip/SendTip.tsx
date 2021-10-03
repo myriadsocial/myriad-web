@@ -52,12 +52,6 @@ export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
 
   return (
     <Paper className={classes.root}>
-      <Typography className={classes.header} variant="h4">
-        Send Tip
-      </Typography>
-      <Typography className={classes.description} variant="body1">
-        Finding this post is insightful? Send a tip!
-      </Typography>
       <div className={classes.subHeaderSection}>
         <Typography className={classes.subHeader}>Balance</Typography>
         <ListItemComponent

@@ -6,9 +6,12 @@ import {Comment, CommentProps} from 'src/interfaces/comment';
 
 type CommentList = BaseList<Comment>;
 
-export const loadComments = async (postId: string, excludeUser?: string): Promise<CommentList> => {
+export const loadComments = async (
+  referenceId: string,
+  excludeUser?: string,
+): Promise<CommentList> => {
   let where: Record<string, any> = {
-    postId,
+    referenceId,
   };
 
   if (excludeUser) {
