@@ -3,8 +3,8 @@ import {useDispatch} from 'react-redux';
 
 import {useStyles} from './profile.style';
 
-import {ProfileEditContainer} from 'src/components-v2/Profile/Edit/ProfileEditContainer';
 import {ProfileHeaderContainer} from 'src/components-v2/Profile/ProfileHeader/ProfileHeaderContainer';
+import {ProfileEditContainer} from 'src/components-v2/Profile/edit/ProfileEditContainer';
 import {UserMenuContainer} from 'src/components-v2/UserMenu';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {User} from 'src/interfaces/user';

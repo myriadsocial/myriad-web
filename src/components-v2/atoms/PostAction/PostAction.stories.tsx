@@ -17,8 +17,11 @@ export const Default = Template.bind({});
 Default.args = {
   metrics: {
     comments: 1210,
-    share: 24,
-    vote: 45,
+    shares: 24,
+    upvotes: 0,
+    downvotes: 0,
+    discussions: 0,
+    debates: 0,
     likes: 0,
     dislikes: 0,
   },

@@ -21,6 +21,12 @@ export interface Like extends LikeProps, BaseModel {}
 
 export interface Dislike extends LikeProps, BaseModel {}
 
-export interface Vote extends LikeProps, BaseModel {
+export type VoteProps = {
+  state: boolean;
+  type: ReferenceType;
+  referenceId: string;
   section?: SectionType;
-}
+  userId: string;
+};
+
+export interface Vote extends VoteProps, BaseModel {}

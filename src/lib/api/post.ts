@@ -83,28 +83,28 @@ export const getPost = async (
     ],
   };
 
+  const params: Record<string, any> = {
+    pageNumber: page,
+    pageLimit: PAGINATION_LIMIT,
+  };
+
   switch (type) {
     case TimelineType.FRIEND:
     case TimelineType.EXPERIENCE:
     case TimelineType.TRENDING:
+      params.timelineType = type;
+      params.userId = userId;
       break;
     default:
       filterParams.where = where;
+      params.filter = filterParams;
       break;
   }
 
   const {data} = await MyriadAPI.request<PostList>({
     url: '/posts',
     method: 'GET',
-    params: {
-      pageNumber: page,
-      pageLimit: PAGINATION_LIMIT,
-      filter: filterParams,
-      //TIMELINE TYPE
-      timelineType: type,
-      //USERID
-      userId: userId,
-    },
+    params,
   });
 
   return data;
