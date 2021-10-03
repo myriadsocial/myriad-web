@@ -26,10 +26,14 @@ export const VotingComponent: React.FC<VoteProps> = props => {
   const style = useStyles({variant, size});
 
   const handleUpVote = debounce(() => {
+    if (isUpVote) return;
+
     onUpvote();
   }, 500);
 
   const handleDownVote = debounce(() => {
+    if (isDownVote) return;
+
     onDownVote();
   }, 500);
 

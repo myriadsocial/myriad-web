@@ -14,17 +14,22 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {acronym} from '../../../helpers/string';
 import {useStyles} from './CommentEditor.style';
 
+import {CommentProps} from 'src/interfaces/comment';
+import {ReferenceType} from 'src/interfaces/interaction';
+
 type Props = {
-  onSubmit: (comment: string) => void;
+  onSubmit: (comment: Partial<CommentProps>) => void;
   username: string;
-  avatar: string;
+  avatar?: string;
   placeholder?: string;
   focus?: boolean;
   expand?: boolean;
+  type?: ReferenceType;
+  referenceId?: string;
 };
 
 export const CommentEditor: React.FC<Props> = props => {
-  const {onSubmit, username, avatar, placeholder, focus, expand} = props;
+  const {onSubmit, username, avatar, placeholder, focus, expand, type, referenceId} = props;
   const style = useStyles();
   const CHARACTER_LIMIT = 2000;
   const [toggle, setToggle] = React.useState<boolean>(false);
@@ -50,13 +55,18 @@ export const CommentEditor: React.FC<Props> = props => {
   };
 
   const reply = () => {
-    onSubmit(comment.text);
+    onSubmit({
+      text: comment.text,
+      type,
+      referenceId,
+    });
+
     discard();
   };
 
   return (
     <div className={style.flex}>
-      <Avatar className={style.avatar} src={avatar || ''}>
+      <Avatar className={style.avatar} src={avatar}>
         {acronym(username)}
       </Avatar>
       <div className={style.root}>

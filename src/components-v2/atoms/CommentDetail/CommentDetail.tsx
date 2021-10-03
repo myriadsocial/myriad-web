@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -17,14 +17,33 @@ import {CommentDetailProps} from './CommentDetail.interface';
 import {useStyles} from './CommentDetail.styles';
 
 import {formatDistance, subDays} from 'date-fns';
+import {ReferenceType} from 'src/interfaces/interaction';
 
 export const CommentDetail: React.FC<CommentDetailProps> = props => {
-  const {comment, deep} = props;
+  const {comment, deep, user, onDownVote, onUpvote, onReply, onLoadReplies} = props;
+
   const style = useStyles();
+
   const [isReply, setIsReply] = React.useState(false);
+
+  useEffect(() => {
+    handleLoadReplies();
+  }, []);
 
   const handleOpenReply = () => {
     setIsReply(!isReply);
+  };
+
+  const handleLoadReplies = () => {
+    onLoadReplies(comment.id);
+  };
+
+  const handleDownVote = () => {
+    onDownVote(comment);
+  };
+
+  const handleUpvote = () => {
+    onUpvote(comment);
   };
 
   const getDate = (commentDate: Date) => {
@@ -63,13 +82,13 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
           </CardContent>
           <CardActions disableSpacing>
             <VotingComponent
-              isUpVote={true}
-              isDownVote={false}
+              isUpVote={Boolean(comment.isUpvoted)}
+              isDownVote={Boolean(comment.isDownvoted)}
               variant="row"
-              vote={1}
+              vote={comment.metric.upvotes}
               size="small"
-              onDownVote={console.log}
-              onUpvote={console.log}
+              onDownVote={handleDownVote}
+              onUpvote={handleUpvote}
             />
             {deep < 2 && (
               <Button
@@ -91,8 +110,28 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             </Button>
           </CardActions>
         </Card>
-        {isReply && <CommentEditor avatar={''} username={'User Login'} onSubmit={console.log} />}
-        {comment && <CommentList deep={deep + 1} comments={comment.replies || []} />}
+
+        {user && isReply && (
+          <CommentEditor
+            type={ReferenceType.COMMENT}
+            referenceId={comment.id}
+            avatar={user?.profilePictureURL}
+            username={user.name}
+            onSubmit={onReply}
+          />
+        )}
+
+        {comment && (
+          <CommentList
+            user={user}
+            deep={deep + 1}
+            onUpvote={onUpvote}
+            onDownvote={onDownVote}
+            comments={comment.replies || []}
+            onComment={onReply}
+            onLoadReplies={onLoadReplies}
+          />
+        )}
       </div>
     </div>
   );

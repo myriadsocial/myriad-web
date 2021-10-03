@@ -19,13 +19,22 @@ import {useStyles} from './friend.style';
 export const FriendListComponent: React.FC<FriendListProps> = props => {
   const {background = false, friends} = props;
   const style = useStyles();
+
+  const handleFilterSelected = (selected: string) => {
+    // code
+  };
+
   const handleSubmit = () => {
     return;
   };
 
   return (
     <div>
-      <FilterDropdownMenu title="Filter by" options={friendFilterOptions} />
+      <FilterDropdownMenu
+        title="Filter by"
+        options={friendFilterOptions}
+        onChange={handleFilterSelected}
+      />
       <SearchComponent onSubmit={handleSubmit} placeholder={'Search friend'} />
       <List className={style.list}>
         {friends &&

@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
     secondCol: {
       flexGrow: 2,
+      minWidth: 644,
       margin: 20,
     },
 

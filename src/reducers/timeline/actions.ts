@@ -4,7 +4,8 @@ import * as constants from './constants';
 
 import axios from 'axios';
 import {Action} from 'redux';
-import {Like} from 'src/interfaces/interaction';
+import {Comment} from 'src/interfaces/comment';
+import {Like, SectionType, Vote} from 'src/interfaces/interaction';
 import {Post, PostProps} from 'src/interfaces/post';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
 import {UserProps} from 'src/interfaces/user';
@@ -86,6 +87,18 @@ export interface UpdatePostPlatformUser extends Action {
   user: Partial<UserProps>;
 }
 
+export interface UpvotePost extends Action {
+  type: constants.UPVOTE_POST;
+  postId: string;
+  vote: Vote;
+}
+
+export interface DownvotePost extends Action {
+  type: constants.DOWNVOTE_POST;
+  postId: string;
+  vote: Vote;
+}
+
 /**
  * Union Action Types
  */
@@ -103,6 +116,8 @@ export type Actions =
   | ClearTimeline
   | FetchDedicatedPost
   | UpdatePostPlatformUser
+  | UpvotePost
+  | DownvotePost
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -149,7 +164,15 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
       dispatch({
         type: constants.LOAD_TIMELINE,
         payload: {
-          posts,
+          posts: posts.map(post => {
+            const upvoted = post.votes?.filter(vote => vote.userId === userId && vote.state);
+            const downvoted = post.votes?.filter(vote => vote.userId === userId && !vote.state);
+
+            post.isUpvoted = upvoted && upvoted.length > 0;
+            post.isDownVoted = downvoted && downvoted.length > 0;
+
+            return post;
+          }),
           sort,
           filter,
           type,
@@ -238,7 +261,7 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
       let message = error.message;
 
       if (axios.isAxiosError(error) && error.response?.status === 422) {
-        message = 'Post already imported';
+        message = error.response.data.error.message;
       }
 
       dispatch(
@@ -446,6 +469,74 @@ export const getDedicatedPost: ThunkActionCreator<Actions, RootState> =
 
       const post = await PostAPI.getPostDetail(postId);
       dispatch(setPost(post));
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const upvote: ThunkActionCreator<Actions, RootState> =
+  (reference: Post | Comment, section?: SectionType, callback?: () => void) =>
+  async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const vote = await InteractionAPI.vote(user.id, reference, section);
+
+      dispatch({
+        type: constants.UPVOTE_POST,
+        postId: reference.id,
+        vote,
+      });
+
+      callback && callback();
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const downvote: ThunkActionCreator<Actions, RootState> =
+  (reference: Post | Comment, section?: SectionType, callback?: () => void) =>
+  async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const vote = await InteractionAPI.downvote(user.id, reference, section);
+
+      dispatch({
+        type: constants.DOWNVOTE_POST,
+        postId: reference.id,
+        vote,
+      });
+
+      callback && callback();
     } catch (error) {
       dispatch(
         setError({
