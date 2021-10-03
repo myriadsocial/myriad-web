@@ -14,6 +14,7 @@ import LinkifyComponent from '../../components/common/Linkify.component';
 import ShowIf from '../../components/common/show-if.component';
 import {Post} from '../../interfaces/post';
 import {PostRender} from '../PostEditor/PostRender';
+import {formatStringToNode} from '../PostEditor/formatter';
 import {Button, ButtonVariant, ButtonColor, ButtonSize} from '../atoms/Button';
 import {Gallery} from '../atoms/Gallery';
 import {NSFW} from '../atoms/NSFW/NSFW.component';
@@ -32,14 +33,16 @@ import {v4 as uuid} from 'uuid';
 type PostDetailListProps = {
   post: Post;
   anonymous: boolean;
+  onUpvote: (reference: Post | Comment) => void;
+  onSendTip: (post: Post) => void;
 };
 
 export const PostDetail: React.FC<PostDetailListProps> = props => {
   const styles = useStyles();
   const router = useRouter();
 
-  const {post} = props;
-  const tabs = useCommentTabs();
+  const {post, onUpvote, onSendTip} = props;
+  const tabs = useCommentTabs(post);
   const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
   const [shoWcomment, setShowComment] = useState(false);
   const [, setDownvoting] = useState(false);
@@ -52,7 +55,7 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
   };
 
   const handleUpvote = async () => {
-    // code
+    onUpvote(post);
   };
 
   const handleDownVote = async () => {
@@ -69,6 +72,29 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
     setViewContent(true);
   };
 
+  const toggleShowComments = () => {
+    setShowComment(prev => !prev);
+    setDownvoting(false);
+  };
+
+  const handleSendTip = () => {
+    onSendTip(post);
+  };
+
+  const getText = (): TNode[] => {
+    try {
+      const nodes = JSON.parse(post.text) as TNode[];
+
+      if (Array.isArray(nodes)) {
+        return nodes;
+      } else {
+        return [formatStringToNode(post.text)];
+      }
+    } catch (e) {
+      return [formatStringToNode(post.text)];
+    }
+  };
+
   return (
     <Paper square className={styles.root}>
       <HeaderComponent post={post} />
@@ -81,7 +107,7 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
         <ShowIf condition={viewContent}>
           <ShowIf condition={post.platform === 'myriad'}>
             <Typography variant="body1" color="textPrimary" component="p">
-              <PostRender nodes={JSON.parse(post.text) as TNode[]} />
+              <PostRender nodes={getText()} />
               <ReadMore text={''} maxCharacter={250} />
             </Typography>
 
@@ -139,11 +165,15 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
       <div className={styles.action}>
         <PostActionComponent
           metrics={post.metric}
+          upvoted={post.isUpvoted}
+          downvoted={post.isDownVoted}
           onUpvote={handleUpvote}
           onDownVote={handleDownVote}
+          onShowComments={toggleShowComments}
         />
 
         <Button
+          onClick={handleSendTip}
           variant={ButtonVariant.OUTLINED}
           color={ButtonColor.SECONDARY}
           size={ButtonSize.SMALL}

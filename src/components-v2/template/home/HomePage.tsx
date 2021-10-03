@@ -75,8 +75,10 @@ const HomePage = (): JSX.Element => {
               posts={Timeline.args?.posts ?? []}
               anonymous={Timeline.args?.anonymous ?? false}
               hasMore={false}
+              upvote={console.log}
               loadNextPage={console.log}
               sortTimeline={console.log}
+              onSendTip={console.log}
             />
           </div>
         </div>

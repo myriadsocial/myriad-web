@@ -1,17 +1,19 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 
 import {ProfileHeader as ProfileHeaderComponent} from '.';
-import {ProfileHeader} from './ProfileHeader.stories';
+
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 export const ProfileHeaderContainer: React.FC = () => {
+  const {user, alias} = useSelector<RootState, UserState>(state => state.userState);
+
   return (
     <ProfileHeaderComponent
-      name={ProfileHeader.args?.name ?? 'Name'}
-      username={ProfileHeader.args?.username ?? 'Username'}
-      avatar={
-        ProfileHeader.args?.avatar ??
-        'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg'
-      }
+      name={user?.name || alias}
+      username={user?.username || alias}
+      avatar={user?.profilePictureURL}
     />
   );
 };

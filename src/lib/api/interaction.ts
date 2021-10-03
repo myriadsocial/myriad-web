@@ -1,7 +1,14 @@
 import MyriadAPI from './base';
 
 import {Comment} from 'src/interfaces/comment';
-import {Like, LikeProps, ReferenceType} from 'src/interfaces/interaction';
+import {
+  Like,
+  LikeProps,
+  ReferenceType,
+  SectionType,
+  Vote,
+  VoteProps,
+} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 
 export const like = async (userId: string, reference: Post | Comment): Promise<Like> => {
@@ -45,6 +52,61 @@ export const dislike = async (userId: string, reference: Post | Comment): Promis
 export const removeLike = async (id: string): Promise<void> => {
   await MyriadAPI.request({
     url: `/likes/${id}`,
+    method: 'DELETE',
+  });
+};
+
+export const vote = async (
+  userId: string,
+  reference: Post | Comment,
+  section?: SectionType,
+): Promise<Vote> => {
+  const type = 'platform' in reference ? ReferenceType.POST : ReferenceType.COMMENT;
+
+  const attributes: VoteProps = {
+    state: true,
+    userId,
+    type,
+    referenceId: reference.id,
+    section,
+  };
+
+  const {data} = await MyriadAPI.request<Vote>({
+    url: `/votes`,
+    method: 'POST',
+    data: attributes,
+  });
+
+  return data;
+};
+
+export const downvote = async (
+  userId: string,
+  reference: Post | Comment,
+  section?: SectionType,
+): Promise<Vote> => {
+  const type = 'platform' in reference ? ReferenceType.POST : ReferenceType.COMMENT;
+
+  const attributes: VoteProps = {
+    state: false,
+    userId,
+    type,
+    referenceId: reference.id,
+    section,
+  };
+
+  const {data} = await MyriadAPI.request<Vote>({
+    url: `/votes`,
+    method: 'POST',
+    data: attributes,
+  });
+
+  return data;
+};
+
+export const removeVote = async (id: string): Promise<void> => {
+  await MyriadAPI.request({
+    url: `/votes/${id}`,
     method: 'DELETE',
   });
 };

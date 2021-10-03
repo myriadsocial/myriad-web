@@ -22,6 +22,7 @@ import DateFormat from 'src/components/common/DateFormat';
 import ShowIf from 'src/components/common/show-if.component';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
 import {Comment} from 'src/interfaces/comment';
+import {ReferenceType, SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
@@ -55,7 +56,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
 
   const router = useRouter();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const {comments, loadInitComment, reply} = useCommentHook(post);
+  const {comments, loadInitComment, reply} = useCommentHook(post.id);
 
   useEffect(() => {
     loadInitComment();
@@ -73,6 +74,9 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
       text: comment,
       postId: post.id,
       userId: user.id,
+      referenceId: post.id,
+      section: SectionType.DISCUSSION,
+      type: ReferenceType.POST,
     });
   };
 

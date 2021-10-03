@@ -15,10 +15,11 @@ type FilterDropdownMenuProps = {
   title: string;
   options: MenuOptions<string>[];
   selected?: string;
+  onChange: (selected: string) => void;
 };
 
 export const FilterDropdownMenu: React.FC<FilterDropdownMenuProps> = props => {
-  const {title, options} = props;
+  const {title, options, onChange} = props;
   const styles = useStyles();
 
   const [selected, setSelected] = useState<string>(options[0].id);
@@ -34,6 +35,7 @@ export const FilterDropdownMenu: React.FC<FilterDropdownMenuProps> = props => {
 
   const handleSelected = (option: string) => {
     setSelected(option);
+    onChange(option);
     handleClose();
   };
 

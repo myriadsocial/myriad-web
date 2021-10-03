@@ -6,6 +6,8 @@ import {PostVisibility} from '../../interfaces/post';
 import {SocialsEnum} from '../../interfaces/social';
 import {PostDetail as PostDetailComponent} from './PostDetail';
 
+import {ReferenceType, SectionType} from 'src/interfaces/interaction';
+
 export default {
   title: 'UI Revamp v2.0/components/Post Detail',
   component: PostDetailComponent,
@@ -36,11 +38,14 @@ MyriadPost.args = {
     originPostId: '',
     importers: [],
     metric: {
-      likes: 0,
+      likes: 1,
       dislikes: 0,
-      comments: 0,
-      vote: 435,
-      share: 400,
+      comments: 1,
+      shares: 400,
+      upvotes: 0,
+      downvotes: 0,
+      discussions: 0,
+      debates: 0,
     },
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -65,6 +70,20 @@ MyriadPost.args = {
         text: 'pertamax',
         postId: '6123614bf6c45c2728e43aca',
         userId: '6123614bf6c45c2728e43aca',
+        type: ReferenceType.COMMENT,
+        referenceId: '6123614bf6c45c2728e43aca',
+        section: SectionType.DISCUSSION,
+        metric: {
+          likes: 0,
+          dislikes: 0,
+          comments: 0,
+          shares: 0,
+          upvotes: 0,
+          downvotes: 0,
+          discussions: 0,
+          debates: 0,
+        },
+
         createdAt: new Date('2021-07-15T03:40:23.000Z'),
         updatedAt: new Date('2021-07-15T03:40:23.000Z'),
         user: {
@@ -98,11 +117,14 @@ TwitterPost.args = {
     originCreatedAt: new Date('2021-08-29T18:21:51.000Z'),
     importers: ['0xdc996f43e45bb990aef40fbe7d9e52fc6270369131a180f1e8a8705b74bbd060'],
     metric: {
-      likes: 0,
+      likes: 1,
       dislikes: 0,
-      comments: 0,
-      vote: 435,
-      share: 400,
+      comments: 1,
+      shares: 400,
+      upvotes: 0,
+      downvotes: 0,
+      discussions: 0,
+      debates: 0,
     },
     createdAt: new Date('2021-08-30T03:45:16.390Z'),
     updatedAt: new Date('2021-08-30T03:45:16.390Z'),
@@ -154,8 +176,11 @@ RedditPost.args = {
       likes: 1,
       dislikes: 0,
       comments: 1,
-      vote: 435,
-      share: 400,
+      shares: 400,
+      upvotes: 0,
+      downvotes: 0,
+      discussions: 0,
+      debates: 0,
     },
     createdAt: new Date('Fri Aug 27 2021 13:39:48 GMT+0000 (Coordinated Universal Time)'),
     updatedAt: new Date('Fri Aug 27 2021 13:39:48 GMT+0000 (Coordinated Universal Time)'),

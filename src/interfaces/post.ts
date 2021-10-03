@@ -27,11 +27,14 @@ export type PostAsset = {
 };
 
 export type PostMetric = {
+  upvotes: number;
+  downvotes: number;
+  discussions: number;
+  debates: number;
+  shares: number;
   likes: number;
   dislikes: number;
   comments: number;
-  share?: number;
-  vote?: number;
 };
 
 export enum PostVisibility {
@@ -72,8 +75,10 @@ export interface Post extends PostProps, BaseModel {
   //TODO: change this on migrating new schema of transaction
   transactions?: any[];
   walletAddress?: string;
-  vote?: Vote;
+  votes?: Vote[];
   mentions?: string[];
+  isUpvoted?: boolean;
+  isDownVoted?: boolean;
 }
 
 export type UpoadedFile = {
