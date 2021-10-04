@@ -16,6 +16,7 @@ export type ModalProps = DialogProps & {
   children: React.ReactNode;
   align?: AllignTitle;
   titleSize?: TitleSize;
+  gutter?: 'none' | 'default';
   onClose: () => void;
 };
 
@@ -27,10 +28,11 @@ export const Modal: React.FC<ModalProps> = props => {
     onClose,
     align = 'center',
     titleSize = 'medium',
+    gutter = 'default',
     ...otherProps
   } = props;
 
-  const styles = useStyles({align, titleSize});
+  const styles = useStyles({align, titleSize, gutter});
 
   const handleClose = () => {
     onClose();

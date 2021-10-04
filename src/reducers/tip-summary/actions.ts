@@ -4,8 +4,9 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {Comment} from 'src/interfaces/comment';
+import {CurrencyId} from 'src/interfaces/currency';
 import {Post} from 'src/interfaces/post';
-import {Transaction, TransactionDetail} from 'src/interfaces/transaction';
+import {Transaction, TransactionDetail, TransactionSort} from 'src/interfaces/transaction';
 import MyriadAPI from 'src/lib/api/base';
 import {BaseList} from 'src/lib/api/interfaces/base-list.interface';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -50,6 +51,16 @@ export interface LoadTransactionSummaryForComment extends Action {
   summary: TransactionDetail[];
 }
 
+export interface SetTransactionCurrency extends Action {
+  type: constants.SET_TRANSACTION_CURRENCY;
+  currency: CurrencyId;
+}
+
+export interface SetTransactionSort extends Action {
+  type: constants.SET_TRANSACTION_SORT;
+  sort: TransactionSort;
+}
+
 /**
  * Union Action Types
  */
@@ -62,6 +73,8 @@ export type Actions =
   | LoadTransactionHistoryForComment
   | LoadTransactionSummaryForComment
   | ClearTippedContent
+  | SetTransactionCurrency
+  | SetTransactionSort
   | BaseAction;
 
 /**
@@ -82,14 +95,25 @@ export const setTippedComment = (comment: Comment): SetTippedComment => ({
   payload: comment,
 });
 
+export const setTransactionCurrency = (currency: CurrencyId): SetTransactionCurrency => ({
+  type: constants.SET_TRANSACTION_CURRENCY,
+  currency,
+});
+
+export const setTransactionSort = (sort: TransactionSort): SetTransactionSort => ({
+  type: constants.SET_TRANSACTION_SORT,
+  sort,
+});
+
 export const fetchTransactionHistory: ThunkActionCreator<Actions, RootState> =
-  (post: Post, page = 1) =>
+  (reference: Post | Comment, type: 'post' | 'comment', page = 1) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
       const {
         userState: {user},
+        tipSummaryState: {sort, currency},
       } = getState();
 
       if (!user) {
@@ -101,10 +125,11 @@ export const fetchTransactionHistory: ThunkActionCreator<Actions, RootState> =
         method: 'GET',
         params: {
           filter: {
-            order: 'createdAt DESC',
+            order: sort === 'highest' ? 'amount DESC' : 'createdAt DESC',
             where: {
-              type: 'post',
-              referenceId: post.id,
+              type,
+              referenceId: reference.id,
+              currencyId: currency ? {eq: currency} : undefined,
             },
             include: ['fromUser', 'toUser'],
           },
