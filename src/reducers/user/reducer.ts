@@ -54,6 +54,16 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       };
     }
 
+    case constants.SET_DEFAULT_CURRENCY: {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          defaultCurrency: action.payload,
+        },
+      };
+    }
+
     case constants.UPDATE_USER: {
       return {
         ...state,
