@@ -1,6 +1,7 @@
 import {useState} from 'react';
 
 import {Comment, CommentProps} from 'src/interfaces/comment';
+import {SectionType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import * as CommentAPI from 'src/lib/api/comment';
 
@@ -8,7 +9,7 @@ type useCommentHookProps = {
   error: any;
   loading: boolean;
   comments: Comment[];
-  loadInitComment: () => void;
+  loadInitComment: (section?: SectionType) => void;
   loadMoreComment: () => void;
   reply: (user: User, comment: CommentProps) => void;
   updateUpvote: (commentId: string, vote: number) => void;
@@ -21,11 +22,11 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
 
-  const load = async () => {
+  const load = async (section?: SectionType) => {
     setLoading(true);
 
     try {
-      const {data: comments} = await CommentAPI.loadComments(referenceId);
+      const {data: comments} = await CommentAPI.loadComments(referenceId, section);
 
       setComments(comments);
     } catch (error) {
