@@ -6,6 +6,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '.';
+import {changeDefaultCurrency} from '../../lib/api/token';
 import {BalanceDetail} from '../MyWallet/';
 import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 import {DraggableBalanceCard} from './DraggableBalanceCard';
@@ -15,13 +16,12 @@ import {CurrencyId} from 'src/interfaces/currency';
 
 type PrimaryCoinMenuProps = {
   balanceDetails: BalanceDetail[];
-  defaultCurrency: CurrencyId;
   togglePrimaryCoinMenu: () => void;
+  user: User;
 };
 
 export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
-  const {togglePrimaryCoinMenu, balanceDetails, defaultCurrency} = props;
-  const classes = useStyles();
+  const {togglePrimaryCoinMenu, balanceDetails, user} = props;
 
   const removeMyriad = (balanceDetails: BalanceDetail[]) => {
     const newCoins = [...balanceDetails];
@@ -33,11 +33,11 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
     return myriadlessCoins;
   };
 
-  const putDefaultFirst = (balanceDetails: BalanceDetail[]) => {
+  const putDefaultFirst = (balanceDetails: BalanceDetail[], defaultCurrencyId: CurrencyId) => {
     const newDefaultCoins = [...balanceDetails];
 
     const defaultCoin = _.remove(newDefaultCoins, function (n) {
-      return n.id === defaultCurrency;
+      return n.id === defaultCurrencyId;
     });
 
     const myriadlessCoins = removeMyriad(newDefaultCoins);
@@ -47,9 +47,9 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
     return resultDefaultCoins;
   };
 
-  const [coins, updateCoins] = useState(putDefaultFirst(balanceDetails));
+  const [coins, updateCoins] = useState(putDefaultFirst(balanceDetails, user.defaultCurrency));
 
-  console.log({coins});
+  const classes = useStyles();
 
   const handleOnDragEnd = ({source, destination}: DropResult) => {
     // Handle if dragging out of bounds
@@ -61,6 +61,22 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
 
     updateCoins(items);
   };
+
+  const handleSetDefaultCurrency = () => {
+    if (coins) {
+      const currencyId = coins[0].id as CurrencyId;
+
+      const values = {
+        userId: user.id,
+        currencyId,
+      };
+
+      changeDefaultCurrency(values);
+      updateCoins(putDefaultFirst(balanceDetails, currencyId));
+    }
+  };
+
+  console.log({coins, user});
 
   return (
     <>
@@ -128,7 +144,9 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
             color={ButtonColor.SECONDARY}>
             Cancel
           </Button>
-          <Button variant={ButtonVariant.CONTAINED}>Apply Changes</Button>
+          <Button onClick={handleSetDefaultCurrency} variant={ButtonVariant.CONTAINED}>
+            Apply Changes
+          </Button>
         </div>
       </div>
     </>
