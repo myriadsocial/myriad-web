@@ -13,7 +13,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: 340,
       position: 'relative',
-      minHeight: 680,
+      marginBottom: 30,
       background: '#FFFFFF',
       boxShadow: `0px 2px 10px rgba(0, 0, 0, 0.05)`,
       borderRadius: 10,
@@ -31,8 +31,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 700,
     },
     subHeaderSection: {
-      padding: '0 8%',
-      marginTop: 30,
+      padding: '0 30px',
     },
     formRoot: {
       marginTop: 12,
