@@ -4,6 +4,7 @@ enum SectionTitle {
   WALLET = 'Wallet',
   EXPERIENCE = 'Experience',
   PROFILE = 'Profile',
+  SETTINGS = 'Settings',
 }
 
 type SectionTitleKey = keyof typeof SectionTitle;
