@@ -15,7 +15,7 @@ import BellIconDefault from '../../images/Icons/notif-default.svg';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
-  const {user, alias, handleSignOut} = props;
+  const {user, alias, handleSignOut, onViewProfile, onSwitchAccount} = props;
   const classes = useStyles();
   const [expanding, setExpanding] = useState(false);
 
@@ -43,7 +43,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
           </div>
         </div>
       </div>
-      <div className={`${classes.content} ${expanding ? classes.open : classes.close}`}>
+      <div
+        className={`${classes.content} ${expanding ? classes.open : classes.close}`}
+        onClick={onViewProfile}>
         <ListItem classes={{gutters: classes.gutters}} className={classes.hover}>
           <ListItemText className={classes.textAlign}>
             <Link href={`/profile/${user.id}`}>
@@ -53,16 +55,22 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
             </Link>
           </ListItemText>
         </ListItem>
-        <ListItem classes={{gutters: classes.gutters}} className={classes.hover}>
+        <ListItem
+          classes={{gutters: classes.gutters}}
+          className={classes.hover}
+          onClick={onSwitchAccount}>
           <ListItemText className={classes.textAlign}>
-            <Typography className={classes.text} component="span" onClick={console.log}>
+            <Typography className={classes.text} component="span">
               Switch account
             </Typography>
           </ListItemText>
         </ListItem>
-        <ListItem classes={{gutters: classes.gutters}} className={classes.hover}>
+        <ListItem
+          classes={{gutters: classes.gutters}}
+          className={classes.hover}
+          onClick={() => handleSignOut()}>
           <ListItemText className={classes.textAlign}>
-            <Typography className={classes.text} component="span" onClick={() => handleSignOut()}>
+            <Typography className={classes.text} component="span">
               Log out
             </Typography>
           </ListItemText>

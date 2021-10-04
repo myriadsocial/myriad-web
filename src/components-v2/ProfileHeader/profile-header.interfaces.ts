@@ -1,9 +1,11 @@
 import {User} from '../../interfaces/user';
 
 interface ProfileHeaderProps {
-  alias?: string;
   user: User;
+  alias?: string;
   handleSignOut: () => void;
+  onViewProfile: () => void;
+  onSwitchAccount: () => void;
 }
 
 export type {ProfileHeaderProps};
