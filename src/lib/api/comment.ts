@@ -3,16 +3,27 @@ import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
 import {Comment, CommentProps} from 'src/interfaces/comment';
+import {SectionType} from 'src/interfaces/interaction';
 
 type CommentList = BaseList<Comment>;
 
 export const loadComments = async (
   referenceId: string,
+  section?: SectionType,
   excludeUser?: string,
 ): Promise<CommentList> => {
   let where: Record<string, any> = {
     referenceId,
   };
+
+  if (section) {
+    where = {
+      ...where,
+      section: {
+        eq: section,
+      },
+    };
+  }
 
   if (excludeUser) {
     where = {

@@ -88,6 +88,7 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       return update(state, {
         loading: {$set: true},
         posts: {$set: []},
+        filter: undefined,
       });
     }
 
