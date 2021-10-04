@@ -79,6 +79,7 @@ const HomePage = (): JSX.Element => {
               loadNextPage={console.log}
               sortTimeline={console.log}
               onSendTip={console.log}
+              toggleDownvoting={console.log}
             />
           </div>
         </div>
@@ -93,7 +94,12 @@ const HomePage = (): JSX.Element => {
             rowGap: 12,
           }}>
           <div>
-            <ProfileHeaderComponent user={userData} handleSignOut={console.log} />
+            <ProfileHeaderComponent
+              user={userData}
+              handleSignOut={console.log}
+              onSwitchAccount={console.log}
+              onViewProfile={console.log}
+            />
           </div>
           <div style={{marginTop: theme.spacing(2.5)}}>
             <RightMenuBar />
