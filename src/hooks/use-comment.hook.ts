@@ -14,7 +14,7 @@ type useCommentHookProps = {
   reply: (user: User, comment: CommentProps) => void;
   updateUpvote: (commentId: string, vote: number) => void;
   updateDownvote: (commentId: string, vote: number) => void;
-  loadReplies: (referenceId: string) => void;
+  loadReplies: (referenceId: string, deep: number) => void;
 };
 
 export const useCommentHook = (referenceId: string): useCommentHookProps => {
@@ -84,14 +84,26 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
     });
   };
 
-  const loadReplies = async (referenceId: string) => {
+  const loadReplies = async (referenceId: string, deep: number) => {
     try {
       const {data: comments} = await CommentAPI.loadComments(referenceId);
 
       setComments(prevComments => {
         return prevComments.map(item => {
-          if (item.id === referenceId) {
-            item.replies = comments;
+          if (deep === 0) {
+            if (item.id === referenceId) {
+              item.replies = comments;
+            }
+          } else {
+            if (item.replies) {
+              item.replies.map(reply => {
+                if (reply.id === referenceId) {
+                  reply.replies = comments;
+                }
+
+                return reply;
+              });
+            }
           }
 
           return item;

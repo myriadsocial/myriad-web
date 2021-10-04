@@ -35,7 +35,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
   };
 
   const handleLoadReplies = () => {
-    onLoadReplies(comment.id);
+    onLoadReplies(comment.id, deep);
   };
 
   const handleDownVote = () => {

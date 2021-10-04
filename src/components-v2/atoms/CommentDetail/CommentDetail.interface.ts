@@ -9,5 +9,5 @@ export interface CommentDetailProps {
   onReply: (comment: Partial<CommentProps>) => void;
   onUpvote: (comment: Comment) => void;
   onDownVote: (comment: Comment) => void;
-  onLoadReplies: (referenceId: string) => void;
+  onLoadReplies: (referenceId: string, deep: number) => void;
 }
