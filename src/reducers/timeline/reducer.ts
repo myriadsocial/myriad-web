@@ -7,6 +7,7 @@ import * as constants from './constants';
 
 import update from 'immutability-helper';
 import * as Redux from 'redux';
+import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 import {TimelineType, TimelineSortMethod, TimelineFilter} from 'src/interfaces/timeline';
 import {WalletDetail} from 'src/interfaces/wallet';
@@ -19,6 +20,9 @@ export interface TimelineState extends BasePaginationState {
   posts: Post[];
   walletDetails: WalletDetail[];
   post?: Post;
+  interaction: {
+    downvoting: Post | Comment | null;
+  };
 }
 
 const initalState: TimelineState = {
@@ -33,6 +37,9 @@ const initalState: TimelineState = {
     itemsPerPage: 10,
     totalItemCount: 0,
     totalPageCount: 0,
+  },
+  interaction: {
+    downvoting: null,
   },
 };
 
@@ -90,6 +97,15 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
         posts: {$set: []},
         filter: undefined,
       });
+    }
+
+    case constants.SET_DOWNVOTING: {
+      return {
+        ...state,
+        interaction: {
+          downvoting: action.reference,
+        },
+      };
     }
 
     case constants.LIKE_POST: {
@@ -174,6 +190,39 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       return {
         ...state,
         post: action.post,
+      };
+    }
+
+    case constants.UPVOTE_POST: {
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post.id === action.postId) {
+            post.votes = post.votes ? [...post.votes, action.vote] : [action.vote];
+            post.isUpvoted = true;
+            post.metric.upvotes = post.metric.upvotes + 1;
+          }
+
+          return post;
+        }),
+      };
+    }
+
+    case constants.DOWNVOTE_POST: {
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post.id === action.postId) {
+            post.votes = post.votes ? [...post.votes, action.vote] : [action.vote];
+            post.isDownVoted = true;
+            post.metric.downvotes = post.metric.downvotes + 1;
+          }
+
+          return post;
+        }),
+        interaction: {
+          downvoting: null,
+        },
       };
     }
 
