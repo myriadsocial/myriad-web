@@ -73,6 +73,7 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
     subtitle,
     action,
     active,
+    onClick,
   } = props;
   const styles = useStyles();
 
@@ -88,7 +89,12 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
   }
 
   return (
-    <ListItem component="div" className={styles.root} ContainerComponent="div" {...listProps}>
+    <ListItem
+      component="div"
+      className={styles.root}
+      ContainerComponent="div"
+      onClick={onClick}
+      {...listProps}>
       {avatar && (
         <ListItemAvatar className={styles.avatar}>
           <Avatar alt="Remy Sharp" src={avatar} variant={variant} className={styles[size]} />
