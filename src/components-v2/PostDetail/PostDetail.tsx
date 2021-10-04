@@ -28,11 +28,13 @@ import {useCommentTabs, CommentTabs} from './hooks/use-comment-tabs';
 
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
+import {Comment} from 'src/interfaces/comment';
 import {v4 as uuid} from 'uuid';
 
 type PostDetailListProps = {
   post: Post;
   anonymous: boolean;
+  toggleDownvoting: (reference: Post | Comment | null) => void;
   onUpvote: (reference: Post | Comment) => void;
   onSendTip: (post: Post) => void;
 };
@@ -41,11 +43,10 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
   const styles = useStyles();
   const router = useRouter();
 
-  const {post, onUpvote, onSendTip} = props;
+  const {post, onUpvote, onSendTip, toggleDownvoting} = props;
   const tabs = useCommentTabs(post);
   const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
   const [shoWcomment, setShowComment] = useState(false);
-  const [, setDownvoting] = useState(false);
   const [viewContent, setViewContent] = useState(!post.isNSFW);
 
   const onHashtagClicked = async (hashtag: string) => {
@@ -55,17 +56,24 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
   };
 
   const handleUpvote = async () => {
-    onUpvote(post);
+    if (!post.isUpvoted) {
+      onUpvote(post);
+    }
   };
 
   const handleDownVote = async () => {
-    setDownvoting(true);
+    if (!post.isDownVoted) {
+      toggleDownvoting(post);
+    }
+
     setShowComment(true);
     setActiveTab('debate');
   };
 
   const handleChangeTab = (tab: string) => {
     setActiveTab(tab as CommentTabs);
+
+    toggleDownvoting(null);
   };
 
   const handleViewContent = () => {
@@ -74,7 +82,8 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
 
   const toggleShowComments = () => {
     setShowComment(prev => !prev);
-    setDownvoting(false);
+
+    toggleDownvoting(null);
   };
 
   const handleSendTip = () => {
