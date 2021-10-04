@@ -91,7 +91,12 @@ const ProfilePage = (): JSX.Element => {
             rowGap: 12,
           }}>
           <div>
-            <ProfileHeaderHomeComponent user={userData} handleSignOut={console.log} />
+            <ProfileHeaderHomeComponent
+              user={userData}
+              handleSignOut={console.log}
+              onViewProfile={console.log}
+              onSwitchAccount={console.log}
+            />
           </div>
           <div style={{marginTop: theme.spacing(2.5)}}>
             <RightMenuBar />
