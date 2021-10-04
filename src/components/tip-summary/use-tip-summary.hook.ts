@@ -53,7 +53,7 @@ export const useTipSummaryHook = (): TipSummaryHookProps => {
   const loadTransaction = async (post: Post, page?: number): Promise<void> => {
     const currentPage = page ? page : meta.currentPage;
 
-    dispatch(fetchTransactionHistory(post, currentPage));
+    dispatch(fetchTransactionHistory(post, 'post', currentPage));
   };
 
   const openTipSummaryForComment = (): void => {

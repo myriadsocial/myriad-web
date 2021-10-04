@@ -1,15 +1,25 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {RootState} from '../../../reducers';
 import {upvote, downvote} from '../../../reducers/timeline/actions';
+import {TipHistory} from '../../TipHistory';
 import {CommentList} from './CommentList';
 
 import {useCommentHook} from 'src/hooks/use-comment.hook';
 import {Comment, CommentProps} from 'src/interfaces/comment';
+import {CurrencyId} from 'src/interfaces/currency';
 import {SectionType, ReferenceType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
+import {TransactionSort} from 'src/interfaces/transaction';
+import {
+  fetchTransactionHistory,
+  clearTippedContent,
+  setTransactionCurrency,
+  setTransactionSort,
+} from 'src/reducers/tip-summary/actions';
+import {TipSummaryState} from 'src/reducers/tip-summary/reducer';
+import {UserState} from 'src/reducers/user/reducer';
 
 type CommentListContainerProps = {
   referenceId: string;
@@ -24,10 +34,14 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const {comments, loadInitComment, reply, updateUpvote, updateDownvote, loadReplies} =
     useCommentHook(referenceId);
 
-  const user = useSelector<RootState, User | undefined>(state => state.userState.user);
+  const {user, currencies} = useSelector<RootState, UserState>(state => state.userState);
   const downvoting = useSelector<RootState, Post | Comment | null>(
     state => state.timelineState.interaction.downvoting,
   );
+  const {transactions} = useSelector<RootState, TipSummaryState>(state => state.tipSummaryState);
+
+  const [tipHistoryReference, setTipHistoryReference] = useState<Comment | null>(null);
+  const isTipHistoryOpen = Boolean(tipHistoryReference);
 
   useEffect(() => {
     loadInitComment(section);
@@ -70,6 +84,37 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     );
   };
 
+  const openTipHistory = (reference: Comment) => {
+    dispatch(fetchTransactionHistory(reference, 'comment'));
+
+    setTipHistoryReference(reference);
+  };
+
+  const handleSendTip = () => {
+    closeTipHistory();
+  };
+
+  const closeTipHistory = () => {
+    setTipHistoryReference(null);
+    dispatch(clearTippedContent());
+  };
+
+  const handleSortTransaction = (sort: TransactionSort) => {
+    dispatch(setTransactionSort(sort));
+
+    if (tipHistoryReference) {
+      dispatch(fetchTransactionHistory(tipHistoryReference, 'comment'));
+    }
+  };
+
+  const handleFilterTransaction = (currency: CurrencyId) => {
+    dispatch(setTransactionCurrency(currency));
+
+    if (tipHistoryReference) {
+      dispatch(fetchTransactionHistory(tipHistoryReference, 'comment'));
+    }
+  };
+
   return (
     <>
       <CommentList
@@ -80,6 +125,17 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         onDownvote={handleDownvote}
         onUpvote={handleUpvote}
         onLoadReplies={loadReplies}
+        onOpenTipHistory={openTipHistory}
+      />
+
+      <TipHistory
+        open={isTipHistoryOpen}
+        currencies={currencies}
+        tips={transactions}
+        sendTip={handleSendTip}
+        onClose={closeTipHistory}
+        onSort={handleSortTransaction}
+        onFilter={handleFilterTransaction}
       />
     </>
   );
