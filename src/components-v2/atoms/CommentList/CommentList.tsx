@@ -17,7 +17,7 @@ type CommentListProps = {
   onComment: (comment: Partial<CommentProps>) => void;
   onUpvote: (comment: Comment) => void;
   onDownvote: (comment: Comment) => void;
-  onLoadReplies: (referenceId: string) => void;
+  onLoadReplies: (referenceId: string, deep: number) => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
