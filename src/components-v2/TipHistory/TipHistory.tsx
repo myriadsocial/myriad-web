@@ -16,8 +16,8 @@ import {
 import Menu from '@material-ui/core/Menu';
 
 import {formatUsd} from '../../helpers/balance';
-import {Currency} from '../../interfaces/currency';
-import {Transaction} from '../../interfaces/transaction';
+import {Currency, CurrencyId} from '../../interfaces/currency';
+import {Transaction, TransactionSort} from '../../interfaces/transaction';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {ListItemComponent} from '../atoms/ListItem';
 import {Modal, ModalProps} from '../atoms/Modal';
@@ -26,14 +26,16 @@ import {sortOptions} from './default';
 
 import {debounce} from 'lodash';
 
-type TipHistoryProps = ModalProps & {
+type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
   tips: Transaction[];
   currencies: Currency[];
   sendTip: () => void;
+  onSort: (sort: TransactionSort) => void;
+  onFilter: (currency: CurrencyId) => void;
 };
 
 export const TipHistory: React.FC<TipHistoryProps> = props => {
-  const {tips, currencies, open, onClose, sendTip} = props;
+  const {tips, currencies, open, onClose, sendTip, onSort, onFilter} = props;
 
   const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -46,6 +48,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
 
   const handleFilter = (currency: Currency) => () => {
     setSelected(currency.id);
+    onFilter(currency.id);
     handleClose();
   };
 
@@ -71,7 +74,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
   };
 
   const handleSortChange = (sort: string) => {
-    // code
+    onSort(sort as TransactionSort);
   };
 
   return (

@@ -10,4 +10,5 @@ export interface CommentDetailProps {
   onUpvote: (comment: Comment) => void;
   onDownVote: (comment: Comment) => void;
   onLoadReplies: (referenceId: string, deep: number) => void;
+  onOpenTipHistory: (comment: Comment) => void;
 }

@@ -20,7 +20,8 @@ import {formatDistance, subDays} from 'date-fns';
 import {ReferenceType} from 'src/interfaces/interaction';
 
 export const CommentDetail: React.FC<CommentDetailProps> = props => {
-  const {comment, deep, user, onDownVote, onUpvote, onReply, onLoadReplies} = props;
+  const {comment, deep, user, onDownVote, onUpvote, onReply, onLoadReplies, onOpenTipHistory} =
+    props;
 
   const style = useStyles();
 
@@ -44,6 +45,10 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
 
   const handleUpvote = () => {
     onUpvote(comment);
+  };
+
+  const handleOpenTipHistory = () => {
+    onOpenTipHistory(comment);
   };
 
   const getDate = (commentDate: Date) => {
@@ -102,7 +107,11 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             <Button classes={{root: style.button}} size="small" variant="text">
               Send tip
             </Button>
-            <Button classes={{root: style.button}} size="small" variant="text">
+            <Button
+              classes={{root: style.button}}
+              size="small"
+              variant="text"
+              onClick={handleOpenTipHistory}>
               Tip history
             </Button>
             <Button classes={{root: style.button}} size="small" variant="text">
@@ -130,6 +139,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             comments={comment.replies || []}
             onComment={onReply}
             onLoadReplies={onLoadReplies}
+            onOpenTipHistory={onOpenTipHistory}
           />
         )}
       </div>

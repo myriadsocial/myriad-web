@@ -42,3 +42,5 @@ export type TransactionHistoryDetail = {
   to: BaseUser;
   currency: Currency;
 };
+
+export type TransactionSort = 'highest' | 'latest';

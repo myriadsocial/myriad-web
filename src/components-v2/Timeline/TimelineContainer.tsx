@@ -93,6 +93,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
       />
 
       <Modal
+        gutter="none"
         open={sendTipOpened}
         onClose={closeSendTip}
         title="Send Tip"

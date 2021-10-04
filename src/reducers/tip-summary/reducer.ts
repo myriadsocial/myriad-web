@@ -6,8 +6,9 @@ import * as constants from './constants';
 
 import * as Redux from 'redux';
 import {Comment} from 'src/interfaces/comment';
+import {CurrencyId} from 'src/interfaces/currency';
 import {Post} from 'src/interfaces/post';
-import {Transaction, TransactionDetail} from 'src/interfaces/transaction';
+import {Transaction, TransactionDetail, TransactionSort} from 'src/interfaces/transaction';
 
 export interface TipSummaryState extends BasePaginationState {
   post: Post | null;
@@ -15,6 +16,8 @@ export interface TipSummaryState extends BasePaginationState {
   show: boolean;
   transactions: Transaction[];
   summary: TransactionDetail[];
+  sort: TransactionSort;
+  currency?: CurrencyId;
 }
 
 const initialState: TipSummaryState = {
@@ -24,6 +27,7 @@ const initialState: TipSummaryState = {
   show: false,
   transactions: [],
   summary: [],
+  sort: 'highest',
   meta: {
     currentPage: 1,
     itemsPerPage: 10,
@@ -86,6 +90,20 @@ export const TipSummaryReducer: Redux.Reducer<TipSummaryState, Actions> = (
         ...state,
         summary: action.summary,
         show: true,
+      };
+    }
+
+    case constants.SET_TRANSACTION_SORT: {
+      return {
+        ...state,
+        sort: action.sort,
+      };
+    }
+
+    case constants.SET_TRANSACTION_CURRENCY: {
+      return {
+        ...state,
+        currency: action.currency,
       };
     }
 
