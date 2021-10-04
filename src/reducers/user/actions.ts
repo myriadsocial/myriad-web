@@ -34,7 +34,7 @@ export interface AddUserToken extends Action {
 
 export interface SetDefaultCurrency extends Action {
   type: constants.SET_DEFAULT_CURRENCY;
-  payload: CurrencyId;
+  user: User;
 }
 
 export interface FetchConnectedSocials extends Action {
@@ -266,6 +266,26 @@ export const setUserAsAnonymous: ThunkActionCreator<Actions, RootState> =
     dispatch(setAnonymous(alias));
   };
 
+export const setDefaultCurrency: ThunkActionCreator<Actions, RootState> =
+  (currencyId: CurrencyId) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+    const {
+      userState: {user},
+    } = getState();
+
+    if (!user) return;
+
+    dispatch({
+      type: constants.SET_DEFAULT_CURRENCY,
+      user: {
+        ...user,
+        defaultCurrency: currencyId,
+      },
+    });
+
+    dispatch(setLoading(false));
+  };
+
 export const updateUser: ThunkActionCreator<Actions, RootState> =
   (attributes: Partial<User>, callback?: () => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
@@ -350,52 +370,6 @@ export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
         dispatch(
           setError({
             message: 'Token is already on your wallet!',
-          }),
-        );
-      } else {
-        dispatch(setError(error.message));
-      }
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-export const setDefaultCurrency: ThunkActionCreator<Actions, RootState> =
-  (currencyId: CurrencyId, callback?: () => void) => async (dispatch, getState) => {
-    dispatch(setLoading(true));
-    const {
-      userState: {user},
-    } = getState();
-
-    if (!user) return;
-
-    try {
-      console.log({currencyId});
-
-      const data = await TokenAPI.changeDefaultCurrency({
-        currencyId,
-        userId: user.id,
-      });
-
-      console.log({data});
-
-      if (data) {
-        dispatch({
-          type: constants.SET_DEFAULT_CURRENCY,
-          payload: currencyId,
-        });
-      } else {
-        throw {
-          message: 'Something wrong happened!',
-        };
-      }
-
-      callback && callback();
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status !== 204) {
-        dispatch(
-          setError({
-            message: 'Oops, please try again later!',
           }),
         );
       } else {

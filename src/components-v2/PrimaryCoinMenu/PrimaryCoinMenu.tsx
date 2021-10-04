@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
 import {DragDropContext, Droppable, Draggable, DropResult} from 'react-beautiful-dnd';
+import {useDispatch} from 'react-redux';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '.';
+import {User} from '../../interfaces/user';
 import {changeDefaultCurrency} from '../../lib/api/token';
+import {setDefaultCurrency} from '../../reducers/user/actions';
 import {BalanceDetail} from '../MyWallet/';
 import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 import {DraggableBalanceCard} from './DraggableBalanceCard';
@@ -22,6 +25,8 @@ type PrimaryCoinMenuProps = {
 
 export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
   const {togglePrimaryCoinMenu, balanceDetails, user} = props;
+
+  const dispatch = useDispatch();
 
   const removeMyriad = (balanceDetails: BalanceDetail[]) => {
     const newCoins = [...balanceDetails];
@@ -63,20 +68,17 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
   };
 
   const handleSetDefaultCurrency = () => {
-    if (coins) {
-      const currencyId = coins[0].id as CurrencyId;
+    const currencyId = coins[0].id as CurrencyId;
 
-      const values = {
-        userId: user.id,
-        currencyId,
-      };
+    const values = {
+      userId: user.id,
+      currencyId,
+    };
 
-      changeDefaultCurrency(values);
-      updateCoins(putDefaultFirst(balanceDetails, currencyId));
-    }
+    changeDefaultCurrency(values);
+    updateCoins(putDefaultFirst(balanceDetails, currencyId));
+    dispatch(setDefaultCurrency(currencyId));
   };
-
-  console.log({coins, user});
 
   return (
     <>
