@@ -11,7 +11,7 @@ type useCommentHookProps = {
   comments: Comment[];
   loadInitComment: (section?: SectionType) => void;
   loadMoreComment: () => void;
-  reply: (user: User, comment: CommentProps) => void;
+  reply: (user: User, comment: CommentProps, callback?: () => void) => void;
   updateUpvote: (commentId: string, vote: number) => void;
   updateDownvote: (commentId: string, vote: number) => void;
   loadReplies: (referenceId: string, deep: number) => void;
@@ -48,7 +48,7 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
     }
   };
 
-  const reply = async (user: User, comment: CommentProps) => {
+  const reply = async (user: User, comment: CommentProps, callback?: () => void) => {
     const data = await CommentAPI.reply(comment);
 
     setComments([
@@ -58,6 +58,8 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
         user,
       },
     ]);
+
+    callback && callback();
   };
 
   const updateUpvote = (commentId: string, vote: number) => {

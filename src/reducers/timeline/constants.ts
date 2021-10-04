@@ -42,5 +42,8 @@ export type UPDATE_POST_PLATFORM_USER = typeof UPDATE_POST_PLATFORM_USER;
 export const UPVOTE_POST = 'UPVOTE_POST';
 export type UPVOTE_POST = typeof UPVOTE_POST;
 
+export const SET_DOWNVOTING = 'SET_DOWNVOTING';
+export type SET_DOWNVOTING = typeof SET_DOWNVOTING;
+
 export const DOWNVOTE_POST = 'DOWNVOTE_POST';
 export type DOWNVOTE_POST = typeof DOWNVOTE_POST;

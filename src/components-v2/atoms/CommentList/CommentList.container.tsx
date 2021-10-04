@@ -8,6 +8,7 @@ import {CommentList} from './CommentList';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
 import {Comment, CommentProps} from 'src/interfaces/comment';
 import {SectionType, ReferenceType} from 'src/interfaces/interaction';
+import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 
 type CommentListContainerProps = {
@@ -24,6 +25,9 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     useCommentHook(referenceId);
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
+  const downvoting = useSelector<RootState, Post | Comment | null>(
+    state => state.timelineState.interaction.downvoting,
+  );
 
   useEffect(() => {
     loadInitComment(section);
@@ -31,14 +35,22 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
 
   const handleSubmitComment = (comment: Partial<CommentProps>) => {
     if (user) {
-      reply(user, {
-        ...comment,
-        postId: referenceId,
-        referenceId: comment.referenceId ?? referenceId,
-        type: comment.type ?? ReferenceType.POST,
-        userId: user.id,
-        section: comment.section ?? section,
-      } as CommentProps);
+      reply(
+        user,
+        {
+          ...comment,
+          postId: referenceId,
+          referenceId: comment.referenceId ?? referenceId,
+          type: comment.type ?? ReferenceType.POST,
+          userId: user.id,
+          section: comment.section ?? section,
+        } as CommentProps,
+        () => {
+          if (downvoting) {
+            dispatch(downvote(downvoting, section));
+          }
+        },
+      );
     }
   };
 

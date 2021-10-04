@@ -13,6 +13,8 @@ import {TabList} from '../atoms/TabList';
 import {useStyles} from './Timeline.styles';
 import {filterOptions, sortOptions, postFilterOptions} from './default';
 
+import {Comment} from 'src/interfaces/comment';
+
 type TimelineProps = {
   posts: Post[];
   type: TimelineType;
@@ -27,6 +29,7 @@ type TimelineProps = {
   filterTimeline?: (type: TimelineType) => void;
   filterOrigin?: (origin: string) => void;
   onSendTip: (post: Post) => void;
+  toggleDownvoting: (reference: Post | Comment | null) => void;
 };
 
 export const Timeline: React.FC<TimelineProps> = props => {
@@ -44,6 +47,7 @@ export const Timeline: React.FC<TimelineProps> = props => {
     filterOrigin,
     upvote,
     onSendTip,
+    toggleDownvoting,
   } = props;
 
   const styles = useStyles();
@@ -115,6 +119,7 @@ export const Timeline: React.FC<TimelineProps> = props => {
             anonymous={anonymous}
             onUpvote={upvote}
             onSendTip={onSendTip}
+            toggleDownvoting={toggleDownvoting}
           />
         ))}
       </InfiniteScroll>

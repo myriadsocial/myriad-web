@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import {Timeline as TimelineComponent} from '.';
 import {useQueryParams} from '../../hooks/use-query-params.hooks';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from '../../interfaces/timeline';
-import {upvote, clearTimeline} from '../../reducers/timeline/actions';
+import {upvote, clearTimeline, setDownvoting} from '../../reducers/timeline/actions';
 import {SendTip} from '../SendTip/SendTip';
 import {Modal} from '../atoms/Modal';
 import {parseQueryToFilter} from './helper';
@@ -12,6 +12,7 @@ import {useTimelineFilter} from './hooks/use-timeline-filter.hook';
 import {useTimelineHook} from './hooks/use-timeline.hook';
 
 import {ParsedUrlQuery} from 'querystring';
+import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 
 type TimelineContainerProps = {
@@ -60,6 +61,10 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     dispatch(upvote(reference));
   };
 
+  const handleToggleDownvoting = (reference: Post | Comment | null) => {
+    dispatch(setDownvoting(reference));
+  };
+
   const handleSendTip = (post: Post) => {
     setTippedPost(post);
   };
@@ -84,6 +89,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
         filterTimeline={handleFilterTimeline}
         filterOrigin={filterByOrigin}
         onSendTip={handleSendTip}
+        toggleDownvoting={handleToggleDownvoting}
       />
 
       <Modal

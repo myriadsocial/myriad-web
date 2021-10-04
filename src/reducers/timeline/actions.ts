@@ -93,6 +93,11 @@ export interface UpvotePost extends Action {
   vote: Vote;
 }
 
+export interface SetDownvoting extends Action {
+  type: constants.SET_DOWNVOTING;
+  reference: Post | Comment | null;
+}
+
 export interface DownvotePost extends Action {
   type: constants.DOWNVOTE_POST;
   postId: string;
@@ -117,6 +122,7 @@ export type Actions =
   | FetchDedicatedPost
   | UpdatePostPlatformUser
   | UpvotePost
+  | SetDownvoting
   | DownvotePost
   | BaseAction;
 
@@ -136,6 +142,11 @@ export const clearTimeline = (): ClearTimeline => ({
 export const setPost = (post: Post): FetchDedicatedPost => ({
   type: constants.FETCH_DEDICATED_POST,
   post,
+});
+
+export const setDownvoting = (reference: Post | Comment | null): SetDownvoting => ({
+  type: constants.SET_DOWNVOTING,
+  reference,
 });
 
 /**
