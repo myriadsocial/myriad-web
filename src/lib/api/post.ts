@@ -27,7 +27,7 @@ export const getPost = async (
       orderField = 'metric.comments';
       break;
     case 'like':
-      orderField = 'metric.likes';
+      orderField = 'metric.upvotes';
       break;
     case 'trending':
     case 'created':
@@ -92,8 +92,14 @@ export const getPost = async (
     case TimelineType.FRIEND:
     case TimelineType.EXPERIENCE:
     case TimelineType.TRENDING:
-      params.timelineType = type;
-      params.userId = userId;
+      if (filters && filters.tags && filters.tags.length === 0) {
+        params.timelineType = type;
+        params.userId = userId;
+      } else {
+        filterParams.where = where;
+        params.filter = filterParams;
+      }
+
       break;
     default:
       filterParams.where = where;

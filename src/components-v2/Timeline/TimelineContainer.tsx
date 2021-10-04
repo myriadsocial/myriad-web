@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import {Timeline as TimelineComponent} from '.';
 import {useQueryParams} from '../../hooks/use-query-params.hooks';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from '../../interfaces/timeline';
-import {upvote} from '../../reducers/timeline/actions';
+import {upvote, clearTimeline} from '../../reducers/timeline/actions';
 import {SendTip} from '../SendTip/SendTip';
 import {Modal} from '../atoms/Modal';
 import {parseQueryToFilter} from './helper';
@@ -51,7 +51,9 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   };
 
   const handleFilterTimeline = (type: TimelineType) => {
-    push('type', type);
+    dispatch(clearTimeline());
+
+    push('type', type, true);
   };
 
   const handleUpvote = (reference: Post | Comment) => {

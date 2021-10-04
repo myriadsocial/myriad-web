@@ -26,7 +26,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
 
   useEffect(() => {
-    loadInitComment();
+    loadInitComment(section);
   }, [referenceId]);
 
   const handleSubmitComment = (comment: Partial<CommentProps>) => {
