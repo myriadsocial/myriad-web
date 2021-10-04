@@ -53,9 +53,9 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
     }
 
     const newFilter: TimelineFilter = {
-      tags,
       ...filter,
       ...filters,
+      tags,
     };
 
     dispatch(loadTimeline(1, timelineSort, newFilter, timelineType));
