@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 
+import NoSsr from '@material-ui/core/NoSsr';
+
 import {BalanceDetailList} from '.';
 
 import {AddCoin} from 'src/components-v2/atoms/AddCoin/AddCoin.component';
@@ -30,7 +32,7 @@ export const BalanceDetailListContainer: React.FC = () => {
   };
 
   return (
-    <>
+    <NoSsr>
       <BalanceDetailList
         balanceDetails={balanceDetails}
         isLoading={loading}
@@ -39,6 +41,6 @@ export const BalanceDetailListContainer: React.FC = () => {
       />
 
       <AddCoin open={showAddCoin} onClose={toggleAddCoinModal} />
-    </>
+    </NoSsr>
   );
 };

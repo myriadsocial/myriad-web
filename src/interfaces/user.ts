@@ -13,7 +13,7 @@ export interface UserSocialMedia {
 export type BaseUser = {
   name: string;
   profilePictureURL?: string;
-  defaultCurrency?: CurrencyId;
+  defaultCurrency: CurrencyId;
 };
 
 export type UserOnTransaction = BaseUser & {
