@@ -4,7 +4,7 @@ import * as constants from './constants';
 
 import axios, {AxiosError} from 'axios';
 import {Action} from 'redux';
-import {Currency} from 'src/interfaces/currency';
+import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {SocialsEnum} from 'src/interfaces/index';
 import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail} from 'src/interfaces/user';
@@ -30,6 +30,11 @@ export interface FetchUser extends Action {
 export interface AddUserToken extends Action {
   type: constants.ADD_USER_TOKEN;
   payload: Currency;
+}
+
+export interface SetDefaultCurrency extends Action {
+  type: constants.SET_DEFAULT_CURRENCY;
+  payload: CurrencyId;
 }
 
 export interface FetchConnectedSocials extends Action {
@@ -63,6 +68,7 @@ export type Actions =
   | FetchUser
   | FetchConnectedSocials
   | AddUserToken
+  | SetDefaultCurrency
   | SetUserAsAnonymous
   | UpdateUser
   | FetchUserTransactionDetail
@@ -344,6 +350,52 @@ export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
         dispatch(
           setError({
             message: 'Token is already on your wallet!',
+          }),
+        );
+      } else {
+        dispatch(setError(error.message));
+      }
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const setDefaultCurrency: ThunkActionCreator<Actions, RootState> =
+  (currencyId: CurrencyId, callback?: () => void) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+    const {
+      userState: {user},
+    } = getState();
+
+    if (!user) return;
+
+    try {
+      console.log({currencyId});
+
+      const data = await TokenAPI.changeDefaultCurrency({
+        currencyId,
+        userId: user.id,
+      });
+
+      console.log({data});
+
+      if (data) {
+        dispatch({
+          type: constants.SET_DEFAULT_CURRENCY,
+          payload: currencyId,
+        });
+      } else {
+        throw {
+          message: 'Something wrong happened!',
+        };
+      }
+
+      callback && callback();
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status !== 204) {
+        dispatch(
+          setError({
+            message: 'Oops, please try again later!',
           }),
         );
       } else {

@@ -57,15 +57,15 @@ export const addUserToken = async (values: UserCurrencyProps): Promise<Currency>
   return data;
 };
 
-export const setDefaultCurrency = async (values: UserCurrencyProps): Promise<string | null> => {
+export const changeDefaultCurrency = async (values: UserCurrencyProps): Promise<boolean | null> => {
   const {userId, currencyId} = values;
-  const {status: statusCode} = await MyriadAPI.request<Currency>({
+  const {status: statusCode} = await MyriadAPI({
     url: `/users/${userId}/select-currency/${currencyId}`,
     method: 'PATCH',
   });
 
   if (statusCode === 204) {
-    return currencyId;
+    return true;
   } else {
     return null;
   }
