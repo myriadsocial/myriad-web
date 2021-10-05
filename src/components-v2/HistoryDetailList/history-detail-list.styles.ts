@@ -70,5 +70,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 'bold',
       color: theme.status.danger.main,
     },
+    loading: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: 360,
+    },
   }),
 );
