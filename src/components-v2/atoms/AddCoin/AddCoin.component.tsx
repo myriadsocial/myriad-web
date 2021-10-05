@@ -2,10 +2,13 @@ import {CheckCircleIcon} from '@heroicons/react/solid';
 import {SearchIcon} from '@heroicons/react/solid';
 
 import React, {useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
 import InputBase from '@material-ui/core/InputBase';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -16,6 +19,11 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {acronym} from '../../../helpers/string';
+import {useToasterHook} from '../../../hooks/use-toaster.hook';
+import {Status} from '../../../interfaces/toaster';
+import {RootState} from '../../../reducers/';
+import {ConfigState} from '../../../reducers/config/reducer';
+import {addUserCurrency} from '../../../reducers/user/actions';
 import {Modal} from '../Modal';
 import {useStyles} from './AddCoin.style';
 import {Props} from './addCoin.interface';
@@ -24,7 +32,11 @@ import {debounce} from 'lodash';
 
 export const AddCoin: React.FC<Props> = props => {
   const {open, onClose} = props;
+  const dispatch = useDispatch();
+  const {openToaster} = useToasterHook();
+  const {availableCurrencies} = useSelector<RootState, ConfigState>(state => state.configState);
   const style = useStyles();
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
 
@@ -57,6 +69,30 @@ export const AddCoin: React.FC<Props> = props => {
   const isSelected = (code: string) => {
     if (selectedAsset === code) return style.selected;
     else return;
+  };
+
+  const handleAddNewCurrency = () => {
+    if (selectedAsset) {
+      dispatch(
+        addUserCurrency(selectedAsset, () => {
+          setLoading(true);
+
+          openToaster({toasterStatus: Status.SUCCESS, message: 'Currency successfully added!'});
+
+          onClose();
+        }),
+      );
+    }
+
+    setLoading(false);
+  };
+
+  const LoadingComponent = () => {
+    return (
+      <Grid container justify="center">
+        <CircularProgress />
+      </Grid>
+    );
   };
 
   return (
@@ -92,71 +128,46 @@ export const AddCoin: React.FC<Props> = props => {
           </ListItem>
           <Divider />
 
-          <ListItem
-            onClick={() => handleSelectAsset('ACA')}
-            className={`${style.hover} ${style.item} ${isSelected('ACA')}`}
-            alignItems="center">
-            <ListItemAvatar>
-              <Avatar
-                className={style.avatar}
-                alt={'name'}
-                src={'https://res.cloudinary.com/dsget80gs/coins/aca.svg'}>
-                {acronym('A')}
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText>
-              <Typography className={style.header} component="span" color="textPrimary">
-                ACA
-              </Typography>
-              <Typography className={style.subHeader} component="p" color="textSecondary">
-                Acala Token
-              </Typography>
-            </ListItemText>
-            {selectedAsset === 'ACA' && (
-              <ListItemSecondaryAction>
-                <SvgIcon
-                  color="primary"
-                  classes={{root: style.fill}}
-                  component={CheckCircleIcon}
-                  viewBox="0 0 20 20"
-                />
-              </ListItemSecondaryAction>
-            )}
-          </ListItem>
-
-          <ListItem
-            onClick={() => handleSelectAsset('aUSD')}
-            className={`${style.hover} ${style.item} ${isSelected('aUSD')}`}
-            alignItems="center">
-            <ListItemAvatar>
-              <Avatar
-                className={style.avatar}
-                alt={'aUSD'}
-                src={'https://res.cloudinary.com/dsget80gs/coins/ausd.png'}>
-                {acronym('A')}
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText>
-              <Typography className={style.header} component="span" color="textPrimary">
-                aUSD
-              </Typography>
-              <Typography className={style.subHeader} component="p" color="textSecondary">
-                Appeal USD
-              </Typography>
-            </ListItemText>
-            {selectedAsset === 'aUSD' && (
-              <ListItemSecondaryAction>
-                <SvgIcon
-                  color="primary"
-                  classes={{root: style.fill}}
-                  component={CheckCircleIcon}
-                  viewBox="0 0 20 20"
-                />
-              </ListItemSecondaryAction>
-            )}
-          </ListItem>
+          {loading && <LoadingComponent />}
+          {!loading &&
+            availableCurrencies.map(currency => (
+              <ListItem
+                key={currency.id}
+                onClick={() => handleSelectAsset(currency.id)}
+                className={`${style.hover} ${style.item} ${isSelected('ACA')}`}
+                alignItems="center">
+                <ListItemAvatar>
+                  <Avatar className={style.avatar} alt={currency.id} src={currency.image}>
+                    {acronym('A')}
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText>
+                  <Typography className={style.header} component="span" color="textPrimary">
+                    {currency.id}
+                  </Typography>
+                  <Typography className={style.subHeader} component="p" color="textSecondary">
+                    {currency.id} Token
+                  </Typography>
+                </ListItemText>
+                {selectedAsset === currency.id && (
+                  <ListItemSecondaryAction>
+                    <SvgIcon
+                      color="primary"
+                      classes={{root: style.fill}}
+                      component={CheckCircleIcon}
+                      viewBox="0 0 20 20"
+                    />
+                  </ListItemSecondaryAction>
+                )}
+              </ListItem>
+            ))}
         </List>
-        <Button className={style.button} fullWidth variant="contained" color="primary">
+        <Button
+          onClick={handleAddNewCurrency}
+          className={style.button}
+          fullWidth
+          variant="contained"
+          color="primary">
           Add to my wallet
         </Button>
       </div>
