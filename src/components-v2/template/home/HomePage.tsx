@@ -80,6 +80,10 @@ const HomePage = (): JSX.Element => {
               loadNextPage={console.log}
               sortTimeline={console.log}
               onSendTip={console.log}
+              onDelete={console.log}
+              onOpenTipHistory={console.log}
+              onReport={console.log}
+              onShared={console.log}
               toggleDownvoting={console.log}
             />
           </div>

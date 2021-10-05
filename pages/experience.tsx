@@ -7,6 +7,7 @@ import {SearchBoxContainer} from '../src/components-v2/atoms/Search/SearchBoxCon
 import {DefaultLayout} from '../src/components-v2/template/Default/DefaultLayout';
 
 import {ExperienceContainer} from 'src/components-v2/ExperienceEditor/Experience.container';
+import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -23,6 +24,7 @@ const Experience: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
+      <ToasterContainer />
       <SearchBoxContainer />
       <ExperienceContainer />
     </DefaultLayout>

@@ -18,7 +18,7 @@ import {PostSubHeader} from './subHeader/post-sub-header.component';
 import ShowIf from 'src/components/common/show-if.component';
 
 export const HeaderComponent: React.FC<PostHeaderProps> = props => {
-  const {post, owner, tipped = false, onDelete, onOpenTipHistory, onReport} = props;
+  const {post, owner, tipped = false, onDelete, onOpenTipHistory, onReport, onShared} = props;
 
   const style = useStyles();
   const router = useRouter();
@@ -67,6 +67,11 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
     }
 
     return url;
+  };
+
+  const handleShare = () => {
+    onShared();
+    handleClosePostSetting();
   };
 
   const handleDelete = () => {
@@ -138,6 +143,9 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         <ShowIf condition={owner || tipped}>
           <MenuItem onClick={handleOpenTipHistory}>Tip History</MenuItem>
         </ShowIf>
+
+        <MenuItem onClick={handleShare}>Share</MenuItem>
+
         <ShowIf condition={!owner}>
           <MenuItem onClick={handleReport} className={style.danger}>
             Report
