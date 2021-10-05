@@ -3,6 +3,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 import React from 'react';
 
 import {Comment} from '../../../interfaces/comment';
+import {CurrencyId} from '../../../interfaces/currency';
 import {CommentDetail as CommentDetailComponent} from './CommentDetail';
 
 import {ReferenceType, SectionType} from 'src/interfaces/interaction';
@@ -39,6 +40,7 @@ const comment: Comment = {
   user: {
     id: '6123614bf6c45c2728e43aca',
     name: 'Storybook User',
+    defaultCurrency: CurrencyId.AUSD,
     profilePictureURL:
       'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
     bannerImageUrl: '',
@@ -71,6 +73,7 @@ const comment: Comment = {
       user: {
         id: '6123614bf6c45c2728e43aca',
         name: 'Reply one',
+        defaultCurrency: CurrencyId.AUSD,
         profilePictureURL:
           'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
         bannerImageUrl: '',
@@ -101,6 +104,7 @@ const comment: Comment = {
           createdAt: new Date('2021-07-15T03:40:23.000Z'),
           updatedAt: new Date('2021-07-15T03:40:23.000Z'),
           user: {
+            defaultCurrency: CurrencyId.AUSD,
             id: '6123614bf6c45c2728e43aca',
             name: 'Reply two',
             profilePictureURL:
@@ -136,6 +140,7 @@ const comment: Comment = {
       user: {
         id: '6123614bf6c45c2728e43aca',
         name: 'Reply one',
+        defaultCurrency: CurrencyId.AUSD,
         profilePictureURL:
           'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
         bannerImageUrl: '',

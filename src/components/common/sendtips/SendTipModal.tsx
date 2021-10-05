@@ -105,7 +105,7 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
   };
 
   const handleChangeTokenBalance = () => {
-    const idx = balanceDetails.findIndex(item => item.tokenSymbol === tokenProperties.tokenId);
+    const idx = balanceDetails.findIndex(item => item.id === tokenProperties.tokenId);
     if (typeof idx === 'number') {
       setTokenBalance(balanceDetails[idx]?.freeBalance.toString() ?? '');
     }
@@ -140,8 +140,8 @@ const SendTipModal = ({isShown, hide, userAddress, availableTokens}: Props) => {
   };
 
   const findDecimals = () => {
-    const idx = balanceDetails.findIndex(item => item.tokenSymbol === tokenProperties.tokenId);
-    const decimals = balanceDetails[idx].tokenDecimals ?? 0;
+    const idx = balanceDetails.findIndex(item => item.id === tokenProperties.tokenId);
+    const decimals = balanceDetails[idx].decimal ?? 0;
 
     return decimals;
   };
