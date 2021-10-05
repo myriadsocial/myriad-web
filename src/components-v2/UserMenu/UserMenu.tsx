@@ -33,7 +33,13 @@ export const UserMenu: React.FC<UserMenuProps> = props => {
 
   return (
     <Paper square className={styles.root}>
-      <TabsComponent tabs={tabs} active={activeTab} onChangeTab={handleTabChange} size="small" />
+      <TabsComponent
+        tabs={tabs}
+        active={activeTab}
+        onChangeTab={handleTabChange}
+        size="small"
+        padding={0}
+      />
     </Paper>
   );
 };
