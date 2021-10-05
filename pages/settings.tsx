@@ -3,6 +3,7 @@ import {useDispatch} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
 
+import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -11,7 +12,7 @@ import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {setAnonymous, setUser, fetchConnectedSocials} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 
-const Experience: React.FC = () => {
+const Settings: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,7 +25,8 @@ const Experience: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
-      <TopNavbarComponent description={'Experience'} sectionTitle={SectionTitle.EXPERIENCE} />
+      <ToasterContainer />
+      <TopNavbarComponent description={'Account settings'} sectionTitle={SectionTitle.SETTINGS} />
     </DefaultLayout>
   );
 };
@@ -70,4 +72,4 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   };
 });
 
-export default Experience;
+export default Settings;

@@ -8,6 +8,7 @@ import {DefaultLayout} from '../../src/components-v2/template/Default/DefaultLay
 import {wrapper} from '../../src/store';
 
 import {ProfileTimeline} from 'src/components-v2/Profile/ProfileComponent';
+import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {User} from 'src/interfaces/user';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
@@ -34,6 +35,7 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
 
   return (
     <DefaultLayout isOnProfilePage={true}>
+      <ToasterContainer />
       {profileDetail && <ProfileTimeline profile={profileDetail} loading={false} />}
     </DefaultLayout>
   );
