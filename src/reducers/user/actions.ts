@@ -348,7 +348,7 @@ export const deleteSocial: ThunkActionCreator<Actions, RootState> =
   };
 
 export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
-  (currencyId: string, callback?: () => void) => async (dispatch, getState) => {
+  (selectedCurrency: Currency, callback?: () => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
     const {
       userState: {user},
@@ -357,15 +357,22 @@ export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
     if (!user) return;
 
     try {
-      const data = await TokenAPI.addUserToken({
-        currencyId,
+      await TokenAPI.addUserToken({
+        currencyId: selectedCurrency.id,
         userId: user.id,
       });
 
       dispatch({
         type: constants.ADD_USER_TOKEN,
-        payload: data,
+        payload: selectedCurrency,
       });
+
+      dispatch(
+        showToaster({
+          toasterStatus: Status.SUCCESS,
+          message: 'Added successfully, please refresh browser!',
+        }),
+      );
 
       callback && callback();
     } catch (error) {
