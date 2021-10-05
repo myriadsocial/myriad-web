@@ -6,6 +6,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       marginBottom: theme.spacing(2.5),
       marginTop: theme.spacing(2.5),
+      marginLeft: 16,
     },
     selected: {
       fontWeight: 600,

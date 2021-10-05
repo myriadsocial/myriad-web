@@ -1,6 +1,6 @@
-import {createStyles, makeStyles} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'inline-block',
@@ -9,6 +9,10 @@ export const useStyles = makeStyles(() =>
       display: 'block',
       position: 'relative',
       top: 10,
+
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
     },
     header: {
       position: 'relative',
@@ -20,6 +24,9 @@ export const useStyles = makeStyles(() =>
         lineHeight: '24px',
         fontWeight: 'bold',
       },
+    },
+    danger: {
+      color: theme.palette.error.main,
     },
   }),
 );

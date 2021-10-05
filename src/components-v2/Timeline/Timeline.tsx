@@ -14,8 +14,10 @@ import {useStyles} from './Timeline.styles';
 import {filterOptions, sortOptions, postFilterOptions} from './default';
 
 import {Comment} from 'src/interfaces/comment';
+import {User} from 'src/interfaces/user';
 
 type TimelineProps = {
+  user?: User;
   posts: Post[];
   type: TimelineType;
   sort: TimelineSortMethod;
@@ -29,11 +31,15 @@ type TimelineProps = {
   filterTimeline?: (type: TimelineType) => void;
   filterOrigin?: (origin: string) => void;
   onSendTip: (post: Post) => void;
+  onOpenTipHistory: (post: Post) => void;
+  onDelete: (post: Post) => void;
+  onReport: (post: Post) => void;
   toggleDownvoting: (reference: Post | Comment | null) => void;
 };
 
 export const Timeline: React.FC<TimelineProps> = props => {
   const {
+    user,
     posts,
     type,
     sort,
@@ -47,6 +53,9 @@ export const Timeline: React.FC<TimelineProps> = props => {
     filterOrigin,
     upvote,
     onSendTip,
+    onOpenTipHistory,
+    onDelete,
+    onReport,
     toggleDownvoting,
   } = props;
 
@@ -114,12 +123,16 @@ export const Timeline: React.FC<TimelineProps> = props => {
         loader={<Lottie options={lottieLoading} height={50} width={50} />}>
         {posts.map(post => (
           <PostDetail
+            user={user}
             key={`post-${post.id}`}
             post={post}
             anonymous={anonymous}
             onUpvote={upvote}
             onSendTip={onSendTip}
             toggleDownvoting={toggleDownvoting}
+            onOpenTipHistory={onOpenTipHistory}
+            onDelete={onDelete}
+            onReport={onReport}
           />
         ))}
       </InfiniteScroll>
