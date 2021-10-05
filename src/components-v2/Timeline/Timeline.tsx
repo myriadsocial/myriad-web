@@ -35,6 +35,7 @@ type TimelineProps = {
   onDelete: (post: Post) => void;
   onReport: (post: Post) => void;
   toggleDownvoting: (reference: Post | Comment | null) => void;
+  onShared: (post: Post) => void;
 };
 
 export const Timeline: React.FC<TimelineProps> = props => {
@@ -56,6 +57,7 @@ export const Timeline: React.FC<TimelineProps> = props => {
     onOpenTipHistory,
     onDelete,
     onReport,
+    onShared,
     toggleDownvoting,
   } = props;
 
@@ -133,6 +135,7 @@ export const Timeline: React.FC<TimelineProps> = props => {
             onOpenTipHistory={onOpenTipHistory}
             onDelete={onDelete}
             onReport={onReport}
+            onShared={onShared}
           />
         ))}
       </InfiniteScroll>
