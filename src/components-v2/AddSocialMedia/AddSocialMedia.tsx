@@ -14,6 +14,7 @@ import {
   FormControl,
   InputLabel,
   capitalize,
+  CircularProgress,
 } from '@material-ui/core';
 
 import ShowIf from '../../components/common/show-if.component';
@@ -27,30 +28,18 @@ import {useStyles} from './AddSocialMedia.styles';
 type AddSocialMediaProps = Pick<ModalProps, 'onClose' | 'open'> & {
   social: SocialsEnum;
   publicKey: string;
+  verifying?: boolean;
   verify: (social: SocialsEnum, username: string) => void;
 };
 
-const prefix: Record<SocialsEnum, string> = {
-  [SocialsEnum.TWITTER]: 'https://twitter.com/',
-  [SocialsEnum.FACEBOOK]: 'https://www.facebook.com/',
-  [SocialsEnum.REDDIT]: 'https://www.reddit.com/user/',
-  [SocialsEnum.INSTAGRAM]: '',
-  [SocialsEnum.FOURCHAN]: '',
-  [SocialsEnum.VK]: '',
-  [SocialsEnum.WECHAT]: '',
-  [SocialsEnum.WEIBO]: '',
-  [SocialsEnum.TELEGRAM]: '',
-};
-
 export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
-  const {social, publicKey, open, onClose, verify} = props;
+  const {social, publicKey, open, verifying = false, onClose, verify} = props;
 
   const styles = useStyles();
 
-  const [socialName, setSocialName] = useState('');
+  const [socialUrl, setSocialUrl] = useState('');
   const [shared, setShared] = useState(false);
   const [termApproved, setTermApproved] = useState(false);
-  const [validUrl, setUrlValid] = useState(false);
 
   const APP_URL = 'https://app.myriad.systems';
   const message = `I'm part of the Myriad ${publicKey}`;
@@ -62,53 +51,27 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
   const clear = () => {
     setShared(false);
     setTermApproved(false);
-    setUrlValid(false);
-    setSocialName('');
+    setSocialUrl('');
   };
 
   const handleSocialNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
 
-    if (social === SocialsEnum.FACEBOOK) {
-      setSocialName(text);
-    } else {
-      const name = text.substring(text.lastIndexOf('/') + 1);
-      setSocialName(name);
-    }
-
-    setUrlValid(text.trim().length > 0);
+    setSocialUrl(text);
   };
 
   const handleSocialNamePasted = (e: React.ClipboardEvent<HTMLDivElement>) => {
     e.preventDefault();
     const text = e.clipboardData.getData('Text');
 
-    if (social === SocialsEnum.FACEBOOK) {
-      const name = text.replace(prefix.facebook, '');
-
-      setSocialName(name);
-      setUrlValid(name.trim().length > 0);
-    } else {
-      const name = text.substring(text.lastIndexOf('/') + 1);
-
-      setSocialName(name);
-      setUrlValid(name.trim().length > 0);
-    }
+    setSocialUrl(text);
   };
 
   const handleShared = () => {
-    if (social && socialName) {
-      let username = socialName;
+    verify(social, socialUrl);
 
-      if (social === SocialsEnum.FACEBOOK) {
-        username = `${prefix.facebook}/${socialName}`;
-      }
-
-      verify(social, username);
-
-      clear();
-      onClose();
-    }
+    clear();
+    onClose();
   };
 
   return (
@@ -129,9 +92,12 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
               <FormControl fullWidth variant="outlined">
                 <InputLabel htmlFor="experience-name">{capitalize(social)} Account URL</InputLabel>
                 <OutlinedInput
-                  id="experience-name"
+                  id="social-profile-url"
                   placeholder="Ex: twitter.com/laraschoffield"
                   labelWidth={160}
+                  onChange={handleSocialNameChange}
+                  onPaste={handleSocialNamePasted}
+                  value={socialUrl}
                 />
               </FormControl>
             </ListItemText>
@@ -187,7 +153,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                     <Button
                       component="div"
                       variant="outlined"
-                      size="large"
+                      fullWidth
                       startIcon={<TwitterIcon />}
                       className={styles.twitter}>
                       Tweet Now
@@ -204,7 +170,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                     <Button
                       component="div"
                       variant="outlined"
-                      size="large"
+                      fullWidth
                       startIcon={<RedditIcon />}
                       className={styles.reddit}>
                       Share
@@ -226,7 +192,8 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
           <ListItem>
             <ListItemText disableTypography>
               <FormControlLabel
-                control={<Checkbox name="term" color="primary" />}
+                onChange={() => setTermApproved(!termApproved)}
+                control={<Checkbox name="term" color="primary" className={styles.icon} />}
                 label={
                   <Typography>
                     I agree to the Myriad{' '}
@@ -243,12 +210,16 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
 
       <Button
         onClick={handleShared}
-        disabled={!shared || !termApproved || !validUrl}
+        disabled={!shared || !termApproved}
         fullWidth
         variant="contained"
         color="primary">
         Verify My {capitalize(social)} Account
       </Button>
+
+      <ShowIf condition={verifying}>
+        <CircularProgress size={40} className={styles.loading} />
+      </ShowIf>
     </Modal>
   );
 };

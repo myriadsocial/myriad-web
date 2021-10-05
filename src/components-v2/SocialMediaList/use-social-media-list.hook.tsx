@@ -11,9 +11,10 @@ import WeChatIcon from '../../images/socials/wechat.svg';
 import WeiboIcon from '../../images/socials/weibo.svg';
 import {SocialsEnum, SocialMedia} from '../../interfaces/social';
 
-type SocialDetail = {
+export type SocialDetail = {
   id: SocialsEnum;
   icon: React.ReactElement | React.FC;
+  originId: string | null;
   connected: boolean;
 };
 
@@ -45,12 +46,19 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
     return !!match && match.verified;
   };
 
+  const getPrimarySocial = (social: SocialsEnum): string | null => {
+    const match = connected.find(item => item.platform === social);
+
+    return match ? match.userId : null;
+  };
+
   for (const key of enumKeys(SocialsEnum)) {
     const social: SocialsEnum = SocialsEnum[key];
 
     socials.push({
       id: social,
       icon: icons[social],
+      originId: getPrimarySocial(social),
       connected: isSocialConnected(social),
     });
   }

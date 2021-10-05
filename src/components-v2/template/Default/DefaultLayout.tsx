@@ -22,36 +22,38 @@ export const DefaultLayout: React.FC<DefaultLayoutProps> = props => {
   const theme = useTheme();
 
   return (
-    <div className={classes.root}>
-      <div className={classes.firstCol}>
-        <div className={classes.innerFirstColWrapper}>
-          <div>
-            <MenuContainer />
+    <>
+      <div className={classes.root}>
+        <div className={classes.firstCol}>
+          <div className={classes.innerFirstColWrapper}>
+            <div>
+              <MenuContainer />
+            </div>
+            <div>
+              <SocialMediaListContainer />
+            </div>
+            <div>
+              <WalletBalancesContainer />
+            </div>
           </div>
-          <div>
-            <SocialMediaListContainer />
-          </div>
-          <div>
-            <WalletBalancesContainer />
+        </div>
+
+        <div className={classes.secondCol}>
+          <div className={classes.innerSecondColWrapper}>{children}</div>
+        </div>
+
+        <div className={classes.thirdCol}>
+          <div className={classes.innerThirdColWrapper}>
+            <div>
+              <ProfileHeaderContainer />
+            </div>
+            <div style={{marginTop: theme.spacing(2.5)}}>
+              <RightMenuBar />
+            </div>
           </div>
         </div>
       </div>
-
-      <div className={classes.secondCol}>
-        <div className={classes.innerSecondColWrapper}>{children}</div>
-      </div>
-
-      <div className={classes.thirdCol}>
-        <div className={classes.innerThirdColWrapper}>
-          <div>
-            <ProfileHeaderContainer />
-          </div>
-          <div style={{marginTop: theme.spacing(2.5)}}>
-            <RightMenuBar />
-          </div>
-        </div>
-        <AlertComponent />
-      </div>
-    </div>
+      <AlertComponent />
+    </>
   );
 };

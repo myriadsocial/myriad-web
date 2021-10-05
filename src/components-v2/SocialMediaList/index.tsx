@@ -4,12 +4,12 @@ import {IconButton} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {BoxComponent} from '../../components-v2/atoms/Box';
-import {SocialMedia, SocialsEnum} from '../../interfaces/social';
-import {useSocialMediaList} from './use-social-media-list.hook';
+import {SocialMedia} from '../../interfaces/social';
+import {SocialDetail, useSocialMediaList} from './use-social-media-list.hook';
 
 type SocialMediaListProps = {
   connected: Array<SocialMedia>;
-  toggleVerify: (social: SocialsEnum) => void;
+  toggleVerify: (social: SocialDetail) => void;
   openSocialPage: () => void;
 };
 
@@ -50,8 +50,10 @@ export const SocialMediaList: React.FC<SocialMediaListProps> = ({
 
   const socials = useSocialMediaList(connected);
 
-  const handleSocialClicked = (social: SocialsEnum) => () => {
-    toggleVerify(social);
+  const handleSocialClicked = (social: SocialDetail) => () => {
+    if (social.connected) {
+      toggleVerify(social);
+    }
   };
 
   return (
@@ -62,7 +64,7 @@ export const SocialMediaList: React.FC<SocialMediaListProps> = ({
             key={social.id}
             size="small"
             color={social.connected ? 'primary' : 'default'}
-            onClick={handleSocialClicked(social.id)}
+            onClick={handleSocialClicked(social)}
             className={styles.icon}>
             {social.icon}
           </IconButton>
