@@ -58,7 +58,6 @@ export const getUserExperience = async (userId: string): Promise<ExperienceList>
       },
     },
   });
-  console.log(data);
   return data;
 };
 
