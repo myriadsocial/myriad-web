@@ -1,5 +1,7 @@
+import {Status} from '../../interfaces/toaster';
 import {Actions as BaseAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
+import {ShowToaster, showToaster} from '../toaster/actions';
 import * as constants from './constants';
 
 import axios, {AxiosError} from 'axios';
@@ -74,6 +76,7 @@ export type Actions =
   | FetchUserTransactionDetail
   | SetVerifyingSocial
   | ResetVerifyingSocial
+  | ShowToaster
   | BaseAction;
 
 /**
@@ -367,6 +370,13 @@ export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
       callback && callback();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 422) {
+        dispatch(
+          showToaster({
+            message: 'Token already added to your wallet!',
+            toasterStatus: Status.DANGER,
+          }),
+        );
+
         dispatch(
           setError({
             message: 'Token is already on your wallet!',
