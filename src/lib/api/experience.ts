@@ -46,19 +46,19 @@ export const searchExperience = async (query: string): Promise<ExperienceList> =
 
 export const getUserExperience = async (userId: string): Promise<ExperienceList> => {
   const {data} = await MyriadAPI.request<ExperienceList>({
-    url: `/user-experiences`,
+    url: `/experiences`,
     method: 'GET',
     params: {
       pageLimit: PAGINATION_LIMIT,
       filter: {
         where: {
-          and: [{userId}],
+          and: [{createdBy: userId}],
         },
         include: ['user'],
       },
     },
   });
-
+  console.log(data);
   return data;
 };
 
@@ -83,22 +83,10 @@ export const cloneExperience = async (userId: string, experienceId: string): Pro
   });
 };
 
-export const chooseExperience = async (
-  userId: string,
-  experienceId: string,
-): Promise<Experience> => {
-  const {data} = await MyriadAPI.request<Experience>({
-    // NOTE: this endpoint returns 204 code (no return)
-    url: `/users/${userId}/select-experience/${experienceId}`,
-    method: 'PATCH',
-  });
-
-  return data;
-};
-
-export const removeExperience = async (experienceId: string): Promise<void> => {
-  await MyriadAPI.request({
-    url: `/user-experiences/${experienceId}`,
-    method: 'DELETE',
+export const createExperience = async (userId: string, experience: Experience): Promise<void> => {
+  await MyriadAPI.request<Experience>({
+    url: `/users/${userId}/new-experiences`,
+    method: 'POST',
+    data: experience,
   });
 };

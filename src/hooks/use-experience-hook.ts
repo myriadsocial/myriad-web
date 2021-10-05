@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {Experience} from '../interfaces/experience';
 import {RootState} from '../reducers';
 import {
   searchExperience,
@@ -9,6 +10,7 @@ import {
   cloneExperience,
   fetchExperience,
   fetchAllExperiences,
+  createExperience,
 } from '../reducers/experience/actions';
 import {ExperienceState} from '../reducers/experience/reducer';
 
@@ -16,7 +18,7 @@ import {ExperienceState} from '../reducers/experience/reducer';
 export const useExperienceHook = () => {
   const dispatch = useDispatch();
 
-  const {experiences, allExperiences} = useSelector<RootState, ExperienceState>(
+  const {experiences, allExperiences, selectedExperience} = useSelector<RootState, ExperienceState>(
     state => state.experienceState,
   );
 
@@ -49,6 +51,11 @@ export const useExperienceHook = () => {
     dispatch(cloneExperience(experienceId));
   };
 
+  const saveExperience = (newExperience: Partial<Experience>, newTags: string[]) => {
+    const experience = {...newExperience, tags: newTags};
+    dispatch(createExperience(experience, newTags));
+  };
+
   return {
     searchPeople: findPeople,
     searchExperience: findExperience,
@@ -56,7 +63,9 @@ export const useExperienceHook = () => {
     followExperience,
     loadExperience,
     experiences,
+    selectedExperience,
     loadAllExperiences,
     allExperiences,
+    saveExperience,
   };
 };
