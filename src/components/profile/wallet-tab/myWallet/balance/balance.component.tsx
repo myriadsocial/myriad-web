@@ -177,11 +177,11 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, hidden}) => {
           <TableBody>
             {balanceDetails.length === 0 && <LoadingComponent />}
             {balanceDetails.map(row => (
-              <TableRow key={row.tokenSymbol}>
+              <TableRow key={row.id}>
                 <TableCell component="th" scope="row">
                   <div className={style.tokenColumn}>
-                    <Avatar alt={row.tokenSymbol} src={row.tokenImage} />
-                    <Typography className={style.balanceText}>{row.tokenSymbol}</Typography>
+                    <Avatar alt={row.id} src={row.image} />
+                    <Typography className={style.balanceText}>{row.id}</Typography>
                   </div>
                 </TableCell>
                 <TableCell align="right">
