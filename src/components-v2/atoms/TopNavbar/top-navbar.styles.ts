@@ -17,6 +17,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 20,
       position: 'relative',
       bottom: 5,
+      '& .MuiSvgIcon-root': {
+        fill: 'none',
+      },
     },
     textWrapper: {
       display: 'flex',
