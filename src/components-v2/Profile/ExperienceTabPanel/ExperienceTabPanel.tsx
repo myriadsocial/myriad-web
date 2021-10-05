@@ -26,7 +26,11 @@ export const ExperienceTabPanel: React.FC<ExperienceTabPanelProps> = props => {
         options={experienceFilterOptions}
         onChange={handleFilterSelected}
       />
-      <ExperienceList isOnHomePage={isOnHomePage} experiences={experiences} />
+      <ExperienceList
+        isOnHomePage={isOnHomePage}
+        experiences={experiences}
+        filterTimeline={console.log}
+      />
     </>
   );
 };
