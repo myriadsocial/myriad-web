@@ -9,13 +9,12 @@ type ToasterStatusKey = keyof typeof Status;
 type ToasterStatusValue = typeof Status[ToasterStatusKey];
 const toasterStatuses: ToasterStatusValue[] = Object.values(Status);
 
-interface ToasterProps {
+type ToasterProps = {
   toasterStatus: Status;
   open: boolean;
   message: string;
   onClose: () => void;
-}
+};
 
 export {Status, toasterStatuses};
-
 export type {ToasterProps};
