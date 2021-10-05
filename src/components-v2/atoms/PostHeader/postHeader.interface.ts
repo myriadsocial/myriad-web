@@ -1,8 +1,12 @@
 import {Post} from '../../../interfaces/post';
 
-export type PostComponentProps = {
-  disable?: boolean;
+export type PostHeaderProps = {
+  owner: boolean;
   post: Post;
+  tipped?: boolean;
+  onDelete: () => void;
+  onOpenTipHistory: () => void;
+  onReport: () => void;
 };
 
 export enum Platform {
