@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 import List from '@material-ui/core/List';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -27,11 +28,12 @@ type HistoryDetailListProps = {
   allTxs: Transaction[];
   outboundTxs: Transaction[];
   inboundTxs: Transaction[];
+  isLoading: boolean;
   userId: string;
 };
 
 export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
-  const {allTxs, inboundTxs, outboundTxs, userId} = props;
+  const {allTxs, isLoading, inboundTxs, outboundTxs, userId} = props;
 
   useEffect(() => {
     const newArray = allTxs.map(tx => ({
@@ -44,9 +46,13 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     setSortOptions((oldSortOptions: MenuOptions[]) => [...oldSortOptions, ...updatedSortOptions]);
   }, []);
 
+  useEffect(() => {
+    setDefaultTxs(allTxs);
+  }, [allTxs]);
+
   const [sortOptions, setSortOptions] = useState(historyCoinSortOptions);
 
-  const [defaultTxs, setDefaultTxs] = useState(allTxs);
+  const [defaultTxs, setDefaultTxs] = useState<Transaction[]>([]);
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const getUniqueListBy = (arr: Array<any>, key: string) => {
@@ -153,66 +159,72 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
       <TableContainer component={List}>
         <Table className={classes.root} aria-label="history details table">
           <TableBody>
-            {defaultTxs.map(tx => (
-              <TableRow key={tx.id} className={classes.tableRow}>
-                <TableCell component="th" scope="row" className={classes.tableCell}>
-                  <CustomAvatar
-                    size={CustomAvatarSize.MEDIUM}
-                    alt={tx.toUser.name}
-                    avatar={tx.toUser.profilePictureURL ?? ''}
-                  />
+            {isLoading && defaultTxs.length === 0 && (
+              <TableRow className={classes.loading}>
+                <CircularProgress />
+              </TableRow>
+            )}
+            {defaultTxs.length > 0 &&
+              defaultTxs.map(tx => (
+                <TableRow key={tx.id} className={classes.tableRow}>
+                  <TableCell component="th" scope="row" className={classes.tableCell}>
+                    <CustomAvatar
+                      size={CustomAvatarSize.MEDIUM}
+                      alt={tx.toUser.name}
+                      avatar={tx.toUser.profilePictureURL ?? ''}
+                    />
 
-                  <div>
-                    <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                      {tx.toUser.name}
-                    </Typography>
-                    <Typography variant="caption" color="textSecondary">
-                      {formatTimeAgo(tx.createdAt)}
-                    </Typography>
-                  </div>
-                </TableCell>
-
-                <TableCell align="center">
-                  {tx.toUser.id === userId && (
-                    <div className={classes.tipStatusGreen}>
-                      <Typography variant="caption">Tipped</Typography>
-                    </div>
-                  )}
-                  {tx.fromUser.id === userId && (
-                    <div className={classes.tipStatusRed}>
-                      <Typography variant="caption">Sent</Typography>
-                    </div>
-                  )}
-                </TableCell>
-
-                <TableCell align="right">
-                  <div className={classes.currencyDetailWrapper}>
                     <div>
-                      {tx.toUser.id === userId && (
-                        <Typography variant="h5" className={classes.textAmountGreen}>
-                          +{tx.amount} {tx.currency.id}
-                        </Typography>
-                      )}
-                      {tx.fromUser.id === userId && (
-                        <Typography variant="h5" className={classes.textAmountRed}>
-                          -{tx.amount} {tx.currency.id}
-                        </Typography>
-                      )}
+                      <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                        {tx.toUser.name}
+                      </Typography>
                       <Typography variant="caption" color="textSecondary">
-                        {'~15.25 USD'}
+                        {formatTimeAgo(tx.createdAt)}
                       </Typography>
                     </div>
-                    <div>
-                      <CustomAvatar
-                        size={CustomAvatarSize.XSMALL}
-                        alt={tx.currency.id}
-                        avatar={tx.currency.image}
-                      />
+                  </TableCell>
+
+                  <TableCell align="center">
+                    {tx.toUser.id === userId && (
+                      <div className={classes.tipStatusGreen}>
+                        <Typography variant="caption">Tipped</Typography>
+                      </div>
+                    )}
+                    {tx.fromUser.id === userId && (
+                      <div className={classes.tipStatusRed}>
+                        <Typography variant="caption">Sent</Typography>
+                      </div>
+                    )}
+                  </TableCell>
+
+                  <TableCell align="right">
+                    <div className={classes.currencyDetailWrapper}>
+                      <div>
+                        {tx.toUser.id === userId && (
+                          <Typography variant="h5" className={classes.textAmountGreen}>
+                            +{tx.amount} {tx.currency.id}
+                          </Typography>
+                        )}
+                        {tx.fromUser.id === userId && (
+                          <Typography variant="h5" className={classes.textAmountRed}>
+                            -{tx.amount} {tx.currency.id}
+                          </Typography>
+                        )}
+                        <Typography variant="caption" color="textSecondary">
+                          {'~15.25 USD'}
+                        </Typography>
+                      </div>
+                      <div>
+                        <CustomAvatar
+                          size={CustomAvatarSize.XSMALL}
+                          alt={tx.currency.id}
+                          avatar={tx.currency.image}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
