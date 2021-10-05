@@ -5,6 +5,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       '& .MuiBox-root': {
         paddingLeft: 0,
+        paddingRight: 0,
       },
     },
   }),

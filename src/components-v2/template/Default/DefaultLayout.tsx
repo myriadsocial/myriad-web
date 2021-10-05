@@ -50,9 +50,8 @@ export const DefaultLayout: React.FC<DefaultLayoutProps> = props => {
             <RightMenuBar />
           </div>
         </div>
+        <AlertComponent />
       </div>
-
-      <AlertComponent />
     </div>
   );
 };
