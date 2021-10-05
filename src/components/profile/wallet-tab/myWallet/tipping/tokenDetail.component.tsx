@@ -63,7 +63,7 @@ const TokenDetailComponent = () => {
           {loadingBalance && balanceDetails.length === 0 && <LoadingComponent />}
           {balanceDetails.map((token, index) => (
             <StyledTab
-              label={token.tokenSymbol.toUpperCase()}
+              label={token.id.toUpperCase()}
               id={`simple-tab-${index}`}
               key={`simple-tab-${index}`}
             />

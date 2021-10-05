@@ -2,6 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
+import {CurrencyId} from '../../interfaces/currency';
 import {PostVisibility} from '../../interfaces/post';
 import {SocialsEnum} from '../../interfaces/social';
 import {Timeline as TimelineComponent} from './Timeline';
@@ -51,6 +52,7 @@ Timeline.args = {
       updatedAt: new Date('Fri Aug 27 2021 13:39:48 GMT+0000 (Coordinated Universal Time)'),
       createdBy: '0x76e85125c8a6997e5e40e5e1f0a64a8154b5c69308e54b426ad3a34af1545b1d',
       user: {
+        defaultCurrency: CurrencyId.AUSD,
         id: '0x76e85125c8a6997e5e40e5e1f0a64a8154b5c69308e54b426ad3a34af1545b1d',
         name: 'Nomaden',
         profilePictureURL:
@@ -86,6 +88,7 @@ Timeline.args = {
           createdAt: new Date('2021-07-15T03:40:23.000Z'),
           updatedAt: new Date('2021-07-15T03:40:23.000Z'),
           user: {
+            defaultCurrency: CurrencyId.AUSD,
             id: '6123614bf6c45c2728e43aca',
             name: 'Storybook User',
             bannerImageUrl: '',
@@ -127,6 +130,7 @@ Timeline.args = {
       createdBy: '0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127',
       peopleId: '6128695ae2f915a7f64ee94e',
       user: {
+        defaultCurrency: CurrencyId.AUSD,
         id: '0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127',
         name: 'Ms. Sara Bellum',
         profilePictureURL:
@@ -180,6 +184,7 @@ Timeline.args = {
       createdBy: '0xdc996f43e45bb990aef40fbe7d9e52fc6270369131a180f1e8a8705b74bbd060',
       peopleId: '612c544caa5264f59d2e36d3',
       user: {
+        defaultCurrency: CurrencyId.AUSD,
         id: '0xdc996f43e45bb990aef40fbe7d9e52fc6270369131a180f1e8a8705b74bbd060',
         name: 'Cintailah Usus Mu',
         profilePictureURL:

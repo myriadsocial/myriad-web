@@ -139,15 +139,15 @@ export const CurrencyDetails = ({userTransactionDetail, balanceDetail}: Props) =
     const result = {
       sent: 0,
       received: 0,
-      currencyId: balanceDetail.tokenSymbol,
+      currencyId: balanceDetail.id,
     };
 
     const receivedObj = userTransactionDetail.received.find(({currencyId}) => {
-      return currencyId === balanceDetail.tokenSymbol;
+      return currencyId === balanceDetail.id;
     });
 
     const sentObj = userTransactionDetail.sent.find(({currencyId}) => {
-      return currencyId === balanceDetail.tokenSymbol;
+      return currencyId === balanceDetail.id;
     });
 
     if (receivedObj) {
@@ -171,7 +171,7 @@ export const CurrencyDetails = ({userTransactionDetail, balanceDetail}: Props) =
         <TableHead>
           <TableRow>
             <TableCell>
-              <Typography className={style.balanceText}>{balanceDetail.tokenSymbol}</Typography>
+              <Typography className={style.balanceText}>{balanceDetail.id}</Typography>
             </TableCell>
             <TableCell align="right">
               <Typography className={style.balanceText}>{balanceDetail.freeBalance}</Typography>

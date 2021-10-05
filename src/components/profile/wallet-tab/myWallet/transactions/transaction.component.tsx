@@ -87,10 +87,10 @@ const TransactionComponent: React.FC<TransactionProps> = ({forwardedRef, detaile
           Filter by
         </Button>
         <Button variant="contained" color="default" size="medium" className={styles.iconButton}>
-          {tokens[0].name}
+          {tokens[0].id}
         </Button>
         <Button variant="contained" color="default" size="medium" className={styles.iconButton}>
-          {tokens[1].name}
+          {tokens[1].id}
         </Button>
       </div>
     );

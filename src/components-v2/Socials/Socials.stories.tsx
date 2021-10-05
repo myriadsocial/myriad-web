@@ -2,6 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
+import {CurrencyId} from '../../interfaces/currency';
 import {SocialsEnum} from '../../interfaces/social';
 import {Socials as SocialsComponent} from './Socials';
 
@@ -17,6 +18,7 @@ export const Socials = Template.bind({});
 Socials.args = {
   user: {
     id: '0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127',
+    defaultCurrency: CurrencyId.AUSD,
     name: 'Ms. Sara Bellum',
     profilePictureURL:
       'https://res.cloudinary.com/dsget80gs/image/upload/v1629910582/dnpyoli9d0jiyqejokqo.png',
