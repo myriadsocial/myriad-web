@@ -7,33 +7,41 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles, SimpleCardProps} from '.';
+import {TimelineType} from '../../../interfaces/timeline';
 
 import classNames from 'classnames';
 
-const SimpleCard = ({
+const SimpleCard: React.FC<SimpleCardProps> = ({
+  user,
   creator,
   title,
   imgUrl,
   isSelectable,
+  filterTimeline,
   ...props
-}: SimpleCardProps): JSX.Element => {
+}) => {
   const classes = useStyles();
-
   const [selected, setSelected] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleClick = () => {
     setSelected(!selected);
+    filterTimeline(TimelineType.EXPERIENCE);
   };
 
   const handleClickSettings = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-
-    console.log('clicked!');
-    //TODO: open drop down component
+    setAnchorEl(e.currentTarget);
   };
 
   const parseImageFilename = (url: string) => {
@@ -64,23 +72,23 @@ const SimpleCard = ({
       <div
         className={classNames(classes.indicator, {
           [classes.indicatorActivated]: selected === true,
-        })}></div>
-      <div className={classes.details}>
-        {isSelectable && (
-          <CardActionArea
-            disableRipple
-            classes={{
-              root: classes.actionArea,
-              focusHighlight: classes.focusHighlight,
-            }}
-            onClick={handleClick}>
+        })}
+      />
+      <CardActionArea
+        onClick={handleClick}
+        disableRipple
+        classes={{
+          root: classes.actionArea,
+        }}>
+        <div className={classes.details}>
+          <div className={classes.details}>
             <CardMedia
               component={'img'}
               className={classes.cover}
               image={imgUrl}
               title={`${parseImageFilename(imgUrl)} Experience image`}
             />
-            <CardContent className={classes.content}>
+            <CardContent classes={{root: classes.cardContent}}>
               <Typography variant="body1">{title}</Typography>
               <Typography variant="caption" color="primary">
                 {creator}
@@ -89,37 +97,26 @@ const SimpleCard = ({
                 {checkCreator(creator) ? `(you)` : ''}
               </Typography>
             </CardContent>
-          </CardActionArea>
-        )}
-        {!isSelectable && (
-          <CardContent className={classes.staticContent}>
-            <CardMedia
-              component={'img'}
-              className={classes.cover}
-              image={imgUrl}
-              title={`${parseImageFilename(imgUrl)} Experience image`}
-            />
-            <div className={classes.content}>
-              <Typography variant="body1">{title}</Typography>
-              <Typography variant="caption" color="primary">
-                {creator}
-              </Typography>
-              <Typography variant="caption" color="textSecondary">
-                {checkCreator(creator) ? `(you)` : ''}
-              </Typography>
-            </div>
-          </CardContent>
-        )}
-      </div>
-      <IconButton
-        disableRipple
+          </div>
+          <IconButton aria-label="settings" onClick={handleClickSettings}>
+            <SvgIcon component={DotsVerticalIcon} viewBox="0 0 24 24" />
+          </IconButton>
+        </div>
+      </CardActionArea>
+      <Menu
         classes={{
-          root: classes.iconButton,
+          paper: classes.menu,
         }}
-        aria-label="settings"
-        onClick={handleClickSettings}>
-        <SvgIcon component={DotsVerticalIcon} viewBox="0 0 24 24" />
-      </IconButton>
+        anchorEl={anchorEl}
+        getContentAnchorEl={null}
+        anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+        transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}>
+        <MenuItem>See details</MenuItem>
+        <MenuItem>Edit experience</MenuItem>
+        <MenuItem className={classes.delete}>Delete</MenuItem>
+      </Menu>
     </Card>
   );
 };
