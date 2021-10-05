@@ -42,15 +42,26 @@ type PostDetailProps = {
   onOpenTipHistory: (post: Post) => void;
   onDelete: (post: Post) => void;
   onReport: (post: Post) => void;
+  onShared: (post: Post) => void;
 };
 
 export const PostDetail: React.FC<PostDetailProps> = props => {
   const styles = useStyles();
   const router = useRouter();
 
-  const {user, post, onUpvote, onSendTip, toggleDownvoting, onOpenTipHistory, onDelete, onReport} =
-    props;
+  const {
+    user,
+    post,
+    onUpvote,
+    onSendTip,
+    toggleDownvoting,
+    onOpenTipHistory,
+    onDelete,
+    onReport,
+    onShared,
+  } = props;
   const tabs = useCommentTabs(post);
+
   const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
   const [shoWcomment, setShowComment] = useState(false);
   const [viewContent, setViewContent] = useState(!post.isNSFW);
@@ -103,6 +114,10 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   const handleReportPost = () => {
     onReport(post);
+  };
+
+  const handleShared = () => {
+    onShared(post);
   };
 
   const handleOpenTipHistory = () => {
@@ -204,6 +219,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           onUpvote={handleUpvote}
           onDownVote={handleDownVote}
           onShowComments={toggleShowComments}
+          shareUrl={`${window.location.origin}/profile/${post.createdBy}?post=${post.id}`}
+          onShared={handleShared}
         />
 
         <Button

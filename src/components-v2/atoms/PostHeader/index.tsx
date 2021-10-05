@@ -69,10 +69,6 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
     return url;
   };
 
-  const handleShare = () => {
-    // code
-  };
-
   const handleDelete = () => {
     onDelete();
     handleClosePostSetting();
@@ -142,8 +138,6 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         <ShowIf condition={owner || tipped}>
           <MenuItem onClick={handleOpenTipHistory}>Tip History</MenuItem>
         </ShowIf>
-
-        <MenuItem onClick={handleShare}>Share</MenuItem>
         <ShowIf condition={!owner}>
           <MenuItem onClick={handleReport} className={style.danger}>
             Report

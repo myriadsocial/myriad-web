@@ -109,6 +109,10 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     setPostToRemove(post);
   };
 
+  const handleSharePost = (post: Post) => {
+    // code
+  };
+
   const handleClosePrompt = (): void => {
     setRemoving(false);
     setPostToRemove(null);
@@ -143,6 +147,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
         onDelete={handleDeletePost}
         onReport={handleReportPost}
         toggleDownvoting={handleToggleDownvoting}
+        onShared={handleSharePost}
       />
 
       <Modal
