@@ -25,7 +25,7 @@ import {ListItemComponent} from '../atoms/ListItem';
 import {useStyles} from './Experience.styles';
 
 type ExperienceEditorProps = {
-  experience?: Experience;
+  experience?: Experience | null;
   tags: Tag[];
   people: People[];
   onSearchTags: (query: string) => void;
@@ -56,6 +56,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     const url = await onImageUpload(files);
 
     setImage(url);
+    setNewExperience({...newExperience, experienceImageURL: url});
   };
 
   const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
