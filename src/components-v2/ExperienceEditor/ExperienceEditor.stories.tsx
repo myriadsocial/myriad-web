@@ -3,6 +3,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 import React from 'react';
 
 import {ExperienceEditor} from '.';
+import {CurrencyId} from '../../interfaces/currency';
 import {SocialsEnum} from '../../interfaces/social';
 
 export default {
@@ -75,6 +76,7 @@ EditExperience.args = {
       },
     ],
     user: {
+      defaultCurrency: CurrencyId.AUSD,
       id: '0x76e85125c8a6997e5e40e5e1f0a64a8154b5c69308e54b426ad3a34af1545b1d',
       name: 'Nomaden',
       profilePictureURL:

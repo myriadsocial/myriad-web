@@ -65,28 +65,24 @@ export const CurrencyTableComponent = ({
             </TableRow>
           )}
           {balanceDetails.map(row => (
-            <TableRow key={row.tokenSymbol}>
+            <TableRow key={row.id}>
               <RadioGroup
                 aria-label="token"
                 name={selectedToken}
                 value={selectedToken}
                 onChange={handleSetSelectedToken}>
                 <TableCell component="th" scope="row">
-                  {row.tokenSymbol === 'MYRIA' ? (
+                  {row.id === 'MYRIA' ? (
                     <></>
                   ) : (
                     <>
-                      <FormControlLabel
-                        value={row.tokenSymbol}
-                        control={<Radio />}
-                        label={row.tokenSymbol}
-                      />
+                      <FormControlLabel value={row.id} control={<Radio />} label={row.id} />
                     </>
                   )}
                 </TableCell>
               </RadioGroup>
               <TableCell align="right">
-                {row.tokenSymbol === 'MYRIA' ? (
+                {row.id === 'MYRIA' ? (
                   <></>
                 ) : isLoading ? (
                   <CircularProgress className={styles.spinner} size={20} />
