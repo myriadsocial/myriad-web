@@ -2,7 +2,11 @@ import {ChevronLeftIcon} from '@heroicons/react/outline';
 
 import React, {useState, useEffect} from 'react';
 
+import {useRouter} from 'next/router';
+
+import {IconButton} from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {TopNavbarProps, SectionTitle, useStyles} from '.';
@@ -36,11 +40,22 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
     return false;
   };
 
+  const router = useRouter();
+
+  const handleClick = (): void => {
+    router.back();
+  };
+
   return (
     <Paper className={classes.root}>
-      <div className={classes.icon}>
-        <ChevronLeftIcon />
-      </div>
+      <IconButton
+        color="primary"
+        size="medium"
+        disableRipple
+        onClick={handleClick}
+        className={classes.icon}>
+        <SvgIcon component={ChevronLeftIcon} viewBox="0 0 24 24" />
+      </IconButton>
       <div className={classes.textWrapper}>
         {!isInvertedSection(sectionTitle) && (
           <>
