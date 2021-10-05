@@ -1,6 +1,6 @@
 import {RefreshIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -33,8 +33,13 @@ type BalanceDetailListProps = {
 export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   const {balanceDetails, isLoading, onClickRefresh, onClickAddCoin} = props;
 
+  // Make sure balance is showing, does not return empty JSX
+  useEffect(() => {
+    setDefaultBalanceDetails(balanceDetails);
+  }, [balanceDetails]);
+
   const [isOnPrimaryCoinMenu, setIsOnPrimaryCoinMenu] = useState(false);
-  const [defaultBalanceDetails, setDefaultBalanceDetails] = useState(balanceDetails);
+  const [defaultBalanceDetails, setDefaultBalanceDetails] = useState<BalanceDetail[]>([]);
 
   const handleSortChanged = (sort: string) => {
     switch (sort) {
@@ -68,13 +73,6 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
 
   const classes = useStyles();
 
-  if (isLoading || balanceDetails.length === 0)
-    return (
-      <div className={classes.loading}>
-        <CircularProgress />
-      </div>
-    );
-
   if (isOnPrimaryCoinMenu)
     return (
       <>
@@ -102,26 +100,32 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
       <TableContainer component={List}>
         <Table className={classes.root} aria-label="Balance Detail Table">
           <TableBody>
-            {defaultBalanceDetails.map(balanceDetail => (
-              <TableRow key={balanceDetail.id} className={classes.tableRow}>
-                <TableCell component="th" scope="row" className={classes.tableCell}>
-                  <Avatar alt={balanceDetail.name} src={balanceDetail.image} />
-                  <Typography variant="h5" color="textPrimary">
-                    {balanceDetail.id}
-                  </Typography>
-                </TableCell>
-                <TableCell align="right">
-                  <div>
-                    <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                      {balanceDetail.freeBalance}
-                    </Typography>
-                    <Typography variant="caption" color="textSecondary">
-                      {'USD 15.25'}
-                    </Typography>
-                  </div>
-                </TableCell>
+            {isLoading && defaultBalanceDetails.length === 0 && (
+              <TableRow className={classes.loading}>
+                <CircularProgress />
               </TableRow>
-            ))}
+            )}
+            {defaultBalanceDetails.length > 0 &&
+              defaultBalanceDetails.map(balanceDetail => (
+                <TableRow key={balanceDetail.id} className={classes.tableRow}>
+                  <TableCell component="th" scope="row" className={classes.tableCell}>
+                    <Avatar alt={balanceDetail.id} src={balanceDetail.image} />
+                    <Typography variant="h5" color="textPrimary">
+                      {balanceDetail.id}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <div>
+                      <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                        {balanceDetail.freeBalance}
+                      </Typography>
+                      <Typography variant="caption" color="textSecondary">
+                        {'USD 15.25'}
+                      </Typography>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
