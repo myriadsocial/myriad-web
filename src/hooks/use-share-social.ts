@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {SocialsEnum} from 'src/interfaces/index';
+import {SocialsEnum} from 'src/interfaces/social';
 import {RootState} from 'src/reducers';
 import {verifySocialMediaConnected, resetVerifyingSocial} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';

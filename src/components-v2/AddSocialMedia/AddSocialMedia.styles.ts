@@ -31,20 +31,36 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
     },
     facebook: {
-      color: '#3b5998',
-      minWidth: 40,
-    },
-    twitter: {
-      color: '#1DA1F2',
-      minWidth: 40,
+      '& rect': {
+        fill: '#4E71A8',
+      },
     },
     reddit: {
-      color: '#FF5700',
-      minWidth: 40,
+      '& rect': {
+        fill: '#FF4500',
+      },
+    },
+    twitter: {
+      '& rect': {
+        fill: '#1DA1F2',
+      },
     },
     term: {
       fontWeight: 700,
       textDecoration: 'none',
+    },
+    icon: {
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
+    },
+    loading: {
+      color: theme.palette.primary.main,
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      marginTop: -12,
+      marginLeft: -12,
     },
   }),
 );
