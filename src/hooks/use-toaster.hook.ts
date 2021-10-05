@@ -12,7 +12,7 @@ export const useToasterHook = () => {
   const dispatch = useDispatch();
 
   const openToaster = (payload: ToasterProps) => {
-    showToaster(payload);
+    dispatch(showToaster(payload));
   };
 
   const clearToaster = () => {

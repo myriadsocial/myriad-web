@@ -44,7 +44,7 @@ export const MyWallet: React.FC<MyWalletProps> = props => {
         mark="underline"
         size="small"
         onChangeTab={handleChangeTab}
-        optionalPadding={0}
+        padding={0}
       />
     </BoxComponent>
   );
