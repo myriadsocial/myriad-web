@@ -1,3 +1,4 @@
+import {CurrencyId} from '../../../interfaces/currency';
 import {Friend, FriendStatus} from '../../../interfaces/friend';
 import {MenuOptions} from '../../atoms/DropdownMenu';
 
@@ -18,6 +19,7 @@ export const friends: Friend[] = [
     requestorId: '0x5cb52a37da79e5698c31da276f326ceed461b90024a1135648606823f4a7ed62',
     requestee: {
       id: '0x6e4f9f0e5e4692b17232e017375065b6a4fcc207c1315be0edbc3ed7663d5917',
+      defaultCurrency: CurrencyId.AUSD,
       name: 'Red Myrian',
       profilePictureURL:
         'https://res.cloudinary.com/dsget80gs/image/upload/v1626667692/gh7ihcpb0vpsifwck2be.jpg',
@@ -33,6 +35,7 @@ export const friends: Friend[] = [
     },
     requestor: {
       id: '0x5cb52a37da79e5698c31da276f326ceed461b90024a1135648606823f4a7ed62',
+      defaultCurrency: CurrencyId.AUSD,
       name: 'Fica',
       profilePictureURL:
         'https://res.cloudinary.com/dsget80gs/image/upload/v1626779846/nth977pbnnr7vls7atkg.jpg',
@@ -56,6 +59,7 @@ export const friends: Friend[] = [
     requestorId: '0x5cb52a37da79e5698c31da276f326ceed461b90024a1135648606823f4a7ed62',
     requestee: {
       id: '0x0a567a34a834112d1685cf6b27bbf743417d8d23615f28aee9a9c62629de8308',
+      defaultCurrency: CurrencyId.AUSD,
       name: 'Lynn ',
       profilePictureURL:
         'https://res.cloudinary.com/dsget80gs/image/upload/v1626794503/znraavovkot3qbjxqbvv.jpg',
@@ -69,6 +73,7 @@ export const friends: Friend[] = [
     requestor: {
       id: '0x5cb52a37da79e5698c31da276f326ceed461b90024a1135648606823f4a7ed62',
       name: 'Fica',
+      defaultCurrency: CurrencyId.AUSD,
       profilePictureURL:
         'https://res.cloudinary.com/dsget80gs/image/upload/v1626779846/nth977pbnnr7vls7atkg.jpg',
       bannerImageUrl:

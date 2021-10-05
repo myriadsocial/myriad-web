@@ -1,7 +1,6 @@
 // TODO: refactor task: move this to interfaces/balance.ts when rewiring data
 type CurrencyDetail = {
   id: string;
-  name: string;
   image: string;
   decimal: number;
   rpcURL: string;

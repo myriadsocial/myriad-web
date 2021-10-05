@@ -101,20 +101,18 @@ const BalanceComponent: React.FC<BalanceProps> = ({forwardedRef, availableTokens
               </TableRow>
             )}
             {tokensReady.map(row => (
-              <TableRow key={row.tokenSymbol}>
+              <TableRow key={row.id}>
                 <TableCell>
                   <div className={style.tokenColumn}>
-                    <Avatar alt={row.tokenSymbol} src={row.tokenImage} />
+                    <Avatar alt={row.id} src={row.image} />
                     <Typography className={style.balanceText}>
                       {
                         // TODO: move to single file constant or enum
                       }
-                      {row.tokenSymbol === 'MYRIA' ? (
-                        <StyledBadge badgeContent={<StyledTooltip />}>
-                          {row.tokenSymbol}
-                        </StyledBadge>
+                      {row.id === 'MYRIA' ? (
+                        <StyledBadge badgeContent={<StyledTooltip />}>{row.id}</StyledBadge>
                       ) : (
-                        row.tokenSymbol
+                        row.id
                       )}
                     </Typography>
                   </div>

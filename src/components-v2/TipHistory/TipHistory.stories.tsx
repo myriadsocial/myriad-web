@@ -32,6 +32,7 @@ TipHistory.args = {
       updatedAt: new Date('2021-09-02T03:11:28.000Z'),
       type: ContentType.POST,
       fromUser: {
+        defaultCurrency: CurrencyId.AUSD,
         id: '0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127',
         name: 'Sergio Aleksei',
         profilePictureURL: 'https://res.cloudinary.com/dsget80gs/d8x8xb18wnvkbxconr58.jpg',
@@ -46,6 +47,7 @@ TipHistory.args = {
         currencies: [],
       },
       toUser: {
+        defaultCurrency: CurrencyId.AUSD,
         id: '0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127',
         name: 'Ms. Sara Bellum',
         profilePictureURL:
@@ -82,6 +84,7 @@ TipHistory.args = {
       to: '0x2ec9196df3273291729097c5c9411ba6add6c84c94e4de0327ff351c1fbb8556',
       currencyId: 'AUSD',
       fromUser: {
+        defaultCurrency: CurrencyId.AUSD,
         id: '0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127',
         name: 'Ms. Sara Bellum',
         profilePictureURL:
@@ -97,6 +100,7 @@ TipHistory.args = {
         currencies: [],
       },
       toUser: {
+        defaultCurrency: CurrencyId.AUSD,
         id: '0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127',
         name: 'Ms. Sara Bellum',
         profilePictureURL:

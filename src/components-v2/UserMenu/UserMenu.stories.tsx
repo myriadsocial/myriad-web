@@ -2,6 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
+import {CurrencyId} from '../../interfaces/currency';
 import {FriendStatus} from '../../interfaces/friend';
 import {SocialsEnum} from '../../interfaces/social';
 import {UserMenu as UserMenuComponent} from './UserMenu';
@@ -27,6 +28,7 @@ UserMenu.args = {
       people: [],
       tags: [],
       user: {
+        defaultCurrency: CurrencyId.AUSD,
         id: '0x76e85125c8a6997e5e40e5e1f0a64a8154b5c69308e54b426ad3a34af1545b1d',
         name: 'Lara Schoffield',
         profilePictureURL:
@@ -97,6 +99,7 @@ UserMenu.args = {
     },
   ],
   user: {
+    defaultCurrency: CurrencyId.AUSD,
     id: '0x76e85125c8a6997e5e40e5e1f0a64a8154b5c69308e54b426ad3a34af1545b1d',
     name: 'Test user',
     profilePictureURL:
@@ -119,6 +122,7 @@ UserMenu.args = {
       requesteeId: '0x6e4f9f0e5e4692b17232e017375065b6a4fcc207c1315be0edbc3ed7663d5917',
       requestorId: '0x5cb52a37da79e5698c31da276f326ceed461b90024a1135648606823f4a7ed62',
       requestee: {
+        defaultCurrency: CurrencyId.AUSD,
         id: '0x6e4f9f0e5e4692b17232e017375065b6a4fcc207c1315be0edbc3ed7663d5917',
         name: 'Red Myrian',
         profilePictureURL:
@@ -134,6 +138,7 @@ UserMenu.args = {
         currencies: [],
       },
       requestor: {
+        defaultCurrency: CurrencyId.AUSD,
         id: '0x5cb52a37da79e5698c31da276f326ceed461b90024a1135648606823f4a7ed62',
         name: 'Fica',
         profilePictureURL:
@@ -157,6 +162,7 @@ UserMenu.args = {
       requesteeId: '0x0a567a34a834112d1685cf6b27bbf743417d8d23615f28aee9a9c62629de8308',
       requestorId: '0x5cb52a37da79e5698c31da276f326ceed461b90024a1135648606823f4a7ed62',
       requestee: {
+        defaultCurrency: CurrencyId.AUSD,
         id: '0x0a567a34a834112d1685cf6b27bbf743417d8d23615f28aee9a9c62629de8308',
         name: 'Lynn ',
         profilePictureURL:
@@ -169,6 +175,7 @@ UserMenu.args = {
         currencies: [],
       },
       requestor: {
+        defaultCurrency: CurrencyId.AUSD,
         id: '0x5cb52a37da79e5698c31da276f326ceed461b90024a1135648606823f4a7ed62',
         name: 'Fica',
         profilePictureURL:
