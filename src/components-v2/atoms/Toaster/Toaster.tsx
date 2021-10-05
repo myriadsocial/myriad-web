@@ -11,7 +11,8 @@ import {useTheme} from '@material-ui/core/styles';
 
 import {ToasterProps, Status} from '.';
 
-const Toaster = ({toasterStatus, message, open, onClose}: ToasterProps): JSX.Element => {
+export const Toaster: React.FC<ToasterProps> = props => {
+  const {toasterStatus, message, open, onClose} = props;
   const {palette, status} = useTheme();
 
   const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
@@ -81,5 +82,3 @@ const Toaster = ({toasterStatus, message, open, onClose}: ToasterProps): JSX.Ele
     </div>
   );
 };
-
-export default Toaster;
