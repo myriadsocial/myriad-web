@@ -1,6 +1,9 @@
 module.exports = {
   future: {
-    webpack5: true,
+    webpack5: false,
+  },
+  experimental: {
+    reactRefresh: true,
   },
   serverRuntimeConfig: {
     // Will only be available on the server side
