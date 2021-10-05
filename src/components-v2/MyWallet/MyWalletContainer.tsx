@@ -1,8 +1,6 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
-import NoSsr from '@material-ui/core/NoSsr';
-
 import {MyWallet} from '.';
 
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
@@ -17,14 +15,10 @@ const MyWalletContainer: React.FC = () => {
   if (!user) return null;
 
   useEffect(() => {
-    load(user?.id, currencies);
+    load(user.id, currencies);
   }, [currencies, user]);
 
-  return (
-    <NoSsr>
-      <MyWallet headerTitle={'Wallet'} />
-    </NoSsr>
-  );
+  return <MyWallet headerTitle={'Wallet'} />;
 };
 
 export default MyWalletContainer;
