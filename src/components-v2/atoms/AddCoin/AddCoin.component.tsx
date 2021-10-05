@@ -19,8 +19,6 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {acronym} from '../../../helpers/string';
-import {useToasterHook} from '../../../hooks/use-toaster.hook';
-import {Status} from '../../../interfaces/toaster';
 import {RootState} from '../../../reducers/';
 import {ConfigState} from '../../../reducers/config/reducer';
 import {addUserCurrency} from '../../../reducers/user/actions';
@@ -33,7 +31,6 @@ import {debounce} from 'lodash';
 export const AddCoin: React.FC<Props> = props => {
   const {open, onClose} = props;
   const dispatch = useDispatch();
-  const {openToaster} = useToasterHook();
   const {availableCurrencies} = useSelector<RootState, ConfigState>(state => state.configState);
   const style = useStyles();
   const [loading, setLoading] = useState(false);
@@ -71,19 +68,24 @@ export const AddCoin: React.FC<Props> = props => {
     else return;
   };
 
+  const filterSelectedCurrency = () => {
+    const result = availableCurrencies.filter(el => {
+      return el.id === selectedAsset;
+    });
+
+    return result[0];
+  };
+
   const handleAddNewCurrency = () => {
     if (selectedAsset) {
       dispatch(
-        addUserCurrency(selectedAsset, () => {
+        addUserCurrency(filterSelectedCurrency(), () => {
           setLoading(true);
-
-          openToaster({toasterStatus: Status.SUCCESS, message: 'Currency successfully added!'});
-
-          onClose();
         }),
       );
     }
 
+    onClose();
     setLoading(false);
   };
 
