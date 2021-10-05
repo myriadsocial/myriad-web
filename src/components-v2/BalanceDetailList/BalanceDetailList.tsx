@@ -102,13 +102,13 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
       <TableContainer component={List}>
         <Table className={classes.root} aria-label="Balance Detail Table">
           <TableBody>
-            {isLoading ||
-              (defaultBalanceDetails.length === 0 && (
-                <TableRow className={classes.loading}>
-                  <CircularProgress />
-                </TableRow>
-              ))}
-            {defaultBalanceDetails.length > 0 &&
+            {isLoading && defaultBalanceDetails.length === 0 && (
+              <TableRow className={classes.loading}>
+                <CircularProgress />
+              </TableRow>
+            )}
+            {!isLoading &&
+              defaultBalanceDetails.length > 0 &&
               defaultBalanceDetails.map(balanceDetail => (
                 <TableRow key={balanceDetail.id} className={classes.tableRow}>
                   <TableCell component="th" scope="row" className={classes.tableCell}>
