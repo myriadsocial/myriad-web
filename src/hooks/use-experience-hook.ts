@@ -18,9 +18,13 @@ import {ExperienceState} from '../reducers/experience/reducer';
 export const useExperienceHook = () => {
   const dispatch = useDispatch();
 
-  const {experiences, allExperiences, selectedExperience} = useSelector<RootState, ExperienceState>(
-    state => state.experienceState,
-  );
+  const {
+    experiences,
+    allExperiences,
+    selectedExperience,
+    searchTags: tags,
+    searchPeople: people,
+  } = useSelector<RootState, ExperienceState>(state => state.experienceState);
 
   useEffect(() => {
     loadExperience();
@@ -67,5 +71,7 @@ export const useExperienceHook = () => {
     loadAllExperiences,
     allExperiences,
     saveExperience,
+    tags,
+    people,
   };
 };

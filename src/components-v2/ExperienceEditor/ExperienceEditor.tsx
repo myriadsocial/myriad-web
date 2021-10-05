@@ -24,6 +24,8 @@ import {Dropzone} from '../atoms/Dropzone';
 import {ListItemComponent} from '../atoms/ListItem';
 import {useStyles} from './Experience.styles';
 
+import {debounce} from 'lodash';
+
 type ExperienceEditorProps = {
   experience?: Experience | null;
   tags: Tag[];
@@ -35,7 +37,7 @@ type ExperienceEditorProps = {
 };
 
 export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
-  const {experience, people, tags, onSave, onImageUpload} = props;
+  const {experience, people, tags, onSave, onImageUpload, onSearchTags, onSearchPeople} = props;
   const styles = useStyles();
 
   const [newExperience, setNewExperience] = useState<Partial<Experience>>();
@@ -51,6 +53,22 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       }
     }
   }, [experience]);
+
+  const handleSearchTags = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const debounceSubmit = debounce(() => {
+      onSearchTags(event.target.value);
+    }, 300);
+
+    debounceSubmit();
+  };
+
+  const handleSearchPeople = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const debounceSubmit = debounce(() => {
+      onSearchPeople(event.target.value);
+    }, 300);
+
+    debounceSubmit();
+  };
 
   const handleImageUpload = async (files: File[]) => {
     const url = await onImageUpload(files);
@@ -163,6 +181,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             {...params}
             label="Tags"
             variant="outlined"
+            onChange={handleSearchTags}
             InputProps={{
               ...params.InputProps,
               endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
@@ -190,6 +209,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             label="People"
             placeholder="Search people here"
             variant="outlined"
+            onChange={handleSearchPeople}
             InputProps={{
               ...params.InputProps,
               endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
