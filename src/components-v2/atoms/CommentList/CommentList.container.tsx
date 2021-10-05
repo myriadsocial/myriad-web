@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {RootState} from '../../../reducers';
@@ -6,19 +6,11 @@ import {upvote, downvote} from '../../../reducers/timeline/actions';
 import {TipHistory} from '../../TipHistory';
 import {CommentList} from './CommentList';
 
+import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
 import {Comment, CommentProps} from 'src/interfaces/comment';
-import {CurrencyId} from 'src/interfaces/currency';
 import {SectionType, ReferenceType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
-import {TransactionSort} from 'src/interfaces/transaction';
-import {
-  fetchTransactionHistory,
-  clearTippedContent,
-  setTransactionCurrency,
-  setTransactionSort,
-} from 'src/reducers/tip-summary/actions';
-import {TipSummaryState} from 'src/reducers/tip-summary/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 type CommentListContainerProps = {
@@ -33,15 +25,19 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const dispatch = useDispatch();
   const {comments, loadInitComment, reply, updateUpvote, updateDownvote, loadReplies} =
     useCommentHook(referenceId);
+  const {
+    isTipHistoryOpen,
+    transactions,
+    closeTipHistory,
+    handleFilterTransaction,
+    handleSortTransaction,
+    openTipHistory,
+  } = useTipHistory();
 
   const {user, currencies} = useSelector<RootState, UserState>(state => state.userState);
   const downvoting = useSelector<RootState, Post | Comment | null>(
     state => state.timelineState.interaction.downvoting,
   );
-  const {transactions} = useSelector<RootState, TipSummaryState>(state => state.tipSummaryState);
-
-  const [tipHistoryReference, setTipHistoryReference] = useState<Comment | null>(null);
-  const isTipHistoryOpen = Boolean(tipHistoryReference);
 
   useEffect(() => {
     loadInitComment(section);
@@ -84,35 +80,8 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     );
   };
 
-  const openTipHistory = (reference: Comment) => {
-    dispatch(fetchTransactionHistory(reference, 'comment'));
-
-    setTipHistoryReference(reference);
-  };
-
   const handleSendTip = () => {
     closeTipHistory();
-  };
-
-  const closeTipHistory = () => {
-    setTipHistoryReference(null);
-    dispatch(clearTippedContent());
-  };
-
-  const handleSortTransaction = (sort: TransactionSort) => {
-    dispatch(setTransactionSort(sort));
-
-    if (tipHistoryReference) {
-      dispatch(fetchTransactionHistory(tipHistoryReference, 'comment'));
-    }
-  };
-
-  const handleFilterTransaction = (currency: CurrencyId) => {
-    dispatch(setTransactionCurrency(currency));
-
-    if (tipHistoryReference) {
-      dispatch(fetchTransactionHistory(tipHistoryReference, 'comment'));
-    }
   };
 
   return (

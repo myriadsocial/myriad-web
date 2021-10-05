@@ -29,25 +29,32 @@ import {useCommentTabs, CommentTabs} from './hooks/use-comment-tabs';
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import {Comment} from 'src/interfaces/comment';
+import {User} from 'src/interfaces/user';
 import {v4 as uuid} from 'uuid';
 
-type PostDetailListProps = {
+type PostDetailProps = {
+  user?: User;
   post: Post;
   anonymous: boolean;
   toggleDownvoting: (reference: Post | Comment | null) => void;
   onUpvote: (reference: Post | Comment) => void;
   onSendTip: (post: Post) => void;
+  onOpenTipHistory: (post: Post) => void;
+  onDelete: (post: Post) => void;
+  onReport: (post: Post) => void;
 };
 
-export const PostDetail: React.FC<PostDetailListProps> = props => {
+export const PostDetail: React.FC<PostDetailProps> = props => {
   const styles = useStyles();
   const router = useRouter();
 
-  const {post, onUpvote, onSendTip, toggleDownvoting} = props;
+  const {user, post, onUpvote, onSendTip, toggleDownvoting, onOpenTipHistory, onDelete, onReport} =
+    props;
   const tabs = useCommentTabs(post);
   const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
   const [shoWcomment, setShowComment] = useState(false);
   const [viewContent, setViewContent] = useState(!post.isNSFW);
+  const owner = post.createdBy === user?.id;
 
   const onHashtagClicked = async (hashtag: string) => {
     await router.push(`/home?tag=${hashtag.replace('#', '')}&type=trending`, undefined, {
@@ -90,6 +97,18 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
     onSendTip(post);
   };
 
+  const handleDeletePost = () => {
+    onDelete(post);
+  };
+
+  const handleReportPost = () => {
+    onReport(post);
+  };
+
+  const handleOpenTipHistory = () => {
+    onOpenTipHistory(post);
+  };
+
   const getText = (): TNode[] => {
     try {
       const nodes = JSON.parse(post.text) as TNode[];
@@ -106,7 +125,13 @@ export const PostDetail: React.FC<PostDetailListProps> = props => {
 
   return (
     <Paper square className={styles.root}>
-      <HeaderComponent post={post} />
+      <HeaderComponent
+        owner={owner}
+        post={post}
+        onOpenTipHistory={handleOpenTipHistory}
+        onDelete={handleDeletePost}
+        onReport={handleReportPost}
+      />
 
       <div className={styles.content}>
         <ShowIf condition={!viewContent}>
