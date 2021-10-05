@@ -10,6 +10,7 @@ import {useSocialMediaList} from './use-social-media-list.hook';
 type SocialMediaListProps = {
   connected: Array<SocialMedia>;
   toggleVerify: (social: SocialsEnum) => void;
+  openSocialPage: () => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -40,7 +41,11 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const SocialMediaList: React.FC<SocialMediaListProps> = ({connected, toggleVerify}) => {
+export const SocialMediaList: React.FC<SocialMediaListProps> = ({
+  connected,
+  toggleVerify,
+  openSocialPage,
+}) => {
   const styles = useStyles();
 
   const socials = useSocialMediaList(connected);
@@ -50,7 +55,7 @@ export const SocialMediaList: React.FC<SocialMediaListProps> = ({connected, togg
   };
 
   return (
-    <BoxComponent title="Social Media">
+    <BoxComponent title="Social Media" onClick={openSocialPage}>
       <div className={styles.list}>
         {socials.map(social => (
           <IconButton
