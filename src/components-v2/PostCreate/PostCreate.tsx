@@ -90,7 +90,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       subtitle={header[activeTab].subtitle}
       onClose={onClose}
       open={open}
-      maxWidth="lg"
+      maxWidth="md"
       className={styles.root}>
       <Tabs
         value={activeTab}
