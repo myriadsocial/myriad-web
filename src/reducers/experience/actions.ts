@@ -310,3 +310,28 @@ export const searchTags: ThunkActionCreator<Actions, RootState> =
       dispatch(setLoading(false));
     }
   };
+
+export const createExperience: ThunkActionCreator<Actions, RootState> =
+  (experience: Experience, newTags: string[]) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      await ExperienceAPI.createExperience(user.id, experience);
+      fetchExperience();
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
