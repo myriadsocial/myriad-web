@@ -46,7 +46,6 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
               tokenBalances.push({
                 freeBalance: formatNumber(tempBalance as number, availableTokens[i].decimal),
                 id: availableTokens[i].id,
-                name: availableTokens[i].name,
                 decimal: availableTokens[i].decimal,
                 rpcURL: provider,
                 image: availableTokens[i].image,
@@ -61,7 +60,6 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
               tokenBalances.push({
                 freeBalance: formatNumber(tempBalance as number, availableTokens[i].decimal),
                 id: availableTokens[i].id,
-                name: availableTokens[i].name,
                 decimal: availableTokens[i].decimal,
                 rpcURL: provider,
                 image: availableTokens[i].image,
@@ -77,7 +75,6 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
               tokenBalances.push({
                 freeBalance: formatNumber(tokenData.free as number, availableTokens[i].decimal),
                 id: availableTokens[i].id,
-                name: availableTokens[i].name,
                 decimal: availableTokens[i].decimal,
                 rpcURL: provider,
                 image: availableTokens[i].image,
@@ -94,7 +91,12 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
         balanceDetails: tokenBalances,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(
+        setError({
+          title: 'something is wrong',
+          message: 'ooopps!',
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
