@@ -47,4 +47,6 @@ export interface Experience extends Searchable {
   createdBy: string;
   createdAt: Date;
   user: User;
+  subscribedCount?: number;
+  experienceImageURL?: string;
 }
