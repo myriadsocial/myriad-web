@@ -80,8 +80,6 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
       </>
     );
 
-  console.log({isLoading, defaultBalanceDetails});
-
   return (
     <>
       <div className={classes.headerActionWrapper}>
