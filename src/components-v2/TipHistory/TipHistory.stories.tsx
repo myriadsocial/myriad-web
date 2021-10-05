@@ -62,10 +62,8 @@ TipHistory.args = {
       },
       currency: {
         id: CurrencyId.MYRIA,
-        name: 'myriad',
         image: 'https://res.cloudinary.com/dsget80gs/coins/myriad.jpg',
         decimal: 18,
-        addressType: 42,
         rpcURL: 'wss://rpc.dev.myriad.systems',
         native: true,
         createdAt: new Date('2021-08-23T07:14:57.000Z'),
@@ -115,10 +113,8 @@ TipHistory.args = {
       },
       currency: {
         id: CurrencyId.AUSD,
-        name: 'ausd',
         image: 'https://res.cloudinary.com/dsget80gs/coins/ausd.png',
         decimal: 12,
-        addressType: 42,
         rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
         native: false,
         createdAt: new Date('2021-08-23T07:14:06.000Z'),
@@ -129,10 +125,8 @@ TipHistory.args = {
   currencies: [
     {
       id: CurrencyId.ACA,
-      name: 'acala',
       image: 'https://res.cloudinary.com/dsget80gs/coins/aca.svg',
       decimal: 13,
-      addressType: 42,
       rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
       native: true,
       createdAt: new Date('2021-08-24T03:42:16.000Z'),
@@ -140,10 +134,8 @@ TipHistory.args = {
     },
     {
       id: CurrencyId.AUSD,
-      name: 'ausd',
       image: 'https://res.cloudinary.com/dsget80gs/coins/ausd.png',
       decimal: 12,
-      addressType: 42,
       rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
       native: false,
       createdAt: new Date('2021-08-23T07:14:06.000Z'),
@@ -151,10 +143,8 @@ TipHistory.args = {
     },
     {
       id: CurrencyId.DOT,
-      name: 'polkadot',
       image: 'https://res.cloudinary.com/dsget80gs/coins/dot.svg',
       decimal: 10,
-      addressType: 42,
       rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
       native: false,
       createdAt: new Date('2021-08-24T03:43:08.000Z'),
@@ -162,10 +152,8 @@ TipHistory.args = {
     },
     {
       id: CurrencyId.MYRIA,
-      name: 'myriad',
       image: 'https://res.cloudinary.com/dsget80gs/coins/myriad.jpg',
       decimal: 18,
-      addressType: 42,
       rpcURL: 'wss://rpc.dev.myriad.systems',
       native: true,
       createdAt: new Date('2021-08-23T07:14:57.000Z'),
