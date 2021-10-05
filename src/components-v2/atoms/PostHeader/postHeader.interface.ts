@@ -7,6 +7,7 @@ export type PostHeaderProps = {
   onDelete: () => void;
   onOpenTipHistory: () => void;
   onReport: () => void;
+  onShared: () => void;
 };
 
 export enum Platform {

@@ -17,8 +17,10 @@ import {useTimelineHook} from './hooks/use-timeline.hook';
 
 import {ParsedUrlQuery} from 'querystring';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
+import {useToasterHook} from 'src/hooks/use-toaster.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
+import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 
@@ -46,6 +48,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     handleSortTransaction,
     openTipHistory,
   } = useTipHistory();
+  const {openToaster} = useToasterHook();
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
   const [timelineType, setTimelineType] = useState<TimelineType>(TimelineType.ALL);
@@ -109,8 +112,13 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     setPostToRemove(post);
   };
 
-  const handleSharePost = (post: Post) => {
-    // code
+  const handleSharePost = (post: Post, type: 'link' | 'post') => {
+    if (type === 'post') {
+      openToaster({
+        message: 'This post successfully share to your timeline',
+        toasterStatus: Status.SUCCESS,
+      });
+    }
   };
 
   const handleClosePrompt = (): void => {

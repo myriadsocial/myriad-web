@@ -35,7 +35,7 @@ type TimelineProps = {
   onDelete: (post: Post) => void;
   onReport: (post: Post) => void;
   toggleDownvoting: (reference: Post | Comment | null) => void;
-  onShared: (post: Post) => void;
+  onShared: (post: Post, type: 'link' | 'post') => void;
 };
 
 export const Timeline: React.FC<TimelineProps> = props => {

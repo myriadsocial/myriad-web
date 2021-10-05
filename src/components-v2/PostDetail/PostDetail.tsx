@@ -42,7 +42,7 @@ type PostDetailProps = {
   onOpenTipHistory: (post: Post) => void;
   onDelete: (post: Post) => void;
   onReport: (post: Post) => void;
-  onShared: (post: Post) => void;
+  onShared: (post: Post, type: 'link' | 'post') => void;
 };
 
 export const PostDetail: React.FC<PostDetailProps> = props => {
@@ -116,8 +116,12 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     onReport(post);
   };
 
-  const handleShared = () => {
-    onShared(post);
+  const handleShareLink = () => {
+    onShared(post, 'link');
+  };
+
+  const handleSharePost = () => {
+    onShared(post, 'post');
   };
 
   const handleOpenTipHistory = () => {
@@ -146,6 +150,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         onOpenTipHistory={handleOpenTipHistory}
         onDelete={handleDeletePost}
         onReport={handleReportPost}
+        onShared={handleSharePost}
       />
 
       <div className={styles.content}>
@@ -219,8 +224,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           onUpvote={handleUpvote}
           onDownVote={handleDownVote}
           onShowComments={toggleShowComments}
-          shareUrl={`${window.location.origin}/profile/${post.createdBy}?post=${post.id}`}
-          onShared={handleShared}
+          shareUrl={`${window.location.origin}/post/${post.id}`}
+          onShared={handleShareLink}
         />
 
         <Button
