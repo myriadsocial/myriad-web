@@ -29,11 +29,13 @@ type SocialsProps = {
   user: User;
   socials: SocialMedia[];
   anonymous?: boolean;
+  verifying?: boolean;
+  onVerifySocialMedia: (social: SocialsEnum, username: string) => void;
   onDisconnectSocial: (people: SocialMedia) => void;
 };
 
 export const Socials: React.FC<SocialsProps> = props => {
-  const {socials, user, onDisconnectSocial} = props;
+  const {socials, user, verifying = false, onDisconnectSocial, onVerifySocialMedia} = props;
   const styles = useStyles();
 
   const socialList = useSocialMediaList(socials);
@@ -49,6 +51,12 @@ export const Socials: React.FC<SocialsProps> = props => {
   useEffect(() => {
     getPeopleList();
   }, [selectedSocial]);
+
+  useEffect(() => {
+    if (!verifying) {
+      setAddSocial(false);
+    }
+  }, [verifying]);
 
   const getPeopleList = (): void => {
     const selected = socials.filter(social => social.platform === selectedSocial);
@@ -78,6 +86,7 @@ export const Socials: React.FC<SocialsProps> = props => {
   };
 
   const verifySocialMedia = (social: SocialsEnum, username: string) => {
+    onVerifySocialMedia(social, username);
     toggleAddSocialMedia();
   };
 
@@ -181,6 +190,7 @@ export const Socials: React.FC<SocialsProps> = props => {
         social={selectedSocial}
         publicKey={user.id}
         onClose={toggleAddSocialMedia}
+        verifying={verifying}
         verify={verifySocialMedia}
       />
 
