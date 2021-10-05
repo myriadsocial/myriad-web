@@ -11,10 +11,6 @@ export const HeaderWithAction: React.FC<HeaderWithActionProps> = props => {
   const {actionText} = props;
   const classes = useStyles();
 
-  const handleAction = () => {
-    console.log('action done!');
-  };
-
   const handleSortChanged = (sort: string) => {
     // code
   };
@@ -22,7 +18,7 @@ export const HeaderWithAction: React.FC<HeaderWithActionProps> = props => {
   return (
     <div className={classes.root}>
       <Typography variant={'caption'} color={'primary'}>
-        <Link className={classes.actionText} component="button" onClick={handleAction}>
+        <Link href={'/experience'} className={classes.actionText}>
           {actionText}
         </Link>
       </Typography>
