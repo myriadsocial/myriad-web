@@ -9,5 +9,24 @@ export const useStyles = makeStyles(() =>
         paddingRight: 0,
       },
     },
+    empty: {
+      background: '#FFF',
+      height: '491px',
+      width: '100%',
+      borderRadius: 10,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    title: {
+      fontWeight: 700,
+      fontSize: '18px',
+      marginBottom: '12px',
+    },
+    subtitle: {
+      marginBottom: '40px',
+      fontSize: '14px',
+    },
   }),
 );
