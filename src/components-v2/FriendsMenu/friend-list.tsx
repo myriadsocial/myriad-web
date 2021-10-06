@@ -17,6 +17,8 @@ import {FriendListProps} from './default';
 import {useStyles} from './friend.style';
 import {useFriendList} from './hooks/use-friend-list.hook';
 
+import {Empty} from 'src/components-v2/atoms/Empty';
+
 export const FriendListComponent: React.FC<FriendListProps> = props => {
   const {background = false, friends, user, onSearch, onFilter} = props;
   const style = useStyles();
@@ -30,6 +32,12 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   const handleSearch = (query: string) => {
     onSearch(query);
   };
+
+  if (friends.length === 0) {
+    return (
+      <Empty title="Friend list is empty" subtitle="Find or invite your friends to Myriad 😉" />
+    );
+  }
 
   return (
     <div>
@@ -54,8 +62,8 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
               </Avatar>
             </ListItemAvatar>
             <ListItemText>
-              <Link href={`/#`}>
-                <a href={`/#`} className={style.link}>
+              <Link href={`/profile/${friend.id}`}>
+                <a href={`/profile/${friend.id}`} className={style.link}>
                   <Typography className={style.name} component="span" color="textPrimary">
                     {friend.name}
                   </Typography>
