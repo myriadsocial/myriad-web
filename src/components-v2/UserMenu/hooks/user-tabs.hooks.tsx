@@ -1,13 +1,9 @@
 import React, {useMemo} from 'react';
 import {useSelector} from 'react-redux';
 
-import {Experience} from '../../../interfaces/experience';
-import {Friend} from '../../../interfaces/friend';
-import {SocialMedia} from '../../../interfaces/social';
-import {User} from '../../../interfaces/user';
 import {RootState} from '../../../reducers';
 import {ProfileState} from '../../../reducers/profile/reducer';
-import {FriendListComponent} from '../../FriendsMenu/friend-list';
+import {FriendListContainer} from '../../FriendsMenu/FriendList.container';
 import {ExperienceTabPanel} from '../../Profile/ExperienceTabPanel/ExperienceTabPanel';
 import {TimelineContainer} from '../../Timeline';
 import {UserSettings} from '../../UserSettings';
@@ -15,19 +11,18 @@ import {UserSocials} from '../../UserSocials';
 import {TabItems} from '../../atoms/Tabs';
 
 import {TimelineFilter} from 'src/interfaces/timeline';
+import {ExperienceState} from 'src/reducers/experience/reducer';
+import {FriendState} from 'src/reducers/friend/reducer';
+import {UserState} from 'src/reducers/user/reducer';
 
 export type UserMenuTabs = 'post' | 'experience' | 'social' | 'friend' | 'setting';
 
-type UserTabsProps = {
-  experiences: Experience[];
-  user?: User;
-  socials: SocialMedia[];
-  friends: Friend[];
-};
-
-export const useUserTabs = (props: UserTabsProps): TabItems<UserMenuTabs>[] => {
-  const {experiences, user, socials, friends} = props;
+export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
   const {detail: people} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const {user, socials} = useSelector<RootState, UserState>(state => state.userState);
+  const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
+  const {experiences} = useSelector<RootState, ExperienceState>(state => state.experienceState);
+
   const filters: TimelineFilter = {
     owner: people?.id,
   };
@@ -47,7 +42,7 @@ export const useUserTabs = (props: UserTabsProps): TabItems<UserMenuTabs>[] => {
       {
         id: 'friend',
         title: `Friends`,
-        component: <FriendListComponent friends={friends} />,
+        component: <FriendListContainer user={people} />,
       },
       {
         id: 'social',
@@ -65,7 +60,7 @@ export const useUserTabs = (props: UserTabsProps): TabItems<UserMenuTabs>[] => {
     }
 
     return items;
-  }, [props]);
+  }, [socials, friends, experiences]);
 
   return tabs;
 };
