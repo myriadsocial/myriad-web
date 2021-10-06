@@ -1,0 +1,62 @@
+import React from 'react';
+
+import {getSession} from 'next-auth/client';
+
+import {WelcomeContainer} from 'src/components-v2/WelcomeModule/Welcome.container';
+import {healthcheck} from 'src/lib/api/healthcheck';
+import * as UserAPI from 'src/lib/api/user';
+import {setAnonymous, setUser} from 'src/reducers/user/actions';
+import {wrapper} from 'src/store';
+
+const Socials: React.FC = () => {
+  return <WelcomeContainer />;
+};
+
+export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
+  const {dispatch} = store;
+  const {req, res} = context;
+  const available = await healthcheck();
+
+  if (!available) {
+    res.setHeader('location', '/maintenance');
+    res.statusCode = 302;
+    res.end();
+  }
+
+  const session = await getSession(context);
+
+  if (!session) {
+    res.setHeader('location', '/');
+    res.statusCode = 302;
+    res.end();
+  }
+
+  const anonymous = Boolean(session?.user.anonymous);
+  const userId = session?.user.address as string;
+  const username = session?.user.name as string;
+  const config = req.cookies.welcome;
+
+  if (config) {
+    res.setHeader('location', '/home');
+    res.statusCode = 302;
+    res.end();
+  }
+
+  //TODO: this process should call thunk action creator instead of dispatch thunk acion
+  //ISSUE: state not hydrated when using thunk action creator
+  if (anonymous) {
+    dispatch(setAnonymous(username));
+  } else {
+    const user = await UserAPI.getUserDetail(userId);
+
+    dispatch(setUser(user));
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
+});
+
+export default Socials;
