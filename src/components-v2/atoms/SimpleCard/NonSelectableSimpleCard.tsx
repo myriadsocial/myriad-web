@@ -1,6 +1,6 @@
 import {DotsVerticalIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React from 'react';
 
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -14,8 +14,6 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles, NonSelectableSimpleCardProps} from '.';
 
-import classNames from 'classnames';
-
 const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
   user,
   creator,
@@ -24,15 +22,10 @@ const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const [selected, setSelected] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleClick = () => {
-    setSelected(!selected);
   };
 
   const handleClickSettings = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -60,14 +53,9 @@ const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
   };
 
   return (
-    <Card
-      className={classNames(classes.root, {
-        [classes.activated]: selected === true,
-      })}
-      {...props}>
+    <Card className={classes.root} {...props}>
       <div className={classes.indicator} />
       <CardActionArea
-        onClick={handleClick}
         disableRipple
         classes={{
           root: classes.actionArea,
