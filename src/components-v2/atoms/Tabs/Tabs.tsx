@@ -14,6 +14,8 @@ type TabsComponentProps = TabsProps & {
   mark?: TabMark;
   size?: TabSize;
   padding?: number;
+  background?: string;
+  borderRadius?: number;
   onChangeTab: (currentTab: string) => void;
 };
 
@@ -26,6 +28,8 @@ export const TabsComponent: React.FC<TabsComponentProps> = props => {
     size = 'medium',
     onChangeTab,
     padding,
+    background,
+    borderRadius,
   } = props;
 
   const styles = useStyles({position, mark, size});
@@ -46,7 +50,13 @@ export const TabsComponent: React.FC<TabsComponentProps> = props => {
       <TabList {...props} onChangeTab={handleTabChange} className={styles.tabs} />
 
       {tabs.map(tab => (
-        <TabPanel key={`tab-panel-${tab.id}`} value={activeTab} index={tab.id} padding={padding}>
+        <TabPanel
+          key={`tab-panel-${tab.id}`}
+          value={activeTab}
+          index={tab.id}
+          padding={padding}
+          background={background}
+          borderRadius={borderRadius}>
           {tab.component}
         </TabPanel>
       ))}
