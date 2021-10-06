@@ -10,12 +10,12 @@ import MyriadPurple from '../../images/Myriad-purple-logo.svg';
 import {Button, ButtonVariant, ButtonSize} from '../atoms/Button';
 
 export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
-  const {displayName, username} = props;
+  const {displayName, username, onSubmit, onSkip} = props;
 
   const classes = useStyles();
 
-  const [, setNewDisplayName] = React.useState('');
-  const [, setNewUsername] = React.useState('');
+  const [newDisplayName, setNewDisplayName] = React.useState(displayName);
+  const [newUserName, setNewUsername] = React.useState(username);
 
   const handleChangeDisplayName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewDisplayName(event.target.value);
@@ -26,7 +26,11 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
   };
 
   const handleSubmit = () => {
-    console.log('submitting form!');
+    onSubmit(newDisplayName, newUserName);
+  };
+
+  const handleSkipWelcome = () => {
+    onSkip();
   };
 
   return (
@@ -71,12 +75,7 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
         <div className={classes.formActionWrapper}>
           <div className={classes.formAction}>
             <Typography color="primary">
-              <Link
-                component="button"
-                variant="body1"
-                onClick={() => {
-                  console.info('Skipping step.');
-                }}>
+              <Link component="button" variant="body1" onClick={handleSkipWelcome}>
                 Skip this step &gt;
               </Link>
             </Typography>
