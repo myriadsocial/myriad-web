@@ -2,6 +2,8 @@ import {TimelineSortMethod, TimelineType} from '../../interfaces/timeline';
 import {MenuOptions} from '../atoms/DropdownMenu';
 import {TabListItem} from '../atoms/TabList';
 
+export type ExperienceType = 'all' | 'personal' | 'other';
+
 // Filter options
 export const postFilterOptions: MenuOptions<string>[] = [
   {
@@ -18,7 +20,7 @@ export const postFilterOptions: MenuOptions<string>[] = [
   },
 ];
 
-export const experienceFilterOptions: MenuOptions<string>[] = [
+export const experienceFilterOptions: MenuOptions<ExperienceType>[] = [
   {id: 'all', title: 'All Experience'},
   {id: 'personal', title: 'Personal Experience'},
   {id: 'other', title: 'Other Experience'},
