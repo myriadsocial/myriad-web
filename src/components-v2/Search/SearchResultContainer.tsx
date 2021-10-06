@@ -3,13 +3,14 @@ import React, {useState, useEffect} from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import {useExperienceHook} from '../../hooks/use-experience-hook';
+import {SearchedExperienceListContainer} from '../ExperienceList/SearchedExperienceListContainer';
 import {TimelineContainer} from '../Timeline/';
 import {SearchBoxContainer} from '../atoms/Search/SearchBoxContainer';
 import {TabItems} from '../atoms/Tabs/';
 import {TabsComponent} from '../atoms/Tabs/';
 
 export const SearchResultContainer: React.FC = () => {
-  const {searchExperience, searchedExperiences, searchPeople} = useExperienceHook();
+  const {searchExperience, searchPeople} = useExperienceHook();
 
   const [submittedQuery, setSubmittedQuery] = useState('');
 
@@ -33,10 +34,6 @@ export const SearchResultContainer: React.FC = () => {
     }
   }, [selectedTab, submittedQuery]);
 
-  useEffect(() => {
-    console.log({searchedExperiences});
-  }, [searchedExperiences]);
-
   const [searchResultTabTexts] = useState<TabItems<string>[]>([
     {
       id: 'post-tab',
@@ -51,7 +48,7 @@ export const SearchResultContainer: React.FC = () => {
     {
       id: 'experience-tab',
       title: 'Experience',
-      component: <p>Experience</p>,
+      component: <SearchedExperienceListContainer />,
     },
   ]);
 
