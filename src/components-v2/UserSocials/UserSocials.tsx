@@ -24,6 +24,7 @@ import {SocialMedia, SocialsEnum} from '../../interfaces/social';
 import {useStyles} from './UserSocials.styles';
 
 import {groupBy} from 'lodash';
+import {Empty} from 'src/components-v2/atoms/Empty';
 
 type UserSocialsProps = {
   socials: SocialMedia[];
@@ -50,6 +51,15 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
   );
 
   const grouped = groupBy<SocialMedia>(socials, 'platform');
+
+  if (socials.length === 0) {
+    return (
+      <Empty
+        title="No social media connected yet"
+        subtitle="connect your socials and you may get some reward"
+      />
+    );
+  }
 
   return (
     <div className={styles.root}>

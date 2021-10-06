@@ -20,7 +20,7 @@ const useStyles = makeStyles(() =>
 
 export const TabPanel: React.FC<TabPanelProps> = props => {
   const styles = useStyles();
-  const {children, value, index, padding = 3, background = '', borderRadius = 0} = props;
+  const {children, value, index, padding = 3, background = 'none', borderRadius = 0} = props;
 
   return (
     <div className={styles.root} hidden={value !== index} role="tabpanel">
