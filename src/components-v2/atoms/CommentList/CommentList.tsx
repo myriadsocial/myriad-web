@@ -19,6 +19,8 @@ type CommentListProps = {
   onDownvote: (comment: Comment) => void;
   onLoadReplies: (referenceId: string, deep: number) => void;
   onOpenTipHistory: (comment: Comment) => void;
+  onSendTip: (comment: Comment) => void;
+  onReport: (comment: Comment) => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -40,6 +42,8 @@ export const CommentList: React.FC<CommentListProps> = props => {
     onDownvote,
     onLoadReplies,
     onOpenTipHistory,
+    onReport,
+    onSendTip,
   } = props;
 
   const styles = useStyles();
@@ -68,6 +72,8 @@ export const CommentList: React.FC<CommentListProps> = props => {
           onDownVote={onDownvote}
           onLoadReplies={onLoadReplies}
           onOpenTipHistory={onOpenTipHistory}
+          onReport={onReport}
+          onSendTip={onSendTip}
         />
       ))}
     </div>

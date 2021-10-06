@@ -20,8 +20,18 @@ import {formatDistance, subDays} from 'date-fns';
 import {ReferenceType} from 'src/interfaces/interaction';
 
 export const CommentDetail: React.FC<CommentDetailProps> = props => {
-  const {comment, deep, user, onDownVote, onUpvote, onReply, onLoadReplies, onOpenTipHistory} =
-    props;
+  const {
+    comment,
+    deep,
+    user,
+    onDownVote,
+    onUpvote,
+    onReply,
+    onLoadReplies,
+    onOpenTipHistory,
+    onReport,
+    onSendTip,
+  } = props;
 
   const style = useStyles();
 
@@ -29,7 +39,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
 
   useEffect(() => {
     handleLoadReplies();
-  }, []);
+  }, [comment]);
 
   const handleOpenReply = () => {
     setIsReply(!isReply);
@@ -51,11 +61,23 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
     onOpenTipHistory(comment);
   };
 
+  const handleReport = () => {
+    onReport(comment);
+  };
+
+  const handleSendTip = () => {
+    onSendTip(comment);
+  };
+
   const getDate = (commentDate: Date) => {
     const newFormat = formatDistance(subDays(new Date(commentDate), 0), new Date(), {
       addSuffix: true,
     });
     return newFormat;
+  };
+
+  const totalVote = () => {
+    return comment.metric.upvotes - comment.metric.downvotes;
   };
 
   return (
@@ -90,7 +112,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
               isUpVote={Boolean(comment.isUpvoted)}
               isDownVote={Boolean(comment.isDownvoted)}
               variant="row"
-              vote={comment.metric.upvotes}
+              vote={totalVote()}
               size="small"
               onDownVote={handleDownVote}
               onUpvote={handleUpvote}
@@ -104,7 +126,11 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
                 Reply
               </Button>
             )}
-            <Button classes={{root: style.button}} size="small" variant="text">
+            <Button
+              classes={{root: style.button}}
+              size="small"
+              variant="text"
+              onClick={handleSendTip}>
               Send tip
             </Button>
             <Button
@@ -114,7 +140,11 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
               onClick={handleOpenTipHistory}>
               Tip history
             </Button>
-            <Button classes={{root: style.button}} size="small" variant="text">
+            <Button
+              classes={{root: style.button}}
+              size="small"
+              variant="text"
+              onClick={handleReport}>
               Report
             </Button>
           </CardActions>
@@ -140,6 +170,8 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             onComment={onReply}
             onLoadReplies={onLoadReplies}
             onOpenTipHistory={onOpenTipHistory}
+            onReport={onReport}
+            onSendTip={onSendTip}
           />
         )}
       </div>

@@ -1,9 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {RootState} from '../../../reducers';
 import {upvote, downvote} from '../../../reducers/timeline/actions';
+import {SendTip} from '../../SendTip/SendTip';
 import {TipHistory} from '../../TipHistory';
+import {Modal} from '../../atoms/Modal';
 import {CommentList} from './CommentList';
 
 import {useTipHistory} from 'src/hooks/tip-history.hook';
@@ -17,10 +19,12 @@ type CommentListContainerProps = {
   referenceId: string;
   placeholder?: string;
   section: SectionType;
+  focus?: boolean;
+  expand?: boolean;
 };
 
 export const CommentListContainer: React.FC<CommentListContainerProps> = props => {
-  const {placeholder, referenceId, section} = props;
+  const {placeholder, referenceId, section, focus, expand} = props;
 
   const dispatch = useDispatch();
   const {comments, loadInitComment, reply, updateUpvote, updateDownvote, loadReplies} =
@@ -38,6 +42,9 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const downvoting = useSelector<RootState, Post | Comment | null>(
     state => state.timelineState.interaction.downvoting,
   );
+
+  const [tippedComment, setTippedComment] = useState<Comment | null>(null);
+  const sendTipOpened = Boolean(tippedComment);
 
   useEffect(() => {
     loadInitComment(section);
@@ -75,13 +82,26 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const handleDownvote = (comment: Comment) => {
     dispatch(
       downvote(comment, section, () => {
-        updateDownvote(comment.id, comment.metric.upvotes - 1);
+        updateDownvote(comment.id, comment.metric.downvotes + 1);
       }),
     );
   };
 
   const handleSendTip = () => {
     closeTipHistory();
+  };
+
+  const handleOnSendTip = (comment: Comment) => {
+    setTippedComment(comment);
+  };
+
+  const closeSendTip = () => {
+    setTippedComment(null);
+  };
+
+  const handleReport = (comment: Comment) => {
+    // code
+    console.log('report');
   };
 
   return (
@@ -95,7 +115,20 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         onUpvote={handleUpvote}
         onLoadReplies={loadReplies}
         onOpenTipHistory={openTipHistory}
+        focus={focus}
+        expand={expand}
+        onReport={handleReport}
+        onSendTip={handleOnSendTip}
       />
+
+      <Modal
+        gutter="none"
+        open={sendTipOpened}
+        onClose={closeSendTip}
+        title="Send Tip"
+        subtitle="Finding this post is insightful? Send a tip!">
+        <SendTip currencies={[]} />
+      </Modal>
 
       <TipHistory
         open={isTipHistoryOpen}

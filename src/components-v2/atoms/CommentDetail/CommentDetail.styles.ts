@@ -61,7 +61,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     horizontalTree: {
       position: 'absolute',
       top: 0,
-      left: '-32px',
+      left: '-33px',
       width: '22px',
       height: '22px',
       borderBottom: '1px solid #E5E5E5',
