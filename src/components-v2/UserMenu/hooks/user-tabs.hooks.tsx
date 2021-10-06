@@ -6,22 +6,18 @@ import {ProfileState} from '../../../reducers/profile/reducer';
 import {FriendListContainer} from '../../FriendsMenu/FriendList.container';
 import {ExperienceTabPanelContainer} from '../../Profile/ExperienceTabPanel/ExperienceTabPanel.container';
 import {TimelineContainer} from '../../Timeline';
-import {UserSettings} from '../../UserSettings';
-import {UserSocials} from '../../UserSocials';
+import {UserSettingsContainer} from '../../UserSettings';
+import {UserSocialContainer} from '../../UserSocials';
 import {TabItems} from '../../atoms/Tabs';
 
 import {TimelineFilter} from 'src/interfaces/timeline';
-import {ExperienceState} from 'src/reducers/experience/reducer';
-import {FriendState} from 'src/reducers/friend/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 export type UserMenuTabs = 'post' | 'experience' | 'social' | 'friend' | 'setting';
 
 export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
   const {detail: people} = useSelector<RootState, ProfileState>(state => state.profileState);
-  const {user, socials} = useSelector<RootState, UserState>(state => state.userState);
-  const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
-  const {experiences} = useSelector<RootState, ExperienceState>(state => state.experienceState);
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
 
   const filters: TimelineFilter = {
     owner: people?.id,
@@ -47,7 +43,7 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
       {
         id: 'social',
         title: `Social Media`,
-        component: <UserSocials socials={socials} />,
+        component: <UserSocialContainer user={people} />,
       },
     ];
 
@@ -55,12 +51,12 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
       items.push({
         id: 'setting',
         title: `Public Key`,
-        component: <UserSettings user={user} />,
+        component: <UserSettingsContainer user={user} />,
       });
     }
 
     return items;
-  }, [socials, friends, experiences]);
+  }, [people, user]);
 
   return tabs;
 };

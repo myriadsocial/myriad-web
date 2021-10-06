@@ -3,15 +3,11 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: theme.spacing(2.5),
-    },
-    title: {
-      fontWeight: 700,
-      marginBottom: 12,
-    },
-    account: {
       display: 'flex',
+      alignItems: 'center',
       justifyContent: 'space-between',
+      marginBottom: 30,
     },
+    filter: {},
   }),
 );

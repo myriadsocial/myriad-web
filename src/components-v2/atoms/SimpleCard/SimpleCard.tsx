@@ -79,6 +79,7 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
       <CardActionArea
         onClick={handleClick}
         disableRipple
+        component="div"
         classes={{
           root: classes.actionArea,
         }}>

@@ -14,6 +14,7 @@ export const getUserSocials = async (userId: string): Promise<SocialMediaList> =
         where: {
           userId: userId,
         },
+        include: ['people'],
       },
     },
   });

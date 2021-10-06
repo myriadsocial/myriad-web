@@ -7,12 +7,5 @@ export const useStyles = makeStyles((theme: Theme) =>
         marginBottom: theme.spacing(1.5),
       },
     },
-    action: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginBottom: 30,
-    },
-    filter: {},
   }),
 );
