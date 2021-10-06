@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../../../reducers';
 import {ProfileState} from '../../../reducers/profile/reducer';
 import {FriendListContainer} from '../../FriendsMenu/FriendList.container';
-import {ExperienceTabPanel} from '../../Profile/ExperienceTabPanel/ExperienceTabPanel';
+import {ExperienceTabPanelContainer} from '../../Profile/ExperienceTabPanel/ExperienceTabPanel.container';
 import {TimelineContainer} from '../../Timeline';
 import {UserSettings} from '../../UserSettings';
 import {UserSocials} from '../../UserSocials';
@@ -37,7 +37,7 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
       {
         id: 'experience',
         title: `Experience`,
-        component: <ExperienceTabPanel experiences={experiences} />,
+        component: <ExperienceTabPanelContainer />,
       },
       {
         id: 'friend',
