@@ -10,14 +10,14 @@ import SearchIcon from '../../../images/Icons/magnifierIcon.svg';
 
 import {debounce} from 'lodash';
 
-const SearchBox = ({
+const SearchBox: React.FC<SearchBoxProps> = ({
   color = SearchBoxColor.PRIMARY,
   ariaLabel = 'search-box',
   placeholder = 'Search for people, topics or experience in Myriad',
   isDisabled = false,
   onSubmit,
   ...props
-}: SearchBoxProps): JSX.Element => {
+}) => {
   const classes = useStyles();
 
   const [input, setInput] = useState('');
