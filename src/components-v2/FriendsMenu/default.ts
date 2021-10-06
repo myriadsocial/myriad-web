@@ -2,8 +2,12 @@ import {CurrencyId} from '../../interfaces/currency';
 import {Friend, FriendStatus} from '../../interfaces/friend';
 import {MenuOptions} from '../atoms/DropdownMenu';
 
+import {User} from 'src/interfaces/user';
+
+export type FriendType = 'all' | 'mutual';
+
 // Filter options
-export const friendFilterOptions: MenuOptions<string>[] = [
+export const friendFilterOptions: MenuOptions<FriendType>[] = [
   {
     id: 'all',
     title: 'All Friends',
@@ -15,8 +19,11 @@ export const friendFilterOptions: MenuOptions<string>[] = [
 ];
 
 export type FriendListProps = {
+  user?: User;
   background?: boolean;
   friends: Friend[];
+  onSearch: (query: string) => void;
+  onFilter: (type: FriendType) => void;
 };
 
 export const friends: Friend[] = [

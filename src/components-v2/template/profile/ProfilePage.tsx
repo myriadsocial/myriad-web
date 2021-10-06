@@ -74,10 +74,7 @@ const ProfilePage = (): JSX.Element => {
             <UserMenu
               selected={UserMenuProps.args?.selected ?? 'post'}
               anonymous={false}
-              experiences={UserMenuProps.args?.experiences ?? []}
-              socials={UserMenuProps.args?.socials ?? []}
               user={UserMenuProps.args?.user ?? user}
-              friends={UserMenuProps.args?.friends ?? []}
             />
           </div>
         </div>

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
 import {UserMenu} from './UserMenu';
 
+import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -13,16 +14,13 @@ type UserMenuContainerProps = {
 export const UserMenuContainer: React.FC<UserMenuContainerProps> = props => {
   const {anonymous = false} = props;
 
+  const {loadFriends} = useFriendsHook();
+
   const {user} = useSelector<RootState, UserState>(state => state.userState);
 
-  return (
-    <UserMenu
-      selected="post"
-      anonymous={anonymous}
-      user={user}
-      experiences={[]}
-      socials={[]}
-      friends={[]}
-    />
-  );
+  useEffect(() => {
+    loadFriends();
+  }, []);
+
+  return <UserMenu selected="post" anonymous={anonymous} user={user} />;
 };
