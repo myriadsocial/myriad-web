@@ -17,7 +17,7 @@ export const FriendTabPanelComponent: React.FC = () => {
       <div className={style.mb20}>
         <DropdownMenu title="Sort by" options={menuOptions} onChange={handleSortChange} />
       </div>
-      <FriendListComponent friends={friends} />
+      <FriendListComponent friends={friends} onSearch={console.log} onFilter={console.log} />
     </>
   );
 };
