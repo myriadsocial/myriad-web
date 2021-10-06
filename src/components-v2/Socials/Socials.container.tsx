@@ -1,24 +1,27 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import {Socials as SocialsComponent} from '.';
 
 import {useShareSocial} from 'src/hooks/use-share-social';
-import {SocialsEnum} from 'src/interfaces/social';
+import {SocialMedia, SocialsEnum} from 'src/interfaces/social';
 import {RootState} from 'src/reducers';
+import {deleteSocial} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const SocialsContainer: React.FC = () => {
-  const {user, socials, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const {isVerifying, verifyPublicKeyShared} = useShareSocial();
+  const {isVerifying, resetVerification, verifyPublicKeyShared} = useShareSocial();
+  const dispatch = useDispatch();
 
-  const handleDisconnectSocial = () => {
-    // code
+  const {user, socials, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+
+  const handleDisconnectSocial = (people: SocialMedia) => {
+    dispatch(deleteSocial(people.id));
   };
 
-  const handleVerifySocial = (social: SocialsEnum, username: string) => {
-    verifyPublicKeyShared(social, username, () => {
-      console.log('verified');
+  const handleVerifySocial = (social: SocialsEnum, profileUrl: string) => {
+    verifyPublicKeyShared(social, profileUrl, () => {
+      resetVerification();
     });
   };
 

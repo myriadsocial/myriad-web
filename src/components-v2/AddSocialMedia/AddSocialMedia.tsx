@@ -29,7 +29,7 @@ type AddSocialMediaProps = Pick<ModalProps, 'onClose' | 'open'> & {
   social: SocialsEnum;
   publicKey: string;
   verifying?: boolean;
-  verify: (social: SocialsEnum, username: string) => void;
+  verify: (social: SocialsEnum, profileUrl: string) => void;
 };
 
 export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
@@ -37,7 +37,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
 
   const styles = useStyles();
 
-  const [socialUrl, setSocialUrl] = useState('');
+  const [profileUrl, setProfileUrl] = useState('');
   const [shared, setShared] = useState(false);
   const [termApproved, setTermApproved] = useState(false);
 
@@ -51,24 +51,24 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
   const clear = () => {
     setShared(false);
     setTermApproved(false);
-    setSocialUrl('');
+    setProfileUrl('');
   };
 
   const handleSocialNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
 
-    setSocialUrl(text);
+    setProfileUrl(text);
   };
 
   const handleSocialNamePasted = (e: React.ClipboardEvent<HTMLDivElement>) => {
     e.preventDefault();
     const text = e.clipboardData.getData('Text');
 
-    setSocialUrl(text);
+    setProfileUrl(text);
   };
 
   const handleShared = () => {
-    verify(social, socialUrl);
+    verify(social, profileUrl);
 
     clear();
     onClose();
@@ -93,11 +93,11 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                 <InputLabel htmlFor="experience-name">{capitalize(social)} Account URL</InputLabel>
                 <OutlinedInput
                   id="social-profile-url"
-                  placeholder="Ex: twitter.com/laraschoffield"
+                  placeholder="Ex: https://twitter.com/laraschoffield"
                   labelWidth={160}
                   onChange={handleSocialNameChange}
                   onPaste={handleSocialNamePasted}
-                  value={socialUrl}
+                  value={profileUrl}
                 />
               </FormControl>
             </ListItemText>
@@ -131,7 +131,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                     url={APP_URL}
                     quote={message}
                     beforeOnClick={onSharedAttempt}
-                    className={styles.fullwidth}>
+                    className={styles.fullWidth}>
                     <Button
                       component="div"
                       variant="outlined"
@@ -149,7 +149,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                     url={APP_URL}
                     title={message}
                     beforeOnClick={onSharedAttempt}
-                    className={styles.fullwidth}>
+                    className={styles.fullWidth}>
                     <Button
                       component="div"
                       variant="outlined"
@@ -166,7 +166,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                     url={APP_URL}
                     title={message}
                     beforeOnClick={onSharedAttempt}
-                    className={styles.fullwidth}>
+                    className={styles.fullWidth}>
                     <Button
                       component="div"
                       variant="outlined"

@@ -14,6 +14,7 @@ import {
   ListItemSecondaryAction,
   Radio,
   SvgIcon,
+  NoSsr,
 } from '@material-ui/core';
 
 import {capitalize} from '../../helpers/string';
@@ -30,7 +31,7 @@ type SocialsProps = {
   socials: SocialMedia[];
   anonymous?: boolean;
   verifying?: boolean;
-  onVerifySocialMedia: (social: SocialsEnum, username: string) => void;
+  onVerifySocialMedia: (social: SocialsEnum, profileUrl: string) => void;
   onDisconnectSocial: (people: SocialMedia) => void;
 };
 
@@ -50,7 +51,7 @@ export const Socials: React.FC<SocialsProps> = props => {
 
   useEffect(() => {
     getPeopleList();
-  }, [selectedSocial]);
+  }, [selectedSocial, socials]);
 
   useEffect(() => {
     if (!verifying) {
@@ -85,8 +86,8 @@ export const Socials: React.FC<SocialsProps> = props => {
     setAddSocial(prevStatus => !prevStatus);
   };
 
-  const verifySocialMedia = (social: SocialsEnum, username: string) => {
-    onVerifySocialMedia(social, username);
+  const verifySocialMedia = (social: SocialsEnum, profileUrl: string) => {
+    onVerifySocialMedia(social, profileUrl);
     toggleAddSocialMedia();
   };
 
@@ -185,14 +186,16 @@ export const Socials: React.FC<SocialsProps> = props => {
         </List>
       </div>
 
-      <AddSocialMedia
-        open={addSocial}
-        social={selectedSocial}
-        publicKey={user.id}
-        onClose={toggleAddSocialMedia}
-        verifying={verifying}
-        verify={verifySocialMedia}
-      />
+      <NoSsr>
+        <AddSocialMedia
+          open={addSocial}
+          social={selectedSocial}
+          publicKey={user.id}
+          onClose={toggleAddSocialMedia}
+          verifying={verifying}
+          verify={verifySocialMedia}
+        />
+      </NoSsr>
 
       <PromptComponent
         title={'Disconnect social account'}

@@ -43,10 +43,18 @@ export const useShareSocial = () => {
 
   const verifyPublicKeyShared = async (
     platform: SocialsEnum,
-    username: string,
+    profileUrl: string,
     callback?: () => void,
   ): Promise<void> => {
     setPlatform(platform);
+
+    let username = profileUrl;
+
+    // NOTE: we only need username for verifying twitter & reddit
+    if ([SocialsEnum.TWITTER, SocialsEnum.REDDIT].includes(platform)) {
+      username = profileUrl.substring(profileUrl.lastIndexOf('/') + 1);
+    }
+
     dispatch(verifySocialMediaConnected(platform, username, callback));
   };
 

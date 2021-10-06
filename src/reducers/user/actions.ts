@@ -10,6 +10,7 @@ import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {SocialsEnum} from 'src/interfaces/index';
 import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail} from 'src/interfaces/user';
+import {BaseErrorResponse} from 'src/lib/api/interfaces/error-response.interface';
 import * as SocialAPI from 'src/lib/api/social';
 import * as TokenAPI from 'src/lib/api/token';
 import * as UserAPI from 'src/lib/api/user';
@@ -163,6 +164,8 @@ export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> 
 
       dispatch(fetchConnectedSocials());
 
+      dispatch(resetVerifyingSocial());
+
       callback && callback();
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -181,57 +184,13 @@ export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> 
 
 // TODO: handle this on social API
 export const handleVerifyError: ThunkActionCreator<Actions, RootState> =
-  (error: AxiosError) => async dispatch => {
+  (error: AxiosError<BaseErrorResponse>) => async dispatch => {
     if (error.response) {
-      switch (error.response.status) {
-        case 404:
-          switch (error.response.data.error.name) {
-            case 'Error':
-              dispatch(
-                setError({
-                  message: 'Please enter the correct account address',
-                }),
-              );
-
-              break;
-            default:
-              switch (error.response.data.error.message) {
-                case 'This twitter/facebook/reddit does not belong to you!':
-                  dispatch(
-                    setError({
-                      message: 'Sorry, this account has been claimed by somebody else',
-                    }),
-                  );
-                  break;
-                case 'Credential Invalid':
-                  dispatch(
-                    setError({
-                      message: 'Invalid credentials',
-                    }),
-                  );
-
-                  break;
-                default:
-                  dispatch(
-                    setError({
-                      message: error.response.data.error.message,
-                    }),
-                  );
-                  break;
-              }
-              break;
-          }
-          break;
-
-        case 400:
-        default:
-          dispatch(
-            setError({
-              message: 'Please enter the correct account address',
-            }),
-          );
-          break;
-      }
+      dispatch(
+        setError({
+          message: error.response.data.error.message,
+        }),
+      );
     }
   };
 

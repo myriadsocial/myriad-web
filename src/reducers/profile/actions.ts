@@ -4,8 +4,10 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {Friend} from 'src/interfaces/friend';
+import {SocialMedia} from 'src/interfaces/social';
 import {User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
+import * as SocialAPI from 'src/lib/api/social';
 import * as UserAPI from 'src/lib/api/user';
 import {ThunkActionCreator} from 'src/types/thunk';
 
@@ -29,11 +31,21 @@ export interface FilterProfileFriend extends Action {
   query: string;
 }
 
+export interface FetchConnectedSocials extends Action {
+  type: constants.FETCH_PROFILE_SOCIALS;
+  payload: SocialMedia[];
+}
+
 /**
  * Union Action Types
  */
 
-export type Actions = FetchProfileDetail | FetchProfileFriend | FilterProfileFriend | BaseAction;
+export type Actions =
+  | FetchProfileDetail
+  | FetchProfileFriend
+  | FilterProfileFriend
+  | FetchConnectedSocials
+  | BaseAction;
 
 /**
  *
@@ -116,6 +128,30 @@ export const searchProfileFriend: ThunkActionCreator<Actions, RootState> =
           message: error.message,
         }),
       );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const fetchConnectedSocials: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    const {
+      profileState: {detail},
+    } = getState();
+
+    if (!detail) return;
+
+    try {
+      const {data} = await SocialAPI.getUserSocials(detail.id);
+
+      dispatch({
+        type: constants.FETCH_PROFILE_SOCIALS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
     } finally {
       dispatch(setLoading(false));
     }
