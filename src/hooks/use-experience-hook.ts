@@ -26,6 +26,7 @@ export const useExperienceHook = () => {
     selectedExperience,
     searchTags: tags,
     searchPeople: people,
+    searchExperience: searchedExperiences,
   } = useSelector<RootState, ExperienceState>(state => state.experienceState);
 
   useEffect(() => {
@@ -65,6 +66,7 @@ export const useExperienceHook = () => {
   return {
     searchPeople: findPeople,
     searchExperience: findExperience,
+    searchedExperiences,
     searchTags: findTags,
     followExperience,
     loadExperience,
