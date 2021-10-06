@@ -9,4 +9,9 @@ interface ExperienceListProps {
   filterTimeline: (type: TimelineType) => void;
 }
 
-export type {ExperienceListProps};
+type NonSelectableExperienceListProps = Omit<
+  ExperienceListProps,
+  'filterTimeline' | 'isOnHomePage'
+>;
+
+export type {ExperienceListProps, NonSelectableExperienceListProps};

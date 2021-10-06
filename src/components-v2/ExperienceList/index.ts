@@ -1,7 +1,8 @@
 import {default as ExperienceList} from './ExperienceList';
-import {ExperienceListProps} from './experience-list.interfaces';
+import {default as NonSelectableExperienceList} from './NonSelectableExperienceList';
+import {NonSelectableExperienceListProps, ExperienceListProps} from './experience-list.interfaces';
 import {useStyles} from './experience-list.style';
 
-export {ExperienceList, useStyles};
+export {ExperienceList, NonSelectableExperienceList, useStyles};
 
-export type {ExperienceListProps};
+export type {NonSelectableExperienceListProps, ExperienceListProps};
