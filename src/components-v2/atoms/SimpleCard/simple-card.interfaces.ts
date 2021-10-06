@@ -22,4 +22,6 @@ interface SimpleCardProps {
   onClick: () => void;
 }
 
-export type {SimpleCardProps};
+type NonSelectableSimpleCardProps = Omit<SimpleCardProps, 'filterTimeline' | 'onClick'>;
+
+export type {SimpleCardProps, NonSelectableSimpleCardProps};
