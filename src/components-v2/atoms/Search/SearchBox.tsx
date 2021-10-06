@@ -26,10 +26,22 @@ const SearchBox: React.FC<SearchBoxProps> = ({
     setInput(event.target.value);
   };
 
+  const submitClickSearch = () => {
+    const debouncedSubmit = debounce(() => {
+      if (onSubmit) {
+        onSubmit(input);
+      }
+    }, 500);
+
+    debouncedSubmit();
+  };
+
   const submitSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       const debouncedSubmit = debounce(() => {
-        onSubmit(input);
+        if (onSubmit) {
+          onSubmit(input);
+        }
       }, 500);
 
       debouncedSubmit();
@@ -38,10 +50,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
 
   return (
     <Paper className={classes.root}>
-      <IconButton
-        className={classes.iconButton}
-        aria-label="search"
-        onClick={() => onSubmit(input)}>
+      <IconButton className={classes.iconButton} aria-label="search" onClick={submitClickSearch}>
         <SvgIcon component={SearchIcon} viewBox="0 0 24 24" />
       </IconButton>
       <InputBase
