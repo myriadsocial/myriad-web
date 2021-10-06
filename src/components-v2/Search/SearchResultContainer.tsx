@@ -59,19 +59,21 @@ export const SearchResultContainer: React.FC = () => {
 
   const onSubmitSearch = (query: string) => {
     setSubmittedQuery(query);
-    //do search logic here
   };
 
   return (
     <>
       <SearchBoxContainer onSubmitSearch={onSubmitSearch} />
-      <Typography>Search result for {submittedQuery}</Typography>
+      <Typography>Search result for &quot;{submittedQuery}&quot;</Typography>
       <TabsComponent
         active={searchResultTabTexts[0].id}
         tabs={searchResultTabTexts}
         mark="underline"
         position="left"
         size="medium"
+        padding={3.75}
+        background="white"
+        borderRadius={10}
         onChangeTab={handleChangeTab}
       />
     </>
