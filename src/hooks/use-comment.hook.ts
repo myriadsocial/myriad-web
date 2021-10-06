@@ -51,13 +51,21 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
   const reply = async (user: User, comment: CommentProps, callback?: () => void) => {
     const data = await CommentAPI.reply(comment);
 
-    setComments([
-      ...comments,
-      {
-        ...data,
-        user,
-      },
-    ]);
+    const newComment = comments.map(item => {
+      if (item.id === data.referenceId) {
+        item.replies?.push({...data, user});
+      }
+      if (item.replies) {
+        item.replies.map(reply => {
+          if (reply.id === data.referenceId) {
+            reply.replies?.push({...data, user});
+          }
+          return reply;
+        });
+      }
+      return item;
+    });
+    setComments(newComment);
 
     callback && callback();
   };
@@ -68,7 +76,18 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
         if (comment.id === commentId) {
           comment.metric.upvotes = vote;
         }
-
+        if (comment.replies) {
+          comment.replies.map(reply => {
+            if (reply.id === commentId) reply.metric.upvotes = vote;
+            if (reply.replies) {
+              reply.replies.map(item => {
+                if (item.id === commentId) item.metric.upvotes = vote;
+                return item;
+              });
+            }
+            return reply;
+          });
+        }
         return comment;
       });
     });
@@ -80,7 +99,18 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
         if (comment.id === commentId) {
           comment.metric.downvotes = vote;
         }
-
+        if (comment.replies) {
+          comment.replies.map(reply => {
+            if (reply.id === commentId) reply.metric.downvotes = vote;
+            if (reply.replies) {
+              reply.replies.map(item => {
+                if (item.id === commentId) item.metric.downvotes = vote;
+                return item;
+              });
+            }
+            return reply;
+          });
+        }
         return comment;
       });
     });

@@ -30,6 +30,8 @@ export const useCommentTabs = (
           placeholder={'Your downvote will be submitted when you post a comment'}
           referenceId={post.id}
           section={SectionType.DEBATE}
+          focus={true}
+          expand={true}
         />
       ),
     },
