@@ -22,23 +22,35 @@ export const getAllExperiences = async (): Promise<ExperienceList> => {
   return data;
 };
 
-export const searchExperience = async (query: string): Promise<ExperienceList> => {
-  const {data} = await MyriadAPI.request<ExperienceList>({
-    url: `/experiences`,
+export const searchExperience = async (query: string): Promise<UserExperienceList> => {
+  const {data} = await MyriadAPI.request<UserExperienceList>({
+    url: `/user-experiences`,
     method: 'GET',
     params: {
       filter: {
-        where: {
-          and: [
-            {
-              name: {
-                like: `${query}.*`,
-                options: 'i',
+        include: [
+          'user',
+          {
+            relation: 'experience',
+            scope: {
+              where: {
+                and: [
+                  {
+                    name: {
+                      like: `${query}.*`,
+                      options: 'i',
+                    },
+                  },
+                ],
               },
+              include: [
+                {
+                  relation: 'user',
+                },
+              ],
             },
-          ],
-        },
-        include: ['user'],
+          },
+        ],
       },
     },
   });
