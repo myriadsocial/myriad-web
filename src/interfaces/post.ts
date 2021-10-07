@@ -40,7 +40,7 @@ export type PostMetric = {
 export enum PostVisibility {
   PUBLIC = 'public',
   FRIEND = 'friend',
-  ONLY_ME = 'only_me',
+  PRIVATE = 'private',
 }
 
 export type PostProps = {
