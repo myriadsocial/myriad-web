@@ -15,6 +15,7 @@ import {
   Radio,
   SvgIcon,
   NoSsr,
+  Grid,
 } from '@material-ui/core';
 
 import {capitalize} from '../../helpers/string';
@@ -203,7 +204,7 @@ export const Socials: React.FC<SocialsProps> = props => {
         open={removing}
         icon="danger"
         onCancel={handleClosePrompt}>
-        <div>
+        <Grid container justifyContent="space-between">
           <Button size="small" variant="outlined" color="secondary" onClick={handleClosePrompt}>
             No, let me rethink
           </Button>
@@ -214,7 +215,7 @@ export const Socials: React.FC<SocialsProps> = props => {
             onClick={confirmDisconnectSocial}>
             Yes, proceed to delete
           </Button>
-        </div>
+        </Grid>
       </PromptComponent>
     </Box>
   );
