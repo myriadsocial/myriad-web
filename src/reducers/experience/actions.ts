@@ -41,7 +41,7 @@ export interface RemoveExperience extends Action {
 }
 export interface SearchExperience extends PaginationAction {
   type: constants.SEARCH_EXPERIENCE;
-  experiences: Experience[];
+  experiences: UserExperience[];
 }
 export interface SearchPeople extends PaginationAction {
   type: constants.SEARCH_PEOPLE;
