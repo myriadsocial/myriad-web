@@ -24,13 +24,13 @@ export const SocialMediaListContainer: React.FC = () => {
 
     switch (social.id) {
       case SocialsEnum.TWITTER:
-        url = `https://twitter.com/${social.originId}`;
+        url = `https://twitter.com/${social.username}`;
         break;
       case SocialsEnum.REDDIT:
-        url = `https://reddit.com/user/${social.originId}`;
+        url = `https://reddit.com/user/${social.username}`;
         break;
       case SocialsEnum.FACEBOOK:
-        url = `https://facebook.com/${social.originId}`;
+        url = `https://facebook.com/${social.username}`;
         break;
       default:
         break;
@@ -41,7 +41,9 @@ export const SocialMediaListContainer: React.FC = () => {
   const handleVerifySocial = (social: SocialDetail) => {
     const url = getPlatformUrl(social);
 
-    window.open(url, '_blank');
+    if (url.length) {
+      window.open(url, '_blank');
+    }
   };
 
   return (

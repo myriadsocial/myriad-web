@@ -16,6 +16,7 @@ export type SocialDetail = {
   icon: React.ReactElement | React.FC;
   originId: string | null;
   connected: boolean;
+  username: string | null;
 };
 
 function enumKeys<E>(e: E): (keyof E)[] {
@@ -46,10 +47,16 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
     return !!match && match.verified;
   };
 
-  const getPrimarySocial = (social: SocialsEnum): string | null => {
+  const getSocialOrigin = (social: SocialsEnum): string | null => {
     const match = connected.find(item => item.platform === social);
 
-    return match ? match.userId : null;
+    return match && match.people ? match.people?.originUserId : null;
+  };
+
+  const getSocialUsername = (social: SocialsEnum): string | null => {
+    const match = connected.find(item => item.platform === social);
+
+    return match && match.people ? match.people?.username : null;
   };
 
   for (const key of enumKeys(SocialsEnum)) {
@@ -58,8 +65,9 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
     socials.push({
       id: social,
       icon: icons[social],
-      originId: getPrimarySocial(social),
+      originId: getSocialOrigin(social),
       connected: isSocialConnected(social),
+      username: getSocialUsername(social),
     });
   }
 
