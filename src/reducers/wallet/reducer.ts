@@ -11,6 +11,7 @@ import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 
 export interface WalletState extends BaseState {
   recipientDetail: WalletDetail;
+  tippedUserId: string;
 }
 
 const initialState: WalletState = {
@@ -20,6 +21,7 @@ const initialState: WalletState = {
     walletAddress: '',
     contentType: ContentType.POST,
   },
+  tippedUserId: '',
 };
 
 export const WalletReducer: Redux.Reducer<WalletState, Actions> = (
@@ -42,6 +44,13 @@ export const WalletReducer: Redux.Reducer<WalletState, Actions> = (
       return {
         ...state,
         recipientDetail: action.recipientDetail,
+      };
+    }
+
+    case constants.SET_TIPPED_USER_ID: {
+      return {
+        ...state,
+        tippedUserId: action.tippedUserId,
       };
     }
 
