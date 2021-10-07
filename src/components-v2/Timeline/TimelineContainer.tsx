@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {Button} from '@material-ui/core';
+import {Button, Grid} from '@material-ui/core';
 
 import {Timeline as TimelineComponent} from '.';
 import {useQueryParams} from '../../hooks/use-query-params.hooks';
@@ -156,14 +156,14 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
         open={removing}
         icon="danger"
         onCancel={handleClosePrompt}>
-        <div>
+        <Grid container justifyContent="space-between">
           <Button size="small" variant="outlined" color="secondary" onClick={handleClosePrompt}>
             No, let me rethink
           </Button>
           <Button size="small" variant="contained" color="primary" onClick={confirmDeletePost}>
             Yes, proceed to delete
           </Button>
-        </div>
+        </Grid>
       </PromptComponent>
     </>
   );

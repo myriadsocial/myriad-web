@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Link from '@material-ui/core/Link';
+import {InputAdornment} from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -42,7 +42,7 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
         <Typography variant="h4">Hi there, welcome to Myriad!</Typography>
       </div>
       <Paper className={classes.rootContainer} component="form">
-        <div>
+        <div className={classes.formInfo}>
           <Typography variant="body1">Personal information</Typography>
           <Typography variant="caption" color="textSecondary">
             Introduce yourself to your audience
@@ -62,10 +62,14 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
         <div className={classes.secondFormField}>
           <TextField
             id="display name field"
+            placeholder="username"
             label="Username"
             defaultValue={username}
             variant="outlined"
             onChange={handleChangeUsername}
+            InputProps={{
+              startAdornment: <InputAdornment position="start">@</InputAdornment>,
+            }}
           />
           <Typography variant="caption" color="textSecondary">
             Please be aware that you cannot change username later
@@ -74,10 +78,13 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
 
         <div className={classes.formActionWrapper}>
           <div className={classes.formAction}>
-            <Typography color="primary">
-              <Link component="button" variant="body1" onClick={handleSkipWelcome}>
-                Skip this step &gt;
-              </Link>
+            <Typography
+              component="div"
+              style={{cursor: 'pointer'}}
+              color="primary"
+              variant="body1"
+              onClick={handleSkipWelcome}>
+              Skip this step &gt;
             </Typography>
 
             <Button
