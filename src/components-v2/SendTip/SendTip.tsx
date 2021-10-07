@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import Link from 'next/link';
 
@@ -27,6 +27,12 @@ type SendTipProps = {
 //TODO: split this component into sub-components
 export const SendTip: React.FC<SendTipProps> = ({balanceDetails}) => {
   const [tipAmount, setTipAmount] = useState('');
+  const [verifiedTipAmount, setVerifiedTipAmount] = useState('');
+
+  useEffect(() => {
+    verifyTipAmount(tipAmount);
+  }, [tipAmount]);
+
   const [gasFee] = useState('0.01');
 
   const [checked, setChecked] = useState(true);
@@ -41,15 +47,60 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails}) => {
 
   const classes = useStyles();
 
+  const checkNotEmpty = (input: string) => {
+    if (input === '') {
+      return '';
+    }
+
+    return input;
+  };
+
+  const checkValidDigits = (input: string) => {
+    const regexValidDigits = /^\d*(\.\d+)?$/;
+
+    if (regexValidDigits.test(input)) {
+      console.log({input});
+      return input;
+    }
+    return '';
+  };
+
+  const setMaxTippable = () => {
+    const maxTippable = selectedCurrency.freeBalance - Number(gasFee);
+    return maxTippable;
+  };
+
+  const checkEnoughBalance = (input: string) => {
+    if (setMaxTippable() > Number(input)) {
+      return input;
+    }
+    return '';
+  };
+
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const input = e.target.value;
-    //TODO: tipAmount input validation goes here
     setTipAmount(input);
   };
 
+  const verifyTipAmount = (tipAmount: string) => {
+    const nonZeroLengthString = checkNotEmpty(tipAmount);
+
+    const validDigits = checkValidDigits(nonZeroLengthString.length > 0 ? nonZeroLengthString : '');
+
+    const validBalanceAmount = checkEnoughBalance(validDigits.length > 0 ? validDigits : '');
+
+    if (validBalanceAmount.length > 0) {
+      console.log({validBalanceAmount});
+      setVerifiedTipAmount(validBalanceAmount);
+    } else {
+      console.log('Insufficient balance');
+    }
+  };
+
   const handleSendTip = () => {
-    console.log('sending tip!');
+    console.log({verifiedTipAmount});
+    // call api along with the payload here
   };
 
   return (
@@ -75,7 +126,16 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails}) => {
             label="Tip amount"
             value={tipAmount}
             onChange={handleChangeAmount}
+            type="number"
             variant="outlined"
+            error={Number(tipAmount) > setMaxTippable() ? true : false}
+            helperText={
+              Number(tipAmount) > setMaxTippable()
+                ? 'Insufficient balance'
+                : checkValidDigits(tipAmount) === ''
+                ? 'Digits only'
+                : ''
+            }
           />
           <div className={classes.receiverSummary}>
             <CustomAvatar
