@@ -10,6 +10,9 @@ import {NonSelectableSimpleCard} from '../atoms/SimpleCard';
 const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = ({
   experiences,
   user,
+  onPreview,
+  onFollow,
+  onSubscribe,
 }) => {
   const classes = useStyles();
 
@@ -19,9 +22,13 @@ const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = 
         <div key={item.experience.id}>
           <NonSelectableSimpleCard
             user={user}
+            experienceId={item.experience.id}
             title={item.experience.name}
             creator={item.experience.user.name}
             imgUrl={item.experience.experienceImageURL || ''}
+            onSubscribe={onSubscribe}
+            onFollow={onFollow}
+            onPreview={onPreview}
           />
         </div>
       ))}

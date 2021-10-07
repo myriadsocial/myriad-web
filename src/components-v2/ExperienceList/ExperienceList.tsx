@@ -44,7 +44,7 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
           <Typography className={classes.subtitle} color="textSecondary" component="p">
             It seems you don’t have an experience yet
           </Typography>
-          <Link href={'/experience'}>
+          <Link href={'/experience/create'}>
             <Button color="primary" variant="contained" size="small">
               Create Experience
             </Button>

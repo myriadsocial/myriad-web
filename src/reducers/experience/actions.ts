@@ -23,21 +23,9 @@ export interface LoadExperience extends PaginationAction {
   type: constants.FETCH_EXPERIENCE;
   experiences: UserExperience[];
 }
-export interface SelectExperience extends Action {
-  type: constants.SELECT_EXPERIENCE;
-  selectedExperience: Experience;
-}
-export interface AddExperience extends Action {
-  type: constants.ADD_EXPERIENCE;
-  addedExperience: Experience;
-}
-export interface UpdateSelectedExperience extends Action {
-  type: constants.UPDATE_SELECTED_EXPERIENCE;
-  updatedExperience: Experience;
-}
-export interface RemoveExperience extends Action {
-  type: constants.REMOVE_EXPERIENCE;
-  removedExperienceId: string;
+export interface LoadDetailExperience extends Action {
+  type: constants.FETCH_DETAIL_EXPERIENCE;
+  experience: Experience;
 }
 export interface SearchExperience extends PaginationAction {
   type: constants.SEARCH_EXPERIENCE;
@@ -58,10 +46,7 @@ export interface SearchTags extends PaginationAction {
 export type Actions =
   | LoadAllExperiences
   | LoadExperience
-  | AddExperience
-  | SelectExperience
-  | UpdateSelectedExperience
-  | RemoveExperience
+  | LoadDetailExperience
   | SearchExperience
   | SearchPeople
   | SearchTags
@@ -137,73 +122,14 @@ export const fetchExperience: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const addExperience: ThunkActionCreator<Actions, RootState> =
-  (experience: Experience) => async dispatch => {
-    dispatch(setLoading(true));
-    try {
-      const data = await ExperienceAPI.createUserExperience(experience);
-
-      dispatch({
-        type: constants.ADD_EXPERIENCE,
-        addedExperience: data,
-      });
-    } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-export const removeExperience: ThunkActionCreator<Actions, RootState> =
+export const fetchDetailExperience: ThunkActionCreator<Actions, RootState> =
   (experienceId: string) => async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
-      const {
-        userState: {user},
-      } = getState();
-
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      await ExperienceAPI.removeExperience(experienceId);
-
+      const experience = await ExperienceAPI.getExperience(experienceId);
       dispatch({
-        type: constants.REMOVE_EXPERIENCE,
-        removedExperienceId: experienceId,
-      });
-    } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-export const selectExperience: ThunkActionCreator<Actions, RootState> =
-  (experienceId: string) => async (dispatch, getState) => {
-    dispatch(setLoading(true));
-    try {
-      const {
-        userState: {user},
-      } = getState();
-
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      const data = await ExperienceAPI.chooseExperience(user.id, experienceId);
-
-      dispatch({
-        type: constants.SELECT_EXPERIENCE,
-        selectedExperience: data,
+        type: constants.FETCH_DETAIL_EXPERIENCE,
+        experience: experience,
       });
     } catch (error) {
       dispatch(
@@ -217,7 +143,7 @@ export const selectExperience: ThunkActionCreator<Actions, RootState> =
   };
 
 export const cloneExperience: ThunkActionCreator<Actions, RootState> =
-  (experienceId: string) => async (dispatch, getState) => {
+  (experienceId: string, experience: Experience) => async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
       const {
@@ -228,7 +154,7 @@ export const cloneExperience: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      await ExperienceAPI.cloneExperience(user.id, experienceId);
+      await ExperienceAPI.cloneExperience(user.id, experienceId, experience);
     } catch (error) {
       dispatch(
         setError({
@@ -329,6 +255,54 @@ export const createExperience: ThunkActionCreator<Actions, RootState> =
 
       await ExperienceAPI.createExperience(user.id, experience);
       fetchExperience();
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const subscribeExperience: ThunkActionCreator<Actions, RootState> =
+  (experienceId: string, experience: Experience) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      await ExperienceAPI.subscribeExperience(user.id, experienceId);
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const updateExperience: ThunkActionCreator<Actions, RootState> =
+  (experienceId: string, experience: Experience) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      await ExperienceAPI.updateExperience(user.id, experienceId, experience);
     } catch (error) {
       dispatch(
         setError({

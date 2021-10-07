@@ -100,24 +100,34 @@ export const getUserExperience = async (
   return data;
 };
 
-export const createUserExperience = async (values: ExperienceProps): Promise<Experience> => {
-  const {data} = await MyriadAPI.request<Experience>({
-    url: '/user-experiences',
+export const cloneExperience = async (
+  userId: string,
+  experienceId: string,
+  data: Experience,
+): Promise<void> => {
+  await MyriadAPI.request<Experience>({
+    url: `/users/${userId}/clone/${experienceId}`,
     method: 'POST',
-    data: values,
+    data,
   });
-
-  return data;
 };
 
-export const cloneExperience = async (userId: string, experienceId: string): Promise<void> => {
+export const subscribeExperience = async (userId: string, experienceId: string): Promise<void> => {
   await MyriadAPI.request<Experience>({
-    url: `/clone-user-experiences`,
+    url: `/users/${userId}/subscribe/${experienceId}`,
     method: 'POST',
-    data: {
-      experienceId,
-      userId,
-    },
+  });
+};
+
+export const updateExperience = async (
+  userId: string,
+  experienceId: string,
+  data: Partial<Experience>,
+): Promise<void> => {
+  await MyriadAPI.request<Experience>({
+    url: `/users/${userId}/experiences/${experienceId}`,
+    method: 'PATCH',
+    data,
   });
 };
 
@@ -127,4 +137,18 @@ export const createExperience = async (userId: string, experience: Experience): 
     method: 'POST',
     data: experience,
   });
+};
+
+export const getExperience = async (experienceId: string): Promise<Experience> => {
+  const {data} = await MyriadAPI.request<Experience>({
+    url: `/experiences/${experienceId}`,
+    method: 'GET',
+    params: {
+      filter: {
+        include: ['user'],
+      },
+    },
+  });
+
+  return data;
 };

@@ -18,7 +18,7 @@ export const HeaderWithAction: React.FC<HeaderWithActionProps> = props => {
   return (
     <div className={classes.root}>
       <Typography variant={'caption'} color={'primary'}>
-        <Link href={'/experience'} className={classes.actionText}>
+        <Link href={'/experience/create'} className={classes.actionText}>
           {actionText}
         </Link>
       </Typography>

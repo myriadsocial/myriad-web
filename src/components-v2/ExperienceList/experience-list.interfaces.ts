@@ -7,6 +7,9 @@ interface ExperienceListProps {
   isOnHomePage?: boolean;
   user?: User;
   filterTimeline: (type: TimelineType) => void;
+  onSubscribe?: (experienceId: string) => void;
+  onFollow?: (experienceId: string) => void;
+  onPreview?: (experienceId: string) => void;
 }
 
 type NonSelectableExperienceListProps = Omit<

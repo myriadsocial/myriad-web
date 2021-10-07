@@ -11,6 +11,9 @@ import {
   fetchExperience,
   fetchAllExperiences,
   createExperience,
+  fetchDetailExperience,
+  subscribeExperience,
+  updateExperience,
 } from '../reducers/experience/actions';
 import {ExperienceState} from '../reducers/experience/reducer';
 
@@ -27,6 +30,7 @@ export const useExperienceHook = () => {
     searchTags: tags,
     searchPeople: people,
     searchExperience: searchedExperiences,
+    detail: experience,
   } = useSelector<RootState, ExperienceState>(state => state.experienceState);
 
   useEffect(() => {
@@ -42,6 +46,11 @@ export const useExperienceHook = () => {
     dispatch(fetchExperience());
   };
 
+  const getDetail = (experienceId: string | string[]) => {
+    const id = experienceId as string;
+    dispatch(fetchDetailExperience(id));
+  };
+
   const findExperience = (query: string) => {
     dispatch(searchExperience(query));
   };
@@ -54,8 +63,26 @@ export const useExperienceHook = () => {
     dispatch(searchTags(query));
   };
 
-  const followExperience = (experienceId: string) => {
-    dispatch(cloneExperience(experienceId));
+  const followExperience = (newExperience: Partial<Experience>, newTags: string[]) => {
+    const experience = {
+      name: newExperience.name,
+      tags: newTags,
+      peole: newExperience.people,
+      description: newExperience.description,
+      experienceImageURL: newExperience.experienceImageURL,
+    };
+    dispatch(cloneExperience(newExperience.id, experience));
+  };
+
+  const editExperience = (newExperience: Partial<Experience>, newTags: string[]) => {
+    const experience = {
+      name: newExperience.name,
+      tags: newTags,
+      peole: newExperience.people,
+      description: newExperience.description,
+      experienceImageURL: newExperience.experienceImageURL,
+    };
+    dispatch(updateExperience(newExperience.id, experience));
   };
 
   const saveExperience = (newExperience: Partial<Experience>, newTags: string[]) => {
@@ -63,12 +90,16 @@ export const useExperienceHook = () => {
     dispatch(createExperience(experience, newTags));
   };
 
+  const beSubscribeExperience = (experienceId: string) => {
+    dispatch(subscribeExperience(experienceId));
+  };
+
   return {
     searchPeople: findPeople,
     searchExperience: findExperience,
     searchedExperiences,
     searchTags: findTags,
-    followExperience,
+    cloneExperience: followExperience,
     loadExperience,
     experiences,
     selectedExperience,
@@ -77,5 +108,9 @@ export const useExperienceHook = () => {
     saveExperience,
     tags,
     people,
+    getDetail,
+    experience,
+    subscribeExperience: beSubscribeExperience,
+    updateExperience: editExperience,
   };
 };
