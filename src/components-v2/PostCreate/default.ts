@@ -39,7 +39,7 @@ export const menuOptions: MenuOptions<PostVisibility>[] = [
     title: 'Friend Only',
   },
   {
-    id: PostVisibility.ONLY_ME,
+    id: PostVisibility.PRIVATE,
     title: 'Only Me',
   },
 ];
