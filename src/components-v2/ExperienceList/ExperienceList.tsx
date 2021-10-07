@@ -23,15 +23,15 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
 
   return (
     <div className={classes.root}>
-      {experiences.map(experience => (
-        <div key={experience.id}>
+      {experiences.map(item => (
+        <div key={item.experience.id}>
           <SimpleCard
             filterTimeline={filterTimeline}
             user={user}
             onClick={handleClick}
-            title={experience.name}
-            creator={experience.user.name}
-            imgUrl={experience.experienceImageURL || ''}
+            title={item.experience.name}
+            creator={item.experience.user.name}
+            imgUrl={item.experience.experienceImageURL || ''}
             isSelectable={isOnHomePage}
           />
         </div>

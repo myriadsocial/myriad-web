@@ -3,11 +3,11 @@ import {Actions} from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {Experience, Tag} from 'src/interfaces/experience';
+import {Experience, UserExperience, Tag} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
 
 export interface ExperienceState extends BasePaginationState {
-  experiences: Experience[];
+  experiences: UserExperience[];
   allExperiences: Experience[];
   selectedExperience: Experience | null;
   searchExperience: Experience[];
@@ -47,7 +47,7 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
       };
     }
     case constants.FETCH_EXPERIENCE: {
-      if (action.meta.currentPage === 1) {
+      if (!action.meta.currentPage || action.meta.currentPage === 1) {
         return {
           ...state,
           experiences: action.experiences,

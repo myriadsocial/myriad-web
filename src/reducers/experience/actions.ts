@@ -1,4 +1,4 @@
-import {Experience, Tag} from '../../interfaces/experience';
+import {Experience, Tag, UserExperience} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
 import * as ExperienceAPI from '../../lib/api/experience';
 import * as PeopleAPI from '../../lib/api/people';
@@ -9,6 +9,7 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
+import {ExperienceType} from 'src/components-v2/Timeline/default';
 
 /**
  * Action Types
@@ -20,7 +21,7 @@ export interface LoadAllExperiences extends PaginationAction {
 }
 export interface LoadExperience extends PaginationAction {
   type: constants.FETCH_EXPERIENCE;
-  experiences: Experience[];
+  experiences: UserExperience[];
 }
 export interface SelectExperience extends Action {
   type: constants.SELECT_EXPERIENCE;
@@ -88,6 +89,7 @@ export const fetchAllExperiences: ThunkActionCreator<Actions, RootState> =
       }
 
       const {meta, data: allExperiences} = await ExperienceAPI.getAllExperiences();
+
       dispatch({
         type: constants.FETCH_ALL_EXPERIENCES,
         allExperiences,
@@ -105,8 +107,9 @@ export const fetchAllExperiences: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchExperience: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
+  (type?: ExperienceType) => async (dispatch, getState) => {
     dispatch(setLoading(true));
+
     try {
       const {
         userState: {user},
@@ -116,7 +119,8 @@ export const fetchExperience: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const {meta, data: experiences} = await ExperienceAPI.getUserExperience(user.id);
+      const {meta, data: experiences} = await ExperienceAPI.getUserExperience(user.id, type);
+
       dispatch({
         type: constants.FETCH_EXPERIENCE,
         experiences,
