@@ -22,6 +22,8 @@ import {
 
 import React, {useCallback} from 'react';
 
+import Link from 'next/link';
+
 import {Typography, TypographyVariant} from '@material-ui/core';
 
 import {ELEMENT_HASHTAG} from './plugins/hashtag';
@@ -107,11 +109,13 @@ export const PostRender: React.FC<PostRenderProps> = props => {
         return <a href={escapeHtml(node.url)}>{children}</a>;
       case ELEMENT_HASHTAG:
         return (
-          <Typography
-            component="span"
-            style={{fontWeight: 600, color: theme.palette.primary.main, display: 'inline-block'}}>
-            #{children}
-          </Typography>
+          <Link href={`/home?tag=${node.hashtag}&type=trending`} shallow={true}>
+            <Typography
+              component="span"
+              style={{fontWeight: 600, color: theme.palette.primary.main, display: 'inline-block'}}>
+              {children}
+            </Typography>
+          </Link>
         );
       case ELEMENT_IMAGE:
         return <Gallery images={[node.url]} onImageClick={console.log} cloudName={'dsget80gs'} />;
