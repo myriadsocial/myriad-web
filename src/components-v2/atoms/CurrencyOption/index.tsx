@@ -11,13 +11,18 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {Props} from './currencyOption.interface';
+import {BalanceDetail} from '../../../interfaces/balance';
 import {useStyles} from './currencyOption.style';
 
 import {debounce} from 'lodash';
 
+type Props = {
+  balanceDetails: BalanceDetail[];
+  onSelect: (selected: BalanceDetail) => void;
+};
+
 export const CurrencyOptionComponent: React.FC<Props> = props => {
-  const {currencies} = props;
+  const {balanceDetails, onSelect} = props;
   const [search, setSearch] = useState('');
   const style = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -29,9 +34,8 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
     setAnchorEl(null);
   };
 
-  const handleSelect = (selected: string) => {
-    // TODO ACTION WHEN CLICK OPTIONS
-    console.log(selected);
+  const handleSelect = (selected: BalanceDetail) => {
+    onSelect(selected);
     handleClose();
   };
 
@@ -89,23 +93,23 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
           <Typography component="span">Coin</Typography>
           <Typography component="span">Balance</Typography>
         </div>
-        {currencies &&
-          currencies.map(item => (
+        {balanceDetails &&
+          balanceDetails.map(item => (
             <MenuItem
               classes={{root: style.hover}}
-              key={item.key}
-              onClick={() => handleSelect(item.tokenSymbol)}>
+              key={item.id}
+              onClick={() => handleSelect(item)}>
               <div className={style.flex}>
                 <div className={style.tokenColumn}>
                   <Avatar
                     className={`${style.avatar} ${style.text}`}
-                    alt={'aUSD'}
-                    src={item.tokenImage}>
-                    {item.tokenSymbol}
+                    alt={item.id}
+                    src={item.image}>
+                    {item.id}
                   </Avatar>
-                  <Typography color="textSecondary">{item.tokenSymbol}</Typography>
+                  <Typography color="textSecondary">{item.id}</Typography>
                 </div>
-                <Typography component="span">{item.balance}</Typography>
+                <Typography component="span">{item.freeBalance}</Typography>
               </div>
             </MenuItem>
           ))}
