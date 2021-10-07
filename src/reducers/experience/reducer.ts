@@ -10,7 +10,7 @@ export interface ExperienceState extends BasePaginationState {
   experiences: UserExperience[];
   allExperiences: Experience[];
   selectedExperience: Experience | null;
-  searchExperience: Experience[];
+  searchExperience: UserExperience[];
   searchPeople: People[];
   searchTags: Tag[];
   hasMore: boolean;

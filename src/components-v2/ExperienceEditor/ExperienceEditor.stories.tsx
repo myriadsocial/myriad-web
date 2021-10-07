@@ -64,6 +64,7 @@ EditExperience.args = {
     name: 'Example experience',
     description: 'Sample',
     createdAt: new Date(),
+    updatedAt: new Date('2021-09-03T06:46:39.000Z'),
     createdBy: '232',
     id: '123',
     people: [],
