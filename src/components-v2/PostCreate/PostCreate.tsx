@@ -67,7 +67,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   };
 
   const handleConfirmNSFWTags = (tags: string[]) => {
-    setPost(prevPost => ({...prevPost, NSFWTag: tags.join(',')}));
+    setPost(prevPost => ({...prevPost, isNSFW: tags.length > 0, NSFWTag: tags.join(',')}));
   };
 
   const handleVisibilityChange = (visibility: string) => {
