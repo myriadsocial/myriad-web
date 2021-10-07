@@ -12,6 +12,12 @@ import {
   ELEMENT_H3,
   ELEMENT_H5,
   ELEMENT_H6,
+  ELEMENT_ALIGN_CENTER,
+  ELEMENT_ALIGN_RIGHT,
+  ELEMENT_ALIGN_JUSTIFY,
+  ELEMENT_OL,
+  ELEMENT_UL,
+  ELEMENT_LIC,
 } from '@udecode/plate';
 
 import React, {useCallback} from 'react';
@@ -42,7 +48,7 @@ export const PostRender: React.FC<PostRenderProps> = props => {
             fontStyle: node.italic ? 'italic' : 'none',
             textDecoration: node.underline
               ? 'underline'
-              : node.striketrough
+              : node.strikethrough
               ? 'line-through'
               : 'none',
           }}>
@@ -73,6 +79,30 @@ export const PostRender: React.FC<PostRenderProps> = props => {
             {node.children[0].text}
           </Typography>
         );
+      case ELEMENT_ALIGN_CENTER:
+        return (
+          <Typography variant={node.type as TypographyVariant} component="div" align="center">
+            {children}
+          </Typography>
+        );
+      case ELEMENT_ALIGN_RIGHT:
+        return (
+          <Typography variant={node.type as TypographyVariant} component="div" align="right">
+            {children}
+          </Typography>
+        );
+      case ELEMENT_ALIGN_JUSTIFY:
+        return (
+          <Typography variant={node.type as TypographyVariant} component="div" align="justify">
+            {children}
+          </Typography>
+        );
+      case ELEMENT_UL:
+        return <ul>{children}</ul>;
+      case ELEMENT_OL:
+        return <ol>{children}</ol>;
+      case ELEMENT_LIC:
+        return <li>{children}</li>;
       case ELEMENT_LINK:
         return <a href={escapeHtml(node.url)}>{children}</a>;
       case ELEMENT_HASHTAG:
@@ -92,7 +122,7 @@ export const PostRender: React.FC<PostRenderProps> = props => {
           <Typography
             component="span"
             style={{fontWeight: 600, color: theme.palette.primary.main, display: 'inline-block'}}>
-            @{children}
+            @{node.name}
           </Typography>
         );
       default:
