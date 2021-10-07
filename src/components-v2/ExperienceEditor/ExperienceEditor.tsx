@@ -27,6 +27,7 @@ import {useStyles} from './Experience.styles';
 import {debounce} from 'lodash';
 
 type ExperienceEditorProps = {
+  type?: string;
   experience?: Experience | null;
   tags: Tag[];
   people: People[];
@@ -37,22 +38,39 @@ type ExperienceEditorProps = {
 };
 
 export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
-  const {experience, people, tags, onSave, onImageUpload, onSearchTags, onSearchPeople} = props;
+  const {type, experience, people, tags, onSave, onImageUpload, onSearchTags, onSearchPeople} =
+    props;
   const styles = useStyles();
 
   const [newExperience, setNewExperience] = useState<Partial<Experience>>();
   const [newTags, setTags] = useState<string[]>([]);
   const [image, setImage] = useState<string>();
+  const [disable, setDisable] = useState<boolean>(true);
 
   useEffect(() => {
     if (experience) {
       setNewExperience(experience);
 
       if (experience.tags) {
-        setTags(experience.tags.map(tag => tag.id));
+        const formatTag = experience.tags as unknown;
+        const tagExperience = formatTag as string[];
+        setTags(tagExperience);
+      }
+
+      if (experience.experienceImageURL) {
+        setImage(experience.experienceImageURL);
       }
     }
   }, [experience]);
+
+  useEffect(() => {
+    if (experience && newExperience) {
+      if (experience.name !== newExperience.name) setDisable(false);
+      if (experience.description !== newExperience.description) setDisable(false);
+      if (experience.experienceImageURL !== newExperience.experienceImageURL) setDisable(false);
+      if (experience.people !== newExperience.people) setDisable(false);
+    }
+  }, [newExperience]);
 
   const handleSearchTags = (event: React.ChangeEvent<HTMLInputElement>) => {
     const debounceSubmit = debounce(() => {
@@ -134,9 +152,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
   return (
     <div className={styles.root}>
-      <Typography className={styles.title}>
-        {experience ? 'Edit' : 'Create new'} Experience
-      </Typography>
+      <Typography className={styles.title}>{type ? type : 'Create new'} Experience</Typography>
 
       <FormControl fullWidth variant="outlined">
         <InputLabel htmlFor="experience-name">Experience Name</InputLabel>
@@ -263,12 +279,13 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       </div>
       <FormControl fullWidth variant="outlined">
         <Button
+          disabled={disable}
           variant="contained"
           color="primary"
           disableElevation
           fullWidth
           onClick={saveExperience}>
-          Create Experience
+          {type ? type : 'Create'} Experience
         </Button>
       </FormControl>
     </div>

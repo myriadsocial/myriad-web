@@ -15,10 +15,14 @@ import Typography from '@material-ui/core/Typography';
 import {useStyles, NonSelectableSimpleCardProps} from '.';
 
 const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
+  experienceId,
   user,
   creator,
   title,
   imgUrl,
+  onFollow,
+  onSubscribe,
+  onPreview,
   ...props
 }) => {
   const classes = useStyles();
@@ -50,6 +54,18 @@ const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
       return true;
     }
     return false;
+  };
+
+  const handlePreviewExperience = () => {
+    if (onPreview && experienceId) onPreview(experienceId);
+  };
+
+  const handleSubscribeExperience = () => {
+    if (onSubscribe && experienceId) onSubscribe(experienceId);
+  };
+
+  const handleCloneExperience = () => {
+    if (onFollow && experienceId) onFollow(experienceId);
   };
 
   return (
@@ -93,9 +109,9 @@ const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
         transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
         open={Boolean(anchorEl)}
         onClose={handleClose}>
-        <MenuItem>View details</MenuItem>
-        <MenuItem>Clone</MenuItem>
-        <MenuItem>Subscribe</MenuItem>
+        <MenuItem onClick={handlePreviewExperience}>View details</MenuItem>
+        <MenuItem onClick={handleCloneExperience}>Clone</MenuItem>
+        <MenuItem onClick={handleSubscribeExperience}>Subscribe</MenuItem>
       </Menu>
     </Card>
   );
