@@ -23,6 +23,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 155.71,
       height: 36,
     },
+    formInfo: {
+      marginBottom: 20,
+    },
     rootContainer: {
       minWidth: 480,
       minHeight: 566,

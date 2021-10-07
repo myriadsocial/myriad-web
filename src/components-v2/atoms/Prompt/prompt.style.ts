@@ -6,6 +6,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: '480px',
       height: '260px',
       textAlign: 'center',
+      padding: 30,
     },
     text: {
       fontSize: '14px',
@@ -13,7 +14,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '17.57px',
     },
     'm-vertical1': {
-      marginBottom: 50,
+      marginBottom: 30,
       marginTop: 12,
     },
     'flex-center': {
@@ -30,7 +31,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     icon: {
       fontSize: 60,
-      marginTop: '30px',
     },
     fill: {
       fill: 'currentColor',
