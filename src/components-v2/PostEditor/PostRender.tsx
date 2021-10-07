@@ -4,6 +4,7 @@ import {
   ELEMENT_LINK,
   ELEMENT_MENTION,
   ELEMENT_PARAGRAPH,
+  ELEMENT_MEDIA_EMBED,
   TNode,
 } from '@udecode/plate';
 
@@ -14,6 +15,8 @@ import {Typography} from '@material-ui/core';
 import {ELEMENT_HASHTAG} from './plugins/hashtag';
 
 import escapeHtml from 'escape-html';
+import {Gallery} from 'src/components-v2/atoms/Gallery';
+import {Video} from 'src/components-v2/atoms/Video/Video';
 import theme from 'src/themes/light-theme-v2';
 
 type PostRenderProps = {
@@ -30,6 +33,7 @@ export const PostRender: React.FC<PostRenderProps> = props => {
           component="span"
           style={{
             fontWeight: node.bold ? 600 : 400,
+            fontStyle: node.italic ? 'italic' : 'none',
             textDecoration: node.underline
               ? 'underline'
               : node.striketrough
@@ -41,7 +45,12 @@ export const PostRender: React.FC<PostRenderProps> = props => {
       );
     }
 
-    const children = node.children.map((node: any) => renderElement(node));
+    let children = '';
+    try {
+      children = node?.children.map((node: any) => renderElement(node));
+    } catch (error) {
+      console.log('error', node);
+    }
 
     switch (node.type) {
       case ELEMENT_BLOCKQUOTE:
@@ -63,7 +72,9 @@ export const PostRender: React.FC<PostRenderProps> = props => {
           </Typography>
         );
       case ELEMENT_IMAGE:
-        return <span>{children}</span>;
+        return <Gallery images={[node.url]} onImageClick={console.log} cloudName={'dsget80gs'} />;
+      case ELEMENT_MEDIA_EMBED:
+        return <Video url={node.url} />;
       case ELEMENT_MENTION:
         return (
           <Typography
