@@ -85,7 +85,10 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails}) => {
               size={CustomAvatarSize.XSMALL}
             />
             <Typography variant="body1">
-              King Lion will receive <span className={classes.clickableText}>{tipAmount} ACA</span>{' '}
+              King Lion will receive{' '}
+              <span className={classes.clickableText}>
+                {tipAmount} {selectedCurrency.id}
+              </span>{' '}
             </Typography>
           </div>
           <div style={{marginTop: 30, width: '100%'}}>
@@ -107,7 +110,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails}) => {
                     </TableCell>
                     <TableCell align="right">
                       <Typography variant="body1" color="textPrimary">
-                        {tipAmount.length === 0 ? '-' : tipAmount} ACA
+                        {tipAmount.length === 0 ? '-' : tipAmount} {selectedCurrency.id}
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -119,7 +122,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails}) => {
                     </TableCell>
                     <TableCell align="right">
                       <Typography variant="body1" color="textSecondary">
-                        {gasFee} ACA
+                        {gasFee} {selectedCurrency.id}
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -132,7 +135,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails}) => {
                     <TableCell align="right">
                       <Typography className={classes.subHeader}>
                         <span className={classes.clickableText}>
-                          {`${Number(tipAmount) + Number(gasFee)}`} ACA
+                          {`${Number(tipAmount) + Number(gasFee)}`} {selectedCurrency.id}
                         </span>
                       </Typography>
                     </TableCell>
