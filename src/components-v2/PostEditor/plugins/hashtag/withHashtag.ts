@@ -1,10 +1,9 @@
 import {isCollapsed, getRangeBefore, getText, unwrapNodes, wrapNodes} from '@udecode/plate-common';
-import {insertNodes} from '@udecode/plate-common';
 import {getPlatePluginType, SPEditor, WithOverride, TElement} from '@udecode/plate-core';
 
 import {ELEMENT_HASHTAG} from './default';
 
-import {Range} from 'slate';
+import {Range, Transforms} from 'slate';
 import {ReactEditor} from 'slate-react';
 
 const isHashTag = (string: string): boolean => {
@@ -21,27 +20,28 @@ const isHashTag = (string: string): boolean => {
 };
 
 export const insertHashtag = (editor: SPEditor, value: string | ArrayBuffer, at: Range) => {
-  const newSelection = editor.selection as Range;
-
   unwrapNodes(editor, {
     at,
     match: {type: getPlatePluginType(editor, ELEMENT_HASHTAG)},
   });
 
-  const text = {text: ''};
+  const newSelection = editor.selection as Range;
+
   const hashtag = {
     type: getPlatePluginType(editor, ELEMENT_HASHTAG),
-    children: [text],
+    children: [{text: ''}],
     hashtag: value,
   };
+
+  console.log('selection', newSelection);
+
   wrapNodes<TElement>(editor, hashtag, {
-    at: {
-      ...at,
-      focus: newSelection.focus,
-    },
+    at,
+    split: true,
   });
 
-  insertNodes(editor, text);
+  Transforms.insertText(editor, ' ');
+  Transforms.move(editor);
 };
 
 export const withHashtag = (): WithOverride<ReactEditor & SPEditor> => editor => {
@@ -50,7 +50,9 @@ export const withHashtag = (): WithOverride<ReactEditor & SPEditor> => editor =>
   editor.insertText = (text: string) => {
     const selection = editor.selection as Range;
 
-    if (!isCollapsed(selection)) return insertText(text);
+    if (!isCollapsed(selection)) {
+      return insertText(text);
+    }
 
     if (text === ' ' && isCollapsed(editor.selection)) {
       const beforeWordRange = getRangeBefore(editor, selection, {

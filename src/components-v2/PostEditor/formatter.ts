@@ -33,7 +33,7 @@ export const formatNodeToPost = (nodes: TNode[]): Partial<Post> => {
         });
         break;
       case ELEMENT_HASHTAG:
-        post.tags?.push(children.value);
+        post.tags?.push(children.hashtag);
         break;
       default:
         if (children.children) {
