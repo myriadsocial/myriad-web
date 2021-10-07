@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useCookies} from 'react-cookie';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
+import {Button, Grid} from '@material-ui/core';
+
+import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {WelcomeModule} from './WelcomeModule';
 
 import {RootState} from 'src/reducers';
@@ -20,11 +23,24 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
   const router = useRouter();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const [skip, setSkip] = useState(false);
 
   const disbleWelcome = () => {
     setCookie('welcome', {
       enabled: false,
     });
+  };
+
+  const openSkipConfirmation = () => {
+    setSkip(true);
+  };
+
+  const closeSkipConfirmation = (): void => {
+    setSkip(false);
+  };
+
+  const confirmSkip = () => {
+    router.push('/home');
   };
 
   const handleSubmit = (displayname: string, username: string) => {
@@ -40,18 +56,33 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
     router.push('/home');
   };
 
-  const handleSkip = () => {
-    router.push('/home');
-  };
-
   if (!user) return null;
 
   return (
-    <WelcomeModule
-      displayName={user.name}
-      username={user.username || ''}
-      onSkip={handleSkip}
-      onSubmit={handleSubmit}
-    />
+    <>
+      <WelcomeModule
+        displayName={user.name}
+        username={user.username || ''}
+        onSkip={openSkipConfirmation}
+        onSubmit={handleSubmit}
+      />
+
+      <PromptComponent
+        title={'Are you sure?'}
+        subtitle={`Are You really want to skip this process?
+        and create username latter? `}
+        open={skip}
+        icon="warning"
+        onCancel={closeSkipConfirmation}>
+        <Grid container justifyContent="space-between">
+          <Button size="small" variant="outlined" color="secondary" onClick={closeSkipConfirmation}>
+            No, let me rethink
+          </Button>
+          <Button size="small" variant="contained" color="primary" onClick={confirmSkip}>
+            Yes, Let’s go
+          </Button>
+        </Grid>
+      </PromptComponent>
+    </>
   );
 };
