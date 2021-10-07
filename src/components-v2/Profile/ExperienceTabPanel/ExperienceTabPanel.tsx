@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 
-import {Experience} from '../../../interfaces/experience';
+import {UserExperience} from '../../../interfaces/experience';
 import {ExperienceList} from '../../ExperienceList';
 import {experienceFilterOptions} from '../../Timeline/default';
 import {FilterDropdownMenu} from '../../atoms/FilterDropdownMenu';
 
 type ExperienceTabPanelProps = {
-  experiences: Experience[];
+  experiences: UserExperience[];
   isOnHomePage?: boolean;
 };
 
