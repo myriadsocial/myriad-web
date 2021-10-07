@@ -22,16 +22,21 @@ import {ListItemComponent} from '../atoms/ListItem/';
 
 type SendTipProps = {
   balanceDetails: BalanceDetail[];
+  tippedUserId: string;
 };
 
 //TODO: split this component into sub-components
-export const SendTip: React.FC<SendTipProps> = ({balanceDetails}) => {
+export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) => {
   const [tipAmount, setTipAmount] = useState('');
   const [verifiedTipAmount, setVerifiedTipAmount] = useState('');
 
   useEffect(() => {
     verifyTipAmount(tipAmount);
   }, [tipAmount]);
+
+  useEffect(() => {
+    handleSendTip(tippedUserId);
+  }, [tippedUserId]);
 
   const [gasFee] = useState('0.01');
 
@@ -59,7 +64,6 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails}) => {
     const regexValidDigits = /^\d*(\.\d+)?$/;
 
     if (regexValidDigits.test(input)) {
-      console.log({input});
       return input;
     }
     return '';
@@ -91,15 +95,14 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails}) => {
     const validBalanceAmount = checkEnoughBalance(validDigits.length > 0 ? validDigits : '');
 
     if (validBalanceAmount.length > 0) {
-      console.log({validBalanceAmount});
       setVerifiedTipAmount(validBalanceAmount);
     } else {
       console.log('Insufficient balance');
     }
   };
 
-  const handleSendTip = () => {
-    console.log({verifiedTipAmount});
+  const handleSendTip = (tippedUserId: string) => {
+    console.log({verifiedTipAmount, tippedUserId});
     // call api along with the payload here
   };
 
