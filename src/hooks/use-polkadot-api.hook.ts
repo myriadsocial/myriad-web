@@ -66,8 +66,8 @@ export const usePolkadotApi = () => {
           await storeTransaction({
             hash: txHash,
             amount: correctedValue,
-            type: ContentType.POST,
-            referenceId,
+            //type: ContentType.POST,
+            //referenceId,
             from,
             to,
             currencyId: currencyId,
