@@ -1,9 +1,9 @@
-import {Experience} from '../../interfaces/experience';
+import {UserExperience} from '../../interfaces/experience';
 import {TimelineType} from '../../interfaces/timeline';
 import {User} from '../../interfaces/user';
 
 interface ExperienceListProps {
-  experiences: Experience[];
+  experiences: UserExperience[];
   isOnHomePage?: boolean;
   user?: User;
   filterTimeline: (type: TimelineType) => void;
