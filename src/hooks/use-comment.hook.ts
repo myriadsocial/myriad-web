@@ -50,35 +50,30 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
 
   const reply = async (user: User, comment: CommentProps, callback?: () => void) => {
     const data = await CommentAPI.reply(comment);
-    let flag = true;
-    const newComment = comments.map(item => {
-      if (item.id === data.referenceId) {
-        item.replies?.push({...data, user});
-        flag = false;
-      }
-      if (item.replies) {
-        item.replies.map(reply => {
-          if (reply.id === data.referenceId) {
-            reply.replies?.push({...data, user});
-            flag = false;
-          }
-          return reply;
-        });
-      }
-      return item;
-    });
-    if (flag) {
-      setComments([
-        ...comments,
-        {
-          ...data,
-          user,
-        },
-      ]);
+
+    // if replying post
+    if (comment.referenceId === referenceId) {
+      setComments(prevComments => [...prevComments, {...data, user}]);
     } else {
+      const newComment = comments.map(item => {
+        if (item.id === data.referenceId) {
+          item.replies?.push({...data, user});
+        }
+
+        if (item.replies) {
+          item.replies.map(reply => {
+            if (reply.id === data.referenceId) {
+              reply.replies?.push({...data, user});
+            }
+            return reply;
+          });
+        }
+        return item;
+      });
+
       setComments(newComment);
     }
-    flag = true;
+
     callback && callback();
   };
 
@@ -88,6 +83,7 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
         if (comment.id === commentId) {
           comment.metric.upvotes = vote;
         }
+
         if (comment.replies) {
           comment.replies.map(reply => {
             if (reply.id === commentId) reply.metric.upvotes = vote;
@@ -111,6 +107,7 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
         if (comment.id === commentId) {
           comment.metric.downvotes = vote;
         }
+
         if (comment.replies) {
           comment.replies.map(reply => {
             if (reply.id === commentId) reply.metric.downvotes = vote;
