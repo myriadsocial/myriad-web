@@ -67,6 +67,12 @@ export type ImportPostProps = {
   tags?: string[];
 };
 
+export type MentionUserProps = {
+  id: string;
+  name: string;
+  username: string;
+};
+
 export interface Post extends PostProps, BaseModel {
   user: User;
   people?: People;
@@ -76,7 +82,7 @@ export interface Post extends PostProps, BaseModel {
   transactions?: any[];
   walletAddress?: string;
   votes?: Vote[];
-  mentions?: string[];
+  mentions?: MentionUserProps[];
   isUpvoted?: boolean;
   isDownVoted?: boolean;
 }
