@@ -14,18 +14,24 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles, TableCell} from '.';
+import {BalanceDetail} from '../../interfaces/balance';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
 import {Button, ButtonVariant} from '../atoms/Button';
 import {CurrencyOptionComponent} from '../atoms/CurrencyOption/';
-import {Props as CurrencyOptionProps} from '../atoms/CurrencyOption/currencyOption.interface';
 import {ListItemComponent} from '../atoms/ListItem/';
 
+type SendTipProps = {
+  balanceDetails: BalanceDetail[];
+};
+
 //TODO: split this component into sub-components
-export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
+export const SendTip: React.FC<SendTipProps> = ({balanceDetails}) => {
   const [tipAmount, setTipAmount] = useState('');
   const [gasFee] = useState('0.01');
 
   const [checked, setChecked] = useState(true);
+
+  const [selectedCurrency, setSelectedCurrency] = useState<BalanceDetail>(balanceDetails[0]);
 
   const [url] = useState('https://myriad.social/');
 
@@ -46,19 +52,20 @@ export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
     console.log('sending tip!');
   };
 
-  //const cancelSendTip = () => {
-  //console.log('cancelling send tip!');
-  //};
-
   return (
     <Paper className={classes.root}>
       <div className={classes.subHeaderSection}>
         <Typography className={classes.subHeader}>Balance</Typography>
         <ListItemComponent
-          avatar={'https://res.cloudinary.com/dsget80gs/coins/aca.svg'}
-          title={'ACA'}
-          subtitle={'200'}
-          action={<CurrencyOptionComponent currencies={currencies} />}
+          avatar={selectedCurrency.image}
+          title={selectedCurrency.id}
+          subtitle={selectedCurrency.freeBalance}
+          action={
+            <CurrencyOptionComponent
+              onSelect={setSelectedCurrency}
+              balanceDetails={balanceDetails}
+            />
+          }
         />
         <form className={classes.formRoot} autoComplete="off">
           <TextField
@@ -138,7 +145,7 @@ export const SendTip = ({currencies}: CurrencyOptionProps): JSX.Element => {
                     </TableCell>
                     <TableCell align="right">
                       <Typography variant="body1" color="textPrimary">
-                        12 Myria
+                        1 Myria
                       </Typography>
                     </TableCell>
                   </TableRow>
