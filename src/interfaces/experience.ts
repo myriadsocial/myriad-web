@@ -28,25 +28,23 @@ export interface ExperienceSetting {
   people: User[];
 }
 
-export type ExperienceProps = {
-  name: string;
-  tags: Tag[];
-  people: People[];
-  description?: string;
-  layout?: LayoutType;
-  user: User;
-};
-
-export interface Experience extends Searchable {
-  id: string;
+export interface ExperienceProps extends Searchable {
   name: string;
   tags: Tag[];
   people: People[];
   description?: string;
   layout?: LayoutType;
   createdBy: string;
-  createdAt: Date;
-  user: User;
   subscribedCount?: number;
   experienceImageURL?: string;
+}
+
+export interface Experience extends ExperienceProps, BaseModel {
+  user: User;
+}
+
+export interface UserExperience extends BaseModel {
+  experienceId: string;
+  subscribed?: boolean;
+  experience: Experience;
 }
