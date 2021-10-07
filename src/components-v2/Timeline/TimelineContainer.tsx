@@ -40,8 +40,8 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const {anonymous = false, filters} = props;
 
   const dispatch = useDispatch();
-  const {posts, hasMore, nextPage} = useTimelineHook();
-  const {filterTimeline} = useTimelineFilter(filters);
+  const {posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
+  const {filterTimeline, filterByOrigin} = useTimelineFilter(filters);
   const {query} = useQueryParams();
   const {
     isTipHistoryOpen,
@@ -76,6 +76,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const handleSendTip = (post?: Post) => {
     if (post) {
       setTippedPost(post);
+      getTippedUserId(post.id);
     }
 
     if (tipHistoryReference) {
