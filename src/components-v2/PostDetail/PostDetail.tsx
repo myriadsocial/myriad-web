@@ -4,7 +4,6 @@ import React, {useState} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
 
-import Link from 'next/link';
 import {useRouter} from 'next/router';
 
 import {Typography} from '@material-ui/core';
@@ -30,7 +29,6 @@ import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import {Comment} from 'src/interfaces/comment';
 import {User} from 'src/interfaces/user';
-import {v4 as uuid} from 'uuid';
 
 type PostDetailProps = {
   user?: User;
@@ -164,16 +162,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
               <PostRender nodes={getText()} />
               <ReadMore text={''} maxCharacter={250} />
             </Typography>
-
-            <div className={styles.tags}>
-              {post.tags.map(tag => (
-                <div style={{marginRight: 4, display: 'inline-block'}} key={uuid()}>
-                  <Link href={`?tag=${tag}&type=trending`} shallow={true}>
-                    <a href={`?tag=${tag}&type=trending`}>#{tag}</a>
-                  </Link>
-                </div>
-              ))}
-            </div>
           </ShowIf>
 
           <ShowIf condition={['twitter'].includes(post.platform)}>

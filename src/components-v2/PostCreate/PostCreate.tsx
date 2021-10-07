@@ -60,7 +60,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
   const handlePostTextChange = (value: TNode[]) => {
     const attributes = formatNodeToPost(value);
-    console.log('attributes', attributes);
+
     setPost(prevPost => ({...prevPost, ...attributes}));
   };
 
