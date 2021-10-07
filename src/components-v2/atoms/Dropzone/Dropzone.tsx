@@ -8,6 +8,8 @@ import UploadIcon from '../../../images/Icons/Upload.svg';
 import {Status, Toaster} from '../Toaster';
 import {useStyles} from './Dropzone.styles';
 
+import ShowIf from 'src/components/common/show-if.component';
+
 type DropzoneProps = {
   value?: string;
   placeholder?: string;
@@ -24,7 +26,7 @@ type FileUploaded = File & {
 export const Dropzone: React.FC<DropzoneProps> = props => {
   const {
     onImageSelected,
-    loading,
+    loading = false,
     value,
     accept = ['image/*'],
     maxSize = 20,
@@ -87,6 +89,9 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
           variant={value ? 'outlined' : 'contained'}
           color={value ? 'secondary' : 'primary'}
           onClick={handleReuploadImage}>
+          <ShowIf condition={loading}>
+            <CircularProgress size="24" color="secondary" style={{marginRight: 12}} />
+          </ShowIf>
           {value ? 'Reupload' : 'Upload'} File
         </Button>
       </div>
@@ -96,7 +101,6 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
         message="File too large"
         onClose={closeError}
       />
-      {loading && <CircularProgress color="primary" className={styles.loading} />}
     </div>
   );
 };
