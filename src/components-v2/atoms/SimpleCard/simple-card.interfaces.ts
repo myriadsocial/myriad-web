@@ -16,6 +16,9 @@ interface SimpleCardProps {
   isSelectable?: boolean;
 
   onClick: () => void;
+  onSubscribe?: (experienceId: string) => void;
+  onFollow?: (experienceId: string) => void;
+  onPreview?: (experienceId: string) => void;
 }
 
 export type {SimpleCardProps};
