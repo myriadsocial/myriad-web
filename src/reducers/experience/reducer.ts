@@ -15,6 +15,7 @@ export interface ExperienceState extends BasePaginationState {
   searchTags: Tag[];
   hasMore: boolean;
   filter?: string;
+  detail: Experience | null;
 }
 
 const initialState: ExperienceState = {
@@ -25,6 +26,7 @@ const initialState: ExperienceState = {
   searchExperience: [],
   searchPeople: [],
   searchTags: [],
+  detail: null,
   hasMore: false,
   meta: {
     currentPage: 1,
@@ -46,6 +48,7 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
         meta: action.meta,
       };
     }
+
     case constants.FETCH_EXPERIENCE: {
       if (!action.meta.currentPage || action.meta.currentPage === 1) {
         return {
@@ -62,34 +65,10 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
       }
     }
 
-    case constants.ADD_EXPERIENCE: {
+    case constants.FETCH_DETAIL_EXPERIENCE: {
       return {
         ...state,
-        selectedExperience: action.addedExperience,
-        experiences: [action.addedExperience, ...state.experiences],
-      };
-    }
-
-    case constants.SELECT_EXPERIENCE: {
-      return {
-        ...state,
-        selectedExperience: action.selectedExperience,
-      };
-    }
-
-    case constants.UPDATE_SELECTED_EXPERIENCE: {
-      return {
-        ...state,
-        selectedExperience: action.updatedExperience,
-      };
-    }
-
-    case constants.REMOVE_EXPERIENCE: {
-      return {
-        ...state,
-        experiences: state.experiences.filter(experience => {
-          return experience.id !== action.removedExperienceId;
-        }),
+        detail: action.experience,
       };
     }
 
