@@ -6,11 +6,17 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_MEDIA_EMBED,
   TNode,
+  ELEMENT_H4,
+  ELEMENT_H1,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_H5,
+  ELEMENT_H6,
 } from '@udecode/plate';
 
 import React, {useCallback} from 'react';
 
-import {Typography} from '@material-ui/core';
+import {Typography, TypographyVariant} from '@material-ui/core';
 
 import {ELEMENT_HASHTAG} from './plugins/hashtag';
 
@@ -45,12 +51,7 @@ export const PostRender: React.FC<PostRenderProps> = props => {
       );
     }
 
-    let children = '';
-    try {
-      children = node?.children.map((node: any) => renderElement(node));
-    } catch (error) {
-      console.log('error', node);
-    }
+    const children = node?.children ? node.children.map((node: any) => renderElement(node)) : '';
 
     switch (node.type) {
       case ELEMENT_BLOCKQUOTE:
@@ -61,6 +62,17 @@ export const PostRender: React.FC<PostRenderProps> = props => {
         );
       case ELEMENT_PARAGRAPH:
         return <p>{children}</p>;
+      case ELEMENT_H1:
+      case ELEMENT_H2:
+      case ELEMENT_H3:
+      case ELEMENT_H4:
+      case ELEMENT_H5:
+      case ELEMENT_H6:
+        return (
+          <Typography variant={node.type as TypographyVariant} component="div">
+            {node.children[0].text}
+          </Typography>
+        );
       case ELEMENT_LINK:
         return <a href={escapeHtml(node.url)}>{children}</a>;
       case ELEMENT_HASHTAG:
