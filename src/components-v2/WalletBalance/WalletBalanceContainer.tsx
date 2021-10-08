@@ -16,10 +16,8 @@ export const WalletBalancesContainer: React.FC = () => {
 
   const {load} = usePolkadotApi();
 
-  if (!user) return null;
-
   useEffect(() => {
-    load(user.id, currencies);
+    if (user) load(user.id, currencies);
   }, [currencies, user]);
 
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
