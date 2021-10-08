@@ -10,6 +10,7 @@ enum CustomAvatarSize {
 interface CustomAvatarProps extends AvatarProps {
   avatar?: string;
   size?: CustomAvatarSize;
+  name?: string;
 }
 
 export {CustomAvatarSize};

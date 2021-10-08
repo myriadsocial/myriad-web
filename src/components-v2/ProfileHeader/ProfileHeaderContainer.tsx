@@ -73,8 +73,6 @@ export const ProfileHeaderContainer: React.FC = () => {
     setAccountListOpen(false);
   };
 
-  if (!user) return null;
-
   return (
     <>
       <ProfileHeaderComponent

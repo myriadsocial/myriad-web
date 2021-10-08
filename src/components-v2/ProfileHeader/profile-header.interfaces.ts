@@ -1,7 +1,7 @@
 import {User} from '../../interfaces/user';
 
 interface ProfileHeaderProps {
-  user: User;
+  user?: User;
   alias?: string;
   handleSignOut: () => void;
   onViewProfile: () => void;

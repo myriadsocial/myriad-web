@@ -8,7 +8,7 @@ import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const RichTextContainer: React.FC = () => {
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, alias} = useSelector<RootState, UserState>(state => state.userState);
 
   const [createPostOpened, setCreatePostOpened] = useState(false);
 
@@ -25,6 +25,7 @@ export const RichTextContainer: React.FC = () => {
       <RichTextComponent
         userProfilePict={user?.profilePictureURL || ''}
         onOpenCreatePost={handleOpenCreatePost}
+        alias={alias}
       />
 
       <PostCreateContainer open={createPostOpened} onClose={handleCloseCreatePost} />
