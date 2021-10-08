@@ -23,7 +23,7 @@ export const CustomAsset: React.FC<Props> = props => {
   };
 
   return (
-    <Modal title="Add coin" onClose={onClose} open={open}>
+    <Modal title="Custom asset" onClose={onClose} open={open}>
       <div className={style.root}>
         <FormControl fullWidth variant="outlined">
           <InputLabel htmlFor="rpc-address">RPC Address</InputLabel>
@@ -65,6 +65,17 @@ export const CustomAsset: React.FC<Props> = props => {
             onChange={handleChange('prefixDecimal')}
             labelWidth={110}
             type="number"
+          />
+        </FormControl>
+        <FormControl fullWidth variant="outlined">
+          <InputLabel htmlFor="custom-type">Custom Type</InputLabel>
+          <OutlinedInput
+            id="custom-type"
+            placeholder="JSON"
+            onChange={handleChange('prefixDecimal')}
+            labelWidth={110}
+            multiline
+            rows={4}
           />
         </FormControl>
         <Button
