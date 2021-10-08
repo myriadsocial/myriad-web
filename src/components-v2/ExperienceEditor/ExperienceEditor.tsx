@@ -70,6 +70,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       if (experience.experienceImageURL !== newExperience.experienceImageURL) setDisable(false);
       if (experience.people !== newExperience.people) setDisable(false);
     }
+    if (newExperience) setDisable(false);
   }, [newExperience]);
 
   const handleSearchTags = (event: React.ChangeEvent<HTMLInputElement>) => {
