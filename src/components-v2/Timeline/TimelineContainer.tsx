@@ -5,16 +5,10 @@ import {Button, Grid} from '@material-ui/core';
 
 import {Timeline as TimelineComponent} from '.';
 import {useQueryParams} from '../../hooks/use-query-params.hooks';
-<<<<<<< HEAD
 import {TimelineFilter} from '../../interfaces/timeline';
 import {upvote, setDownvoting, deletePost} from '../../reducers/timeline/actions';
-import {SendTip} from '../SendTip/SendTip';
-import {TimelineFilterContainer} from '../TimelineFilter';
-=======
-import {TimelineFilter, TimelineSortMethod, TimelineType} from '../../interfaces/timeline';
-import {upvote, clearTimeline, setDownvoting, deletePost} from '../../reducers/timeline/actions';
 import {SendTipContainer} from '../SendTip/';
->>>>>>> 986c27a6 (MYR-877: created and applied SendTipContainer)
+import {TimelineFilterContainer} from '../TimelineFilter';
 import {TipHistory} from '../TipHistory';
 import {Modal} from '../atoms/Modal';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
@@ -41,7 +35,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
   const dispatch = useDispatch();
   const {posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
-  const {filterTimeline, filterByOrigin} = useTimelineFilter(filters);
+  const {filterTimeline} = useTimelineFilter(filters);
   const {query} = useQueryParams();
   const {
     isTipHistoryOpen,
@@ -77,6 +71,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     if (post) {
       setTippedPost(post);
       getTippedUserId(post.id);
+      console.log({post});
     }
 
     if (tipHistoryReference) {
