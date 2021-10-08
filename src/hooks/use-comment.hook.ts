@@ -50,23 +50,35 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
 
   const reply = async (user: User, comment: CommentProps, callback?: () => void) => {
     const data = await CommentAPI.reply(comment);
-
+    let flag = true;
     const newComment = comments.map(item => {
       if (item.id === data.referenceId) {
         item.replies?.push({...data, user});
+        flag = false;
       }
       if (item.replies) {
         item.replies.map(reply => {
           if (reply.id === data.referenceId) {
             reply.replies?.push({...data, user});
+            flag = false;
           }
           return reply;
         });
       }
       return item;
     });
-    setComments(newComment);
-
+    if (flag) {
+      setComments([
+        ...comments,
+        {
+          ...data,
+          user,
+        },
+      ]);
+    } else {
+      setComments(newComment);
+    }
+    flag = true;
     callback && callback();
   };
 
