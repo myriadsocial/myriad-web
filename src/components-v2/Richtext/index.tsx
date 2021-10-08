@@ -12,7 +12,7 @@ import {Props} from './richText.interface';
 import {useStyles} from './richtext.style';
 
 export const RichTextComponent: React.FC<Props> = props => {
-  const {userProfilePict, onOpenCreatePost} = props;
+  const {userProfilePict, onOpenCreatePost, alias} = props;
   const style = useStyles();
   const [post, setPost] = useState<string>('');
 
@@ -31,7 +31,7 @@ export const RichTextComponent: React.FC<Props> = props => {
             variant="circular"
             sizes="lg"
             style={{width: 50, height: 50}}>
-            {acronym('User Name')}
+            {acronym(alias || 'User')}
           </Avatar>
           <TextareaAutosize
             rowsMin={1}
