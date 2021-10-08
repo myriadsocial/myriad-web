@@ -28,43 +28,51 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       <div className={classes.box}>
         <div className={classes.secondRoot}>
           <div className={classes.iconButtonWrapper}>
-            <IconButton aria-label="avatar">
+            <IconButton aria-label="avatar" disabled={!!alias}>
               <SvgIcon component={BellIconDefault} viewBox="0 0 24 24" />
             </IconButton>
           </div>
           <div className={classes.textAlign}>
-            <Typography variant="h5">{user.name || alias || ''}</Typography>
+            <Typography variant="h5">{user?.name || alias || ''}</Typography>
             <Typography variant="caption" color="textSecondary">
-              {user.username || '@username'}
+              {user?.username || '@username'}
             </Typography>
           </div>
           <div className={classes.customAvatarWrapper}>
-            <CustomAvatar avatar={user.profilePictureURL || ''} size={CustomAvatarSize.MEDIUM} />
+            <CustomAvatar
+              avatar={user?.profilePictureURL || ''}
+              size={CustomAvatarSize.MEDIUM}
+              name={user?.name || alias || ''}
+            />
           </div>
         </div>
       </div>
       <div
         className={`${classes.content} ${expanding ? classes.open : classes.close}`}
         onClick={onViewProfile}>
-        <ListItem classes={{gutters: classes.gutters}} className={classes.hover}>
-          <ListItemText className={classes.textAlign}>
-            <Link href={`/profile/${user.id}`}>
-              <Typography className={classes.text} component="span">
-                View profile
-              </Typography>
-            </Link>
-          </ListItemText>
-        </ListItem>
-        <ListItem
-          classes={{gutters: classes.gutters}}
-          className={classes.hover}
-          onClick={onSwitchAccount}>
-          <ListItemText className={classes.textAlign}>
-            <Typography className={classes.text} component="span">
-              Switch account
-            </Typography>
-          </ListItemText>
-        </ListItem>
+        {user && (
+          <>
+            <ListItem classes={{gutters: classes.gutters}} className={classes.hover}>
+              <ListItemText className={classes.textAlign}>
+                <Link href={`/profile/${user?.id}`}>
+                  <Typography className={classes.text} component="span">
+                    View profile
+                  </Typography>
+                </Link>
+              </ListItemText>
+            </ListItem>
+            <ListItem
+              classes={{gutters: classes.gutters}}
+              className={classes.hover}
+              onClick={onSwitchAccount}>
+              <ListItemText className={classes.textAlign}>
+                <Typography className={classes.text} component="span">
+                  Switch account
+                </Typography>
+              </ListItemText>
+            </ListItem>
+          </>
+        )}
         <ListItem
           classes={{gutters: classes.gutters}}
           className={classes.hover}
