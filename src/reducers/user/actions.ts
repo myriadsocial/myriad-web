@@ -268,6 +268,12 @@ export const updateUser: ThunkActionCreator<Actions, RootState> =
           ...attributes,
         },
       });
+      dispatch(
+        showToaster({
+          message: 'Success update profile',
+          toasterStatus: Status.SUCCESS,
+        }),
+      );
     } catch (error) {
       dispatch(
         setError({
