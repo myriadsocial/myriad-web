@@ -81,6 +81,7 @@
     "firebase": "^8.6.2",
     "html-react-parser": "^1.2.7",
     "immutability-helper": "^3.1.1",
+    "link-preview-js": "^2.1.8",
     "localforage": "^1.9.0",
     "lodash": "^4.17.21",
     "material-ui-popup-state": "^1.8.3",

@@ -27,6 +27,7 @@ import {useCommentTabs, CommentTabs} from './hooks/use-comment-tabs';
 
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
+import {LinkPreview} from 'src/components-v2/atoms/LinkPreview';
 import {Comment} from 'src/interfaces/comment';
 import {User} from 'src/interfaces/user';
 
@@ -202,6 +203,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
             <Video url={post.asset.videos[0]} />
           )}
         </ShowIf>
+
+        {post.embeddedURL && <LinkPreview url={post.embeddedURL} />}
       </div>
 
       <div className={styles.action}>
