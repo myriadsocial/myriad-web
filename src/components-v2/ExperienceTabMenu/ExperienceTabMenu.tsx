@@ -2,7 +2,7 @@ import React from 'react';
 
 import Typography from '@material-ui/core/Typography';
 
-import {UserExperience} from '../../interfaces/experience';
+import {Experience, UserExperience} from '../../interfaces/experience';
 import {TimelineType} from '../../interfaces/timeline';
 import {User} from '../../interfaces/user';
 import {ExperienceList} from '../ExperienceList/';
@@ -11,7 +11,7 @@ import {HeaderWithAction} from '../HeaderWithAction/';
 interface ExperienceTabMenuProps {
   experiences: UserExperience[];
   user?: User;
-  filterTimeline: (type: TimelineType) => void;
+  filterTimeline: (type: TimelineType, experience: Experience) => void;
 }
 
 export const ExperienceTabMenu: React.FC<ExperienceTabMenuProps> = props => {
