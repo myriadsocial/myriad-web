@@ -56,6 +56,7 @@ export type PostProps = {
   text: string;
   title?: string;
   url: string;
+  embeddedURL?: string;
   isNSFW?: boolean;
   NSFWTag?: string;
   visibility: PostVisibility;

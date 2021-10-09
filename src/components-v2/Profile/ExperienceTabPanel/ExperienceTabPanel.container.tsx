@@ -4,6 +4,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {ExperienceTabPanel} from './ExperienceTabPanel';
 
 import {ExperienceType} from 'src/components-v2/Timeline/default';
+import {Experience} from 'src/interfaces/experience';
 import {TimelineType} from 'src/interfaces/timeline';
 import {RootState} from 'src/reducers';
 import {fetchExperience} from 'src/reducers/experience/actions';
@@ -22,7 +23,7 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
     dispatch(fetchExperience(type));
   };
 
-  const handleFilterTimeline = (type: TimelineType) => {
+  const handleFilterTimeline = (type: TimelineType, experience: Experience) => {
     // code
   };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {UserExperience} from '../../../interfaces/experience';
+import {Experience, UserExperience} from '../../../interfaces/experience';
 import {ExperienceList} from '../../ExperienceList';
 import {experienceFilterOptions, ExperienceType} from '../../Timeline/default';
 import {FilterDropdownMenu} from '../../atoms/FilterDropdownMenu';
@@ -11,7 +11,7 @@ type ExperienceTabPanelProps = {
   experiences: UserExperience[];
   isOnHomePage?: boolean;
   onFilter: (type: ExperienceType) => void;
-  onSelect: (type: TimelineType) => void;
+  onSelect: (type: TimelineType, experience: Experience) => void;
 };
 
 export const ExperienceTabPanel: React.FC<ExperienceTabPanelProps> = props => {
@@ -21,8 +21,8 @@ export const ExperienceTabPanel: React.FC<ExperienceTabPanelProps> = props => {
     onFilter(selected as ExperienceType);
   };
 
-  const handleFilterTimeline = (type: TimelineType) => {
-    onSelect(type);
+  const handleFilterTimeline = (type: TimelineType, experience: Experience) => {
+    onSelect(type, experience);
   };
 
   return (

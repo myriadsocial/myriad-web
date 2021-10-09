@@ -9,6 +9,7 @@ import {useQueryParams} from '../../hooks/use-query-params.hooks';
 import {TimelineType} from '../../interfaces/timeline';
 import {ExperienceTabMenu} from './ExperienceTabMenu';
 
+import {Experience} from 'src/interfaces/experience';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -37,7 +38,8 @@ export const ExperienceTabMenuContainer: React.FC = () => {
     loadExperience();
   }, []);
 
-  const handleFilterTimeline = (type: TimelineType) => {
+  const handleFilterTimeline = (type: TimelineType, experience: Experience) => {
+    console.log('handleFilterTimeline', experience);
     push('type', type);
   };
 

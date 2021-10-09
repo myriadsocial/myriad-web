@@ -7,6 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import {ExperienceListProps, useStyles} from '.';
 import {SimpleCard} from '../atoms/SimpleCard';
 
+import {Experience} from 'src/interfaces/experience';
+import {TimelineType} from 'src/interfaces/timeline';
+
 const ExperienceList: React.FC<ExperienceListProps> = ({
   experiences,
   isOnHomePage = false,
@@ -21,12 +24,16 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
     setSelected(!selected);
   };
 
+  const handleFilterTimeline = (experience: Experience) => (type: TimelineType) => {
+    filterTimeline(type, experience);
+  };
+
   return (
     <div className={classes.root}>
       {experiences.map(item => (
         <div key={item.experience.id}>
           <SimpleCard
-            filterTimeline={filterTimeline}
+            filterTimeline={handleFilterTimeline(item.experience)}
             user={user}
             onClick={handleClick}
             title={item.experience.name}

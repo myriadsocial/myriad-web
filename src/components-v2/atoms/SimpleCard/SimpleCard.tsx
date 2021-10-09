@@ -37,8 +37,9 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
   const handleClick = () => {
     if (isSelectable) {
       setSelected(!selected);
-      filterTimeline(TimelineType.EXPERIENCE);
     }
+
+    filterTimeline(TimelineType.EXPERIENCE);
   };
 
   const handleClickSettings = (e: React.MouseEvent<HTMLButtonElement>) => {

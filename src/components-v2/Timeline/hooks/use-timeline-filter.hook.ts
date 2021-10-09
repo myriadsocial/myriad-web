@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {TimelineType, TimelineFilter, TimelineSortMethod} from '../../../interfaces/timeline';
 import {RootState} from '../../../reducers';
 import {ProfileState} from '../../../reducers/profile/reducer';
-import {loadTimeline} from '../../../reducers/timeline/actions';
+import {loadTimeline, clearTimeline} from '../../../reducers/timeline/actions';
 import {TimelineState} from '../../../reducers/timeline/reducer';
 
 import {ParsedUrlQuery} from 'querystring';
@@ -73,15 +73,16 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
         break;
       case 'imported':
         filters.platform = ['facebook', 'reddit', 'twitter'];
-        filters.importer = people.id;
+        filters.owner = people.id;
         break;
 
       default:
-        filters.importer = people.id;
         filters.owner = people.id;
+        filters.platform = undefined;
         break;
     }
 
+    dispatch(clearTimeline());
     dispatch(loadTimeline(1, timelineSort, filters, TimelineType.ALL));
   };
 
