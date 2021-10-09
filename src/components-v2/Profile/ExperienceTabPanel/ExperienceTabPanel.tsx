@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import {UserExperience} from '../../../interfaces/experience';
+import {Experience, UserExperience} from '../../../interfaces/experience';
 import {ExperienceList} from '../../ExperienceList';
 import {experienceFilterOptions} from '../../Timeline/default';
 import {FilterDropdownMenu} from '../../atoms/FilterDropdownMenu';
