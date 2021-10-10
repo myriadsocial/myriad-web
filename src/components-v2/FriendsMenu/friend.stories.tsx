@@ -2,14 +2,16 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {FriendComponent} from './friendMenu';
+import {FriendMenuComponent} from './FriendMenu';
 
 export default {
   title: 'UI Revamp v2.0/components/Friend',
-  component: FriendComponent,
-} as ComponentMeta<typeof FriendComponent>;
+  component: FriendMenuComponent,
+} as ComponentMeta<typeof FriendMenuComponent>;
 
-const Template: ComponentStory<typeof FriendComponent> = args => <FriendComponent {...args} />;
+const Template: ComponentStory<typeof FriendMenuComponent> = args => (
+  <FriendMenuComponent {...args} />
+);
 
-export const Friend = Template.bind({});
-Friend.args = {};
+export const FriendMenu = Template.bind({});
+FriendMenu.args = {};

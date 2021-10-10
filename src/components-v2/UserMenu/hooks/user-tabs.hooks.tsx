@@ -12,6 +12,7 @@ import {TabItems} from '../../atoms/Tabs';
 
 import {TimelineFilter} from 'src/interfaces/timeline';
 import {ExperienceState} from 'src/reducers/experience/reducer';
+import {FriendState} from 'src/reducers/friend/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 export type UserMenuTabs = 'post' | 'experience' | 'social' | 'friend' | 'setting';
@@ -20,6 +21,7 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
   const {detail: people} = useSelector<RootState, ProfileState>(state => state.profileState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {experiences} = useSelector<RootState, ExperienceState>(state => state.experienceState);
+  const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
 
   const filters: TimelineFilter = {
     owner: people?.id,
@@ -35,7 +37,7 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
       {
         id: 'experience',
         title: `Experience`,
-        component: <ExperienceTabPanelContainer />,
+        component: <ExperienceTabPanelContainer user={people} />,
       },
       {
         id: 'friend',
@@ -58,7 +60,7 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
     }
 
     return items;
-  }, [people, user, experiences]);
+  }, [people, user, experiences, friends]);
 
   return tabs;
 };

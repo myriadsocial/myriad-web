@@ -1,8 +1,11 @@
-import {Actions as BaseAction, setLoading, setError} from '../base/actions';
+import * as ExperienceAPI from '../../lib/api/experience';
+import {Actions as BaseAction, setLoading, setError, PaginationAction} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
+import {ExperienceType} from 'src/components-v2/TimelineFilter/hooks/use-filter-option.hook';
+import {UserExperience} from 'src/interfaces/experience';
 import {Friend} from 'src/interfaces/friend';
 import {SocialMedia} from 'src/interfaces/social';
 import {User} from 'src/interfaces/user';
@@ -20,12 +23,12 @@ export interface FetchProfileDetail extends Action {
   detail: User;
 }
 
-export interface FetchProfileFriend extends Action {
+export interface FetchProfileFriend extends PaginationAction {
   type: constants.FETCH_PROFILE_FRIEND;
   friends: Friend[];
 }
 
-export interface FilterProfileFriend extends Action {
+export interface FilterProfileFriend extends PaginationAction {
   type: constants.FILTER_PROFILE_FRIEND;
   friends: Friend[];
   query: string;
@@ -34,6 +37,11 @@ export interface FilterProfileFriend extends Action {
 export interface FetchConnectedSocials extends Action {
   type: constants.FETCH_PROFILE_SOCIALS;
   payload: SocialMedia[];
+}
+
+export interface FetchProfileExperience extends PaginationAction {
+  type: constants.FETCH_PROFILE_EXPERIENCE;
+  experiences: UserExperience[];
 }
 
 /**
@@ -45,6 +53,7 @@ export type Actions =
   | FetchProfileFriend
   | FilterProfileFriend
   | FetchConnectedSocials
+  | FetchProfileExperience
   | BaseAction;
 
 /**
@@ -94,11 +103,12 @@ export const fetchProfileFriend: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const {data: friends} = await FriendAPI.getFriends(detail.id);
+      const {data: friends, meta} = await FriendAPI.getFriends(detail.id);
 
       dispatch({
         type: constants.FETCH_PROFILE_FRIEND,
         friends,
+        meta,
       });
     } catch (error) {
       dispatch(
@@ -116,11 +126,12 @@ export const searchProfileFriend: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const {data: friends} = await FriendAPI.searchFriend(userId, query);
+      const {data: friends, meta} = await FriendAPI.searchFriend(userId, query);
       dispatch({
         type: constants.FILTER_PROFILE_FRIEND,
         friends,
         query,
+        meta,
       });
     } catch (error) {
       dispatch(
@@ -152,6 +163,37 @@ export const fetchConnectedSocials: ThunkActionCreator<Actions, RootState> =
       });
     } catch (error) {
       dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const fetchProfileExperience: ThunkActionCreator<Actions, RootState> =
+  (type?: ExperienceType) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        profileState: {detail},
+      } = getState();
+
+      if (!detail) {
+        throw new Error('User not found');
+      }
+
+      const {meta, data: experiences} = await ExperienceAPI.getUserExperience(detail.id, type);
+
+      dispatch({
+        type: constants.FETCH_PROFILE_EXPERIENCE,
+        experiences,
+        meta,
+      });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }
