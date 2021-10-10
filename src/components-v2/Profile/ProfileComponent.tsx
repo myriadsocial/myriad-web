@@ -7,6 +7,7 @@ import {ProfileHeaderContainer} from 'src/components-v2/Profile/ProfileHeader/Pr
 import {ProfileEditContainer} from 'src/components-v2/Profile/edit/ProfileEditContainer';
 import {UserMenuContainer} from 'src/components-v2/UserMenu';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
+import ShowIf from 'src/components/common/show-if.component';
 import {User} from 'src/interfaces/user';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';
 
@@ -37,13 +38,16 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
         <div className={style.mb}>
           <TopNavbarComponent description={profile.name} sectionTitle={SectionTitle.PROFILE} />
         </div>
-        {isEdit && <ProfileEditContainer />}
-        {!isEdit && (
-          <>
-            <ProfileHeaderContainer edit={handleOpenEdit} />
-            <UserMenuContainer />
-          </>
-        )}
+
+        <ShowIf condition={isEdit}>
+          <ProfileEditContainer />
+        </ShowIf>
+
+        <ShowIf condition={!isEdit}>
+          <ProfileHeaderContainer edit={handleOpenEdit} />
+
+          <UserMenuContainer />
+        </ShowIf>
       </div>
     </div>
   );

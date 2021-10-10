@@ -21,7 +21,12 @@ const UserFriendComponent: React.FC<UserFriendProps> = ({profile}) => {
   const {searchFriend, removeFriendRequest} = useFriendHook();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {friends, totalFriends} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const {
+    friends: {
+      data: friends,
+      meta: {totalItemCount: totalFriends},
+    },
+  } = useSelector<RootState, ProfileState>(state => state.profileState);
   const [search, setSearchQuery] = useState('');
 
   const handleSearchFriend = debounce((query: string) => {

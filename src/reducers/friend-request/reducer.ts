@@ -31,7 +31,9 @@ export const FriendRequestReducer: Redux.Reducer<FriendRequestState, Actions> = 
       return {
         ...state,
         requests:
-          action.meta.currentPage === 1 ? action.requests : [...state.requests, ...action.requests],
+          !action.meta.currentPage || action.meta.currentPage === 1
+            ? action.requests
+            : [...state.requests, ...action.requests],
         meta: action.meta,
         hasMore: action.meta.currentPage < action.meta.totalPageCount,
       };

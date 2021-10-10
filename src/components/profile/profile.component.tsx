@@ -35,7 +35,11 @@ export default function ProfileTimeline({profile, loading}: Props) {
   const dispatch = useDispatch();
 
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
-  const {totalFriends} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const {
+    experience: {
+      meta: {totalItemCount: totalFriends},
+    },
+  } = useSelector<RootState, ProfileState>(state => state.profileState);
   const [isWalletTabActivated, setIsWalletTabActivated] = useState(false);
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [isGuest, setIsGuest] = useState<boolean>(false);

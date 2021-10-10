@@ -21,6 +21,7 @@ export const friendFilterOptions: MenuOptions<FriendType>[] = [
 export type FriendListProps = {
   user?: User;
   background?: boolean;
+  disableFilter?: boolean;
   friends: Friend[];
   onSearch: (query: string) => void;
   onFilter: (type: FriendType) => void;

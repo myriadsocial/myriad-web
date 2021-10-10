@@ -1,7 +1,10 @@
-import {CalendarIcon} from '@heroicons/react/outline';
-import {GlobeAltIcon} from '@heroicons/react/outline';
-import {CurrencyDollarIcon} from '@heroicons/react/outline';
-import {UserAddIcon} from '@heroicons/react/outline';
+import {
+  CalendarIcon,
+  CurrencyDollarIcon,
+  GlobeAltIcon,
+  UserAddIcon,
+  UserIcon,
+} from '@heroicons/react/outline';
 import {DotsVerticalIcon} from '@heroicons/react/solid';
 
 import React from 'react';
@@ -13,22 +16,37 @@ import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import {Friend} from '../../../interfaces/friend';
+import {Friend, FriendStatus} from '../../../interfaces/friend';
 import {User} from '../../../interfaces/user';
 import {useStyles} from './profile-header.style';
 
 import {format} from 'date-fns';
 import millify from 'millify';
+import ShowIf from 'src/components/common/show-if.component';
 
 export type Props = {
   user: User;
   selfProfile: boolean;
   status: Friend | null;
+  totalFriends: number;
+  totalExperience: number;
+  onSendRequest: () => void;
+  onDeclineRequest: () => void;
+  onSendTip: () => void;
   onEdit?: () => void;
 };
 
 export const ProfileHeaderComponent: React.FC<Props> = props => {
-  const {user, selfProfile, status, onEdit} = props;
+  const {
+    user,
+    selfProfile,
+    status,
+    totalFriends,
+    totalExperience,
+    onEdit,
+    onSendRequest,
+    onSendTip,
+  } = props;
   const style = useStyles();
 
   const formatNumber = (num: number) => {
@@ -98,6 +116,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           />
           {formatDate(user.createdAt)}
         </Typography>
+
         <div className={`${style.mt15} ${style.flexEnd}`}>
           <div>
             <div className={style.text}>
@@ -121,7 +140,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Friends
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(96)}
+                {formatNumber(totalFriends)}
               </Typography>
             </div>
             <div className={style.text}>
@@ -129,12 +148,12 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Experience
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(18)}
+                {formatNumber(totalExperience)}
               </Typography>
             </div>
           </div>
           <div>
-            {selfProfile && (
+            <ShowIf condition={selfProfile}>
               <Button
                 onClick={handleOpenEdit}
                 classes={{root: style.button}}
@@ -143,42 +162,63 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 size="small">
                 Edit Profile
               </Button>
-            )}
-            {!selfProfile && (
-              <>
-                {!status && (
-                  <Button
-                    startIcon={
-                      <SvgIcon
-                        classes={{root: style.fill}}
-                        component={UserAddIcon}
-                        viewBox="0 0 22 22"
-                      />
-                    }
-                    classes={{root: style.button}}
-                    className={style.mr12}
-                    variant="contained"
-                    color="primary"
-                    size="small">
-                    Add Friend
-                  </Button>
-                )}
+            </ShowIf>
+
+            <ShowIf condition={!selfProfile}>
+              <ShowIf condition={!status}>
+                <Button
+                  onClick={onSendRequest}
+                  startIcon={
+                    <SvgIcon
+                      classes={{root: style.fill}}
+                      component={UserAddIcon}
+                      viewBox="0 0 22 22"
+                    />
+                  }
+                  classes={{root: style.button}}
+                  className={style.mr12}
+                  variant="contained"
+                  color="primary"
+                  size="small">
+                  Add Friend
+                </Button>
+              </ShowIf>
+
+              <ShowIf condition={Boolean(status)}>
                 <Button
                   startIcon={
                     <SvgIcon
                       classes={{root: style.fill}}
-                      component={CurrencyDollarIcon}
-                      viewBox="2 2 21 21"
+                      component={status?.status === FriendStatus.APPROVED ? UserIcon : UserAddIcon}
+                      viewBox="0 0 22 22"
                     />
                   }
                   classes={{root: style.button}}
+                  className={style.mr12}
                   variant="contained"
-                  color="primary"
+                  color={status?.status === FriendStatus.APPROVED ? 'primary' : 'default'}
                   size="small">
-                  Send Tip
+                  <ShowIf condition={status?.status === FriendStatus.APPROVED}>Friend</ShowIf>
+                  <ShowIf condition={status?.status === FriendStatus.PENDING}>Requested</ShowIf>
                 </Button>
-              </>
-            )}
+              </ShowIf>
+
+              <Button
+                onClick={onSendTip}
+                startIcon={
+                  <SvgIcon
+                    classes={{root: style.fill}}
+                    component={CurrencyDollarIcon}
+                    viewBox="2 2 21 21"
+                  />
+                }
+                classes={{root: style.button}}
+                variant="contained"
+                color="primary"
+                size="small">
+                Send Tip
+              </Button>
+            </ShowIf>
           </div>
         </div>
       </div>

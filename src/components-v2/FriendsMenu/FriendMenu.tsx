@@ -1,36 +1,35 @@
 import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 import {TabsComponent} from '../atoms/Tabs/Tabs';
-import {friends} from './default';
-import {FriendListComponent} from './friend-list';
-import {FriendRequestComponent} from './friend-request';
+import {FriendListContainer} from './FriendList.container';
+import {FriendRequestListContainer} from './FriendRequest.container';
 import {useStyles} from './friend.style';
 
-export const FriendComponent: React.FC = () => {
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
+
+export const FriendMenuComponent: React.FC = () => {
   const style = useStyles();
+
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const [activeTab, setActiveTab] = useState<string>('0');
+
   const tabs = [
     {
       id: '0',
       title: 'Friend List',
-      component: (
-        <FriendListComponent
-          background
-          friends={friends}
-          onFilter={console.log}
-          onSearch={console.log}
-        />
-      ),
+      component: <FriendListContainer user={user} disableFilter />,
     },
     {
       id: '1',
       title: 'Friend Request',
-      component: <FriendRequestComponent />,
+      component: <FriendRequestListContainer user={user} />,
     },
   ];
-  const [activeTab, setActiveTab] = useState<string>('0');
 
   const handleChangeTab = (tab: string) => {
     setActiveTab(tab);

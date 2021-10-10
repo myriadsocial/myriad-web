@@ -4,6 +4,8 @@ import Avatar from '@material-ui/core/Avatar';
 
 import {CustomAvatarProps, CustomAvatarSize, useStyles} from '.';
 
+import {acronym} from 'src/helpers/string';
+
 const CustomAvatar = ({
   avatar,
   variant = 'circular',
@@ -16,7 +18,7 @@ const CustomAvatar = ({
     <>
       {(avatar || name) && (
         <Avatar {...restProps} src={avatar} variant={variant} className={styles[size]}>
-          {name}
+          {name ? acronym(name) : ''}
         </Avatar>
       )}
     </>

@@ -3,6 +3,7 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Friend} from 'src/interfaces/friend';
+import {User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
 import {ThunkActionCreator} from 'src/types/thunk';
 
@@ -36,18 +37,11 @@ export type Actions = LoadFriends | FilterFriend | BaseAction;
  * Action Creator
  */
 export const fetchFriend: ThunkActionCreator<Actions, RootState> =
-  (page = 1) =>
+  (user: User, page = 1) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
+
     try {
-      const {
-        userState: {user},
-      } = getState();
-
-      if (!user) {
-        throw new Error('User not found');
-      }
-
       const {meta, data: friends} = await FriendAPI.getFriends(user.id, page);
 
       dispatch({
@@ -67,18 +61,10 @@ export const fetchFriend: ThunkActionCreator<Actions, RootState> =
   };
 
 export const searchFriend: ThunkActionCreator<Actions, RootState> =
-  (query: string) => async (dispatch, getState) => {
+  (user: User, query: string) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
-      const {
-        userState: {user},
-      } = getState();
-
-      if (!user) {
-        throw new Error('User not found');
-      }
-
       const {meta, data: friends} = await FriendAPI.searchFriend(user.id, query);
 
       dispatch({

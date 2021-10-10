@@ -37,18 +37,12 @@ export type Actions = LoadFriendRequests | CreateFriendRequest | BaseAction;
  * Action Creator
  */
 export const fetchFriendRequest: ThunkActionCreator<Actions, RootState> =
-  (page = 1) =>
+  (user: User, page = 1) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
-      const {userState} = getState();
-
-      if (!userState.user) {
-        throw new Error('User not found');
-      }
-
-      const {data: requests, meta} = await FriendAPI.getFriendRequests(userState.user.id, page);
+      const {data: requests, meta} = await FriendAPI.getFriendRequests(user.id, page);
 
       dispatch({
         type: constants.FETCH_FRIEND_REQUEST,
@@ -109,7 +103,7 @@ export const deleteFriendRequest: ThunkActionCreator<Actions, RootState> =
   };
 
 export const toggleFriendRequest: ThunkActionCreator<Actions, RootState> =
-  (request: Friend, status: FriendStatus) => async (dispatch, getState) => {
+  (request: Friend, status: FriendStatus, callback?: () => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
@@ -128,6 +122,8 @@ export const toggleFriendRequest: ThunkActionCreator<Actions, RootState> =
       }
 
       dispatch(fetchFriendRequest());
+
+      callback && callback();
     } catch (error) {
       dispatch(setError(error.message));
     } finally {

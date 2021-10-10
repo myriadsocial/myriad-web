@@ -9,17 +9,16 @@ import {
   fetchFriendRequest,
   createFriendRequest,
   toggleFriendRequest,
+  deleteFriendRequest,
 } from 'src/reducers/friend-request/actions';
 import {FriendRequestState} from 'src/reducers/friend-request/reducer';
 import {fetchFriend, searchFriend} from 'src/reducers/friend/actions';
 import {FriendState} from 'src/reducers/friend/reducer';
-import {UserState} from 'src/reducers/user/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useFriendsHook = () => {
+export const useFriendsHook = (user?: User) => {
   const dispatch = useDispatch();
 
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {
     meta: {currentPage: currentFriendPage},
   } = useSelector<RootState, FriendState>(state => state.friendState);
@@ -31,7 +30,9 @@ export const useFriendsHook = () => {
   const [error, setError] = useState(null);
 
   const loadRequests = () => {
-    dispatch(fetchFriendRequest());
+    if (!user) return;
+
+    dispatch(fetchFriendRequest(user));
   };
 
   const loadMoreRequests = () => {
@@ -39,7 +40,9 @@ export const useFriendsHook = () => {
   };
 
   const loadFriends = () => {
-    dispatch(fetchFriend());
+    if (!user) return;
+
+    dispatch(fetchFriend(user));
   };
 
   const loadMoreFriends = () => {
@@ -47,7 +50,9 @@ export const useFriendsHook = () => {
   };
 
   const searchFriends = (query: string) => {
-    dispatch(searchFriend(query));
+    if (!user) return;
+
+    dispatch(searchFriend(user, query));
   };
 
   const sendRequest = async (destination: User) => {
@@ -74,7 +79,17 @@ export const useFriendsHook = () => {
   };
 
   const toggleRequest = async (request: Friend, status: FriendStatus) => {
-    dispatch(toggleFriendRequest(request, status));
+    dispatch(
+      toggleFriendRequest(request, status, () => {
+        if (user) {
+          checkFriendStatus([user]);
+        }
+      }),
+    );
+  };
+
+  const removeFriendRequest = async (request: Friend) => {
+    dispatch(deleteFriendRequest(request));
   };
 
   return {
@@ -88,6 +103,7 @@ export const useFriendsHook = () => {
     loadMoreRequests,
     sendRequest,
     toggleRequest,
+    removeFriendRequest,
     checkFriendStatus,
   };
 };

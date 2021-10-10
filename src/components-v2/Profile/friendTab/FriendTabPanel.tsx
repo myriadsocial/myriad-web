@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {FriendListComponent} from '../../FriendsMenu/friend-list';
+import {FriendListComponent} from '../../FriendsMenu/FriendList';
 import {DropdownMenu} from '../../atoms/DropdownMenu';
 import {menuOptions, friends} from './default';
 import {useStyles} from './friendTabPanel.style';
