@@ -12,12 +12,22 @@ export const FriendTabPanelComponent: React.FC = () => {
     // code
   };
 
+  const loadNextPage = () => {
+    // code
+  };
+
   return (
     <>
       <div className={style.mb20}>
         <DropdownMenu title="Sort by" options={menuOptions} onChange={handleSortChange} />
       </div>
-      <FriendListComponent friends={friends} onSearch={console.log} onFilter={console.log} />
+      <FriendListComponent
+        friends={friends}
+        onSearch={console.log}
+        onFilter={console.log}
+        hasMore={false}
+        onLoadNextPage={loadNextPage}
+      />
     </>
   );
 };

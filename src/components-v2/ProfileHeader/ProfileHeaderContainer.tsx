@@ -14,11 +14,13 @@ import {PolkadotAccountList} from '../PolkadotAccountList';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {RootState} from 'src/reducers';
+import {NotificationState} from 'src/reducers/notification/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 import {Prompt} from 'src/stories/Prompt.stories';
 
 export const ProfileHeaderContainer: React.FC = () => {
   const {user, alias, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
 
   const router = useRouter();
 
@@ -73,14 +75,22 @@ export const ProfileHeaderContainer: React.FC = () => {
     setAccountListOpen(false);
   };
 
+  const handleShowNotificationList = () => {
+    if (user && !anonymous) {
+      router.push(`/notification`);
+    }
+  };
+
   return (
     <>
       <ProfileHeaderComponent
         user={user}
         alias={alias}
+        notificationCount={total}
         onViewProfile={handleViewProfile}
         onSwitchAccount={handleSwitchAccount}
         handleSignOut={handleSignOut}
+        onShowNotificationList={handleShowNotificationList}
       />
 
       <PolkadotAccountList
