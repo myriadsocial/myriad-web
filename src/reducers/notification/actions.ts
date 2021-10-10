@@ -40,7 +40,8 @@ export type Actions = FetchNotification | ReadNotification | TotalNewNotificatio
  * Action Creator
  */
 export const fetchNotification: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
+  (page = 1) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
@@ -52,7 +53,7 @@ export const fetchNotification: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const {data: notifications, meta} = await NotificationAPI.getNotification(user.id);
+      const {data: notifications, meta} = await NotificationAPI.getNotification(user.id, page);
 
       dispatch({
         type: constants.FETCH_NOTIFICATION,
@@ -93,7 +94,7 @@ export const readAllNotifications: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const numOfNewNotifications: ThunkActionCreator<Actions, RootState> =
+export const countNewNotification: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
@@ -106,7 +107,7 @@ export const numOfNewNotifications: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const total: number = await NotificationAPI.getNumOfNewNotification(user.id);
+      const total: number = await NotificationAPI.countNewNotification(user.id);
 
       dispatch({
         type: constants.TOTAL_NEW_NOTIFICATION,

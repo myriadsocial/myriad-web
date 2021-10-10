@@ -14,14 +14,15 @@ import {TopNavbarProps, SectionTitle, useStyles} from '.';
 export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
   const {sectionTitle, description} = props;
 
-  useEffect(() => {
-    switchText(sectionTitle);
-  }, [sectionTitle]);
-
   const classes = useStyles();
 
   const [localSectionTitle, setLocalSectionTitle] = useState(sectionTitle as string);
   const [localDescription, setLocalDescription] = useState(description);
+
+  useEffect(() => {
+    switchText(sectionTitle);
+    setLocalDescription(description);
+  }, [sectionTitle, description]);
 
   const switchText = (sectionTitle: SectionTitle) => {
     let newSectionTitle = '';
