@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {Typography} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
@@ -11,6 +11,7 @@ import {ExperienceTabMenu} from './ExperienceTabMenu';
 
 import {Experience} from 'src/interfaces/experience';
 import {RootState} from 'src/reducers';
+import {updateFilter} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,6 +29,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export const ExperienceTabMenuContainer: React.FC = () => {
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
   const style = useStyles();
+
+  const dispatch = useDispatch();
   const {push} = useQueryParams();
 
   // Only load experiences specific to logged user
@@ -39,7 +42,13 @@ export const ExperienceTabMenuContainer: React.FC = () => {
   }, []);
 
   const handleFilterTimeline = (type: TimelineType, experience: Experience) => {
-    console.log('handleFilterTimeline', experience);
+    dispatch(
+      updateFilter({
+        people: experience.people.map(people => people.id),
+        tags: experience.tags.map(tag => tag.id),
+      }),
+    );
+
     push('type', type);
   };
 

@@ -41,6 +41,12 @@ export const getPost = async (
     };
   }
 
+  if (filters && filters.people && filters.people.length) {
+    where.peopleId = {
+      inq: filters.people,
+    };
+  }
+
   if (filters && filters.layout === 'photo') {
     // code
   }
@@ -92,7 +98,11 @@ export const getPost = async (
     case TimelineType.FRIEND:
     case TimelineType.EXPERIENCE:
     case TimelineType.TRENDING:
-      if (filters && filters.tags && filters.tags.length === 0) {
+      if (
+        filters &&
+        (!filters.tags || filters.tags.length == 0) &&
+        (!filters.people || filters.people.length === 0)
+      ) {
         params.timelineType = type;
         params.userId = userId;
       } else {
