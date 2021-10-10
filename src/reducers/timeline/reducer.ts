@@ -91,6 +91,12 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       };
     }
 
+    case constants.UPDATE_TIMELINE_FILTER: {
+      return update(state, {
+        filter: {$set: action.filter},
+      });
+    }
+
     case constants.CLEAR_TIMELINE: {
       return update(state, {
         loading: {$set: true},
