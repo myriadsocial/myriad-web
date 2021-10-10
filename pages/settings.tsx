@@ -3,6 +3,7 @@ import {useDispatch} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
 
+import {Settings as SettingsComponent} from 'src/components-v2/Settings';
 import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
@@ -27,6 +28,8 @@ const Settings: React.FC = () => {
     <DefaultLayout isOnProfilePage={false}>
       <ToasterContainer />
       <TopNavbarComponent description={'Account settings'} sectionTitle={SectionTitle.SETTINGS} />
+
+      <SettingsComponent onSaveSetting={console.log} />
     </DefaultLayout>
   );
 };
