@@ -30,7 +30,12 @@ export const NotificationReducer: Redux.Reducer<NotificationState, Actions> = (
     case constants.FETCH_NOTIFICATION: {
       return {
         ...state,
-        notifications: action.notifications,
+        loading: false,
+        notifications:
+          !action.meta.currentPage || action.meta.currentPage === 1
+            ? action.notifications
+            : [...state.notifications, ...action.notifications],
+        meta: action.meta,
       };
     }
 

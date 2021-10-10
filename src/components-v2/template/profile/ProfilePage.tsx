@@ -95,10 +95,12 @@ const ProfilePage = (): JSX.Element => {
           }}>
           <div>
             <ProfileHeaderHomeComponent
+              notificationCount={0}
               user={userData}
               handleSignOut={console.log}
               onViewProfile={console.log}
               onSwitchAccount={console.log}
+              onShowNotificationList={console.log}
             />
           </div>
           <div style={{marginTop: theme.spacing(2.5)}}>

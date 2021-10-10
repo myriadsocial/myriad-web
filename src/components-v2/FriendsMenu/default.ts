@@ -23,8 +23,10 @@ export type FriendListProps = {
   background?: boolean;
   disableFilter?: boolean;
   friends: Friend[];
+  hasMore: boolean;
   onSearch: (query: string) => void;
   onFilter: (type: FriendType) => void;
+  onLoadNextPage: () => void;
 };
 
 export const friends: Friend[] = [
