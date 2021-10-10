@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
 import {ProfileHeaderComponent} from '.';
@@ -13,26 +13,55 @@ type Props = {
 };
 
 export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
-  const {detail: profile} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const {
+    detail: profile,
+    friends: {
+      meta: {totalItemCount: totalFriends},
+    },
+    experience: {
+      meta: {totalItemCount: totalExperience},
+    },
+  } = useSelector<RootState, ProfileState>(state => state.profileState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
 
-  const {friendStatus} = useFriendHook();
-  const [selfProfile, setSelfProfile] = useState<boolean>(false);
+  const {friendStatus, makeFriend, checkFriendStatus, removeFriendRequest} = useFriendHook();
+  const isOwnProfile = profile?.id === user?.id;
 
   useEffect(() => {
-    if (profile && user) setSelfProfile(profile.id === user.id);
-  }, [profile?.id]);
+    if (profile) {
+      checkFriendStatus(profile.id);
+    }
+  }, [profile]);
+
+  const sendFriendReqest = () => {
+    if (!profile) return;
+
+    makeFriend(profile);
+  };
+
+  const declineFriendRequest = () => {
+    if (!friendStatus) return;
+
+    removeFriendRequest(friendStatus);
+  };
+
+  const handleSendTip = () => {
+    // code
+  };
+
+  if (!profile) return null;
 
   return (
-    <>
-      {profile && (
-        <ProfileHeaderComponent
-          user={profile}
-          selfProfile={selfProfile}
-          status={friendStatus}
-          onEdit={edit}
-        />
-      )}
-    </>
+    <ProfileHeaderComponent
+      user={profile}
+      selfProfile={isOwnProfile}
+      status={friendStatus}
+      totalFriends={totalFriends}
+      totalExperience={totalExperience}
+      onSendRequest={sendFriendReqest}
+      onDeclineRequest={declineFriendRequest}
+      onSendTip={handleSendTip}
+      onEdit={edit}
+    />
   );
 };

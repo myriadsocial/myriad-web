@@ -26,7 +26,7 @@ const initalState: FriendState = {
 export const FriendReducer: Redux.Reducer<FriendState, Actions> = (state = initalState, action) => {
   switch (action.type) {
     case constants.FETCH_FRIEND: {
-      if (action.meta.currentPage === 1) {
+      if (!action.meta.currentPage || action.meta.currentPage === 1) {
         return {
           ...state,
           friends: action.friends,

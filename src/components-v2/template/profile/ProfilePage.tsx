@@ -68,6 +68,11 @@ const ProfilePage = (): JSX.Element => {
               user={Header.args?.user ?? user}
               selfProfile={true}
               status={null}
+              onDeclineRequest={console.log}
+              onSendRequest={console.log}
+              onSendTip={console.log}
+              totalExperience={0}
+              totalFriends={0}
             />
           </div>
           <div style={{width: '100%'}}>

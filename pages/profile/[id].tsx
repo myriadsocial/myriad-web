@@ -36,6 +36,7 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
   return (
     <DefaultLayout isOnProfilePage={true}>
       <ToasterContainer />
+
       {profileDetail && <ProfileTimeline profile={profileDetail} loading={false} />}
     </DefaultLayout>
   );
