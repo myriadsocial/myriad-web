@@ -4,6 +4,7 @@ import React, {useState} from 'react';
 
 import Link from 'next/link';
 
+import {Badge} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -15,7 +16,15 @@ import BellIconDefault from '../../images/Icons/notif-default.svg';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
-  const {user, alias, handleSignOut, onViewProfile, onSwitchAccount} = props;
+  const {
+    user,
+    alias,
+    notificationCount,
+    handleSignOut,
+    onViewProfile,
+    onSwitchAccount,
+    onShowNotificationList,
+  } = props;
   const classes = useStyles();
   const [expanding, setExpanding] = useState(false);
 
@@ -28,8 +37,10 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       <div className={classes.box}>
         <div className={classes.secondRoot}>
           <div className={classes.iconButtonWrapper}>
-            <IconButton aria-label="avatar" disabled={!!alias}>
-              <SvgIcon component={BellIconDefault} viewBox="0 0 24 24" />
+            <IconButton aria-label="avatar" disabled={!!alias} onClick={onShowNotificationList}>
+              <Badge color="secondary" variant="dot" invisible={notificationCount === 0}>
+                <SvgIcon component={BellIconDefault} />
+              </Badge>
             </IconButton>
           </div>
           <div className={classes.textAlign}>
