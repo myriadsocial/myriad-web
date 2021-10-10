@@ -16,9 +16,13 @@ type FriendListContainerProps = {
 
 export const FriendListContainer: React.FC<FriendListContainerProps> = props => {
   const {user, disableFilter} = props;
-  const {loadFriends, searchFriend} = useFriendsHook(user);
+  const {loadFriends, searchFriend, loadMoreFriends} = useFriendsHook(user);
 
-  const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
+  const {
+    friends,
+    meta: {totalItemCount: totalFriends},
+  } = useSelector<RootState, FriendState>(state => state.friendState);
+  const hasMore = friends.length < totalFriends;
 
   useEffect(() => {
     loadFriends();
@@ -33,8 +37,10 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
       disableFilter={disableFilter}
       friends={friends}
       user={user}
+      hasMore={hasMore}
       onSearch={searchFriend}
       onFilter={handleFilterFriend}
+      onLoadNextPage={loadMoreFriends}
     />
   );
 };
