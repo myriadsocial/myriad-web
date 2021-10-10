@@ -10,7 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
 import {acronym} from '../../helpers/string';
-import {FilterDropdownMenu} from '../atoms/FilterDropdownMenu/';
+import {FilterDropdownMenu} from '../atoms/FilterDropdownMenu';
 import SearchComponent from '../atoms/Search/SearchBox';
 import {friendFilterOptions, FriendType} from './default';
 import {FriendListProps} from './default';
@@ -18,9 +18,10 @@ import {useStyles} from './friend.style';
 import {useFriendList} from './hooks/use-friend-list.hook';
 
 import {Empty} from 'src/components-v2/atoms/Empty';
+import ShowIf from 'src/components/common/show-if.component';
 
 export const FriendListComponent: React.FC<FriendListProps> = props => {
-  const {background = false, friends, user, onSearch, onFilter} = props;
+  const {background = false, friends, user, disableFilter = false, onSearch, onFilter} = props;
   const style = useStyles();
 
   const list = useFriendList(friends, user);
@@ -41,11 +42,13 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
 
   return (
     <div>
-      <FilterDropdownMenu
-        title="Filter by"
-        options={friendFilterOptions}
-        onChange={handleFilterSelected}
-      />
+      <ShowIf condition={!disableFilter}>
+        <FilterDropdownMenu
+          title="Filter by"
+          options={friendFilterOptions}
+          onChange={handleFilterSelected}
+        />
+      </ShowIf>
 
       <SearchComponent onSubmit={handleSearch} placeholder={'Search friend'} />
 

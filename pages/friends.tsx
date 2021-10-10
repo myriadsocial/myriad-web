@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
 
+import {FriendMenuComponent} from 'src/components-v2/FriendsMenu/FriendMenu';
 import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
@@ -33,6 +34,8 @@ const Socials: React.FC = () => {
         description={`${meta.totalItemCount} Friends`}
         sectionTitle={SectionTitle.FRIENDS}
       />
+
+      <FriendMenuComponent />
     </DefaultLayout>
   );
 };
