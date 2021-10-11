@@ -56,6 +56,8 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
     }
   };
 
+  if (!balanceDetails) return null;
+
   return (
     <div>
       <Typography component="span">Change currency</Typography>
