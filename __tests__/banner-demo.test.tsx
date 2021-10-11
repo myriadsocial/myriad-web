@@ -11,8 +11,8 @@ describe('Banner demo test', () => {
   it('renders a banner text', () => {
     render(<Banner />);
     // used when text within multiple elements
-    const bannerDemoText = screen.getByText((content: string, node) => {
-      const hasText = node =>
+    const bannerDemoText = screen.getByText((content: string, node: any) => {
+      const hasText = (node: any) =>
         node.textContent ===
         'You’re on Myriad Demo v1.0.0 right now, not audited, use at your own risk!';
       const nodeHasText = hasText(node);
