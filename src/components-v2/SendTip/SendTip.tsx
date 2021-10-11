@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import Link from 'next/link';
 
 import Checkbox from '@material-ui/core/Checkbox';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -34,10 +35,13 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
   const [tipAmount, setTipAmount] = useState('');
   const [verifiedTipAmount, setVerifiedTipAmount] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState<BalanceDetail>(balanceDetails[0]);
+  const [gasFee] = useState('0.01');
+  const [checked, setChecked] = useState(false);
+  const [url] = useState('https://myriad.social/');
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
 
-  const {simplerSendTip} = usePolkadotApi();
+  const {simplerSendTip, isSignerLoading} = usePolkadotApi();
 
   if (!user) return null;
 
@@ -56,12 +60,6 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
     }
   }, [openSigner]);
 
-  const [gasFee] = useState('0.01');
-
-  const [checked, setChecked] = useState(true);
-
-  const [url] = useState('https://myriad.social/');
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
@@ -78,10 +76,14 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
 
   const checkValidDigits = (input: string) => {
     const regexValidDigits = /^\d*(\.\d+)?$/;
+    const regexRepeatedZeros = /([0])\1*/;
 
-    if (regexValidDigits.test(input)) {
-      return input;
+    if (!regexRepeatedZeros.test(input)) {
+      if (regexValidDigits.test(input)) {
+        return input;
+      }
     }
+
     return '';
   };
 
@@ -113,7 +115,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
     if (validBalanceAmount.length > 0) {
       setVerifiedTipAmount(validBalanceAmount);
     } else {
-      console.log('Insufficient balance');
+      setVerifiedTipAmount('');
     }
   };
 
@@ -274,8 +276,11 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
                 </Typography>
               }
             />
-            <Button variant={ButtonVariant.CONTAINED} onClick={triggerSignTransactionWithExtension}>
-              Send my tip
+            <Button
+              isDisabled={verifiedTipAmount.length === 0}
+              variant={ButtonVariant.CONTAINED}
+              onClick={triggerSignTransactionWithExtension}>
+              {isSignerLoading ? <CircularProgress /> : 'Send my tips'}
             </Button>
           </div>
         </form>
