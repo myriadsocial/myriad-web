@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useSelector} from 'react-redux';
 
 import Link from 'next/link';
 
@@ -14,7 +15,10 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles, TableCell} from '.';
+import {usePolkadotApi} from '../../hooks/use-polkadot-api.hook';
 import {BalanceDetail} from '../../interfaces/balance';
+import {RootState} from '../../reducers/';
+import {UserState} from '../../reducers/user/reducer';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
 import {Button, ButtonVariant} from '../atoms/Button';
 import {CurrencyOptionComponent} from '../atoms/CurrencyOption/';
@@ -29,20 +33,32 @@ type SendTipProps = {
 export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) => {
   const [tipAmount, setTipAmount] = useState('');
   const [verifiedTipAmount, setVerifiedTipAmount] = useState('');
+  const [selectedCurrency, setSelectedCurrency] = useState<BalanceDetail>(balanceDetails[0]);
+
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+
+  const {simplerSendTip} = usePolkadotApi();
+
+  if (!user) return null;
 
   useEffect(() => {
     verifyTipAmount(tipAmount);
   }, [tipAmount]);
 
+  //useEffect(() => {
+  //handleSendTip(user.id, tippedUserId, verifiedTipAmount, selectedCurrency);
+  //}, [user, tippedUserId, verifiedTipAmount, selectedCurrency]);
+  const [openSigner, setOpenSigner] = useState(false);
+
   useEffect(() => {
-    handleSendTip(tippedUserId);
-  }, [tippedUserId]);
+    if (openSigner) {
+      handleSendTip();
+    }
+  }, [openSigner]);
 
   const [gasFee] = useState('0.01');
 
   const [checked, setChecked] = useState(true);
-
-  const [selectedCurrency, setSelectedCurrency] = useState<BalanceDetail>(balanceDetails[0]);
 
   const [url] = useState('https://myriad.social/');
 
@@ -101,9 +117,21 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
     }
   };
 
-  const handleSendTip = (tippedUserId: string) => {
-    console.log({verifiedTipAmount, tippedUserId});
-    // call api along with the payload here
+  const handleSendTip = () => {
+    const sendTipPayload = {
+      from: user.id,
+      to: tippedUserId,
+      amount: Number(verifiedTipAmount),
+      currency: selectedCurrency,
+    };
+
+    simplerSendTip(sendTipPayload);
+
+    setOpenSigner(false);
+  };
+
+  const triggerSignTransactionWithExtension = () => {
+    setOpenSigner(true);
   };
 
   return (
@@ -246,7 +274,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
                 </Typography>
               }
             />
-            <Button variant={ButtonVariant.CONTAINED} onClick={handleSendTip}>
+            <Button variant={ButtonVariant.CONTAINED} onClick={triggerSignTransactionWithExtension}>
               Send my tip
             </Button>
           </div>
