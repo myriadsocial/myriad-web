@@ -2,8 +2,6 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
-import {fetchTippedUserId} from '../reducers/wallet/actions';
-
 import {TimelineFilter, TimelineSortMethod} from 'src/interfaces/timeline';
 import {RootState} from 'src/reducers';
 import {loadTimeline} from 'src/reducers/timeline/actions';
@@ -29,10 +27,6 @@ export const useTimelineHook = () => {
     router.push(`?sort=${sort}`, undefined, {shallow: true});
   };
 
-  const getTippedUserId = async (postId: string) => {
-    dispatch(fetchTippedUserId(postId));
-  };
-
   return {
     error: timelineState.error,
     loading: timelineState.loading,
@@ -42,6 +36,5 @@ export const useTimelineHook = () => {
     initTimeline,
     nextPage,
     sortTimeline,
-    getTippedUserId,
   };
 };
