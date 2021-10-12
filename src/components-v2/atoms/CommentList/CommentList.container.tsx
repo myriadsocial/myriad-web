@@ -5,7 +5,7 @@ import {CommentList} from './CommentList';
 
 import {ReportContainer} from 'src/components-v2/Report';
 import {SendTipContainer} from 'src/components-v2/SendTip';
-import {TipHistory} from 'src/components-v2/TipHistory';
+import {TipHistoryContainer} from 'src/components-v2/TipHistory';
 import {Modal} from 'src/components-v2/atoms/Modal';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
@@ -30,16 +30,9 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const dispatch = useDispatch();
   const {comments, loadInitComment, reply, updateUpvote, updateDownvote, loadReplies} =
     useCommentHook(referenceId);
-  const {
-    isTipHistoryOpen,
-    transactions,
-    closeTipHistory,
-    handleFilterTransaction,
-    handleSortTransaction,
-    openTipHistory,
-  } = useTipHistory();
+  const {openTipHistory} = useTipHistory();
 
-  const {user, currencies} = useSelector<RootState, UserState>(state => state.userState);
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
   const downvoting = useSelector<RootState, Post | Comment | null>(
     state => state.timelineState.interaction.downvoting,
   );
@@ -88,13 +81,11 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     );
   };
 
-  const handleSendTip = () => {
-    closeTipHistory();
-  };
-
-  const handleOnSendTip = (comment: Comment) => {
-    console.log({comment});
-    setTippedComment(comment);
+  const handleSendTip = (reference: Post | Comment) => {
+    // type guard to check if reference is a Comment object
+    if ('section' in reference) {
+      setTippedComment(reference);
+    }
   };
 
   const closeSendTip = () => {
@@ -123,7 +114,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         focus={focus}
         expand={expand}
         onReport={handleReport}
-        onSendTip={handleOnSendTip}
+        onSendTip={handleSendTip}
       />
 
       <Modal
@@ -135,15 +126,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         <SendTipContainer />
       </Modal>
 
-      <TipHistory
-        open={isTipHistoryOpen}
-        currencies={currencies}
-        tips={transactions}
-        sendTip={handleSendTip}
-        onClose={closeTipHistory}
-        onSort={handleSortTransaction}
-        onFilter={handleFilterTransaction}
-      />
+      <TipHistoryContainer onSendTip={handleSendTip} />
 
       <ReportContainer reference={reported} onClose={closeReportPost} />
     </>

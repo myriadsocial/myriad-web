@@ -33,7 +33,7 @@ import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 import {ContentType} from 'src/interfaces/wallet';
 import {RootState} from 'src/reducers';
-import {setTippedComment} from 'src/reducers/tip-summary/actions';
+import {setTippedReference} from 'src/reducers/tip-summary/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {setRecipientDetail} from 'src/reducers/wallet/actions';
 import {fetchRecipientDetail} from 'src/reducers/wallet/actions';
@@ -106,7 +106,7 @@ const PostComponent: React.FC<PostComponentProps> = ({
 
   const tipCommentUser = (comment: Comment) => {
     const recipientDetail = defineRecipientDetail(comment);
-    dispatch(setTippedComment(comment));
+    dispatch(setTippedReference(comment));
     dispatch(setRecipientDetail(recipientDetail));
 
     tippingClicked();

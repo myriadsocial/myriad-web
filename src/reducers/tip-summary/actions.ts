@@ -17,9 +17,9 @@ type TransactionList = BaseList<Transaction>;
  * Action Types
  */
 
-export interface SetTippedPost extends Action {
-  type: constants.SET_TIPPED_POST;
-  payload: Post;
+export interface SetTippedReference extends Action {
+  type: constants.SET_TIPPED_REFERENCE;
+  payload: Post | Comment;
 }
 
 export interface ClearTippedContent extends Action {
@@ -34,11 +34,6 @@ export interface LoadTransactionHistory extends PaginationAction {
 export interface LoadTransactionSummary extends Action {
   type: constants.FETCH_TRANSACTION_SUMMARY;
   summary: TransactionDetail[];
-}
-
-export interface SetTippedComment extends Action {
-  type: constants.SET_TIPPED_COMMENT;
-  payload: Comment;
 }
 
 export interface LoadTransactionHistoryForComment extends PaginationAction {
@@ -66,10 +61,9 @@ export interface SetTransactionSort extends Action {
  */
 
 export type Actions =
-  | SetTippedPost
+  | SetTippedReference
   | LoadTransactionHistory
   | LoadTransactionSummary
-  | SetTippedComment
   | LoadTransactionHistoryForComment
   | LoadTransactionSummaryForComment
   | ClearTippedContent
@@ -81,18 +75,13 @@ export type Actions =
  *
  * Actions
  */
-export const setTippedPost = (post: Post): SetTippedPost => ({
-  type: constants.SET_TIPPED_POST,
-  payload: post,
+export const setTippedReference = (reference: Post | Comment): SetTippedReference => ({
+  type: constants.SET_TIPPED_REFERENCE,
+  payload: reference,
 });
 
 export const clearTippedContent = (): ClearTippedContent => ({
   type: constants.CLEAR_TIPPED_CONTENT,
-});
-
-export const setTippedComment = (comment: Comment): SetTippedComment => ({
-  type: constants.SET_TIPPED_COMMENT,
-  payload: comment,
 });
 
 export const setTransactionCurrency = (currency: CurrencyId): SetTransactionCurrency => ({
@@ -131,7 +120,7 @@ export const fetchTransactionHistory: ThunkActionCreator<Actions, RootState> =
               referenceId: reference.id,
               currencyId: currency ? {eq: currency} : undefined,
             },
-            include: ['fromUser', 'toUser'],
+            include: ['fromUser', 'toUser', 'currency'],
           },
           pageNumber: page,
         },
@@ -189,7 +178,7 @@ export const fetchTransactionHistoryForComment: ThunkActionCreator<Actions, Root
       } = getState();
 
       const {
-        tipSummaryState: {comment},
+        tipSummaryState: {reference: comment},
       } = getState();
 
       if (!user) {
@@ -237,7 +226,7 @@ export const fetchTransactionSummaryForComment: ThunkActionCreator<Actions, Root
         userState: {user},
       } = getState();
       const {
-        tipSummaryState: {comment},
+        tipSummaryState: {reference: comment},
       } = getState();
 
       if (!user) {

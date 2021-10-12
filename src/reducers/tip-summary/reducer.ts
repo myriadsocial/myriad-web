@@ -11,9 +11,9 @@ import {Post} from 'src/interfaces/post';
 import {Transaction, TransactionDetail, TransactionSort} from 'src/interfaces/transaction';
 
 export interface TipSummaryState extends BasePaginationState {
-  post: Post | null;
-  comment: Comment | null;
+  reference: Post | Comment | null;
   show: boolean;
+  hasMore: boolean;
   transactions: Transaction[];
   summary: TransactionDetail[];
   sort: TransactionSort;
@@ -21,10 +21,10 @@ export interface TipSummaryState extends BasePaginationState {
 }
 
 const initialState: TipSummaryState = {
-  post: null,
-  comment: null,
+  reference: null,
   loading: false,
   show: false,
+  hasMore: false,
   transactions: [],
   summary: [],
   sort: 'highest',
@@ -45,10 +45,10 @@ export const TipSummaryReducer: Redux.Reducer<TipSummaryState, Actions> = (
       return action.payload.tipSummaryState;
     }
 
-    case constants.SET_TIPPED_POST: {
+    case constants.SET_TIPPED_REFERENCE: {
       return {
         ...state,
-        post: action.payload,
+        reference: action.payload,
         show: true,
       };
     }
@@ -56,7 +56,10 @@ export const TipSummaryReducer: Redux.Reducer<TipSummaryState, Actions> = (
     case constants.FETCH_TRANSACTION_HISTORY: {
       return {
         ...state,
-        transactions: action.transactions,
+        transactions:
+          action.meta.currentPage || action.meta.currentPage === 1
+            ? action.transactions
+            : [...state.transactions, ...action.transactions],
         meta: action.meta,
         hasMore: action.meta.currentPage < action.meta.totalPageCount,
       };
@@ -66,13 +69,6 @@ export const TipSummaryReducer: Redux.Reducer<TipSummaryState, Actions> = (
       return {
         ...state,
         summary: action.summary,
-      };
-    }
-
-    case constants.SET_TIPPED_COMMENT: {
-      return {
-        ...state,
-        comment: action.payload,
       };
     }
 
