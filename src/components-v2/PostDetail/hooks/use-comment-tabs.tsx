@@ -1,9 +1,8 @@
 import React from 'react';
 
-import {Comment} from '../../../interfaces/comment';
-import {CommentListContainer} from '../../atoms/CommentList';
-import {TabItems} from '../../atoms/Tabs';
-
+import {CommentListContainer} from 'src/components-v2/atoms/CommentList';
+import {TabItems} from 'src/components-v2/atoms/Tabs';
+import {Comment} from 'src/interfaces/comment';
 import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 

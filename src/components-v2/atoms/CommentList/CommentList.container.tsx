@@ -1,18 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {RootState} from '../../../reducers';
-import {upvote, downvote} from '../../../reducers/timeline/actions';
-import {SendTipContainer} from '../../SendTip/';
-import {TipHistory} from '../../TipHistory';
-import {Modal} from '../../atoms/Modal';
 import {CommentList} from './CommentList';
 
+import {ReportContainer} from 'src/components-v2/Report';
+import {SendTipContainer} from 'src/components-v2/SendTip';
+import {TipHistory} from 'src/components-v2/TipHistory';
+import {Modal} from 'src/components-v2/atoms/Modal';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
 import {Comment, CommentProps} from 'src/interfaces/comment';
 import {SectionType, ReferenceType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
+import {RootState} from 'src/reducers';
+import {upvote, downvote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 type CommentListContainerProps = {
@@ -42,7 +43,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const downvoting = useSelector<RootState, Post | Comment | null>(
     state => state.timelineState.interaction.downvoting,
   );
-
+  const [reported, setReported] = useState<Comment | null>(null);
   const [tippedComment, setTippedComment] = useState<Comment | null>(null);
   const sendTipOpened = Boolean(tippedComment);
 
@@ -101,8 +102,11 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   };
 
   const handleReport = (comment: Comment) => {
-    // code
-    console.log('report');
+    setReported(comment);
+  };
+
+  const closeReportPost = () => {
+    setReported(null);
   };
 
   return (
@@ -140,6 +144,8 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         onSort={handleSortTransaction}
         onFilter={handleFilterTransaction}
       />
+
+      <ReportContainer reference={reported} onClose={closeReportPost} />
     </>
   );
 };
