@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {RootState} from '../../../reducers';
 import {upvote, downvote} from '../../../reducers/timeline/actions';
-import {SendTip} from '../../SendTip/SendTip';
+import {SendTipContainer} from '../../SendTip/';
 import {TipHistory} from '../../TipHistory';
 import {Modal} from '../../atoms/Modal';
 import {CommentList} from './CommentList';
@@ -92,6 +92,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   };
 
   const handleOnSendTip = (comment: Comment) => {
+    console.log({comment});
     setTippedComment(comment);
   };
 
@@ -127,7 +128,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         onClose={closeSendTip}
         title="Send Tip"
         subtitle="Finding this post is insightful? Send a tip!">
-        <SendTip currencies={[]} />
+        <SendTipContainer />
       </Modal>
 
       <TipHistory
