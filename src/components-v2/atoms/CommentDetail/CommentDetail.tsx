@@ -80,6 +80,8 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
     return comment.metric.upvotes - comment.metric.downvotes;
   };
 
+  const owner = comment.userId === user?.id;
+
   return (
     <div className={style.flex}>
       <div className={style.tree}>
@@ -128,6 +130,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
               </Button>
             )}
             <Button
+              disabled={owner}
               classes={{root: style.button}}
               size="small"
               variant="text"
