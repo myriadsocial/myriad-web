@@ -148,8 +148,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     }
   };
 
-  console.log({owner});
-
   return (
     <Paper square className={styles.root}>
       <HeaderComponent

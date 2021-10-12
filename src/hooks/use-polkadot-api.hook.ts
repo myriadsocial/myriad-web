@@ -31,6 +31,7 @@ export const usePolkadotApi = () => {
     dispatch(fetchBalances(address, availableTokens));
   };
 
+  // TODO: remove only if simplerSendTip works!
   const sendTip = async (
     {from, to, value, decimals, currencyId, referenceId, contentType, wsAddress}: SendTipProps,
     callback?: () => void,
@@ -122,11 +123,13 @@ export const usePolkadotApi = () => {
     try {
       setSignerLoading(true);
 
+      const correctedAmount = amount * 10 ** currency.decimal;
+
       const txHash = await signAndSendExtrinsic(
         {
           from,
           to,
-          value: amount,
+          value: correctedAmount,
           currencyId: currency.id,
           wsAddress: currency.rpcURL,
         },
@@ -155,8 +158,6 @@ export const usePolkadotApi = () => {
           type: type === 'post' ? 'post' : 'comment',
           referenceId,
         });
-
-        //openTipSummaryForComment();
 
         dispatch(
           showToaster({
