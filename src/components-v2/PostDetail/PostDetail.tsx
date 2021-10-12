@@ -112,6 +112,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   };
 
   const handleSendTip = () => {
+    console.log({post});
     onSendTip(post);
     const contentType = 'post';
     const referenceId = post.id;
