@@ -112,7 +112,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   };
 
   const handleSendTip = () => {
-    console.log({post});
     onSendTip(post);
     const contentType = 'post';
     const referenceId = post.id;
@@ -153,6 +152,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
       return [formatStringToNode(post.text)];
     }
   };
+
+  console.log({owner});
 
   return (
     <Paper square className={styles.root}>
