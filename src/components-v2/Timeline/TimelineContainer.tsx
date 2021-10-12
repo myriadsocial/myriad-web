@@ -139,6 +139,8 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
       <ReportContainer reference={reported} onClose={closeReportPost} />
 
+      <ReportContainer reference={reported} onClose={closeReportPost} />
+
       <PromptComponent
         title={'Remove Post'}
         subtitle={`Are you sure to remove this post?`}
