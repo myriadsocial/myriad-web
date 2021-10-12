@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import {useSelector} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -18,6 +19,8 @@ import {useStyles} from './CommentDetail.styles';
 
 import {formatDistance, subDays} from 'date-fns';
 import {ReferenceType} from 'src/interfaces/interaction';
+import {RootState} from 'src/reducers';
+import {BalanceState} from 'src/reducers/balance/reducer';
 
 export const CommentDetail: React.FC<CommentDetailProps> = props => {
   const {
@@ -32,6 +35,8 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
     onReport,
     onSendTip,
   } = props;
+
+  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
 
   const style = useStyles();
 
@@ -130,7 +135,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
               </Button>
             )}
             <Button
-              disabled={owner}
+              disabled={owner || balanceDetails.length === 0}
               classes={{root: style.button}}
               size="small"
               variant="text"
