@@ -8,11 +8,11 @@ import {experienceSortOptions} from '../Timeline/default';
 import {DropdownMenu} from '../atoms/DropdownMenu/';
 
 export const HeaderWithAction: React.FC<HeaderWithActionProps> = props => {
-  const {actionText} = props;
+  const {actionText, filter} = props;
   const classes = useStyles();
 
   const handleSortChanged = (sort: string) => {
-    // code
+    filter(sort);
   };
 
   return (
