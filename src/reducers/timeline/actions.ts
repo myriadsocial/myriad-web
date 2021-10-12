@@ -104,6 +104,11 @@ export interface DownvotePost extends Action {
   vote: Vote;
 }
 
+export interface SetTippedContent extends Action {
+  type: constants.SET_TIPPED_CONTENT;
+  contentType: string;
+  referenceId: string;
+}
 /**
  * Union Action Types
  */
@@ -124,6 +129,7 @@ export type Actions =
   | UpvotePost
   | SetDownvoting
   | DownvotePost
+  | SetTippedContent
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -133,6 +139,12 @@ export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
 
 export const clearTimeline = (): ClearTimeline => ({
   type: constants.CLEAR_TIMELINE,
+});
+
+export const setTippedContent = (contentType: string, referenceId: string): SetTippedContent => ({
+  type: constants.SET_TIPPED_CONTENT,
+  contentType,
+  referenceId,
 });
 
 /**
