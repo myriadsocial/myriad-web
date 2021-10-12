@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {Typography} from '@material-ui/core';
@@ -35,11 +35,16 @@ export const ExperienceTabMenuContainer: React.FC = () => {
 
   // Only load experiences specific to logged user
   const {loadExperience, experiences} = useExperienceHook();
+  const [myExperience, setMyExperience] = useState(experiences);
 
   useEffect(() => {
     //TODO: move this to app level to avoid refetching
     loadExperience();
   }, []);
+
+  useEffect(() => {
+    setMyExperience(experiences);
+  }, [experiences]);
 
   const handleFilterTimeline = (type: TimelineType, experience: Experience) => {
     dispatch(
@@ -50,6 +55,41 @@ export const ExperienceTabMenuContainer: React.FC = () => {
     );
 
     push('type', type);
+  };
+
+  const handleFilterExperience = (sort: string) => {
+    let sortExperience;
+    switch (sort) {
+      case 'all':
+        sortExperience = myExperience.sort((a, b) => {
+          if (a.experience.createdAt < b.experience.createdAt) return 1;
+          if (a.experience.createdAt > b.experience.createdAt) return -1;
+          return 0;
+        });
+        console.log(sortExperience);
+        setMyExperience(sortExperience);
+        break;
+      case 'latest':
+        sortExperience = myExperience.sort((a, b) => {
+          if (a.experience.createdAt < b.experience.createdAt) return -1;
+          if (a.experience.createdAt > b.experience.createdAt) return 1;
+          return 0;
+        });
+        console.log(sortExperience);
+        setMyExperience(sortExperience);
+        break;
+      case 'aToZ':
+        sortExperience = myExperience.sort((a, b) => {
+          if (a.experience.name < b.experience.name) return -1;
+          if (a.experience.name > b.experience.name) return 1;
+          return 0;
+        });
+        console.log(sortExperience);
+        setMyExperience(sortExperience);
+        break;
+      default:
+        break;
+    }
   };
 
   if (anonymous)
@@ -65,7 +105,8 @@ export const ExperienceTabMenuContainer: React.FC = () => {
   return (
     <ExperienceTabMenu
       filterTimeline={handleFilterTimeline}
-      experiences={experiences}
+      filterExperience={handleFilterExperience}
+      experiences={myExperience}
       user={user}
     />
   );
