@@ -108,7 +108,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   };
 
   const handleSendTip = () => {
-    console.log({post});
     onSendTip(post);
     const contentType = 'post';
     const referenceId = post.id;
@@ -148,6 +147,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
       return [formatStringToNode(post.text)];
     }
   };
+
+  console.log({owner});
 
   return (
     <Paper square className={styles.root}>
@@ -228,6 +229,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         />
 
         <Button
+          isDisabled={owner}
           onClick={handleSendTip}
           variant={ButtonVariant.OUTLINED}
           color={ButtonColor.SECONDARY}
