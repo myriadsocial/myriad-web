@@ -15,7 +15,6 @@ import {
 } from 'src/reducers/timeline/actions';
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const usePostHook = (user?: User) => {
   const dispatch = useDispatch();
   const {showAlert} = useAlertHook();

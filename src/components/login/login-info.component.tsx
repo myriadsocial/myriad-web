@@ -49,9 +49,11 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-type Props = {};
+type LoginInfoComponentProps = {
+  children?: React.ReactNode;
+};
 
-export const LoginInfoComponent = ({}: Props) => {
+export const LoginInfoComponent: React.FC<LoginInfoComponentProps> = () => {
   const style = useStyles();
 
   return (

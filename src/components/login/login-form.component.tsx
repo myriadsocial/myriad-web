@@ -167,7 +167,6 @@ export const LoginFormComponent: React.FC<LoginComponentProps> = props => {
                 ? 'Username must be filled and has 6 character or more'
                 : ''
             }
-            autoFocus
             fullWidth
             hiddenLabel
             name="username"
@@ -204,7 +203,7 @@ export const LoginFormComponent: React.FC<LoginComponentProps> = props => {
           Anonymous Login
         </Button>
         <Link href="/register">
-          <a>
+          <a href="/register">
             <Button className={style.register} variant="contained" size="large">
               Create Account
             </Button>

@@ -17,7 +17,6 @@ import {
 } from '../reducers/experience/actions';
 import {ExperienceState} from '../reducers/experience/reducer';
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 //TODO: isn't it better to rename this to something more general like, useSearchHook?
 // it's not obvious if we want to searchPeople we can use this hook
 export const useExperienceHook = () => {
