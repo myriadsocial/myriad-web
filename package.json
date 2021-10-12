@@ -17,7 +17,7 @@
     "dev": "nodemon",
     "export-env": "node ./plugins/export-env.js",
     "clean": "rm -rf .next dist plugins/sv-env.js",
-    "build": "next build && tsc --project tsconfig.server.json && build-storybook",
+    "build": "next build && tsc --project tsconfig.server.json && yarn build:storybook",
     "build:storybook": "build-storybook -o docs",
     "postbuild": "yarn run export-env",
     "rebuild": "yarn run clean && yarn run build",
