@@ -75,7 +75,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
 
   const checkValidDigits = (input: string) => {
     const regexValidDigits = /^\d*(\.\d+)?$/;
-    const regexRepeatedZeros = /([0])\1*/;
+    const regexRepeatedZeros = /^[0]{1,}$/;
 
     if (!regexRepeatedZeros.test(input)) {
       if (regexValidDigits.test(input)) {
