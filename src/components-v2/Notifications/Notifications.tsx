@@ -21,7 +21,6 @@ import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {Notification, NotificationType} from 'src/interfaces/notification';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 type NotificationsProps = {
   notifications: Notification[];
   total: number;

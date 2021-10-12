@@ -11,7 +11,6 @@ let API: AxiosInstance;
 
 const {publicRuntimeConfig} = getConfig();
 
-/*eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export const initialize = (params?: AuthorizationParams): AxiosInstance => {
   if (!API) {
     API = axios.create({

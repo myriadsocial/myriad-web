@@ -36,7 +36,7 @@ const Card = ({image, title, text}: CardProps) => {
   const styles = useStyles();
   return (
     <div className={styles.card}>
-      <img src={image} className={styles.card} alt="no-image" />
+      <img src={image} className={styles.card} alt="link-preview" />
       <div className="card-body">
         <h5 className="card-title">{title}</h5>
         <p className="card-text">{text}</p>
