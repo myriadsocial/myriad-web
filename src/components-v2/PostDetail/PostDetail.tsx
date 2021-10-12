@@ -246,8 +246,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
             variant={ButtonVariant.OUTLINED}
             color={ButtonColor.SECONDARY}
             size={ButtonSize.SMALL}
-            className={styles.sendTips}
-          >
+            className={styles.sendTips}>
             Send Tip
           </Button>
         </ShowIf>
