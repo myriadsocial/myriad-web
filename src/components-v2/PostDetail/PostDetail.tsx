@@ -209,7 +209,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           )}
         </ShowIf>
 
-        {post.embeddedURL && <LinkPreview url={post.embeddedURL} />}
+        {post.embeddedURL && <LinkPreview embed={post.embeddedURL} />}
       </div>
 
       <div className={styles.action}>

@@ -56,7 +56,7 @@ export type PostProps = {
   text: string;
   title?: string;
   url: string;
-  embeddedURL?: string;
+  embeddedURL?: PostEmbedProps;
   isNSFW?: boolean;
   NSFWTag?: string;
   visibility: PostVisibility;
@@ -74,6 +74,20 @@ export type MentionUserProps = {
   username: string;
 };
 
+export type EmbedMediaProps = {
+  url: string;
+  width?: number;
+  height?: number;
+};
+
+export type PostEmbedProps = {
+  url: string;
+  title: string;
+  siteName: string;
+  description: string;
+  image?: EmbedMediaProps;
+  video?: EmbedMediaProps;
+};
 export interface Post extends PostProps, BaseModel {
   user: User;
   people?: People;

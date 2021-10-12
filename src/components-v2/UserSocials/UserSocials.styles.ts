@@ -7,37 +7,22 @@ export const useStyles = makeStyles((theme: Theme) =>
         background: 'inherit',
       },
     },
+    list: {
+      display: 'flex',
+    },
     item: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: 'auto',
+      marginRight: 20,
+
       '& .MuiListItemIcon-root': {
         minWidth: 40,
       },
     },
-    nested: {
-      paddingLeft: 55,
-    },
-    facebook: {
-      '& rect': {
-        fill: '#4E71A8',
-      },
-    },
-    reddit: {
-      '& rect': {
-        fill: '#FF4500',
-      },
-    },
-    twitter: {
-      '& rect': {
-        fill: '#1DA1F2',
-      },
-    },
-    instagram: {},
-    wechat: {},
-    telegram: {},
-    weibo: {},
-    vk: {},
-    '4chan': {},
-    itemIcon: {
-      minWidth: 42,
+    avatar: {
+      height: 56,
+      width: 56,
     },
   }),
 );
