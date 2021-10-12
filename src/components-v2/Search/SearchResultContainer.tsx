@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
 import Typography from '@material-ui/core/Typography';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {useExperienceHook} from '../../hooks/use-experience-hook';
 import {SearchedExperienceListContainer} from '../ExperienceList/SearchedExperienceListContainer';
@@ -9,12 +10,25 @@ import {SearchBoxContainer} from '../atoms/Search/SearchBoxContainer';
 import {TabItems} from '../atoms/Tabs/';
 import {TabsComponent} from '../atoms/Tabs/';
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    text: {
+      position: 'relative',
+      fontSize: '14px',
+      color: theme.palette.text.secondary,
+      alignSelf: 'start',
+    },
+  }),
+);
+
 export const SearchResultContainer: React.FC = () => {
   const {searchExperience, searchPeople} = useExperienceHook();
 
   const [submittedQuery, setSubmittedQuery] = useState('');
 
   const [selectedTab, setSelectedTab] = useState('');
+
+  const style = useStyles();
 
   useEffect(() => {
     switch (selectedTab) {
@@ -64,7 +78,9 @@ export const SearchResultContainer: React.FC = () => {
   return (
     <>
       <SearchBoxContainer onSubmitSearch={onSubmitSearch} />
-      <Typography>Search result for &quot;{submittedQuery}&quot;</Typography>
+      <Typography className={style.text}>
+        Search result for &quot;{submittedQuery}&quot; :
+      </Typography>
       <TabsComponent
         active={searchResultTabTexts[0].id}
         tabs={searchResultTabTexts}
