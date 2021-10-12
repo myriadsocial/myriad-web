@@ -3,6 +3,7 @@ import {TNode} from '@udecode/plate';
 import React, {useState} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
+import {useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
@@ -12,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import LinkifyComponent from '../../components/common/Linkify.component';
 import ShowIf from '../../components/common/show-if.component';
 import {Post} from '../../interfaces/post';
+import {setTippedContent} from '../../reducers/timeline/actions';
 import {PostRender} from '../PostEditor/PostRender';
 import {formatStringToNode} from '../PostEditor/formatter';
 import {Button, ButtonVariant, ButtonColor, ButtonSize} from '../atoms/Button';
@@ -47,6 +49,8 @@ type PostDetailProps = {
 export const PostDetail: React.FC<PostDetailProps> = props => {
   const styles = useStyles();
   const router = useRouter();
+
+  const dispatch = useDispatch();
 
   const {
     user,
@@ -104,7 +108,11 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   };
 
   const handleSendTip = () => {
+    console.log({post});
     onSendTip(post);
+    const contentType = 'post';
+    const referenceId = post.id;
+    dispatch(setTippedContent(contentType, referenceId));
   };
 
   const handleDeletePost = () => {
