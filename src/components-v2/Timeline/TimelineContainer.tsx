@@ -71,7 +71,6 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     if (post) {
       setTippedPost(post);
       getTippedUserId(post.id);
-      console.log({post});
     }
 
     if (tipHistoryReference) {
