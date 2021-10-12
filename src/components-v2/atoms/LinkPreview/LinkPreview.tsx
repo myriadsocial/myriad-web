@@ -1,74 +1,35 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 import {Card, CardActionArea, CardContent, CardMedia, Typography} from '@material-ui/core';
 
 import {useStyles} from './LinkPreview.styles';
 
-import {getLinkPreview} from 'link-preview-js';
+import {PostEmbedProps} from 'src/interfaces/post';
 
 type LinkPreviewProps = {
-  url: string;
-  proxy?: string;
-};
-
-type PreviewProps = {
-  url: string;
-  title: string;
-  siteName: string | undefined;
-  description: string | undefined;
-  mediaType: string;
-  contentType: string | undefined;
-  images: string[];
-  videos: {
-    url: string | undefined;
-    secureUrl: string | null | undefined;
-    type: string | null | undefined;
-    width: string | undefined;
-    height: string | undefined;
-  }[];
-  favicons: string[];
+  embed: PostEmbedProps;
 };
 
 export const LinkPreview: React.FC<LinkPreviewProps> = props => {
-  const {url, proxy = 'https://cors.bridged.cc/'} = props;
+  const {embed} = props;
   const styles = useStyles();
 
-  const [resource, setResource] = useState<PreviewProps | null>(null);
-
-  useEffect(() => {
-    getUrlMeta();
-  }, []);
-
-  const getUrlMeta = async () => {
-    const resource = await getLinkPreview(url, {
-      headers: {
-        'user-agent': 'googlebot',
-        'Accept-Language': 'en-US',
-      },
-      proxyUrl: proxy,
-    });
-
-    setResource(resource as PreviewProps);
-  };
-
   const handleClick = () => {
-    window.open(url, '_blank');
+    window.open(embed.url, '_blank');
   };
 
-  if (!resource) return null;
-
-  console.log('resource', resource);
+  if (!embed) return null;
 
   return (
     <Card className={styles.root} onClick={handleClick}>
       <CardActionArea>
-        <CardMedia className={styles.media} image={resource.images[0]} title={resource.title} />
+        <CardMedia className={styles.media} image={embed.image?.url} title={embed.title} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            {resource.title}
+            {embed.title}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            {resource.description}
+            {embed.description}
           </Typography>
         </CardContent>
       </CardActionArea>
