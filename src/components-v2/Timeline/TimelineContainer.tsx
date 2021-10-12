@@ -7,7 +7,8 @@ import {Timeline as TimelineComponent} from '.';
 import {useQueryParams} from '../../hooks/use-query-params.hooks';
 import {TimelineFilter} from '../../interfaces/timeline';
 import {upvote, setDownvoting, deletePost} from '../../reducers/timeline/actions';
-import {SendTipContainer} from '../SendTip/';
+import {ReportContainer} from '../Report';
+import {SendTipContainer} from '../SendTip';
 import {TimelineFilterContainer} from '../TimelineFilter';
 import {TipHistory} from '../TipHistory';
 import {Modal} from '../atoms/Modal';
@@ -51,6 +52,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
+  const [reported, setReported] = useState<Post | null>(null);
   const [removing, setRemoving] = useState(false);
   const [postToRemove, setPostToRemove] = useState<Post | null>(null);
   const sendTipOpened = Boolean(tippedPost);
@@ -83,7 +85,11 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   };
 
   const handleReportPost = (post: Post) => {
-    // code
+    setReported(post);
+  };
+
+  const closeReportPost = () => {
+    setReported(null);
   };
 
   const handleDeletePost = (post: Post) => {
@@ -150,6 +156,8 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
         onSort={handleSortTransaction}
         onFilter={handleFilterTransaction}
       />
+
+      <ReportContainer reference={reported} onClose={closeReportPost} />
 
       <PromptComponent
         title={'Remove Post'}
