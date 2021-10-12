@@ -12,15 +12,16 @@ interface ExperienceTabMenuProps {
   experiences: UserExperience[];
   user?: User;
   filterTimeline: (type: TimelineType, experience: Experience) => void;
+  filterExperience: (sort: string) => void;
 }
 
 export const ExperienceTabMenu: React.FC<ExperienceTabMenuProps> = props => {
-  const {experiences, user, filterTimeline} = props;
+  const {experiences, user, filterTimeline, filterExperience} = props;
 
   return (
     <>
       <Typography variant={'h4'}>Experience</Typography>
-      <HeaderWithAction actionText={'+ Create experience'} />
+      <HeaderWithAction filter={filterExperience} actionText={'+ Create experience'} />
       <ExperienceList filterTimeline={filterTimeline} experiences={experiences} user={user} />
     </>
   );
