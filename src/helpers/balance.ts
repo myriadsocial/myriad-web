@@ -1,6 +1,8 @@
 import {BalanceDetail} from '../interfaces/balance';
 import {Currency, CurrencyId} from '../interfaces/currency';
 
+import _ from 'lodash';
+
 // TODO: check if needs to be removed
 export const formatNumber = (number: number, decimals: number): number => {
   if (number.toString() === '0') return 0;
