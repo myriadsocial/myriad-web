@@ -131,6 +131,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   };
 
   const handleOpenTipHistory = () => {
+    console.log('handleOpenTipHistory', post);
     onOpenTipHistory(post);
   };
 
