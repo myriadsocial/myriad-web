@@ -8,7 +8,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderRadius: 5,
     },
     media: {
-      height: 140,
+      height: 240,
     },
   }),
 );

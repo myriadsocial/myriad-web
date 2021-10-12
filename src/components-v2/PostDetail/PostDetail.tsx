@@ -204,7 +204,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           )}
         </ShowIf>
 
-        {post.embeddedURL && <LinkPreview url={post.embeddedURL} />}
+        {post.embeddedURL && <LinkPreview embed={post.embeddedURL} />}
       </div>
 
       <div className={styles.action}>
@@ -224,7 +224,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           variant={ButtonVariant.OUTLINED}
           color={ButtonColor.SECONDARY}
           size={ButtonSize.SMALL}
-          className={styles.sendTips}>
+          className={styles.sendTips}
+        >
           Send Tip
         </Button>
       </div>
