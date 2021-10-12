@@ -1,11 +1,9 @@
 import {BalanceDetail} from '../interfaces/balance';
 import {BaseModel} from './base.interface';
 
-import {CurrencyId} from 'src/interfaces/currency';
+import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {Post} from 'src/interfaces/post';
 import {UserOnTransaction, User} from 'src/interfaces/user';
-
-//import {ContentType} from 'src/interfaces/wallet';
 
 export type TransactionProps = {
   hash: string;
