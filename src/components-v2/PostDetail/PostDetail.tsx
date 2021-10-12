@@ -148,6 +148,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     }
   };
 
+  console.log({owner});
+
   return (
     <Paper square className={styles.root}>
       <HeaderComponent
@@ -227,6 +229,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         />
 
         <Button
+          isDisabled={owner}
           onClick={handleSendTip}
           variant={ButtonVariant.OUTLINED}
           color={ButtonColor.SECONDARY}
