@@ -18,6 +18,10 @@ export interface TimelineState extends BasePaginationState {
   filter?: TimelineFilter;
   hasMore: boolean;
   posts: Post[];
+  tippedContent: {
+    contentType: string;
+    referenceId: string;
+  };
   walletDetails: WalletDetail[];
   post?: Post;
   interaction: {
@@ -31,6 +35,10 @@ const initalState: TimelineState = {
   sort: 'created',
   hasMore: false,
   posts: [],
+  tippedContent: {
+    contentType: '',
+    referenceId: '',
+  },
   walletDetails: [],
   meta: {
     currentPage: 1,
@@ -228,6 +236,16 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
         }),
         interaction: {
           downvoting: null,
+        },
+      };
+    }
+
+    case constants.SET_TIPPED_CONTENT: {
+      return {
+        ...state,
+        tippedContent: {
+          contentType: action.contentType,
+          referenceId: action.referenceId,
         },
       };
     }

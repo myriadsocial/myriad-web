@@ -3,6 +3,7 @@ import {TNode} from '@udecode/plate';
 import React, {useState} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
+import {useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
@@ -12,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import LinkifyComponent from '../../components/common/Linkify.component';
 import ShowIf from '../../components/common/show-if.component';
 import {Post} from '../../interfaces/post';
+import {setTippedContent} from '../../reducers/timeline/actions';
 import {PostRender} from '../PostEditor/PostRender';
 import {formatStringToNode} from '../PostEditor/formatter';
 import {Button, ButtonVariant, ButtonColor, ButtonSize} from '../atoms/Button';
@@ -48,7 +50,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const styles = useStyles();
   const router = useRouter();
 
-<<<<<<< HEAD
+  const dispatch = useDispatch();
+
   const {
     user,
     post,
@@ -62,10 +65,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   } = props;
   const tabs = useCommentTabs(post);
 
-=======
-  const {post} = props;
-  const tabs = useCommentTabs();
->>>>>>> 59dc8324 (MYR-870: init timeline)
   const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
   const [shoWcomment, setShowComment] = useState(false);
   const [viewContent, setViewContent] = useState(!post.isNSFW);
@@ -110,6 +109,9 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   const handleSendTip = () => {
     onSendTip(post);
+    const contentType = 'post';
+    const referenceId = post.id;
+    dispatch(setTippedContent(contentType, referenceId));
   };
 
   const handleDeletePost = () => {
@@ -229,8 +231,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           variant={ButtonVariant.OUTLINED}
           color={ButtonColor.SECONDARY}
           size={ButtonSize.SMALL}
-          className={styles.sendTips}
-        >
+          className={styles.sendTips}>
           Send Tip
         </Button>
       </div>
