@@ -1,6 +1,10 @@
 import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {Status} from '../interfaces/toaster';
+import {SimpleSendTipProps} from '../interfaces/transaction';
+import {showToaster} from '../reducers/toaster/actions';
+
 import _ from 'lodash';
 import {useTipSummaryHook} from 'src/components/tip-summary/use-tip-summary.hook';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
@@ -108,6 +112,75 @@ export const usePolkadotApi = () => {
     }
   };
 
+  const simplerSendTip = async (
+    {from, to, amount, currency, type, referenceId}: SimpleSendTipProps,
+    callback?: () => void,
+  ) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      setSignerLoading(true);
+
+      const txHash = await signAndSendExtrinsic(
+        {
+          from,
+          to,
+          value: amount,
+          currencyId: currency.id,
+          wsAddress: currency.rpcURL,
+        },
+        params => {
+          if (params.signerOpened) {
+            setSignerLoading(false);
+          }
+        },
+      );
+
+      if (_.isEmpty(txHash)) {
+        throw {
+          message: 'Cancelled',
+        };
+      }
+
+      if (txHash) {
+        // Record the transaction
+        await storeTransaction({
+          hash: txHash,
+          amount,
+          from,
+          to,
+          currencyId: currency.id,
+          // Optionals for Post or Comment
+          type: type === 'post' ? 'post' : 'comment',
+          referenceId,
+        });
+
+        //openTipSummaryForComment();
+
+        dispatch(
+          showToaster({
+            toasterStatus: Status.SUCCESS,
+            message: 'Tip sent!',
+          }),
+        );
+        callback && callback();
+      }
+    } catch (error) {
+      if (error.message === 'Cancelled') {
+        dispatch(
+          showToaster({
+            toasterStatus: Status.WARNING,
+            message: 'Transaction signing cancelled',
+          }),
+        );
+      }
+    } finally {
+      setLoading(false);
+      setSignerLoading(false);
+    }
+  };
+
   return {
     loadingBalance: balanceState.loading,
     loading,
@@ -115,5 +188,6 @@ export const usePolkadotApi = () => {
     error,
     load,
     sendTip,
+    simplerSendTip,
   };
 };
