@@ -4,12 +4,13 @@ import {BaseModel} from './base.interface';
 import {CurrencyId} from 'src/interfaces/currency';
 import {Post} from 'src/interfaces/post';
 import {UserOnTransaction, User} from 'src/interfaces/user';
-import {ContentType} from 'src/interfaces/wallet';
+
+//import {ContentType} from 'src/interfaces/wallet';
 
 export type TransactionProps = {
   hash: string;
   amount: number;
-  type?: ContentType;
+  type?: string;
   referenceId?: string;
   from: string;
   to: string;
@@ -19,7 +20,7 @@ export type TransactionProps = {
 export type SimpleSendTipProps = {
   from: string;
   to: string;
-  type?: ContentType;
+  type?: string;
   referenceId?: string;
   amount: number;
   currency: BalanceDetail;
