@@ -19,6 +19,7 @@ import {useStyles, TableCell} from '.';
 import {usePolkadotApi} from '../../hooks/use-polkadot-api.hook';
 import {BalanceDetail} from '../../interfaces/balance';
 import {RootState} from '../../reducers/';
+import {TimelineState} from '../../reducers/timeline/reducer';
 import {UserState} from '../../reducers/user/reducer';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
 import {Button, ButtonVariant} from '../atoms/Button';
@@ -40,6 +41,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
   const [url] = useState('https://myriad.social/');
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {tippedContent} = useSelector<RootState, TimelineState>(state => state.timelineState);
 
   const {simplerSendTip, isSignerLoading} = usePolkadotApi();
 
@@ -49,9 +51,6 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
     verifyTipAmount(tipAmount);
   }, [tipAmount]);
 
-  //useEffect(() => {
-  //handleSendTip(user.id, tippedUserId, verifiedTipAmount, selectedCurrency);
-  //}, [user, tippedUserId, verifiedTipAmount, selectedCurrency]);
   const [openSigner, setOpenSigner] = useState(false);
 
   useEffect(() => {
@@ -120,14 +119,25 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
   };
 
   const handleSendTip = () => {
-    const sendTipPayload = {
-      from: user.id,
-      to: tippedUserId,
-      amount: Number(verifiedTipAmount),
-      currency: selectedCurrency,
-    };
-
-    simplerSendTip(sendTipPayload);
+    if (tippedContent.contentType.length > 0) {
+      const sendTipForContentPayload = {
+        from: user.id,
+        to: tippedUserId,
+        type: tippedContent.contentType,
+        referenceId: tippedContent.referenceId,
+        amount: Number(verifiedTipAmount),
+        currency: selectedCurrency,
+      };
+      simplerSendTip(sendTipForContentPayload);
+    } else {
+      const sendTipDirectToUserPayload = {
+        from: user.id,
+        to: tippedUserId,
+        amount: Number(verifiedTipAmount),
+        currency: selectedCurrency,
+      };
+      simplerSendTip(sendTipDirectToUserPayload);
+    }
 
     setOpenSigner(false);
   };
@@ -280,7 +290,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
               isDisabled={verifiedTipAmount.length === 0}
               variant={ButtonVariant.CONTAINED}
               onClick={triggerSignTransactionWithExtension}>
-              {isSignerLoading ? <CircularProgress /> : 'Send my tips'}
+              {isSignerLoading ? <CircularProgress style={{color: 'white'}} /> : 'Send my tips'}
             </Button>
           </div>
         </form>
