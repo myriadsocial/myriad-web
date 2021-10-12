@@ -31,14 +31,23 @@ export const useStyles = makeStyles((theme: Theme) =>
     item: {
       marginBottom: theme.spacing(0.5),
       paddingRight: theme.spacing(0.5),
+      position: 'relative',
 
       '& .MuiListItemText-root': {
         alignSelf: 'center',
       },
     },
+    circle: {
+      background: theme.palette.primary.main,
+      borderRadius: '50%',
+      width: 20,
+      height: 20,
+      textAlign: 'center',
+    },
     avatar: {
       width: '50px',
       height: '50px',
+      marginRight: 10,
     },
   }),
 );
