@@ -1,4 +1,4 @@
-import {CheckIcon, ChatAlt2Icon, PlusIcon} from '@heroicons/react/solid';
+import {CheckIcon, ChatAlt2Icon, PlusIcon, ExclamationCircleIcon} from '@heroicons/react/solid';
 
 import React from 'react';
 
@@ -67,7 +67,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
           avatar: notification.fromUserId.profilePictureURL,
           description: (
             <Typography component="span">
-              Commented on your &nbsp;
+              Commented on your&nbsp;
               <Link href={`/post/${notification.referenceId}`}>
                 <a href={`/post/${notification.referenceId}`} className={style.link}>
                   Post
@@ -81,6 +81,52 @@ export const useNotificationList = (notifications: Notification[]): Notification
                 component={ChatAlt2Icon}
                 viewBox="-4 -4 34 34"
                 style={{fill: 'currentColor', color: '#FFF'}}
+              />
+            </div>
+          ),
+          createdAt: notification.createdAt,
+        };
+        break;
+      case NotificationType.REPORT_POST:
+        return {
+          id: notification.id,
+          user: notification.fromUserId.name,
+          avatar: notification.fromUserId.profilePictureURL,
+          description: (
+            <Typography component="span">
+              Somebody reported your&nbsp;
+              <Link href={`/post/${notification.referenceId}`}>
+                <a href={`/post/${notification.referenceId}`} className={style.link}>
+                  Post
+                </a>
+              </Link>
+              &nbsp;as a violance
+            </Typography>
+          ),
+          badge: (
+            <div className={style.circleError}>
+              <SvgIcon
+                component={ExclamationCircleIcon}
+                style={{color: '#FFF', fill: 'currentColor'}}
+                viewBox="-4 -4 34 34"
+              />
+            </div>
+          ),
+          createdAt: notification.createdAt,
+        };
+        break;
+      case NotificationType.REPORT_USER:
+        return {
+          id: notification.id,
+          user: notification.fromUserId.name,
+          avatar: notification.fromUserId.profilePictureURL,
+          description: 'Somebody reported your account as a violance',
+          badge: (
+            <div className={style.circleError}>
+              <SvgIcon
+                component={ExclamationCircleIcon}
+                style={{color: '#FFF', fill: 'currentColor'}}
+                viewBox="-4 -4 34 34"
               />
             </div>
           ),
