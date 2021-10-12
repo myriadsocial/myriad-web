@@ -163,6 +163,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             </ShowIf>
 
             <Button
+              disabled={owner}
               classes={{root: style.button}}
               size="small"
               variant="text"
