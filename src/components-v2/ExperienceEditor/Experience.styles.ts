@@ -35,6 +35,18 @@ export const useStyles = makeStyles((theme: Theme) =>
     preview: {
       marginBottom: 30,
 
+      '& .MuiListItem-container': {
+        '& .MuiListItemSecondaryAction-root': {
+          display: 'none',
+        },
+
+        '&:hover': {
+          '& .MuiListItemSecondaryAction-root': {
+            display: 'block',
+          },
+        },
+      },
+
       '& .MuiListItem-root:hover': {
         backgroundColor: alpha('#FFC857', 0.15),
 
