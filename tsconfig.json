@@ -31,11 +31,7 @@
   "exclude": ["node_modules", "./src/helpers/polkadotApi.js"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "paths": {
-    "@interfaces/*": [
-      "src/interfaces/*"
-    ],
-    "@components/*": [
-      "src/components-v2/*"
-    ],
-  },
+    "@interfaces/*": ["src/interfaces/*"],
+    "@components/*": ["src/components-v2/*"]
+  }
 }

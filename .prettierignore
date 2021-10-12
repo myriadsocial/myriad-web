@@ -1,6 +1,11 @@
 .maintain/kubernetes
 .next/
+.github/
+.storybook/
 dist/
+storybook-static/
+docs/
+src/lottie/
 node_modules/
 /public/sw-env.js
 *.tsbuildinfo
