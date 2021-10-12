@@ -14,6 +14,7 @@ import {PolkadotAccountList} from '../PolkadotAccountList';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {RootState} from 'src/reducers';
+import {countNewNotification} from 'src/reducers/notification/actions';
 import {NotificationState} from 'src/reducers/notification/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 import {Prompt} from 'src/stories/Prompt.stories';
@@ -36,6 +37,10 @@ export const ProfileHeaderContainer: React.FC = () => {
       getAvailableAccounts();
     }
   }, [extensionInstalled]);
+
+  useEffect(() => {
+    countNewNotification();
+  }, []);
 
   const checkExtensionInstalled = async () => {
     const installed = await enablePolkadotExtension();
