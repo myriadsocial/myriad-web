@@ -73,8 +73,7 @@ export const Notifications: React.FC<NotificationsProps> = props => {
           dataLength={notifications.length}
           hasMore={hasMore}
           next={onLoadNextPage}
-          loader={<Lottie options={lottieLoading} height={50} width={50} />}
-        >
+          loader={<Lottie options={lottieLoading} height={50} width={50} />}>
           {list.map(notification => {
             return (
               <ListItem key={notification.id} className={style.item} alignItems="center">

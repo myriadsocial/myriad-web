@@ -10,7 +10,7 @@ import {upvote, setDownvoting, deletePost} from '../../reducers/timeline/actions
 import {ReportContainer} from '../Report';
 import {SendTipContainer} from '../SendTip';
 import {TimelineFilterContainer} from '../TimelineFilter';
-import {TipHistory} from '../TipHistory';
+import {TipHistoryContainer} from '../TipHistory';
 import {Modal} from '../atoms/Modal';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {useTimelineFilter} from './hooks/use-timeline-filter.hook';
@@ -38,16 +38,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const {posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
   const {filterTimeline} = useTimelineFilter(filters);
   const {query} = useQueryParams();
-  const {
-    isTipHistoryOpen,
-    tipHistoryReference,
-    currencies,
-    transactions,
-    closeTipHistory,
-    handleFilterTransaction,
-    handleSortTransaction,
-    openTipHistory,
-  } = useTipHistory();
+  const {openTipHistory} = useTipHistory();
   const {openToaster} = useToasterHook();
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
@@ -69,14 +60,11 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     dispatch(setDownvoting(reference));
   };
 
-  const handleSendTip = (post?: Post) => {
-    if (post) {
-      setTippedPost(post);
-      getTippedUserId(post.id);
-    }
-
-    if (tipHistoryReference) {
-      setTippedPost(tipHistoryReference as Post);
+  const handleSendTip = (reference?: Post | Comment) => {
+    // type guard to check if reference is a Post object
+    if (reference && 'platform' in reference) {
+      setTippedPost(reference);
+      getTippedUserId(reference.id);
     }
   };
 
@@ -147,15 +135,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
         <SendTipContainer />
       </Modal>
 
-      <TipHistory
-        open={isTipHistoryOpen}
-        currencies={currencies}
-        tips={transactions}
-        sendTip={handleSendTip}
-        onClose={closeTipHistory}
-        onSort={handleSortTransaction}
-        onFilter={handleFilterTransaction}
-      />
+      <TipHistoryContainer onSendTip={handleSendTip} />
 
       <ReportContainer reference={reported} onClose={closeReportPost} />
 
