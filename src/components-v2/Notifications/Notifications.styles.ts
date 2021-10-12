@@ -44,6 +44,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: 20,
       textAlign: 'center',
     },
+    circleError: {
+      background: '#FE3333',
+      borderRadius: '50%',
+      width: 20,
+      height: 20,
+      textAlign: 'center',
+    },
     avatar: {
       width: '50px',
       height: '50px',
