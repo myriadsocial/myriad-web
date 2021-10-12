@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -10,6 +10,8 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 
 import {acronym} from '../../../helpers/string';
+import {setTippedContent} from '../../../reducers/timeline/actions';
+import {setTippedUserId} from '../../../reducers/wallet/actions';
 import {CommentEditor} from '../CommentEditor';
 import {CommentList} from '../CommentList';
 import {ReadMore} from '../ReadMore/ReadMore';
@@ -35,6 +37,8 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
     onReport,
     onSendTip,
   } = props;
+
+  const dispatch = useDispatch();
 
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
 
@@ -72,6 +76,10 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
 
   const handleSendTip = () => {
     onSendTip(comment);
+    dispatch(setTippedUserId(comment.userId));
+    const contentType = 'comment';
+    const referenceId = comment.id;
+    dispatch(setTippedContent(contentType, referenceId));
   };
 
   const getDate = (commentDate: Date) => {
