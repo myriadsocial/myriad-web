@@ -6,7 +6,7 @@ import {Transaction, TransactionDetail} from 'src/interfaces/transaction';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {RootState} from 'src/reducers';
 import {
-  setTippedPost,
+  setTippedReference,
   clearTippedContent,
   fetchTransactionHistory,
   fetchTransactionSummary,
@@ -34,13 +34,13 @@ type TipSummaryHookProps = {
 export const useTipSummaryHook = (): TipSummaryHookProps => {
   const dispatch = useDispatch();
 
-  const {loading, post, comment, show, summary, transactions, meta} = useSelector<
+  const {loading, reference, show, summary, transactions, meta} = useSelector<
     RootState,
     TipSummaryState
   >(state => state.tipSummaryState);
 
   const openTipSummary = (post: Post): void => {
-    dispatch(setTippedPost(post));
+    dispatch(setTippedReference(post));
     dispatch(fetchTransactionSummary(post));
   };
 
@@ -79,8 +79,8 @@ export const useTipSummaryHook = (): TipSummaryHookProps => {
   return {
     meta,
     show,
-    post,
-    comment,
+    post: reference && 'platform' in reference ? reference : null,
+    comment: reference && 'platform' in reference ? null : reference,
     summary,
     transactions,
     loadTransaction,
