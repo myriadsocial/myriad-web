@@ -8,12 +8,15 @@ import {
 import {DotsVerticalIcon} from '@heroicons/react/solid';
 
 import React from 'react';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import {Friend, FriendStatus} from '../../../interfaces/friend';
@@ -22,6 +25,7 @@ import {useStyles} from './profile-header.style';
 
 import {format} from 'date-fns';
 import millify from 'millify';
+import {Status, Toaster} from 'src/components-v2/atoms/Toaster';
 import ShowIf from 'src/components/common/show-if.component';
 
 export type Props = {
@@ -34,7 +38,10 @@ export type Props = {
   onDeclineRequest: () => void;
   onSendTip: () => void;
   onEdit?: () => void;
+  linkUrl: string;
 };
+
+const background = 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png';
 
 export const ProfileHeaderComponent: React.FC<Props> = props => {
   const {
@@ -46,8 +53,32 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     onEdit,
     onSendRequest,
     onSendTip,
+    linkUrl,
   } = props;
   const style = useStyles();
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorElFriend, setAnchorElFriend] = React.useState<null | HTMLElement>(null);
+  const [linkCopied, setLinkCopied] = React.useState(false);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setAnchorElFriend(null);
+  };
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (status?.status === FriendStatus.APPROVED) {
+      e.stopPropagation();
+      setAnchorEl(e.currentTarget);
+    }
+  };
+
+  const handleClickOption = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (status?.status === FriendStatus.APPROVED) {
+      e.stopPropagation();
+      setAnchorElFriend(e.currentTarget);
+    }
+  };
 
   const formatNumber = (num: number) => {
     const vote = millify(num, {
@@ -66,10 +97,23 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     if (onEdit) onEdit();
   };
 
+  const handleLinkCopied = () => {
+    handleClose();
+    setLinkCopied(true);
+  };
+
+  const handleCloseLinkCopied = () => {
+    setLinkCopied(false);
+  };
+
   return (
     <div>
       <div className={style.root}>
-        <CardMedia className={style.media} image={user.bannerImageUrl} title={user.name} />
+        <CardMedia
+          className={style.media}
+          image={user.bannerImageUrl || background}
+          title={user.name}
+        />
         <div className={style.screen} />
 
         <div className={style.flex}>
@@ -90,9 +134,37 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             </div>
           </div>
           {!selfProfile && (
-            <IconButton classes={{root: style.action}} aria-label="profile-setting">
-              <SvgIcon component={DotsVerticalIcon} viewBox="0 0 20 20" />
-            </IconButton>
+            <>
+              <IconButton
+                onClick={handleClick}
+                classes={{root: style.action}}
+                aria-label="profile-setting">
+                <SvgIcon
+                  classes={{root: style.solid}}
+                  component={DotsVerticalIcon}
+                  viewBox="0 0 20 20"
+                />
+              </IconButton>
+              <Menu
+                classes={{
+                  paper: style.menu,
+                }}
+                anchorEl={anchorEl}
+                getContentAnchorEl={null}
+                anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+                transformOrigin={{vertical: 'top', horizontal: 'right'}}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}>
+                <MenuItem disabled>Message</MenuItem>
+                <CopyToClipboard text={linkUrl} onCopy={handleLinkCopied}>
+                  <MenuItem>Copy link profile</MenuItem>
+                </CopyToClipboard>
+                <MenuItem disabled>Mute account</MenuItem>
+                <MenuItem disabled className={style.delete}>
+                  Report account
+                </MenuItem>
+              </Menu>
+            </>
           )}
         </div>
         <Typography className={`${style.username} ${style.mt22}`} component="p">
@@ -186,6 +258,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
 
               <ShowIf condition={Boolean(status)}>
                 <Button
+                  onClick={handleClickOption}
                   startIcon={
                     <SvgIcon
                       classes={{root: style.fill}}
@@ -201,6 +274,21 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                   <ShowIf condition={status?.status === FriendStatus.APPROVED}>Friend</ShowIf>
                   <ShowIf condition={status?.status === FriendStatus.PENDING}>Requested</ShowIf>
                 </Button>
+                <Menu
+                  classes={{
+                    paper: style.menu,
+                  }}
+                  anchorEl={anchorElFriend}
+                  getContentAnchorEl={null}
+                  anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+                  transformOrigin={{vertical: 'top', horizontal: 'right'}}
+                  open={Boolean(anchorElFriend)}
+                  onClose={handleClose}>
+                  <MenuItem>Unfriend</MenuItem>
+                  <MenuItem disabled className={style.delete}>
+                    Block this person
+                  </MenuItem>
+                </Menu>
               </ShowIf>
 
               <Button
@@ -222,6 +310,13 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           </div>
         </div>
       </div>
+
+      <Toaster
+        open={linkCopied}
+        onClose={handleCloseLinkCopied}
+        toasterStatus={Status.SUCCESS}
+        message="Profile link copied!"
+      />
     </div>
   );
 };
