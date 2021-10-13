@@ -1,11 +1,13 @@
 import {Experience, Tag, UserExperience} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
+import {Status} from '../../interfaces/toaster';
 import * as ExperienceAPI from '../../lib/api/experience';
 import * as PeopleAPI from '../../lib/api/people';
 import * as TagAPI from '../../lib/api/tag';
 import {ThunkActionCreator} from '../../types/thunk';
 import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
+import {ShowToaster, showToaster} from '../toaster/actions';
 import * as constants from './constants';
 
 import {Action} from 'redux';
@@ -50,6 +52,7 @@ export type Actions =
   | SearchExperience
   | SearchPeople
   | SearchTags
+  | ShowToaster
   | BaseAction;
 
 /**
@@ -242,7 +245,8 @@ export const searchTags: ThunkActionCreator<Actions, RootState> =
   };
 
 export const createExperience: ThunkActionCreator<Actions, RootState> =
-  (experience: Experience, newTags: string[]) => async (dispatch, getState) => {
+  (experience: Experience, newTags: string[], callback?: (id: string) => void) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
       const {
@@ -253,8 +257,16 @@ export const createExperience: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      await ExperienceAPI.createExperience(user.id, experience);
-      fetchExperience();
+      const newExperience = await ExperienceAPI.createExperience(user.id, experience);
+
+      callback && callback(newExperience.id);
+
+      await dispatch(
+        showToaster({
+          toasterStatus: Status.SUCCESS,
+          message: 'Experience succesfully created!',
+        }),
+      );
     } catch (error) {
       dispatch(
         setError({
@@ -291,7 +303,8 @@ export const subscribeExperience: ThunkActionCreator<Actions, RootState> =
   };
 
 export const updateExperience: ThunkActionCreator<Actions, RootState> =
-  (experienceId: string, experience: Experience) => async (dispatch, getState) => {
+  (experienceId: string, experience: Experience, callback?: (id: string) => void) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
       const {
@@ -303,6 +316,42 @@ export const updateExperience: ThunkActionCreator<Actions, RootState> =
       }
 
       await ExperienceAPI.updateExperience(user.id, experienceId, experience);
+      await fetchExperience();
+
+      callback && callback(experienceId);
+
+      await dispatch(
+        showToaster({
+          toasterStatus: Status.SUCCESS,
+          message: 'experience succesfully updated!',
+        }),
+      );
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const deleteExperience: ThunkActionCreator<Actions, RootState> =
+  (experienceId: string, callback?: () => void) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      await ExperienceAPI.deleteExperience(experienceId);
+
+      callback && callback();
     } catch (error) {
       dispatch(
         setError({

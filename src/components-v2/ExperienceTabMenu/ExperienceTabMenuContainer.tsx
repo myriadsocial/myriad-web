@@ -9,8 +9,9 @@ import {useQueryParams} from '../../hooks/use-query-params.hooks';
 import {TimelineType} from '../../interfaces/timeline';
 import {ExperienceTabMenu} from './ExperienceTabMenu';
 
-import {Experience} from 'src/interfaces/experience';
+import {Experience, UserExperience} from 'src/interfaces/experience';
 import {RootState} from 'src/reducers';
+import {ProfileState} from 'src/reducers/profile/reducer';
 import {updateFilter} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -28,14 +29,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const ExperienceTabMenuContainer: React.FC = () => {
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
+  const {detail: profile} = useSelector<RootState, ProfileState>(state => state.profileState);
   const style = useStyles();
+  const [toggle, setToggle] = useState<string>('');
 
   const dispatch = useDispatch();
   const {push} = useQueryParams();
 
   // Only load experiences specific to logged user
-  const {loadExperience, experiences} = useExperienceHook();
-  const [myExperience, setMyExperience] = useState(experiences);
+  const {loadExperience, experiences, removeExperience} = useExperienceHook();
+  const [myExperience, setMyExperience] = useState<UserExperience[]>([]);
 
   useEffect(() => {
     //TODO: move this to app level to avoid refetching
@@ -44,7 +47,7 @@ export const ExperienceTabMenuContainer: React.FC = () => {
 
   useEffect(() => {
     setMyExperience(experiences);
-  }, [experiences]);
+  }, [experiences, toggle]);
 
   const handleFilterTimeline = (type: TimelineType, experience: Experience) => {
     dispatch(
@@ -57,8 +60,17 @@ export const ExperienceTabMenuContainer: React.FC = () => {
     push('type', type);
   };
 
+  const statusProfile = () => {
+    if (profile && user) {
+      if (profile.id == user.id) {
+        return true;
+      }
+    }
+  };
+
   const handleFilterExperience = (sort: string) => {
     let sortExperience;
+    setToggle(sort);
     switch (sort) {
       case 'all':
         sortExperience = myExperience.sort((a, b) => {
@@ -66,7 +78,6 @@ export const ExperienceTabMenuContainer: React.FC = () => {
           if (a.experience.createdAt > b.experience.createdAt) return -1;
           return 0;
         });
-        console.log(sortExperience);
         setMyExperience(sortExperience);
         break;
       case 'latest':
@@ -75,7 +86,6 @@ export const ExperienceTabMenuContainer: React.FC = () => {
           if (a.experience.createdAt > b.experience.createdAt) return 1;
           return 0;
         });
-        console.log(sortExperience);
         setMyExperience(sortExperience);
         break;
       case 'aToZ':
@@ -84,12 +94,17 @@ export const ExperienceTabMenuContainer: React.FC = () => {
           if (a.experience.name > b.experience.name) return 1;
           return 0;
         });
-        console.log(sortExperience);
         setMyExperience(sortExperience);
         break;
       default:
         break;
     }
+  };
+
+  const handleRemoveExperience = (experienceId: string) => {
+    removeExperience(experienceId, () => {
+      loadExperience();
+    });
   };
 
   if (anonymous)
@@ -108,6 +123,8 @@ export const ExperienceTabMenuContainer: React.FC = () => {
       filterExperience={handleFilterExperience}
       experiences={myExperience}
       user={user}
+      onDelete={handleRemoveExperience}
+      profileStatus={statusProfile()}
     />
   );
 };
