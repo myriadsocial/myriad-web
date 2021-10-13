@@ -70,6 +70,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 700,
       lineHeight: '20.08px',
     },
+    solid: {
+      fill: 'currentColor',
+    },
     action: {
       background: 'rgba(115, 66, 204, 0.2)',
       padding: '8px',
@@ -114,6 +117,13 @@ export const useStyles = makeStyles((theme: Theme) =>
     text: {
       display: 'inline-block',
       marginRight: '20px',
+    },
+    menu: {
+      borderRadius: '10px',
+      marginTop: '8px',
+    },
+    delete: {
+      color: '#FE3636',
     },
   }),
 );

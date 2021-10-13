@@ -5,8 +5,8 @@ import {ProfileHeaderComponent} from '.';
 import {User} from '../../../interfaces/user';
 import {setTippedUserId} from '../../../reducers/wallet/actions';
 import {SendTipContainer} from '../../SendTip/';
-import {Modal} from '../../atoms/Modal/';
 
+import {Modal} from 'src/components-v2/atoms/Modal';
 import {useFriendHook} from 'src/components/profile/use-profile-friend.hook';
 import {RootState} from 'src/reducers';
 import {ProfileState} from 'src/reducers/profile/reducer';
@@ -36,6 +36,13 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const sendTipOpened = Boolean(tippedUser);
 
   const isOwnProfile = profile?.id === user?.id;
+
+  const urlLink = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.origin;
+    }
+    return '';
+  };
 
   useEffect(() => {
     if (profile) {
@@ -80,6 +87,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
         onDeclineRequest={declineFriendRequest}
         onSendTip={handleSendTip}
         onEdit={edit}
+        linkUrl={`${urlLink()}/profile/${profile.id}`}
       />
       <Modal
         gutter="none"
