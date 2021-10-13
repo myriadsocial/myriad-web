@@ -131,12 +131,17 @@ export const updateExperience = async (
   });
 };
 
-export const createExperience = async (userId: string, experience: Experience): Promise<void> => {
-  await MyriadAPI.request<Experience>({
+export const createExperience = async (
+  userId: string,
+  experience: Experience,
+): Promise<Experience> => {
+  const {data} = await MyriadAPI.request<Experience>({
     url: `/users/${userId}/new-experiences`,
     method: 'POST',
     data: experience,
   });
+
+  return data;
 };
 
 export const getExperience = async (experienceId: string): Promise<Experience> => {
@@ -150,5 +155,13 @@ export const getExperience = async (experienceId: string): Promise<Experience> =
     },
   });
 
+  return data;
+};
+
+export const deleteExperience = async (experienceId: string): Promise<Experience> => {
+  const {data} = await MyriadAPI.request<Experience>({
+    url: `/user-experiences/${experienceId}`,
+    method: 'DELETE',
+  });
   return data;
 };

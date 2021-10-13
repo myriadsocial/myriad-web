@@ -15,6 +15,8 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
   isOnHomePage = false,
   user,
   filterTimeline,
+  onDelete,
+  profileStatus,
 }) => {
   const classes = useStyles();
   const [selected, setSelected] = useState(false);
@@ -39,11 +41,14 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
             title={item.experience.name}
             creator={item.experience.user.name}
             imgUrl={item.experience.experienceImageURL || ''}
+            experienceId={item.experienceId}
+            userExperienceId={item.id}
             isSelectable={isOnHomePage}
+            onDelete={onDelete}
           />
         </div>
       ))}
-      {!experiences.length && (
+      {!experiences.length && profileStatus && (
         <div className={classes.empty}>
           <Typography className={classes.title} component="p">
             Uh-oh!
