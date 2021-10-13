@@ -137,34 +137,37 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
                 onClick={handleOpenReply}
                 classes={{root: style.button}}
                 size="small"
-                variant="text"
-              >
+                variant="text">
                 Reply
               </Button>
             )}
+
+            {
+              // hide button if it's owner's post or balance is not yet loaded
+            }
+            {owner || balanceDetails.length === 0 ? (
+              <></>
+            ) : (
+              <Button
+                classes={{root: style.button}}
+                size="small"
+                variant="text"
+                onClick={handleSendTip}>
+                Send tip
+              </Button>
+            )}
             <Button
-              disabled={owner || balanceDetails.length === 0}
               classes={{root: style.button}}
               size="small"
               variant="text"
-              onClick={handleSendTip}
-            >
-              Send tip
-            </Button>
-            <Button
-              classes={{root: style.button}}
-              size="small"
-              variant="text"
-              onClick={handleOpenTipHistory}
-            >
+              onClick={handleOpenTipHistory}>
               Tip history
             </Button>
             <Button
               classes={{root: style.button}}
               size="small"
               variant="text"
-              onClick={handleReport}
-            >
+              onClick={handleReport}>
               Report
             </Button>
           </CardActions>
