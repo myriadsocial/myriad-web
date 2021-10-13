@@ -9,6 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 
+import ShowIf from '../../../components/common/show-if.component';
 import {acronym} from '../../../helpers/string';
 import {setTippedContent} from '../../../reducers/timeline/actions';
 import {setTippedUserId} from '../../../reducers/wallet/actions';
@@ -137,7 +138,8 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
                 onClick={handleOpenReply}
                 classes={{root: style.button}}
                 size="small"
-                variant="text">
+                variant="text"
+              >
                 Reply
               </Button>
             )}
@@ -145,29 +147,35 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             {
               // hide button if it's owner's post or balance is not yet loaded
             }
-            {owner || balanceDetails.length === 0 ? (
+            <ShowIf condition={owner || balanceDetails.length === 0}>
               <></>
-            ) : (
+            </ShowIf>
+
+            <ShowIf condition={!owner}>
               <Button
                 classes={{root: style.button}}
                 size="small"
                 variant="text"
-                onClick={handleSendTip}>
+                onClick={handleSendTip}
+              >
                 Send tip
               </Button>
-            )}
+            </ShowIf>
+
             <Button
               classes={{root: style.button}}
               size="small"
               variant="text"
-              onClick={handleOpenTipHistory}>
+              onClick={handleOpenTipHistory}
+            >
               Tip history
             </Button>
             <Button
               classes={{root: style.button}}
               size="small"
               variant="text"
-              onClick={handleReport}>
+              onClick={handleReport}
+            >
               Report
             </Button>
           </CardActions>
