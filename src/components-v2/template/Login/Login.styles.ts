@@ -8,7 +8,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: '100vh',
     },
     paper: {
-      minHeight: '768px',
+      height: '100vh',
       padding: theme.spacing(2),
       color: theme.palette.text.secondary,
       backgroundColor: theme.palette.background.paper,
