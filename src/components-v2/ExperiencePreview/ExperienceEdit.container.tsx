@@ -27,7 +27,9 @@ export const ExperienceEditContainer: React.FC = () => {
   };
 
   const onSave = (newExperience: Partial<Experience>, newTags: string[]) => {
-    updateExperience(newExperience, newTags);
+    updateExperience(newExperience, newTags, (experienceId: string) => {
+      router.push(`/experience/${experienceId}/preview`);
+    });
   };
 
   const handleSearchTags = debounce((query: string) => {
