@@ -13,16 +13,24 @@ interface ExperienceTabMenuProps {
   user?: User;
   filterTimeline: (type: TimelineType, experience: Experience) => void;
   filterExperience: (sort: string) => void;
+  onDelete: (experienceId: string) => void;
+  profileStatus?: boolean;
 }
 
 export const ExperienceTabMenu: React.FC<ExperienceTabMenuProps> = props => {
-  const {experiences, user, filterTimeline, filterExperience} = props;
+  const {experiences, user, filterTimeline, filterExperience, onDelete, profileStatus} = props;
 
   return (
     <>
       <Typography variant={'h4'}>Experience</Typography>
       <HeaderWithAction filter={filterExperience} actionText={'+ Create experience'} />
-      <ExperienceList filterTimeline={filterTimeline} experiences={experiences} user={user} />
+      <ExperienceList
+        onDelete={onDelete}
+        filterTimeline={filterTimeline}
+        experiences={experiences}
+        user={user}
+        profileStatus={profileStatus}
+      />
     </>
   );
 };
