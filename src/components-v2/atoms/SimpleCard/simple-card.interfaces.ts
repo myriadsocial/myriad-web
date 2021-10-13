@@ -22,7 +22,7 @@ interface SimpleCardProps {
   onSubscribe?: (experienceId: string) => void;
   onFollow?: (experienceId: string) => void;
   onPreview?: (experienceId: string) => void;
-  onDelete: (experienceId: string) => void;
+  onDelete?: (experienceId: string) => void;
 }
 
 export type {SimpleCardProps};

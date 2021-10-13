@@ -75,6 +75,7 @@ const ProfilePage = (): JSX.Element => {
               onSendTip={console.log}
               totalExperience={0}
               totalFriends={0}
+              linkUrl={''}
             />
           </div>
           <div style={{width: '100%'}}>
