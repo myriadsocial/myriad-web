@@ -3,7 +3,7 @@ import {TNode} from '@udecode/plate';
 import React, {useState} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
-import {useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
@@ -13,6 +13,9 @@ import Paper from '@material-ui/core/Paper';
 import LinkifyComponent from '../../components/common/Linkify.component';
 import ShowIf from '../../components/common/show-if.component';
 import {Post} from '../../interfaces/post';
+import {User} from '../../interfaces/user';
+import {RootState} from '../../reducers';
+import {BalanceState} from '../../reducers/balance/reducer';
 import {setTippedContent} from '../../reducers/timeline/actions';
 import {PostRender} from '../PostEditor/PostRender';
 import {formatStringToNode} from '../PostEditor/formatter';
@@ -31,7 +34,6 @@ import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
 import {LinkPreview} from 'src/components-v2/atoms/LinkPreview';
 import {Comment} from 'src/interfaces/comment';
-import {User} from 'src/interfaces/user';
 
 type PostDetailProps = {
   user?: User;
@@ -47,6 +49,8 @@ type PostDetailProps = {
 };
 
 export const PostDetail: React.FC<PostDetailProps> = props => {
+  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
+
   const styles = useStyles();
   const router = useRouter();
 
@@ -227,15 +231,21 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           onShared={handleShareLink}
         />
 
-        <Button
-          isDisabled={owner}
-          onClick={handleSendTip}
-          variant={ButtonVariant.OUTLINED}
-          color={ButtonColor.SECONDARY}
-          size={ButtonSize.SMALL}
-          className={styles.sendTips}>
-          Send Tip
-        </Button>
+        {
+          // hide button if it's owner's post or balance is not yet loaded
+        }
+        {owner || balanceDetails.length === 0 ? (
+          <></>
+        ) : (
+          <Button
+            onClick={handleSendTip}
+            variant={ButtonVariant.OUTLINED}
+            color={ButtonColor.SECONDARY}
+            size={ButtonSize.SMALL}
+            className={styles.sendTips}>
+            Send Tip
+          </Button>
+        )}
       </div>
 
       <ShowIf condition={shoWcomment}>
