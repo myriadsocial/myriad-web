@@ -29,6 +29,10 @@ export interface LoadDetailExperience extends Action {
   type: constants.FETCH_DETAIL_EXPERIENCE;
   experience: Experience;
 }
+export interface SearchAllRelatedExperiences extends PaginationAction {
+  type: constants.SEARCH_ALL_RELATED_EXPERIENCES;
+  experiences: Experience[];
+}
 export interface SearchExperience extends PaginationAction {
   type: constants.SEARCH_EXPERIENCE;
   experiences: UserExperience[];
@@ -50,6 +54,7 @@ export type Actions =
   | LoadExperience
   | LoadDetailExperience
   | SearchExperience
+  | SearchAllRelatedExperiences
   | SearchPeople
   | SearchTags
   | ShowToaster
@@ -170,6 +175,37 @@ export const cloneExperience: ThunkActionCreator<Actions, RootState> =
           message: 'Experience succesfully cloned!',
         }),
       );
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const searchAllRelatedExperiences: ThunkActionCreator<Actions, RootState> =
+  (query: string) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const {meta, data: experiences} = await ExperienceAPI.searchExperiencesByQuery(query);
+
+      dispatch({
+        type: constants.SEARCH_ALL_RELATED_EXPERIENCES,
+        experiences,
+        meta,
+      });
     } catch (error) {
       dispatch(
         setError({
