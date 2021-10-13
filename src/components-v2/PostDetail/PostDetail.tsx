@@ -234,18 +234,21 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         {
           // hide button if it's owner's post or balance is not yet loaded
         }
-        {owner || balanceDetails.length === 0 ? (
+        <ShowIf condition={owner || balanceDetails.length === 0}>
           <></>
-        ) : (
+        </ShowIf>
+
+        <ShowIf condition={!owner}>
           <Button
             onClick={handleSendTip}
             variant={ButtonVariant.OUTLINED}
             color={ButtonColor.SECONDARY}
             size={ButtonSize.SMALL}
-            className={styles.sendTips}>
+            className={styles.sendTips}
+          >
             Send Tip
           </Button>
-        )}
+        </ShowIf>
       </div>
 
       <ShowIf condition={shoWcomment}>
