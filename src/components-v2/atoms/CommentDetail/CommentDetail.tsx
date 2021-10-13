@@ -147,15 +147,22 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             {
               // hide button if it's owner's post or balance is not yet loaded
             }
+<<<<<<< HEAD
             <ShowIf condition={owner || balanceDetails.length === 0}>
               <></>
             </ShowIf>
 
             <ShowIf condition={!owner}>
+=======
+            {owner || balanceDetails.length === 0 ? (
+              <></>
+            ) : (
+>>>>>>> b653e666 (MYR-838: removed send tip button if no balance loaded / owner)
               <Button
                 classes={{root: style.button}}
                 size="small"
                 variant="text"
+<<<<<<< HEAD
                 onClick={handleSendTip}
               >
                 Send tip
@@ -164,6 +171,13 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
 
             <Button
               disabled={owner}
+=======
+                onClick={handleSendTip}>
+                Send tip
+              </Button>
+            )}
+            <Button
+>>>>>>> b653e666 (MYR-838: removed send tip button if no balance loaded / owner)
               classes={{root: style.button}}
               size="small"
               variant="text"
