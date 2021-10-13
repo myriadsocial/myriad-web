@@ -29,14 +29,20 @@ const Home: React.FC = () => {
 
   const router = useRouter();
 
-  const changePageToSearchResult = () => {
-    router.push('/searchResult');
+  const performSearch = (query: string) => {
+    localStorage.setItem('searchQuery', query ?? '');
+
+    const DELAY = 2000;
+    setTimeout(() => {
+      // shallow push, without rerender page
+      router.push('/searchResult', undefined, {shallow: true});
+    }, DELAY);
   };
 
   return (
     <DefaultLayout isOnProfilePage={false}>
       <ToasterContainer />
-      <SearchBoxContainer onSubmitSearch={changePageToSearchResult} />
+      <SearchBoxContainer onSubmitSearch={performSearch} />
       <RichTextContainer />
       <TimelineContainer />
     </DefaultLayout>
