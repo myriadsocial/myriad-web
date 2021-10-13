@@ -1,7 +1,11 @@
-import React, {useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
 import {ProfileHeaderComponent} from '.';
+import {User} from '../../../interfaces/user';
+import {setTippedUserId} from '../../../reducers/wallet/actions';
+import {SendTipContainer} from '../../SendTip/';
+import {Modal} from '../../atoms/Modal/';
 
 import {useFriendHook} from 'src/components/profile/use-profile-friend.hook';
 import {RootState} from 'src/reducers';
@@ -24,7 +28,13 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   } = useSelector<RootState, ProfileState>(state => state.profileState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
 
+  const dispatch = useDispatch();
+
   const {friendStatus, makeFriend, checkFriendStatus, removeFriendRequest} = useFriendHook();
+
+  const [tippedUser, setTippedUser] = useState<User | null>(null);
+  const sendTipOpened = Boolean(tippedUser);
+
   const isOwnProfile = profile?.id === user?.id;
 
   useEffect(() => {
@@ -45,23 +55,40 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     removeFriendRequest(friendStatus);
   };
 
-  const handleSendTip = () => {
-    // code
+  if (!user) return null;
+
+  const closeSendTip = () => {
+    setTippedUser(null);
   };
 
   if (!profile) return null;
 
+  const handleSendTip = () => {
+    setTippedUser(profile);
+    dispatch(setTippedUserId(profile.id));
+  };
+
   return (
-    <ProfileHeaderComponent
-      user={profile}
-      selfProfile={isOwnProfile}
-      status={friendStatus}
-      totalFriends={totalFriends}
-      totalExperience={totalExperience}
-      onSendRequest={sendFriendReqest}
-      onDeclineRequest={declineFriendRequest}
-      onSendTip={handleSendTip}
-      onEdit={edit}
-    />
+    <>
+      <ProfileHeaderComponent
+        user={profile}
+        selfProfile={isOwnProfile}
+        status={friendStatus}
+        totalFriends={totalFriends}
+        totalExperience={totalExperience}
+        onSendRequest={sendFriendReqest}
+        onDeclineRequest={declineFriendRequest}
+        onSendTip={handleSendTip}
+        onEdit={edit}
+      />
+      <Modal
+        gutter="none"
+        open={sendTipOpened}
+        onClose={closeSendTip}
+        title="Send Tip"
+        subtitle="Finding this post is insightful? Send a tip!">
+        <SendTipContainer />
+      </Modal>
+    </>
   );
 };
