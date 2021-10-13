@@ -60,12 +60,13 @@ export const ExperienceTabMenuContainer: React.FC = () => {
     push('type', type);
   };
 
-  const statusProfile = () => {
+  const statusProfile = (): boolean | undefined => {
     if (profile && user) {
       if (profile.id == user.id) {
         return true;
       }
     }
+    return;
   };
 
   const handleFilterExperience = (sort: string) => {
