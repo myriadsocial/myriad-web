@@ -18,21 +18,7 @@ const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = 
 
   return (
     <div className={classes.root}>
-      {experiences.map(item => (
-        <div key={item.experience.id}>
-          <NonSelectableSimpleCard
-            user={user}
-            experienceId={item.experience.id}
-            title={item.experience.name}
-            creator={item.experience.user.name}
-            imgUrl={item.experience.experienceImageURL || ''}
-            onSubscribe={onSubscribe}
-            onFollow={onFollow}
-            onPreview={onPreview}
-          />
-        </div>
-      ))}
-      {!experiences.length && (
+      {experiences.length === 0 && (
         <div className={classes.empty}>
           <Typography className={classes.title} component="p">
             Uh-oh!
@@ -47,6 +33,21 @@ const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = 
           </Link>
         </div>
       )}
+      {experiences.length > 0 &&
+        experiences.map(experience => (
+          <div key={experience.id}>
+            <NonSelectableSimpleCard
+              user={user}
+              experienceId={experience.id}
+              title={experience.name}
+              creator={experience.user.name}
+              imgUrl={experience.experienceImageURL || ''}
+              onSubscribe={onSubscribe}
+              onFollow={onFollow}
+              onPreview={onPreview}
+            />
+          </div>
+        ))}
     </div>
   );
 };
