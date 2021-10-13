@@ -28,6 +28,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       fontWeight: 400,
     },
+    polkadot: {
+      color: 'rgb(255, 140, 0)',
+    },
     link: {
       padding: 0,
       fontSize: 18,

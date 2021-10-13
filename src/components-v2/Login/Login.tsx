@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
-import {Button, Typography} from '@material-ui/core';
+import {Button, Link, Typography} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
@@ -75,7 +75,18 @@ export const Login: React.FC = () => {
         icon="warning"
         open={signIn && !extensionInstalled}
         onCancel={toggleModal}
-        subtitle="Kindly check if you have Polkadot.js installed on your browser">
+        subtitle={
+          <Typography>
+            Kindly check if you have{' '}
+            <Link
+              href="https://polkadot.js.org/extension"
+              target="_blank"
+              className={styles.polkadot}>
+              Polkadot.js
+            </Link>{' '}
+            installed on your browser
+          </Typography>
+        }>
         <Button size="small" variant="contained" color="primary" onClick={toggleModal}>
           Close
         </Button>
