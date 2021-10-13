@@ -1,6 +1,5 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Lottie from 'react-lottie';
 
 import {Badge, Button, Grid, ListItemSecondaryAction} from '@material-ui/core';
 import List from '@material-ui/core/List';
@@ -11,11 +10,11 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import {Theme, withStyles, createStyles} from '@material-ui/core/styles';
 
-import LoadingAnimation from '../../lottie/loading.json';
 import {useStyles} from './Notifications.styles';
 import {useNotificationList} from './hooks/use-notification-list.hook';
 
 import {formatDistance, subDays} from 'date-fns';
+import {Loading} from 'src/components-v2/atoms/Loading';
 import {AvatarComponent} from 'src/components/common/Avatar.component';
 import {acronym} from 'src/helpers/string';
 import {Notification} from 'src/interfaces/notification';
@@ -46,15 +45,6 @@ export const Notifications: React.FC<NotificationsProps> = props => {
 
   const style = useStyles();
 
-  const lottieLoading = {
-    loop: true,
-    autoplay: true,
-    animationData: LoadingAnimation,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
-  };
-
   const list = useNotificationList(notifications);
 
   return (
@@ -73,7 +63,7 @@ export const Notifications: React.FC<NotificationsProps> = props => {
           dataLength={notifications.length}
           hasMore={hasMore}
           next={onLoadNextPage}
-          loader={<Lottie options={lottieLoading} height={50} width={50} />}>
+          loader={<Loading />}>
           {list.map(notification => {
             return (
               <ListItem key={notification.id} className={style.item} alignItems="center">

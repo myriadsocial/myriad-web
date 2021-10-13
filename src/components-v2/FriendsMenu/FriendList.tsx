@@ -1,6 +1,5 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Lottie from 'react-lottie';
 
 import Link from 'next/link';
 
@@ -11,8 +10,6 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
-import {acronym} from '../../helpers/string';
-import LoadingAnimation from '../../lottie/loading.json';
 import {FilterDropdownMenu} from '../atoms/FilterDropdownMenu';
 import SearchComponent from '../atoms/Search/SearchBox';
 import {friendFilterOptions, FriendType} from './default';
@@ -21,7 +18,9 @@ import {useStyles} from './friend.style';
 import {useFriendList} from './hooks/use-friend-list.hook';
 
 import {Empty} from 'src/components-v2/atoms/Empty';
+import {Loading} from 'src/components-v2/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
+import {acronym} from 'src/helpers/string';
 
 export const FriendListComponent: React.FC<FriendListProps> = props => {
   const {
@@ -37,15 +36,6 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   const style = useStyles();
 
   const list = useFriendList(friends, user);
-
-  const lottieLoading = {
-    loop: true,
-    autoplay: true,
-    animationData: LoadingAnimation,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
-  };
 
   const handleFilterSelected = (selected: string) => {
     onFilter(selected as FriendType);
@@ -79,7 +69,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
           dataLength={list.length}
           hasMore={hasMore}
           next={onLoadNextPage}
-          loader={<Lottie options={lottieLoading} height={50} width={50} />}>
+          loader={<Loading />}>
           {list.map(friend => (
             <ListItem
               key={friend.id}

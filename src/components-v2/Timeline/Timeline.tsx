@@ -1,13 +1,12 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Lottie from 'react-lottie';
 
-import {Post} from '../../interfaces/post';
-import LoadingAnimation from '../../lottie/loading.json';
 import {PostDetail} from '../PostDetail';
 import {useStyles} from './Timeline.styles';
 
+import {Loading} from 'src/components-v2/atoms/Loading';
 import {Comment} from 'src/interfaces/comment';
+import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 
 type TimelineProps = {
@@ -42,14 +41,6 @@ export const Timeline: React.FC<TimelineProps> = props => {
   } = props;
 
   const styles = useStyles();
-  const lottieLoading = {
-    loop: true,
-    autoplay: true,
-    animationData: LoadingAnimation,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
-  };
 
   return (
     <div className={styles.root}>
@@ -58,7 +49,7 @@ export const Timeline: React.FC<TimelineProps> = props => {
         dataLength={posts.length}
         hasMore={hasMore}
         next={loadNextPage}
-        loader={<Lottie options={lottieLoading} height={50} width={50} />}>
+        loader={<Loading />}>
         {posts.map(post => (
           <PostDetail
             user={user}
