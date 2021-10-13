@@ -80,8 +80,6 @@ export const searchExperiencesByQuery = async (query: string): Promise<Experienc
     },
   });
 
-  console.log({data, query});
-
   return data;
 };
 
