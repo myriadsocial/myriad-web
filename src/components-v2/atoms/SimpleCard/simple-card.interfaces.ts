@@ -25,7 +25,7 @@ interface SimpleCardProps {
   onSubscribe?: (experienceId: string) => void;
   onFollow?: (experienceId: string) => void;
   onPreview?: (experienceId: string) => void;
-  onDelete: (experienceId: string) => void;
+  onDelete?: (experienceId: string) => void;
 }
 
 type NonSelectableSimpleCardProps = Omit<SimpleCardProps, 'filterTimeline' | 'onClick'>;
