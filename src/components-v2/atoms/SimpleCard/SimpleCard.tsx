@@ -59,7 +59,7 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
   };
 
   const handleRemove = () => {
-    if (userExperienceId) onDelete(userExperienceId);
+    if (userExperienceId && onDelete) onDelete(userExperienceId);
     handleCancel();
     handleClose();
   };
