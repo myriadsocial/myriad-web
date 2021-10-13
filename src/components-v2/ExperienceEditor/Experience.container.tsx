@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {useRouter} from 'next/router';
+
 import {useExperienceHook} from '../../hooks/use-experience-hook';
 import {Experience} from '../../interfaces/experience';
 import {ExperienceEditor} from './ExperienceEditor';
@@ -8,10 +10,17 @@ import {debounce} from 'lodash';
 import {useImageUpload} from 'src/hooks/use-image-upload.hook';
 
 export const ExperienceContainer: React.FC = () => {
-  const {selectedExperience, saveExperience, searchTags, tags, searchPeople, people} =
-    useExperienceHook();
+  const {
+    selectedExperience,
+    saveExperience,
+    searchTags,
+    tags,
+    searchPeople,
+    people,
+    loadExperience,
+  } = useExperienceHook();
   const {uploadImage} = useImageUpload();
-
+  const router = useRouter();
   const onImageUpload = async (files: File[]) => {
     const url = await uploadImage(files[0]);
     if (url) return url;
@@ -19,7 +28,10 @@ export const ExperienceContainer: React.FC = () => {
   };
 
   const onSave = (newExperience: Partial<Experience>, newTags: string[]) => {
-    saveExperience(newExperience, newTags);
+    saveExperience(newExperience, newTags, (experienceId: string) => {
+      router.push(`/experience/${experienceId}/preview`);
+      loadExperience();
+    });
   };
 
   const handleSearchTags = debounce((query: string) => {
