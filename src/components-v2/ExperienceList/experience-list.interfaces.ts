@@ -11,7 +11,6 @@ interface ExperienceListProps {
   onFollow?: (experienceId: string) => void;
   onPreview?: (experienceId: string) => void;
   onDelete?: (experienceId: string) => void;
-  profileStatus?: boolean;
 }
 
 type NonSelectableExperienceListProps = Omit<

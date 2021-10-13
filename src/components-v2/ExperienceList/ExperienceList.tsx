@@ -1,9 +1,5 @@
 import React, {useState} from 'react';
 
-import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
-
 import {ExperienceListProps, useStyles} from '.';
 import {SimpleCard} from '../atoms/SimpleCard';
 
@@ -16,7 +12,6 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
   user,
   filterTimeline,
   onDelete,
-  profileStatus,
 }) => {
   const classes = useStyles();
   const [selected, setSelected] = useState(false);
@@ -48,21 +43,6 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
           />
         </div>
       ))}
-      {!experiences.length && profileStatus && (
-        <div className={classes.empty}>
-          <Typography className={classes.title} component="p">
-            Uh-oh!
-          </Typography>
-          <Typography className={classes.subtitle} color="textSecondary" component="p">
-            It seems you don’t have an experience yet
-          </Typography>
-          <Link href={'/experience/create'}>
-            <Button color="primary" variant="contained" size="small">
-              Create Experience
-            </Button>
-          </Link>
-        </div>
-      )}
     </div>
   );
 };
