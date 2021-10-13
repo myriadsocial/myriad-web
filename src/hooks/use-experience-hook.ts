@@ -4,7 +4,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {Experience} from '../interfaces/experience';
 import {RootState} from '../reducers';
 import {
-  searchExperience,
+  searchAllRelatedExperiences,
   searchPeople,
   searchTags,
   cloneExperience,
@@ -52,7 +52,7 @@ export const useExperienceHook = () => {
   };
 
   const findExperience = (query: string) => {
-    dispatch(searchExperience(query));
+    dispatch(searchAllRelatedExperiences(query));
   };
 
   const findPeople = (query: string) => {
