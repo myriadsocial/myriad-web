@@ -36,6 +36,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
   const [tipAmount, setTipAmount] = useState('');
   const [verifiedTipAmount, setVerifiedTipAmount] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState<BalanceDetail>(balanceDetails[0]);
+  //TODO: fetch gas fee using api
   const [gasFee] = useState('0.01');
   const [checked, setChecked] = useState(false);
   const [url] = useState('https://myriad.social/');
