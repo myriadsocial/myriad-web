@@ -3,7 +3,6 @@ import {SearchIcon} from '@heroicons/react/solid';
 
 import React, {useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Lottie from 'react-lottie';
 
 import {
   Avatar,
@@ -20,7 +19,6 @@ import Menu from '@material-ui/core/Menu';
 import {formatUsd} from '../../helpers/balance';
 import {Currency, CurrencyId} from '../../interfaces/currency';
 import {Transaction, TransactionSort} from '../../interfaces/transaction';
-import LoadingAnimation from '../../lottie/loading.json';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {ListItemComponent} from '../atoms/ListItem';
 import {Modal, ModalProps} from '../atoms/Modal';
@@ -29,6 +27,7 @@ import {sortOptions} from './default';
 
 import {debounce} from 'lodash';
 import {Empty} from 'src/components-v2/atoms/Empty';
+import {Loading} from 'src/components-v2/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
 
 type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
@@ -48,15 +47,6 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<string>('All Coin');
-
-  const lottieLoading = {
-    loop: true,
-    autoplay: true,
-    animationData: LoadingAnimation,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
-  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -162,7 +152,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
             dataLength={tips.length}
             hasMore={hasMore}
             next={nextPage}
-            loader={<Lottie options={lottieLoading} height={50} width={50} />}>
+            loader={<Loading />}>
             {tips.map(tip => (
               <ListItemComponent
                 key={tip.id}
