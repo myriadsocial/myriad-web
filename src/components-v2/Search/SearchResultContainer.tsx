@@ -5,7 +5,6 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {useExperienceHook} from '../../hooks/use-experience-hook';
 import {SearchedExperienceListContainer} from '../ExperienceList/SearchedExperienceListContainer';
-import {TimelineContainer} from '../Timeline/';
 import {SearchBoxContainer} from '../atoms/Search/SearchBoxContainer';
 import {TabItems} from '../atoms/Tabs/';
 import {TabsComponent} from '../atoms/Tabs/';
@@ -25,6 +24,13 @@ export const SearchResultContainer: React.FC = () => {
   const {searchExperience, searchPeople} = useExperienceHook();
 
   const [submittedQuery, setSubmittedQuery] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const searchQuery = localStorage.getItem('searchQuery');
+      setSubmittedQuery(searchQuery ?? '');
+    }
+  }, []);
 
   const [selectedTab, setSelectedTab] = useState('');
 
@@ -52,7 +58,7 @@ export const SearchResultContainer: React.FC = () => {
     {
       id: 'post-tab',
       title: 'Post',
-      component: <TimelineContainer />,
+      component: <p>Posts </p>,
     },
     {
       id: 'people-tab',
@@ -67,7 +73,6 @@ export const SearchResultContainer: React.FC = () => {
   ]);
 
   const handleChangeTab = (currentTab: string) => {
-    console.log('changed tab!');
     setSelectedTab(currentTab);
   };
 
