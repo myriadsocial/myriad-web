@@ -14,6 +14,7 @@ import {
   fetchDetailExperience,
   subscribeExperience,
   updateExperience,
+  deleteExperience,
 } from '../reducers/experience/actions';
 import {ExperienceState} from '../reducers/experience/reducer';
 
@@ -74,7 +75,11 @@ export const useExperienceHook = () => {
     dispatch(cloneExperience(newExperience.id, experience));
   };
 
-  const editExperience = (newExperience: Partial<Experience>, newTags: string[]) => {
+  const editExperience = (
+    newExperience: Partial<Experience>,
+    newTags: string[],
+    callback?: (id: string) => void,
+  ) => {
     const experience = {
       name: newExperience.name,
       tags: newTags,
@@ -85,13 +90,21 @@ export const useExperienceHook = () => {
     dispatch(updateExperience(newExperience.id, experience));
   };
 
-  const saveExperience = (newExperience: Partial<Experience>, newTags: string[]) => {
+  const saveExperience = (
+    newExperience: Partial<Experience>,
+    newTags: string[],
+    callback?: (id: string) => void,
+  ) => {
     const experience = {...newExperience, tags: newTags};
-    dispatch(createExperience(experience, newTags));
+    dispatch(createExperience(experience, newTags, callback));
   };
 
   const beSubscribeExperience = (experienceId: string) => {
     dispatch(subscribeExperience(experienceId));
+  };
+
+  const removeExperience = (experienceId: string, callback?: () => void) => {
+    dispatch(deleteExperience(experienceId, callback));
   };
 
   return {
@@ -112,5 +125,6 @@ export const useExperienceHook = () => {
     experience,
     subscribeExperience: beSubscribeExperience,
     updateExperience: editExperience,
+    removeExperience,
   };
 };

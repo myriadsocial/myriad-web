@@ -19,11 +19,13 @@ interface SimpleCardProps {
   isSelectable?: boolean;
   user?: User;
   experienceId?: string;
+  userExperienceId?: string;
   filterTimeline: (type: TimelineType) => void;
   onClick: () => void;
   onSubscribe?: (experienceId: string) => void;
   onFollow?: (experienceId: string) => void;
   onPreview?: (experienceId: string) => void;
+  onDelete: (experienceId: string) => void;
 }
 
 type NonSelectableSimpleCardProps = Omit<SimpleCardProps, 'filterTimeline' | 'onClick'>;
