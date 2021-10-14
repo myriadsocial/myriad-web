@@ -2,12 +2,8 @@
   "name": "myriad-web",
   "version": "1.0.0",
   "description": "myriad-web",
-  "engines": {
-    "node": ">=14.0.0",
-    "yarn": ">=1.21.1"
-  },
   "private": true,
-  "license": "UNLICENSED",
+  "license": "GPL-3.0",
   "author": "Myriad Dev Team <myriad.dev@blocksphere.id>",
   "homepage": "https://myriad.social",
   "repository": {
@@ -17,34 +13,33 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "prepare": "husky install",
     "dev": "nodemon",
+    "export-env": "node ./plugins/export-env.js",
+    "clean": "rm -rf .next dist plugins/sv-env.js",
     "build": "next build && tsc --project tsconfig.server.json",
     "build:storybook": "build-storybook -o docs",
-    "build:env": "node ./plugins/export-env.js",
-    "start": "node dist/index.js",
-    "start-docker": "yarn build:env && next start",
-    "start-custom-server": "yarn build:env && node dist/index.js",
-    "type-check": "tsc",
-    "lint": "eslint --fix .",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
-    "postbuild": "yarn build:env",
-    "prepare": "husky install",
-    "test": "yarn build && yarn lint-staged",
-    "test:watch": "jest --watch",
+    "postbuild": "yarn run export-env",
+    "rebuild": "yarn run clean && yarn run build",
+    "eslint:cli": "eslint",
+    "eslint:check": "yarn run eslint:cli --report-unused-disable-directives .",
+    "eslint:fix": "yarn run eslint:cli --fix .",
+    "prettier:cli": "prettier",
+    "prettier:check": "yarn run prettier:cli -l .",
+    "prettier:fix": "yarn run prettier:cli --write .",
+    "lint": "yarn run eslint:check && yarn run prettier:check",
+    "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
+    "pretest": "yarn run rebuild",
+    "test": "jest --ci",
+    "posttest": "yarn run lint",
+    "test:dev": "jest --watch && yarn run posttest",
     "docker:build": "./.maintain/docker/build-image.sh",
     "docker:run": "./.maintain/docker/start-docker-compose.sh",
     "docker:down": "./.maintain/docker/stop-docker-compose.sh",
-    "storybook": "start-storybook -p 6006"
-  },
-  "lint-staged": {
-    "./src/**/*.{js,ts,tsx,scss}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "./pages/**/*.{js,ts,tsx,scss}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
+    "prestart": "yarn run rebuild",
+    "start": "node .",
+    "start:docker": "yarn export-env && next start",
+    "start:storybook": "start-storybook -p 6006"
   },
   "cacheDirectories": [
     ".next/cache"
@@ -125,7 +120,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
-    "@commitlint/cli": "^12.1.4",
     "@storybook/addon-actions": "^6.3.7",
     "@storybook/addon-essentials": "^6.3.7",
     "@storybook/addon-links": "^6.3.7",
@@ -153,8 +147,6 @@
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
     "autoprefixer": "^9.4.9",
-    "commitlint-config-jira": "^1.5.1",
-    "commitlint-plugin-jira-rules": "^1.5.1",
     "dotenv": "^8.2.0",
     "eslint": "^7.12.1",
     "eslint-config-prettier": "^8.3.0",

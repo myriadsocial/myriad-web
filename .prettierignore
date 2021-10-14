@@ -1,6 +1,5 @@
 .maintain/kubernetes
 .next/
-.github/
 .storybook/
 dist/
 storybook-static/
