@@ -34,12 +34,18 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     updateProfilePicture,
   } = props;
   const [newUser, setNewUser] = useState<Partial<User>>({
-    username: user.username ?? '',
     name: user.name ?? '',
     bio: user.bio ?? '',
     websiteURL: user.websiteURL ?? '',
   });
+
+  const [username, setUsername] = useState<string>(user.username ?? '');
+
   const style = useStyles();
+
+  const handleChangeUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
+  };
 
   const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewUser(prevUser => ({
@@ -113,9 +119,9 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         <OutlinedInput
           id="username"
           placeholder="Username"
-          value={newUser?.username}
-          onChange={handleChange('username')}
-          labelWidth={110}
+          value={username}
+          onChange={handleChangeUsername}
+          labelWidth={80}
         />
       </FormControl>
 
@@ -130,7 +136,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           placeholder="Display Name"
           value={newUser?.name}
           onChange={handleChange('name')}
-          labelWidth={110}
+          labelWidth={100}
         />
       </FormControl>
 
@@ -141,7 +147,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           placeholder="Bio"
           value={newUser?.bio}
           onChange={handleChange('bio')}
-          labelWidth={110}
+          labelWidth={30}
         />
       </FormControl>
 
@@ -152,7 +158,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           placeholder="oct.network"
           value={newUser?.websiteURL}
           onChange={handleChange('websiteURL')}
-          labelWidth={110}
+          labelWidth={65}
         />
       </FormControl>
 
