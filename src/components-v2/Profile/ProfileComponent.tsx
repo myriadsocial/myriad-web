@@ -32,6 +32,10 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
     setIsEdit(true);
   };
 
+  const handleCloseEdit = () => {
+    setIsEdit(false);
+  };
+
   return (
     <div className={style.root}>
       <div className={style.scroll}>
@@ -40,7 +44,7 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
         </div>
 
         <ShowIf condition={isEdit}>
-          <ProfileEditContainer />
+          <ProfileEditContainer onClose={handleCloseEdit} />
         </ShowIf>
 
         <ShowIf condition={!isEdit}>

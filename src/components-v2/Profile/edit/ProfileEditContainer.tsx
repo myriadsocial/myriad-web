@@ -8,7 +8,11 @@ import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
-export const ProfileEditContainer: React.FC = () => {
+type Props = {
+  onClose: () => void;
+};
+
+export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {
     updateProfile,
@@ -29,6 +33,7 @@ export const ProfileEditContainer: React.FC = () => {
 
   const onSave = (newUser: Partial<User>) => {
     updateProfile(newUser);
+    onClose();
   };
 
   return (
