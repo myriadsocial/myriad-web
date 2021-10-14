@@ -63,15 +63,19 @@ export const useExperienceHook = () => {
     dispatch(searchTags(query));
   };
 
-  const followExperience = (newExperience: Partial<Experience>, newTags: string[]) => {
+  const followExperience = (
+    newExperience: Partial<Experience>,
+    newTags: string[],
+    callback?: (id: string) => void,
+  ) => {
     const experience = {
       name: newExperience.name,
       tags: newTags,
-      peole: newExperience.people,
+      people: newExperience.people,
       description: newExperience.description,
       experienceImageURL: newExperience.experienceImageURL,
     };
-    dispatch(cloneExperience(newExperience.id, experience));
+    dispatch(cloneExperience(newExperience.id, experience, callback));
   };
 
   const editExperience = (
@@ -82,11 +86,11 @@ export const useExperienceHook = () => {
     const experience = {
       name: newExperience.name,
       tags: newTags,
-      peole: newExperience.people,
+      people: newExperience.people,
       description: newExperience.description,
       experienceImageURL: newExperience.experienceImageURL,
     };
-    dispatch(updateExperience(newExperience.id, experience));
+    dispatch(updateExperience(newExperience.id, experience, callback));
   };
 
   const saveExperience = (
@@ -99,7 +103,11 @@ export const useExperienceHook = () => {
   };
 
   const beSubscribeExperience = (experienceId: string) => {
-    dispatch(subscribeExperience(experienceId));
+    dispatch(
+      subscribeExperience(experienceId, () => {
+        loadExperience();
+      }),
+    );
   };
 
   const removeExperience = (experienceId: string, callback?: () => void) => {
