@@ -87,6 +87,12 @@ prisma
 .next
 /public/sw-env.js
 
+# storybook
+/storybook-static
+/docs/*
+# exception to the rule
+!docs/.gitkeep
+
 # IDE
 .idea
 .vscode

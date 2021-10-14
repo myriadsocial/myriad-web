@@ -1,1 +1,1 @@
-# Myriad Application
+# Myriad Web Application
