@@ -30,7 +30,9 @@ export const ExperienceCloneContainer: React.FC = () => {
   };
 
   const handleCloneExperience = (newExperience: Partial<Experience>, newTags: string[]) => {
-    cloneExperience(newExperience, newTags);
+    cloneExperience(newExperience, newTags, (experienceId: string) => {
+      router.push(`/experience/${experienceId}/preview`);
+    });
   };
 
   const handleSearchTags = debounce((query: string) => {
@@ -45,7 +47,7 @@ export const ExperienceCloneContainer: React.FC = () => {
     <>
       <div className={style.mb}>
         <TopNavbarComponent
-          description={'Create Experience'}
+          description={'Clone Experience'}
           sectionTitle={SectionTitle.EXPERIENCE}
         />
       </div>

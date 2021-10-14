@@ -103,13 +103,14 @@ export const getUserExperience = async (
 export const cloneExperience = async (
   userId: string,
   experienceId: string,
-  data: Experience,
-): Promise<void> => {
-  await MyriadAPI.request<Experience>({
+  experience: Experience,
+): Promise<UserExperience> => {
+  const {data} = await MyriadAPI.request<UserExperience>({
     url: `/users/${userId}/clone/${experienceId}`,
     method: 'POST',
-    data,
+    data: experience,
   });
+  return data;
 };
 
 export const subscribeExperience = async (userId: string, experienceId: string): Promise<void> => {
