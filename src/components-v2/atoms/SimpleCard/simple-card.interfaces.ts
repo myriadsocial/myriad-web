@@ -1,3 +1,6 @@
+import {TimelineType} from '../../../interfaces/timeline';
+import {User} from '../../../interfaces/user';
+
 interface SimpleCardProps {
   title: string;
   /*
@@ -25,4 +28,6 @@ interface SimpleCardProps {
   onDelete?: (experienceId: string) => void;
 }
 
-export type {SimpleCardProps};
+type NonSelectableSimpleCardProps = Omit<SimpleCardProps, 'filterTimeline' | 'onClick'>;
+
+export type {SimpleCardProps, NonSelectableSimpleCardProps};
