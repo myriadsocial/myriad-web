@@ -80,5 +80,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         fill: 'currentColor',
       },
     },
+    mb: {
+      marginBottom: '10px',
+      marginTop: '-20px',
+    },
   }),
 );
