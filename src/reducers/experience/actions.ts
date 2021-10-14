@@ -146,7 +146,8 @@ export const fetchDetailExperience: ThunkActionCreator<Actions, RootState> =
   };
 
 export const cloneExperience: ThunkActionCreator<Actions, RootState> =
-  (experienceId: string, experience: Experience) => async (dispatch, getState) => {
+  (experienceId: string, experience: Experience, callback?: (id: string) => void) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
       const {
@@ -157,7 +158,18 @@ export const cloneExperience: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      await ExperienceAPI.cloneExperience(user.id, experienceId, experience);
+      const cloneExperience = await ExperienceAPI.cloneExperience(
+        user.id,
+        experienceId,
+        experience,
+      );
+      callback && callback(cloneExperience.experienceId);
+      await dispatch(
+        showToaster({
+          toasterStatus: Status.SUCCESS,
+          message: 'Experience succesfully cloned!',
+        }),
+      );
     } catch (error) {
       dispatch(
         setError({
@@ -279,7 +291,7 @@ export const createExperience: ThunkActionCreator<Actions, RootState> =
   };
 
 export const subscribeExperience: ThunkActionCreator<Actions, RootState> =
-  (experienceId: string, experience: Experience) => async (dispatch, getState) => {
+  (experienceId: string, callback?: () => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
       const {
@@ -291,6 +303,15 @@ export const subscribeExperience: ThunkActionCreator<Actions, RootState> =
       }
 
       await ExperienceAPI.subscribeExperience(user.id, experienceId);
+
+      callback && callback();
+
+      await dispatch(
+        showToaster({
+          toasterStatus: Status.SUCCESS,
+          message: 'subscribed successfully!',
+        }),
+      );
     } catch (error) {
       dispatch(
         setError({
