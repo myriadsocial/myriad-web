@@ -1,60 +1,112 @@
-import React from 'react';
+import {ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/outline';
 
+import React, {useState} from 'react';
+
+import Link from 'next/link';
+
+import {Badge} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
-import {useTheme} from '@material-ui/core/styles';
 
 import {useStyles, ProfileHeaderProps} from '.';
 import BellIconDefault from '../../images/Icons/notif-default.svg';
-import VectorDownIcon from '../../images/Icons/vectorDownIcon.svg';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
-import {BoxComponent} from '../atoms/Box';
 
-const ProfileHeader = ({
-  name = 'Aaron Ting',
-  username = '@aaronting8',
-  avatar = 'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg',
-}: ProfileHeaderProps): JSX.Element => {
-  const theme = useTheme();
+const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
+  const {
+    user,
+    alias,
+    notificationCount,
+    handleSignOut,
+    onViewProfile,
+    onSwitchAccount,
+    onShowNotificationList,
+  } = props;
   const classes = useStyles();
-
-  //CONSTANTS
-  const BORDER_RADIUS = theme.spacing(0, 0, 2.5, 2.5);
+  const [expanding, setExpanding] = useState(false);
 
   const handleMenuProfileHeader = () => {
-    console.log('opening menu!');
+    setExpanding(!expanding);
   };
 
   return (
     <div className={classes.root}>
-      <div className={classes.vectorDownIconWrapper}>
-        <IconButton
-          centerRipple
-          disableRipple
-          className={classes.downIconButton}
-          onClick={handleMenuProfileHeader}>
-          <SvgIcon className={classes.downSvgIcon} component={VectorDownIcon} viewBox="0 0 10 7" />
-        </IconButton>
-      </div>
-      <BoxComponent radiusStr={BORDER_RADIUS}>
+      <div className={classes.box}>
         <div className={classes.secondRoot}>
           <div className={classes.iconButtonWrapper}>
-            <IconButton aria-label="avatar">
-              <SvgIcon component={BellIconDefault} viewBox="0 0 24 24" />
+            <IconButton aria-label="avatar" disabled={!!alias} onClick={onShowNotificationList}>
+              <Badge color="secondary" variant="dot" invisible={notificationCount === 0}>
+                <SvgIcon component={BellIconDefault} />
+              </Badge>
             </IconButton>
           </div>
-          <div>
-            <Typography variant="h5">{name}</Typography>
+          <div className={classes.textAlign}>
+            <Typography variant="h5">{user?.name || alias || ''}</Typography>
             <Typography variant="caption" color="textSecondary">
-              {username}
+              {user?.username || '@username'}
             </Typography>
           </div>
           <div className={classes.customAvatarWrapper}>
-            <CustomAvatar avatar={avatar} size={CustomAvatarSize.MEDIUM} />
+            <CustomAvatar
+              avatar={user?.profilePictureURL || ''}
+              size={CustomAvatarSize.MEDIUM}
+              name={user?.name || alias || ''}
+            />
           </div>
         </div>
-      </BoxComponent>
+      </div>
+      <div
+        className={`${classes.content} ${expanding ? classes.open : classes.close}`}
+        onClick={onViewProfile}>
+        {user && (
+          <>
+            <ListItem classes={{gutters: classes.gutters}} className={classes.hover}>
+              <ListItemText className={classes.textAlign}>
+                <Link href={`/profile/${user?.id}`}>
+                  <Typography className={classes.text} component="span">
+                    View profile
+                  </Typography>
+                </Link>
+              </ListItemText>
+            </ListItem>
+            <ListItem
+              classes={{gutters: classes.gutters}}
+              className={classes.hover}
+              onClick={onSwitchAccount}>
+              <ListItemText className={classes.textAlign}>
+                <Typography className={classes.text} component="span">
+                  Switch account
+                </Typography>
+              </ListItemText>
+            </ListItem>
+          </>
+        )}
+        <ListItem
+          classes={{gutters: classes.gutters}}
+          className={classes.hover}
+          onClick={() => handleSignOut()}>
+          <ListItemText className={classes.textAlign}>
+            <Typography className={classes.text} component="span">
+              Log out
+            </Typography>
+          </ListItemText>
+        </ListItem>
+      </div>
+      <div
+        className={classes.downIconButton}
+        onClick={handleMenuProfileHeader}
+        role="button"
+        tabIndex={0}
+        aria-hidden="true">
+        <SvgIcon
+          color="primary"
+          component={expanding ? ChevronUpIcon : ChevronDownIcon}
+          viewBox="0 0 24 24"
+        />
+      </div>
     </div>
   );
 };

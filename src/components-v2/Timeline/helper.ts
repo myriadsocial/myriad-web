@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 import {TimelineSortMethod, TimelineType} from '../../interfaces/timeline';
 
 import {ParsedUrlQuery} from 'querystring';
-=======
-import {ParsedUrlQuery} from 'querystring';
-import {TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
->>>>>>> 59dc8324 (MYR-870: init timeline)
 
 export const parseQueryToFilter = (query: ParsedUrlQuery) => {
   let timelineType = TimelineType.ALL;
