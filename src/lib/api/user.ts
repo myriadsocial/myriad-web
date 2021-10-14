@@ -1,9 +1,10 @@
 import MyriadAPI from './base';
 import {BaseList} from './interfaces/base-list.interface';
 
-import {User, UserTransactionDetail} from 'src/interfaces/user';
+import {User, UserTransactionDetail, ActivityLog} from 'src/interfaces/user';
 
 type UserList = BaseList<User>;
+type ActivityList = BaseList<ActivityLog>;
 
 export const getUserDetail = async (id: string): Promise<User> => {
   const {data} = await MyriadAPI.request<User>({
@@ -80,6 +81,38 @@ export const getUserTransactionDetail = async (id: string): Promise<UserTransact
   const {data} = await MyriadAPI.request<UserTransactionDetail>({
     url: `/users/${id}/transaction-summary`,
     method: 'GET',
+  });
+
+  return data;
+};
+
+export const searchUsername = async (query: string): Promise<UserList> => {
+  const {data} = await MyriadAPI.request<UserList>({
+    url: '/users',
+    method: 'GET',
+    params: {
+      filter: {
+        where: {
+          username: query,
+        },
+      },
+    },
+  });
+
+  return data;
+};
+
+export const checkUsername = async (userId: string): Promise<ActivityList> => {
+  const {data} = await MyriadAPI.request<ActivityList>({
+    url: '/activity-logs',
+    method: 'GET',
+    params: {
+      filter: {
+        where: {
+          and: [{type: 'username'}, {userId}],
+        },
+      },
+    },
   });
 
   return data;

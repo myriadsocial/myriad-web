@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
 import {ProfileEditComponent} from './ProfileEdit';
@@ -21,7 +21,15 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
     uploadingBanner,
     updateProfileBanner,
     updateProfilePicture,
+    checkUsernameStatus,
+    checkUsernameAvailable,
+    usernameStatus,
+    usernameAvailable,
   } = useProfileHook();
+
+  useEffect(() => {
+    checkUsernameStatus();
+  }, []);
 
   const hanleUpdateBannerImage = async (image: File): Promise<void> => {
     updateProfileBanner(image);
@@ -29,6 +37,10 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
 
   const handleUpdateProfilePicture = (image: File): void => {
     updateProfilePicture(image);
+  };
+
+  const handleUsernameAvailable = (username: string): void => {
+    checkUsernameAvailable(username);
   };
 
   const onSave = (newUser: Partial<User>) => {
@@ -47,6 +59,9 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
           uploadingBanner={uploadingBanner}
           updateProfileBanner={hanleUpdateBannerImage}
           updateProfilePicture={handleUpdateProfilePicture}
+          isChanged={usernameStatus}
+          checkAvailable={handleUsernameAvailable}
+          isAvailable={usernameAvailable}
         />
       )}
     </>

@@ -61,6 +61,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.secondary,
       marginBottom: '34px',
     },
+    available: {
+      fontSize: '12px',
+      color: theme.palette.text.secondary,
+    },
+    red: {
+      color: 'red',
+    },
+    green: {
+      color: 'green',
+    },
     username: {
       marginBottom: '12px',
     },

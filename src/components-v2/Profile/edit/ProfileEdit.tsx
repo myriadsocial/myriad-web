@@ -13,14 +13,19 @@ import {IconButtonUpload} from './IconButtonUpload.component';
 import {ImageButton} from './ImageButton.component';
 import {useStyles} from './profile-edit.style';
 
+import {debounce} from 'lodash';
+
 export type Props = {
   user: User;
   onSave: (user: Partial<User>) => void;
   uploadingAvatar: boolean;
   uploadingBanner: boolean;
   updatingProfile: boolean;
+  isChanged: boolean;
+  isAvailable?: boolean;
   updateProfileBanner: (image: File) => void;
   updateProfilePicture: (image: File) => void;
+  checkAvailable: (username: string) => void;
 };
 
 export const ProfileEditComponent: React.FC<Props> = props => {
@@ -32,6 +37,9 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     updateProfileBanner,
     uploadingAvatar,
     updateProfilePicture,
+    isChanged,
+    isAvailable,
+    checkAvailable,
   } = props;
   const [newUser, setNewUser] = useState<Partial<User>>({
     name: user.name ?? '',
@@ -45,6 +53,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
 
   const handleChangeUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
+    handleUsernameAvailable(event.target.value);
   };
 
   const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,10 +64,22 @@ export const ProfileEditComponent: React.FC<Props> = props => {
   };
 
   const saveUser = () => {
+    if (!isChanged && isAvailable && username !== user.username) {
+      setNewUser(prevUser => ({
+        ...prevUser,
+        username: username,
+      }));
+    }
     if (newUser) {
       onSave(newUser);
     }
   };
+
+  const handleUsernameAvailable = debounce((username: string) => {
+    if (username !== user.username) {
+      checkAvailable(username);
+    }
+  }, 300);
 
   const handleRemovePicture = (image: Partial<User>) => {
     onSave(image);
@@ -70,6 +91,16 @@ export const ProfileEditComponent: React.FC<Props> = props => {
 
   const handleUpdateProfilePicture = (image: File): void => {
     updateProfilePicture(image);
+  };
+
+  const handleError = (): boolean => {
+    if (!username.length) return true;
+    if (isAvailable === undefined) return false;
+    if (typeof isAvailable === 'boolean') {
+      if (isAvailable === true) return false;
+      if (isAvailable === false) return true;
+    }
+    return false;
   };
 
   return (
@@ -117,6 +148,8 @@ export const ProfileEditComponent: React.FC<Props> = props => {
       <FormControl className={style.username} fullWidth variant="outlined">
         <InputLabel htmlFor="username">Username</InputLabel>
         <OutlinedInput
+          error={handleError()}
+          disabled={isChanged}
           id="username"
           placeholder="Username"
           value={username}
@@ -125,8 +158,14 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         />
       </FormControl>
 
+      {username !== user.username && (
+        <Typography className={`${style.available} ${handleError() ? style.red : style.green}`}>
+          {handleError() ? 'Username is not available' : 'Username is available'}
+        </Typography>
+      )}
+
       <Typography className={style.marker}>
-        You have used the attempt to change your name
+        {isChanged ? 'You already set username' : 'You have used the attempt to change your name'}
       </Typography>
 
       <FormControl fullWidth variant="outlined">

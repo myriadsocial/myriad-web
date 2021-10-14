@@ -39,3 +39,10 @@ export interface UserTransactionDetail {
   sent: TransactionDetail[];
   received: TransactionDetail[];
 }
+
+export interface ActivityLog {
+  id: string;
+  type: string;
+  message: string;
+  userId: string;
+}
