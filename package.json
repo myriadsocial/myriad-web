@@ -18,7 +18,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "nodemon",
-    "build": "next build && tsc --project tsconfig.server.json && yarn build:storybook",
+    "build": "next build && tsc --project tsconfig.server.json",
     "build:storybook": "build-storybook -o docs",
     "build:env": "node ./plugins/export-env.js",
     "start": "node dist/index.js",
