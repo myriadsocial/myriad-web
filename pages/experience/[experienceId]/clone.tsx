@@ -4,7 +4,6 @@ import {useDispatch} from 'react-redux';
 import {getSession} from 'next-auth/client';
 
 import {ExperienceCloneContainer} from 'src/components-v2/ExperiencePreview/ExperienceClone.container';
-import {SearchBoxContainer} from 'src/components-v2/atoms/Search/SearchBoxContainer';
 import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -24,7 +23,6 @@ const Experience: React.FC = () => {
   return (
     <DefaultLayout isOnProfilePage={false}>
       <ToasterContainer />
-      <SearchBoxContainer />
       <ExperienceCloneContainer />
     </DefaultLayout>
   );
