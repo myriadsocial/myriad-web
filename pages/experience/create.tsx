@@ -3,7 +3,6 @@ import {useDispatch} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
 
-import {SearchBoxContainer} from '../../src/components-v2/atoms/Search/SearchBoxContainer';
 import {DefaultLayout} from '../../src/components-v2/template/Default/DefaultLayout';
 
 import {ExperienceContainer} from 'src/components-v2/ExperienceEditor/Experience.container';
@@ -25,7 +24,7 @@ const Experience: React.FC = () => {
   return (
     <DefaultLayout isOnProfilePage={false}>
       <ToasterContainer />
-      <SearchBoxContainer />
+
       <ExperienceContainer />
     </DefaultLayout>
   );
