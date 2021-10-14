@@ -71,7 +71,7 @@ export const createFriendRequest: ThunkActionCreator<Actions, RootState> =
 
       await FriendAPI.sendRequest(user.id, profile.id);
 
-      dispatch(fetchFriendRequest());
+      dispatch(fetchFriendRequest(user));
     } catch (error) {
       dispatch(setError(error.message));
     } finally {
@@ -94,7 +94,7 @@ export const deleteFriendRequest: ThunkActionCreator<Actions, RootState> =
 
       await FriendAPI.deleteRequest(request.id);
 
-      dispatch(fetchFriendRequest());
+      dispatch(fetchFriendRequest(user));
     } catch (error) {
       dispatch(setError(error.message));
     } finally {
@@ -118,10 +118,10 @@ export const toggleFriendRequest: ThunkActionCreator<Actions, RootState> =
       await FriendAPI.toggleRequest(request.id, status);
 
       if (status === FriendStatus.APPROVED) {
-        dispatch(fetchFriend());
+        dispatch(fetchFriend(user));
       }
 
-      dispatch(fetchFriendRequest());
+      dispatch(fetchFriendRequest(user));
 
       callback && callback();
     } catch (error) {
