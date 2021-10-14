@@ -41,14 +41,6 @@ export const VotingComponent: React.FC<VoteProps> = props => {
     return vote;
   };
 
-  const formatNumber = (num: number) => {
-    const vote = millify(num, {
-      precision: 1,
-      lowercase: true,
-    });
-    return vote;
-  };
-
   return (
     <div className={style.root}>
       <div className={style.icon}>
