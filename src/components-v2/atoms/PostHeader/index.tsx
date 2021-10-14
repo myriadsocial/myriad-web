@@ -59,7 +59,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         url = `https://reddit.com/user/${post.people?.username as string}`;
         break;
       case Platform.myriad:
-        url = post.createdBy;
+        url = `profile/${post.createdBy}`;
         break;
       default:
         url = post.url;
