@@ -2,7 +2,7 @@ import {TNode} from '@udecode/plate';
 
 import React, {useState} from 'react';
 
-import {Button, IconButton, SvgIcon} from '@material-ui/core';
+import {Button} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
@@ -92,14 +92,12 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       onClose={onClose}
       open={open}
       maxWidth="md"
-      className={styles.root}
-    >
+      className={styles.root}>
       <Tabs
         value={activeTab}
         indicatorColor="secondary"
         onChange={handleTabChange}
-        className={styles.tabs}
-      >
+        className={styles.tabs}>
         <Tab label="Create" value="create" />
         <Tab label="Import" value="import" />
       </Tabs>

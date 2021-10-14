@@ -1,6 +1,5 @@
 import {useSelector, useDispatch} from 'react-redux';
 
-<<<<<<< HEAD
 import {TimelineType, TimelineFilter, TimelineSortMethod} from '../../../interfaces/timeline';
 import {RootState} from '../../../reducers';
 import {ProfileState} from '../../../reducers/profile/reducer';
@@ -13,17 +12,6 @@ import {ParsedUrlQuery} from 'querystring';
 export const useTimelineFilter = (filters?: TimelineFilter) => {
   const {filter} = useSelector<RootState, TimelineState>(state => state.timelineState);
   const {detail: people} = useSelector<RootState, ProfileState>(state => state.profileState);
-=======
-import {ParsedUrlQuery} from 'querystring';
-import {TimelineType, TimelineFilter, TimelineSortMethod} from 'src/interfaces/timeline';
-import {RootState} from 'src/reducers';
-import {loadTimeline} from 'src/reducers/timeline/actions';
-import {TimelineState} from 'src/reducers/timeline/reducer';
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useTimelineFilter = () => {
-  const {filter} = useSelector<RootState, TimelineState>(state => state.timelineState);
->>>>>>> 59dc8324 (MYR-870: init timeline)
   const dispatch = useDispatch();
 
   const filterTimeline = async (query: ParsedUrlQuery) => {
@@ -60,7 +48,6 @@ export const useTimelineFilter = () => {
       }
     }
 
-<<<<<<< HEAD
     if (query.q) {
       tags = Array.isArray(query.q) ? query.q : [query.q];
     }
@@ -69,19 +56,11 @@ export const useTimelineFilter = () => {
       ...filter,
       ...filters,
       tags,
-=======
-    const newFilter: TimelineFilter = {
-      tags,
-      people: filter?.people,
-      layout: filter?.layout,
-      platform: filter?.platform,
->>>>>>> 59dc8324 (MYR-870: init timeline)
     };
 
     dispatch(loadTimeline(1, timelineSort, newFilter, timelineType));
   };
 
-<<<<<<< HEAD
   const filterByOrigin = async (origin: string) => {
     const timelineSort: TimelineSortMethod = 'created';
 
@@ -105,29 +84,10 @@ export const useTimelineFilter = () => {
 
     dispatch(clearTimeline());
     dispatch(loadTimeline(1, timelineSort, filters, TimelineType.ALL));
-=======
-  const filterSearchTimeline = async (query: ParsedUrlQuery) => {
-    let tags: string[] = [];
-    const timelineSort: TimelineSortMethod = 'created';
-    const timelineType = TimelineType.TRENDING;
-
-    if (query.q) {
-      tags = Array.isArray(query.q) ? query.q : [query.q];
-    }
-
-    const newFilter: TimelineFilter = {
-      tags,
-    };
-    dispatch(loadTimeline(1, timelineSort, newFilter, timelineType));
->>>>>>> 59dc8324 (MYR-870: init timeline)
   };
 
   return {
     filterTimeline,
-<<<<<<< HEAD
     filterByOrigin,
-=======
-    filterSearchTimeline,
->>>>>>> 59dc8324 (MYR-870: init timeline)
   };
 };
