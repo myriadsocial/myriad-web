@@ -4,9 +4,11 @@ import {useRouter} from 'next/router';
 
 import {useExperienceHook} from '../../hooks/use-experience-hook';
 import {Experience} from '../../interfaces/experience';
+import {useStyles} from './Experience.styles';
 import {ExperienceEditor} from './ExperienceEditor';
 
 import {debounce} from 'lodash';
+import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {useImageUpload} from 'src/hooks/use-image-upload.hook';
 
 export const ExperienceContainer: React.FC = () => {
@@ -19,6 +21,7 @@ export const ExperienceContainer: React.FC = () => {
     people,
     loadExperience,
   } = useExperienceHook();
+  const style = useStyles();
   const {uploadImage} = useImageUpload();
   const router = useRouter();
   const onImageUpload = async (files: File[]) => {
@@ -43,14 +46,22 @@ export const ExperienceContainer: React.FC = () => {
   }, 300);
 
   return (
-    <ExperienceEditor
-      experience={selectedExperience}
-      tags={tags}
-      people={people}
-      onSearchTags={handleSearchTags}
-      onImageUpload={onImageUpload}
-      onSearchPeople={handleSearchPeople}
-      onSave={onSave}
-    />
+    <>
+      <div className={style.mb}>
+        <TopNavbarComponent
+          description={'Create Experience'}
+          sectionTitle={SectionTitle.EXPERIENCE}
+        />
+      </div>
+      <ExperienceEditor
+        experience={selectedExperience}
+        tags={tags}
+        people={people}
+        onSearchTags={handleSearchTags}
+        onImageUpload={onImageUpload}
+        onSearchPeople={handleSearchPeople}
+        onSave={onSave}
+      />
+    </>
   );
 };

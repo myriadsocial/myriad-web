@@ -23,7 +23,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const style = useStyles();
 
   const parcingTags = () => {
-    return [experience.tags]
+    return experience.tags
       .map(tag => {
         return `#${tag}`;
       })
