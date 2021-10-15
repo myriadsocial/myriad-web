@@ -76,6 +76,7 @@ const ProfilePage = (): JSX.Element => {
               totalExperience={0}
               totalFriends={0}
               linkUrl={''}
+              onSubmit={console.log}
             />
           </div>
           <div style={{width: '100%'}}>
