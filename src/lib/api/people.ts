@@ -61,9 +61,20 @@ export const searchPeople = async (query: string): Promise<PeopleList> => {
       pageLimit: 10,
       filter: {
         where: {
-          username: {
-            like: `^${query}`,
-          },
+          or: [
+            {
+              username: {
+                like: `.*${query}`,
+                options: 'i',
+              },
+            },
+            {
+              name: {
+                like: `.*${query}`,
+                options: 'i',
+              },
+            },
+          ],
         },
       },
     },
