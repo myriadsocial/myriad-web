@@ -9,6 +9,7 @@ import {DotsVerticalIcon} from '@heroicons/react/solid';
 
 import React from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import {useSelector} from 'react-redux';
 
 import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
@@ -22,6 +23,8 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import {Friend, FriendStatus} from '../../../interfaces/friend';
 import {User, Report} from '../../../interfaces/user';
 import {ReportComponent} from '../../atoms/Report/Report.component';
+import {RootState} from '../../reducers';
+import {BalanceState} from '../../reducers/balance/reducer';
 import {useStyles} from './profile-header.style';
 
 import {format} from 'date-fns';
@@ -59,6 +62,8 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     onSubmit,
   } = props;
   const style = useStyles();
+
+  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorElFriend, setAnchorElFriend] = React.useState<null | HTMLElement>(null);
@@ -305,6 +310,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               </ShowIf>
 
               <Button
+                disabled={balanceDetails.length === 0}
                 onClick={onSendTip}
                 startIcon={
                   <SvgIcon
