@@ -2,12 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {ProfileHeaderComponent} from '.';
-import {User} from '../../../interfaces/user';
+import {User, Report} from '../../../interfaces/user';
 import {setTippedUserId} from '../../../reducers/wallet/actions';
 import {SendTipContainer} from '../../SendTip/';
 
 import {Modal} from 'src/components-v2/atoms/Modal';
 import {useFriendHook} from 'src/components/profile/use-profile-friend.hook';
+import {useProfileHook} from 'src/components/profile/use-profile.hook';
 import {RootState} from 'src/reducers';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
@@ -31,6 +32,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const dispatch = useDispatch();
 
   const {friendStatus, makeFriend, checkFriendStatus, removeFriendRequest} = useFriendHook();
+  const {reportUser} = useProfileHook();
 
   const [tippedUser, setTippedUser] = useState<User | null>(null);
   const sendTipOpened = Boolean(tippedUser);
@@ -75,6 +77,10 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     dispatch(setTippedUserId(profile.id));
   };
 
+  const handleSubmit = (payload: Partial<Report>) => {
+    reportUser(payload);
+  };
+
   return (
     <>
       <ProfileHeaderComponent
@@ -88,6 +94,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
         onSendTip={handleSendTip}
         onEdit={edit}
         linkUrl={`${urlLink()}/profile/${profile.id}`}
+        onSubmit={handleSubmit}
       />
       <Modal
         gutter="none"
