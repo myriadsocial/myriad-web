@@ -29,11 +29,12 @@ const Notification: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
-      <TopNavbarComponent
-        description={`${total} new notifications`}
-        sectionTitle={SectionTitle.NOTIFICATION}
-      />
-
+      <div style={{marginTop: '-20px'}}>
+        <TopNavbarComponent
+          description={`${total} new notifications`}
+          sectionTitle={SectionTitle.NOTIFICATION}
+        />
+      </div>
       <NotificationsContainer />
 
       <ToasterContainer />
