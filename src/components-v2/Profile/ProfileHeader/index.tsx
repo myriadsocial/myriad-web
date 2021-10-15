@@ -20,7 +20,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import {Friend, FriendStatus} from '../../../interfaces/friend';
-import {User} from '../../../interfaces/user';
+import {User, Report} from '../../../interfaces/user';
+import {ReportComponent} from '../../atoms/Report/Report.component';
 import {useStyles} from './profile-header.style';
 
 import {format} from 'date-fns';
@@ -39,6 +40,7 @@ export type Props = {
   onSendTip: () => void;
   onEdit?: () => void;
   linkUrl: string;
+  onSubmit: (payload: Partial<Report>) => void;
 };
 
 const background = 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png';
@@ -54,12 +56,14 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     onSendRequest,
     onSendTip,
     linkUrl,
+    onSubmit,
   } = props;
   const style = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorElFriend, setAnchorElFriend] = React.useState<null | HTMLElement>(null);
   const [linkCopied, setLinkCopied] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -104,6 +108,15 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
 
   const handleCloseLinkCopied = () => {
     setLinkCopied(false);
+  };
+
+  const handleOpenModal = () => {
+    setOpen(true);
+    handleClose();
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false);
   };
 
   return (
@@ -160,7 +173,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                   <MenuItem>Copy link profile</MenuItem>
                 </CopyToClipboard>
                 <MenuItem disabled>Mute account</MenuItem>
-                <MenuItem disabled className={style.delete}>
+                <MenuItem onClick={handleOpenModal} className={style.delete}>
                   Report account
                 </MenuItem>
               </Menu>
@@ -310,6 +323,8 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           </div>
         </div>
       </div>
+
+      <ReportComponent onSubmit={onSubmit} user={user} open={open} onClose={handleCloseModal} />
 
       <Toaster
         open={linkCopied}
