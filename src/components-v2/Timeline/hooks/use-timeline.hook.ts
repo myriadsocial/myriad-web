@@ -4,7 +4,7 @@ import {useRouter} from 'next/router';
 
 import {TimelineFilter, TimelineSortMethod} from '../../../interfaces/timeline';
 import {RootState} from '../../../reducers';
-import {loadTimeline} from '../../../reducers/timeline/actions';
+import {loadTimeline, getDedicatedPost} from '../../../reducers/timeline/actions';
 import {TimelineState} from '../../../reducers/timeline/reducer';
 import {fetchTippedUserId} from '../../../reducers/wallet/actions';
 
@@ -32,6 +32,11 @@ export const useTimelineHook = () => {
     dispatch(fetchTippedUserId(postId));
   };
 
+  const getPostDetail = (postId: string | string[]) => {
+    const id = postId as string;
+    dispatch(getDedicatedPost(id));
+  };
+
   return {
     error: timelineState.error,
     loading: timelineState.loading,
@@ -43,5 +48,7 @@ export const useTimelineHook = () => {
     nextPage,
     sortTimeline,
     getTippedUserId,
+    getPostDetail,
+    post: timelineState.post,
   };
 };
