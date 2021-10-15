@@ -1,7 +1,7 @@
 import MyriadAPI from './base';
 import {BaseList} from './interfaces/base-list.interface';
 
-import {User, UserTransactionDetail, ActivityLog} from 'src/interfaces/user';
+import {User, UserTransactionDetail, ActivityLog, Report} from 'src/interfaces/user';
 
 type UserList = BaseList<User>;
 type ActivityList = BaseList<ActivityLog>;
@@ -115,5 +115,14 @@ export const checkUsername = async (userId: string): Promise<ActivityList> => {
     },
   });
 
+  return data;
+};
+
+export const reportUser = async (payload: Partial<Report>): Promise<Report> => {
+  const {data} = await MyriadAPI.request<Report>({
+    url: '/reports',
+    method: 'POST',
+    data: payload,
+  });
   return data;
 };
