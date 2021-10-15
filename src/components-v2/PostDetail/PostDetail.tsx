@@ -42,6 +42,7 @@ type PostDetailProps = {
   onDelete: (post: Post) => void;
   onReport: (post: Post) => void;
   onShared: (post: Post, type: 'link' | 'post') => void;
+  expanded?: boolean;
 };
 
 export const PostDetail: React.FC<PostDetailProps> = props => {
@@ -62,11 +63,12 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     onDelete,
     onReport,
     onShared,
+    expanded = false,
   } = props;
   const tabs = useCommentTabs(post);
 
   const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
-  const [shoWcomment, setShowComment] = useState(false);
+  const [shoWcomment, setShowComment] = useState(expanded);
   const [maxLength, setMaxLength] = useState<number | undefined>(250);
   const [viewContent, setViewContent] = useState(!post.isNSFW);
   const owner = post.createdBy === user?.id;
