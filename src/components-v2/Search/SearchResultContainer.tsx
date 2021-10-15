@@ -5,6 +5,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {useExperienceHook} from '../../hooks/use-experience-hook';
 import {SearchedExperienceListContainer} from '../ExperienceList/SearchedExperienceListContainer';
+import {PeopleListContainer} from '../PeopleList/PeopleListContainer';
 import {SearchBoxContainer} from '../atoms/Search/SearchBoxContainer';
 import {TabItems} from '../atoms/Tabs/';
 import {TabsComponent} from '../atoms/Tabs/';
@@ -63,7 +64,7 @@ export const SearchResultContainer: React.FC = () => {
     {
       id: 'people-tab',
       title: 'People',
-      component: <p>People</p>,
+      component: <PeopleListContainer />,
     },
     {
       id: 'experience-tab',
