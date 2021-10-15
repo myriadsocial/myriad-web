@@ -1,4 +1,5 @@
 import {SocialsEnum} from './social';
+import {UserSocialMedia} from './user';
 
 export interface PeopleProps {
   id: string;
@@ -7,6 +8,10 @@ export interface PeopleProps {
   platform: SocialsEnum;
   profilePictureURL: string;
   username: string;
+}
+
+export interface SearchablePeople extends PeopleProps {
+  userSocialMedia: UserSocialMedia;
 }
 
 export interface People extends PeopleProps {
