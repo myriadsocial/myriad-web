@@ -9,7 +9,7 @@ import Tabs from '@material-ui/core/Tabs';
 import {People} from '../../interfaces/people';
 import {Post, PostVisibility} from '../../interfaces/post';
 import {NSFWTags} from '../NSFWTags';
-import {PostEditor, formatStringToNode, formatNodeToPost} from '../PostEditor';
+import {PostEditor, formatStringToNode, serialize} from '../PostEditor';
 import {PostImport} from '../PostImport';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {Modal} from '../atoms/Modal';
@@ -59,7 +59,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   };
 
   const handlePostTextChange = (value: TNode[]) => {
-    const attributes = formatNodeToPost(value);
+    const attributes = serialize(value);
 
     setPost(prevPost => ({...prevPost, ...attributes}));
   };

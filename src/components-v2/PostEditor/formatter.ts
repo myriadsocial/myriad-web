@@ -1,6 +1,7 @@
 import {ELEMENT_MENTION, ELEMENT_PARAGRAPH} from '@udecode/plate';
 import {TNode} from '@udecode/plate-core';
 
+import {ELEMENT_SHOW_MORE} from './Render/ShowMore';
 import {ELEMENT_HASHTAG} from './plugins/hashtag';
 
 import {Post} from 'src/interfaces/post';
@@ -16,7 +17,64 @@ export const formatStringToNode = (string: string): TNode => {
   };
 };
 
-export const formatNodeToPost = (nodes: TNode[]): Partial<Post> => {
+const formatShowMore = (value: string, maxLength?: number): TNode[] => {
+  const showMore = maxLength && value.length > maxLength;
+  const text = maxLength && showMore ? value.slice(0, maxLength) : value;
+  const nodes: TNode[] = [formatStringToNode(text)];
+
+  if (showMore) {
+    nodes.push({
+      type: ELEMENT_SHOW_MORE,
+      children: [
+        {
+          text: '',
+        },
+      ],
+    });
+  }
+
+  return nodes;
+};
+
+export const formatToString = (node: TNode): string => {
+  if (node.text) {
+    return node.text;
+  }
+
+  return node.children ? node.children.map((element: TNode) => formatToString(element)) : '';
+};
+
+export const deserialize = (post: Post, maxLength?: number): TNode[] => {
+  try {
+    const nodes = JSON.parse(post.text) as TNode[];
+    const text = nodes.map(formatToString).join('');
+
+    if (Array.isArray(nodes)) {
+      if (maxLength && text.length > maxLength) {
+        return [
+          formatStringToNode(text.slice(0, maxLength)),
+          {
+            type: ELEMENT_SHOW_MORE,
+            children: [
+              {
+                text: '',
+              },
+            ],
+          },
+        ];
+      } else {
+        return nodes;
+      }
+    } else {
+      return formatShowMore(post.text, maxLength);
+    }
+  } catch (e) {
+    console.log(e);
+    return formatShowMore(post.text, maxLength);
+  }
+};
+
+export const serialize = (nodes: TNode[]): Partial<Post> => {
   const post: Partial<Post> = {
     text: JSON.stringify(nodes),
     tags: [],

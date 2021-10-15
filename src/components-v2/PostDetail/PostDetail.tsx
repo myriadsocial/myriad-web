@@ -1,5 +1,3 @@
-import {TNode} from '@udecode/plate';
-
 import React, {useState} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
@@ -7,7 +5,6 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
-import {Typography} from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 
 import LinkifyComponent from '../../components/common/Linkify.component';
@@ -18,13 +15,12 @@ import {RootState} from '../../reducers';
 import {BalanceState} from '../../reducers/balance/reducer';
 import {setTippedContent} from '../../reducers/timeline/actions';
 import {PostRender} from '../PostEditor/PostRender';
-import {formatStringToNode} from '../PostEditor/formatter';
+import {ShowMore} from '../PostEditor/Render/ShowMore';
 import {Button, ButtonVariant, ButtonColor, ButtonSize} from '../atoms/Button';
 import {Gallery} from '../atoms/Gallery';
 import {NSFW} from '../atoms/NSFW/NSFW.component';
 import {PostActionComponent} from '../atoms/PostAction';
 import {HeaderComponent} from '../atoms/PostHeader';
-import {ReadMore} from '../atoms/ReadMore/ReadMore';
 import {TabsComponent} from '../atoms/Tabs';
 import {Video} from '../atoms/Video';
 import {useStyles} from './PostDetail.styles';
@@ -71,6 +67,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
   const [shoWcomment, setShowComment] = useState(false);
+  const [maxLength, setMaxLength] = useState<number | undefined>(250);
   const [viewContent, setViewContent] = useState(!post.isNSFW);
   const owner = post.createdBy === user?.id;
 
@@ -139,22 +136,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     onOpenTipHistory(post);
   };
 
-  const getText = (): TNode[] => {
-    try {
-      const nodes = JSON.parse(post.text) as TNode[];
-
-      if (Array.isArray(nodes)) {
-        return nodes;
-      } else {
-        return [formatStringToNode(post.text)];
-      }
-    } catch (e) {
-      return [formatStringToNode(post.text)];
-    }
-  };
-
-  console.log({owner});
-
   return (
     <Paper square className={styles.root}>
       <HeaderComponent
@@ -173,10 +154,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
         <ShowIf condition={viewContent}>
           <ShowIf condition={post.platform === 'myriad'}>
-            <Typography variant="body1" color="textPrimary" component="p">
-              <PostRender nodes={getText()} />
-              <ReadMore text={''} maxCharacter={250} />
-            </Typography>
+            <PostRender post={post} max={maxLength} onShowAll={() => setMaxLength(undefined)} />
           </ShowIf>
 
           <ShowIf condition={['twitter'].includes(post.platform)}>
@@ -197,10 +175,13 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
                 color="textPrimary"
               />
             )}
-
             <ReactMarkdown skipHtml remarkPlugins={[remarkGFM, remarkHTML]}>
-              {post.text}
+              {post.text.slice(0, maxLength)}
             </ReactMarkdown>
+
+            <ShowIf condition={!!maxLength}>
+              <ShowMore onClick={() => setMaxLength(undefined)} />
+            </ShowIf>
           </ShowIf>
 
           <ShowIf condition={post.platform === 'facebook'}>
