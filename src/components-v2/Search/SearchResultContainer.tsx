@@ -4,8 +4,9 @@ import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {useExperienceHook} from '../../hooks/use-experience-hook';
+import {useMyriadUser} from '../../hooks/use-myriad-users.hooks';
 import {SearchedExperienceListContainer} from '../ExperienceList/SearchedExperienceListContainer';
-import {PeopleListContainer} from '../PeopleList/PeopleListContainer';
+import {UsersListContainer} from '../UsersList/UsersListContainer';
 import {SearchBoxContainer} from '../atoms/Search/SearchBoxContainer';
 import {TabItems} from '../atoms/Tabs/';
 import {TabsComponent} from '../atoms/Tabs/';
@@ -22,7 +23,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const SearchResultContainer: React.FC = () => {
-  const {searchExperience, searchPeople} = useExperienceHook();
+  const {searchExperience} = useExperienceHook();
+
+  const {search: searchUsers} = useMyriadUser();
 
   const [submittedQuery, setSubmittedQuery] = useState('');
 
@@ -39,8 +42,8 @@ export const SearchResultContainer: React.FC = () => {
 
   useEffect(() => {
     switch (selectedTab) {
-      case 'people-tab': {
-        searchPeople(submittedQuery);
+      case 'users-tab': {
+        searchUsers(submittedQuery);
         break;
       }
 
@@ -62,9 +65,9 @@ export const SearchResultContainer: React.FC = () => {
       component: <p>Posts </p>,
     },
     {
-      id: 'people-tab',
-      title: 'People',
-      component: <PeopleListContainer />,
+      id: 'users-tab',
+      title: 'Users',
+      component: <UsersListContainer />,
     },
     {
       id: 'experience-tab',

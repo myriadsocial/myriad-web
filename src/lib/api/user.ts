@@ -65,10 +65,20 @@ export const search = async (query: string): Promise<UserList> => {
     params: {
       filter: {
         where: {
-          name: {
-            like: `${query}.*`,
-            options: 'i',
-          },
+          or: [
+            {
+              username: {
+                like: `.*${query}`,
+                options: 'i',
+              },
+            },
+            {
+              name: {
+                like: `.*${query}`,
+                options: 'i',
+              },
+            },
+          ],
         },
       },
     },
