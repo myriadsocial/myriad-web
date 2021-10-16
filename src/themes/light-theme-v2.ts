@@ -50,7 +50,7 @@ declare module '@material-ui/core/styles' {
 const neutral20 = '#F5F5F5';
 const neutral30 = '#EDEDED';
 const neutral50 = '#C2C2C2';
-const neutral70 = '#757575';
+//const neutral70 = '#757575';
 const neutral90 = '#404040';
 
 //Primary colors
@@ -64,8 +64,8 @@ const primaryBlue = '#1070CA';
 
 // text colors
 const textPrimary = '#12130F';
-//const textSecondary = '#898888';
-const textSecondary = neutral70;
+const textSecondary = '#898888';
+//const textSecondary = neutral70;
 
 //Surface colors
 const surfacePurple = '#EBE0FF';
