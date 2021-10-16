@@ -98,8 +98,7 @@ export default function ProfileTimeline({profile, loading}: Props) {
             variant="fullWidth"
             onChange={handleChange}
             indicatorColor="primary"
-            textColor="primary"
-          >
+            textColor="primary">
             <Tab className={style.tabItem} label={'Myriad Post'} />
             <Tab className={style.tabItem} label={'Imported Post'} />
             <Tab className={style.tabItem} label={`Friends(${totalFriends})`} />

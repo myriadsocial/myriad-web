@@ -99,8 +99,8 @@ OtherPost.args = {
     createdBy: '0x48c145fb4a5aeb32075023a576180107ecc1e5470ab2ebdd1965b71a33dad363',
     peopleId: '60efac8c565ab8004ed28ba6',
     user: {
+      defaultCurrency: CurrencyId.ACA,
       id: '0x48c145fb4a5aeb32075023a576180107ecc1e5470ab2ebdd1965b71a33dad363',
-      defaultCurrency: CurrencyId.AUSD,
       name: 'Myriad',
       bannerImageUrl: undefined,
       fcmTokens: [],

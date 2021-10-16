@@ -30,8 +30,7 @@ const HomePage = (): JSX.Element => {
             display: 'flex',
             flexDirection: 'column',
             rowGap: 12,
-          }}
-        >
+          }}>
           <div>
             <MenuComponent selected={'home'} onChange={SidebarMenu.args?.onChange ?? console.log} />
           </div>
@@ -56,8 +55,7 @@ const HomePage = (): JSX.Element => {
             flexWrap: 'wrap',
             alignItems: 'center',
             rowGap: 12,
-          }}
-        >
+          }}>
           <div style={{width: '100%'}}>
             <DefaultSearchBox
               onSubmit={value => console.log(value)}
@@ -95,8 +93,7 @@ const HomePage = (): JSX.Element => {
             display: 'flex',
             flexDirection: 'column',
             rowGap: 12,
-          }}
-        >
+          }}>
           <div>
             <ProfileHeaderComponent
               user={userData}

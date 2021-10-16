@@ -11,7 +11,6 @@ import {ExperienceTabMenu} from './ExperienceTabMenu';
 
 import {Experience, UserExperience} from 'src/interfaces/experience';
 import {RootState} from 'src/reducers';
-import {ProfileState} from 'src/reducers/profile/reducer';
 import {updateFilter} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -29,7 +28,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const ExperienceTabMenuContainer: React.FC = () => {
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
-  const {detail: profile} = useSelector<RootState, ProfileState>(state => state.profileState);
   const style = useStyles();
   const [toggle, setToggle] = useState<string>('');
 
@@ -58,15 +56,6 @@ export const ExperienceTabMenuContainer: React.FC = () => {
     );
 
     push('type', type);
-  };
-
-  const statusProfile = (): boolean | undefined => {
-    if (profile && user) {
-      if (profile.id == user.id) {
-        return true;
-      }
-    }
-    return;
   };
 
   const handleFilterExperience = (sort: string) => {

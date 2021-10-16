@@ -31,8 +31,7 @@ const ProfilePage = (): JSX.Element => {
             display: 'flex',
             flexDirection: 'column',
             rowGap: 12,
-          }}
-        >
+          }}>
           <div>
             <MenuComponent selected={'home'} onChange={SidebarMenu.args?.onChange ?? console.log} />
           </div>
@@ -57,8 +56,7 @@ const ProfilePage = (): JSX.Element => {
             flexWrap: 'wrap',
             alignItems: 'center',
             rowGap: 12,
-          }}
-        >
+          }}>
           <div style={{width: '100%'}}>
             <TopNavbarComponent
               sectionTitle={ProfileTopNavbar.args?.sectionTitle ?? SectionTitle.PROFILE}
@@ -96,8 +94,7 @@ const ProfilePage = (): JSX.Element => {
             display: 'flex',
             flexDirection: 'column',
             rowGap: 12,
-          }}
-        >
+          }}>
           <div>
             <ProfileHeaderHomeComponent
               notificationCount={0}
