@@ -16,6 +16,7 @@ type TabsComponentProps = TabsProps & {
   padding?: number;
   background?: string;
   borderRadius?: number;
+  paddingLeft?: number;
   onChangeTab: (currentTab: string) => void;
 };
 
@@ -30,6 +31,7 @@ export const TabsComponent: React.FC<TabsComponentProps> = props => {
     padding,
     background,
     borderRadius,
+    paddingLeft,
   } = props;
 
   const styles = useStyles({position, mark, size});
@@ -56,7 +58,9 @@ export const TabsComponent: React.FC<TabsComponentProps> = props => {
           index={tab.id}
           padding={padding}
           background={background}
-          borderRadius={borderRadius}>
+          paddingLeft={paddingLeft}
+          borderRadius={borderRadius}
+        >
           {tab.component}
         </TabPanel>
       ))}
