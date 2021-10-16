@@ -9,7 +9,8 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+
+import {useStyles} from './UsersList.styles';
 
 type UsersListItemProps = ListItemProps & {
   icon?: any;
@@ -20,39 +21,6 @@ type UsersListItemProps = ListItemProps & {
   subtitle?: string | React.ReactNode;
   url?: string;
 };
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      paddingLeft: 0,
-    },
-    avatar: {
-      minWidth: theme.spacing(3.75),
-      marginRight: 20,
-    },
-    icon: {
-      minWidth: 24,
-      marginRight: 20,
-      padding: 6,
-    },
-    tiny: {
-      width: 12,
-      height: 12,
-    },
-    small: {
-      width: theme.spacing(3.75),
-      height: theme.spacing(3.75),
-    },
-    medium: {
-      width: theme.spacing(6),
-      height: theme.spacing(6),
-    },
-    large: {
-      width: theme.spacing(9),
-      height: theme.spacing(9),
-    },
-  }),
-);
 
 export const UsersListItem: React.FC<UsersListItemProps> = props => {
   const {icon, avatar, variant = 'circular', size = 'small', title, subtitle, url = ''} = props;
