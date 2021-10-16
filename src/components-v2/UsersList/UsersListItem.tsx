@@ -31,44 +31,9 @@ export const UsersListItem: React.FC<UsersListItemProps> = props => {
 
   return (
     <>
-      {url.length === 0 && (
-        <ListItem
-          button
-          component="a"
-          className={styles.root}
-          ContainerComponent="div"
-          {...listProps}
-        >
-          {avatar && (
-            <ListItemAvatar className={styles.avatar}>
-              <Avatar alt="Remy Sharp" src={avatar} variant={variant} className={styles[size]} />
-            </ListItemAvatar>
-          )}
-
-          {icon && !avatar && (
-            <ListItemIcon className={iconSyles.join(' ')}>
-              <SvgIcon component={icon} />
-            </ListItemIcon>
-          )}
-
-          <ListItemText
-            primary={
-              <Typography component="div" variant="h5" color="textPrimary">
-                {title}
-              </Typography>
-            }
-            secondary={
-              subtitle ? (
-                <Typography component="span" variant="subtitle1" color="textPrimary">
-                  {subtitle}
-                </Typography>
-              ) : undefined
-            }
-          />
-        </ListItem>
-      )}
       <Link href={url} passHref>
         <ListItem
+          disableGutters
           button
           component="a"
           className={styles.root}
@@ -77,7 +42,7 @@ export const UsersListItem: React.FC<UsersListItemProps> = props => {
         >
           {avatar && (
             <ListItemAvatar className={styles.avatar}>
-              <Avatar alt="Remy Sharp" src={avatar} variant={variant} className={styles[size]} />
+              <Avatar alt={title} src={avatar} variant={variant} className={styles[size]} />
             </ListItemAvatar>
           )}
 
@@ -95,7 +60,7 @@ export const UsersListItem: React.FC<UsersListItemProps> = props => {
             }
             secondary={
               subtitle ? (
-                <Typography component="span" variant="subtitle1" color="textPrimary">
+                <Typography component="span" variant="caption" color="textSecondary">
                   {subtitle}
                 </Typography>
               ) : undefined
