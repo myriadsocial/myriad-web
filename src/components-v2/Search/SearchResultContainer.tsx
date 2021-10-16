@@ -99,6 +99,7 @@ export const SearchResultContainer: React.FC = () => {
         padding={3.75}
         background="white"
         borderRadius={10}
+        paddingLeft={selectedTab === 'users-tab' ? 0 : 30}
         onChangeTab={handleChangeTab}
       />
     </>
