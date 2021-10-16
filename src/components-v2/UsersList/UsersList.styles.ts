@@ -3,7 +3,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      paddingLeft: 0,
+      paddingLeft: theme.spacing(3.75),
     },
     avatar: {
       minWidth: theme.spacing(3.75),
