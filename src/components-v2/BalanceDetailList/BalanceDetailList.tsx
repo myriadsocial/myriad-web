@@ -90,8 +90,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
           }}
           disableRipple
           aria-label="refresh"
-          onClick={onClickRefresh}
-        >
+          onClick={onClickRefresh}>
           <SvgIcon component={RefreshIcon} color="primary" />
           <Typography variant="body1" color="primary">
             Refresh
@@ -135,8 +134,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
         <Button
           variant={ButtonVariant.OUTLINED}
           color={ButtonColor.SECONDARY}
-          onClick={togglePrimaryCoinMenu}
-        >
+          onClick={togglePrimaryCoinMenu}>
           Set coin priority
         </Button>
         <Button onClick={onClickAddCoin} variant={ButtonVariant.CONTAINED}>

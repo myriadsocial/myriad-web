@@ -92,8 +92,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
                 <List
                   className={classes.listRoot}
                   {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
+                  ref={provided.innerRef}>
                   {provided.placeholder}
                   {coins.map((coin, index) => {
                     return (
@@ -107,8 +106,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
                               <ListItem
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                              >
+                                {...provided.dragHandleProps}>
                                 <DraggableBalanceCard balanceDetail={coin} index={index} />
                               </ListItem>
                             </>
@@ -117,8 +115,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
                               <ListItem
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                              >
+                                {...provided.dragHandleProps}>
                                 <DraggableBalanceCard balanceDetail={coin} index={index} />
                               </ListItem>
                             </>
@@ -137,8 +134,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
           <Button
             onClick={togglePrimaryCoinMenu}
             variant={ButtonVariant.OUTLINED}
-            color={ButtonColor.SECONDARY}
-          >
+            color={ButtonColor.SECONDARY}>
             Cancel
           </Button>
           <Button onClick={handleSetDefaultCurrency} variant={ButtonVariant.CONTAINED}>
