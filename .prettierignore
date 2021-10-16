@@ -1,6 +1,7 @@
 .maintain/kubernetes
 .next/
 .storybook/
+.github
 dist/
 storybook-static/
 docs/
@@ -8,3 +9,4 @@ src/lottie/
 node_modules/
 /public/sw-env.js
 *.tsbuildinfo
+*.json

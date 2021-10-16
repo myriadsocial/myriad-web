@@ -12,7 +12,7 @@ import {EmbedoReddit} from 'embedo/plugins';
 
 type EmbedProps = {
   url: string;
-  options: {
+  options?: {
     facebookAppId: string;
   };
   showError?: boolean;
@@ -73,7 +73,7 @@ export const Embed: React.FC<EmbedProps> = props => {
       <div ref={ref} onClick={handleClick} />
 
       <ShowIf condition={isFacebook}>
-        <FacebookProvider appId={options.facebookAppId}>
+        <FacebookProvider appId={options?.facebookAppId}>
           <EmbeddedPost href={url} width="700" />
         </FacebookProvider>
       </ShowIf>
