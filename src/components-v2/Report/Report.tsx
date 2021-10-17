@@ -1,14 +1,6 @@
 import React, {useState} from 'react';
 
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  List,
-  ListItem,
-  ListItemText,
-  OutlinedInput,
-} from '@material-ui/core';
+import {Button, FormControl, List, ListItem, ListItemText, TextField} from '@material-ui/core';
 
 import {tagOptions} from '../NSFWTags/default';
 import {Modal} from '../atoms/Modal';
@@ -20,7 +12,7 @@ import {Post} from 'src/interfaces/post';
 type ReportProps = {
   open: boolean;
   reference: Post | Comment;
-  onConfirm: (selected: string[]) => void;
+  onConfirm: (selected: string[], description: string) => void;
   onClose: () => void;
 };
 
@@ -31,7 +23,7 @@ export const Report: React.FC<ReportProps> = props => {
   const [tags, setTags] = useState<string[]>([]);
   const [description, setDescription] = useState('');
 
-  const handleChange = () => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDescription(event.target.value);
   };
 
@@ -44,7 +36,7 @@ export const Report: React.FC<ReportProps> = props => {
   };
 
   const submitReport = () => {
-    onConfirm(tags);
+    onConfirm(tags, description);
   };
 
   return (
@@ -62,13 +54,12 @@ export const Report: React.FC<ReportProps> = props => {
       </List>
 
       <FormControl fullWidth variant="outlined">
-        <InputLabel htmlFor="experience-description">Description</InputLabel>
-        <OutlinedInput
+        <TextField
           id="report-description"
-          placeholder="Description"
+          label="Description"
+          variant="outlined"
           value={description}
           onChange={handleChange}
-          labelWidth={70}
         />
       </FormControl>
 
