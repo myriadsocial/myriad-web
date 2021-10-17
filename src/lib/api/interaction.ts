@@ -10,6 +10,7 @@ import {
   VoteProps,
 } from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
+import {ReportProps} from 'src/interfaces/report';
 
 export const like = async (userId: string, reference: Post | Comment): Promise<Like> => {
   const type = 'platform' in reference ? ReferenceType.POST : ReferenceType.COMMENT;
@@ -62,12 +63,14 @@ export const vote = async (
   section?: SectionType,
 ): Promise<Vote> => {
   const type = 'platform' in reference ? ReferenceType.POST : ReferenceType.COMMENT;
+  const postId = 'platform' in reference ? reference.id : reference.postId;
 
   const attributes: VoteProps = {
     state: true,
     userId,
     type,
     referenceId: reference.id,
+    postId,
     section,
   };
 
@@ -86,10 +89,12 @@ export const downvote = async (
   section?: SectionType,
 ): Promise<Vote> => {
   const type = 'platform' in reference ? ReferenceType.POST : ReferenceType.COMMENT;
+  const postId = 'platform' in reference ? reference.id : reference.postId;
 
   const attributes: VoteProps = {
     state: false,
     userId,
+    postId,
     type,
     referenceId: reference.id,
     section,
@@ -108,5 +113,13 @@ export const removeVote = async (id: string): Promise<void> => {
   await MyriadAPI.request({
     url: `/votes/${id}`,
     method: 'DELETE',
+  });
+};
+
+export const report = async (report: ReportProps): Promise<void> => {
+  await MyriadAPI.request({
+    url: `/reports`,
+    method: 'POST',
+    data: report,
   });
 };
