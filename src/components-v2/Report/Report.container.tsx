@@ -2,9 +2,11 @@ import React from 'react';
 
 import {Report} from './Report';
 
+import {useReport} from 'src/hooks/use-report.hook';
 import {useToasterHook} from 'src/hooks/use-toaster.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
+import {ReportType} from 'src/interfaces/report';
 import {Status} from 'src/interfaces/toaster';
 
 type ReportContainerProps = {
@@ -17,9 +19,12 @@ export const ReportContainer: React.FC<ReportContainerProps> = props => {
   const isOpen = Boolean(reference);
 
   const {openToaster} = useToasterHook();
+  const {sendReport} = useReport();
 
-  const handleConfirmReport = () => {
-    // TODO: call API
+  const handleConfirmReport = (tags: string[], description: string) => {
+    if (reference) {
+      sendReport(reference, ReportType.OTHER, description);
+    }
 
     onClose();
     openToaster({

@@ -25,6 +25,7 @@ export type VoteProps = {
   state: boolean;
   type: ReferenceType;
   referenceId: string;
+  postId: string;
   section?: SectionType;
   userId: string;
 };
