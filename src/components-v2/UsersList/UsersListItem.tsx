@@ -38,8 +38,7 @@ export const UsersListItem: React.FC<UsersListItemProps> = props => {
           component="a"
           className={styles.root}
           ContainerComponent="div"
-          {...listProps}
-        >
+          {...listProps}>
           {avatar && (
             <ListItemAvatar className={styles.avatar}>
               <Avatar alt={title} src={avatar} variant={variant} className={styles[size]} />
