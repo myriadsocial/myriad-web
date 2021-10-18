@@ -6,11 +6,12 @@ import {User, UserTransactionDetail, ActivityLog, Report} from 'src/interfaces/u
 type UserList = BaseList<User>;
 type ActivityList = BaseList<ActivityLog>;
 
-export const getUserDetail = async (id: string): Promise<User> => {
+export const getUserDetail = async (id: string, userId?: string): Promise<User> => {
   const {data} = await MyriadAPI.request<User>({
     url: `users/${id}`,
     method: 'GET',
     params: {
+      userId,
       filter: {
         include: ['currencies'],
       },

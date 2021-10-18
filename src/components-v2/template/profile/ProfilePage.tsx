@@ -75,6 +75,7 @@ const ProfilePage = (): JSX.Element => {
               totalFriends={0}
               linkUrl={''}
               onSubmit={console.log}
+              onBlock={console.log}
             />
           </div>
           <div style={{width: '100%'}}>
