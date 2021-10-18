@@ -130,6 +130,15 @@ export const findPosts = async (query: string): Promise<PostList> => {
   const {data} = await MyriadAPI.request<PostList>({
     url: `/posts?q=${query}`,
     method: 'GET',
+    params: {
+      filter: {
+        include: [
+          {
+            relation: 'user',
+          },
+        ],
+      },
+    },
   });
 
   return data;
