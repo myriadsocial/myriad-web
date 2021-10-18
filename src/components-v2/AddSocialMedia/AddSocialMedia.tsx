@@ -42,7 +42,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
   const [termApproved, setTermApproved] = useState(false);
 
   const APP_URL = 'https://app.myriad.systems';
-  const message = `I'm part of the Myriad ${publicKey}`;
+  const message = `I'm part of the @myriad_social ${publicKey}\n\nhttps://www.myriad.social`;
 
   const onSharedAttempt = () => {
     setShared(true);
