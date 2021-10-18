@@ -47,9 +47,14 @@ export const useFriendHook = () => {
     setLoading(true);
 
     await dispatch(toggleFriendRequest(request, status));
-
     await dispatch(fetchProfileFriend());
-    await checkFriendStatus(request.requestorId);
+
+    if (!user) return;
+    if (user.id === request.requesteeId) {
+      await checkFriendStatus(request.requestorId);
+    } else {
+      await checkFriendStatus(request.requesteeId);
+    }
   };
 
   const checkFriendStatus = async (friendId: string) => {
