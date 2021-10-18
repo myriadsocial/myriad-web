@@ -18,7 +18,6 @@ type TabsComponentProps = TabsProps & {
   borderRadius?: number;
   paddingLeft?: number;
   paddingRight?: number;
-  noBox?: boolean;
   onChangeTab: (currentTab: string) => void;
 };
 
@@ -35,7 +34,6 @@ export const TabsComponent: React.FC<TabsComponentProps> = props => {
     borderRadius,
     paddingRight,
     paddingLeft,
-    noBox,
   } = props;
 
   const styles = useStyles({position, mark, size});
@@ -64,7 +62,6 @@ export const TabsComponent: React.FC<TabsComponentProps> = props => {
           background={background}
           paddingLeft={paddingLeft}
           paddingRight={paddingRight}
-          noBox={noBox}
           borderRadius={borderRadius}>
           {tab.component}
         </TabPanel>

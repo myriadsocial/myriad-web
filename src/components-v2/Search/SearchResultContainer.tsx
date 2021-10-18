@@ -40,6 +40,10 @@ export const SearchResultContainer: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    searchPosts(submittedQuery);
+  }, [submittedQuery]);
+
   const [selectedTab, setSelectedTab] = useState('');
 
   const style = useStyles();
@@ -108,7 +112,6 @@ export const SearchResultContainer: React.FC = () => {
         padding={3.75}
         background="white"
         borderRadius={10}
-        noBox={selectedTab === 'posts-tab' ? true : false}
         paddingLeft={selectedTab === 'users-tab' ? 0 : 30}
         paddingRight={selectedTab === 'users-tab' ? 0 : 30}
         onChangeTab={handleChangeTab}
