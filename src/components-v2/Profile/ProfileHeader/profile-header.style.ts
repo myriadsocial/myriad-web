@@ -125,5 +125,19 @@ export const useStyles = makeStyles((theme: Theme) =>
     delete: {
       color: '#FE3636',
     },
+    'flex-center': {
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    m1: {
+      marginRight: theme.spacing(2),
+    },
+    error: {
+      background: '#FE3636',
+      color: '#FFF',
+      '&:hover': {
+        color: theme.palette.text.primary,
+      },
+    },
   }),
 );
