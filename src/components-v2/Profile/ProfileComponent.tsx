@@ -1,6 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
+import {useRouter} from 'next/router';
+
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
 import {useStyles} from './profile.style';
 
 import {ProfileHeaderContainer} from 'src/components-v2/Profile/ProfileHeader/ProfileHeaderContainer';
@@ -19,7 +24,7 @@ type Props = {
 export const ProfileTimeline: React.FC<Props> = ({profile}) => {
   const style = useStyles();
   const dispatch = useDispatch();
-
+  const router = useRouter();
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   useEffect(() => {
@@ -35,6 +40,28 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
   const handleCloseEdit = () => {
     setIsEdit(false);
   };
+
+  const goHome = () => {
+    router.push('/home');
+  };
+
+  if (!profile.id)
+    return (
+      <div className={style.root}>
+        <div className={style.mb}>
+          <TopNavbarComponent description={'User not found'} sectionTitle={SectionTitle.PROFILE} />
+        </div>
+        <div className={style.emptyUser}>
+          <Typography className={style.text}>We cannot find user you are looking for</Typography>
+          <Typography className={style.text2}>
+            This user might be blocked or banned from our system
+          </Typography>
+          <Button onClick={goHome} variant="contained" color="primary" size="medium">
+            Back to Home
+          </Button>
+        </div>
+      </div>
+    );
 
   return (
     <div className={style.root}>

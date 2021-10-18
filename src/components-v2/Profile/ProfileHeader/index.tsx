@@ -24,6 +24,7 @@ import {Friend, FriendStatus} from '../../../interfaces/friend';
 import {User, Report} from '../../../interfaces/user';
 import {RootState} from '../../../reducers/';
 import {BalanceState} from '../../../reducers/balance/reducer';
+import {PromptComponent} from '../../atoms/Prompt/prompt.component';
 import {ReportComponent} from '../../atoms/Report/Report.component';
 import {useStyles} from './profile-header.style';
 
@@ -44,6 +45,7 @@ export type Props = {
   onEdit?: () => void;
   linkUrl: string;
   onSubmit: (payload: Partial<Report>) => void;
+  onBlock: () => void;
 };
 
 const background = 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png';
@@ -60,6 +62,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     onSendTip,
     linkUrl,
     onSubmit,
+    onBlock,
   } = props;
   const style = useStyles();
 
@@ -69,6 +72,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   const [anchorElFriend, setAnchorElFriend] = React.useState<null | HTMLElement>(null);
   const [linkCopied, setLinkCopied] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [openPrompt, setOpenPrompt] = React.useState(false);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -122,6 +126,20 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
 
   const handleCloseModal = () => {
     setOpen(false);
+  };
+
+  const handleOpenPrompt = () => {
+    setOpenPrompt(true);
+    handleClose();
+  };
+
+  const handleClosePrompt = () => {
+    setOpenPrompt(false);
+  };
+
+  const handleBlockUser = () => {
+    onBlock();
+    setOpenPrompt(false);
   };
 
   return (
@@ -303,7 +321,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                   open={Boolean(anchorElFriend)}
                   onClose={handleClose}>
                   <MenuItem>Unfriend</MenuItem>
-                  <MenuItem disabled className={style.delete}>
+                  <MenuItem onClick={handleOpenPrompt} className={style.delete}>
                     Block this person
                   </MenuItem>
                 </Menu>
@@ -329,6 +347,31 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           </div>
         </div>
       </div>
+
+      <PromptComponent
+        onCancel={handleClosePrompt}
+        open={openPrompt}
+        icon="danger"
+        title="Block User?"
+        subtitle="You will not able to search and see post from this user">
+        <div className={`${style['flex-center']}`}>
+          <Button
+            onClick={handleClosePrompt}
+            className={style.m1}
+            size="small"
+            variant="outlined"
+            color="secondary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleBlockUser}
+            className={style.error}
+            size="small"
+            variant="contained">
+            Block Now
+          </Button>
+        </div>
+      </PromptComponent>
 
       <ReportComponent onSubmit={onSubmit} user={user} open={open} onClose={handleCloseModal} />
 
