@@ -17,6 +17,7 @@ type BoxComponentProps = BoxProps & {
   isFitContent?: boolean;
   minWidth?: number;
   paddingLeft?: number;
+  paddingRight?: number;
   onClick?: () => void;
 };
 
@@ -32,7 +33,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     minWidth: props => props.minWidth ?? 0,
     padding: theme.spacing(3, 3.75),
     // @ts-ignore
-    paddingLeft: props => props.paddingLeft ?? theme.spacing(3.75),
+    paddingLeft: props => (props.paddingLeft === 0 ? theme.spacing(0) : theme.spacing(3.75)),
+    // @ts-ignore
+    paddingRight: props => props.paddingRight ?? theme.spacing(3.75),
   },
   header: {
     marginBottom: 14,
@@ -57,9 +60,10 @@ export const BoxComponent: React.FC<BoxComponentProps> = props => {
     radiusStr,
     minWidth,
     paddingLeft,
+    paddingRight,
     ...restProps
   } = props;
-  const styles = useStyles({isFitContent, radiusStr, minWidth, paddingLeft});
+  const styles = useStyles({isFitContent, radiusStr, minWidth, paddingLeft, paddingRight});
 
   const handleClick = (): void => {
     onClick && onClick();
@@ -77,8 +81,7 @@ export const BoxComponent: React.FC<BoxComponentProps> = props => {
               onClick={handleClick}
               color="primary"
               size="medium"
-              className={styles.action}
-            >
+              className={styles.action}>
               <SvgIcon component={ChevronRightIcon} viewBox="0 0 24 24" />
             </IconButton>
           )}
