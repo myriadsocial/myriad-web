@@ -3,8 +3,6 @@ import React from 'react';
 import Box from '@material-ui/core/Box';
 import {createStyles, makeStyles} from '@material-ui/core/styles';
 
-import ShowIf from '../../../components/common/show-if.component';
-
 type TabPanelProps = {
   value: string | number;
   index: string | number;
@@ -14,7 +12,6 @@ type TabPanelProps = {
   borderRadius?: number;
   paddingLeft?: number;
   paddingRight?: number;
-  noBox?: boolean;
 };
 
 const useStyles = makeStyles(() =>
@@ -32,21 +29,18 @@ export const TabPanel: React.FC<TabPanelProps> = props => {
     padding = 3,
     background = 'none',
     borderRadius = 0,
-    paddingLeft = 30,
-    paddingRight = 30,
-    noBox = false,
+    paddingLeft = 0,
+    paddingRight = 0,
   } = props;
 
   return (
     <div className={styles.root} hidden={value !== index} role="tabpanel">
-      {value === index && (
+      {index === 'posts-tab' && <>{children}</>}
+      {index !== 'posts-tab' && value === index && (
         <>
-          <ShowIf condition={!noBox}>
-            <Box p={padding} style={{background, borderRadius, paddingLeft, paddingRight}}>
-              {children}
-            </Box>
-          </ShowIf>
-          <ShowIf condition={noBox}>{children}</ShowIf>
+          <Box p={padding} style={{background, borderRadius, paddingLeft, paddingRight}}>
+            {children}
+          </Box>
         </>
       )}
     </div>
