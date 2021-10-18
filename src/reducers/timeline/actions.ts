@@ -109,6 +109,14 @@ export interface SetTippedContent extends Action {
   contentType: string;
   referenceId: string;
 }
+
+export interface SetSearchedPosts extends Action {
+  type: constants.SET_SEARCHED_POSTS;
+  payload: {
+    posts: Post[];
+    meta: ListMeta;
+  };
+}
 /**
  * Union Action Types
  */
@@ -130,6 +138,7 @@ export type Actions =
   | SetDownvoting
   | DownvotePost
   | SetTippedContent
+  | SetSearchedPosts
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -560,6 +569,31 @@ export const downvote: ThunkActionCreator<Actions, RootState> =
       });
 
       callback && callback();
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
+  (query: string) => async dispatch => {
+    dispatch(setLoading(true));
+
+    try {
+      const {data: posts, meta} = await PostAPI.findPosts(query);
+
+      dispatch({
+        type: constants.SET_SEARCHED_POSTS,
+        payload: {
+          posts,
+          meta,
+        },
+      });
     } catch (error) {
       dispatch(
         setError({
