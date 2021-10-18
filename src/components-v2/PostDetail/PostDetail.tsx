@@ -39,7 +39,7 @@ type PostDetailProps = {
   onUpvote: (reference: Post | Comment) => void;
   onSendTip: (post: Post) => void;
   onOpenTipHistory: (post: Post) => void;
-  onDelete: (post: Post) => void;
+  onDelete?: (post: Post) => void;
   onReport: (post: Post) => void;
   onShared: (post: Post, type: 'link' | 'post') => void;
   expanded?: boolean;
@@ -118,7 +118,9 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   };
 
   const handleDeletePost = () => {
-    onDelete(post);
+    if (onDelete) {
+      onDelete(post);
+    }
   };
 
   const handleReportPost = () => {
