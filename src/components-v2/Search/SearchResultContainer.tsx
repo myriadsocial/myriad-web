@@ -6,6 +6,8 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {useExperienceHook} from '../../hooks/use-experience-hook';
 import {useMyriadUser} from '../../hooks/use-myriad-users.hooks';
 import {SearchedExperienceListContainer} from '../ExperienceList/SearchedExperienceListContainer';
+import {PostsListContainer} from '../PostsList/PostsListContainer';
+import {useTimelineHook} from '../Timeline/hooks/use-timeline.hook';
 import {UsersListContainer} from '../UsersList/UsersListContainer';
 import {SearchBoxContainer} from '../atoms/Search/SearchBoxContainer';
 import {TabItems} from '../atoms/Tabs/';
@@ -27,6 +29,8 @@ export const SearchResultContainer: React.FC = () => {
 
   const {search: searchUsers} = useMyriadUser();
 
+  const {searchPosts} = useTimelineHook();
+
   const [submittedQuery, setSubmittedQuery] = useState('');
 
   useEffect(() => {
@@ -42,6 +46,11 @@ export const SearchResultContainer: React.FC = () => {
 
   useEffect(() => {
     switch (selectedTab) {
+      case 'posts-tab': {
+        searchPosts(submittedQuery);
+        break;
+      }
+
       case 'users-tab': {
         searchUsers(submittedQuery);
         break;
@@ -60,9 +69,9 @@ export const SearchResultContainer: React.FC = () => {
 
   const [searchResultTabTexts] = useState<TabItems<string>[]>([
     {
-      id: 'post-tab',
+      id: 'posts-tab',
       title: 'Post',
-      component: <p>Posts </p>,
+      component: <PostsListContainer />,
     },
     {
       id: 'users-tab',
@@ -99,6 +108,7 @@ export const SearchResultContainer: React.FC = () => {
         padding={3.75}
         background="white"
         borderRadius={10}
+        noBox={selectedTab === 'posts-tab' ? true : false}
         paddingLeft={selectedTab === 'users-tab' ? 0 : 30}
         paddingRight={selectedTab === 'users-tab' ? 0 : 30}
         onChangeTab={handleChangeTab}
