@@ -1,10 +1,13 @@
 import React, {createContext, useContext, useReducer} from 'react';
 
+import {Post} from '../../interfaces/post';
+
 import {User} from 'src/interfaces/user';
 
 export enum SearchActionType {
   RESET_STATE = 'RESET_STATE',
   LOAD_USER = 'USER_LOADED',
+  LOAD_POSTS = 'POSTS_LOADED',
   ABORT_SEARCH = 'ABORT_SEARCH',
 }
 
@@ -17,20 +20,27 @@ export interface LoadUser {
   payload: User[];
 }
 
+export interface LoadPosts {
+  type: SearchActionType.LOAD_POSTS;
+  payload: Post[];
+}
+
 export interface AbortSearch {
   type: SearchActionType.ABORT_SEARCH;
 }
 
-export type Action = LoadUser | AbortSearch | ResetState;
+export type Action = LoadUser | LoadPosts | AbortSearch | ResetState;
 type Dispatch = (action: Action) => void;
 type SearchProviderProps = {children: React.ReactNode};
 type State = {
   users: User[];
+  posts: Post[];
   isSearching: boolean;
 };
 
 const initialState = {
   isSearching: false,
+  posts: [],
   users: [],
 };
 
@@ -47,6 +57,13 @@ function searchReducer(state: State, action: Action) {
       return {
         ...state,
         users: action.payload,
+        isSearching: true,
+      };
+    }
+    case SearchActionType.LOAD_POSTS: {
+      return {
+        ...state,
+        posts: action.payload,
         isSearching: true,
       };
     }

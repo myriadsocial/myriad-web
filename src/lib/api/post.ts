@@ -126,6 +126,35 @@ export const getPost = async (
   return data;
 };
 
+export const findPosts = async (query: string): Promise<PostList> => {
+  const {data} = await MyriadAPI.request<PostList>({
+    url: '/posts',
+    method: 'GET',
+    params: {
+      filter: {
+        where: {
+          or: [
+            {
+              text: {
+                like: `.*${query}`,
+                options: 'i',
+              },
+            },
+            {
+              title: {
+                like: `.*${query}`,
+                options: 'i',
+              },
+            },
+          ],
+        },
+      },
+    },
+  });
+
+  return data;
+};
+
 export const createPost = async (values: PostProps): Promise<Post> => {
   const {data} = await MyriadAPI.request<Post>({
     url: '/posts',
