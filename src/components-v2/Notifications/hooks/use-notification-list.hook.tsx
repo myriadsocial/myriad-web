@@ -76,8 +76,8 @@ export const useNotificationList = (notifications: Notification[]): Notification
           description: (
             <Typography component="span">
               Commented on your&nbsp;
-              <Link href={`/${notification.referenceId}/post`}>
-                <a href={`/${notification.referenceId}/post`} className={style.link}>
+              <Link href={`/post/${notification.referenceId}`}>
+                <a href={`/post/${notification.referenceId}`} className={style.link}>
                   Post
                 </a>
               </Link>
@@ -123,8 +123,8 @@ export const useNotificationList = (notifications: Notification[]): Notification
           description: (
             <Typography component="span">
               Upvoted your&nbsp;
-              <Link href={`/${notification.referenceId}/post`}>
-                <a href={`/${notification.referenceId}/post`} className={style.link}>
+              <Link href={`/post/${notification.referenceId}`}>
+                <a href={`/post/${notification.referenceId}`} className={style.link}>
                   Post
                 </a>
               </Link>
@@ -218,8 +218,8 @@ export const useNotificationList = (notifications: Notification[]): Notification
           description: (
             <Typography component="span">
               Your&nbsp;
-              <Link href={`/${notification.referenceId}/post`}>
-                <a href={`/${notification.referenceId}/post`} className={style.link}>
+              <Link href={`/post/${notification.referenceId}`}>
+                <a href={`/post/${notification.referenceId}`} className={style.link}>
                   post
                 </a>
               </Link>
@@ -320,8 +320,8 @@ export const useNotificationList = (notifications: Notification[]): Notification
           description: (
             <Typography component="span">
               Somebody reported your&nbsp;
-              <Link href={`/${notification.referenceId}/post`}>
-                <a href={`/${notification.referenceId}/post`} className={style.link}>
+              <Link href={`/post/${notification.referenceId}`}>
+                <a href={`/post/${notification.referenceId}`} className={style.link}>
                   Post
                 </a>
               </Link>
