@@ -227,6 +227,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
         <ShowIf condition={!owner}>
           <Button
+            isDisabled={balanceDetails.length === 0}
             onClick={handleSendTip}
             variant={ButtonVariant.OUTLINED}
             color={ButtonColor.SECONDARY}
