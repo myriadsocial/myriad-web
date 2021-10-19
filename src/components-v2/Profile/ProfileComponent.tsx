@@ -13,6 +13,7 @@ import {ProfileEditContainer} from 'src/components-v2/Profile/edit/ProfileEditCo
 import {UserMenuContainer} from 'src/components-v2/UserMenu';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import ShowIf from 'src/components/common/show-if.component';
+import Illustration from 'src/images/UserStatusIsometric.svg';
 import {User} from 'src/interfaces/user';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';
 
@@ -52,6 +53,9 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
           <TopNavbarComponent description={'User not found'} sectionTitle={SectionTitle.PROFILE} />
         </div>
         <div className={style.emptyUser}>
+          <div className={style.illustration}>
+            <Illustration />
+          </div>
           <Typography className={style.text}>We cannot find user you are looking for</Typography>
           <Typography className={style.text2}>
             This user might be blocked or banned from our system
