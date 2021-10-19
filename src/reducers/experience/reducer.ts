@@ -10,7 +10,7 @@ export interface ExperienceState extends BasePaginationState {
   experiences: UserExperience[];
   allExperiences: Experience[];
   selectedExperience: Experience | null;
-  searchExperience: UserExperience[];
+  searchExperience: Experience[];
   searchPeople: People[];
   searchTags: Tag[];
   hasMore: boolean;
@@ -75,7 +75,7 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
     case constants.SEARCH_EXPERIENCE: {
       return {
         ...state,
-        searchExperience: action.experiences,
+        experiences: action.experiences,
       };
     }
 
