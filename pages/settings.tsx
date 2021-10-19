@@ -27,8 +27,9 @@ const Settings: React.FC = () => {
   return (
     <DefaultLayout isOnProfilePage={false}>
       <ToasterContainer />
-      <TopNavbarComponent description={'Account settings'} sectionTitle={SectionTitle.SETTINGS} />
-
+      <div style={{marginTop: '-20px'}}>
+        <TopNavbarComponent description={'Account settings'} sectionTitle={SectionTitle.SETTINGS} />
+      </div>
       <SettingsComponent onSaveSetting={console.log} />
     </DefaultLayout>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {BlockListContainer} from '../../BlockUserList/BlockList.container';
+import {HelpComponent} from '../../Help/Help';
 
 export type SettingsOption = {
   id: string;
@@ -34,6 +35,7 @@ export const useSettingList = (): SettingsOption[] => {
       id: 'help',
       title: 'Help',
       subtitle: 'Terms and conditions, privacy policy, contact us',
+      component: <HelpComponent />,
     },
     {
       id: 'about',
