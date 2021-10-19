@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {BlockListContainer} from '../../BlockUserList/BlockList.container';
+
 export type SettingsOption = {
   id: string;
   title: string;
@@ -18,14 +20,15 @@ export const useSettingList = (): SettingsOption[] => {
     {
       id: 'notification',
       title: 'Notification',
-      subtitle: 'configure any type of notification',
+      subtitle:
+        'By blocking someone, they can no longer see things you post on your timeline, tag you, and start a conversation with you, or add you as a friend.',
       component: <p>Test</p>,
     },
     {
       id: 'block',
       title: 'Blocked User',
       subtitle: 'list of people you blocked on myriad',
-      component: <p>Test</p>,
+      component: <BlockListContainer />,
     },
     {
       id: 'help',
