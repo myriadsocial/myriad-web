@@ -9,6 +9,8 @@ import {PostDetail} from '../PostDetail/';
 import {sortOptions} from '../Timeline/default';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 
+import _ from 'lodash';
+
 type PostsListProps = {
   user?: User;
   searchedPosts: Post[];
