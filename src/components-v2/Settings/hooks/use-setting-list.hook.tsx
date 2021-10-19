@@ -16,12 +16,6 @@ export const useSettingList = (): SettingsOption[] => {
       component: <p>Test</p>,
     },
     {
-      id: 'post',
-      title: 'Post',
-      subtitle: 'who can see your post, comment, send tip etc',
-      component: <p>Test</p>,
-    },
-    {
       id: 'notification',
       title: 'Notification',
       subtitle: 'configure any type of notification',
@@ -44,6 +38,12 @@ export const useSettingList = (): SettingsOption[] => {
       title: 'About Myriad',
       subtitle: 'Read more about Myriad',
       component: <p>Test</p>,
+    },
+    {
+      id: 'version',
+      title: 'Myriad version',
+      subtitle: '',
+      component: <></>,
     },
   ];
 };
