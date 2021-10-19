@@ -13,8 +13,19 @@ interface ExperienceListProps {
   onDelete?: (experienceId: string) => void;
 }
 
+interface NonSelectableExperienceList {
+  experiences: Experience[];
+  isOnHomePage?: boolean;
+  user?: User;
+  filterTimeline: (type: TimelineType, experience: Experience) => void;
+  onSubscribe?: (experienceId: string) => void;
+  onFollow?: (experienceId: string) => void;
+  onPreview?: (experienceId: string) => void;
+  onDelete?: (experienceId: string) => void;
+}
+
 type NonSelectableExperienceListProps = Omit<
-  ExperienceListProps,
+  NonSelectableExperienceList,
   'filterTimeline' | 'isOnHomePage'
 >;
 
