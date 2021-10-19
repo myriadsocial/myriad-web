@@ -1,9 +1,15 @@
-import {isCollapsed, getRangeBefore, getText, unwrapNodes, wrapNodes} from '@udecode/plate-common';
+import {
+  isCollapsed,
+  getRangeBefore,
+  getText,
+  wrapNodes,
+  getQueryOptions,
+} from '@udecode/plate-common';
 import {getPlatePluginType, SPEditor, WithOverride, TElement} from '@udecode/plate-core';
 
 import {ELEMENT_HASHTAG} from './default';
 
-import {Range, Transforms} from 'slate';
+import {Range, Transforms, Editor} from 'slate';
 import {ReactEditor} from 'slate-react';
 
 const isHashTag = (string: string): boolean => {
@@ -20,20 +26,11 @@ const isHashTag = (string: string): boolean => {
 };
 
 export const insertHashtag = (editor: SPEditor, value: string | ArrayBuffer, at: Range) => {
-  unwrapNodes(editor, {
-    at,
-    match: {type: getPlatePluginType(editor, ELEMENT_HASHTAG)},
-  });
-
-  const newSelection = editor.selection as Range;
-
   const hashtag = {
     type: getPlatePluginType(editor, ELEMENT_HASHTAG),
     children: [{text: ''}],
     hashtag: value,
   };
-
-  console.log('selection', newSelection);
 
   wrapNodes<TElement>(editor, hashtag, {
     at,
@@ -54,24 +51,67 @@ export const withHashtag = (): WithOverride<ReactEditor & SPEditor> => editor =>
       return insertText(text);
     }
 
-    if (text === ' ' && isCollapsed(editor.selection)) {
+    // allowed character on hashtag
+    const match = text.match(/(?:\s|^)[A-Za-z0-9\-._]+(?:\s|$)/);
+
+    if (match && isCollapsed(editor.selection)) {
       const beforeWordRange = getRangeBefore(editor, selection, {
-        matchString: ' ',
-        skipInvalid: true,
-        afterMatch: true,
-        multiPaths: true,
+        matchString: '#',
+        skipInvalid: false,
+        afterMatch: false,
+        multiPaths: false,
       });
 
       if (beforeWordRange) {
         const beforeWordText = getText(editor, beforeWordRange);
+        const currentText = beforeWordText + text;
 
-        if (isHashTag(beforeWordText)) {
-          insertHashtag(editor, beforeWordText.replace('#', ''), beforeWordRange);
+        if (isHashTag(currentText)) {
+          insertHashtag(editor, currentText.replace('#', ''), beforeWordRange);
+        }
+      } else {
+        const beforeWordRange = getRangeBefore(editor, selection, {
+          matchString: ' ',
+          skipInvalid: true,
+          afterMatch: false,
+          multiPaths: false,
+        });
+
+        if (!beforeWordRange) {
+          const prevNode = Editor.previous<any>(
+            editor,
+            getQueryOptions<TElement>(editor, {
+              at: selection,
+              match: {
+                type: getPlatePluginType(editor, ELEMENT_HASHTAG),
+              },
+            }),
+          );
+
+          if (prevNode) {
+            const [child, path] = prevNode;
+            const current = child.hashtag + text;
+
+            Transforms.removeNodes(editor, {at: path});
+
+            const hashtag = {
+              type: getPlatePluginType(editor, ELEMENT_HASHTAG),
+              children: [{text: ''}],
+              hashtag: current,
+            };
+
+            Transforms.insertNodes(editor, hashtag, {at: path});
+            Transforms.select(editor, selection);
+          } else {
+            insertText(text);
+          }
+        } else {
+          insertText(text);
         }
       }
+    } else {
+      insertText(text);
     }
-
-    insertText(text);
   };
 
   return editor;
