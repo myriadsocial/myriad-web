@@ -22,9 +22,9 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 
 import {Friend, FriendStatus} from '../../../interfaces/friend';
 import {User, Report} from '../../../interfaces/user';
+import {RootState} from '../../../reducers/';
+import {BalanceState} from '../../../reducers/balance/reducer';
 import {ReportComponent} from '../../atoms/Report/Report.component';
-import {RootState} from '../../reducers';
-import {BalanceState} from '../../reducers/balance/reducer';
 import {useStyles} from './profile-header.style';
 
 import {format} from 'date-fns';
