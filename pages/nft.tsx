@@ -3,17 +3,16 @@ import {useDispatch} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
 
-import {DefaultLayout} from '../../src/components-v2/template/Default/DefaultLayout';
-
-import {ExperienceContainer} from 'src/components-v2/ExperienceEditor/Experience.container';
+import NFTContainer from 'src/components-v2/NFT/NFT.container';
 import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
+import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {setAnonymous, setUser, fetchConnectedSocials} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 
-const CreateExperience: React.FC = () => {
+const NFTComponent: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -21,11 +20,13 @@ const CreateExperience: React.FC = () => {
     dispatch(fetchAvailableToken());
   }, [dispatch]);
 
+  //TODO: any logic + components which replace
+  // the middle column of home page should go here
+
   return (
     <DefaultLayout isOnProfilePage={false}>
+      <NFTContainer />
       <ToasterContainer />
-
-      <ExperienceContainer />
     </DefaultLayout>
   );
 };
@@ -71,4 +72,4 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   };
 });
 
-export default CreateExperience;
+export default NFTComponent;
