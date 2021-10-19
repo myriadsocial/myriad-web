@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {useTheme} from '@material-ui/core/styles';
 
 import AlertComponent from '../../../components/alert/Alert.component';
+import ShowIf from '../../../components/common/show-if.component';
 import {MenuContainer} from '../../Menu/MenuContainer';
+import {NotificationsContainer} from '../../Notifications/sidebar/Notifications.container';
 import {ProfileHeaderContainer} from '../../ProfileHeader/ProfileHeaderContainer';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
 import {SocialMediaListContainer} from '../../SocialMediaList/SocialMediaListContainer';
@@ -18,8 +20,12 @@ type DefaultLayoutProps = {
 export const DefaultLayout: React.FC<DefaultLayoutProps> = props => {
   const {children} = props;
   const classes = useStyles();
-
+  const [showNotification, setShowNotification] = useState(false);
   const theme = useTheme();
+
+  const handleToggleNotification = () => {
+    setShowNotification(!showNotification);
+  };
 
   return (
     <>
@@ -45,10 +51,15 @@ export const DefaultLayout: React.FC<DefaultLayoutProps> = props => {
         <div className={classes.thirdCol}>
           <div className={classes.innerThirdColWrapper}>
             <div>
-              <ProfileHeaderContainer />
+              <ProfileHeaderContainer toggleNotification={handleToggleNotification} />
             </div>
-            <div style={{marginTop: theme.spacing(2.5)}}>
-              <RightMenuBar />
+            <div style={{marginTop: theme.spacing(1)}}>
+              <ShowIf condition={!showNotification}>
+                <RightMenuBar />
+              </ShowIf>
+              <ShowIf condition={showNotification}>
+                <NotificationsContainer />
+              </ShowIf>
             </div>
           </div>
         </div>

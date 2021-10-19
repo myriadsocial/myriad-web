@@ -19,7 +19,11 @@ import {NotificationState} from 'src/reducers/notification/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 import {Prompt} from 'src/stories/Prompt.stories';
 
-export const ProfileHeaderContainer: React.FC = () => {
+type Props = {
+  toggleNotification: () => void;
+};
+
+export const ProfileHeaderContainer: React.FC<Props> = ({toggleNotification}) => {
   const {user, alias, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
 
@@ -81,9 +85,7 @@ export const ProfileHeaderContainer: React.FC = () => {
   };
 
   const handleShowNotificationList = () => {
-    if (user && !anonymous) {
-      router.push(`/notification`);
-    }
+    toggleNotification();
   };
 
   return (
