@@ -134,7 +134,7 @@ export const PostRender: React.FC<PostRenderProps> = props => {
                   color: theme.palette.primary.main,
                   display: 'inline-block',
                 }}>
-                {children}
+                #{node.hashtag}
               </Typography>
             </Link>
           );
