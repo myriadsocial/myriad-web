@@ -15,7 +15,7 @@ import {FriendState} from 'src/reducers/friend/reducer';
 import {setAnonymous, setUser, fetchConnectedSocials} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 
-const Socials: React.FC = () => {
+const Friends: React.FC = () => {
   const dispatch = useDispatch();
   const {meta} = useSelector<RootState, FriendState>(state => state.friendState);
 
@@ -81,4 +81,4 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   };
 });
 
-export default Socials;
+export default Friends;
