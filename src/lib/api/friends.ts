@@ -62,6 +62,26 @@ export const getFriends = async (userId: string, page = 1): Promise<FriendList> 
   return data;
 };
 
+export const getBlockList = async (userId: string, page = 1): Promise<FriendList> => {
+  const {data} = await MyriadAPI.request<FriendList>({
+    url: `/friends`,
+    method: 'GET',
+    params: {
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
+      filter: {
+        where: {
+          or: [{requesteeId: userId}, {requestorId: userId}],
+          status: FriendStatus.BLOCKED,
+        },
+        include: ['requestee', 'requestor'],
+      },
+    },
+  });
+
+  return data;
+};
+
 export const searchFriend = async (userId: string, query: string): Promise<FriendList> => {
   const {data} = await MyriadAPI.request<FriendList>({
     url: `/friends`,

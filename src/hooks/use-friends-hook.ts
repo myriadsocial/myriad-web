@@ -5,6 +5,7 @@ import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
 import {RootState} from 'src/reducers';
+import {getBlockList} from 'src/reducers/block/actions';
 import {
   fetchFriendRequest,
   createFriendRequest,
@@ -92,6 +93,11 @@ export const useFriendsHook = (user?: User) => {
     dispatch(deleteFriendRequest(request));
   };
 
+  const loadBlockList = () => {
+    if (!user) return;
+    dispatch(getBlockList(user));
+  };
+
   return {
     error,
     loading,
@@ -105,5 +111,6 @@ export const useFriendsHook = (user?: User) => {
     toggleRequest,
     removeFriendRequest,
     checkFriendStatus,
+    loadBlockList,
   };
 };
