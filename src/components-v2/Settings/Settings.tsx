@@ -20,56 +20,60 @@ export const Settings: React.FC<SettingsProps> = () => {
 
   return (
     <Paper className={styles.root}>
-      <Typography className={styles.title} color="textPrimary">
-        {selected?.title} Settings
-      </Typography>
-
       {!selected && (
-        <List>
-          {settings.map(item => {
-            return (
-              <ListItem
-                key={item.id}
-                button
-                onClick={() => setSelectedSetting(item)}
-                className={styles.option}
-                alignItems="center">
-                <ListItemText>
-                  <Typography variant="h5" color="textPrimary">
-                    {item.title}
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {item.subtitle}
-                  </Typography>
-                </ListItemText>
-                {item.id === 'version' && (
-                  <div
-                    style={{
-                      display: 'flex',
-                      paddingRight: 31,
-                      fontWeight: 300,
-                      fontStyle: 'italic',
-                      fontSize: 14,
-                      color: '#988E8E',
-                    }}>
-                    <Typography>v1.0.0</Typography>
-                  </div>
-                )}
+        <>
+          <Typography className={styles.title} color="textPrimary">
+            Settings
+          </Typography>
+          <List>
+            {settings.map(item => {
+              return (
+                <ListItem
+                  key={item.id}
+                  button
+                  onClick={() => setSelectedSetting(item)}
+                  className={styles.option}
+                  alignItems="center">
+                  <ListItemText>
+                    <Typography variant="h5" color="textPrimary">
+                      {item.title}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary">
+                      {item.subtitle}
+                    </Typography>
+                  </ListItemText>
+                  {item.id === 'version' && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        paddingRight: 31,
+                        fontWeight: 300,
+                        fontStyle: 'italic',
+                        fontSize: 14,
+                        color: '#988E8E',
+                      }}>
+                      <Typography>v1.0.0</Typography>
+                    </div>
+                  )}
 
-                {item.id !== 'version' && (
-                  <div className="hidden-button">
-                    <SvgIcon component={ChevronRightIcon} />
-                  </div>
-                )}
-              </ListItem>
-            );
-          })}
-        </List>
+                  {item.id !== 'version' && (
+                    <div className="hidden-button">
+                      <SvgIcon component={ChevronRightIcon} />
+                    </div>
+                  )}
+                </ListItem>
+              );
+            })}
+          </List>
+        </>
       )}
 
       {selected && (
         <ShowIf condition={selected.id !== 'version' && selected.id !== 'about'}>
-          selected.component
+          <Typography className={styles.subtitle} color="textPrimary">
+            {selected?.title}
+          </Typography>
+          <div>{selected.component}</div>
         </ShowIf>
       )}
     </Paper>

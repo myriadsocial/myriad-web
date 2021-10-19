@@ -1,5 +1,6 @@
 import {BalanceReducer} from './balance/reducer';
 import {BaseReducer} from './base/reducer';
+import {BlockReducer} from './block/reducer';
 import {ConfigReducer} from './config/reducer';
 import {ExperienceReducer} from './experience/reducer';
 import {FriendRequestReducer} from './friend-request/reducer';
@@ -34,6 +35,7 @@ const reducers = {
   experienceState: ExperienceReducer,
   peopleState: PeopleReducer,
   toasterState: ToasterReducer,
+  blockState: BlockReducer,
 };
 
 export const combinedReducers = combineReducers(reducers);

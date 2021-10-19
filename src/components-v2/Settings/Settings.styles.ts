@@ -11,6 +11,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingLeft: theme.spacing(3.75),
       paddingBottom: theme.spacing(5),
     },
+    subtitle: {
+      fontSize: theme.typography.h4.fontSize,
+      fontWeight: 700,
+      paddingLeft: theme.spacing(3.75),
+      paddingBottom: theme.spacing(1),
+    },
     option: {
       paddingLeft: 30,
       paddingTop: 18,
