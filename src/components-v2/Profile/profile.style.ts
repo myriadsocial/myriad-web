@@ -34,7 +34,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: 30,
     },
     text: {
-      marginTop: '320px',
       marginBottom: '20px',
       fontSize: '24px',
       fontWeight: 700,
@@ -44,6 +43,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: '85px',
       fontSize: '20px',
       lineHeight: 1,
+    },
+    illustration: {
+      marginBottom: '80px',
+      marginTop: '70px',
     },
   }),
 );
