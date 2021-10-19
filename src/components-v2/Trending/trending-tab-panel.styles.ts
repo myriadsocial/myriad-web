@@ -13,7 +13,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 3.75),
       background: '#FFF',
       boxShadow: `0px 2px 10px rgba(0, 0, 0, 0.05)`,
-      borderRadius: `20px 20px 0px 0px`,
+      borderRadius: `20px`,
     },
   }),
 );
