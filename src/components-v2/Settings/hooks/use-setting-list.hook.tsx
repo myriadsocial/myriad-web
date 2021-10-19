@@ -3,8 +3,8 @@ import React from 'react';
 export type SettingsOption = {
   id: string;
   title: string;
-  subtitle: string;
-  component: React.ReactNode;
+  subtitle?: string;
+  component?: React.ReactNode;
 };
 
 export const useSettingList = (): SettingsOption[] => {
@@ -31,19 +31,15 @@ export const useSettingList = (): SettingsOption[] => {
       id: 'help',
       title: 'Help',
       subtitle: 'Terms and conditions, privacy policy, contact us',
-      component: <p>Test</p>,
     },
     {
       id: 'about',
       title: 'About Myriad',
       subtitle: 'Read more about Myriad',
-      component: <p>Test</p>,
     },
     {
       id: 'version',
       title: 'Myriad version',
-      subtitle: '',
-      component: <></>,
     },
   ];
 };
