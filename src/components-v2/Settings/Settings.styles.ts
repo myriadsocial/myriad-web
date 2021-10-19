@@ -23,6 +23,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
       '&:hover .hidden-button': {
         display: 'flex',
+        paddingRight: 29,
       },
     },
   }),
