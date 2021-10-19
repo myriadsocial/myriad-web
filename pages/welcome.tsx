@@ -8,7 +8,7 @@ import * as UserAPI from 'src/lib/api/user';
 import {setAnonymous, setUser} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 
-const Socials: React.FC = () => {
+const WelcomeComponentPage: React.FC = () => {
   return <WelcomeContainer />;
 };
 
@@ -59,4 +59,4 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   };
 });
 
-export default Socials;
+export default WelcomeComponentPage;

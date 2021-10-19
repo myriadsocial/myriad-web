@@ -13,7 +13,7 @@ import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {setAnonymous, setUser, fetchConnectedSocials} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 
-const Home: React.FC = () => {
+const PostPage: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -73,4 +73,4 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   };
 });
 
-export default Home;
+export default PostPage;
