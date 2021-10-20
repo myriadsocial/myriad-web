@@ -1,6 +1,6 @@
 import {ChevronDownIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {Typography} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
@@ -23,8 +23,14 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
   const {title, options, selected, onChange} = props;
   const styles = useStyles();
 
-  const [current, setCurrent] = useState<string>(selected || options[0].id);
+  const [current, setCurrent] = useState<string>(options[0].id);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  useEffect(() => {
+    if (selected) {
+      setCurrent(selected);
+    }
+  }, [selected]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);

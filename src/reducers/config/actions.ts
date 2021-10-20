@@ -4,6 +4,7 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {Currency} from 'src/interfaces/currency';
+import {NotificationSettingItems, PrivacySettingType, PrivacyType} from 'src/interfaces/setting';
 import * as TokenAPI from 'src/lib/api/token';
 import {ThunkActionCreator} from 'src/types/thunk';
 
@@ -16,16 +17,45 @@ export interface FetchAvailableToken extends Action {
   payload: Currency[];
 }
 
+export interface UpdatePrivacySetting extends Action {
+  type: constants.UPDATE_PRIVACY_SETTING;
+  key: PrivacySettingType;
+  value: PrivacyType;
+}
+export interface UpdateNotificationSetting extends Action {
+  type: constants.UPDATE_NOTIFICATION_SETTING;
+  settings: NotificationSettingItems;
+}
+
 /**
  * Union Action Types
  */
 
-export type Actions = FetchAvailableToken | BaseAction;
+export type Actions =
+  | FetchAvailableToken
+  | UpdatePrivacySetting
+  | UpdateNotificationSetting
+  | BaseAction;
 
 /**
  *
  * Actions
  */
+export const updatePrivacySetting = (
+  key: PrivacySettingType,
+  value: PrivacyType,
+): UpdatePrivacySetting => ({
+  type: constants.UPDATE_PRIVACY_SETTING,
+  key,
+  value,
+});
+
+export const updateNotificationSetting = (
+  settings: NotificationSettingItems,
+): UpdateNotificationSetting => ({
+  type: constants.UPDATE_NOTIFICATION_SETTING,
+  settings,
+});
 
 /**
  * Action Creator

@@ -13,17 +13,23 @@ import {DropdownMenu} from '../atoms/DropdownMenu/';
 import {useStyles} from './Settings.styles';
 import {accountPrivacyOptions} from './default';
 import {useAccountSetting} from './hooks/use-account-setting.hook';
+import {SettingsOption} from './hooks/use-setting-list.hook';
+
+import {PrivacySettings, PrivacySettingType, PrivacyType} from 'src/interfaces/setting';
 
 type AccountSettingsProps = {
-  onSaveSetting: () => void;
+  value: PrivacySettings;
+  onSaveSetting: (key: PrivacySettingType, value: PrivacyType) => void;
 };
 
-export const AccountSettings: React.FC<AccountSettingsProps> = () => {
+export const AccountSettings: React.FC<AccountSettingsProps> = props => {
+  const {value, onSaveSetting} = props;
+
   const styles = useStyles();
   const settings = useAccountSetting();
 
-  const handleSelectOption = (item: string) => {
-    console.log(item);
+  const changePrivacySetting = (item: SettingsOption<PrivacySettingType>) => (selected: string) => {
+    onSaveSetting(item.id, selected as PrivacyType);
   };
 
   return (
@@ -43,9 +49,9 @@ export const AccountSettings: React.FC<AccountSettingsProps> = () => {
               <ListItemSecondaryAction>
                 <DropdownMenu
                   title=""
-                  selected={accountPrivacyOptions[0].id}
+                  selected={value[item.id]}
                   options={accountPrivacyOptions}
-                  onChange={handleSelectOption}
+                  onChange={changePrivacySetting(item)}
                 />
               </ListItemSecondaryAction>
             </ListItem>

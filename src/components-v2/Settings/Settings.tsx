@@ -1,22 +1,33 @@
 import {ChevronRightIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React from 'react';
 
 import {List, ListItem, ListItemText, Paper, SvgIcon, Typography} from '@material-ui/core';
 
 import ShowIf from '../../components/common/show-if.component';
 import {useStyles} from './Settings.styles';
-import {SettingsOption, useSettingList} from './hooks/use-setting-list.hook';
+import {SettingsOption, useSettingList, SettingsType} from './hooks/use-setting-list.hook';
+
+import {UserSettings} from 'src/interfaces/setting';
 
 type SettingsProps = {
+  selectedType?: SettingsType;
+  value: UserSettings;
+  onChange: (section: SettingsType) => void;
   onSaveSetting: () => void;
 };
 
-export const Settings: React.FC<SettingsProps> = () => {
+export const Settings: React.FC<SettingsProps> = props => {
+  const {selectedType, value, onChange} = props;
+
   const styles = useStyles();
   const settings = useSettingList();
 
-  const [selected, setSelectedSetting] = useState<SettingsOption | null>(null);
+  const selected = settings.find(item => item.id === selectedType);
+
+  const selectSettings = (setting: SettingsOption<SettingsType>) => () => {
+    onChange(setting.id);
+  };
 
   return (
     <Paper className={styles.root}>
@@ -31,7 +42,7 @@ export const Settings: React.FC<SettingsProps> = () => {
                 <ListItem
                   key={item.id}
                   button
-                  onClick={() => setSelectedSetting(item)}
+                  onClick={selectSettings(item)}
                   className={styles.option}
                   alignItems="center">
                   <ListItemText>
@@ -52,7 +63,7 @@ export const Settings: React.FC<SettingsProps> = () => {
                         fontSize: 14,
                         color: '#988E8E',
                       }}>
-                      <Typography>v1.0.0</Typography>
+                      <Typography>{value.version}</Typography>
                     </div>
                   )}
 

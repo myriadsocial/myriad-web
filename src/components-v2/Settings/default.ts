@@ -1,8 +1,8 @@
 import {MenuOptions} from '../atoms/DropdownMenu';
 
-export type PrivacyOptions = 'private' | 'public';
+import {PrivacyType} from 'src/interfaces/setting';
 
-export const accountPrivacyOptions: MenuOptions<PrivacyOptions>[] = [
+export const accountPrivacyOptions: MenuOptions<PrivacyType>[] = [
   {
     id: 'private',
     title: 'Private',

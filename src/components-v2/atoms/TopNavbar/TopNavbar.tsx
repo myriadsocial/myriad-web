@@ -13,7 +13,7 @@ import {TopNavbarProps, SectionTitle, useStyles} from '.';
 
 export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
   const {sectionTitle, description} = props;
-
+  const router = useRouter();
   const classes = useStyles();
 
   const [localSectionTitle, setLocalSectionTitle] = useState(sectionTitle as string);
@@ -40,10 +40,12 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
     return false;
   };
 
-  const router = useRouter();
-
   const handleClick = (): void => {
-    router.back();
+    if (router.query) {
+      router.back();
+    } else {
+      router.push('/home', undefined, {shallow: true});
+    }
   };
 
   return (
