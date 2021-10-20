@@ -71,7 +71,7 @@ export const Settings: React.FC<SettingsProps> = () => {
       {selected && (
         <ShowIf condition={selected.id !== 'version' && selected.id !== 'about'}>
           <Typography className={styles.subtitle} color="textPrimary">
-            {selected?.title}
+            {selected?.title} Settings
           </Typography>
           <div>{selected.component}</div>
         </ShowIf>

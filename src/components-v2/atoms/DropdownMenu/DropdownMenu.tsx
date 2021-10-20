@@ -8,6 +8,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
+import ShowIf from '../../../components/common/show-if.component';
 import {useStyles} from './DropdownMenu.styles';
 import {MenuOptions} from './DropdownMenu.types';
 
@@ -49,7 +50,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
     <div className={styles.root}>
       <div>
         <Typography component="span" color="textSecondary">
-          {title}:&nbsp;
+          <ShowIf condition={title.length > 0}>{title}:&nbsp;</ShowIf>
         </Typography>
 
         <Typography component="span" color="textPrimary" className={styles.selected}>
