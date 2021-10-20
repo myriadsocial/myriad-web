@@ -2,8 +2,9 @@ import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
+import {useRouter} from 'next/router';
 
-import {Settings as SettingsComponent} from 'src/components-v2/Settings';
+import {SettingsContainer, SettingsType, useSettingList} from 'src/components-v2/Settings';
 import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
@@ -15,6 +16,13 @@ import {wrapper} from 'src/store';
 
 const Settings: React.FC = () => {
   const dispatch = useDispatch();
+  const {query} = useRouter();
+
+  const settings = useSettingList();
+
+  const currentSection = query.section as SettingsType | undefined;
+
+  const selected = settings.find(item => item.id === currentSection);
 
   useEffect(() => {
     dispatch(fetchConnectedSocials());
@@ -28,9 +36,14 @@ const Settings: React.FC = () => {
     <DefaultLayout isOnProfilePage={false}>
       <ToasterContainer />
       <div style={{marginTop: '-20px'}}>
-        <TopNavbarComponent description={'Account settings'} sectionTitle={SectionTitle.SETTINGS} />
+        <TopNavbarComponent
+          description={
+            selected ? `${selected.title} Settings` : 'Set Privacy and Notification settings'
+          }
+          sectionTitle={SectionTitle.SETTINGS}
+        />
       </div>
-      <SettingsComponent onSaveSetting={console.log} />
+      <SettingsContainer />
     </DefaultLayout>
   );
 };
