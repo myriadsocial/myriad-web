@@ -46,10 +46,7 @@ export const PostsList: React.FC<PostsListProps> = props => {
 
   const [defaultPosts, setDefaultPosts] = useState<Post[]>([]);
 
-  console.log({defaultPosts});
-
   const handleSort = (sort: string) => {
-    console.log({sort});
     switch (sort) {
       case 'created': {
         const sortedByLatest = _.orderBy(defaultPosts, 'createdAt', 'desc');
