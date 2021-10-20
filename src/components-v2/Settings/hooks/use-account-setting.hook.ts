@@ -1,18 +1,16 @@
-export type SettingsOption = {
-  id: string;
-  title: string;
-  subtitle?: string;
-};
+import {SettingsOption} from './use-setting-list.hook';
 
-export const useAccountSetting = (): SettingsOption[] => {
+import {PrivacySettingType} from 'src/interfaces/setting';
+
+export const useAccountSetting = (): SettingsOption<PrivacySettingType>[] => {
   return [
     {
-      id: 'account-privacy',
+      id: 'account',
       title: 'Account privacy',
       subtitle: 'Change whether people other than friends can see your posts',
     },
     {
-      id: 'social-media-privacy',
+      id: 'social',
       title: 'Social media privacy',
       subtitle: 'Change whether people other than friends can see your social media',
     },
