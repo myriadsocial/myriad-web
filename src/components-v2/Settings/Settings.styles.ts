@@ -4,6 +4,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       padding: theme.spacing(3.75, 0),
+      minHeight: 'calc(100vh - 130px)',
     },
     title: {
       fontSize: theme.typography.h4.fontSize,
@@ -31,6 +32,10 @@ export const useStyles = makeStyles((theme: Theme) =>
         display: 'flex',
         paddingRight: 29,
       },
+    },
+
+    action: {
+      padding: 30,
     },
   }),
 );

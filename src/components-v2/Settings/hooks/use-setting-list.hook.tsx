@@ -3,33 +3,34 @@ import React from 'react';
 import {BlockListContainer} from '../../BlockUserList/BlockList.container';
 import {HelpComponent} from '../../Help/Help';
 import {AccountSettingsContainer} from '../AccountSettingsContainer';
+import {NotificationSettingsContainer} from '../NotificationSettings.container';
 
-export type SettingsOption = {
-  id: string;
+export type SettingsType = 'account' | 'notification' | 'block' | 'about' | 'help' | 'version';
+export type SettingsOption<T> = {
+  id: T;
   title: string;
   subtitle?: string;
   component?: React.ReactNode;
 };
 
-export const useSettingList = (): SettingsOption[] => {
+export const useSettingList = (): SettingsOption<SettingsType>[] => {
   return [
     {
       id: 'account',
       title: 'Account',
-      subtitle: 'account privacy, social media privacy',
+      subtitle: 'Account privacy, social media privacy',
       component: <AccountSettingsContainer />,
     },
     {
       id: 'notification',
       title: 'Notification',
-      subtitle:
-        'By blocking someone, they can no longer see things you post on your timeline, tag you, and start a conversation with you, or add you as a friend.',
-      component: <p>Test</p>,
+      subtitle: 'Configure any type of notification',
+      component: <NotificationSettingsContainer />,
     },
     {
       id: 'block',
       title: 'Blocked User',
-      subtitle: 'list of people you blocked on myriad',
+      subtitle: 'List of people you blocked on myriad',
       component: <BlockListContainer />,
     },
     {
