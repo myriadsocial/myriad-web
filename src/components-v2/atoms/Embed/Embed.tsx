@@ -21,7 +21,6 @@ type EmbedProps = {
 };
 
 Embedo.plugins([EmbedoReddit.default]);
-Embedo.debug = true;
 
 export const Embed: React.FC<EmbedProps> = props => {
   const {url, options, showError = false, onClick, onError} = props;
