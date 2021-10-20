@@ -135,7 +135,12 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           </Button>
         </div>
 
-        <Button variant="contained" color="primary" size="small" onClick={handleSubmit}>
+        <Button
+          disabled={!importUrl && !post.text}
+          variant="contained"
+          color="primary"
+          size="small"
+          onClick={handleSubmit}>
           Create Post
         </Button>
       </div>
