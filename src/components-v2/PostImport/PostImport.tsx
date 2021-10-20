@@ -2,14 +2,24 @@ import {isUrl} from '@udecode/plate-common';
 
 import React, {useEffect, useState} from 'react';
 
-import {FormControl, Input, InputLabel, Typography} from '@material-ui/core';
+import {FormControl, FormHelperText, Input, InputLabel, Typography} from '@material-ui/core';
 
 import {Embed} from '../atoms/Embed';
 import {useStyles} from './PostImport.styles';
 
+import ShowIf from 'src/components/common/show-if.component';
+import {SocialsEnum} from 'src/interfaces/social';
+
 type PostImportProps = {
   value?: string;
   onChange: (url: string | null) => void;
+};
+
+const regex = {
+  [SocialsEnum.TWITTER]: /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/,
+  [SocialsEnum.FACEBOOK]:
+    /^(?:https?:\/\/)?(?:www\.|m\.|mobile\.|touch\.|mbasic\.)?(?:facebook\.com|fb(?:\.me|\.com))\/(?!$)(?:(?:\w)*#!\/)?(?:pages\/)?(?:photo\.php\?fbid=)?(?:[\w\-]*\/)*?(?:\/)?(?:profile\.php\?id=)?([^\/?&\s]*)(?:\/|&|\?)?.*$/s,
+  [SocialsEnum.REDDIT]: /(?:^.+?)(?:reddit.com\/r)(?:\/[\w\d]+){2}(?:\/)([\w\d]*)/,
 };
 
 export const PostImport: React.FC<PostImportProps> = props => {
@@ -18,12 +28,16 @@ export const PostImport: React.FC<PostImportProps> = props => {
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [url, setUrl] = useState('');
+  const [isValidUrl, setIsValidUrl] = useState(false);
+  const showError = url.length > 0 && !isValidUrl;
 
   useEffect(() => {
     setUrl(value);
 
     if (isUrl(value)) {
-      setPreviewUrl(value);
+      parseUrl(value);
+    } else {
+      setIsValidUrl(false);
     }
 
     return () => {
@@ -35,20 +49,45 @@ export const PostImport: React.FC<PostImportProps> = props => {
     const url = event.target.value;
 
     setUrl(url);
+    setPreviewUrl(null);
 
     if (isUrl(url)) {
-      setPreviewUrl(url);
-      onChange(url);
+      parseUrl(url);
     } else {
-      setPreviewUrl('');
+      setIsValidUrl(false);
+      onChange(null);
+    }
+  };
+
+  const parseUrl = (url: string) => {
+    setIsValidUrl(false);
+    const matchTwitter = regex[SocialsEnum.TWITTER].exec(url);
+
+    if (matchTwitter) {
+      setPreviewUrl(url);
+      setIsValidUrl(true);
+      onChange(url);
+    }
+
+    const matchReddit = regex[SocialsEnum.REDDIT].exec(url);
+
+    if (matchReddit) {
+      setPreviewUrl(url);
+      setIsValidUrl(true);
+      onChange(url);
     }
   };
 
   return (
     <div className={styles.root}>
-      <FormControl fullWidth className={styles.input}>
+      <FormControl fullWidth className={styles.input} error={showError}>
         <InputLabel htmlFor="link-to-post">Link to post</InputLabel>
         <Input id="link-to-post" value={url} onChange={handleUrlChange} />
+        <ShowIf condition={showError}>
+          <FormHelperText id="component-error-text">
+            Curently we only can import post from reddit and twitter
+          </FormHelperText>
+        </ShowIf>
       </FormControl>
 
       {previewUrl && (
