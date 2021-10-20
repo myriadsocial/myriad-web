@@ -2,6 +2,7 @@ import React from 'react';
 
 import {BlockListContainer} from '../../BlockUserList/BlockList.container';
 import {HelpComponent} from '../../Help/Help';
+import {AccountSettingsContainer} from '../AccountSettingsContainer';
 
 export type SettingsOption = {
   id: string;
@@ -16,7 +17,7 @@ export const useSettingList = (): SettingsOption[] => {
       id: 'account',
       title: 'Account',
       subtitle: 'account privacy, social media privacy',
-      component: <p>Test</p>,
+      component: <AccountSettingsContainer />,
     },
     {
       id: 'notification',
