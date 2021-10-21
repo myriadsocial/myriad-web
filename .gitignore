@@ -92,3 +92,9 @@ prisma
 /docs/*
 # exception to the rule
 !docs/.gitkeep
+
+# Sentry
+.sentryclirc
+
+# Sentry
+.sentryclirc
