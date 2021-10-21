@@ -1,3 +1,5 @@
+import {withSentry} from '@sentry/nextjs';
+
 import type {NextApiRequest, NextApiResponse} from 'next';
 import nextConnect from 'next-connect';
 import getConfig from 'next/config';
@@ -88,4 +90,4 @@ const handler = nextConnect()
     }
   });
 
-export default handler;
+export default withSentry(handler);
