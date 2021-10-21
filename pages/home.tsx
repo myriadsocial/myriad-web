@@ -35,7 +35,7 @@ const Home: React.FC = () => {
     const DELAY = 2000;
     setTimeout(() => {
       // shallow push, without rerender page
-      router.push('/searchresult', `/searchresult?${query}`, {shallow: true});
+      router.push('/searchresults', `/searchresults?${query}`, {shallow: true});
     }, DELAY);
   };
 
