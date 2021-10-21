@@ -34,8 +34,21 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
     return undefined;
   }, [profile.id]);
 
+  useEffect(() => {
+    const section = router.query.edit as string | undefined;
+
+    setIsEdit(!!section);
+  }, [router.query]);
+
   const handleOpenEdit = () => {
-    setIsEdit(true);
+    router.push(
+      {
+        pathname: `/profile/${profile.id}`,
+        query: {edit: 'edit'},
+      },
+      undefined,
+      {shallow: true},
+    );
   };
 
   const handleCloseEdit = () => {
