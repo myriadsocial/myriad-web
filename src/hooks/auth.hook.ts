@@ -17,7 +17,7 @@ import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 export const useAuthHook = () => {
   const {getPolkadotAccounts} = usePolkadotExtension();
   const dispatch = useDispatch();
-  const [cookies] = useCookies(['welcome']);
+  const [cookies, , removeCookie] = useCookies(['welcome']);
 
   const getUserByAccounts = async (accounts: InjectedAccountWithMeta[]): Promise<User[] | null> => {
     try {
@@ -132,6 +132,7 @@ export const useAuthHook = () => {
   };
 
   const logout = async () => {
+    await removeCookie('welcome');
     await firebaseCloudMessaging.removeToken();
     await signOut({
       callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
