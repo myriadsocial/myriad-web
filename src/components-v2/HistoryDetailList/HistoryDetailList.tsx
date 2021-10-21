@@ -170,13 +170,17 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                   <TableCell component="th" scope="row" className={classes.tableCell}>
                     <CustomAvatar
                       size={CustomAvatarSize.MEDIUM}
-                      alt={tx.toUser.name}
-                      avatar={tx.toUser.profilePictureURL ?? ''}
+                      alt={tx.toUser.id === userId ? tx.fromUser.name : tx.toUser.id}
+                      avatar={
+                        tx.toUser.id === userId
+                          ? tx.fromUser.profilePictureURL
+                          : tx.toUser.profilePictureURL
+                      }
                     />
 
                     <div>
                       <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                        {tx.toUser.name}
+                        {tx.toUser.id === userId ? tx.fromUser.name : tx.toUser.name}
                       </Typography>
                       <Typography variant="caption" color="textSecondary">
                         {formatTimeAgo(tx.createdAt)}
@@ -192,7 +196,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                     )}
                     {tx.fromUser.id === userId && (
                       <div className={classes.tipStatusRed}>
-                        <Typography variant="caption">Sent</Typography>
+                        <Typography variant="caption">Received</Typography>
                       </div>
                     )}
                   </TableCell>
