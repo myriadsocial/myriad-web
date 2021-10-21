@@ -2,11 +2,13 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {},
+    root: {
+      paddingBottom: 8,
+    },
     title: {
       textAlign: 'center',
       marginBottom: 20,
-      marginTop: -10,
+      marginTop: 0,
     },
     steps: {
       width: 340,
