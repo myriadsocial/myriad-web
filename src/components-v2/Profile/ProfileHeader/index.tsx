@@ -39,6 +39,7 @@ export type Props = {
   status: Friend | null;
   totalFriends: number;
   totalExperience: number;
+  totalPost: number;
   onSendRequest: () => void;
   onDeclineRequest: () => void;
   onSendTip: () => void;
@@ -57,6 +58,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     status,
     totalFriends,
     totalExperience,
+    totalPost,
     onEdit,
     onSendRequest,
     onSendTip,
@@ -232,7 +234,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Post
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(13000)}
+                {formatNumber(totalPost)}
               </Typography>
             </div>
             <div className={style.text}>
@@ -240,7 +242,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Kudos
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(103000)}
+                {formatNumber(0)}
               </Typography>
             </div>
             <div className={style.text}>

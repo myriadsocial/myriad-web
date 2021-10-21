@@ -3,14 +3,18 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {ProfileHeaderComponent} from '.';
 import {User, Report} from '../../../interfaces/user';
+import {TimelineState} from '../../../reducers/timeline/reducer';
 import {setTippedUserId} from '../../../reducers/wallet/actions';
 import {SendTipContainer} from '../../SendTip/';
 
+import {useTimelineFilter} from 'src/components-v2/Timeline/hooks/use-timeline-filter.hook';
 import {Modal} from 'src/components-v2/atoms/Modal';
 import {useFriendHook} from 'src/components/profile/use-profile-friend.hook';
 import {useProfileHook} from 'src/components/profile/use-profile.hook';
+import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {FriendStatus} from 'src/interfaces/friend';
 import {RootState} from 'src/reducers';
+import {fetchProfileExperience} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -29,12 +33,19 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     },
   } = useSelector<RootState, ProfileState>(state => state.profileState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {
+    meta: {totalItemCount: totalPost},
+  } = useSelector<RootState, TimelineState>(state => state.timelineState);
 
   const dispatch = useDispatch();
 
   const {friendStatus, makeFriend, checkFriendStatus, removeFriendRequest, toggleRequest} =
     useFriendHook();
   const {reportUser} = useProfileHook();
+  const {query} = useQueryParams();
+  const {filterTimeline} = useTimelineFilter({
+    owner: profile?.id,
+  });
 
   const [tippedUser, setTippedUser] = useState<User | null>(null);
   const sendTipOpened = Boolean(tippedUser);
@@ -51,6 +62,8 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   useEffect(() => {
     if (profile) {
       checkFriendStatus(profile.id);
+      dispatch(fetchProfileExperience());
+      filterTimeline(query);
     }
   }, [profile]);
 
@@ -97,6 +110,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
         status={friendStatus}
         totalFriends={totalFriends}
         totalExperience={totalExperience}
+        totalPost={totalPost}
         onSendRequest={sendFriendReqest}
         onDeclineRequest={declineFriendRequest}
         onSendTip={handleSendTip}
