@@ -63,15 +63,13 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     }));
   };
 
-  const saveUser = () => {
+  const saveUser = async () => {
     if (!isChanged && isAvailable && username !== user.username) {
-      setNewUser(prevUser => ({
-        ...prevUser,
-        username: username,
-      }));
-    }
-    if (newUser) {
-      onSave(newUser);
+      onSave({...newUser, username});
+    } else {
+      if (newUser) {
+        onSave(newUser);
+      }
     }
   };
 
@@ -155,6 +153,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           value={username}
           onChange={handleChangeUsername}
           labelWidth={80}
+          startAdornment={'@'}
         />
       </FormControl>
 
