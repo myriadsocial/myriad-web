@@ -16,16 +16,16 @@ export const MenuContainer: React.FC = () => {
 
   const parseSelected = (path: string) => {
     switch (path) {
-      case '/user/friends':
+      case '/friends':
         setSelected('friends');
         break;
-      case '/user/socials':
+      case '/socials':
         setSelected('token');
         break;
-      case '/user/nft':
+      case '/nft':
         setSelected('nft');
         break;
-      case '/user/settings':
+      case '/settings':
         setSelected('settings');
         break;
       default:
