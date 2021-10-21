@@ -22,14 +22,18 @@ export const SettingsContainer: React.FC = () => {
   }, [router.query]);
 
   const handleChangeSection = (section: SettingsType) => {
-    router.push(
-      {
-        pathname: '/settings',
-        query: {section},
-      },
-      undefined,
-      {shallow: true},
-    );
+    if (section === 'help') {
+      window.open('https://www.myriad.social/', '_ blank');
+    } else {
+      router.push(
+        {
+          pathname: '/settings',
+          query: {section},
+        },
+        undefined,
+        {shallow: true},
+      );
+    }
   };
 
   return (
