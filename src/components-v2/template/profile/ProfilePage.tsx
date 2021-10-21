@@ -73,6 +73,7 @@ const ProfilePage = (): JSX.Element => {
               onSendTip={console.log}
               totalExperience={0}
               totalFriends={0}
+              totalPost={0}
               linkUrl={''}
               onSubmit={console.log}
               onBlock={console.log}
