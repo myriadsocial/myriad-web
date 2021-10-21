@@ -11,8 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import {format} from 'date-fns';
 import {AvatarComponent} from 'src/components/common/Avatar.component';
 import {useStyles} from 'src/components/wallet/transactions/transactionList-style';
-//TODO: transformTokenValue should be removed, value fetched from BE
-//import {transformTokenValue} from 'src/helpers/transformTokenValue';
+import {acronym} from 'src/helpers/string';
 import {Transaction} from 'src/interfaces/transaction';
 import {User} from 'src/interfaces/user';
 
@@ -65,7 +64,7 @@ export default function TransactionListComponent({transactions, user}: Props) {
             <Link href={`/${direction(txHistory)}`}>
               <a href={`/${direction(txHistory)}`}>{txHistory.toUser?.name ?? defaultUserName}</a>
             </Link>
-            's post with {txHistory.amount} {txHistory.currencyId}
+            &sbquo;s post with {txHistory.amount} {txHistory.currencyId}
           </Typography>
         ) : txHistory.fromUser?.name === 'Myriad' ? (
           <Typography>
@@ -116,8 +115,9 @@ export default function TransactionListComponent({transactions, user}: Props) {
                             txHistory?.toUser?.id === userId
                               ? txHistory?.fromUser?.profilePictureURL
                               : txHistory?.toUser?.profilePictureURL
-                          }
-                        />
+                          }>
+                          {acronym(txHistory?.fromUser?.name)}
+                        </AvatarComponent>
                       </a>
                     </Link>
                   }

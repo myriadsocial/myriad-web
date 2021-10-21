@@ -20,6 +20,7 @@ import {AvatarComponent} from 'src/components/common/Avatar.component';
 import CardTitle from 'src/components/common/CardTitle.component';
 import DateFormat from 'src/components/common/DateFormat';
 import ShowIf from 'src/components/common/show-if.component';
+import {acronym} from 'src/helpers/string';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
 import {Comment} from 'src/interfaces/comment';
 import {ReferenceType, SectionType} from 'src/interfaces/interaction';
@@ -117,7 +118,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
                         <AvatarComponent
                           aria-label={comment.user?.name}
                           src={comment.user?.profilePictureURL}>
-                          {comment.user?.name}
+                          {acronym(comment.user?.name)}
                         </AvatarComponent>
                       </StyledBadge>
                     </IconButton>
