@@ -6,8 +6,7 @@ import {Button} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
-import {People} from '../../interfaces/people';
-import {Post, PostVisibility} from '../../interfaces/post';
+import {FriendDetail} from '../FriendsMenu/hooks/use-friend-list.hook';
 import {NSFWTags} from '../NSFWTags';
 import {PostEditor, formatStringToNode, serialize} from '../PostEditor';
 import {PostImport} from '../PostImport';
@@ -17,11 +16,13 @@ import {TabPanel} from '../atoms/TabPanel';
 import {useStyles} from './PostCreate.styles';
 import {menuOptions} from './default';
 
+import {Post, PostVisibility} from 'src/interfaces/post';
+
 type PostCreateProps = {
   value?: string;
   url?: string;
   open: boolean;
-  people: People[];
+  people: FriendDetail[];
   onClose: () => void;
   onSubmit: (post: Partial<Post> | string) => void;
   onSearchPeople: (query: string) => void;
@@ -107,7 +108,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           mentionable={people.map(item => ({
             value: item.id,
             name: item.name,
-            avatar: item.profilePictureURL,
+            avatar: item.avatar,
           }))}
           value={[node]}
           onChange={handlePostTextChange}

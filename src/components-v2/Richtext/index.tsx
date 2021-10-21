@@ -34,7 +34,7 @@ export const RichTextComponent: React.FC<Props> = props => {
             {acronym(alias || 'User')}
           </Avatar>
           <TextareaAutosize
-            rowsMin={1}
+            minRows={1}
             value={post}
             placeholder={`What's on your mind?`}
             className={style.postTextArea}

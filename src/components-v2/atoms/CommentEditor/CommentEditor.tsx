@@ -73,7 +73,7 @@ export const CommentEditor: React.FC<Props> = props => {
         <TextareaAutosize
           ref={inputRef}
           onClick={openComment}
-          rowsMin={1}
+          minRows={1}
           value={comment.text}
           placeholder={placeholder || 'Write a Comment...'}
           className={style.write}
