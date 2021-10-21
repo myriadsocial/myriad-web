@@ -234,7 +234,7 @@ export const dislike = async (userId: string, postId: string): Promise<void> => 
 
 export const removePost = async (postId: string): Promise<void> => {
   await MyriadAPI.request({
-    url: `/posts/${postId}`,
+    url: `/posts/${postId}/delete`,
     method: 'DELETE',
   });
 };
