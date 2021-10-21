@@ -16,6 +16,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ShowIf from '../common/show-if.component';
 
 import {AvatarComponent} from 'src/components/common/Avatar.component';
+import {acronym} from 'src/helpers/string';
 import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
@@ -180,7 +181,11 @@ const SearchResultComponent: React.FC<SearchResultProps> = ({options}) => {
               <Grid item xs={12} sm={6} key={people.id}>
                 <Card>
                   <CardHeader
-                    avatar={<AvatarComponent aria-label="avatar" src={people.profilePictureURL} />}
+                    avatar={
+                      <AvatarComponent aria-label="avatar" src={people.profilePictureURL}>
+                        {acronym(people.name)}
+                      </AvatarComponent>
+                    }
                     title={RenderPrimaryText(people.name)}
                   />
                   <CardActionButtons people={people} />

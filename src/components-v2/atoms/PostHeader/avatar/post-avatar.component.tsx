@@ -13,8 +13,10 @@ import StyledBadge from '../Badge.component';
 import {Props} from './post-avatar.interface';
 import {useStyles} from './post-avatar.style';
 
+import {acronym} from 'src/helpers/string';
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function PostAvatar({origin, avatar, onClick}: Props) {
+export default function PostAvatar({origin, avatar, name, onClick}: Props) {
   const style = useStyles();
 
   const socials = React.useMemo(
@@ -42,7 +44,9 @@ export default function PostAvatar({origin, avatar, onClick}: Props) {
   return (
     <IconButton className={style.action} aria-label="avatar-icon" onClick={onClick}>
       <StyledBadge badgeContent={socials[origin]} className={style[origin]} color="default">
-        <Avatar className={style.avatar} aria-label="avatar" src={avatar} />
+        <Avatar className={style.avatar} aria-label="avatar" src={avatar}>
+          {acronym(name)}
+        </Avatar>
       </StyledBadge>
     </IconButton>
   );

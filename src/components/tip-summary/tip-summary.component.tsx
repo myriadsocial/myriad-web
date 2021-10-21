@@ -25,6 +25,7 @@ import {useTipSummaryHook} from './use-tip-summary.hook';
 import {AvatarComponent} from 'src/components/common/Avatar.component';
 import DialogTitle from 'src/components/common/DialogTitle.component';
 import {timeAgo} from 'src/helpers/date';
+import {acronym} from 'src/helpers/string';
 import {getTipperUserName} from 'src/helpers/transaction';
 
 export const TipSummaryComponent: React.FC = () => {
@@ -125,8 +126,9 @@ export const TipSummaryComponent: React.FC = () => {
                   <ListItemAvatar>
                     <AvatarComponent
                       alt={getTipperUserName(transaction)}
-                      src={transaction.fromUser?.profilePictureURL}
-                    />
+                      src={transaction.fromUser?.profilePictureURL}>
+                      {acronym(transaction.fromUser?.name)}
+                    </AvatarComponent>
                   </ListItemAvatar>
                   <ListItemText
                     primary={`${getTipperUserName(transaction)} tipped ${transaction.amount} ${

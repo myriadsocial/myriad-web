@@ -10,6 +10,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import {Experience} from '../..//interfaces/experience';
 import {useStyles} from './experience.style';
 
+import {acronym} from 'src/helpers/string';
+
 type Props = {
   experience: Experience;
   userId: string;
@@ -61,8 +63,9 @@ export const ExperiencePreview: React.FC<Props> = props => {
             alt={experience.user.name}
             src={experience.user.profilePictureURL}
             variant="circle"
-            className={style.photo}
-          />
+            className={style.photo}>
+            {acronym(experience.user.name)}
+          </Avatar>
           <Typography className={style.user}>{experience.user.name}</Typography>
         </div>
       </div>

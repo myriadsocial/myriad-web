@@ -26,6 +26,7 @@ export const RichTextContainer: React.FC = () => {
         userProfilePict={user?.profilePictureURL || ''}
         onOpenCreatePost={handleOpenCreatePost}
         alias={alias}
+        name={user?.name}
       />
 
       <PostCreateContainer open={createPostOpened} onClose={handleCloseCreatePost} />

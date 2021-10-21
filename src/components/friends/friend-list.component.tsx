@@ -22,6 +22,7 @@ import clsx from 'clsx';
 import {AvatarComponent} from 'src/components/common/Avatar.component';
 import {ToggleCollapseButton} from 'src/components/common/collapse-button.component';
 import ShowIf from 'src/components/common/show-if.component';
+import {acronym} from 'src/helpers/string';
 import {RootState} from 'src/reducers';
 import {FriendState} from 'src/reducers/friend/reducer';
 
@@ -135,7 +136,9 @@ const FriendsListComponent: React.FC<FriendsListProps> = ({
                   <Link href={`/${friend.id}`}>
                     <a href={`/${friend.id}`}>
                       <ListItemAvatar>
-                        <AvatarComponent alt={friend.name} src={friend.avatar} />
+                        <AvatarComponent alt={friend.name} src={friend.avatar}>
+                          {acronym(friend.name)}
+                        </AvatarComponent>
                       </ListItemAvatar>
                     </a>
                   </Link>
