@@ -10,6 +10,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
+import {acronym} from 'src/helpers/string';
+
 type ListItemComponentProps = ListItemProps & {
   icon?: any;
   avatar?: string;
@@ -95,9 +97,11 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
       ContainerComponent="div"
       onClick={onClick}
       {...listProps}>
-      {avatar && (
+      {avatar !== undefined && (
         <ListItemAvatar className={styles.avatar}>
-          <Avatar alt="Remy Sharp" src={avatar} variant={variant} className={styles[size]} />
+          <Avatar alt={title} src={avatar} variant={variant} className={styles[size]}>
+            {acronym(title)}
+          </Avatar>
         </ListItemAvatar>
       )}
 

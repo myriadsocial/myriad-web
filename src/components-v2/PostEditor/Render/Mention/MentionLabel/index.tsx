@@ -2,7 +2,7 @@ import {MentionNodeData} from '@udecode/plate';
 
 import React from 'react';
 
-import {ListItemComponent} from '../../../../atoms/ListItem';
+import {ListItemComponent} from 'src/components-v2/atoms/ListItem';
 
 export const renderMentionLabel = (mentionable: MentionNodeData, plain = false) => {
   if (plain) return mentionable.name;
