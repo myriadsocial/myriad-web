@@ -6,11 +6,11 @@ import {useStyles} from './Empty.styles';
 
 type EmptyProps = {
   title: string;
-  subtitle: string;
+  subtitle?: string;
 };
 
 export const Empty: React.FC<EmptyProps> = props => {
-  const {title, subtitle} = props;
+  const {title, subtitle, children} = props;
   const styles = useStyles();
 
   return (
@@ -21,6 +21,7 @@ export const Empty: React.FC<EmptyProps> = props => {
       <Typography className={styles.subtitle} color="textSecondary" component="p">
         {subtitle}
       </Typography>
+      {children}
     </div>
   );
 };
