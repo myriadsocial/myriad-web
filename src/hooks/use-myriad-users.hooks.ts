@@ -22,7 +22,7 @@ export const useMyriadUser = () => {
 
     if (query.length > 0) {
       try {
-        const {data: users} = await UserAPI.search(query);
+        const {data: users} = await UserAPI.searchUsers(query);
 
         dispatch({
           type: SearchActionType.LOAD_USER,
