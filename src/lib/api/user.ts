@@ -1,4 +1,5 @@
 import MyriadAPI from './base';
+import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
 import {User, UserTransactionDetail, ActivityLog, Report} from 'src/interfaces/user';
@@ -59,11 +60,13 @@ export const updateUser = async (userId: string, values: Partial<User>): Promise
   return data;
 };
 
-export const search = async (query: string): Promise<UserList> => {
+export const searchUsers = async (query: string, page = 1): Promise<UserList> => {
   const {data} = await MyriadAPI.request<UserList>({
     url: '/users',
     method: 'GET',
     params: {
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
       filter: {
         where: {
           or: [
