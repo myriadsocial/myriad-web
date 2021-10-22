@@ -1,4 +1,7 @@
+//TODO: this file can be removed, has been replaced by searchReducer
 import React, {createContext, useContext, useReducer} from 'react';
+
+import {ListMeta} from '../../lib/api/interfaces/base-list.interface';
 
 import {User} from 'src/interfaces/user';
 
@@ -14,7 +17,10 @@ export interface ResetState {
 
 export interface LoadUser {
   type: SearchActionType.LOAD_USER;
-  payload: User[];
+  payload: {
+    users: User[];
+    meta: ListMeta;
+  };
 }
 
 export interface AbortSearch {
@@ -27,11 +33,25 @@ type SearchProviderProps = {children: React.ReactNode};
 type State = {
   users: User[];
   isSearching: boolean;
+  hasMore: boolean;
+  meta: {
+    currentPage: number;
+    itemsPerPage: number;
+    totalItemCount: number;
+    totalPageCount: number;
+  };
 };
 
 const initialState = {
   isSearching: false,
   users: [],
+  hasMore: false,
+  meta: {
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItemCount: 0,
+    totalPageCount: 0,
+  },
 };
 
 const SearchContext = createContext<{state: State; dispatch: Dispatch} | undefined>(undefined);
@@ -44,9 +64,16 @@ function searchReducer(state: State, action: Action) {
       };
     }
     case SearchActionType.LOAD_USER: {
+      const {meta} = action.payload;
+
       return {
         ...state,
-        users: action.payload,
+        users:
+          !meta.currentPage || meta.currentPage === 1
+            ? action.payload.users
+            : [...state.users, ...action.payload.users],
+        hasMore: meta.currentPage < meta.totalPageCount,
+        meta,
         isSearching: true,
       };
     }
