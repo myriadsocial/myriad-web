@@ -115,6 +115,7 @@ jobs:
             FIREBASE_API_KEY:${{ secrets.PROD_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.PROD_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
             FIREBASE_APP_ID:${{ secrets.PROD_GCP_PROJECT_ID }}/FIREBASE_APP_ID
+            SENTRY_DNS:${{ secrets.PROD_GCP_PROJECT_ID }}/SENTRY_DNS
             CLOUDINARY_CLOUND_NAME:${{ secrets.PROD_GCP_PROJECT_ID }}/CLOUDINARY_CLOUND_NAME
             CLOUDINARY_API_KEY:${{ secrets.PROD_GCP_PROJECT_ID }}/CLOUDINARY_API_KEY
             CLOUDINARY_SECRET:${{ secrets.PROD_GCP_PROJECT_ID }}/CLOUDINARY_SECRET
@@ -139,6 +140,7 @@ jobs:
             --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
             --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
             --set-string config.firebase.appId=${{ steps.secrets.outputs.FIREBASE_APP_ID }} \
+            --set-string config.sentry.dns=${{ steps.secrets.outputs.SENTRY_DNS }} \
             --set-string config.cloudinary.cloudName=${{ steps.secrets.outputs.CLOUDINARY_CLOUND_NAME }} \
             --set-string config.cloudinary.apiKey=${{ steps.secrets.outputs.CLOUDINARY_API_KEY }} \
             --set-string config.cloudinary.secret=${{ steps.secrets.outputs.CLOUDINARY_SECRET }} \
