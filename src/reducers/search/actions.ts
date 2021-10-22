@@ -86,8 +86,6 @@ export const searchUsers: ThunkActionCreator<Actions, RootState> =
     try {
       const {meta, data: users} = await UserAPI.searchUsers(query);
 
-      console.log({meta, users});
-
       dispatch({
         type: constants.SET_SEARCHED_USERS,
         users,
