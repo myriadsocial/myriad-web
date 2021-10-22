@@ -41,18 +41,24 @@ export const SearchReducer: Redux.Reducer<SearchState, Actions> = (
       };
     }
 
-    case constants.SEARCH_USERS: {
-      const {meta} = action;
+    case constants.LOAD_USERS: {
+      const {users, meta} = action.payload;
 
       return {
         ...state,
         searchedUsers:
-          !meta.currentPage || meta.currentPage === 1
-            ? action.users
-            : [...state.searchedUsers, ...action.users],
+          !meta.currentPage || meta.currentPage === 1 ? users : [...state.searchedUsers, ...users],
         isSearching: true,
         hasMore: meta.currentPage < meta.totalPageCount,
         meta,
+      };
+    }
+
+    case constants.SET_SEARCHED_USERS: {
+      return {
+        ...state,
+        searchedUsers: action.payload.users,
+        meta: action.payload.meta,
       };
     }
 
