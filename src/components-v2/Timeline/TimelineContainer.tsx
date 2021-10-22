@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {useRouter} from 'next/router';
+
 import {Button, Grid} from '@material-ui/core';
 
 import {Timeline as TimelineComponent} from '.';
@@ -16,6 +18,7 @@ import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {useTimelineFilter} from './hooks/use-timeline-filter.hook';
 import {useTimelineHook} from './hooks/use-timeline.hook';
 
+import {Empty} from 'src/components-v2/atoms/Empty';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useToasterHook} from 'src/hooks/use-toaster.hook';
 import {Comment} from 'src/interfaces/comment';
@@ -33,6 +36,7 @@ type TimelineContainerProps = {
 
 export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const {anonymous = false, filters} = props;
+  const router = useRouter();
 
   const dispatch = useDispatch();
   const {posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
@@ -106,6 +110,24 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
     handleClosePrompt();
   };
+
+  const handleGoHome = () => {
+    router.push('/home');
+  };
+
+  if (!posts.length && filters?.owner === user?.id) {
+    return (
+      <Empty title="Looks like you haven’t post yet">
+        <Button onClick={handleGoHome} variant="contained" size="small" color="primary">
+          Create my first post
+        </Button>
+      </Empty>
+    );
+  }
+
+  if (!posts.length) {
+    return <Empty title="No post yet" subtitle="This user hasn’t post anything" />;
+  }
 
   return (
     <>
