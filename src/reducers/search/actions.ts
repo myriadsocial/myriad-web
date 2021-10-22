@@ -6,6 +6,7 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
+import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 
 /**
  * Action Types
@@ -15,8 +16,16 @@ export interface ResetState extends Action {
   type: constants.RESET_SEARCH_STATE;
 }
 
-export interface SearchUsers extends PaginationAction {
-  type: constants.SEARCH_USERS;
+export interface LoadUsers extends Action {
+  type: constants.LOAD_USERS;
+  payload: {
+    users: User[];
+    meta: ListMeta;
+  };
+}
+
+export interface SetSearchedUsers extends PaginationAction {
+  type: constants.SET_SEARCHED_USERS;
   users: User[];
 }
 
@@ -27,16 +36,48 @@ export interface AbortSearch extends Action {
 /**
  * Union Action Types
  */
-export type Actions = ResetState | SearchUsers | AbortSearch | BaseAction;
+export type Actions = ResetState | LoadUsers | SetSearchedUsers | AbortSearch | BaseAction;
 
 /**
  *
  * Actions
  */
 
+export const setSearchedUsers = (users: User[], meta: ListMeta): SetSearchedUsers => ({
+  type: constants.SET_SEARCHED_USERS,
+  users,
+  meta,
+});
+
 /**
  * Action Creator
  */
+
+export const loadUsers: ThunkActionCreator<Actions, RootState> =
+  (page = 1) =>
+  async dispatch => {
+    dispatch(setLoading(true));
+
+    try {
+      const {data: users, meta} = await UserAPI.searchUsers(page);
+
+      dispatch({
+        type: constants.LOAD_USERS,
+        payload: {
+          users,
+          meta,
+        },
+      });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
 
 export const searchUsers: ThunkActionCreator<Actions, RootState> =
   (query: string) => async dispatch => {
@@ -45,8 +86,10 @@ export const searchUsers: ThunkActionCreator<Actions, RootState> =
     try {
       const {meta, data: users} = await UserAPI.searchUsers(query);
 
+      console.log({meta, users});
+
       dispatch({
-        type: constants.SEARCH_USERS,
+        type: constants.SET_SEARCHED_USERS,
         users,
         meta,
       });
