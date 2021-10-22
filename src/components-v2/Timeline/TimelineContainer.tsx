@@ -117,7 +117,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
   if (!posts.length && filters?.owner === user?.id) {
     return (
-      <Empty title="Looks like you haven’t post yet">
+      <Empty title="Looks like you haven’t posted yet">
         <Button onClick={handleGoHome} variant="contained" size="small" color="primary">
           Create my first post
         </Button>
@@ -126,7 +126,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   }
 
   if (!posts.length) {
-    return <Empty title="No post yet" subtitle="This user hasn’t post anything" />;
+    return <Empty title="No post yet" subtitle="This user hasn’t posted anything" />;
   }
 
   return (
