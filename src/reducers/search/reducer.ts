@@ -57,8 +57,8 @@ export const SearchReducer: Redux.Reducer<SearchState, Actions> = (
     case constants.SET_SEARCHED_USERS: {
       return {
         ...state,
-        searchedUsers: action.payload.users,
-        meta: action.payload.meta,
+        searchedUsers: action.users,
+        meta: action.meta,
       };
     }
 
