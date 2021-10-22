@@ -8,6 +8,7 @@ import {FriendReducer} from './friend/reducer';
 import {NotificationReducer} from './notification/reducer';
 import {PeopleReducer} from './people/reducer';
 import {ProfileReducer} from './profile/reducer';
+import {SearchReducer} from './search/reducer';
 import {TagReducer} from './tag/reducer';
 import {TimelineReducer} from './timeline/reducer';
 import {TipSummaryReducer} from './tip-summary/reducer';
@@ -36,6 +37,7 @@ const reducers = {
   peopleState: PeopleReducer,
   toasterState: ToasterReducer,
   blockState: BlockReducer,
+  searchState: SearchReducer,
 };
 
 export const combinedReducers = combineReducers(reducers);
