@@ -12,7 +12,7 @@ import {Props} from './richText.interface';
 import {useStyles} from './richtext.style';
 
 export const RichTextComponent: React.FC<Props> = props => {
-  const {userProfilePict, onOpenCreatePost, alias} = props;
+  const {userProfilePict, onOpenCreatePost, alias, name} = props;
   const style = useStyles();
   const [post, setPost] = useState<string>('');
 
@@ -31,10 +31,10 @@ export const RichTextComponent: React.FC<Props> = props => {
             variant="circular"
             sizes="lg"
             style={{width: 50, height: 50}}>
-            {acronym(alias || 'User')}
+            {acronym(name || alias || '')}
           </Avatar>
           <TextareaAutosize
-            rowsMin={1}
+            minRows={1}
             value={post}
             placeholder={`What's on your mind?`}
             className={style.postTextArea}
