@@ -24,6 +24,8 @@ config:
     apiKey: ""
     messagingSenderId: ""
     appId: ""
+  sentry:
+    dns: ""
   cloudinary:
     cloudName: ""
     apiKey: ""

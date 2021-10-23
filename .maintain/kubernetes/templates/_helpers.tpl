@@ -69,6 +69,13 @@ Create the name of firebase secret.
 {{- end }}
 
 {{/*
+Create the name of sentry secret.
+*/}}
+{{- define "myriad-web.sentrySecretName" -}}
+{{- printf "%s-%s" (include "myriad-web.fullname" .) "sentry" | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
 Create the name of cloudinary secret.
 */}}
 {{- define "myriad-web.cloudinarySecretName" -}}

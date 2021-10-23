@@ -51,7 +51,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         url: '/settings',
       },
     ],
-    [],
+    [selected],
   );
 
   return menu;

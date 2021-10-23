@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {useExperienceHook} from '../../hooks/use-experience-hook';
-import {useMyriadUser} from '../../hooks/use-myriad-users.hooks';
+import {useSearchHook} from '../../hooks/use-search.hooks';
 import {SearchedExperienceListContainer} from '../ExperienceList/SearchedExperienceListContainer';
 import {PostsListContainer} from '../PostsList/PostsListContainer';
 import {useTimelineHook} from '../Timeline/hooks/use-timeline.hook';
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export const SearchResultContainer: React.FC = () => {
   const {searchExperience} = useExperienceHook();
 
-  const {search: searchUsers} = useMyriadUser();
+  const {searchUsers} = useSearchHook();
 
   const {searchPosts} = useTimelineHook();
 
