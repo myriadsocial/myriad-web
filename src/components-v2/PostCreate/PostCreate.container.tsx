@@ -4,12 +4,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import {PostCreate} from '.';
 import {Post} from '../../interfaces/post';
 import {RootState} from '../../reducers';
-import {fetchPeople, searchPeople} from '../../reducers/people/actions';
-import {PeopleState} from '../../reducers/people/reducer';
+import {fetchFriend, searchFriend} from '../../reducers/friend/actions';
 import {createPost, importPost} from '../../reducers/timeline/actions';
+import {useFriendList} from '../FriendsMenu/hooks/use-friend-list.hook';
 import {useUpload} from './hooks/use-upload.hook';
 
 import {debounce} from 'lodash';
+import {FriendState} from 'src/reducers/friend/reducer';
+import {UserState} from 'src/reducers/user/reducer';
 
 type PostCreateContainerType = {
   open: boolean;
@@ -21,14 +23,20 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
 
   const dispatch = useDispatch();
   const {uploadImage, uploadVideo} = useUpload();
-  const {people} = useSelector<RootState, PeopleState>(state => state.peopleState);
+  const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const mentionable = useFriendList(friends, user);
 
   useEffect(() => {
-    dispatch(fetchPeople());
-  }, [dispatch]);
+    if (user) {
+      dispatch(fetchFriend(user));
+    }
+  }, [dispatch, user]);
 
   const handleSearchPeople = debounce((query: string) => {
-    dispatch(searchPeople(query));
+    if (user) {
+      dispatch(searchFriend(user, query));
+    }
   }, 300);
 
   const handleFileUpload = async (file: File, type: 'image' | 'video'): Promise<string> => {
@@ -66,7 +74,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   return (
     <PostCreate
       open={open}
-      people={people}
+      people={mentionable}
       onClose={onClose}
       onSubmit={submitPost}
       onSearchPeople={handleSearchPeople}
