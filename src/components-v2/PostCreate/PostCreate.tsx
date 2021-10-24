@@ -8,7 +8,7 @@ import Tabs from '@material-ui/core/Tabs';
 
 import {FriendDetail} from '../FriendsMenu/hooks/use-friend-list.hook';
 import {NSFWTags} from '../NSFWTags';
-import {PostEditor, formatStringToNode, serialize} from '../PostEditor';
+import {PostEditor, serialize, formatToString, hasMedia} from '../PostEditor';
 import {PostImport} from '../PostImport';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {Modal} from '../atoms/Modal';
@@ -19,7 +19,6 @@ import {menuOptions} from './default';
 import {Post, PostVisibility} from 'src/interfaces/post';
 
 type PostCreateProps = {
-  value?: string;
   url?: string;
   open: boolean;
   people: FriendDetail[];
@@ -37,12 +36,13 @@ const initialPost = {
 };
 
 export const PostCreate: React.FC<PostCreateProps> = props => {
-  const {value = '', url, open, people, onClose, onSubmit, onSearchPeople, onUploadFile} = props;
+  const {url, open, people, onClose, onSubmit, onSearchPeople, onUploadFile} = props;
   const styles = useStyles();
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
   const [post, setPost] = useState<Partial<Post>>(initialPost);
   const [importUrl, setImport] = useState<string | null>(null);
+  const [validPost, setValidPost] = useState(false);
 
   useEffect(() => {
     return setPost(initialPost);
@@ -59,14 +59,19 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     },
   };
 
-  const node = formatStringToNode(value);
-
   const handleTabChange = (event: React.ChangeEvent<{}>, tab: PostCreateType) => {
     setActiveTab(tab);
   };
 
   const handlePostTextChange = (value: TNode[]) => {
     const attributes = serialize(value);
+
+    if (hasMedia(value)) {
+      setValidPost(true);
+    } else {
+      const string = value.map(formatToString).join('');
+      setValidPost(string.length > 0);
+    }
 
     setPost(prevPost => ({...prevPost, ...attributes}));
   };
@@ -119,7 +124,6 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             name: item.name,
             avatar: item.avatar,
           }))}
-          value={[node]}
           onChange={handlePostTextChange}
           onSearchMention={onSearchPeople}
           onFileUploaded={onUploadFile}
@@ -146,7 +150,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
         </div>
 
         <Button
-          disabled={!importUrl && !post.text}
+          disabled={!validPost}
           variant="contained"
           color="primary"
           size="small"

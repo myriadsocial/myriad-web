@@ -54,7 +54,6 @@ import {Transforms, Selection, Editor} from 'slate';
 import {ReactEditor} from 'slate-react';
 
 export type PostEditorProps = {
-  value: TNode[];
   debug?: boolean;
   placeholder?: string;
   mentionable: MentionNodeData[];
@@ -71,7 +70,6 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     debug = false,
     placeholder = 'Type…',
     mentionable,
-    value,
     onSearchMention,
     onChange,
     onFileUploaded,
@@ -313,7 +311,6 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     <Box className={styles.root}>
       <Plate
         editableProps={editableProps}
-        initialValue={value}
         onChange={onChangeDebug}
         plugins={plugins}
         components={components}
