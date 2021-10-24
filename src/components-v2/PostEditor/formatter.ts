@@ -6,11 +6,11 @@ import {
 } from '@udecode/plate';
 import {TNode} from '@udecode/plate-core';
 
-import {Post} from 'src/interfaces/post';
-
 import {ELEMENT_IMAGE_LIST} from './Render/ImageList';
 import {ELEMENT_SHOW_MORE} from './Render/ShowMore';
 import {ELEMENT_HASHTAG} from './plugins/hashtag';
+
+import {Post} from 'src/interfaces/post';
 
 export const formatStringToNode = (string: string): TNode => {
   return {

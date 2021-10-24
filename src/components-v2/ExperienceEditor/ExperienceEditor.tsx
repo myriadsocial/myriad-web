@@ -18,13 +18,13 @@ import {
   AutocompleteRenderOptionState,
 } from '@material-ui/lab';
 
-import {debounce} from 'lodash';
-
 import {Experience, Tag} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
 import {Dropzone} from '../atoms/Dropzone';
 import {ListItemComponent} from '../atoms/ListItem';
 import {useStyles} from './Experience.styles';
+
+import {debounce} from 'lodash';
 
 type ExperienceEditorProps = {
   type?: string;
