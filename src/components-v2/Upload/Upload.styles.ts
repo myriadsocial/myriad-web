@@ -10,5 +10,12 @@ export const useStyles = makeStyles((theme: Theme) =>
     confirm: {
       marginTop: 60,
     },
+    progress: {
+      position: 'absolute',
+      top: '50%',
+      right: 30,
+      marginTop: -12,
+      marginLeft: -12,
+    },
   }),
 );

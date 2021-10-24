@@ -25,11 +25,6 @@ export const useStyles = makeStyles(() =>
       display: 'flex',
       alignItems: 'center',
       flexDirection: 'column',
-
-      '& > img': {
-        width: 80,
-        height: 80,
-      },
     },
     button: {
       marginTop: 20,
