@@ -18,13 +18,13 @@ import {
   AutocompleteRenderOptionState,
 } from '@material-ui/lab';
 
+import {debounce} from 'lodash';
+
 import {Experience, Tag} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
 import {Dropzone} from '../atoms/Dropzone';
 import {ListItemComponent} from '../atoms/ListItem';
 import {useStyles} from './Experience.styles';
-
-import {debounce} from 'lodash';
 
 type ExperienceEditorProps = {
   type?: string;
@@ -101,6 +101,19 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       ...prevExperience,
       [field]: event.target.value,
     }));
+  };
+
+  const handleTagsInputChange = (event: React.ChangeEvent<{}>, newValue: string) => {
+    const options = newValue.split(/[ ,]+/);
+
+    const fieldValue = newTags
+      .concat(options)
+      .map(x => x.trim())
+      .filter(x => x);
+
+    if (options.length > 1) {
+      handleTagsChange(event, fieldValue, 'create-option');
+    }
   };
 
   const handleTagsChange = (
@@ -192,6 +205,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         options={tags.map(tag => tag.id)}
         disableClearable
         onChange={handleTagsChange}
+        onInputChange={handleTagsInputChange}
         getOptionLabel={option => `#${option}`}
         renderInput={params => (
           <TextField
