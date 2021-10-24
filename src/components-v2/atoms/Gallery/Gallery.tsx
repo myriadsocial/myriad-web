@@ -1,8 +1,14 @@
-import React from 'react';
+import {XIcon, ChevronRightIcon, ChevronLeftIcon} from '@heroicons/react/solid';
 
+import React, {useState} from 'react';
+import Carousel from 'react-material-ui-carousel';
+
+import {Dialog, IconButton, SvgIcon, Paper} from '@material-ui/core';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
+
+import theme from 'src/themes/light-theme-v2';
 
 import {useStyles} from './Gallery.styles';
 import {GalleryType} from './Gallery.types';
@@ -12,18 +18,28 @@ type GalleryProps = {
   images: string[];
   variant?: GalleryType;
   cloudName: string;
-  onImageClick: (index: number) => void;
 };
 
 export const Gallery: React.FC<GalleryProps> = props => {
-  const {images, cloudName, variant = 'horizontal', onImageClick} = props;
+  const {images, cloudName, variant = 'horizontal'} = props;
 
   const style = useStyles();
 
+  const [viewerIsOpen, setViewerIsOpen] = useState(false);
+  const [index, setIndex] = useState(0);
   const list = buildList(images, variant, cloudName);
 
   const handleImageClick = (index: number) => () => {
-    onImageClick(index);
+    openLightbox(index);
+  };
+
+  const openLightbox = (i: number) => {
+    setIndex(i);
+    setViewerIsOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setViewerIsOpen(false);
   };
 
   return (
@@ -48,6 +64,39 @@ export const Gallery: React.FC<GalleryProps> = props => {
           </GridListTile>
         ))}
       </GridList>
+
+      <Dialog open={viewerIsOpen} fullScreen>
+        <IconButton
+          color="primary"
+          aria-label="close"
+          size="small"
+          onClick={closeLightbox}
+          className={style.close}>
+          <SvgIcon component={XIcon} />
+        </IconButton>
+
+        <Carousel
+          index={index}
+          autoPlay={false}
+          NextIcon={
+            <SvgIcon component={ChevronRightIcon} viewBox="0 0 20 20" className={style.icon} />
+          }
+          PrevIcon={
+            <SvgIcon component={ChevronLeftIcon} viewBox="0 0 20 20" className={style.icon} />
+          }
+          navButtonsProps={{
+            style: {
+              backgroundColor: theme.palette.primary.main,
+              color: '#FFF',
+            },
+          }}>
+          {list.images.map((image, i) => (
+            <Paper key={i} className={style.preview}>
+              <img src={image.sizes.large} alt="" />
+            </Paper>
+          ))}
+        </Carousel>
+      </Dialog>
     </div>
   );
 };

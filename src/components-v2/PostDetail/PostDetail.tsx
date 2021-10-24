@@ -7,13 +7,18 @@ import {useRouter} from 'next/router';
 
 import Paper from '@material-ui/core/Paper';
 
-import LinkifyComponent from '../../components/common/Linkify.component';
-import ShowIf from '../../components/common/show-if.component';
-import {Post} from '../../interfaces/post';
-import {User} from '../../interfaces/user';
-import {RootState} from '../../reducers';
-import {BalanceState} from '../../reducers/balance/reducer';
-import {setTippedContent} from '../../reducers/timeline/actions';
+import remarkGFM from 'remark-gfm';
+import remarkHTML from 'remark-html';
+import {LinkPreview} from 'src/components-v2/atoms/LinkPreview';
+import LinkifyComponent from 'src/components/common/Linkify.component';
+import ShowIf from 'src/components/common/show-if.component';
+import {Comment} from 'src/interfaces/comment';
+import {Post} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
+import {BalanceState} from 'src/reducers/balance/reducer';
+import {setTippedContent} from 'src/reducers/timeline/actions';
+
 import {PostRender} from '../PostEditor/PostRender';
 import {ShowMore} from '../PostEditor/Render/ShowMore';
 import {Button, ButtonVariant, ButtonColor, ButtonSize} from '../atoms/Button';
@@ -25,11 +30,6 @@ import {TabsComponent} from '../atoms/Tabs';
 import {Video} from '../atoms/Video';
 import {useStyles} from './PostDetail.styles';
 import {useCommentTabs, CommentTabs} from './hooks/use-comment-tabs';
-
-import remarkGFM from 'remark-gfm';
-import remarkHTML from 'remark-html';
-import {LinkPreview} from 'src/components-v2/atoms/LinkPreview';
-import {Comment} from 'src/interfaces/comment';
 
 type PostDetailProps = {
   user?: User;
@@ -46,13 +46,6 @@ type PostDetailProps = {
 };
 
 export const PostDetail: React.FC<PostDetailProps> = props => {
-  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
-
-  const styles = useStyles();
-  const router = useRouter();
-
-  const dispatch = useDispatch();
-
   const {
     user,
     post,
@@ -65,8 +58,13 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     onShared,
     expanded = false,
   } = props;
+
+  const styles = useStyles();
+  const router = useRouter();
+  const dispatch = useDispatch();
   const tabs = useCommentTabs(post);
 
+  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
   const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
   const [shoWcomment, setShowComment] = useState(expanded);
   const [maxLength, setMaxLength] = useState<number | undefined>(250);
@@ -136,7 +134,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   };
 
   const handleOpenTipHistory = () => {
-    console.log('handleOpenTipHistory', post);
     onOpenTipHistory(post);
   };
 
@@ -195,7 +192,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           </ShowIf>
 
           {post.asset?.images && post.asset?.images.length > 0 && (
-            <Gallery images={post.asset?.images} onImageClick={console.log} cloudName="dsget80gs" />
+            <Gallery images={post.asset?.images} cloudName="dsget80gs" />
           )}
 
           {post.asset?.videos && post.asset.videos.length > 0 && (

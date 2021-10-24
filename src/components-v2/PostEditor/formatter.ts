@@ -6,10 +6,11 @@ import {
 } from '@udecode/plate';
 import {TNode} from '@udecode/plate-core';
 
+import {Post} from 'src/interfaces/post';
+
+import {ELEMENT_IMAGE_LIST} from './Render/ImageList';
 import {ELEMENT_SHOW_MORE} from './Render/ShowMore';
 import {ELEMENT_HASHTAG} from './plugins/hashtag';
-
-import {Post} from 'src/interfaces/post';
 
 export const formatStringToNode = (string: string): TNode => {
   return {
@@ -56,13 +57,17 @@ export const formatToString = (node: TNode): string => {
 };
 
 export const deserialize = (post: Post, maxLength?: number): TNode[] => {
+  let nodes: TNode[] = [];
+
   try {
-    const nodes = JSON.parse(post.text) as TNode[];
-    const text = nodes.map(formatToString).join('');
+    const originNodes = JSON.parse(post.text) as TNode[];
+    nodes = originNodes;
 
     if (Array.isArray(nodes)) {
+      const text = nodes.map(formatToString).join(' ');
+
       if (maxLength && text.length > maxLength) {
-        return [
+        nodes = [
           formatStringToNode(text.slice(0, maxLength)),
           {
             type: ELEMENT_SHOW_MORE,
@@ -73,16 +78,30 @@ export const deserialize = (post: Post, maxLength?: number): TNode[] => {
             ],
           },
         ];
-      } else {
-        return nodes;
+
+        if (hasMedia(originNodes)) {
+          const url: string[] = [];
+          for (const node of originNodes) {
+            if ([ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE].includes(node.type)) {
+              url.push(node.url);
+            }
+          }
+
+          nodes.push({
+            type: ELEMENT_IMAGE_LIST,
+            children: [{text: ''}],
+            url: url,
+          });
+        }
       }
     } else {
-      return formatShowMore(post.text, maxLength);
+      nodes = formatShowMore(post.text, maxLength);
     }
   } catch (e) {
-    console.log(e);
-    return formatShowMore(post.text, maxLength);
+    nodes = formatShowMore(post.text, maxLength);
   }
+
+  return nodes;
 };
 
 export const serialize = (nodes: TNode[]): Partial<Post> => {
