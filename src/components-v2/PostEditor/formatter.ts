@@ -1,4 +1,9 @@
-import {ELEMENT_MENTION, ELEMENT_PARAGRAPH} from '@udecode/plate';
+import {
+  ELEMENT_IMAGE,
+  ELEMENT_MEDIA_EMBED,
+  ELEMENT_MENTION,
+  ELEMENT_PARAGRAPH,
+} from '@udecode/plate';
 import {TNode} from '@udecode/plate-core';
 
 import {ELEMENT_SHOW_MORE} from './Render/ShowMore';
@@ -36,9 +41,15 @@ const formatShowMore = (value: string, maxLength?: number): TNode[] => {
   return nodes;
 };
 
+export const hasMedia = (nodes: TNode[]): boolean => {
+  const match = nodes.filter(node => [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE].includes(node.type));
+
+  return match.length > 0;
+};
+
 export const formatToString = (node: TNode): string => {
   if (node.text) {
-    return node.text;
+    return node.text.trim();
   }
 
   return node.children ? node.children.map((element: TNode) => formatToString(element)) : '';
