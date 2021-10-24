@@ -3,6 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Link from 'next/link';
 
+import {Button, Grid} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -76,23 +77,36 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
               classes={{root: background ? style.backgroundEven : ''}}
               className={style.item}
               alignItems="center">
-              <ListItemAvatar>
-                <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
-                  {acronym(friend.name)}
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText>
-                <Link href={`/profile/${friend.id}`}>
-                  <a href={`/profile/${friend.id}`} className={style.link}>
-                    <Typography className={style.name} component="span" color="textPrimary">
-                      {friend.name}
-                    </Typography>
-                  </a>
-                </Link>
-                <Typography className={style.friend} component="p" color="textSecondary">
-                  1 mutual friends
-                </Typography>
-              </ListItemText>
+              <Grid container style={{padding: '10px'}}>
+                <Grid item xs container>
+                  <Grid item>
+                    <ListItemAvatar>
+                      <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
+                        {acronym(friend.name)}
+                      </Avatar>
+                    </ListItemAvatar>
+                  </Grid>
+                  <Grid item>
+                    <ListItemText>
+                      <Link href={`/profile/${friend.id}`}>
+                        <a href={`/profile/${friend.id}`} className={style.link}>
+                          <Typography className={style.name} component="span" color="textPrimary">
+                            {friend.name}
+                          </Typography>
+                        </a>
+                      </Link>
+                      <Typography className={style.friend} component="p" color="textSecondary">
+                        1 mutual friends
+                      </Typography>
+                    </ListItemText>
+                  </Grid>
+                </Grid>
+                <Grid item xs={3}>
+                  <Button variant="contained" color="primary" href={`/chat/${friend.id}`}>
+                    Chat
+                  </Button>
+                </Grid>
+              </Grid>
             </ListItem>
           ))}
         </InfiniteScroll>
