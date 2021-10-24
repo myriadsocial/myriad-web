@@ -8,11 +8,11 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 
-import theme from 'src/themes/light-theme-v2';
-
 import {useStyles} from './Gallery.styles';
 import {GalleryType} from './Gallery.types';
 import {buildList} from './util';
+
+import theme from 'src/themes/light-theme-v2';
 
 type GalleryProps = {
   images: string[];
