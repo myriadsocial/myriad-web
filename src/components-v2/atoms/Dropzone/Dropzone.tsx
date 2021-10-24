@@ -1,7 +1,17 @@
+import {TrashIcon} from '@heroicons/react/outline';
+
 import React, {useState, useEffect} from 'react';
 import {FileRejection, useDropzone} from 'react-dropzone';
 
-import {Button, ImageList, ImageListItem, Typography} from '@material-ui/core';
+import {
+  Button,
+  IconButton,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
+  SvgIcon,
+  Typography,
+} from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import UploadIcon from '../../../images/Icons/Upload.svg';
@@ -34,7 +44,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
   } = props;
   const styles = useStyles();
 
-  const [, setFiles] = useState<FileUploaded[]>([]);
+  const [files, setFiles] = useState<FileUploaded[]>([]);
   const [preview, setPreview] = useState<string[]>([]);
   const [error, setError] = useState<FileRejection[] | null>(null);
 
@@ -67,6 +77,16 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     },
   });
 
+  const removeFile = (index: number) => {
+    const currentFiles = files.filter((file, i) => index !== i);
+    const currentPreview = preview.filter((url, i) => index !== i);
+
+    setFiles(currentFiles);
+    setPreview(currentPreview);
+
+    onImageSelected(currentFiles);
+  };
+
   const handleReuploadImage = () => {
     open();
   };
@@ -85,6 +105,17 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
             {preview.map((item, i) => (
               <ImageListItem key={i} cols={2}>
                 <img src={item} alt={item} />
+                <ImageListItemBar
+                  style={{background: 'none'}}
+                  actionIcon={
+                    <IconButton
+                      aria-label={`remove image`}
+                      className={styles.icon}
+                      onClick={() => removeFile(i)}>
+                      <SvgIcon component={TrashIcon} />
+                    </IconButton>
+                  }
+                />
               </ImageListItem>
             ))}
           </ImageList>
