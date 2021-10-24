@@ -1,6 +1,6 @@
 import {TNode} from '@udecode/plate';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {Button} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
@@ -31,16 +31,22 @@ type PostCreateProps = {
 
 type PostCreateType = 'create' | 'import';
 
+const initialPost = {
+  visibility: PostVisibility.PUBLIC,
+  isNSFW: false,
+};
+
 export const PostCreate: React.FC<PostCreateProps> = props => {
   const {value = '', url, open, people, onClose, onSubmit, onSearchPeople, onUploadFile} = props;
   const styles = useStyles();
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
-  const [post, setPost] = useState<Partial<Post>>({
-    visibility: PostVisibility.PUBLIC,
-    isNSFW: false,
-  });
+  const [post, setPost] = useState<Partial<Post>>(initialPost);
   const [importUrl, setImport] = useState<string | null>(null);
+
+  useEffect(() => {
+    return setPost(initialPost);
+  }, []);
 
   const header: Record<PostCreateType, {title: string; subtitle: string}> = {
     create: {
@@ -80,9 +86,12 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const handleSubmit = () => {
     if (activeTab === 'import' && importUrl) {
       onSubmit(importUrl);
+      setPost(initialPost);
     }
+
     if (activeTab === 'create') {
       onSubmit(post);
+      setPost(initialPost);
     }
   };
 
