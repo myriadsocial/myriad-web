@@ -1,20 +1,20 @@
 import React, {useState} from 'react';
 
-import {Button} from '@material-ui/core';
+import {Button, CircularProgress} from '@material-ui/core';
 
 import {Dropzone} from '../atoms/Dropzone';
 import {useStyles} from './Upload.styles';
 
 type UploadProps = {
   accept: string[];
-  loading?: boolean;
+  loading: boolean;
   maxSize?: number;
   placeholder?: string;
   onFileSelected: (result: File[] | string) => void;
 };
 
 export const Upload: React.FC<UploadProps> = props => {
-  const {accept, placeholder, maxSize, loading = false, onFileSelected} = props;
+  const {accept, placeholder, maxSize, loading, onFileSelected} = props;
   const styles = useStyles();
 
   const [files, setFiles] = useState<File[]>([]);
@@ -44,6 +44,7 @@ export const Upload: React.FC<UploadProps> = props => {
         onClick={handleConfirm}
         disabled={files.length === 0}>
         Confirm
+        {loading && <CircularProgress size={24} className={styles.progress} color="secondary" />}
       </Button>
     </div>
   );

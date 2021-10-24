@@ -150,7 +150,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
       // others
       createTrailingBlockPlugin({type: ELEMENT_PARAGRAPH}),
       createSelectOnBackspacePlugin({
-        allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED, ELEMENT_MENTION, ELEMENT_HASHTAG],
+        allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED, ELEMENT_MENTION, ELEMENT_LINK],
       }),
       createSoftBreakPlugin(),
       createExitBreakPlugin(),
@@ -170,6 +170,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   const [showModalImageLink, toggleModalImageLink] = useState(false);
   const [showVideoUpload, toggleVideoUpload] = useState(false);
   const [currentSelection, setCurrentSelection] = useState<Selection | null>(null);
+  const [uploadLoading, setUploadLoading] = useState(false);
 
   useEffect(() => {
     if (mentionQuery.length > 0) {
@@ -247,6 +248,8 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   };
 
   const handleImageSelected = async (result: File[] | string) => {
+    setUploadLoading(true);
+
     if (typeof result === 'string') {
       setImageUrl.resolve(result);
     }
@@ -264,9 +267,12 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     setImageUploadType(null);
     toggleImageUpload(false);
     toggleModalImageLink(false);
+    setUploadLoading(false);
   };
 
   const handleVideoSelected = async (result: File[] | string) => {
+    setUploadLoading(true);
+
     if (editor && Array.isArray(result) && onFileUploaded) {
       const url = await onFileUploaded(result[0], 'video');
       insertMediaEmbed(editor, {url});
@@ -275,6 +281,8 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     if (editor && typeof result === 'string') {
       insertMediaEmbed(editor, {url: result});
     }
+
+    setUploadLoading(false);
 
     toggleVideoUpload(false);
   };
@@ -329,7 +337,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         maxWidth="xl"
         open={showImageUpload}
         onClose={closeImageUpload}>
-        <Upload onFileSelected={handleImageSelected} accept={['image/*']} />
+        <Upload loading={uploadLoading} onFileSelected={handleImageSelected} accept={['image/*']} />
       </Modal>
 
       <Modal
@@ -340,6 +348,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         open={showVideoUpload}
         onClose={closeVideoUpload}>
         <Upload
+          loading={uploadLoading}
           onFileSelected={handleVideoSelected}
           accept={['video/*']}
           maxSize={100}
