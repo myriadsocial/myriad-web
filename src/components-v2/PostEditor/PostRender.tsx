@@ -25,16 +25,16 @@ import Link from 'next/link';
 
 import {Typography, TypographyVariant} from '@material-ui/core';
 
+import {ELEMENT_IMAGE_LIST} from './Render/ImageList';
+import {ELEMENT_SHOW_MORE, ShowMore} from './Render/ShowMore';
+import {deserialize, formatToString} from './formatter';
+import {ELEMENT_HASHTAG} from './plugins/hashtag';
+
 import escapeHtml from 'escape-html';
 import {Gallery} from 'src/components-v2/atoms/Gallery';
 import {Video} from 'src/components-v2/atoms/Video/Video';
 import {Post} from 'src/interfaces/post';
 import theme from 'src/themes/light-theme-v2';
-
-import {ELEMENT_IMAGE_LIST} from './Render/ImageList';
-import {ELEMENT_SHOW_MORE, ShowMore} from './Render/ShowMore';
-import {deserialize, formatToString} from './formatter';
-import {ELEMENT_HASHTAG} from './plugins/hashtag';
 
 type PostRenderProps = {
   post: Post;

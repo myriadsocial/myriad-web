@@ -7,18 +7,6 @@ import {useRouter} from 'next/router';
 
 import Paper from '@material-ui/core/Paper';
 
-import remarkGFM from 'remark-gfm';
-import remarkHTML from 'remark-html';
-import {LinkPreview} from 'src/components-v2/atoms/LinkPreview';
-import LinkifyComponent from 'src/components/common/Linkify.component';
-import ShowIf from 'src/components/common/show-if.component';
-import {Comment} from 'src/interfaces/comment';
-import {Post} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
-import {RootState} from 'src/reducers';
-import {BalanceState} from 'src/reducers/balance/reducer';
-import {setTippedContent} from 'src/reducers/timeline/actions';
-
 import {PostRender} from '../PostEditor/PostRender';
 import {ShowMore} from '../PostEditor/Render/ShowMore';
 import {Button, ButtonVariant, ButtonColor, ButtonSize} from '../atoms/Button';
@@ -30,6 +18,18 @@ import {TabsComponent} from '../atoms/Tabs';
 import {Video} from '../atoms/Video';
 import {useStyles} from './PostDetail.styles';
 import {useCommentTabs, CommentTabs} from './hooks/use-comment-tabs';
+
+import remarkGFM from 'remark-gfm';
+import remarkHTML from 'remark-html';
+import {LinkPreview} from 'src/components-v2/atoms/LinkPreview';
+import LinkifyComponent from 'src/components/common/Linkify.component';
+import ShowIf from 'src/components/common/show-if.component';
+import {Comment} from 'src/interfaces/comment';
+import {Post} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
+import {BalanceState} from 'src/reducers/balance/reducer';
+import {setTippedContent} from 'src/reducers/timeline/actions';
 
 type PostDetailProps = {
   user?: User;
