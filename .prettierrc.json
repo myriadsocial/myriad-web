@@ -14,8 +14,10 @@
     "^(next)([-a-zA-Z/]+)?$",
     "^@material-ui/(.*)$",
     "^@polkadot/(.*)$",
-    "^[./]",
-    "^[-a-zA-Z/]+"
+    "^@*/(.*)$",
+    "^[-a-zA-Z/]+",
+    "^[../]",
+    "^[./]"
   ],
   "importOrderSeparation": true
 }

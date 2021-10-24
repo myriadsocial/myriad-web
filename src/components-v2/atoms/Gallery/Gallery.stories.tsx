@@ -19,16 +19,10 @@ DefaultGallery.args = {
     'https://res.cloudinary.com/dsget80gs/aqzylqjxopgf23nqypac.jpg',
     'https://res.cloudinary.com/dsget80gs/i1rhvyusrvlszdsamcsf.jpg',
   ],
-  onImageClick: (index: number) => {
-    console.log('Image clicked', index);
-  },
 };
 
 export const SmallImages = Template.bind({});
 SmallImages.args = {
   cloudName: 'dsget80gs',
   images: ['https://res.cloudinary.com/dsget80gs/dsccp9uljwazyfudyeew.jpg'],
-  onImageClick: (index: number) => {
-    console.log('Image clicked', index);
-  },
 };

@@ -107,6 +107,7 @@
     "react-joyride": "^2.3.0",
     "react-lottie": "^1.2.3",
     "react-markdown": "^6.0.1",
+    "react-material-ui-carousel": "^2.3.5",
     "react-player": "^2.9.0",
     "react-redux": "^7.2.4",
     "react-share": "^4.4.0",
