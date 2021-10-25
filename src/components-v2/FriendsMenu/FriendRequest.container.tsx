@@ -28,10 +28,6 @@ export const FriendRequestListContainer: React.FC<FriendRequestContainerProps> =
     loadRequests();
   }, [user]);
 
-  const handleSearchFriendRequest = (query: string) => {
-    // code
-  };
-
   const acceptFriendRequest = (request: Friend) => {
     toggleRequest(request, FriendStatus.APPROVED);
 
@@ -50,14 +46,12 @@ export const FriendRequestListContainer: React.FC<FriendRequestContainerProps> =
     });
   };
 
-  console.log('requests', requests);
   return (
     <FriendRequestComponent
       user={user}
       requests={requests}
       onAcceptRequest={acceptFriendRequest}
       onDeclineRequest={declineFriendRequest}
-      onSearch={handleSearchFriendRequest}
     />
   );
 };
