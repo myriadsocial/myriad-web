@@ -1,7 +1,10 @@
+import {Firegun} from '@yokowasis/firegun';
+
 import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
 import {RichTextContainer} from '../src/components-v2/Richtext/RichTextContainer';
@@ -16,13 +19,55 @@ import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {setAnonymous, setUser, fetchConnectedSocials} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 
-const Home: React.FC = () => {
+const Home: React.FC = (props: any) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchConnectedSocials());
     dispatch(fetchAvailableToken());
   }, [dispatch]);
+
+  useEffect(() => {
+    // Patch pub dan Epub
+    const fg = new Firegun([
+      'https://gundb.dev.myriad.systems/gun',
+      'https://gun-relay.bimasoft.web.id:16902/gun',
+    ]);
+    const {publicRuntimeConfig} = getConfig();
+    const baseURL = publicRuntimeConfig.apiURL;
+    const userID = props.session.user.address;
+
+    async function userLoginSignup(gunUser: string, gunPass: string, alias: string) {
+      try {
+        await fg.userLogin(gunUser, gunPass, alias);
+      } catch (error) {
+        await fg.userNew(gunUser, gunPass, alias);
+      }
+    }
+
+    fetch(`${baseURL}/users/${userID}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json())
+      .then(result => {
+        console.log(result);
+        const gunUser = userID;
+        const gunPass = result.password.slice(0, 10);
+        const gunAlias = result.name;
+        if (fg.user.alias === '') {
+          userLoginSignup(gunUser, gunPass, gunAlias);
+        } else {
+          if (fg.user.alias !== gunAlias) {
+            fg.userLogout();
+            userLoginSignup(gunUser, gunPass, gunAlias);
+          }
+        }
+      });
+  }, []);
 
   //TODO: any logic + components which replace
   // the middle column of home page should go here
