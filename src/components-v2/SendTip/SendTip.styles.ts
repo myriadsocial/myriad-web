@@ -91,5 +91,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.primary.main,
       textDecoration: 'none',
     },
+    backdrop: {
+      textAlign: 'center',
+    },
+    noBackdrop: {},
   }),
 );

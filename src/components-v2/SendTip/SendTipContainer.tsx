@@ -15,8 +15,6 @@ export const SendTipContainer: React.FC = () => {
     state => state.walletState,
   );
 
-  if (!tippedUser) return <p>loading</p>;
-
   return (
     <SendTip
       tippedUser={tippedUser}
