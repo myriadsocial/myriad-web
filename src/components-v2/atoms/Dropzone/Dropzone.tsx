@@ -38,7 +38,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     onImageSelected,
     loading = false,
     value,
-    accept = ['image/*'],
+    accept = ['image/jpeg', 'image/png'],
     maxSize = 20,
     placeholder = 'File must be .jpeg or .png',
   } = props;
