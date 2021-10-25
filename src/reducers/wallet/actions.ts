@@ -1,9 +1,9 @@
+import {acronym} from '../../helpers/string';
 import {Actions as BaseAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
-import {User} from 'src/interfaces/user';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 import * as PostAPI from 'src/lib/api/post';
 import * as UserAPI from 'src/lib/api/user';
@@ -30,7 +30,10 @@ export interface SetTippedUserId extends Action {
 
 export interface SetTippedUser extends Action {
   type: constants.SET_TIPPED_USER;
-  tippedUser: User;
+  payload: {
+    name: string;
+    profilePictureURL: string;
+  };
 }
 
 /**
@@ -59,9 +62,12 @@ export const setTippedUserId = (tippedUserId: string): SetTippedUserId => ({
   tippedUserId,
 });
 
-export const setTippedUser = (tippedUser: User): SetTippedUser => ({
+export const setTippedUser = (name: string, profilePictureURL: string): SetTippedUser => ({
   type: constants.SET_TIPPED_USER,
-  tippedUser,
+  payload: {
+    name,
+    profilePictureURL,
+  },
 });
 
 /**
@@ -104,13 +110,13 @@ export const fetchTippedUserId: ThunkActionCreator<Actions, RootState> =
     try {
       const {walletAddress} = await PostAPI.getWalletAddress(postId);
 
-      const {people} = posts.filter(post => post.id === postId).shift();
+      const {people} = posts.find(post => post.id === postId) ?? {};
 
       if (!people) {
         const user = await UserAPI.getUserDetail(walletAddress);
-        dispatch(setTippedUser(user));
+        dispatch(setTippedUser(user.name, user.profilePictureURL ?? acronym(user.name)));
       } else {
-        dispatch(setTippedUser(people));
+        dispatch(setTippedUser(people.name, people.profilePictureURL));
       }
 
       dispatch(setTippedUserId(walletAddress));

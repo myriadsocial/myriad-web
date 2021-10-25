@@ -18,7 +18,6 @@ import Typography from '@material-ui/core/Typography';
 import {useStyles, TableCell} from '.';
 import {usePolkadotApi} from '../../hooks/use-polkadot-api.hook';
 import {BalanceDetail} from '../../interfaces/balance';
-import {User} from '../../interfaces/user';
 import {RootState} from '../../reducers/';
 import {TimelineState} from '../../reducers/timeline/reducer';
 import {UserState} from '../../reducers/user/reducer';
@@ -30,7 +29,10 @@ import {ListItemComponent} from '../atoms/ListItem/';
 type SendTipProps = {
   balanceDetails: BalanceDetail[];
   tippedUserId: string;
-  tippedUser: User | People;
+  tippedUser?: {
+    name: string;
+    profilePictureURL: string;
+  };
 };
 
 //TODO: split this component into sub-components
