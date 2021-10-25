@@ -28,6 +28,10 @@ const moduleExports = {
     firebaseMessagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     firebaseAppId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   },
+  sentry: {
+    disableServerWebpackPlugin: true,
+    disableClientWebpackPlugin: true,
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.mjs$/,
