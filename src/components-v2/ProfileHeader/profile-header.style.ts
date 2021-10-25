@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     customAvatarWrapper: {
       padding: 12,
+      '&:hover': {
+        cursor: 'pointer',
+      },
     },
     box: {
       background: '#FFF',

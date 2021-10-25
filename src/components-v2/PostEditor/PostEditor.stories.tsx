@@ -1,16 +1,9 @@
 import {ComponentStory, ComponentMeta} from '@storybook/react';
-import {
-  ELEMENT_IMAGE,
-  ELEMENT_MEDIA_EMBED,
-  ELEMENT_MENTION,
-  ELEMENT_PARAGRAPH,
-} from '@udecode/plate';
 import {MentionNodeData} from '@udecode/plate-mention';
 
 import React from 'react';
 
 import {PostEditor as PostEditorComponent} from './PostEditor';
-import {ELEMENT_HASHTAG} from './plugins/hashtag';
 
 import axios from 'axios';
 
@@ -42,70 +35,6 @@ const client = axios.create({
 
 export const PostEditor = Template.bind({});
 PostEditor.args = {
-  value: [
-    {
-      type: ELEMENT_PARAGRAPH,
-      children: [
-        {
-          text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tristique eget quam a auctor. Etiam eu tincidunt massa. Nam tincidunt dignissim varius. Cras suscipit suscipit dolor in hendrerit. In quis aliquam dolor, eget porta purus.',
-        },
-      ],
-    },
-    {
-      type: ELEMENT_PARAGRAPH,
-      children: [
-        {
-          text: 'Hi',
-        },
-        {
-          children: [
-            {
-              text: '',
-            },
-          ],
-          type: ELEMENT_MENTION,
-          ...mentionables[0],
-        },
-        {
-          text: ' ',
-        },
-        {
-          children: [
-            {
-              text: '',
-            },
-          ],
-          type: ELEMENT_HASHTAG,
-          hashtag: 'hashtag',
-        },
-        {
-          text: ' ',
-        },
-      ],
-    },
-    {
-      children: [{text: ''}],
-      type: ELEMENT_IMAGE,
-      url: 'https://res.cloudinary.com/dsget80gs/image/upload/v1629982505/jhfcuw4uyxkxxo9n0hgw.jpg',
-    },
-    {
-      type: ELEMENT_PARAGRAPH,
-      children: [
-        {
-          text: 'Etiam vulputate ullamcorper quam sed vulputate. Donec urna purus, faucibus vitae convallis ac, tristique auctor sem. Proin porttitor dolor ac semper placerat. Fusce ullamcorper, orci id pharetra consequat, risus augue laoreet massa, a tincidunt augue purus non justo. Aliquam erat volutpat. Nam commodo varius pretium',
-        },
-      ],
-    },
-    {
-      children: [{text: ''}],
-      type: ELEMENT_MEDIA_EMBED,
-      url: 'https://res.cloudinary.com/dsget80gs/video/upload/v1632409239/mixkit-youtuber-editing-a-video-41273.mp4',
-    },
-    {
-      children: [{text: ''}],
-      type: ELEMENT_PARAGRAPH,
-    },
-  ],
   mentionable: mentionables,
   onSearchMention: (query: string) => {
     mentionables.push({

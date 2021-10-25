@@ -25,6 +25,7 @@ import Link from 'next/link';
 
 import {Typography, TypographyVariant} from '@material-ui/core';
 
+import {ELEMENT_IMAGE_LIST} from './Render/ImageList';
 import {ELEMENT_SHOW_MORE, ShowMore} from './Render/ShowMore';
 import {deserialize, formatToString} from './formatter';
 import {ELEMENT_HASHTAG} from './plugins/hashtag';
@@ -139,7 +140,9 @@ export const PostRender: React.FC<PostRenderProps> = props => {
             </Link>
           );
         case ELEMENT_IMAGE:
-          return <Gallery images={[node.url]} onImageClick={console.log} cloudName={'dsget80gs'} />;
+          return <Gallery images={[node.url]} cloudName={'dsget80gs'} />;
+        case ELEMENT_IMAGE_LIST:
+          return <Gallery images={node.url} cloudName={'dsget80gs'} />;
         case ELEMENT_MEDIA_EMBED:
           return <Video url={node.url} />;
         case ELEMENT_MENTION:

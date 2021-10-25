@@ -103,6 +103,19 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     }));
   };
 
+  const handleTagsInputChange = (event: React.ChangeEvent<{}>, newValue: string) => {
+    const options = newValue.split(/[ ,]+/);
+
+    const fieldValue = newTags
+      .concat(options)
+      .map(x => x.trim())
+      .filter(x => x);
+
+    if (options.length > 1) {
+      handleTagsChange(event, fieldValue, 'create-option');
+    }
+  };
+
   const handleTagsChange = (
     // eslint-disable-next-line @typescript-eslint/ban-types
     event: React.ChangeEvent<{}>,
@@ -192,6 +205,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         options={tags.map(tag => tag.id)}
         disableClearable
         onChange={handleTagsChange}
+        onInputChange={handleTagsInputChange}
         getOptionLabel={option => `#${option}`}
         renderInput={params => (
           <TextField

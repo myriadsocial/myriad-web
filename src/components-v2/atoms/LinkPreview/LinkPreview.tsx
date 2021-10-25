@@ -23,7 +23,7 @@ export const LinkPreview: React.FC<LinkPreviewProps> = props => {
   return (
     <Card className={styles.root} onClick={handleClick}>
       <CardActionArea>
-        <CardMedia className={styles.media} src={embed.image?.url} title={embed.title} />
+        <CardMedia className={styles.media} image={embed.image?.url} title={embed.title} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {embed.title}

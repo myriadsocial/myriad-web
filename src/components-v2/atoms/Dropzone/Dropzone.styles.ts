@@ -1,6 +1,6 @@
-import {createStyles, makeStyles} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       border: '1px dashed #E5E5E5',
@@ -25,11 +25,9 @@ export const useStyles = makeStyles(() =>
       display: 'flex',
       alignItems: 'center',
       flexDirection: 'column',
-
-      '& > img': {
-        width: 80,
-        height: 80,
-      },
+    },
+    icon: {
+      color: theme.palette.error.main,
     },
     button: {
       marginTop: 20,

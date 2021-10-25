@@ -19,7 +19,12 @@ PostCreate.args = {
   open: true,
   onClose: console.log,
   onSubmit: console.log,
-  url: 'https://www.facebook.com/electronicosfantasticos/videos/1179074382533015',
-  value:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tristique eget quam a auctor. Etiam eu tincidunt massa. Nam tincidunt dignissim varius. Cras suscipit suscipit dolor in hendrerit. In quis aliquam dolor, eget porta purus.',
+  people: [
+    {
+      id: '60efac8c565ab8004ed28ba6',
+      name: 'Elon Musk',
+      avatar: 'https://pbs.twimg.com/profile_images/1383184766959120385/MM9DHPWC_400x400.jpg',
+      username: 'elonmusk',
+    },
+  ],
 };
