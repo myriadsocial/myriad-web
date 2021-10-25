@@ -214,9 +214,27 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
         ...state,
         posts: state.posts.map(post => {
           if (post.id === action.postId) {
-            post.votes = post.votes ? [...post.votes, action.vote] : [action.vote];
             post.isUpvoted = true;
+            post.isDownVoted = false;
             post.metric.upvotes = post.metric.upvotes + 1;
+
+            // get previous downvote info
+            const downvote = post.votes?.find(
+              prevVote => !prevVote.state && prevVote.userId === action.vote.userId,
+            );
+
+            // if user has downvote, decrease count and replace with upvote
+            if (post.votes && downvote) {
+              post.metric.downvotes = post.metric.downvotes - 1;
+              post.votes = [
+                // get all votes not belong to current user
+                ...post.votes.filter(prevVote => prevVote.userId !== action.vote.userId),
+                // append upvote
+                action.vote,
+              ];
+            } else {
+              post.votes = post.votes ? [...post.votes, action.vote] : [action.vote];
+            }
           }
 
           return post;
@@ -229,9 +247,27 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
         ...state,
         posts: state.posts.map(post => {
           if (post.id === action.postId) {
-            post.votes = post.votes ? [...post.votes, action.vote] : [action.vote];
             post.isDownVoted = true;
+            post.isUpvoted = false;
             post.metric.downvotes = post.metric.downvotes + 1;
+
+            // get previous downvote info
+            const upvote = post.votes?.find(
+              prevVote => prevVote.state && prevVote.userId === action.vote.userId,
+            );
+
+            // if user has upvote, decrease count and replace with downvote
+            if (post.votes && upvote) {
+              post.metric.upvotes = post.metric.upvotes - 1;
+              post.votes = [
+                // get all votes not belong to current user
+                ...post.votes.filter(prevVote => prevVote.userId !== action.vote.userId),
+                // append downvote
+                action.vote,
+              ];
+            } else {
+              post.votes = post.votes ? [...post.votes, action.vote] : [action.vote];
+            }
           }
 
           return post;
