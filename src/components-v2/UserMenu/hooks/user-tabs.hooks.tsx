@@ -5,7 +5,7 @@ import {RootState} from '../../../reducers';
 import {ProfileState} from '../../../reducers/profile/reducer';
 import {FriendListContainer} from '../../FriendsMenu/FriendList.container';
 import {ExperienceTabPanelContainer} from '../../Profile/ExperienceTabPanel/ExperienceTabPanel.container';
-import {TimelineContainer} from '../../Timeline';
+import {PostTabPanel} from '../../Profile/PostTabPanel/PostTabPanel.container';
 import {UserSettingsContainer} from '../../UserSettings';
 import {UserSocialContainer} from '../../UserSocials';
 import {TabItems} from '../../atoms/Tabs';
@@ -32,7 +32,7 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
       {
         id: 'post',
         title: `Post`,
-        component: <TimelineContainer enableFilter={false} sortType="filter" filters={filters} />,
+        component: <PostTabPanel enableFilter={false} sortType="filter" filters={filters} />,
       },
       {
         id: 'experience',
