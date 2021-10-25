@@ -45,6 +45,23 @@ const Home: React.FC = (props: any) => {
       }
     }
 
+    async function patchUser(id:string,pubkey:string,epub:string) {
+      fetch(`${baseURL}/users/${id}`, {
+        method: "PATCH",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "gunPub" : pubkey,
+          "gunEpub" : epub,
+        })
+      })
+      .then(res=>{
+        console.log("PATCH BERHASIL",res)
+      })
+    }
+
     fetch(`${baseURL}/users/${userID}`, {
       method: 'GET',
       headers: {
@@ -52,21 +69,23 @@ const Home: React.FC = (props: any) => {
         'Content-Type': 'application/json',
       },
     })
-      .then(res => res.json())
-      .then(result => {
-        console.log(result);
-        const gunUser = userID;
-        const gunPass = result.password.slice(0, 10);
-        const gunAlias = result.name;
-        if (fg.user.alias === '') {
-          userLoginSignup(gunUser, gunPass, gunAlias);
-        } else {
-          if (fg.user.alias !== gunAlias) {
-            fg.userLogout();
-            userLoginSignup(gunUser, gunPass, gunAlias);
-          }
+    .then(res => res.json())
+    .then(async (result) => {
+      console.log (result);
+      const gunUser = userID;
+      const gunPass = result.password.slice(0, 10);
+      const gunAlias = result.name;
+      if (fg.user.alias === '') {
+        await userLoginSignup(gunUser, gunPass, gunAlias)
+        await patchUser(userID,fg.user.pair.pub,fg.user.pair.epub)
+      } else {
+        if (fg.user.alias !== gunAlias) {
+          fg.userLogout();
+          await userLoginSignup(gunUser, gunPass, gunAlias)
+          await patchUser(userID,fg.user.pair.pub,fg.user.pair.epub)
         }
-      });
+      }
+    });
   }, []);
 
   //TODO: any logic + components which replace

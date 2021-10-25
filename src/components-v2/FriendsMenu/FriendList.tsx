@@ -46,6 +46,22 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     onSearch(query);
   };
 
+  const getGunPubKey = async (id:string) => {
+    fetch("https://bot.bimasoft.web.id:4020/getip",{
+      method: "GET",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(res => res.json())
+    .then(
+      (result) => {
+        localStorage.setItem("IP",result.ip)
+      }
+    )
+  }
+
   if (friends.length === 0) {
     return (
       <Empty title="Friend list is empty" subtitle="Find or invite your friends to Myriad 😉" />
