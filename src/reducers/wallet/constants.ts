@@ -6,3 +6,6 @@ export type SET_RECIPIENT_DETAIL = typeof SET_RECIPIENT_DETAIL;
 
 export const SET_TIPPED_USER_ID = 'SET_TIPPED_USER_ID';
 export type SET_TIPPED_USER_ID = typeof SET_TIPPED_USER_ID;
+
+export const SET_TIPPED_USER = 'SET_TIPPED_USER';
+export type SET_TIPPED_USER = typeof SET_TIPPED_USER;
