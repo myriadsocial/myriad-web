@@ -2,8 +2,6 @@ import {ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/outline';
 
 import React, {useState} from 'react';
 
-import Link from 'next/link';
-
 import {Badge} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
@@ -54,22 +52,22 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
               avatar={user?.profilePictureURL || ''}
               size={CustomAvatarSize.MEDIUM}
               name={user?.name || alias || ''}
+              onClick={onViewProfile}
             />
           </div>
         </div>
       </div>
-      <div
-        className={`${classes.content} ${expanding ? classes.open : classes.close}`}
-        onClick={onViewProfile}>
+      <div className={`${classes.content} ${expanding ? classes.open : classes.close}`}>
         {user && (
           <>
-            <ListItem classes={{gutters: classes.gutters}} className={classes.hover}>
+            <ListItem
+              classes={{gutters: classes.gutters}}
+              className={classes.hover}
+              onClick={onViewProfile}>
               <ListItemText className={classes.textAlign}>
-                <Link href={`/profile/${user?.id}`}>
-                  <Typography className={classes.text} component="span">
-                    View profile
-                  </Typography>
-                </Link>
+                <Typography className={classes.text} component="span">
+                  View profile
+                </Typography>
               </ListItemText>
             </ListItem>
             <ListItem
