@@ -16,7 +16,6 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {acronym} from '../../helpers/string';
-import SearchComponent from '../atoms/Search/SearchBox';
 import {useStyles} from './friend.style';
 import {useFriendRequestList} from './hooks/use-friend-request.hook';
 
@@ -28,7 +27,6 @@ type FriendRequestProps = {
   requests: Friend[];
   onAcceptRequest: (request: Friend) => void;
   onDeclineRequest: (request: Friend) => void;
-  onSearch: (query: string) => void;
 };
 
 export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
@@ -37,14 +35,8 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
 
   const list = useFriendRequestList(requests, user);
 
-  const handleSubmit = () => {
-    return;
-  };
-
   return (
     <div>
-      <SearchComponent onSubmit={handleSubmit} placeholder={'Search friend'} />
-
       <List>
         {list.map(request => (
           <ListItem className={style.item} alignItems="center" key={request.id}>
