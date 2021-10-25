@@ -4,9 +4,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Button, Grid} from '@material-ui/core';
 
 import {Timeline as TimelineComponent} from '.';
-import {useQueryParams} from '../../hooks/use-query-params.hooks';
-import {TimelineFilter} from '../../interfaces/timeline';
-import {upvote, setDownvoting, deletePost} from '../../reducers/timeline/actions';
 import {ReportContainer} from '../Report';
 import {SendTipContainer} from '../SendTip';
 import {TimelineFilterContainer} from '../TimelineFilter';
@@ -17,12 +14,15 @@ import {useTimelineFilter} from './hooks/use-timeline-filter.hook';
 import {useTimelineHook} from './hooks/use-timeline.hook';
 
 import {useTipHistory} from 'src/hooks/tip-history.hook';
+import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useToasterHook} from 'src/hooks/use-toaster.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
+import {TimelineFilter} from 'src/interfaces/timeline';
 import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
+import {upvote, setDownvoting, deletePost} from 'src/reducers/timeline/actions';
 
 type TimelineContainerProps = {
   filters?: TimelineFilter;

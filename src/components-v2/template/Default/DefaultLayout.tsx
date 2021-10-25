@@ -2,8 +2,6 @@ import React, {useState} from 'react';
 
 import {useTheme} from '@material-ui/core/styles';
 
-import AlertComponent from '../../../components/alert/Alert.component';
-import ShowIf from '../../../components/common/show-if.component';
 import {MenuContainer} from '../../Menu/MenuContainer';
 import {NotificationsContainer} from '../../Notifications/sidebar/Notifications.container';
 import {ProfileHeaderContainer} from '../../ProfileHeader/ProfileHeaderContainer';
@@ -12,12 +10,15 @@ import {SocialMediaListContainer} from '../../SocialMediaList/SocialMediaListCon
 import {WalletBalancesContainer} from '../../WalletBalance/WalletBalanceContainer';
 import useStyles from './DefaultLayout.styles';
 
-type DefaultLayoutProps = {
+import {withError, WithErrorProps} from 'src/components-v2/Error';
+import ShowIf from 'src/components/common/show-if.component';
+
+type DefaultLayoutProps = WithErrorProps & {
   isOnProfilePage: boolean;
   children: React.ReactNode;
 };
 
-export const DefaultLayout: React.FC<DefaultLayoutProps> = props => {
+const Default: React.FC<DefaultLayoutProps> = props => {
   const {children} = props;
   const classes = useStyles();
   const [showNotification, setShowNotification] = useState(false);
@@ -64,7 +65,8 @@ export const DefaultLayout: React.FC<DefaultLayoutProps> = props => {
           </div>
         </div>
       </div>
-      <AlertComponent />
     </>
   );
 };
+
+export const DefaultLayout = withError(Default);
