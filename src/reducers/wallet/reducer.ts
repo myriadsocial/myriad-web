@@ -7,14 +7,15 @@ import * as constants from './constants';
 
 import update from 'immutability-helper';
 import * as Redux from 'redux';
-import {People} from 'src/interfaces/people';
-import {User} from 'src/interfaces/user';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 
 export interface WalletState extends BaseState {
   recipientDetail: WalletDetail;
   tippedUserId: string;
-  tippedUser?: User | People;
+  tippedUser?: {
+    name: string;
+    profilePictureURL: string;
+  };
 }
 
 const initialState: WalletState = {
@@ -60,7 +61,10 @@ export const WalletReducer: Redux.Reducer<WalletState, Actions> = (
     case constants.SET_TIPPED_USER: {
       return {
         ...state,
-        tippedUser: action.tippedUser,
+        tippedUser: {
+          name: action.payload.name,
+          profilePictureURL: action.payload.profilePictureURL,
+        },
       };
     }
 
