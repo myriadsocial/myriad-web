@@ -78,11 +78,13 @@ const Home: React.FC = (props: any) => {
       if (fg.user.alias === '') {
         await userLoginSignup(gunUser, gunPass, gunAlias)
         await patchUser(userID,fg.user.pair.pub,fg.user.pair.epub)
+        fg.userPut("alias",gunAlias);
       } else {
         if (fg.user.alias !== gunAlias) {
           fg.userLogout();
           await userLoginSignup(gunUser, gunPass, gunAlias)
           await patchUser(userID,fg.user.pair.pub,fg.user.pair.epub)
+          fg.userPut("alias",gunAlias);
         }
       }
     });
