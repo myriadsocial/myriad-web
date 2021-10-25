@@ -18,6 +18,7 @@ import Typography from '@material-ui/core/Typography';
 import {useStyles, TableCell} from '.';
 import {usePolkadotApi} from '../../hooks/use-polkadot-api.hook';
 import {BalanceDetail} from '../../interfaces/balance';
+import {User} from '../../interfaces/user';
 import {RootState} from '../../reducers/';
 import {TimelineState} from '../../reducers/timeline/reducer';
 import {UserState} from '../../reducers/user/reducer';
@@ -29,10 +30,11 @@ import {ListItemComponent} from '../atoms/ListItem/';
 type SendTipProps = {
   balanceDetails: BalanceDetail[];
   tippedUserId: string;
+  tippedUser: User;
 };
 
 //TODO: split this component into sub-components
-export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) => {
+export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tippedUserId}) => {
   const [tipAmount, setTipAmount] = useState('');
   const [verifiedTipAmount, setVerifiedTipAmount] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState<BalanceDetail>(balanceDetails[0]);
@@ -184,12 +186,13 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
           <div className={classes.receiverSummary}>
             <CustomAvatar
               avatar={
-                'https://res.cloudinary.com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg'
+                `${tippedUser.profilePictureURL}` ??
+                'https://res..com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg'
               }
               size={CustomAvatarSize.XSMALL}
             />
             <Typography variant="body1">
-              King Lion will receive{' '}
+              {tippedUser.name ?? `Myriad King`} will receive{' '}
               <span className={classes.clickableText}>
                 {tipAmount} {selectedCurrency.id}
               </span>{' '}
