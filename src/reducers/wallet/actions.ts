@@ -3,8 +3,10 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
+import {User} from 'src/interfaces/user';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 import * as PostAPI from 'src/lib/api/post';
+import * as UserAPI from 'src/lib/api/user';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -26,11 +28,21 @@ export interface SetTippedUserId extends Action {
   tippedUserId: string;
 }
 
+export interface SetTippedUser extends Action {
+  type: constants.SET_TIPPED_USER;
+  tippedUser: User;
+}
+
 /**
  * Union Action Types
  */
 
-export type Actions = FetchRecipientDetail | SetRecipientDetail | SetTippedUserId | BaseAction;
+export type Actions =
+  | FetchRecipientDetail
+  | SetRecipientDetail
+  | SetTippedUserId
+  | SetTippedUser
+  | BaseAction;
 
 /**
  *
@@ -45,6 +57,11 @@ export const setRecipientDetail = (recipientDetail: WalletDetail): SetRecipientD
 export const setTippedUserId = (tippedUserId: string): SetTippedUserId => ({
   type: constants.SET_TIPPED_USER_ID,
   tippedUserId,
+});
+
+export const setTippedUser = (tippedUser: User): SetTippedUser => ({
+  type: constants.SET_TIPPED_USER,
+  tippedUser,
 });
 
 /**
@@ -82,6 +99,10 @@ export const fetchTippedUserId: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {walletAddress} = await PostAPI.getWalletAddress(postId);
+
+      const user = await UserAPI.getUserDetail(walletAddress);
+
+      dispatch(setTippedUser(user));
 
       dispatch(setTippedUserId(walletAddress));
     } catch (error) {
