@@ -154,20 +154,13 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
 
   if (!tippedUser)
     return (
-      <Paper className={classes.root}>
-        <div className={classes.backdrop}>
-          <CircularProgress />
-        </div>
-      </Paper>
+      <Backdrop className={classes.backdrop} open={!tippedUser}>
+        <CircularProgress color="primary" />
+      </Backdrop>
     );
 
   return (
     <Paper className={classes.root}>
-      {!tippedUser && (
-        <div className={classes.backdrop}>
-          <CircularProgress color="primary" />
-        </div>
-      )}
       {tippedUser && (
         <>
           <div className={classes.subHeaderSection}>
