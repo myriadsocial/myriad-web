@@ -316,6 +316,15 @@ const theme = createTheme({
       },
     },
 
+    MuiMenu: {
+      list: {
+        minWidth: 170,
+      },
+      paper: {
+        minWidth: 170,
+      },
+    },
+
     MuiMenuItem: {
       root: {
         '&:hover': {
