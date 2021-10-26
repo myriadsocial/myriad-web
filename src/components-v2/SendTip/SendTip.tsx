@@ -259,18 +259,6 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                           </Typography>
                         </TableCell>
                       </TableRow>
-                      <TableRow>
-                        <TableCell component="th" scope="row">
-                          <Typography variant="body1" color="textSecondary">
-                            Tip Reward
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography variant="body1" color="textPrimary">
-                            1 Myria
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
                     </TableBody>
                   </Table>
                 </TableContainer>
