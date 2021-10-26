@@ -139,5 +139,8 @@ export const useStyles = makeStyles((theme: Theme) =>
         color: theme.palette.text.primary,
       },
     },
+    link: {
+      color: '#FFF',
+    },
   }),
 );

@@ -44,8 +44,9 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
   };
 
   const onSave = (newUser: Partial<User>) => {
-    updateProfile(newUser);
-    onClose();
+    updateProfile(newUser, () => {
+      onClose();
+    });
   };
 
   return (
