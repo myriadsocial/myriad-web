@@ -8,23 +8,28 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiSvgIcon-root': {
         color: '#404040',
       },
+      '& .MuiListItem-button': {
+        paddingLeft: theme.spacing(3.75),
+        paddingRight: theme.spacing(3.75),
+      },
+
       '& .MuiListItem-button:hover': {
         backgroundColor: alpha('#FFC857', 0.15),
 
-        '&::before,&::after': {
-          content: '""',
-          position: 'absolute',
-          width: 30,
-          height: 52,
-          top: 0,
-          backgroundColor: alpha('#FFC857', 0.15),
-        },
-        '&::before': {
-          left: -30,
-        },
-        '&::after': {
-          right: -30,
-        },
+        //'&::before,&::after': {
+        //content: '""',
+        //position: 'absolute',
+        //width: 30,
+        //height: 52,
+        //top: 0,
+        //backgroundColor: alpha('#FFC857', 0.15),
+        //},
+        //'&::before': {
+        //left: -30,
+        //},
+        //'&::after': {
+        //right: -30,
+        //},
       },
 
       '&::before': {
@@ -38,6 +43,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     head: {
+      marginLeft: 30,
       marginTop: 30,
       marginBottom: 32,
     },
