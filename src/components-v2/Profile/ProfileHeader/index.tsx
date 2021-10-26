@@ -16,6 +16,7 @@ import {IconButton} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
+import Link from '@material-ui/core/Link';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
@@ -144,6 +145,13 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     setOpenPrompt(false);
   };
 
+  const handleURL = (url: string): string => {
+    if (url.search('http') === -1) {
+      return 'https://' + url;
+    }
+    return url;
+  };
+
   return (
     <div>
       <div className={style.root}>
@@ -217,7 +225,13 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             component={GlobeAltIcon}
             viewBox="0 0 24 24"
           />
-          {user.websiteURL || 'oct.network'}
+          <Link
+            className={style.link}
+            href={handleURL(user.websiteURL ?? '')}
+            rel="noreferrer"
+            target="_blank">
+            {user.websiteURL || 'oct.network'}
+          </Link>
           <SvgIcon
             classes={{root: style.fill}}
             className={`${style.icon} ${style.ml20}`}
