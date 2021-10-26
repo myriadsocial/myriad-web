@@ -166,9 +166,11 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClosePostSetting}>
-        <MenuItem onClick={openPost}>View Post</MenuItem>
+        <ShowIf condition={!owner}>
+          <MenuItem onClick={openPost}>View Post</MenuItem>
+        </ShowIf>
 
-        <ShowIf condition={post.platform !== 'myriad'}>
+        <ShowIf condition={!owner && post.platform !== 'myriad'}>
           <MenuItem onClick={openSourcePost}>View Source Post</MenuItem>
           <MenuItem onClick={openUserProfile}>Visit (User) Profile</MenuItem>
           <MenuItem onClick={openSourceAccount}>
@@ -176,7 +178,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
           </MenuItem>
         </ShowIf>
 
-        <ShowIf condition={post.platform === 'myriad'}>
+        <ShowIf condition={!owner && post.platform === 'myriad'}>
           <MenuItem onClick={openUserProfile}>Visit Profile</MenuItem>
         </ShowIf>
 
@@ -189,6 +191,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
             Report
           </MenuItem>
         </ShowIf>
+
         <ShowIf condition={owner}>
           <MenuItem onClick={handleDelete} className={style.danger} color="danger">
             Delete
