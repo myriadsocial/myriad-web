@@ -46,10 +46,10 @@ app.prepare().then(() => {
   });
 
   var httpsServer = https.createServer(options, server);
-  httpsServer.listen(443, () => {
+  httpsServer.listen(3443, () => {
     //tslint:disable-next-line:no-console
     console.log(
-      `> Server listening at 'https://localhost:${443} as ${
+      `> Server listening at 'https://localhost:${3443} as ${
         dev ? 'development' : process.env.NODE_ENV
       }`,
     );
