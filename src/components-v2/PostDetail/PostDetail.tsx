@@ -132,10 +132,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     onShared(post, 'link');
   };
 
-  const handleSharePost = () => {
-    onShared(post, 'post');
-  };
-
   const handleOpenTipHistory = () => {
     onOpenTipHistory(post);
   };
@@ -148,7 +144,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         onOpenTipHistory={handleOpenTipHistory}
         onDelete={handleDeletePost}
         onReport={handleReportPost}
-        onShared={handleSharePost}
       />
 
       <div className={styles.content}>
