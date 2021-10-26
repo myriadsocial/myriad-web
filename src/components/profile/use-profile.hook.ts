@@ -24,11 +24,12 @@ export const useProfileHook = () => {
     state => state.profileState,
   );
 
-  const updateProfile = (attributes: Partial<User>) => {
+  const updateProfile = (attributes: Partial<User>, callback?: () => void) => {
     dispatch(
       updateUser(attributes, () => {
         if (user && profileDetail?.id === user.id) {
           dispatch(fetchProfileDetail(user.id));
+          callback && callback();
         }
       }),
     );

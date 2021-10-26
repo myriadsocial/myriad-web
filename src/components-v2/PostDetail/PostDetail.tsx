@@ -5,6 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 
 import {PostRender} from '../PostEditor/PostRender';
@@ -232,7 +233,11 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
             color={ButtonColor.SECONDARY}
             size={ButtonSize.SMALL}
             className={styles.sendTips}>
-            Send Tip
+            {balanceDetails.length === 0 ? (
+              <CircularProgress size={14} color="primary" />
+            ) : (
+              'Send tip'
+            )}
           </Button>
         </ShowIf>
       </div>

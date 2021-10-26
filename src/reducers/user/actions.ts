@@ -274,6 +274,7 @@ export const updateUser: ThunkActionCreator<Actions, RootState> =
           toasterStatus: Status.SUCCESS,
         }),
       );
+      callback && callback();
     } catch (error) {
       dispatch(
         setError({
@@ -282,8 +283,6 @@ export const updateUser: ThunkActionCreator<Actions, RootState> =
       );
     } finally {
       dispatch(setLoading(false));
-
-      callback && callback();
     }
   };
 
