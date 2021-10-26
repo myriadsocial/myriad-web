@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/nextjs';
+
 import getConfig from 'next/config';
 
 import axios, {AxiosInstance} from 'axios';
@@ -24,6 +26,17 @@ export const initialize = (params?: AuthorizationParams): AxiosInstance => {
 
       return config;
     });
+
+    API.interceptors.response.use(
+      response => {
+        return response;
+      },
+      error => {
+        Sentry.captureException(error);
+
+        return Promise.reject(error);
+      },
+    );
   }
 
   return API;

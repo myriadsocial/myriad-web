@@ -12,6 +12,10 @@ import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 export interface WalletState extends BaseState {
   recipientDetail: WalletDetail;
   tippedUserId: string;
+  tippedUser?: {
+    name: string;
+    profilePictureURL: string;
+  };
 }
 
 const initialState: WalletState = {
@@ -51,6 +55,16 @@ export const WalletReducer: Redux.Reducer<WalletState, Actions> = (
       return {
         ...state,
         tippedUserId: action.tippedUserId,
+      };
+    }
+
+    case constants.SET_TIPPED_USER: {
+      return {
+        ...state,
+        tippedUser: {
+          name: action.payload.name,
+          profilePictureURL: action.payload.profilePictureURL,
+        },
       };
     }
 

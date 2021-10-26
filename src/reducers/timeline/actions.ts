@@ -283,6 +283,9 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
         importer: user.id,
       });
 
+      // creator relation data
+      post.user = user;
+
       dispatch({
         type: constants.ADD_POST_TO_TIMELINE,
         post,

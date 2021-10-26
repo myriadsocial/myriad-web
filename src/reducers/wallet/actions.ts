@@ -1,3 +1,4 @@
+import {acronym} from '../../helpers/string';
 import {Actions as BaseAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
@@ -5,6 +6,7 @@ import * as constants from './constants';
 import {Action} from 'redux';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 import * as PostAPI from 'src/lib/api/post';
+import * as UserAPI from 'src/lib/api/user';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -26,11 +28,24 @@ export interface SetTippedUserId extends Action {
   tippedUserId: string;
 }
 
+export interface SetTippedUser extends Action {
+  type: constants.SET_TIPPED_USER;
+  payload: {
+    name: string;
+    profilePictureURL: string;
+  };
+}
+
 /**
  * Union Action Types
  */
 
-export type Actions = FetchRecipientDetail | SetRecipientDetail | SetTippedUserId | BaseAction;
+export type Actions =
+  | FetchRecipientDetail
+  | SetRecipientDetail
+  | SetTippedUserId
+  | SetTippedUser
+  | BaseAction;
 
 /**
  *
@@ -45,6 +60,14 @@ export const setRecipientDetail = (recipientDetail: WalletDetail): SetRecipientD
 export const setTippedUserId = (tippedUserId: string): SetTippedUserId => ({
   type: constants.SET_TIPPED_USER_ID,
   tippedUserId,
+});
+
+export const setTippedUser = (name: string, profilePictureURL: string): SetTippedUser => ({
+  type: constants.SET_TIPPED_USER,
+  payload: {
+    name,
+    profilePictureURL,
+  },
 });
 
 /**
@@ -77,11 +100,24 @@ export const fetchRecipientDetail: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchTippedUserId: ThunkActionCreator<Actions, RootState> =
-  (postId: string) => async dispatch => {
+  (postId: string) => async (dispatch, getState) => {
+    const {
+      timelineState: {posts},
+    } = getState();
+
     dispatch(setLoading(true));
 
     try {
       const {walletAddress} = await PostAPI.getWalletAddress(postId);
+
+      const {people} = posts.find(post => post.id === postId) ?? {};
+
+      if (!people) {
+        const user = await UserAPI.getUserDetail(walletAddress);
+        dispatch(setTippedUser(user.name, user.profilePictureURL ?? acronym(user.name)));
+      } else {
+        dispatch(setTippedUser(people.name, people.profilePictureURL));
+      }
 
       dispatch(setTippedUserId(walletAddress));
     } catch (error) {

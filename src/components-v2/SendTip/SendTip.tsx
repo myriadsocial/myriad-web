@@ -29,10 +29,14 @@ import {ListItemComponent} from '../atoms/ListItem/';
 type SendTipProps = {
   balanceDetails: BalanceDetail[];
   tippedUserId: string;
+  tippedUser?: {
+    name: string;
+    profilePictureURL: string;
+  };
 };
 
 //TODO: split this component into sub-components
-export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) => {
+export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tippedUserId}) => {
   const [tipAmount, setTipAmount] = useState('');
   const [verifiedTipAmount, setVerifiedTipAmount] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState<BalanceDetail>(balanceDetails[0]);
@@ -147,156 +151,173 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUserId}) 
     setOpenSigner(true);
   };
 
+  if (!tippedUser)
+    return (
+      <Paper className={classes.root}>
+        <div className={classes.backdrop}>
+          <CircularProgress />
+        </div>
+      </Paper>
+    );
+
   return (
     <Paper className={classes.root}>
-      <div className={classes.subHeaderSection}>
-        <Typography className={classes.subHeader}>Balance</Typography>
-        <ListItemComponent
-          avatar={selectedCurrency.image}
-          title={selectedCurrency.id}
-          subtitle={selectedCurrency.freeBalance}
-          action={
-            <CurrencyOptionComponent
-              onSelect={setSelectedCurrency}
-              balanceDetails={balanceDetails}
-            />
-          }
-        />
-        <form className={classes.formRoot} autoComplete="off">
-          <TextField
-            className={classes.formInput}
-            id="send-tip-amount"
-            aria-label="send-tip-amount"
-            label="Tip amount"
-            value={tipAmount}
-            onChange={handleChangeAmount}
-            type="number"
-            variant="outlined"
-            error={Number(tipAmount) > setMaxTippable() ? true : false}
-            helperText={
-              Number(tipAmount) > setMaxTippable()
-                ? 'Insufficient balance'
-                : checkValidDigits(tipAmount) === ''
-                ? 'Digits only'
-                : ''
+      {!tippedUser && (
+        <div className={classes.backdrop}>
+          <CircularProgress />
+        </div>
+      )}
+      {tippedUser && (
+        <div className={classes.subHeaderSection}>
+          <Typography className={classes.subHeader}>Balance</Typography>
+          <ListItemComponent
+            avatar={selectedCurrency.image}
+            title={selectedCurrency.id}
+            subtitle={selectedCurrency.freeBalance}
+            action={
+              <CurrencyOptionComponent
+                onSelect={setSelectedCurrency}
+                balanceDetails={balanceDetails}
+              />
             }
           />
-          <div className={classes.receiverSummary}>
-            <CustomAvatar
-              avatar={
-                'https://res.cloudinary.com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg'
-              }
-              size={CustomAvatarSize.XSMALL}
-            />
-            <Typography variant="body1">
-              King Lion will receive{' '}
-              <span className={classes.clickableText}>
-                {tipAmount} {selectedCurrency.id}
-              </span>{' '}
-            </Typography>
-          </div>
-          <div style={{marginTop: 30, width: '100%'}}>
-            <Typography className={classes.subHeader}>Tip Summary</Typography>
-            <TableContainer>
-              <Table size="small" aria-label="tip summary table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell></TableCell>
-                    <TableCell align="right"></TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell component="th" scope="row">
-                      <Typography variant="body1" color="textSecondary">
-                        Tip
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography variant="body1" color="textPrimary">
-                        {tipAmount.length === 0 ? '-' : tipAmount} {selectedCurrency.id}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell component="th" scope="row">
-                      <Typography variant="body1" color="textSecondary">
-                        Gas fee
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography variant="body1" color="textSecondary">
-                        {gasFee} {selectedCurrency.id}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell component="th" scope="row">
-                      <Typography variant="body1" color="textSecondary">
-                        Total
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography className={classes.subHeader}>
-                        <span className={classes.clickableText}>
-                          {`${Number(tipAmount) + Number(gasFee)}`} {selectedCurrency.id}
-                        </span>
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell component="th" scope="row">
-                      <Typography variant="body1" color="textSecondary">
-                        Tip Reward
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography variant="body1" color="textPrimary">
-                        1 Myria
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
-          <div className={classes.formControls}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  className={classes.checkBox}
-                  checked={checked}
-                  onChange={handleChange}
-                  name="check-tipping-agreement"
-                  color="primary"
-                />
-              }
-              label={
-                <Typography>
-                  I agree to the Myriad{' '}
-                  <Link href={url}>
-                    <a
-                      href={url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={classes.clickableText}>
-                      Terms of Service
-                    </a>
-                  </Link>{' '}
-                  about Tipping
-                </Typography>
+          <form className={classes.formRoot} autoComplete="off">
+            <TextField
+              className={classes.formInput}
+              id="send-tip-amount"
+              aria-label="send-tip-amount"
+              label="Tip amount"
+              value={tipAmount}
+              onChange={handleChangeAmount}
+              type="number"
+              variant="outlined"
+              error={Number(tipAmount) > setMaxTippable() ? true : false}
+              helperText={
+                Number(tipAmount) > setMaxTippable()
+                  ? 'Insufficient balance'
+                  : checkValidDigits(tipAmount) === ''
+                  ? 'Digits only'
+                  : ''
               }
             />
-            <Button
-              isDisabled={verifiedTipAmount.length === 0}
-              variant={ButtonVariant.CONTAINED}
-              onClick={triggerSignTransactionWithExtension}>
-              {isSignerLoading ? <CircularProgress style={{color: 'white'}} /> : 'Send my tips'}
-            </Button>
-          </div>
-        </form>
-        <div className={classes.formStreak}></div>
-      </div>
+            <div className={classes.receiverSummary}>
+              <CustomAvatar
+                avatar={
+                  `${tippedUser.profilePictureURL}` ??
+                  'https://res..com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg'
+                }
+                size={CustomAvatarSize.XSMALL}
+              />
+              <Typography variant="body1">
+                {tippedUser.name ?? `Myriad King`} will receive{' '}
+                <span className={classes.clickableText}>
+                  {tipAmount} {selectedCurrency.id}
+                </span>{' '}
+              </Typography>
+            </div>
+            <div style={{marginTop: 30, width: '100%'}}>
+              <Typography className={classes.subHeader}>Tip Summary</Typography>
+              <TableContainer>
+                <Table size="small" aria-label="tip summary table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell></TableCell>
+                      <TableCell align="right"></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell component="th" scope="row">
+                        <Typography variant="body1" color="textSecondary">
+                          Tip
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography variant="body1" color="textPrimary">
+                          {tipAmount.length === 0 ? '-' : tipAmount} {selectedCurrency.id}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell component="th" scope="row">
+                        <Typography variant="body1" color="textSecondary">
+                          Gas fee
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography variant="body1" color="textSecondary">
+                          {gasFee} {selectedCurrency.id}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell component="th" scope="row">
+                        <Typography variant="body1" color="textSecondary">
+                          Total
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography className={classes.subHeader}>
+                          <span className={classes.clickableText}>
+                            {`${Number(tipAmount) + Number(gasFee)}`} {selectedCurrency.id}
+                          </span>
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell component="th" scope="row">
+                        <Typography variant="body1" color="textSecondary">
+                          Tip Reward
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography variant="body1" color="textPrimary">
+                          1 Myria
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+            <div className={classes.formControls}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    className={classes.checkBox}
+                    checked={checked}
+                    onChange={handleChange}
+                    name="check-tipping-agreement"
+                    color="primary"
+                  />
+                }
+                label={
+                  <Typography>
+                    I agree to the Myriad{' '}
+                    <Link href={url}>
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={classes.clickableText}>
+                        Terms of Service
+                      </a>
+                    </Link>{' '}
+                    about Tipping
+                  </Typography>
+                }
+              />
+              <Button
+                isDisabled={verifiedTipAmount.length === 0}
+                variant={ButtonVariant.CONTAINED}
+                onClick={triggerSignTransactionWithExtension}>
+                {isSignerLoading ? <CircularProgress style={{color: 'white'}} /> : 'Send my tips'}
+              </Button>
+            </div>
+          </form>
+          <div className={classes.formStreak}></div>
+        </div>
+      )}
     </Paper>
   );
 };

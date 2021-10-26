@@ -34,7 +34,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         title: 'Social Token',
         active: selected === 'token',
         icon: CurrencyDollarIcon,
-        url: '/wallet',
+        url: '/socialtoken',
       },
       {
         id: 'nft',

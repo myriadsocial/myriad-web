@@ -8,7 +8,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'start',
+      height: '335px',
     },
     title: {
       marginTop: 54,
@@ -17,7 +18,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: '12px',
     },
     subtitle: {
-      marginBottom: 250,
       fontSize: '14px',
     },
   }),

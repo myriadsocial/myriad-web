@@ -5,7 +5,7 @@ export const buildList = (source: string[], variant: GalleryType, cloudName: str
   let listCols = 1;
   let itemCols = 1;
   let ROWS = 1;
-  let cellHeight = 300;
+  let cellHeight = 320;
 
   const images: ImageListItem[] = [];
 
@@ -17,7 +17,7 @@ export const buildList = (source: string[], variant: GalleryType, cloudName: str
 
     if (source.length >= 3) {
       listCols = 6;
-      cellHeight = 200;
+      cellHeight = 160;
       ROWS = index === 0 ? 2 : 1;
       itemCols = index === 0 ? listCols : listCols / Math.min(source.length - 1, 3);
     }

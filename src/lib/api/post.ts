@@ -105,6 +105,7 @@ export const getPost = async (
       ) {
         params.timelineType = type;
         params.userId = userId;
+        params.filter = filterParams;
       } else {
         filterParams.where = where;
         params.filter = filterParams;

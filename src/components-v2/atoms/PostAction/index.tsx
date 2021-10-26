@@ -28,7 +28,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
   const style = useStyles();
 
   const {
-    metrics: {shares = 0, comments, upvotes = 0},
+    metrics: {shares = 0, comments, upvotes = 0, downvotes},
     downvoted = false,
     upvoted = false,
     shareUrl,
@@ -69,7 +69,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
         isDownVote={downvoted}
         isUpVote={upvoted}
         variant="row"
-        vote={upvotes}
+        vote={upvotes - downvotes}
         onUpvote={onUpvote}
         onDownVote={onDownVote}
       />

@@ -1,18 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {useRouter} from 'next/router';
+
 import {Button, Grid} from '@material-ui/core';
 
-import {Timeline as TimelineComponent} from '.';
-import {ReportContainer} from '../Report';
-import {SendTipContainer} from '../SendTip';
-import {TimelineFilterContainer} from '../TimelineFilter';
-import {TipHistoryContainer} from '../TipHistory';
-import {Modal} from '../atoms/Modal';
-import {PromptComponent} from '../atoms/Prompt/prompt.component';
-import {useTimelineFilter} from './hooks/use-timeline-filter.hook';
-import {useTimelineHook} from './hooks/use-timeline.hook';
-
+import {ReportContainer} from 'src/components-v2/Report';
+import {SendTipContainer} from 'src/components-v2/SendTip';
+import {Timeline as TimelineComponent} from 'src/components-v2/Timeline';
+import {useTimelineFilter} from 'src/components-v2/Timeline/hooks/use-timeline-filter.hook';
+import {useTimelineHook} from 'src/components-v2/Timeline/hooks/use-timeline.hook';
+import {TimelineFilterContainer} from 'src/components-v2/TimelineFilter';
+import {TipHistoryContainer} from 'src/components-v2/TipHistory';
+import {Empty} from 'src/components-v2/atoms/Empty';
+import {Modal} from 'src/components-v2/atoms/Modal';
+import {PromptComponent} from 'src/components-v2/atoms/Prompt/prompt.component';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useToasterHook} from 'src/hooks/use-toaster.hook';
@@ -31,8 +33,9 @@ type TimelineContainerProps = {
   anonymous?: boolean;
 };
 
-export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
+export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   const {anonymous = false, filters} = props;
+  const router = useRouter();
 
   const dispatch = useDispatch();
   const {posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
@@ -106,6 +109,24 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
     handleClosePrompt();
   };
+
+  const handleGoHome = () => {
+    router.push('/home');
+  };
+
+  if (!posts.length && filters?.owner === user?.id) {
+    return (
+      <Empty title="Looks like you haven’t posted yet">
+        <Button onClick={handleGoHome} variant="contained" size="small" color="primary">
+          Create my first post
+        </Button>
+      </Empty>
+    );
+  }
+
+  if (!posts.length) {
+    return <Empty title="No post yet" subtitle="This user hasn’t posted anything" />;
+  }
 
   return (
     <>

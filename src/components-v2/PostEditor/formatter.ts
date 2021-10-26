@@ -1,6 +1,12 @@
-import {ELEMENT_MENTION, ELEMENT_PARAGRAPH} from '@udecode/plate';
+import {
+  ELEMENT_IMAGE,
+  ELEMENT_MEDIA_EMBED,
+  ELEMENT_MENTION,
+  ELEMENT_PARAGRAPH,
+} from '@udecode/plate';
 import {TNode} from '@udecode/plate-core';
 
+import {ELEMENT_IMAGE_LIST} from './Render/ImageList';
 import {ELEMENT_SHOW_MORE} from './Render/ShowMore';
 import {ELEMENT_HASHTAG} from './plugins/hashtag';
 
@@ -36,22 +42,32 @@ const formatShowMore = (value: string, maxLength?: number): TNode[] => {
   return nodes;
 };
 
+export const hasMedia = (nodes: TNode[]): boolean => {
+  const match = nodes.filter(node => [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE].includes(node.type));
+
+  return match.length > 0;
+};
+
 export const formatToString = (node: TNode): string => {
   if (node.text) {
-    return node.text;
+    return node.text.trim();
   }
 
   return node.children ? node.children.map((element: TNode) => formatToString(element)) : '';
 };
 
 export const deserialize = (post: Post, maxLength?: number): TNode[] => {
+  let nodes: TNode[] = [];
+
   try {
-    const nodes = JSON.parse(post.text) as TNode[];
-    const text = nodes.map(formatToString).join('');
+    const originNodes = JSON.parse(post.text) as TNode[];
+    nodes = originNodes;
 
     if (Array.isArray(nodes)) {
+      const text = nodes.map(formatToString).join(' ');
+
       if (maxLength && text.length > maxLength) {
-        return [
+        nodes = [
           formatStringToNode(text.slice(0, maxLength)),
           {
             type: ELEMENT_SHOW_MORE,
@@ -62,16 +78,30 @@ export const deserialize = (post: Post, maxLength?: number): TNode[] => {
             ],
           },
         ];
-      } else {
-        return nodes;
+
+        if (hasMedia(originNodes)) {
+          const url: string[] = [];
+          for (const node of originNodes) {
+            if ([ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE].includes(node.type)) {
+              url.push(node.url);
+            }
+          }
+
+          nodes.push({
+            type: ELEMENT_IMAGE_LIST,
+            children: [{text: ''}],
+            url: url,
+          });
+        }
       }
     } else {
-      return formatShowMore(post.text, maxLength);
+      nodes = formatShowMore(post.text, maxLength);
     }
   } catch (e) {
-    console.log(e);
-    return formatShowMore(post.text, maxLength);
+    nodes = formatShowMore(post.text, maxLength);
   }
+
+  return nodes;
 };
 
 export const serialize = (nodes: TNode[]): Partial<Post> => {

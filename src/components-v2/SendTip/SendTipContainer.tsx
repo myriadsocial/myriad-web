@@ -11,7 +11,15 @@ import {BalanceState} from 'src/reducers/balance/reducer';
 export const SendTipContainer: React.FC = () => {
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
 
-  const {tippedUserId} = useSelector<RootState, WalletState>(state => state.walletState);
+  const {tippedUserId, tippedUser} = useSelector<RootState, WalletState>(
+    state => state.walletState,
+  );
 
-  return <SendTip tippedUserId={tippedUserId} balanceDetails={removeMyriad(balanceDetails)} />;
+  return (
+    <SendTip
+      tippedUser={tippedUser}
+      tippedUserId={tippedUserId}
+      balanceDetails={removeMyriad(balanceDetails)}
+    />
+  );
 };

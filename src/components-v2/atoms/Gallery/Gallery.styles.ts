@@ -12,6 +12,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-around',
       overflow: 'hidden',
       minWidth: 600,
+      marginTop: 12,
       backgroundColor: theme.palette.background.paper,
     },
     gridList: {},
@@ -29,6 +30,22 @@ export const useStyles = makeStyles((theme: Theme) =>
     imageGrid: {
       width: '100%',
       height: 'auto !important',
+    },
+    icon: {
+      fill: '#FFF',
+    },
+    close: {
+      position: 'absolute',
+      top: 30,
+      right: 30,
+      zIndex: 2,
+      '& .MuiSvgIcon-root': {
+        fill: theme.palette.primary.main,
+      },
+    },
+    preview: {
+      height: '100%',
+      textAlign: 'center',
     },
   }),
 );

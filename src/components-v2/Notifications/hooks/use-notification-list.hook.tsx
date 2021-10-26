@@ -10,8 +10,6 @@ import {
 
 import React from 'react';
 
-import Link from 'next/link';
-
 import {SvgIcon, Typography} from '@material-ui/core';
 
 import {useStyles} from '../Notifications.styles';
@@ -73,16 +71,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
           id: notification.id,
           user: notification.fromUserId.name,
           avatar: notification.fromUserId.profilePictureURL,
-          description: (
-            <Typography component="span">
-              Commented on your&nbsp;
-              <Link href={`/post/${notification.referenceId}`}>
-                <a href={`/post/${notification.referenceId}`} className={style.link}>
-                  Post
-                </a>
-              </Link>
-            </Typography>
-          ),
+          description: <Typography component="span">Commented on your Post</Typography>,
           badge: (
             <div className={style.circle}>
               <SvgIcon
@@ -120,16 +109,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
           id: notification.id,
           user: notification.fromUserId.name,
           avatar: notification.fromUserId.profilePictureURL,
-          description: (
-            <Typography component="span">
-              Upvoted your&nbsp;
-              <Link href={`/post/${notification.referenceId}`}>
-                <a href={`/post/${notification.referenceId}`} className={style.link}>
-                  Post
-                </a>
-              </Link>
-            </Typography>
-          ),
+          description: <Typography component="span">Upvoted your Post</Typography>,
           badge: (
             <div className={style.circle}>
               <SvgIcon
@@ -189,11 +169,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
           description: (
             <Typography component="span">
               You recieved tip from&nbsp;
-              <Link href={`/profile/${notification.from}`}>
-                <a href={`/profile/${notification.from}`} className={style.link}>
-                  {notification.fromUserId.name}
-                </a>
-              </Link>
+              {notification.fromUserId.name}
               &nbsp;{`(${notification.message})`}
             </Typography>
           ),
@@ -217,19 +193,8 @@ export const useNotificationList = (notifications: Notification[]): Notification
           avatar: notification.fromUserId.profilePictureURL,
           description: (
             <Typography component="span">
-              Your&nbsp;
-              <Link href={`/post/${notification.referenceId}`}>
-                <a href={`/post/${notification.referenceId}`} className={style.link}>
-                  post
-                </a>
-              </Link>
-              &nbsp;recieved tip from&nbsp;
-              <Link href={`/profile/${notification.from}`}>
-                <a href={`/profile/${notification.from}`} className={style.link}>
-                  {notification.fromUserId.name}
-                </a>
-              </Link>
-              &nbsp;{`(${notification.message})`}
+              Your post recieved tip from {notification.fromUserId.name}&nbsp;
+              {`(${notification.message})`}
             </Typography>
           ),
           badge: (
@@ -253,11 +218,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
           description: (
             <Typography component="span">
               Your reply recieved tip from&nbsp;
-              <Link href={`/profile/${notification.from}`}>
-                <a href={`/profile/${notification.from}`} className={style.link}>
-                  {notification.fromUserId.name}
-                </a>
-              </Link>
+              {notification.fromUserId.name}
               &nbsp;{`(${notification.message})`}
             </Typography>
           ),
@@ -318,15 +279,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
           user: notification.fromUserId.name,
           avatar: notification.fromUserId.profilePictureURL,
           description: (
-            <Typography component="span">
-              Somebody reported your&nbsp;
-              <Link href={`/post/${notification.referenceId}`}>
-                <a href={`/post/${notification.referenceId}`} className={style.link}>
-                  Post
-                </a>
-              </Link>
-              &nbsp;as a violance
-            </Typography>
+            <Typography component="span">Somebody reported your Post as a violance</Typography>
           ),
           badge: (
             <div className={style.circleError}>
