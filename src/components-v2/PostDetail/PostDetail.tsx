@@ -71,6 +71,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const [viewContent, setViewContent] = useState(!post.isNSFW);
   const owner = post.createdBy === user?.id;
 
+  const isImportedPost = post.platform !== 'myriad' ? true : false;
+
   const onHashtagClicked = async (hashtag: string) => {
     await router.push(`/home?tag=${hashtag.replace('#', '')}&type=trending`, undefined, {
       shallow: true,
@@ -222,7 +224,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           <></>
         </ShowIf>
 
-        <ShowIf condition={!owner}>
+        <ShowIf condition={isImportedPost}>
           <Button
             isDisabled={balanceDetails.length === 0}
             onClick={handleSendTip}
