@@ -218,13 +218,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           onShared={handleShareLink}
         />
 
-        {
-          // hide button if it's owner's post or balance is not yet loaded
-        }
-        <ShowIf condition={owner || balanceDetails.length === 0}>
-          <></>
-        </ShowIf>
-
         <ShowIf condition={isImportedPost}>
           <Button
             isDisabled={balanceDetails.length === 0}
