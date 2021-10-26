@@ -25,5 +25,12 @@ export const useStyles = makeStyles((theme: Theme) =>
     fill: {
       fill: 'none',
     },
+    modal: {
+      paddingBottom: 10,
+    },
+    copy: {
+      paddingTop: 10,
+      width: 520,
+    },
   }),
 );
