@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Link from 'next/link';
@@ -38,7 +38,6 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   } = props;
   const style = useStyles();
 
-  const [friendLink,setFriendLink] = useState<{[key:string] : string[]}>({})
   const chatFriendRef = useRef<any[]>([])
 
   const list = useFriendList(friends, user);
