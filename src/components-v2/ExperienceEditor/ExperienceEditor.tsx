@@ -212,6 +212,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             {...params}
             label="Tags"
             variant="outlined"
+            placeholder="topic you want to follow"
             onChange={handleSearchTags}
             InputProps={{
               ...params.InputProps,
@@ -251,11 +252,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           return (
             <ListItemComponent
               title={option.name}
-              subtitle={
-                <Typography variant="caption">
-                  5 followers on <b className={styles.social}>{option.platform}</b>
-                </Typography>
-              }
+              subtitle={<Typography variant="caption">@{option.username}</Typography>}
               avatar={option.profilePictureURL}
               size="medium"
               action={
@@ -277,11 +274,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           <ListItemComponent
             key={people.id}
             title={people.name}
-            subtitle={
-              <Typography variant="caption">
-                5 followers on <b className={styles.social}>{people.platform}</b>
-              </Typography>
-            }
+            subtitle={<Typography variant="caption">@{people.username}</Typography>}
             avatar={people.profilePictureURL}
             size="medium"
             action={
