@@ -4718,7 +4718,7 @@
   resolved "https://registry.yarnpkg.com/@types/escape-html/-/escape-html-1.0.1.tgz#b19b4646915f0ae2c306bf984dc0a59c5cfc97ba"
   integrity sha512-4mI1FuUUZiuT95fSVqvZxp/ssQK9zsa86S43h9x3zPOSU9BBJ+BfDkXwuaU7BfsD+e7U0/cUUfJFk3iW2M4okA==
 
-"@types/eslint-scope@^3.7.0":
+"@types/eslint-scope@^3.7.0", "@types/eslint-scope@^3.7.1":
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/@types/eslint-scope/-/eslint-scope-3.7.1.tgz#8dc390a7b4f9dd9f1284629efce982e41612116e"
   integrity sha512-SCFeogqiptms4Fg29WpOTk5nHIzfpKCemSN63ksBQYKTcXoJEmJagV+DhVmbapZzY4/5YaOV1nZwrsU79fFm1g==
@@ -6159,10 +6159,10 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@yokowasis/firechat@^0.2.7":
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/@yokowasis/firechat/-/firechat-0.2.7.tgz#f5b2d50f64a5bfa0a062d24c1d9873e79069dd27"
-  integrity sha512-6ormG8c3ffsySZkOJtPlVYByRkyLfgrrUmcpB3mhAjfKZui8s/mS3g6tvxIoqnbkHhwEeKbquXyTHoSUGx89bg==
+"@yokowasis/firechat@0.2.8":
+  version "0.2.8"
+  resolved "https://registry.yarnpkg.com/@yokowasis/firechat/-/firechat-0.2.8.tgz#e683ce5affd860373db2965314a55e956fb569ed"
+  integrity sha512-+rs177VPClUK3SZnYsvhNVcpRLGAamIx5ILHgeQCfb9Gg32EK27KmHnCHkXXYszZqYaK6udUpP1TeRzoyAfTMA==
   dependencies:
     "@emotion/react" "^11.5.0"
     "@emotion/styled" "^11.3.0"
@@ -6177,17 +6177,18 @@
     "@types/node" "^12.0.0"
     "@types/react" "^17.0.0"
     "@types/react-dom" "^17.0.0"
-    "@yokowasis/firegun" latest
+    "@yokowasis/firegun" "1.4.12"
     downloadjs "^1.4.7"
     react-scripts "4.0.3"
     typescript "^4.1.2"
     web-vitals "^1.0.1"
 
-"@yokowasis/firegun@^1.4.10", "@yokowasis/firegun@latest":
-  version "1.4.10"
-  resolved "https://registry.yarnpkg.com/@yokowasis/firegun/-/firegun-1.4.10.tgz#631a6044a7eca2d9c43f5a30ea0e7479d18f2757"
-  integrity sha512-X65+8FRz3FiDXeRmwqa+I6etDZOT3GKPBj4Y9IQykMcZGjBTzlhllSh6r4o1aPMHVuHytzXjLXrpnSc51Ak/fg==
+"@yokowasis/firegun@1.4.12":
+  version "1.4.12"
+  resolved "https://registry.yarnpkg.com/@yokowasis/firegun/-/firegun-1.4.12.tgz#091ffdf340482988099cdd585fa93b138e426188"
+  integrity sha512-dTBzL/4zatv0AbJB3HaJV5UueuLAIUDc0Ckq92ICwjntrYETa6Jbsb6bmWRn1NG8L05FUMM9kSxQ67t0RJ+oCw==
   dependencies:
+    "@types/eslint-scope" "^3.7.1"
     gun "^0.2020.1235"
     node-polyfill-webpack-plugin "^1.1.4"
 
