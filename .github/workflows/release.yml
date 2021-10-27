@@ -111,11 +111,13 @@ jobs:
         uses: google-github-actions/get-secretmanager-secrets@main
         with:
           secrets: |-
+            API_URL:${{ secrets.PROD_GCP_PROJECT_ID }}/API_URL
+            RPC_WS_URL:${{ secrets.PROD_GCP_PROJECT_ID }}/RPC_WS_URL
             FIREBASE_PROJECT_ID:${{ secrets.PROD_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
             FIREBASE_API_KEY:${{ secrets.PROD_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.PROD_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
             FIREBASE_APP_ID:${{ secrets.PROD_GCP_PROJECT_ID }}/FIREBASE_APP_ID
-            SENTRY_DNS:${{ secrets.PROD_GCP_PROJECT_ID }}/SENTRY_DNS
+            WEB_SENTRY_DNS:${{ secrets.PROD_GCP_PROJECT_ID }}/WEB_SENTRY_DNS
             CLOUDINARY_CLOUND_NAME:${{ secrets.PROD_GCP_PROJECT_ID }}/CLOUDINARY_CLOUND_NAME
             CLOUDINARY_API_KEY:${{ secrets.PROD_GCP_PROJECT_ID }}/CLOUDINARY_API_KEY
             CLOUDINARY_SECRET:${{ secrets.PROD_GCP_PROJECT_ID }}/CLOUDINARY_SECRET
@@ -134,13 +136,13 @@ jobs:
             --set-string config.appName=myriad \
             --set-string config.nextAuthURL=https://app.myriad.systems \
             --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
-            --set-string config.apiURL=https://api.myriad.systems \
-            --set-string config.rpcWSURL=wss://rpc.myriad.systems \
+            --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
+            --set-string config.rpcWSURL=${{ steps.secrets.outputs.RPC_WS_URL }} \
             --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
             --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
             --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
             --set-string config.firebase.appId=${{ steps.secrets.outputs.FIREBASE_APP_ID }} \
-            --set-string config.sentry.dns=${{ steps.secrets.outputs.SENTRY_DNS }} \
+            --set-string config.sentry.dns=${{ steps.secrets.outputs.WEB_SENTRY_DNS }} \
             --set-string config.cloudinary.cloudName=${{ steps.secrets.outputs.CLOUDINARY_CLOUND_NAME }} \
             --set-string config.cloudinary.apiKey=${{ steps.secrets.outputs.CLOUDINARY_API_KEY }} \
             --set-string config.cloudinary.secret=${{ steps.secrets.outputs.CLOUDINARY_SECRET }} \
