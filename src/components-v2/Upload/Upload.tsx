@@ -10,11 +10,12 @@ type UploadProps = {
   loading: boolean;
   maxSize?: number;
   placeholder?: string;
+  multiple?: boolean;
   onFileSelected: (result: File[] | string) => void;
 };
 
 export const Upload: React.FC<UploadProps> = props => {
-  const {accept, placeholder, maxSize, loading, onFileSelected} = props;
+  const {accept, placeholder, maxSize, loading, multiple = false, onFileSelected} = props;
   const styles = useStyles();
 
   const [files, setFiles] = useState<File[]>([]);
@@ -29,6 +30,7 @@ export const Upload: React.FC<UploadProps> = props => {
   return (
     <div className={styles.root}>
       <Dropzone
+        multiple={multiple}
         loading={loading}
         onImageSelected={handleFileSelected}
         accept={accept}
