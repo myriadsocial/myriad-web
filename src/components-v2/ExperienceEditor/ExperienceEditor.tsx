@@ -141,10 +141,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     value: People[],
     reason: AutocompleteChangeReason,
   ) => {
+    const people = newExperience?.people ? newExperience.people : [];
     if (reason === 'select-option') {
       setNewExperience(prevExperience => ({
         ...prevExperience,
-        people: value,
+        people: [...people, ...value.filter(option => people.indexOf(option) === -1)],
       }));
     }
   };
@@ -198,7 +199,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       </FormControl>
 
       <Autocomplete
-        id="post-tags"
+        id="experience-tags"
         freeSolo
         multiple
         value={newTags}
@@ -223,7 +224,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       />
 
       <Autocomplete
-        id="post-people"
+        id="experience-people"
         className={styles.people}
         value={newExperience?.people}
         multiple
