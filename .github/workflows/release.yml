@@ -1,9 +1,9 @@
 name: Release automation
 
 on:
-  release:
-    types:
-      - published
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
 
 concurrency:
   group: release-automation
@@ -13,8 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      sha_short: ${{ steps.build-info.outputs.sha_short }}
-      date: ${{ steps.build-info.outputs.date }}
+      latest_tag: ${{ steps.build-info.outputs.latest_tag }}
 
     steps:
       - name: Checkout code
@@ -26,8 +25,9 @@ jobs:
         id: build-info
         shell: bash
         run: |
-          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-          echo "::set-output name=date::$(date +'%Y%m%d')"
+          version=${GITHUB_REF#refs/*/}
+          echo $version
+          echo "::set-output name=latest_tag::$version"
 
   build-and-publish-docker-image:
     runs-on: ubuntu-latest
@@ -66,7 +66,7 @@ jobs:
           push: true
           file: .maintain/docker/Dockerfile
           tags: |
-            ${{ github.repository }}:${{ github.event.release.tag_name }}
+            ${{ github.repository }}:${{ needs.compute-build-info.outputs.latest_tag }}
             ${{ github.repository }}:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
@@ -132,7 +132,7 @@ jobs:
         run: |
           helm upgrade myriad-web .maintain/kubernetes \
             --install \
-            --set-string image.tag=${{ github.event.release.tag_name }} \
+            --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
             --set-string config.appName=myriad \
             --set-string config.nextAuthURL=https://app.myriad.systems \
             --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
