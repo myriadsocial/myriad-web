@@ -46,12 +46,15 @@ export const Gallery: React.FC<GalleryProps> = props => {
     <div className={style.root}>
       <GridList cellHeight={list.cellHeight} cols={list.cols} className={style.imageGrid}>
         {list.images.slice(0, 4).map((image, i) => (
-          <GridListTile key={image.sizes.thumbnail} cols={image.cols} rows={image.rows}>
+          <GridListTile
+            key={image.sizes.thumbnail}
+            cols={image.cols}
+            rows={image.rows}
+            onClick={handleImageClick(i)}>
             <img
               className={style.imageGrid}
               src={image.rows === 2 || list.cols === 1 ? image.sizes.medium : image.sizes.small}
               alt={image.src}
-              onClick={handleImageClick(i)}
             />
             {images.length > 4 && i === 3 && (
               <GridListTileBar
@@ -92,7 +95,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
           }}>
           {list.images.map((image, i) => (
             <Paper key={i} className={style.preview}>
-              <img src={image.sizes.large} alt="" />
+              <img src={image.sizes.large} alt="" style={{height: '100%'}} />
             </Paper>
           ))}
         </Carousel>

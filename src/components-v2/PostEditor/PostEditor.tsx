@@ -21,6 +21,7 @@ import {
   TNode,
   getPlatePluginType,
   LinkElement,
+  ImageElement,
 } from '@udecode/plate';
 import {isCollapsed, unwrapNodes} from '@udecode/plate-common';
 import {ELEMENT_IMAGE, createImagePlugin, insertImage} from '@udecode/plate-image';
@@ -93,6 +94,10 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     }),
     [ELEMENT_HASHTAG]: withProps(HashtagElement, {
       prefix: '#',
+    }),
+    [ELEMENT_IMAGE]: withProps(ImageElement, {
+      caption: {disabled: true},
+      draggable: false,
     }),
     [ELEMENT_MEDIA_EMBED]: withProps(MediaEmbedElement, {}),
     [ELEMENT_LINK]: withProps(LinkElement, {
