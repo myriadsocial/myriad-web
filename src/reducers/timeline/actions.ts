@@ -156,6 +156,14 @@ export const setTippedContent = (contentType: string, referenceId: string): SetT
   referenceId,
 });
 
+export const setSearchedPosts = (posts: Post[], meta: ListMeta): SetSearchedPosts => ({
+  type: constants.SET_SEARCHED_POSTS,
+  payload: {
+    posts,
+    meta,
+  },
+});
+
 /**
  *
  * Actions

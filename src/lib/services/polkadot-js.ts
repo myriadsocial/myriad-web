@@ -82,6 +82,8 @@ export const signAndSendExtrinsic = async (
             // popup asking to sign the balance transfer transaction
             const txInfo = await transferExtrinsic.signAndSend(from, {
               signer: injector.signer,
+              // make sure nonce does not stuck
+              nonce: -1,
             });
 
             if (txInfo) {

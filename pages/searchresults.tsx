@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getSession} from 'next-auth/client';
 
 import {SearchResultContainer} from '../src/components-v2/Search/SearchResultContainer';
+import {ToasterContainer} from '../src/components-v2/atoms/Toaster/ToasterContainer';
 import {DefaultLayout} from '../src/components-v2/template/Default/DefaultLayout';
 import {healthcheck} from '../src/lib/api/healthcheck';
 import * as UserAPI from '../src/lib/api/user';
@@ -26,9 +27,8 @@ const Home: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
-      <>
-        <SearchResultContainer />
-      </>
+      <ToasterContainer />
+      <SearchResultContainer />
     </DefaultLayout>
   );
 };
