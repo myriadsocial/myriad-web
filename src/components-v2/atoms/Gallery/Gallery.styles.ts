@@ -47,7 +47,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     preview: {
-      // height: '100vh',
+      height: '100vh',
       textAlign: 'center',
     },
   }),
