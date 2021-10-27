@@ -29,13 +29,12 @@ const Home: React.FC = (props: any) => {
 
   useEffect(() => {
     // Patch pub dan Epub
-    const fg = new Firegun([
-      'https://gundb.dev.myriad.systems/gun',
-      'https://gun-relay.bimasoft.web.id:16902/gun',
-    ]);
     const {publicRuntimeConfig} = getConfig();
     const baseURL = publicRuntimeConfig.apiURL;
+    const gunRelayURL = publicRuntimeConfig.gunRelayURL.split(",");
     const userID = props.session.user.address;
+
+    const fg = new Firegun(gunRelayURL);
 
     async function userLoginSignup(gunUser: string, gunPass: string, alias: string) {
       try {
