@@ -19,7 +19,7 @@ export const MenuContainer: React.FC = () => {
       case '/friends':
         setSelected('friends');
         break;
-      case '/socials':
+      case '/socialtoken':
         setSelected('token');
         break;
       case '/nft':
