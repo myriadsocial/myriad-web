@@ -30,6 +30,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     imageGrid: {
       width: '100%',
       height: 'auto !important',
+      objectFit: 'cover',
+      objectPosition: 'center',
+      backgroundSize: 'cover',
     },
     icon: {
       fill: '#FFF',
@@ -44,7 +47,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     preview: {
-      height: '100%',
+      // height: '100vh',
       textAlign: 'center',
     },
   }),
