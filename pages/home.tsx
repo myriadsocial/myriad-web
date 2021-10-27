@@ -31,7 +31,7 @@ const Home: React.FC = (props: any) => {
     // Patch pub dan Epub
     const {publicRuntimeConfig} = getConfig();
     const baseURL = publicRuntimeConfig.apiURL;
-    const gunRelayURL = publicRuntimeConfig.gunRelayURL.split(",");
+    const gunRelayURL = publicRuntimeConfig.gunRelayURL.split(',');
     const userID = props.session.user.address;
 
     const fg = new Firegun(gunRelayURL);
@@ -44,21 +44,20 @@ const Home: React.FC = (props: any) => {
       }
     }
 
-    async function patchUser(id:string,pubkey:string,epub:string) {
+    async function patchUser(id: string, pubkey: string, epub: string) {
       fetch(`${baseURL}/users/${id}`, {
-        method: "PATCH",
+        method: 'PATCH',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          "gunPub" : pubkey,
-          "gunEpub" : epub,
-        })
-      })
-      .then(res=>{
-        console.log("PATCH BERHASIL",res)
-      })
+          gunPub: pubkey,
+          gunEpub: epub,
+        }),
+      }).then(res => {
+        console.log('PATCH BERHASIL', res);
+      });
     }
 
     fetch(`${baseURL}/users/${userID}`, {
@@ -68,25 +67,25 @@ const Home: React.FC = (props: any) => {
         'Content-Type': 'application/json',
       },
     })
-    .then(res => res.json())
-    .then(async (result) => {
-      console.log (result);
-      const gunUser = userID;
-      const gunPass = result.password.slice(0, 10);
-      const gunAlias = result.name;
-      if (fg.user.alias === '') {
-        await userLoginSignup(gunUser, gunPass, gunAlias)
-        await patchUser(userID,fg.user.pair.pub,fg.user.pair.epub)
-        fg.userPut("alias",gunAlias);
-      } else {
-        if (fg.user.alias !== gunAlias) {
-          fg.userLogout();
-          await userLoginSignup(gunUser, gunPass, gunAlias)
-          await patchUser(userID,fg.user.pair.pub,fg.user.pair.epub)
-          fg.userPut("alias",gunAlias);
+      .then(res => res.json())
+      .then(async result => {
+        console.log(result);
+        const gunUser = userID;
+        const gunPass = result.password.slice(0, 10);
+        const gunAlias = result.name;
+        if (fg.user.alias === '') {
+          await userLoginSignup(gunUser, gunPass, gunAlias);
+          await patchUser(userID, fg.user.pair.pub, fg.user.pair.epub);
+          fg.userPut('alias', gunAlias);
+        } else {
+          if (fg.user.alias !== gunAlias) {
+            fg.userLogout();
+            await userLoginSignup(gunUser, gunPass, gunAlias);
+            await patchUser(userID, fg.user.pair.pub, fg.user.pair.epub);
+            fg.userPut('alias', gunAlias);
+          }
         }
-      }
-    });
+      });
   }, []);
 
   //TODO: any logic + components which replace
