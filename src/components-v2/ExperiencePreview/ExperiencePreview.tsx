@@ -24,7 +24,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const {experience, userId, onSubscribe, onFollow, onUpdate} = props;
   const style = useStyles();
 
-  const parcingTags = () => {
+  const parsingTags = () => {
     const list = experience.tags.map(tag => {
       return `#${tag}`;
     });
@@ -76,7 +76,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
       </div>
       <div className={style.mb30}>
         <Typography className={style.subtitle}>{'Tags'}</Typography>
-        <Typography>{parcingTags()}</Typography>
+        <Typography>{parsingTags()}</Typography>
       </div>
       <div>
         <Typography className={style.subtitle}>{'People'}</Typography>
