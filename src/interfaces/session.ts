@@ -8,4 +8,5 @@ export interface UserSession {
   profilePictureURL?: string;
   address: string;
   anonymous: boolean;
+  welcome: boolean;
 }
