@@ -177,6 +177,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           value={newExperience?.name}
           onChange={handleChange('name')}
           labelWidth={110}
+          inputProps={{maxLength: 50}}
         />
       </FormControl>
 
@@ -188,6 +189,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           value={newExperience?.description}
           onChange={handleChange('description')}
           labelWidth={70}
+          inputProps={{maxLength: 280}}
+          multiline
         />
       </FormControl>
 
