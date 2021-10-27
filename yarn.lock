@@ -6159,10 +6159,10 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@yokowasis/firechat@0.2.8":
-  version "0.2.8"
-  resolved "https://registry.yarnpkg.com/@yokowasis/firechat/-/firechat-0.2.8.tgz#e683ce5affd860373db2965314a55e956fb569ed"
-  integrity sha512-+rs177VPClUK3SZnYsvhNVcpRLGAamIx5ILHgeQCfb9Gg32EK27KmHnCHkXXYszZqYaK6udUpP1TeRzoyAfTMA==
+"@yokowasis/firechat@0.2.9":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@yokowasis/firechat/-/firechat-0.2.9.tgz#553c8e9feac56e82e58b052874a795eb4b209140"
+  integrity sha512-CrYUB79IApH2VL7PzqOSjC94ifq7HhZZ7z6LFZDNlSHOE8+vczBH79O8Nv3gaOEqLWlJiuU824w2Vt5O51aNGQ==
   dependencies:
     "@emotion/react" "^11.5.0"
     "@emotion/styled" "^11.3.0"
@@ -6183,7 +6183,7 @@
     typescript "^4.1.2"
     web-vitals "^1.0.1"
 
-"@yokowasis/firegun@1.4.12":
+"@yokowasis/firegun@1.4.12", "@yokowasis/firegun@^1.4.12":
   version "1.4.12"
   resolved "https://registry.yarnpkg.com/@yokowasis/firegun/-/firegun-1.4.12.tgz#091ffdf340482988099cdd585fa93b138e426188"
   integrity sha512-dTBzL/4zatv0AbJB3HaJV5UueuLAIUDc0Ckq92ICwjntrYETa6Jbsb6bmWRn1NG8L05FUMM9kSxQ67t0RJ+oCw==
