@@ -137,6 +137,9 @@ export const findPosts = async (query: string): Promise<PostList> => {
           {
             relation: 'user',
           },
+          {
+            relation: 'people',
+          },
         ],
       },
     },
