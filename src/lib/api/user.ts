@@ -14,7 +14,7 @@ export const getUserDetail = async (id: string, userId?: string): Promise<User> 
     params: {
       userId,
       filter: {
-        include: ['currencies'],
+        include: ['currencies', 'activityLogs'],
       },
     },
   });

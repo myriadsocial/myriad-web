@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {useCookies} from 'react-cookie';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
@@ -18,18 +17,11 @@ type WelcomeProps = {
 };
 
 export const WelcomeContainer: React.FC<WelcomeProps> = props => {
-  const [, setCookie] = useCookies(['welcome']);
   const dispatch = useDispatch();
   const router = useRouter();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [skip, setSkip] = useState(false);
-
-  const disbleWelcome = () => {
-    setCookie('welcome', {
-      enabled: false,
-    });
-  };
 
   const openSkipConfirmation = () => {
     setSkip(true);
@@ -44,8 +36,6 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
   };
 
   const handleSubmit = (displayname: string, username: string) => {
-    disbleWelcome();
-
     dispatch(
       updateUser({
         name: displayname,

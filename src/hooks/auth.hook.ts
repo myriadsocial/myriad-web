@@ -1,4 +1,3 @@
-import {useCookies} from 'react-cookie';
 import {useDispatch} from 'react-redux';
 
 import {signIn, signOut} from 'next-auth/client';
@@ -17,7 +16,6 @@ import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 export const useAuthHook = () => {
   const {getPolkadotAccounts} = usePolkadotExtension();
   const dispatch = useDispatch();
-  const [cookies, , removeCookie] = useCookies(['welcome']);
 
   const getUserByAccounts = async (accounts: InjectedAccountWithMeta[]): Promise<User[] | null> => {
     try {
@@ -35,12 +33,11 @@ export const useAuthHook = () => {
   const register = async (user: Partial<User>) => {
     try {
       const registered = await UserAPI.createUser(user);
-      const redirect = cookies ? '/home' : '/welcome';
 
       await signIn('credentials', {
         address: registered.id,
         name: registered.name,
-        callbackUrl: process.env.NEXT_PUBLIC_APP_URL + redirect,
+        callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/welcome',
       });
 
       return registered;
@@ -66,13 +63,11 @@ export const useAuthHook = () => {
   };
 
   const signInWithAccount = (account: InjectedAccountWithMeta) => {
-    const redirect = !cookies.welcome ? '/welcome' : '/home';
-
     signIn('credentials', {
       address: toHexPublicKey(account),
       name: account.meta.name,
       anonymous: false,
-      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + redirect,
+      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/welcome',
     });
   };
 
@@ -115,7 +110,7 @@ export const useAuthHook = () => {
         address: selected.id,
         name: username,
         anonymous,
-        callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
+        callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/welcome',
       });
     } else {
       console.log('[useAuthHook][login][info]', 'No registered user matched with username');
@@ -132,7 +127,6 @@ export const useAuthHook = () => {
   };
 
   const logout = async () => {
-    await removeCookie('welcome');
     await firebaseCloudMessaging.removeToken();
     await signOut({
       callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
