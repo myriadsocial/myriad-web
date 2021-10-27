@@ -1,6 +1,6 @@
 import {DotsVerticalIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React from 'react';
 
 import Link from 'next/link';
 
@@ -19,8 +19,6 @@ import {useStyles, SimpleCardProps} from '.';
 import {TimelineType} from '../../../interfaces/timeline';
 import {PromptComponent} from '../Prompt/prompt.component';
 
-import classNames from 'classnames';
-
 const SimpleCard: React.FC<SimpleCardProps> = ({
   user,
   creator,
@@ -31,10 +29,10 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
   onDelete,
   experienceId,
   userExperienceId,
-  ...props
+  selected,
+  onSelect,
 }) => {
   const classes = useStyles();
-  const [selected, setSelected] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
@@ -52,10 +50,9 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
 
   const handleClick = () => {
     if (isSelectable) {
-      setSelected(!selected);
+      onSelect && experienceId && onSelect(experienceId);
+      filterTimeline(TimelineType.EXPERIENCE);
     }
-
-    filterTimeline(TimelineType.EXPERIENCE);
   };
 
   const handleRemove = () => {
@@ -82,23 +79,21 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
   };
 
   const checkCreator = (name: string) => {
-    if (name === 'Lara Schoffield') {
+    if (name === user?.name) {
       return true;
     }
     return false;
   };
 
+  const activated = () => {
+    if (selected && experienceId) {
+      if (selected == experienceId) return true;
+    }
+    return false;
+  };
+
   return (
-    <Card
-      className={classNames(classes.root, {
-        [classes.activated]: selected === true,
-      })}
-      {...props}>
-      <div
-        className={classNames(classes.indicator, {
-          [classes.indicatorActivated]: selected === true,
-        })}
-      />
+    <Card className={`${classes.root} ${activated() && classes.activated}`}>
       <CardActionArea
         onClick={handleClick}
         disableRipple
@@ -106,6 +101,7 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
         classes={{
           root: classes.actionArea,
         }}>
+        <div className={`${classes.indicator} ${activated() && classes.indicatorActivated}`} />
         <div className={classes.details}>
           <div className={classes.details}>
             <CardMedia
@@ -120,7 +116,7 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
                 {creator}
               </Typography>
               <Typography variant="caption" color="textSecondary">
-                {checkCreator(creator) ? `(you)` : ''}
+                {checkCreator(creator) ? ` (you)` : ''}
               </Typography>
             </CardContent>
           </div>

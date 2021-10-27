@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme: Theme) =>
       border: `1px solid #6E3FC3`,
     },
     indicator: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      height: '100%',
       width: 8,
       borderBottomLeftRadius: 10,
       borderTopLeftRadius: 10,
@@ -32,13 +36,16 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
     },
     cardContent: {
-      padding: '0 0 0 20',
+      padding: '0px 0px 0px 20px',
+      '&:last-child': {
+        paddingBottom: 0,
+      },
     },
     actionArea: {
       '&:hover $focusHighlight': {
         opacity: 0,
       },
-      padding: 20,
+      padding: '20px 20px 20px 28px',
     },
     focusHighlight: {},
     iconButton: {},
