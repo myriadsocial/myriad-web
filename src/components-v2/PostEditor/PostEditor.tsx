@@ -21,9 +21,10 @@ import {
   TNode,
   getPlatePluginType,
   LinkElement,
+  ImageElement,
 } from '@udecode/plate';
 import {isCollapsed, unwrapNodes} from '@udecode/plate-common';
-import {ELEMENT_IMAGE, createImagePlugin} from '@udecode/plate-image';
+import {ELEMENT_IMAGE, createImagePlugin, insertImage} from '@udecode/plate-image';
 import {createLinkPlugin, ELEMENT_LINK, upsertLinkAtSelection} from '@udecode/plate-link';
 import {ToolbarLink} from '@udecode/plate-link-ui';
 import {insertMediaEmbed} from '@udecode/plate-media-embed';
@@ -94,6 +95,10 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     [ELEMENT_HASHTAG]: withProps(HashtagElement, {
       prefix: '#',
     }),
+    [ELEMENT_IMAGE]: withProps(ImageElement, {
+      caption: {disabled: true},
+      draggable: false,
+    }),
     [ELEMENT_MEDIA_EMBED]: withProps(MediaEmbedElement, {}),
     [ELEMENT_LINK]: withProps(LinkElement, {
       styles: {
@@ -161,7 +166,6 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   }, [mentionPlugin]);
 
   const editor = useStoreEditorState('main');
-  const [setImageUrl, setImageUrlPromise] = useState<any>();
   const [showImageUpload, toggleImageUpload] = useState(false);
   const [imageUploadType, setImageUploadType] = useState<'upload' | 'link' | null>(null);
   const [showModalLink, toggleModalLink] = useState(false);
@@ -200,9 +204,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     toggleModalImageLink(false);
   };
 
-  const getImageUrl = async (type: 'upload' | 'link'): Promise<string> => {
-    let resolve;
-
+  const getImageUrl = (type: 'upload' | 'link'): void => {
     setImageUploadType(type);
 
     if (type === 'upload') {
@@ -210,17 +212,6 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     } else {
       toggleModalImageLink(prevState => !prevState);
     }
-
-    const promise = new Promise<string>(_resolve => {
-      resolve = _resolve;
-    });
-
-    // @ts-ignore
-    promise.resolve = resolve;
-
-    setImageUrlPromise(promise);
-
-    return promise;
   };
 
   const getVideoUrl = (): void => {
@@ -248,18 +239,23 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   const handleImageSelected = async (result: File[] | string) => {
     setUploadLoading(true);
 
-    if (typeof result === 'string') {
-      setImageUrl.resolve(result);
-    }
+    const urls: string[] = [];
 
     if (imageUploadType === 'upload' && Array.isArray(result) && onFileUploaded) {
-      const url = await onFileUploaded(result[0], 'image');
-
-      setImageUrl.resolve(url);
+      for (const image of result) {
+        const url = await onFileUploaded(image, 'image');
+        urls.push(url);
+      }
     }
 
     if (imageUploadType === 'link' && typeof result === 'string') {
-      setImageUrl.resolve(result);
+      urls.push(result);
+    }
+
+    if (editor) {
+      for (const url of urls) {
+        insertImage(editor, url);
+      }
     }
 
     setImageUploadType(null);
@@ -281,7 +277,6 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     }
 
     setUploadLoading(false);
-
     toggleVideoUpload(false);
   };
 
@@ -321,7 +316,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
           <ToolbarButtonsAlign />
           <ToolbarButtonsList />
           <ToolbarLink icon={<Link />} onMouseDown={openLinkEditor} />
-          <ToolbarMedia getImageUrl={getImageUrl} openVideoUpload={getVideoUrl} />
+          <ToolbarMedia openImageUpload={getImageUrl} openVideoUpload={getVideoUrl} />
         </HeadingToolbar>
 
         <MentionSelect {...getMentionSelectProps()} renderLabel={renderMentionLabel} />
@@ -334,7 +329,12 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         maxWidth="xl"
         open={showImageUpload}
         onClose={closeImageUpload}>
-        <Upload loading={uploadLoading} onFileSelected={handleImageSelected} accept={['image/*']} />
+        <Upload
+          loading={uploadLoading}
+          multiple={true}
+          onFileSelected={handleImageSelected}
+          accept={['image/*']}
+        />
       </Modal>
 
       <Modal

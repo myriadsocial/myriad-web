@@ -10,7 +10,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      height: 180,
+      minHeight: 180,
       position: 'relative',
     },
     loading: {
@@ -24,10 +24,22 @@ export const useStyles = makeStyles((theme: Theme) =>
     preview: {
       display: 'flex',
       alignItems: 'center',
-      flexDirection: 'column',
+      flexDirection: 'row',
+    },
+    image: {
+      objectFit: 'cover',
+      objectPosition: 'center',
+      minHeight: 112,
+      backgroundSize: 'cover',
     },
     icon: {
-      color: theme.palette.error.main,
+      color: theme.palette.primary.main,
+      background: '#FFF',
+      marginRight: 12,
+      padding: 0,
+      height: 24,
+      width: 24,
+      fontSize: '1rem',
     },
     button: {
       marginTop: 20,

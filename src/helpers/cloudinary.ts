@@ -20,8 +20,8 @@ export const generateImageSizes = (url: string, cloudName: string, extension = '
 
   return {
     thumbnail: `${CLOUDINARY_BASE_URL}/${cloudName}/${prefix}/w_150,h_150,c_thumb/${filepath}`,
-    small: `${CLOUDINARY_BASE_URL}/${cloudName}/${prefix}/w_400,c_fit/${filepath}`,
-    medium: `${CLOUDINARY_BASE_URL}/${cloudName}/${prefix}/w_800,c_fit/${filepath}`,
-    large: `${CLOUDINARY_BASE_URL}/${cloudName}/${prefix}/w_1200,c_limit/${filepath}`,
+    small: `${CLOUDINARY_BASE_URL}/${cloudName}/${prefix}/w_400,h_400,c_fill,g_auto/${filepath}`,
+    medium: `${CLOUDINARY_BASE_URL}/${cloudName}/${prefix}/w_800,h_800,c_fill,g_auto/${filepath}`,
+    large: `${CLOUDINARY_BASE_URL}/${cloudName}/${prefix}/w_1200,c_fill/${filepath}`,
   };
 };
