@@ -40,7 +40,7 @@ export const loadComments = async (
     params: {
       filter: {
         where,
-        include: ['user'],
+        include: ['user', 'votes'],
       },
       pageNumber: 1,
       pageLimit: PAGINATION_LIMIT,
