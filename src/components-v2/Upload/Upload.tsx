@@ -6,6 +6,7 @@ import {Dropzone} from '../atoms/Dropzone';
 import {useStyles} from './Upload.styles';
 
 type UploadProps = {
+  type: 'video' | 'image';
   accept: string[];
   loading: boolean;
   maxSize?: number;
@@ -15,7 +16,7 @@ type UploadProps = {
 };
 
 export const Upload: React.FC<UploadProps> = props => {
-  const {accept, placeholder, maxSize, loading, multiple = false, onFileSelected} = props;
+  const {accept, placeholder, maxSize, loading, type, multiple = false, onFileSelected} = props;
   const styles = useStyles();
 
   const [files, setFiles] = useState<File[]>([]);
@@ -30,6 +31,7 @@ export const Upload: React.FC<UploadProps> = props => {
   return (
     <div className={styles.root}>
       <Dropzone
+        type={type}
         multiple={multiple}
         loading={loading}
         onImageSelected={handleFileSelected}
