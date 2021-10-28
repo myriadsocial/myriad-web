@@ -119,8 +119,8 @@ export const fetchTippedUserId: ThunkActionCreator<Actions, RootState> =
         dispatch(setTippedUser(user.name, user.profilePictureURL ?? acronym(user.name)));
       } else {
         dispatch(setTippedUser(people.name, people.profilePictureURL));
-        dispatch(setTippedUserId(walletAddress));
       }
+      dispatch(setTippedUserId(walletAddress));
     } catch (error) {
       dispatch(
         setError({
