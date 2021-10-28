@@ -28,18 +28,23 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     image: {
       objectFit: 'cover',
-      objectPosition: 'center',
-      minHeight: 112,
-      backgroundSize: 'cover',
+      height: '100%',
     },
     icon: {
+      boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
       color: theme.palette.primary.main,
       background: '#FFF',
-      marginRight: 12,
       padding: 0,
       height: 24,
       width: 24,
       fontSize: '1rem',
+      position: 'absolute',
+      top: 0,
+      right: 0,
+
+      '&:hover': {
+        background: '#FFF',
+      },
     },
     button: {
       marginTop: 20,

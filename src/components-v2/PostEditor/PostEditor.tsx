@@ -23,11 +23,10 @@ import {
   LinkElement,
   ImageElement,
 } from '@udecode/plate';
-import {isCollapsed, unwrapNodes} from '@udecode/plate-common';
+import {insertNodes, isCollapsed, unwrapNodes} from '@udecode/plate-common';
 import {ELEMENT_IMAGE, createImagePlugin, insertImage} from '@udecode/plate-image';
 import {createLinkPlugin, ELEMENT_LINK, upsertLinkAtSelection} from '@udecode/plate-link';
 import {ToolbarLink} from '@udecode/plate-link-ui';
-import {insertMediaEmbed} from '@udecode/plate-media-embed';
 import {ELEMENT_MENTION, MentionNodeData, useMentionPlugin} from '@udecode/plate-mention';
 import {HeadingToolbar} from '@udecode/plate-toolbar';
 
@@ -53,6 +52,7 @@ import {createHashtagPlugin, ELEMENT_HASHTAG} from './plugins/hashtag';
 
 import {Transforms, Selection, Editor} from 'slate';
 import {ReactEditor} from 'slate-react';
+import {EditableProps} from 'slate-react/dist/components/editable';
 
 export type PostEditorProps = {
   debug?: boolean;
@@ -76,8 +76,10 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     onFileUploaded,
   } = props;
 
-  const editableProps = {
+  const editableProps: EditableProps = {
     placeholder,
+    autoFocus: true,
+    spellCheck: false,
     style: {
       padding: 20,
       background: '#FFFFFF',
@@ -205,7 +207,11 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   };
 
   const getImageUrl = (type: 'upload' | 'link'): void => {
+    if (!editor) return;
+
     setImageUploadType(type);
+
+    console.log('getImageUrl', editor.selection);
 
     if (type === 'upload') {
       toggleImageUpload(prevState => !prevState);
@@ -269,12 +275,23 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
 
     if (editor && Array.isArray(result) && onFileUploaded) {
       const url = await onFileUploaded(result[0], 'video');
-      insertMediaEmbed(editor, {url});
+
+      insertNodes(editor, {
+        type: ELEMENT_MEDIA_EMBED,
+        url,
+        children: [{text: ''}],
+      });
     }
 
     if (editor && typeof result === 'string') {
-      insertMediaEmbed(editor, {url: result});
+      insertNodes(editor, {
+        type: ELEMENT_MEDIA_EMBED,
+        url: result,
+        children: [{text: ''}],
+      });
     }
+
+    ReactEditor.focus(editor as ReactEditor);
 
     setUploadLoading(false);
     toggleVideoUpload(false);
@@ -330,6 +347,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         open={showImageUpload}
         onClose={closeImageUpload}>
         <Upload
+          type="image"
           loading={uploadLoading}
           multiple={true}
           onFileSelected={handleImageSelected}
@@ -345,6 +363,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         open={showVideoUpload}
         onClose={closeVideoUpload}>
         <Upload
+          type="video"
           loading={uploadLoading}
           onFileSelected={handleVideoSelected}
           accept={['video/*']}

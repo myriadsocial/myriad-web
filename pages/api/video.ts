@@ -32,11 +32,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
-  if (file.mimetype === 'video/mp4') {
-    cb(null, true);
-  } else {
-    cb(new Error('Unsupported File Format'));
-  }
+  cb(null, true);
 };
 
 const upload = multer({
@@ -65,13 +61,16 @@ const handler = nextConnect()
   .post((req: NextApiRequestWithFormData, res: NextApiResponse<ResponseVideoUpload>) => {
     const {path} = req.file as Express.Multer.File;
 
-    console.log('uploading');
     cloudinary.uploader.upload_large(
       path,
       {
         resource_type: 'video',
         chunk_size: 10000000,
         async: false,
+        transformation: {
+          video_codec: 'auto',
+          format: 'webm',
+        },
       },
       (err, response) => {
         unlinkSync(path);
