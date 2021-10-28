@@ -178,7 +178,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
               {post.text.slice(0, maxLength)}
             </ReactMarkdown>
 
-            <ShowIf condition={!!maxLength}>
+            <ShowIf condition={!!maxLength && post.text.length > maxLength}>
               <ShowMore onClick={() => setMaxLength(undefined)} />
             </ShowIf>
           </ShowIf>
