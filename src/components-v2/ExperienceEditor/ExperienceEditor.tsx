@@ -141,10 +141,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     value: People[],
     reason: AutocompleteChangeReason,
   ) => {
+    const people = newExperience?.people ? newExperience.people : [];
     if (reason === 'select-option') {
       setNewExperience(prevExperience => ({
         ...prevExperience,
-        people: value,
+        people: [...people, ...value.filter(option => people.indexOf(option) === -1)],
       }));
     }
   };
@@ -176,6 +177,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           value={newExperience?.name}
           onChange={handleChange('name')}
           labelWidth={110}
+          inputProps={{maxLength: 50}}
         />
       </FormControl>
 
@@ -187,6 +189,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           value={newExperience?.description}
           onChange={handleChange('description')}
           labelWidth={70}
+          inputProps={{maxLength: 280}}
+          multiline
         />
       </FormControl>
 
@@ -198,7 +202,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       </FormControl>
 
       <Autocomplete
-        id="post-tags"
+        id="experience-tags"
         freeSolo
         multiple
         value={newTags}
@@ -212,6 +216,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             {...params}
             label="Tags"
             variant="outlined"
+            placeholder="topic you want to follow"
             onChange={handleSearchTags}
             InputProps={{
               ...params.InputProps,
@@ -222,7 +227,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       />
 
       <Autocomplete
-        id="post-people"
+        id="experience-people"
         className={styles.people}
         value={newExperience?.people}
         multiple
@@ -251,11 +256,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           return (
             <ListItemComponent
               title={option.name}
-              subtitle={
-                <Typography variant="caption">
-                  5 followers on <b className={styles.social}>{option.platform}</b>
-                </Typography>
-              }
+              subtitle={<Typography variant="caption">@{option.username}</Typography>}
               avatar={option.profilePictureURL}
               size="medium"
               action={
@@ -277,11 +278,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           <ListItemComponent
             key={people.id}
             title={people.name}
-            subtitle={
-              <Typography variant="caption">
-                5 followers on <b className={styles.social}>{people.platform}</b>
-              </Typography>
-            }
+            subtitle={<Typography variant="caption">@{people.username}</Typography>}
             avatar={people.profilePictureURL}
             size="medium"
             action={
