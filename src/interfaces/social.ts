@@ -18,6 +18,7 @@ export interface SocialMedia extends BaseModel {
   platform: SocialsEnum;
   peopleId: string;
   userId: string;
+  primary: boolean;
 
   people?: People;
 }
