@@ -22,6 +22,13 @@ export const getUserSocials = async (userId: string): Promise<SocialMediaList> =
   return data;
 };
 
+export const updateSocialAsPrimary = async (userSocialId: string): Promise<void> => {
+  await MyriadAPI.request({
+    url: `/user-social-medias/${userSocialId}/primary`,
+    method: 'PATCH',
+  });
+};
+
 export const verifySocialAccount = async (
   username: string,
   platform: string,

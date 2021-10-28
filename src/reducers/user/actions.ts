@@ -333,6 +333,31 @@ export const deleteSocial: ThunkActionCreator<Actions, RootState> =
     }
   };
 
+export const setAsPrimary: ThunkActionCreator<Actions, RootState> =
+  (credentialId: string) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    const {
+      userState: {user},
+    } = getState();
+
+    if (!user) return;
+
+    try {
+      await SocialAPI.updateSocialAsPrimary(credentialId);
+
+      dispatch(fetchConnectedSocials());
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
 export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
   (selectedCurrency: Currency, callback?: () => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
