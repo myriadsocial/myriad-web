@@ -2,7 +2,6 @@ import {UserSession, SignInCredential} from 'src/interfaces/session';
 import {ActivityLogType, User} from 'src/interfaces/user';
 
 export const userToSession = (user: User): UserSession => {
-  console.log('userToSession', user);
   const session: UserSession = {
     anonymous: false,
     name: user.name,
