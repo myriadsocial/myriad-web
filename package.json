@@ -94,6 +94,7 @@
     "next-redux-wrapper": "^7.0.2",
     "next-transpile-modules": "^6.4.0",
     "node-fetch": "^2.6.1",
+    "notistack": "^1.0.10",
     "react": "next",
     "react-beautiful-dnd": "^13.1.0",
     "react-cookie": "^4.0.3",
