@@ -63,15 +63,44 @@ export const PostImport: React.FC<PostImportProps> = props => {
   const parseUrl = (url: string) => {
     setIsValidUrl(false);
 
-    //TODO: send these consts to importPost() in timeline actions so .split() not required
     const matchTwitter = regex[SocialsEnum.TWITTER].exec(url);
-    const matchReddit = regex[SocialsEnum.REDDIT].exec(url);
-    const matchFacebook = regex[SocialsEnum.FACEBOOK].exec(url);
-    const matchTelegram = regex[SocialsEnum.TELEGRAM].exec(url);
-    if (matchTwitter || matchReddit || matchFacebook || matchTelegram) {
+    if (matchTwitter) {
+      setSocial(SocialsEnum.TWITTER);
+      setPostId(matchTwitter[3]);
       setPreviewUrl(url);
       setIsValidUrl(true);
       onChange(url);
+
+      return;
+    }
+
+    const matchReddit = regex[SocialsEnum.FACEBOOK].exec(url);
+    if (matchReddit) {
+      setSocial(SocialsEnum.REDDIT);
+      setPostId(matchReddit[1]);
+      setPreviewUrl(url);
+      setIsValidUrl(true);
+      onChange(url);
+      
+    }
+
+    const matchFacebook = regex[SocialsEnum.FACEBOOK].exec(url);
+    if (matchFacebook) {
+      setSocial(SocialsEnum.FACEBOOK)
+      setPostId(matchFacebook[3]);
+      setPreviewUrl(url);
+      setIsValidUrl(true);
+      onChange(url);
+      console.log(matchFacebook);
+    }
+    const matchTelegram = regex[SocialsEnum.TELEGRAM].exec(url);
+    if (matchTelegram) {
+      setSocial(SocialsEnum.FACEBOOK)
+      setPostId(matchTelegram[0]);
+      setPreviewUrl(url);
+      setIsValidUrl(true);
+      onChange(url);
+      console.log(matchTelegram);
     }
   };
 
