@@ -156,6 +156,14 @@ export const setTippedContent = (contentType: string, referenceId: string): SetT
   referenceId,
 });
 
+export const setSearchedPosts = (posts: Post[], meta: ListMeta): SetSearchedPosts => ({
+  type: constants.SET_SEARCHED_POSTS,
+  payload: {
+    posts,
+    meta,
+  },
+});
+
 /**
  *
  * Actions
@@ -516,7 +524,7 @@ export const getDedicatedPost: ThunkActionCreator<Actions, RootState> =
   };
 
 export const upvote: ThunkActionCreator<Actions, RootState> =
-  (reference: Post | Comment, section?: SectionType, callback?: () => void) =>
+  (reference: Post | Comment, section?: SectionType, callback?: (vote: Vote) => void) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
 
@@ -531,13 +539,15 @@ export const upvote: ThunkActionCreator<Actions, RootState> =
 
       const vote = await InteractionAPI.vote(user.id, reference, section);
 
-      dispatch({
-        type: constants.UPVOTE_POST,
-        postId: reference.id,
-        vote,
-      });
+      if ('platform' in reference) {
+        dispatch({
+          type: constants.UPVOTE_POST,
+          postId: reference.id,
+          vote,
+        });
+      }
 
-      callback && callback();
+      callback && callback(vote);
     } catch (error) {
       dispatch(
         setError({
@@ -550,7 +560,7 @@ export const upvote: ThunkActionCreator<Actions, RootState> =
   };
 
 export const downvote: ThunkActionCreator<Actions, RootState> =
-  (reference: Post | Comment, section?: SectionType, callback?: () => void) =>
+  (reference: Post | Comment, section?: SectionType, callback?: (vote: Vote) => void) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
 
@@ -565,13 +575,15 @@ export const downvote: ThunkActionCreator<Actions, RootState> =
 
       const vote = await InteractionAPI.downvote(user.id, reference, section);
 
-      dispatch({
-        type: constants.DOWNVOTE_POST,
-        postId: reference.id,
-        vote,
-      });
+      if ('platform' in reference) {
+        dispatch({
+          type: constants.DOWNVOTE_POST,
+          postId: reference.id,
+          vote,
+        });
+      }
 
-      callback && callback();
+      callback && callback(vote);
     } catch (error) {
       dispatch(
         setError({

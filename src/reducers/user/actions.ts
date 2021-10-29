@@ -274,6 +274,7 @@ export const updateUser: ThunkActionCreator<Actions, RootState> =
           toasterStatus: Status.SUCCESS,
         }),
       );
+      callback && callback();
     } catch (error) {
       dispatch(
         setError({
@@ -282,8 +283,6 @@ export const updateUser: ThunkActionCreator<Actions, RootState> =
       );
     } finally {
       dispatch(setLoading(false));
-
-      callback && callback();
     }
   };
 
@@ -321,6 +320,31 @@ export const deleteSocial: ThunkActionCreator<Actions, RootState> =
 
     try {
       await SocialAPI.disconnectSocial(credentialId);
+
+      dispatch(fetchConnectedSocials());
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const setAsPrimary: ThunkActionCreator<Actions, RootState> =
+  (credentialId: string) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    const {
+      userState: {user},
+    } = getState();
+
+    if (!user) return;
+
+    try {
+      await SocialAPI.updateSocialAsPrimary(credentialId);
 
       dispatch(fetchConnectedSocials());
     } catch (error) {

@@ -4,7 +4,7 @@ import React from 'react';
 
 import {useRouter} from 'next/router';
 
-import {Menu, MenuItem} from '@material-ui/core';
+import {capitalize, Menu, MenuItem} from '@material-ui/core';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
@@ -18,7 +18,7 @@ import {PostSubHeader} from './subHeader/post-sub-header.component';
 import ShowIf from 'src/components/common/show-if.component';
 
 export const HeaderComponent: React.FC<PostHeaderProps> = props => {
-  const {post, owner, tipped = false, onDelete, onOpenTipHistory, onReport, onShared} = props;
+  const {post, owner, tipped = false, onDelete, onOpenTipHistory, onReport} = props;
 
   const style = useStyles();
   const router = useRouter();
@@ -69,11 +69,6 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
     return url;
   };
 
-  const handleShare = () => {
-    onShared();
-    handleClosePostSetting();
-  };
-
   const handleDelete = () => {
     onDelete();
     handleClosePostSetting();
@@ -86,6 +81,36 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
 
   const handleOpenTipHistory = () => {
     onOpenTipHistory();
+    handleClosePostSetting();
+  };
+
+  const openPost = () => {
+    router.push(`/post/${post.id}`);
+
+    handleClosePostSetting();
+  };
+
+  const openUserProfile = () => {
+    if (post.user) {
+      router.push(`/profile/${post.user.id}`);
+    }
+
+    handleClosePostSetting();
+  };
+
+  const openSourcePost = () => {
+    window.open(post.url, '_blank');
+
+    handleClosePostSetting();
+  };
+
+  const openSourceAccount = () => {
+    if (post.people) {
+      const url = getPlatformUrl();
+
+      window.open(url, '_blank');
+    }
+
     handleClosePostSetting();
   };
 
@@ -141,17 +166,32 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClosePostSetting}>
+        <ShowIf condition={!owner}>
+          <MenuItem onClick={openPost}>View Post</MenuItem>
+        </ShowIf>
+
+        <ShowIf condition={!owner && post.platform !== 'myriad'}>
+          <MenuItem onClick={openSourcePost}>View Source Post</MenuItem>
+          <MenuItem onClick={openUserProfile}>Visit (User) Profile</MenuItem>
+          <MenuItem onClick={openSourceAccount}>
+            Visit ({capitalize(post.platform)}) Account
+          </MenuItem>
+        </ShowIf>
+
+        <ShowIf condition={!owner && post.platform === 'myriad'}>
+          <MenuItem onClick={openUserProfile}>Visit Profile</MenuItem>
+        </ShowIf>
+
         <ShowIf condition={owner || tipped}>
           <MenuItem onClick={handleOpenTipHistory}>Tip History</MenuItem>
         </ShowIf>
-
-        <MenuItem onClick={handleShare}>Share</MenuItem>
 
         <ShowIf condition={!owner}>
           <MenuItem onClick={handleReport} className={style.danger}>
             Report
           </MenuItem>
         </ShowIf>
+
         <ShowIf condition={owner}>
           <MenuItem onClick={handleDelete} className={style.danger} color="danger">
             Delete

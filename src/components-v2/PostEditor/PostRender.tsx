@@ -53,9 +53,33 @@ export const PostRender: React.FC<PostRenderProps> = props => {
     showMore = true;
   }
 
+  const renderPost = () => {
+    const render: any[] = [];
+    let imageUrls: string[] = [];
+
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i].type === ELEMENT_IMAGE) {
+        if (nodes[i + 1] && nodes[i + 1].type === ELEMENT_IMAGE) {
+          imageUrls.push(nodes[i].url as string);
+          continue;
+        } else {
+          imageUrls.push(nodes[i].url as string);
+          render.push(renderElement(nodes[i], imageUrls));
+          imageUrls = [];
+        }
+      } else {
+        render.push(renderElement(nodes[i]));
+      }
+    }
+
+    return render;
+  };
+
   const renderElement = useCallback(
-    node => {
+    (node, images: string[] = []) => {
       if (node.text) {
+        if (Object.keys(node).length === 1) return node.text;
+
         return (
           <Typography
             component="span"
@@ -140,7 +164,7 @@ export const PostRender: React.FC<PostRenderProps> = props => {
             </Link>
           );
         case ELEMENT_IMAGE:
-          return <Gallery images={[node.url]} cloudName={'dsget80gs'} />;
+          return <Gallery images={images} cloudName={'dsget80gs'} />;
         case ELEMENT_IMAGE_LIST:
           return <Gallery images={node.url} cloudName={'dsget80gs'} />;
         case ELEMENT_MEDIA_EMBED:
@@ -162,5 +186,5 @@ export const PostRender: React.FC<PostRenderProps> = props => {
     [max],
   );
 
-  return <>{nodes.map(renderElement)}</>;
+  return <>{renderPost()}</>;
 };

@@ -14,7 +14,7 @@ const WelcomeComponentPage: React.FC = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {dispatch} = store;
-  const {req, res} = context;
+  const {res} = context;
   const available = await healthcheck();
 
   if (!available) {
@@ -34,9 +34,9 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const anonymous = Boolean(session?.user.anonymous);
   const userId = session?.user.address as string;
   const username = session?.user.name as string;
-  const config = req.cookies.welcome;
+  const welcome = session?.user.welcome;
 
-  if (config) {
+  if (!welcome) {
     res.setHeader('location', '/home');
     res.statusCode = 302;
     res.end();

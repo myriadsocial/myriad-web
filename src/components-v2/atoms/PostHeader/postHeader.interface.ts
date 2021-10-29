@@ -1,4 +1,4 @@
-import {Post} from '../../../interfaces/post';
+import {Post} from 'src/interfaces/post';
 
 export type PostHeaderProps = {
   owner: boolean;
@@ -7,7 +7,6 @@ export type PostHeaderProps = {
   onDelete: () => void;
   onOpenTipHistory: () => void;
   onReport: () => void;
-  onShared: () => void;
 };
 
 export enum Platform {

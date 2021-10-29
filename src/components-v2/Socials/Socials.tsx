@@ -34,10 +34,18 @@ type SocialsProps = {
   verifying?: boolean;
   onVerifySocialMedia: (social: SocialsEnum, profileUrl: string) => void;
   onDisconnectSocial: (people: SocialMedia) => void;
+  onSetAsPrimary: (people: SocialMedia) => void;
 };
 
 export const Socials: React.FC<SocialsProps> = props => {
-  const {socials, user, verifying = false, onDisconnectSocial, onVerifySocialMedia} = props;
+  const {
+    socials,
+    user,
+    verifying = false,
+    onDisconnectSocial,
+    onVerifySocialMedia,
+    onSetAsPrimary,
+  } = props;
   const styles = useStyles();
 
   const socialList = useSocialMediaList(socials);
@@ -76,6 +84,18 @@ export const Socials: React.FC<SocialsProps> = props => {
     classname.push(styles[social]);
 
     return classname;
+  };
+
+  const handleChangeSelecedSocial = (socialId: SocialsEnum) => () => {
+    setSelectedSocial(socialId);
+
+    setSelectedPeople(null);
+  };
+
+  const handleSetPrimary = (account: SocialMedia) => () => {
+    setSelectedPeople(account.peopleId);
+
+    onSetAsPrimary(account);
   };
 
   const handleDisconnectSocial = (social: SocialMedia) => {
@@ -123,7 +143,7 @@ export const Socials: React.FC<SocialsProps> = props => {
             size="small"
             className={[styles.icon, ...getStyles(social.id)].join(' ')}
             disabled={!enabledSocial.includes(social.id)}
-            onClick={() => setSelectedSocial(social.id)}>
+            onClick={handleChangeSelecedSocial(social.id)}>
             {social.icon}
           </IconButton>
         ))}
@@ -153,14 +173,14 @@ export const Socials: React.FC<SocialsProps> = props => {
                     checked={selectedPeople === account.peopleId}
                     value={account.peopleId}
                     disableRipple
-                    onChange={() => setSelectedPeople(account.peopleId)}
+                    onChange={handleSetPrimary(account)}
                     inputProps={{'aria-labelledby': labelId}}
                   />
                 </ListItemIcon>
                 <ListItemText id={labelId} disableTypography>
                   <ListItemComponent
                     title={account.people?.name || ''}
-                    subtitle={index === 0 ? '(Primary account)' : undefined}
+                    subtitle={account.primary ? '(Primary account)' : undefined}
                     size="medium"
                     avatar={account.people?.profilePictureURL}
                   />

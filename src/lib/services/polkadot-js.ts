@@ -1,4 +1,5 @@
 import {options} from '@acala-network/api';
+import * as Sentry from '@sentry/nextjs';
 
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {Keyring} from '@polkadot/keyring';
@@ -76,12 +77,15 @@ export const signAndSendExtrinsic = async (
               apiConnected: true,
               signerOpened: true,
             });
+
           if (transferExtrinsic) {
             // passing the injected account address as the first argument of signAndSend
             // will allow the api to retrieve the signer and the user will see the extension
             // popup asking to sign the balance transfer transaction
             const txInfo = await transferExtrinsic.signAndSend(from, {
               signer: injector.signer,
+              // make sure nonce does not stuck
+              nonce: -1,
             });
 
             if (txInfo) {
@@ -97,6 +101,7 @@ export const signAndSendExtrinsic = async (
     // return null if no txHash is produced
     return null;
   } catch (error) {
+    Sentry.captureException(error);
     return error;
   }
 };

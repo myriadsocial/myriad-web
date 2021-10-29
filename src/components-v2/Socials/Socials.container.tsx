@@ -6,7 +6,7 @@ import {Socials as SocialsComponent} from '.';
 import {useShareSocial} from 'src/hooks/use-share-social';
 import {SocialMedia, SocialsEnum} from 'src/interfaces/social';
 import {RootState} from 'src/reducers';
-import {deleteSocial} from 'src/reducers/user/actions';
+import {deleteSocial, setAsPrimary} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const SocialsContainer: React.FC = () => {
@@ -25,6 +25,10 @@ export const SocialsContainer: React.FC = () => {
     });
   };
 
+  const handleSetUserSocialAsPrimary = (people: SocialMedia) => {
+    dispatch(setAsPrimary(people.id));
+  };
+
   if (!user) return null;
 
   return (
@@ -35,6 +39,7 @@ export const SocialsContainer: React.FC = () => {
       verifying={isVerifying}
       onVerifySocialMedia={handleVerifySocial}
       onDisconnectSocial={handleDisconnectSocial}
+      onSetAsPrimary={handleSetUserSocialAsPrimary}
     />
   );
 };

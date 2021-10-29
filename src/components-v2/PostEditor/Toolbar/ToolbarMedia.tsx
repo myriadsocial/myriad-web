@@ -24,25 +24,25 @@ export const useStyles = makeStyles((theme: Theme) =>
 );
 
 type ToolbarMediaProps = {
-  getImageUrl: (type: 'upload' | 'link') => Promise<string>;
+  openImageUpload: (type: 'upload' | 'link') => void;
   openVideoUpload: () => void;
 };
 export const ToolbarMedia: React.FC<ToolbarMediaProps> = props => {
   const styles = useStyles();
-  const {getImageUrl, openVideoUpload} = props;
+  const {openImageUpload, openVideoUpload} = props;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const openImage = () => {
     handleClose();
 
-    return getImageUrl('upload');
+    return openImageUpload('upload');
   };
 
   const openImageLink = () => {
     handleClose();
 
-    return getImageUrl('link');
+    return openImageUpload('link');
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -66,10 +66,10 @@ export const ToolbarMedia: React.FC<ToolbarMediaProps> = props => {
         open={Boolean(anchorEl)}
         onClose={handleClose}>
         <MenuItem>
-          <ToolbarImage icon={<Typography>Upload Image</Typography>} getImageUrl={openImage} />
+          <ToolbarImage icon={<Typography>Upload Image</Typography>} onMouseDown={openImage} />
         </MenuItem>
         <MenuItem>
-          <ToolbarImage icon={<Typography>Image Link</Typography>} getImageUrl={openImageLink} />
+          <ToolbarImage icon={<Typography>Image Link</Typography>} onMouseDown={openImageLink} />
         </MenuItem>
       </Menu>
 

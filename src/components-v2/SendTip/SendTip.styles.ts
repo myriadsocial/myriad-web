@@ -92,7 +92,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       textDecoration: 'none',
     },
     backdrop: {
-      textAlign: 'center',
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
     },
     noBackdrop: {},
   }),

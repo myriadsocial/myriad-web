@@ -5,6 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 
 import {PostRender} from '../PostEditor/PostRender';
@@ -71,6 +72,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const [viewContent, setViewContent] = useState(!post.isNSFW);
   const owner = post.createdBy === user?.id;
 
+  const isImportedPost = post.platform !== 'myriad' || post.createdBy !== user?.id ? true : false;
+
   const onHashtagClicked = async (hashtag: string) => {
     await router.push(`/home?tag=${hashtag.replace('#', '')}&type=trending`, undefined, {
       shallow: true,
@@ -129,10 +132,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     onShared(post, 'link');
   };
 
-  const handleSharePost = () => {
-    onShared(post, 'post');
-  };
-
   const handleOpenTipHistory = () => {
     onOpenTipHistory(post);
   };
@@ -145,7 +144,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         onOpenTipHistory={handleOpenTipHistory}
         onDelete={handleDeletePost}
         onReport={handleReportPost}
-        onShared={handleSharePost}
       />
 
       <div className={styles.content}>
@@ -180,7 +178,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
               {post.text.slice(0, maxLength)}
             </ReactMarkdown>
 
-            <ShowIf condition={!!maxLength}>
+            <ShowIf condition={!!maxLength && post.text.length > maxLength}>
               <ShowMore onClick={() => setMaxLength(undefined)} />
             </ShowIf>
           </ShowIf>
@@ -215,14 +213,12 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           onShared={handleShareLink}
         />
 
-        {
-          // hide button if it's owner's post or balance is not yet loaded
-        }
-        <ShowIf condition={owner || balanceDetails.length === 0}>
+        {/* hide send tip button for own post */}
+        <ShowIf condition={owner}>
           <></>
         </ShowIf>
 
-        <ShowIf condition={!owner}>
+        <ShowIf condition={isImportedPost}>
           <Button
             isDisabled={balanceDetails.length === 0}
             onClick={handleSendTip}
@@ -230,7 +226,11 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
             color={ButtonColor.SECONDARY}
             size={ButtonSize.SMALL}
             className={styles.sendTips}>
-            Send Tip
+            {balanceDetails.length === 0 ? (
+              <CircularProgress size={14} color="primary" />
+            ) : (
+              'Send tip'
+            )}
           </Button>
         </ShowIf>
       </div>

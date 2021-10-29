@@ -24,7 +24,7 @@ export const Menu: React.FC<MenuProps> = props => {
 
   return (
     <div className={styles.root}>
-      <BoxComponent>
+      <BoxComponent paddingLeft={0} paddingRight={0}>
         <div className={styles.head}>
           <MyriadIcon />
         </div>

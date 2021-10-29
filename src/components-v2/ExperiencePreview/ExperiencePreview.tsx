@@ -24,12 +24,17 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const {experience, userId, onSubscribe, onFollow, onUpdate} = props;
   const style = useStyles();
 
-  const parcingTags = () => {
-    return experience.tags
-      .map(tag => {
-        return `#${tag}`;
-      })
-      .join(' ');
+  const parsingTags = () => {
+    const list = experience.tags.map(tag => {
+      return `#${tag}`;
+    });
+    return list.map(tag => {
+      return (
+        <Typography key={tag} component="span" className={style.tag}>
+          {tag}
+        </Typography>
+      );
+    });
   };
 
   const handleEditExperience = () => {
@@ -71,7 +76,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
       </div>
       <div className={style.mb30}>
         <Typography className={style.subtitle}>{'Tags'}</Typography>
-        <Typography className={style.tag}>{parcingTags()}</Typography>
+        <Typography>{parsingTags()}</Typography>
       </div>
       <div>
         <Typography className={style.subtitle}>{'People'}</Typography>
