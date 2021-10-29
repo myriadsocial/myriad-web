@@ -8,6 +8,7 @@ export interface UserSocialMedia {
   platform: string;
   peopleId: string;
   userId: string;
+  primary: boolean;
 }
 
 export type BaseUser = {

@@ -22,6 +22,7 @@ import ShowIf from 'src/components/common/show-if.component';
 
 type DropzoneProps = {
   value?: string;
+  type?: 'image' | 'video';
   placeholder?: string;
   loading?: boolean;
   accept?: string[];
@@ -39,6 +40,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     onImageSelected,
     loading = false,
     value,
+    type = 'image',
     accept = ['image/jpeg', 'image/png'],
     maxSize = 20,
     multiple = false,
@@ -112,28 +114,41 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     <div className={styles.root}>
       <div {...getRootProps({className: 'dropzone'})} className={styles.dropzone}>
         <input {...getInputProps()} />
-
         {preview.length ? (
-          <ImageList rowHeight={112} cols={6} className={styles.preview}>
-            {preview.map((item, i) => (
-              <ImageListItem key={i} cols={getCols()} rows={getRows()}>
-                <img src={item} alt={item} className={styles.image} />
-                <ImageListItemBar
-                  position="top"
-                  style={{background: 'none'}}
-                  actionIcon={
-                    <IconButton
-                      size="small"
-                      aria-label={`remove image`}
-                      className={styles.icon}
-                      onClick={() => removeFile(i)}>
-                      <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
-                    </IconButton>
-                  }
-                />
-              </ImageListItem>
-            ))}
-          </ImageList>
+          <>
+            <ShowIf condition={type === 'image'}>
+              <ImageList rowHeight={112} cols={6} className={styles.preview} gap={10}>
+                {files.map((item, i) => (
+                  <ImageListItem key={i} cols={getCols()} rows={getRows()}>
+                    <img src={item.preview} alt="" className={styles.image} />
+                    <ImageListItemBar
+                      position="top"
+                      style={{background: 'none'}}
+                      actionIcon={
+                        <IconButton
+                          size="small"
+                          aria-label={`remove image`}
+                          className={styles.icon}
+                          onClick={() => removeFile(i)}>
+                          <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
+                        </IconButton>
+                      }
+                    />
+                  </ImageListItem>
+                ))}
+              </ImageList>
+            </ShowIf>
+
+            <ShowIf condition={type === 'video'}>
+              {files.map((item, i) => (
+                <video key={i} controls width="500">
+                  <track kind="captions" />
+                  <source src={item.preview} type="video/mp4" />
+                  <div>Video encoding not supported.</div>
+                </video>
+              ))}
+            </ShowIf>
+          </>
         ) : (
           <>
             <UploadIcon />

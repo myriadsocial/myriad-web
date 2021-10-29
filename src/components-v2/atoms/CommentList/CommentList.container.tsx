@@ -66,6 +66,8 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   };
 
   const handleUpvote = (comment: Comment) => {
+    if (comment.isUpvoted) return;
+
     dispatch(
       upvote(comment, section, () => {
         updateUpvote(comment.id, comment.metric.upvotes + 1);
@@ -74,6 +76,8 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   };
 
   const handleDownvote = (comment: Comment) => {
+    if (comment.isDownVoted) return;
+
     dispatch(
       downvote(comment, section, () => {
         updateDownvote(comment.id, comment.metric.downvotes + 1);

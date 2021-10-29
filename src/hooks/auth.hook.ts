@@ -37,7 +37,9 @@ export const useAuthHook = () => {
       await signIn('credentials', {
         address: registered.id,
         name: registered.name,
-        callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/welcome',
+        callbackUrl: process.env.NEXT_PUBLIC_APP_URL
+          ? process.env.NEXT_PUBLIC_APP_URL + '/welcome'
+          : '/welcome',
       });
 
       return registered;
@@ -58,7 +60,9 @@ export const useAuthHook = () => {
       address: null,
       name: name,
       anonymous: true,
-      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
+      callbackUrl: process.env.NEXT_PUBLIC_APP_URL
+        ? process.env.NEXT_PUBLIC_APP_URL + '/welcome'
+        : '/welcome',
     });
   };
 
@@ -67,7 +71,9 @@ export const useAuthHook = () => {
       address: toHexPublicKey(account),
       name: account.meta.name,
       anonymous: false,
-      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/welcome',
+      callbackUrl: process.env.NEXT_PUBLIC_APP_URL
+        ? process.env.NEXT_PUBLIC_APP_URL + '/welcome'
+        : '/welcome',
     });
   };
 
@@ -110,7 +116,9 @@ export const useAuthHook = () => {
         address: selected.id,
         name: username,
         anonymous,
-        callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/welcome',
+        callbackUrl: process.env.NEXT_PUBLIC_APP_URL
+          ? process.env.NEXT_PUBLIC_APP_URL + '/welcome'
+          : '/welcome',
       });
     } else {
       console.log('[useAuthHook][login][info]', 'No registered user matched with username');

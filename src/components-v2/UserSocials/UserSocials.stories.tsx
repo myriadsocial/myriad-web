@@ -26,6 +26,7 @@ UserSocials.args = {
       updatedAt: new Date(),
       userId: '123',
       verified: true,
+      primary: false,
       people: {
         id: '123',
         name: 'Aaron Ting',
@@ -43,6 +44,7 @@ UserSocials.args = {
       updatedAt: new Date(),
       userId: '567',
       verified: true,
+      primary: false,
       people: {
         id: '567',
         name: 'Bitcoin Strategy',
@@ -61,6 +63,7 @@ UserSocials.args = {
       updatedAt: new Date(),
       userId: '234',
       verified: true,
+      primary: false,
       people: {
         id: '234',
         name: 'The Cryptowatcher',
