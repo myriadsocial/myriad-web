@@ -61,8 +61,8 @@ export const PostImport: React.FC<PostImportProps> = props => {
 
   const parseUrl = (url: string) => {
     setIsValidUrl(false);
-    const matchTwitter = regex[SocialsEnum.TWITTER].exec(url);
 
+    const matchTwitter = regex[SocialsEnum.TWITTER].exec(url);
     if (matchTwitter) {
       setPreviewUrl(url);
       setIsValidUrl(true);
@@ -70,8 +70,14 @@ export const PostImport: React.FC<PostImportProps> = props => {
     }
 
     const matchReddit = regex[SocialsEnum.REDDIT].exec(url);
-
     if (matchReddit) {
+      setPreviewUrl(url);
+      setIsValidUrl(true);
+      onChange(url);
+    }
+
+    const matchFacebook = regex[SocialsEnum.FACEBOOK].exec(url);
+    if (matchFacebook) {
       setPreviewUrl(url);
       setIsValidUrl(true);
       onChange(url);

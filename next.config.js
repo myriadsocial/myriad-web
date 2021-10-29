@@ -17,6 +17,8 @@ module.exports = {
     // Will be available on both server and client
     appName: process.env.NEXT_PUBLIC_APP_NAME,
     apiURL: process.env.NEXT_PUBLIC_API_URL,
+    scraperBaseURL: process.env.SCRAPER_BASE_URL,
+    claimerBaseURL: process.env.CLAIMER_BASE_URL,
     facebookAppId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
     myriadWsRPC: process.env.NEXT_PUBLIC_MYRIAD_WS_RPC,
     cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,

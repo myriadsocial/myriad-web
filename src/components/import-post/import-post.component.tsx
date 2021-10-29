@@ -173,7 +173,7 @@ const ImportPostComponent: React.FC<ImportPostProps> = ({user}) => {
             <CardActions className={styles.cardActions}>
               <Button
                 variant="contained"
-                disabled={social === SocialsEnum.FACEBOOK || social === null}
+                disabled={social === null}
                 size="large"
                 color="primary"
                 style={{width: 300}}
