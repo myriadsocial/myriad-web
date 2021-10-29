@@ -55,7 +55,7 @@ interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
 
-const App = ({classes, ...props}: MyAppProps & WithStyles<typeof styles>) => {
+const App = ({classes, ...props}: MyAppProps & WithStyles<typeof snackbarStyles>) => {
   const {Component, emotionCache = clientSideEmotionCache, pageProps} = props;
   const notistackRef = React.createRef<SnackbarProvider>();
   const onClickDismiss = (
