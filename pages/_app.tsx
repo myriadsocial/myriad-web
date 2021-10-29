@@ -22,7 +22,13 @@ import {SnackbarProvider} from 'notistack';
 import {SearchProvider} from 'src/components/search/search.context';
 import {AlertProvider} from 'src/context/alert.context';
 
-const styles = {
+const snackbarStyles = {
+  root: {
+    backgroundColor: '#FFF',
+  },
+  containerRoot: {
+    borderRadius: 30,
+  },
   success: {
     backgroundColor: '#39BF87',
   },
@@ -87,6 +93,8 @@ const App = ({classes, ...props}: MyAppProps & WithStyles<typeof styles>) => {
             variantError: classes.error,
             variantWarning: classes.warning,
             variantInfo: classes.info,
+            root: classes.root,
+            containerRoot: classes.containerRoot,
           }}
           action={key => (
             <>
@@ -135,4 +143,4 @@ export function reportWebVitals(metric: NextWebVitalsMetric) {
   console.log('report:', metric);
 }
 
-export default wrapper.withRedux(withStyles(styles)(App));
+export default wrapper.withRedux(withStyles(snackbarStyles)(App));
