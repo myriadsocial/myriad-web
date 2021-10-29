@@ -291,7 +291,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                   }
                 />
                 <Button
-                  isDisabled={verifiedTipAmount.length === 0 || isSignerLoading}
+                  isDisabled={verifiedTipAmount.length === 0 || !checked}
                   variant={ButtonVariant.CONTAINED}
                   onClick={triggerSignTransactionWithExtension}>
                   Send my tips
