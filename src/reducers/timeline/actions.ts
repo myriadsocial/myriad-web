@@ -1,4 +1,5 @@
 import {Status} from '../../interfaces/toaster';
+import ScraperAPI from '../../lib/api/scraper-base';
 import {Actions as BaseAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import {ShowToaster, showToaster} from '../toaster/actions';
@@ -10,6 +11,7 @@ import {Comment} from 'src/interfaces/comment';
 import {FriendStatus} from 'src/interfaces/friend';
 import {Like, ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
 import {Post, PostProps} from 'src/interfaces/post';
+import {SocialsEnum} from 'src/interfaces/social';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
 import {UserProps} from 'src/interfaces/user';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
@@ -331,6 +333,28 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
+      if (postUrl.includes(SocialsEnum.FACEBOOK)) {
+        const tempUrlArray = ['facebook'];
+        if (postUrl.slice(-1) === '/') postUrl = postUrl.slice(0, -1);
+        console.log(postUrl);
+        const split = postUrl.split('/');
+        const stripNonNumbers = split[split.length - 1].replace(/\D/g, '');
+        tempUrlArray.push(stripNonNumbers);
+        tempUrlArray.push('_UNKNOWN_');
+        ScraperAPI.request<Post>({
+          url: '/facebook/individual',
+          method: 'POST',
+          data: {
+            urlId: stripNonNumbers,
+            importerUsername: user.username,
+          },
+        }).then(response => console.log(response));
+        console.log('starting to wait');
+        //allow time for the scraper to fetch and save to Gun
+        await new Promise(f => setTimeout(f, 25000));
+        console.log('finished waiting');
+        postUrl = tempUrlArray.join();
+      }
       const post = await PostAPI.importPost({
         url: postUrl,
         importer: user.id,
