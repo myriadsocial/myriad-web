@@ -1,5 +1,4 @@
-import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import React from 'react';
 
 import {getSession} from 'next-auth/client';
 import {useRouter} from 'next/router';
@@ -9,13 +8,14 @@ import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
-import * as UserAPI from 'src/lib/api/user';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
-import {setAnonymous, setUser, fetchConnectedSocials} from 'src/reducers/user/actions';
+import {fetchExperience} from 'src/reducers/experience/actions';
+import {countNewNotification} from 'src/reducers/notification/actions';
+import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
+import {ThunkDispatchAction} from 'src/types/thunk';
 
 const Settings: React.FC = () => {
-  const dispatch = useDispatch();
   const {query} = useRouter();
 
   const settings = useSettingList();
@@ -23,11 +23,6 @@ const Settings: React.FC = () => {
   const currentSection = query.section as SettingsType | undefined;
 
   const selected = settings.find(item => item.id === currentSection);
-
-  useEffect(() => {
-    dispatch(fetchConnectedSocials());
-    dispatch(fetchAvailableToken());
-  }, [dispatch]);
 
   //TODO: any logic + components which replace
   // the middle column of home page should go here
@@ -49,37 +44,46 @@ const Settings: React.FC = () => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const {dispatch} = store;
-  const {res} = context;
+  const dispatch = store.dispatch as ThunkDispatchAction;
 
   const available = await healthcheck();
 
   if (!available) {
-    res.setHeader('location', '/maintenance');
-    res.statusCode = 302;
-    res.end();
+    return {
+      redirect: {
+        destination: '/maintenance',
+        permanent: false,
+      },
+    };
   }
 
   const session = await getSession(context);
 
   if (!session) {
-    res.setHeader('location', '/');
-    res.statusCode = 302;
-    res.end();
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
   }
 
   const anonymous = Boolean(session?.user.anonymous);
   const userId = session?.user.address as string;
-  const username = session?.user.name as string;
 
-  //TODO: this process should call thunk action creator instead of dispatch thunk acion
-  //ISSUE: state not hydrated when using thunk action creator
-  if (anonymous) {
-    dispatch(setAnonymous(username));
+  if (anonymous || !userId) {
+    const username = session?.user.name as string;
+
+    await dispatch(setAnonymous(username));
   } else {
-    const user = await UserAPI.getUserDetail(userId);
+    await dispatch(fetchUser(userId));
 
-    dispatch(setUser(user));
+    await Promise.all([
+      dispatch(fetchConnectedSocials()),
+      dispatch(fetchAvailableToken()),
+      dispatch(countNewNotification()),
+      dispatch(fetchExperience()),
+    ]);
   }
 
   return {
