@@ -17,7 +17,6 @@ export const healthcheck = async (): Promise<boolean> => {
 
     return true;
   } catch (error) {
-    console.log('healthcheck', error);
     return false;
   }
 

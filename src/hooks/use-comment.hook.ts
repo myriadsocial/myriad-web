@@ -36,7 +36,7 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
         comments.map(comment => {
           const upvoted = comment.votes?.filter(vote => vote.userId === user?.id && vote.state);
           const downvoted = comment.votes?.filter(vote => vote.userId === user?.id && !vote.state);
-          console.log('comment', upvoted, downvoted);
+
           comment.isUpvoted = upvoted && upvoted.length > 0;
           comment.isDownVoted = downvoted && downvoted.length > 0;
 
@@ -59,7 +59,7 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
         ...data.map(comment => {
           const upvoted = comment.votes?.filter(vote => vote.userId === user?.id && vote.state);
           const downvoted = comment.votes?.filter(vote => vote.userId === user?.id && !vote.state);
-          console.log('comment', upvoted, downvoted);
+
           comment.isUpvoted = upvoted && upvoted.length > 0;
           comment.isDownVoted = downvoted && downvoted.length > 0;
 
