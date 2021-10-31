@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
@@ -14,11 +14,15 @@ import {UserMenuContainer} from 'src/components-v2/UserMenu';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import ShowIf from 'src/components/common/show-if.component';
 import Illustration from 'src/images/UserStatusIsometric.svg';
+import {FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';
+import {checkFriendedStatus} from 'src/reducers/profile/actions';
+import {ProfileState} from 'src/reducers/profile/reducer';
 
 type Props = {
-  profile: User;
+  profile?: User;
   loading: boolean;
 };
 
@@ -28,11 +32,16 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
   const router = useRouter();
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
+  const {friendStatus} = useSelector<RootState, ProfileState>(state => state.profileState);
+
   useEffect(() => {
-    dispatch(fetchProfileFriend());
+    if (profile?.id) {
+      dispatch(fetchProfileFriend());
+      dispatch(checkFriendedStatus());
+    }
 
     return undefined;
-  }, [profile.id]);
+  }, [profile?.id]);
 
   useEffect(() => {
     const section = router.query.edit as string | undefined;
@@ -43,7 +52,7 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
   const handleOpenEdit = () => {
     router.push(
       {
-        pathname: `/profile/${profile.id}`,
+        pathname: `/profile/${profile?.id}`,
         query: {edit: 'edit'},
       },
       undefined,
@@ -59,7 +68,9 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
     router.push('/home');
   };
 
-  if (!profile.id)
+  console.log('friendStatus', friendStatus);
+
+  if (!profile?.id)
     return (
       <div className={style.root}>
         <div className={style.mb}>
@@ -94,7 +105,17 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
         <ShowIf condition={!isEdit}>
           <ProfileHeaderContainer edit={handleOpenEdit} />
 
-          <UserMenuContainer />
+          <ShowIf condition={friendStatus?.status !== FriendStatus.BLOCKED}>
+            <UserMenuContainer />
+          </ShowIf>
+
+          <ShowIf condition={friendStatus?.status === FriendStatus.BLOCKED}>
+            <div className={style.blocked}>
+              <Typography variant="h4" style={{fontWeight: 700}}>
+                You have blocked this user
+              </Typography>
+            </div>
+          </ShowIf>
         </ShowIf>
       </div>
     </div>

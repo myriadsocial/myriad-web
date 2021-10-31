@@ -12,7 +12,9 @@ import {Modal} from 'src/components-v2/atoms/Modal';
 import {useFriendHook} from 'src/components/profile/use-profile-friend.hook';
 import {useProfileHook} from 'src/components/profile/use-profile.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
-import {FriendStatus} from 'src/interfaces/friend';
+import {useToasterHook} from 'src/hooks/use-toaster.hook';
+import {Friend, FriendStatus} from 'src/interfaces/friend';
+import {Status} from 'src/interfaces/toaster';
 import {RootState} from 'src/reducers';
 import {fetchProfileExperience} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
@@ -31,6 +33,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     experience: {
       meta: {totalItemCount: totalExperience},
     },
+    friendStatus,
   } = useSelector<RootState, ProfileState>(state => state.profileState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {
@@ -39,9 +42,9 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
 
   const dispatch = useDispatch();
 
-  const {friendStatus, makeFriend, checkFriendStatus, removeFriendRequest, toggleRequest} =
-    useFriendHook();
+  const {makeFriend, removeFriendRequest, toggleRequest} = useFriendHook();
   const {reportUser} = useProfileHook();
+  const {openToaster} = useToasterHook();
   const {query} = useQueryParams();
   const {filterTimeline} = useTimelineFilter({
     owner: profile?.id,
@@ -61,7 +64,6 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
 
   useEffect(() => {
     if (profile) {
-      checkFriendStatus(profile.id);
       dispatch(fetchProfileExperience());
       filterTimeline(query);
     }
@@ -99,7 +101,15 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const handleBlockUser = () => {
     if (friendStatus) {
       toggleRequest(friendStatus, FriendStatus.BLOCKED);
+      openToaster({
+        message: 'User successfully blocked',
+        toasterStatus: Status.SUCCESS,
+      });
     }
+  };
+
+  const handleUnblockUser = (friend: Friend) => {
+    toggleRequest(friend, FriendStatus.PENDING);
   };
 
   return (
@@ -115,6 +125,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
         onDeclineRequest={declineFriendRequest}
         onSendTip={handleSendTip}
         onBlock={handleBlockUser}
+        onUnblockFriend={handleUnblockUser}
         onEdit={edit}
         linkUrl={`${urlLink()}/profile/${profile.id}`}
         onSubmit={handleSubmit}

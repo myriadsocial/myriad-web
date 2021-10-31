@@ -1,5 +1,6 @@
 import {
   CalendarIcon,
+  ChevronDownIcon,
   CurrencyDollarIcon,
   GlobeAltIcon,
   UserAddIcon,
@@ -37,11 +38,12 @@ import ShowIf from 'src/components/common/show-if.component';
 export type Props = {
   user: User;
   selfProfile: boolean;
-  status: Friend | null;
+  status?: Friend;
   totalFriends: number;
   totalExperience: number;
   totalPost: number;
   onSendRequest: () => void;
+  onUnblockFriend: (friend: Friend) => void;
   onDeclineRequest: () => void;
   onSendTip: () => void;
   onEdit?: () => void;
@@ -62,6 +64,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     totalPost,
     onEdit,
     onSendRequest,
+    onUnblockFriend,
     onSendTip,
     linkUrl,
     onSubmit,
@@ -143,6 +146,14 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   const handleBlockUser = () => {
     onBlock();
     setOpenPrompt(false);
+  };
+
+  const handleSendRequest = () => {
+    if (status) {
+      onUnblockFriend(status);
+    } else {
+      onSendRequest();
+    }
   };
 
   const handleURL = (url: string): string => {
@@ -291,7 +302,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             <ShowIf condition={!selfProfile}>
               <ShowIf condition={!status}>
                 <Button
-                  onClick={onSendRequest}
+                  onClick={handleSendRequest}
                   startIcon={
                     <SvgIcon
                       classes={{root: style.fill}}
@@ -308,7 +319,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 </Button>
               </ShowIf>
 
-              <ShowIf condition={Boolean(status)}>
+              <ShowIf condition={Boolean(status) && status?.status !== FriendStatus.BLOCKED}>
                 <Button
                   onClick={handleClickOption}
                   startIcon={
@@ -318,12 +329,17 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                       viewBox="0 0 22 22"
                     />
                   }
+                  endIcon={
+                    status?.status === FriendStatus.APPROVED ? (
+                      <SvgIcon component={ChevronDownIcon} />
+                    ) : null
+                  }
                   classes={{root: style.button}}
                   className={style.mr12}
                   variant="contained"
                   color={status?.status === FriendStatus.APPROVED ? 'primary' : 'default'}
                   size="small">
-                  <ShowIf condition={status?.status === FriendStatus.APPROVED}>Friend</ShowIf>
+                  <ShowIf condition={status?.status === FriendStatus.APPROVED}>Friends</ShowIf>
                   <ShowIf condition={status?.status === FriendStatus.PENDING}>Requested</ShowIf>
                 </Button>
                 <Menu
@@ -343,22 +359,24 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 </Menu>
               </ShowIf>
 
-              <Button
-                disabled={balanceDetails.length === 0}
-                onClick={onSendTip}
-                startIcon={
-                  <SvgIcon
-                    classes={{root: style.fill}}
-                    component={CurrencyDollarIcon}
-                    viewBox="2 2 21 21"
-                  />
-                }
-                classes={{root: style.button}}
-                variant="contained"
-                color="primary"
-                size="small">
-                Send Tip
-              </Button>
+              <ShowIf condition={status?.status !== FriendStatus.BLOCKED}>
+                <Button
+                  disabled={balanceDetails.length === 0}
+                  onClick={onSendTip}
+                  startIcon={
+                    <SvgIcon
+                      classes={{root: style.fill}}
+                      component={CurrencyDollarIcon}
+                      viewBox="2 2 21 21"
+                    />
+                  }
+                  classes={{root: style.button}}
+                  variant="contained"
+                  color="primary"
+                  size="small">
+                  Send Tip
+                </Button>
+              </ShowIf>
             </ShowIf>
           </div>
         </div>

@@ -60,7 +60,6 @@ export const useExperience = (userId: string) => {
       dispatch({
         type: ExperienceActionType.INIT_EXPERIENCE,
         experiences: data.map(experience => {
-          console.log(ExperienceActionType.INIT_EXPERIENCE, experience);
           return {
             ...experience,
             // @ts-ignore
@@ -176,7 +175,6 @@ export const useExperience = (userId: string) => {
       },
     });
 
-    console.log('UPDATE SELECTED EXPERIENCE', experience);
     dispatch({
       type: ExperienceActionType.UPDATE_SELECTED_EXPERIENCE,
       experience,
