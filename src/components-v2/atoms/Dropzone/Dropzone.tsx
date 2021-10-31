@@ -101,13 +101,13 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
   };
 
   const getCols = (): number => {
-    return preview.length % 3 === 0 ? 2 : preview.length % 2 === 0 ? 3 : preview.length > 1 ? 2 : 6;
+    return preview.length === 1 ? 6 : 2;
   };
 
   const getRows = (): number => {
     const cols = getCols();
 
-    return cols === 6 ? 3 : cols === 3 ? 2 : 1;
+    return cols === 6 ? 2 : 1;
   };
 
   return (
