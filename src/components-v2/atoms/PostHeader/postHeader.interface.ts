@@ -8,9 +8,3 @@ export type PostHeaderProps = {
   onOpenTipHistory: () => void;
   onReport: () => void;
 };
-
-export enum Platform {
-  twitter = 'twitter',
-  myriad = 'myriad',
-  reddit = 'reddit',
-}
