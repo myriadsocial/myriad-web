@@ -58,9 +58,10 @@ export type PostEditorProps = {
   debug?: boolean;
   placeholder?: string;
   mentionable: MentionNodeData[];
+  uploadProgress: number;
   onSearchMention: (query: string) => void;
   onChange?: (value: TNode[]) => void;
-  onFileUploaded?: (file: File, type: 'image' | 'video') => Promise<string>;
+  onFileUploaded?: (file: File, type: 'image' | 'video') => Promise<string | null>;
 };
 
 export const PostEditor: React.FC<PostEditorProps> = props => {
@@ -71,6 +72,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     debug = false,
     placeholder = 'Type…',
     mentionable,
+    uploadProgress,
     onSearchMention,
     onChange,
     onFileUploaded,
@@ -175,12 +177,22 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   const [showVideoUpload, toggleVideoUpload] = useState(false);
   const [currentSelection, setCurrentSelection] = useState<Selection | null>(null);
   const [uploadLoading, setUploadLoading] = useState(false);
+  const [uploadSize, setUploadSize] = useState(0);
+  const [uploadIndex, setUploadIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (mentionQuery.length > 0) {
       onSearchMention && onSearchMention(mentionQuery);
     }
   }, [mentionQuery]);
+
+  useEffect(() => {
+    if (uploadIndex > 0 && uploadSize > 0) {
+      const totalProgress = (100 * (uploadIndex - 1)) / uploadSize + uploadProgress / uploadSize;
+      setProgress(totalProgress);
+    }
+  }, [uploadProgress]);
 
   const onChangeDebug = (value: TNode[]) => {
     if (debug) {
@@ -210,8 +222,6 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     if (!editor) return;
 
     setImageUploadType(type);
-
-    console.log('getImageUrl', editor.selection);
 
     if (type === 'upload') {
       toggleImageUpload(prevState => !prevState);
@@ -248,9 +258,16 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     const urls: string[] = [];
 
     if (imageUploadType === 'upload' && Array.isArray(result) && onFileUploaded) {
+      setUploadSize(result.length);
+
       for (const image of result) {
+        setUploadIndex(prevIndex => prevIndex + 1);
+
         const url = await onFileUploaded(image, 'image');
-        urls.push(url);
+
+        if (url) {
+          urls.push(url);
+        }
       }
     }
 
@@ -268,19 +285,25 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     toggleImageUpload(false);
     toggleModalImageLink(false);
     setUploadLoading(false);
+    setUploadSize(0);
+    setUploadIndex(0);
   };
 
   const handleVideoSelected = async (result: File[] | string) => {
     setUploadLoading(true);
 
     if (editor && Array.isArray(result) && onFileUploaded) {
+      setUploadSize(1);
+      setUploadIndex(1);
       const url = await onFileUploaded(result[0], 'video');
 
-      insertNodes(editor, {
-        type: ELEMENT_MEDIA_EMBED,
-        url,
-        children: [{text: ''}],
-      });
+      if (url) {
+        insertNodes(editor, {
+          type: ELEMENT_MEDIA_EMBED,
+          url,
+          children: [{text: ''}],
+        });
+      }
     }
 
     if (editor && typeof result === 'string') {
@@ -295,6 +318,8 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
 
     setUploadLoading(false);
     toggleVideoUpload(false);
+    setUploadSize(0);
+    setUploadIndex(0);
   };
 
   const handleConfirmLink = (url: string | null) => {
@@ -348,6 +373,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         onClose={closeImageUpload}>
         <Upload
           type="image"
+          progress={progress}
           loading={uploadLoading}
           multiple={true}
           onFileSelected={handleImageSelected}
@@ -364,6 +390,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         onClose={closeVideoUpload}>
         <Upload
           type="video"
+          progress={progress}
           loading={uploadLoading}
           onFileSelected={handleVideoSelected}
           accept={['video/*']}

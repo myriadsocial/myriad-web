@@ -12,6 +12,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       minHeight: 180,
       position: 'relative',
+      width: '100%',
     },
     loading: {
       position: 'absolute',
@@ -20,14 +21,17 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     dropzone: {
       textAlign: 'center',
+      width: '100%',
     },
     preview: {
+      width: '100%',
       display: 'flex',
       alignItems: 'center',
       flexDirection: 'row',
     },
     image: {
       objectFit: 'cover',
+      objectPosition: 'center',
       height: '100%',
     },
     icon: {

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import {Button, CircularProgress} from '@material-ui/core';
+import {Button, LinearProgress} from '@material-ui/core';
 
 import {Dropzone} from '../atoms/Dropzone';
 import {useStyles} from './Upload.styles';
@@ -9,6 +9,7 @@ type UploadProps = {
   type: 'video' | 'image';
   accept: string[];
   loading: boolean;
+  progress: number;
   maxSize?: number;
   placeholder?: string;
   multiple?: boolean;
@@ -16,7 +17,16 @@ type UploadProps = {
 };
 
 export const Upload: React.FC<UploadProps> = props => {
-  const {accept, placeholder, maxSize, loading, type, multiple = false, onFileSelected} = props;
+  const {
+    accept,
+    placeholder,
+    maxSize,
+    loading,
+    type,
+    multiple = false,
+    progress,
+    onFileSelected,
+  } = props;
   const styles = useStyles();
 
   const [files, setFiles] = useState<File[]>([]);
@@ -40,16 +50,26 @@ export const Upload: React.FC<UploadProps> = props => {
         maxSize={maxSize}
       />
 
-      <Button
-        className={styles.confirm}
-        variant="contained"
-        color="primary"
-        fullWidth
-        onClick={handleConfirm}
-        disabled={files.length === 0}>
-        Confirm
-        {loading && <CircularProgress size={24} className={styles.progress} color="secondary" />}
-      </Button>
+      <div className={styles.confirm}>
+        <Button
+          className={styles.button}
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={handleConfirm}
+          disabled={files.length === 0 || loading}>
+          {loading ? 'Uploading' : 'Confirm'}
+        </Button>
+
+        {loading && (
+          <LinearProgress
+            variant="determinate"
+            color="primary"
+            value={progress}
+            className={styles.progress}
+          />
+        )}
+      </div>
     </div>
   );
 };
