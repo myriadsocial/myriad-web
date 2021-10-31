@@ -26,6 +26,8 @@ export const PostImport: React.FC<PostImportProps> = props => {
   const {value = '', onChange} = props;
   const styles = useStyles();
 
+  const [social, setSocial] = useState<SocialsEnum | null>(null);
+  const [postId, setPostId] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [url, setUrl] = useState('');
   const [isValidUrl, setIsValidUrl] = useState(false);
@@ -50,6 +52,8 @@ export const PostImport: React.FC<PostImportProps> = props => {
 
     setUrl(url);
     setPreviewUrl(null);
+    setSocial(null);
+    setPostId(null);
 
     if (isUrl(url)) {
       parseUrl(url);
@@ -64,6 +68,8 @@ export const PostImport: React.FC<PostImportProps> = props => {
     const matchTwitter = regex[SocialsEnum.TWITTER].exec(url);
 
     if (matchTwitter) {
+      setSocial(SocialsEnum.TWITTER);
+      setPostId(matchTwitter[3]);
       setPreviewUrl(url);
       setIsValidUrl(true);
       onChange(url);
@@ -72,6 +78,8 @@ export const PostImport: React.FC<PostImportProps> = props => {
     const matchReddit = regex[SocialsEnum.REDDIT].exec(url);
 
     if (matchReddit) {
+      setSocial(SocialsEnum.REDDIT);
+      setPostId(matchReddit[1]);
       setPreviewUrl(url);
       setIsValidUrl(true);
       onChange(url);
@@ -97,7 +105,14 @@ export const PostImport: React.FC<PostImportProps> = props => {
           </Typography>
 
           <div className={styles.preview}>
-            <Embed url={previewUrl} options={{facebookAppId: '1349208398779551'}} />
+            {social && postId && (
+              <Embed
+                social={social}
+                postId={postId}
+                url={previewUrl}
+                options={{facebookAppId: '1349208398779551'}}
+              />
+            )}
           </div>
         </div>
       )}
