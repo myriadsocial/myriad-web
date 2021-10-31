@@ -82,6 +82,8 @@ export const useFriendsHook = (user?: User) => {
   const toggleRequest = async (request: Friend, status: FriendStatus) => {
     dispatch(
       toggleFriendRequest(request, status, () => {
+        loadBlockList();
+
         if (user) {
           checkFriendStatus([user]);
         }

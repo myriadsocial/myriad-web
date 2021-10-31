@@ -5,7 +5,6 @@ import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {useNotifHook} from 'src/hooks/use-notif.hook';
 import {FriendStatus, Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
-import * as FriendAPI from 'src/lib/api/friends';
 import {RootState} from 'src/reducers';
 import {
   createFriendRequest,
@@ -13,13 +12,13 @@ import {
   toggleFriendRequest,
 } from 'src/reducers/friend-request/actions';
 import {searchProfileFriend, fetchProfileFriend} from 'src/reducers/profile/actions';
+import {checkFriendedStatus} from 'src/reducers/profile/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const useFriendHook = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const dispatch = useDispatch();
 
-  const [friendStatus, setFriendStatus] = useState<Friend | null>(null);
   const [loading, setLoading] = useState(false);
   const {loadNotifications} = useNotifHook();
   const {loadFriends} = useFriendsHook();
@@ -31,7 +30,7 @@ export const useFriendHook = () => {
   const makeFriend = async (profile: User) => {
     await dispatch(createFriendRequest(profile));
 
-    checkFriendStatus(profile.id);
+    await dispatch(checkFriendedStatus());
   };
 
   const removeFriendRequest = async (request: Friend) => {
@@ -39,7 +38,8 @@ export const useFriendHook = () => {
 
     await loadFriends();
     await dispatch(fetchProfileFriend());
-    await checkFriendStatus(request.requestorId);
+    await dispatch(checkFriendedStatus());
+
     loadNotifications();
   };
 
@@ -50,36 +50,15 @@ export const useFriendHook = () => {
     await dispatch(fetchProfileFriend());
 
     if (!user) return;
-    if (user.id === request.requesteeId) {
-      await checkFriendStatus(request.requestorId);
-    } else {
-      await checkFriendStatus(request.requesteeId);
-    }
-  };
 
-  const checkFriendStatus = async (friendId: string) => {
-    if (!user) return;
-
-    setLoading(true);
-
-    try {
-      const {data} = await FriendAPI.checkFriendStatus(user.id, [friendId]);
-      if (data.length > 0) setFriendStatus(data[0]);
-      else setFriendStatus(null);
-    } catch (error) {
-      console.log(error, '<<<error');
-    } finally {
-      setLoading(false);
-    }
+    await dispatch(checkFriendedStatus());
   };
 
   return {
     loading,
-    friendStatus,
     makeFriend,
     searchFriend,
     removeFriendRequest,
-    checkFriendStatus,
     toggleRequest,
   };
 };

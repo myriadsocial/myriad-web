@@ -48,5 +48,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: '80px',
       marginTop: '70px',
     },
+    blocked: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: 'calc(100vh - 360px)',
+    },
   }),
 );
