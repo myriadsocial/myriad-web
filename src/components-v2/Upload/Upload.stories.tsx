@@ -16,4 +16,5 @@ export const ImageUpload = Template.bind({});
 ImageUpload.args = {
   accept: ['image/*'],
   loading: false,
+  progress: 50,
 };

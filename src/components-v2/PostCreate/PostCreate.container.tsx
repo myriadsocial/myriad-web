@@ -22,7 +22,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const {open, onClose} = props;
 
   const dispatch = useDispatch();
-  const {uploadImage, uploadVideo} = useUpload();
+  const {progress, uploadImage, uploadVideo} = useUpload();
   const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const mentionable = useFriendList(friends, user);
@@ -39,23 +39,19 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     }
   }, 300);
 
-  const handleFileUpload = async (file: File, type: 'image' | 'video'): Promise<string> => {
-    let url = '';
+  const handleFileUpload = async (file: File, type: 'image' | 'video'): Promise<string | null> => {
+    let url: string | null = null;
 
     if (type === 'image') {
       const response = await uploadImage(file);
 
-      if (response) {
-        url = response;
-      }
+      url = response;
     }
 
     if (type === 'video') {
       const response = await uploadVideo(file);
 
-      if (response) {
-        url = response;
-      }
+      url = response;
     }
 
     return url;
@@ -75,6 +71,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     <PostCreate
       open={open}
       people={mentionable}
+      uploadProgress={progress}
       onClose={onClose}
       onSubmit={submitPost}
       onSearchPeople={handleSearchPeople}
