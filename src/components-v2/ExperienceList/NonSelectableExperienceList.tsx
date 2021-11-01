@@ -34,14 +34,14 @@ const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = 
         </div>
       )}
       {experiences.length > 0 &&
-        experiences.map(experience => (
-          <div key={experience.id}>
+        experiences.map(item => (
+          <div key={item.experience.id}>
             <NonSelectableSimpleCard
               user={user}
-              experienceId={experience.id}
-              title={experience.name}
-              creator={experience.user.name}
-              imgUrl={experience.experienceImageURL || ''}
+              experienceId={item.experience.id}
+              title={item.experience.name}
+              creator={item.experience.user.name}
+              imgUrl={item.experience.experienceImageURL || ''}
               onSubscribe={onSubscribe}
               onFollow={onFollow}
               onPreview={onPreview}

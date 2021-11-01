@@ -14,7 +14,7 @@ interface ExperienceListProps {
 }
 
 interface NonSelectableExperienceList {
-  experiences: Experience[];
+  experiences: UserExperience[];
   isOnHomePage?: boolean;
   user?: User;
   filterTimeline: (type: TimelineType, experience: Experience) => void;
