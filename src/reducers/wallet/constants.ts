@@ -9,3 +9,6 @@ export type SET_TIPPED_USER_ID = typeof SET_TIPPED_USER_ID;
 
 export const SET_TIPPED_USER = 'SET_TIPPED_USER';
 export type SET_TIPPED_USER = typeof SET_TIPPED_USER;
+
+export const SET_IS_TIP_SENT = 'SET_IS_TIP_SENT';
+export type SET_IS_TIP_SENT = typeof SET_IS_TIP_SENT;
