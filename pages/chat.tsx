@@ -5,6 +5,7 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
 import {SearchBoxContainer} from '../src/components-v2/atoms/Search/SearchBoxContainer';
@@ -28,10 +29,10 @@ const ChatPage: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    const fg = new Firegun([
-      'https://gundb.dev.myriad.systems/gun',
-      'https://gun-relay.bimasoft.web.id:16902/gun',
-    ]);
+    const {publicRuntimeConfig} = getConfig();
+    const gunRelayURL = publicRuntimeConfig.gunRelayURL.split(',');
+    const fg = new Firegun(gunRelayURL);
+
     const chat = new ChatFG(fg);
 
     const arr = [];
