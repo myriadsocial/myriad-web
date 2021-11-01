@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React from 'react';
+import {useSelector} from 'react-redux';
 
 import {Session} from 'next-auth';
 import {getSession} from 'next-auth/client';
@@ -9,29 +9,22 @@ import {wrapper} from '../../src/store';
 
 import {ProfileTimeline} from 'src/components-v2/Profile/ProfileComponent';
 import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
-import {User} from 'src/interfaces/user';
 import {healthcheck} from 'src/lib/api/healthcheck';
-import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
-import {setProfile} from 'src/reducers/profile/actions';
+import {fetchExperience} from 'src/reducers/experience/actions';
+import {countNewNotification} from 'src/reducers/notification/actions';
+import {fetchProfileDetail} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
-import {setAnonymous, setUser, fetchConnectedSocials} from 'src/reducers/user/actions';
+import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
+import {ThunkDispatchAction} from 'src/types/thunk';
 
 type ProfilePageProps = {
   session: Session;
-  profile: User | null;
 };
 
-const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
-  const dispatch = useDispatch();
-
+const ProfilePageComponent: React.FC<ProfilePageProps> = () => {
   const {detail: profileDetail} = useSelector<RootState, ProfileState>(state => state.profileState);
-
-  useEffect(() => {
-    dispatch(fetchConnectedSocials());
-    dispatch(fetchAvailableToken());
-  }, [dispatch]);
 
   return (
     <DefaultLayout isOnProfilePage={true}>
@@ -43,50 +36,57 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = ({profile}) => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const {res, params} = context;
-  const {dispatch} = store;
+  const {params} = context;
+  const dispatch = store.dispatch as ThunkDispatchAction;
 
   const available = await healthcheck();
 
   if (!available) {
-    res.setHeader('location', '/maintenance');
-    res.statusCode = 302;
-    res.end();
+    return {
+      redirect: {
+        destination: '/maintenance',
+        permanent: false,
+      },
+    };
   }
 
   const session = await getSession(context);
 
   if (!session) {
-    res.setHeader('location', '/');
-    res.statusCode = 302;
-    res.end();
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
   }
 
   const anonymous = Boolean(session?.user.anonymous);
   const userId = session?.user.address as string;
-  const username = session?.user.name as string;
   const profileId = params?.id as string;
 
-  //TODO: this process should call thunk action creator instead of dispatch thunk acion
-  //ISSUE: state not hydrated when using thunk action creator
-  if (anonymous) {
-    dispatch(setAnonymous(username));
-  } else {
-    const user = await UserAPI.getUserDetail(userId);
+  if (anonymous || !userId) {
+    const username = session?.user.name as string;
 
-    dispatch(setUser(user));
+    await dispatch(setAnonymous(username));
+  } else {
+    await dispatch(fetchUser(userId));
+
+    await Promise.all([
+      dispatch(fetchConnectedSocials()),
+      dispatch(fetchAvailableToken()),
+      dispatch(countNewNotification()),
+      dispatch(fetchExperience()),
+    ]);
   }
 
-  const profile = await UserAPI.getUserDetail(profileId);
-
-  if (profile) {
-    dispatch(setProfile(profile));
+  if (profileId) {
+    await dispatch(fetchProfileDetail(profileId));
   }
 
   return {
     props: {
       session,
-      profile,
     },
   };
 });

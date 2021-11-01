@@ -7,7 +7,6 @@ import {composeWithDevTools} from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk';
 
 const reducer: Reducer<RootState, AnyAction> = (state, action) => {
-  console.log('state', action);
   if (action.type === HYDRATE) {
     const nextState = {
       ...state, // use previous state
