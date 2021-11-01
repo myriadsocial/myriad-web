@@ -2,23 +2,24 @@ import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {ProfileHeaderComponent} from '.';
-import {User, Report} from '../../../interfaces/user';
-import {TimelineState} from '../../../reducers/timeline/reducer';
-import {setTippedUserId} from '../../../reducers/wallet/actions';
-import {SendTipContainer} from '../../SendTip/';
 
+import {SendTipContainer} from 'src/components-v2/SendTip';
 import {useTimelineFilter} from 'src/components-v2/Timeline/hooks/use-timeline-filter.hook';
 import {Modal} from 'src/components-v2/atoms/Modal';
 import {useFriendHook} from 'src/components/profile/use-profile-friend.hook';
-import {useProfileHook} from 'src/components/profile/use-profile.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
+import {useReport} from 'src/hooks/use-report.hook';
 import {useToasterHook} from 'src/hooks/use-toaster.hook';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
+import {ReportProps} from 'src/interfaces/report';
 import {Status} from 'src/interfaces/toaster';
+import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileExperience} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
+import {TimelineState} from 'src/reducers/timeline/reducer';
 import {UserState} from 'src/reducers/user/reducer';
+import {setTippedUserId} from 'src/reducers/wallet/actions';
 
 type Props = {
   edit?: () => void;
@@ -43,7 +44,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const dispatch = useDispatch();
 
   const {makeFriend, removeFriendRequest, toggleRequest} = useFriendHook();
-  const {reportUser} = useProfileHook();
+  const {sendReportWithAttributes} = useReport();
   const {openToaster} = useToasterHook();
   const {query} = useQueryParams();
   const {filterTimeline} = useTimelineFilter({
@@ -94,8 +95,8 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     dispatch(setTippedUserId(profile.id));
   };
 
-  const handleSubmit = (payload: Partial<Report>) => {
-    reportUser(payload);
+  const handleSubmitReport = (payload: ReportProps) => {
+    sendReportWithAttributes(payload);
   };
 
   const handleBlockUser = () => {
@@ -128,7 +129,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
         onUnblockFriend={handleUnblockUser}
         onEdit={edit}
         linkUrl={`${urlLink()}/profile/${profile.id}`}
-        onSubmit={handleSubmit}
+        onSubmitReport={handleSubmitReport}
       />
       <Modal
         gutter="none"

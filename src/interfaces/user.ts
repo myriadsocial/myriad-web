@@ -49,36 +49,6 @@ export interface ActivityLog {
   userId: string;
 }
 
-export enum ReportType {
-  POST = 'post',
-  USER = 'user',
-  COMMENT = 'comment',
-}
-
-export enum CaseType {
-  PORNOGRAPHY = 'pornography',
-  CHILD = 'child',
-  OTHER = 'other',
-}
-
-export enum ReportStatus {
-  PENDING = 'pending',
-  APPROVE = 'approve',
-  OTHER = 'other',
-}
-
-export interface Report extends BaseModel {
-  referenceType: ReportType;
-  referenceId: string;
-  type: CaseType;
-  status: ReportStatus;
-  reason: string;
-  totalReported: number;
-  reportedBy: string;
-  postId: string;
-  userId: string;
-}
-
 export enum ActivityLogType {
   USERNAME = 'username',
   PROFILE = 'profile',

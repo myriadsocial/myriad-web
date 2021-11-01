@@ -3,6 +3,7 @@ import {BaseModel} from './base.interface';
 export enum ReferenceType {
   POST = 'post',
   COMMENT = 'comment',
+  USER = 'user',
 }
 
 export enum SectionType {

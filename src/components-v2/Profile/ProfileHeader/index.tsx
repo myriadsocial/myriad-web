@@ -22,10 +22,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import {Friend, FriendStatus} from '../../../interfaces/friend';
-import {User, Report} from '../../../interfaces/user';
-import {RootState} from '../../../reducers/';
-import {BalanceState} from '../../../reducers/balance/reducer';
 import {PromptComponent} from '../../atoms/Prompt/prompt.component';
 import {ReportComponent} from '../../atoms/Report/Report.component';
 import {useStyles} from './profile-header.style';
@@ -34,6 +30,11 @@ import {format} from 'date-fns';
 import millify from 'millify';
 import {Status, Toaster} from 'src/components-v2/atoms/Toaster';
 import ShowIf from 'src/components/common/show-if.component';
+import {Friend, FriendStatus} from 'src/interfaces/friend';
+import {ReportProps} from 'src/interfaces/report';
+import {User} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
+import {BalanceState} from 'src/reducers/balance/reducer';
 
 export type Props = {
   user: User;
@@ -48,7 +49,7 @@ export type Props = {
   onSendTip: () => void;
   onEdit?: () => void;
   linkUrl: string;
-  onSubmit: (payload: Partial<Report>) => void;
+  onSubmitReport: (payload: ReportProps) => void;
   onBlock: () => void;
 };
 
@@ -67,7 +68,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     onUnblockFriend,
     onSendTip,
     linkUrl,
-    onSubmit,
+    onSubmitReport,
     onBlock,
   } = props;
   const style = useStyles();
@@ -85,14 +86,12 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     setAnchorElFriend(null);
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (status?.status === FriendStatus.APPROVED) {
-      e.stopPropagation();
-      setAnchorEl(e.currentTarget);
-    }
+  const handleClickUserOption = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setAnchorEl(e.currentTarget);
   };
 
-  const handleClickOption = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClickFriendOption = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (status?.status === FriendStatus.APPROVED) {
       e.stopPropagation();
       setAnchorElFriend(e.currentTarget);
@@ -163,6 +162,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     return url;
   };
 
+  console.log('self profile', selfProfile);
   return (
     <div>
       <div className={style.root}>
@@ -193,7 +193,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           {!selfProfile && (
             <>
               <IconButton
-                onClick={handleClick}
+                onClick={handleClickUserOption}
                 classes={{root: style.action}}
                 aria-label="profile-setting">
                 <SvgIcon
@@ -321,7 +321,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
 
               <ShowIf condition={Boolean(status) && status?.status !== FriendStatus.BLOCKED}>
                 <Button
-                  onClick={handleClickOption}
+                  onClick={handleClickFriendOption}
                   startIcon={
                     <SvgIcon
                       classes={{root: style.fill}}
@@ -407,7 +407,12 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         </div>
       </PromptComponent>
 
-      <ReportComponent onSubmit={onSubmit} user={user} open={open} onClose={handleCloseModal} />
+      <ReportComponent
+        onSubmit={onSubmitReport}
+        user={user}
+        open={open}
+        onClose={handleCloseModal}
+      />
 
       <Toaster
         open={linkCopied}
