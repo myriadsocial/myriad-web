@@ -28,7 +28,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const mentionable = useFriendList(friends, user);
 
   useEffect(() => {
-    if (user) {
+    if (user && friends.length === 0) {
       dispatch(fetchFriend(user));
     }
   }, [dispatch, user]);

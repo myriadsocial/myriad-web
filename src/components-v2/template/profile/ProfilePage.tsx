@@ -67,7 +67,6 @@ const ProfilePage = (): JSX.Element => {
             <ProfileHeaderComponent
               user={Header.args?.user ?? user}
               selfProfile={true}
-              status={null}
               onDeclineRequest={console.log}
               onSendRequest={console.log}
               onSendTip={console.log}
@@ -77,6 +76,7 @@ const ProfilePage = (): JSX.Element => {
               linkUrl={''}
               onSubmit={console.log}
               onBlock={console.log}
+              onUnblockFriend={console.log}
             />
           </div>
           <div style={{width: '100%'}}>

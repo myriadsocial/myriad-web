@@ -44,6 +44,11 @@ export interface FetchProfileExperience extends PaginationAction {
   experiences: UserExperience[];
 }
 
+export interface SetProfileFriendedStatus extends Action {
+  type: constants.SET_FRIENDED_STATUS;
+  status: Friend;
+}
+
 /**
  * Union Action Types
  */
@@ -54,6 +59,7 @@ export type Actions =
   | FilterProfileFriend
   | FetchConnectedSocials
   | FetchProfileExperience
+  | SetProfileFriendedStatus
   | BaseAction;
 
 /**
@@ -188,6 +194,39 @@ export const fetchProfileExperience: ThunkActionCreator<Actions, RootState> =
         experiences,
         meta,
       });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const checkFriendedStatus: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        profileState: {detail: profile},
+        userState: {user},
+      } = getState();
+
+      if (!profile || !user) {
+        throw new Error('User not found');
+      }
+
+      const {data} = await FriendAPI.checkFriendStatus(user.id, [profile.id]);
+
+      if (data.length > 0) {
+        dispatch({
+          type: constants.SET_FRIENDED_STATUS,
+          status: data[0],
+        });
+      }
     } catch (error) {
       dispatch(
         setError({
