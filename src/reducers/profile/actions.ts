@@ -81,10 +81,7 @@ export const fetchProfileDetail: ThunkActionCreator<Actions, RootState> =
     try {
       const detail: User = await UserAPI.getUserDetail(userId);
 
-      dispatch({
-        type: constants.FETCH_PROFILE_DETAIL,
-        detail,
-      });
+      dispatch(setProfile(detail));
     } catch (error) {
       dispatch(
         setError({
