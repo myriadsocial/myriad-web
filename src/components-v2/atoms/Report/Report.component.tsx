@@ -34,7 +34,6 @@ export const ReportComponent: React.FC<Props> = props => {
       referenceType: ReferenceType.USER,
       referenceId: user.id,
       description: description,
-      type: 'other',
     };
 
     onSubmit(payload);
