@@ -23,6 +23,7 @@ type NotificationList = {
   description: React.ReactNode;
   badge: React.ReactNode;
   createdAt: Date;
+  read: boolean;
 };
 
 export const useNotificationList = (notifications: Notification[]): NotificationList[] => {
@@ -33,6 +34,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       case NotificationType.FRIEND_ACCEPT:
         return {
           id: notification.id,
+          read: notification.read,
           user: notification.fromUserId.name,
           avatar: notification.fromUserId.profilePictureURL,
           description: 'Accepted your friend request',
@@ -51,6 +53,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       case NotificationType.FRIEND_REQUEST:
         return {
           id: notification.id,
+          read: notification.read,
           user: notification.fromUserId.name,
           avatar: notification.fromUserId.profilePictureURL,
           description: 'Wants to be your friend',
@@ -69,6 +72,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       case NotificationType.POST_COMMENT:
         return {
           id: notification.id,
+          read: notification.read,
           user: notification.fromUserId.name,
           avatar: notification.fromUserId.profilePictureURL,
           description: <Typography component="span">Commented on your Post</Typography>,
@@ -88,6 +92,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       case NotificationType.COMMENT_COMMENT:
         return {
           id: notification.id,
+          read: notification.read,
           user: notification.fromUserId.name,
           avatar: notification.fromUserId.profilePictureURL,
           description: 'Commented on your reply',
@@ -107,6 +112,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       case NotificationType.POST_VOTE:
         return {
           id: notification.id,
+          read: notification.read,
           user: notification.fromUserId.name,
           avatar: notification.fromUserId.profilePictureURL,
           description: <Typography component="span">Upvoted your Post</Typography>,
@@ -126,6 +132,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       case NotificationType.COMMENT_VOTE:
         return {
           id: notification.id,
+          read: notification.read,
           user: notification.fromUserId.name,
           avatar: notification.fromUserId.profilePictureURL,
           description: 'Upvoted your reply',
@@ -145,6 +152,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       case NotificationType.POST_MENTION:
         return {
           id: notification.id,
+          read: notification.read,
           user: notification.fromUserId.name,
           avatar: notification.fromUserId.profilePictureURL,
           description: 'Mention you in a comment',
@@ -164,6 +172,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       case NotificationType.USER_TIPS:
         return {
           id: notification.id,
+          read: notification.read,
           user: 'Tips received',
           avatar: notification.fromUserId.profilePictureURL,
           description: (
@@ -189,6 +198,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       case NotificationType.POST_TIPS:
         return {
           id: notification.id,
+          read: notification.read,
           user: 'Tips received',
           avatar: notification.fromUserId.profilePictureURL,
           description: (
@@ -213,6 +223,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       case NotificationType.COMMENT_TIPS:
         return {
           id: notification.id,
+          read: notification.read,
           user: 'Tips received',
           avatar: notification.fromUserId.profilePictureURL,
           description: (
@@ -238,6 +249,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       case NotificationType.USER_CLAIM_TIPS:
         return {
           id: notification.id,
+          read: notification.read,
           user: 'Tips claimed',
           avatar: notification.fromUserId.profilePictureURL,
           description: `${notification.message}`,
@@ -257,6 +269,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       case NotificationType.USER_REWARD:
         return {
           id: notification.id,
+          read: notification.read,
           user: 'Tips reward',
           avatar: notification.fromUserId.profilePictureURL,
           description: `${notification.message}`,
@@ -276,6 +289,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       case NotificationType.REPORT_POST:
         return {
           id: notification.id,
+          read: notification.read,
           user: notification.fromUserId.name,
           avatar: notification.fromUserId.profilePictureURL,
           description: (
@@ -296,6 +310,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       case NotificationType.REPORT_USER:
         return {
           id: notification.id,
+          read: notification.read,
           user: notification.fromUserId.name,
           avatar: notification.fromUserId.profilePictureURL,
           description: 'Somebody reported your account as a violance',
@@ -314,6 +329,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
       default:
         return {
           id: notification.id,
+          read: notification.read,
           user: notification.fromUserId.name,
           avatar: notification.fromUserId.profilePictureURL,
           description: notification.message,

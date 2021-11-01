@@ -37,7 +37,6 @@ export default function CaptchaComponent({getCaptchaVerification}: Props) {
 
       if (response.ok) {
         changeVerifiedStatus();
-        console.log(`Recaptcha successfully submitted!`);
       } else {
         const error = await response.json();
         throw new Error(error?.message);
