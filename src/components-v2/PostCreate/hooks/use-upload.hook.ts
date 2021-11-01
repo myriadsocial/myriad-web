@@ -1,8 +1,13 @@
+import * as Sentry from '@sentry/nextjs';
+
 import {useState} from 'react';
 
 import getConfig from 'next/config';
 
 import Axios from 'axios';
+import axios from 'axios';
+import {useToasterHook} from 'src/hooks/use-toaster.hook';
+import {Status} from 'src/interfaces/toaster';
 
 const {serverRuntimeConfig} = getConfig();
 
@@ -19,6 +24,12 @@ type ResponseImageUpload = {
 export const useUpload = () => {
   const [image, setImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
+  const {openToaster} = useToasterHook();
+
+  const randomIntBetween = (min: number, max: number): number => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
 
   const uploadImage = async (file: File) => {
     const formData = new FormData();
@@ -26,19 +37,38 @@ export const useUpload = () => {
     formData.append('image', file);
 
     try {
+      setProgress(0);
+
       const {data} = await client.request<ResponseImageUpload>({
         method: 'POST',
         url: '/api/image',
         data: formData,
+        onUploadProgress: (event: ProgressEvent) => {
+          const fileProgress =
+            (Math.round((100 * event.loaded) / event.total) * (randomIntBetween(5, 8) * 10)) / 100;
+
+          setProgress(fileProgress);
+        },
       });
 
       setImage(data.url);
 
+      setProgress(100);
+
       return data.url;
     } catch (error) {
-      console.error(error);
-      setError(error.message);
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data.eror);
+      } else {
+        setError(error.message);
+      }
 
+      Sentry.captureException(error);
+
+      openToaster({
+        message: 'failed to upload image',
+        toasterStatus: Status.WARNING,
+      });
       return null;
     }
   };
@@ -49,18 +79,38 @@ export const useUpload = () => {
     formData.append('video', file);
 
     try {
+      setProgress(0);
+
       const {data} = await client.request<ResponseImageUpload>({
         method: 'POST',
         url: '/api/video',
         data: formData,
+        onUploadProgress: (event: ProgressEvent) => {
+          const fileProgress =
+            (Math.round((100 * event.loaded) / event.total) * (randomIntBetween(5, 8) * 10)) / 100;
+
+          setProgress(fileProgress);
+        },
       });
+
+      setProgress(100);
 
       setImage(data.url);
 
       return data.url;
     } catch (error) {
-      console.error(error);
-      setError(error.message);
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data.eror);
+      } else {
+        setError(error.message);
+      }
+
+      Sentry.captureException(error);
+
+      openToaster({
+        message: 'failed to upload video',
+        toasterStatus: Status.WARNING,
+      });
 
       return null;
     }
@@ -69,6 +119,7 @@ export const useUpload = () => {
   return {
     error,
     image,
+    progress,
     uploadImage,
     uploadVideo,
   };

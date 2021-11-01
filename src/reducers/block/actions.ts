@@ -53,3 +53,30 @@ export const getBlockList: ThunkActionCreator<Actions, RootState> =
       dispatch(setLoading(false));
     }
   };
+
+export const unblockUser: ThunkActionCreator<Actions, RootState> =
+  (friendId: string) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    const {
+      userState: {user},
+    } = getState();
+
+    try {
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      await FriendAPI.deleteRequest(friendId);
+
+      dispatch(getBlockList(user));
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };

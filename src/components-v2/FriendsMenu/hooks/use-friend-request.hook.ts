@@ -1,7 +1,7 @@
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 
-type FriendRequestDetail = {
+export type FriendRequestDetail = {
   id: string;
   name: string;
   avatar?: string;
