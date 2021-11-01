@@ -36,6 +36,11 @@ export interface SetTippedUser extends Action {
   };
 }
 
+export interface SetIsTipSent extends Action {
+  type: constants.SET_IS_TIP_SENT;
+  isTipSent: boolean;
+}
+
 /**
  * Union Action Types
  */
@@ -45,6 +50,7 @@ export type Actions =
   | SetRecipientDetail
   | SetTippedUserId
   | SetTippedUser
+  | SetIsTipSent
   | BaseAction;
 
 /**
@@ -68,6 +74,11 @@ export const setTippedUser = (name: string, profilePictureURL: string): SetTippe
     name,
     profilePictureURL,
   },
+});
+
+export const setIsTipSent = (isTipSent: boolean): SetIsTipSent => ({
+  type: constants.SET_IS_TIP_SENT,
+  isTipSent,
 });
 
 /**
