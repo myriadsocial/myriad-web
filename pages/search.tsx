@@ -1,6 +1,6 @@
 // SEARCH PAGE
-import React, {useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React from 'react';
+import {useSelector} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
 
@@ -14,12 +14,14 @@ import TopicComponent from 'src/components/topic/topic.component';
 import UserDetail from 'src/components/user/user.component';
 import {Wallet} from 'src/components/wallet/wallet.component';
 import {healthcheck} from 'src/lib/api/healthcheck';
-import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
-import {setAnonymous, setUser, fetchConnectedSocials} from 'src/reducers/user/actions';
+import {fetchExperience} from 'src/reducers/experience/actions';
+import {countNewNotification} from 'src/reducers/notification/actions';
+import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
+import {ThunkDispatchAction} from 'src/types/thunk';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -65,14 +67,8 @@ export const useStyles = makeStyles((theme: Theme) =>
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function Search() {
   const style = useStyles();
-  const dispatch = useDispatch();
 
   const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
-
-  useEffect(() => {
-    dispatch(fetchConnectedSocials());
-    dispatch(fetchAvailableToken());
-  }, [dispatch]);
 
   return (
     <Layout>
@@ -97,37 +93,46 @@ export default function Search() {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const {res} = context;
-  const {dispatch} = store;
+  const dispatch = store.dispatch as ThunkDispatchAction;
 
   const available = await healthcheck();
 
   if (!available) {
-    res.setHeader('location', '/maintenance');
-    res.statusCode = 302;
-    res.end();
+    return {
+      redirect: {
+        destination: '/maintenance',
+        permanent: false,
+      },
+    };
   }
 
   const session = await getSession(context);
 
   if (!session) {
-    res.setHeader('location', '/');
-    res.statusCode = 302;
-    res.end();
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
   }
 
   const anonymous = Boolean(session?.user.anonymous);
   const userId = session?.user.address as string;
-  const username = session?.user.name as string;
 
-  //TODO: this process should call thunk action creator instead of dispatch thunk acion
-  //ISSUE: state not hydrated when using thunk action creator
-  if (anonymous) {
-    dispatch(setAnonymous(username));
+  if (anonymous || !userId) {
+    const username = session?.user.name as string;
+
+    await dispatch(setAnonymous(username));
   } else {
-    const user = await UserAPI.getUserDetail(userId);
+    await dispatch(fetchUser(userId));
 
-    dispatch(setUser(user));
+    await Promise.all([
+      dispatch(fetchConnectedSocials()),
+      dispatch(fetchAvailableToken()),
+      dispatch(countNewNotification()),
+      dispatch(fetchExperience()),
+    ]);
   }
 
   return {
