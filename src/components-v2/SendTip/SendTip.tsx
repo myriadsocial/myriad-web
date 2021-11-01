@@ -38,6 +38,11 @@ type SendTipProps = {
 
 //TODO: split this component into sub-components
 export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tippedUserId}) => {
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {tippedContent} = useSelector<RootState, TimelineState>(state => state.timelineState);
+
+  const {simplerSendTip, isSignerLoading} = usePolkadotApi();
+
   const [tipAmount, setTipAmount] = useState('');
   const [verifiedTipAmount, setVerifiedTipAmount] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState<BalanceDetail>(balanceDetails[0]);
@@ -45,11 +50,6 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
   const [gasFee] = useState('0.01');
   const [checked, setChecked] = useState(false);
   const [url] = useState('https://myriad.social/');
-
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {tippedContent} = useSelector<RootState, TimelineState>(state => state.timelineState);
-
-  const {simplerSendTip, isSignerLoading} = usePolkadotApi();
 
   if (!user) return null;
 
