@@ -1,33 +1,42 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme, alpha} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: 'flex',
-      flexDirection: 'column',
-      width: 386,
+      width: 460,
     },
     list: {
       display: 'flex',
       flexWrap: 'wrap',
+      flexDirection: 'column',
       padding: 0,
-      marginBottom: 60,
+      marginTop: 18,
+      marginBottom: 20,
 
       '& .MuiListItem-root': {
         height: 36,
         width: 'auto',
-        border: '1px solid',
-        borderColor: '#E5E5E5',
-        borderRadius: 5,
-        marginRight: theme.spacing(1),
         marginBottom: theme.spacing(1),
-        padding: theme.spacing(1, 1.5),
+        padding: theme.spacing(1, 0),
 
         '&.Mui-selected': {
-          color: theme.palette.primary.main,
           fontWeight: 'bold',
-          borderColor: theme.palette.primary.main,
-          background: 'transparent',
+          backgroundColor: alpha('#FFC857', 0.15),
+
+          '&::before,&::after': {
+            content: '""',
+            position: 'absolute',
+            width: 30,
+            height: 36,
+            top: 0,
+            backgroundColor: alpha('#FFC857', 0.15),
+          },
+          '&::before': {
+            left: -30,
+          },
+          '&::after': {
+            right: -30,
+          },
         },
       },
 
@@ -38,6 +47,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiTypography-root': {
         lineHeight: '18px',
       },
+
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
+    },
+    info: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
     },
   }),
 );
