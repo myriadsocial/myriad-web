@@ -75,8 +75,8 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
       <Menu
         anchorEl={anchorEl}
         getContentAnchorEl={null}
-        anchorOrigin={{vertical: 'center', horizontal: 'right'}}
-        transformOrigin={{vertical: 'center', horizontal: 'left'}}
+        anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+        transformOrigin={{vertical: 'top', horizontal: 'center'}}
         open={Boolean(anchorEl)}
         onClose={handleClose}>
         {options.map(option => (
