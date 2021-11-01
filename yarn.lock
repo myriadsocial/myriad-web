@@ -5725,10 +5725,10 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@yokowasis/firechat@^0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@yokowasis/firechat/-/firechat-0.3.3.tgz#2d1fe7034ccfba468828a67770eb201abe24d7a3"
-  integrity sha512-MY2pG4TMJt4/YJpmZ0ykDsO6TCsfM1ZzZgKjpKwdjCFICkNwrbH8Cl93CW+xC9IlwepXGUIxUpZooXnEWMJcTg==
+"@yokowasis/firechat@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@yokowasis/firechat/-/firechat-0.4.0.tgz#e766223d5bf9a2e539ff73943529136c0d29716e"
+  integrity sha512-qOZ5hajvUJ1TAC4bY8OPiiEISvJo703Z4Ozd5YylpI3lk50ysOxxCKiQyJ9wmTlwt/rQE4l92iKceIR7Dv4ipw==
   dependencies:
     "@emotion/react" "^11.5.0"
     "@emotion/styled" "^11.3.0"
@@ -5736,15 +5736,13 @@
     "@mui/material" "^5.0.6"
     "@mui/styles" "^5.0.2"
     "@types/downloadjs" "^1.4.2"
-    "@yokowasis/firegun" "^1.4.19"
+    "@yokowasis/firegun" "^1.5.0"
     downloadjs "^1.4.7"
-    react "^17.0.0"
-    react-dom "^17.0.0"
 
-"@yokowasis/firegun@^1.4.19", "@yokowasis/firegun@^1.4.20":
-  version "1.4.20"
-  resolved "https://registry.yarnpkg.com/@yokowasis/firegun/-/firegun-1.4.20.tgz#7a67a5ef920a3ff127021ea7ad09714e3f473ab0"
-  integrity sha512-Y2imlUA0cT9MmQqrgC/+QPK5rxaI+tQtu2pRRUN2/oc1BEg+xAcBGBbYGfGwsvnvEHtadWzmbNuKQ3PoOytU7Q==
+"@yokowasis/firegun@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@yokowasis/firegun/-/firegun-1.5.0.tgz#66ce63195e5797f754e371e57ff6d0e2528e6d93"
+  integrity sha512-BmSMeEi3zesQkxji20pfU2UOo8+d61iG2P3K1+F3RZZHi87zqfoYeWSAm/KgQ/9E/COxo2TYrCyR37JuQCxCcQ==
   dependencies:
     "@types/eslint-scope" "^3.7.1"
     gun "^0.2020.1235"
@@ -15079,15 +15077,6 @@ react-docgen@^5.0.0:
     node-dir "^0.1.10"
     strip-indent "^3.0.0"
 
-react-dom@^17.0.0:
-  version "17.0.2"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.2.tgz#ecffb6845e3ad8dbfcdc498f0d0a939736502c23"
-  integrity sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    scheduler "^0.20.2"
-
 react-dom@next:
   version "18.0.0-alpha-4298ddbc5-20211023"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.0.0-alpha-4298ddbc5-20211023.tgz#c3613a1b1e5da44c8e5d36c33245ad270f01c215"
@@ -15559,14 +15548,6 @@ react-view-pager@^0.6.0:
     react-motion "^0.5.0"
     resize-observer-polyfill "1.5.0"
     tabbable "1.1.2"
-
-react@^17.0.0:
-  version "17.0.2"
-  resolved "https://registry.yarnpkg.com/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"
-  integrity sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 react@next:
   version "18.0.0-alpha-4298ddbc5-20211023"
@@ -16204,14 +16185,6 @@ scheduler@0.21.0-alpha-4298ddbc5-20211023:
   version "0.21.0-alpha-4298ddbc5-20211023"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.21.0-alpha-4298ddbc5-20211023.tgz#534917ed21310d284b26238b6127360a962cc51b"
   integrity sha512-mu+N6DfS+o7rZZWfuim7uayO/eCy+nkbLLOgRw70Lo+TRb8aWO6h5fRgN2cMMFUVRRyH+QFHsBZPhOY6M+Em7A==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-
-scheduler@^0.20.2:
-  version "0.20.2"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.20.2.tgz#4baee39436e34aa93b4874bddcbf0fe8b8b50e91"
-  integrity sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
