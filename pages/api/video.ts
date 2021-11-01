@@ -32,11 +32,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
-  if (file.mimetype === 'video/mp4') {
-    cb(null, true);
-  } else {
-    cb(new Error('Unsupported File Format'));
-  }
+  cb(null, true);
 };
 
 const upload = multer({
@@ -63,15 +59,23 @@ export const config = {
 const handler = nextConnect()
   .use(upload.single('video'))
   .post((req: NextApiRequestWithFormData, res: NextApiResponse<ResponseVideoUpload>) => {
-    const {path} = req.file as Express.Multer.File;
+    const {path, size} = req.file as Express.Multer.File;
 
-    console.log('uploading');
     cloudinary.uploader.upload_large(
       path,
       {
         resource_type: 'video',
         chunk_size: 10000000,
         async: false,
+        // NOTE: free cloudinary account have transform size limitation
+        // and codec error is most likely from small video transformation only applied on small video
+        transformation:
+          size < 20000000
+            ? {
+                video_codec: 'auto',
+                format: 'webm',
+              }
+            : undefined,
       },
       (err, response) => {
         unlinkSync(path);
@@ -81,8 +85,6 @@ const handler = nextConnect()
             error: err.message,
           });
         }
-
-        console.log('Response', response);
 
         return res.json({url: response?.secure_url});
       },

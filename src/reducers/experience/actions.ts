@@ -37,11 +37,11 @@ export interface SearchExperience extends PaginationAction {
   type: constants.SEARCH_EXPERIENCE;
   experiences: UserExperience[];
 }
-export interface SearchPeople extends PaginationAction {
+export interface SearchPeople extends Action {
   type: constants.SEARCH_PEOPLE;
   people: People[];
 }
-export interface SearchTags extends PaginationAction {
+export interface SearchTags extends Action {
   type: constants.SEARCH_TAGS;
   tags: Tag[];
 }
@@ -253,12 +253,19 @@ export const searchPeople: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const {meta, data: people} = await PeopleAPI.searchPeople(query);
-      dispatch({
-        type: constants.SEARCH_PEOPLE,
-        people,
-        meta,
-      });
+      if (query) {
+        const {meta, data: people} = await PeopleAPI.searchPeople(query);
+        dispatch({
+          type: constants.SEARCH_PEOPLE,
+          people,
+          meta,
+        });
+      } else {
+        dispatch({
+          type: constants.SEARCH_PEOPLE,
+          people: [],
+        });
+      }
     } catch (error) {
       dispatch(
         setError({
@@ -275,12 +282,19 @@ export const searchTags: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const {meta, data: tags} = await TagAPI.searchTag(query);
-      dispatch({
-        type: constants.SEARCH_TAGS,
-        tags,
-        meta,
-      });
+      if (query) {
+        const {meta, data: tags} = await TagAPI.searchTag(query);
+        dispatch({
+          type: constants.SEARCH_TAGS,
+          tags,
+          meta,
+        });
+      } else {
+        dispatch({
+          type: constants.SEARCH_TAGS,
+          tags: [],
+        });
+      }
     } catch (error) {
       dispatch(
         setError({

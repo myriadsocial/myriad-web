@@ -21,12 +21,12 @@ import {
   TNode,
   getPlatePluginType,
   LinkElement,
+  ImageElement,
 } from '@udecode/plate';
-import {isCollapsed, unwrapNodes} from '@udecode/plate-common';
-import {ELEMENT_IMAGE, createImagePlugin} from '@udecode/plate-image';
+import {insertNodes, isCollapsed, unwrapNodes} from '@udecode/plate-common';
+import {ELEMENT_IMAGE, createImagePlugin, insertImage} from '@udecode/plate-image';
 import {createLinkPlugin, ELEMENT_LINK, upsertLinkAtSelection} from '@udecode/plate-link';
 import {ToolbarLink} from '@udecode/plate-link-ui';
-import {insertMediaEmbed} from '@udecode/plate-media-embed';
 import {ELEMENT_MENTION, MentionNodeData, useMentionPlugin} from '@udecode/plate-mention';
 import {HeadingToolbar} from '@udecode/plate-toolbar';
 
@@ -52,14 +52,16 @@ import {createHashtagPlugin, ELEMENT_HASHTAG} from './plugins/hashtag';
 
 import {Transforms, Selection, Editor} from 'slate';
 import {ReactEditor} from 'slate-react';
+import {EditableProps} from 'slate-react/dist/components/editable';
 
 export type PostEditorProps = {
   debug?: boolean;
   placeholder?: string;
   mentionable: MentionNodeData[];
+  uploadProgress: number;
   onSearchMention: (query: string) => void;
   onChange?: (value: TNode[]) => void;
-  onFileUploaded?: (file: File, type: 'image' | 'video') => Promise<string>;
+  onFileUploaded?: (file: File, type: 'image' | 'video') => Promise<string | null>;
 };
 
 export const PostEditor: React.FC<PostEditorProps> = props => {
@@ -70,13 +72,16 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     debug = false,
     placeholder = 'Type…',
     mentionable,
+    uploadProgress,
     onSearchMention,
     onChange,
     onFileUploaded,
   } = props;
 
-  const editableProps = {
+  const editableProps: EditableProps = {
     placeholder,
+    autoFocus: true,
+    spellCheck: false,
     style: {
       padding: 20,
       background: '#FFFFFF',
@@ -93,6 +98,10 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     }),
     [ELEMENT_HASHTAG]: withProps(HashtagElement, {
       prefix: '#',
+    }),
+    [ELEMENT_IMAGE]: withProps(ImageElement, {
+      caption: {disabled: true},
+      draggable: false,
     }),
     [ELEMENT_MEDIA_EMBED]: withProps(MediaEmbedElement, {}),
     [ELEMENT_LINK]: withProps(LinkElement, {
@@ -161,7 +170,6 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   }, [mentionPlugin]);
 
   const editor = useStoreEditorState('main');
-  const [setImageUrl, setImageUrlPromise] = useState<any>();
   const [showImageUpload, toggleImageUpload] = useState(false);
   const [imageUploadType, setImageUploadType] = useState<'upload' | 'link' | null>(null);
   const [showModalLink, toggleModalLink] = useState(false);
@@ -169,12 +177,22 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   const [showVideoUpload, toggleVideoUpload] = useState(false);
   const [currentSelection, setCurrentSelection] = useState<Selection | null>(null);
   const [uploadLoading, setUploadLoading] = useState(false);
+  const [uploadSize, setUploadSize] = useState(0);
+  const [uploadIndex, setUploadIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (mentionQuery.length > 0) {
       onSearchMention && onSearchMention(mentionQuery);
     }
   }, [mentionQuery]);
+
+  useEffect(() => {
+    if (uploadIndex > 0 && uploadSize > 0) {
+      const totalProgress = (100 * (uploadIndex - 1)) / uploadSize + uploadProgress / uploadSize;
+      setProgress(totalProgress);
+    }
+  }, [uploadProgress]);
 
   const onChangeDebug = (value: TNode[]) => {
     if (debug) {
@@ -200,8 +218,8 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     toggleModalImageLink(false);
   };
 
-  const getImageUrl = async (type: 'upload' | 'link'): Promise<string> => {
-    let resolve;
+  const getImageUrl = (type: 'upload' | 'link'): void => {
+    if (!editor) return;
 
     setImageUploadType(type);
 
@@ -210,17 +228,6 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     } else {
       toggleModalImageLink(prevState => !prevState);
     }
-
-    const promise = new Promise<string>(_resolve => {
-      resolve = _resolve;
-    });
-
-    // @ts-ignore
-    promise.resolve = resolve;
-
-    setImageUrlPromise(promise);
-
-    return promise;
   };
 
   const getVideoUrl = (): void => {
@@ -248,41 +255,71 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   const handleImageSelected = async (result: File[] | string) => {
     setUploadLoading(true);
 
-    if (typeof result === 'string') {
-      setImageUrl.resolve(result);
-    }
+    const urls: string[] = [];
 
     if (imageUploadType === 'upload' && Array.isArray(result) && onFileUploaded) {
-      const url = await onFileUploaded(result[0], 'image');
+      setUploadSize(result.length);
 
-      setImageUrl.resolve(url);
+      for (const image of result) {
+        setUploadIndex(prevIndex => prevIndex + 1);
+
+        const url = await onFileUploaded(image, 'image');
+
+        if (url) {
+          urls.push(url);
+        }
+      }
     }
 
     if (imageUploadType === 'link' && typeof result === 'string') {
-      setImageUrl.resolve(result);
+      urls.push(result);
+    }
+
+    if (editor) {
+      for (const url of urls) {
+        insertImage(editor, url);
+      }
     }
 
     setImageUploadType(null);
     toggleImageUpload(false);
     toggleModalImageLink(false);
     setUploadLoading(false);
+    setUploadSize(0);
+    setUploadIndex(0);
   };
 
   const handleVideoSelected = async (result: File[] | string) => {
     setUploadLoading(true);
 
     if (editor && Array.isArray(result) && onFileUploaded) {
+      setUploadSize(1);
+      setUploadIndex(1);
       const url = await onFileUploaded(result[0], 'video');
-      insertMediaEmbed(editor, {url});
+
+      if (url) {
+        insertNodes(editor, {
+          type: ELEMENT_MEDIA_EMBED,
+          url,
+          children: [{text: ''}],
+        });
+      }
     }
 
     if (editor && typeof result === 'string') {
-      insertMediaEmbed(editor, {url: result});
+      insertNodes(editor, {
+        type: ELEMENT_MEDIA_EMBED,
+        url: result,
+        children: [{text: ''}],
+      });
     }
 
-    setUploadLoading(false);
+    ReactEditor.focus(editor as ReactEditor);
 
+    setUploadLoading(false);
     toggleVideoUpload(false);
+    setUploadSize(0);
+    setUploadIndex(0);
   };
 
   const handleConfirmLink = (url: string | null) => {
@@ -321,7 +358,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
           <ToolbarButtonsAlign />
           <ToolbarButtonsList />
           <ToolbarLink icon={<Link />} onMouseDown={openLinkEditor} />
-          <ToolbarMedia getImageUrl={getImageUrl} openVideoUpload={getVideoUrl} />
+          <ToolbarMedia openImageUpload={getImageUrl} openVideoUpload={getVideoUrl} />
         </HeadingToolbar>
 
         <MentionSelect {...getMentionSelectProps()} renderLabel={renderMentionLabel} />
@@ -334,7 +371,14 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         maxWidth="xl"
         open={showImageUpload}
         onClose={closeImageUpload}>
-        <Upload loading={uploadLoading} onFileSelected={handleImageSelected} accept={['image/*']} />
+        <Upload
+          type="image"
+          progress={progress}
+          loading={uploadLoading}
+          multiple={true}
+          onFileSelected={handleImageSelected}
+          accept={['image/*']}
+        />
       </Modal>
 
       <Modal
@@ -345,6 +389,8 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         open={showVideoUpload}
         onClose={closeVideoUpload}>
         <Upload
+          type="video"
+          progress={progress}
           loading={uploadLoading}
           onFileSelected={handleVideoSelected}
           accept={['video/*']}

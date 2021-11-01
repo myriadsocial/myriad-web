@@ -52,6 +52,11 @@ const useStyles = makeStyles((theme: Theme) =>
     textAlign: {
       textAlign: 'right',
     },
+    notification: {
+      '& .MuiBadge-dot': {
+        backgroundColor: theme.status.danger.main,
+      },
+    },
     downIconButton: {
       width: '100%',
       background: '#FFF',

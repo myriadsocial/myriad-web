@@ -9,13 +9,21 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     confirm: {
       marginTop: 60,
+      position: 'relative',
+    },
+    button: {
+      '& .MuiButton-label': {
+        zIndex: 2,
+      },
     },
     progress: {
+      backgroundColor: '#C2C2C2',
       position: 'absolute',
-      top: '50%',
-      right: 30,
-      marginTop: -12,
-      marginLeft: -12,
+      top: 0,
+      right: 0,
+      height: 40,
+      width: '100%',
+      borderRadius: 20,
     },
   }),
 );

@@ -1,9 +1,12 @@
 import {useState} from 'react';
+import {useSelector} from 'react-redux';
 
 import {Comment, CommentProps} from 'src/interfaces/comment';
 import {SectionType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import * as CommentAPI from 'src/lib/api/comment';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 type useCommentHookProps = {
   error: any;
@@ -18,6 +21,7 @@ type useCommentHookProps = {
 };
 
 export const useCommentHook = (referenceId: string): useCommentHookProps => {
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
@@ -28,7 +32,17 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
     try {
       const {data: comments} = await CommentAPI.loadComments(referenceId, section);
 
-      setComments(comments);
+      setComments(
+        comments.map(comment => {
+          const upvoted = comment.votes?.filter(vote => vote.userId === user?.id && vote.state);
+          const downvoted = comment.votes?.filter(vote => vote.userId === user?.id && !vote.state);
+
+          comment.isUpvoted = upvoted && upvoted.length > 0;
+          comment.isDownVoted = downvoted && downvoted.length > 0;
+
+          return comment;
+        }),
+      );
     } catch (error) {
       setError(error);
     } finally {
@@ -40,7 +54,18 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
     try {
       const {data} = await CommentAPI.loadComments(referenceId);
 
-      setComments([...comments, ...data]);
+      setComments([
+        ...comments,
+        ...data.map(comment => {
+          const upvoted = comment.votes?.filter(vote => vote.userId === user?.id && vote.state);
+          const downvoted = comment.votes?.filter(vote => vote.userId === user?.id && !vote.state);
+
+          comment.isUpvoted = upvoted && upvoted.length > 0;
+          comment.isDownVoted = downvoted && downvoted.length > 0;
+
+          return comment;
+        }),
+      ]);
     } catch (error) {
       setError(error);
     } finally {
@@ -82,6 +107,13 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
       return prevComments.map(comment => {
         if (comment.id === commentId) {
           comment.metric.upvotes = vote;
+
+          if (comment.isDownVoted) {
+            comment.metric.downvotes -= 1;
+          }
+
+          comment.isUpvoted = true;
+          comment.isDownVoted = false;
         }
 
         if (comment.replies) {
@@ -106,6 +138,13 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
       return prevComments.map(comment => {
         if (comment.id === commentId) {
           comment.metric.downvotes = vote;
+
+          if (comment.isUpvoted) {
+            comment.metric.upvotes -= 1;
+          }
+
+          comment.isUpvoted = false;
+          comment.isDownVoted = true;
         }
 
         if (comment.replies) {

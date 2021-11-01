@@ -22,10 +22,11 @@ type PostCreateProps = {
   url?: string;
   open: boolean;
   people: FriendDetail[];
+  uploadProgress: number;
   onClose: () => void;
   onSubmit: (post: Partial<Post> | string) => void;
   onSearchPeople: (query: string) => void;
-  onUploadFile: (file: File, type: 'image' | 'video') => Promise<string>;
+  onUploadFile: (file: File, type: 'image' | 'video') => Promise<string | null>;
 };
 
 type PostCreateType = 'create' | 'import';
@@ -36,7 +37,8 @@ const initialPost = {
 };
 
 export const PostCreate: React.FC<PostCreateProps> = props => {
-  const {url, open, people, onClose, onSubmit, onSearchPeople, onUploadFile} = props;
+  const {url, open, people, uploadProgress, onClose, onSubmit, onSearchPeople, onUploadFile} =
+    props;
   const styles = useStyles();
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
@@ -126,6 +128,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             name: item.name,
             avatar: item.avatar,
           }))}
+          uploadProgress={uploadProgress}
           onChange={handlePostTextChange}
           onSearchMention={onSearchPeople}
           onFileUploaded={onUploadFile}

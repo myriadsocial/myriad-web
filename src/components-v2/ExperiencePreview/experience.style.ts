@@ -38,8 +38,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.secondary,
     },
     tag: {
-      fontSize: '12px',
+      fontSize: '14px',
       fontWeight: 600,
+      marginRight: '12px',
       color: theme.palette.primary.main,
     },
     user: {

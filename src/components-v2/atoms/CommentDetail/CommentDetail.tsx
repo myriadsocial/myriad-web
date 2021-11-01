@@ -126,7 +126,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
           <CardActions disableSpacing>
             <VotingComponent
               isUpVote={Boolean(comment.isUpvoted)}
-              isDownVote={Boolean(comment.isDownvoted)}
+              isDownVote={Boolean(comment.isDownVoted)}
               variant="row"
               vote={totalVote()}
               size="small"

@@ -30,10 +30,9 @@ export default NextAuth({
 
         if (credentials.anonymous === 'false') {
           try {
-            console.log('CREDENTIALS', credentials);
             const user = await UserAPI.getUserDetail(credentials.address);
 
-            console.log('[next-auth][debug][authorize] user exist', user);
+            console.log('[next-auth][debug][authorize] user exist', credentials.address);
 
             return userToSession(user);
           } catch (error) {
@@ -43,7 +42,7 @@ export default NextAuth({
                 name: credentials.name,
               });
 
-              console.log('[next-auth][debug][authorize] user create', user);
+              console.log('[next-auth][debug][authorize] user create', credentials.address);
 
               return userToSession(user);
             } catch (error) {

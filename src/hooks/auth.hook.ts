@@ -1,23 +1,23 @@
-import {useCookies} from 'react-cookie';
 import {useDispatch} from 'react-redux';
 
 import {signIn, signOut} from 'next-auth/client';
+import getConfig from 'next/config';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
-import {usePolkadotExtension} from '../hooks/use-polkadot-app.hook';
-import {User} from '../interfaces/user';
-import * as UserAPI from '../lib/api/user';
-import {toHexPublicKey} from '../lib/crypto';
-import {firebaseCloudMessaging} from '../lib/firebase';
-import {setError} from '../reducers/base/actions';
-
+import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
+import {User} from 'src/interfaces/user';
+import * as UserAPI from 'src/lib/api/user';
+import {toHexPublicKey} from 'src/lib/crypto';
+import {firebaseCloudMessaging} from 'src/lib/firebase';
+import {setError} from 'src/reducers/base/actions';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
 export const useAuthHook = () => {
   const {getPolkadotAccounts} = usePolkadotExtension();
+  const {publicRuntimeConfig} = getConfig();
+
   const dispatch = useDispatch();
-  const [cookies, , removeCookie] = useCookies(['welcome']);
 
   const getUserByAccounts = async (accounts: InjectedAccountWithMeta[]): Promise<User[] | null> => {
     try {
@@ -35,12 +35,13 @@ export const useAuthHook = () => {
   const register = async (user: Partial<User>) => {
     try {
       const registered = await UserAPI.createUser(user);
-      const redirect = cookies ? '/home' : '/welcome';
 
       await signIn('credentials', {
         address: registered.id,
         name: registered.name,
-        callbackUrl: process.env.NEXT_PUBLIC_APP_URL + redirect,
+        callbackUrl: publicRuntimeConfig.nextAuthURL
+          ? publicRuntimeConfig.nextAuthURL + '/welcome'
+          : '/welcome',
       });
 
       return registered;
@@ -61,18 +62,20 @@ export const useAuthHook = () => {
       address: null,
       name: name,
       anonymous: true,
-      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
+      callbackUrl: publicRuntimeConfig.nextAuthURL
+        ? publicRuntimeConfig.nextAuthURL + '/welcome'
+        : '/welcome',
     });
   };
 
   const signInWithAccount = (account: InjectedAccountWithMeta) => {
-    const redirect = !cookies.welcome ? '/welcome' : '/home';
-
     signIn('credentials', {
       address: toHexPublicKey(account),
       name: account.meta.name,
       anonymous: false,
-      callbackUrl: process.env.NEXT_PUBLIC_APP_URL + redirect,
+      callbackUrl: publicRuntimeConfig.nextAuthURL
+        ? publicRuntimeConfig.nextAuthURL + '/welcome'
+        : '/welcome',
     });
   };
 
@@ -115,7 +118,9 @@ export const useAuthHook = () => {
         address: selected.id,
         name: username,
         anonymous,
-        callbackUrl: process.env.NEXT_PUBLIC_APP_URL + '/home',
+        callbackUrl: publicRuntimeConfig.nextAuthURL
+          ? publicRuntimeConfig.nextAuthURL + '/welcome'
+          : '/welcome',
       });
     } else {
       console.log('[useAuthHook][login][info]', 'No registered user matched with username');
@@ -132,10 +137,9 @@ export const useAuthHook = () => {
   };
 
   const logout = async () => {
-    await removeCookie('welcome');
     await firebaseCloudMessaging.removeToken();
     await signOut({
-      callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
+      callbackUrl: publicRuntimeConfig.nextAuthURL,
       redirect: true,
     });
   };

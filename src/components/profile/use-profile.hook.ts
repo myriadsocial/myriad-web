@@ -87,7 +87,6 @@ export const useProfileHook = () => {
     try {
       const {data} = await UserAPI.checkUsername(user.id);
       if (data.length) {
-        console.log(data);
         setUsernameStatus(true);
       }
     } catch (error) {

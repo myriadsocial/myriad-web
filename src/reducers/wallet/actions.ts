@@ -102,15 +102,17 @@ export const fetchRecipientDetail: ThunkActionCreator<Actions, RootState> =
 export const fetchTippedUserId: ThunkActionCreator<Actions, RootState> =
   (postId: string) => async (dispatch, getState) => {
     const {
-      timelineState: {posts},
+      timelineState: {posts, searchedPosts},
     } = getState();
 
     dispatch(setLoading(true));
 
     try {
-      const {walletAddress} = await PostAPI.getWalletAddress(postId);
+      const tippablePosts = posts.length ? posts : searchedPosts;
 
-      const {people} = posts.find(post => post.id === postId) ?? {};
+      const {people} = tippablePosts.find(post => post.id === postId) ?? {};
+
+      const {walletAddress} = await PostAPI.getWalletAddress(postId);
 
       if (!people) {
         const user = await UserAPI.getUserDetail(walletAddress);
@@ -118,7 +120,6 @@ export const fetchTippedUserId: ThunkActionCreator<Actions, RootState> =
       } else {
         dispatch(setTippedUser(people.name, people.profilePictureURL));
       }
-
       dispatch(setTippedUserId(walletAddress));
     } catch (error) {
       dispatch(

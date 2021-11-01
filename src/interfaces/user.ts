@@ -8,6 +8,7 @@ export interface UserSocialMedia {
   platform: string;
   peopleId: string;
   userId: string;
+  primary: boolean;
 }
 
 export type BaseUser = {
@@ -33,6 +34,7 @@ export type UserProps = BaseUser & {
 
 export interface User extends UserProps, BaseModel {
   currencies: Currency[];
+  activityLogs?: ActivityLog[];
 }
 
 export interface UserTransactionDetail {
@@ -42,7 +44,7 @@ export interface UserTransactionDetail {
 
 export interface ActivityLog {
   id: string;
-  type: string;
+  type: ActivityLogType;
   message: string;
   userId: string;
 }
@@ -75,4 +77,9 @@ export interface Report extends BaseModel {
   reportedBy: string;
   postId: string;
   userId: string;
+}
+
+export enum ActivityLogType {
+  USERNAME = 'username',
+  PROFILE = 'profile',
 }

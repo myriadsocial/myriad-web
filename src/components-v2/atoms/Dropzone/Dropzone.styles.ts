@@ -10,8 +10,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      height: 180,
+      minHeight: 180,
       position: 'relative',
+      width: '100%',
     },
     loading: {
       position: 'absolute',
@@ -20,14 +21,34 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     dropzone: {
       textAlign: 'center',
+      width: '100%',
     },
     preview: {
+      width: '100%',
       display: 'flex',
       alignItems: 'center',
-      flexDirection: 'column',
+      flexDirection: 'row',
+    },
+    image: {
+      objectFit: 'cover',
+      objectPosition: 'center',
+      height: '100%',
     },
     icon: {
-      color: theme.palette.error.main,
+      boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
+      color: theme.palette.primary.main,
+      background: '#FFF',
+      padding: 0,
+      height: 24,
+      width: 24,
+      fontSize: '1rem',
+      position: 'absolute',
+      top: 0,
+      right: 0,
+
+      '&:hover': {
+        background: '#FFF',
+      },
     },
     button: {
       marginTop: 20,

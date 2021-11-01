@@ -61,6 +61,10 @@ export const getPost = async (
     where.createdBy = {
       eq: filters.owner,
     };
+
+    where.importers = {
+      inq: [filters.importer],
+    };
   }
 
   if (filters && filters.importer) {
@@ -113,8 +117,14 @@ export const getPost = async (
 
       break;
     default:
-      filterParams.where = where;
+      if (Object.keys(where).length > 0) {
+        filterParams.where = where;
+      } else {
+        params.timelineType = TimelineType.ALL;
+      }
+
       params.filter = filterParams;
+      params.userId = userId;
       break;
   }
 
@@ -136,6 +146,9 @@ export const findPosts = async (query: string): Promise<PostList> => {
         include: [
           {
             relation: 'user',
+          },
+          {
+            relation: 'people',
           },
         ],
       },

@@ -7,15 +7,6 @@ import {Notification, TotalNewNotification} from 'src/interfaces/notification';
 type NotificationList = BaseList<Notification>;
 
 export const getNotification = async (userId: string, page = 1): Promise<NotificationList> => {
-  console.log({
-    pageNumber: page,
-    pageLimit: PAGINATION_LIMIT,
-    filter: {
-      order: `createdAt DESC`,
-      where: {to: userId},
-      include: ['fromUserId', 'toUserId'],
-    },
-  });
   const {data} = await MyriadAPI.request<NotificationList>({
     url: `/notifications`,
     method: 'GET',

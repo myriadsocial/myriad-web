@@ -72,7 +72,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const [viewContent, setViewContent] = useState(!post.isNSFW);
   const owner = post.createdBy === user?.id;
 
-  const isImportedPost = post.platform !== 'myriad' ? true : false;
+  const isImportedPost = post.platform !== 'myriad' || post.createdBy !== user?.id ? true : false;
 
   const onHashtagClicked = async (hashtag: string) => {
     await router.push(`/home?tag=${hashtag.replace('#', '')}&type=trending`, undefined, {
@@ -178,7 +178,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
               {post.text.slice(0, maxLength)}
             </ReactMarkdown>
 
-            <ShowIf condition={!!maxLength}>
+            <ShowIf condition={!!maxLength && post.text.length > maxLength}>
               <ShowMore onClick={() => setMaxLength(undefined)} />
             </ShowIf>
           </ShowIf>
@@ -212,6 +212,11 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           shareUrl={`${window.location.origin}/post/${post.id}`}
           onShared={handleShareLink}
         />
+
+        {/* hide send tip button for own post */}
+        <ShowIf condition={owner}>
+          <></>
+        </ShowIf>
 
         <ShowIf condition={isImportedPost}>
           <Button

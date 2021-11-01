@@ -23,7 +23,6 @@ const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
   onFollow,
   onSubscribe,
   onPreview,
-  ...props
 }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -69,7 +68,7 @@ const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
   };
 
   return (
-    <Card className={classes.root} {...props}>
+    <Card className={classes.root}>
       <div className={classes.indicator} />
       <CardActionArea
         disableRipple

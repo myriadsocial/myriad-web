@@ -1,11 +1,10 @@
 import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {Status} from '../interfaces/toaster';
 import {SimpleSendTipProps} from '../interfaces/transaction';
-import {showToaster} from '../reducers/toaster/actions';
 
 import _ from 'lodash';
+import {useSnackbar} from 'notistack';
 import {useTipSummaryHook} from 'src/components/tip-summary/use-tip-summary.hook';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {Currency} from 'src/interfaces/currency';
@@ -22,6 +21,7 @@ export const usePolkadotApi = () => {
   const balanceState = useSelector<RootState, BalanceState>(state => state.balanceState);
   const {showAlert, showTipAlert} = useAlertHook();
   const {openTipSummaryForComment} = useTipSummaryHook();
+  const {enqueueSnackbar} = useSnackbar();
 
   const [loading, setLoading] = useState(false);
   const [isSignerLoading, setSignerLoading] = useState(false);
@@ -159,22 +159,16 @@ export const usePolkadotApi = () => {
           referenceId,
         });
 
-        dispatch(
-          showToaster({
-            toasterStatus: Status.SUCCESS,
-            message: 'Tip sent!',
-          }),
-        );
+        enqueueSnackbar('Tip sent!', {variant: 'success', autoHideDuration: 3000});
+
         callback && callback();
       }
     } catch (error) {
       if (error.message === 'Cancelled') {
-        dispatch(
-          showToaster({
-            toasterStatus: Status.WARNING,
-            message: 'Transaction signing cancelled',
-          }),
-        );
+        enqueueSnackbar('Transaction signing cancelled', {
+          variant: 'warning',
+          autoHideDuration: 3000,
+        });
       }
     } finally {
       setLoading(false);

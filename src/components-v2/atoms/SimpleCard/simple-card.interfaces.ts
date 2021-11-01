@@ -20,8 +20,9 @@ interface SimpleCardProps {
   user?: User;
   experienceId?: string;
   userExperienceId?: string;
+  selected?: string | undefined;
   filterTimeline: (type: TimelineType) => void;
-  onClick: () => void;
+  onSelect?: (id: string) => void;
   onSubscribe?: (experienceId: string) => void;
   onFollow?: (experienceId: string) => void;
   onPreview?: (experienceId: string) => void;
