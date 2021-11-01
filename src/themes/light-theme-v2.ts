@@ -162,6 +162,10 @@ const theme = createTheme({
     body1: {
       fontSize: textBs,
     },
+    h6: {
+      fontSize: textBs,
+      fontWeight: 600,
+    },
     h5: {
       fontSize: textMd,
     },

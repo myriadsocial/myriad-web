@@ -74,7 +74,7 @@ const ProfilePage = (): JSX.Element => {
               totalFriends={0}
               totalPost={0}
               linkUrl={''}
-              onSubmit={console.log}
+              onSubmitReport={console.log}
               onBlock={console.log}
               onUnblockFriend={console.log}
             />

@@ -27,4 +27,4 @@ const makeStore = () => {
 };
 
 // Export the wrapper & wrap the pages/_app.js with this wrapper only
-export const wrapper = createWrapper(makeStore, {debug: process.env.NODE_ENV === 'development'});
+export const wrapper = createWrapper(makeStore, {debug: false});
