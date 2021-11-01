@@ -18,7 +18,7 @@ export enum PenaltyStatusType {
 export type ReportProps = {
   referenceType: ReferenceType;
   referenceId: string;
-  type: string;
+  type?: string;
   description: string;
 };
 
