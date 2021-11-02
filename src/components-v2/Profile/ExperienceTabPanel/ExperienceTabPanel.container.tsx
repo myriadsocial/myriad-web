@@ -5,6 +5,7 @@ import {useRouter} from 'next/router';
 
 import {Button} from '@material-ui/core';
 
+import {useExperienceHook} from '../../../hooks/use-experience-hook';
 import {ExperienceTabPanel} from './ExperienceTabPanel';
 
 import {ExperienceType} from 'src/components-v2/Timeline/default';
@@ -21,6 +22,7 @@ type ExperienceTabPanelContainerProps = {
 
 export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerProps> = props => {
   const {user} = props;
+  const {subscribeExperience} = useExperienceHook();
   const router = useRouter();
   const userLogin = useSelector<RootState, User | undefined>(state => state.userState.user);
 
@@ -36,6 +38,18 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
 
   const handleFilterType = (type: ExperienceType) => {
     dispatch(fetchProfileExperience(type));
+  };
+
+  const handleSubsibeExperience = (experienceId: string) => {
+    subscribeExperience(experienceId);
+  };
+
+  const handleCloneExperience = (experienceId: string) => {
+    router.push(`/experience/${experienceId}/clone`);
+  };
+
+  const handlePreviewExperience = (experienceId: string) => {
+    router.push(`/experience/${experienceId}/preview`);
   };
 
   const handleCreateExperience = () => {
@@ -56,5 +70,13 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
     return <Empty title="No experience yet" subtitle="This user hasn't experience yet" />;
   }
 
-  return <ExperienceTabPanel experiences={experiences} onFilter={handleFilterType} />;
+  return (
+    <ExperienceTabPanel
+      experiences={experiences}
+      onFilter={handleFilterType}
+      onSubscribe={handleSubsibeExperience}
+      onFollow={handleCloneExperience}
+      onPreview={handlePreviewExperience}
+    />
+  );
 };
