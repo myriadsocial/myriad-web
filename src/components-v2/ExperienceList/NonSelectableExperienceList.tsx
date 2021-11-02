@@ -39,9 +39,12 @@ const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = 
             <NonSelectableSimpleCard
               user={user}
               experienceId={item.experience.id}
-              title={item.experience.name}
-              creator={item.experience.user.name}
-              imgUrl={item.experience.experienceImageURL || ''}
+              title={item.experience.name ?? 'Unnamed Experience'}
+              creator={item.experience.user.name ?? 'Unnamed Myrian'}
+              imgUrl={
+                item.experience.experienceImageURL ??
+                'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg'
+              }
               onSubscribe={onSubscribe}
               onFollow={onFollow}
               onPreview={onPreview}
