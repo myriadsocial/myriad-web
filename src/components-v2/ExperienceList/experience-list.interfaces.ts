@@ -29,4 +29,17 @@ type NonSelectableExperienceListProps = Omit<
   'filterTimeline' | 'isOnHomePage'
 >;
 
-export type {ExperienceListProps, NonSelectableExperienceListProps};
+interface SearchedExperienceList {
+  experiences: Experience[];
+  isOnHomePage?: boolean;
+  user?: User;
+  filterTimeline: (type: TimelineType, experience: Experience) => void;
+  onSubscribe?: (experienceId: string) => void;
+  onFollow?: (experienceId: string) => void;
+  onPreview?: (experienceId: string) => void;
+  onDelete?: (experienceId: string) => void;
+}
+
+type SearchedExperienceListProps = Omit<SearchedExperienceList, 'filterTimeline' | 'isOnHomePage'>;
+
+export type {ExperienceListProps, NonSelectableExperienceListProps, SearchedExperienceListProps};
