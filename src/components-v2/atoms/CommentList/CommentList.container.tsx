@@ -15,6 +15,7 @@ import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
 import {upvote, downvote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
+import {setTippedUser} from 'src/reducers/wallet/actions';
 
 type CommentListContainerProps = {
   referenceId: string;
@@ -89,6 +90,13 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     // type guard to check if reference is a Comment object
     if ('section' in reference) {
       setTippedComment(reference);
+      dispatch(
+        setTippedUser(
+          reference.user.name,
+          reference.user.profilePictureURL ??
+            'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg',
+        ),
+      );
     }
   };
 
