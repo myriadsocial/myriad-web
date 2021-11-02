@@ -116,9 +116,12 @@ export const removeVote = async (id: string): Promise<void> => {
   });
 };
 
-export const report = async (report: ReportProps): Promise<void> => {
+export const report = async (
+  userId: string,
+  report: Pick<ReportProps, 'referenceId' | 'type' | 'referenceType' | 'description'>,
+): Promise<void> => {
   await MyriadAPI.request({
-    url: `/reports`,
+    url: `users/${userId}/reports`,
     method: 'POST',
     data: report,
   });
