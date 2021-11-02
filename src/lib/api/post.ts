@@ -58,13 +58,18 @@ export const getPost = async (
   }
 
   if (filters && filters.owner) {
-    where.createdBy = {
-      eq: filters.owner,
-    };
-
-    where.importers = {
-      inq: [filters.importer],
-    };
+    where.or = [
+      {
+        createdBy: {
+          eq: filters.owner,
+        },
+      },
+      {
+        importers: {
+          inq: [filters.owner],
+        },
+      },
+    ];
   }
 
   if (filters && filters.importer) {

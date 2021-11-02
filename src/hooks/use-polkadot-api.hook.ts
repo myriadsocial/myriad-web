@@ -2,6 +2,8 @@ import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {SimpleSendTipProps} from '../interfaces/transaction';
+import {setIsTipSent} from '../reducers/wallet/actions';
+import {WalletState} from '../reducers/wallet/reducer';
 
 import _ from 'lodash';
 import {useSnackbar} from 'notistack';
@@ -19,6 +21,7 @@ import {BalanceState} from 'src/reducers/balance/reducer';
 export const usePolkadotApi = () => {
   const dispatch = useDispatch();
   const balanceState = useSelector<RootState, BalanceState>(state => state.balanceState);
+  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
   const {showAlert, showTipAlert} = useAlertHook();
   const {openTipSummaryForComment} = useTipSummaryHook();
   const {enqueueSnackbar} = useSnackbar();
@@ -120,6 +123,10 @@ export const usePolkadotApi = () => {
     setLoading(true);
     setError(null);
 
+    if (isTipSent) {
+      dispatch(setIsTipSent(false));
+    }
+
     try {
       setSignerLoading(true);
 
@@ -158,6 +165,8 @@ export const usePolkadotApi = () => {
           type: type === 'post' ? 'post' : 'comment',
           referenceId,
         });
+
+        dispatch(setIsTipSent(true));
 
         enqueueSnackbar('Tip sent!', {variant: 'success', autoHideDuration: 3000});
 

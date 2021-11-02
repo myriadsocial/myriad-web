@@ -6,15 +6,18 @@ import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Typography from '@material-ui/core/Typography';
 
-import {Report, User, ReportType, CaseType} from '../../../interfaces/user';
 import {Modal} from '../Modal';
 import {useStyles} from './report.style';
+
+import {ReferenceType} from 'src/interfaces/interaction';
+import {ReportProps} from 'src/interfaces/report';
+import {User} from 'src/interfaces/user';
 
 export type Props = {
   user: User;
   open: boolean;
   onClose: () => void;
-  onSubmit: (payload: Partial<Report>) => void;
+  onSubmit: (payload: ReportProps) => void;
 };
 
 export const ReportComponent: React.FC<Props> = props => {
@@ -28,11 +31,11 @@ export const ReportComponent: React.FC<Props> = props => {
 
   const handleSubmit = () => {
     const payload = {
-      referenceType: ReportType.USER,
+      referenceType: ReferenceType.USER,
       referenceId: user.id,
-      reason: description,
-      type: CaseType.OTHER,
+      description: description,
     };
+
     onSubmit(payload);
     onClose();
   };

@@ -7,7 +7,6 @@ import {composeWithDevTools} from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk';
 
 const reducer: Reducer<RootState, AnyAction> = (state, action) => {
-  console.log('state', action);
   if (action.type === HYDRATE) {
     const nextState = {
       ...state, // use previous state
@@ -27,4 +26,4 @@ const makeStore = () => {
 };
 
 // Export the wrapper & wrap the pages/_app.js with this wrapper only
-export const wrapper = createWrapper(makeStore, {debug: process.env.NODE_ENV === 'development'});
+export const wrapper = createWrapper(makeStore, {debug: false});
