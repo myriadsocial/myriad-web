@@ -122,7 +122,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
         {preview.length ? (
           <>
             <ShowIf condition={type === 'image'}>
-              <ImageList rowHeight={112} cols={6} className={styles.preview}>
+              <ImageList rowHeight={128} cols={6} className={styles.preview}>
                 {files.map((item, i) => (
                   <ImageListItem
                     key={i}

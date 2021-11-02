@@ -16,6 +16,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {acronym} from '../../helpers/string';
+import {Empty} from '../atoms/Empty';
 import {useStyles} from './friend.style';
 import {useFriendRequestList} from './hooks/use-friend-request.hook';
 
@@ -34,6 +35,10 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
   const style = useStyles();
 
   const list = useFriendRequestList(requests, user);
+
+  if (requests.length === 0) {
+    return <Empty title="Friend request is empty" />;
+  }
 
   return (
     <div>
