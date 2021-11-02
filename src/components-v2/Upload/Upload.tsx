@@ -48,19 +48,10 @@ export const Upload: React.FC<UploadProps> = props => {
         accept={accept}
         placeholder={placeholder}
         maxSize={maxSize}
+        border={false}
       />
 
       <div className={styles.confirm}>
-        <Button
-          className={styles.button}
-          variant="contained"
-          color="primary"
-          fullWidth
-          onClick={handleConfirm}
-          disabled={files.length === 0 || loading}>
-          {loading ? 'Uploading' : 'Confirm'}
-        </Button>
-
         {loading && (
           <LinearProgress
             variant="determinate"
@@ -69,6 +60,16 @@ export const Upload: React.FC<UploadProps> = props => {
             className={styles.progress}
           />
         )}
+
+        <Button
+          className={styles.button}
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={handleConfirm}
+          disabled={files.length === 0 || loading}>
+          Confirm
+        </Button>
       </div>
     </div>
   );
