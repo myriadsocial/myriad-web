@@ -9,8 +9,7 @@ import {ExperienceTabPanel} from './ExperienceTabPanel';
 
 import {ExperienceType} from 'src/components-v2/Timeline/default';
 import {Empty} from 'src/components-v2/atoms/Empty';
-import {Experience, UserExperience} from 'src/interfaces/experience';
-import {TimelineType} from 'src/interfaces/timeline';
+import {UserExperience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileExperience} from 'src/reducers/profile/actions';
@@ -39,10 +38,6 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
     dispatch(fetchProfileExperience(type));
   };
 
-  const handleFilterTimeline = (type: TimelineType, experience: Experience) => {
-    // code
-  };
-
   const handleCreateExperience = () => {
     router.push('/experience/create');
   };
@@ -61,11 +56,5 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
     return <Empty title="No experience yet" subtitle="This user hasn't experience yet" />;
   }
 
-  return (
-    <ExperienceTabPanel
-      experiences={experiences}
-      onFilter={handleFilterType}
-      onSelect={handleFilterTimeline}
-    />
-  );
+  return <ExperienceTabPanel experiences={experiences} onFilter={handleFilterType} />;
 };
