@@ -36,6 +36,9 @@ const Home: React.FC = (props: any) => {
 
     const fg = new Firegun(gunRelayURL);
 
+    (window as any).fg = fg;
+
+
     async function userLoginSignup(gunUser: string, gunPass: string, alias: string) {
       try {
         await fg.userLogin(gunUser, gunPass, alias);
@@ -73,6 +76,11 @@ const Home: React.FC = (props: any) => {
         const gunUser = userID;
         const gunPass = result.password.slice(0, 10);
         const gunAlias = result.name;
+        console.log("Login", 
+        "user : " , gunUser, 
+        "password : ", gunPass, 
+        "passwordLengkap : ", result.password,
+        "alias : ", gunAlias);
         if (fg.user.alias === '') {
           await userLoginSignup(gunUser, gunPass, gunAlias);
           await patchUser(userID, fg.user.pair.pub, fg.user.pair.epub);
