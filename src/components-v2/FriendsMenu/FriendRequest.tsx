@@ -46,8 +46,8 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
               </Avatar>
             </ListItemAvatar>
             <ListItemText>
-              <Link href={`/#`}>
-                <a href={`/#`} className={style.link}>
+              <Link href={`/profile/${request.id}`}>
+                <a href={`/profile/${request.id}`} className={style.link}>
                   <Typography className={style.name} component="span" color="textPrimary">
                     {request.name}
                   </Typography>
