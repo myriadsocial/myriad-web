@@ -22,6 +22,7 @@ import {
   getPlatePluginType,
   LinkElement,
   ImageElement,
+  ELEMENT_BLOCKQUOTE,
 } from '@udecode/plate';
 import {insertNodes, isCollapsed, unwrapNodes} from '@udecode/plate-common';
 import {ELEMENT_IMAGE, createImagePlugin, insertImage} from '@udecode/plate-image';
@@ -157,10 +158,25 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
       // others
       createTrailingBlockPlugin({type: ELEMENT_PARAGRAPH}),
       createSelectOnBackspacePlugin({
-        allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED, ELEMENT_MENTION, ELEMENT_LINK],
+        allow: [ELEMENT_MENTION, ELEMENT_LINK],
       }),
-      createSoftBreakPlugin(),
-      createExitBreakPlugin(),
+      createSoftBreakPlugin({
+        rules: [
+          {
+            hotkey: 'enter',
+            query: {
+              allow: [ELEMENT_BLOCKQUOTE],
+            },
+          },
+        ],
+      }),
+      createExitBreakPlugin({
+        rules: [
+          {
+            hotkey: 'enter',
+          },
+        ],
+      }),
 
       createHashtagPlugin(),
       mentionPlugin,
