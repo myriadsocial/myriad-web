@@ -5649,10 +5649,10 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@yokowasis/firechat@^0.4.0":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@yokowasis/firechat/-/firechat-0.4.1.tgz#9a58db88cda913129269bf7596ce7b31bf62d29c"
-  integrity sha512-Jktv1k0PXKv1X8TxrHLZcQgYmw77Pn/ddxh7XehuX0mLCpXqZr5PARZPxV+PNHwoa/3q8QmwLjI8lYQOncw5/A==
+"@yokowasis/firechat@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@yokowasis/firechat/-/firechat-0.4.3.tgz#71ef46d85ba3ef288f72ef9656fc9c21520349b9"
+  integrity sha512-6/sjyb/EWIrrl6Rt1tezU+TnoqAktl2VSenpkihPjP46v5rrr63XWIPtsIZHJqqZqUiDykHHJoB0+TkExpflAg==
   dependencies:
     "@emotion/react" "^11.5.0"
     "@emotion/styled" "^11.3.0"

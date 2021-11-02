@@ -1,5 +1,5 @@
 import Chat from '@yokowasis/firechat';
-import {Firegun, Chat as ChatFG} from '@yokowasis/firegun';
+import {Firegun, Chat as ChatFG, common} from '@yokowasis/firegun';
 
 import React, {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
@@ -21,7 +21,7 @@ import {wrapper} from 'src/store';
 const ChatPage: React.FC = () => {
   const dispatch = useDispatch();
 
-  const [chatComp, setChatComp] = useState<{fg: Firegun; chat: ChatFG}[]>([]);
+  const [chatComp, setChatComp] = useState<{common : typeof common, fg: Firegun; chat: ChatFG}[]>([]);
 
   useEffect(() => {
     dispatch(fetchConnectedSocials());
@@ -39,6 +39,7 @@ const ChatPage: React.FC = () => {
     arr.push({
       fg: fg,
       chat: chat,
+      common : common,
     });
 
     setChatComp(arr);
@@ -64,7 +65,7 @@ const ChatPage: React.FC = () => {
       <ToasterContainer />
       <SearchBoxContainer onSubmitSearch={performSearch} />
       {chatComp.map((value, index) => (
-        <Chat key={index} fg={value.fg} chat={value.chat} />
+        <Chat common={value.common} key={index} fg={value.fg} chat={value.chat} />
       ))}
     </DefaultLayout>
   );
