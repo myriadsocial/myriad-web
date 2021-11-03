@@ -198,13 +198,14 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
               <div className={classes.receiverSummary}>
                 <CustomAvatar
                   avatar={
-                    `${tippedUser.profilePictureURL}` ??
-                    'https://res..com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg'
+                    tippedUser.profilePictureURL.length < 5
+                      ? 'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg'
+                      : String(tippedUser.profilePictureURL)
                   }
                   size={CustomAvatarSize.XSMALL}
                 />
                 <Typography variant="body1">
-                  {tippedUser.name ?? `Myriad King`} will receive{' '}
+                  {tippedUser.name ?? `Unnamed Myrian`} will receive{' '}
                   <span className={classes.clickableText}>
                     {tipAmount} {selectedCurrency.id}
                   </span>{' '}
