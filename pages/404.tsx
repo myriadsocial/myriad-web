@@ -1,14 +1,13 @@
 import React from 'react';
 
-import {GetServerSideProps} from 'next';
+import {useRouter} from 'next/router';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
+import Illustration from 'src/images/404_Page_Not_Found__Isometric_2_1.svg';
 import Logo from 'src/images/Myriad_Full_Logo_Color_1-01_1.svg';
-import Illustration from 'src/images/undraw_Fall_is_coming_yl0x_1.svg';
-import {healthcheck} from 'src/lib/api/healthcheck';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,10 +20,10 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
       alignItems: 'center',
     },
-    logo: {},
-    illustration: {
-      marginTop: -30,
+    logo: {
+      marginBottom: 32,
     },
+    illustration: {},
     bar: {
       background: '#FFC857',
       position: 'absolute',
@@ -56,11 +55,12 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Maintenance: React.FC = () => {
+const NotFound: React.FC = () => {
   const style = useStyles();
+  const router = useRouter();
 
   const handleAction = () => {
-    window.open('https://www.myriad.social/', '_ blank');
+    router.push('/home');
   };
 
   return (
@@ -73,32 +73,21 @@ const Maintenance: React.FC = () => {
         <div className={style.illustration}>
           <Illustration />
         </div>
-        <Typography className={style.title}>Yep there&rsquo;s no one here</Typography>
+        <Typography className={style.title}>
+          Whoops! You&rsquo;ve moved so fast and you got lost
+        </Typography>
         <Typography className={style.subtitle}>
-          We&rsquo;re currently under maintenance, please comeback latter
+          The page you are looking for is not found&nbsp;
+          <span aria-label="sad" role="img">
+            😢
+          </span>
         </Typography>
         <Button onClick={handleAction} className={style.button} variant="contained" color="primary">
-          Myriad web
+          Back to home
         </Button>
       </div>
     </div>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const {res} = context;
-
-  const available = await healthcheck();
-
-  if (available) {
-    res.setHeader('location', '/');
-    res.statusCode = 302;
-    res.end();
-  }
-
-  return {
-    props: {},
-  };
-};
-
-export default Maintenance;
+export default NotFound;
