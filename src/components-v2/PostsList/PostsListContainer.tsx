@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {useTipHistory} from '../../hooks/tip-history.hook';
@@ -16,6 +16,7 @@ import {PostsList} from './PostsList';
 
 import {Comment} from 'src/interfaces/comment';
 import {RootState} from 'src/reducers';
+import {WalletState} from 'src/reducers/wallet/reducer';
 
 type PostsListContainerProps = {
   anonymous?: boolean;
@@ -29,6 +30,14 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
   const {searchedPosts: posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
   const {openTipHistory} = useTipHistory();
   const {openToaster} = useToasterHook();
+
+  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
+
+  useEffect(() => {
+    if (isTipSent) {
+      closeSendTip();
+    }
+  }, [isTipSent]);
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
@@ -49,6 +58,11 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
   };
 
   const closeSendTip = () => {
+    if (isTipSent && tippedPost) {
+      openTipHistory(tippedPost);
+    } else {
+      console.log('no post tipped');
+    }
     setTippedPost(null);
   };
 
