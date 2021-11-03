@@ -64,14 +64,14 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   }, [experience]);
 
   useEffect(() => {
-    if (experience && newExperience) {
-      if (experience.name !== newExperience.name) setDisable(false);
-      if (experience.description !== newExperience.description) setDisable(false);
-      if (experience.experienceImageURL !== newExperience.experienceImageURL) setDisable(false);
-      if (experience.people !== newExperience.people) setDisable(false);
-    }
-    if (newExperience) setDisable(false);
-  }, [newExperience]);
+    const name = newExperience?.name;
+    const description = newExperience?.description;
+    const experienceImageURL = newExperience?.experienceImageURL;
+    const people = newExperience?.people?.length;
+    const tags = newTags.length;
+
+    setDisable(!name || !description || !experienceImageURL || !people || !tags);
+  }, [newExperience, newTags]);
 
   const handleSearchTags = (event: React.ChangeEvent<HTMLInputElement>) => {
     const debounceSubmit = debounce(() => {
