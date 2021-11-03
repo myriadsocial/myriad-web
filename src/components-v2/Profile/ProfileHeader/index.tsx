@@ -41,9 +41,9 @@ export type Props = {
   user: User;
   selfProfile: boolean;
   status?: Friend;
-  totalFriends: number;
-  totalExperience: number;
-  totalPost: number;
+  //totalFriends: number;
+  //totalExperience: number;
+  //totalPost: number;
   onSendRequest: () => void;
   onUnblockFriend: (friend: Friend) => void;
   onDeclineRequest: () => void;
@@ -61,9 +61,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     user,
     selfProfile,
     status,
-    totalFriends,
-    totalExperience,
-    totalPost,
+    //totalFriends,
+    //totalExperience,
+    //totalPost,
     onEdit,
     onSendRequest,
     onUnblockFriend,
@@ -163,6 +163,8 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     return url;
   };
 
+  console.log({user});
+
   console.log('self profile', selfProfile);
   return (
     <div>
@@ -261,7 +263,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Post
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(totalPost)}
+                {formatNumber(user.metric?.totalPosts ?? 0)}
               </Typography>
             </div>
             <div className={style.text}>
@@ -269,7 +271,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Kudos
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(0)}
+                {formatNumber(user.metric?.totalKudos ?? 0)}
               </Typography>
             </div>
             <div className={style.text}>
@@ -277,7 +279,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Friends
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(totalFriends)}
+                {formatNumber(user.metric?.totalFriends ?? 0)}
               </Typography>
             </div>
             <div className={style.text}>
@@ -285,7 +287,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Experience
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(totalExperience)}
+                {formatNumber(user.metric?.totalExperiences ?? 0)}
               </Typography>
             </div>
           </div>
