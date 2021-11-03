@@ -19,7 +19,7 @@ import {fetchProfileExperience} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {TimelineState} from 'src/reducers/timeline/reducer';
 import {UserState} from 'src/reducers/user/reducer';
-import {setTippedUserId} from 'src/reducers/wallet/actions';
+import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
 
 type Props = {
   edit?: () => void;
@@ -92,6 +92,14 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
 
   const handleSendTip = () => {
     setTippedUser(profile);
+
+    dispatch(
+      setDetailTippedUser(
+        profile.name,
+        profile.profilePictureURL ??
+          'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg',
+      ),
+    );
     dispatch(setTippedUserId(profile.id));
   };
 
