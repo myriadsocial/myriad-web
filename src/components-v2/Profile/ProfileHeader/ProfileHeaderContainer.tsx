@@ -20,6 +20,7 @@ import {ProfileState} from 'src/reducers/profile/reducer';
 import {TimelineState} from 'src/reducers/timeline/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
+import {WalletState} from 'src/reducers/wallet/reducer';
 
 type Props = {
   edit?: () => void;
@@ -50,6 +51,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const {filterTimeline} = useTimelineFilter({
     owner: profile?.id,
   });
+  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
 
   const [tippedUser, setTippedUser] = useState<User | null>(null);
   const sendTipOpened = Boolean(tippedUser);
@@ -70,6 +72,12 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     }
   }, [profile]);
 
+  useEffect(() => {
+    if (isTipSent) {
+      closeSendTip();
+    }
+  }, [isTipSent]);
+
   const sendFriendReqest = () => {
     if (!profile) return;
 
@@ -84,10 +92,6 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
 
   if (!user) return null;
 
-  const closeSendTip = () => {
-    setTippedUser(null);
-  };
-
   if (!profile) return null;
 
   const handleSendTip = () => {
@@ -95,6 +99,15 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
 
     dispatch(setDetailTippedUser(profile.name, profile.profilePictureURL ?? ''));
     dispatch(setTippedUserId(profile.id));
+  };
+
+  const closeSendTip = () => {
+    if (isTipSent && tippedUser) {
+      //for the future, open tip history here
+    } else {
+      console.log('no user tipped');
+    }
+    setTippedUser(null);
   };
 
   const handleSubmitReport = (payload: ReportProps) => {
