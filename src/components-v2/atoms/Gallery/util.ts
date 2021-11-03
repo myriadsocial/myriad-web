@@ -1,5 +1,6 @@
-import {generateImageSizes} from '../../../helpers/cloudinary';
 import {ImageList, ImageListItem, GalleryType} from './Gallery.types';
+
+import {generateImageSizes} from 'src/helpers/cloudinary';
 
 export const buildList = (source: string[], variant: GalleryType, cloudName: string): ImageList => {
   let listCols = 1;
@@ -29,6 +30,7 @@ export const buildList = (source: string[], variant: GalleryType, cloudName: str
       rows: ROWS,
       src: ROWS === 1 ? sizes.small : sizes.medium,
       sizes: sizes,
+      loading: true,
     });
   }
 

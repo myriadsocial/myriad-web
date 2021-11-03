@@ -12,12 +12,14 @@ import {
   SvgIcon,
   Typography,
 } from '@material-ui/core';
+import {Skeleton} from '@material-ui/lab';
 
-import UploadIcon from '../../../images/Icons/Upload.svg';
 import {Status, Toaster} from '../Toaster';
 import {useStyles} from './Dropzone.styles';
 
 import ShowIf from 'src/components/common/show-if.component';
+import UploadIcon from 'src/images/Icons/Upload.svg';
+import ImagePlaceholder from 'src/images/Icons/myriad-grey.svg';
 
 type DropzoneProps = {
   value?: string;
@@ -33,6 +35,7 @@ type DropzoneProps = {
 
 type FileUploaded = File & {
   preview: string;
+  loading: boolean;
 };
 
 export const Dropzone: React.FC<DropzoneProps> = props => {
@@ -71,6 +74,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
         ...acceptedFiles.map(file =>
           Object.assign(file, {
             preview: URL.createObjectURL(file),
+            loading: true,
           }),
         ),
       ]);
@@ -86,6 +90,18 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
       setError(rejection);
     },
   });
+
+  const imageLoaded = (index: number) => () => {
+    setFiles(prevFiles =>
+      prevFiles.map((file, i) => {
+        if (i === index) {
+          file.loading = false;
+        }
+
+        return file;
+      }),
+    );
+  };
 
   const removeFile = (index: number) => {
     const currentFiles = files.filter((file, i) => index !== i);
@@ -129,7 +145,32 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
                     cols={getCols()}
                     rows={getRows()}
                     classes={{item: styles.item}}>
-                    <img src={item.preview} alt="" className={styles.image} />
+                    {item.loading && (
+                      <Skeleton
+                        variant="rect"
+                        animation={false}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                        width={115 * getCols()}
+                        height={128 * getRows()}>
+                        <SvgIcon
+                          component={ImagePlaceholder}
+                          viewBox="0 0 50 50"
+                          style={{width: 50, height: 50, visibility: 'visible'}}
+                        />
+                      </Skeleton>
+                    )}
+                    <img
+                      style={{visibility: item.loading ? 'hidden' : 'visible'}}
+                      src={item.preview}
+                      alt=""
+                      className={styles.image}
+                      onLoad={imageLoaded(i)}
+                    />
+
                     <IconButton
                       size="small"
                       aria-label={`remove image`}
