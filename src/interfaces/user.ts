@@ -34,6 +34,12 @@ export type UserProps = BaseUser & {
 
 export interface User extends UserProps, BaseModel {
   currencies: Currency[];
+  metric?: {
+    totalExperiences: number;
+    totalFriends: number;
+    totalKudos: number;
+    totalPosts: number;
+  };
   activityLogs?: ActivityLog[];
 }
 
