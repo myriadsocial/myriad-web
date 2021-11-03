@@ -12,7 +12,6 @@ import Typography from '@material-ui/core/Typography';
 import ShowIf from '../../../components/common/show-if.component';
 import {acronym} from '../../../helpers/string';
 import {setTippedContent} from '../../../reducers/timeline/actions';
-import {setTippedUserId} from '../../../reducers/wallet/actions';
 import {CommentEditor} from '../CommentEditor';
 import {CommentList} from '../CommentList';
 import {ReadMore} from '../ReadMore/ReadMore';
@@ -77,7 +76,6 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
 
   const handleSendTip = () => {
     onSendTip(comment);
-    dispatch(setTippedUserId(comment.userId));
     const contentType = 'comment';
     const referenceId = comment.id;
     dispatch(setTippedContent(contentType, referenceId));
