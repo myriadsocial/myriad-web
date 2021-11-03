@@ -5,10 +5,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       padding: theme.spacing(1, 1, 3),
       background: '#FFF',
-      width: 580,
+      width: 720,
     },
     confirm: {
-      marginTop: 60,
+      marginTop: 16,
       position: 'relative',
     },
     button: {
@@ -18,11 +18,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     progress: {
       backgroundColor: '#C2C2C2',
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      height: 40,
       width: '100%',
+      height: 10,
+      marginBottom: 30,
       borderRadius: 20,
     },
   }),

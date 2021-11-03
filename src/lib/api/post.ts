@@ -19,7 +19,10 @@ export const getPost = async (
   sort?: TimelineSortMethod,
   filters?: TimelineFilter,
 ): Promise<PostList> => {
-  const where: LoopbackWhere<PostProps> = {};
+  const where: LoopbackWhere<PostProps> = {
+    deletedAt: {exists: false},
+  };
+
   let orderField = 'originCreatedAt';
 
   switch (sort) {
@@ -70,12 +73,16 @@ export const getPost = async (
         },
       },
     ];
+
+    delete where.deletedAt;
   }
 
   if (filters && filters.importer) {
     where.importers = {
       inq: [filters.importer],
     };
+
+    delete where.deletedAt;
   }
 
   const filterParams: Record<string, any> = {
@@ -107,24 +114,17 @@ export const getPost = async (
     case TimelineType.FRIEND:
     case TimelineType.EXPERIENCE:
     case TimelineType.TRENDING:
-      if (
-        filters &&
-        (!filters.tags || filters.tags.length == 0) &&
-        (!filters.people || filters.people.length === 0)
-      ) {
-        params.timelineType = type;
-        params.userId = userId;
-        params.filter = filterParams;
-      } else {
-        filterParams.where = where;
-        params.filter = filterParams;
-      }
+      filterParams.where = where;
+
+      params.filter = filterParams;
+      params.timelineType = type;
+      params.userId = userId;
 
       break;
     default:
-      if (Object.keys(where).length > 0) {
-        filterParams.where = where;
-      } else {
+      filterParams.where = where;
+
+      if (!filters?.owner && !filters?.importer) {
         params.timelineType = TimelineType.ALL;
       }
 

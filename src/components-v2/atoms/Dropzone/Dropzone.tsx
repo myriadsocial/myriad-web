@@ -5,14 +5,13 @@ import {FileRejection, useDropzone} from 'react-dropzone';
 
 import {
   Button,
+  capitalize,
   IconButton,
   ImageList,
   ImageListItem,
-  ImageListItemBar,
   SvgIcon,
   Typography,
 } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import UploadIcon from '../../../images/Icons/Upload.svg';
 import {Status, Toaster} from '../Toaster';
@@ -23,6 +22,7 @@ import ShowIf from 'src/components/common/show-if.component';
 type DropzoneProps = {
   value?: string;
   type?: 'image' | 'video';
+  border?: boolean;
   placeholder?: string;
   loading?: boolean;
   accept?: string[];
@@ -38,15 +38,16 @@ type FileUploaded = File & {
 export const Dropzone: React.FC<DropzoneProps> = props => {
   const {
     onImageSelected,
-    loading = false,
     value,
     type = 'image',
     accept = ['image/jpeg', 'image/png'],
     maxSize = 20,
+    loading = false,
     multiple = false,
+    border = true,
     placeholder = 'File must be .jpeg or .png',
   } = props;
-  const styles = useStyles();
+  const styles = useStyles({border});
 
   const [files, setFiles] = useState<FileUploaded[]>([]);
   const [preview, setPreview] = useState<string[]>([]);
@@ -65,15 +66,19 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     noKeyboard: true,
     multiple,
     onDrop: acceptedFiles => {
-      setFiles(
-        acceptedFiles.map(file =>
+      setFiles(prevFiles => [
+        ...prevFiles,
+        ...acceptedFiles.map(file =>
           Object.assign(file, {
             preview: URL.createObjectURL(file),
           }),
         ),
-      );
+      ]);
 
-      setPreview(acceptedFiles.map(file => URL.createObjectURL(file)));
+      setPreview(prevPreview => [
+        ...prevPreview,
+        ...acceptedFiles.map(file => URL.createObjectURL(file)),
+      ]);
 
       onImageSelected(acceptedFiles);
     },
@@ -107,7 +112,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
   const getRows = (): number => {
     const cols = getCols();
 
-    return cols === 6 ? 2 : 1;
+    return cols === 6 ? 3 : 1;
   };
 
   return (
@@ -117,23 +122,21 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
         {preview.length ? (
           <>
             <ShowIf condition={type === 'image'}>
-              <ImageList rowHeight={112} cols={6} className={styles.preview} gap={10}>
+              <ImageList rowHeight={128} cols={6} className={styles.preview}>
                 {files.map((item, i) => (
-                  <ImageListItem key={i} cols={getCols()} rows={getRows()}>
+                  <ImageListItem
+                    key={i}
+                    cols={getCols()}
+                    rows={getRows()}
+                    classes={{item: styles.item}}>
                     <img src={item.preview} alt="" className={styles.image} />
-                    <ImageListItemBar
-                      position="top"
-                      style={{background: 'none'}}
-                      actionIcon={
-                        <IconButton
-                          size="small"
-                          aria-label={`remove image`}
-                          className={styles.icon}
-                          onClick={() => removeFile(i)}>
-                          <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
-                        </IconButton>
-                      }
-                    />
+                    <IconButton
+                      size="small"
+                      aria-label={`remove image`}
+                      className={styles.icon}
+                      onClick={() => removeFile(i)}>
+                      <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
+                    </IconButton>
                   </ImageListItem>
                 ))}
               </ImageList>
@@ -154,19 +157,18 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
             <UploadIcon />
 
             <Typography>{placeholder}</Typography>
-
-            <Button
-              className={styles.button}
-              size="small"
-              variant={value ? 'outlined' : 'contained'}
-              color={value ? 'secondary' : 'primary'}
-              onClick={handleReuploadImage}>
-              <ShowIf condition={loading}>
-                <CircularProgress size="24" color="secondary" style={{marginRight: 12}} />
-              </ShowIf>
-              {value ? 'Reupload' : 'Upload'} File
-            </Button>
           </>
+        )}
+
+        {!loading && (
+          <Button
+            className={styles.button}
+            size="small"
+            variant={preview.length ? 'outlined' : 'contained'}
+            color={value ? 'secondary' : 'primary'}
+            onClick={handleReuploadImage}>
+            Upload {capitalize(type)}
+          </Button>
         )}
       </div>
 
