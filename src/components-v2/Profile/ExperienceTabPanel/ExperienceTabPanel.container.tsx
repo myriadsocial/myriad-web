@@ -5,12 +5,12 @@ import {useRouter} from 'next/router';
 
 import {Button} from '@material-ui/core';
 
+import {useExperienceHook} from '../../../hooks/use-experience-hook';
 import {ExperienceTabPanel} from './ExperienceTabPanel';
 
 import {ExperienceType} from 'src/components-v2/Timeline/default';
 import {Empty} from 'src/components-v2/atoms/Empty';
-import {Experience, UserExperience} from 'src/interfaces/experience';
-import {TimelineType} from 'src/interfaces/timeline';
+import {UserExperience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileExperience} from 'src/reducers/profile/actions';
@@ -22,6 +22,7 @@ type ExperienceTabPanelContainerProps = {
 
 export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerProps> = props => {
   const {user} = props;
+  const {subscribeExperience} = useExperienceHook();
   const router = useRouter();
   const userLogin = useSelector<RootState, User | undefined>(state => state.userState.user);
 
@@ -39,8 +40,16 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
     dispatch(fetchProfileExperience(type));
   };
 
-  const handleFilterTimeline = (type: TimelineType, experience: Experience) => {
-    // code
+  const handleSubsibeExperience = (experienceId: string) => {
+    subscribeExperience(experienceId);
+  };
+
+  const handleCloneExperience = (experienceId: string) => {
+    router.push(`/experience/${experienceId}/clone`);
+  };
+
+  const handlePreviewExperience = (experienceId: string) => {
+    router.push(`/experience/${experienceId}/preview`);
   };
 
   const handleCreateExperience = () => {
@@ -65,7 +74,9 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
     <ExperienceTabPanel
       experiences={experiences}
       onFilter={handleFilterType}
-      onSelect={handleFilterTimeline}
+      onSubscribe={handleSubsibeExperience}
+      onFollow={handleCloneExperience}
+      onPreview={handlePreviewExperience}
     />
   );
 };

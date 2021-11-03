@@ -197,11 +197,8 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
               />
               <div className={classes.receiverSummary}>
                 <CustomAvatar
-                  avatar={
-                    tippedUser.profilePictureURL.length < 5
-                      ? 'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg'
-                      : String(tippedUser.profilePictureURL)
-                  }
+                  avatar={String(tippedUser.profilePictureURL)}
+                  name={tippedUser.name}
                   size={CustomAvatarSize.XSMALL}
                 />
                 <Typography variant="body1">

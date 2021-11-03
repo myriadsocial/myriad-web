@@ -22,6 +22,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
+import {acronym} from '../../../helpers/string';
 import {PromptComponent} from '../../atoms/Prompt/prompt.component';
 import {ReportComponent} from '../../atoms/Report/Report.component';
 import {useStyles} from './profile-header.style';
@@ -179,8 +180,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               alt={user.name}
               src={user.profilePictureURL}
               variant="circle"
-              className={style.avatar}
-            />
+              className={style.avatar}>
+              {acronym(user.name)}
+            </Avatar>
             <div>
               <Typography className={style.name} component="p">
                 {user.name}

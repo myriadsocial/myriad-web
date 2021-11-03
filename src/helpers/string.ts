@@ -4,7 +4,11 @@ import parse from 'html-react-parser';
 
 export const acronym = (value: string): string => {
   if (!value) return '';
-  return value.split(/\s/).reduce((response, word) => (response += word.slice(0, 1)), '');
+  return value
+    .split(/\s/)
+    .reduce((response, word) => (response += word.slice(0, 1)), '')
+    .substring(0, 2)
+    .toUpperCase();
 };
 
 export const capitalize = (text: string): string => {

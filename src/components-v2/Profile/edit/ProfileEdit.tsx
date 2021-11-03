@@ -8,6 +8,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InputLabel from '@material-ui/core/InputLabel';
 
+import {acronym} from '../../../helpers/string';
 import {User} from '../../../interfaces/user';
 import {IconButtonUpload} from './IconButtonUpload.component';
 import {ImageButton} from './ImageButton.component';
@@ -115,8 +116,9 @@ export const ProfileEditComponent: React.FC<Props> = props => {
               alt={user.name}
               src={user.profilePictureURL}
               variant="circle"
-              className={style.avatar}
-            />
+              className={style.avatar}>
+              {acronym(username)}
+            </Avatar>
             <ImageButton
               title="Edit Image profile"
               onImageSelected={handleUpdateProfilePicture}

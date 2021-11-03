@@ -15,7 +15,8 @@ import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
 import {upvote, downvote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
-import {setTippedUser} from 'src/reducers/wallet/actions';
+import {setTippedUser, setTippedUserId} from 'src/reducers/wallet/actions';
+import {WalletState} from 'src/reducers/wallet/reducer';
 
 type CommentListContainerProps = {
   referenceId: string;
@@ -32,6 +33,13 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const {comments, loadInitComment, reply, updateUpvote, updateDownvote, loadReplies} =
     useCommentHook(referenceId);
   const {openTipHistory} = useTipHistory();
+  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
+
+  useEffect(() => {
+    if (isTipSent) {
+      closeSendTip();
+    }
+  }, [isTipSent]);
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const downvoting = useSelector<RootState, Post | Comment | null>(
@@ -90,17 +98,17 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     // type guard to check if reference is a Comment object
     if ('section' in reference) {
       setTippedComment(reference);
-      dispatch(
-        setTippedUser(
-          reference.user.name,
-          reference.user.profilePictureURL ??
-            'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg',
-        ),
-      );
+      dispatch(setTippedUserId(reference.userId));
+      dispatch(setTippedUser(reference.user.name, reference.user.profilePictureURL ?? ''));
     }
   };
 
   const closeSendTip = () => {
+    if (isTipSent && tippedComment) {
+      openTipHistory(tippedComment);
+    } else {
+      console.log('no comment tipped');
+    }
     setTippedComment(null);
   };
 
