@@ -5649,10 +5649,10 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@yokowasis/firechat@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@yokowasis/firechat/-/firechat-0.4.3.tgz#71ef46d85ba3ef288f72ef9656fc9c21520349b9"
-  integrity sha512-6/sjyb/EWIrrl6Rt1tezU+TnoqAktl2VSenpkihPjP46v5rrr63XWIPtsIZHJqqZqUiDykHHJoB0+TkExpflAg==
+"@yokowasis/firechat@^0.4.5":
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/@yokowasis/firechat/-/firechat-0.4.5.tgz#9c705936c68d19e02b273589179b698eb0539784"
+  integrity sha512-xVIW/9PJU9KAQE6YMaetx/Y+z1GNCU/08+H/nj9lMB4xwyl5t0ikmf2g4dLcSB1CIxphPCZoHKziVFa6HsvfpA==
   dependencies:
     "@emotion/react" "^11.5.0"
     "@emotion/styled" "^11.3.0"
@@ -5660,13 +5660,13 @@
     "@mui/material" "^5.0.6"
     "@mui/styles" "^5.0.2"
     "@types/downloadjs" "^1.4.2"
-    "@yokowasis/firegun" "^1.5.1"
+    "@yokowasis/firegun" "^1.5.5"
     downloadjs "^1.4.7"
 
-"@yokowasis/firegun@^1.5.0", "@yokowasis/firegun@^1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@yokowasis/firegun/-/firegun-1.5.1.tgz#13734a238213d825d7bd5a76f5f445f1c7681dab"
-  integrity sha512-ZQhTtuwkamd6cdH+hCIhvvsUlMmG63qbvHAGe8g+8ebRRipLf021Co3g3jQQpKcfqrqUlLGHP2ncpCUDlWhmlg==
+"@yokowasis/firegun@^1.5.5":
+  version "1.5.5"
+  resolved "https://registry.yarnpkg.com/@yokowasis/firegun/-/firegun-1.5.5.tgz#0100e568b6390d04e577195377d4a3f83e4dbbab"
+  integrity sha512-jvjL0Nabe5Q9NUGj1d85OQb8XvjipYx1yv9uQCOoRnmAXGvdYcewan+WgFlQLUdHsyeGCHpZG/G8jwKnGbhEQg==
   dependencies:
     "@types/eslint-scope" "^3.7.1"
     gun "^0.2020.1235"
