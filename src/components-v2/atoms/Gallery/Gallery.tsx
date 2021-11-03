@@ -1,17 +1,19 @@
 import {XIcon, ChevronRightIcon, ChevronLeftIcon} from '@heroicons/react/solid';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Carousel from 'react-material-ui-carousel';
 
 import {Dialog, IconButton, SvgIcon, Paper} from '@material-ui/core';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
+import {Skeleton} from '@material-ui/lab';
 
 import {useStyles} from './Gallery.styles';
-import {GalleryType} from './Gallery.types';
+import {GalleryType, ImageList, ImageListItem} from './Gallery.types';
 import {buildList} from './util';
 
+import ImagePlaceholder from 'src/images/Icons/myriad-grey.svg';
 import theme from 'src/themes/light-theme-v2';
 
 type GalleryProps = {
@@ -27,7 +29,31 @@ export const Gallery: React.FC<GalleryProps> = props => {
 
   const [viewerIsOpen, setViewerIsOpen] = useState(false);
   const [index, setIndex] = useState(0);
-  const list = buildList(images, variant, cloudName);
+  const [items, setItems] = useState<ImageListItem[]>([]);
+  const [list, setList] = useState<ImageList>({
+    cols: 0,
+    cellHeight: 0,
+    images: [],
+  });
+
+  useEffect(() => {
+    const gallery = buildList(images, variant, cloudName);
+
+    setList(gallery);
+    setItems(gallery.images);
+  }, []);
+
+  const imageLoaded = (index: number) => () => {
+    setItems(prevItems =>
+      prevItems.map((image, i) => {
+        if (i === index) {
+          image.loading = false;
+        }
+
+        return image;
+      }),
+    );
+  };
 
   const handleImageClick = (index: number) => () => {
     openLightbox(index);
@@ -45,16 +71,37 @@ export const Gallery: React.FC<GalleryProps> = props => {
   return (
     <div className={style.root}>
       <GridList cellHeight={list.cellHeight} cols={list.cols} className={style.imageGrid}>
-        {list.images.slice(0, 4).map((image, i) => (
+        {items.slice(0, 4).map((image, i) => (
           <GridListTile
             key={image.sizes.thumbnail}
             cols={image.cols}
             rows={image.rows}
             onClick={handleImageClick(i)}>
+            {image.loading && (
+              <Skeleton
+                variant="rect"
+                animation={false}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                width={image.cols === 1 ? 635 : 635 / image.cols}
+                height={list.cellHeight * image.rows}>
+                <SvgIcon
+                  component={ImagePlaceholder}
+                  viewBox="0 0 50 50"
+                  style={{width: 50, height: 50, visibility: 'visible'}}
+                />
+              </Skeleton>
+            )}
+
             <img
+              style={{visibility: image.loading ? 'hidden' : 'visible'}}
               className={style.imageGrid}
               src={image.rows === 2 || list.cols === 1 ? image.sizes.medium : image.sizes.small}
               alt={image.src}
+              onLoad={imageLoaded(i)}
             />
             {images.length > 4 && i === 3 && (
               <GridListTileBar

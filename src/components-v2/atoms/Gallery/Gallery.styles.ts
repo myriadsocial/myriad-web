@@ -29,10 +29,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     imageGrid: {
       width: '100%',
-      height: 'auto !important',
-      objectFit: 'cover',
-      objectPosition: 'center',
-      backgroundSize: 'cover',
     },
     icon: {
       fill: '#FFF',

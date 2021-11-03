@@ -74,7 +74,9 @@ export const getPost = async (
       },
     ];
 
-    delete where.deletedAt;
+    if (userId === filters.owner) {
+      delete where.deletedAt;
+    }
   }
 
   if (filters && filters.importer) {
@@ -82,7 +84,9 @@ export const getPost = async (
       inq: [filters.importer],
     };
 
-    delete where.deletedAt;
+    if (userId === filters.importer) {
+      delete where.deletedAt;
+    }
   }
 
   const filterParams: Record<string, any> = {
