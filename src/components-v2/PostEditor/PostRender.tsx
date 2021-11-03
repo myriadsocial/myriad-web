@@ -78,7 +78,14 @@ export const PostRender: React.FC<PostRenderProps> = props => {
   const renderElement = useCallback(
     (node, images: string[] = []) => {
       if (node.text) {
-        if (Object.keys(node).length === 1) return node.text;
+        if (Object.keys(node).length === 1) {
+          return node.text.split('\n').map((item: string, key: number) => (
+            <span key={key}>
+              {item}
+              <br />
+            </span>
+          ));
+        }
 
         return (
           <Typography
