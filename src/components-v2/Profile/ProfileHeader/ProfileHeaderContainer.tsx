@@ -93,13 +93,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const handleSendTip = () => {
     setTippedUser(profile);
 
-    dispatch(
-      setDetailTippedUser(
-        profile.name,
-        profile.profilePictureURL ??
-          'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg',
-      ),
-    );
+    dispatch(setDetailTippedUser(profile.name, profile.profilePictureURL ?? ''));
     dispatch(setTippedUserId(profile.id));
   };
 

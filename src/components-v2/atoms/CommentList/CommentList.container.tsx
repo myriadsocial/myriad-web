@@ -98,26 +98,17 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     // type guard to check if reference is a Comment object
     if ('section' in reference) {
       setTippedComment(reference);
-      console.log({reference});
       dispatch(setTippedUserId(reference.userId));
-      dispatch(
-        setTippedUser(
-          reference.user.name,
-          reference.user.profilePictureURL ??
-            'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg',
-        ),
-      );
+      dispatch(setTippedUser(reference.user.name, reference.user.profilePictureURL ?? ''));
     }
   };
 
   const closeSendTip = () => {
     if (isTipSent && tippedComment) {
-      console.log('masuk sini');
       openTipHistory(tippedComment);
     } else {
       console.log('no comment tipped');
     }
-    console.log('gak jalan');
     setTippedComment(null);
   };
 
