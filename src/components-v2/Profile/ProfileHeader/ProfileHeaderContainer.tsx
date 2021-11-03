@@ -17,7 +17,6 @@ import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileExperience} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
-import {TimelineState} from 'src/reducers/timeline/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
@@ -27,20 +26,10 @@ type Props = {
 };
 
 export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
-  const {
-    detail: profile,
-    friends: {
-      meta: {totalItemCount: totalFriends},
-    },
-    experience: {
-      meta: {totalItemCount: totalExperience},
-    },
-    friendStatus,
-  } = useSelector<RootState, ProfileState>(state => state.profileState);
+  const {detail: profile, friendStatus} = useSelector<RootState, ProfileState>(
+    state => state.profileState,
+  );
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {
-    meta: {totalItemCount: totalPost},
-  } = useSelector<RootState, TimelineState>(state => state.timelineState);
 
   const dispatch = useDispatch();
 
@@ -134,9 +123,6 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
         user={profile}
         selfProfile={isOwnProfile}
         status={friendStatus}
-        totalFriends={totalFriends}
-        totalExperience={totalExperience}
-        totalPost={totalPost}
         onSendRequest={sendFriendReqest}
         onDeclineRequest={declineFriendRequest}
         onSendTip={handleSendTip}

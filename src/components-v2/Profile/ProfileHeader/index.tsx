@@ -41,9 +41,6 @@ export type Props = {
   user: User;
   selfProfile: boolean;
   status?: Friend;
-  //totalFriends: number;
-  //totalExperience: number;
-  //totalPost: number;
   onSendRequest: () => void;
   onUnblockFriend: (friend: Friend) => void;
   onDeclineRequest: () => void;
@@ -61,9 +58,6 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     user,
     selfProfile,
     status,
-    //totalFriends,
-    //totalExperience,
-    //totalPost,
     onEdit,
     onSendRequest,
     onUnblockFriend,

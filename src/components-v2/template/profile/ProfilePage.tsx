@@ -70,9 +70,6 @@ const ProfilePage = (): JSX.Element => {
               onDeclineRequest={console.log}
               onSendRequest={console.log}
               onSendTip={console.log}
-              totalExperience={0}
-              totalFriends={0}
-              totalPost={0}
               linkUrl={''}
               onSubmitReport={console.log}
               onBlock={console.log}
