@@ -10,6 +10,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
+import {acronym} from '../../helpers/string';
 import {useStyles} from './UsersList.styles';
 
 type UsersListItemProps = ListItemProps & {
@@ -23,7 +24,15 @@ type UsersListItemProps = ListItemProps & {
 };
 
 export const UsersListItem: React.FC<UsersListItemProps> = props => {
-  const {icon, avatar, variant = 'circular', size = 'small', title, subtitle, url = ''} = props;
+  const {
+    icon,
+    avatar = '',
+    variant = 'circular',
+    size = 'small',
+    title,
+    subtitle,
+    url = '',
+  } = props;
   const styles = useStyles();
 
   const iconSyles = [styles.icon];
@@ -39,11 +48,11 @@ export const UsersListItem: React.FC<UsersListItemProps> = props => {
           className={styles.root}
           ContainerComponent="div"
           {...listProps}>
-          {avatar && (
-            <ListItemAvatar className={styles.avatar}>
-              <Avatar alt={title} src={avatar} variant={variant} className={styles[size]} />
-            </ListItemAvatar>
-          )}
+          <ListItemAvatar className={styles.avatar}>
+            <Avatar alt={title} src={avatar} variant={variant} className={styles[size]}>
+              {acronym(title)}
+            </Avatar>
+          </ListItemAvatar>
 
           {icon && !avatar && (
             <ListItemIcon className={iconSyles.join(' ')}>

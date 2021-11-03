@@ -4,10 +4,10 @@ import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 
-import {NonSelectableExperienceListProps, useStyles} from '.';
+import {SearchedExperienceListProps, useStyles} from '.';
 import {NonSelectableSimpleCard} from '../atoms/SimpleCard';
 
-const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = ({
+const SearchedExperienceList: React.FC<SearchedExperienceListProps> = ({
   experiences,
   user,
   onPreview,
@@ -34,15 +34,15 @@ const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = 
         </div>
       )}
       {experiences.length > 0 &&
-        experiences.map(item => (
-          <div key={item.experience.id}>
+        experiences.map(experience => (
+          <div key={experience.id}>
             <NonSelectableSimpleCard
               user={user}
-              experienceId={item.experience.id}
-              title={item.experience.name ?? 'Unnamed Experience'}
-              creator={item.experience.user.name ?? 'Unnamed Myrian'}
+              experienceId={experience.id}
+              title={experience.name ?? 'Unnamed Experience'}
+              creator={experience.user.name ?? 'Unnamed Myrian'}
               imgUrl={
-                item.experience.experienceImageURL ??
+                experience.experienceImageURL ??
                 'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg'
               }
               onSubscribe={onSubscribe}
@@ -55,4 +55,4 @@ const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = 
   );
 };
 
-export default NonSelectableExperienceList;
+export default SearchedExperienceList;
