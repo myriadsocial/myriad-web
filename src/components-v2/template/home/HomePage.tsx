@@ -81,6 +81,7 @@ const HomePage = (): JSX.Element => {
               onReport={console.log}
               onShared={console.log}
               toggleDownvoting={console.log}
+              onRemoveVote={console.log}
             />
           </div>
         </div>

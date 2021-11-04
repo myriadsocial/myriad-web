@@ -157,9 +157,6 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     return url;
   };
 
-  console.log({user});
-
-  console.log('self profile', selfProfile);
   return (
     <div>
       <div className={style.root}>

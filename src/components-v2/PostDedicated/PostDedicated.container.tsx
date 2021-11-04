@@ -18,7 +18,7 @@ import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 import {Status} from 'src/interfaces/toaster';
 import {RootState} from 'src/reducers';
-import {upvote, setDownvoting, deletePost} from 'src/reducers/timeline/actions';
+import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const PostContainer: React.FC = () => {
@@ -95,6 +95,10 @@ export const PostContainer: React.FC = () => {
     handleClosePrompt();
   };
 
+  const handleRemoveVote = (reference: Post | Comment) => {
+    dispatch(removeVote(reference));
+  };
+
   if (!post) return null;
 
   return (
@@ -111,6 +115,7 @@ export const PostContainer: React.FC = () => {
         onDelete={handleDeletePost}
         onReport={handleReportPost}
         onShared={handleSharePost}
+        onRemoveVote={handleRemoveVote}
         expanded
       />
 
