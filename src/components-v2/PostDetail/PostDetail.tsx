@@ -215,7 +215,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           onUpvote={handleUpvote}
           onDownVote={handleDownVote}
           onShowComments={toggleShowComments}
-          shareUrl={`${window.location.origin}/post/${post.id}`}
+          shareUrl={`/post/${post.id}`}
           onShared={handleShareLink}
         />
 
