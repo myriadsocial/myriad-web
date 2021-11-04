@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 
-import {useTheme} from '@material-ui/core/styles';
-
 import {MenuContainer} from '../../Menu/MenuContainer';
 import {NotificationsContainer} from '../../Notifications/sidebar/Notifications.container';
 import {ProfileHeaderContainer} from '../../ProfileHeader/ProfileHeaderContainer';
@@ -22,7 +20,6 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const {children} = props;
   const classes = useStyles();
   const [showNotification, setShowNotification] = useState(false);
-  const theme = useTheme();
 
   const handleToggleNotification = () => {
     setShowNotification(!showNotification);
@@ -54,7 +51,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
             <div>
               <ProfileHeaderContainer toggleNotification={handleToggleNotification} />
             </div>
-            <div style={{marginTop: theme.spacing(1)}}>
+            <div>
               <ShowIf condition={!showNotification}>
                 <RightMenuBar />
               </ShowIf>

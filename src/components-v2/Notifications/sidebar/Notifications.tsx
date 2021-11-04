@@ -52,7 +52,7 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
           Notifications
         </Typography>
         <Button
-          style={{width: 'auto', fontSize: '12px', padding: 0}}
+          style={{width: 'auto', fontSize: '12px', padding: 0, fontWeight: 'bold'}}
           color="primary"
           onClick={onMarkAllAsRead}>
           Mark all as read
@@ -100,7 +100,7 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
       <div className={style.footer}>
         <Link href="/notification">
           <a href={`/notification`} className={style.link}>
-            <Typography>View all notifications</Typography>
+            <Typography style={{fontWeight: 'bold'}}>View all notifications</Typography>
           </a>
         </Link>
       </div>
