@@ -58,7 +58,7 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
 
   if (!experiences.length && userLogin?.id === user?.id) {
     return (
-      <Empty title="Looks like you haven’t experience yet">
+      <Empty title="You haven’t created any experiences yet">
         <Button onClick={handleCreateExperience} variant="contained" size="small" color="primary">
           Create my experience
         </Button>
