@@ -278,6 +278,30 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       };
     }
 
+    case constants.REMOVE_VOTE_POST: {
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post.id === action.postId) {
+            if (post.isDownVoted) {
+              post.metric.downvotes = post.metric.downvotes - 1;
+            } else {
+              post.metric.upvotes = post.metric.upvotes - 1;
+            }
+
+            post.isDownVoted = false;
+            post.isUpvoted = false;
+            post.votes = [];
+          }
+
+          return post;
+        }),
+        interaction: {
+          downvoting: null,
+        },
+      };
+    }
+
     case constants.SET_TIPPED_CONTENT: {
       return {
         ...state,

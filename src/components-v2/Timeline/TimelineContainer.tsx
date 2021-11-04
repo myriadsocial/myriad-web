@@ -22,7 +22,7 @@ import {TimelineFilter} from 'src/interfaces/timeline';
 import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
-import {upvote, setDownvoting, deletePost} from 'src/reducers/timeline/actions';
+import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
 type TimelineContainerProps = {
@@ -121,6 +121,10 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     handleClosePrompt();
   };
 
+  const handleRemoveVote = (reference: Post | Comment) => {
+    dispatch(removeVote(reference));
+  };
+
   return (
     <>
       <TimelineFilterContainer {...props} />
@@ -138,6 +142,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
         onReport={handleReportPost}
         toggleDownvoting={handleToggleDownvoting}
         onShared={handleSharePost}
+        onRemoveVote={handleRemoveVote}
       />
 
       <Modal

@@ -4,7 +4,7 @@ import {BaseList} from './interfaces/base-list.interface';
 import {LoopbackWhere} from './interfaces/loopback-query.interface';
 
 import {Dislike, Like} from 'src/interfaces/interaction';
-import {Post, PostProps, ImportPostProps} from 'src/interfaces/post';
+import {Post, PostProps, ImportPostProps, PostVisibility} from 'src/interfaces/post';
 import {TimelineSortMethod, TimelineFilter, TimelineType} from 'src/interfaces/timeline';
 
 type PostList = BaseList<Post>;
@@ -76,6 +76,10 @@ export const getPost = async (
 
     if (userId === filters.owner) {
       delete where.deletedAt;
+    } else {
+      where.visibility = {
+        inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
+      };
     }
   }
 
@@ -86,6 +90,10 @@ export const getPost = async (
 
     if (userId === filters.importer) {
       delete where.deletedAt;
+    } else {
+      where.visibility = {
+        inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
+      };
     }
   }
 
@@ -128,7 +136,7 @@ export const getPost = async (
     default:
       filterParams.where = where;
 
-      if (!filters?.owner && !filters?.importer) {
+      if (!filters?.importer && !filters?.owner) {
         params.timelineType = TimelineType.ALL;
       }
 

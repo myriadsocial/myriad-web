@@ -38,6 +38,7 @@ type PostDetailProps = {
   anonymous: boolean;
   toggleDownvoting: (reference: Post | Comment | null) => void;
   onUpvote: (reference: Post | Comment) => void;
+  onRemoveVote: (reference: Post | Comment) => void;
   onSendTip: (post: Post) => void;
   onOpenTipHistory: (post: Post) => void;
   onDelete?: (post: Post) => void;
@@ -51,6 +52,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     user,
     post,
     onUpvote,
+    onRemoveVote,
     onSendTip,
     toggleDownvoting,
     onOpenTipHistory,
@@ -83,16 +85,20 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const handleUpvote = async () => {
     if (!post.isUpvoted) {
       onUpvote(post);
+    } else {
+      onRemoveVote(post);
     }
   };
 
   const handleDownVote = async () => {
     if (!post.isDownVoted) {
       toggleDownvoting(post);
-    }
 
-    setShowComment(true);
-    setActiveTab('debate');
+      setShowComment(true);
+      setActiveTab('debate');
+    } else {
+      onRemoveVote(post);
+    }
   };
 
   const handleChangeTab = (tab: string) => {

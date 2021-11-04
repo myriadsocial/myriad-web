@@ -2,10 +2,11 @@ import React from 'react';
 
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import {Comment, CommentProps} from '../../../interfaces/comment';
-import {User} from '../../../interfaces/user';
 import {CommentDetail} from '../CommentDetail';
 import {CommentEditor} from '../CommentEditor';
+
+import {Comment, CommentProps} from 'src/interfaces/comment';
+import {User} from 'src/interfaces/user';
 
 type CommentListProps = {
   user?: User;
