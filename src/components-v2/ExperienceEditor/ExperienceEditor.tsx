@@ -229,10 +229,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       <Autocomplete
         id="experience-people"
         className={styles.people}
-        value={newExperience?.people ?? []}
+        value={(newExperience?.people as People[]) ?? []}
         multiple
         options={people}
-        getOptionSelected={(option, value) => option === value}
+        getOptionSelected={(option, value) => option.id === value.id}
+        filterSelectedOptions={true}
         getOptionLabel={option => option.name}
         disableClearable
         autoHighlight={false}
