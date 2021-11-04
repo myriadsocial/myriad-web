@@ -28,7 +28,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(-2),
       marginRight: theme.spacing(-2),
       minHeight: 500,
-      overflow: 'scroll',
+      overflow: 'auto',
     },
     item: {
       position: 'relative',
