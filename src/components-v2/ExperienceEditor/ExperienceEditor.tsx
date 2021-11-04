@@ -174,7 +174,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         <OutlinedInput
           id="experience-name"
           placeholder="Experience Name"
-          value={newExperience?.name}
+          value={newExperience?.name ?? ''}
           onChange={handleChange('name')}
           labelWidth={110}
           inputProps={{maxLength: 50}}
@@ -186,7 +186,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         <OutlinedInput
           id="experience-description"
           placeholder="Description"
-          value={newExperience?.description}
+          value={newExperience?.description ?? ''}
           onChange={handleChange('description')}
           labelWidth={70}
           inputProps={{maxLength: 280}}
@@ -205,7 +205,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         id="experience-tags"
         freeSolo
         multiple
-        value={newTags}
+        value={newTags ?? ''}
         options={tags.map(tag => tag.id)}
         disableClearable
         onChange={handleTagsChange}
@@ -229,7 +229,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       <Autocomplete
         id="experience-people"
         className={styles.people}
-        value={newExperience?.people}
+        value={newExperience?.people ?? []}
         multiple
         options={people}
         getOptionSelected={(option, value) => option === value}
@@ -255,6 +255,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         renderOption={(option, state: AutocompleteRenderOptionState) => {
           return (
             <ListItemComponent
+              id="first-list-item"
               title={option.name}
               subtitle={<Typography variant="caption">@{option.username}</Typography>}
               avatar={option.profilePictureURL}
@@ -276,6 +277,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       <div className={styles.preview}>
         {newExperience?.people?.map(people => (
           <ListItemComponent
+            id="second-list-item"
             key={people.id}
             title={people.name}
             subtitle={<Typography variant="caption">@{people.username}</Typography>}
