@@ -138,6 +138,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         }
         subheader={
           <PostSubHeader
+            postId={post.id}
             date={post.createdAt}
             importer={post.platform !== 'myriad' ? post.user : undefined}
             platform={post.platform}
@@ -190,7 +191,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
           </MenuItem>
         </ShowIf>
 
-        <ShowIf condition={owner}>
+        <ShowIf condition={owner && !post.deletedAt}>
           <MenuItem onClick={handleDelete} className={style.danger} color="danger">
             Delete
           </MenuItem>

@@ -9,7 +9,13 @@ import {useStyles} from './post-sub-header.style';
 
 import {format} from 'date-fns';
 
-export const PostSubHeader: React.FC<PostSubHeaderProps> = ({date, platform, importer, url}) => {
+export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
+  postId,
+  date,
+  platform,
+  importer,
+  url,
+}) => {
   const style = useStyles();
 
   const getDate = (datePost: Date) => {
@@ -19,16 +25,29 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({date, platform, imp
 
   return (
     <Typography component="div" className={style.root}>
-      {platform === 'myriad' && getDate(date)}
+      {platform === 'myriad' && (
+        <Link href={`/post/${postId}`}>
+          <a href={`/post/${postId}`} className={style.linkGrey}>
+            {getDate(date)}
+          </a>
+        </Link>
+      )}
+
       {importer && (
         <>
-          Imported on {getDate(date)} by{' '}
+          Imported on&nbsp;
+          <Link href={`/post/${postId}`}>
+            <a href={`/post/${postId}`} className={style.linkGrey}>
+              {getDate(date)}
+            </a>
+          </Link>
+          &nbsp;by&nbsp;
           <Link href={`/profile/${importer.id}`}>
             <a href={`/profile/${importer.id}`} className={style.link}>
               {importer.name}
             </a>
-          </Link>{' '}
-          via{' '}
+          </Link>
+          &nbsp;via&nbsp;
           <Link href={url}>
             <a href={url} className={style.link} target="_blank" rel="noreferrer">
               {platform}

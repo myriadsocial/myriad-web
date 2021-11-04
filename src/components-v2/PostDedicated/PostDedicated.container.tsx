@@ -1,7 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-
-import {useRouter} from 'next/router';
 
 import {Button, Grid} from '@material-ui/core';
 
@@ -23,9 +21,8 @@ import {UserState} from 'src/reducers/user/reducer';
 
 export const PostContainer: React.FC = () => {
   const dispatch = useDispatch();
-  const router = useRouter();
-  const {postId} = router.query;
-  const {getPostDetail, post, getTippedUserId} = useTimelineHook();
+
+  const {post, getTippedUserId} = useTimelineHook();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {openTipHistory} = useTipHistory();
   const {openToaster} = useToasterHook();
@@ -35,10 +32,6 @@ export const PostContainer: React.FC = () => {
   const [postToRemove, setPostToRemove] = useState<Post | null>(null);
   const [reported, setReported] = useState<Post | null>(null);
   const sendTipOpened = Boolean(tippedPost);
-
-  useEffect(() => {
-    if (postId) getPostDetail(postId);
-  }, []);
 
   const handleUpvote = (reference: Post | Comment) => {
     dispatch(upvote(reference));
