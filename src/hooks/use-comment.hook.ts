@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import {Comment, CommentProps} from 'src/interfaces/comment';
-import {SectionType} from 'src/interfaces/interaction';
+import {SectionType, Vote} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import * as CommentAPI from 'src/lib/api/comment';
 import {RootState} from 'src/reducers';
@@ -15,8 +15,9 @@ type useCommentHookProps = {
   loadInitComment: (section?: SectionType) => void;
   loadMoreComment: () => void;
   reply: (user: User, comment: CommentProps, callback?: () => void) => void;
-  updateUpvote: (commentId: string, vote: number) => void;
-  updateDownvote: (commentId: string, vote: number) => void;
+  updateUpvote: (commentId: string, total: number, vote: Vote) => void;
+  updateDownvote: (commentId: string, total: number, vote: Vote) => void;
+  updateRemoveUpvote: (commentId: string) => void;
   loadReplies: (referenceId: string, deep: number) => void;
 };
 
@@ -102,63 +103,131 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
     callback && callback();
   };
 
-  const updateUpvote = (commentId: string, vote: number) => {
+  const updateUpvote = (commentId: string, total: number, vote: Vote) => {
+    const modifyVotes = (comment: Comment) => {
+      if (comment.id === commentId) {
+        comment.metric.upvotes = total;
+
+        if (comment.isDownVoted) {
+          comment.metric.downvotes -= 1;
+        }
+
+        comment.isUpvoted = true;
+        comment.isDownVoted = false;
+        comment.votes = [vote];
+      }
+
+      return comment;
+    };
+
     setComments(prevComments => {
       return prevComments.map(comment => {
-        if (comment.id === commentId) {
-          comment.metric.upvotes = vote;
-
-          if (comment.isDownVoted) {
-            comment.metric.downvotes -= 1;
-          }
-
-          comment.isUpvoted = true;
-          comment.isDownVoted = false;
-        }
+        comment = modifyVotes(comment);
 
         if (comment.replies) {
           comment.replies.map(reply => {
-            if (reply.id === commentId) reply.metric.upvotes = vote;
+            if (reply.id === commentId) {
+              reply = modifyVotes(reply);
+            }
+
             if (reply.replies) {
               reply.replies.map(item => {
-                if (item.id === commentId) item.metric.upvotes = vote;
+                item = modifyVotes(item);
+
                 return item;
               });
             }
+
             return reply;
           });
         }
+
         return comment;
       });
     });
   };
 
-  const updateDownvote = (commentId: string, vote: number) => {
+  const updateDownvote = (commentId: string, total: number, vote: Vote) => {
+    const modifyVotes = (comment: Comment) => {
+      if (comment.id === commentId) {
+        comment.metric.downvotes = total;
+
+        if (comment.isUpvoted) {
+          comment.metric.upvotes -= 1;
+        }
+
+        comment.isUpvoted = false;
+        comment.isDownVoted = true;
+        comment.votes = [vote];
+      }
+
+      return comment;
+    };
+
     setComments(prevComments => {
       return prevComments.map(comment => {
-        if (comment.id === commentId) {
-          comment.metric.downvotes = vote;
-
-          if (comment.isUpvoted) {
-            comment.metric.upvotes -= 1;
-          }
-
-          comment.isUpvoted = false;
-          comment.isDownVoted = true;
-        }
+        comment = modifyVotes(comment);
 
         if (comment.replies) {
           comment.replies.map(reply => {
-            if (reply.id === commentId) reply.metric.downvotes = vote;
+            reply = modifyVotes(reply);
+
             if (reply.replies) {
               reply.replies.map(item => {
-                if (item.id === commentId) item.metric.downvotes = vote;
+                item = modifyVotes(item);
+
                 return item;
               });
             }
+
             return reply;
           });
         }
+
+        return comment;
+      });
+    });
+  };
+
+  const updateRemoveUpvote = (commentId: string) => {
+    const modifyVotes = (comment: Comment) => {
+      if (comment.id === commentId) {
+        if (comment.isDownVoted) {
+          comment.metric.downvotes -= 1;
+        }
+
+        if (comment.isUpvoted) {
+          comment.metric.upvotes -= 1;
+        }
+
+        comment.isUpvoted = false;
+        comment.isDownVoted = false;
+        comment.votes = [];
+      }
+
+      return comment;
+    };
+
+    setComments(prevComments => {
+      return prevComments.map(comment => {
+        comment = modifyVotes(comment);
+
+        if (comment.replies) {
+          comment.replies.map(reply => {
+            reply = modifyVotes(reply);
+
+            if (reply.replies) {
+              reply.replies.map(item => {
+                item = modifyVotes(item);
+
+                return item;
+              });
+            }
+
+            return reply;
+          });
+        }
+
         return comment;
       });
     });
@@ -205,6 +274,7 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
     reply,
     updateUpvote,
     updateDownvote,
+    updateRemoveUpvote,
     loadReplies,
   };
 };

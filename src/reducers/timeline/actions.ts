@@ -5,7 +5,7 @@ import * as constants from './constants';
 import axios from 'axios';
 import {Action} from 'redux';
 import {Comment} from 'src/interfaces/comment';
-import {Like, SectionType, Vote} from 'src/interfaces/interaction';
+import {Like, ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
 import {Post, PostProps} from 'src/interfaces/post';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
 import {UserProps} from 'src/interfaces/user';
@@ -104,6 +104,12 @@ export interface DownvotePost extends Action {
   vote: Vote;
 }
 
+export interface RemoveVotePost extends Action {
+  type: constants.REMOVE_VOTE_POST;
+  postId: string;
+  vote: Vote;
+}
+
 export interface SetTippedContent extends Action {
   type: constants.SET_TIPPED_CONTENT;
   contentType: string;
@@ -137,6 +143,7 @@ export type Actions =
   | UpvotePost
   | SetDownvoting
   | DownvotePost
+  | RemoveVotePost
   | SetTippedContent
   | SetSearchedPosts
   | BaseAction;
@@ -584,6 +591,47 @@ export const downvote: ThunkActionCreator<Actions, RootState> =
       }
 
       callback && callback(vote);
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const removeVote: ThunkActionCreator<Actions, RootState> =
+  (reference: Post | Comment, callback?: () => void) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      if (!reference.votes) {
+        return;
+      }
+
+      for (const vote of reference.votes) {
+        await InteractionAPI.removeVote(vote.id);
+
+        if (vote.type === ReferenceType.POST) {
+          dispatch({
+            type: constants.REMOVE_VOTE_POST,
+            postId: vote.referenceId,
+            vote,
+          });
+        }
+      }
+
+      callback && callback();
     } catch (error) {
       dispatch(
         setError({

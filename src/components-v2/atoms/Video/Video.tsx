@@ -25,7 +25,7 @@ export const Video: React.FC<VideoProps> = ({url}) => {
 
   return (
     <div className={style.root}>
-      <ReactPlayer url={url} controls={true} />
+      <ReactPlayer url={url} controls={true} playing={false} stopOnUnmount={true} />
     </div>
   );
 };

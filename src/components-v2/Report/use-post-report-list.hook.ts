@@ -16,7 +16,7 @@ export const usePostReportList = (): TagOptions[] => {
     },
     {
       id: 'pornography',
-      title: 'Pornography',
+      title: 'Pornography (No NSFW Tag)',
     },
     {
       id: 'private_information',

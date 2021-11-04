@@ -1,12 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {useTipHistory} from '../../hooks/tip-history.hook';
-import {useToasterHook} from '../../hooks/use-toaster.hook';
-import {Post} from '../../interfaces/post';
-import {Status} from '../../interfaces/toaster';
-import {User} from '../../interfaces/user';
-import {upvote, setDownvoting} from '../../reducers/timeline/actions';
 import {ReportContainer} from '../Report';
 import {SendTipContainer} from '../SendTip';
 import {useTimelineHook} from '../Timeline/hooks/use-timeline.hook';
@@ -14,8 +8,14 @@ import {TipHistoryContainer} from '../TipHistory';
 import {Modal} from '../atoms/Modal';
 import {PostsList} from './PostsList';
 
+import {useTipHistory} from 'src/hooks/tip-history.hook';
+import {useToasterHook} from 'src/hooks/use-toaster.hook';
 import {Comment} from 'src/interfaces/comment';
+import {Post} from 'src/interfaces/post';
+import {Status} from 'src/interfaces/toaster';
+import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
+import {upvote, setDownvoting, removeVote} from 'src/reducers/timeline/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
 type PostsListContainerProps = {
@@ -87,6 +87,10 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
     dispatch(setDownvoting(reference));
   };
 
+  const handleRemoveVote = (reference: Post | Comment) => {
+    dispatch(removeVote(reference));
+  };
+
   return (
     <>
       <PostsList
@@ -101,6 +105,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
         toggleDownvoting={handleToggleDownvoting}
         onShared={handleSharePost}
         searchedPosts={posts}
+        onRemoveVote={handleRemoveVote}
       />
 
       <Modal

@@ -69,22 +69,35 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     noKeyboard: true,
     multiple,
     onDrop: acceptedFiles => {
-      setFiles(prevFiles => [
-        ...prevFiles,
-        ...acceptedFiles.map(file =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-            loading: true,
-          }),
-        ),
-      ]);
+      if (multiple) {
+        setFiles(prevFiles => [
+          ...prevFiles,
+          ...acceptedFiles.map(file =>
+            Object.assign(file, {
+              preview: URL.createObjectURL(file),
+              loading: type === 'image',
+            }),
+          ),
+        ]);
 
-      setPreview(prevPreview => [
-        ...prevPreview,
-        ...acceptedFiles.map(file => URL.createObjectURL(file)),
-      ]);
+        setPreview(prevPreview => [
+          ...prevPreview,
+          ...acceptedFiles.map(file => URL.createObjectURL(file)),
+        ]);
+      } else {
+        setFiles(
+          acceptedFiles.map(file =>
+            Object.assign(file, {
+              preview: URL.createObjectURL(file),
+              loading: type === 'image',
+            }),
+          ),
+        );
 
-      onImageSelected(acceptedFiles);
+        setPreview(acceptedFiles.map(file => URL.createObjectURL(file)));
+      }
+
+      onImageSelected(files);
     },
     onDropRejected: rejection => {
       setError(rejection);
@@ -185,7 +198,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
 
             <ShowIf condition={type === 'video'}>
               {files.map((item, i) => (
-                <video key={i} controls width="500">
+                <video key={item.name} controls style={{width: '100%'}}>
                   <track kind="captions" />
                   <source src={item.preview} type="video/mp4" />
                   <div>Video encoding not supported.</div>
