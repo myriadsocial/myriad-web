@@ -121,7 +121,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         disableTypography
         avatar={
           <PostAvatarComponent
-            name={post.user.name}
+            name={post.user?.name ?? 'Unknown Myrian'}
             origin={post.platform}
             avatar={
               post.platform === 'myriad'

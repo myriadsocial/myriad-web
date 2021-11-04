@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 312,
       display: 'flex',
       flexDirection: 'column',
-      rowGap: 12,
+      rowGap: theme.spacing(1),
     },
   }),
 );
