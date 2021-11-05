@@ -97,7 +97,9 @@ export const PostsList: React.FC<PostsListProps> = props => {
         next={loadNextPage}
         loader={<Loading />}>
         {defaultPosts.length === 0 ? (
-          <Typography>No post found</Typography>
+          <div style={{marginLeft: 12}}>
+            <Typography>No post found</Typography>
+          </div>
         ) : (
           defaultPosts.map(post => (
             <PostDetail
@@ -115,7 +117,6 @@ export const PostsList: React.FC<PostsListProps> = props => {
             />
           ))
         )}
-        {}
       </InfiniteScroll>
     </>
   );
