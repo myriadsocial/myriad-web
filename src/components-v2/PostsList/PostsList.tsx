@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import Typography from '@material-ui/core/Typography';
+
 import {Loading} from '../../components-v2/atoms/Loading';
 import {Comment} from '../../interfaces/comment';
 import {Post} from '../../interfaces/post';
@@ -80,33 +82,40 @@ export const PostsList: React.FC<PostsListProps> = props => {
 
   return (
     <>
-      <DropdownMenu
-        title="Sort by"
-        selected={sortOptions[0].id}
-        options={sortOptions}
-        onChange={handleSort}
-      />
+      <div style={{marginBottom: 12}}>
+        <DropdownMenu
+          title="Sort by"
+          selected={sortOptions[0].id}
+          options={sortOptions}
+          onChange={handleSort}
+        />
+      </div>
       <InfiniteScroll
         scrollableTarget="scrollable-searched-posts"
         dataLength={searchedPosts.length}
         hasMore={hasMore}
         next={loadNextPage}
         loader={<Loading />}>
-        {defaultPosts.map(post => (
-          <PostDetail
-            user={user}
-            key={`post-${post.id}`}
-            post={post}
-            anonymous={anonymous}
-            onUpvote={upvote}
-            onSendTip={onSendTip}
-            toggleDownvoting={toggleDownvoting}
-            onOpenTipHistory={onOpenTipHistory}
-            onReport={onReport}
-            onShared={onShared}
-            onRemoveVote={onRemoveVote}
-          />
-        ))}
+        {defaultPosts.length === 0 ? (
+          <Typography>No post found</Typography>
+        ) : (
+          defaultPosts.map(post => (
+            <PostDetail
+              user={user}
+              key={`post-${post.id}`}
+              post={post}
+              anonymous={anonymous}
+              onUpvote={upvote}
+              onSendTip={onSendTip}
+              toggleDownvoting={toggleDownvoting}
+              onOpenTipHistory={onOpenTipHistory}
+              onReport={onReport}
+              onShared={onShared}
+              onRemoveVote={onRemoveVote}
+            />
+          ))
+        )}
+        {}
       </InfiniteScroll>
     </>
   );
