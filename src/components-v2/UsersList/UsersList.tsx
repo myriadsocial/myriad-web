@@ -2,6 +2,7 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import {List} from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, alpha} from '@material-ui/core/styles';
 
 import {Loading} from '../../components-v2/atoms/Loading';
@@ -35,7 +36,11 @@ export const UsersList: React.FC<UsersListProps> = ({users, hasMore, loadNextPag
       next={loadNextPage}
       loader={<Loading />}>
       <List className={classes.root}>
-        {users.length &&
+        {users.length === 0 ? (
+          <div style={{marginLeft: 12}}>
+            <Typography>No user found</Typography>
+          </div>
+        ) : (
           users.map(user => (
             <UsersListItem
               title={user.name}
@@ -45,7 +50,8 @@ export const UsersList: React.FC<UsersListProps> = ({users, hasMore, loadNextPag
               avatar={user.profilePictureURL}
               url={`/profile/${user.id}`}
             />
-          ))}
+          ))
+        )}
       </List>
     </InfiniteScroll>
   );
