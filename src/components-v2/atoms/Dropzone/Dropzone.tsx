@@ -69,35 +69,39 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     noKeyboard: true,
     multiple,
     onDrop: acceptedFiles => {
+      let newFiles: FileUploaded[] = [];
+
       if (multiple) {
-        setFiles(prevFiles => [
-          ...prevFiles,
+        newFiles = [
+          ...files,
           ...acceptedFiles.map(file =>
             Object.assign(file, {
               preview: URL.createObjectURL(file),
               loading: type === 'image',
             }),
           ),
-        ]);
+        ];
+
+        setFiles(newFiles);
 
         setPreview(prevPreview => [
           ...prevPreview,
           ...acceptedFiles.map(file => URL.createObjectURL(file)),
         ]);
       } else {
-        setFiles(
-          acceptedFiles.map(file =>
-            Object.assign(file, {
-              preview: URL.createObjectURL(file),
-              loading: type === 'image',
-            }),
-          ),
+        newFiles = acceptedFiles.map(file =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+            loading: type === 'image',
+          }),
         );
+
+        setFiles(newFiles);
 
         setPreview(acceptedFiles.map(file => URL.createObjectURL(file)));
       }
 
-      onImageSelected(files);
+      onImageSelected(newFiles);
     },
     onDropRejected: rejection => {
       setError(rejection);
