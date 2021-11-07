@@ -71,6 +71,7 @@ export const SocialListComponent: React.FC<SocialListProps> = ({isAnonymous}) =>
     [SocialsEnum.FACEBOOK]: false,
     [SocialsEnum.TWITTER]: false,
     [SocialsEnum.REDDIT]: false,
+    [SocialsEnum.TELEGRAM]: false,
   };
 
   if (socials.length > 0) {

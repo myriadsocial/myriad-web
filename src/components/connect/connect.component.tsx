@@ -43,6 +43,7 @@ const prefix: Record<SocialsEnum, string> = {
   [SocialsEnum.TWITTER]: 'https://twitter.com/',
   [SocialsEnum.FACEBOOK]: 'https://www.facebook.com/',
   [SocialsEnum.REDDIT]: 'https://www.reddit.com/user/',
+  [SocialsEnum.TELEGRAM]: 'https://t.me/',
 };
 
 export const ConnectComponent = forwardRef(
