@@ -41,6 +41,7 @@ const initalState: State = {
   [SocialsEnum.FACEBOOK]: true,
   [SocialsEnum.REDDIT]: true,
   [SocialsEnum.TWITTER]: true,
+  [SocialsEnum.TELEGRAM]: true,
   selectedSidebarMenu: SidebarTab.FRIENDS,
 };
 
