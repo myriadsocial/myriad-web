@@ -8,6 +8,7 @@ export enum SocialsEnum {
   FACEBOOK = 'facebook',
   TWITTER = 'twitter',
   REDDIT = 'reddit',
+  TELEGRAM = 'telegram',
 }
 
 export type SocialsEnumType = typeof SocialsEnum;
