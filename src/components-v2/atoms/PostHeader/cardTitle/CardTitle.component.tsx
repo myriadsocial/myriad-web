@@ -9,8 +9,8 @@ const CardTitle: React.FC<CardTitleProps> = ({text, url, target = '_blank'}) => 
   const style = useStyles();
 
   return (
-    <Link href={url}>
-      <a href={url} className={style.link} target={target} rel="noreferrer">
+    <Link href={url ? url : '#'}>
+      <a href={url ? url : '#'} className={style.link} target="_blank" rel="noreferrer">
         {text}
       </a>
     </Link>
