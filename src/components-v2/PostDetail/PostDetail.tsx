@@ -188,7 +188,9 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
               />
             )}
             <ReactMarkdown skipHtml remarkPlugins={[remarkGFM, remarkHTML]}>
-              {post.text.slice(0, maxLength)}
+              {Object.prototype.hasOwnProperty.call(post, 'text')
+                ? post.text.slice(0, maxLength)
+                : ''}
             </ReactMarkdown>
 
             <ShowIf condition={!!maxLength && post.text.length > maxLength}>
