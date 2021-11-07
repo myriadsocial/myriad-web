@@ -281,26 +281,9 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
       }
 
       if (postUrl.includes(SocialsEnum.FACEBOOK)) {
-        const tempUrlArray = ['facebook'];
-        if (postUrl.slice(-1) === '/') postUrl = postUrl.slice(0, -1);
-        console.log(postUrl);
-        const split = postUrl.split('/');
-        const stripNonNumbers = split[split.length - 1].replace(/\D/g, '');
-        tempUrlArray.push(stripNonNumbers);
-        tempUrlArray.push('_UNKNOWN_');
-        ScraperAPI.request<Post>({
-          url: '/facebook/individual',
-          method: 'POST',
-          data: {
-            urlId: stripNonNumbers,
-            importerUsername: user.username,
-          },
-        }).then(response => console.log(response));
-        console.log('starting to wait');
-        //allow time for the scraper to fetch and save to Gun
-        await new Promise(f => setTimeout(f, 25000));
-        console.log('finished waiting');
-        postUrl = tempUrlArray.join();
+        postUrl = await scrapeFacebookPost(postUrl, user.username);
+      } else if (postUrl.includes('t.me')) {
+        postUrl = await scrapeTelegramPost(postUrl, user.username);
       }
       const post = await PostAPI.importPost({
         url: postUrl,
@@ -329,6 +312,47 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
       dispatch(setLoading(false));
     }
   };
+async function scrapeFacebookPost(postUrl: string, username: string | undefined): Promise<string> {
+  const tempUrlArray = ['facebook'];
+  if (postUrl.slice(-1) === '/') postUrl = postUrl.slice(0, -1);
+  console.log(postUrl);
+  const split = postUrl.split('/');
+  const stripNonNumbers = split[split.length - 1].replace(/\D/g, '');
+  tempUrlArray.push(stripNonNumbers);
+  tempUrlArray.push('_UNKNOWN_');
+  ScraperAPI.request<Post>({
+    url: '/facebook/individual',
+    method: 'POST',
+    data: {
+      urlId: stripNonNumbers,
+      importerUsername: username,
+    },
+  }).then(response => console.log(response));
+  console.log('starting to wait');
+  //allow time for the scraper to fetch and save to Gun
+  await new Promise(f => setTimeout(f, 25000));
+  console.log('finished waiting');
+  return tempUrlArray.join();
+}
+
+async function scrapeTelegramPost(
+  url: string,
+  importerUsername: string | undefined,
+): Promise<string> {
+  ScraperAPI.request<Post>({
+    url: '/telegram/individual',
+    method: 'POST',
+    data: {
+      url,
+      importerUsername,
+    },
+  }).then(response => console.log(response));
+  await new Promise(f => setTimeout(f, 10000));
+  const split = url.split('/');
+  console.log(split);
+
+  return 'telegram,' + split[4] + ',' + split[3];
+}
 
 export const updatePostPlatformUser: ThunkActionCreator<Actions, RootState> =
   (url: string) => async (dispatch, getState) => {
