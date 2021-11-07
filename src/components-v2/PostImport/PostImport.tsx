@@ -20,6 +20,7 @@ const regex = {
   [SocialsEnum.FACEBOOK]:
     /^(?:https?:\/\/)?(?:www\.|m\.|mobile\.|touch\.|mbasic\.)?(?:facebook\.com|fb(?:\.me|\.com))\/(?!$)(?:(?:\w)*#!\/)?(?:pages\/)?(?:photo\.php\?fbid=)?(?:[\w\-]*\/)*?(?:\/)?(?:profile\.php\?id=)?([^\/?&\s]*)(?:\/|&|\?)?.*$/s,
   [SocialsEnum.REDDIT]: /(?:^.+?)(?:reddit.com\/r)(?:\/[\w\d]+){2}(?:\/)([\w\d]*)/,
+  [SocialsEnum.TELEGRAM]: /^https?:\/\/t\.me\/([a-z]+)\/([0-9]+)/,
 };
 
 export const PostImport: React.FC<PostImportProps> = props => {
@@ -62,22 +63,12 @@ export const PostImport: React.FC<PostImportProps> = props => {
   const parseUrl = (url: string) => {
     setIsValidUrl(false);
 
+    //TODO: send these consts to importPost() in timeline actions so .split() not required
     const matchTwitter = regex[SocialsEnum.TWITTER].exec(url);
-    if (matchTwitter) {
-      setPreviewUrl(url);
-      setIsValidUrl(true);
-      onChange(url);
-    }
-
     const matchReddit = regex[SocialsEnum.REDDIT].exec(url);
-    if (matchReddit) {
-      setPreviewUrl(url);
-      setIsValidUrl(true);
-      onChange(url);
-    }
-
     const matchFacebook = regex[SocialsEnum.FACEBOOK].exec(url);
-    if (matchFacebook) {
+    const matchTelegram = regex[SocialsEnum.TELEGRAM].exec(url);
+    if (matchTwitter || matchReddit || matchFacebook || matchTelegram) {
       setPreviewUrl(url);
       setIsValidUrl(true);
       onChange(url);
