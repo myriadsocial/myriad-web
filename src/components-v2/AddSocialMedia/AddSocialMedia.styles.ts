@@ -11,7 +11,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: 0,
     },
     steps: {
-      width: 340,
+      width: 400,
       '& .MuiListItem-root:nth-child(even)': {
         background: 'inherit',
       },
