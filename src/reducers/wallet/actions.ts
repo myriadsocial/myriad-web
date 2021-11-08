@@ -113,13 +113,13 @@ export const fetchRecipientDetail: ThunkActionCreator<Actions, RootState> =
 export const fetchTippedUserId: ThunkActionCreator<Actions, RootState> =
   (postId: string) => async (dispatch, getState) => {
     const {
-      timelineState: {posts, searchedPosts},
+      timelineState: {posts},
     } = getState();
 
     dispatch(setLoading(true));
 
     try {
-      const tippablePosts = posts.length ? posts : searchedPosts;
+      const tippablePosts = posts;
 
       const {people} = tippablePosts.find(post => post.id === postId) ?? {};
 
