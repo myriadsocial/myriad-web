@@ -18,7 +18,6 @@ export interface TimelineState extends BasePaginationState {
   filter?: TimelineFilter;
   hasMore: boolean;
   posts: Post[];
-  searchedPosts: Post[];
   tippedContent: {
     contentType: string;
     referenceId: string;
@@ -36,7 +35,6 @@ const initalState: TimelineState = {
   sort: 'created',
   hasMore: false,
   posts: [],
-  searchedPosts: [],
   tippedContent: {
     contentType: '',
     referenceId: '',
@@ -309,14 +307,6 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
           contentType: action.contentType,
           referenceId: action.referenceId,
         },
-      };
-    }
-
-    case constants.SET_SEARCHED_POSTS: {
-      return {
-        ...state,
-        searchedPosts: action.payload.posts,
-        meta: action.payload.meta,
       };
     }
 

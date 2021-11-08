@@ -116,13 +116,6 @@ export interface SetTippedContent extends Action {
   referenceId: string;
 }
 
-export interface SetSearchedPosts extends Action {
-  type: constants.SET_SEARCHED_POSTS;
-  payload: {
-    posts: Post[];
-    meta: ListMeta;
-  };
-}
 /**
  * Union Action Types
  */
@@ -145,7 +138,6 @@ export type Actions =
   | DownvotePost
   | RemoveVotePost
   | SetTippedContent
-  | SetSearchedPosts
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -161,14 +153,6 @@ export const setTippedContent = (contentType: string, referenceId: string): SetT
   type: constants.SET_TIPPED_CONTENT,
   contentType,
   referenceId,
-});
-
-export const setSearchedPosts = (posts: Post[], meta: ListMeta): SetSearchedPosts => ({
-  type: constants.SET_SEARCHED_POSTS,
-  payload: {
-    posts,
-    meta,
-  },
 });
 
 /**
@@ -644,16 +628,29 @@ export const removeVote: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
-  (query: string) => async dispatch => {
+  (query: string) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
+    const {
+      userState: {user},
+    } = getState();
+    const userId = user?.id as string;
+
     try {
-      const {data: posts, meta} = await PostAPI.findPosts(query);
+      const {data: posts, meta} = await PostAPI.findPosts(userId, query);
 
       dispatch({
-        type: constants.SET_SEARCHED_POSTS,
+        type: constants.LOAD_TIMELINE,
         payload: {
-          posts,
+          posts: posts.map(post => {
+            const upvoted = post.votes?.filter(vote => vote.userId === userId && vote.state);
+            const downvoted = post.votes?.filter(vote => vote.userId === userId && !vote.state);
+
+            post.isUpvoted = upvoted && upvoted.length > 0;
+            post.isDownVoted = downvoted && downvoted.length > 0;
+
+            return post;
+          }),
           meta,
         },
       });
