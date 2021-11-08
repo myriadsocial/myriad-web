@@ -160,8 +160,9 @@ export const PostRender: React.FC<PostRenderProps> = props => {
           return (
             <Link href={`/home?tag=${node.hashtag}&type=trending`} shallow={true}>
               <Typography
-                component="span"
+                component="a"
                 style={{
+                  cursor: 'pointer',
                   fontWeight: 600,
                   color: theme.palette.primary.main,
                   display: 'inline-block',
@@ -178,11 +179,18 @@ export const PostRender: React.FC<PostRenderProps> = props => {
           return <Video url={node.url} />;
         case ELEMENT_MENTION:
           return (
-            <Typography
-              component="span"
-              style={{fontWeight: 600, color: theme.palette.primary.main, display: 'inline-block'}}>
-              @{node.name}
-            </Typography>
+            <Link href={`/profile/${node.value}`} shallow={true}>
+              <Typography
+                component="a"
+                style={{
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  color: theme.palette.primary.main,
+                  display: 'inline-block',
+                }}>
+                @{node.name}
+              </Typography>
+            </Link>
           );
         case ELEMENT_SHOW_MORE:
           return <ShowMore onClick={onShowAll} />;
