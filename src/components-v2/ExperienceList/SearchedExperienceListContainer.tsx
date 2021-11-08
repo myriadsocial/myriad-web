@@ -2,7 +2,7 @@ import React from 'react';
 
 import {useRouter} from 'next/router';
 
-import {NonSelectableExperienceList} from '.';
+import {SearchedExperienceList} from '.';
 import {useExperienceHook} from '../../hooks/use-experience-hook';
 
 export const SearchedExperienceListContainer: React.FC = () => {
@@ -22,7 +22,7 @@ export const SearchedExperienceListContainer: React.FC = () => {
   };
 
   return (
-    <NonSelectableExperienceList
+    <SearchedExperienceList
       experiences={searchedExperiences}
       onSubscribe={handleSubsibeExperience}
       onFollow={handleCloneExperience}

@@ -9,7 +9,7 @@ import {Action} from 'redux';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {SocialsEnum} from 'src/interfaces/index';
 import {SocialMedia} from 'src/interfaces/social';
-import {User, UserTransactionDetail, Report} from 'src/interfaces/user';
+import {User, UserTransactionDetail} from 'src/interfaces/user';
 import {BaseErrorResponse} from 'src/lib/api/interfaces/error-response.interface';
 import * as SocialAPI from 'src/lib/api/social';
 import * as TokenAPI from 'src/lib/api/token';
@@ -275,28 +275,6 @@ export const updateUser: ThunkActionCreator<Actions, RootState> =
         }),
       );
       callback && callback();
-    } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-export const reportUser: ThunkActionCreator<Actions, RootState> =
-  (payload: Partial<Report>) => async (dispatch, getState) => {
-    dispatch(setLoading(true));
-    try {
-      await UserAPI.reportUser(payload);
-      dispatch(
-        showToaster({
-          message: 'Success report this user',
-          toasterStatus: Status.SUCCESS,
-        }),
-      );
     } catch (error) {
       dispatch(
         setError({

@@ -24,7 +24,7 @@ import {TimelineFilter} from 'src/interfaces/timeline';
 import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
-import {upvote, setDownvoting, deletePost} from 'src/reducers/timeline/actions';
+import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
 
 type TimelineContainerProps = {
   filters?: TimelineFilter;
@@ -110,6 +110,10 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     handleClosePrompt();
   };
 
+  const handleRemoveVote = (reference: Post | Comment) => {
+    dispatch(removeVote(reference));
+  };
+
   const handleGoHome = () => {
     router.push('/home');
   };
@@ -145,6 +149,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
         onReport={handleReportPost}
         toggleDownvoting={handleToggleDownvoting}
         onShared={handleSharePost}
+        onRemoveVote={handleRemoveVote}
       />
 
       <Modal

@@ -13,6 +13,7 @@ import {Theme, withStyles, createStyles} from '@material-ui/core/styles';
 import {useStyles} from './Notifications.styles';
 import {useNotificationList} from './hooks/use-notification-list.hook';
 
+import clsx from 'clsx';
 import {formatDistance, subDays} from 'date-fns';
 import {Loading} from 'src/components-v2/atoms/Loading';
 import {AvatarComponent} from 'src/components/common/Avatar.component';
@@ -66,7 +67,13 @@ export const Notifications: React.FC<NotificationsProps> = props => {
           loader={<Loading />}>
           {list.map(notification => {
             return (
-              <ListItem key={notification.id} className={style.item} alignItems="center">
+              <ListItem
+                key={notification.id}
+                className={clsx({
+                  [style.item]: true,
+                  [style.unread]: !notification.read,
+                })}
+                alignItems="center">
                 <ListItemAvatar>
                   <StyledBadge badgeContent={notification.badge}>
                     <AvatarComponent className={style.avatar} src={notification.avatar}>

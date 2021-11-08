@@ -4,18 +4,18 @@ import React from 'react';
 
 import {useRouter} from 'next/router';
 
-import {capitalize, Menu, MenuItem} from '@material-ui/core';
+import {capitalize, Menu, MenuItem, Typography} from '@material-ui/core';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import PostAvatarComponent from './avatar/post-avatar.component';
-import CardTitle from './cardTitle/CardTitle.component';
-import {PostHeaderProps, Platform} from './postHeader.interface';
+import {PostHeaderProps} from './postHeader.interface';
 import {useStyles} from './postHeader.style';
 import {PostSubHeader} from './subHeader/post-sub-header.component';
 
 import ShowIf from 'src/components/common/show-if.component';
+import {SocialsEnum} from 'src/interfaces/social';
 
 export const HeaderComponent: React.FC<PostHeaderProps> = props => {
   const {post, owner, tipped = false, onDelete, onOpenTipHistory, onReport} = props;
@@ -33,12 +33,12 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
     setAnchorEl(null);
   };
 
-  const openContentSource = (): void => {
-    const url = getPlatformUrl();
+  const openContentProfileUrl = (): void => {
+    const url = getPlataformProfileUrl();
 
     switch (post.platform) {
-      case Platform.myriad:
-        router.push(`/profile/${post.user?.id}`);
+      case 'myriad':
+        router.push(url);
         break;
       default:
         window.open(url, '_blank');
@@ -46,20 +46,20 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
     }
   };
 
-  const getPlatformUrl = (): string => {
+  const getPlataformProfileUrl = (): string => {
     let url = '';
 
     if (!post.user) return url;
 
     switch (post.platform) {
-      case Platform.twitter:
+      case SocialsEnum.TWITTER:
         url = `https://twitter.com/${post.people?.username as string}`;
         break;
-      case Platform.reddit:
+      case SocialsEnum.REDDIT:
         url = `https://reddit.com/user/${post.people?.username as string}`;
         break;
-      case Platform.myriad:
-        url = `profile/${post.createdBy}`;
+      case 'myriad':
+        url = `/profile/${post.createdBy}`;
         break;
       default:
         url = post.url;
@@ -106,7 +106,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
 
   const openSourceAccount = () => {
     if (post.people) {
-      const url = getPlatformUrl();
+      const url = getPlataformProfileUrl();
 
       window.open(url, '_blank');
     }
@@ -121,29 +121,28 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         disableTypography
         avatar={
           <PostAvatarComponent
-            name={post.user.name}
+            name={post.user?.name ?? 'Unknown Myrian'}
             origin={post.platform}
             avatar={
-              post.platform === Platform.myriad
+              post.platform === 'myriad'
                 ? post.user?.profilePictureURL
                 : post.people?.profilePictureURL
             }
-            onClick={openContentSource}
+            onClick={openContentProfileUrl}
           />
         }
         title={
-          <CardTitle
-            text={
-              post.platform === Platform.myriad ? post.user?.name : (post.people?.name as string)
-            }
-            url={getPlatformUrl()}
-          />
+          <Typography variant="h5">
+            {post.platform === 'myriad' ? post.user?.name : (post.people?.name as string)}
+          </Typography>
         }
         subheader={
           <PostSubHeader
+            postId={post.id}
             date={post.createdAt}
-            importer={post.platform !== Platform.myriad ? post.user : undefined}
+            importer={post.platform !== 'myriad' ? post.user : undefined}
             platform={post.platform}
+            url={post.url}
           />
         }
         action={
@@ -192,7 +191,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
           </MenuItem>
         </ShowIf>
 
-        <ShowIf condition={owner}>
+        <ShowIf condition={owner && !post.deletedAt}>
           <MenuItem onClick={handleDelete} className={style.danger} color="danger">
             Delete
           </MenuItem>

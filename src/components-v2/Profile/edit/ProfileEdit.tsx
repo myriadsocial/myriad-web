@@ -1,14 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
-import {Typography} from '@material-ui/core';
-import {FormControl, OutlinedInput} from '@material-ui/core';
+import {FormControl, OutlinedInput, Typography} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 
+import {acronym} from '../../../helpers/string';
 import {User} from '../../../interfaces/user';
+import {PromptComponent} from '../../atoms/Prompt/prompt.component';
 import {IconButtonUpload} from './IconButtonUpload.component';
 import {ImageButton} from './ImageButton.component';
 import {useStyles} from './profile-edit.style';
@@ -18,6 +20,7 @@ import {debounce} from 'lodash';
 export type Props = {
   user: User;
   onSave: (user: Partial<User>) => void;
+  onCancel: () => void;
   uploadingAvatar: boolean;
   uploadingBanner: boolean;
   updatingProfile: boolean;
@@ -32,6 +35,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
   const {
     user,
     onSave,
+    onCancel,
     updatingProfile,
     uploadingBanner,
     updateProfileBanner,
@@ -48,8 +52,14 @@ export const ProfileEditComponent: React.FC<Props> = props => {
   });
 
   const [username, setUsername] = useState<string>(user.username ?? '');
+  const [isEdited, setIsEdited] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
 
   const style = useStyles();
+
+  useEffect(() => {
+    handleChanges();
+  }, [newUser]);
 
   const handleChangeUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -101,6 +111,22 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     return false;
   };
 
+  const handleChanges = () => {
+    const a = user.bio === newUser.bio;
+    const b = user.name === newUser.name;
+    const c = user.websiteURL === newUser.websiteURL;
+    setIsEdited(!a || !b || !c);
+  };
+
+  const handleCancel = () => {
+    isEdited && openPrompt();
+    !isEdited && onCancel();
+  };
+
+  const openPrompt = () => {
+    setOpen(!open);
+  };
+
   return (
     <div className={style.root}>
       <Typography className={style.title}>Edit Profile</Typography>
@@ -115,8 +141,9 @@ export const ProfileEditComponent: React.FC<Props> = props => {
               alt={user.name}
               src={user.profilePictureURL}
               variant="circle"
-              className={style.avatar}
-            />
+              className={style.avatar}>
+              {acronym(username)}
+            </Avatar>
             <ImageButton
               title="Edit Image profile"
               onImageSelected={handleUpdateProfilePicture}
@@ -200,14 +227,44 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         />
       </FormControl>
 
-      <FormControl className={style.button} fullWidth variant="outlined">
-        <Button variant="contained" color="primary" disableElevation fullWidth onClick={saveUser}>
-          Save changes
-        </Button>
-        {updatingProfile && (
-          <CircularProgress size={24} color="primary" className={style.buttonProgress} />
-        )}
-      </FormControl>
+      <div className={style.flex}>
+        <FormControl className={style.button} variant="outlined">
+          <Button variant="outlined" color="secondary" disableElevation onClick={handleCancel}>
+            Cancel
+          </Button>
+          {updatingProfile && (
+            <CircularProgress size={24} color="primary" className={style.buttonProgress} />
+          )}
+        </FormControl>
+        <FormControl className={style.button} variant="outlined">
+          <Button variant="contained" color="primary" disableElevation onClick={saveUser}>
+            Save changes
+          </Button>
+          {updatingProfile && (
+            <CircularProgress size={24} color="primary" className={style.buttonProgress} />
+          )}
+        </FormControl>
+      </div>
+      <PromptComponent
+        title="Are you sure?"
+        subtitle={
+          <>
+            <Typography>{'You already made some changes,'}</Typography>
+            <Typography>{'sure you want to leave it?'}</Typography>
+          </>
+        }
+        icon="warning"
+        open={open}
+        onCancel={openPrompt}>
+        <Grid container justifyContent="space-between">
+          <Button size="small" variant="outlined" color="secondary" onClick={openPrompt}>
+            No, let me rethink
+          </Button>
+          <Button size="small" variant="contained" color="primary" onClick={onCancel}>
+            Yes, Leave it
+          </Button>
+        </Grid>
+      </PromptComponent>
     </div>
   );
 };

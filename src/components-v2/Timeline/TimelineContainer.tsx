@@ -22,7 +22,8 @@ import {TimelineFilter} from 'src/interfaces/timeline';
 import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
-import {upvote, setDownvoting, deletePost} from 'src/reducers/timeline/actions';
+import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
+import {WalletState} from 'src/reducers/wallet/reducer';
 
 type TimelineContainerProps = {
   filters?: TimelineFilter;
@@ -38,6 +39,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const {posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
   const {filterTimeline} = useTimelineFilter(filters);
   const {query} = useQueryParams();
+  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
   const {openTipHistory} = useTipHistory();
   const {openToaster} = useToasterHook();
 
@@ -51,6 +53,12 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   useEffect(() => {
     filterTimeline(query);
   }, [query]);
+
+  useEffect(() => {
+    if (isTipSent) {
+      closeSendTip();
+    }
+  }, [isTipSent]);
 
   const handleUpvote = (reference: Post | Comment) => {
     dispatch(upvote(reference));
@@ -69,6 +77,12 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   };
 
   const closeSendTip = () => {
+    if (isTipSent && tippedPost) {
+      openTipHistory(tippedPost);
+    } else {
+      console.log('no post tipped');
+    }
+
     setTippedPost(null);
   };
 
@@ -107,6 +121,10 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     handleClosePrompt();
   };
 
+  const handleRemoveVote = (reference: Post | Comment) => {
+    dispatch(removeVote(reference));
+  };
+
   return (
     <>
       <TimelineFilterContainer {...props} />
@@ -124,6 +142,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
         onReport={handleReportPost}
         toggleDownvoting={handleToggleDownvoting}
         onShared={handleSharePost}
+        onRemoveVote={handleRemoveVote}
       />
 
       <Modal

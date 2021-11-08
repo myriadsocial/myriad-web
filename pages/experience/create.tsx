@@ -1,5 +1,4 @@
-import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import React from 'react';
 
 import {getSession} from 'next-auth/client';
 
@@ -8,19 +7,14 @@ import {DefaultLayout} from '../../src/components-v2/template/Default/DefaultLay
 import {ExperienceContainer} from 'src/components-v2/ExperienceEditor/Experience.container';
 import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {healthcheck} from 'src/lib/api/healthcheck';
-import * as UserAPI from 'src/lib/api/user';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
-import {setAnonymous, setUser, fetchConnectedSocials} from 'src/reducers/user/actions';
+import {fetchExperience} from 'src/reducers/experience/actions';
+import {countNewNotification} from 'src/reducers/notification/actions';
+import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
+import {ThunkDispatchAction} from 'src/types/thunk';
 
 const CreateExperience: React.FC = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchConnectedSocials());
-    dispatch(fetchAvailableToken());
-  }, [dispatch]);
-
   return (
     <DefaultLayout isOnProfilePage={false}>
       <ToasterContainer />
@@ -31,37 +25,46 @@ const CreateExperience: React.FC = () => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const {dispatch} = store;
-  const {res} = context;
+  const dispatch = store.dispatch as ThunkDispatchAction;
 
   const available = await healthcheck();
 
   if (!available) {
-    res.setHeader('location', '/maintenance');
-    res.statusCode = 302;
-    res.end();
+    return {
+      redirect: {
+        destination: '/maintenance',
+        permanent: false,
+      },
+    };
   }
 
   const session = await getSession(context);
 
   if (!session) {
-    res.setHeader('location', '/');
-    res.statusCode = 302;
-    res.end();
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
   }
 
   const anonymous = Boolean(session?.user.anonymous);
   const userId = session?.user.address as string;
-  const username = session?.user.name as string;
 
-  //TODO: this process should call thunk action creator instead of dispatch thunk acion
-  //ISSUE: state not hydrated when using thunk action creator
-  if (anonymous) {
-    dispatch(setAnonymous(username));
+  if (anonymous || !userId) {
+    const username = session?.user.name as string;
+
+    await dispatch(setAnonymous(username));
   } else {
-    const user = await UserAPI.getUserDetail(userId);
+    await dispatch(fetchUser(userId));
 
-    dispatch(setUser(user));
+    await Promise.all([
+      dispatch(fetchConnectedSocials()),
+      dispatch(fetchAvailableToken()),
+      dispatch(countNewNotification()),
+      dispatch(fetchExperience()),
+    ]);
   }
 
   return {

@@ -84,6 +84,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       boxSizing: 'border-box',
       width: theme.spacing(10),
       height: theme.spacing(10),
+      fontSize: '30px',
     },
     buttonProgress: {
       position: 'absolute',
@@ -91,6 +92,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       left: '50%',
       marginTop: -12,
       marginLeft: -12,
+    },
+    flex: {
+      display: 'flex',
+      justifyContent: 'space-between',
     },
   }),
 );

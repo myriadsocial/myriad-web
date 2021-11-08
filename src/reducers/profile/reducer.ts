@@ -32,6 +32,7 @@ export interface ProfileState extends BaseState {
       totalPageCount: number;
     };
   };
+  friendStatus?: Friend;
 }
 
 const initalState: ProfileState = {
@@ -107,6 +108,13 @@ export const ProfileReducer: Redux.Reducer<ProfileState, Actions> = (
           data: action.experiences,
           meta: action.meta,
         },
+      };
+    }
+
+    case constants.SET_FRIENDED_STATUS: {
+      return {
+        ...state,
+        friendStatus: action.status,
       };
     }
 

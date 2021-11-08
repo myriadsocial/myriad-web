@@ -34,6 +34,12 @@ export type UserProps = BaseUser & {
 
 export interface User extends UserProps, BaseModel {
   currencies: Currency[];
+  metric?: {
+    totalExperiences: number;
+    totalFriends: number;
+    totalKudos: number;
+    totalPosts: number;
+  };
   activityLogs?: ActivityLog[];
 }
 
@@ -46,36 +52,6 @@ export interface ActivityLog {
   id: string;
   type: ActivityLogType;
   message: string;
-  userId: string;
-}
-
-export enum ReportType {
-  POST = 'post',
-  USER = 'user',
-  COMMENT = 'comment',
-}
-
-export enum CaseType {
-  PORNOGRAPHY = 'pornography',
-  CHILD = 'child',
-  OTHER = 'other',
-}
-
-export enum ReportStatus {
-  PENDING = 'pending',
-  APPROVE = 'approve',
-  OTHER = 'other',
-}
-
-export interface Report extends BaseModel {
-  referenceType: ReportType;
-  referenceId: string;
-  type: CaseType;
-  status: ReportStatus;
-  reason: string;
-  totalReported: number;
-  reportedBy: string;
-  postId: string;
   userId: string;
 }
 

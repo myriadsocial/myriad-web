@@ -5,7 +5,6 @@ import {List} from '@material-ui/core';
 import {createStyles, makeStyles, alpha} from '@material-ui/core/styles';
 
 import {Loading} from '../../components-v2/atoms/Loading';
-import {acronym} from '../../helpers/string';
 import {User} from '../../interfaces/user';
 import {UsersListItem} from '../UsersList/UsersListItem';
 
@@ -43,7 +42,7 @@ export const UsersList: React.FC<UsersListProps> = ({users, hasMore, loadNextPag
               subtitle={user.username ? `@${user.username}` : '@username'}
               key={user.id}
               size={'medium'}
-              avatar={user.profilePictureURL ? user.profilePictureURL : acronym(user.name)}
+              avatar={user.profilePictureURL}
               url={`/profile/${user.id}`}
             />
           ))}

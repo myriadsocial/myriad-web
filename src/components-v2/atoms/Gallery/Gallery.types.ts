@@ -5,6 +5,7 @@ export type ImageListItem = {
   sizes: Sizes;
   rows: number;
   cols: number;
+  loading: boolean;
 };
 
 export type ImageList = {

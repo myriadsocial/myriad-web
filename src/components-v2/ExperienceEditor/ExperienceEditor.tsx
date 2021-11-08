@@ -64,14 +64,14 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   }, [experience]);
 
   useEffect(() => {
-    if (experience && newExperience) {
-      if (experience.name !== newExperience.name) setDisable(false);
-      if (experience.description !== newExperience.description) setDisable(false);
-      if (experience.experienceImageURL !== newExperience.experienceImageURL) setDisable(false);
-      if (experience.people !== newExperience.people) setDisable(false);
-    }
-    if (newExperience) setDisable(false);
-  }, [newExperience]);
+    const name = newExperience?.name;
+    const description = newExperience?.description;
+    const experienceImageURL = newExperience?.experienceImageURL;
+    const people = newExperience?.people?.length;
+    const tags = newTags.length;
+
+    setDisable(!name || !description || !experienceImageURL || !people || !tags);
+  }, [newExperience, newTags]);
 
   const handleSearchTags = (event: React.ChangeEvent<HTMLInputElement>) => {
     const debounceSubmit = debounce(() => {
@@ -174,7 +174,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         <OutlinedInput
           id="experience-name"
           placeholder="Experience Name"
-          value={newExperience?.name}
+          value={newExperience?.name || ''}
           onChange={handleChange('name')}
           labelWidth={110}
           inputProps={{maxLength: 50}}
@@ -186,7 +186,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         <OutlinedInput
           id="experience-description"
           placeholder="Description"
-          value={newExperience?.description}
+          value={newExperience?.description || ''}
           onChange={handleChange('description')}
           labelWidth={70}
           inputProps={{maxLength: 280}}
@@ -205,7 +205,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         id="experience-tags"
         freeSolo
         multiple
-        value={newTags}
+        value={newTags || ''}
         options={tags.map(tag => tag.id)}
         disableClearable
         onChange={handleTagsChange}
@@ -229,10 +229,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       <Autocomplete
         id="experience-people"
         className={styles.people}
-        value={newExperience?.people}
+        value={(newExperience?.people as People[]) || []}
         multiple
         options={people}
-        getOptionSelected={(option, value) => option === value}
+        getOptionSelected={(option, value) => option.id === value.id}
+        filterSelectedOptions={true}
         getOptionLabel={option => option.name}
         disableClearable
         autoHighlight={false}
@@ -255,6 +256,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         renderOption={(option, state: AutocompleteRenderOptionState) => {
           return (
             <ListItemComponent
+              id="selectable-experience-list-item"
               title={option.name}
               subtitle={<Typography variant="caption">@{option.username}</Typography>}
               avatar={option.profilePictureURL}
@@ -276,6 +278,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       <div className={styles.preview}>
         {newExperience?.people?.map(people => (
           <ListItemComponent
+            id="selected-experience-list-item"
             key={people.id}
             title={people.name}
             subtitle={<Typography variant="caption">@{people.username}</Typography>}

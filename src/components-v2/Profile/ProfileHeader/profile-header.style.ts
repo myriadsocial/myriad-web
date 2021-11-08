@@ -42,6 +42,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: theme.spacing(10),
       height: theme.spacing(10),
       marginRight: '20px',
+      fontSize: '30px',
     },
     name: {
       fontSize: '24px',

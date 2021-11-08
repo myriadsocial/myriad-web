@@ -1,5 +1,6 @@
 import {
   CalendarIcon,
+  ChevronDownIcon,
   CurrencyDollarIcon,
   GlobeAltIcon,
   UserAddIcon,
@@ -21,10 +22,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import {Friend, FriendStatus} from '../../../interfaces/friend';
-import {User, Report} from '../../../interfaces/user';
-import {RootState} from '../../../reducers/';
-import {BalanceState} from '../../../reducers/balance/reducer';
+import {acronym} from '../../../helpers/string';
 import {PromptComponent} from '../../atoms/Prompt/prompt.component';
 import {ReportComponent} from '../../atoms/Report/Report.component';
 import {useStyles} from './profile-header.style';
@@ -33,20 +31,23 @@ import {format} from 'date-fns';
 import millify from 'millify';
 import {Status, Toaster} from 'src/components-v2/atoms/Toaster';
 import ShowIf from 'src/components/common/show-if.component';
+import {Friend, FriendStatus} from 'src/interfaces/friend';
+import {ReportProps} from 'src/interfaces/report';
+import {User} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
+import {BalanceState} from 'src/reducers/balance/reducer';
 
 export type Props = {
   user: User;
   selfProfile: boolean;
-  status: Friend | null;
-  totalFriends: number;
-  totalExperience: number;
-  totalPost: number;
+  status?: Friend;
   onSendRequest: () => void;
+  onUnblockFriend: (friend: Friend) => void;
   onDeclineRequest: () => void;
   onSendTip: () => void;
   onEdit?: () => void;
   linkUrl: string;
-  onSubmit: (payload: Partial<Report>) => void;
+  onSubmitReport: (payload: ReportProps) => void;
   onBlock: () => void;
 };
 
@@ -57,14 +58,12 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     user,
     selfProfile,
     status,
-    totalFriends,
-    totalExperience,
-    totalPost,
     onEdit,
     onSendRequest,
+    onUnblockFriend,
     onSendTip,
     linkUrl,
-    onSubmit,
+    onSubmitReport,
     onBlock,
   } = props;
   const style = useStyles();
@@ -82,14 +81,12 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     setAnchorElFriend(null);
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (status?.status === FriendStatus.APPROVED) {
-      e.stopPropagation();
-      setAnchorEl(e.currentTarget);
-    }
+  const handleClickUserOption = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setAnchorEl(e.currentTarget);
   };
 
-  const handleClickOption = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClickFriendOption = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (status?.status === FriendStatus.APPROVED) {
       e.stopPropagation();
       setAnchorElFriend(e.currentTarget);
@@ -145,6 +142,14 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     setOpenPrompt(false);
   };
 
+  const handleSendRequest = () => {
+    if (status) {
+      onUnblockFriend(status);
+    } else {
+      onSendRequest();
+    }
+  };
+
   const handleURL = (url: string): string => {
     if (url.search('http') === -1) {
       return 'https://' + url;
@@ -168,8 +173,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               alt={user.name}
               src={user.profilePictureURL}
               variant="circle"
-              className={style.avatar}
-            />
+              className={style.avatar}>
+              {acronym(user.name)}
+            </Avatar>
             <div>
               <Typography className={style.name} component="p">
                 {user.name}
@@ -182,7 +188,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           {!selfProfile && (
             <>
               <IconButton
-                onClick={handleClick}
+                onClick={handleClickUserOption}
                 classes={{root: style.action}}
                 aria-label="profile-setting">
                 <SvgIcon
@@ -248,7 +254,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Post
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(totalPost)}
+                {formatNumber(user.metric?.totalPosts ?? 0)}
               </Typography>
             </div>
             <div className={style.text}>
@@ -256,7 +262,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Kudos
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(0)}
+                {formatNumber(user.metric?.totalKudos ?? 0)}
               </Typography>
             </div>
             <div className={style.text}>
@@ -264,7 +270,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Friends
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(totalFriends)}
+                {formatNumber(user.metric?.totalFriends ?? 0)}
               </Typography>
             </div>
             <div className={style.text}>
@@ -272,7 +278,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Experience
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(totalExperience)}
+                {formatNumber(user.metric?.totalExperiences ?? 0)}
               </Typography>
             </div>
           </div>
@@ -291,7 +297,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             <ShowIf condition={!selfProfile}>
               <ShowIf condition={!status}>
                 <Button
-                  onClick={onSendRequest}
+                  onClick={handleSendRequest}
                   startIcon={
                     <SvgIcon
                       classes={{root: style.fill}}
@@ -308,9 +314,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 </Button>
               </ShowIf>
 
-              <ShowIf condition={Boolean(status)}>
+              <ShowIf condition={Boolean(status) && status?.status !== FriendStatus.BLOCKED}>
                 <Button
-                  onClick={handleClickOption}
+                  onClick={handleClickFriendOption}
                   startIcon={
                     <SvgIcon
                       classes={{root: style.fill}}
@@ -318,12 +324,17 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                       viewBox="0 0 22 22"
                     />
                   }
+                  endIcon={
+                    status?.status === FriendStatus.APPROVED ? (
+                      <SvgIcon component={ChevronDownIcon} />
+                    ) : null
+                  }
                   classes={{root: style.button}}
                   className={style.mr12}
                   variant="contained"
                   color={status?.status === FriendStatus.APPROVED ? 'primary' : 'default'}
                   size="small">
-                  <ShowIf condition={status?.status === FriendStatus.APPROVED}>Friend</ShowIf>
+                  <ShowIf condition={status?.status === FriendStatus.APPROVED}>Friends</ShowIf>
                   <ShowIf condition={status?.status === FriendStatus.PENDING}>Requested</ShowIf>
                 </Button>
                 <Menu
@@ -343,22 +354,24 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 </Menu>
               </ShowIf>
 
-              <Button
-                disabled={balanceDetails.length === 0}
-                onClick={onSendTip}
-                startIcon={
-                  <SvgIcon
-                    classes={{root: style.fill}}
-                    component={CurrencyDollarIcon}
-                    viewBox="2 2 21 21"
-                  />
-                }
-                classes={{root: style.button}}
-                variant="contained"
-                color="primary"
-                size="small">
-                Send Tip
-              </Button>
+              <ShowIf condition={status?.status !== FriendStatus.BLOCKED}>
+                <Button
+                  disabled={balanceDetails.length === 0}
+                  onClick={onSendTip}
+                  startIcon={
+                    <SvgIcon
+                      classes={{root: style.fill}}
+                      component={CurrencyDollarIcon}
+                      viewBox="2 2 21 21"
+                    />
+                  }
+                  classes={{root: style.button}}
+                  variant="contained"
+                  color="primary"
+                  size="small">
+                  Send Tip
+                </Button>
+              </ShowIf>
             </ShowIf>
           </div>
         </div>
@@ -389,7 +402,12 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         </div>
       </PromptComponent>
 
-      <ReportComponent onSubmit={onSubmit} user={user} open={open} onClose={handleCloseModal} />
+      <ReportComponent
+        onSubmit={onSubmitReport}
+        user={user}
+        open={open}
+        onClose={handleCloseModal}
+      />
 
       <Toaster
         open={linkCopied}

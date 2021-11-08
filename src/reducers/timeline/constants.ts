@@ -48,6 +48,9 @@ export type SET_DOWNVOTING = typeof SET_DOWNVOTING;
 export const DOWNVOTE_POST = 'DOWNVOTE_POST';
 export type DOWNVOTE_POST = typeof DOWNVOTE_POST;
 
+export const REMOVE_VOTE_POST = 'REMOVE_VOTE_POST';
+export type REMOVE_VOTE_POST = typeof REMOVE_VOTE_POST;
+
 export const SET_TIPPED_CONTENT = 'SET_TIPPED_CONTENT';
 export type SET_TIPPED_CONTENT = typeof SET_TIPPED_CONTENT;
 
