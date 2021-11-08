@@ -2,13 +2,13 @@ import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useImageUpload} from 'src/hooks/use-image-upload.hook';
-import {User, Report} from 'src/interfaces/user';
+import {User} from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileDetail} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {updatePostPlatformUser} from 'src/reducers/timeline/actions';
-import {updateUser, reportUser} from 'src/reducers/user/actions';
+import {updateUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const useProfileHook = () => {
@@ -87,7 +87,6 @@ export const useProfileHook = () => {
     try {
       const {data} = await UserAPI.checkUsername(user.id);
       if (data.length) {
-        console.log(data);
         setUsernameStatus(true);
       }
     } catch (error) {
@@ -110,12 +109,6 @@ export const useProfileHook = () => {
     }
   };
 
-  const reportUserProfile = async (payload: Partial<Report>): Promise<void> => {
-    if (!user) return;
-    const data = {...payload, reportedBy: user.id};
-    dispatch(reportUser(data));
-  };
-
   return {
     loading,
     uploadingAvatar,
@@ -127,6 +120,5 @@ export const useProfileHook = () => {
     checkUsernameAvailable,
     usernameStatus,
     usernameAvailable,
-    reportUser: reportUserProfile,
   };
 };

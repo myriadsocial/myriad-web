@@ -1,4 +1,4 @@
-import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
+import {createStyles, Theme, makeStyles, alpha} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,14 +27,17 @@ export const useStyles = makeStyles((theme: Theme) =>
     list: {
       marginLeft: theme.spacing(-2),
       marginRight: theme.spacing(-2),
-      height: '500px',
-      overflow: 'scroll',
+      minHeight: 500,
+      overflow: 'auto',
     },
     item: {
       position: 'relative',
       '& .MuiListItemText-root': {
         alignItems: 'start',
       },
+    },
+    unread: {
+      backgroundColor: alpha('#FFC857', 0.15),
     },
     circle: {
       background: theme.palette.primary.main,

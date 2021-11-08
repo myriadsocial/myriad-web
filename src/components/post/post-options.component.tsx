@@ -55,22 +55,18 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({postId, ownPos
 
   const handleEditPost = () => {
     handleClose();
-    console.log('post edited!');
   };
 
   const handleCopyLink = () => {
     handleClose();
-    console.log('link copied!');
   };
 
   const handleVisitMyriadAccount = () => {
     handleClose();
-    console.log('go to myriad profile');
   };
 
   const handleVisitSocialPost = () => {
     handleClose();
-    console.log('got to social post');
   };
 
   const handleDeletePost = () => {
@@ -79,7 +75,6 @@ export const PostOptionsComponent: React.FC<PostOptionsProps> = ({postId, ownPos
 
   const handleReportPost = () => {
     handleClose();
-    console.log('post reported!');
   };
 
   const handleClose = () => {

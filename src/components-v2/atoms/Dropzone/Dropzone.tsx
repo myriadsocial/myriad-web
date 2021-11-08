@@ -5,24 +5,26 @@ import {FileRejection, useDropzone} from 'react-dropzone';
 
 import {
   Button,
+  capitalize,
   IconButton,
   ImageList,
   ImageListItem,
-  ImageListItemBar,
   SvgIcon,
   Typography,
 } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import {Skeleton} from '@material-ui/lab';
 
-import UploadIcon from '../../../images/Icons/Upload.svg';
 import {Status, Toaster} from '../Toaster';
 import {useStyles} from './Dropzone.styles';
 
 import ShowIf from 'src/components/common/show-if.component';
+import UploadIcon from 'src/images/Icons/Upload.svg';
+import ImagePlaceholder from 'src/images/Icons/myriad-grey.svg';
 
 type DropzoneProps = {
   value?: string;
   type?: 'image' | 'video';
+  border?: boolean;
   placeholder?: string;
   loading?: boolean;
   accept?: string[];
@@ -33,20 +35,22 @@ type DropzoneProps = {
 
 type FileUploaded = File & {
   preview: string;
+  loading: boolean;
 };
 
 export const Dropzone: React.FC<DropzoneProps> = props => {
   const {
     onImageSelected,
-    loading = false,
     value,
     type = 'image',
     accept = ['image/jpeg', 'image/png'],
     maxSize = 20,
+    loading = false,
     multiple = false,
+    border = true,
     placeholder = 'File must be .jpeg or .png',
   } = props;
-  const styles = useStyles();
+  const styles = useStyles({border});
 
   const [files, setFiles] = useState<FileUploaded[]>([]);
   const [preview, setPreview] = useState<string[]>([]);
@@ -65,22 +69,56 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     noKeyboard: true,
     multiple,
     onDrop: acceptedFiles => {
-      setFiles(
-        acceptedFiles.map(file =>
+      let newFiles: FileUploaded[] = [];
+
+      if (multiple) {
+        newFiles = [
+          ...files,
+          ...acceptedFiles.map(file =>
+            Object.assign(file, {
+              preview: URL.createObjectURL(file),
+              loading: type === 'image',
+            }),
+          ),
+        ];
+
+        setFiles(newFiles);
+
+        setPreview(prevPreview => [
+          ...prevPreview,
+          ...acceptedFiles.map(file => URL.createObjectURL(file)),
+        ]);
+      } else {
+        newFiles = acceptedFiles.map(file =>
           Object.assign(file, {
             preview: URL.createObjectURL(file),
+            loading: type === 'image',
           }),
-        ),
-      );
+        );
 
-      setPreview(acceptedFiles.map(file => URL.createObjectURL(file)));
+        setFiles(newFiles);
 
-      onImageSelected(acceptedFiles);
+        setPreview(acceptedFiles.map(file => URL.createObjectURL(file)));
+      }
+
+      onImageSelected(newFiles);
     },
     onDropRejected: rejection => {
       setError(rejection);
     },
   });
+
+  const imageLoaded = (index: number) => () => {
+    setFiles(prevFiles =>
+      prevFiles.map((file, i) => {
+        if (i === index) {
+          file.loading = false;
+        }
+
+        return file;
+      }),
+    );
+  };
 
   const removeFile = (index: number) => {
     const currentFiles = files.filter((file, i) => index !== i);
@@ -101,13 +139,13 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
   };
 
   const getCols = (): number => {
-    return preview.length % 3 === 0 ? 2 : preview.length % 2 === 0 ? 3 : preview.length > 1 ? 2 : 6;
+    return preview.length === 1 ? 6 : 2;
   };
 
   const getRows = (): number => {
     const cols = getCols();
 
-    return cols === 6 ? 3 : cols === 3 ? 2 : 1;
+    return cols === 6 ? 3 : 1;
   };
 
   return (
@@ -117,23 +155,46 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
         {preview.length ? (
           <>
             <ShowIf condition={type === 'image'}>
-              <ImageList rowHeight={112} cols={6} className={styles.preview} gap={10}>
+              <ImageList rowHeight={128} cols={6} className={styles.preview}>
                 {files.map((item, i) => (
-                  <ImageListItem key={i} cols={getCols()} rows={getRows()}>
-                    <img src={item.preview} alt="" className={styles.image} />
-                    <ImageListItemBar
-                      position="top"
-                      style={{background: 'none'}}
-                      actionIcon={
-                        <IconButton
-                          size="small"
-                          aria-label={`remove image`}
-                          className={styles.icon}
-                          onClick={() => removeFile(i)}>
-                          <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
-                        </IconButton>
-                      }
+                  <ImageListItem
+                    key={i}
+                    cols={getCols()}
+                    rows={getRows()}
+                    classes={{item: styles.item}}>
+                    {item.loading && (
+                      <Skeleton
+                        variant="rect"
+                        animation={false}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                        width={115 * getCols()}
+                        height={128 * getRows()}>
+                        <SvgIcon
+                          component={ImagePlaceholder}
+                          viewBox="0 0 50 50"
+                          style={{width: 50, height: 50, visibility: 'visible'}}
+                        />
+                      </Skeleton>
+                    )}
+                    <img
+                      style={{visibility: item.loading ? 'hidden' : 'visible'}}
+                      src={item.preview}
+                      alt=""
+                      className={styles.image}
+                      onLoad={imageLoaded(i)}
                     />
+
+                    <IconButton
+                      size="small"
+                      aria-label={`remove image`}
+                      className={styles.icon}
+                      onClick={() => removeFile(i)}>
+                      <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
+                    </IconButton>
                   </ImageListItem>
                 ))}
               </ImageList>
@@ -141,7 +202,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
 
             <ShowIf condition={type === 'video'}>
               {files.map((item, i) => (
-                <video key={i} controls width="500">
+                <video key={item.name} controls style={{width: '100%'}}>
                   <track kind="captions" />
                   <source src={item.preview} type="video/mp4" />
                   <div>Video encoding not supported.</div>
@@ -154,19 +215,18 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
             <UploadIcon />
 
             <Typography>{placeholder}</Typography>
-
-            <Button
-              className={styles.button}
-              size="small"
-              variant={value ? 'outlined' : 'contained'}
-              color={value ? 'secondary' : 'primary'}
-              onClick={handleReuploadImage}>
-              <ShowIf condition={loading}>
-                <CircularProgress size="24" color="secondary" style={{marginRight: 12}} />
-              </ShowIf>
-              {value ? 'Reupload' : 'Upload'} File
-            </Button>
           </>
+        )}
+
+        {!loading && (
+          <Button
+            className={styles.button}
+            size="small"
+            variant={preview.length ? 'outlined' : 'contained'}
+            color={value ? 'secondary' : 'primary'}
+            onClick={handleReuploadImage}>
+            Upload {capitalize(type)}
+          </Button>
         )}
       </div>
 

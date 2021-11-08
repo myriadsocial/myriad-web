@@ -23,6 +23,7 @@ type PostsListProps = {
   onReport: (post: Post) => void;
   toggleDownvoting: (reference: Post | Comment | null) => void;
   onShared: (post: Post, type: 'link' | 'post') => void;
+  onRemoveVote: (reference: Post | Comment) => void;
 };
 
 export const PostsList: React.FC<PostsListProps> = props => {
@@ -38,6 +39,7 @@ export const PostsList: React.FC<PostsListProps> = props => {
     onReport,
     onShared,
     toggleDownvoting,
+    onRemoveVote,
   } = props;
 
   useEffect(() => {
@@ -102,6 +104,7 @@ export const PostsList: React.FC<PostsListProps> = props => {
             onOpenTipHistory={onOpenTipHistory}
             onReport={onReport}
             onShared={onShared}
+            onRemoveVote={onRemoveVote}
           />
         ))}
       </InfiniteScroll>

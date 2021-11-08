@@ -49,6 +49,10 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
     });
   };
 
+  const onCancel = () => {
+    onClose();
+  };
+
   return (
     <>
       {user && (
@@ -63,6 +67,7 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
           isChanged={usernameStatus}
           checkAvailable={handleUsernameAvailable}
           isAvailable={usernameAvailable}
+          onCancel={onCancel}
         />
       )}
     </>

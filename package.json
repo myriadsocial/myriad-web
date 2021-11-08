@@ -94,6 +94,7 @@
     "next-redux-wrapper": "^7.0.2",
     "next-transpile-modules": "^6.4.0",
     "node-fetch": "^2.6.1",
+    "notistack": "^1.0.10",
     "react": "next",
     "react-beautiful-dnd": "^13.1.0",
     "react-cookie": "^4.0.3",
@@ -127,7 +128,7 @@
     "slate-react": "^0.65.3",
     "styled-components": "^5.3.1",
     "tslib": "2.1.0",
-    "unique-names-generator": "^4.4.0",
+    "unique-names-generator": "^4.6.0",
     "url-loader": "^3.0.0",
     "uuid": "^8.3.2"
   },

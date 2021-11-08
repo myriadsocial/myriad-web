@@ -49,7 +49,10 @@ export const Toaster: React.FC<ToasterProps> = props => {
 
   return (
     <div>
-      <Snackbar open={open} onClose={handleClose}>
+      <Snackbar
+        open={open}
+        onClose={handleClose}
+        autoHideDuration={toasterStatus !== Status.DANGER ? 3000 : null}>
         <Paper
           style={{
             borderRadius: 10,

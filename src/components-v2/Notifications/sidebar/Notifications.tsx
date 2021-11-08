@@ -14,6 +14,7 @@ import {Theme, withStyles, createStyles} from '@material-ui/core/styles';
 import {useNotificationList} from '../hooks/use-notification-list.hook';
 import {useStyles} from './Notifications.styles';
 
+import clsx from 'clsx';
 import {formatDistance, subDays} from 'date-fns';
 import {AvatarComponent} from 'src/components/common/Avatar.component';
 import {acronym} from 'src/helpers/string';
@@ -51,7 +52,7 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
           Notifications
         </Typography>
         <Button
-          style={{width: 'auto', fontSize: '12px', padding: 0}}
+          style={{width: 'auto', fontSize: '12px', padding: 0, fontWeight: 'bold'}}
           color="primary"
           onClick={onMarkAllAsRead}>
           Mark all as read
@@ -60,7 +61,13 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
       <List className={style.list}>
         {list.map(notification => {
           return (
-            <ListItem key={notification.id} className={style.item} alignItems="center">
+            <ListItem
+              key={notification.id}
+              className={clsx({
+                [style.item]: true,
+                [style.unread]: !notification.read,
+              })}
+              alignItems="center">
               <ListItemAvatar>
                 <StyledBadge badgeContent={notification.badge}>
                   <AvatarComponent className={style.avatar} src={notification.avatar}>
@@ -93,7 +100,7 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
       <div className={style.footer}>
         <Link href="/notification">
           <a href={`/notification`} className={style.link}>
-            <Typography>View all notifications</Typography>
+            <Typography style={{fontWeight: 'bold'}}>View all notifications</Typography>
           </a>
         </Link>
       </div>

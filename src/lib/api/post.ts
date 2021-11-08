@@ -4,7 +4,7 @@ import {BaseList} from './interfaces/base-list.interface';
 import {LoopbackWhere} from './interfaces/loopback-query.interface';
 
 import {Dislike, Like} from 'src/interfaces/interaction';
-import {Post, PostProps, ImportPostProps} from 'src/interfaces/post';
+import {Post, PostProps, ImportPostProps, PostVisibility} from 'src/interfaces/post';
 import {TimelineSortMethod, TimelineFilter, TimelineType} from 'src/interfaces/timeline';
 
 type PostList = BaseList<Post>;
@@ -19,7 +19,10 @@ export const getPost = async (
   sort?: TimelineSortMethod,
   filters?: TimelineFilter,
 ): Promise<PostList> => {
-  const where: LoopbackWhere<PostProps> = {};
+  const where: LoopbackWhere<PostProps> = {
+    deletedAt: {exists: false},
+  };
+
   let orderField = 'originCreatedAt';
 
   switch (sort) {
@@ -58,19 +61,40 @@ export const getPost = async (
   }
 
   if (filters && filters.owner) {
-    where.createdBy = {
-      eq: filters.owner,
-    };
+    where.or = [
+      {
+        createdBy: {
+          eq: filters.owner,
+        },
+      },
+      {
+        importers: {
+          inq: [filters.owner],
+        },
+      },
+    ];
 
-    where.importers = {
-      inq: [filters.importer],
-    };
+    if (userId === filters.owner) {
+      delete where.deletedAt;
+    } else {
+      where.visibility = {
+        inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
+      };
+    }
   }
 
   if (filters && filters.importer) {
     where.importers = {
       inq: [filters.importer],
     };
+
+    if (userId === filters.importer) {
+      delete where.deletedAt;
+    } else {
+      where.visibility = {
+        inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
+      };
+    }
   }
 
   const filterParams: Record<string, any> = {
@@ -102,24 +126,21 @@ export const getPost = async (
     case TimelineType.FRIEND:
     case TimelineType.EXPERIENCE:
     case TimelineType.TRENDING:
-      if (
-        filters &&
-        (!filters.tags || filters.tags.length == 0) &&
-        (!filters.people || filters.people.length === 0)
-      ) {
-        params.timelineType = type;
-        params.userId = userId;
-        params.filter = filterParams;
-      } else {
-        filterParams.where = where;
-        params.filter = filterParams;
-      }
+      filterParams.where = where;
+
+      params.filter = filterParams;
+      params.timelineType = type;
+      params.userId = userId;
 
       break;
     default:
       filterParams.where = where;
+
+      if (!filters?.importer && !filters?.owner) {
+        params.timelineType = TimelineType.ALL;
+      }
+
       params.filter = filterParams;
-      params.timelineType = TimelineType.ALL;
       params.userId = userId;
       break;
   }

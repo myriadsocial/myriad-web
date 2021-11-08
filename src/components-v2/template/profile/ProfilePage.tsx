@@ -67,16 +67,13 @@ const ProfilePage = (): JSX.Element => {
             <ProfileHeaderComponent
               user={Header.args?.user ?? user}
               selfProfile={true}
-              status={null}
               onDeclineRequest={console.log}
               onSendRequest={console.log}
               onSendTip={console.log}
-              totalExperience={0}
-              totalFriends={0}
-              totalPost={0}
               linkUrl={''}
-              onSubmit={console.log}
+              onSubmitReport={console.log}
               onBlock={console.log}
+              onUnblockFriend={console.log}
             />
           </div>
           <div style={{width: '100%'}}>

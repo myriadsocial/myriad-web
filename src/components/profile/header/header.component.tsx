@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {useSelector} from 'react-redux';
 
@@ -30,6 +30,7 @@ import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
+import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 type ProfileHeaderProps = {
@@ -42,19 +43,16 @@ type ProfileHeaderProps = {
 const ProfileHeaderComponent: React.FC<ProfileHeaderProps> = ({isAnonymous, profile, isGuest}) => {
   const style = useStyles();
 
-  const {friendStatus, makeFriend, checkFriendStatus, removeFriendRequest, toggleRequest} =
-    useFriendHook();
+  const {makeFriend, removeFriendRequest, toggleRequest} = useFriendHook();
   const {showAlert} = useAlertHook();
   const {logout} = useAuthHook();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {friendStatus} = useSelector<RootState, ProfileState>(state => state.profileState);
+
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);
   const [isrequestSent, setIsRequestSent] = useState(false);
-
-  useEffect(() => {
-    checkFriendStatus(profile.id);
-  }, [profile.id]);
 
   const profileInfo =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae nibh eu tellus tincidunt luctus hendrerit in orci. Phasellus vitae tristique nulla. Nam magna massa, sollicitudin sed turpis eros.';

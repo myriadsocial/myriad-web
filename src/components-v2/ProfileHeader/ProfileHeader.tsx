@@ -36,7 +36,10 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
         <div className={classes.secondRoot}>
           <div className={classes.iconButtonWrapper}>
             <IconButton aria-label="avatar" disabled={!!alias} onClick={onShowNotificationList}>
-              <Badge color="secondary" variant="dot" invisible={notificationCount === 0}>
+              <Badge
+                className={classes.notification}
+                variant="dot"
+                invisible={notificationCount === 0}>
                 <SvgIcon component={BellIconDefault} />
               </Badge>
             </IconButton>

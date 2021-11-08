@@ -1,4 +1,4 @@
-import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
+import {createStyles, Theme, makeStyles, alpha} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,6 +36,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiListItemText-root': {
         alignSelf: 'center',
       },
+    },
+    unread: {
+      backgroundColor: alpha('#FFC857', 0.15),
     },
     circle: {
       background: theme.palette.primary.main,

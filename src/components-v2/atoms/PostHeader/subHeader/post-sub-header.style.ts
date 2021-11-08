@@ -15,5 +15,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.primary.main,
       textDecoration: 'none',
     },
+    linkGrey: {
+      color: theme.palette.text.secondary,
+      textDecoration: 'none',
+    },
   }),
 );

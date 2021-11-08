@@ -1,9 +1,13 @@
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+type StylesProps = {
+  border: boolean;
+};
+
+export const useStyles = makeStyles<Theme, StylesProps>(theme =>
   createStyles({
     root: {
-      border: '1px dashed #E5E5E5',
+      border: props => (props.border ? '1px dashed #E5E5E5' : 'none'),
       padding: 8,
       background: '#FFF',
       borderRadius: 5,
@@ -12,6 +16,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       minHeight: 180,
       position: 'relative',
+      width: '100%',
     },
     loading: {
       position: 'absolute',
@@ -20,18 +25,27 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     dropzone: {
       textAlign: 'center',
+      width: '100%',
     },
     preview: {
+      width: '100%',
       display: 'flex',
       alignItems: 'center',
       flexDirection: 'row',
     },
+    item: {
+      padding: theme.spacing(1, 1, 1, 0),
+      height: '100%',
+      display: 'block',
+    },
     image: {
       objectFit: 'cover',
+      objectPosition: 'center',
       height: '100%',
+      width: '100%',
     },
     icon: {
-      boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
+      filter: 'drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.16))',
       color: theme.palette.primary.main,
       background: '#FFF',
       padding: 0,

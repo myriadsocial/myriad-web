@@ -5,17 +5,23 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       padding: theme.spacing(1, 1, 3),
       background: '#FFF',
-      width: 580,
+      width: 720,
     },
     confirm: {
-      marginTop: 60,
+      marginTop: 16,
+      position: 'relative',
+    },
+    button: {
+      '& .MuiButton-label': {
+        zIndex: 2,
+      },
     },
     progress: {
-      position: 'absolute',
-      top: '50%',
-      right: 30,
-      marginTop: -12,
-      marginLeft: -12,
+      backgroundColor: '#C2C2C2',
+      width: '100%',
+      height: 10,
+      marginBottom: 30,
+      borderRadius: 20,
     },
   }),
 );

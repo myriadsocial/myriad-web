@@ -17,5 +17,4 @@ const Template: ComponentStory<typeof ExperienceTabPanel> = args => (
 export const ExperiencePanel = Template.bind({});
 ExperiencePanel.args = {
   experiences: ExperienceList.args?.experiences ?? [],
-  isOnHomePage: true,
 };

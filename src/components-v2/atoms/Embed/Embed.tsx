@@ -1,18 +1,18 @@
-import React, {useEffect, useRef, useState, useMemo} from 'react';
+import React from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
+import {Tweet} from 'react-twitter-widgets';
 
-import CircularProgress from '@material-ui/core/CircularProgress';
-
-import ShowIf from '../../../components/common/show-if.component';
 import {useStyles} from './Embed.styles';
-import {isFacebookUrl} from './util';
 
-import Embedo from 'embedo';
-import {EmbedoReddit} from 'embedo/plugins';
+import ShowIf from 'src/components/common/show-if.component';
+import {generateRedditEmbedUrl} from 'src/helpers/url';
+import {SocialsEnum} from 'src/interfaces/social';
 
 type EmbedProps = {
+  social: SocialsEnum;
   url: string;
-  options?: {
+  postId: string;
+  options: {
     facebookAppId: string;
   };
   showError?: boolean;
@@ -20,72 +20,42 @@ type EmbedProps = {
   onClick?: () => void;
 };
 
-Embedo.plugins([EmbedoReddit.default]);
-
 export const Embed: React.FC<EmbedProps> = props => {
-  const {url, options, showError = false, onClick, onError} = props;
+  const {social, url, postId, options, onClick} = props;
   const styles = useStyles();
-
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const isFacebook = isFacebookUrl(url);
-
-  const embedo = useMemo(() => {
-    const embedo = new Embedo({
-      facebook: null,
-      twitter: true,
-      reddit: true,
-    });
-
-    return embedo;
-  }, [Embedo, options]);
-
-  useEffect(() => {
-    if (!isFacebook) {
-      setLoading(true);
-
-      embedo
-        .load(ref.current, url, options)
-        .done(() => {
-          setLoading(false);
-        })
-        .fail((err: any) => {
-          setLoading(false);
-
-          setError('Error');
-          onError && onError('Error');
-        });
-    }
-
-    return () => {
-      embedo.destroy(ref.current);
-    };
-  }, [url, isFacebook]);
 
   const handleClick = (): void => {
     onClick && onClick();
   };
 
   return (
-    <div className={styles.root}>
-      <div ref={ref} onClick={handleClick} />
+    <div className={styles.root} onClick={handleClick}>
+      <ShowIf condition={social === SocialsEnum.TWITTER}>
+        <div style={{margin: '0 auto', width: 560}}>
+          <Tweet tweetId={postId} options={{height: 560}} />
+        </div>
+      </ShowIf>
 
-      <ShowIf condition={isFacebook}>
+      <ShowIf condition={social === SocialsEnum.FACEBOOK}>
         <FacebookProvider appId={options?.facebookAppId}>
-          <EmbeddedPost href={url} width="700" />
+          <EmbeddedPost href={url} width="780" />
         </FacebookProvider>
       </ShowIf>
 
-      {loading && (
-        <div className={styles.loading}>
-          <CircularProgress />
-        </div>
-      )}
+      <ShowIf condition={social === SocialsEnum.REDDIT}>
+        <iframe
+          id="reddit-embed"
+          title="Reddit preview"
+          src={generateRedditEmbedUrl(url)}
+          sandbox="allow-scripts allow-same-origin allow-popups"
+          style={{border: 'none'}}
+          width="780"
+          height="560"
+          scrolling="yes"
+        />
+      </ShowIf>
 
       <div id="fb-root" />
-
-      {showError && error}
     </div>
   );
 };

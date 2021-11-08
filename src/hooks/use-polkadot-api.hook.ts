@@ -1,11 +1,12 @@
 import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {Status} from '../interfaces/toaster';
 import {SimpleSendTipProps} from '../interfaces/transaction';
-import {showToaster} from '../reducers/toaster/actions';
+import {setIsTipSent} from '../reducers/wallet/actions';
+import {WalletState} from '../reducers/wallet/reducer';
 
 import _ from 'lodash';
+import {useSnackbar} from 'notistack';
 import {useTipSummaryHook} from 'src/components/tip-summary/use-tip-summary.hook';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {Currency} from 'src/interfaces/currency';
@@ -20,8 +21,10 @@ import {BalanceState} from 'src/reducers/balance/reducer';
 export const usePolkadotApi = () => {
   const dispatch = useDispatch();
   const balanceState = useSelector<RootState, BalanceState>(state => state.balanceState);
+  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
   const {showAlert, showTipAlert} = useAlertHook();
   const {openTipSummaryForComment} = useTipSummaryHook();
+  const {enqueueSnackbar} = useSnackbar();
 
   const [loading, setLoading] = useState(false);
   const [isSignerLoading, setSignerLoading] = useState(false);
@@ -120,6 +123,10 @@ export const usePolkadotApi = () => {
     setLoading(true);
     setError(null);
 
+    if (isTipSent) {
+      dispatch(setIsTipSent(false));
+    }
+
     try {
       setSignerLoading(true);
 
@@ -159,22 +166,18 @@ export const usePolkadotApi = () => {
           referenceId,
         });
 
-        dispatch(
-          showToaster({
-            toasterStatus: Status.SUCCESS,
-            message: 'Tip sent!',
-          }),
-        );
+        dispatch(setIsTipSent(true));
+
+        enqueueSnackbar('Tip sent!', {variant: 'success', autoHideDuration: 3000});
+
         callback && callback();
       }
     } catch (error) {
       if (error.message === 'Cancelled') {
-        dispatch(
-          showToaster({
-            toasterStatus: Status.WARNING,
-            message: 'Transaction signing cancelled',
-          }),
-        );
+        enqueueSnackbar('Transaction signing cancelled', {
+          variant: 'warning',
+          autoHideDuration: 3000,
+        });
       }
     } finally {
       setLoading(false);
