@@ -21,6 +21,7 @@ const moduleExports = {
     appName: process.env.NEXT_PUBLIC_APP_NAME,
     apiURL: process.env.NEXT_PUBLIC_API_URL,
     nextAuthURL: process.env.NEXTAUTH_URL,
+    gunRelayURL: process.env.GUN_RELAY_PEERS,
     facebookAppId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
     myriadWsRPC: process.env.NEXT_PUBLIC_MYRIAD_WS_RPC,
     cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,

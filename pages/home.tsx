@@ -1,6 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {Firegun} from '@yokowasis/firegun';
+import {useDispatch} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
 import {RichTextContainer} from '../src/components-v2/Richtext/RichTextContainer';
@@ -17,7 +20,86 @@ import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
-const Home: React.FC = () => {
+const Home: React.FC = (props: any) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchConnectedSocials());
+    dispatch(fetchAvailableToken());
+  }, [dispatch]);
+
+  useEffect(() => {
+    // Patch pub dan Epub
+    const {publicRuntimeConfig} = getConfig();
+    const baseURL = publicRuntimeConfig.apiURL;
+    const gunRelayURL = publicRuntimeConfig.gunRelayURL.split(',');
+    const userID = props.session.user.address;
+
+    const fg = new Firegun(gunRelayURL);
+
+    (window as any).fg = fg;
+
+
+    async function userLoginSignup(gunUser: string, gunPass: string, alias: string) {
+      try {
+        await fg.userLogin(gunUser, gunPass, alias);
+      } catch (error) {
+        await fg.userNew(gunUser, gunPass, alias);
+      }
+    }
+
+    async function patchUser(id: string, pubkey: string, epub: string) {
+      fetch(`${baseURL}/users/${id}`, {
+        method: 'PATCH',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          gunPub: pubkey,
+          gunEpub: epub,
+        }),
+      }).then(res => {
+        console.log('PATCH BERHASIL', res);
+      });
+    }
+
+    fetch(`${baseURL}/users/${userID}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json())
+      .then(async result => {
+        console.log(result);
+        const gunUser = userID;
+        const gunPass = result.password.slice(0, 10);
+        const gunAlias = result.name;
+        console.log("Login", 
+        "user : " , gunUser, 
+        "password : ", gunPass, 
+        "passwordLengkap : ", result.password,
+        "alias : ", gunAlias);
+        if (fg.user.alias === '') {
+          await userLoginSignup(gunUser, gunPass, gunAlias);
+          await patchUser(userID, fg.user.pair.pub, fg.user.pair.epub);
+          fg.userPut('alias', gunAlias);
+        } else {
+          if (fg.user.alias !== gunAlias) {
+            fg.userLogout();
+            await userLoginSignup(gunUser, gunPass, gunAlias);
+            await patchUser(userID, fg.user.pair.pub, fg.user.pair.epub);
+            fg.userPut('alias', gunAlias);
+          }
+        }
+      });
+  }, []);
+
+  //TODO: any logic + components which replace
+  // the middle column of home page should go here
+  
   const router = useRouter();
 
   const performSearch = (query: string) => {
