@@ -40,12 +40,10 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const {filterTimeline} = useTimelineFilter({
     owner: profile?.id,
   });
-  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
 
+  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
   const [tippedUser, setTippedUser] = useState<User | null>(null);
   const sendTipOpened = Boolean(tippedUser);
-
-  const isOwnProfile = profile?.id === user?.id;
 
   const urlLink = () => {
     if (typeof window !== 'undefined') {
@@ -79,15 +77,13 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     removeFriendRequest(friendStatus);
   };
 
-  if (!user) return null;
-
-  if (!profile) return null;
-
   const handleSendTip = () => {
-    setTippedUser(profile);
+    if (profile) {
+      setTippedUser(profile);
 
-    dispatch(setDetailTippedUser(profile.name, profile.profilePictureURL ?? ''));
-    dispatch(setTippedUserId(profile.id));
+      dispatch(setDetailTippedUser(profile.name, profile.profilePictureURL ?? ''));
+      dispatch(setTippedUserId(profile.id));
+    }
   };
 
   const closeSendTip = () => {
@@ -117,11 +113,35 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     toggleRequest(friend, FriendStatus.PENDING);
   };
 
+  const handleAcceptFriend = () => {
+    if (friendStatus) {
+      toggleRequest(friendStatus, FriendStatus.APPROVED);
+
+      openToaster({
+        message: 'Friend request confirmed',
+        toasterStatus: Status.SUCCESS,
+      });
+    }
+  };
+
+  const handleRemoveFriend = () => {
+    if (friendStatus) {
+      removeFriendRequest(friendStatus);
+
+      openToaster({
+        message: `${profile?.name} has removed from your friend list`,
+        toasterStatus: Status.SUCCESS,
+      });
+    }
+  };
+
+  if (!user || !profile) return null;
+
   return (
     <>
       <ProfileHeaderComponent
-        user={profile}
-        selfProfile={isOwnProfile}
+        person={profile}
+        user={user}
         status={friendStatus}
         onSendRequest={sendFriendReqest}
         onDeclineRequest={declineFriendRequest}
@@ -131,6 +151,8 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
         onEdit={edit}
         linkUrl={`${urlLink()}/profile/${profile.id}`}
         onSubmitReport={handleSubmitReport}
+        onRemoveFriend={handleRemoveFriend}
+        onAcceptFriend={handleAcceptFriend}
       />
       <Modal
         gutter="none"
