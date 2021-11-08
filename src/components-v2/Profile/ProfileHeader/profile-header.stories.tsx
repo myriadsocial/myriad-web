@@ -29,6 +29,5 @@ export const user = {
 
 export const Header = Template.bind({});
 Header.args = {
-  user,
-  selfProfile: true,
+  person: user,
 };

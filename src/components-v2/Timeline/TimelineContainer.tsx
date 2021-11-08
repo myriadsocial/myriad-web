@@ -164,7 +164,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
         open={removing}
         icon="danger"
         onCancel={handleClosePrompt}>
-        <Grid container justifyContent="space-between">
+        <Grid container justifyContent="space-between" style={{padding: '0 20px'}}>
           <Button size="small" variant="outlined" color="secondary" onClick={handleClosePrompt}>
             No, let me rethink
           </Button>
