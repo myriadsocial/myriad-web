@@ -5,11 +5,5 @@ export const useStyles = makeStyles((theme: Theme) =>
     dropdownMenu: {
       marginBottom: theme.spacing(1.5),
     },
-    rootPostsList: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      rowGap: 12,
-    },
   }),
 );
