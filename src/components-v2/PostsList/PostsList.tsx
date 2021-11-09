@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Typography from '@material-ui/core/Typography';
 
 import {Loading} from '../../components-v2/atoms/Loading';
+import NoPostFoundIcon from '../../images/no_post_found.svg';
 import {Comment} from '../../interfaces/comment';
 import {Post} from '../../interfaces/post';
 import {User} from '../../interfaces/user';
@@ -97,8 +98,16 @@ export const PostsList: React.FC<PostsListProps> = props => {
         next={loadNextPage}
         loader={<Loading />}>
         {defaultPosts.length === 0 ? (
-          <div style={{marginLeft: 12}}>
-            <Typography>No post found</Typography>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', rowGap: 12}}>
+            <NoPostFoundIcon />
+            <Typography variant="h4" style={{fontWeight: 'bold'}}>
+              We can’t find any related users
+            </Typography>
+            <div style={{textAlign: 'center', fontWeight: 'normal'}}>
+              <Typography variant="h6">
+                Make sure you type correctly <br /> or try different keywords.
+              </Typography>
+            </div>
           </div>
         ) : (
           defaultPosts.map(post => (
