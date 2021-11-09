@@ -41,10 +41,6 @@ export const PostImport: React.FC<PostImportProps> = props => {
     } else {
       setIsValidUrl(false);
     }
-
-    return () => {
-      setPreviewUrl(null);
-    };
   }, [value]);
 
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -73,6 +69,8 @@ export const PostImport: React.FC<PostImportProps> = props => {
       setPreviewUrl(url);
       setIsValidUrl(true);
       onChange(url);
+
+      return;
     }
 
     const matchReddit = regex[SocialsEnum.REDDIT].exec(url);
@@ -83,8 +81,13 @@ export const PostImport: React.FC<PostImportProps> = props => {
       setPreviewUrl(url);
       setIsValidUrl(true);
       onChange(url);
+
+      return;
     }
   };
+
+  console.log('url', url);
+  console.log('value', value);
 
   return (
     <div className={styles.root}>
