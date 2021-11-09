@@ -1,16 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import Typography from '@material-ui/core/Typography';
-
 import {Loading} from '../../components-v2/atoms/Loading';
-import NoPostFoundIcon from '../../images/no_post_found.svg';
 import {Comment} from '../../interfaces/comment';
 import {Post} from '../../interfaces/post';
 import {User} from '../../interfaces/user';
 import {PostDetail} from '../PostDetail/';
+import {EmptyResult} from '../Search/EmptyResult';
 import {sortOptions} from '../Timeline/default';
 import {DropdownMenu} from '../atoms/DropdownMenu';
+import {useStyles} from './PostsList.styles';
 
 import _ from 'lodash';
 
@@ -44,6 +43,8 @@ export const PostsList: React.FC<PostsListProps> = props => {
     toggleDownvoting,
     onRemoveVote,
   } = props;
+
+  const classes = useStyles();
 
   useEffect(() => {
     setDefaultPosts(searchedPosts);
@@ -83,7 +84,7 @@ export const PostsList: React.FC<PostsListProps> = props => {
 
   return (
     <>
-      <div style={{marginBottom: 12}}>
+      <div className={classes.dropdownMenu}>
         <DropdownMenu
           title="Sort by"
           selected={sortOptions[0].id}
@@ -98,16 +99,20 @@ export const PostsList: React.FC<PostsListProps> = props => {
         next={loadNextPage}
         loader={<Loading />}>
         {defaultPosts.length === 0 ? (
-          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', rowGap: 12}}>
-            <NoPostFoundIcon />
-            <Typography variant="h4" style={{fontWeight: 'bold'}}>
+          <div className={classes.rootPostsList}>
+            <EmptyResult
+              iconPath={'/images/no_post_found.svg'}
+              heading={`
               We can’t find any related users
-            </Typography>
-            <div style={{textAlign: 'center', fontWeight: 'normal'}}>
-              <Typography variant="h6">
-                Make sure you type correctly <br /> or try different keywords.
-              </Typography>
-            </div>
+            `}
+              firstLineText={`
+                Make sure you type correctly
+              
+              `}
+              secondLineText={`
+              or try different keywords.
+              `}
+            />
           </div>
         ) : (
           defaultPosts.map(post => (
