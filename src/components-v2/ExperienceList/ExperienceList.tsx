@@ -11,26 +11,30 @@ import {TimelineType} from 'src/interfaces/timeline';
 const ExperienceList: React.FC<ExperienceListProps> = ({
   experiences,
   user,
-  filterTimeline,
+  viewPostList,
   onDelete,
 }) => {
   const classes = useStyles();
-  const [selected, setSelected] = useState<undefined | string>(undefined);
-  const [isOnHomePage, setIsOnHomePage] = useState(true);
+
   const router = useRouter();
+
+  const [selected, setSelected] = useState<undefined | string>(undefined);
+  const [selectable, setSelectable] = useState(true);
+
   //TODO: still unable to only select one experience card
   const handleClick = (id?: string) => {
     if (id) setSelected(id);
     if (id === selected) setSelected(undefined);
   };
 
-  const handleFilterTimeline = (experience: Experience) => (type: TimelineType) => {
-    filterTimeline(type, experience);
+  const handleViewExperience = (experience: Experience) => (type: TimelineType) => {
+    console.log('handleViewExperience', experience);
+    viewPostList(type, experience);
   };
 
   useEffect(() => {
-    if (router.pathname === '/home') setIsOnHomePage(true);
-    else setIsOnHomePage(false);
+    if (['/home', '/topic/[type]'].includes(router.route)) setSelectable(true);
+    else setSelectable(false);
   }, []);
 
   return (
@@ -38,7 +42,7 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
       {experiences.map(item => (
         <div key={item.experience.id}>
           <SimpleCard
-            filterTimeline={handleFilterTimeline(item.experience)}
+            filterTimeline={handleViewExperience(item.experience)}
             user={user}
             onSelect={handleClick}
             title={item.experience.name}
@@ -46,7 +50,7 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
             imgUrl={item.experience.experienceImageURL || ''}
             experienceId={item.experienceId}
             userExperienceId={item.id}
-            isSelectable={isOnHomePage}
+            isSelectable={selectable}
             onDelete={onDelete}
             selected={selected}
           />

@@ -13,6 +13,7 @@ import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {useTimelineFilter} from './hooks/use-timeline-filter.hook';
 import {useTimelineHook} from './hooks/use-timeline.hook';
 
+import ShowIf from 'src/components/common/show-if.component';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useToasterHook} from 'src/hooks/use-toaster.hook';
@@ -33,7 +34,7 @@ type TimelineContainerProps = {
 };
 
 export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
-  const {anonymous = false, filters} = props;
+  const {anonymous = false, filters, enableFilter = true} = props;
 
   const dispatch = useDispatch();
   const {posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
@@ -127,7 +128,9 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
   return (
     <>
-      <TimelineFilterContainer {...props} />
+      <ShowIf condition={enableFilter}>
+        <TimelineFilterContainer {...props} />
+      </ShowIf>
 
       <TimelineComponent
         user={user}
