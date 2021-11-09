@@ -21,6 +21,7 @@ const BannerStatusComponent: React.FC<Props> = props => {
   const [open, setOpen] = React.useState(true);
   const {publicRuntimeConfig} = getConfig();
   const appName = publicRuntimeConfig.appName;
+  const appStatus = publicRuntimeConfig.appStatus;
   const {
     text = `You are currently using ${appName} v.${version}, It’s not audited so use it on your own risk!`,
   } = props;
@@ -37,7 +38,7 @@ const BannerStatusComponent: React.FC<Props> = props => {
 
   return (
     <>
-      <ShowIf condition={open}>
+      <ShowIf condition={open && appStatus !== 'production'}>
         <div className={style.alert}>
           <Typography className={style.text}>
             <SvgIcon
