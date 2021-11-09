@@ -18,7 +18,13 @@ export const useCommentTabs = (
       id: 'discussion',
       title: `Discussion (${post.metric.discussions || 0})`,
       icon: '🤔 ',
-      component: <CommentListContainer referenceId={post.id} section={SectionType.DISCUSSION} />,
+      component: (
+        <CommentListContainer
+          placeholder={'Write a Discussion...'}
+          referenceId={post.id}
+          section={SectionType.DISCUSSION}
+        />
+      ),
     },
     {
       id: 'debate',
