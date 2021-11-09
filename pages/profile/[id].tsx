@@ -14,7 +14,7 @@ import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExperience} from 'src/reducers/experience/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
-import {fetchProfileDetail} from 'src/reducers/profile/actions';
+import {fetchProfileDetail, checkFriendedStatus} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
 import {ThunkDispatchAction} from 'src/types/thunk';
@@ -82,6 +82,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   if (profileId) {
     await dispatch(fetchProfileDetail(profileId));
+    await dispatch(checkFriendedStatus());
   }
 
   return {

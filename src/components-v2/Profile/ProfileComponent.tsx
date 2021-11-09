@@ -68,8 +68,6 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
     router.push('/home');
   };
 
-  console.log('friendStatus', friendStatus);
-
   if (!profile?.id)
     return (
       <div className={style.root}>

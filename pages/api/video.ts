@@ -61,6 +61,10 @@ const handler = nextConnect()
   .post((req: NextApiRequestWithFormData, res: NextApiResponse<ResponseVideoUpload>) => {
     const {path, size} = req.file as Express.Multer.File;
 
+    return res.status(400).json({
+      error: 'Kegedean tong',
+    });
+
     cloudinary.uploader.upload_large(
       path,
       {
