@@ -6,7 +6,7 @@ interface ExperienceListProps {
   experiences: UserExperience[];
   isOnHomePage?: boolean;
   user?: User;
-  filterTimeline: (type: TimelineType, experience: Experience) => void;
+  viewPostList: (type: TimelineType, experience: Experience) => void;
   onSubscribe?: (experienceId: string) => void;
   onFollow?: (experienceId: string) => void;
   onPreview?: (experienceId: string) => void;

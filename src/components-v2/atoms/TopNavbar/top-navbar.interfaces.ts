@@ -16,7 +16,7 @@ type SectionTitleValue = typeof SectionTitle[SectionTitleKey];
 const sectionTitles: SectionTitleValue[] = Object.values(SectionTitle);
 
 interface TopNavbarProps {
-  sectionTitle: SectionTitle;
+  sectionTitle: SectionTitle | string;
   description: string;
 }
 

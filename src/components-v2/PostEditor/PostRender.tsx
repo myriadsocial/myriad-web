@@ -34,7 +34,6 @@ import escapeHtml from 'escape-html';
 import {Gallery} from 'src/components-v2/atoms/Gallery';
 import {Video} from 'src/components-v2/atoms/Video/Video';
 import {Post} from 'src/interfaces/post';
-import {TimelineType} from 'src/interfaces/timeline';
 import theme from 'src/themes/light-theme-v2';
 
 type PostRenderProps = {
@@ -159,8 +158,8 @@ export const PostRender: React.FC<PostRenderProps> = props => {
           return <a href={escapeHtml(node.url)}>{children}</a>;
         case ELEMENT_HASHTAG:
           return (
-            <Link href={`/home?tag=${node.hashtag}&type=${TimelineType.ALL}`} shallow={true}>
-              <a href={`/home?tag=${node.hashtag}&type=${TimelineType.ALL}`}>
+            <Link href={`/topic/hashtag?tag=${node.hashtag}`} shallow={true}>
+              <a href={`/topic/hashtag?tag=${node.hashtag}`}>
                 <Typography
                   component="span"
                   style={{

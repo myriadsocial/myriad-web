@@ -43,6 +43,10 @@ export const getPost = async (
     where.tags = {
       inq: filters.tags,
     };
+
+    where.visibility = {
+      inq: [PostVisibility.PUBLIC],
+    };
   }
 
   if (filters && filters.people && filters.people.length) {
@@ -144,14 +148,18 @@ export const getPost = async (
       filterParams.where = where;
 
       params.filter = filterParams;
-      params.timelineType = type;
+
+      if (Object.keys(where).length === 0) {
+        params.timelineType = type;
+      }
+
       params.userId = userId;
 
       break;
     default:
       filterParams.where = where;
 
-      if (!filters?.importer && !filters?.owner) {
+      if (!filters?.importer && !filters?.owner && (!filters?.tags || filters.tags?.length === 0)) {
         params.timelineType = TimelineType.ALL;
       }
 
