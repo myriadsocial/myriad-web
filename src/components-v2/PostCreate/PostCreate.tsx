@@ -8,7 +8,7 @@ import Tabs from '@material-ui/core/Tabs';
 
 import {FriendDetail} from '../FriendsMenu/hooks/use-friend-list.hook';
 import {NSFWTags} from '../NSFWTags';
-import {PostEditor, serialize, formatToString, hasMedia} from '../PostEditor';
+import {PostEditor, serialize, formatToString, hasMedia, deserialize} from '../PostEditor';
 import {PostImport} from '../PostImport';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {Modal} from '../atoms/Modal';
@@ -37,17 +37,18 @@ const initialPost = {
 };
 
 export const PostCreate: React.FC<PostCreateProps> = props => {
-  const {url, open, people, uploadProgress, onClose, onSubmit, onSearchPeople, onUploadFile} =
-    props;
+  const {open, people, uploadProgress, onClose, onSubmit, onSearchPeople, onUploadFile} = props;
   const styles = useStyles();
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
   const [post, setPost] = useState<Partial<Post>>(initialPost);
-  const [importUrl, setImport] = useState<string | null>(null);
+  const [importUrl, setImport] = useState<string | undefined>();
   const [validPost, setValidPost] = useState(false);
 
   useEffect(() => {
-    return setPost(initialPost);
+    return () => {
+      setPost(initialPost);
+    };
   }, []);
 
   const header: Record<PostCreateType, {title: string; subtitle: string}> = {
@@ -79,9 +80,13 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   };
 
   const handlePostUrlChange = (url: string | null) => {
-    setImport(url);
+    if (url) {
+      setImport(url);
 
-    setValidPost(Boolean(url));
+      setValidPost(Boolean(url));
+    } else {
+      setValidPost(false);
+    }
   };
 
   const handleConfirmNSFWTags = (tags: string[]) => {
@@ -95,20 +100,30 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const handleSubmit = () => {
     if (activeTab === 'import' && importUrl) {
       onSubmit(importUrl);
-      setPost(initialPost);
     }
 
     if (activeTab === 'create') {
       onSubmit(post);
-      setPost(initialPost);
     }
+
+    setPost(initialPost);
+    setImport(undefined);
+    setValidPost(false);
+  };
+
+  const handleClose = () => {
+    setPost(initialPost);
+    setImport(undefined);
+    setValidPost(false);
+
+    onClose();
   };
 
   return (
     <Modal
       title={header[activeTab].title}
       subtitle={header[activeTab].subtitle}
-      onClose={onClose}
+      onClose={handleClose}
       open={open}
       maxWidth="md"
       className={styles.root}>
@@ -123,6 +138,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
       <TabPanel value={activeTab} index="create">
         <PostEditor
+          value={post.text ? deserialize(post as Post) : undefined}
           mentionable={people.map(item => ({
             value: item.id,
             name: item.name,
@@ -136,7 +152,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       </TabPanel>
 
       <TabPanel value={activeTab} index="import">
-        <PostImport value={url} onChange={handlePostUrlChange} />
+        <PostImport value={importUrl} onChange={handlePostUrlChange} />
       </TabPanel>
 
       <div className={styles.action}>

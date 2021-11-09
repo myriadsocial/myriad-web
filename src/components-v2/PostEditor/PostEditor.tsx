@@ -23,8 +23,16 @@ import {
   LinkElement,
   ImageElement,
   ELEMENT_BLOCKQUOTE,
+  KEYS_HEADING,
+  createResetNodePlugin,
 } from '@udecode/plate';
-import {insertNodes, isCollapsed, unwrapNodes} from '@udecode/plate-common';
+import {
+  insertNodes,
+  isBlockAboveEmpty,
+  isCollapsed,
+  isSelectionAtBlockStart,
+  unwrapNodes,
+} from '@udecode/plate-common';
 import {ELEMENT_IMAGE, createImagePlugin, insertImage} from '@udecode/plate-image';
 import {createLinkPlugin, ELEMENT_LINK, upsertLinkAtSelection} from '@udecode/plate-link';
 import {ToolbarLink} from '@udecode/plate-link-ui';
@@ -56,6 +64,7 @@ import {ReactEditor} from 'slate-react';
 import {EditableProps} from 'slate-react/dist/components/editable';
 
 export type PostEditorProps = {
+  value?: TNode[];
   debug?: boolean;
   placeholder?: string;
   mentionable: MentionNodeData[];
@@ -65,11 +74,17 @@ export type PostEditorProps = {
   onFileUploaded?: (file: File, type: 'image' | 'video') => Promise<string | null>;
 };
 
+const resetBlockTypesCommonRule = {
+  types: [ELEMENT_BLOCKQUOTE],
+  defaultType: ELEMENT_PARAGRAPH,
+};
+
 export const PostEditor: React.FC<PostEditorProps> = props => {
   const styles = useStyles();
   const options = createPlateOptions();
 
   const {
+    value,
     debug = false,
     placeholder = 'Type…',
     mentionable,
@@ -162,6 +177,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
       }),
       createSoftBreakPlugin({
         rules: [
+          {hotkey: 'shift+enter'},
           {
             hotkey: 'enter',
             query: {
@@ -173,7 +189,33 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
       createExitBreakPlugin({
         rules: [
           {
+            hotkey: 'mod+enter',
+          },
+          {
+            hotkey: 'mod+shift+enter',
+            before: true,
+          },
+          {
             hotkey: 'enter',
+            query: {
+              start: true,
+              end: true,
+              allow: KEYS_HEADING,
+            },
+          },
+        ],
+      }),
+      createResetNodePlugin({
+        rules: [
+          {
+            ...resetBlockTypesCommonRule,
+            hotkey: 'Enter',
+            predicate: isBlockAboveEmpty,
+          },
+          {
+            ...resetBlockTypesCommonRule,
+            hotkey: 'Backspace',
+            predicate: isSelectionAtBlockStart,
           },
         ],
       }),
@@ -363,6 +405,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   return (
     <Box className={styles.root}>
       <Plate
+        initialValue={value}
         editableProps={editableProps}
         onChange={onChangeDebug}
         plugins={plugins}
