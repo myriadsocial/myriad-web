@@ -99,21 +99,19 @@ export const PostsList: React.FC<PostsListProps> = props => {
         next={loadNextPage}
         loader={<Loading />}>
         {defaultPosts.length === 0 ? (
-          <div className={classes.rootPostsList}>
-            <EmptyResult
-              iconPath={'/images/no_post_found.svg'}
-              heading={`
-              We can’t find any related users
+          <EmptyResult
+            iconPath={'/images/no_post_found.svg'}
+            heading={`
+              We can’t find any related posts
             `}
-              firstLineText={`
+            firstLineText={`
                 Make sure you type correctly
               
               `}
-              secondLineText={`
+            secondLineText={`
               or try different keywords.
               `}
-            />
-          </div>
+          />
         ) : (
           defaultPosts.map(post => (
             <PostDetail
