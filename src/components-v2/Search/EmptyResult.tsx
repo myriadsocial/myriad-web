@@ -18,7 +18,13 @@ export const EmptyResult: React.FC<EmptyResultProps> = ({
   secondLineText,
 }) => {
   return (
-    <>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        rowGap: 12,
+      }}>
       <Image src={iconPath} width={60} height={60} alt="Icon of not found" />
       <Typography variant="h4" style={{fontWeight: 'bold'}}>
         {heading}
@@ -27,6 +33,6 @@ export const EmptyResult: React.FC<EmptyResultProps> = ({
         <Typography variant="h6">{firstLineText}</Typography>
         <Typography variant="h6">{secondLineText}</Typography>
       </div>
-    </>
+    </div>
   );
 };
