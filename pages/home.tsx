@@ -9,6 +9,7 @@ import {SearchBoxContainer} from '../src/components-v2/atoms/Search/SearchBoxCon
 import {ToasterContainer} from '../src/components-v2/atoms/Toaster/ToasterContainer';
 import {DefaultLayout} from '../src/components-v2/template/Default/DefaultLayout';
 
+import Banner from 'src/components-v2/atoms/BannerStatus/BannerStatus';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExperience} from 'src/reducers/experience/actions';
@@ -33,6 +34,7 @@ const Home: React.FC = () => {
   return (
     <DefaultLayout isOnProfilePage={false}>
       <ToasterContainer />
+      <Banner />
       <SearchBoxContainer onSubmitSearch={performSearch} />
       <RichTextContainer />
       <TimelineContainer />
