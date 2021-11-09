@@ -86,9 +86,6 @@ export const PostImport: React.FC<PostImportProps> = props => {
     }
   };
 
-  console.log('url', url);
-  console.log('value', value);
-
   return (
     <div className={styles.root}>
       <FormControl fullWidth className={styles.input} error={showError}>

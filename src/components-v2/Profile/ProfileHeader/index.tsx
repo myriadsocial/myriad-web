@@ -341,7 +341,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 </Button>
               </ShowIf>
 
-              <ShowIf condition={!isBlocked}>
+              <ShowIf condition={!isBlocked && !canAddFriend}>
                 <Button
                   onClick={handleClickFriendOption}
                   startIcon={
