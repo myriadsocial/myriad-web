@@ -18,6 +18,7 @@ export const getPost = async (
   type: TimelineType = TimelineType.TRENDING,
   sort?: TimelineSortMethod,
   filters?: TimelineFilter,
+  asFriend = false,
 ): Promise<PostList> => {
   const where: LoopbackWhere<PostProps> = {
     deletedAt: {exists: false},
@@ -81,6 +82,13 @@ export const getPost = async (
         inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
       };
     }
+
+    // filter only public post if no friend status provided
+    if (!asFriend) {
+      where.visibility = {
+        eq: PostVisibility.PUBLIC,
+      };
+    }
   }
 
   if (filters && filters.importer) {
@@ -93,6 +101,13 @@ export const getPost = async (
     } else {
       where.visibility = {
         inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
+      };
+    }
+
+    // filter only public post if no friend status provided
+    if (!asFriend) {
+      where.visibility = {
+        eq: PostVisibility.PUBLIC,
       };
     }
   }
