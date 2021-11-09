@@ -15,6 +15,7 @@ type TabsComponentProps = TabsProps & {
   size?: TabSize;
   padding?: number;
   background?: string;
+  noBackground?: boolean;
   borderRadius?: number;
   paddingLeft?: number;
   paddingRight?: number;
@@ -31,6 +32,7 @@ export const TabsComponent: React.FC<TabsComponentProps> = props => {
     onChangeTab,
     padding,
     background,
+    noBackground = false,
     borderRadius,
     paddingRight,
     paddingLeft,
@@ -60,6 +62,7 @@ export const TabsComponent: React.FC<TabsComponentProps> = props => {
           index={tab.id}
           padding={padding}
           background={background}
+          noBackground={noBackground}
           paddingLeft={paddingLeft}
           paddingRight={paddingRight}
           borderRadius={borderRadius}>
