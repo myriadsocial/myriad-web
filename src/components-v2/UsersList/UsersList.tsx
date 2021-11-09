@@ -2,11 +2,12 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import {List} from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, alpha} from '@material-ui/core/styles';
 
 import {Loading} from '../../components-v2/atoms/Loading';
+import ShowIf from '../../components/common/show-if.component';
 import {User} from '../../interfaces/user';
+import {EmptyResult} from '../Search/EmptyResult';
 import {UsersListItem} from '../UsersList/UsersListItem';
 
 export const useStyles = makeStyles(() =>
@@ -35,13 +36,25 @@ export const UsersList: React.FC<UsersListProps> = ({users, hasMore, loadNextPag
       hasMore={hasMore}
       next={loadNextPage}
       loader={<Loading />}>
-      <List className={classes.root}>
-        {users.length === 0 ? (
-          <div style={{marginLeft: 12}}>
-            <Typography>No user found</Typography>
-          </div>
-        ) : (
-          users.map(user => (
+      <ShowIf condition={users.length === 0}>
+        <EmptyResult
+          iconPath={'/images/no_users_icon.svg'}
+          heading={`
+              We can’t find any related users
+            `}
+          firstLineText={`
+                Make sure you type correctly
+              
+              `}
+          secondLineText={`
+              or try different keywords.
+              `}
+        />
+      </ShowIf>
+
+      <ShowIf condition={users.length > 0}>
+        <List className={classes.root}>
+          {users.map(user => (
             <UsersListItem
               title={user.name}
               subtitle={user.username ? `@${user.username}` : '@username'}
@@ -50,9 +63,9 @@ export const UsersList: React.FC<UsersListProps> = ({users, hasMore, loadNextPag
               avatar={user.profilePictureURL}
               url={`/profile/${user.id}`}
             />
-          ))
-        )}
-      </List>
+          ))}
+        </List>
+      </ShowIf>
     </InfiniteScroll>
   );
 };
