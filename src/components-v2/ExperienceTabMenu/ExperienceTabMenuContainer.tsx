@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+
+import {useRouter} from 'next/router';
 
 import {Typography} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import {useExperienceHook} from '../../hooks/use-experience-hook';
-import {useQueryParams} from '../../hooks/use-query-params.hooks';
-import {TimelineType} from '../../interfaces/timeline';
 import {ExperienceTabMenu} from './ExperienceTabMenu';
 
+import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {Experience, UserExperience} from 'src/interfaces/experience';
+import {TimelineType} from 'src/interfaces/timeline';
 import {RootState} from 'src/reducers';
-import {updateFilter} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -31,8 +31,7 @@ export const ExperienceTabMenuContainer: React.FC = () => {
   const style = useStyles();
   const [toggle, setToggle] = useState<string>('');
 
-  const dispatch = useDispatch();
-  const {push} = useQueryParams();
+  const router = useRouter();
 
   // Only load experiences specific to logged user
   const {loadExperience, experiences, removeExperience} = useExperienceHook();
@@ -47,15 +46,9 @@ export const ExperienceTabMenuContainer: React.FC = () => {
     setMyExperience(experiences);
   }, [experiences, toggle]);
 
-  const handleFilterTimeline = (type: TimelineType, experience: Experience) => {
-    dispatch(
-      updateFilter({
-        people: experience.people.map(people => people.id),
-        tags: experience.tags.map(tag => tag.id),
-      }),
-    );
-
-    push('type', type);
+  const handleViewPostList = (type: TimelineType, experience: Experience) => {
+    console.log('handleViewPostList');
+    router.push(`/topic/experience?id=${experience.id}`);
   };
 
   const handleFilterExperience = (sort: string) => {
@@ -109,7 +102,7 @@ export const ExperienceTabMenuContainer: React.FC = () => {
 
   return (
     <ExperienceTabMenu
-      filterTimeline={handleFilterTimeline}
+      viewPostList={handleViewPostList}
       filterExperience={handleFilterExperience}
       experiences={myExperience}
       user={user}

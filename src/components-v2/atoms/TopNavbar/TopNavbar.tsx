@@ -23,7 +23,7 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
     switchText(sectionTitle);
   }, [sectionTitle]);
 
-  const switchText = (sectionTitle: SectionTitle) => {
+  const switchText = (sectionTitle: SectionTitle | string) => {
     let newSectionTitle = '';
     let newDescription = '';
 
