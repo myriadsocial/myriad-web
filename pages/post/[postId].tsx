@@ -8,6 +8,7 @@ import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import ShowIf from 'src/components/common/show-if.component';
+import {PostVisibility} from 'src/interfaces/post';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as PostAPI from 'src/lib/api/post';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -80,7 +81,9 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     const post = await PostAPI.getPostDetail(params.postId);
 
     showAsDeleted =
-      Boolean(post.deletedAt) && userId !== post.createdBy && !post.importers.includes(userId);
+      (Boolean(post.deletedAt) || post.visibility !== PostVisibility.PUBLIC) &&
+      userId !== post.createdBy &&
+      !post.importers.includes(userId);
 
     dispatch(setPost(post));
   } catch {
