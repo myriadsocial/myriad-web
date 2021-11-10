@@ -52,7 +52,8 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
           Notifications
         </Typography>
         <Button
-          style={{width: 'auto', fontSize: '12px', padding: 0, fontWeight: 'bold'}}
+          //move this to styles.ts
+          style={{width: 'auto', fontSize: '12px', padding: 0, fontWeight: 'bold', marginRight: 24}}
           color="primary"
           onClick={onMarkAllAsRead}>
           Mark all as read
@@ -62,6 +63,9 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
         {list.map(notification => {
           return (
             <ListItem
+              button
+              component="a"
+              ContainerComponent="div"
               key={notification.id}
               className={clsx({
                 [style.item]: true,
