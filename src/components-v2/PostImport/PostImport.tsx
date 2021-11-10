@@ -73,7 +73,6 @@ export const PostImport: React.FC<PostImportProps> = props => {
       setIsValidUrl(true);
       onChange(url);
     }
-
   };
 
   return (

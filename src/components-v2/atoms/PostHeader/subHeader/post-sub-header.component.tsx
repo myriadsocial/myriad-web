@@ -48,8 +48,8 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
             </a>
           </Link>
           &nbsp;via&nbsp;
-          <Link href={url}>
-            <a href={url} className={style.link} target="_blank" rel="noreferrer">
+          <Link href={url ? url : '#'}>
+            <a href={url ? url : '#'} className={style.link} target="_blank" rel="noreferrer">
               {platform}
             </a>
           </Link>

@@ -149,6 +149,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     return '';
   };
 
+  if (!post.text) post['text'] = '';
   return (
     <Paper square className={styles.root}>
       <HeaderComponent
