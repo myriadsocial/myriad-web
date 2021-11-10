@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
-import {Button, Grid} from '@material-ui/core';
+import {Button} from '@material-ui/core';
 
 import {ReportContainer} from 'src/components-v2/Report';
 import {SendTipContainer} from 'src/components-v2/SendTip';
@@ -171,14 +171,23 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
         open={removing}
         icon="danger"
         onCancel={handleClosePrompt}>
-        <Grid container justifyContent="space-between">
-          <Button size="small" variant="outlined" color="secondary" onClick={handleClosePrompt}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            style={{marginRight: '24px'}}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={handleClosePrompt}>
             No, let me rethink
           </Button>
           <Button size="small" variant="contained" color="primary" onClick={confirmDeletePost}>
             Yes, proceed to delete
           </Button>
-        </Grid>
+        </div>
       </PromptComponent>
     </>
   );
