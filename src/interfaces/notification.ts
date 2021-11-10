@@ -5,8 +5,6 @@ export enum NotificationType {
   FRIEND_REQUEST = 'friend_request',
   FRIEND_ACCEPT = 'friend_accept',
   POST_COMMENT = 'post_comment',
-  REPORT_POST = 'report_post',
-  REPORT_USER = 'report_user',
   COMMENT_COMMENT = 'comment_comment',
   POST_VOTE = 'post_vote',
   COMMENT_VOTE = 'comment_vote',
@@ -17,6 +15,11 @@ export enum NotificationType {
   USER_REWARD = 'user_reward',
   USER_INITIAL_TIPS = 'user_initial_tips',
   USER_CLAIM_TIPS = 'user_claim_tips',
+  CONNECTED_SOCIAL_MEDIA = 'connected_social_media',
+  DISCONNECTED_SOCIAL_MEDIA = 'disconnected_social_media',
+  POST_REMOVED = 'post_removed',
+  COMMENT_REMOVED = 'comment_removed',
+  USER_BANNED = 'user_banned',
 }
 
 export type NotificationProps = {
