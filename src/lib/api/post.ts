@@ -145,14 +145,8 @@ export const getPost = async (
     case TimelineType.FRIEND:
     case TimelineType.EXPERIENCE:
     case TimelineType.TRENDING:
-      filterParams.where = where;
-
       params.filter = filterParams;
-
-      if (Object.keys(where).length === 0) {
-        params.timelineType = type;
-      }
-
+      params.timelineType = type;
       params.userId = userId;
 
       break;
