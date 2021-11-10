@@ -2,12 +2,14 @@ import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useImageUpload} from 'src/hooks/use-image-upload.hook';
+import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileDetail} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {updatePostPlatformUser} from 'src/reducers/timeline/actions';
+import {showToaster} from 'src/reducers/toaster/actions';
 import {updateUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -31,6 +33,13 @@ export const useProfileHook = () => {
           dispatch(fetchProfileDetail(user.id));
           callback && callback();
         }
+
+        dispatch(
+          showToaster({
+            message: 'Success update profile',
+            toasterStatus: Status.SUCCESS,
+          }),
+        );
       }),
     );
   };
@@ -49,6 +58,13 @@ export const useProfileHook = () => {
             }
 
             dispatch(updatePostPlatformUser(url));
+
+            dispatch(
+              showToaster({
+                message: 'Success update profile',
+                toasterStatus: Status.SUCCESS,
+              }),
+            );
           }),
         );
     } finally {
@@ -70,6 +86,13 @@ export const useProfileHook = () => {
             },
             () => {
               setUploadingBanner(false);
+
+              dispatch(
+                showToaster({
+                  message: 'Success update profile',
+                  toasterStatus: Status.SUCCESS,
+                }),
+              );
             },
           ),
         );
