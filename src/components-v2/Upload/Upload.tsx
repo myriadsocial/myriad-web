@@ -13,6 +13,7 @@ type UploadProps = {
   maxSize?: number;
   placeholder?: string;
   multiple?: boolean;
+  usage?: string;
   onFileSelected: (result: File[] | string) => void;
 };
 
@@ -26,6 +27,7 @@ export const Upload: React.FC<UploadProps> = props => {
     multiple = false,
     progress,
     onFileSelected,
+    usage = '',
   } = props;
   const styles = useStyles();
 
@@ -49,6 +51,7 @@ export const Upload: React.FC<UploadProps> = props => {
         placeholder={placeholder}
         maxSize={maxSize}
         border={false}
+        usage={usage}
       />
 
       <div className={styles.confirm}>
