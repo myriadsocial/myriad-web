@@ -18,7 +18,7 @@ type Props = {
 
 const BannerStatusComponent: React.FC<Props> = props => {
   const style = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const {publicRuntimeConfig} = getConfig();
   const appName = publicRuntimeConfig.appName;
   const appStatus = publicRuntimeConfig.appStatus;
@@ -29,6 +29,7 @@ const BannerStatusComponent: React.FC<Props> = props => {
   React.useEffect(() => {
     const status = localStorage.getItem('banner');
     status && setOpen(JSON.parse(status));
+    !status && setOpen(true);
   }, []);
 
   const setHiddenBanner = () => {
