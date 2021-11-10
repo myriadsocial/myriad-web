@@ -30,6 +30,7 @@ type DropzoneProps = {
   accept?: string[];
   maxSize?: number;
   multiple?: boolean;
+  usage?: string;
   onImageSelected: (files: File[]) => void;
 };
 
@@ -49,6 +50,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     multiple = false,
     border = true,
     placeholder = 'File must be .jpeg or .png',
+    usage = '',
   } = props;
   const styles = useStyles({border});
 
@@ -148,6 +150,14 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     return cols === 6 ? 3 : 1;
   };
 
+  const formatButtonLable = () => {
+    if (usage == 'post') {
+      if (type == 'video') return `Replace ${capitalize(type)}`;
+      return `Add ${capitalize(type)}`;
+    }
+    return `Upload ${capitalize(type)}`;
+  };
+
   return (
     <div className={styles.root}>
       <div {...getRootProps({className: 'dropzone'})} className={styles.dropzone}>
@@ -225,7 +235,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
             variant={preview.length ? 'outlined' : 'contained'}
             color={value ? 'secondary' : 'primary'}
             onClick={handleReuploadImage}>
-            Upload {capitalize(type)}
+            {formatButtonLable()}
           </Button>
         )}
       </div>

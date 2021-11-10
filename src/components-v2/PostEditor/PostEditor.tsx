@@ -437,6 +437,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
           multiple={true}
           onFileSelected={handleImageSelected}
           accept={['image/*']}
+          usage="post"
         />
       </Modal>
 
@@ -455,6 +456,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
           accept={['video/*']}
           maxSize={100}
           placeholder="Upload .mp4 video file with size less than 100Mb"
+          usage="post"
         />
       </Modal>
 
