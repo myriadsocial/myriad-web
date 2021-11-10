@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {MenuContainer} from '../../Menu/MenuContainer';
 import {NotificationsContainer} from '../../Notifications/sidebar/Notifications.container';
@@ -10,6 +10,8 @@ import useStyles from './DefaultLayout.styles';
 
 import {withError, WithErrorProps} from 'src/components-v2/Error';
 import ShowIf from 'src/components/common/show-if.component';
+import {useUserHook} from 'src/hooks/use-user.hook';
+import {firebaseCloudMessaging} from 'src/lib/firebase';
 
 type DefaultLayoutProps = WithErrorProps & {
   isOnProfilePage: boolean;
@@ -20,6 +22,16 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const {children} = props;
   const classes = useStyles();
   const [showNotification, setShowNotification] = useState(false);
+
+  const {loadFcmToken} = useUserHook();
+
+  useEffect(() => {
+    window.addEventListener('load', function () {
+      firebaseCloudMessaging.init();
+    });
+
+    loadFcmToken();
+  }, []);
 
   const handleToggleNotification = () => {
     setShowNotification(!showNotification);
