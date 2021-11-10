@@ -131,7 +131,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
     },
     m1: {
-      marginRight: theme.spacing(2),
+      marginRight: theme.spacing(3),
     },
     error: {
       background: '#FE3636',
