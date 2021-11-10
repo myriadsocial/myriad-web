@@ -143,7 +143,7 @@ const FriendsListComponent: React.FC<FriendListProps> = ({
     request: Friend,
   ) => {
     setAnchorEl(event.currentTarget);
-    console.log(id);
+
     setSelectedProfileId(id);
     setSelectedFriendName(name);
     setSelectedFriend(request);

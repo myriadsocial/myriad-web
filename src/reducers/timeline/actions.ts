@@ -5,6 +5,7 @@ import * as constants from './constants';
 import axios from 'axios';
 import {Action} from 'redux';
 import {Comment} from 'src/interfaces/comment';
+import {FriendStatus} from 'src/interfaces/friend';
 import {Like, ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
 import {Post, PostProps} from 'src/interfaces/post';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
@@ -176,6 +177,12 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
   (page = 1, sort?: TimelineSortMethod, filter?: TimelineFilter, type?: TimelineType) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
+    let asFriend = false;
+
+    const {
+      profileState: {friendStatus},
+      userState: {user},
+    } = getState();
 
     try {
       const {timelineState, userState} = getState();
@@ -184,12 +191,17 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
       const timelineFilter = filter ?? timelineState.filter;
       const timelineSort = sort ?? timelineState.sort;
 
+      if (user && (timelineFilter?.owner || timelineFilter?.importer)) {
+        asFriend = friendStatus?.status === FriendStatus.APPROVED;
+      }
+
       const {data: posts, meta} = await PostAPI.getPost(
         page,
         userId,
         timelineType,
         timelineSort,
         timelineFilter,
+        asFriend,
       );
 
       dispatch({

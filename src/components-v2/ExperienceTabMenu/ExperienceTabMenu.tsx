@@ -40,13 +40,13 @@ const useStyles = makeStyles(() =>
 interface ExperienceTabMenuProps {
   experiences: UserExperience[];
   user?: User;
-  filterTimeline: (type: TimelineType, experience: Experience) => void;
+  viewPostList: (type: TimelineType, experience: Experience) => void;
   filterExperience: (sort: string) => void;
   onDelete: (experienceId: string) => void;
 }
 
 export const ExperienceTabMenu: React.FC<ExperienceTabMenuProps> = props => {
-  const {experiences, user, filterTimeline, filterExperience, onDelete} = props;
+  const {experiences, user, viewPostList, filterExperience, onDelete} = props;
   const style = useStyles();
 
   return (
@@ -55,7 +55,7 @@ export const ExperienceTabMenu: React.FC<ExperienceTabMenuProps> = props => {
       <HeaderWithAction filter={filterExperience} actionText={'+ Create experience'} />
       <ExperienceList
         onDelete={onDelete}
-        filterTimeline={filterTimeline}
+        viewPostList={viewPostList}
         experiences={experiences}
         user={user}
       />

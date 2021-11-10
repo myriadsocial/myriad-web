@@ -18,6 +18,7 @@ export const getPost = async (
   type: TimelineType = TimelineType.TRENDING,
   sort?: TimelineSortMethod,
   filters?: TimelineFilter,
+  asFriend = false,
 ): Promise<PostList> => {
   const where: LoopbackWhere<PostProps> = {
     deletedAt: {exists: false},
@@ -41,6 +42,10 @@ export const getPost = async (
   if (filters && filters.tags && filters.tags.length) {
     where.tags = {
       inq: filters.tags,
+    };
+
+    where.visibility = {
+      inq: [PostVisibility.PUBLIC],
     };
   }
 
@@ -81,6 +86,13 @@ export const getPost = async (
         inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
       };
     }
+
+    // filter only public post if no friend status provided
+    if (!asFriend) {
+      where.visibility = {
+        eq: PostVisibility.PUBLIC,
+      };
+    }
   }
 
   if (filters && filters.importer) {
@@ -93,6 +105,13 @@ export const getPost = async (
     } else {
       where.visibility = {
         inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
+      };
+    }
+
+    // filter only public post if no friend status provided
+    if (!asFriend) {
+      where.visibility = {
+        eq: PostVisibility.PUBLIC,
       };
     }
   }
@@ -126,8 +145,6 @@ export const getPost = async (
     case TimelineType.FRIEND:
     case TimelineType.EXPERIENCE:
     case TimelineType.TRENDING:
-      filterParams.where = where;
-
       params.filter = filterParams;
       params.timelineType = type;
       params.userId = userId;
@@ -136,7 +153,7 @@ export const getPost = async (
     default:
       filterParams.where = where;
 
-      if (!filters?.importer && !filters?.owner) {
+      if (!filters?.importer && !filters?.owner && (!filters?.tags || filters.tags?.length === 0)) {
         params.timelineType = TimelineType.ALL;
       }
 

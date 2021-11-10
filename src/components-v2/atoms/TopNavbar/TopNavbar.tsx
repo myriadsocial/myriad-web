@@ -21,9 +21,9 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
 
   useEffect(() => {
     switchText(sectionTitle);
-  }, [sectionTitle]);
+  }, [sectionTitle, description]);
 
-  const switchText = (sectionTitle: SectionTitle) => {
+  const switchText = (sectionTitle: SectionTitle | string) => {
     let newSectionTitle = '';
     let newDescription = '';
 
