@@ -4,15 +4,18 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      padding: 24,
+      padding: theme.spacing(3, 0),
       borderRadius: '20px',
     },
     header: {
       textAlign: 'center',
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
     },
     title: {
       fontSize: theme.typography.h4.fontSize,
       fontWeight: 700,
+      marginLeft: theme.spacing(3),
     },
     content: {
       '&:last-child': {
@@ -25,10 +28,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600,
     },
     list: {
-      marginLeft: theme.spacing(-2),
-      marginRight: theme.spacing(-2),
+      //marginLeft: theme.spacing(-2),
+      //marginRight: theme.spacing(-2),
       minHeight: 500,
       overflow: 'auto',
+      '& .MuiListItem-button:hover': {
+        backgroundColor: alpha('#FFC857', 0.15),
+      },
     },
     item: {
       position: 'relative',
