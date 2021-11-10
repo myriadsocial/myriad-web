@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 
-import {Grid} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
@@ -55,8 +54,8 @@ export const BlockListComponent: React.FC<Props> = ({blockList, user, onUnblock}
     <>
       <div className={style.root}>
         <Typography className={style.text}>
-          By blocking someone, they can no longer see things you post on your timeline, tag you, and
-          start a conversation with you, or add you as a friend.
+          When you blocked someone, that person won’t be able to view your profile and post, add you
+          as a friend, tag you or message you and you won’t see post or notification from them.
         </Typography>
       </div>
 
@@ -92,14 +91,19 @@ export const BlockListComponent: React.FC<Props> = ({blockList, user, onUnblock}
         icon="warning"
         title="Unblock User?"
         subtitle="You will be able to search and see post from this user">
-        <Grid container justifyContent="space-between">
-          <Button size="small" variant="outlined" color="secondary" onClick={cancelUblockUser}>
+        <div className={style.flex}>
+          <Button
+            className={style.m1}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={cancelUblockUser}>
             Cancel
           </Button>
           <Button size="small" variant="contained" color="primary" onClick={confirmUnblockUser}>
             Unblock Now
           </Button>
-        </Grid>
+        </div>
       </PromptComponent>
     </>
   );

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {Button, Grid} from '@material-ui/core';
+import {Button} from '@material-ui/core';
 
 import {PostDetail} from 'src/components-v2/PostDetail';
 import {ReportContainer} from 'src/components-v2/Report';
@@ -131,14 +131,23 @@ export const PostContainer: React.FC = () => {
         open={removing}
         icon="danger"
         onCancel={handleClosePrompt}>
-        <Grid container justifyContent="space-between">
-          <Button size="small" variant="outlined" color="secondary" onClick={handleClosePrompt}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            style={{marginRight: '24px'}}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={handleClosePrompt}>
             No, let me rethink
           </Button>
           <Button size="small" variant="contained" color="primary" onClick={confirmDeletePost}>
             Yes, proceed to delete
           </Button>
-        </Grid>
+        </div>
       </PromptComponent>
     </div>
   );

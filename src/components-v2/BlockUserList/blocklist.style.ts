@@ -49,5 +49,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.primary.main,
       padding: '0px',
     },
+    flex: {
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    m1: {
+      marginRight: theme.spacing(3),
+    },
   }),
 );
