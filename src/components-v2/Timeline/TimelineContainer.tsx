@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {Button, Grid} from '@material-ui/core';
+import {Button} from '@material-ui/core';
 
 import {Timeline as TimelineComponent} from '.';
 import {ReportContainer} from '../Report';
@@ -167,14 +167,23 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
         open={removing}
         icon="danger"
         onCancel={handleClosePrompt}>
-        <Grid container justifyContent="space-between" style={{padding: '0 20px'}}>
-          <Button size="small" variant="outlined" color="secondary" onClick={handleClosePrompt}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            style={{marginRight: '24px'}}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={handleClosePrompt}>
             No, let me rethink
           </Button>
           <Button size="small" variant="contained" color="primary" onClick={confirmDeletePost}>
             Yes, proceed to delete
           </Button>
-        </Grid>
+        </div>
       </PromptComponent>
     </>
   );
