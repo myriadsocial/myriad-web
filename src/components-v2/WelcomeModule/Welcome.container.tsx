@@ -8,7 +8,9 @@ import {Button, Grid} from '@material-ui/core';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {WelcomeModule} from './WelcomeModule';
 
+import {Status} from 'src/interfaces/toaster';
 import {RootState} from 'src/reducers';
+import {showToaster} from 'src/reducers/toaster/actions';
 import {updateUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -37,10 +39,20 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
 
   const handleSubmit = (displayname: string, username: string) => {
     dispatch(
-      updateUser({
-        name: displayname,
-        username,
-      }),
+      updateUser(
+        {
+          name: displayname,
+          username,
+        },
+        () => {
+          dispatch(
+            showToaster({
+              message: 'Success update profile',
+              toasterStatus: Status.SUCCESS,
+            }),
+          );
+        },
+      ),
     );
 
     router.push('/home');

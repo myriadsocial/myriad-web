@@ -1,9 +1,11 @@
 import {useSelector, useDispatch} from 'react-redux';
 
 import {SocialsEnum} from 'src/interfaces';
+import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
 import {RootState} from 'src/reducers';
+import {showToaster} from 'src/reducers/toaster/actions';
 import {updateUser, deleteSocial} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -30,19 +32,27 @@ export const useUserHook = (): UserHookProps => {
     }
   };
 
-  const updateUserDetail = async (values: Partial<User>) => {
+  const updateUserDetail = async (values: Partial<User>, disableUpdateAlert = false) => {
     if (!user) return;
 
     dispatch(updateUser(values));
+
+    if (!disableUpdateAlert) {
+      dispatch(
+        showToaster({
+          message: 'Success update profile',
+          toasterStatus: Status.SUCCESS,
+        }),
+      );
+    }
   };
 
   const loadFcmToken = async () => {
     const token = await firebaseCloudMessaging.getToken();
+    const disableUpdateAlert = true;
 
-    if (token) {
-      updateUserDetail({
-        fcmTokens: [token as string],
-      });
+    if (token && user && user.fcmTokens && !user.fcmTokens.includes(token)) {
+      updateUserDetail({fcmTokens: [token as string]}, disableUpdateAlert);
     }
   };
 
