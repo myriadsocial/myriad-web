@@ -114,6 +114,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
     handleClosePostSetting();
   };
 
+  if (!post.platform) post['platform'] = '';
   return (
     <>
       <CardHeader
