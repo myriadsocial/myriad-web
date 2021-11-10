@@ -4,7 +4,6 @@ import {
   PlusIcon,
   ExclamationCircleIcon,
   AtSymbolIcon,
-  ArrowCircleUpIcon,
   ArrowCircleLeftIcon,
 } from '@heroicons/react/solid';
 
@@ -24,6 +23,7 @@ type NotificationList = {
   badge: React.ReactNode;
   createdAt: Date;
   read: boolean;
+  href: string;
 };
 
 export const useNotificationList = (notifications: Notification[]): NotificationList[] => {
@@ -50,8 +50,9 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            href: `/users/${notification.fromUserId.id}`,
           };
-          break;
+
         case NotificationType.FRIEND_REQUEST:
           return {
             id: notification.id,
@@ -69,8 +70,9 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            href: `/friends`,
           };
-          break;
+
         case NotificationType.POST_COMMENT:
           return {
             id: notification.id,
@@ -88,8 +90,8 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            href: notification.referenceId ? `/posts/${notification.referenceId}` : `/404`,
           };
-          break;
 
         case NotificationType.COMMENT_COMMENT:
           return {
@@ -108,48 +110,9 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            //TODO: dedicated comment display not yet available
+            href: `/home`,
           };
-          break;
-
-        case NotificationType.POST_VOTE:
-          return {
-            id: notification.id,
-            read: notification.read,
-            user: notification.fromUserId.name,
-            avatar: notification.fromUserId.profilePictureURL,
-            description: <Typography component="span">Upvoted your Post</Typography>,
-            badge: (
-              <div className={style.circle}>
-                <SvgIcon
-                  component={ArrowCircleUpIcon}
-                  viewBox="-4 -4 34 34"
-                  style={{fill: 'currentColor', color: '#FFF'}}
-                />
-              </div>
-            ),
-            createdAt: notification.createdAt,
-          };
-          break;
-
-        case NotificationType.COMMENT_VOTE:
-          return {
-            id: notification.id,
-            read: notification.read,
-            user: notification.fromUserId.name,
-            avatar: notification.fromUserId.profilePictureURL,
-            description: 'Upvoted your reply',
-            badge: (
-              <div className={style.circle}>
-                <SvgIcon
-                  component={ArrowCircleUpIcon}
-                  viewBox="-4 -4 34 34"
-                  style={{fill: 'currentColor', color: '#FFF'}}
-                />
-              </div>
-            ),
-            createdAt: notification.createdAt,
-          };
-          break;
 
         case NotificationType.POST_MENTION:
           return {
@@ -168,8 +131,8 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            href: notification.referenceId ? `/posts/${notification.referenceId}` : `/404`,
           };
-          break;
 
         case NotificationType.USER_TIPS:
           return {
@@ -194,8 +157,8 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            href: `/wallet`,
           };
-          break;
 
         case NotificationType.POST_TIPS:
           return {
@@ -219,8 +182,8 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            href: `/wallet`,
           };
-          break;
 
         case NotificationType.COMMENT_TIPS:
           return {
@@ -245,8 +208,8 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            href: `/wallet`,
           };
-          break;
 
         case NotificationType.USER_CLAIM_TIPS:
           return {
@@ -265,8 +228,8 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            href: `/wallet`,
           };
-          break;
 
         case NotificationType.USER_REWARD:
           return {
@@ -285,18 +248,16 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            href: `/wallet`,
           };
-          break;
 
-        case NotificationType.REPORT_POST:
+        case NotificationType.POST_REMOVED:
           return {
             id: notification.id,
             read: notification.read,
-            user: notification.fromUserId.name,
+            user: 'Post removed',
             avatar: notification.fromUserId.profilePictureURL,
-            description: (
-              <Typography component="span">Somebody reported your Post as a violance</Typography>
-            ),
+            description: 'Your post has been removed due to breaking our community guideline',
             badge: (
               <div className={style.circleError}>
                 <SvgIcon
@@ -307,15 +268,16 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            href: `/home`,
           };
-          break;
-        case NotificationType.REPORT_USER:
+
+        case NotificationType.COMMENT_REMOVED:
           return {
             id: notification.id,
             read: notification.read,
-            user: notification.fromUserId.name,
+            user: 'Comment removed',
             avatar: notification.fromUserId.profilePictureURL,
-            description: 'Somebody reported your account as a violance',
+            description: 'Your comment has been removed due to breaking our community guideline',
             badge: (
               <div className={style.circleError}>
                 <SvgIcon
@@ -326,8 +288,29 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            href: `/home`,
           };
-          break;
+
+        case NotificationType.USER_BANNED:
+          return {
+            id: notification.id,
+            read: notification.read,
+            user: 'User reported',
+            avatar: notification.fromUserId.profilePictureURL,
+            description: notification.message,
+            badge: (
+              <div className={style.circleError}>
+                <SvgIcon
+                  component={ExclamationCircleIcon}
+                  style={{color: '#FFF', fill: 'currentColor'}}
+                  viewBox="-4 -4 34 34"
+                />
+              </div>
+            ),
+            createdAt: notification.createdAt,
+            href: `/home`,
+          };
+
         default:
           return {
             id: notification.id,
@@ -345,8 +328,8 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            href: `/home`,
           };
-          break;
       }
     });
 };
