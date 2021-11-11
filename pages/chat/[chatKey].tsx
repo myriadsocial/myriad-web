@@ -64,6 +64,7 @@ const Home: React.FC = (props: any) => {
       <ToasterContainer />
       <Banner />
       <SearchBoxContainer onSubmitSearch={performSearch} />
+      {/* Render Chat Component (Firechat) */}
       {chatComp.map((value, index) => (
         <Chat
           common={value.common}
@@ -73,6 +74,7 @@ const Home: React.FC = (props: any) => {
           newChat={chatKey as string}
         />
       ))}
+      {/* End Render */}
     </DefaultLayout>
   );
 };
