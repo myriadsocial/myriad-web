@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import Paper from '@material-ui/core/Paper';
@@ -9,11 +9,13 @@ import {FriendListContainer} from './FriendList.container';
 import {FriendRequestListContainer} from './FriendRequest.container';
 import {useStyles} from './friend.style';
 
+import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const FriendMenuComponent: React.FC = () => {
   const style = useStyles();
+  const {query} = useQueryParams();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [activeTab, setActiveTab] = useState<string>('0');
@@ -30,6 +32,10 @@ export const FriendMenuComponent: React.FC = () => {
       component: <FriendRequestListContainer user={user} />,
     },
   ];
+
+  useEffect(() => {
+    if (query.type === 'request') setActiveTab('1');
+  }, [query]);
 
   const handleChangeTab = (tab: string) => {
     setActiveTab(tab);
