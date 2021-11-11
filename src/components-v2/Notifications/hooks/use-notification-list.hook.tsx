@@ -58,7 +58,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/users/${notification.fromUserId.id}`,
+            href: `/profile/${notification.fromUserId.id}`,
           };
 
         case NotificationType.FRIEND_REQUEST:
@@ -78,7 +78,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/friends`,
+            href: `/friends?type=request`,
           };
 
         case NotificationType.POST_COMMENT:
@@ -280,7 +280,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/home`,
+            href: `support@myriad.social`,
           };
 
         case NotificationType.COMMENT_REMOVED:
@@ -300,7 +300,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/home`,
+            href: `support@myriad.social`,
           };
 
         case NotificationType.USER_BANNED:
@@ -320,7 +320,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/home`,
+            href: `support@myriad.social`,
           };
 
         case NotificationType.CONNECTED_SOCIAL_MEDIA:
