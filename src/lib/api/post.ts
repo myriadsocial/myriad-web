@@ -24,16 +24,18 @@ export const getPost = async (
     deletedAt: {exists: false},
   };
 
-  let orderField = 'originCreatedAt';
+  let sortField = 'latest';
 
   switch (sort) {
     case 'comment':
-      orderField = 'metric.comments';
+      sortField = 'comment';
       break;
     case 'like':
-      orderField = 'metric.upvotes';
+      sortField = 'upvote';
       break;
     case 'trending':
+      sortField = 'popular';
+      break;
     case 'created':
     default:
       break;
@@ -82,16 +84,16 @@ export const getPost = async (
     if (userId === filters.owner) {
       delete where.deletedAt;
     } else {
-      where.visibility = {
-        inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
-      };
-    }
-
-    // filter only public post if no friend status provided
-    if (!asFriend) {
-      where.visibility = {
-        eq: PostVisibility.PUBLIC,
-      };
+      // filter only public post if no friend status provided
+      if (asFriend) {
+        where.visibility = {
+          inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
+        };
+      } else {
+        where.visibility = {
+          eq: PostVisibility.PUBLIC,
+        };
+      }
     }
   }
 
@@ -103,21 +105,20 @@ export const getPost = async (
     if (userId === filters.importer) {
       delete where.deletedAt;
     } else {
-      where.visibility = {
-        inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
-      };
-    }
-
-    // filter only public post if no friend status provided
-    if (!asFriend) {
-      where.visibility = {
-        eq: PostVisibility.PUBLIC,
-      };
+      // filter only public post if no friend status provided
+      if (asFriend) {
+        where.visibility = {
+          inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
+        };
+      } else {
+        where.visibility = {
+          eq: PostVisibility.PUBLIC,
+        };
+      }
     }
   }
 
   const filterParams: Record<string, any> = {
-    order: `${orderField} DESC`,
     include: [
       {
         relation: 'user',
@@ -137,6 +138,8 @@ export const getPost = async (
   };
 
   const params: Record<string, any> = {
+    sortBy: sortField,
+    order: `DESC`,
     pageNumber: page,
     pageLimit: PAGINATION_LIMIT,
   };
