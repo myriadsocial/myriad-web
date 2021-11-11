@@ -16,7 +16,7 @@ import {useNotificationList} from '../hooks/use-notification-list.hook';
 import {useStyles} from './Notifications.styles';
 
 import clsx from 'clsx';
-import {formatDistance, subDays} from 'date-fns';
+import {formatDistanceStrict, subDays} from 'date-fns';
 import {AvatarComponent} from 'src/components/common/Avatar.component';
 import {acronym} from 'src/helpers/string';
 import {Notification} from 'src/interfaces/notification';
@@ -76,8 +76,8 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
                 })}
                 alignItems="center">
                 <ListItemAvatar>
-                  {notification.user === 'Account disconnected' ||
-                  notification.user === 'Account connected' ? (
+                  {notification.user === 'Account unlinked' ||
+                  notification.user === 'Account linked' ? (
                     <PostAvatar
                       origin={notification.platform ?? 'myriad'}
                       name={notification.avatar ?? 'Myriad'}
@@ -106,9 +106,13 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
                 </ListItemText>
                 <ListItemSecondaryAction classes={{root: style.date}}>
                   <Typography className={style.textSecondary} color="textSecondary">
-                    {formatDistance(subDays(new Date(notification.createdAt), 0), new Date(), {
-                      addSuffix: true,
-                    })}
+                    {formatDistanceStrict(
+                      subDays(new Date(notification.createdAt), 0),
+                      new Date(),
+                      {
+                        addSuffix: true,
+                      },
+                    )}
                   </Typography>
                 </ListItemSecondaryAction>
               </ListItem>

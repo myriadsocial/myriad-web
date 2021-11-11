@@ -327,12 +327,12 @@ export const useNotificationList = (notifications: Notification[]): Notification
           return {
             id: notification.id,
             read: notification.read,
-            user: 'Account connected',
+            user: 'Account linked',
             avatar: notification.toUserId.profilePictureURL ?? notification.toUserId.name,
             description:
               'Your ' +
               getPlatform(notification.message) +
-              ` account ${notification.fromUserId.name} successfully connected from Myriad`,
+              ` account ${notification.fromUserId.name} successfully connected to Myriad`,
             badge: (
               <div className={style.circleError}>
                 <SvgIcon
@@ -351,7 +351,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
           return {
             id: notification.id,
             read: notification.read,
-            user: 'Account disconnected',
+            user: 'Account unlinked',
             avatar: notification.toUserId.profilePictureURL ?? notification.toUserId.name,
             description:
               'Your ' +
