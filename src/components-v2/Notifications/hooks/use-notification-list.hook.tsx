@@ -18,6 +18,7 @@ import {Notification, NotificationType} from 'src/interfaces/notification';
 
 type NotificationList = {
   id: string;
+  type?: NotificationType;
   user: string;
   avatar?: string;
   description: React.ReactNode;
@@ -37,8 +38,6 @@ const getPlatform = (message: string) => {
 export const useNotificationList = (notifications: Notification[]): NotificationList[] => {
   const style = useStyles();
 
-  console.log({notifications});
-
   return notifications
     .filter(notification => Boolean(notification.fromUserId) && Boolean(notification.toUserId))
     .map(notification => {
@@ -46,6 +45,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
         case NotificationType.FRIEND_ACCEPT:
           return {
             id: notification.id,
+            type: NotificationType.FRIEND_ACCEPT,
             read: notification.read,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
@@ -66,6 +66,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
         case NotificationType.FRIEND_REQUEST:
           return {
             id: notification.id,
+            type: NotificationType.FRIEND_REQUEST,
             read: notification.read,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
@@ -86,6 +87,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
         case NotificationType.POST_COMMENT:
           return {
             id: notification.id,
+            type: NotificationType.POST_COMMENT,
             read: notification.read,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
@@ -108,6 +110,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
         case NotificationType.COMMENT_COMMENT:
           return {
             id: notification.id,
+            type: NotificationType.COMMENT_COMMENT,
             read: notification.read,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
@@ -129,6 +132,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
         case NotificationType.POST_MENTION:
           return {
             id: notification.id,
+            type: NotificationType.POST_MENTION,
             read: notification.read,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
@@ -146,9 +150,52 @@ export const useNotificationList = (notifications: Notification[]): Notification
             href: notification.referenceId ? `/post/${notification.referenceId}` : `/404`,
           };
 
+        case NotificationType.POST_VOTE:
+          return {
+            id: notification.id,
+            type: NotificationType.POST_VOTE,
+            read: notification.read,
+            user: notification.fromUserId.name,
+            avatar: notification.fromUserId.profilePictureURL,
+            description: notification.message,
+            badge: (
+              <div className={style.circleSuccess}>
+                <SvgIcon
+                  component={ArrowCircleLeftIcon}
+                  viewBox="2 2 20 20"
+                  style={{fill: '#47B881', color: '#FFF'}}
+                />
+              </div>
+            ),
+            createdAt: notification.createdAt,
+            href: `/home`,
+          };
+
+        case NotificationType.COMMENT_VOTE:
+          return {
+            id: notification.id,
+            type: NotificationType.COMMENT_VOTE,
+            read: notification.read,
+            user: notification.fromUserId.name,
+            avatar: notification.fromUserId.profilePictureURL,
+            description: notification.message,
+            badge: (
+              <div className={style.circleSuccess}>
+                <SvgIcon
+                  component={ArrowCircleLeftIcon}
+                  viewBox="2 2 20 20"
+                  style={{fill: '#47B881', color: '#FFF'}}
+                />
+              </div>
+            ),
+            createdAt: notification.createdAt,
+            href: `/home`,
+          };
+
         case NotificationType.USER_TIPS:
           return {
             id: notification.id,
+            type: NotificationType.USER_TIPS,
             read: notification.read,
             user: 'Tips received',
             avatar: notification.fromUserId.profilePictureURL,
@@ -175,6 +222,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
         case NotificationType.POST_TIPS:
           return {
             id: notification.id,
+            type: NotificationType.POST_TIPS,
             read: notification.read,
             user: 'Tips received',
             avatar: notification.fromUserId.profilePictureURL,
@@ -200,6 +248,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
         case NotificationType.COMMENT_TIPS:
           return {
             id: notification.id,
+            type: NotificationType.COMMENT_TIPS,
             read: notification.read,
             user: 'Tips received',
             avatar: notification.fromUserId.profilePictureURL,
@@ -226,6 +275,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
         case NotificationType.USER_CLAIM_TIPS:
           return {
             id: notification.id,
+            type: NotificationType.USER_CLAIM_TIPS,
             read: notification.read,
             user: 'Tips claimed',
             avatar: notification.fromUserId.profilePictureURL,
@@ -246,6 +296,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
         case NotificationType.USER_REWARD:
           return {
             id: notification.id,
+            type: NotificationType.USER_REWARD,
             read: notification.read,
             user: 'Tips reward',
             avatar: notification.fromUserId.profilePictureURL,
@@ -266,6 +317,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
         case NotificationType.POST_REMOVED:
           return {
             id: notification.id,
+            type: NotificationType.POST_REMOVED,
             read: notification.read,
             user: 'Post removed',
             avatar: notification.fromUserId.profilePictureURL,
@@ -286,6 +338,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
         case NotificationType.COMMENT_REMOVED:
           return {
             id: notification.id,
+            type: NotificationType.COMMENT_REMOVED,
             read: notification.read,
             user: 'Comment removed',
             avatar: notification.fromUserId.profilePictureURL,
@@ -306,6 +359,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
         case NotificationType.USER_BANNED:
           return {
             id: notification.id,
+            type: NotificationType.USER_BANNED,
             read: notification.read,
             user: 'User reported',
             avatar: notification.fromUserId.profilePictureURL,
@@ -326,6 +380,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
         case NotificationType.CONNECTED_SOCIAL_MEDIA:
           return {
             id: notification.id,
+            type: NotificationType.CONNECTED_SOCIAL_MEDIA,
             read: notification.read,
             user: 'Account linked',
             avatar: notification.toUserId.profilePictureURL ?? notification.toUserId.name,
@@ -350,6 +405,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
         case NotificationType.DISCONNECTED_SOCIAL_MEDIA:
           return {
             id: notification.id,
+            type: NotificationType.DISCONNECTED_SOCIAL_MEDIA,
             read: notification.read,
             user: 'Account unlinked',
             avatar: notification.toUserId.profilePictureURL ?? notification.toUserId.name,
