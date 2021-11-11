@@ -22,7 +22,14 @@ export enum NotificationType {
   USER_BANNED = 'user_banned',
 }
 
+export interface AdditionalReferenceIdItem {
+  postId: string;
+  firstCommentId: string;
+  secondCommentId: string;
+}
+
 export type NotificationProps = {
+  additionalReferenceId?: AdditionalReferenceIdItem[];
   referenceId?: string;
   type: NotificationType;
   read: boolean;
