@@ -39,6 +39,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
     await updateUserFcmToken();
 
     firebaseCloudMessaging.onMessageListener(payload => {
+      console.log('onMessageListener', payload);
       dispatch(countNewNotification());
     });
   };

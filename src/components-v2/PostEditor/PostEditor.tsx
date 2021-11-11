@@ -228,6 +228,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   }, [mentionPlugin]);
 
   const editor = useStoreEditorState('main');
+  const [initialValue] = useState(value);
   const [showImageUpload, toggleImageUpload] = useState(false);
   const [imageUploadType, setImageUploadType] = useState<'upload' | 'link' | null>(null);
   const [showModalLink, toggleModalLink] = useState(false);
@@ -405,7 +406,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   return (
     <Box className={styles.root}>
       <Plate
-        initialValue={value}
+        initialValue={initialValue}
         editableProps={editableProps}
         onChange={onChangeDebug}
         plugins={plugins}

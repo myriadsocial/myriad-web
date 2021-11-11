@@ -50,6 +50,7 @@ export const useUserHook = (): UserHookProps => {
   const updateUserFcmToken = async () => {
     const token = await firebaseCloudMessaging.getToken();
     const disableUpdateAlert = true;
+    console.log('token', token);
 
     if (token && user && user.fcmTokens && !user.fcmTokens.includes(token)) {
       updateUserDetail({fcmTokens: [token as string]}, disableUpdateAlert);
