@@ -29,9 +29,12 @@ self.addEventListener(
 );
 
 messaging.onBackgroundMessage(function (payload) {
-  console.log('[firebase-messaging-sw.js][onBackgroundMessage] Received background message ', payload); // debug info
+  console.log(
+    '[firebase-messaging-sw.js][onBackgroundMessage] Received background message ',
+    payload,
+  ); // debug info
 
-  const { title, body, icon, ...restPayload } = payload.notification;
+  const {title, body, icon, ...restPayload} = payload.notification;
 
   const notificationOptions = {
     body,
@@ -41,4 +44,3 @@ messaging.onBackgroundMessage(function (payload) {
 
   return self.registration.showNotification(title, notificationOptions);
 });
-
