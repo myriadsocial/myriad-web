@@ -13,6 +13,7 @@ import {SvgIcon, Typography} from '@material-ui/core';
 
 import {useStyles} from '../Notifications.styles';
 
+import {acronym} from 'src/helpers/string';
 import {Notification, NotificationType} from 'src/interfaces/notification';
 
 type NotificationList = {
@@ -24,6 +25,14 @@ type NotificationList = {
   createdAt: Date;
   read: boolean;
   href: string;
+};
+
+const getPlatform = (message: string) => {
+  const result = message.split(' ');
+
+  console.log({result});
+
+  return result[2];
 };
 
 export const useNotificationList = (notifications: Notification[]): NotificationList[] => {
@@ -313,6 +322,52 @@ export const useNotificationList = (notifications: Notification[]): Notification
             ),
             createdAt: notification.createdAt,
             href: `/home`,
+          };
+
+        case NotificationType.CONNECTED_SOCIAL_MEDIA:
+          return {
+            id: notification.id,
+            read: notification.read,
+            user: 'Account connected',
+            avatar: notification.toUserId.profilePictureURL ?? acronym(notification.toUserId.name),
+            description:
+              'Your ' +
+              getPlatform(notification.message) +
+              ` account ${notification.fromUserId.name} successfully connected from Myriad`,
+            badge: (
+              <div className={style.circleError}>
+                <SvgIcon
+                  component={ExclamationCircleIcon}
+                  style={{color: '#FFF', fill: 'currentColor'}}
+                  viewBox="-4 -4 34 34"
+                />
+              </div>
+            ),
+            createdAt: notification.createdAt,
+            href: `/socials`,
+          };
+
+        case NotificationType.DISCONNECTED_SOCIAL_MEDIA:
+          return {
+            id: notification.id,
+            read: notification.read,
+            user: 'Account disconnected',
+            avatar: notification.toUserId.profilePictureURL ?? acronym(notification.toUserId.name),
+            description:
+              'Your ' +
+              getPlatform(notification.message) +
+              ` account ${notification.fromUserId.name} successfully disconnected from Myriad`,
+            badge: (
+              <div className={style.circleError}>
+                <SvgIcon
+                  component={ExclamationCircleIcon}
+                  style={{color: '#FFF', fill: 'currentColor'}}
+                  viewBox="-4 -4 34 34"
+                />
+              </div>
+            ),
+            createdAt: notification.createdAt,
+            href: `/socials`,
           };
 
         default:
