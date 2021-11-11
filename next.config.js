@@ -25,6 +25,7 @@ const moduleExports = {
     gunRelayURL: process.env.GUN_RELAY_PEERS,
     scraperBaseURL: process.env.SCRAPER_BASE_URL,
     claimerBaseURL: process.env.CLAIMER_BASE_URL,
+    gunRelayURL: process.env.GUN_RELAY_PEERS,
     facebookAppId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
     myriadWsRPC: process.env.NEXT_PUBLIC_MYRIAD_WS_RPC,
     myriadWebsite: process.env.NEXT_PUBLIC_MYRIAD_WEBSITE ?? 'https://www.myriad.social',
