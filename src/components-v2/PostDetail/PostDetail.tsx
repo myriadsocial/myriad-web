@@ -142,6 +142,13 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     onOpenTipHistory(post);
   };
 
+  const urlLink = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.origin;
+    }
+    return '';
+  };
+
   return (
     <Paper square className={styles.root}>
       <HeaderComponent
@@ -215,7 +222,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           onUpvote={handleUpvote}
           onDownVote={handleDownVote}
           onShowComments={toggleShowComments}
-          shareUrl={`/post/${post.id}`}
+          shareUrl={`${urlLink()}/post/${post.id}`}
           onShared={handleShareLink}
         />
 
