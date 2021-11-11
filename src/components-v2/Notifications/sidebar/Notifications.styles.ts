@@ -17,6 +17,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 700,
       marginLeft: theme.spacing(3),
     },
+    button: {
+      width: 'auto',
+      fontSize: 12,
+      padding: 0,
+      fontWeight: 'bold',
+      marginRight: theme.spacing(3),
+    },
     content: {
       '&:last-child': {
         paddingBottom: 0,
@@ -28,8 +35,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600,
     },
     list: {
-      //marginLeft: theme.spacing(-2),
-      //marginRight: theme.spacing(-2),
       minHeight: 500,
       overflow: 'auto',
       '& .MuiListItem-button:hover': {
