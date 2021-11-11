@@ -46,6 +46,7 @@ export const MentionSelect = (props: MentionSelectProps) => {
       <div ref={ref} className={styles.root} {...props}>
         {options.map((option, i) => (
           <div
+            role="presentation"
             key={`${i}-${option.value}`}
             className={valueIndex === i ? styles.item : styles.selected}
             onMouseDown={getPreventDefaultHandler(onClickMention, editor, option)}>

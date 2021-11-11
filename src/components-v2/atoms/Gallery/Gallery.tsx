@@ -4,13 +4,13 @@ import React, {useEffect, useState} from 'react';
 import Carousel from 'react-material-ui-carousel';
 
 import {Dialog, IconButton, SvgIcon, Paper} from '@material-ui/core';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
+import ImageList from '@material-ui/core/ImageList';
+import ImageListItem from '@material-ui/core/ImageListItem';
+import ImageListItemBar from '@material-ui/core/ImageListItemBar';
 import {Skeleton} from '@material-ui/lab';
 
 import {useStyles} from './Gallery.styles';
-import {GalleryType, ImageList, ImageListItem} from './Gallery.types';
+import {GalleryType, ImageListProps, ImageListItemProps} from './Gallery.types';
 import {buildList} from './util';
 
 import ImagePlaceholder from 'src/images/Icons/myriad-grey.svg';
@@ -29,8 +29,8 @@ export const Gallery: React.FC<GalleryProps> = props => {
 
   const [viewerIsOpen, setViewerIsOpen] = useState(false);
   const [index, setIndex] = useState(0);
-  const [items, setItems] = useState<ImageListItem[]>([]);
-  const [list, setList] = useState<ImageList>({
+  const [items, setItems] = useState<ImageListItemProps[]>([]);
+  const [list, setList] = useState<ImageListProps>({
     cols: 0,
     cellHeight: 0,
     images: [],
@@ -70,9 +70,9 @@ export const Gallery: React.FC<GalleryProps> = props => {
 
   return (
     <div className={style.root}>
-      <GridList cellHeight={list.cellHeight} cols={list.cols} className={style.imageGrid}>
+      <ImageList rowHeight={list.cellHeight} cols={list.cols} className={style.imageGrid}>
         {items.slice(0, 4).map((image, i) => (
-          <GridListTile
+          <ImageListItem
             key={image.sizes.thumbnail}
             cols={image.cols}
             rows={image.rows}
@@ -104,16 +104,16 @@ export const Gallery: React.FC<GalleryProps> = props => {
               onLoad={imageLoaded(i)}
             />
             {images.length > 4 && i === 3 && (
-              <GridListTileBar
+              <ImageListItemBar
                 title={`+ ${list.images.length - 4} more`}
                 titlePosition="top"
                 actionPosition="left"
                 className={style.tileTitle}
               />
             )}
-          </GridListTile>
+          </ImageListItem>
         ))}
-      </GridList>
+      </ImageList>
 
       <Dialog open={viewerIsOpen} fullScreen>
         <IconButton

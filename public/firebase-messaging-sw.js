@@ -1,6 +1,6 @@
 /* global importScripts, firebase */
-importScripts('https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/8.6.2/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js');
 importScripts('sw-env.js');
 
 firebase.initializeApp({
@@ -32,15 +32,32 @@ messaging.onBackgroundMessage(function (payload) {
   console.log(
     '[firebase-messaging-sw.js][onBackgroundMessage] Received background message ',
     payload,
-  ); // debug info
+  );
 
-  const {title, body, icon, ...restPayload} = payload.notification;
+  const {title, body} = payload.notification;
 
-  const notificationOptions = {
-    body,
-    icon: icon || 'https://res.cloudinary.com/dsget80gs/image/upload/myriad/myriad-purple-logo.jpg', // path to your "fallback" firebase notification logo
-    data: restPayload,
-  };
+  // Schedule our own custom notification to show.
+  setTimeout(() => {
+    const notificationOptions = {
+      body,
+      icon: 'https://res.cloudinary.com/dsget80gs/image/upload/myriad/myriad-purple-logo.jpg',
+    };
 
-  return self.registration.showNotification(title, notificationOptions);
+    self.registration.showNotification(title, notificationOptions);
+  }, 30);
+
+  // Schedule closing all notifications that are not our own.
+  // This is necessary because if we don't close the other notifications the
+  // default one will appear and we will have duplicate notifications.
+  return new Promise(function (resolve) {
+    resolve();
+
+    setTimeout(function () {
+      self.registration.getNotifications().then(notifications => {
+        notifications.forEach(notification => {
+          notification.close();
+        });
+      });
+    }, 0);
+  });
 });
