@@ -1,9 +1,12 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import getConfig from 'next/config';
 import Link from 'next/link';
 
 import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -35,6 +38,8 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   } = props;
   const style = useStyles();
 
+  const chatFriendRef = React.useRef<any[]>([]);
+
   const list = useFriendList(friends, user);
 
   const handleFilterSelected = (selected: string) => {
@@ -44,6 +49,41 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   const handleSearch = (query: string) => {
     onSearch(query);
   };
+
+  const getGunPubKey = async (id: string) => {
+    // Ambil Pubkey dari API
+
+    const {publicRuntimeConfig} = getConfig();
+    const baseURL = publicRuntimeConfig.apiURL;
+
+    return new Promise((resolve, reject) => {
+      fetch(`${baseURL}/users/${id}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(res => res.json())
+        .then(result => {
+          const alias = result.name || '';
+          const pub = result.gunPub || '';
+          const epub = result.gunEpub || '';
+          resolve(`${pub}&${epub}&${alias}`);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  };
+
+  React.useEffect(() => {
+    list.map((friend, index) => {
+      getGunPubKey(friend.id).then(link => {
+        chatFriendRef.current[index].href = `/chat/${link}`;
+      });
+    });
+  }, [list.length]);
 
   if (friends.length === 0) {
     return (
@@ -70,29 +110,49 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
           hasMore={hasMore}
           next={onLoadNextPage}
           loader={<Loading />}>
-          {list.map(friend => (
+          {list.map((friend, index) => (
             <ListItem
               key={friend.id}
               classes={{root: background ? style.backgroundEven : ''}}
               className={style.item}
               alignItems="center">
-              <ListItemAvatar>
-                <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
-                  {acronym(friend.name)}
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText>
-                <Link href={`/profile/${friend.id}`}>
-                  <a href={`/profile/${friend.id}`} className={style.link}>
-                    <Typography className={style.name} component="span" color="textPrimary">
-                      {friend.name}
-                    </Typography>
-                  </a>
-                </Link>
-                <Typography className={style.friend} component="p" color="textSecondary">
-                  1 mutual friends
-                </Typography>
-              </ListItemText>
+              <Grid container style={{padding: '10px'}}>
+                <Grid item xs container>
+                  <Grid item>
+                    <ListItemAvatar>
+                      <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
+                        {acronym(friend.name)}
+                      </Avatar>
+                    </ListItemAvatar>
+                  </Grid>
+                  <Grid item>
+                    <ListItemText>
+                      <Link href={`/profile/${friend.id}`}>
+                        <a href={`/profile/${friend.id}`} className={style.link}>
+                          <Typography className={style.name} component="span" color="textPrimary">
+                            {friend.name}
+                          </Typography>
+                        </a>
+                      </Link>
+                      <Typography className={style.friend} component="p" color="textSecondary">
+                        1 mutual friends
+                      </Typography>
+                    </ListItemText>
+                  </Grid>
+                </Grid>
+                <Grid item xs={3}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    href={`#proses`}
+                    ref={el => {
+                      chatFriendRef.current[index] = el;
+                      return chatFriendRef.current[index];
+                    }}>
+                    Chat
+                  </Button>
+                </Grid>
+              </Grid>
             </ListItem>
           ))}
         </InfiniteScroll>
