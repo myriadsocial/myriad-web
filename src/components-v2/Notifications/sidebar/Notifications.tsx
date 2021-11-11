@@ -74,7 +74,9 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
                 <ListItemAvatar>
                   <StyledBadge badgeContent={notification.badge}>
                     <AvatarComponent className={style.avatar} src={notification.avatar}>
-                      {acronym(notification.user)}
+                      {notification.avatar
+                        ? acronym(notification.avatar)
+                        : acronym(notification.user)}
                     </AvatarComponent>
                   </StyledBadge>
                 </ListItemAvatar>
