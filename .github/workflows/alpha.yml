@@ -109,11 +109,12 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-
     needs: [compute-build-info, publish-draft-release]
-
+    env:
+      DEPLOY: ${{ secrets.STG_DEPLOY }}
     steps:
       - name: Checkout code
+        if: "${{ env.DEPLOY == 'true' }}"
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
