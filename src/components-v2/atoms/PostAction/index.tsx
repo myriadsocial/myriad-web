@@ -28,7 +28,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
   const style = useStyles();
 
   const {
-    metrics: {shares = 0, comments, upvotes = 0, downvotes},
+    metrics: {comments, upvotes = 0, downvotes},
     downvoted = false,
     upvoted = false,
     shareUrl,
@@ -94,11 +94,16 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
 
       <div className={style.section}>
         <IconButton onClick={handleClickShare} className={style.action} color="primary">
-          <SvgIcon classes={{root: style.fill}} component={ShareIcon} viewBox="0 0 24 24" />
+          <SvgIcon
+            className={style.mr1}
+            classes={{root: style.fill}}
+            component={ShareIcon}
+            viewBox="0 0 24 24"
+          />
+          <Typography component="span" color="textPrimary" variant="caption">
+            Shares
+          </Typography>
         </IconButton>
-        <Typography component="span" color="textPrimary" variant="caption">
-          {shares} Shares
-        </Typography>
         <Menu
           id="share-menu"
           anchorEl={shareAnchorEl}

@@ -19,6 +19,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(1),
       padding: 0,
     },
+    mr1: {
+      marginRight: theme.spacing(1),
+    },
     text: {
       fontSize: '12px',
     },
