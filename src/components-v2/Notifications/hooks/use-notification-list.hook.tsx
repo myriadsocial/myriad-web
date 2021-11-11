@@ -37,6 +37,8 @@ const getPlatform = (message: string) => {
 export const useNotificationList = (notifications: Notification[]): NotificationList[] => {
   const style = useStyles();
 
+  console.log({notifications});
+
   return notifications
     .filter(notification => Boolean(notification.fromUserId) && Boolean(notification.toUserId))
     .map(notification => {
@@ -141,9 +143,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: notification.additionalReferenceId
-              ? `/post/${notification.additionalReferenceId[0]?.postId}`
-              : `/404`,
+            href: notification.referenceId ? `/post/${notification.referenceId}` : `/404`,
           };
 
         case NotificationType.USER_TIPS:
