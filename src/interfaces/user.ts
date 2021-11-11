@@ -24,7 +24,7 @@ export type UserOnTransaction = BaseUser & {
 export type UserProps = BaseUser & {
   bio?: string;
   bannerImageUrl?: string;
-  fcmTokens: string[];
+  fcmTokens?: string[];
   skipTour?: boolean;
   onTimeline?: string;
   skipWelcome?: boolean;

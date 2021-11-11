@@ -42,7 +42,7 @@ const firebaseCloudMessaging = {
     }
   },
 
-  onMessageListener: (callback: (payload: any) => void) => {
+  onMessageListener: (callback: (payload: any) => void): void | null => {
     if (!firebase.apps.length) return null;
 
     const messaging = firebase.messaging();
