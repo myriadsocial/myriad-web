@@ -1,6 +1,6 @@
 /* global importScripts, firebase */
-importScripts('https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/7.9.1/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/8.6.2/firebase-messaging.js');
 importScripts('sw-env.js');
 
 firebase.initializeApp({
@@ -27,3 +27,18 @@ self.addEventListener(
   },
   false,
 );
+
+messaging.onBackgroundMessage(function (payload) {
+  console.log('[firebase-messaging-sw.js][onBackgroundMessage] Received background message ', payload); // debug info
+
+  const { title, body, icon, ...restPayload } = payload.notification;
+
+  const notificationOptions = {
+    body,
+    icon: icon || 'https://res.cloudinary.com/dsget80gs/image/upload/myriad/myriad-purple-logo.jpg', // path to your "fallback" firebase notification logo
+    data: restPayload,
+  };
+
+  return self.registration.showNotification(title, notificationOptions);
+});
+

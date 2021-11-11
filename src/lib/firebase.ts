@@ -32,10 +32,6 @@ const firebaseCloudMessaging = {
 
       const messaging = firebase.messaging();
 
-      messaging.onMessage(function (payload) {
-        console.log('Message received', payload);
-      });
-
       await Notification.requestPermission();
 
       const token = await messaging.getToken();
@@ -44,6 +40,21 @@ const firebaseCloudMessaging = {
     } catch (error) {
       console.error(error);
     }
+  },
+
+  onMessageListener: (callback: (payload: any) => void) => {
+    if (!firebase.apps.length) return null;
+
+    const messaging = firebase.messaging();
+
+    messaging.onMessage(
+      (payload: any) => {
+        callback(payload);
+      },
+      error => {
+        console.error('onMessageListener error', error);
+      },
+    );
   },
 };
 

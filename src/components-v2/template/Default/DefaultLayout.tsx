@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useDispatch} from 'react-redux';
 
 import {MenuContainer} from '../../Menu/MenuContainer';
 import {NotificationsContainer} from '../../Notifications/sidebar/Notifications.container';
@@ -12,6 +13,7 @@ import {withError, WithErrorProps} from 'src/components-v2/Error';
 import ShowIf from 'src/components/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
+import {countNewNotification} from 'src/reducers/notification/actions';
 
 type DefaultLayoutProps = WithErrorProps & {
   isOnProfilePage: boolean;
@@ -20,18 +22,26 @@ type DefaultLayoutProps = WithErrorProps & {
 
 const Default: React.FC<DefaultLayoutProps> = props => {
   const {children} = props;
+
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const {updateUserFcmToken} = useUserHook();
+
   const [showNotification, setShowNotification] = useState(false);
 
-  const {loadFcmToken} = useUserHook();
-
   useEffect(() => {
-    window.addEventListener('load', function () {
-      firebaseCloudMessaging.init();
-    });
-
-    loadFcmToken();
+    initializeMessaging();
   }, []);
+
+  const initializeMessaging = async () => {
+    await firebaseCloudMessaging.init();
+
+    await updateUserFcmToken();
+
+    firebaseCloudMessaging.onMessageListener(payload => {
+      dispatch(countNewNotification());
+    });
+  };
 
   const handleToggleNotification = () => {
     setShowNotification(!showNotification);
