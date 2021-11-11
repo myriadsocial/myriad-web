@@ -1,6 +1,9 @@
+import {Firegun} from '@yokowasis/firegun';
+
 import React from 'react';
 
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
 import {RichTextContainer} from '../src/components-v2/Richtext/RichTextContainer';
@@ -18,7 +21,84 @@ import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
-const Home: React.FC = () => {
+const Home: React.FC = (props: any) => {
+  React.useEffect(() => {
+    // Patch pub dan Epub
+    const {publicRuntimeConfig} = getConfig();
+    const baseURL = publicRuntimeConfig.apiURL;
+    const gunRelayURL = publicRuntimeConfig.gunRelayURL.split(',');
+    const userID = props.session.user.address;
+
+    const fg = new Firegun(gunRelayURL);
+
+    (window as any).fg = fg;
+
+    async function userLoginSignup(gunUser: string, gunPass: string, alias: string) {
+      try {
+        await fg.userLogin(gunUser, gunPass, alias);
+      } catch (error) {
+        await fg.userNew(gunUser, gunPass, alias);
+      }
+    }
+
+    async function patchUser(id: string, pubkey: string, epub: string) {
+      fetch(`${baseURL}/users/${id}`, {
+        method: 'PATCH',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          gunPub: pubkey,
+          gunEpub: epub,
+        }),
+      }).then(res => {
+        console.log('PATCH BERHASIL', res);
+      });
+    }
+
+    // Fetch dari API apakah user sudah ada di Server API
+    fetch(`${baseURL}/users/${userID}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json())
+      .then(async result => {
+        console.log(result);
+        const gunUser = userID;
+        const gunPass = result.password.slice(0, 10);
+        const gunAlias = result.name;
+        console.log(
+          'Login',
+          'user : ',
+          gunUser,
+          'password : ',
+          gunPass,
+          'passwordLengkap : ',
+          result.password,
+          'alias : ',
+          gunAlias,
+        );
+        if (fg.user.alias === '') {
+          // User Belum Ada di server API
+          await userLoginSignup(gunUser, gunPass, gunAlias);
+          await patchUser(userID, fg.user.pair.pub, fg.user.pair.epub);
+          fg.userPut('alias', gunAlias);
+        } else {
+          // User ada, tapi yang login bukan user yang di server API
+          if (fg.user.alias !== gunAlias) {
+            fg.userLogout();
+            await userLoginSignup(gunUser, gunPass, gunAlias);
+            await patchUser(userID, fg.user.pair.pub, fg.user.pair.epub);
+            fg.userPut('alias', gunAlias);
+          }
+        }
+      });
+  }, []);
+
   const router = useRouter();
 
   const performSearch = (query: string) => {
