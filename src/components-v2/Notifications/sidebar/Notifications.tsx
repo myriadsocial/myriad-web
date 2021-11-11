@@ -20,7 +20,7 @@ import clsx from 'clsx';
 import {formatDistanceStrict, subDays} from 'date-fns';
 import {AvatarComponent} from 'src/components/common/Avatar.component';
 import {acronym} from 'src/helpers/string';
-import {Notification} from 'src/interfaces/notification';
+import {Notification, NotificationType} from 'src/interfaces/notification';
 
 type NotificationsProps = {
   notifications: Notification[];
@@ -52,8 +52,6 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
     console.log('clicked!');
   };
 
-  console.log({list});
-
   return (
     <Paper className={style.root}>
       <Grid container justifyContent="space-between" alignItems="center">
@@ -70,63 +68,68 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
             <CircularProgress />
           </div>
         ) : (
-          list.map(notification => {
-            return (
-              <Link key={notification.id} href={notification.href} passHref>
-                <ListItem
-                  button
-                  component="a"
-                  ContainerComponent="div"
-                  key={notification.id}
-                  className={clsx({
-                    [style.item]: true,
-                    [style.unread]: !notification.read,
-                  })}
-                  alignItems="center">
-                  <ListItemAvatar>
-                    {notification.user === 'Account unlinked' ||
-                    notification.user === 'Account linked' ? (
-                      <PostAvatar
-                        origin={notification.platform ?? 'myriad'}
-                        name={notification.avatar ?? 'Myriad'}
-                        onClick={handleClickAvatar}
-                      />
-                    ) : (
-                      <StyledBadge badgeContent={notification.badge}>
-                        <AvatarComponent className={style.avatar} src={notification.avatar}>
-                          {notification.avatar
-                            ? acronym(notification.avatar)
-                            : acronym(notification.user)}
-                        </AvatarComponent>
-                      </StyledBadge>
-                    )}
-                  </ListItemAvatar>
-                  <ListItemText>
-                    <Typography className={style.textMain} color="textPrimary">
-                      {notification.user}
-                    </Typography>
-                    <Typography
-                      style={{maxWidth: '140px'}}
-                      className={style.textSecondary}
-                      color="textSecondary">
-                      {notification.description}
-                    </Typography>
-                  </ListItemText>
-                  <ListItemSecondaryAction classes={{root: style.date}}>
-                    <Typography className={style.textSecondary} color="textSecondary">
-                      {formatDistanceStrict(
-                        subDays(new Date(notification.createdAt), 0),
-                        new Date(),
-                        {
-                          addSuffix: true,
-                        },
+          list
+            .filter(notification => notification.type !== NotificationType.POST_VOTE)
+            .filter(notification => notification.type !== NotificationType.COMMENT_VOTE)
+            .map(filteredNotification => {
+              return (
+                <Link key={filteredNotification.id} href={filteredNotification.href} passHref>
+                  <ListItem
+                    button
+                    component="a"
+                    ContainerComponent="div"
+                    key={filteredNotification.id}
+                    className={clsx({
+                      [style.item]: true,
+                      [style.unread]: !filteredNotification.read,
+                    })}
+                    alignItems="center">
+                    <ListItemAvatar>
+                      {filteredNotification.user === 'Account unlinked' ||
+                      filteredNotification.user === 'Account linked' ? (
+                        <PostAvatar
+                          origin={filteredNotification.platform ?? 'myriad'}
+                          name={filteredNotification.avatar ?? 'Myriad'}
+                          onClick={handleClickAvatar}
+                        />
+                      ) : (
+                        <StyledBadge badgeContent={filteredNotification.badge}>
+                          <AvatarComponent
+                            className={style.avatar}
+                            src={filteredNotification.avatar}>
+                            {filteredNotification.avatar
+                              ? acronym(filteredNotification.avatar)
+                              : acronym(filteredNotification.user)}
+                          </AvatarComponent>
+                        </StyledBadge>
                       )}
-                    </Typography>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </Link>
-            );
-          })
+                    </ListItemAvatar>
+                    <ListItemText>
+                      <Typography className={style.textMain} color="textPrimary">
+                        {filteredNotification.user}
+                      </Typography>
+                      <Typography
+                        style={{maxWidth: '140px'}}
+                        className={style.textSecondary}
+                        color="textSecondary">
+                        {filteredNotification.description}
+                      </Typography>
+                    </ListItemText>
+                    <ListItemSecondaryAction classes={{root: style.date}}>
+                      <Typography className={style.textSecondary} color="textSecondary">
+                        {formatDistanceStrict(
+                          subDays(new Date(filteredNotification.createdAt), 0),
+                          new Date(),
+                          {
+                            addSuffix: true,
+                          },
+                        )}
+                      </Typography>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                </Link>
+              );
+            })
         )}
       </List>
       <div className={style.footer}>
