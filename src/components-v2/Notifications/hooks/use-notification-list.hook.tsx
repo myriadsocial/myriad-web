@@ -11,6 +11,7 @@ import React from 'react';
 
 import {SvgIcon, Typography} from '@material-ui/core';
 
+import {PostOrigin} from '../../../interfaces/timeline';
 import {useStyles} from '../Notifications.styles';
 
 import {acronym} from 'src/helpers/string';
@@ -25,12 +26,11 @@ type NotificationList = {
   createdAt: Date;
   read: boolean;
   href: string;
+  platform?: PostOrigin;
 };
 
 const getPlatform = (message: string) => {
   const result = message.split(' ');
-
-  console.log({result});
 
   return result[2];
 };
@@ -344,6 +344,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            platform: getPlatform(notification.message) as PostOrigin,
             href: `/socials`,
           };
 
@@ -367,6 +368,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
+            platform: getPlatform(notification.message) as PostOrigin,
             href: `/socials`,
           };
 
