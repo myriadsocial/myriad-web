@@ -141,7 +141,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
               src={user.profilePictureURL}
               variant="circle"
               className={style.avatar}>
-              {acronym(username)}
+              {acronym(user.name)}
             </Avatar>
             <ImageButton
               title="Edit Image profile"
