@@ -169,7 +169,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/wallet`,
+            href: `/wallet?type=history`,
           };
 
         case NotificationType.POST_TIPS:
@@ -194,7 +194,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/wallet`,
+            href: `/wallet?type=history`,
           };
 
         case NotificationType.COMMENT_TIPS:
@@ -220,7 +220,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/wallet`,
+            href: `/wallet?type=history`,
           };
 
         case NotificationType.USER_CLAIM_TIPS:
@@ -240,7 +240,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/wallet`,
+            href: `/wallet?type=history`,
           };
 
         case NotificationType.USER_REWARD:
@@ -260,7 +260,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/wallet`,
+            href: `/wallet?type=history`,
           };
 
         case NotificationType.POST_REMOVED:
