@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import {withStyles, createStyles} from '@material-ui/core/styles';
 
+import PostAvatar from '../../atoms/PostHeader/avatar/post-avatar.component';
 import {useNotificationList} from '../hooks/use-notification-list.hook';
 import {useStyles} from './Notifications.styles';
 
@@ -45,7 +46,10 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
 
   const list = useNotificationList(notifications);
 
-  console.log({notifications});
+  //TODO: this is a duplicate function on PostHeader/index.tsx
+  const handleClickAvatar = (): void => {
+    console.log('clicked!');
+  };
 
   return (
     <Paper className={style.root}>
@@ -72,13 +76,22 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
                 })}
                 alignItems="center">
                 <ListItemAvatar>
-                  <StyledBadge badgeContent={notification.badge}>
-                    <AvatarComponent className={style.avatar} src={notification.avatar}>
-                      {notification.avatar
-                        ? acronym(notification.avatar)
-                        : acronym(notification.user)}
-                    </AvatarComponent>
-                  </StyledBadge>
+                  {notification.user === 'Account disconnected' ||
+                  notification.user === 'Account connected' ? (
+                    <PostAvatar
+                      origin={notification.platform ?? 'myriad'}
+                      name={notification.user}
+                      onClick={handleClickAvatar}
+                    />
+                  ) : (
+                    <StyledBadge badgeContent={notification.badge}>
+                      <AvatarComponent className={style.avatar} src={notification.avatar}>
+                        {notification.avatar
+                          ? acronym(notification.avatar)
+                          : acronym(notification.user)}
+                      </AvatarComponent>
+                    </StyledBadge>
+                  )}
                 </ListItemAvatar>
                 <ListItemText>
                   <Typography className={style.textMain} color="textPrimary">
