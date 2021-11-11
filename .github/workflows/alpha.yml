@@ -185,5 +185,6 @@ jobs:
               --set-string ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
               --set-string ingress.tls[0].secretName=myriad-app-tls \
               --set-string ingress.tls[0].hosts[0]=app.stg.myriad.systems \
-              --set autoscaling.enabled=true
+              --set autoscaling.enabled=true \
+              --set-string image.pullPolicy=Always
             kubectl rollout status deployment/myriad-web
