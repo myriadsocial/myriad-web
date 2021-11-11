@@ -98,3 +98,5 @@ prisma
 
 # Sentry
 .sentryclirc
+
+.env.local
