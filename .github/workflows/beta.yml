@@ -158,7 +158,7 @@ jobs:
             helm repo update
             helm upgrade myriad-web myriad/myriad-web \
               --install \
-              --set-string image.tag=${{ needs.compute-build-info.outputs.new_tag }} \
+              --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName="Myriad Testnet" \
               --set-string config.nextAuthURL=https://app.stg.myriad.systems \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
