@@ -3,7 +3,7 @@ name: Release-candidate automation
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+-rc[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+-rc*'
 
 concurrency:
   group: release-candidate-automation
