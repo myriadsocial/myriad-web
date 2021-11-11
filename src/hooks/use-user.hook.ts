@@ -11,7 +11,7 @@ import {UserState} from 'src/reducers/user/reducer';
 
 type UserHookProps = {
   disconnectSocial: (social: SocialsEnum) => void;
-  loadFcmToken: () => void;
+  updateUserFcmToken: () => void;
   updateUser: (values: Partial<User>) => void;
 };
 
@@ -47,7 +47,7 @@ export const useUserHook = (): UserHookProps => {
     }
   };
 
-  const loadFcmToken = async () => {
+  const updateUserFcmToken = async () => {
     const token = await firebaseCloudMessaging.getToken();
     const disableUpdateAlert = true;
 
@@ -58,7 +58,7 @@ export const useUserHook = (): UserHookProps => {
 
   return {
     disconnectSocial,
-    loadFcmToken,
+    updateUserFcmToken,
     updateUser: updateUserDetail,
   };
 };

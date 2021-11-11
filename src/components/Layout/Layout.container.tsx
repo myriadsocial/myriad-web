@@ -44,7 +44,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [, loading] = useSession();
-  const {loadFcmToken} = useUserHook();
+  const {updateUserFcmToken} = useUserHook();
 
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
@@ -53,7 +53,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
       firebaseCloudMessaging.init();
     });
 
-    loadFcmToken();
+    updateUserFcmToken();
   }, []);
 
   useEffect(() => {
