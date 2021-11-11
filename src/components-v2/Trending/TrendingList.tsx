@@ -9,10 +9,9 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
-import {Tag} from '../../interfaces/experience';
-import {TimelineType} from '../../interfaces/timeline';
 import {useStyles} from './trending-list.styles';
 
+import {Tag} from 'src/interfaces/experience';
 import {v4 as uuid} from 'uuid';
 
 interface TrendingListProps {
@@ -31,8 +30,8 @@ export const TrendingList: React.FC<TrendingListProps> = props => {
         {trendings.map((trending, i) => (
           <ListItem className={style.item} key={uuid()}>
             <ListItemText disableTypography className={style.text}>
-              <Link href={`/home?tag=${trending.id}&type=${TimelineType.ALL}`} shallow={true}>
-                <a href={`?tag=${trending.id}&type=${TimelineType.ALL}`}>
+              <Link href={`/topic/hashtag?tag=${trending.id}`} shallow={false}>
+                <a href={`/topic/hashtag?tag=${trending.id}`}>
                   <Typography variant="body1" color="textPrimary">{`#${trending.id}`}</Typography>
                   <Typography
                     variant="caption"

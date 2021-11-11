@@ -18,21 +18,24 @@ export const getPost = async (
   type: TimelineType = TimelineType.TRENDING,
   sort?: TimelineSortMethod,
   filters?: TimelineFilter,
+  asFriend = false,
 ): Promise<PostList> => {
   const where: LoopbackWhere<PostProps> = {
     deletedAt: {exists: false},
   };
 
-  let orderField = 'originCreatedAt';
+  let sortField = 'latest';
 
   switch (sort) {
     case 'comment':
-      orderField = 'metric.comments';
+      sortField = 'comment';
       break;
     case 'like':
-      orderField = 'metric.upvotes';
+      sortField = 'upvote';
       break;
     case 'trending':
+      sortField = 'popular';
+      break;
     case 'created':
     default:
       break;
@@ -41,6 +44,10 @@ export const getPost = async (
   if (filters && filters.tags && filters.tags.length) {
     where.tags = {
       inq: filters.tags,
+    };
+
+    where.visibility = {
+      inq: [PostVisibility.PUBLIC],
     };
   }
 
@@ -77,9 +84,16 @@ export const getPost = async (
     if (userId === filters.owner) {
       delete where.deletedAt;
     } else {
-      where.visibility = {
-        inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
-      };
+      // filter only public post if no friend status provided
+      if (asFriend) {
+        where.visibility = {
+          inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
+        };
+      } else {
+        where.visibility = {
+          eq: PostVisibility.PUBLIC,
+        };
+      }
     }
   }
 
@@ -91,14 +105,20 @@ export const getPost = async (
     if (userId === filters.importer) {
       delete where.deletedAt;
     } else {
-      where.visibility = {
-        inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
-      };
+      // filter only public post if no friend status provided
+      if (asFriend) {
+        where.visibility = {
+          inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
+        };
+      } else {
+        where.visibility = {
+          eq: PostVisibility.PUBLIC,
+        };
+      }
     }
   }
 
   const filterParams: Record<string, any> = {
-    order: `${orderField} DESC`,
     include: [
       {
         relation: 'user',
@@ -118,6 +138,8 @@ export const getPost = async (
   };
 
   const params: Record<string, any> = {
+    sortBy: sortField,
+    order: `DESC`,
     pageNumber: page,
     pageLimit: PAGINATION_LIMIT,
   };
@@ -126,8 +148,6 @@ export const getPost = async (
     case TimelineType.FRIEND:
     case TimelineType.EXPERIENCE:
     case TimelineType.TRENDING:
-      filterParams.where = where;
-
       params.filter = filterParams;
       params.timelineType = type;
       params.userId = userId;
@@ -136,7 +156,7 @@ export const getPost = async (
     default:
       filterParams.where = where;
 
-      if (!filters?.importer && !filters?.owner) {
+      if (!filters?.importer && !filters?.owner && (!filters?.tags || filters.tags?.length === 0)) {
         params.timelineType = TimelineType.ALL;
       }
 
@@ -154,7 +174,7 @@ export const getPost = async (
   return data;
 };
 
-export const findPosts = async (query: string): Promise<PostList> => {
+export const findPosts = async (userId: string, query: string): Promise<PostList> => {
   const {data} = await MyriadAPI.request<PostList>({
     url: `/posts?q=${query}`,
     method: 'GET',
@@ -166,6 +186,14 @@ export const findPosts = async (query: string): Promise<PostList> => {
           },
           {
             relation: 'people',
+          },
+          {
+            relation: 'votes',
+            scope: {
+              where: {
+                userId: {eq: userId},
+              },
+            },
           },
         ],
       },

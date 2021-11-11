@@ -32,14 +32,16 @@ export type UserProps = BaseUser & {
   username?: string;
 };
 
+export type UserMetric = {
+  totalExperiences: number;
+  totalFriends: number;
+  totalKudos: number;
+  totalPosts: number;
+};
+
 export interface User extends UserProps, BaseModel {
   currencies: Currency[];
-  metric?: {
-    totalExperiences: number;
-    totalFriends: number;
-    totalKudos: number;
-    totalPosts: number;
-  };
+  metric?: UserMetric;
   activityLogs?: ActivityLog[];
 }
 

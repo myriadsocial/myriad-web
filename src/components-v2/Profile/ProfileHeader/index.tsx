@@ -25,25 +25,28 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import {acronym} from '../../../helpers/string';
 import {PromptComponent} from '../../atoms/Prompt/prompt.component';
 import {ReportComponent} from '../../atoms/Report/Report.component';
+import {useFriendOptions} from './hooks/use-friend-options.hook';
 import {useStyles} from './profile-header.style';
 
 import {format} from 'date-fns';
 import millify from 'millify';
 import {Status, Toaster} from 'src/components-v2/atoms/Toaster';
 import ShowIf from 'src/components/common/show-if.component';
-import {Friend, FriendStatus} from 'src/interfaces/friend';
+import {Friend} from 'src/interfaces/friend';
 import {ReportProps} from 'src/interfaces/report';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 
 export type Props = {
-  user: User;
-  selfProfile: boolean;
+  person: User;
+  user?: User;
   status?: Friend;
   onSendRequest: () => void;
+  onAcceptFriend: () => void;
   onUnblockFriend: (friend: Friend) => void;
   onDeclineRequest: () => void;
+  onRemoveFriend: () => void;
   onSendTip: () => void;
   onEdit?: () => void;
   linkUrl: string;
@@ -55,18 +58,27 @@ const background = 'https://res.cloudinary.com/dsget80gs/background/profile-defa
 
 export const ProfileHeaderComponent: React.FC<Props> = props => {
   const {
+    person,
     user,
-    selfProfile,
     status,
     onEdit,
+    onAcceptFriend,
     onSendRequest,
     onUnblockFriend,
+    onDeclineRequest,
+    onRemoveFriend,
     onSendTip,
     linkUrl,
     onSubmitReport,
     onBlock,
   } = props;
   const style = useStyles();
+
+  const {self, canAddFriend, isBlocked, isFriend, isRequested, isRequesting} = useFriendOptions(
+    person,
+    user,
+    status,
+  );
 
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
 
@@ -75,6 +87,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   const [linkCopied, setLinkCopied] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [openPrompt, setOpenPrompt] = React.useState(false);
+  const [openRemoveFriend, setOpenRemoveFriend] = React.useState(false);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -87,7 +100,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   };
 
   const handleClickFriendOption = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (status?.status === FriendStatus.APPROVED) {
+    if (isFriend || isRequested) {
       e.stopPropagation();
       setAnchorElFriend(e.currentTarget);
     }
@@ -157,70 +170,84 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     return url;
   };
 
+  const confirmRemoveFriend = () => {
+    setOpenRemoveFriend(true);
+  };
+
+  const closeConfirmRemoveFriend = () => {
+    setOpenRemoveFriend(false);
+  };
+
+  const handleRemoveFriend = () => {
+    onRemoveFriend();
+
+    closeConfirmRemoveFriend();
+  };
+
   return (
     <div>
       <div className={style.root}>
         <CardMedia
           className={style.media}
-          image={user.bannerImageUrl || background}
-          title={user.name}
+          image={person.bannerImageUrl || background}
+          title={person.name}
         />
         <div className={style.screen} />
 
         <div className={style.flex}>
           <div className={style.flexCenter}>
             <Avatar
-              alt={user.name}
-              src={user.profilePictureURL}
+              alt={person.name}
+              src={person.profilePictureURL}
               variant="circle"
               className={style.avatar}>
-              {acronym(user.name)}
+              {acronym(person.name)}
             </Avatar>
             <div>
               <Typography className={style.name} component="p">
-                {user.name}
+                {person.name}
               </Typography>
               <Typography className={style.username} component="p">
-                @{user.username || 'username'}
+                @{person.username || 'username'}
               </Typography>
             </div>
           </div>
-          {!selfProfile && (
-            <>
-              <IconButton
-                onClick={handleClickUserOption}
-                classes={{root: style.action}}
-                aria-label="profile-setting">
-                <SvgIcon
-                  classes={{root: style.solid}}
-                  component={DotsVerticalIcon}
-                  viewBox="0 0 20 20"
-                />
-              </IconButton>
-              <Menu
-                classes={{
-                  paper: style.menu,
-                }}
-                anchorEl={anchorEl}
-                getContentAnchorEl={null}
-                anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
-                transformOrigin={{vertical: 'top', horizontal: 'right'}}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}>
-                <MenuItem disabled>Message</MenuItem>
-                <CopyToClipboard text={linkUrl} onCopy={handleLinkCopied}>
-                  <MenuItem>Copy link profile</MenuItem>
-                </CopyToClipboard>
-                <MenuItem disabled>Mute account</MenuItem>
-                <MenuItem onClick={handleOpenModal} className={style.delete}>
-                  Report account
-                </MenuItem>
-              </Menu>
-            </>
-          )}
+
+          <ShowIf condition={!self}>
+            <IconButton
+              onClick={handleClickUserOption}
+              classes={{root: style.action}}
+              aria-label="profile-setting">
+              <SvgIcon
+                classes={{root: style.solid}}
+                component={DotsVerticalIcon}
+                viewBox="0 0 20 20"
+              />
+            </IconButton>
+            <Menu
+              classes={{
+                paper: style.menu,
+              }}
+              anchorEl={anchorEl}
+              getContentAnchorEl={null}
+              anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+              transformOrigin={{vertical: 'top', horizontal: 'right'}}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}>
+              <MenuItem disabled>Message</MenuItem>
+              <CopyToClipboard text={linkUrl} onCopy={handleLinkCopied}>
+                <MenuItem>Copy link profile</MenuItem>
+              </CopyToClipboard>
+              <MenuItem disabled>Mute account</MenuItem>
+              <MenuItem onClick={handleOpenModal} className={style.delete}>
+                Report account
+              </MenuItem>
+            </Menu>
+          </ShowIf>
         </div>
+
         <Typography className={`${style.username} ${style.mt22}`} component="p">
-          {user.bio}
+          {person.bio}
         </Typography>
         <Typography
           className={`${style.aditionLite} ${style.flexCenter} ${style.mt22}`}
@@ -233,10 +260,10 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           />
           <Link
             className={style.link}
-            href={handleURL(user.websiteURL ?? '')}
+            href={handleURL(person.websiteURL ?? '')}
             rel="noreferrer"
             target="_blank">
-            {user.websiteURL || 'oct.network'}
+            {person.websiteURL || 'oct.network'}
           </Link>
           <SvgIcon
             classes={{root: style.fill}}
@@ -244,7 +271,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             component={CalendarIcon}
             viewBox="0 0 24 24"
           />
-          {formatDate(user.createdAt)}
+          {formatDate(person.createdAt)}
         </Typography>
 
         <div className={`${style.mt15} ${style.flexEnd}`}>
@@ -254,7 +281,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Post
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(user.metric?.totalPosts ?? 0)}
+                {formatNumber(person.metric?.totalPosts ?? 0)}
               </Typography>
             </div>
             <div className={style.text}>
@@ -262,7 +289,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Kudos
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(user.metric?.totalKudos ?? 0)}
+                {formatNumber(person.metric?.totalKudos ?? 0)}
               </Typography>
             </div>
             <div className={style.text}>
@@ -270,7 +297,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Friends
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(user.metric?.totalFriends ?? 0)}
+                {formatNumber(person.metric?.totalFriends ?? 0)}
               </Typography>
             </div>
             <div className={style.text}>
@@ -278,12 +305,12 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 Experience
               </Typography>
               <Typography className={style.total} component="p">
-                {formatNumber(user.metric?.totalExperiences ?? 0)}
+                {formatNumber(person.metric?.totalExperiences ?? 0)}
               </Typography>
             </div>
           </div>
           <div>
-            <ShowIf condition={selfProfile}>
+            <ShowIf condition={self}>
               <Button
                 onClick={handleOpenEdit}
                 classes={{root: style.button}}
@@ -294,8 +321,8 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               </Button>
             </ShowIf>
 
-            <ShowIf condition={!selfProfile}>
-              <ShowIf condition={!status}>
+            <ShowIf condition={!self}>
+              <ShowIf condition={canAddFriend}>
                 <Button
                   onClick={handleSendRequest}
                   startIcon={
@@ -314,47 +341,52 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 </Button>
               </ShowIf>
 
-              <ShowIf condition={Boolean(status) && status?.status !== FriendStatus.BLOCKED}>
+              <ShowIf condition={!isBlocked && !canAddFriend}>
                 <Button
                   onClick={handleClickFriendOption}
                   startIcon={
                     <SvgIcon
                       classes={{root: style.fill}}
-                      component={status?.status === FriendStatus.APPROVED ? UserIcon : UserAddIcon}
+                      component={isFriend ? UserIcon : UserAddIcon}
                       viewBox="0 0 22 22"
                     />
                   }
-                  endIcon={
-                    status?.status === FriendStatus.APPROVED ? (
-                      <SvgIcon component={ChevronDownIcon} />
-                    ) : null
-                  }
+                  endIcon={isFriend || isRequested ? <SvgIcon component={ChevronDownIcon} /> : null}
                   classes={{root: style.button}}
                   className={style.mr12}
                   variant="contained"
-                  color={status?.status === FriendStatus.APPROVED ? 'primary' : 'default'}
+                  color={isFriend ? 'primary' : 'default'}
                   size="small">
-                  <ShowIf condition={status?.status === FriendStatus.APPROVED}>Friends</ShowIf>
-                  <ShowIf condition={status?.status === FriendStatus.PENDING}>Requested</ShowIf>
+                  <ShowIf condition={isFriend}>Friends</ShowIf>
+                  <ShowIf condition={isRequested}>Respond</ShowIf>
+                  <ShowIf condition={isRequesting}>Requested</ShowIf>
                 </Button>
                 <Menu
-                  classes={{
-                    paper: style.menu,
-                  }}
+                  classes={{paper: style.menu}}
                   anchorEl={anchorElFriend}
                   getContentAnchorEl={null}
                   anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
                   transformOrigin={{vertical: 'top', horizontal: 'right'}}
                   open={Boolean(anchorElFriend)}
                   onClose={handleClose}>
-                  <MenuItem>Unfriend</MenuItem>
-                  <MenuItem onClick={handleOpenPrompt} className={style.delete}>
-                    Block this person
-                  </MenuItem>
+                  <ShowIf condition={isFriend}>
+                    <MenuItem onClick={() => confirmRemoveFriend()}>Unfriend</MenuItem>
+                  </ShowIf>
+                  <ShowIf condition={isFriend}>
+                    <MenuItem onClick={handleOpenPrompt} className={style.delete}>
+                      Block this person
+                    </MenuItem>
+                  </ShowIf>
+                  <ShowIf condition={isRequested}>
+                    <MenuItem onClick={() => onAcceptFriend()}>Accept</MenuItem>
+                  </ShowIf>
+                  <ShowIf condition={isRequested}>
+                    <MenuItem onClick={() => onDeclineRequest()}>Reject</MenuItem>
+                  </ShowIf>
                 </Menu>
               </ShowIf>
 
-              <ShowIf condition={status?.status !== FriendStatus.BLOCKED}>
+              <ShowIf condition={!isBlocked}>
                 <Button
                   disabled={balanceDetails.length === 0}
                   onClick={onSendTip}
@@ -402,9 +434,34 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         </div>
       </PromptComponent>
 
+      <PromptComponent
+        onCancel={closeConfirmRemoveFriend}
+        open={openRemoveFriend}
+        icon="danger"
+        title={`Unfriend ${person.name}?`}
+        subtitle="You will not able to search and see post from this user">
+        <div className={`${style['flex-center']}`}>
+          <Button
+            onClick={closeConfirmRemoveFriend}
+            className={style.m1}
+            size="small"
+            variant="outlined"
+            color="secondary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleRemoveFriend}
+            className={style.error}
+            size="small"
+            variant="contained">
+            Unfriend Now
+          </Button>
+        </div>
+      </PromptComponent>
+
       <ReportComponent
         onSubmit={onSubmitReport}
-        user={user}
+        user={person}
         open={open}
         onClose={handleCloseModal}
       />

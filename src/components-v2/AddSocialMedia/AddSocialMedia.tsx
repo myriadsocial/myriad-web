@@ -10,11 +10,9 @@ import {
   ListItemText,
   Typography,
   TextField,
-  OutlinedInput,
-  FormControl,
-  InputLabel,
   capitalize,
   CircularProgress,
+  InputAdornment,
 } from '@material-ui/core';
 
 import ShowIf from '../../components/common/show-if.component';
@@ -30,6 +28,18 @@ type AddSocialMediaProps = Pick<ModalProps, 'onClose' | 'open'> & {
   publicKey: string;
   verifying?: boolean;
   verify: (social: SocialsEnum, profileUrl: string) => void;
+};
+
+const prefix: Record<SocialsEnum, string> = {
+  [SocialsEnum.TWITTER]: 'https://twitter.com/',
+  [SocialsEnum.FACEBOOK]: 'https://www.facebook.com/',
+  [SocialsEnum.REDDIT]: 'https://www.reddit.com/',
+  [SocialsEnum.TELEGRAM]: '',
+  [SocialsEnum.FOURCHAN]: '',
+  [SocialsEnum.INSTAGRAM]: '',
+  [SocialsEnum.VK]: '',
+  [SocialsEnum.WECHAT]: '',
+  [SocialsEnum.WEIBO]: '',
 };
 
 export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
@@ -57,14 +67,14 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
   const handleSocialNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
 
-    setProfileUrl(text);
+    setProfileUrl(text.replace(/\/$/, '').replace(prefix[social], ''));
   };
 
   const handleSocialNamePasted = (e: React.ClipboardEvent<HTMLDivElement>) => {
     e.preventDefault();
     const text = e.clipboardData.getData('Text');
 
-    setProfileUrl(text);
+    setProfileUrl(text.replace(/\/$/, '').replace(prefix[social], ''));
   };
 
   const handleShared = () => {
@@ -89,17 +99,24 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                 <b>Step 1:</b> Fill in your {capitalize(social)} account URL
               </Typography>
 
-              <FormControl fullWidth variant="outlined">
-                <InputLabel htmlFor="experience-name">{capitalize(social)} Account URL</InputLabel>
-                <OutlinedInput
-                  id="social-profile-url"
-                  placeholder="Ex: https://twitter.com/laraschoffield"
-                  labelWidth={160}
-                  onChange={handleSocialNameChange}
-                  onPaste={handleSocialNamePasted}
-                  value={profileUrl}
-                />
-              </FormControl>
+              <TextField
+                id="social-profile-url"
+                name={`${capitalize(social)} Account URL`}
+                type="text"
+                placeholder={`laraschoffield`}
+                onChange={handleSocialNameChange}
+                onPaste={handleSocialNamePasted}
+                value={profileUrl}
+                InputProps={{
+                  disableUnderline: true,
+                  color: 'primary',
+                  startAdornment: (
+                    <InputAdornment position="start" disableTypography>
+                      {prefix[social]}
+                    </InputAdornment>
+                  ),
+                }}
+              />
             </ListItemText>
           </ListItem>
 

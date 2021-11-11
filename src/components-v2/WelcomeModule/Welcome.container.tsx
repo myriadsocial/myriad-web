@@ -3,12 +3,14 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
-import {Button, Grid} from '@material-ui/core';
+import {Button} from '@material-ui/core';
 
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {WelcomeModule} from './WelcomeModule';
 
+import {Status} from 'src/interfaces/toaster';
 import {RootState} from 'src/reducers';
+import {showToaster} from 'src/reducers/toaster/actions';
 import {updateUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -37,10 +39,20 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
 
   const handleSubmit = (displayname: string, username: string) => {
     dispatch(
-      updateUser({
-        name: displayname,
-        username,
-      }),
+      updateUser(
+        {
+          name: displayname,
+          username,
+        },
+        () => {
+          dispatch(
+            showToaster({
+              message: 'Success update profile',
+              toasterStatus: Status.SUCCESS,
+            }),
+          );
+        },
+      ),
     );
 
     router.push('/home');
@@ -64,14 +76,23 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
         open={skip}
         icon="warning"
         onCancel={closeSkipConfirmation}>
-        <Grid container justifyContent="space-between">
-          <Button size="small" variant="outlined" color="secondary" onClick={closeSkipConfirmation}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            style={{marginRight: '24px'}}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={closeSkipConfirmation}>
             No, let me rethink
           </Button>
           <Button size="small" variant="contained" color="primary" onClick={confirmSkip}>
             Yes, Let’s go
           </Button>
-        </Grid>
+        </div>
       </PromptComponent>
     </>
   );

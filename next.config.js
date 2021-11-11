@@ -19,6 +19,7 @@ const moduleExports = {
   publicRuntimeConfig: {
     // Will be available on both server and client
     appName: process.env.NEXT_PUBLIC_APP_NAME,
+    appStatus: process.env.NEXT_PUBLIC_APP_STATUS,
     apiURL: process.env.NEXT_PUBLIC_API_URL,
     nextAuthURL: process.env.NEXTAUTH_URL,
     facebookAppId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,

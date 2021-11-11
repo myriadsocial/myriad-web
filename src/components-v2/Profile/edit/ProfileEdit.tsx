@@ -5,7 +5,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 
 import {acronym} from '../../../helpers/string';
@@ -256,14 +255,19 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         icon="warning"
         open={open}
         onCancel={openPrompt}>
-        <Grid container justifyContent="space-between">
-          <Button size="small" variant="outlined" color="secondary" onClick={openPrompt}>
+        <div className={style.flexCenter}>
+          <Button
+            className={style.m1}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={openPrompt}>
             No, let me rethink
           </Button>
           <Button size="small" variant="contained" color="primary" onClick={onCancel}>
             Yes, Leave it
           </Button>
-        </Grid>
+        </div>
       </PromptComponent>
     </div>
   );

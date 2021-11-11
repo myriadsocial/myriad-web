@@ -75,7 +75,7 @@ export const CommentEditor: React.FC<Props> = props => {
           onClick={openComment}
           minRows={1}
           value={comment.text}
-          placeholder={placeholder || 'Write a Comment...'}
+          placeholder={placeholder || 'Write a Reply...'}
           className={style.write}
           onChange={handleChange('text')}
           spellCheck={false}

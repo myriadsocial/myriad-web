@@ -15,7 +15,6 @@ import {
   Radio,
   SvgIcon,
   NoSsr,
-  Grid,
 } from '@material-ui/core';
 
 import {capitalize} from '../../helpers/string';
@@ -224,8 +223,13 @@ export const Socials: React.FC<SocialsProps> = props => {
         open={removing}
         icon="danger"
         onCancel={handleClosePrompt}>
-        <Grid container justifyContent="space-between">
-          <Button size="small" variant="outlined" color="secondary" onClick={handleClosePrompt}>
+        <div className={`${styles['flex-center']}`}>
+          <Button
+            className={styles.m1}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={handleClosePrompt}>
             No, let me rethink
           </Button>
           <Button
@@ -235,7 +239,7 @@ export const Socials: React.FC<SocialsProps> = props => {
             onClick={confirmDisconnectSocial}>
             Yes, proceed to delete
           </Button>
-        </Grid>
+        </div>
       </PromptComponent>
     </Box>
   );

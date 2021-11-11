@@ -5,6 +5,7 @@ import * as constants from './constants';
 import axios from 'axios';
 import {Action} from 'redux';
 import {Comment} from 'src/interfaces/comment';
+import {FriendStatus} from 'src/interfaces/friend';
 import {Like, ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
 import {Post, PostProps} from 'src/interfaces/post';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
@@ -116,13 +117,6 @@ export interface SetTippedContent extends Action {
   referenceId: string;
 }
 
-export interface SetSearchedPosts extends Action {
-  type: constants.SET_SEARCHED_POSTS;
-  payload: {
-    posts: Post[];
-    meta: ListMeta;
-  };
-}
 /**
  * Union Action Types
  */
@@ -145,7 +139,6 @@ export type Actions =
   | DownvotePost
   | RemoveVotePost
   | SetTippedContent
-  | SetSearchedPosts
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -161,14 +154,6 @@ export const setTippedContent = (contentType: string, referenceId: string): SetT
   type: constants.SET_TIPPED_CONTENT,
   contentType,
   referenceId,
-});
-
-export const setSearchedPosts = (posts: Post[], meta: ListMeta): SetSearchedPosts => ({
-  type: constants.SET_SEARCHED_POSTS,
-  payload: {
-    posts,
-    meta,
-  },
 });
 
 /**
@@ -192,6 +177,12 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
   (page = 1, sort?: TimelineSortMethod, filter?: TimelineFilter, type?: TimelineType) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
+    let asFriend = false;
+
+    const {
+      profileState: {friendStatus},
+      userState: {user},
+    } = getState();
 
     try {
       const {timelineState, userState} = getState();
@@ -200,12 +191,17 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
       const timelineFilter = filter ?? timelineState.filter;
       const timelineSort = sort ?? timelineState.sort;
 
+      if (user && (timelineFilter?.owner || timelineFilter?.importer)) {
+        asFriend = friendStatus?.status === FriendStatus.APPROVED;
+      }
+
       const {data: posts, meta} = await PostAPI.getPost(
         page,
         userId,
         timelineType,
         timelineSort,
         timelineFilter,
+        asFriend,
       );
 
       dispatch({
@@ -644,16 +640,29 @@ export const removeVote: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
-  (query: string) => async dispatch => {
+  (query: string) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
+    const {
+      userState: {user},
+    } = getState();
+    const userId = user?.id as string;
+
     try {
-      const {data: posts, meta} = await PostAPI.findPosts(query);
+      const {data: posts, meta} = await PostAPI.findPosts(userId, query);
 
       dispatch({
-        type: constants.SET_SEARCHED_POSTS,
+        type: constants.LOAD_TIMELINE,
         payload: {
-          posts,
+          posts: posts.map(post => {
+            const upvoted = post.votes?.filter(vote => vote.userId === userId && vote.state);
+            const downvoted = post.votes?.filter(vote => vote.userId === userId && !vote.state);
+
+            post.isUpvoted = upvoted && upvoted.length > 0;
+            post.isDownVoted = downvoted && downvoted.length > 0;
+
+            return post;
+          }),
           meta,
         },
       });

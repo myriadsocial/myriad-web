@@ -97,5 +97,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'space-between',
     },
+    flexCenter: {
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    m1: {
+      marginRight: theme.spacing(3),
+    },
   }),
 );

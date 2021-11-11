@@ -158,16 +158,19 @@ export const PostRender: React.FC<PostRenderProps> = props => {
           return <a href={escapeHtml(node.url)}>{children}</a>;
         case ELEMENT_HASHTAG:
           return (
-            <Link href={`/home?tag=${node.hashtag}&type=trending`} shallow={true}>
-              <Typography
-                component="span"
-                style={{
-                  fontWeight: 600,
-                  color: theme.palette.primary.main,
-                  display: 'inline-block',
-                }}>
-                #{node.hashtag}
-              </Typography>
+            <Link href={`/topic/hashtag?tag=${node.hashtag}`} shallow={true}>
+              <a href={`/topic/hashtag?tag=${node.hashtag}`}>
+                <Typography
+                  component="span"
+                  style={{
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                    color: theme.palette.primary.main,
+                    display: 'inline-block',
+                  }}>
+                  #{node.hashtag}
+                </Typography>
+              </a>
             </Link>
           );
         case ELEMENT_IMAGE:
@@ -178,11 +181,20 @@ export const PostRender: React.FC<PostRenderProps> = props => {
           return <Video url={node.url} />;
         case ELEMENT_MENTION:
           return (
-            <Typography
-              component="span"
-              style={{fontWeight: 600, color: theme.palette.primary.main, display: 'inline-block'}}>
-              @{node.name}
-            </Typography>
+            <Link href={`/profile/${node.value}`} shallow={true}>
+              <a href={`/profile/${node.value}`}>
+                <Typography
+                  component="span"
+                  style={{
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                    color: theme.palette.primary.main,
+                    display: 'inline-block',
+                  }}>
+                  @{node.name}
+                </Typography>
+              </a>
+            </Link>
           );
         case ELEMENT_SHOW_MORE:
           return <ShowMore onClick={onShowAll} />;

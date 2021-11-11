@@ -27,7 +27,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
   const dispatch = useDispatch();
 
-  const {searchedPosts: posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
+  const {posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
   const {openTipHistory} = useTipHistory();
   const {openToaster} = useToasterHook();
 

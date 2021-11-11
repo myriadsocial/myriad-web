@@ -2,8 +2,12 @@ import {TagOptions} from 'src/components-v2/PostTag';
 
 export const tagOptions: TagOptions[] = [
   {
-    id: 'violent',
-    title: 'Violent',
+    id: 'nudity',
+    title: 'Nudity',
+  },
+  {
+    id: 'pornography',
+    title: 'Pornography',
   },
   {
     id: 'profanity',
@@ -14,12 +18,8 @@ export const tagOptions: TagOptions[] = [
     title: 'Violence and Gore',
   },
   {
-    id: 'rage_religion',
+    id: 'race_religion',
     title: 'Race and Religion',
-  },
-  {
-    id: 'pornography',
-    title: 'Pornography',
   },
   {
     id: 'other',
