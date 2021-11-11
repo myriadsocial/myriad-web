@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "myriad-web",
   "private": true,
-  "license": "GPL-3.0",
+  "license": "AGPL-3.0",
   "author": "Myriad Dev Team <myriad.dev@blocksphere.id>",
   "homepage": "https://myriad.social",
   "repository": {
