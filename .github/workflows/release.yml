@@ -82,25 +82,27 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
-  deploy:
+  deploy-pre-release:
     runs-on: ubuntu-latest
-
     needs: [compute-build-info, build-and-publish-docker-image]
-
+    env:
+      DEPLOY: ${{ secrets.PROD_DEPLOY }}
+    if: "github.event.release.prerelease && !contains(needs.compute-build-info.outputs.latest_tag, 'alpha') && !contains(needs.compute-build-info.outputs.latest_tag, 'beta')"
     steps:
       - name: Checkout code
+        if: "${{ env.DEPLOY == 'true' }}"
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
       - name: Set up Cloud SDK
+        if: "${{ env.DEPLOY == 'true' }}"
         uses: google-github-actions/setup-gcloud@master
         with:
           project_id: ${{ secrets.PROD_GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.PROD_GCP_SA_KEY }}
           export_default_credentials: true
-
       - name: Get secrets
+        if: "${{ env.DEPLOY == 'true' }}"
         id: secrets
         uses: google-github-actions/get-secretmanager-secrets@main
         with:
@@ -121,8 +123,92 @@ jobs:
             SSH_USERNAME:${{ secrets.PROD_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.PROD_GCP_PROJECT_ID }}/SSH_KEY
             SSH_PORT:${{ secrets.PROD_GCP_PROJECT_ID }}/SSH_PORT
-
       - name: Deploy
+        if: "${{ env.DEPLOY == 'true' }}"
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ steps.secrets.outputs.SSH_HOST }}
+          username: ${{ steps.secrets.outputs.SSH_USERNAME }}
+          key: ${{ steps.secrets.outputs.SSH_KEY }}
+          port: ${{ steps.secrets.outputs.SSH_PORT }}
+          script: |
+            helm repo add myriad https://charts.myriad.systems
+            helm repo update
+            helm upgrade myriad-web myriad/myriad-web \
+              --install \
+              --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
+              --set-string config.appName=Myriad \
+              --set-string config.nextAuthURL=https://app.myriad.systems \
+              --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
+              --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
+              --set-string config.rpcWSURL=${{ steps.secrets.outputs.RPC_WS_URL }} \
+              --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
+              --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
+              --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
+              --set-string config.firebase.appId=${{ steps.secrets.outputs.FIREBASE_APP_ID }} \
+              --set-string config.sentry.dns=${{ steps.secrets.outputs.WEB_SENTRY_DNS }} \
+              --set-string config.cloudinary.cloudName=${{ steps.secrets.outputs.CLOUDINARY_CLOUND_NAME }} \
+              --set-string config.cloudinary.apiKey=${{ steps.secrets.outputs.CLOUDINARY_API_KEY }} \
+              --set-string config.cloudinary.secret=${{ steps.secrets.outputs.CLOUDINARY_SECRET }} \
+              --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
+              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
+              --set ingress.enabled=true \
+              --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
+              --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
+              --set-string ingress.annotations."nginx\.ingress\.kubernetes\.io/limit-rps"="10" \
+              --set-string ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"="100m" \
+              --set-string ingress.annotations."nginx\.org/client-max-body-size"="100m" \
+              --set-string ingress.hosts[0].host=app.myriad.systems \
+              --set-string ingress.hosts[0].paths[0].path=/ \
+              --set-string ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
+              --set-string ingress.tls[0].secretName=myriad-app-tls \
+              --set-string ingress.tls[0].hosts[0]=app.myriad.systems \
+              --set autoscaling.enabled=true
+            kubectl rollout status deployment/myriad-web
+
+  deploy-release:
+    if: "!github.event.release.prerelease"
+    runs-on: ubuntu-latest
+    needs: [compute-build-info, build-and-publish-docker-image]
+    env:
+      DEPLOY: ${{ secrets.PROD_DEPLOY }}
+    steps:
+      - name: Checkout code
+        if: "${{ env.DEPLOY == 'true' }}"
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Cloud SDK
+        if: "${{ env.DEPLOY == 'true' }}"
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.PROD_GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.PROD_GCP_SA_KEY }}
+          export_default_credentials: true
+      - name: Get secrets
+        if: "${{ env.DEPLOY == 'true' }}"
+        id: secrets
+        uses: google-github-actions/get-secretmanager-secrets@main
+        with:
+          secrets: |-
+            API_URL:${{ secrets.PROD_GCP_PROJECT_ID }}/API_URL
+            RPC_WS_URL:${{ secrets.PROD_GCP_PROJECT_ID }}/RPC_WS_URL
+            FIREBASE_PROJECT_ID:${{ secrets.PROD_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
+            FIREBASE_API_KEY:${{ secrets.PROD_GCP_PROJECT_ID }}/FIREBASE_API_KEY
+            FIREBASE_MESSAGING_SENDER_ID:${{ secrets.PROD_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
+            FIREBASE_APP_ID:${{ secrets.PROD_GCP_PROJECT_ID }}/FIREBASE_APP_ID
+            WEB_SENTRY_DNS:${{ secrets.PROD_GCP_PROJECT_ID }}/WEB_SENTRY_DNS
+            CLOUDINARY_CLOUND_NAME:${{ secrets.PROD_GCP_PROJECT_ID }}/CLOUDINARY_CLOUND_NAME
+            CLOUDINARY_API_KEY:${{ secrets.PROD_GCP_PROJECT_ID }}/CLOUDINARY_API_KEY
+            CLOUDINARY_SECRET:${{ secrets.PROD_GCP_PROJECT_ID }}/CLOUDINARY_SECRET
+            FACEBOOK_APP_ID:${{ secrets.PROD_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
+            TWITTER_BEARER_TOKEN:${{ secrets.PROD_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            SSH_HOST:${{ secrets.PROD_GCP_PROJECT_ID }}/SSH_HOST
+            SSH_USERNAME:${{ secrets.PROD_GCP_PROJECT_ID }}/SSH_USERNAME
+            SSH_KEY:${{ secrets.PROD_GCP_PROJECT_ID }}/SSH_KEY
+            SSH_PORT:${{ secrets.PROD_GCP_PROJECT_ID }}/SSH_PORT
+      - name: Deploy
+        if: "${{ env.DEPLOY == 'true' }}"
         uses: appleboy/ssh-action@master
         with:
           host: ${{ steps.secrets.outputs.SSH_HOST }}
