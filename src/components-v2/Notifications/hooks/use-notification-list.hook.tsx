@@ -14,7 +14,6 @@ import {SvgIcon, Typography} from '@material-ui/core';
 import {PostOrigin} from '../../../interfaces/timeline';
 import {useStyles} from '../Notifications.styles';
 
-import {acronym} from 'src/helpers/string';
 import {Notification, NotificationType} from 'src/interfaces/notification';
 
 type NotificationList = {
@@ -329,7 +328,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             read: notification.read,
             user: 'Account connected',
-            avatar: notification.toUserId.profilePictureURL ?? acronym(notification.toUserId.name),
+            avatar: notification.toUserId.profilePictureURL ?? notification.toUserId.name,
             description:
               'Your ' +
               getPlatform(notification.message) +
@@ -353,7 +352,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             read: notification.read,
             user: 'Account disconnected',
-            avatar: notification.toUserId.profilePictureURL ?? acronym(notification.toUserId.name),
+            avatar: notification.toUserId.profilePictureURL ?? notification.toUserId.name,
             description:
               'Your ' +
               getPlatform(notification.message) +

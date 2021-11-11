@@ -80,7 +80,7 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
                   notification.user === 'Account connected' ? (
                     <PostAvatar
                       origin={notification.platform ?? 'myriad'}
-                      name={notification.user}
+                      name={notification.avatar ?? 'Myriad'}
                       onClick={handleClickAvatar}
                     />
                   ) : (
