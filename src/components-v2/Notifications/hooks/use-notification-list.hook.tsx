@@ -90,7 +90,9 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: notification.referenceId ? `/posts/${notification.referenceId}` : `/404`,
+            href: notification.additionalReferenceId
+              ? `/post/${notification.additionalReferenceId[0]?.postId}`
+              : `/404`,
           };
 
         case NotificationType.COMMENT_COMMENT:
@@ -120,7 +122,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
             read: notification.read,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
-            description: 'Mention you in a comment',
+            description: 'Mention you in a post',
             badge: (
               <div className={style.circle}>
                 <SvgIcon
@@ -131,7 +133,9 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: notification.referenceId ? `/posts/${notification.referenceId}` : `/404`,
+            href: notification.additionalReferenceId
+              ? `/post/${notification.additionalReferenceId[0]?.postId}`
+              : `/404`,
           };
 
         case NotificationType.USER_TIPS:
