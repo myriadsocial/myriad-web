@@ -135,7 +135,7 @@ jobs:
             helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
-              --set-string config.appName=myriad \
+              --set-string config.appName=Myriad \
               --set-string config.nextAuthURL=https://app.myriad.systems \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
