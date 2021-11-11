@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {MyWalletProps} from '.';
 import {BalanceDetailListContainer} from '../BalanceDetailList/BalanceDetailListContainer';
@@ -6,8 +6,12 @@ import {HistoryDetailListContainer} from '../HistoryDetailList/HistoryDetailList
 import {BoxComponent} from '../atoms/Box/';
 import {TabsComponent} from '../atoms/Tabs/';
 
+import {useQueryParams} from 'src/hooks/use-query-params.hooks';
+
 export const MyWallet: React.FC<MyWalletProps> = props => {
   const {headerTitle} = props;
+
+  const {query} = useQueryParams();
 
   const [tabTexts] = useState([
     {
@@ -21,6 +25,12 @@ export const MyWallet: React.FC<MyWalletProps> = props => {
       component: <HistoryDetailListContainer />,
     },
   ]);
+
+  const [activeTabId, setActiveTabId] = useState('first-tab');
+
+  useEffect(() => {
+    if (query.type === 'history') setActiveTabId('second-tab');
+  }, [query]);
 
   const handleChangeTab = () => {
     console.log('changed tab!');
@@ -38,7 +48,7 @@ export const MyWallet: React.FC<MyWalletProps> = props => {
       minWidth={583}
       onClick={handleClick}>
       <TabsComponent
-        active={tabTexts[0].id}
+        active={activeTabId}
         tabs={tabTexts}
         position={'space-around'}
         mark="underline"
