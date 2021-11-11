@@ -178,7 +178,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           placeholder="Username"
           value={username}
           onChange={handleChangeUsername}
-          labelWidth={80}
+          labelWidth={70}
           startAdornment={'@'}
         />
       </FormControl>
@@ -200,7 +200,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           placeholder="Display Name"
           value={newUser?.name}
           onChange={handleChange('name')}
-          labelWidth={100}
+          labelWidth={93}
         />
       </FormControl>
 
@@ -211,7 +211,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           placeholder="Bio"
           value={newUser?.bio}
           onChange={handleChange('bio')}
-          labelWidth={30}
+          labelWidth={23}
         />
       </FormControl>
 
@@ -222,7 +222,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           placeholder="oct.network"
           value={newUser?.websiteURL}
           onChange={handleChange('websiteURL')}
-          labelWidth={65}
+          labelWidth={58}
         />
       </FormControl>
 
