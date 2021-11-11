@@ -160,7 +160,7 @@ jobs:
             helm repo update
             helm upgrade myriad-web myriad/myriad-web \
               --install \
-              --set-string image.tag=${{ steps.build-info.outputs.latest_tag }} \
+              --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string image.pullPolicy=Always \
               --set-string config.appName="Myriad Staging" \
               --set-string config.nextAuthURL=https://app.stg.myriad.systems \
