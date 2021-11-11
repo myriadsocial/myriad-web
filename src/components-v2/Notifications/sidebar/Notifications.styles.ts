@@ -41,6 +41,12 @@ export const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: alpha('#FFC857', 0.15),
       },
     },
+    loading: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: 360,
+    },
     item: {
       position: 'relative',
       '& .MuiListItemText-root': {

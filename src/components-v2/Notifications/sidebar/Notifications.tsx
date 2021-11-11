@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 
 import {Badge, Button, Grid, ListItemSecondaryAction} from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -51,6 +52,8 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
     console.log('clicked!');
   };
 
+  console.log({list});
+
   return (
     <Paper className={style.root}>
       <Grid container justifyContent="space-between" alignItems="center">
@@ -62,63 +65,69 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
         </Button>
       </Grid>
       <List className={style.list}>
-        {list.map(notification => {
-          return (
-            <Link key={notification.id} href={notification.href} passHref>
-              <ListItem
-                button
-                component="a"
-                ContainerComponent="div"
-                key={notification.id}
-                className={clsx({
-                  [style.item]: true,
-                  [style.unread]: !notification.read,
-                })}
-                alignItems="center">
-                <ListItemAvatar>
-                  {notification.user === 'Account unlinked' ||
-                  notification.user === 'Account linked' ? (
-                    <PostAvatar
-                      origin={notification.platform ?? 'myriad'}
-                      name={notification.avatar ?? 'Myriad'}
-                      onClick={handleClickAvatar}
-                    />
-                  ) : (
-                    <StyledBadge badgeContent={notification.badge}>
-                      <AvatarComponent className={style.avatar} src={notification.avatar}>
-                        {notification.avatar
-                          ? acronym(notification.avatar)
-                          : acronym(notification.user)}
-                      </AvatarComponent>
-                    </StyledBadge>
-                  )}
-                </ListItemAvatar>
-                <ListItemText>
-                  <Typography className={style.textMain} color="textPrimary">
-                    {notification.user}
-                  </Typography>
-                  <Typography
-                    style={{maxWidth: '140px'}}
-                    className={style.textSecondary}
-                    color="textSecondary">
-                    {notification.description}
-                  </Typography>
-                </ListItemText>
-                <ListItemSecondaryAction classes={{root: style.date}}>
-                  <Typography className={style.textSecondary} color="textSecondary">
-                    {formatDistanceStrict(
-                      subDays(new Date(notification.createdAt), 0),
-                      new Date(),
-                      {
-                        addSuffix: true,
-                      },
+        {list.length === 0 ? (
+          <div className={style.loading}>
+            <CircularProgress />
+          </div>
+        ) : (
+          list.map(notification => {
+            return (
+              <Link key={notification.id} href={notification.href} passHref>
+                <ListItem
+                  button
+                  component="a"
+                  ContainerComponent="div"
+                  key={notification.id}
+                  className={clsx({
+                    [style.item]: true,
+                    [style.unread]: !notification.read,
+                  })}
+                  alignItems="center">
+                  <ListItemAvatar>
+                    {notification.user === 'Account unlinked' ||
+                    notification.user === 'Account linked' ? (
+                      <PostAvatar
+                        origin={notification.platform ?? 'myriad'}
+                        name={notification.avatar ?? 'Myriad'}
+                        onClick={handleClickAvatar}
+                      />
+                    ) : (
+                      <StyledBadge badgeContent={notification.badge}>
+                        <AvatarComponent className={style.avatar} src={notification.avatar}>
+                          {notification.avatar
+                            ? acronym(notification.avatar)
+                            : acronym(notification.user)}
+                        </AvatarComponent>
+                      </StyledBadge>
                     )}
-                  </Typography>
-                </ListItemSecondaryAction>
-              </ListItem>
-            </Link>
-          );
-        })}
+                  </ListItemAvatar>
+                  <ListItemText>
+                    <Typography className={style.textMain} color="textPrimary">
+                      {notification.user}
+                    </Typography>
+                    <Typography
+                      style={{maxWidth: '140px'}}
+                      className={style.textSecondary}
+                      color="textSecondary">
+                      {notification.description}
+                    </Typography>
+                  </ListItemText>
+                  <ListItemSecondaryAction classes={{root: style.date}}>
+                    <Typography className={style.textSecondary} color="textSecondary">
+                      {formatDistanceStrict(
+                        subDays(new Date(notification.createdAt), 0),
+                        new Date(),
+                        {
+                          addSuffix: true,
+                        },
+                      )}
+                    </Typography>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </Link>
+            );
+          })
+        )}
       </List>
       <div className={style.footer}>
         <Link href="/notification">
