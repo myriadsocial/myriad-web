@@ -68,6 +68,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@polkadot/api": "^6.5.2",
+    "@mui/system": "^5.1.0",
     "@polkadot/extension-dapp": "^0.37.2",
     "@polkadot/react-identicon": "^0.58.*",
     "@sentry/nextjs": "^6.13.3",
