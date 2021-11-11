@@ -1,6 +1,6 @@
 import {Sizes} from '../../../interfaces/assets';
 
-export type ImageListItem = {
+export type ImageListItemProps = {
   src: string;
   sizes: Sizes;
   rows: number;
@@ -8,10 +8,10 @@ export type ImageListItem = {
   loading: boolean;
 };
 
-export type ImageList = {
+export type ImageListProps = {
   cols: number;
   cellHeight: number;
-  images: ImageListItem[];
+  images: ImageListItemProps[];
 };
 
 export type GalleryType = 'vertical' | 'horizontal';

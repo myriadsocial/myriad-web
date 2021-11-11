@@ -1,14 +1,18 @@
-import {ImageList, ImageListItem, GalleryType} from './Gallery.types';
+import {ImageListProps, ImageListItemProps, GalleryType} from './Gallery.types';
 
 import {generateImageSizes} from 'src/helpers/cloudinary';
 
-export const buildList = (source: string[], variant: GalleryType, cloudName: string): ImageList => {
+export const buildList = (
+  source: string[],
+  variant: GalleryType,
+  cloudName: string,
+): ImageListProps => {
   let listCols = 1;
   let itemCols = 1;
   let ROWS = 1;
   let cellHeight = 320;
 
-  const images: ImageListItem[] = [];
+  const images: ImageListItemProps[] = [];
 
   for (let index = 0; index < source.length; index++) {
     if (source.length > 1) {

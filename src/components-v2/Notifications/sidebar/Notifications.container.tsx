@@ -25,7 +25,10 @@ export const NotificationsContainer: React.FC<NotificationsContainerProps> = pro
 
   useEffect(() => {
     dispatch(fetchNotification());
-    dispatch(countNewNotification());
+
+    return () => {
+      dispatch(countNewNotification());
+    };
   }, []);
 
   const markAllAsRead = () => {
