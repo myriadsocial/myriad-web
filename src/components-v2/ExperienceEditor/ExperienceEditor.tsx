@@ -12,12 +12,14 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   Autocomplete,
   AutocompleteChangeReason,
   AutocompleteRenderOptionState,
 } from '@material-ui/lab';
 
+import ShowIf from '../../components/common/show-if.component';
 import {Experience, Tag} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
 import {Dropzone} from '../atoms/Dropzone';
@@ -46,6 +48,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const [newTags, setTags] = useState<string[]>([]);
   const [image, setImage] = useState<string>();
   const [disable, setDisable] = useState<boolean>(true);
+  const [isLoading, setIsloading] = useState<boolean>(false);
 
   useEffect(() => {
     if (experience) {
@@ -73,6 +76,15 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     setDisable(!name || !description || !experienceImageURL || !people || !tags);
   }, [newExperience, newTags]);
 
+  useEffect(() => {
+    if (type?.toLowerCase() == 'clone') {
+      const people = JSON.stringify(newExperience?.people) == JSON.stringify(experience?.people);
+      const tags = JSON.stringify(newTags) == JSON.stringify(experience?.tags);
+
+      setDisable(people && tags);
+    }
+  }, [newExperience, newTags]);
+
   const handleSearchTags = (event: React.ChangeEvent<HTMLInputElement>) => {
     const debounceSubmit = debounce(() => {
       onSearchTags(event.target.value);
@@ -90,8 +102,10 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   };
 
   const handleImageUpload = async (files: File[]) => {
+    setIsloading(true);
     const url = await onImageUpload(files);
 
+    setIsloading(false);
     setImage(url);
     setNewExperience({...newExperience, experienceImageURL: url});
   };
@@ -194,11 +208,16 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         />
       </FormControl>
 
-      <FormControl fullWidth variant="outlined">
+      <FormControl fullWidth variant="outlined" style={{position: 'relative'}}>
         <InputLabel htmlFor="experience-picture" shrink={true} className={styles.label}>
           Picture
         </InputLabel>
-        <Dropzone onImageSelected={handleImageUpload} value={image} />
+        <Dropzone onImageSelected={handleImageUpload} value={image} maxSize={3} />
+        <ShowIf condition={isLoading}>
+          <div className={styles.loading}>
+            <CircularProgress size={32} color="primary" />
+          </div>
+        </ShowIf>
       </FormControl>
 
       <Autocomplete
