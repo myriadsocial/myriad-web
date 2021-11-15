@@ -514,6 +514,7 @@ export const getDedicatedPost: ThunkActionCreator<Actions, RootState> =
       }
 
       const post = await PostAPI.getPostDetail(postId);
+
       dispatch(setPost(post));
     } catch (error) {
       dispatch(
