@@ -5,6 +5,8 @@ import React from 'react';
 import {NextPage} from 'next';
 import NextErrorComponent, {ErrorProps} from 'next/error';
 
+import {Error as ErrorComponent} from 'src/components-v2/Error';
+
 interface AppErrorProps extends ErrorProps {
   err?: Error;
   hasGetInitialPropsRun?: boolean;
@@ -19,7 +21,7 @@ const AppError: NextPage<AppErrorProps> = ({statusCode, hasGetInitialPropsRun, e
     // Flushing is not required in this case as it only happens on the client
   }
 
-  return <NextErrorComponent statusCode={statusCode} />;
+  return <ErrorComponent statusCode={statusCode} />;
 };
 
 AppError.getInitialProps = async ctx => {
