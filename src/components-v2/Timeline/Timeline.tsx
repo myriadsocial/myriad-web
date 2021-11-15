@@ -1,12 +1,12 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import Image from 'next/image';
-
-import Typography from '@material-ui/core/Typography';
+import {useRouter} from 'next/router';
 
 import {PostDetail} from '../PostDetail';
+import {Button, ButtonSize, ButtonVariant} from '../atoms/Button';
 import {useStyles} from './Timeline.styles';
+import {TimelineEmpty as TimelineEmptyComponent} from './TimelineEmpty';
 
 import {Loading} from 'src/components-v2/atoms/Loading';
 import {Comment} from 'src/interfaces/comment';
@@ -49,6 +49,12 @@ export const Timeline: React.FC<TimelineProps> = props => {
     onRemoveVote,
   } = props;
 
+  const router = useRouter();
+
+  const handleCreateExperience = () => {
+    router.push('/experience/create');
+  };
+
   const styles = useStyles();
 
   return (
@@ -60,25 +66,29 @@ export const Timeline: React.FC<TimelineProps> = props => {
         next={loadNextPage}
         loader={<Loading />}>
         {timelineType === TimelineType.EXPERIENCE && posts.length === 0 ? (
-          <div>
-            <Image src="/images/Empty_experience_post_illustration.svg" width={90} height={90} />
-            <Typography style={{fontWeight: 'bold', fontSize: 18}}>
-              No Experience posts yet
-            </Typography>
-            <Typography style={{fontWeight: 400, fontSize: 14}}>
-              Create your own timeline experience and see only posts which interest you
-            </Typography>
-          </div>
+          <TimelineEmptyComponent
+            title={'No Experience posts yet'}
+            subtitle={'Create your own timeline experience and see only posts which interest you'}
+            iconPath={'/images/Empty_experience_post_illustration.svg'}
+            width={90}
+            height={90}
+            action={
+              <Button
+                variant={ButtonVariant.CONTAINED}
+                size={ButtonSize.SMALL}
+                onClick={handleCreateExperience}>
+                Create experience
+              </Button>
+            }
+          />
         ) : timelineType === TimelineType.FRIEND && posts.length === 0 ? (
-          <div>
-            <Image src="/images/Empty_friend_post_illustration.svg" width={90} height={90} />
-            <Typography style={{fontWeight: 'bold', fontSize: 18}}>
-              No posts from friends yet
-            </Typography>
-            <Typography style={{fontWeight: 400, fontSize: 14}}>
-              let’s make friends and you might get some valuable insights
-            </Typography>
-          </div>
+          <TimelineEmptyComponent
+            title={'No posts from friends yet'}
+            subtitle={'let’s make friends and you might get some valuable insights'}
+            iconPath={'/images/Empty_friend_post_illustration.svg'}
+            width={90}
+            height={90}
+          />
         ) : (
           posts.map(post => (
             <PostDetail
@@ -97,7 +107,6 @@ export const Timeline: React.FC<TimelineProps> = props => {
             />
           ))
         )}
-        {}
       </InfiniteScroll>
     </div>
   );
