@@ -25,9 +25,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const SearchResultContainer: React.FC = () => {
-  const {searchedExperiences, searchExperience} = useExperienceHook();
+  const {searchExperience} = useExperienceHook();
 
-  const {users: searchedUsers, searchUsers} = useSearchHook();
+  const {searchUsers} = useSearchHook();
 
   const {searchPosts} = useTimelineHook();
 
@@ -111,7 +111,6 @@ export const SearchResultContainer: React.FC = () => {
         size="medium"
         padding={3.75}
         background="white"
-        noBackground={searchedExperiences.length === 0 || searchedUsers.length === 0 ? true : false}
         borderRadius={10}
         paddingLeft={selectedTab === 'users-tab' ? 0 : 30}
         paddingRight={selectedTab === 'users-tab' ? 0 : 30}

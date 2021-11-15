@@ -8,6 +8,7 @@ import {Loading} from '../../components-v2/atoms/Loading';
 import ShowIf from '../../components/common/show-if.component';
 import {User} from '../../interfaces/user';
 import {EmptyResult} from '../Search/EmptyResult';
+import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
 import {UsersListItem} from '../UsersList/UsersListItem';
 
 export const useStyles = makeStyles(() =>
@@ -37,19 +38,7 @@ export const UsersList: React.FC<UsersListProps> = ({users, hasMore, loadNextPag
       next={loadNextPage}
       loader={<Loading />}>
       <ShowIf condition={users.length === 0}>
-        <EmptyResult
-          iconPath={'/images/no_users_icon.svg'}
-          heading={`
-              We can’t find any related users
-            `}
-          firstLineText={`
-                Make sure you type correctly
-              
-              `}
-          secondLineText={`
-              or try different keywords.
-              `}
-        />
+        <EmptyResult emptyContent={EmptyContentEnum.USER} />
       </ShowIf>
 
       <ShowIf condition={users.length > 0}>
