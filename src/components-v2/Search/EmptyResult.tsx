@@ -19,7 +19,7 @@ export const EmptyResult: React.FC<EmptyResultProps> = ({emptyContent}) => {
         No {emptyContent} found.
       </Typography>
       {emptyContent === EmptyContentEnum.EXPERIENCE ? (
-        <Link href={'/experience'}>
+        <Link href={'/experience/create'}>
           <Button color="primary" variant="contained" size="small">
             Create Experience
           </Button>
