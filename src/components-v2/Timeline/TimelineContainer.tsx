@@ -133,6 +133,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
       </ShowIf>
 
       <TimelineComponent
+        timelineType={query.type as TimelineType}
         user={user}
         posts={posts}
         anonymous={anonymous}
