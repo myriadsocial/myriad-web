@@ -5,6 +5,7 @@ import {List} from '@material-ui/core';
 import {SearchedExperienceListProps, useStyles} from '.';
 import ShowIf from '../../components/common/show-if.component';
 import {EmptyResult} from '../Search/EmptyResult';
+import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
 import {NonSelectableSimpleCard} from '../atoms/SimpleCard';
 
 const SearchedExperienceList: React.FC<SearchedExperienceListProps> = ({
@@ -19,19 +20,7 @@ const SearchedExperienceList: React.FC<SearchedExperienceListProps> = ({
   return (
     <div className={classes.root}>
       <ShowIf condition={experiences.length === 0}>
-        <EmptyResult
-          iconPath={'/images/no_experience_icon.svg'}
-          heading={`
-              We can’t find any related experience
-            `}
-          firstLineText={`
-                Make sure you type correctly
-              
-              `}
-          secondLineText={`
-              or try different keywords.
-              `}
-        />
+        <EmptyResult emptyContent={EmptyContentEnum.EXPERIENCE} />
       </ShowIf>
 
       <ShowIf condition={experiences.length > 0}>
