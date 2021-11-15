@@ -3,40 +3,9 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
-import {createStyles, makeStyles} from '@material-ui/core/styles';
 
 import {EmptyResultProps, EmptyContentEnum} from './EmptyResult.interfaces';
-
-export const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      position: 'relative',
-      '& .MuiListItem-gutters': {
-        paddingLeft: 0,
-        paddingRight: 0,
-      },
-    },
-    empty: {
-      background: '#FFF',
-      height: '491px',
-      width: '100%',
-      borderRadius: 10,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    title: {
-      fontWeight: 700,
-      fontSize: '18px',
-      marginBottom: '12px',
-    },
-    subtitle: {
-      marginBottom: '40px',
-      fontSize: '14px',
-    },
-  }),
-);
+import {useStyles} from './EmptyResult.styles';
 
 export const EmptyResult: React.FC<EmptyResultProps> = ({emptyContent}) => {
   const classes = useStyles();
