@@ -50,7 +50,6 @@ export const Upload: React.FC<UploadProps> = props => {
         accept={accept}
         placeholder={placeholder}
         maxSize={maxSize}
-        border={false}
         usage={usage}
       />
 

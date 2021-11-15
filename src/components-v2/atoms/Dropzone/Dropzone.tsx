@@ -251,8 +251,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
             <ShowIf condition={type === 'video'}>
               <ShowIf condition={!videoCodecSupported}>
                 <Typography>
-                  Browser not supported video codec for preview, we will re-encode it once you
-                  confirm upload.
+                  We cannot preview your video, preview video can be done after you confirm it.
                 </Typography>
               </ShowIf>
               <ShowIf condition={videoCodecSupported}>
