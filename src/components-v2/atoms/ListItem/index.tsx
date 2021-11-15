@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
     small: {
       width: theme.spacing(3.75),
       height: theme.spacing(3.75),
+      fontSize: theme.spacing(2),
     },
     medium: {
       width: theme.spacing(6),
@@ -97,18 +98,16 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
       ContainerComponent="div"
       onClick={onClick}
       {...listProps}>
-      {avatar !== undefined && (
+      {icon ? (
+        <ListItemIcon className={iconSyles.join(' ')}>
+          <SvgIcon component={icon} />
+        </ListItemIcon>
+      ) : (
         <ListItemAvatar className={styles.avatar}>
           <Avatar alt={title} src={avatar} variant={variant} className={styles[size]}>
             {acronym(title)}
           </Avatar>
         </ListItemAvatar>
-      )}
-
-      {icon && !avatar && (
-        <ListItemIcon className={iconSyles.join(' ')}>
-          <SvgIcon component={icon} />
-        </ListItemIcon>
       )}
 
       <ListItemText
