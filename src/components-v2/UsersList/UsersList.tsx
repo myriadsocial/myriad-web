@@ -5,7 +5,10 @@ import {List} from '@material-ui/core';
 import {createStyles, makeStyles, alpha} from '@material-ui/core/styles';
 
 import {Loading} from '../../components-v2/atoms/Loading';
+import ShowIf from '../../components/common/show-if.component';
 import {User} from '../../interfaces/user';
+import {EmptyResult} from '../Search/EmptyResult';
+import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
 import {UsersListItem} from '../UsersList/UsersListItem';
 
 export const useStyles = makeStyles(() =>
@@ -34,9 +37,13 @@ export const UsersList: React.FC<UsersListProps> = ({users, hasMore, loadNextPag
       hasMore={hasMore}
       next={loadNextPage}
       loader={<Loading />}>
-      <List className={classes.root}>
-        {users.length &&
-          users.map(user => (
+      <ShowIf condition={users.length === 0}>
+        <EmptyResult emptyContent={EmptyContentEnum.USER} />
+      </ShowIf>
+
+      <ShowIf condition={users.length > 0}>
+        <List className={classes.root}>
+          {users.map(user => (
             <UsersListItem
               title={user.name}
               subtitle={user.username ? `@${user.username}` : '@username'}
@@ -46,7 +53,8 @@ export const UsersList: React.FC<UsersListProps> = ({users, hasMore, loadNextPag
               url={`/profile/${user.id}`}
             />
           ))}
-      </List>
+        </List>
+      </ShowIf>
     </InfiniteScroll>
   );
 };

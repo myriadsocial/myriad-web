@@ -6,8 +6,11 @@ import {Comment} from '../../interfaces/comment';
 import {Post} from '../../interfaces/post';
 import {User} from '../../interfaces/user';
 import {PostDetail} from '../PostDetail/';
+import {EmptyResult} from '../Search/EmptyResult';
+import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
 import {sortOptions} from '../Timeline/default';
 import {DropdownMenu} from '../atoms/DropdownMenu';
+import {useStyles} from './PostsList.styles';
 
 import _ from 'lodash';
 
@@ -41,6 +44,8 @@ export const PostsList: React.FC<PostsListProps> = props => {
     toggleDownvoting,
     onRemoveVote,
   } = props;
+
+  const classes = useStyles();
 
   useEffect(() => {
     setDefaultPosts(searchedPosts);
@@ -80,33 +85,39 @@ export const PostsList: React.FC<PostsListProps> = props => {
 
   return (
     <>
-      <DropdownMenu
-        title="Sort by"
-        selected={sortOptions[0].id}
-        options={sortOptions}
-        onChange={handleSort}
-      />
+      <div className={classes.dropdownMenu}>
+        <DropdownMenu
+          title="Sort by"
+          selected={sortOptions[0].id}
+          options={sortOptions}
+          onChange={handleSort}
+        />
+      </div>
       <InfiniteScroll
         scrollableTarget="scrollable-searched-posts"
         dataLength={searchedPosts.length}
         hasMore={hasMore}
         next={loadNextPage}
         loader={<Loading />}>
-        {defaultPosts.map(post => (
-          <PostDetail
-            user={user}
-            key={`post-${post.id}`}
-            post={post}
-            anonymous={anonymous}
-            onUpvote={upvote}
-            onSendTip={onSendTip}
-            toggleDownvoting={toggleDownvoting}
-            onOpenTipHistory={onOpenTipHistory}
-            onReport={onReport}
-            onShared={onShared}
-            onRemoveVote={onRemoveVote}
-          />
-        ))}
+        {defaultPosts.length === 0 ? (
+          <EmptyResult emptyContent={EmptyContentEnum.POST} />
+        ) : (
+          defaultPosts.map(post => (
+            <PostDetail
+              user={user}
+              key={`post-${post.id}`}
+              post={post}
+              anonymous={anonymous}
+              onUpvote={upvote}
+              onSendTip={onSendTip}
+              toggleDownvoting={toggleDownvoting}
+              onOpenTipHistory={onOpenTipHistory}
+              onReport={onReport}
+              onShared={onShared}
+              onRemoveVote={onRemoveVote}
+            />
+          ))
+        )}
       </InfiniteScroll>
     </>
   );

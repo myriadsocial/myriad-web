@@ -146,7 +146,8 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
         <ShowIf condition={tips.length === 0}>
           <Empty title="Tip empty" subtitle="" />
         </ShowIf>
-        <List>
+
+        <List className={styles.list} id="scrollable-tip-history">
           <InfiniteScroll
             scrollableTarget="scrollable-tip-history"
             dataLength={tips.length}
@@ -156,7 +157,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
             {tips.map(tip => (
               <ListItemComponent
                 key={tip.id}
-                avatar={tip.fromUser.profilePictureURL}
+                avatar={tip.fromUser.profilePictureURL || tip.fromUser.name}
                 title={tip.fromUser.name}
                 subtitle={'2 seconds ago'}
                 size="medium"

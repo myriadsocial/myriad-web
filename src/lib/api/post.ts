@@ -171,6 +171,14 @@ export const getPost = async (
     params,
   });
 
+  data.data.map(post => {
+    if (post.platform === 'reddit') {
+      post.text = post.text.replace('&amp;#x200B;', '&nbsp;');
+    }
+
+    return post;
+  });
+
   return data;
 };
 
@@ -198,6 +206,14 @@ export const findPosts = async (userId: string, query: string): Promise<PostList
         ],
       },
     },
+  });
+
+  data.data.map(post => {
+    if (post.platform === 'reddit') {
+      post.text = post.text.replace('&amp;#x200B;', '&nbsp;');
+    }
+
+    return post;
   });
 
   return data;
@@ -245,6 +261,10 @@ export const getPostDetail = async (id: string): Promise<Post> => {
       },
     },
   });
+
+  if (data.platform === 'reddit') {
+    data.text = data.text.replace('&amp;#x200B;', '&nbsp;');
+  }
 
   return data;
 };

@@ -19,7 +19,7 @@ import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useToasterHook} from 'src/hooks/use-toaster.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
-import {TimelineFilter} from 'src/interfaces/timeline';
+import {TimelineFilter, TimelineType} from 'src/interfaces/timeline';
 import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
@@ -133,6 +133,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
       </ShowIf>
 
       <TimelineComponent
+        timelineType={query.type as TimelineType}
         user={user}
         posts={posts}
         anonymous={anonymous}

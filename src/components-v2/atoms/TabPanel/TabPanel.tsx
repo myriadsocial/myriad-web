@@ -35,8 +35,9 @@ export const TabPanel: React.FC<TabPanelProps> = props => {
 
   return (
     <div className={styles.root} hidden={value !== index} role="tabpanel">
-      {index === 'posts-tab' && <>{children}</>}
-      {index !== 'posts-tab' && value === index && (
+      {index === 'posts-tab' ? (
+        <>{children}</>
+      ) : (
         <>
           <Box p={padding} style={{background, borderRadius, paddingLeft, paddingRight}}>
             {children}
