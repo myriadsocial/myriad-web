@@ -84,5 +84,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: '10px',
       marginTop: '-20px',
     },
+    loading: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      position: 'absolute',
+      zIndex: 999,
+      width: '100%',
+      height: '100%',
+      textAlign: 'center',
+    },
   }),
 );
