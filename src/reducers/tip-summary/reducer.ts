@@ -57,7 +57,7 @@ export const TipSummaryReducer: Redux.Reducer<TipSummaryState, Actions> = (
       return {
         ...state,
         transactions:
-          action.meta.currentPage || action.meta.currentPage === 1
+          !action.meta.currentPage || action.meta.currentPage === 1
             ? action.transactions
             : [...state.transactions, ...action.transactions],
         meta: action.meta,
