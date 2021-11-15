@@ -25,6 +25,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: 0,
     },
     list: {
+      height: 340,
+      overflow: 'auto',
       '& .MuiListItem-root': {
         paddingTop: 0,
         paddingBottom: 0,
