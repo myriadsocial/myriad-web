@@ -86,7 +86,11 @@ export const Gallery: React.FC<GalleryProps> = props => {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
-                width={image.cols === 1 ? 635 : 635 / image.cols}
+                width={
+                  image.cols === 1 || (image.cols === 2 && images.length === 2)
+                    ? 635
+                    : 635 / image.cols
+                }
                 height={list.cellHeight * image.rows}>
                 <SvgIcon
                   component={ImagePlaceholder}
