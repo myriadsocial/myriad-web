@@ -7,6 +7,7 @@ import {Post} from '../../interfaces/post';
 import {User} from '../../interfaces/user';
 import {PostDetail} from '../PostDetail/';
 import {EmptyResult} from '../Search/EmptyResult';
+import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
 import {sortOptions} from '../Timeline/default';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {useStyles} from './PostsList.styles';
@@ -99,19 +100,7 @@ export const PostsList: React.FC<PostsListProps> = props => {
         next={loadNextPage}
         loader={<Loading />}>
         {defaultPosts.length === 0 ? (
-          <EmptyResult
-            iconPath={'/images/no_post_found.svg'}
-            heading={`
-              We can’t find any related posts
-            `}
-            firstLineText={`
-                Make sure you type correctly
-              
-              `}
-            secondLineText={`
-              or try different keywords.
-              `}
-          />
+          <EmptyResult emptyContent={EmptyContentEnum.POST} />
         ) : (
           defaultPosts.map(post => (
             <PostDetail
