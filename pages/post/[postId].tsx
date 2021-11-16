@@ -54,6 +54,25 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const params = context.params as PostPageParams;
   let showAsDeleted = false;
 
+  if (typeof window === 'undefined') {
+    const DeviceDetect = eval('require("node-device-detector")');
+
+    const device = new DeviceDetect();
+    const {
+      device: {type},
+    } = device.detect(context.req.headers['user-agent']);
+
+    if (type === 'smartphone') {
+      return {
+        redirect: {
+          destination: '/mobile',
+          permanent: false,
+          headers: context.req.headers,
+        },
+      };
+    }
+  }
+
   const available = await healthcheck();
 
   if (!available) {
