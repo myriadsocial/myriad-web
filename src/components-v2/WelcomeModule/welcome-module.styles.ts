@@ -55,5 +55,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       justifyContent: 'space-between',
     },
+    validation: {
+      fontSize: '12px',
+      color: 'red',
+    },
   }),
 );
