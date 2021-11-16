@@ -53,11 +53,12 @@ export const ProfileEditComponent: React.FC<Props> = props => {
   const [username, setUsername] = useState<string>(user.username ?? '');
   const [isEdited, setIsEdited] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
-
+  const [isError, setIsError] = useState(false);
   const style = useStyles();
 
   useEffect(() => {
     handleChanges();
+    nameValidation();
   }, [newUser]);
 
   const handleChangeUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,6 +110,14 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     }
     return false;
   };
+
+  const nameValidation = debounce(() => {
+    if (!newUser.name || newUser.name?.length < 2) {
+      setIsError(true);
+    } else {
+      setIsError(false);
+    }
+  }, 300);
 
   const handleChanges = () => {
     const a = user.bio === newUser.bio;
@@ -169,7 +178,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         </div>
       </FormControl>
 
-      <FormControl className={style.username} fullWidth variant="outlined">
+      <FormControl className={style.mb} fullWidth variant="outlined">
         <InputLabel htmlFor="username">Username</InputLabel>
         <OutlinedInput
           error={handleError()}
@@ -190,7 +199,9 @@ export const ProfileEditComponent: React.FC<Props> = props => {
       )}
 
       <Typography className={style.marker}>
-        {isChanged ? 'You already set username' : 'You have used the attempt to change your name'}
+        {isChanged
+          ? 'You already set username'
+          : 'Max 16 char. Please be aware that you can only change username once'}
       </Typography>
 
       <FormControl fullWidth variant="outlined">
@@ -201,8 +212,16 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           value={newUser?.name}
           onChange={handleChange('name')}
           labelWidth={93}
+          inputProps={{maxLength: 22}}
+          error={isError}
         />
       </FormControl>
+
+      {isError && (
+        <Typography className={`${style.available} ${style.red} ${style.validation}`}>
+          Required min 2 characters
+        </Typography>
+      )}
 
       <FormControl fullWidth variant="outlined">
         <InputLabel htmlFor="bio">Bio</InputLabel>
@@ -236,7 +255,12 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           )}
         </FormControl>
         <FormControl className={style.button} variant="outlined">
-          <Button variant="contained" color="primary" disableElevation onClick={saveUser}>
+          <Button
+            variant="contained"
+            color="primary"
+            disableElevation
+            onClick={saveUser}
+            disabled={isError}>
             Save changes
           </Button>
           {updatingProfile && (

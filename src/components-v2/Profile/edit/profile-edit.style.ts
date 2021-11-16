@@ -71,8 +71,12 @@ export const useStyles = makeStyles((theme: Theme) =>
     green: {
       color: 'green',
     },
-    username: {
+    mb: {
       marginBottom: '12px',
+    },
+    validation: {
+      position: 'absolute',
+      marginTop: -30,
     },
     media: {
       height: '206px',
