@@ -9,6 +9,8 @@ import {useStyles, WelcomeModuleProps} from '.';
 import MyriadPurple from '../../images/Myriad-purple-logo.svg';
 import {Button, ButtonVariant, ButtonSize} from '../atoms/Button';
 
+import {debounce} from 'lodash';
+
 export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
   const {displayName, username, onSubmit, onSkip} = props;
 
@@ -16,6 +18,11 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
 
   const [newDisplayName, setNewDisplayName] = React.useState(displayName);
   const [newUserName, setNewUsername] = React.useState(username);
+  const [isError, setIsError] = React.useState(false);
+
+  React.useEffect(() => {
+    nameValidation();
+  }, [newDisplayName]);
 
   const handleChangeDisplayName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewDisplayName(event.target.value);
@@ -32,6 +39,14 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
   const handleSkipWelcome = () => {
     onSkip();
   };
+
+  const nameValidation = debounce(() => {
+    if (!newDisplayName || newDisplayName.length < 2) {
+      setIsError(true);
+    } else {
+      setIsError(false);
+    }
+  }, 300);
 
   return (
     <div className={classes.root}>
@@ -56,7 +71,13 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
             defaultValue={displayName}
             variant="outlined"
             onChange={handleChangeDisplayName}
+            error={isError}
+            inputProps={{maxLength: 22}}
           />
+
+          {isError && (
+            <Typography className={`${classes.validation}`}>Required min 2 characters</Typography>
+          )}
         </div>
 
         <div className={classes.secondFormField}>
@@ -90,7 +111,8 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
             <Button
               onClick={handleSubmit}
               variant={ButtonVariant.CONTAINED}
-              size={ButtonSize.SMALL}>
+              size={ButtonSize.SMALL}
+              isDisabled={isError}>
               Save
             </Button>
           </div>
