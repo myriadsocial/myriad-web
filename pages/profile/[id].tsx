@@ -4,19 +4,20 @@ import {useSelector} from 'react-redux';
 import {Session} from 'next-auth';
 import {getSession} from 'next-auth/client';
 
-import {DefaultLayout} from '../../src/components-v2/template/Default/DefaultLayout';
-import {wrapper} from '../../src/store';
-
 import {ProfileTimeline} from 'src/components-v2/Profile/ProfileComponent';
 import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
+import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
+import {setError} from 'src/reducers/base/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExperience} from 'src/reducers/experience/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
-import {fetchProfileDetail, checkFriendedStatus} from 'src/reducers/profile/actions';
+import {checkFriendedStatus, setProfile} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
+import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
 type ProfilePageProps = {
@@ -29,8 +30,7 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = () => {
   return (
     <DefaultLayout isOnProfilePage={true}>
       <ToasterContainer />
-
-      {profileDetail && <ProfileTimeline profile={profileDetail} loading={false} />}
+      <ProfileTimeline profile={profileDetail} loading={false} />
     </DefaultLayout>
   );
 };
@@ -100,8 +100,18 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   if (profileId) {
-    await dispatch(fetchProfileDetail(profileId));
-    await dispatch(checkFriendedStatus());
+    try {
+      const detail = await UserAPI.getUserDetail(profileId);
+      if (detail) {
+        dispatch(setProfile(detail));
+
+        await dispatch(checkFriendedStatus());
+      }
+    } catch (error) {
+      setError({
+        message: 'user not found',
+      });
+    }
   }
 
   return {
