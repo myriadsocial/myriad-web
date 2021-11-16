@@ -41,6 +41,6 @@ export const useFriendOptions = (
     isRequested: isRequested(),
     isRequesting: isRequesting(),
     canAddFriend: !self() && !isFriended(),
-    isBlocked: isFriended && friend?.status === FriendStatus.BLOCKED,
+    isBlocked: isFriended() && friend?.status === FriendStatus.BLOCKED,
   };
 };

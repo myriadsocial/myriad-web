@@ -140,7 +140,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
       const reader = new FileReader();
 
       // Register event listeners
-      reader.addEventListener('loadend', e => resolve(e.target?.result));
+      reader.addEventListener('loadend', e => resolve(e.target!.result));
       reader.addEventListener('error', reject);
 
       // Read file
