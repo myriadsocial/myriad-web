@@ -248,7 +248,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         <InputLabel htmlFor="website">Website</InputLabel>
         <OutlinedInput
           id="website"
-          placeholder="oct.network"
+          placeholder="mysite.url"
           value={newUser?.websiteURL}
           onChange={handleChange('websiteURL')}
           labelWidth={58}
