@@ -15,7 +15,7 @@ export const HelpComponent: React.FC = () => {
   };
 
   const handleRedirectToTelegram = () => {
-    window.open('https://t.me/myriadsocial', '_blank');
+    window.open('mailto:support@myriad.social', '_blank');
   };
 
   return (
