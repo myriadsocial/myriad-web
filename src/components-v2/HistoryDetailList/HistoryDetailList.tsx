@@ -139,7 +139,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     return timeAgoInString;
   };
 
-  const namePlaceholder = 'Unnamed Myrian';
+  const namePlaceholder = 'Unknown Myrian';
 
   return (
     <>
