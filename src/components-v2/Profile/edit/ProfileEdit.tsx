@@ -54,12 +54,15 @@ export const ProfileEditComponent: React.FC<Props> = props => {
   const [isEdited, setIsEdited] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [usernameError, setUsernameError] = useState(false);
+
   const style = useStyles();
 
   useEffect(() => {
     handleChanges();
     nameValidation();
-  }, [newUser]);
+    usernameValidation();
+  }, [newUser, username]);
 
   const handleChangeUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -102,6 +105,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
   };
 
   const handleError = (): boolean => {
+    if (usernameError) return true;
     if (!username.length) return true;
     if (isAvailable === undefined) return false;
     if (typeof isAvailable === 'boolean') {
@@ -117,6 +121,12 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     } else {
       setIsError(false);
     }
+  }, 300);
+
+  const usernameValidation = debounce(() => {
+    const validation = /[^a-z0-9._]/g;
+    const isNotValid = validation.test(username);
+    setUsernameError(isNotValid);
   }, 300);
 
   const handleChanges = () => {
@@ -189,9 +199,9 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           onChange={handleChangeUsername}
           labelWidth={70}
           startAdornment={'@'}
+          inputProps={{maxLength: 16}}
         />
       </FormControl>
-
       {username !== user.username && (
         <Typography className={`${style.available} ${handleError() ? style.red : style.green}`}>
           {handleError() ? 'Username is not available' : 'Username is available'}
@@ -260,7 +270,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
             color="primary"
             disableElevation
             onClick={saveUser}
-            disabled={isError}>
+            disabled={isError || handleError()}>
             Save changes
           </Button>
           {updatingProfile && (
