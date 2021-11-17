@@ -59,5 +59,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: '12px',
       color: 'red',
     },
+    available: {
+      fontSize: '12px',
+      color: theme.palette.text.secondary,
+    },
+    red: {
+      color: 'red',
+    },
+    green: {
+      color: 'green',
+    },
   }),
 );

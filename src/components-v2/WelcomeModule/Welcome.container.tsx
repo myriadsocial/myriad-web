@@ -8,6 +8,7 @@ import {Button} from '@material-ui/core';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {WelcomeModule} from './WelcomeModule';
 
+import {useProfileHook} from 'src/components/profile/use-profile.hook';
 import {Status} from 'src/interfaces/toaster';
 import {skipUsername} from 'src/lib/api/activity';
 import {RootState} from 'src/reducers';
@@ -22,6 +23,7 @@ type WelcomeProps = {
 export const WelcomeContainer: React.FC<WelcomeProps> = props => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const {usernameAvailable, checkUsernameAvailable} = useProfileHook();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [skip, setSkip] = useState(false);
@@ -40,6 +42,10 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
     }
 
     router.push('/home');
+  };
+
+  const handleUsernameAvailable = (username: string): void => {
+    checkUsernameAvailable(username);
   };
 
   const handleSubmit = (displayname: string, username: string) => {
@@ -72,6 +78,8 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
         username={user.username || ''}
         onSkip={openSkipConfirmation}
         onSubmit={handleSubmit}
+        isAvailable={usernameAvailable}
+        checkAvailable={handleUsernameAvailable}
       />
 
       <PromptComponent
