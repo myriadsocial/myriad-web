@@ -42,9 +42,17 @@ export const getPost = async (
   }
 
   if (filters && filters.tags && filters.tags.length) {
-    where.tags = {
-      inq: filters.tags,
+    const condition = {
+      tags: {
+        inq: filters.tags,
+      },
     };
+
+    if (where.or) {
+      where.or.push(condition);
+    } else {
+      where.or = [condition];
+    }
 
     where.visibility = {
       inq: [PostVisibility.PUBLIC],
@@ -52,9 +60,17 @@ export const getPost = async (
   }
 
   if (filters && filters.people && filters.people.length) {
-    where.peopleId = {
-      inq: filters.people,
+    const condition = {
+      peopleId: {
+        inq: filters.people,
+      },
     };
+
+    if (where.or) {
+      where.or.push(condition);
+    } else {
+      where.or = [condition];
+    }
   }
 
   if (filters && filters.layout === 'photo') {
@@ -146,12 +162,23 @@ export const getPost = async (
 
   switch (type) {
     case TimelineType.FRIEND:
-    case TimelineType.EXPERIENCE:
     case TimelineType.TRENDING:
       params.filter = filterParams;
+      params.userId = userId;
       params.timelineType = type;
+      break;
+    case TimelineType.EXPERIENCE:
+      params.filter = filterParams;
       params.userId = userId;
 
+      if (
+        filters &&
+        ((filters.tags && filters.tags.length > 0) || (filters.people && filters.people.length > 0))
+      ) {
+        filterParams.where = where;
+      } else {
+        params.timelineType = type;
+      }
       break;
     default:
       filterParams.where = where;
@@ -244,7 +271,7 @@ export const importPost = async (values: ImportPostProps): Promise<Post> => {
   return data;
 };
 
-export const getPostDetail = async (id: string): Promise<Post> => {
+export const getPostDetail = async (id: string, userId?: string): Promise<Post> => {
   const {data} = await MyriadAPI.request<Post>({
     url: `/posts/${id}`,
     method: 'GET',
@@ -256,6 +283,14 @@ export const getPostDetail = async (id: string): Promise<Post> => {
           },
           {
             relation: 'people',
+          },
+          {
+            relation: 'votes',
+            scope: {
+              where: {
+                userId: {eq: userId},
+              },
+            },
           },
         ],
       },

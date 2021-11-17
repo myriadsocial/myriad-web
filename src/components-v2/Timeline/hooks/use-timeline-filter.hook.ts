@@ -17,7 +17,7 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
   const filterTimeline = async (query: ParsedUrlQuery) => {
     let timelineType = TimelineType.ALL;
     let timelineSort: TimelineSortMethod = 'created';
-    let tags: string[] = [];
+    let tags: string[] = filter?.tags || [];
 
     if (query.type) {
       const type = Array.isArray(query.type) ? query.type[0] : query.type;

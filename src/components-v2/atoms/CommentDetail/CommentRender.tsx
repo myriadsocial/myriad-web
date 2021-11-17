@@ -85,7 +85,7 @@ export const CommentRender: React.FC<CommentRenderProps> = props => {
           if (showMore) {
             return <span>{children}</span>;
           } else {
-            return <p>{children}</p>;
+            return <p style={{marginTop: 0, marginBottom: 4}}>{children}</p>;
           }
         case ELEMENT_MENTION:
           return (

@@ -39,7 +39,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     flex: {
       display: 'flex',
-      padding: theme.spacing(2),
+      padding: theme.spacing(0, 2),
     },
     avatar: {
       marginRight: 12,
