@@ -263,7 +263,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             href={handleURL(person.websiteURL ?? '')}
             rel="noreferrer"
             target="_blank">
-            {person.websiteURL || 'oct.network'}
+            {person.websiteURL ?? ''}
           </Link>
           <SvgIcon
             classes={{root: style.fill}}
