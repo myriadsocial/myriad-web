@@ -12,17 +12,19 @@ import {Button, ButtonVariant, ButtonSize} from '../atoms/Button';
 import {debounce} from 'lodash';
 
 export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
-  const {displayName, username, onSubmit, onSkip} = props;
+  const {displayName, username, onSubmit, onSkip, isAvailable, checkAvailable} = props;
 
   const classes = useStyles();
 
   const [newDisplayName, setNewDisplayName] = React.useState(displayName);
-  const [newUserName, setNewUsername] = React.useState(username);
+  const [newUsername, setNewUsername] = React.useState(username);
   const [isError, setIsError] = React.useState(false);
+  const [usernameError, setUsernameError] = React.useState(false);
 
   React.useEffect(() => {
     nameValidation();
-  }, [newDisplayName]);
+    usernameValidation();
+  }, [newDisplayName, newUsername]);
 
   const handleChangeDisplayName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewDisplayName(event.target.value);
@@ -33,7 +35,7 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
   };
 
   const handleSubmit = () => {
-    onSubmit(newDisplayName, newUserName);
+    onSubmit(newDisplayName, newUsername);
   };
 
   const handleSkipWelcome = () => {
@@ -47,6 +49,30 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
       setIsError(false);
     }
   }, 300);
+
+  const usernameValidation = debounce(() => {
+    handleUsernameAvailable();
+    const validation = /[^a-z0-9._]/g;
+    const isNotValid = validation.test(newUsername);
+    setUsernameError(isNotValid);
+  }, 300);
+
+  const handleUsernameAvailable = debounce(() => {
+    if (username !== newUsername) {
+      checkAvailable(newUsername);
+    }
+  }, 300);
+
+  const handleError = (): boolean => {
+    if (usernameError) return true;
+    if (!newUsername.length) return true;
+    if (isAvailable === undefined) return false;
+    if (typeof isAvailable === 'boolean') {
+      if (isAvailable === true) return false;
+      if (isAvailable === false) return true;
+    }
+    return false;
+  };
 
   return (
     <div className={classes.root}>
@@ -88,10 +114,16 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
             defaultValue={username}
             variant="outlined"
             onChange={handleChangeUsername}
+            error={handleError()}
+            inputProps={{maxLength: 16}}
             InputProps={{
               startAdornment: <InputAdornment position="start">@</InputAdornment>,
             }}
           />
+          <Typography
+            className={`${classes.available} ${handleError() ? classes.red : classes.green}`}>
+            {handleError() ? 'Username is not available' : 'Username is available'}
+          </Typography>
           <Typography variant="caption" color="textSecondary">
             Please be aware that you cannot change username later
           </Typography>
@@ -112,7 +144,7 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
               onClick={handleSubmit}
               variant={ButtonVariant.CONTAINED}
               size={ButtonSize.SMALL}
-              isDisabled={isError}>
+              isDisabled={isError || handleError()}>
               Save
             </Button>
           </div>
