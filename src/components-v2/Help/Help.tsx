@@ -10,24 +10,32 @@ import {useStyles} from './help.style';
 export const HelpComponent: React.FC = () => {
   const style = useStyles();
 
+  const handleRedirectMyriadSocial = () => {
+    window.open('https://www.myriad.social', '_blank');
+  };
+
+  const handleRedirectToTelegram = () => {
+    window.open('https://t.me/myriadsocial', '_blank');
+  };
+
   return (
     <List className={style.root}>
       <ListItem className={style.item} alignItems="center">
-        <ListItemText>
+        <ListItemText onClick={handleRedirectMyriadSocial}>
           <Typography className={style.name} component="span" color="textPrimary">
             Terms and conditions
           </Typography>
         </ListItemText>
       </ListItem>
       <ListItem className={style.item} alignItems="center">
-        <ListItemText>
+        <ListItemText onClick={handleRedirectMyriadSocial}>
           <Typography className={style.name} component="span" color="textPrimary">
             Privacy and Policy
           </Typography>
         </ListItemText>
       </ListItem>
       <ListItem className={style.item} alignItems="center">
-        <ListItemText>
+        <ListItemText onClick={handleRedirectToTelegram}>
           <Typography className={style.name} component="span" color="textPrimary">
             Contact us
           </Typography>
