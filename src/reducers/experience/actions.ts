@@ -168,7 +168,7 @@ export const cloneExperience: ThunkActionCreator<Actions, RootState> =
         experienceId,
         experience,
       );
-      callback && callback(cloneExperience.experienceId);
+      callback && callback(cloneExperience.id);
       await dispatch(
         showToaster({
           toasterStatus: Status.SUCCESS,
