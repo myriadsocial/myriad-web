@@ -99,7 +99,17 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const userId = session?.user.address as string;
 
   try {
-    const post = await PostAPI.getPostDetail(params.postId);
+    const post = await PostAPI.getPostDetail(params.postId, userId);
+
+    const upvoted = post.votes
+      ? post.votes.filter(vote => vote.userId === userId && vote.state)
+      : [];
+    const downvoted = post.votes
+      ? post.votes.filter(vote => vote.userId === userId && !vote.state)
+      : [];
+
+    post.isUpvoted = upvoted.length > 0;
+    post.isDownVoted = downvoted.length > 0;
 
     // show deleted post if the current user is the post creator or importer
     if (post.deletedAt) {

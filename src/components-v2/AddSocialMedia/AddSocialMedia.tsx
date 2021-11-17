@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {FacebookShareButton, RedditShareButton, TwitterShareButton} from 'react-share';
 
 import {
@@ -54,6 +54,10 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
   const APP_URL = 'https://app.myriad.systems';
   const message = `I'm part of the @myriad_social ${publicKey}\n\nhttps://www.myriad.social`;
 
+  useEffect(() => {
+    return clear();
+  }, []);
+
   const onSharedAttempt = () => {
     setShared(true);
   };
@@ -66,7 +70,6 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
 
   const handleSocialNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
-
     setProfileUrl(text.replace(/\/$/, '').replace(prefix[social], ''));
   };
 
@@ -80,12 +83,16 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
   const handleShared = () => {
     verify(social, profileUrl);
 
+    handleClose();
+  };
+
+  const handleClose = () => {
     clear();
     onClose();
   };
 
   return (
-    <Modal title="Add social media" onClose={onClose} open={open} className={styles.root}>
+    <Modal title="Add social media" onClose={handleClose} open={open} className={styles.root}>
       <div className={styles.title}>
         <Typography component="div" variant="body1">
           Connect your {capitalize(social)} account
@@ -227,7 +234,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
 
       <Button
         onClick={handleShared}
-        disabled={!shared || !termApproved}
+        disabled={!shared || !termApproved || profileUrl.length === 0}
         fullWidth
         variant="contained"
         color="primary">

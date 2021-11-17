@@ -101,7 +101,12 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
 
     case constants.UPDATE_TIMELINE_FILTER: {
       return update(state, {
-        filter: {$set: action.filter},
+        filter: {
+          $set: {
+            ...state.filter,
+            ...action.filter,
+          },
+        },
       });
     }
 
@@ -208,6 +213,32 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
     }
 
     case constants.UPVOTE_POST: {
+      const post: Post | undefined = state.post;
+
+      if (post && post.id === action.postId) {
+        post.isUpvoted = true;
+        post.isDownVoted = false;
+        post.metric.upvotes = post.metric.upvotes + 1;
+
+        // get previous downvote info
+        const downvote = post.votes?.find(
+          prevVote => !prevVote.state && prevVote.userId === action.vote.userId,
+        );
+
+        // if user has downvote, decrease count and replace with upvote
+        if (post.votes && downvote) {
+          post.metric.downvotes = post.metric.downvotes - 1;
+          post.votes = [
+            // get all votes not belong to current user
+            ...post.votes.filter(prevVote => prevVote.userId !== action.vote.userId),
+            // append upvote
+            action.vote,
+          ];
+        } else {
+          post.votes = post.votes ? [...post.votes, action.vote] : [action.vote];
+        }
+      }
+
       return {
         ...state,
         posts: state.posts.map(post => {
@@ -237,10 +268,37 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
 
           return post;
         }),
+        post,
       };
     }
 
     case constants.DOWNVOTE_POST: {
+      const post: Post | undefined = state.post;
+
+      if (post && post.id === action.postId) {
+        post.isDownVoted = true;
+        post.isUpvoted = false;
+        post.metric.downvotes = post.metric.downvotes + 1;
+
+        // get previous downvote info
+        const upvote = post.votes?.find(
+          prevVote => prevVote.state && prevVote.userId === action.vote.userId,
+        );
+
+        // if user has upvote, decrease count and replace with downvote
+        if (post.votes && upvote) {
+          post.metric.upvotes = post.metric.upvotes - 1;
+          post.votes = [
+            // get all votes not belong to current user
+            ...post.votes.filter(prevVote => prevVote.userId !== action.vote.userId),
+            // append downvote
+            action.vote,
+          ];
+        } else {
+          post.votes = post.votes ? [...post.votes, action.vote] : [action.vote];
+        }
+      }
+
       return {
         ...state,
         posts: state.posts.map(post => {
@@ -270,6 +328,7 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
 
           return post;
         }),
+        post,
         interaction: {
           downvoting: null,
         },
@@ -277,6 +336,20 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
     }
 
     case constants.REMOVE_VOTE_POST: {
+      const post: Post | undefined = state.post;
+
+      if (post && post.id === action.postId) {
+        if (post.isDownVoted) {
+          post.metric.downvotes = post.metric.downvotes - 1;
+        } else {
+          post.metric.upvotes = post.metric.upvotes - 1;
+        }
+
+        post.isDownVoted = false;
+        post.isUpvoted = false;
+        post.votes = [];
+      }
+
       return {
         ...state,
         posts: state.posts.map(post => {
@@ -294,6 +367,7 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
 
           return post;
         }),
+        post,
         interaction: {
           downvoting: null,
         },

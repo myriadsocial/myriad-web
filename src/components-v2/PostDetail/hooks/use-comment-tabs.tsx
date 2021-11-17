@@ -21,7 +21,7 @@ export const useCommentTabs = (
         section={SectionType.DISCUSSION}
       />
     );
-  }, [comments]);
+  }, [post]);
 
   const debatesComponent = useMemo(() => {
     return (
@@ -33,7 +33,7 @@ export const useCommentTabs = (
         expand={true}
       />
     );
-  }, [comments]);
+  }, [post]);
 
   return [
     {
