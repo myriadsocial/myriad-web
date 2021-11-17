@@ -22,7 +22,7 @@ export const SettingsContainer: React.FC = () => {
   }, [router.query]);
 
   const handleChangeSection = (section: SettingsType) => {
-    if (section === 'help') {
+    if (section === 'about') {
       window.open('https://www.myriad.social/', '_ blank');
     } else {
       router.push(
