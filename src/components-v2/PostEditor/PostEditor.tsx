@@ -44,7 +44,6 @@ import React, {useMemo, useEffect, useState} from 'react';
 import Box from '@material-ui/core/Box';
 import {Link} from '@material-ui/icons';
 
-import theme from '../../themes/light-theme-v2';
 import {EmbedURL} from '../EmbedURL';
 import {Upload} from '../Upload';
 import {Modal} from '../atoms/Modal';
@@ -62,6 +61,7 @@ import {createHashtagPlugin, ELEMENT_HASHTAG} from './plugins/hashtag';
 import {Transforms, Selection, Editor} from 'slate';
 import {ReactEditor} from 'slate-react';
 import {EditableProps} from 'slate-react/dist/components/editable';
+import theme from 'src/themes/light-theme-v2';
 
 export type PostEditorProps = {
   value?: TNode[];
@@ -75,7 +75,7 @@ export type PostEditorProps = {
 };
 
 const resetBlockTypesCommonRule = {
-  types: [ELEMENT_BLOCKQUOTE],
+  types: [ELEMENT_BLOCKQUOTE, ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED],
   defaultType: ELEMENT_PARAGRAPH,
 };
 
@@ -96,7 +96,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
 
   const editableProps: EditableProps = {
     placeholder,
-    autoFocus: true,
+    autoFocus: false,
     spellCheck: false,
     style: {
       padding: 20,
@@ -171,7 +171,10 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
       createMediaEmbedPlugin(),
 
       // others
-      createTrailingBlockPlugin({type: ELEMENT_PARAGRAPH}),
+      createTrailingBlockPlugin({
+        type: ELEMENT_PARAGRAPH,
+        allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED, ELEMENT_LINK],
+      }),
       createSelectOnBackspacePlugin({
         allow: [ELEMENT_MENTION, ELEMENT_LINK],
       }),
@@ -198,9 +201,9 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
           {
             hotkey: 'enter',
             query: {
-              start: true,
+              start: false,
               end: true,
-              allow: KEYS_HEADING,
+              allow: [...KEYS_HEADING, ELEMENT_IMAGE],
             },
           },
         ],
@@ -227,8 +230,15 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     return pluginsBasic;
   }, [mentionPlugin]);
 
-  const editor = useStoreEditorState('main');
-  const [initialValue] = useState(value);
+  const initial = [
+    {
+      type: ELEMENT_PARAGRAPH,
+      children: [{text: ''}],
+    },
+  ];
+
+  const editor = useStoreEditorState('post-editor');
+  const [initialValue] = useState(value || initial);
   const [showImageUpload, toggleImageUpload] = useState(false);
   const [imageUploadType, setImageUploadType] = useState<'upload' | 'link' | null>(null);
   const [showModalLink, toggleModalLink] = useState(false);
@@ -406,6 +416,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   return (
     <Box className={styles.root}>
       <Plate
+        id="post-editor"
         initialValue={initialValue}
         editableProps={editableProps}
         onChange={onChangeDebug}

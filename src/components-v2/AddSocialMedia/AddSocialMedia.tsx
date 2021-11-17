@@ -33,7 +33,7 @@ type AddSocialMediaProps = Pick<ModalProps, 'onClose' | 'open'> & {
 const prefix: Record<SocialsEnum, string> = {
   [SocialsEnum.TWITTER]: 'https://twitter.com/',
   [SocialsEnum.FACEBOOK]: 'https://www.facebook.com/',
-  [SocialsEnum.REDDIT]: 'https://www.reddit.com/',
+  [SocialsEnum.REDDIT]: 'https://www.reddit.com/user/',
   [SocialsEnum.TELEGRAM]: '',
   [SocialsEnum.FOURCHAN]: '',
   [SocialsEnum.INSTAGRAM]: '',

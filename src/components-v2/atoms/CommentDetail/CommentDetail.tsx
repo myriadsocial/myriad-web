@@ -14,10 +14,10 @@ import {acronym} from '../../../helpers/string';
 import {setTippedContent} from '../../../reducers/timeline/actions';
 import {CommentEditor} from '../CommentEditor';
 import {CommentList} from '../CommentList';
-import {ReadMore} from '../ReadMore/ReadMore';
 import {VotingComponent} from '../Voting';
 import {CommentDetailProps} from './CommentDetail.interface';
 import {useStyles} from './CommentDetail.styles';
+import {CommentRender} from './CommentRender';
 
 import {formatDistance, subDays} from 'date-fns';
 import {ReferenceType} from 'src/interfaces/interaction';
@@ -29,6 +29,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
     comment,
     deep,
     user,
+    mentionables,
     onDownVote,
     onUpvote,
     onReply,
@@ -36,6 +37,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
     onOpenTipHistory,
     onReport,
     onSendTip,
+    onSearchPeople,
   } = props;
 
   const dispatch = useDispatch();
@@ -117,10 +119,9 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             }
           />
           <CardContent className={style.content}>
-            <Typography variant="body1" color="textPrimary" component="p">
-              <ReadMore text={comment.text} maxCharacter={180} />
-            </Typography>
+            <CommentRender comment={comment} max={180} onShowAll={console.log} />
           </CardContent>
+
           <CardActions disableSpacing>
             <VotingComponent
               isUpVote={Boolean(comment.isUpvoted)}
@@ -178,10 +179,15 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
 
         {user && isReply && (
           <CommentEditor
-            type={ReferenceType.COMMENT}
             referenceId={comment.id}
-            avatar={user?.profilePictureURL}
-            username={user.name}
+            type={ReferenceType.COMMENT}
+            user={user}
+            mentionables={mentionables.map(item => ({
+              value: item.id,
+              name: item.name,
+              avatar: item.avatar,
+            }))}
+            onSearchMention={onSearchPeople}
             onSubmit={onReply}
           />
         )}
@@ -198,6 +204,8 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             onOpenTipHistory={onOpenTipHistory}
             onReport={onReport}
             onSendTip={onSendTip}
+            mentionables={mentionables}
+            onSearchPeople={onSearchPeople}
           />
         )}
       </div>

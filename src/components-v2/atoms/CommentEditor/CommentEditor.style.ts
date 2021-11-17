@@ -3,59 +3,36 @@ import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: '100%',
-      position: 'relative',
+      padding: theme.spacing(2),
+    },
+    avatar: {
+      marginRight: 12,
+    },
+    editor: {
       backgroundColor: theme.palette.background.paper,
       borderRadius: theme.spacing(1),
       marginBottom: theme.spacing(1),
       border: '1px solid',
       borderColor: '#E5E5E5',
-      padding: theme.spacing(2),
-    },
-    write: {
-      width: '100%',
-      boxSizing: 'border-box',
-      fontFamily: theme.typography.fontFamily,
-      border: 'none',
-      borderRadius: theme.spacing(1),
-      padding: theme.spacing(1.5),
-      backgroundColor: theme.palette.background.paper,
-      resize: 'none',
-      '&:focus-visible': {
-        outline: 'none',
-      },
-    },
-    reply: {
-      position: 'absolute',
-      width: 85,
-      height: 24,
-      right: 0,
-      bottom: 20,
+      flexGrow: 1,
+      display: 'flex',
+      flexDirection: 'column-reverse',
     },
     action: {
-      padding: 1,
+      paddingTop: 0,
+      justifyContent: 'space-between',
+
+      '& .MuiButtonGroup-grouped': {
+        minWidth: 24,
+      },
+      '& .MuiIconButton-root': {
+        padding: 2,
+        marginRight: 8,
+      },
     },
     replyIcon: {
       color: theme.palette.primary.main,
       transform: 'rotate(45deg)',
-    },
-    avatar: {
-      marginRight: 12,
-    },
-    flex: {
-      display: 'flex',
-    },
-    container: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      width: '100%',
-    },
-    fill: {
-      fill: 'none',
-    },
-    text: {
-      fontWeight: theme.typography.fontWeightRegular,
-      fontFamily: theme.typography.fontFamily,
     },
   }),
 );

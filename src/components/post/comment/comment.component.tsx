@@ -78,6 +78,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
       referenceId: post.id,
       section: SectionType.DISCUSSION,
       type: ReferenceType.POST,
+      mentions: [],
     });
   };
 
