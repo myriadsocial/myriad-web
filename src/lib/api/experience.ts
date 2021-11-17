@@ -176,7 +176,7 @@ export const getExperience = async (experienceId: string): Promise<Experience> =
     method: 'GET',
     params: {
       filter: {
-        include: ['user'],
+        include: ['user', 'users'],
       },
     },
   });

@@ -3,14 +3,15 @@ import React from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {CommentDetail} from '../CommentDetail';
-import {CommentEditor} from '../CommentEditor';
 
+import {FriendDetail} from 'src/components-v2/FriendsMenu/hooks/use-friend-list.hook';
 import {Comment, CommentProps} from 'src/interfaces/comment';
 import {User} from 'src/interfaces/user';
 
 type CommentListProps = {
   user?: User;
   comments: Comment[];
+  mentionables: FriendDetail[];
   deep?: number;
   placeholder?: string;
   focus?: boolean;
@@ -22,6 +23,7 @@ type CommentListProps = {
   onOpenTipHistory: (comment: Comment) => void;
   onSendTip: (comment: Comment) => void;
   onReport: (comment: Comment) => void;
+  onSearchPeople: (query: string) => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,10 +36,8 @@ export const CommentList: React.FC<CommentListProps> = props => {
   const {
     user,
     comments = [],
+    mentionables,
     deep = 0,
-    placeholder,
-    focus,
-    expand,
     onComment,
     onUpvote,
     onDownvote,
@@ -45,28 +45,19 @@ export const CommentList: React.FC<CommentListProps> = props => {
     onOpenTipHistory,
     onReport,
     onSendTip,
+    onSearchPeople,
   } = props;
 
   const styles = useStyles();
 
   return (
     <div className={styles.root}>
-      {deep === 0 && user && (
-        <CommentEditor
-          placeholder={placeholder || ''}
-          onSubmit={onComment}
-          username={user.name}
-          avatar={user.profilePictureURL || ''}
-          focus={focus}
-          expand={expand}
-        />
-      )}
-
       {comments.map(comment => (
         <CommentDetail
           user={user}
           key={comment.id}
           comment={comment}
+          mentionables={mentionables}
           deep={deep}
           onReply={onComment}
           onUpvote={onUpvote}
@@ -75,6 +66,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
           onOpenTipHistory={onOpenTipHistory}
           onReport={onReport}
           onSendTip={onSendTip}
+          onSearchPeople={onSearchPeople}
         />
       ))}
     </div>

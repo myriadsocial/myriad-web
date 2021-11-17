@@ -8,7 +8,9 @@ export const userToSession = (user: User): UserSession => {
     profilePictureURL: user.profilePictureURL || '',
     address: user.id,
     welcome: user.activityLogs
-      ? user.activityLogs.filter(log => log.type === ActivityLogType.USERNAME).length === 0
+      ? user.activityLogs.filter(log =>
+          [ActivityLogType.SKIP, ActivityLogType.USERNAME].includes(log.type),
+        ).length === 0
       : true,
   };
 

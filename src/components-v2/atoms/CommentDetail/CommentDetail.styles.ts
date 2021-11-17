@@ -16,7 +16,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     content: {
-      padding: theme.spacing(1, 2),
+      padding: theme.spacing(0, 2),
     },
     text: {
       fontSize: '14px',
@@ -39,6 +39,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     flex: {
       display: 'flex',
+      padding: theme.spacing(2),
     },
     avatar: {
       marginRight: 12,
