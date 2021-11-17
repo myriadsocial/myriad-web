@@ -24,6 +24,8 @@ const moduleExports = {
     nextAuthURL: process.env.NEXTAUTH_URL,
     facebookAppId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
     myriadWsRPC: process.env.NEXT_PUBLIC_MYRIAD_WS_RPC,
+    myriadWebsite: process.env.NEXT_PUBLIC_MYRIAD_WEBSITE,
+    myriadSupportMail: process.env.NEXT_PUBLIC_MYRIAD_SUPPORT_MAIL,
     cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
     firebaseAPIKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     firebaseProjectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import getConfig from 'next/config';
+
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -7,15 +9,17 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './help.style';
 
+const {publicRuntimeConfig} = getConfig();
+
 export const HelpComponent: React.FC = () => {
   const style = useStyles();
 
   const handleRedirectMyriadSocial = () => {
-    window.open('https://www.myriad.social', '_blank');
+    window.open(publicRuntimeConfig.myriadWebsite, '_blank');
   };
 
   const handleRedirectToTelegram = () => {
-    window.open('mailto:support@myriad.social', '_blank');
+    window.open(`mailto:${publicRuntimeConfig.myriadSupportMail}`, '_blank');
   };
 
   return (
