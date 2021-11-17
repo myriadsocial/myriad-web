@@ -20,7 +20,7 @@ import {MenuOptions} from '../atoms/DropdownMenu/';
 import {DropdownMenu} from '../atoms/DropdownMenu/';
 import {useStyles} from './history-detail-list.styles';
 
-import {formatDistance} from 'date-fns';
+import {formatDistanceStrict} from 'date-fns';
 import _ from 'lodash';
 import {CurrencyId} from 'src/interfaces/currency';
 
@@ -134,10 +134,12 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const classes = useStyles();
 
   const formatTimeAgo = (ISODate: Date) => {
-    const timeAgoInString = formatDistance(new Date(ISODate), new Date(), {addSuffix: true});
+    const timeAgoInString = formatDistanceStrict(new Date(ISODate), new Date(), {addSuffix: true});
     //=> "3 days ago"
     return timeAgoInString;
   };
+
+  const namePlaceholder = 'Unknown Myrian';
 
   return (
     <>
@@ -170,18 +172,24 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                   <TableCell component="th" scope="row" className={classes.tableCell}>
                     <CustomAvatar
                       size={CustomAvatarSize.MEDIUM}
-                      alt={tx.toUser?.id === userId ? tx.fromUser?.name : tx.toUser?.id}
+                      alt={tx.toUser?.id === userId ? tx.fromUser?.id : tx.toUser?.id}
                       avatar={
                         tx.toUser?.id === userId
-                          ? tx.fromUser?.profilePictureURL
-                          : tx.toUser?.profilePictureURL
+                          ? tx.fromUser?.profilePictureURL ?? namePlaceholder
+                          : tx.toUser?.profilePictureURL ?? namePlaceholder
                       }
-                      name={tx.toUser?.id === userId ? tx.fromUser?.name : tx.toUser?.name}
+                      name={
+                        tx.toUser?.id === userId
+                          ? tx.fromUser?.name ?? namePlaceholder
+                          : tx.toUser?.name ?? namePlaceholder
+                      }
                     />
 
                     <div>
                       <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                        {tx.toUser?.id === userId ? tx.fromUser?.name : tx.toUser?.name}
+                        {tx.toUser?.id === userId
+                          ? tx.fromUser?.name ?? namePlaceholder
+                          : tx.toUser?.name ?? namePlaceholder}
                       </Typography>
                       <Typography variant="caption" color="textSecondary">
                         {formatTimeAgo(tx.createdAt)}
@@ -221,6 +229,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                       </div>
                       <div>
                         <CustomAvatar
+                          name={tx.currency.id}
                           size={CustomAvatarSize.XSMALL}
                           alt={tx.currency.id}
                           avatar={tx.currency.image}
