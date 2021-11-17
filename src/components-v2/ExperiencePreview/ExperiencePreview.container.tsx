@@ -22,7 +22,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
     if (experienceId) getDetail(experienceId);
   }, []);
 
-  const handleSubsibeExperience = (experienceId: string) => {
+  const handleSubscribeExperience = (experienceId: string) => {
     subscribeExperience(experienceId);
   };
 
@@ -47,7 +47,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
           <ExperiencePreview
             experience={experience}
             userId={user.id}
-            onSubscribe={handleSubsibeExperience}
+            onSubscribe={handleSubscribeExperience}
             onFollow={handleCloneExperience}
             onUpdate={handleEditExperience}
           />
