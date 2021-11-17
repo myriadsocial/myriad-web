@@ -217,7 +217,7 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
             return post;
           }),
           sort,
-          filter,
+          filter: timelineFilter,
           type,
           meta,
         },
@@ -513,7 +513,7 @@ export const getDedicatedPost: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const post = await PostAPI.getPostDetail(postId);
+      const post = await PostAPI.getPostDetail(postId, user.id);
 
       dispatch(setPost(post));
     } catch (error) {
