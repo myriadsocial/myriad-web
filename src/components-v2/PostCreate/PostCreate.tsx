@@ -182,3 +182,5 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     </Modal>
   );
 };
+
+export default PostCreate;

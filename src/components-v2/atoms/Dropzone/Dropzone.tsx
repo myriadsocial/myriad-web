@@ -105,7 +105,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
 
         setPreview(acceptedFiles.map(file => URL.createObjectURL(file)));
 
-        if (acceptedFiles.length) {
+        if (acceptedFiles.length && type === 'video') {
           checkCodec(acceptedFiles[0]);
         }
       }
@@ -125,7 +125,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
       const [video] = muxjs.mp4.probe.tracks(data);
 
       // browser codec name for HEVC (H.265)
-      if (video.codec === 'hvc1') {
+      if (video?.codec === 'hvc1') {
         const browser = detect();
         setVideoCodecSupported(browser !== null && !['firefox', 'chrome'].includes(browser.name));
       } else {

@@ -1,8 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {CommentEditor} from '../CommentEditor/CommentEditor';
 import {CommentList} from './CommentList';
 
+import {debounce} from 'lodash';
+import {useFriendList} from 'src/components-v2/FriendsMenu/hooks/use-friend-list.hook';
 import {ReportContainer} from 'src/components-v2/Report';
 import {SendTipContainer} from 'src/components-v2/SendTip';
 import {TipHistoryContainer} from 'src/components-v2/TipHistory';
@@ -13,6 +16,8 @@ import {Comment, CommentProps} from 'src/interfaces/comment';
 import {SectionType, ReferenceType, Vote} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
+import {fetchFriend, searchFriend} from 'src/reducers/friend/actions';
+import {FriendState} from 'src/reducers/friend/reducer';
 import {upvote, downvote, removeVote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {setTippedUser, setTippedUserId} from 'src/reducers/wallet/actions';
@@ -40,21 +45,30 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     loadReplies,
   } = useCommentHook(referenceId);
   const {openTipHistory} = useTipHistory();
+
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
+  const downvoting = useSelector<RootState, Post | Comment | null>(
+    state => state.timelineState.interaction.downvoting,
+  );
   const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
+  const [reported, setReported] = useState<Comment | null>(null);
+  const [tippedComment, setTippedComment] = useState<Comment | null>(null);
+
+  const sendTipOpened = Boolean(tippedComment);
+  const mentionables = useFriendList(friends, user);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchFriend(user));
+    }
+  }, [user]);
 
   useEffect(() => {
     if (isTipSent) {
       closeSendTip();
     }
   }, [isTipSent]);
-
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const downvoting = useSelector<RootState, Post | Comment | null>(
-    state => state.timelineState.interaction.downvoting,
-  );
-  const [reported, setReported] = useState<Comment | null>(null);
-  const [tippedComment, setTippedComment] = useState<Comment | null>(null);
-  const sendTipOpened = Boolean(tippedComment);
 
   useEffect(() => {
     loadInitComment(section);
@@ -139,11 +153,32 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     setReported(null);
   };
 
+  const handleSearchPeople = debounce((query: string) => {
+    if (user) {
+      dispatch(searchFriend(user, query));
+    }
+  }, 300);
+
   return (
     <>
+      <CommentEditor
+        referenceId={referenceId}
+        placeholder={placeholder}
+        user={user}
+        expand={expand}
+        mentionables={mentionables.map(item => ({
+          value: item.id,
+          name: item.name,
+          avatar: item.avatar,
+        }))}
+        onSearchMention={handleSearchPeople}
+        onSubmit={handleSubmitComment}
+      />
+
       <CommentList
         user={user}
         comments={comments || []}
+        mentionables={mentionables}
         placeholder={placeholder}
         onComment={handleSubmitComment}
         onDownvote={handleDownvote}
@@ -154,6 +189,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         expand={expand}
         onReport={handleReport}
         onSendTip={handleSendTip}
+        onSearchPeople={handleSearchPeople}
       />
 
       <Modal
@@ -171,3 +207,5 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     </>
   );
 };
+
+export default CommentListContainer;

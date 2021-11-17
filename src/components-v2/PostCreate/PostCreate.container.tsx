@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {PostCreate} from '.';
+import dynamic from 'next/dynamic';
+
 import {Post} from '../../interfaces/post';
 import {RootState} from '../../reducers';
 import {fetchFriend, searchFriend} from '../../reducers/friend/actions';
@@ -17,6 +18,10 @@ type PostCreateContainerType = {
   open: boolean;
   onClose: () => void;
 };
+
+const PostCreate = dynamic(() => import('./PostCreate'), {
+  ssr: false,
+});
 
 export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const {open, onClose} = props;
