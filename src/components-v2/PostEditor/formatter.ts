@@ -23,7 +23,7 @@ export const formatStringToNode = (string: string): TNode => {
   };
 };
 
-const formatShowMore = (value: string, maxLength?: number): TNode[] => {
+export const formatShowMore = (value: string, maxLength?: number): TNode[] => {
   const showMore = maxLength && value.length > maxLength;
   const text = maxLength && showMore ? value.slice(0, maxLength) : value;
   const nodes: TNode[] = [formatStringToNode(text)];

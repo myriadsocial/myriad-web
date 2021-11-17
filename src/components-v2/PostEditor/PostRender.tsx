@@ -45,6 +45,7 @@ type PostRenderProps = {
 export const PostRender: React.FC<PostRenderProps> = props => {
   const {post, max, onShowAll} = props;
   let nodes = deserialize(post);
+
   const originText = nodes.map(formatToString).join('');
   let showMore = false;
 
@@ -79,10 +80,12 @@ export const PostRender: React.FC<PostRenderProps> = props => {
     (node, images: string[] = []) => {
       if (node.text) {
         if (Object.keys(node).length === 1) {
-          return node.text.split('\n').map((item: string, key: number) => (
+          const splitNewLine = node.text.split('\n');
+
+          return splitNewLine.map((item: string, key: number) => (
             <span key={key}>
               {item}
-              <br />
+              {key !== splitNewLine.length - 1 && <br />}
             </span>
           ));
         }

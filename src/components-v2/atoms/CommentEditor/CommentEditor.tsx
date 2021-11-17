@@ -1,127 +1,234 @@
 import {PhotographIcon} from '@heroicons/react/outline';
 import {FilmIcon} from '@heroicons/react/outline';
 import {PaperAirplaneIcon} from '@heroicons/react/outline';
+import {
+  Plate,
+  createReactPlugin,
+  createHistoryPlugin,
+  createParagraphPlugin,
+  createPlateComponents,
+  createPlateOptions,
+  createTrailingBlockPlugin,
+  createSelectOnBackspacePlugin,
+  createSoftBreakPlugin,
+  ELEMENT_PARAGRAPH,
+  withProps,
+  TNode,
+  createResetNodePlugin,
+  ELEMENT_BLOCKQUOTE,
+  isBlockAboveEmpty,
+  isSelectionAtBlockStart,
+  useStoreEditorState,
+  createNormalizeTypesPlugin,
+} from '@udecode/plate';
+import {ELEMENT_MENTION, MentionNodeData, useMentionPlugin} from '@udecode/plate-mention';
 
-import React from 'react';
+import React, {useMemo, useEffect, useState} from 'react';
 
+import {ButtonGroup, CardActions, Grid, IconButton, SvgIcon, Tooltip} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
-import CardActions from '@material-ui/core/CardActions';
-import IconButton from '@material-ui/core/IconButton';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import Tooltip from '@material-ui/core/Tooltip';
 
-import {acronym} from '../../../helpers/string';
 import {useStyles} from './CommentEditor.style';
+import {serialize} from './formatter';
 
+import {EditableProps} from 'slate-react/dist/components/editable';
+import {
+  MentionElement,
+  MentionSelect,
+  renderMentionLabel,
+} from 'src/components-v2/PostEditor/Render/Mention';
+import {acronym} from 'src/helpers/string';
 import {CommentProps} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
+import {User} from 'src/interfaces/user';
+import theme from 'src/themes/light-theme-v2';
 
-type Props = {
-  onSubmit: (comment: Partial<CommentProps>) => void;
-  username: string;
-  avatar?: string;
-  placeholder?: string;
-  focus?: boolean;
-  expand?: boolean;
+export type PostEditorProps = {
+  referenceId: string;
   type?: ReferenceType;
-  referenceId?: string;
+  user?: User;
+  expand?: boolean;
+  debug?: boolean;
+  placeholder?: string;
+  mentionables: MentionNodeData[];
+  onSearchMention: (query: string) => void;
+  onSubmit: (comment: Partial<CommentProps>) => void;
 };
 
-export const CommentEditor: React.FC<Props> = props => {
-  const {onSubmit, username, avatar, placeholder, focus, expand, type, referenceId} = props;
-  const style = useStyles();
-  const CHARACTER_LIMIT = 2000;
-  const [toggle, setToggle] = React.useState<boolean>(false);
+const resetBlockTypesCommonRule = {
+  types: [ELEMENT_BLOCKQUOTE],
+  defaultType: ELEMENT_PARAGRAPH,
+};
 
-  const [comment, setValues] = React.useState({
-    text: '',
+export const CommentEditor: React.FC<PostEditorProps> = props => {
+  const styles = useStyles();
+  const options = createPlateOptions();
+
+  const {
+    referenceId,
+    type,
+    user,
+    expand = false,
+    debug = false,
+    placeholder = 'Write a Discussion ...',
+    mentionables,
+    onSearchMention,
+    onSubmit,
+  } = props;
+
+  const editableProps: EditableProps = {
+    placeholder,
+    autoFocus: false,
+    spellCheck: false,
+    style: {
+      padding: 16,
+      background: '#FFFFFF',
+      fontFamily: theme.typography.fontFamily,
+      lineHeight: '24px',
+      fontSize: 14,
+    },
+  };
+
+  const components = createPlateComponents({
+    [ELEMENT_MENTION]: withProps(MentionElement, {
+      renderLabel: renderMentionLabel,
+      prefix: '@',
+    }),
   });
-  const inputRef = React.useRef() as React.MutableRefObject<HTMLTextAreaElement>;
 
-  React.useEffect(() => {
-    if (expand) setToggle(true);
-    if (focus) inputRef.current.focus();
-  }, []);
-
-  const openComment = () => setToggle(true);
-
-  const handleChange = (text: string) => (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValues({...comment, [text]: event.target.value.substring(0, CHARACTER_LIMIT)});
+  const mentionPluginOptions = {
+    mentionables,
+    maxSuggestions: 10,
+    insertSpaceAfterMention: true,
+    trigger: '@',
+    mentionableFilter: (s: string) => (mentionable: MentionNodeData) =>
+      mentionable.name.toLowerCase().includes(s.toLowerCase()),
+    mentionableSearchPattern: '\\S*',
   };
 
-  const discard = () => {
-    setValues({...comment, text: ''});
+  const {
+    getMentionSelectProps,
+    plugin: mentionPlugin,
+    searchValue: mentionQuery,
+  } = useMentionPlugin(mentionPluginOptions);
+
+  const plugins = useMemo(() => {
+    const pluginsBasic = [
+      // editor
+      createReactPlugin(),
+      createHistoryPlugin(),
+
+      // elements
+      createParagraphPlugin(),
+
+      // others
+      createTrailingBlockPlugin({type: ELEMENT_PARAGRAPH}),
+      createSelectOnBackspacePlugin({
+        allow: [ELEMENT_MENTION],
+      }),
+      createNormalizeTypesPlugin({
+        rules: [{path: [0], strictType: ELEMENT_PARAGRAPH}],
+      }),
+      createSoftBreakPlugin({
+        rules: [{hotkey: 'shift+enter'}],
+      }),
+      createResetNodePlugin({
+        rules: [
+          {
+            ...resetBlockTypesCommonRule,
+            hotkey: 'Enter',
+            predicate: isBlockAboveEmpty,
+          },
+          {
+            ...resetBlockTypesCommonRule,
+            hotkey: 'Backspace',
+            predicate: isSelectionAtBlockStart,
+          },
+        ],
+      }),
+      mentionPlugin,
+    ];
+
+    return pluginsBasic;
+  }, [mentionPlugin]);
+
+  const editor = useStoreEditorState(referenceId);
+  const [showMediaEmbed, setShowMediaEmbed] = useState(expand);
+  const [comment, setComment] = useState<TNode[] | undefined>();
+
+  useEffect(() => {
+    if (mentionQuery.length > 0) {
+      onSearchMention && onSearchMention(mentionQuery);
+    }
+  }, [mentionQuery]);
+
+  const onChangeDebug = (value: TNode[]) => {
+    if (debug) {
+      console.log('[DEBUG]:', value);
+    }
+
+    setShowMediaEmbed(true);
+    setComment(value);
   };
 
-  const reply = () => {
-    onSubmit({
-      text: comment.text,
-      type,
-      referenceId,
-    });
+  const submitComment = () => {
+    if (comment) {
+      const attributes = serialize(comment);
 
-    discard();
+      onSubmit({
+        ...attributes,
+        referenceId,
+        type,
+      });
+
+      setComment(undefined);
+      setShowMediaEmbed(false);
+    }
   };
 
   return (
-    <div className={style.flex}>
-      <Avatar className={style.avatar} src={avatar}>
-        {acronym(username)}
+    <Grid container className={styles.root} direction="row">
+      <Avatar className={styles.avatar} src={user?.profilePictureURL}>
+        {acronym(user?.name || '')}
       </Avatar>
-      <div className={style.root}>
-        <TextareaAutosize
-          ref={inputRef}
-          onClick={openComment}
-          minRows={1}
-          value={comment.text}
-          placeholder={placeholder || 'Write a Reply...'}
-          className={style.write}
-          onChange={handleChange('text')}
-          spellCheck={false}
-          maxLength={CHARACTER_LIMIT}
-        />
-        {toggle && (
-          <CardActions disableSpacing>
-            <div className={style.container}>
-              <div>
-                <Tooltip classes={{tooltip: style.text}} title="Coming soon" arrow>
-                  <IconButton className={style.action} aria-label="photo">
-                    <SvgIcon
-                      classes={{root: style.fill}}
-                      component={PhotographIcon}
-                      color="primary"
-                      viewBox="0 0 24 24"
-                    />
+
+      <div className={styles.editor}>
+        <Plate
+          id={referenceId}
+          initialValue={comment}
+          editor={editor}
+          editableProps={editableProps}
+          onChange={onChangeDebug}
+          plugins={plugins}
+          components={components}
+          options={options}>
+          <MentionSelect {...getMentionSelectProps()} renderLabel={renderMentionLabel} />
+
+          {showMediaEmbed && (
+            <CardActions disableSpacing className={styles.action}>
+              <ButtonGroup color="primary">
+                <Tooltip title="Coming soon" arrow>
+                  <IconButton aria-label="photo">
+                    <SvgIcon component={PhotographIcon} color="primary" viewBox="0 0 24 24" />
                   </IconButton>
                 </Tooltip>
-                <Tooltip classes={{tooltip: style.text}} title="Coming soon" arrow>
-                  <IconButton className={style.action} aria-label="video">
-                    <SvgIcon
-                      classes={{root: style.fill}}
-                      color="primary"
-                      component={FilmIcon}
-                      viewBox="0 0 24 24"
-                    />
+                <Tooltip title="Coming soon" arrow>
+                  <IconButton aria-label="video">
+                    <SvgIcon color="primary" component={FilmIcon} viewBox="0 0 24 24" />
                   </IconButton>
                 </Tooltip>
-              </div>
-              <IconButton
-                aria-label="reply"
-                disabled={comment.text.length === 0}
-                onClick={reply}
-                className={style.action}>
+              </ButtonGroup>
+              <IconButton aria-label="reply" onClick={submitComment}>
                 <SvgIcon
-                  classes={{root: style.fill}}
-                  className={style.replyIcon}
+                  className={styles.replyIcon}
                   component={PaperAirplaneIcon}
                   viewBox="0 0 24 24"
                 />
               </IconButton>
-            </div>
-          </CardActions>
-        )}
+            </CardActions>
+          )}
+        </Plate>
       </div>
-    </div>
+    </Grid>
   );
 };

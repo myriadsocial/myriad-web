@@ -37,7 +37,7 @@ export const insertHashtag = (editor: SPEditor, value: string | ArrayBuffer, at:
     split: true,
   });
 
-  Transforms.insertText(editor, ' ');
+  Transforms.insertText(editor, '');
   Transforms.move(editor);
 };
 

@@ -75,6 +75,7 @@ Timeline.args = {
           type: ReferenceType.COMMENT,
           referenceId: '6123614bf6c45c2728e43aca',
           section: SectionType.DISCUSSION,
+          mentions: [],
           metric: {
             likes: 0,
             dislikes: 0,

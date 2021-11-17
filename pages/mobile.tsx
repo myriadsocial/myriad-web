@@ -8,7 +8,6 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import {useAuthHook} from 'src/hooks/auth.hook';
 import Logo from 'src/images/Myriad_Full_Logo_Color_1-01_1.svg';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -47,8 +46,6 @@ const useStyles = makeStyles((theme: Theme) =>
 const Mobile: React.FC = () => {
   const style = useStyles();
 
-  const {anonymous} = useAuthHook();
-
   return (
     <div className={style.root}>
       <Grid container direction="column" justifyContent="center" alignContent="center">
@@ -78,8 +75,12 @@ const Mobile: React.FC = () => {
         </Grid>
 
         <Grid item>
-          <Button onClick={anonymous} className={style.button} variant="contained" color="primary">
-            Anonymous Login
+          <Button
+            href="https://www.myriad.social/"
+            className={style.button}
+            variant="contained"
+            color="primary">
+            Visit Myriad Social
           </Button>
         </Grid>
       </Grid>

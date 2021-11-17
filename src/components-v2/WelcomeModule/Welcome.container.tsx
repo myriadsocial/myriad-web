@@ -9,6 +9,7 @@ import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {WelcomeModule} from './WelcomeModule';
 
 import {Status} from 'src/interfaces/toaster';
+import {skipUsername} from 'src/lib/api/activity';
 import {RootState} from 'src/reducers';
 import {showToaster} from 'src/reducers/toaster/actions';
 import {updateUser} from 'src/reducers/user/actions';
@@ -33,7 +34,11 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
     setSkip(false);
   };
 
-  const confirmSkip = () => {
+  const confirmSkip = async () => {
+    if (user) {
+      await skipUsername(user);
+    }
+
     router.push('/home');
   };
 
