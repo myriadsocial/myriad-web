@@ -1,7 +1,7 @@
 import {CheckCircleIcon} from '@heroicons/react/solid';
 import {SearchIcon} from '@heroicons/react/solid';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -27,15 +27,23 @@ import {useStyles} from './AddCoin.style';
 import {Props} from './addCoin.interface';
 
 import {debounce} from 'lodash';
+import {Currency} from 'src/interfaces/currency';
 
 export const AddCoin: React.FC<Props> = props => {
   const {open, onClose} = props;
   const dispatch = useDispatch();
   const {availableCurrencies} = useSelector<RootState, ConfigState>(state => state.configState);
   const style = useStyles();
+
+  const [searchedCurrencies, setSearchedCurrencies] = useState<Currency[]>([]);
+
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
+
+  useEffect(() => {
+    setSearchedCurrencies(availableCurrencies);
+  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // TODO FILTER WHEN TYPING
@@ -50,7 +58,10 @@ export const AddCoin: React.FC<Props> = props => {
   const submitSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     // TODO FILTER WHEN ENTER
     if (event.key === 'Enter') {
-      console.log(search);
+      const searchResults = availableCurrencies.filter(currencies =>
+        currencies.id.toLowerCase().includes(search),
+      );
+      setSearchedCurrencies(searchResults);
     }
   };
 
@@ -132,7 +143,7 @@ export const AddCoin: React.FC<Props> = props => {
 
           {loading && <LoadingComponent />}
           {!loading &&
-            availableCurrencies.map(currency => (
+            searchedCurrencies.map(currency => (
               <ListItem
                 key={currency.id}
                 onClick={() => handleSelectAsset(currency.id)}
