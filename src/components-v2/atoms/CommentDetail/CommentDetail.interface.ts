@@ -1,9 +1,11 @@
 import {Comment, CommentProps} from '../../../interfaces/comment';
 
 import {FriendDetail} from 'src/components-v2/FriendsMenu/hooks/use-friend-list.hook';
+import {SectionType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 
 export interface CommentDetailProps {
+  section: SectionType;
   user?: User;
   comment: Comment;
   deep: number;
@@ -16,4 +18,6 @@ export interface CommentDetailProps {
   onSendTip: (comment: Comment) => void;
   onReport: (comment: Comment) => void;
   onSearchPeople: (query: string) => void;
+  setDownvoting: (comment: Comment) => void;
+  onBeforeDownvote?: () => void;
 }

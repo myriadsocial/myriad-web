@@ -6,6 +6,7 @@ import {CommentList} from './CommentList';
 
 import {debounce} from 'lodash';
 import {useFriendList} from 'src/components-v2/FriendsMenu/hooks/use-friend-list.hook';
+import {CommentTabs} from 'src/components-v2/PostDetail/hooks/use-comment-tabs';
 import {ReportContainer} from 'src/components-v2/Report';
 import {SendTipContainer} from 'src/components-v2/SendTip';
 import {TipHistoryContainer} from 'src/components-v2/TipHistory';
@@ -18,7 +19,7 @@ import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
 import {fetchFriend, searchFriend} from 'src/reducers/friend/actions';
 import {FriendState} from 'src/reducers/friend/reducer';
-import {upvote, downvote, removeVote} from 'src/reducers/timeline/actions';
+import {upvote, downvote, removeVote, setDownvoting} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {setTippedUser, setTippedUserId} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
@@ -29,10 +30,11 @@ type CommentListContainerProps = {
   section: SectionType;
   focus?: boolean;
   expand?: boolean;
+  handleChangeTab: (tab: CommentTabs) => void;
 };
 
 export const CommentListContainer: React.FC<CommentListContainerProps> = props => {
-  const {placeholder, referenceId, section, focus, expand} = props;
+  const {placeholder, referenceId, section, focus, expand, handleChangeTab} = props;
 
   const dispatch = useDispatch();
   const {
@@ -88,7 +90,14 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         } as CommentProps,
         () => {
           if (downvoting) {
-            dispatch(downvote(downvoting, section));
+            dispatch(
+              downvote(downvoting, section, (vote: Vote) => {
+                // update vote count if reference is a comment
+                if ('section' in downvoting) {
+                  updateDownvote(downvoting.id, downvoting.metric.downvotes + 1, vote);
+                }
+              }),
+            );
           }
         },
       );
@@ -119,12 +128,16 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         }),
       );
     } else {
-      dispatch(
-        downvote(comment, section, (vote: Vote) => {
-          updateDownvote(comment.id, comment.metric.downvotes + 1, vote);
-        }),
-      );
+      dispatch(setDownvoting(comment));
+
+      if (section === SectionType.DISCUSSION) {
+        handleChangeTab('debate');
+      }
     }
+  };
+
+  const handleSetDownvoting = (comment: Comment) => {
+    dispatch(setDownvoting(comment));
   };
 
   const handleSendTip = (reference: Post | Comment) => {
@@ -176,6 +189,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
       />
 
       <CommentList
+        section={section}
         user={user}
         comments={comments || []}
         mentionables={mentionables}
@@ -185,6 +199,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         onUpvote={handleUpvote}
         onLoadReplies={loadReplies}
         onOpenTipHistory={openTipHistory}
+        setDownvoting={handleSetDownvoting}
         focus={focus}
         expand={expand}
         onReport={handleReport}

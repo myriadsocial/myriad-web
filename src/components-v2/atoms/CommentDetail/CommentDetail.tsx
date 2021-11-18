@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -9,9 +9,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 
-import ShowIf from '../../../components/common/show-if.component';
-import {acronym} from '../../../helpers/string';
-import {setTippedContent} from '../../../reducers/timeline/actions';
 import {CommentEditor} from '../CommentEditor';
 import {CommentList} from '../CommentList';
 import {VotingComponent} from '../Voting';
@@ -20,12 +17,17 @@ import {useStyles} from './CommentDetail.styles';
 import {CommentRender} from './CommentRender';
 
 import {formatDistance, subDays} from 'date-fns';
-import {ReferenceType} from 'src/interfaces/interaction';
+import ShowIf from 'src/components/common/show-if.component';
+import {acronym} from 'src/helpers/string';
+import {CommentProps} from 'src/interfaces/comment';
+import {ReferenceType, SectionType} from 'src/interfaces/interaction';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
+import {setTippedContent} from 'src/reducers/timeline/actions';
 
 export const CommentDetail: React.FC<CommentDetailProps> = props => {
   const {
+    section,
     comment,
     deep,
     user,
@@ -38,22 +40,25 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
     onReport,
     onSendTip,
     onSearchPeople,
+    setDownvoting,
+    onBeforeDownvote,
   } = props;
 
   const dispatch = useDispatch();
 
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
+  const editorRef = useRef<HTMLDivElement>(null);
 
   const style = useStyles();
 
-  const [isReply, setIsReply] = React.useState(false);
+  const [isReplying, setIsReplying] = React.useState(false);
 
   useEffect(() => {
     handleLoadReplies();
   }, [comment]);
 
   const handleOpenReply = () => {
-    setIsReply(!isReply);
+    setIsReplying(!isReplying);
   };
 
   const handleLoadReplies = () => {
@@ -61,7 +66,19 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
   };
 
   const handleDownVote = () => {
-    onDownVote(comment);
+    if (section === SectionType.DEBATE) {
+      setDownvoting(comment);
+
+      if (deep < 2) {
+        handleOpenReply();
+      }
+
+      if (deep >= 2) {
+        onBeforeDownvote && onBeforeDownvote();
+      }
+    } else {
+      onDownVote(comment);
+    }
   };
 
   const handleUpvote = () => {
@@ -81,6 +98,12 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
     const contentType = 'comment';
     const referenceId = comment.id;
     dispatch(setTippedContent(contentType, referenceId));
+  };
+
+  const handleSendReply = (attributes: Partial<CommentProps>) => {
+    setIsReplying(false);
+
+    onReply(attributes);
   };
 
   const getDate = (commentDate: Date) => {
@@ -177,8 +200,9 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
           </CardActions>
         </Card>
 
-        {user && isReply && (
+        {user && isReplying && (
           <CommentEditor
+            ref={editorRef}
             referenceId={comment.id}
             type={ReferenceType.COMMENT}
             user={user}
@@ -188,12 +212,13 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
               avatar: item.avatar,
             }))}
             onSearchMention={onSearchPeople}
-            onSubmit={onReply}
+            onSubmit={handleSendReply}
           />
         )}
 
         {comment && (
           <CommentList
+            section={section}
             user={user}
             deep={deep + 1}
             onUpvote={onUpvote}
@@ -206,6 +231,8 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             onSendTip={onSendTip}
             mentionables={mentionables}
             onSearchPeople={onSearchPeople}
+            setDownvoting={setDownvoting}
+            onBeforeDownvote={handleOpenReply}
           />
         )}
       </div>
