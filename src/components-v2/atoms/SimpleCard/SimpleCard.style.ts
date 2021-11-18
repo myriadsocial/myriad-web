@@ -1,4 +1,4 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import {alpha, createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,8 +42,8 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     actionArea: {
-      '&:hover $focusHighlight': {
-        opacity: 0,
+      '&:hover': {
+        backgroundColor: alpha('#FFC857', 0.15),
       },
       padding: '20px 20px 20px 28px',
     },
