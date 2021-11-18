@@ -49,6 +49,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const [reported, setReported] = useState<Post | null>(null);
   const [removing, setRemoving] = useState(false);
   const [postToRemove, setPostToRemove] = useState<Post | null>(null);
+  const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
   const sendTipOpened = Boolean(tippedPost);
 
   useEffect(() => {
@@ -79,7 +80,8 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
   const closeSendTip = () => {
     if (isTipSent && tippedPost) {
-      openTipHistory(tippedPost);
+      setOpenSuccessPrompt(true);
+      //openTipHistory(tippedPost);
     } else {
       console.log('no post tipped');
     }
@@ -112,6 +114,10 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const handleClosePrompt = (): void => {
     setRemoving(false);
     setPostToRemove(null);
+  };
+
+  const handleCloseSuccessPrompt = (): void => {
+    setOpenSuccessPrompt(false);
   };
 
   const confirmDeletePost = (): void => {
@@ -157,6 +163,16 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
         subtitle="Finding this post is insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
+
+      <PromptComponent
+        icon={'success'}
+        open={openSuccessPrompt}
+        onCancel={handleCloseSuccessPrompt}
+        title={'Success'}
+        subtitle={'Tip to Jenny Chang sent successfully'}>
+        <Button>See tip history</Button>
+        <Button onClick={handleCloseSuccessPrompt}>Return</Button>
+      </PromptComponent>
 
       <TipHistoryContainer onSendTip={handleSendTip} />
 
