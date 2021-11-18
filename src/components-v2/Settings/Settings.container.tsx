@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
+import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
 import {Settings as SettingsComponent} from './Settings';
@@ -8,6 +9,8 @@ import {SettingsType} from './hooks/use-setting-list.hook';
 
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
+
+const {publicRuntimeConfig} = getConfig();
 
 export const SettingsContainer: React.FC = () => {
   const router = useRouter();
@@ -23,7 +26,7 @@ export const SettingsContainer: React.FC = () => {
 
   const handleChangeSection = (section: SettingsType) => {
     if (section === 'about') {
-      window.open('https://www.myriad.social/', '_ blank');
+      window.open(publicRuntimeConfig.myriadWebsite, '_ blank');
     } else {
       router.push(
         {
