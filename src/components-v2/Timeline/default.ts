@@ -67,12 +67,12 @@ export const balanceSortOptions: MenuOptions<string>[] = [
 
 export const historyAmountSortOptions: MenuOptions<string>[] = [
   {
-    id: 'highestAmount',
-    title: 'Highest Amount',
-  },
-  {
     id: 'latestTransaction',
     title: 'Latest Transaction',
+  },
+  {
+    id: 'highestAmount',
+    title: 'Highest Amount',
   },
 ];
 

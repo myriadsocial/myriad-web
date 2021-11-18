@@ -1,6 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
+import {PromptComponent} from '../../atoms/Prompt/prompt.component';
 import {CommentEditor} from '../CommentEditor/CommentEditor';
 import {CommentList} from './CommentList';
 
@@ -56,6 +61,8 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
   const [reported, setReported] = useState<Comment | null>(null);
   const [tippedComment, setTippedComment] = useState<Comment | null>(null);
+  const [tippedContentForHistory, setTippedContentForHistory] = useState<Comment | null>(null);
+  const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
 
   const sendTipOpened = Boolean(tippedComment);
   const mentionables = useFriendList(friends, user);
@@ -151,11 +158,23 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
 
   const closeSendTip = () => {
     if (isTipSent && tippedComment) {
-      openTipHistory(tippedComment);
+      setOpenSuccessPrompt(true);
+      setTippedContentForHistory(tippedComment);
     } else {
       console.log('no comment tipped');
     }
     setTippedComment(null);
+  };
+
+  const handleCloseSuccessPrompt = (): void => {
+    setOpenSuccessPrompt(false);
+  };
+
+  const handleOpenTipHistory = (): void => {
+    if (tippedContentForHistory) {
+      openTipHistory(tippedContentForHistory);
+      setOpenSuccessPrompt(false);
+    }
   };
 
   const handleReport = (comment: Comment) => {
@@ -215,6 +234,43 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         subtitle="Finding this post is insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
+
+      <PromptComponent
+        icon={'success'}
+        open={openSuccessPrompt}
+        onCancel={handleCloseSuccessPrompt}
+        title={'Success'}
+        subtitle={
+          <Typography component="div">
+            Tip to{' '}
+            <Box fontWeight={700} display="inline">
+              {tippedContentForHistory?.user.name ?? 'Unknown Myrian'}
+            </Box>{' '}
+            sent successfully
+          </Typography>
+        }>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            style={{marginRight: '24px'}}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={handleOpenTipHistory}>
+            See tip history
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={handleCloseSuccessPrompt}>
+            Return
+          </Button>
+        </div>
+      </PromptComponent>
 
       <TipHistoryContainer onSendTip={handleSendTip} />
 
