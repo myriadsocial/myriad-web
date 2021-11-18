@@ -168,8 +168,6 @@ export const usePolkadotApi = () => {
 
         dispatch(setIsTipSent(true));
 
-        enqueueSnackbar('Tip sent!', {variant: 'success', autoHideDuration: 3000});
-
         callback && callback();
       }
     } catch (error) {
