@@ -65,10 +65,9 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const styles = useStyles();
   const router = useRouter();
   const dispatch = useDispatch();
-  const tabs = useCommentTabs(post);
+  const {activeTab, setActiveTab, tabs} = useCommentTabs(post);
 
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
-  const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
   const [shoWcomment, setShowComment] = useState(expanded);
   const [maxLength, setMaxLength] = useState<number | undefined>(250);
   const [viewContent, setViewContent] = useState(!post.isNSFW);

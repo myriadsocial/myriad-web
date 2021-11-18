@@ -6,9 +6,11 @@ import {CommentDetail} from '../CommentDetail';
 
 import {FriendDetail} from 'src/components-v2/FriendsMenu/hooks/use-friend-list.hook';
 import {Comment, CommentProps} from 'src/interfaces/comment';
+import {SectionType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 
 type CommentListProps = {
+  section: SectionType;
   user?: User;
   comments: Comment[];
   mentionables: FriendDetail[];
@@ -24,6 +26,8 @@ type CommentListProps = {
   onSendTip: (comment: Comment) => void;
   onReport: (comment: Comment) => void;
   onSearchPeople: (query: string) => void;
+  setDownvoting: (comment: Comment) => void;
+  onBeforeDownvote?: () => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,6 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const CommentList: React.FC<CommentListProps> = props => {
   const {
+    section,
     user,
     comments = [],
     mentionables,
@@ -46,6 +51,8 @@ export const CommentList: React.FC<CommentListProps> = props => {
     onReport,
     onSendTip,
     onSearchPeople,
+    setDownvoting,
+    onBeforeDownvote,
   } = props;
 
   const styles = useStyles();
@@ -54,6 +61,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
     <div className={styles.root}>
       {comments.map(comment => (
         <CommentDetail
+          section={section}
           user={user}
           key={comment.id}
           comment={comment}
@@ -67,6 +75,8 @@ export const CommentList: React.FC<CommentListProps> = props => {
           onReport={onReport}
           onSendTip={onSendTip}
           onSearchPeople={onSearchPeople}
+          setDownvoting={setDownvoting}
+          onBeforeDownvote={onBeforeDownvote}
         />
       ))}
     </div>

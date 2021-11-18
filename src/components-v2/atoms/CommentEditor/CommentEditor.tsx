@@ -44,6 +44,7 @@ import {User} from 'src/interfaces/user';
 import theme from 'src/themes/light-theme-v2';
 
 export type PostEditorProps = {
+  ref?: React.RefObject<HTMLDivElement>;
   referenceId: string;
   type?: ReferenceType;
   user?: User;
@@ -65,6 +66,7 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
   const options = createPlateOptions();
 
   const {
+    ref,
     referenceId,
     type,
     user,
@@ -182,8 +184,8 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
       });
 
       setComment(undefined);
-      setShowMediaEmbed(false);
     }
+    setShowMediaEmbed(false);
   };
 
   return (
@@ -192,7 +194,7 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
         {acronym(user?.name || '')}
       </Avatar>
 
-      <div className={styles.editor}>
+      <div className={styles.editor} ref={ref}>
         <Plate
           id={referenceId}
           initialValue={comment}
