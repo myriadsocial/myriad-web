@@ -235,7 +235,17 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
 
   const loadReplies = async (referenceId: string, deep: number) => {
     try {
-      const {data: comments} = await CommentAPI.loadComments(referenceId);
+      const {data} = await CommentAPI.loadComments(referenceId);
+
+      const comments = data.map(comment => {
+        const upvoted = comment.votes?.filter(vote => vote.userId === user?.id && vote.state);
+        const downvoted = comment.votes?.filter(vote => vote.userId === user?.id && !vote.state);
+
+        comment.isUpvoted = upvoted && upvoted.length > 0;
+        comment.isDownVoted = downvoted && downvoted.length > 0;
+
+        return comment;
+      });
 
       setComments(prevComments => {
         return prevComments.map(item => {

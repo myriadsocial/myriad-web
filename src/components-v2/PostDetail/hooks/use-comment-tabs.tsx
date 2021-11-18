@@ -1,24 +1,26 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 
 import {CommentListContainer} from 'src/components-v2/atoms/CommentList';
-import {TabItems} from 'src/components-v2/atoms/Tabs';
 import {Comment} from 'src/interfaces/comment';
 import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 
 export type CommentTabs = 'discussion' | 'debate';
 
-export const useCommentTabs = (
-  post: Post,
-  comments?: Comment[],
-  debates?: Comment[],
-): TabItems<CommentTabs>[] => {
+export const useCommentTabs = (post: Post, comments?: Comment[], debates?: Comment[]) => {
+  const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
+
+  const handleChangeTab = (tab: CommentTabs) => {
+    setActiveTab(tab);
+  };
+
   const discussionComponent = useMemo(() => {
     return (
       <CommentListContainer
         placeholder={'Write a Discussion...'}
         referenceId={post.id}
         section={SectionType.DISCUSSION}
+        handleChangeTab={handleChangeTab}
       />
     );
   }, [post]);
@@ -31,22 +33,27 @@ export const useCommentTabs = (
         section={SectionType.DEBATE}
         focus={true}
         expand={true}
+        handleChangeTab={handleChangeTab}
       />
     );
   }, [post]);
 
-  return [
-    {
-      id: 'discussion',
-      title: `Discussion (${post.metric.discussions || 0})`,
-      icon: '🤔 ',
-      component: discussionComponent,
-    },
-    {
-      id: 'debate',
-      title: `Debate (${post.metric.debates || 0})`,
-      icon: '😡 ',
-      component: debatesComponent,
-    },
-  ];
+  return {
+    activeTab,
+    setActiveTab,
+    tabs: [
+      {
+        id: 'discussion',
+        title: `Discussion (${post.metric.discussions || 0})`,
+        icon: '🤔 ',
+        component: discussionComponent,
+      },
+      {
+        id: 'debate',
+        title: `Debate (${post.metric.debates || 0})`,
+        icon: '😡 ',
+        component: debatesComponent,
+      },
+    ],
+  };
 };
