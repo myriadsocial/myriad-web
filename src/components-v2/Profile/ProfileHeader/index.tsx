@@ -249,30 +249,44 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         <Typography className={`${style.username} ${style.mt22}`} component="p">
           {person.bio}
         </Typography>
-        <Typography
-          className={`${style.aditionLite} ${style.flexCenter} ${style.mt22}`}
-          component="p">
-          <SvgIcon
-            classes={{root: style.fill}}
-            className={`${style.icon}`}
-            component={GlobeAltIcon}
-            viewBox="0 0 24 24"
-          />
-          <Link
-            className={style.link}
-            href={handleURL(person.websiteURL ?? '')}
-            rel="noreferrer"
-            target="_blank">
-            {person.websiteURL ?? ''}
-          </Link>
-          <SvgIcon
-            classes={{root: style.fill}}
-            className={`${style.icon} ${style.ml20}`}
-            component={CalendarIcon}
-            viewBox="0 0 24 24"
-          />
-          {formatDate(person.createdAt)}
-        </Typography>
+        {person.websiteURL ? (
+          <Typography
+            className={`${style.aditionLite} ${style.flexCenter} ${style.mt22}`}
+            component="p">
+            <SvgIcon
+              classes={{root: style.fill}}
+              className={`${style.icon}`}
+              component={GlobeAltIcon}
+              viewBox="0 0 24 24"
+            />
+            <Link
+              className={style.link}
+              href={handleURL(person.websiteURL ?? '')}
+              rel="noreferrer"
+              target="_blank">
+              {person.websiteURL ?? ''}
+            </Link>
+            <SvgIcon
+              classes={{root: style.fill}}
+              className={`${style.icon} ${style.ml20}`}
+              component={CalendarIcon}
+              viewBox="0 0 24 24"
+            />
+            {formatDate(person.createdAt)}
+          </Typography>
+        ) : (
+          <Typography
+            className={`${style.aditionLite} ${style.flexCenter} ${style.mt22}`}
+            component="p">
+            <SvgIcon
+              classes={{root: style.fill}}
+              className={`${style.icon}`}
+              component={CalendarIcon}
+              viewBox="0 0 24 24"
+            />
+            {formatDate(person.createdAt)}
+          </Typography>
+        )}
 
         <div className={`${style.mt15} ${style.flexEnd}`}>
           <div>
