@@ -1,11 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
 import {ReportContainer} from '../Report';
 import {SendTipContainer} from '../SendTip';
 import {useTimelineHook} from '../Timeline/hooks/use-timeline.hook';
 import {TipHistoryContainer} from '../TipHistory';
 import {Modal} from '../atoms/Modal';
+import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {PostsList} from './PostsList';
 
 import {useTipHistory} from 'src/hooks/tip-history.hook';
@@ -41,8 +46,10 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
+  const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | null>(null);
 
   const [reported, setReported] = useState<Post | null>(null);
+  const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
   const sendTipOpened = Boolean(tippedPost);
 
   const handleUpvote = (reference: Post | Comment) => {
@@ -59,11 +66,23 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
   const closeSendTip = () => {
     if (isTipSent && tippedPost) {
-      openTipHistory(tippedPost);
+      setOpenSuccessPrompt(true);
+      setTippedContentForHistory(tippedPost);
     } else {
       console.log('no post tipped');
     }
     setTippedPost(null);
+  };
+
+  const handleCloseSuccessPrompt = (): void => {
+    setOpenSuccessPrompt(false);
+  };
+
+  const handleOpenTipHistory = (): void => {
+    if (tippedContentForHistory) {
+      openTipHistory(tippedContentForHistory);
+      setOpenSuccessPrompt(false);
+    }
   };
 
   const handleReportPost = (post: Post) => {
@@ -116,6 +135,43 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
         subtitle="Finding this post is insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
+
+      <PromptComponent
+        icon={'success'}
+        open={openSuccessPrompt}
+        onCancel={handleCloseSuccessPrompt}
+        title={'Success'}
+        subtitle={
+          <Typography component="div">
+            Tip to{' '}
+            <Box fontWeight={700} display="inline">
+              {tippedContentForHistory?.user.name ?? 'Unknown Myrian'}
+            </Box>{' '}
+            sent successfully
+          </Typography>
+        }>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            style={{marginRight: '24px'}}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={handleOpenTipHistory}>
+            See tip history
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={handleCloseSuccessPrompt}>
+            Return
+          </Button>
+        </div>
+      </PromptComponent>
 
       <TipHistoryContainer onSendTip={handleSendTip} />
       <ReportContainer reference={reported} onClose={closeReportPost} />
