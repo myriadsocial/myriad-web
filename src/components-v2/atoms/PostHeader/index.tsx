@@ -171,7 +171,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
 
         <ShowIf condition={!owner && post.platform !== 'myriad'}>
           <MenuItem onClick={openSourcePost}>View Source Post</MenuItem>
-          <MenuItem onClick={openUserProfile}>Visit {post.user.name} Profile</MenuItem>
+          <MenuItem onClick={openUserProfile}>Visit {post.user?.name} Profile</MenuItem>
           <MenuItem onClick={openSourceAccount}>Visit {post.people?.name} Account</MenuItem>
         </ShowIf>
 
