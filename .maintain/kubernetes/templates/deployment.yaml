@@ -79,7 +79,7 @@ spec:
                   name: {{ include "myriad-web.firebaseSecretName" . }}
                   key: appId
             {{- if .Values.config.sentry.dns }}
-            - name: SENTRY_DNS
+            - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
                   name: {{ include "myriad-web.sentrySecretName" . }}
