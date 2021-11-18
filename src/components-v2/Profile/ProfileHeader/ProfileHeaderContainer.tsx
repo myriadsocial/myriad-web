@@ -1,7 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {Typography} from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+
 import {ProfileHeaderComponent} from '.';
+import {PromptComponent} from '../../atoms/Prompt/prompt.component';
 
 import {SendTipContainer} from 'src/components-v2/SendTip';
 import {useTimelineFilter} from 'src/components-v2/Timeline/hooks/use-timeline-filter.hook';
@@ -43,6 +48,8 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
 
   const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
   const [tippedUser, setTippedUser] = useState<User | null>(null);
+  const [tippedUserForHistory, setTippedUserForHistory] = useState<User | null>(null);
+  const [openSuccessPrompt, setOpenSuccessPrompt] = React.useState(false);
   const sendTipOpened = Boolean(tippedUser);
 
   const urlLink = () => {
@@ -89,10 +96,16 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const closeSendTip = () => {
     if (isTipSent && tippedUser) {
       //for the future, open tip history here
+      setOpenSuccessPrompt(true);
+      setTippedUserForHistory(tippedUser);
     } else {
       console.log('no user tipped');
     }
     setTippedUser(null);
+  };
+
+  const handleCloseSuccessPrompt = (): void => {
+    setOpenSuccessPrompt(false);
   };
 
   const handleSubmitReport = (payload: ReportProps) => {
@@ -162,6 +175,35 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
         subtitle="Finding this post is insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
+
+      <PromptComponent
+        icon={'success'}
+        open={openSuccessPrompt}
+        onCancel={handleCloseSuccessPrompt}
+        title={'Success'}
+        subtitle={
+          <Typography component="div">
+            Tip to{' '}
+            <Box fontWeight={700} display="inline">
+              {tippedUserForHistory?.name ?? 'Unknown Myrian'}
+            </Box>{' '}
+            sent successfully
+          </Typography>
+        }>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={handleCloseSuccessPrompt}>
+            Return
+          </Button>
+        </div>
+      </PromptComponent>
     </>
   );
 };
