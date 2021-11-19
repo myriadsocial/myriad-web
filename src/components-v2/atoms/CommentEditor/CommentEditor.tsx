@@ -72,7 +72,7 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
     user,
     expand = false,
     debug = false,
-    placeholder = 'Write a Discussion ...',
+    placeholder = 'Write a Reply ...',
     mentionables,
     onSearchMention,
     onSubmit,
