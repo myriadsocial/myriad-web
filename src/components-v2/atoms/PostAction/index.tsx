@@ -101,7 +101,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
             viewBox="0 0 24 24"
           />
           <Typography component="span" color="textPrimary" variant="caption">
-            Shares
+            Share
           </Typography>
         </IconButton>
         <Menu
