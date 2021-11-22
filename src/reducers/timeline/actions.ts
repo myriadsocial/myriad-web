@@ -117,6 +117,18 @@ export interface SetTippedContent extends Action {
   referenceId: string;
 }
 
+export interface IncreaseCommentCount extends Action {
+  type: constants.INCREASE_COMMENT_COUNT;
+  postId: string;
+  section: SectionType;
+}
+
+export interface DecreaseCommentCount extends Action {
+  type: constants.DECREASE_COMMENT_COUNT;
+  postId: string;
+  section: SectionType;
+}
+
 /**
  * Union Action Types
  */
@@ -139,6 +151,8 @@ export type Actions =
   | DownvotePost
   | RemoveVotePost
   | SetTippedContent
+  | IncreaseCommentCount
+  | DecreaseCommentCount
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -168,6 +182,24 @@ export const setPost = (post: Post): FetchDedicatedPost => ({
 export const setDownvoting = (reference: Post | Comment | null): SetDownvoting => ({
   type: constants.SET_DOWNVOTING,
   reference,
+});
+
+export const increaseCommentCount = (
+  postId: string,
+  section: SectionType,
+): IncreaseCommentCount => ({
+  type: constants.INCREASE_COMMENT_COUNT,
+  postId,
+  section,
+});
+
+export const decreaseCommentCount = (
+  postId: string,
+  section: SectionType,
+): DecreaseCommentCount => ({
+  type: constants.DECREASE_COMMENT_COUNT,
+  postId,
+  section,
 });
 
 /**

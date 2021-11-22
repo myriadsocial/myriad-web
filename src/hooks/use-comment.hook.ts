@@ -1,11 +1,12 @@
 import {useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {Comment, CommentProps} from 'src/interfaces/comment';
 import {SectionType, Vote} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import * as CommentAPI from 'src/lib/api/comment';
 import {RootState} from 'src/reducers';
+import {increaseCommentCount} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 type useCommentHookProps = {
@@ -22,6 +23,7 @@ type useCommentHookProps = {
 };
 
 export const useCommentHook = (referenceId: string): useCommentHookProps => {
+  const distpatch = useDispatch();
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -76,6 +78,7 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
 
   const reply = async (user: User, comment: CommentProps, callback?: () => void) => {
     const data = await CommentAPI.reply(comment);
+    const postId = data.postId;
 
     // if replying post
     if (comment.referenceId === referenceId) {
@@ -99,6 +102,8 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
 
       setComments(newComment);
     }
+
+    distpatch(increaseCommentCount(postId, comment.section));
 
     callback && callback();
   };

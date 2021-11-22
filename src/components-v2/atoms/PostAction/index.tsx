@@ -28,7 +28,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
   const style = useStyles();
 
   const {
-    metrics: {comments, upvotes = 0, downvotes},
+    metrics: {discussions = 0, debates = 0, upvotes = 0, downvotes},
     downvoted = false,
     upvoted = false,
     shareUrl,
@@ -88,7 +88,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
           <SvgIcon classes={{root: style.fill}} component={ChatAltIcon} viewBox="0 0 24 24" />
         </IconButton>
         <Typography component="span" color="textPrimary" variant="caption">
-          {comments} Comments
+          {discussions + debates} Comments
         </Typography>
       </div>
 
