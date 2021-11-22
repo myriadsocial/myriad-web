@@ -5,12 +5,15 @@ import {
   GlobeAltIcon,
   UserAddIcon,
   UserIcon,
+  ChatAlt2Icon,
 } from '@heroicons/react/outline';
 import {DotsVerticalIcon} from '@heroicons/react/solid';
 
 import React from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {useSelector} from 'react-redux';
+
+import getConfig from 'next/config';
 
 import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
@@ -184,6 +187,40 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     closeConfirmRemoveFriend();
   };
 
+  const getGunPubKey = async (id: string) => {
+    // Ambil Pubkey dari API
+
+    const {publicRuntimeConfig} = getConfig();
+    const baseURL = publicRuntimeConfig.apiURL;
+
+    return new Promise((resolve, reject) => {
+      fetch(`${baseURL}/users/${id}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(res => res.json())
+        .then(result => {
+          const alias = result.name || '';
+          const pub = result.gunPub || '';
+          const epub = result.gunEpub || '';
+          resolve(`${pub}&${epub}&${alias}`);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  };
+
+  const handleClickChat = () => {
+    getGunPubKey(person.id).then(link => {
+      const url = `/chat/${link}`;
+      window.open(url, '_blank');
+    });
+  };
+
   return (
     <div>
       <div className={style.root}>
@@ -341,6 +378,24 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 </Button>
               </ShowIf>
 
+              <ShowIf condition={isFriend}>
+                <Button
+                  onClick={handleClickChat}
+                  startIcon={
+                    <SvgIcon
+                      classes={{root: style.fill}}
+                      component={ChatAlt2Icon}
+                      viewBox="0 0 22 22"
+                    />
+                  }
+                  classes={{root: style.button}}
+                  className={style.mr12}
+                  variant="contained"
+                  color={isFriend ? 'primary' : 'default'}
+                  size="small">
+                  Chat
+                </Button>
+              </ShowIf>
               <ShowIf condition={!isBlocked && !canAddFriend}>
                 <Button
                   onClick={handleClickFriendOption}
