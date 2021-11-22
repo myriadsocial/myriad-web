@@ -76,7 +76,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const isImportedPost = post.platform !== 'myriad' || post.createdBy !== user?.id ? true : false;
 
   const onHashtagClicked = async (hashtag: string) => {
-    await router.push(`/home?tag=${hashtag.replace('#', '')}&type=trending`, undefined, {
+    await router.push(`/topic/hashtag?tag=${hashtag.replace('#', '')}`, undefined, {
       shallow: true,
     });
   };
