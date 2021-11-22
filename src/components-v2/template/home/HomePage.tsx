@@ -37,7 +37,8 @@ const HomePage = (): JSX.Element => {
           <div>
             <SocialMediaList
               connected={SocialMediaList.args?.connected ?? []}
-              toggleVerify={social => console.log(social)}
+              openSocialLink={social => console.log(social)}
+              addSocial={social => console.log(social)}
               openSocialPage={console.log}
             />
           </div>

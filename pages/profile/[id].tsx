@@ -3,10 +3,14 @@ import {useSelector} from 'react-redux';
 
 import {Session} from 'next-auth';
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
+import Head from 'next/head';
+import {useRouter} from 'next/router';
 
 import {ProfileTimeline} from 'src/components-v2/Profile/ProfileComponent';
 import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
+import {User} from 'src/interfaces/user';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
@@ -22,13 +26,37 @@ import {ThunkDispatchAction} from 'src/types/thunk';
 
 type ProfilePageProps = {
   session: Session;
+  title: string;
+  description: string;
+  image: string | null;
 };
 
-const ProfilePageComponent: React.FC<ProfilePageProps> = () => {
+const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
+  const {title, description, image} = props;
+  const {publicRuntimeConfig} = getConfig();
+  const router = useRouter();
+
   const {detail: profileDetail} = useSelector<RootState, ProfileState>(state => state.profileState);
 
   return (
     <DefaultLayout isOnProfilePage={true}>
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+
+        <meta name="og:url" content={publicRuntimeConfig.nextAuthURL + router.asPath} />
+        <meta name="og:title" content={title} />
+        <meta name="og:description" content={description} />
+        {image && <meta name="og:image" content={image} />}
+        <meta name="og:type" content="website" />
+        <meta name="fb:app_id" content={publicRuntimeConfig.facebookAppId} />
+        {/* Twitter Card tags */}
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        {image && <meta name="twitter:image" content={image} />}
+        <meta name="twitter:card" content="summary" />
+      </Head>
+
       <ToasterContainer />
       <ProfileTimeline profile={profileDetail} loading={false} />
     </DefaultLayout>
@@ -99,9 +127,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     ]);
   }
 
+  let detail: User | null = null;
+
   if (profileId) {
     try {
-      const detail = await UserAPI.getUserDetail(profileId);
+      detail = await UserAPI.getUserDetail(profileId);
+
       if (detail) {
         dispatch(setProfile(detail));
 
@@ -117,6 +148,9 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   return {
     props: {
       session,
+      title: detail?.name,
+      description: detail?.bio,
+      image: detail?.profilePictureURL ?? null,
     },
   };
 });
