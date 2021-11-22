@@ -8,6 +8,7 @@ import * as constants from './constants';
 import update from 'immutability-helper';
 import * as Redux from 'redux';
 import {Comment} from 'src/interfaces/comment';
+import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {TimelineType, TimelineSortMethod, TimelineFilter} from 'src/interfaces/timeline';
 import {WalletDetail} from 'src/interfaces/wallet';
@@ -381,6 +382,34 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
           contentType: action.contentType,
           referenceId: action.referenceId,
         },
+      };
+    }
+
+    case constants.INCREASE_COMMENT_COUNT: {
+      const post: Post | undefined = state.post;
+
+      if (post && post.id === action.postId) {
+        if (action.section === SectionType.DEBATE) {
+          post.metric.debates += 1;
+        } else {
+          post.metric.discussions += 1;
+        }
+      }
+
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post.id === action.postId) {
+            if (action.section === SectionType.DEBATE) {
+              post.metric.debates += 1;
+            } else {
+              post.metric.discussions += 1;
+            }
+          }
+
+          return post;
+        }),
+        post,
       };
     }
 
