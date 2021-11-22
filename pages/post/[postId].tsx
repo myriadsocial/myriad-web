@@ -1,15 +1,19 @@
 import React from 'react';
 
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
+import Head from 'next/head';
+import {useRouter} from 'next/router';
 
 import {PostContainer} from 'src/components-v2/PostDedicated/PostDedicated.container';
+import {formatToString} from 'src/components-v2/PostEditor';
 import {ResourceDeleted} from 'src/components-v2/ResourceDeleted';
 import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import ShowIf from 'src/components/common/show-if.component';
 import {FriendStatus} from 'src/interfaces/friend';
-import {PostVisibility} from 'src/interfaces/post';
+import {Post, PostVisibility} from 'src/interfaces/post';
 import * as FriendAPI from 'src/lib/api/friends';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as PostAPI from 'src/lib/api/post';
@@ -21,17 +25,43 @@ import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
+const {publicRuntimeConfig} = getConfig();
+
 type PostPageProps = {
   removed: boolean;
+  title: string;
+  description: string;
+  image: string | null;
 };
 
 type PostPageParams = {
   postId: string;
 };
 
-const PostPage: React.FC<PostPageProps> = ({removed}) => {
+const PostPage: React.FC<PostPageProps> = props => {
+  const {removed, title, description, image} = props;
+
+  const router = useRouter();
+
   return (
     <DefaultLayout isOnProfilePage={false}>
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+
+        <meta name="og:url" content={publicRuntimeConfig.nextAuthURL + router.asPath} />
+        <meta name="og:title" content={title} />
+        <meta name="og:description" content={description} />
+        {image && <meta name="og:image" content={image} />}
+        <meta name="og:type" content="website" />
+        <meta name="fb:app_id" content={publicRuntimeConfig.facebookAppId} />
+        {/* Twitter Card tags */}
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        {image && <meta name="twitter:image" content={image} />}
+        <meta name="twitter:card" content="summary" />
+      </Head>
+
       <div style={{marginTop: '-20px'}}>
         <TopNavbarComponent description={'Post Detail'} sectionTitle={SectionTitle.TIMELINE} />
       </div>
@@ -97,9 +127,10 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const anonymous = Boolean(session?.user.anonymous);
   const userId = session?.user.address as string;
+  let post: Post;
 
   try {
-    const post = await PostAPI.getPostDetail(params.postId, userId);
+    post = await PostAPI.getPostDetail(params.postId, userId);
 
     const upvoted = post.votes
       ? post.votes.filter(vote => vote.userId === userId && vote.state)
@@ -151,10 +182,13 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchExperience()),
     ]);
   }
-
+  console.log('POST', post);
   return {
     props: {
       session,
+      title: post?.title ?? `${post.user.name} on ${publicRuntimeConfig.appName}`,
+      description: post.platform === 'myriad' ? formatToString(post) : post.text,
+      image: post.asset?.images ? post.asset?.images[0] : null,
       removed: showAsDeleted,
     },
   };
