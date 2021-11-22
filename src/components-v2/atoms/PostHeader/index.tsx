@@ -18,7 +18,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import {SocialsEnum} from 'src/interfaces/social';
 
 export const HeaderComponent: React.FC<PostHeaderProps> = props => {
-  const {post, owner, tipped = false, onDelete, onOpenTipHistory, onReport} = props;
+  const {post, owner, onDelete, onOpenTipHistory, onReport} = props;
 
   const style = useStyles();
   const router = useRouter();
@@ -165,6 +165,8 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClosePostSetting}>
+        <MenuItem onClick={handleOpenTipHistory}>Tip History</MenuItem>
+
         <ShowIf condition={!owner}>
           <MenuItem onClick={openPost}>View Post</MenuItem>
         </ShowIf>
@@ -177,10 +179,6 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
 
         <ShowIf condition={!owner && post.platform === 'myriad'}>
           <MenuItem onClick={openUserProfile}>Visit Profile</MenuItem>
-        </ShowIf>
-
-        <ShowIf condition={owner || tipped}>
-          <MenuItem onClick={handleOpenTipHistory}>Tip History</MenuItem>
         </ShowIf>
 
         <ShowIf condition={!owner}>
