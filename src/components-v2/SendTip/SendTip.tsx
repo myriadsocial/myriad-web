@@ -80,13 +80,11 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
   };
 
   const checkValidDigits = (input: string) => {
-    const regexValidDigits = /^\d*(\.\d+)?$/;
-    const regexRepeatedZeros = /^[0]{1,}$/;
+    const regexValidDigits = /^(?:[1-9]\d*|0(?!(?:\.0+)?$))?(?:\.\d+)?$/; // any number in the world, no leading zeros, no 0.0
 
-    if (!regexRepeatedZeros.test(input)) {
-      if (regexValidDigits.test(input)) {
-        return input;
-      }
+    if (regexValidDigits.test(input)) {
+      console.log({input, gasFee});
+      return input;
     }
 
     return '';
@@ -252,7 +250,8 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                         <TableCell align="right">
                           <Typography className={classes.subHeader}>
                             <span className={classes.clickableText}>
-                              {`${Number(tipAmount) + Number(gasFee)}`} {selectedCurrency.id}
+                              {Number((Number(tipAmount) + Number(gasFee)).toFixed(8)).toString()}{' '}
+                              {selectedCurrency.id}
                             </span>
                           </Typography>
                         </TableCell>
