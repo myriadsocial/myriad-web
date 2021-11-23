@@ -4,6 +4,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useRouter} from 'next/router';
 
 import {Button} from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {WelcomeModule} from './WelcomeModule';
@@ -27,6 +28,9 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [skip, setSkip] = useState(false);
+  const [confirmation, setConfirmation] = useState(false);
+  const [name, setName] = useState(user?.name || '');
+  const [username, setUsername] = useState(user?.username || '');
 
   const openSkipConfirmation = () => {
     setSkip(true);
@@ -69,6 +73,16 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
     router.push('/home');
   };
 
+  const handleConfirmation = (displayname: string, username: string) => {
+    setName(displayname);
+    setUsername(username);
+    setConfirmation(!confirmation);
+  };
+
+  const closeConfirmation = () => {
+    setConfirmation(!confirmation);
+  };
+
   if (!user) return null;
 
   return (
@@ -77,7 +91,7 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
         displayName={user.name}
         username={user.username || ''}
         onSkip={openSkipConfirmation}
-        onSubmit={handleSubmit}
+        onSubmit={handleConfirmation}
         isAvailable={usernameAvailable}
         checkAvailable={handleUsernameAvailable}
       />
@@ -95,7 +109,7 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
             justifyContent: 'center',
           }}>
           <Button
-            style={{marginRight: '24px'}}
+            style={{marginRight: '12px'}}
             size="small"
             variant="outlined"
             color="secondary"
@@ -103,6 +117,47 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
             No, let me rethink
           </Button>
           <Button size="small" variant="contained" color="primary" onClick={confirmSkip}>
+            Yes, Let’s go
+          </Button>
+        </div>
+      </PromptComponent>
+
+      <PromptComponent
+        title={'Are you sure?'}
+        subtitle={
+          <Typography>
+            Your username&nbsp;
+            <Typography component="span" color="primary" style={{fontWeight: 600}}>
+              @{username}
+            </Typography>
+            &nbsp;and&nbsp;
+            <Typography component="span" color="error" style={{fontWeight: 600}}>
+              cannot be change later
+            </Typography>
+            . are you really want to use it?
+          </Typography>
+        }
+        open={confirmation}
+        icon="warning"
+        onCancel={closeConfirmation}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            style={{marginRight: '12px'}}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={closeConfirmation}>
+            No, let me rethink
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => handleSubmit(name, username)}>
             Yes, Let’s go
           </Button>
         </div>
