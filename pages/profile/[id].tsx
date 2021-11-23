@@ -57,8 +57,8 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
         <meta name="twitter:card" content="summary" />
       </Head>
 
-      <ToasterContainer />
       <ProfileTimeline profile={profileDetail} loading={false} />
+      <ToasterContainer />
     </DefaultLayout>
   );
 };
