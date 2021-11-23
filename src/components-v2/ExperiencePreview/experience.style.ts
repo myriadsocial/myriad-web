@@ -7,10 +7,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#FFF',
       borderRadius: 10,
     },
-    mb: {
-      marginBottom: '10px',
-      marginTop: '-20px',
-    },
     avatar: {
       width: '68px',
       height: '68px',

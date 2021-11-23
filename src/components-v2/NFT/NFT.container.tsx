@@ -10,7 +10,7 @@ import Illustration from 'src/images/NFT_Isometric_1.svg';
 const NFTContainer: React.FC = () => {
   const style = useStyles();
   return (
-    <div className={style.root}>
+    <div>
       <div className={style.mb}>
         <TopNavbarComponent description={'Underway'} sectionTitle={SectionTitle.NFT} />
       </div>
