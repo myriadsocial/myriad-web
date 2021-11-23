@@ -11,7 +11,7 @@ const SocialTokenContainer: React.FC = () => {
   const style = useStyles();
 
   return (
-    <div className={style.root}>
+    <div>
       <div className={style.mb}>
         <TopNavbarComponent description={'Underway'} sectionTitle={SectionTitle.SOCIAL_TOKEN} />
       </div>
