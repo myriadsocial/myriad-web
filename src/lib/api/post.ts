@@ -20,9 +20,7 @@ export const getPost = async (
   filters?: TimelineFilter,
   asFriend = false,
 ): Promise<PostList> => {
-  const where: LoopbackWhere<PostProps> = {
-    deletedAt: {exists: false},
-  };
+  const where: LoopbackWhere<PostProps> = {};
 
   let sortField = 'latest';
 
