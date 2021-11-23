@@ -10,7 +10,6 @@ import {NonSelectableSimpleCard} from '../atoms/SimpleCard';
 
 const SearchedExperienceList: React.FC<SearchedExperienceListProps> = ({
   experiences,
-  user,
   onPreview,
   onFollow,
   onSubscribe,
@@ -28,7 +27,7 @@ const SearchedExperienceList: React.FC<SearchedExperienceListProps> = ({
           {experiences.map(experience => (
             <div key={experience.id}>
               <NonSelectableSimpleCard
-                user={user}
+                ownerId={experience.user.id}
                 experienceId={experience.id}
                 title={experience.name ?? 'Unnamed Experience'}
                 creator={experience.user.name ?? 'Unnamed Myrian'}
