@@ -18,6 +18,7 @@ interface SimpleCardProps {
    */
   isSelectable?: boolean;
   user?: User;
+  ownerId?: string;
   experienceId?: string;
   userExperienceId?: string;
   selected?: string | undefined;

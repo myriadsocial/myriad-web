@@ -1,6 +1,7 @@
 import {DotsVerticalIcon} from '@heroicons/react/outline';
 
 import React from 'react';
+import {useSelector} from 'react-redux';
 
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -14,9 +15,12 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles, NonSelectableSimpleCardProps} from '.';
 
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
+
 const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
   experienceId,
-  user,
+  ownerId,
   creator,
   title,
   imgUrl,
@@ -25,6 +29,9 @@ const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
   onPreview,
 }) => {
   const classes = useStyles();
+
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClose = () => {
@@ -48,9 +55,11 @@ const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
     return filename[0];
   };
 
-  const checkCreator = (name: string) => {
-    if (name === 'Lara Schoffield') {
-      return true;
+  const checkCreator = () => {
+    if (user) {
+      if (ownerId === user.id) {
+        return true;
+      }
     }
     return false;
   };
@@ -89,7 +98,7 @@ const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
                 {creator}
               </Typography>
               <Typography variant="caption" color="textSecondary">
-                {checkCreator(creator) ? `(you)` : ''}
+                {checkCreator() ? ` (you)` : ''}
               </Typography>
             </CardContent>
           </div>
@@ -98,20 +107,35 @@ const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
           </IconButton>
         </div>
       </CardActionArea>
-      <Menu
-        classes={{
-          paper: classes.menu,
-        }}
-        anchorEl={anchorEl}
-        getContentAnchorEl={null}
-        anchorOrigin={{vertical: 'top', horizontal: 'center'}}
-        transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}>
-        <MenuItem onClick={handlePreviewExperience}>View details</MenuItem>
-        <MenuItem onClick={handleCloneExperience}>Clone</MenuItem>
-        <MenuItem onClick={handleSubscribeExperience}>Subscribe</MenuItem>
-      </Menu>
+      {checkCreator() ? (
+        <Menu
+          classes={{
+            paper: classes.menu,
+          }}
+          anchorEl={anchorEl}
+          getContentAnchorEl={null}
+          anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+          transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}>
+          <MenuItem onClick={handlePreviewExperience}>View details</MenuItem>
+        </Menu>
+      ) : (
+        <Menu
+          classes={{
+            paper: classes.menu,
+          }}
+          anchorEl={anchorEl}
+          getContentAnchorEl={null}
+          anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+          transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}>
+          <MenuItem onClick={handlePreviewExperience}>View details</MenuItem>
+          <MenuItem onClick={handleCloneExperience}>Clone</MenuItem>
+          <MenuItem onClick={handleSubscribeExperience}>Subscribe</MenuItem>
+        </Menu>
+      )}
     </Card>
   );
 };
