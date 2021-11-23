@@ -38,14 +38,12 @@ const Topic: React.FC<TopicPageProps> = ({experience}) => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
-      <div style={{marginTop: '-20px'}}>
-        <TopNavbarComponent
-          description={type === 'hashtag' ? 'Topics' : 'Experience'}
-          sectionTitle={
-            type === 'hashtag' ? `#${capitalize(tag as string)}` : (experience?.name as string)
-          }
-        />
-      </div>
+      <TopNavbarComponent
+        description={type === 'hashtag' ? 'Topics' : 'Experience'}
+        sectionTitle={
+          type === 'hashtag' ? `#${capitalize(tag as string)}` : (experience?.name as string)
+        }
+      />
 
       <TimelineContainer enableFilter={false} />
 

@@ -29,16 +29,14 @@ const Settings: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
-      <ToasterContainer />
-      <div style={{marginTop: '-20px'}}>
-        <TopNavbarComponent
-          description={
-            selected ? `${selected.title} Settings` : 'Set Privacy and Notification settings'
-          }
-          sectionTitle={SectionTitle.SETTINGS}
-        />
-      </div>
+      <TopNavbarComponent
+        description={
+          selected ? `${selected.title} Settings` : 'Set Privacy and Notification settings'
+        }
+        sectionTitle={SectionTitle.SETTINGS}
+      />
       <SettingsContainer />
+      <ToasterContainer />
     </DefaultLayout>
   );
 };

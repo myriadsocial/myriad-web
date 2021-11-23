@@ -62,9 +62,7 @@ const PostPage: React.FC<PostPageProps> = props => {
         <meta name="twitter:card" content="summary" />
       </Head>
 
-      <div style={{marginTop: '-20px'}}>
-        <TopNavbarComponent description={'Post Detail'} sectionTitle={SectionTitle.TIMELINE} />
-      </div>
+      <TopNavbarComponent description={'Post Detail'} sectionTitle={SectionTitle.TIMELINE} />
 
       <ShowIf condition={removed}>
         <ResourceDeleted />

@@ -22,13 +22,13 @@ const Socials: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
-      <ToasterContainer />
       <TopNavbarComponent
         description={`${socials.length} account connected`}
         sectionTitle={SectionTitle.SOCIAL_MEDIA}
       />
 
       <SocialsContainer />
+      <ToasterContainer />
     </DefaultLayout>
   );
 };

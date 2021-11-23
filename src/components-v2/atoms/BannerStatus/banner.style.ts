@@ -4,7 +4,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     alert: {
       display: 'flex',
-      marginTop: '-20px',
       padding: '12px 24px',
       alignItems: 'center',
       backgroundColor: '#FFD7D7',
