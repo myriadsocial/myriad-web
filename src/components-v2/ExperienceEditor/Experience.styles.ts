@@ -80,6 +80,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         fill: 'currentColor',
       },
     },
+    mb: {
+      marginBottom: '10px',
+    },
     loading: {
       display: 'flex',
       justifyContent: 'center',
