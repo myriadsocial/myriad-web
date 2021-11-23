@@ -26,6 +26,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600,
       marginBottom: '12px',
     },
+    mb: {
+      marginBottom: '10px',
+    },
     mb30: {
       marginBottom: '30px',
     },
