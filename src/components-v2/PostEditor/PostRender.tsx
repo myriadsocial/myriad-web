@@ -80,6 +80,24 @@ export const PostRender: React.FC<PostRenderProps> = props => {
     (node, images: string[] = []) => {
       if (node.text) {
         if (Object.keys(node).length === 1) {
+          if (post.deletedAt) {
+            return (
+              <Typography
+                component="span"
+                style={{
+                  fontWeight: node.bold ? 600 : 400,
+                  fontStyle: node.italic ? 'italic' : 'none',
+                  textDecoration: node.underline
+                    ? 'underline'
+                    : node.strikethrough
+                    ? 'line-through'
+                    : 'none',
+                }}>
+                [post deleted]
+              </Typography>
+            );
+          }
+
           const splitNewLine = node.text.split('\n');
 
           return splitNewLine.map((item: string, key: number) => (
