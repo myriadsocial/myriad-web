@@ -148,7 +148,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   return {
     props: {
       session,
-      title: detail?.name,
+      title: detail?.name ?? null,
       description: detail?.bio ?? null,
       image: detail?.profilePictureURL ?? null,
     },
