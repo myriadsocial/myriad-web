@@ -33,13 +33,6 @@ export const useProfileHook = () => {
           dispatch(fetchProfileDetail(user.id));
           callback && callback();
         }
-
-        dispatch(
-          showToaster({
-            message: 'Success update profile',
-            toasterStatus: Status.SUCCESS,
-          }),
-        );
       }),
     );
   };

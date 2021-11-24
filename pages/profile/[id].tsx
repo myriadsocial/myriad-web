@@ -57,8 +57,8 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
         <meta name="twitter:card" content="summary" />
       </Head>
 
-      <ToasterContainer />
       <ProfileTimeline profile={profileDetail} loading={false} />
+      <ToasterContainer />
     </DefaultLayout>
   );
 };
@@ -149,7 +149,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     props: {
       session,
       title: detail?.name,
-      description: detail?.bio,
+      description: detail?.bio ?? null,
       image: detail?.profilePictureURL ?? null,
     },
   };
