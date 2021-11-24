@@ -13,10 +13,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: 18,
       marginBottom: 20,
 
+      '& .MuiListItem-container': {
+        marginBottom: 8,
+      },
       '& .MuiListItem-root': {
         height: 36,
         width: 'auto',
-        marginBottom: theme.spacing(1),
         padding: theme.spacing(1, 0),
 
         '&.Mui-selected': {
@@ -52,10 +54,28 @@ export const useStyles = makeStyles((theme: Theme) =>
         fill: 'currentColor',
       },
     },
+    description: {
+      marginBottom: 0,
+
+      '& .MuiFormHelperText-root': {
+        position: 'absolute',
+        bottom: 4,
+        right: 0,
+      },
+    },
     info: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+    },
+    action: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+
+      '& .MuiButton-root': {
+        width: 180,
+      },
     },
   }),
 );

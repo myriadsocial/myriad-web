@@ -216,6 +216,8 @@ export const findPosts = async (userId: string, query: string): Promise<PostList
     url: `/posts?q=${query}`,
     method: 'GET',
     params: {
+      timelineType: TimelineType.ALL,
+      userId,
       filter: {
         include: [
           {

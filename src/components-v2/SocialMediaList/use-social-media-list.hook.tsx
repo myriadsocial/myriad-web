@@ -50,6 +50,8 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
   for (const key of enumKeys(SocialsEnum)) {
     const social: SocialsEnum = SocialsEnum[key];
 
+    if (!icons[social]) continue;
+
     socials.push({
       id: social,
       icon: icons[social] as JSX.Element,

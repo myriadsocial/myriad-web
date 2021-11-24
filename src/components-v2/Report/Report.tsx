@@ -40,6 +40,7 @@ export const Report: React.FC<ReportProps> = props => {
   const list = usePostReportList();
   const [type, setType] = useState<string | null>(null);
   const [description, setDescription] = useState('');
+  const CHARACTER_LIMIT = 200;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDescription(event.target.value);
@@ -83,8 +84,15 @@ export const Report: React.FC<ReportProps> = props => {
         label="Description"
         variant="outlined"
         fullWidth
+        multiline
+        rows={4}
         value={description}
         margin="none"
+        inputProps={{
+          maxlength: CHARACTER_LIMIT,
+        }}
+        className={styles.description}
+        helperText={`${description.length}/${CHARACTER_LIMIT}`}
         onChange={handleChange}
       />
 
@@ -104,14 +112,19 @@ export const Report: React.FC<ReportProps> = props => {
         </CardContent>
       </Card>
 
-      <Button
-        fullWidth
-        disabled={!type || description.length === 0}
-        variant="contained"
-        color="primary"
-        onClick={submitReport}>
-        Confirm
-      </Button>
+      <div className={styles.action}>
+        <Button variant="outlined" color="secondary" onClick={onClose}>
+          Cancel
+        </Button>
+
+        <Button
+          disabled={!type || description.length === 0}
+          variant="contained"
+          color="primary"
+          onClick={submitReport}>
+          Confirm
+        </Button>
+      </div>
     </Modal>
   );
 };
