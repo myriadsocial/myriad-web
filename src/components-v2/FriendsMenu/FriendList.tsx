@@ -1,13 +1,18 @@
-import React from 'react';
+import {DotsHorizontalIcon} from '@heroicons/react/outline';
+
+import React, {useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Link from 'next/link';
+import {useRouter} from 'next/router';
 
+import {IconButton, Menu, MenuItem} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {FilterDropdownMenu} from '../atoms/FilterDropdownMenu';
@@ -15,7 +20,7 @@ import SearchComponent from '../atoms/Search/SearchBox';
 import {friendFilterOptions, FriendType} from './default';
 import {FriendListProps} from './default';
 import {useStyles} from './friend.style';
-import {useFriendList} from './hooks/use-friend-list.hook';
+import {FriendDetail, useFriendList} from './hooks/use-friend-list.hook';
 
 import {Empty} from 'src/components-v2/atoms/Empty';
 import {Loading} from 'src/components-v2/atoms/Loading';
@@ -34,6 +39,40 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     onLoadNextPage,
   } = props;
   const style = useStyles();
+  const router = useRouter();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [friendId, setFriendId] = useState('');
+
+  const handleOpenFriendSetting =
+    (friend: FriendDetail) => (event: React.MouseEvent<HTMLButtonElement>) => {
+      setFriendId(friend.id);
+      setAnchorEl(event.currentTarget);
+    };
+
+  const handleCloseFriendSetting = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleVisitProfile = () => {
+    router.push(`/profile/${friendId}`);
+    setAnchorEl(null);
+  };
+
+  const handleSendTip = () => {
+    setAnchorEl(null);
+  };
+
+  const handleUnfriend = () => {
+    handleClose();
+  };
+
+  const handleBlock = () => {
+    handleClose();
+  };
 
   const list = useFriendList(friends, user);
 
@@ -61,9 +100,11 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         />
       </ShowIf>
 
-      <SearchComponent onSubmit={handleSearch} placeholder={'Search friend'} />
+      <div className={style.list}>
+        <SearchComponent onSubmit={handleSearch} placeholder={'Search friend'} />
+      </div>
 
-      <List className={style.list}>
+      <List>
         <InfiniteScroll
           scrollableTarget="scrollable-timeline"
           dataLength={list.length}
@@ -74,7 +115,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
             <ListItem
               key={friend.id}
               classes={{root: background ? style.backgroundEven : ''}}
-              className={style.item}
+              className={style.option}
               alignItems="center">
               <ListItemAvatar>
                 <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
@@ -93,8 +134,43 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                   1 mutual friends
                 </Typography>
               </ListItemText>
+
+              <div className="hidden-button">
+                <IconButton
+                  aria-label="friend-setting"
+                  classes={{root: style.bgIcon}}
+                  color="primary"
+                  onClick={handleOpenFriendSetting(friend)}
+                  disableRipple={true}
+                  disableFocusRipple={true}
+                  disableTouchRipple>
+                  <SvgIcon
+                    component={DotsHorizontalIcon}
+                    classes={{root: style.icon}}
+                    fontSize="small"
+                  />
+                </IconButton>
+              </div>
             </ListItem>
           ))}
+
+          <Menu
+            id="friend-setting"
+            anchorEl={anchorEl}
+            style={{width: 170}}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleCloseFriendSetting}
+            MenuListProps={{onMouseLeave: handleClose}}>
+            <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
+            <MenuItem onClick={handleSendTip}>Send direct tip</MenuItem>
+            <MenuItem className={style.danger} onClick={handleUnfriend}>
+              Unfriend
+            </MenuItem>
+            <MenuItem className={style.danger} onClick={handleBlock}>
+              Block this person
+            </MenuItem>
+          </Menu>
         </InfiniteScroll>
       </List>
     </div>
