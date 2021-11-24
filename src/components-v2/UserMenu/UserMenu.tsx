@@ -41,7 +41,8 @@ export const UserMenu: React.FC<UserMenuProps> = props => {
         active={activeTab}
         onChangeTab={handleTabChange}
         size="small"
-        padding={0}
+        paddingLeft={30}
+        paddingRight={30}
       />
     </Paper>
   );
