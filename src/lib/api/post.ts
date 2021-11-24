@@ -201,6 +201,10 @@ export const getPost = async (
       post.text = post.text.replace('&amp;#x200B;', '&nbsp;');
     }
 
+    if (post.deletedAt) {
+      post.text = '[post removed]';
+    }
+
     return post;
   });
 
