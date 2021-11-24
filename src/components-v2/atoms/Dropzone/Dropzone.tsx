@@ -1,7 +1,7 @@
 import {XIcon} from '@heroicons/react/outline';
 
 import React, {useState, useEffect} from 'react';
-import {FileRejection, useDropzone} from 'react-dropzone';
+import {ErrorCode, FileError, FileRejection, useDropzone} from 'react-dropzone';
 
 import {
   Button,
@@ -196,6 +196,14 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     return `Upload ${capitalize(type)}`;
   };
 
+  const getErrorMessage = (error: FileError): string => {
+    if (error.code === ErrorCode.FileTooLarge) {
+      return `File is larger than ${maxSize}Mb`;
+    }
+
+    return error.message;
+  };
+
   return (
     <div className={styles.root}>
       <div {...getRootProps({className: 'dropzone'})} className={styles.dropzone}>
@@ -288,7 +296,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
       <Toaster
         open={Boolean(error)}
         toasterStatus={Status.DANGER}
-        message={error ? error[0].errors[0].message : ''}
+        message={error ? getErrorMessage(error[0].errors[0]) : ''}
         onClose={closeError}
       />
     </div>

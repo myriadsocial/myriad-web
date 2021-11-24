@@ -113,7 +113,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewExperience(prevExperience => ({
       ...prevExperience,
-      [field]: event.target.value,
+      [field]: event.target.value.trimStart(),
     }));
   };
 
