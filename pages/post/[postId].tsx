@@ -148,7 +148,11 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
         showAsDeleted = userId !== post.createdBy && !post.importers.includes(userId);
       }
 
-      if (post.visibility === PostVisibility.FRIEND) {
+      if (
+        post.visibility === PostVisibility.FRIEND &&
+        ((post.importers.length > 0 && !post.importers.includes(userId)) ||
+          post.createdBy !== userId)
+      ) {
         const {data: requests} = await FriendAPI.checkFriendStatus(userId, [
           ...post.importers,
           post.createdBy,
@@ -180,7 +184,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchExperience()),
     ]);
   }
-  console.log('POST', post);
+
   return {
     props: {
       session,
