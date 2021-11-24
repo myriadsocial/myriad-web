@@ -29,7 +29,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       boxSizing: 'border-box',
       padding: '30px',
       paddingBottom: '20px',
-      height: '260px',
+      minHeight: '260px',
       position: 'relative',
       width: '100%',
       borderTopLeftRadius: '10px',
