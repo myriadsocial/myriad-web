@@ -53,6 +53,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
   const [username, setUsername] = useState<string>(user.username ?? '');
   const [isEdited, setIsEdited] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
   const [isError, setIsError] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
 
@@ -83,6 +84,14 @@ export const ProfileEditComponent: React.FC<Props> = props => {
       if (newUser) {
         onSave(newUser);
       }
+    }
+  };
+
+  const saveConfirmation = () => {
+    if (username !== user.username) {
+      handleOpenConfirmation();
+    } else {
+      saveUser();
     }
   };
 
@@ -143,6 +152,10 @@ export const ProfileEditComponent: React.FC<Props> = props => {
 
   const openPrompt = () => {
     setOpen(!open);
+  };
+
+  const handleOpenConfirmation = () => {
+    setOpenConfirmation(!openConfirmation);
   };
 
   return (
@@ -269,7 +282,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
             variant="contained"
             color="primary"
             disableElevation
-            onClick={saveUser}
+            onClick={saveConfirmation}
             disabled={isError || handleError()}>
             Save changes
           </Button>
@@ -300,6 +313,35 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           </Button>
           <Button size="small" variant="contained" color="primary" onClick={onCancel}>
             Yes, Leave it
+          </Button>
+        </div>
+      </PromptComponent>
+      <PromptComponent
+        title="Are you sure?"
+        subtitle={
+          <>
+            <Typography>
+              <b>Username</b> cannot be change later
+            </Typography>
+            <Typography>
+              but you can still change your <b>Display Name</b>
+            </Typography>
+          </>
+        }
+        icon="warning"
+        open={openConfirmation}
+        onCancel={handleOpenConfirmation}>
+        <div className={style.flexCenter}>
+          <Button
+            className={style.m1}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={handleOpenConfirmation}>
+            No, Let me think
+          </Button>
+          <Button size="small" variant="contained" color="primary" onClick={saveUser}>
+            Yes, Let’s go
           </Button>
         </div>
       </PromptComponent>

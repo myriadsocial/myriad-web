@@ -1,6 +1,11 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
+import {useRouter} from 'next/router';
+
+import {Button, Typography} from '@material-ui/core';
+
+import {PromptComponent} from '../../atoms/Prompt/prompt.component';
 import {ProfileEditComponent} from './ProfileEdit';
 
 import {useProfileHook} from 'src/components/profile/use-profile.hook';
@@ -13,7 +18,9 @@ type Props = {
 };
 
 export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
+  const router = useRouter();
   const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const [open, setOpen] = React.useState(false);
   const {
     updateProfile,
     loading,
@@ -45,12 +52,27 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
 
   const onSave = (newUser: Partial<User>) => {
     updateProfile(newUser, () => {
-      onClose();
+      openPrompt();
     });
   };
 
-  const onCancel = () => {
+  const finishedEditProfile = () => {
     onClose();
+    handleCloseEdit();
+  };
+
+  const handleCloseEdit = () => {
+    router.push(
+      {
+        pathname: `/profile/${user?.id}`,
+      },
+      undefined,
+      {shallow: true},
+    );
+  };
+
+  const openPrompt = () => {
+    setOpen(!open);
   };
 
   return (
@@ -67,9 +89,19 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
           isChanged={usernameStatus}
           checkAvailable={handleUsernameAvailable}
           isAvailable={usernameAvailable}
-          onCancel={onCancel}
+          onCancel={finishedEditProfile}
         />
       )}
+      <PromptComponent
+        title="Profile saved!"
+        subtitle={<Typography>Your profile changes has saved</Typography>}
+        icon="success"
+        open={open}
+        onCancel={openPrompt}>
+        <Button size="small" variant="contained" color="primary" onClick={finishedEditProfile}>
+          See Profile
+        </Button>
+      </PromptComponent>
     </>
   );
 };
