@@ -1,5 +1,7 @@
+import {Status} from '../../interfaces/toaster';
 import {Actions as BaseAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
+import {ShowToaster, showToaster} from '../toaster/actions';
 import * as constants from './constants';
 
 import axios from 'axios';
@@ -153,6 +155,7 @@ export type Actions =
   | SetTippedContent
   | IncreaseCommentCount
   | DecreaseCommentCount
+  | ShowToaster
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -297,6 +300,13 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
           user,
         },
       });
+
+      dispatch(
+        showToaster({
+          toasterStatus: Status.SUCCESS,
+          message: 'Success created post!',
+        }),
+      );
     } catch (error) {
       dispatch(
         setError({
@@ -333,6 +343,13 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
         type: constants.ADD_POST_TO_TIMELINE,
         post,
       });
+
+      dispatch(
+        showToaster({
+          toasterStatus: Status.SUCCESS,
+          message: 'Success created post!',
+        }),
+      );
 
       callback && callback();
     } catch (error) {
