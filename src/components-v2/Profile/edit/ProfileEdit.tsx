@@ -143,16 +143,11 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     const b = user.name === newUser.name;
     const c = user.websiteURL === newUser.websiteURL;
     setIsEdited(!a || !b || !c);
-    //1 1 1 -> 1
-    //0 0 0 -> 0
   };
 
   const handleCancel = () => {
-    isEdited && openPrompt(); //true -> open
+    isEdited && openPrompt();
     !isEdited && onCancel();
-    console.log(user.bio, 'user');
-    console.log(user.websiteURL, 'user');
-    console.log(newUser, 'newUser');
   };
 
   const openPrompt = () => {

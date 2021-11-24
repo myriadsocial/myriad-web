@@ -33,11 +33,11 @@ const Home: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
-      <ToasterContainer />
       <Banner />
       <SearchBoxContainer onSubmitSearch={performSearch} />
       <RichTextContainer />
       <TimelineContainer />
+      <ToasterContainer />
     </DefaultLayout>
   );
 };
