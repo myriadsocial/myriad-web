@@ -45,9 +45,9 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     checkAvailable,
   } = props;
   const [newUser, setNewUser] = useState<Partial<User>>({
-    name: user.name ?? '',
-    bio: user.bio ?? '',
-    websiteURL: user.websiteURL ?? '',
+    name: user.name,
+    bio: user.bio,
+    websiteURL: user.websiteURL,
   });
 
   const [username, setUsername] = useState<string>(user.username ?? '');
@@ -143,11 +143,16 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     const b = user.name === newUser.name;
     const c = user.websiteURL === newUser.websiteURL;
     setIsEdited(!a || !b || !c);
+    //1 1 1 -> 1
+    //0 0 0 -> 0
   };
 
   const handleCancel = () => {
-    isEdited && openPrompt();
+    isEdited && openPrompt(); //true -> open
     !isEdited && onCancel();
+    console.log(user.bio, 'user');
+    console.log(user.websiteURL, 'user');
+    console.log(newUser, 'newUser');
   };
 
   const openPrompt = () => {
@@ -254,6 +259,8 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           value={newUser?.bio}
           onChange={handleChange('bio')}
           labelWidth={23}
+          inputProps={{maxLength: 160}}
+          multiline
         />
       </FormControl>
 
