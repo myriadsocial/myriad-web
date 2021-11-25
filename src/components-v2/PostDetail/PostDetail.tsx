@@ -72,7 +72,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const [maxLength, setMaxLength] = useState<number | undefined>(250);
   const [viewContent, setViewContent] = useState(!post.isNSFW);
   const owner = post.createdBy === user?.id;
-  const isOwnSocialPost = user?.people.find(person => person.id === post.peopleId) ? true : false;
+  const isOwnSocialPost = user?.people?.find(person => person.id === post.peopleId) ? true : false;
 
   const isImportedPost = post.platform !== 'myriad' || post.createdBy !== user?.id ? true : false;
 

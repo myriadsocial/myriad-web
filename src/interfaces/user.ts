@@ -42,7 +42,7 @@ export type UserMetric = {
 
 export interface User extends UserProps, BaseModel {
   currencies: Currency[];
-  people: People[];
+  people?: People[];
   metric?: UserMetric;
   activityLogs?: ActivityLog[];
 }
