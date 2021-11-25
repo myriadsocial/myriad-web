@@ -30,10 +30,10 @@ const initalState: ConfigState = {
       social: 'public',
     },
     notification: {
-      comment: true,
-      tip: true,
-      mention: true,
-      friend: true,
+      comments: true,
+      tips: true,
+      mentions: true,
+      friendRequests: true,
     },
   },
 };
