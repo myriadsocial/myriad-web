@@ -27,7 +27,12 @@ type NotificationSettingsProps = {
 export const NotificationSettings: React.FC<NotificationSettingsProps> = props => {
   const {value, onSaveSetting} = props;
   const styles = useStyles();
-  const {settings, settingsProp, changeSetting} = useNotificationSetting(value);
+  const {settings, settingsProp, changeSetting, setNotificationSetting} =
+    useNotificationSetting(value);
+
+  React.useEffect(() => {
+    setNotificationSetting(value);
+  }, [value]);
 
   const handleChangeSetting =
     (item: NotificationSettingsOption) => (event: React.ChangeEvent<HTMLInputElement>) => {
