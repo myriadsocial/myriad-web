@@ -24,6 +24,7 @@ import {FriendListProps} from './default';
 import {useStyles} from './friend.style';
 import {FriendDetail, useFriendList} from './hooks/use-friend-list.hook';
 
+import {useToasterHook} from 'src/hooks/use-toaster.hook';
 import {SendTipContainer} from 'src/components-v2/SendTip';
 import {Empty} from 'src/components-v2/atoms/Empty';
 import {Loading} from 'src/components-v2/atoms/Loading';
@@ -31,6 +32,7 @@ import {Modal} from 'src/components-v2/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {blockedFriendList, removedFriendList} from 'src/reducers/friend/actions';
+import { Status } from 'src/interfaces/toaster';
 
 export const FriendListComponent: React.FC<FriendListProps> = props => {
   const {
@@ -47,10 +49,12 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentFriend, setCurrentFriend] = useState<null | FriendDetail>(null);
-  const [tippedUser, setTippedUser] = useState(false);
+  const [sendTipOpened, setSendTipOpened] = useState(false);
   const [friendList, setFriendList] = useState<FriendDetail[]>([]);
   const [openRemoveFriend, setOpenRemoveFriend] = useState(false);
   const [openBlockUser, setOpenBlockUser] = useState(false);
+
+  const {openToaster} = useToasterHook();
 
   const dispatch = useDispatch();
 
@@ -83,10 +87,13 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     handleClose();
   };
 
-  const closeSendTip = () => {};
+  const closeSendTip = () => {
+    setSendTipOpened(false)
+  };
 
   const handleSendTip = () => {
-    setTippedUser(true);
+    setSendTipOpened(true);
+    handleClose();
   };
 
   const handleUnfriend = () => {
@@ -138,6 +145,11 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       setFriendList(newFriendList);
       closeConfirmRemoveFriend();
 
+      openToaster({
+        message: `${currentFriend?.name} has removed from your friend list`,
+        toasterStatus: Status.SUCCESS,
+      });
+
       setCurrentFriend(null);
     }
   };
@@ -155,8 +167,14 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       dispatch(blockedFriendList(currentFriend.id));
 
       setFriendList(newFriendList);
-      setCurrentFriend(null);
       closeConfirmBlockUser();
+
+      openToaster({
+        message: 'User successfully blocked',
+        toasterStatus: Status.SUCCESS,
+      });
+
+      setCurrentFriend(null);
     }
   };
 
@@ -214,7 +232,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
               <div className="hidden-button">
                 <IconButton
                   aria-label="friend-setting"
-                  classes={{root: style.bgIcon}}
+                  classes={{root: style.iconbutton}}
                   color="primary"
                   onClick={handleOpenFriendSetting(friend)}
                   disableRipple={true}
@@ -230,83 +248,85 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
             </ListItem>
           ))}
 
-          <Menu
-            id="friend-setting"
-            anchorEl={anchorEl}
-            style={{width: 170}}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleCloseFriendSetting}>
-            <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
-            <MenuItem onClick={handleSendTip}>Send direct tip</MenuItem>
-            <MenuItem className={style.danger} onClick={handleUnfriend}>
-              Unfriend
-            </MenuItem>
-            <MenuItem className={style.danger} onClick={handleBlock}>
-              Block this person
-            </MenuItem>
-          </Menu>
-
-          <Modal
-            gutter="none"
-            open={tippedUser}
-            onClose={closeSendTip}
-            title="Send Tip"
-            subtitle="Finding this post is insightful? Send a tip!">
-            <SendTipContainer />
-          </Modal>
-
-          <PromptComponent
-            onCancel={closeConfirmRemoveFriend}
-            open={openRemoveFriend}
-            icon="danger"
-            title={`Unfriend ${currentFriend ? currentFriend.name : 'Unknown'}?`}
-            subtitle="You will not able to search and see post from this user">
-            <div className={`${style.flexCenter}`}>
-              <Button
-                onClick={closeConfirmRemoveFriend}
-                className={style.m1}
-                size="small"
-                variant="outlined"
-                color="secondary">
-                Cancel
-              </Button>
-              <Button
-                onClick={handleRemoveFriend}
-                className={style.error}
-                size="small"
-                variant="contained">
-                Unfriend Now
-              </Button>
-            </div>
-          </PromptComponent>
-
-          <PromptComponent
-            onCancel={closeConfirmBlockUser}
-            open={openBlockUser}
-            icon="danger"
-            title="Block User?"
-            subtitle="You will not able to search and see post from this user">
-            <div className={`${style.flexCenter}`}>
-              <Button
-                onClick={closeConfirmBlockUser}
-                className={style.m1}
-                size="small"
-                variant="outlined"
-                color="secondary">
-                Cancel
-              </Button>
-              <Button
-                onClick={handleBlockUser}
-                className={style.error}
-                size="small"
-                variant="contained">
-                Block Now
-              </Button>
-            </div>
-          </PromptComponent>
         </InfiniteScroll>
       </List>
+
+      <Modal
+        gutter="none"
+        open={sendTipOpened}
+        onClose={closeSendTip}
+        title="Send Tip"
+        subtitle="Finding this post is insightful? Send a tip!"
+      >
+        <SendTipContainer />
+      </Modal>
+
+      <Menu
+        id="friend-setting"
+        anchorEl={anchorEl}
+        style={{width: 170}}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleCloseFriendSetting}>
+        <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
+        <MenuItem onClick={handleSendTip}>Send direct tip</MenuItem>
+        <MenuItem className={style.danger} onClick={handleUnfriend}>
+          Unfriend
+        </MenuItem>
+        <MenuItem className={style.danger} onClick={handleBlock}>
+          Block this person
+        </MenuItem>
+      </Menu>
+
+      <PromptComponent
+        onCancel={closeConfirmRemoveFriend}
+        open={openRemoveFriend}
+        icon="danger"
+        title={`Unfriend ${currentFriend ? currentFriend.name : 'Unknown'}?`}
+        subtitle="You will not able to search and see post from this user">
+        <div className={`${style.flexCenter}`}>
+          <Button
+            onClick={closeConfirmRemoveFriend}
+            className={style.m1}
+            size="small"
+            variant="outlined"
+            color="secondary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleRemoveFriend}
+            className={style.error}
+            size="small"
+            variant="contained">
+            Unfriend Now
+          </Button>
+        </div>
+      </PromptComponent>
+
+      <PromptComponent
+        onCancel={closeConfirmBlockUser}
+        open={openBlockUser}
+        icon="danger"
+        title="Block User?"
+        subtitle="You will not able to search and see post from this user">
+        <div className={`${style.flexCenter}`}>
+          <Button
+            onClick={closeConfirmBlockUser}
+            className={style.m1}
+            size="small"
+            variant="outlined"
+            color="secondary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleBlockUser}
+            className={style.error}
+            size="small"
+            variant="contained">
+            Block Now
+          </Button>
+        </div>
+      </PromptComponent>
     </div>
   );
 };
