@@ -1,4 +1,4 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import {alpha, createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -17,6 +17,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     list: {
       padding: '20px',
+      '& .MuiListItem-button:hover': {
+        backgroundColor: alpha('#FFC857', 0.15),
+      },
     },
     item: {
       paddingLeft: theme.spacing(0.5),
