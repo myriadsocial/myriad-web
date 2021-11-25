@@ -3,13 +3,10 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
-import {Button} from '@material-ui/core';
-
 import {useExperienceHook} from '../../../hooks/use-experience-hook';
 import {ExperienceTabPanel} from './ExperienceTabPanel';
 
 import {ExperienceType} from 'src/components-v2/Timeline/default';
-import {Empty} from 'src/components-v2/atoms/Empty';
 import {UserExperience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
@@ -24,7 +21,6 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
   const {user} = props;
   const {subscribeExperience} = useExperienceHook();
   const router = useRouter();
-  const userLogin = useSelector<RootState, User | undefined>(state => state.userState.user);
 
   const dispatch = useDispatch();
 
@@ -51,24 +47,6 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
   const handlePreviewExperience = (experienceId: string) => {
     router.push(`/experience/${experienceId}/preview`);
   };
-
-  const handleCreateExperience = () => {
-    router.push('/experience/create');
-  };
-
-  if (!experiences.length && userLogin?.id === user?.id) {
-    return (
-      <Empty title="You haven’t created any experiences yet">
-        <Button onClick={handleCreateExperience} variant="contained" size="small" color="primary">
-          Create my experience
-        </Button>
-      </Empty>
-    );
-  }
-
-  if (!experiences.length) {
-    return <Empty title="No experience yet" subtitle="This user hasn't experience yet" />;
-  }
 
   return (
     <ExperienceTabPanel
