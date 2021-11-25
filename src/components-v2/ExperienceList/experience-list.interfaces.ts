@@ -22,6 +22,7 @@ interface NonSelectableExperienceList {
   onFollow?: (experienceId: string) => void;
   onPreview?: (experienceId: string) => void;
   onDelete?: (experienceId: string) => void;
+  isFilterTriggered?: boolean;
 }
 
 type NonSelectableExperienceListProps = Omit<

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {UserExperience} from '../../../interfaces/experience';
 import {NonSelectableExperienceList} from '../../ExperienceList';
@@ -16,8 +16,11 @@ type ExperienceTabPanelProps = {
 export const ExperienceTabPanel: React.FC<ExperienceTabPanelProps> = props => {
   const {experiences, onSubscribe, onFollow, onPreview, onFilter} = props;
 
+  const [filterTriggered, setFilterTriggered] = useState(false);
+
   const handleFilterSelected = (selected: string) => {
     onFilter(selected as ExperienceType);
+    setFilterTriggered(true);
   };
 
   return (
@@ -29,6 +32,7 @@ export const ExperienceTabPanel: React.FC<ExperienceTabPanelProps> = props => {
       />
 
       <NonSelectableExperienceList
+        isFilterTriggered={filterTriggered}
         experiences={experiences}
         onSubscribe={onSubscribe}
         onFollow={onFollow}
