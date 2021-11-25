@@ -9,7 +9,8 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       minHeight: '66vh',
-      //height: 320,
+      background: 'white',
+      borderRadius: 8, //height: 320,
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
