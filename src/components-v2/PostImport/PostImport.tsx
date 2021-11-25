@@ -81,12 +81,11 @@ export const PostImport: React.FC<PostImportProps> = props => {
       setPreviewUrl(url);
       setIsValidUrl(true);
       onChange(url);
-      
     }
 
     const matchFacebook = regex[SocialsEnum.FACEBOOK].exec(url);
     if (matchFacebook) {
-      setSocial(SocialsEnum.FACEBOOK)
+      setSocial(SocialsEnum.FACEBOOK);
       setPostId(matchFacebook[3]);
       setPreviewUrl(url);
       setIsValidUrl(true);
@@ -95,7 +94,7 @@ export const PostImport: React.FC<PostImportProps> = props => {
     }
     const matchTelegram = regex[SocialsEnum.TELEGRAM].exec(url);
     if (matchTelegram) {
-      setSocial(SocialsEnum.FACEBOOK)
+      setSocial(SocialsEnum.FACEBOOK);
       setPostId(matchTelegram[0]);
       setPreviewUrl(url);
       setIsValidUrl(true);
