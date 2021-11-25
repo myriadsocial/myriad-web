@@ -1,12 +1,13 @@
 import {DotsHorizontalIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import {useDispatch} from 'react-redux';
 
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
-import {IconButton, Menu, MenuItem} from '@material-ui/core';
+import {IconButton, Menu, MenuItem, Button} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -16,16 +17,20 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {FilterDropdownMenu} from '../atoms/FilterDropdownMenu';
+import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import SearchComponent from '../atoms/Search/SearchBox';
 import {friendFilterOptions, FriendType} from './default';
 import {FriendListProps} from './default';
 import {useStyles} from './friend.style';
 import {FriendDetail, useFriendList} from './hooks/use-friend-list.hook';
 
+import {SendTipContainer} from 'src/components-v2/SendTip';
 import {Empty} from 'src/components-v2/atoms/Empty';
 import {Loading} from 'src/components-v2/atoms/Loading';
+import {Modal} from 'src/components-v2/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
+import {blockedFriendList, removedFriendList} from 'src/reducers/friend/actions';
 
 export const FriendListComponent: React.FC<FriendListProps> = props => {
   const {
@@ -41,11 +46,22 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   const style = useStyles();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [friendId, setFriendId] = useState('');
+  const [currentFriend, setCurrentFriend] = useState<null | FriendDetail>(null);
+  const [tippedUser, setTippedUser] = useState(false);
+  const [friendList, setFriendList] = useState<FriendDetail[]>([]);
+  const [openRemoveFriend, setOpenRemoveFriend] = useState(false);
+  const [openBlockUser, setOpenBlockUser] = useState(false);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const list = useFriendList(friends, user);
+    setFriendList(list);
+  }, [friends, user]);
 
   const handleOpenFriendSetting =
-    (friend: FriendDetail) => (event: React.MouseEvent<HTMLButtonElement>) => {
-      setFriendId(friend.id);
+    (currentFriend: FriendDetail) => (event: React.MouseEvent<HTMLButtonElement>) => {
+      setCurrentFriend(currentFriend);
       setAnchorEl(event.currentTarget);
     };
 
@@ -58,23 +74,38 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   };
 
   const handleVisitProfile = () => {
-    router.push(`/profile/${friendId}`);
-    setAnchorEl(null);
+    if (!currentFriend) {
+      router.push('/404');
+    } else {
+      router.push(`/profile/${currentFriend.id}`);
+    }
+
+    handleClose();
   };
 
+  const closeSendTip = () => {};
+
   const handleSendTip = () => {
-    setAnchorEl(null);
+    setTippedUser(true);
   };
 
   const handleUnfriend = () => {
+    if (!currentFriend) {
+      router.push('/404');
+    } else {
+      setOpenRemoveFriend(true);
+    }
     handleClose();
   };
 
   const handleBlock = () => {
+    if (!currentFriend) {
+      router.push('/404');
+    } else {
+      setOpenBlockUser(true);
+    }
     handleClose();
   };
-
-  const list = useFriendList(friends, user);
 
   const handleFilterSelected = (selected: string) => {
     onFilter(selected as FriendType);
@@ -82,6 +113,51 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
 
   const handleSearch = (query: string) => {
     onSearch(query);
+  };
+
+  const closeConfirmRemoveFriend = () => {
+    setOpenRemoveFriend(false);
+  };
+
+  const handleRemoveFriend = () => {
+    if (!currentFriend) {
+      router.push('/404');
+    } else {
+      const removedFriend = friends.find(friend => {
+        if (friend.requesteeId === currentFriend.id || friend.requestorId === currentFriend.id)
+          return true;
+        return false;
+      });
+
+      if (!removedFriend) return;
+
+      dispatch(removedFriendList(removedFriend));
+
+      const newFriendList = friendList.filter(friend => friend.id !== currentFriend.id);
+
+      setFriendList(newFriendList);
+      closeConfirmRemoveFriend();
+
+      setCurrentFriend(null);
+    }
+  };
+
+  const closeConfirmBlockUser = () => {
+    setOpenBlockUser(false);
+  };
+
+  const handleBlockUser = () => {
+    if (!currentFriend) {
+      router.push('/404');
+    } else {
+      const newFriendList = friendList.filter(friend => friend.id !== currentFriend.id);
+
+      dispatch(blockedFriendList(currentFriend.id));
+
+      setFriendList(newFriendList);
+      setCurrentFriend(null);
+      closeConfirmBlockUser();
+    }
   };
 
   if (friends.length === 0) {
@@ -107,11 +183,11 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       <List>
         <InfiniteScroll
           scrollableTarget="scrollable-timeline"
-          dataLength={list.length}
+          dataLength={friendList.length}
           hasMore={hasMore}
           next={onLoadNextPage}
           loader={<Loading />}>
-          {list.map(friend => (
+          {friendList.map(friend => (
             <ListItem
               key={friend.id}
               classes={{root: background ? style.backgroundEven : ''}}
@@ -160,8 +236,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
             style={{width: 170}}
             keepMounted
             open={Boolean(anchorEl)}
-            onClose={handleCloseFriendSetting}
-            MenuListProps={{onMouseLeave: handleClose}}>
+            onClose={handleCloseFriendSetting}>
             <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
             <MenuItem onClick={handleSendTip}>Send direct tip</MenuItem>
             <MenuItem className={style.danger} onClick={handleUnfriend}>
@@ -171,6 +246,65 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
               Block this person
             </MenuItem>
           </Menu>
+
+          <Modal
+            gutter="none"
+            open={tippedUser}
+            onClose={closeSendTip}
+            title="Send Tip"
+            subtitle="Finding this post is insightful? Send a tip!">
+            <SendTipContainer />
+          </Modal>
+
+          <PromptComponent
+            onCancel={closeConfirmRemoveFriend}
+            open={openRemoveFriend}
+            icon="danger"
+            title={`Unfriend ${currentFriend ? currentFriend.name : 'Unknown'}?`}
+            subtitle="You will not able to search and see post from this user">
+            <div className={`${style.flexCenter}`}>
+              <Button
+                onClick={closeConfirmRemoveFriend}
+                className={style.m1}
+                size="small"
+                variant="outlined"
+                color="secondary">
+                Cancel
+              </Button>
+              <Button
+                onClick={handleRemoveFriend}
+                className={style.error}
+                size="small"
+                variant="contained">
+                Unfriend Now
+              </Button>
+            </div>
+          </PromptComponent>
+
+          <PromptComponent
+            onCancel={closeConfirmBlockUser}
+            open={openBlockUser}
+            icon="danger"
+            title="Block User?"
+            subtitle="You will not able to search and see post from this user">
+            <div className={`${style.flexCenter}`}>
+              <Button
+                onClick={closeConfirmBlockUser}
+                className={style.m1}
+                size="small"
+                variant="outlined"
+                color="secondary">
+                Cancel
+              </Button>
+              <Button
+                onClick={handleBlockUser}
+                className={style.error}
+                size="small"
+                variant="contained">
+                Block Now
+              </Button>
+            </div>
+          </PromptComponent>
         </InfiniteScroll>
       </List>
     </div>
