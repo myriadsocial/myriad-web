@@ -45,9 +45,9 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     checkAvailable,
   } = props;
   const [newUser, setNewUser] = useState<Partial<User>>({
-    name: user.name ?? '',
-    bio: user.bio ?? '',
-    websiteURL: user.websiteURL ?? '',
+    name: user.name,
+    bio: user.bio,
+    websiteURL: user.websiteURL,
   });
 
   const [username, setUsername] = useState<string>(user.username ?? '');
@@ -254,6 +254,8 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           value={newUser?.bio}
           onChange={handleChange('bio')}
           labelWidth={23}
+          inputProps={{maxLength: 160}}
+          multiline
         />
       </FormControl>
 
