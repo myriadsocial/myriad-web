@@ -5,6 +5,7 @@ import * as constants from './constants';
 import {Action} from 'redux';
 import {Currency} from 'src/interfaces/currency';
 import {NotificationSettingItems, PrivacySettingType, PrivacyType} from 'src/interfaces/setting';
+import * as SettingAPI from 'src/lib/api/setting';
 import * as TokenAPI from 'src/lib/api/token';
 import {ThunkActionCreator} from 'src/types/thunk';
 
@@ -50,16 +51,51 @@ export const updatePrivacySetting = (
   value,
 });
 
-export const updateNotificationSetting = (
-  settings: NotificationSettingItems,
-): UpdateNotificationSetting => ({
-  type: constants.UPDATE_NOTIFICATION_SETTING,
-  settings,
-});
-
 /**
  * Action Creator
  */
+export const updateNotificationSetting: ThunkActionCreator<Action, RootState> =
+  (id: string, settings: NotificationSettingItems, callback?: () => void) => async dispatch => {
+    dispatch(setLoading(true));
+
+    try {
+      await SettingAPI.updateNotificationSettings(id, settings);
+      console.log(settings, 'hmm');
+      dispatch({
+        type: constants.UPDATE_NOTIFICATION_SETTING,
+        settings,
+      });
+      callback && callback();
+    } catch (error) {
+      dispatch(setError(error.message));
+      console.log(error);
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const fetchNotificationSetting: ThunkActionCreator<Action, RootState> =
+  (id: string) => async dispatch => {
+    dispatch(setLoading(true));
+
+    try {
+      const data = await SettingAPI.getNotificationSettings(id);
+      dispatch({
+        type: constants.UPDATE_NOTIFICATION_SETTING,
+        settings: {
+          mentions: data.mentions,
+          comments: data.comments,
+          friendRequests: data.friendRequests,
+          tips: data.tips,
+        },
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
 export const fetchAvailableToken: ThunkActionCreator<Actions, RootState> = () => async dispatch => {
   dispatch(setLoading(true));
 

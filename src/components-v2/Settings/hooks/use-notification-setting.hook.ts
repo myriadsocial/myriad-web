@@ -14,24 +14,24 @@ export const useNotificationSetting = (setting: NotificationSetting) => {
 
   const settings: NotificationSettingsOption[] = [
     {
-      id: 'comment',
+      id: 'comments',
       title: 'Comments',
-      enabled: notificationSettings.comment,
+      enabled: notificationSettings.comments,
     },
     {
-      id: 'mention',
+      id: 'mentions',
       title: 'Mention',
-      enabled: notificationSettings.mention,
+      enabled: notificationSettings.mentions,
     },
     {
-      id: 'friend',
+      id: 'friendRequests',
       title: 'Friend Request',
-      enabled: notificationSettings.friend,
+      enabled: notificationSettings.friendRequests,
     },
     {
-      id: 'tip',
+      id: 'tips',
       title: 'Tips',
-      enabled: notificationSettings.tip,
+      enabled: notificationSettings.tips,
     },
   ];
 
@@ -46,5 +46,6 @@ export const useNotificationSetting = (setting: NotificationSetting) => {
     settings,
     settingsProp: notificationSettings,
     changeSetting,
+    setNotificationSetting,
   };
 };
