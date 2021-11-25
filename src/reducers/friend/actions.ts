@@ -83,3 +83,47 @@ export const searchFriend: ThunkActionCreator<Actions, RootState> =
       dispatch(setLoading(false));
     }
   };
+
+export const removedFriendList: ThunkActionCreator<Actions, RootState> =
+  (request: Friend) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+      await FriendAPI.deleteRequest(request.id);
+
+      dispatch(fetchFriend(user));
+    } catch {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const blockedFriendList: ThunkActionCreator<Actions, RootState> =
+  (requesteeId: string) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+      await FriendAPI.blockedUser(requesteeId, user.id);
+
+      dispatch(fetchFriend(user));
+    } catch {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
