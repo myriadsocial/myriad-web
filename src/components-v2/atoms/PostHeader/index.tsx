@@ -114,7 +114,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
     handleClosePostSetting();
   };
 
-  if (!post.platform) post['platform'] = '';
+  if (!post.platform) post['platform'] = 'myriad';
   return (
     <>
       <CardHeader
