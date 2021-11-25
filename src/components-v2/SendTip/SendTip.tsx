@@ -51,6 +51,8 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
   const [checked, setChecked] = useState(false);
   const [url] = useState('https://myriad.social/');
 
+  const digitLengthLimit = 10;
+
   if (!user) return null;
 
   useEffect(() => {
@@ -83,7 +85,6 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
     const regexValidDigits = /^(?:[1-9]\d*|0(?!(?:\.0+)?$))?(?:\.\d+)?$/; // any number in the world, no leading zeros, no 0.0
 
     if (regexValidDigits.test(input)) {
-      console.log({input, gasFee});
       return input;
     }
 
@@ -182,6 +183,12 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                 label="Tip amount"
                 value={tipAmount}
                 onChange={handleChangeAmount}
+                onInput={e => {
+                  const InputElement = e.target as HTMLInputElement;
+                  InputElement.value = Math.max(0, parseFloat(InputElement.value))
+                    .toString()
+                    .slice(0, digitLengthLimit);
+                }}
                 type="number"
                 variant="outlined"
                 error={Number(tipAmount) > setMaxTippable() ? true : false}
@@ -250,7 +257,9 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                         <TableCell align="right">
                           <Typography className={classes.subHeader}>
                             <span className={classes.clickableText}>
-                              {Number((Number(tipAmount) + Number(gasFee)).toFixed(8)).toString()}{' '}
+                              {Number(
+                                (Number(tipAmount) + Number(gasFee)).toFixed(digitLengthLimit),
+                              ).toString()}{' '}
                               {selectedCurrency.id}
                             </span>
                           </Typography>
