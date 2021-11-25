@@ -1,5 +1,6 @@
 import {BaseModel} from './base.interface';
 import {Currency, CurrencyId} from './currency';
+import {People} from './people';
 import {TransactionDetail} from './transaction';
 
 export interface UserSocialMedia {
@@ -41,6 +42,7 @@ export type UserMetric = {
 
 export interface User extends UserProps, BaseModel {
   currencies: Currency[];
+  people: People[];
   metric?: UserMetric;
   activityLogs?: ActivityLog[];
 }
