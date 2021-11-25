@@ -72,6 +72,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const [maxLength, setMaxLength] = useState<number | undefined>(250);
   const [viewContent, setViewContent] = useState(!post.isNSFW);
   const owner = post.createdBy === user?.id;
+  const isOwnSocialPost = user?.people.find(person => person.id === post.peopleId) ? true : false;
 
   const isImportedPost = post.platform !== 'myriad' || post.createdBy !== user?.id ? true : false;
 
@@ -225,12 +226,12 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           onShared={handleShareLink}
         />
 
-        {/* hide send tip button for own post */}
-        <ShowIf condition={owner}>
+        {/* hide send tip button for own post or for own social imported posts*/}
+        <ShowIf condition={owner || isOwnSocialPost}>
           <></>
         </ShowIf>
 
-        <ShowIf condition={isImportedPost}>
+        <ShowIf condition={isImportedPost && !isOwnSocialPost}>
           <Button
             isDisabled={balanceDetails.length === 0}
             onClick={handleSendTip}
