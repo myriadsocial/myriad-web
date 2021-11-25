@@ -78,7 +78,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         background: 'rgba(255, 200, 87, 0.15)',
       },
     },
-    bgIcon: {
+    iconbutton: {
       backgroundColor: theme.palette.primary.main,
       '&:hover': {
         backgroundColor: '#e5e5e5',
