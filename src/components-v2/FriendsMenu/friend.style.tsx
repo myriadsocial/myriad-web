@@ -59,7 +59,13 @@ export const useStyles = makeStyles((theme: Theme) =>
         color: theme.palette.primary.main,
       },
     },
-    error: {color: '#FE3636'},
+    error: {
+      background: '#FE3656',
+      color: '#FFF',
+      '&:hover': {
+        color: theme.palette.text.primary,
+      },
+    },
     option: {
       padding: '5px 20px',
       '& .hidden-button': {
@@ -86,6 +92,13 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     danger: {
       color: theme.palette.error.main,
+    },
+    flexCenter: {
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    m1: {
+      marginRight: theme.spacing(3),
     },
   }),
 );
