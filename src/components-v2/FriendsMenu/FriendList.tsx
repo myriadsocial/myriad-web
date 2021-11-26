@@ -24,15 +24,15 @@ import {FriendListProps} from './default';
 import {useStyles} from './friend.style';
 import {FriendDetail, useFriendList} from './hooks/use-friend-list.hook';
 
-import {useToasterHook} from 'src/hooks/use-toaster.hook';
 import {SendTipContainer} from 'src/components-v2/SendTip';
 import {Empty} from 'src/components-v2/atoms/Empty';
 import {Loading} from 'src/components-v2/atoms/Loading';
 import {Modal} from 'src/components-v2/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
+import {useToasterHook} from 'src/hooks/use-toaster.hook';
+import {Status} from 'src/interfaces/toaster';
 import {blockedFriendList, removedFriendList} from 'src/reducers/friend/actions';
-import { Status } from 'src/interfaces/toaster';
 
 export const FriendListComponent: React.FC<FriendListProps> = props => {
   const {
@@ -84,7 +84,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   };
 
   const closeSendTip = () => {
-    setSendTipOpened(false)
+    setSendTipOpened(false);
   };
 
   const handleSendTip = () => {
@@ -243,7 +243,6 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
               </div>
             </ListItem>
           ))}
-
         </InfiniteScroll>
       </List>
 
@@ -252,8 +251,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         open={sendTipOpened}
         onClose={closeSendTip}
         title="Send Tip"
-        subtitle="Finding this post is insightful? Send a tip!"
-      >
+        subtitle="Finding this post is insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
 
