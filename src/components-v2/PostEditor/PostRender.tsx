@@ -177,9 +177,9 @@ export const PostRender: React.FC<PostRenderProps> = props => {
             </Link>
           );
         case ELEMENT_IMAGE:
-          return <Gallery images={images} cloudName={'dsget80gs'} />;
+          return <Gallery images={images} />;
         case ELEMENT_IMAGE_LIST:
-          return <Gallery images={node.url} cloudName={'dsget80gs'} />;
+          return <Gallery images={node.url} />;
         case ELEMENT_MEDIA_EMBED:
           return <Video url={node.url} />;
         case ELEMENT_MENTION:

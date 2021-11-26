@@ -54,6 +54,7 @@ export type Props = {
   onBlock: () => void;
 };
 
+// TODO: change this to firebase storage
 const background = 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png';
 
 export const ProfileHeaderComponent: React.FC<Props> = props => {

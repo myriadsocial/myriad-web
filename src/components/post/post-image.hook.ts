@@ -1,5 +1,3 @@
-import getConfig from 'next/config';
-
 import {generateImageSizes} from 'src/helpers/cloudinary';
 import {Sizes} from 'src/interfaces/assets';
 import {PostOrigin} from 'src/interfaces/timeline';
@@ -18,8 +16,6 @@ type ImageList = {
 };
 
 export const useImageHooks = () => {
-  const {publicRuntimeConfig} = getConfig();
-
   const buildList = (source: string[], platform: PostOrigin): ImageList => {
     let listCols = 1;
     let itemCols = 1;
@@ -45,7 +41,7 @@ export const useImageHooks = () => {
         cols: itemCols,
         rows: ROWS,
         src: source[index],
-        sizes: generateImageSizes(source[index], publicRuntimeConfig.cloudinaryName),
+        sizes: generateImageSizes(source[index]),
       });
     }
 

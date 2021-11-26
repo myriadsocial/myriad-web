@@ -2,24 +2,21 @@ import {withSentry} from '@sentry/nextjs';
 
 import type {NextApiRequest, NextApiResponse} from 'next';
 import nextConnect from 'next-connect';
-import getConfig from 'next/config';
 
-import {v2 as cloudinary} from 'cloudinary';
 import {Request} from 'express';
 import {unlinkSync} from 'fs';
 import multer, {FileFilterCallback} from 'multer';
+import admin from 'src/lib/firebase-admin';
+import {convert} from 'src/lib/video';
 
 type NextApiRequestWithFormData = NextApiRequest & {
-  file: any;
+  file: Express.Multer.File;
 };
 
 type ResponseVideoUpload = {
   url?: string;
   error?: string;
 };
-
-const {serverRuntimeConfig, publicRuntimeConfig} = getConfig();
-const maxSize = 99 * 1024 * 1024; // for 99MB
 
 // Multer config
 const storage = multer.diskStorage({
@@ -37,16 +34,21 @@ const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallb
 
 const upload = multer({
   storage,
-  limits: {fileSize: maxSize},
   fileFilter,
 });
 
-// cloudinary config
-cloudinary.config({
-  cloud_name: publicRuntimeConfig.cloudinaryName,
-  api_key: serverRuntimeConfig.cloudinaryAPIKey,
-  api_secret: serverRuntimeConfig.cloudinarySecret,
-});
+const uploadVideo = async (filePath: string, filename: string): Promise<string> => {
+  const bucket = admin.storage().bucket();
+  const options = {resumable: false, metadata: {contentType: 'video/mp4'}};
+
+  const convertedPath = await convert(filePath);
+
+  const [file] = await bucket.upload(convertedPath, options);
+
+  unlinkSync(convertedPath);
+
+  return file.publicUrl();
+};
 
 // Doc on custom API configuration:
 // https://nextjs.org/docs/api-routes/api-middlewares#custom-config
@@ -58,37 +60,21 @@ export const config = {
 
 const handler = nextConnect()
   .use(upload.single('video'))
-  .post((req: NextApiRequestWithFormData, res: NextApiResponse<ResponseVideoUpload>) => {
-    const {path, size} = req.file as Express.Multer.File;
+  .post(async (req: NextApiRequestWithFormData, res: NextApiResponse<ResponseVideoUpload>) => {
+    const {originalname, path} = req.file;
+    console.log('req.file', req.file);
 
-    cloudinary.uploader.upload_large(
-      path,
-      {
-        resource_type: 'video',
-        chunk_size: 10000000,
-        async: false,
-        // NOTE: free cloudinary account have transform size limitation
-        // and codec error is most likely from small video transformation only applied on small video
-        transformation:
-          size < 20000000
-            ? {
-                video_codec: 'auto',
-                format: 'webm',
-              }
-            : undefined,
-      },
-      (err, response) => {
-        unlinkSync(path);
+    try {
+      const url = await uploadVideo(path, originalname);
 
-        if (err) {
-          return res.status(err.http_code).json({
-            error: err.message,
-          });
-        }
+      unlinkSync(path);
 
-        return res.json({url: response?.secure_url});
-      },
-    );
+      return res.json({url});
+    } catch (error) {
+      console.log('[next-api][upload-image][error]', error);
+
+      throw error;
+    }
   });
 
 export default withSentry(handler);

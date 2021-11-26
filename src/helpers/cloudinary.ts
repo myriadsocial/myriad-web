@@ -1,9 +1,9 @@
 import {Sizes} from '../interfaces/assets';
 
-const CLOUDINARY_BASE_URL = 'https://res.cloudinary.com';
+const STORAGE_BASE_URL = 'https://storage.googleapis.com';
 
-export const generateImageSizes = (url: string, cloudName: string, extension = 'jpg'): Sizes => {
-  const external = !url.includes(CLOUDINARY_BASE_URL);
+export const generateImageSizes = (url: string, extension = 'jpg'): Sizes => {
+  const external = !url.includes(STORAGE_BASE_URL);
   const filename = url.split(/[\\/]/).pop();
 
   if (!filename || external)
@@ -14,13 +14,13 @@ export const generateImageSizes = (url: string, cloudName: string, extension = '
       large: url,
     };
 
-  const cloudinaryId = filename.split('.').slice(0, -1).join('.');
-  const filepath = external ? url : `${cloudinaryId}.${extension}`;
+  const fileId = filename.split('.').slice(0, -1).join('.');
+  const pathname = url.replace(STORAGE_BASE_URL, '').replace(filename, '');
 
   return {
-    thumbnail: `${CLOUDINARY_BASE_URL}/${cloudName}/w_150,h_150,c_thumb/${filepath}`,
-    small: `${CLOUDINARY_BASE_URL}/${cloudName}/w_400,h_400,c_fill,g_auto/${filepath}`,
-    medium: `${CLOUDINARY_BASE_URL}/${cloudName}/w_800,h_800,c_fill,g_auto/${filepath}`,
-    large: `${CLOUDINARY_BASE_URL}/${cloudName}/w_1200,c_fill/${filepath}`,
+    thumbnail: `${STORAGE_BASE_URL}${pathname}${fileId}_thumbnail.${extension}`,
+    small: `${STORAGE_BASE_URL}${pathname}${fileId}_small.${extension}`,
+    medium: `${STORAGE_BASE_URL}${pathname}${fileId}_medium.${extension}`,
+    large: `${STORAGE_BASE_URL}${pathname}${fileId}.${extension}`,
   };
 };

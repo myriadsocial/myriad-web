@@ -2,11 +2,7 @@ import {ImageListProps, ImageListItemProps, GalleryType} from './Gallery.types';
 
 import {generateImageSizes} from 'src/helpers/cloudinary';
 
-export const buildList = (
-  source: string[],
-  variant: GalleryType,
-  cloudName: string,
-): ImageListProps => {
+export const buildList = (source: string[], variant: GalleryType): ImageListProps => {
   let listCols = 1;
   let itemCols = 1;
   let ROWS = 1;
@@ -27,7 +23,7 @@ export const buildList = (
       itemCols = index === 0 ? listCols : listCols / Math.min(source.length - 1, 3);
     }
 
-    const sizes = generateImageSizes(source[index], cloudName);
+    const sizes = generateImageSizes(source[index]);
 
     images.push({
       cols: itemCols,

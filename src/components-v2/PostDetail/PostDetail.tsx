@@ -203,7 +203,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           </ShowIf>
 
           {post.asset?.images && post.asset?.images.length > 0 && (
-            <Gallery images={post.asset?.images} cloudName="dsget80gs" />
+            <Gallery images={post.asset?.images} />
           )}
 
           {post.asset?.videos && post.asset.videos.length > 0 && (

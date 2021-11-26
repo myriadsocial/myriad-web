@@ -13,8 +13,10 @@ const moduleExports = {
     nextAuthURL: process.env.NEXTAUTH_URL,
     secret: process.env.SECRET,
     twitterBearerToken: process.env.TWITTER_BEARER_TOKEN,
-    cloudinaryAPIKey: process.env.CLOUDINARY_API_KEY,
-    cloudinarySecret: process.env.CLOUDINARY_SECRET,
+    firebasePrivateKey: process.env.FIREBASE_PRIVATE_KEY,
+    firebaseClientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    firebaseStorageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    firebaseDatabaseUrl: process.env.FIREBASE_DATABASE_URL,
   },
   publicRuntimeConfig: {
     // Will be available on both server and client
@@ -26,7 +28,6 @@ const moduleExports = {
     myriadWsRPC: process.env.NEXT_PUBLIC_MYRIAD_WS_RPC,
     myriadWebsite: process.env.NEXT_PUBLIC_MYRIAD_WEBSITE ?? 'https://www.myriad.social',
     myriadSupportMail: process.env.NEXT_PUBLIC_MYRIAD_SUPPORT_MAIL ?? 'support@myriad.social',
-    cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
     firebaseAPIKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     firebaseProjectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
     firebaseMessagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,

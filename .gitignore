@@ -96,5 +96,5 @@ prisma
 # Sentry
 .sentryclirc
 
-# Sentry
-.sentryclirc
+# Firebase
+firebase-adminsdk.json

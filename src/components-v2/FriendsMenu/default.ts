@@ -29,6 +29,7 @@ export type FriendListProps = {
   onLoadNextPage: () => void;
 };
 
+// TODO: remove this
 export const friends: Friend[] = [
   {
     id: '60f6a7f08b6ae08341c9a0f0',

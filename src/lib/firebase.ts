@@ -16,6 +16,7 @@ const firebaseCloudMessaging = {
   },
 
   init: async function (): Promise<void | boolean> {
+    console.log('INIT');
     if (!firebase.apps.length) {
       firebase.initializeApp({
         apiKey: publicRuntimeConfig.firebaseAPIKey,
@@ -44,7 +45,7 @@ const firebaseCloudMessaging = {
 
   onMessageListener: (callback: (payload: any) => void): void | null => {
     if (!firebase.apps.length) return null;
-
+    console.log('ON MESSAGE');
     const messaging = firebase.messaging();
 
     messaging.onMessage(

@@ -39,6 +39,8 @@ type DropzoneProps = {
 type FileUploaded = File & {
   preview: string;
   loading: boolean;
+  width?: number;
+  height?: number;
 };
 
 export const Dropzone: React.FC<DropzoneProps> = props => {
@@ -79,12 +81,34 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
       if (multiple) {
         newFiles = [
           ...files,
-          ...acceptedFiles.map(file =>
-            Object.assign(file, {
-              preview: URL.createObjectURL(file),
+          ...acceptedFiles.map((file, index) => {
+            const url = URL.createObjectURL(file);
+            const img = new Image();
+            img.src = url;
+
+            img.onload = function () {
+              // @ts-expect-error
+              const width = this.width as number;
+              // @ts-expect-error
+              const height = this.height as number;
+
+              setFiles(prevFiles =>
+                prevFiles.map((file, i) => {
+                  if (i === index) {
+                    file.width = width;
+                    file.height = height;
+                  }
+
+                  return file;
+                }),
+              );
+            };
+
+            return Object.assign(file, {
+              preview: url,
               loading: type === 'image',
-            }),
-          ),
+            });
+          }),
         ];
 
         setFiles(newFiles);
@@ -94,12 +118,35 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
           ...acceptedFiles.map(file => URL.createObjectURL(file)),
         ]);
       } else {
-        newFiles = acceptedFiles.map(file =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
+        newFiles = acceptedFiles.map((file, index) => {
+          const url = URL.createObjectURL(file);
+          const img = new Image();
+
+          img.src = url;
+
+          img.onload = function () {
+            // @ts-expect-error
+            const width = this.width;
+            // @ts-expect-error
+            const height = this.height;
+
+            setFiles(prevFiles =>
+              prevFiles.map((file, i) => {
+                if (i === index) {
+                  file.width = width;
+                  file.height = height;
+                }
+
+                return file;
+              }),
+            );
+          };
+
+          return Object.assign(file, {
+            preview: url,
             loading: type === 'image',
-          }),
-        );
+          });
+        });
 
         setFiles(newFiles);
 

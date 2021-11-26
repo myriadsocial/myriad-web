@@ -2,16 +2,15 @@ import {withSentry} from '@sentry/nextjs';
 
 import type {NextApiRequest, NextApiResponse} from 'next';
 import nextConnect from 'next-connect';
-import getConfig from 'next/config';
 
-import {v2 as cloudinary} from 'cloudinary';
-import DatauriParser from 'datauri/parser';
 import multer from 'multer';
 import path from 'path';
 import sharp from 'sharp';
+import admin from 'src/lib/firebase-admin';
+import {v4 as uuid} from 'uuid';
 
 type NextApiRequestWithFormData = NextApiRequest & {
-  file: any;
+  file: Express.Multer.File;
 };
 
 type ResponseImageUpload = {
@@ -19,10 +18,23 @@ type ResponseImageUpload = {
   error?: string;
 };
 
-const {serverRuntimeConfig, publicRuntimeConfig} = getConfig();
-
-const MAX_IMAGE_WIDTH = 2560; // 30inch monitor resolution 2560 x 1600
-const MAX_IMAGE_SIZE = MAX_IMAGE_WIDTH * 1000;
+const mutations = [
+  {
+    type: 'thumbnail',
+    width: 200,
+    height: 200,
+  },
+  {
+    type: 'small',
+    width: 400,
+    height: 400,
+  },
+  {
+    type: 'medium',
+    width: 600,
+    height: 600,
+  },
+];
 
 // Multer config
 const storage = multer.memoryStorage();
@@ -30,19 +42,35 @@ const upload = multer({
   storage,
 });
 
-// cloudinary config
-cloudinary.config({
-  cloud_name: publicRuntimeConfig.cloudinaryName,
-  api_key: serverRuntimeConfig.cloudinaryAPIKey,
-  api_secret: serverRuntimeConfig.cloudinarySecret,
-});
+const uploadImage = async (image: Buffer, filename: string): Promise<string> => {
+  const bucket = admin.storage().bucket();
 
-const cloudinaryUpload = (file: string) => cloudinary.uploader.upload(file);
+  const parsed = path.parse(filename);
+  const format = 'jpg';
+  const uniqueId = uuid();
+  const options = {resumable: false, metadata: {contentType: 'image/jpg'}};
 
-const formatBufferTo64 = (name: string, file: Buffer): DatauriParser => {
-  const parser = new DatauriParser();
+  const baseFilename = `${parsed.name}_${uniqueId}`;
 
-  return parser.format(path.extname(name).toString(), file);
+  // TODO: do this asynchronously on child process to reduce API load
+  for (const mutation of mutations) {
+    const file = bucket.file(`${baseFilename}_${mutation.type}.${format}`);
+
+    const resized = await sharp(image)
+      .resize({width: mutation.width})
+      .toFormat(format)
+      .toBuffer({resolveWithObject: true});
+
+    await file.save(resized.data, options);
+  }
+
+  const file = bucket.file(`${baseFilename}.${format}`);
+
+  const resized = await sharp(image).toFormat(format).toBuffer({resolveWithObject: true});
+
+  await file.save(resized.data, options);
+
+  return file.publicUrl();
 };
 
 // Doc on custom API configuration:
@@ -56,33 +84,12 @@ export const config = {
 const handler = nextConnect()
   .use(upload.single('image'))
   .post(async (req: NextApiRequestWithFormData, res: NextApiResponse<ResponseImageUpload>) => {
-    const fileName = req.file.originalname;
-    const image = req.file.buffer as Buffer;
-    let file: DatauriParser;
-
-    // resize image based on width and keep the aspect ratio
-    // store as buffer to keep server clean from additional file
-    if (req.file.size > MAX_IMAGE_SIZE) {
-      const resized = await sharp(image)
-        .resize({
-          width: MAX_IMAGE_WIDTH,
-        })
-        .toBuffer({resolveWithObject: true});
-
-      // format file as string
-      file = formatBufferTo64(fileName, resized.data);
-    } else {
-      file = formatBufferTo64(fileName, image);
-    }
-
-    if (!file.content) {
-      throw new Error('Failed to parse file');
-    }
+    const {originalname, buffer} = req.file;
 
     try {
-      const uploadResult = await cloudinaryUpload(file.content);
+      const url = await uploadImage(buffer, originalname);
 
-      return res.json({url: uploadResult.secure_url});
+      return res.json({url});
     } catch (error) {
       console.log('[next-api][upload-image][error]', error);
 
