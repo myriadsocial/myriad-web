@@ -137,7 +137,7 @@ export const PostContainer: React.FC = () => {
             justifyContent: 'center',
           }}>
           <Button
-            style={{marginRight: '24px'}}
+            style={{marginRight: '12px'}}
             size="small"
             variant="outlined"
             color="secondary"
