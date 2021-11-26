@@ -1,6 +1,7 @@
 import {ExclamationCircleIcon} from '@heroicons/react/solid';
 
 import React from 'react';
+import {useSelector} from 'react-redux';
 
 import getConfig from 'next/config';
 
@@ -11,12 +12,15 @@ import {version} from '../../../../package.json';
 import useStyles from './banner.style';
 
 import ShowIf from 'src/components/common/show-if.component';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 type Props = {
   text?: string;
 };
 
 const BannerStatusComponent: React.FC<Props> = props => {
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
   const style = useStyles();
   const [open, setOpen] = React.useState(false);
   const {publicRuntimeConfig} = getConfig();
@@ -28,12 +32,18 @@ const BannerStatusComponent: React.FC<Props> = props => {
 
   React.useEffect(() => {
     const status = localStorage.getItem('banner');
-    status && setOpen(JSON.parse(status));
+
+    status && setOpen(!JSON.parse(status).includes(user?.id));
     !status && setOpen(true);
   }, []);
 
   const setHiddenBanner = () => {
-    localStorage.setItem('banner', 'false');
+    const status = localStorage.getItem('banner');
+    let blockList = [];
+    if (status) blockList = JSON.parse(status);
+
+    blockList.push(user?.id);
+    localStorage.setItem('banner', JSON.stringify(blockList));
     setOpen(false);
   };
 
