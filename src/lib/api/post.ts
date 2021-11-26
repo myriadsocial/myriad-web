@@ -247,6 +247,19 @@ export const findPosts = async (page: number, userId: string, query: string): Pr
             },
           },
         ],
+        where: {
+          or: [
+            {
+              visibility: 'public',
+            },
+            {
+              created_by: userId,
+              importers: {
+                inq: userId,
+              },
+            },
+          ],
+        },
       },
     },
   });
