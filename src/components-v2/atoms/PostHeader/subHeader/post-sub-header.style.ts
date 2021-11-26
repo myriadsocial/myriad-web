@@ -14,10 +14,18 @@ export const useStyles = makeStyles((theme: Theme) =>
     link: {
       color: theme.palette.primary.main,
       textDecoration: 'none',
+
+      '&:hover': {
+        textDecoration: 'underline',
+      },
     },
     linkGrey: {
       color: theme.palette.text.secondary,
       textDecoration: 'none',
+
+      '&:hover': {
+        textDecoration: 'underline',
+      },
     },
   }),
 );

@@ -8,12 +8,13 @@ import {PostSubHeaderProps} from './post-sub-header.interface';
 import {useStyles} from './post-sub-header.style';
 
 import {format} from 'date-fns';
+import ShowIf from 'src/components/common/show-if.component';
 
 export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
   postId,
   date,
   platform,
-  importer,
+  importers,
   url,
 }) => {
   const style = useStyles();
@@ -33,7 +34,7 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
         </Link>
       )}
 
-      {importer && (
+      {importers && (
         <>
           Imported on&nbsp;
           <Link href={`/post/${postId}`}>
@@ -42,11 +43,19 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
             </a>
           </Link>
           &nbsp;by&nbsp;
-          <Link href={`/profile/${importer.id}`}>
-            <a href={`/profile/${importer.id}`} className={style.link}>
-              {importer.name}
-            </a>
-          </Link>
+          <>
+            {importers.map((importer, i) => (
+              <>
+                <Link key={importer.id} href={`/profile/${importer.id}`}>
+                  <a href={`/profile/${importer.id}`} className={style.link}>
+                    {importer.name}
+                  </a>
+                </Link>
+                <ShowIf condition={i < importers.length - 2}>&nbsp;&#44;&nbsp;</ShowIf>
+                <ShowIf condition={i < importers.length - 1}>&nbsp;&amp;&nbsp;</ShowIf>
+              </>
+            ))}
+          </>
           &nbsp;via&nbsp;
           <Link href={url}>
             <a href={url} className={style.link} target="_blank" rel="noreferrer">

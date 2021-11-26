@@ -46,8 +46,12 @@ export const Report: React.FC<ReportProps> = props => {
     setDescription(event.target.value);
   };
 
-  const handleSelectItem = (value: string) => () => {
-    setType(value);
+  const handleSelectItem = (value: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      setType(value);
+    } else {
+      setType(null);
+    }
   };
 
   const submitReport = () => {
