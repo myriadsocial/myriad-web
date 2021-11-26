@@ -66,6 +66,7 @@ export const WelcomeModule: React.FC<WelcomeModuleProps> = props => {
   const handleError = (): boolean => {
     if (usernameError) return true;
     if (!newUsername.length) return true;
+    if (newUsername.length > 16) return true;
     if (isAvailable === undefined) return false;
     if (typeof isAvailable === 'boolean') {
       if (isAvailable === true) return false;
