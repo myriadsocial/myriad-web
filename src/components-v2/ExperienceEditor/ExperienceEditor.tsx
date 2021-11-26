@@ -27,6 +27,7 @@ import {ListItemComponent} from '../atoms/ListItem';
 import {useStyles} from './Experience.styles';
 
 import {debounce} from 'lodash';
+import {SocialsEnum} from 'src/interfaces/social';
 
 type ExperienceEditorProps = {
   type?: string;
@@ -44,7 +45,18 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     props;
   const styles = useStyles();
 
-  const [newExperience, setNewExperience] = useState<Partial<Experience>>();
+  const [newExperience, setNewExperience] = useState<Partial<Experience>>({
+    people: [
+      {
+        id: '',
+        name: '',
+        originUserId: '',
+        platform: SocialsEnum.TWITTER,
+        profilePictureURL: '',
+        username: '',
+      },
+    ],
+  });
   const [newTags, setTags] = useState<string[]>([]);
   const [image, setImage] = useState<string>();
   const [disable, setDisable] = useState<boolean>(true);
@@ -248,7 +260,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       <Autocomplete
         id="experience-people"
         className={styles.people}
-        value={(newExperience?.people as People[]) || []}
+        value={(newExperience?.people as People[]) ?? []}
         multiple
         options={people}
         getOptionSelected={(option, value) => option.id === value.id}
@@ -273,6 +285,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           />
         )}
         renderOption={(option, state: AutocompleteRenderOptionState) => {
+          if (option.id === '') return null;
           return (
             <ListItemComponent
               id="selectable-experience-list-item"
@@ -295,21 +308,25 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       />
 
       <div className={styles.preview}>
-        {newExperience?.people?.map(people => (
-          <ListItemComponent
-            id="selected-experience-list-item"
-            key={people.id}
-            title={people.name}
-            subtitle={<Typography variant="caption">@{people.username}</Typography>}
-            avatar={people.profilePictureURL}
-            size="medium"
-            action={
-              <IconButton onClick={removeSelectedPeople(people)}>
-                <SvgIcon component={XCircleIcon} color="error" />
-              </IconButton>
-            }
-          />
-        ))}
+        {newExperience?.people?.map(people =>
+          people.id === '' ? (
+            <></>
+          ) : (
+            <ListItemComponent
+              id="selected-experience-list-item"
+              key={people.id}
+              title={people.name}
+              subtitle={<Typography variant="caption">@{people.username}</Typography>}
+              avatar={people.profilePictureURL}
+              size="medium"
+              action={
+                <IconButton onClick={removeSelectedPeople(people)}>
+                  <SvgIcon component={XCircleIcon} color="error" />
+                </IconButton>
+              }
+            />
+          ),
+        )}
       </div>
       <FormControl fullWidth variant="outlined">
         <Button
