@@ -140,7 +140,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
           <PostSubHeader
             postId={post.id}
             date={post.createdAt}
-            importer={post.platform !== 'myriad' ? post.user : undefined}
+            importers={post.importers}
             platform={post.platform}
             url={post.url}
           />

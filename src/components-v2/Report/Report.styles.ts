@@ -67,6 +67,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+      boxShadow: 'none',
     },
     action: {
       display: 'flex',

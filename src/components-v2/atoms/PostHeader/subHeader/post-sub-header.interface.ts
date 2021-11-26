@@ -4,6 +4,6 @@ export type PostSubHeaderProps = {
   postId: string;
   platform: string;
   date: Date;
-  importer?: User;
+  importers?: User[];
   url: string;
 };

@@ -112,6 +112,7 @@ export const getPost = async (
   }
 
   if (filters && filters.importer) {
+    // @ts-expect-error
     where.importers = {
       inq: [filters.importer],
     };
@@ -134,6 +135,9 @@ export const getPost = async (
 
   const filterParams: Record<string, any> = {
     include: [
+      {
+        relation: 'importers',
+      },
       {
         relation: 'user',
       },
@@ -198,7 +202,7 @@ export const getPost = async (
 
   data.data.map(post => {
     if (post.platform === 'reddit') {
-      post.text = post.text.replace('&amp;#x200B;', '&nbsp;');
+      post.text = post.text.replace(new RegExp('&amp;#x200B;', 'g'), '&nbsp;');
     }
 
     if (post.deletedAt) {
@@ -221,6 +225,9 @@ export const findPosts = async (userId: string, query: string): Promise<PostList
       filter: {
         include: [
           {
+            relation: 'importers',
+          },
+          {
             relation: 'user',
           },
           {
@@ -241,7 +248,7 @@ export const findPosts = async (userId: string, query: string): Promise<PostList
 
   data.data.map(post => {
     if (post.platform === 'reddit') {
-      post.text = post.text.replace('&amp;#x200B;', '&nbsp;');
+      post.text = post.text.replace(new RegExp('&amp;#x200B;', 'g'), '&nbsp;');
     }
 
     return post;
@@ -283,6 +290,9 @@ export const getPostDetail = async (id: string, userId?: string): Promise<Post> 
       filter: {
         include: [
           {
+            relation: 'importers',
+          },
+          {
             relation: 'user',
           },
           {
@@ -302,7 +312,7 @@ export const getPostDetail = async (id: string, userId?: string): Promise<Post> 
   });
 
   if (data.platform === 'reddit') {
-    data.text = data.text.replace('&amp;#x200B;', '&nbsp;');
+    data.text = data.text.replace(new RegExp('&amp;#x200B;', 'g'), '&nbsp;');
   }
 
   return data;
