@@ -73,10 +73,6 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     setAnchorEl(null);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   const handleVisitProfile = () => {
     if (!currentFriend) {
       router.push('/404');
@@ -84,7 +80,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       router.push(`/profile/${currentFriend.id}`);
     }
 
-    handleClose();
+    handleCloseFriendSetting();
   };
 
   const closeSendTip = () => {
@@ -93,7 +89,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
 
   const handleSendTip = () => {
     setSendTipOpened(true);
-    handleClose();
+    handleCloseFriendSetting();
   };
 
   const handleUnfriend = () => {
@@ -102,7 +98,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     } else {
       setOpenRemoveFriend(true);
     }
-    handleClose();
+    handleCloseFriendSetting();
   };
 
   const handleBlock = () => {
@@ -111,7 +107,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     } else {
       setOpenBlockUser(true);
     }
-    handleClose();
+    handleCloseFriendSetting();
   };
 
   const handleFilterSelected = (selected: string) => {

@@ -99,7 +99,7 @@ export const removedFriendList: ThunkActionCreator<Actions, RootState> =
       await FriendAPI.deleteRequest(request.id);
 
       dispatch(fetchFriend(user));
-    } catch {
+    } catch (error) {
       dispatch(setError(error.message));
     } finally {
       dispatch(setLoading(false));
@@ -121,7 +121,7 @@ export const blockedFriendList: ThunkActionCreator<Actions, RootState> =
       await FriendAPI.blockedUser(requesteeId, user.id);
 
       dispatch(fetchFriend(user));
-    } catch {
+    } catch (error) {
       dispatch(setError(error.message));
     } finally {
       dispatch(setLoading(false));
