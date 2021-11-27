@@ -190,9 +190,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         />
       </ShowIf>
 
-      <div className={style.list}>
-        <SearchComponent onSubmit={handleSearch} placeholder={'Search friend'} />
-      </div>
+      <SearchComponent onSubmit={handleSearch} placeholder={'Search friend'} />
 
       <List>
         <InfiniteScroll

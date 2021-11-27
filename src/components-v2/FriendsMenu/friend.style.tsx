@@ -67,7 +67,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     option: {
-      padding: '5px 20px',
       '& .hidden-button': {
         display: 'none',
       },
