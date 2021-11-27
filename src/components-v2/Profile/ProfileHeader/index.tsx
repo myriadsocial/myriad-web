@@ -37,6 +37,7 @@ import {ReportProps} from 'src/interfaces/report';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
+import OfficialBadge from 'src/images/official-badge.svg';
 
 export type Props = {
   person: User;
@@ -205,7 +206,8 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             </Avatar>
             <div>
               <Typography className={style.name} component="p">
-                {person.name}
+                <ShowIf condition={person.username !== 'myriad_official'}>{person.name}</ShowIf>
+                <ShowIf condition={person.username === 'myriad_official'}>{person.name} <OfficialBadge/></ShowIf>
               </Typography>
               <Typography className={style.username} component="p">
                 @{person.username || 'username'}
@@ -239,9 +241,11 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 <MenuItem>Copy link profile</MenuItem>
               </CopyToClipboard>
               <MenuItem disabled>Mute account</MenuItem>
-              <MenuItem onClick={handleOpenModal} className={style.delete}>
-                Report account
-              </MenuItem>
+              <ShowIf condition={person.username !== 'myriad_official'}>
+                <MenuItem onClick={handleOpenModal} className={style.delete}>
+                  Report account
+                </MenuItem>
+              </ShowIf>
             </Menu>
           </ShowIf>
         </div>
@@ -336,7 +340,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             </ShowIf>
 
             <ShowIf condition={!self}>
-              <ShowIf condition={canAddFriend}>
+              <ShowIf condition={canAddFriend && person.username !== 'myriad_official'}>
                 <Button
                   onClick={handleSendRequest}
                   startIcon={
@@ -355,7 +359,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 </Button>
               </ShowIf>
 
-              <ShowIf condition={!isBlocked && !canAddFriend}>
+              <ShowIf condition={!isBlocked && !canAddFriend && person.username !== 'myriad_official'}>
                 <Button
                   onClick={handleClickFriendOption}
                   startIcon={
