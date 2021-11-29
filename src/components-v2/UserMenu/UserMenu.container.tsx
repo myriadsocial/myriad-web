@@ -9,10 +9,11 @@ import {UserState} from 'src/reducers/user/reducer';
 
 type UserMenuContainerProps = {
   anonymous?: boolean;
+  isMyriad?: boolean;
 };
 
 export const UserMenuContainer: React.FC<UserMenuContainerProps> = props => {
-  const {anonymous = false} = props;
+  const {anonymous = false, isMyriad = false} = props;
 
   const {loadFriends} = useFriendsHook();
 
@@ -22,5 +23,5 @@ export const UserMenuContainer: React.FC<UserMenuContainerProps> = props => {
     loadFriends();
   }, []);
 
-  return <UserMenu selected="post" anonymous={anonymous} user={user} />;
+  return <UserMenu selected="post" anonymous={anonymous} user={user} isMyriad={isMyriad} />;
 };

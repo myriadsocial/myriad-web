@@ -15,15 +15,16 @@ type UserMenuProps = {
   selected: UserMenuTabs;
   anonymous?: boolean;
   user?: User;
+  isMyriad?: boolean;
 };
 
 export const UserMenu: React.FC<UserMenuProps> = props => {
-  const {selected} = props;
+  const {selected, isMyriad} = props;
   const {detail: profileDetail} = useSelector<RootState, ProfileState>(state => state.profileState);
 
   const styles = useStyles();
 
-  const tabs = useUserTabs();
+  const tabs = isMyriad ? useUserTabs().filter(tab => tab.id !== 'friend') : useUserTabs();
   const [activeTab, setActiveTab] = useState<UserMenuTabs>(selected);
 
   const handleTabChange = (tab: string) => {

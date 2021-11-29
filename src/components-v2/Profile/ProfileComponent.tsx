@@ -104,7 +104,7 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
           <ProfileHeaderContainer edit={handleOpenEdit} />
 
           <ShowIf condition={friendStatus?.status !== FriendStatus.BLOCKED}>
-            <UserMenuContainer />
+            <UserMenuContainer isMyriad={profile.username === 'myriad_official'} />
           </ShowIf>
 
           <ShowIf condition={friendStatus?.status === FriendStatus.BLOCKED}>

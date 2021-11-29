@@ -32,12 +32,12 @@ import {format} from 'date-fns';
 import millify from 'millify';
 import {Status, Toaster} from 'src/components-v2/atoms/Toaster';
 import ShowIf from 'src/components/common/show-if.component';
+import OfficialBadge from 'src/images/official-badge.svg';
 import {Friend} from 'src/interfaces/friend';
 import {ReportProps} from 'src/interfaces/report';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
-import OfficialBadge from 'src/images/official-badge.svg';
 
 export type Props = {
   person: User;
@@ -207,7 +207,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             <div>
               <Typography className={style.name} component="p">
                 <ShowIf condition={person.username !== 'myriad_official'}>{person.name}</ShowIf>
-                <ShowIf condition={person.username === 'myriad_official'}>{person.name} <OfficialBadge/></ShowIf>
+                <ShowIf condition={person.username === 'myriad_official'}>
+                  {person.name} <OfficialBadge />
+                </ShowIf>
               </Typography>
               <Typography className={style.username} component="p">
                 @{person.username || 'username'}
@@ -310,14 +312,16 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 {formatNumber(person.metric?.totalKudos ?? 0)}
               </Typography>
             </div>
-            <div className={style.text}>
-              <Typography className={`${style.username}`} component="p">
-                Friends
-              </Typography>
-              <Typography className={style.total} component="p">
-                {formatNumber(person.metric?.totalFriends ?? 0)}
-              </Typography>
-            </div>
+            <ShowIf condition={person.username !== 'myriad_official'}>
+              <div className={style.text}>
+                <Typography className={`${style.username}`} component="p">
+                  Friends
+                </Typography>
+                <Typography className={style.total} component="p">
+                  {formatNumber(person.metric?.totalFriends ?? 0)}
+                </Typography>
+              </div>
+            </ShowIf>
             <div className={style.text}>
               <Typography className={`${style.username}`} component="p">
                 Experience
@@ -359,7 +363,8 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 </Button>
               </ShowIf>
 
-              <ShowIf condition={!isBlocked && !canAddFriend && person.username !== 'myriad_official'}>
+              <ShowIf
+                condition={!isBlocked && !canAddFriend && person.username !== 'myriad_official'}>
                 <Button
                   onClick={handleClickFriendOption}
                   startIcon={
