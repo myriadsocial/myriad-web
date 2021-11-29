@@ -48,6 +48,7 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
         id: 'social',
         title: `Social Media`,
         component: <UserSocialContainer user={people} />,
+        background: 'white',
       },
     ];
 
@@ -56,6 +57,7 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
         id: 'setting',
         title: `Public Key`,
         component: <UserSettingsContainer user={user} />,
+        background: 'white',
       });
     }
 
