@@ -10,6 +10,7 @@ import {useRouter} from 'next/router';
 import {ProfileTimeline} from 'src/components-v2/Profile/ProfileComponent';
 import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
+import {loginAsAnonymous} from 'src/helpers/auth';
 import {User} from 'src/interfaces/user';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
@@ -100,12 +101,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const session = await getSession(context);
 
   if (!session) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
+    loginAsAnonymous();
   }
 
   const anonymous = Boolean(session?.user.anonymous);

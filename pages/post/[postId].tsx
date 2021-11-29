@@ -12,6 +12,7 @@ import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import ShowIf from 'src/components/common/show-if.component';
+import {loginAsAnonymous} from 'src/helpers/auth';
 import {FriendStatus} from 'src/interfaces/friend';
 import {Post, PostVisibility} from 'src/interfaces/post';
 import * as FriendAPI from 'src/lib/api/friends';
@@ -115,12 +116,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const session = await getSession(context);
 
   if (!session) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
+    loginAsAnonymous();
   }
 
   const anonymous = Boolean(session?.user.anonymous);
