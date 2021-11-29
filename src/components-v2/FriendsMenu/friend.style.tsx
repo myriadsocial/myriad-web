@@ -15,7 +15,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '23px',
       letterSpacing: '0em',
     },
-    list: {},
+    list: {
+      padding: '20px',
+    },
     item: {
       paddingLeft: theme.spacing(0.5),
       paddingRight: theme.spacing(0.5),
@@ -51,6 +53,51 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600,
       fontSize: '14px',
     },
-    error: {color: '#FE3636'},
+    icon: {
+      color: '#FFF',
+      '&:hover': {
+        color: theme.palette.primary.main,
+      },
+    },
+    error: {
+      background: '#FE3656',
+      color: '#FFF',
+      '&:hover': {
+        color: theme.palette.text.primary,
+      },
+    },
+    option: {
+      '& .hidden-button': {
+        display: 'none',
+      },
+      '&:hover .hidden-button': {
+        display: 'flex',
+      },
+      '&:hover': {
+        background: 'rgba(255, 200, 87, 0.15)',
+      },
+    },
+    iconbutton: {
+      backgroundColor: theme.palette.primary.main,
+      '&:hover': {
+        backgroundColor: '#e5e5e5',
+        opacity: 0.8,
+      },
+      width: '32px',
+      height: '32px',
+    },
+    dropdownMenu: {
+      marginBottom: theme.spacing(1.5),
+    },
+    danger: {
+      color: theme.palette.error.main,
+    },
+    flexCenter: {
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    m1: {
+      marginRight: theme.spacing(3),
+    },
   }),
 );
