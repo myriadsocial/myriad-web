@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 0,
       left: 0,
       height: '100%',
-      width: 8,
       borderBottomLeftRadius: 10,
       borderTopLeftRadius: 10,
       backgroundColor: 'inherit',
