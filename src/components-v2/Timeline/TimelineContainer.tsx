@@ -194,7 +194,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
             justifyContent: 'center',
           }}>
           <Button
-            style={{marginRight: '24px'}}
+            style={{marginRight: '12px'}}
             size="small"
             variant="outlined"
             color="secondary"
@@ -227,7 +227,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
             justifyContent: 'center',
           }}>
           <Button
-            style={{marginRight: '24px'}}
+            style={{marginRight: '12px'}}
             size="small"
             variant="outlined"
             color="secondary"

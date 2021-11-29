@@ -196,3 +196,14 @@ export const deleteRequest = async (requestId: string): Promise<void> => {
     method: 'DELETE',
   });
 };
+
+export const blockedUser = async (requesteeId: string, userId: string): Promise<void> => {
+  await MyriadAPI.request({
+    url: '/friends/blocked',
+    method: 'POST',
+    data: {
+      requesteeId: requesteeId,
+      requestorId: userId,
+    },
+  });
+};
