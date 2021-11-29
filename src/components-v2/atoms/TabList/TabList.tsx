@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
+import {useRouter} from 'next/router';
+
 import {Tooltip} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs, {TabsProps} from '@material-ui/core/Tabs';
@@ -29,6 +31,8 @@ export const TabList: React.FC<TabListProps> = props => {
     onChangeTab,
   } = props;
 
+  const router = useRouter();
+
   const styles = useStyles({position, mark, size});
 
   const [activeTab, setActiveTab] = useState(defaultActive);
@@ -43,42 +47,51 @@ export const TabList: React.FC<TabListProps> = props => {
   };
 
   return (
-    <Tabs
-      value={activeTab}
-      indicatorColor={indicatorColor}
-      TabIndicatorProps={{color: 'transparent', children: <span className={styles.indicator} />}}
-      textColor={textColor}
-      onChange={handleTabChange}
-      className={styles.tabs}>
-      {tabs.map(tab => {
-        {
-          if (tab.id === 'chatTabPanel')
-            return (
-              <Tooltip title={<Typography>Chat feature, coming soon</Typography>} arrow>
-                <span>
-                  <Tab
-                    key={`tab-${tab.id}`}
-                    label={tab.title}
-                    value={tab.id}
-                    icon={tab.icon}
-                    className={styles.tab}
-                    disabled={true}
-                  />
-                </span>
-              </Tooltip>
-            );
-        }
+    <div
+      style={{
+        background:
+          router.pathname === '/profile/[id]' && mark === 'underline' ? 'white' : 'transparent',
+      }}>
+      <Tabs
+        value={activeTab}
+        indicatorColor={indicatorColor}
+        TabIndicatorProps={{
+          color: 'transparent',
+          children: <span className={styles.indicator} />,
+        }}
+        textColor={textColor}
+        onChange={handleTabChange}
+        className={styles.tabs}>
+        {tabs.map(tab => {
+          {
+            if (tab.id === 'chatTabPanel')
+              return (
+                <Tooltip title={<Typography>Chat feature, coming soon</Typography>} arrow>
+                  <span>
+                    <Tab
+                      key={`tab-${tab.id}`}
+                      label={tab.title}
+                      value={tab.id}
+                      icon={tab.icon}
+                      className={styles.tab}
+                      disabled={true}
+                    />
+                  </span>
+                </Tooltip>
+              );
+          }
 
-        return (
-          <Tab
-            key={`tab-${tab.id}`}
-            label={tab.title}
-            value={tab.id}
-            icon={tab.icon}
-            className={styles.tab}
-          />
-        );
-      })}
-    </Tabs>
+          return (
+            <Tab
+              key={`tab-${tab.id}`}
+              label={tab.title}
+              value={tab.id}
+              icon={tab.icon}
+              className={styles.tab}
+            />
+          );
+        })}
+      </Tabs>
+    </div>
   );
 };
