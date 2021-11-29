@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {useRouter} from 'next/router';
+
 import {Button} from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -37,6 +39,8 @@ type TimelineContainerProps = {
 
 export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const {anonymous = false, filters, enableFilter = true} = props;
+
+  const router = useRouter();
 
   const dispatch = useDispatch();
   const {posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
@@ -148,22 +152,24 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
         <TimelineFilterContainer {...props} />
       </ShowIf>
 
-      <TimelineComponent
-        timelineType={query.type as TimelineType}
-        user={user}
-        posts={posts}
-        anonymous={anonymous}
-        loadNextPage={nextPage}
-        hasMore={hasMore}
-        upvote={handleUpvote}
-        onSendTip={handleSendTip}
-        onOpenTipHistory={openTipHistory}
-        onDelete={handleDeletePost}
-        onReport={handleReportPost}
-        toggleDownvoting={handleToggleDownvoting}
-        onShared={handleSharePost}
-        onRemoveVote={handleRemoveVote}
-      />
+      <div style={{marginTop: router.pathname === '/home' ? 30 : 0}}>
+        <TimelineComponent
+          timelineType={query.type as TimelineType}
+          user={user}
+          posts={posts}
+          anonymous={anonymous}
+          loadNextPage={nextPage}
+          hasMore={hasMore}
+          upvote={handleUpvote}
+          onSendTip={handleSendTip}
+          onOpenTipHistory={openTipHistory}
+          onDelete={handleDeletePost}
+          onReport={handleReportPost}
+          toggleDownvoting={handleToggleDownvoting}
+          onShared={handleSharePost}
+          onRemoveVote={handleRemoveVote}
+        />
+      </div>
 
       <Modal
         gutter="none"
