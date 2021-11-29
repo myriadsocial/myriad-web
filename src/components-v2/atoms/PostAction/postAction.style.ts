@@ -32,8 +32,37 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingBottom: 10,
     },
     copy: {
-      paddingTop: 10,
       width: 520,
+    },
+    subtitle: {
+      fontWeight: theme.typography.fontWeightMedium,
+      fontSize: '18px',
+      marginBottom: 26,
+      lineHeight: 1,
+    },
+    input: {
+      marginBottom: '0px',
+      '& .MuiOutlinedInput-input': {
+        padding: '12px 16px',
+      },
+    },
+    multiline: {
+      marginBottom: '0px',
+      '& .MuiOutlinedInput-multiline': {
+        padding: '12px 16px',
+      },
+    },
+    copyButton: {
+      width: '100%',
+      textAlign: 'right',
+      marginTop: 16,
+    },
+    divider: {
+      height: 1,
+      width: '100%',
+      background: '#E0E0E0',
+      marginTop: 32,
+      marginBottom: 32,
     },
   }),
 );

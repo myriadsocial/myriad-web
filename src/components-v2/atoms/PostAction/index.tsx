@@ -1,9 +1,9 @@
-import {ChatAltIcon, DuplicateIcon, ShareIcon} from '@heroicons/react/outline';
+import {ChatAltIcon, ShareIcon} from '@heroicons/react/outline';
 
 import React, {useState} from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
-import {InputAdornment, Menu, MenuItem, TextField, Typography} from '@material-ui/core';
+import {Button, Menu, MenuItem, TextField, Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
@@ -125,6 +125,9 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
         open={Boolean(linkAnchorEl)}
         onClose={handleCloseCopyLink}>
         <div className={style.copy}>
+          <Typography component="p" className={style.subtitle} color="primary" variant="caption">
+            Post URL
+          </Typography>
           <TextField
             label="Post URL"
             id="copy-post-url"
@@ -133,19 +136,37 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
             disabled
             fullWidth
             margin="none"
-            style={{marginBottom: 0}}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <CopyToClipboard text={shareUrl} onCopy={handleLinkCopied}>
-                    <IconButton aria-label="copy-post-link" style={{padding: 0}}>
-                      <SvgIcon component={DuplicateIcon} color="primary" />
-                    </IconButton>
-                  </CopyToClipboard>
-                </InputAdornment>
-              ),
-            }}
+            className={style.input}
           />
+          <div className={style.copyButton}>
+            <CopyToClipboard text={shareUrl} onCopy={handleLinkCopied}>
+              <Button color="primary" variant="contained" style={{width: 'auto'}}>
+                Copy URL
+              </Button>
+            </CopyToClipboard>
+          </div>
+          <div className={style.divider} />
+          <Typography component="p" className={style.subtitle} color="primary" variant="caption">
+            Embed Link
+          </Typography>
+          <TextField
+            label="Copy and paste this code into your website or blog"
+            id="copy-post-embed"
+            value={`<iframe src="${shareUrl}></iframe>`}
+            variant="outlined"
+            disabled
+            fullWidth
+            multiline
+            margin="none"
+            className={style.multiline}
+          />
+          <div className={style.copyButton}>
+            <CopyToClipboard text={`<iframe src="${shareUrl}"></iframe>`} onCopy={handleLinkCopied}>
+              <Button color="primary" variant="contained" style={{width: 'auto'}}>
+                Copy URL
+              </Button>
+            </CopyToClipboard>
+          </div>
         </div>
       </Modal>
 
