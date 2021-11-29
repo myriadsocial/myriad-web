@@ -190,59 +190,124 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         />
       </ShowIf>
 
-      <SearchComponent onSubmit={handleSearch} placeholder={'Search friend'} />
+      {router.pathname === '/profile/[id]' ? (
+        <div
+          style={{
+            background: 'white',
+            borderRadius: `20px 20px 0px 0px`,
+            padding: `20px 30px 30px`,
+          }}>
+          <SearchComponent onSubmit={handleSearch} placeholder={'Search friend'} />
 
-      <List>
-        <InfiniteScroll
-          scrollableTarget="scrollable-timeline"
-          dataLength={friendList.length}
-          hasMore={hasMore}
-          next={onLoadNextPage}
-          loader={<Loading />}>
-          {friendList.map(friend => (
-            <ListItem
-              key={friend.id}
-              classes={{root: background ? style.backgroundEven : ''}}
-              className={style.option}
-              alignItems="center">
-              <ListItemAvatar>
-                <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
-                  {acronym(friend.name)}
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText>
-                <Link href={`/profile/${friend.id}`}>
-                  <a href={`/profile/${friend.id}`} className={style.link}>
-                    <Typography className={style.name} component="span" color="textPrimary">
-                      {friend.name}
+          <List>
+            <InfiniteScroll
+              scrollableTarget="scrollable-timeline"
+              dataLength={friendList.length}
+              hasMore={hasMore}
+              next={onLoadNextPage}
+              loader={<Loading />}>
+              {friendList.map(friend => (
+                <ListItem
+                  key={friend.id}
+                  classes={{root: background ? style.backgroundEven : ''}}
+                  className={style.option}
+                  alignItems="center">
+                  <ListItemAvatar>
+                    <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
+                      {acronym(friend.name)}
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText>
+                    <Link href={`/profile/${friend.id}`}>
+                      <a href={`/profile/${friend.id}`} className={style.link}>
+                        <Typography className={style.name} component="span" color="textPrimary">
+                          {friend.name}
+                        </Typography>
+                      </a>
+                    </Link>
+                    <Typography className={style.friend} component="p" color="textSecondary">
+                      1 mutual friends
                     </Typography>
-                  </a>
-                </Link>
-                <Typography className={style.friend} component="p" color="textSecondary">
-                  1 mutual friends
-                </Typography>
-              </ListItemText>
+                  </ListItemText>
 
-              <div className="hidden-button">
-                <IconButton
-                  aria-label="friend-setting"
-                  classes={{root: style.iconbutton}}
-                  color="primary"
-                  onClick={handleOpenFriendSetting(friend)}
-                  disableRipple={true}
-                  disableFocusRipple={true}
-                  disableTouchRipple>
-                  <SvgIcon
-                    component={DotsHorizontalIcon}
-                    classes={{root: style.icon}}
-                    fontSize="small"
-                  />
-                </IconButton>
-              </div>
-            </ListItem>
-          ))}
-        </InfiniteScroll>
-      </List>
+                  <div className="hidden-button">
+                    <IconButton
+                      aria-label="friend-setting"
+                      classes={{root: style.iconbutton}}
+                      color="primary"
+                      onClick={handleOpenFriendSetting(friend)}
+                      disableRipple={true}
+                      disableFocusRipple={true}
+                      disableTouchRipple>
+                      <SvgIcon
+                        component={DotsHorizontalIcon}
+                        classes={{root: style.icon}}
+                        fontSize="small"
+                      />
+                    </IconButton>
+                  </div>
+                </ListItem>
+              ))}
+            </InfiniteScroll>
+          </List>
+        </div>
+      ) : (
+        <>
+          <SearchComponent onSubmit={handleSearch} placeholder={'Search friend'} />
+
+          <List>
+            <InfiniteScroll
+              scrollableTarget="scrollable-timeline"
+              dataLength={friendList.length}
+              hasMore={hasMore}
+              next={onLoadNextPage}
+              loader={<Loading />}>
+              {friendList.map(friend => (
+                <ListItem
+                  key={friend.id}
+                  classes={{root: background ? style.backgroundEven : ''}}
+                  className={style.option}
+                  alignItems="center">
+                  <ListItemAvatar>
+                    <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
+                      {acronym(friend.name)}
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText>
+                    <Link href={`/profile/${friend.id}`}>
+                      <a href={`/profile/${friend.id}`} className={style.link}>
+                        <Typography className={style.name} component="span" color="textPrimary">
+                          {friend.name}
+                        </Typography>
+                      </a>
+                    </Link>
+                    <Typography className={style.friend} component="p" color="textSecondary">
+                      1 mutual friends
+                    </Typography>
+                  </ListItemText>
+
+                  <div className="hidden-button">
+                    <IconButton
+                      aria-label="friend-setting"
+                      classes={{root: style.iconbutton}}
+                      color="primary"
+                      onClick={handleOpenFriendSetting(friend)}
+                      disableRipple={true}
+                      disableFocusRipple={true}
+                      disableTouchRipple>
+                      <SvgIcon
+                        component={DotsHorizontalIcon}
+                        classes={{root: style.icon}}
+                        fontSize="small"
+                      />
+                    </IconButton>
+                  </div>
+                </ListItem>
+              ))}
+            </InfiniteScroll>
+          </List>
+        </>
+      )}
 
       <Modal
         gutter="none"
