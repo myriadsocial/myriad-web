@@ -37,7 +37,21 @@ MyriadPost.args = {
     visibility: PostVisibility.PUBLIC,
     originCreatedAt: new Date(),
     originPostId: '',
-    importers: [],
+    importers: [
+      {
+        id: '0xdc996f43e45bb990aef40fbe7d9e52fc6270369131a180f1e8a8705b74bbd060',
+        defaultCurrency: CurrencyId.AUSD,
+        name: 'Cintailah Usus Mu',
+        profilePictureURL:
+          'https://res.cloudinary.com/dsget80gs/image/upload/v1630078148/obliq1oabyggyn6ryiwi.jpg',
+        bannerImageUrl:
+          'https://res.cloudinary.com/dsget80gs/image/upload/v1630078156/ii9gfses5qanz9fbqhiw.jpg',
+        bio: 'Minum makanan bergizi',
+        createdAt: new Date('2021-07-22T09:00:47.000Z'),
+        updatedAt: new Date('2021-08-27T15:29:28.000Z'),
+        currencies: [],
+      },
+    ],
     metric: {
       likes: 1,
       dislikes: 0,
@@ -119,7 +133,21 @@ TwitterPost.args = {
       videos: [],
     },
     originCreatedAt: new Date('2021-08-29T18:21:51.000Z'),
-    importers: ['0xdc996f43e45bb990aef40fbe7d9e52fc6270369131a180f1e8a8705b74bbd060'],
+    importers: [
+      {
+        id: '0xdc996f43e45bb990aef40fbe7d9e52fc6270369131a180f1e8a8705b74bbd060',
+        defaultCurrency: CurrencyId.AUSD,
+        name: 'Cintailah Usus Mu',
+        profilePictureURL:
+          'https://res.cloudinary.com/dsget80gs/image/upload/v1630078148/obliq1oabyggyn6ryiwi.jpg',
+        bannerImageUrl:
+          'https://res.cloudinary.com/dsget80gs/image/upload/v1630078156/ii9gfses5qanz9fbqhiw.jpg',
+        bio: 'Minum makanan bergizi',
+        createdAt: new Date('2021-07-22T09:00:47.000Z'),
+        updatedAt: new Date('2021-08-27T15:29:28.000Z'),
+        currencies: [],
+      },
+    ],
     metric: {
       likes: 1,
       dislikes: 0,
@@ -176,7 +204,7 @@ RedditPost.args = {
       videos: [],
     },
     originCreatedAt: new Date('2021-08-26T10:08:46.000Z'),
-    importers: ['0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127'],
+    importers: [],
     metric: {
       likes: 1,
       dislikes: 0,

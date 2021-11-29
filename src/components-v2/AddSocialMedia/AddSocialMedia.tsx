@@ -177,6 +177,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                     <Button
                       component="div"
                       variant="outlined"
+                      color="secondary"
                       fullWidth
                       startIcon={<TwitterIcon />}
                       className={styles.twitter}>
@@ -194,6 +195,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                     <Button
                       component="div"
                       variant="outlined"
+                      color="secondary"
                       fullWidth
                       startIcon={<RedditIcon />}
                       className={styles.reddit}>

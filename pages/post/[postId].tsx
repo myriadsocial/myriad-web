@@ -130,6 +130,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   try {
     post = await PostAPI.getPostDetail(params.postId, userId);
 
+    const importerIds = post.importers ? post.importers.map(importer => importer.id) : [];
+
     const upvoted = post.votes
       ? post.votes.filter(vote => vote.userId === userId && vote.state)
       : [];
@@ -140,21 +142,24 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     post.isUpvoted = upvoted.length > 0;
     post.isDownVoted = downvoted.length > 0;
 
+    if (post.platform === 'reddit') {
+      post.text = post.text.replace(new RegExp('&amp;#x200B;', 'g'), '&nbsp;');
+    }
+
     // show deleted post if the current user is the post creator or importer
     if (post.deletedAt) {
-      showAsDeleted = userId !== post.createdBy && !post.importers.includes(userId);
+      showAsDeleted = userId !== post.createdBy && !importerIds.includes(userId);
     } else {
       if (post.visibility === PostVisibility.PRIVATE) {
-        showAsDeleted = userId !== post.createdBy && !post.importers.includes(userId);
+        showAsDeleted = userId !== post.createdBy && !importerIds.includes(userId);
       }
 
       if (
         post.visibility === PostVisibility.FRIEND &&
-        ((post.importers.length > 0 && !post.importers.includes(userId)) ||
-          post.createdBy !== userId)
+        ((importerIds.length > 0 && !importerIds.includes(userId)) || post.createdBy !== userId)
       ) {
         const {data: requests} = await FriendAPI.checkFriendStatus(userId, [
-          ...post.importers,
+          ...importerIds,
           post.createdBy,
         ]);
 
@@ -190,7 +195,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       session,
       title: post?.title ?? `${post.user.name} on ${publicRuntimeConfig.appName}`,
       description: post.platform === 'myriad' ? formatToString(post) : post.text,
-      image: post.asset?.images ? post.asset?.images[0] : null,
+      image: null,
       removed: showAsDeleted,
     },
   };

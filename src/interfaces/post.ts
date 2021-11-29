@@ -46,7 +46,6 @@ export enum PostVisibility {
 export type PostProps = {
   asset?: PostAsset;
   createdBy: string;
-  importers: string[];
   metric: PostMetric;
   originCreatedAt: Date;
   originPostId: string;
@@ -99,6 +98,7 @@ export interface Post extends PostProps, BaseModel {
   walletAddress?: string;
   votes?: Vote[];
   mentions?: MentionUserProps[];
+  importers?: User[];
   isUpvoted?: boolean;
   isDownVoted?: boolean;
 }
