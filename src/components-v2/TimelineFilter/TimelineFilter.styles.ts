@@ -6,7 +6,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      marginBottom: 30,
     },
     filter: {},
   }),
