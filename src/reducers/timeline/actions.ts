@@ -690,7 +690,8 @@ export const removeVote: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
-  (query: string) => async (dispatch, getState) => {
+  (query: string, page = 1) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     const {
@@ -699,7 +700,7 @@ export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
     const userId = user?.id as string;
 
     try {
-      const {data: posts, meta} = await PostAPI.findPosts(userId, query);
+      const {data: posts, meta} = await PostAPI.findPosts(page, userId, query);
 
       dispatch({
         type: constants.LOAD_TIMELINE,

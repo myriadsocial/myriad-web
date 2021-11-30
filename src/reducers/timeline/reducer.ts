@@ -17,6 +17,7 @@ export interface TimelineState extends BasePaginationState {
   type: TimelineType;
   sort: TimelineSortMethod;
   filter?: TimelineFilter;
+  search?: string;
   hasMore: boolean;
   posts: Post[];
   tippedContent: {

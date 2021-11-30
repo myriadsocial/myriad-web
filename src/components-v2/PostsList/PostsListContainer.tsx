@@ -25,14 +25,15 @@ import {WalletState} from 'src/reducers/wallet/reducer';
 
 type PostsListContainerProps = {
   anonymous?: boolean;
+  query: string;
 };
 
 export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
-  const {anonymous = false} = props;
+  const {anonymous = false, query} = props;
 
   const dispatch = useDispatch();
 
-  const {posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
+  const {page, posts, hasMore, searchPosts, getTippedUserId} = useTimelineHook();
   const {openTipHistory} = useTipHistory();
   const {openToaster} = useToasterHook();
 
@@ -51,6 +52,10 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
   const [reported, setReported] = useState<Post | null>(null);
   const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
   const sendTipOpened = Boolean(tippedPost);
+
+  const handleLoadNextPage = () => {
+    searchPosts(query, page + 1);
+  };
 
   const handleUpvote = (reference: Post | Comment) => {
     dispatch(upvote(reference));
@@ -115,7 +120,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
       <PostsList
         user={user}
         anonymous={anonymous}
-        loadNextPage={nextPage}
+        loadNextPage={handleLoadNextPage}
         hasMore={hasMore}
         upvote={handleUpvote}
         onSendTip={handleSendTip}
