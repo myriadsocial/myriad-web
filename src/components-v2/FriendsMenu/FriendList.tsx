@@ -33,6 +33,7 @@ import {acronym} from 'src/helpers/string';
 import {useToasterHook} from 'src/hooks/use-toaster.hook';
 import {Status} from 'src/interfaces/toaster';
 import {blockedFriendList, removedFriendList} from 'src/reducers/friend/actions';
+import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
 
 export const FriendListComponent: React.FC<FriendListProps> = props => {
   const {
@@ -88,8 +89,13 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   };
 
   const handleSendTip = () => {
-    setSendTipOpened(true);
-    handleCloseFriendSetting();
+    if (currentFriend) {
+      dispatch(setDetailTippedUser(currentFriend.name, currentFriend.avatar ?? ''));
+      dispatch(setTippedUserId(currentFriend.id));
+
+      setSendTipOpened(true);
+      handleCloseFriendSetting();
+    }
   };
 
   const handleUnfriend = () => {
@@ -318,22 +324,35 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         <SendTipContainer />
       </Modal>
 
-      <Menu
-        id="friend-setting"
-        anchorEl={anchorEl}
-        style={{width: 170}}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleCloseFriendSetting}>
-        <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
-        <MenuItem onClick={handleSendTip}>Send direct tip</MenuItem>
-        <MenuItem className={style.danger} onClick={handleUnfriend}>
-          Unfriend
-        </MenuItem>
-        <MenuItem className={style.danger} onClick={handleBlock}>
-          Block this person
-        </MenuItem>
-      </Menu>
+      {currentFriend && currentFriend.username === 'myriad_official' ? (
+        <Menu
+          id={currentFriend.id}
+          anchorEl={anchorEl}
+          style={{width: 170}}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleCloseFriendSetting}>
+          <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
+          <MenuItem onClick={handleSendTip}>Send direct tip</MenuItem>
+        </Menu>
+      ) : (
+        <Menu
+          id={currentFriend?.id ?? 'friend-id'}
+          anchorEl={anchorEl}
+          style={{width: 170}}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleCloseFriendSetting}>
+          <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
+          <MenuItem onClick={handleSendTip}>Send direct tip</MenuItem>
+          <MenuItem className={style.danger} onClick={handleUnfriend}>
+            Unfriend
+          </MenuItem>
+          <MenuItem className={style.danger} onClick={handleBlock}>
+            Block this person
+          </MenuItem>
+        </Menu>
+      )}
 
       <PromptComponent
         onCancel={closeConfirmRemoveFriend}
