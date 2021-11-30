@@ -80,14 +80,18 @@ export const ExperiencePreview: React.FC<Props> = props => {
       </div>
       <div>
         <Typography className={style.subtitle}>{'People'}</Typography>
-        {experience.people.map(person => (
-          <ListItem key={person.id} classes={{root: style.list}}>
-            <ListItemAvatar>
-              <Avatar src={person.profilePictureURL} />
-            </ListItemAvatar>
-            <ListItemText primary={person.name} secondary={person.platform} />
-          </ListItem>
-        ))}
+        {experience.people.map(person =>
+          person.id === '' ? (
+            <></>
+          ) : (
+            <ListItem key={person.id} classes={{root: style.list}}>
+              <ListItemAvatar>
+                <Avatar src={person.profilePictureURL} />
+              </ListItemAvatar>
+              <ListItemText primary={person.name} secondary={person.platform} />
+            </ListItem>
+          ),
+        )}
       </div>
       {experience.createdBy !== userId && (
         <div className={style.button}>
