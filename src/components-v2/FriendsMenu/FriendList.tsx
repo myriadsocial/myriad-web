@@ -2,13 +2,14 @@ import {DotsHorizontalIcon} from '@heroicons/react/outline';
 
 import React, {useEffect, useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import {useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
 import {IconButton, Menu, MenuItem, Button} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -32,8 +33,10 @@ import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {useToasterHook} from 'src/hooks/use-toaster.hook';
 import {Status} from 'src/interfaces/toaster';
+import {RootState} from 'src/reducers';
 import {blockedFriendList, removedFriendList} from 'src/reducers/friend/actions';
 import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
+import {WalletState} from 'src/reducers/wallet/reducer';
 
 export const FriendListComponent: React.FC<FriendListProps> = props => {
   const {
@@ -48,12 +51,17 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   } = props;
   const style = useStyles();
   const router = useRouter();
+
+  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentFriend, setCurrentFriend] = useState<null | FriendDetail>(null);
+  const [tippedFriendForHistory, setTippedFriendForHistory] = useState<FriendDetail | null>(null);
   const [sendTipOpened, setSendTipOpened] = useState(false);
   const [friendList, setFriendList] = useState<FriendDetail[]>([]);
   const [openRemoveFriend, setOpenRemoveFriend] = useState(false);
   const [openBlockUser, setOpenBlockUser] = useState(false);
+  const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
 
   const {openToaster} = useToasterHook();
 
@@ -63,6 +71,12 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     const list = useFriendList(friends, user);
     setFriendList(list);
   }, [friends, user]);
+
+  useEffect(() => {
+    if (isTipSent) {
+      closeSendTip();
+    }
+  }, [isTipSent]);
 
   const handleOpenFriendSetting =
     (currentFriend: FriendDetail) => (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -84,10 +98,6 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     handleCloseFriendSetting();
   };
 
-  const closeSendTip = () => {
-    setSendTipOpened(false);
-  };
-
   const handleSendTip = () => {
     if (currentFriend) {
       dispatch(setDetailTippedUser(currentFriend.name, currentFriend.avatar ?? ''));
@@ -96,6 +106,22 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       setSendTipOpened(true);
       handleCloseFriendSetting();
     }
+  };
+
+  const closeSendTip = () => {
+    if (isTipSent && currentFriend) {
+      setSendTipOpened(false);
+      setTippedFriendForHistory(currentFriend);
+      setOpenSuccessPrompt(true);
+    } else {
+      console.log('no user tipped');
+    }
+
+    setCurrentFriend(null);
+  };
+
+  const handleCloseSuccessPrompt = (): void => {
+    setOpenSuccessPrompt(false);
   };
 
   const handleUnfriend = () => {
@@ -400,6 +426,35 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
             size="small"
             variant="contained">
             Block Now
+          </Button>
+        </div>
+      </PromptComponent>
+
+      <PromptComponent
+        icon={'success'}
+        open={openSuccessPrompt}
+        onCancel={handleCloseSuccessPrompt}
+        title={'Success'}
+        subtitle={
+          <Typography component="div">
+            Tip to{' '}
+            <Box fontWeight={700} display="inline">
+              {tippedFriendForHistory?.name ?? 'Unknown Myrian'}
+            </Box>{' '}
+            sent successfully
+          </Typography>
+        }>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={handleCloseSuccessPrompt}>
+            Return
           </Button>
         </div>
       </PromptComponent>
