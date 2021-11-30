@@ -22,12 +22,19 @@ const Home: React.FC = () => {
   const router = useRouter();
 
   const performSearch = (query: string) => {
-    localStorage.setItem('searchQuery', query ?? '');
-
     const DELAY = 2000;
     setTimeout(() => {
       // shallow push, without rerender page
-      router.push('/searchresults', `/searchresults?${query}`, {shallow: true});
+      router.push(
+        {
+          pathname: 'searchresults',
+          query: {
+            q: query,
+          },
+        },
+        undefined,
+        {shallow: true},
+      );
     }, DELAY);
   };
 

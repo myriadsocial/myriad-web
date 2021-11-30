@@ -16,6 +16,7 @@ import {TabPanel} from '../atoms/TabPanel';
 import {useStyles} from './PostCreate.styles';
 import {menuOptions} from './default';
 
+import ShowIf from 'src/components/common/show-if.component';
 import {Post, PostVisibility} from 'src/interfaces/post';
 
 type PostCreateProps = {
@@ -165,9 +166,11 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
           <NSFWTags tags={post.NSFWTag?.split(',') || []} onConfirm={handleConfirmNSFWTags} />
 
-          <Button color="primary" size="small" className={styles.markdown}>
-            Markdown Mode
-          </Button>
+          <ShowIf condition={false}>
+            <Button color="primary" size="small" className={styles.markdown}>
+              Markdown Mode
+            </Button>
+          </ShowIf>
         </div>
 
         <Button

@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
+import {useRouter} from 'next/router';
+
 import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
@@ -25,43 +27,37 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const SearchResultContainer: React.FC = () => {
+  const style = useStyles();
+
+  const router = useRouter();
+
   const {searchExperience} = useExperienceHook();
-
   const {searchUsers} = useSearchHook();
-
   const {searchPosts} = useTimelineHook();
 
-  const [submittedQuery, setSubmittedQuery] = useState('');
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const searchQuery = localStorage.getItem('searchQuery');
-      setSubmittedQuery(searchQuery ?? '');
-    }
-  }, []);
-
-  useEffect(() => {
-    searchPosts(submittedQuery);
-  }, [submittedQuery]);
-
   const [selectedTab, setSelectedTab] = useState('');
+  const searchKeyword = router.query.q as string;
 
-  const style = useStyles();
+  useEffect(() => {
+    if (searchKeyword.length) {
+      searchPosts(searchKeyword);
+    }
+  }, [searchKeyword]);
 
   useEffect(() => {
     switch (selectedTab) {
       case 'posts-tab': {
-        searchPosts(submittedQuery);
+        searchPosts(searchKeyword);
         break;
       }
 
       case 'users-tab': {
-        searchUsers(submittedQuery);
+        searchUsers(searchKeyword);
         break;
       }
 
       case 'experience-tab': {
-        searchExperience(submittedQuery);
+        searchExperience(searchKeyword);
         break;
       }
 
@@ -69,13 +65,13 @@ export const SearchResultContainer: React.FC = () => {
         break;
       }
     }
-  }, [selectedTab, submittedQuery]);
+  }, [selectedTab]);
 
   const [searchResultTabTexts] = useState<TabItems<string>[]>([
     {
       id: 'posts-tab',
       title: 'Post',
-      component: <PostsListContainer />,
+      component: <PostsListContainer query={searchKeyword} />,
     },
     {
       id: 'users-tab',
@@ -94,14 +90,23 @@ export const SearchResultContainer: React.FC = () => {
   };
 
   const onSubmitSearch = (query: string) => {
-    setSubmittedQuery(query);
+    router.push(
+      {
+        pathname: 'searchresults',
+        query: {
+          q: query,
+        },
+      },
+      undefined,
+      {shallow: true},
+    );
   };
 
   return (
     <>
       <SearchBoxContainer onSubmitSearch={onSubmitSearch} />
       <Typography className={style.text}>
-        Search result for &quot;{submittedQuery}&quot; :
+        Search result for &quot;{searchKeyword}&quot; :
       </Typography>
       <TabsComponent
         active={searchResultTabTexts[0].id}

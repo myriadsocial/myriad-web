@@ -1,6 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
+import {Session} from 'next-auth';
 import {getSession} from 'next-auth/client';
 
 import {SearchResultContainer} from '../src/components-v2/Search/SearchResultContainer';
@@ -17,7 +18,11 @@ import {fetchExperience} from 'src/reducers/experience/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
-const Home: React.FC = () => {
+type SearchProps = {
+  session: Session;
+};
+
+const Search: React.FC<SearchProps> = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
 
   if (!user) return null;
@@ -31,6 +36,8 @@ const Home: React.FC = () => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
+  const {req} = context;
+
   const dispatch = store.dispatch as ThunkDispatchAction;
 
   if (typeof window === 'undefined') {
@@ -46,7 +53,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
         redirect: {
           destination: '/mobile',
           permanent: false,
-          headers: context.req.headers,
+          headers: req.headers,
         },
       };
     }
@@ -98,4 +105,4 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     },
   };
 });
-export default Home;
+export default Search;

@@ -41,8 +41,8 @@ export const useTimelineHook = () => {
     dispatch(getDedicatedPost(id));
   };
 
-  const searchPosts = async (query: string) => {
-    dispatch(fetchSearchedPosts(query));
+  const searchPosts = async (query: string, page = 1) => {
+    dispatch(fetchSearchedPosts(query, page));
   };
 
   return {
@@ -59,5 +59,6 @@ export const useTimelineHook = () => {
     getTippedUserId,
     getPostDetail,
     post: timelineState.post,
+    page: timelineState.meta.currentPage,
   };
 };
