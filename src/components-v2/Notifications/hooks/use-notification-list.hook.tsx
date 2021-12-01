@@ -39,6 +39,8 @@ export const useNotificationList = (notifications: Notification[]): Notification
   const style = useStyles();
 
   return notifications
+    .filter(notification => notification.type !== NotificationType.POST_VOTE)
+    .filter(notification => notification.type !== NotificationType.COMMENT_VOTE)
     .filter(notification => Boolean(notification.fromUserId) && Boolean(notification.toUserId))
     .map(notification => {
       switch (notification.type) {
@@ -102,9 +104,10 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: notification.additionalReferenceId
-              ? `/post/${notification.additionalReferenceId[0]?.postId}`
-              : `/404`,
+            href:
+              notification.additionalReferenceId && notification.additionalReferenceId.length > 0
+                ? `/post/${notification.additionalReferenceId[0]?.postId}`
+                : `/404`,
           };
 
         case NotificationType.COMMENT_COMMENT:
