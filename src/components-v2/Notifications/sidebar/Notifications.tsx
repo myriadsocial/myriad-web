@@ -21,6 +21,7 @@ import {formatDistanceStrict, subDays} from 'date-fns';
 import {AvatarComponent} from 'src/components/common/Avatar.component';
 import {acronym} from 'src/helpers/string';
 import {Notification, NotificationType} from 'src/interfaces/notification';
+import {PAGINATION_LIMIT} from 'src/lib/api/constants/pagination';
 
 type NotificationsProps = {
   notifications: Notification[];
@@ -45,7 +46,7 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
 
   const style = useStyles();
 
-  const list = useNotificationList(notifications);
+  const list = useNotificationList(notifications).slice(0, PAGINATION_LIMIT);
 
   //TODO: this is a duplicate function on PostHeader/index.tsx
   const handleClickAvatar = (): void => {
