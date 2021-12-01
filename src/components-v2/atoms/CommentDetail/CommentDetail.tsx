@@ -20,7 +20,7 @@ import {formatDistance, subDays} from 'date-fns';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {CommentProps} from 'src/interfaces/comment';
-import {ReferenceType, SectionType} from 'src/interfaces/interaction';
+import {ReferenceType} from 'src/interfaces/interaction';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {setTippedContent} from 'src/reducers/timeline/actions';
@@ -32,7 +32,6 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
     deep,
     user,
     mentionables,
-    onDownVote,
     onUpvote,
     onReply,
     onLoadReplies,
@@ -40,6 +39,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
     onReport,
     onSendTip,
     onSearchPeople,
+    onRemoveVote,
     setDownvoting,
     onBeforeDownvote,
   } = props;
@@ -66,7 +66,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
   };
 
   const handleDownVote = () => {
-    if (section === SectionType.DEBATE) {
+    if (!comment.isDownVoted) {
       setDownvoting(comment);
 
       if (deep < 2) {
@@ -77,7 +77,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
         onBeforeDownvote && onBeforeDownvote();
       }
     } else {
-      onDownVote(comment);
+      onRemoveVote(comment);
     }
   };
 
@@ -222,7 +222,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             user={user}
             deep={deep + 1}
             onUpvote={onUpvote}
-            onDownvote={onDownVote}
+            onRemoveVote={onRemoveVote}
             comments={comment.replies || []}
             onComment={onReply}
             onLoadReplies={onLoadReplies}

@@ -20,7 +20,7 @@ type CommentListProps = {
   expand?: boolean;
   onComment: (comment: Partial<CommentProps>) => void;
   onUpvote: (comment: Comment) => void;
-  onDownvote: (comment: Comment) => void;
+  onRemoveVote: (comment: Comment) => void;
   onLoadReplies: (referenceId: string, deep: number) => void;
   onOpenTipHistory: (comment: Comment) => void;
   onSendTip: (comment: Comment) => void;
@@ -45,7 +45,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
     deep = 0,
     onComment,
     onUpvote,
-    onDownvote,
+    onRemoveVote,
     onLoadReplies,
     onOpenTipHistory,
     onReport,
@@ -69,7 +69,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
           deep={deep}
           onReply={onComment}
           onUpvote={onUpvote}
-          onDownVote={onDownvote}
+          onRemoveVote={onRemoveVote}
           onLoadReplies={onLoadReplies}
           onOpenTipHistory={onOpenTipHistory}
           onReport={onReport}

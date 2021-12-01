@@ -12,7 +12,7 @@ export interface CommentDetailProps {
   mentionables: FriendDetail[];
   onReply: (comment: Partial<CommentProps>) => void;
   onUpvote: (comment: Comment) => void;
-  onDownVote: (comment: Comment) => void;
+  onRemoveVote: (comment: Comment) => void;
   onLoadReplies: (referenceId: string, deep: number) => void;
   onOpenTipHistory: (comment: Comment) => void;
   onSendTip: (comment: Comment) => void;
