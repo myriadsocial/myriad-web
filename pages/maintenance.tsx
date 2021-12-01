@@ -86,14 +86,18 @@ const Maintenance: React.FC = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const {res} = context;
+  const {req} = context;
 
   const available = await healthcheck();
 
   if (available) {
-    res.setHeader('location', '/');
-    res.statusCode = 302;
-    res.end();
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+        headers: req.headers,
+      },
+    };
   }
 
   return {
