@@ -522,7 +522,7 @@ export const fetchWalletDetails: ThunkActionCreator<Actions, RootState> =
   };
 
 export const deletePost: ThunkActionCreator<Actions, RootState> =
-  (postId: string) => async (dispatch, getState) => {
+  (postId: string, callback?: () => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
@@ -535,10 +535,13 @@ export const deletePost: ThunkActionCreator<Actions, RootState> =
       }
 
       await PostAPI.removePost(postId);
+
       dispatch({
         type: constants.REMOVE_POST,
         postId,
       });
+
+      callback && callback();
     } catch (error) {
       dispatch(
         setError({
