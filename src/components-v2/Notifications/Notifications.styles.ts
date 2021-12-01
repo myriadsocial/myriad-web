@@ -5,10 +5,12 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: '100%',
       margin: '8px 0',
-      padding: 30,
+      padding: 16,
     },
     header: {
-      textAlign: 'center',
+      paddingTop: 14,
+      paddingRight: 14,
+      paddingLeft: 14,
     },
     title: {
       fontSize: theme.typography.h4.fontSize,
@@ -27,6 +29,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     list: {
       marginLeft: theme.spacing(-2),
       marginRight: theme.spacing(-2),
+      '& .MuiListItem-button:hover': {
+        backgroundColor: alpha('#FFC857', 0.15),
+      },
     },
     item: {
       marginBottom: theme.spacing(0.5),
@@ -62,9 +67,18 @@ export const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
     },
     avatar: {
-      width: '50px',
-      height: '50px',
+      width: '40px',
+      height: '40px',
       marginRight: 10,
+    },
+    avatarItem: {
+      paddingLeft: 14,
+    },
+    secondaryItem: {
+      paddingRight: 14,
+    },
+    textItem: {
+      paddingLeft: 6,
     },
   }),
 );
