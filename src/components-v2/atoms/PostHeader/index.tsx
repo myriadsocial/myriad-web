@@ -162,6 +162,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         id="post-setting"
         anchorEl={anchorEl}
         style={{width: 170}}
+        classes={{paper: style.menu}}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClosePostSetting}>
