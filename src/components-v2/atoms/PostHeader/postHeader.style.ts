@@ -28,5 +28,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     danger: {
       color: theme.palette.error.main,
     },
+    menu: {
+      maxWidth: 'max-content',
+    },
   }),
 );
