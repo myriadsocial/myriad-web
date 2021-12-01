@@ -1,9 +1,9 @@
-import {ChatAltIcon, ShareIcon} from '@heroicons/react/outline';
+import {ChatAltIcon, DuplicateIcon, ShareIcon} from '@heroicons/react/outline';
 
 import React, {useState} from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
-import {Button, Menu, MenuItem, TextField, Typography} from '@material-ui/core';
+import {Menu, MenuItem, TextField, Typography, InputAdornment} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
@@ -137,14 +137,18 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
             fullWidth
             margin="none"
             className={style.input}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <CopyToClipboard text={shareUrl} onCopy={handleLinkCopied}>
+                    <IconButton aria-label="copy-post-link" style={{padding: 0}}>
+                      <SvgIcon component={DuplicateIcon} color="primary" />
+                    </IconButton>
+                  </CopyToClipboard>
+                </InputAdornment>
+              ),
+            }}
           />
-          <div className={style.copyButton}>
-            <CopyToClipboard text={shareUrl} onCopy={handleLinkCopied}>
-              <Button color="primary" variant="contained" style={{width: 'auto'}}>
-                Copy URL
-              </Button>
-            </CopyToClipboard>
-          </div>
           <div className={style.divider} />
           <Typography component="p" className={style.subtitle} color="primary" variant="caption">
             Embed Link
@@ -159,14 +163,20 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
             multiline
             margin="none"
             className={style.multiline}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <CopyToClipboard
+                    text={`<iframe src="${shareUrl}"></iframe>`}
+                    onCopy={handleLinkCopied}>
+                    <IconButton aria-label="copy-post-embed" style={{padding: 0}}>
+                      <SvgIcon component={DuplicateIcon} color="primary" />
+                    </IconButton>
+                  </CopyToClipboard>
+                </InputAdornment>
+              ),
+            }}
           />
-          <div className={style.copyButton}>
-            <CopyToClipboard text={`<iframe src="${shareUrl}"></iframe>`} onCopy={handleLinkCopied}>
-              <Button color="primary" variant="contained" style={{width: 'auto'}}>
-                Copy URL
-              </Button>
-            </CopyToClipboard>
-          </div>
         </div>
       </Modal>
 
