@@ -89,7 +89,10 @@ const Mobile: React.FC = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  if (typeof window === 'undefined') {
+  const {req} = context;
+  const {headers} = req;
+
+  if (typeof window === 'undefined' && headers['user-agent']) {
     const DeviceDetect = eval('require("node-device-detector")');
     const device = new DeviceDetect();
     const {
