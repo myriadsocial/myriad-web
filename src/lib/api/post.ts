@@ -136,9 +136,6 @@ export const getPost = async (
   const filterParams: Record<string, any> = {
     include: [
       {
-        relation: 'importers',
-      },
-      {
         relation: 'user',
       },
       {
@@ -158,6 +155,7 @@ export const getPost = async (
   const params: Record<string, any> = {
     sortBy: sortField,
     order: `DESC`,
+    importers: true,
     pageNumber: page,
     pageLimit: PAGINATION_LIMIT,
   };
@@ -221,13 +219,11 @@ export const findPosts = async (page: number, userId: string, query: string): Pr
     method: 'GET',
     params: {
       userId,
+      importers: true,
       pageNumber: page,
       pageLimit: PAGINATION_LIMIT,
       filter: {
         include: [
-          {
-            relation: 'importers',
-          },
           {
             relation: 'user',
           },
@@ -288,11 +284,9 @@ export const getPostDetail = async (id: string, userId?: string): Promise<Post> 
     url: `/posts/${id}`,
     method: 'GET',
     params: {
+      importers: true,
       filter: {
         include: [
-          {
-            relation: 'importers',
-          },
           {
             relation: 'user',
           },
