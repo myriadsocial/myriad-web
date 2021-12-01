@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {useRouter} from 'next/router';
+
 import {Button} from '@material-ui/core';
 
 import {PostDetail} from 'src/components-v2/PostDetail';
@@ -21,6 +23,7 @@ import {UserState} from 'src/reducers/user/reducer';
 
 export const PostContainer: React.FC = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const {post, getTippedUserId} = useTimelineHook();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
@@ -81,11 +84,15 @@ export const PostContainer: React.FC = () => {
   };
 
   const confirmDeletePost = (): void => {
-    if (postToRemove) {
-      dispatch(deletePost(postToRemove.id));
-    }
-
     handleClosePrompt();
+
+    if (postToRemove) {
+      dispatch(
+        deletePost(postToRemove.id, () => {
+          router.push('/home');
+        }),
+      );
+    }
   };
 
   const handleRemoveVote = (reference: Post | Comment) => {
