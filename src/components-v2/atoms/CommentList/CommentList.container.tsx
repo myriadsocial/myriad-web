@@ -11,7 +11,6 @@ import {CommentList} from './CommentList';
 
 import {debounce} from 'lodash';
 import {useFriendList} from 'src/components-v2/FriendsMenu/hooks/use-friend-list.hook';
-import {CommentTabs} from 'src/components-v2/PostDetail/hooks/use-comment-tabs';
 import {ReportContainer} from 'src/components-v2/Report';
 import {SendTipContainer} from 'src/components-v2/SendTip';
 import {TipHistoryContainer} from 'src/components-v2/TipHistory';
@@ -35,11 +34,10 @@ type CommentListContainerProps = {
   section: SectionType;
   focus?: boolean;
   expand?: boolean;
-  handleChangeTab: (tab: CommentTabs) => void;
 };
 
 export const CommentListContainer: React.FC<CommentListContainerProps> = props => {
-  const {placeholder, referenceId, section, focus, expand, handleChangeTab} = props;
+  const {placeholder, referenceId, section, focus, expand} = props;
 
   const dispatch = useDispatch();
   const {
@@ -113,11 +111,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
 
   const handleUpvote = (comment: Comment) => {
     if (comment.isUpvoted) {
-      dispatch(
-        removeVote(comment, () => {
-          updateRemoveUpvote(comment.id);
-        }),
-      );
+      handleRemoveVote(comment);
     } else {
       dispatch(
         upvote(comment, section, (vote: Vote) => {
@@ -127,24 +121,16 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     }
   };
 
-  const handleDownvote = (comment: Comment) => {
-    if (comment.isDownVoted) {
-      dispatch(
-        removeVote(comment, () => {
-          updateRemoveUpvote(comment.id);
-        }),
-      );
-    } else {
-      dispatch(setDownvoting(comment));
-
-      if (section === SectionType.DISCUSSION) {
-        handleChangeTab('debate');
-      }
-    }
-  };
-
   const handleSetDownvoting = (comment: Comment) => {
     dispatch(setDownvoting(comment));
+  };
+
+  const handleRemoveVote = (comment: Comment) => {
+    dispatch(
+      removeVote(comment, () => {
+        updateRemoveUpvote(comment.id);
+      }),
+    );
   };
 
   const handleSendTip = (reference: Post | Comment) => {
@@ -214,8 +200,8 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         mentionables={mentionables}
         placeholder={placeholder}
         onComment={handleSubmitComment}
-        onDownvote={handleDownvote}
         onUpvote={handleUpvote}
+        onRemoveVote={handleRemoveVote}
         onLoadReplies={loadReplies}
         onOpenTipHistory={openTipHistory}
         setDownvoting={handleSetDownvoting}

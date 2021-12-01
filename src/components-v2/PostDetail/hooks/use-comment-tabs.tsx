@@ -10,17 +10,12 @@ export type CommentTabs = 'discussion' | 'debate';
 export const useCommentTabs = (post: Post, comments?: Comment[], debates?: Comment[]) => {
   const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
 
-  const handleChangeTab = (tab: CommentTabs) => {
-    setActiveTab(tab);
-  };
-
   const discussionComponent = useMemo(() => {
     return (
       <CommentListContainer
         placeholder={'Write a Discussion...'}
         referenceId={post.id}
         section={SectionType.DISCUSSION}
-        handleChangeTab={handleChangeTab}
       />
     );
   }, [post]);
@@ -33,7 +28,6 @@ export const useCommentTabs = (post: Post, comments?: Comment[], debates?: Comme
         section={SectionType.DEBATE}
         focus={true}
         expand={true}
-        handleChangeTab={handleChangeTab}
       />
     );
   }, [post]);
