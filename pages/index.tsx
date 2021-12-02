@@ -36,22 +36,23 @@ export default function Index() {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const {res} = context;
+  const {res, req} = context;
+  const {headers} = req;
 
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' && headers['user-agent']) {
     const DeviceDetect = eval('require("node-device-detector")');
 
     const device = new DeviceDetect();
     const {
       device: {type},
-    } = device.detect(context.req.headers['user-agent']);
+    } = device.detect(headers['user-agent']);
 
     if (type === 'smartphone') {
       return {
         redirect: {
           destination: '/mobile',
           permanent: false,
-          headers: context.req.headers,
+          headers,
         },
       };
     }

@@ -2,6 +2,7 @@ import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../
 import {RootState} from '../index';
 import * as constants from './constants';
 
+import {Action} from 'redux';
 import {People} from 'src/interfaces/people';
 import * as PeopleAPI from 'src/lib/api/people';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -15,7 +16,7 @@ export interface LoadPeople extends PaginationAction {
   people: People[];
 }
 
-export interface FilterPeople extends PaginationAction {
+export interface FilterPeople extends Action {
   type: constants.FILTER_PEOPLE;
   people: People[];
   filter: string;
@@ -79,12 +80,11 @@ export const searchPeople: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const {meta, data: people} = await PeopleAPI.searchPeople(query);
+      const people = await PeopleAPI.searchPeople(query);
 
       dispatch({
         type: constants.FILTER_PEOPLE,
         people,
-        meta,
         filter: query,
       });
     } catch (error) {

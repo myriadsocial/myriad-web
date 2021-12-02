@@ -65,23 +65,25 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const {params} = context;
+  const {params, req} = context;
+  const {headers} = req;
+
   const dispatch = store.dispatch as ThunkDispatchAction;
 
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' && headers['user-agent']) {
     const DeviceDetect = eval('require("node-device-detector")');
 
     const device = new DeviceDetect();
     const {
       device: {type},
-    } = device.detect(context.req.headers['user-agent']);
+    } = device.detect(headers['user-agent']);
 
     if (type === 'smartphone') {
       return {
         redirect: {
           destination: '/mobile',
           permanent: false,
-          headers: context.req.headers,
+          headers,
         },
       };
     }
