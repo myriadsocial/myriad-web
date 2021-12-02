@@ -13,7 +13,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: 340,
       position: 'relative',
-      marginBottom: 30,
+      paddingBottom: 30,
       background: '#FFFFFF',
       boxShadow: `0px 2px 10px rgba(0, 0, 0, 0.05)`,
       borderRadius: 10,
