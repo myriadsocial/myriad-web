@@ -215,7 +215,7 @@ export const getPost = async (
 
 export const findPosts = async (page: number, userId: string, query: string): Promise<PostList> => {
   const {data} = await MyriadAPI.request<PostList>({
-    url: `/posts?q=${query}`,
+    url: `/posts?q=${encodeURIComponent(query)}`,
     method: 'GET',
     params: {
       userId,
