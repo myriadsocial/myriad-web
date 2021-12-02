@@ -254,11 +254,10 @@ export const searchPeople: ThunkActionCreator<Actions, RootState> =
 
     try {
       if (query) {
-        const {meta, data: people} = await PeopleAPI.searchPeople(query);
+        const people = await PeopleAPI.searchPeople(query);
         dispatch({
           type: constants.SEARCH_PEOPLE,
           people,
-          meta,
         });
       } else {
         dispatch({
