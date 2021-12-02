@@ -50,6 +50,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
   const [gasFee] = useState('0.01');
   const [checked, setChecked] = useState(false);
   const [url] = useState('https://myriad.social/');
+  const [lengthError, setLengthError] = useState(false);
 
   const digitLengthLimit = 10;
 
@@ -109,6 +110,14 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
     setTipAmount(input);
   };
 
+  const checkTipLength = (tipAmount: string) => {
+    if (tipAmount.length > digitLengthLimit) {
+      setLengthError(true);
+    } else {
+      setLengthError(false);
+    }
+  };
+
   const verifyTipAmount = (tipAmount: string) => {
     const nonZeroLengthString = checkNotEmpty(tipAmount);
 
@@ -117,6 +126,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
     const validBalanceAmount = checkEnoughBalance(validDigits.length > 0 ? validDigits : '');
 
     if (validBalanceAmount.length > 0) {
+      checkTipLength(validBalanceAmount);
       setVerifiedTipAmount(validBalanceAmount);
     } else {
       setVerifiedTipAmount('');
@@ -183,17 +193,13 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                 label="Tip amount"
                 value={tipAmount}
                 onChange={handleChangeAmount}
-                onInput={e => {
-                  const InputElement = e.target as HTMLInputElement;
-                  InputElement.value = Math.max(0, parseFloat(InputElement.value))
-                    .toString()
-                    .slice(0, digitLengthLimit);
-                }}
                 type="number"
                 variant="outlined"
-                error={Number(tipAmount) > setMaxTippable() ? true : false}
+                error={Number(tipAmount) > setMaxTippable() || lengthError ? true : false}
                 helperText={
-                  Number(tipAmount) > setMaxTippable()
+                  lengthError
+                    ? '10 char maximum'
+                    : Number(tipAmount) > setMaxTippable()
                     ? 'Insufficient balance'
                     : checkValidDigits(tipAmount) === ''
                     ? 'Digits only'
@@ -239,7 +245,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                       <TableRow>
                         <TableCell component="th" scope="row">
                           <Typography variant="body1" color="textSecondary">
-                            Gas fee
+                            Estimated gas fee
                           </Typography>
                         </TableCell>
                         <TableCell align="right">
@@ -297,7 +303,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                   }
                 />
                 <Button
-                  isDisabled={verifiedTipAmount.length === 0 || !checked}
+                  isDisabled={verifiedTipAmount.length === 0 || !checked || lengthError}
                   variant={ButtonVariant.CONTAINED}
                   onClick={triggerSignTransactionWithExtension}>
                   Send my tips
