@@ -28,6 +28,7 @@ import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
+import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
 type TimelineContainerProps = {
@@ -92,6 +93,8 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     } else {
       console.log('no post tipped');
     }
+
+    dispatch(setIsTipSent(false));
 
     setTippedPost(null);
   };
