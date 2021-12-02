@@ -63,7 +63,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     error: {
-      background: '#FE3656',
+      background: theme.palette.secondary.main,
       color: '#FFF',
       '&:hover': {
         color: theme.palette.text.primary,
