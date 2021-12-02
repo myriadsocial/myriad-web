@@ -79,8 +79,8 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
               </Button>
               <Button
                 onClick={() => onDeclineRequest(request.friend)}
-                className={`${style.button} ${style.error}`}
-                color="inherit"
+                className={`${style.button}`}
+                color="secondary"
                 variant="text"
                 startIcon={
                   <SvgIcon
