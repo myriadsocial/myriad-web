@@ -20,7 +20,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
 
   useEffect(() => {
     if (experienceId) getDetail(experienceId);
-  }, []);
+  }, [experienceId]);
 
   const handleSubscribeExperience = (experienceId: string) => {
     subscribeExperience(experienceId);
