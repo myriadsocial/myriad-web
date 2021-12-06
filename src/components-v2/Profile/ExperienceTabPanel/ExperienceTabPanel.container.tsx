@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
@@ -28,9 +28,49 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
     state => state.profileState.experience.data,
   );
 
+  const [toggle, setToggle] = useState<string>('');
+  const [myExperience, setMyExperience] = useState<UserExperience[]>([]);
+
   useEffect(() => {
     dispatch(fetchProfileExperience());
   }, [user]);
+
+  useEffect(() => {
+    setMyExperience(experiences);
+  }, [experiences, toggle]);
+
+  const handleFilterExperience = (sort: string) => {
+    let sortExperience;
+    setToggle(sort);
+    switch (sort) {
+      case 'all':
+        sortExperience = myExperience.sort((a, b) => {
+          if (a.experience.createdAt < b.experience.createdAt) return 1;
+          if (a.experience.createdAt > b.experience.createdAt) return -1;
+          return 0;
+        });
+        setMyExperience(sortExperience);
+        break;
+      case 'latest':
+        sortExperience = myExperience.sort((a, b) => {
+          if (a.experience.createdAt < b.experience.createdAt) return -1;
+          if (a.experience.createdAt > b.experience.createdAt) return 1;
+          return 0;
+        });
+        setMyExperience(sortExperience);
+        break;
+      case 'aToZ':
+        sortExperience = myExperience.sort((a, b) => {
+          if (a.experience.name < b.experience.name) return -1;
+          if (a.experience.name > b.experience.name) return 1;
+          return 0;
+        });
+        setMyExperience(sortExperience);
+        break;
+      default:
+        break;
+    }
+  };
 
   const handleFilterType = (type: ExperienceType) => {
     dispatch(fetchProfileExperience(type));
@@ -50,11 +90,12 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
 
   return (
     <ExperienceTabPanel
-      experiences={experiences}
+      experiences={myExperience}
       onFilter={handleFilterType}
       onSubscribe={handleSubsibeExperience}
       onFollow={handleCloneExperience}
       onPreview={handlePreviewExperience}
+      filter={handleFilterExperience}
     />
   );
 };
