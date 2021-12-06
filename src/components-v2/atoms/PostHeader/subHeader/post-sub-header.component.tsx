@@ -24,6 +24,8 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
     return newFormat;
   };
 
+  console.log('URL', url, postId);
+
   return (
     <Typography component="div" className={style.root}>
       {platform === 'myriad' && (
@@ -34,7 +36,7 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
         </Link>
       )}
 
-      {importers && (
+      {importers && importers.length && (
         <>
           Imported on&nbsp;
           <Link href={`/post/${postId}`}>
