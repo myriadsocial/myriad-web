@@ -5,6 +5,7 @@ import {MenuOptions} from '../atoms/DropdownMenu';
 import {User} from 'src/interfaces/user';
 
 export type FriendType = 'all' | 'mutual';
+export type SortType = 'oldest' | 'latest';
 
 // Filter options
 export const friendFilterOptions: MenuOptions<FriendType>[] = [
@@ -18,6 +19,11 @@ export const friendFilterOptions: MenuOptions<FriendType>[] = [
   },
 ];
 
+export const sortOptions: MenuOptions<SortType>[] = [
+  {id: 'latest', title: 'Latest'},
+  {id: 'oldest', title: 'Oldest'},
+];
+
 export type FriendListProps = {
   user?: User;
   background?: boolean;
@@ -26,6 +32,7 @@ export type FriendListProps = {
   hasMore: boolean;
   onSearch: (query: string) => void;
   onFilter: (type: FriendType) => void;
+  onSort: (type: string) => void;
   onLoadNextPage: () => void;
 };
 
