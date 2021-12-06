@@ -13,6 +13,8 @@ import {Status, Toaster} from '../Toaster';
 import {VotingComponent} from '../Voting';
 import {useStyles} from './postAction.style';
 
+import ShowIf from 'src/components/common/show-if.component';
+
 type PostActionProps = {
   metrics: PostMetric;
   downvoted?: boolean;
@@ -22,6 +24,7 @@ type PostActionProps = {
   onDownVote: () => void;
   onShowComments: () => void;
   onShared: () => void;
+  disableAction?: boolean;
 };
 
 export const PostActionComponent: React.FC<PostActionProps> = props => {
@@ -36,6 +39,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
     onDownVote,
     onShowComments,
     onShared,
+    disableAction,
   } = props;
 
   const [shareAnchorEl, setShareAnchorEl] = useState<null | HTMLElement>(null);
@@ -84,7 +88,11 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
       />
 
       <div className={style.section}>
-        <IconButton onClick={onShowComments} className={style.action} color="primary">
+        <IconButton
+          disabled={disableAction}
+          onClick={onShowComments}
+          className={style.action}
+          color="primary">
           <SvgIcon classes={{root: style.fill}} component={ChatAltIcon} viewBox="0 0 24 24" />
         </IconButton>
         <Typography component="span" color="textPrimary" variant="caption">
@@ -92,93 +100,95 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
         </Typography>
       </div>
 
-      <div className={style.section}>
-        <IconButton onClick={handleClickShare} className={style.action} color="primary">
-          <SvgIcon
-            className={style.mr1}
-            classes={{root: style.fill}}
-            component={ShareIcon}
-            viewBox="0 0 24 24"
-          />
-          <Typography component="span" color="textPrimary" variant="caption">
-            Share
-          </Typography>
-        </IconButton>
-        <Menu
-          id="share-menu"
-          anchorEl={shareAnchorEl}
-          keepMounted
-          open={Boolean(shareAnchorEl)}
-          onClose={handleCloseShare}>
-          <MenuItem button onClick={handleClickShareLink}>
-            <div style={{width: 170}}>
-              <Typography>Copy Link</Typography>
-            </div>
-          </MenuItem>
-        </Menu>
-      </div>
-
-      <Modal
-        align="left"
-        title="Copy post link"
-        className={style.modal}
-        open={Boolean(linkAnchorEl)}
-        onClose={handleCloseCopyLink}>
-        <div className={style.copy}>
-          <Typography component="p" className={style.subtitle} color="primary" variant="caption">
-            Post URL
-          </Typography>
-          <TextField
-            label="Post URL"
-            id="copy-post-url"
-            value={shareUrl}
-            variant="outlined"
-            disabled
-            fullWidth
-            margin="none"
-            className={style.input}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <CopyToClipboard text={shareUrl} onCopy={handleLinkCopied}>
-                    <IconButton aria-label="copy-post-link" style={{padding: 0}}>
-                      <SvgIcon component={DuplicateIcon} color="primary" />
-                    </IconButton>
-                  </CopyToClipboard>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <div className={style.divider} />
-          <Typography component="p" className={style.subtitle} color="primary" variant="caption">
-            Embed Link
-          </Typography>
-          <TextField
-            label="Copy and paste this code into your website or blog"
-            id="copy-post-embed"
-            value={`<iframe src="${shareUrl}></iframe>`}
-            variant="outlined"
-            disabled
-            fullWidth
-            multiline
-            margin="none"
-            className={style.multiline}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <CopyToClipboard
-                    text={`<iframe src="${shareUrl}"></iframe>`}
-                    onCopy={handleLinkCopied}>
-                    <IconButton aria-label="copy-post-embed" style={{padding: 0}}>
-                      <SvgIcon component={DuplicateIcon} color="primary" />
-                    </IconButton>
-                  </CopyToClipboard>
-                </InputAdornment>
-              ),
-            }}
-          />
+      <ShowIf condition={!disableAction}>
+        <div className={style.section}>
+          <IconButton onClick={handleClickShare} className={style.action} color="primary">
+            <SvgIcon
+              className={style.mr1}
+              classes={{root: style.fill}}
+              component={ShareIcon}
+              viewBox="0 0 24 24"
+            />
+            <Typography component="span" color="textPrimary" variant="caption">
+              Share
+            </Typography>
+          </IconButton>
+          <Menu
+            id="share-menu"
+            anchorEl={shareAnchorEl}
+            keepMounted
+            open={Boolean(shareAnchorEl)}
+            onClose={handleCloseShare}>
+            <MenuItem button onClick={handleClickShareLink}>
+              <div style={{width: 170}}>
+                <Typography>Copy Link</Typography>
+              </div>
+            </MenuItem>
+          </Menu>
         </div>
-      </Modal>
+
+        <Modal
+          align="left"
+          title="Copy post link"
+          className={style.modal}
+          open={Boolean(linkAnchorEl)}
+          onClose={handleCloseCopyLink}>
+          <div className={style.copy}>
+            <Typography component="p" className={style.subtitle} color="primary" variant="caption">
+              Post URL
+            </Typography>
+            <TextField
+              label="Post URL"
+              id="copy-post-url"
+              value={shareUrl}
+              variant="outlined"
+              disabled
+              fullWidth
+              margin="none"
+              className={style.input}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <CopyToClipboard text={shareUrl} onCopy={handleLinkCopied}>
+                      <IconButton aria-label="copy-post-link" style={{padding: 0}}>
+                        <SvgIcon component={DuplicateIcon} color="primary" />
+                      </IconButton>
+                    </CopyToClipboard>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <div className={style.divider} />
+            <Typography component="p" className={style.subtitle} color="primary" variant="caption">
+              Embed Link
+            </Typography>
+            <TextField
+              label="Copy and paste this code into your website or blog"
+              id="copy-post-embed"
+              value={`<iframe src="${shareUrl}></iframe>`}
+              variant="outlined"
+              disabled
+              fullWidth
+              multiline
+              margin="none"
+              className={style.multiline}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <CopyToClipboard
+                      text={`<iframe src="${shareUrl}"></iframe>`}
+                      onCopy={handleLinkCopied}>
+                      <IconButton aria-label="copy-post-embed" style={{padding: 0}}>
+                        <SvgIcon component={DuplicateIcon} color="primary" />
+                      </IconButton>
+                    </CopyToClipboard>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </div>
+        </Modal>
+      </ShowIf>
 
       <Toaster
         open={linkCopied}

@@ -19,33 +19,30 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
 }) => {
   const style = useStyles();
 
-  const getDate = (datePost: Date) => {
-    const newFormat = format(new Date(datePost), 'd MMM y');
-    return newFormat;
+  const getDate = (datePost: Date): string => {
+    return format(new Date(datePost), 'd MMM y');
   };
-
-  console.log('URL', url, postId);
 
   return (
     <Typography component="div" className={style.root}>
-      {platform === 'myriad' && (
-        <Link href={`/post/${postId}`}>
-          <a href={`/post/${postId}`} className={style.linkGrey}>
-            {getDate(date)}
-          </a>
-        </Link>
-      )}
+      <ShowIf condition={platform !== 'myriad'}>Imported on&nbsp;</ShowIf>
 
-      {importers && importers.length && (
-        <>
-          Imported on&nbsp;
-          <Link href={`/post/${postId}`}>
-            <a href={`/post/${postId}`} className={style.linkGrey}>
-              {getDate(date)}
-            </a>
-          </Link>
-          &nbsp;by&nbsp;
+      <Link href={`/post/${postId}`}>
+        <a href={`/post/${postId}`} className={style.linkGrey}>
+          {getDate(date)}
+        </a>
+      </Link>
+
+      <ShowIf condition={platform !== 'myriad'}>
+        {importers && importers.length && (
           <>
+            Imported on&nbsp;
+            <Link href={`/post/${postId}`}>
+              <a href={`/post/${postId}`} className={style.linkGrey}>
+                {getDate(date)}
+              </a>
+            </Link>
+            &nbsp;by&nbsp;
             {importers.map((importer, i) => (
               <>
                 <Link key={importer.id} href={`/profile/${importer.id}`}>
@@ -57,15 +54,15 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
                 <ShowIf condition={i < importers.length - 1}>&nbsp;&amp;&nbsp;</ShowIf>
               </>
             ))}
+            &nbsp;via&nbsp;
+            <Link href={url}>
+              <a href={url} className={style.link} target="_blank" rel="noreferrer">
+                {platform}
+              </a>
+            </Link>
           </>
-          &nbsp;via&nbsp;
-          <Link href={url}>
-            <a href={url} className={style.link} target="_blank" rel="noreferrer">
-              {platform}
-            </a>
-          </Link>
-        </>
-      )}
+        )}
+      </ShowIf>
     </Typography>
   );
 };

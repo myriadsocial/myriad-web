@@ -22,6 +22,7 @@ export const VotingComponent: React.FC<VoteProps> = props => {
     onUpvote,
     isDownVote,
     isUpVote,
+    disabled = false,
   } = props;
   const style = useStyles({variant, size});
 
@@ -45,6 +46,7 @@ export const VotingComponent: React.FC<VoteProps> = props => {
     <div className={style.root}>
       <div className={style.icon}>
         <IconButton
+          disabled={disabled}
           onClick={handleUpVote}
           color={isUpVote ? 'primary' : 'default'}
           className={`${style.action} ${style.mr1}`}>
@@ -54,6 +56,7 @@ export const VotingComponent: React.FC<VoteProps> = props => {
           {formatNumber(vote)}
         </Typography>
         <IconButton
+          disabled={disabled}
           onClick={handleDownVote}
           className={`${style.action} ${isDownVote ? style.red : style.default}`}>
           <SvgIcon

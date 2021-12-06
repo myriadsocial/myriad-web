@@ -45,6 +45,7 @@ type PostDetailProps = {
   onReport: (post: Post) => void;
   onShared: (post: Post, type: 'link' | 'post') => void;
   expanded?: boolean;
+  type?: 'share' | 'default';
 };
 
 export const PostDetail: React.FC<PostDetailProps> = props => {
@@ -60,6 +61,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     onReport,
     onShared,
     expanded = false,
+    type = 'default',
   } = props;
 
   const styles = useStyles();
@@ -83,6 +85,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   };
 
   const handleUpvote = async () => {
+    if (type === 'share') return;
+
     if (!post.isUpvoted) {
       onUpvote(post);
     } else {
@@ -91,6 +95,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   };
 
   const handleDownVote = async () => {
+    if (type === 'share') return;
+
     if (!post.isDownVoted) {
       toggleDownvoting(post);
 
@@ -112,6 +118,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   };
 
   const toggleShowComments = () => {
+    if (type === 'share') return;
+
     setShowComment(prev => !prev);
 
     toggleDownvoting(null);
@@ -157,6 +165,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         onOpenTipHistory={handleOpenTipHistory}
         onDelete={handleDeletePost}
         onReport={handleReportPost}
+        disableAction={type === 'share'}
       />
 
       <div className={styles.content}>
@@ -224,14 +233,10 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           onShowComments={toggleShowComments}
           shareUrl={`${urlLink()}/post/${post.id}`}
           onShared={handleShareLink}
+          disableAction={type === 'share'}
         />
 
-        {/* hide send tip button for own post or for own social imported posts*/}
-        <ShowIf condition={owner || isOwnSocialPost}>
-          <></>
-        </ShowIf>
-
-        <ShowIf condition={isImportedPost && !isOwnSocialPost}>
+        <ShowIf condition={isImportedPost && !isOwnSocialPost && type !== 'share'}>
           <Button
             isDisabled={balanceDetails.length === 0}
             onClick={handleSendTip}

@@ -6,4 +6,5 @@ export type VoteProps = {
   isUpVote: boolean;
   onUpvote: () => void;
   onDownVote: () => void;
+  disabled?: boolean;
 };
