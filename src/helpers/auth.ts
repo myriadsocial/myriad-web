@@ -5,11 +5,8 @@ import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
 const {publicRuntimeConfig} = getConfig();
 
-export const loginAsAnonymous = async (): Promise<void> => {
-  const name: string = uniqueNamesGenerator({
-    dictionaries: [adjectives, colors],
-    separator: ' ',
-  });
+export const loginAsAnonymous = async (): Promise<string> => {
+  const name = generateAnonymousUser();
 
   await signIn('credentials', {
     address: null,
@@ -19,4 +16,15 @@ export const loginAsAnonymous = async (): Promise<void> => {
       ? publicRuntimeConfig.nextAuthURL + '/welcome'
       : '/welcome',
   });
+
+  return name;
+};
+
+export const generateAnonymousUser = (): string => {
+  const name: string = uniqueNamesGenerator({
+    dictionaries: [adjectives, colors],
+    separator: ' ',
+  });
+
+  return name;
 };

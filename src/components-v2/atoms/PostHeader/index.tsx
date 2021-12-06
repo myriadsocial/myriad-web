@@ -18,7 +18,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import {SocialsEnum} from 'src/interfaces/social';
 
 export const HeaderComponent: React.FC<PostHeaderProps> = props => {
-  const {post, owner, onDelete, onOpenTipHistory, onReport} = props;
+  const {post, owner, disableAction = false, onDelete, onOpenTipHistory, onReport} = props;
 
   const style = useStyles();
   const router = useRouter();
@@ -146,15 +146,17 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
           />
         }
         action={
-          <IconButton
-            aria-label="post-setting"
-            onClick={handleOpenPostSetting}
-            className={style.action}
-            disableRipple={true}
-            disableFocusRipple={true}
-            disableTouchRipple>
-            <SvgIcon component={DotsVerticalIcon} />
-          </IconButton>
+          !disableAction ? (
+            <IconButton
+              aria-label="post-setting"
+              onClick={handleOpenPostSetting}
+              className={style.action}
+              disableRipple={true}
+              disableFocusRipple={true}
+              disableTouchRipple>
+              <SvgIcon component={DotsVerticalIcon} />
+            </IconButton>
+          ) : null
         }
       />
 

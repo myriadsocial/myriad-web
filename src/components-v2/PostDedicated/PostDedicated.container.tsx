@@ -21,7 +21,14 @@ import {RootState} from 'src/reducers';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
-export const PostContainer: React.FC = () => {
+type PostContainerProps = {
+  type?: 'share' | 'default';
+  expanded?: boolean;
+};
+
+export const PostContainer: React.FC<PostContainerProps> = props => {
+  const {type = 'default', expanded = true} = props;
+
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -116,7 +123,8 @@ export const PostContainer: React.FC = () => {
         onReport={handleReportPost}
         onShared={handleSharePost}
         onRemoveVote={handleRemoveVote}
-        expanded
+        expanded={expanded}
+        type={type}
       />
 
       <Modal
