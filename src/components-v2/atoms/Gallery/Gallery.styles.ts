@@ -27,6 +27,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: 18,
       fontWeight: 700,
     },
+    tileTitleVertical: {
+      height: 162,
+      textAlign: 'center',
+      fontSize: 18,
+      fontWeight: 700,
+      top: 4,
+      left: 4,
+      right: 4,
+      bottom: 4,
+    },
     imageGrid: {
       width: '100%',
     },
