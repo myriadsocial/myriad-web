@@ -221,15 +221,11 @@ export const getPost = async (
   return data;
 };
 
-export const findPosts = async (page: number, userId: string, query: string): Promise<PostList> => {
+export const findPosts = async (user: User, query: string): Promise<PostList> => {
   const {data} = await MyriadAPI.request<PostList>({
     url: `/posts?q=${encodeURIComponent(query)}`,
     method: 'GET',
     params: {
-      userId,
-      importers: true,
-      pageNumber: page,
-      pageLimit: PAGINATION_LIMIT,
       filter: {
         include: [
           {
@@ -242,7 +238,7 @@ export const findPosts = async (page: number, userId: string, query: string): Pr
             relation: 'votes',
             scope: {
               where: {
-                userId: {eq: userId},
+                userId: {eq: user.id},
               },
             },
           },
@@ -253,9 +249,9 @@ export const findPosts = async (page: number, userId: string, query: string): Pr
               visibility: 'public',
             },
             {
-              created_by: userId,
+              created_by: user.id,
               importers: {
-                inq: userId,
+                inq: [user.id],
               },
             },
           ],
