@@ -37,13 +37,7 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
       <ShowIf condition={platform !== 'myriad'}>
         {importers && importers.length && (
           <>
-            Imported on&nbsp;
-            <Link href={`/post/${postId}`}>
-              <a href={`/post/${postId}`} className={style.linkGrey}>
-                {getDate(date)}
-              </a>
-            </Link>
-            &nbsp;by&nbsp;
+            by&nbsp;
             {importers.map((importer, i) => (
               <>
                 <Link key={importer.id} href={`/profile/${importer.id}`}>
