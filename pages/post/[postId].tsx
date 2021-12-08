@@ -126,6 +126,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   try {
     post = await PostAPI.getPostDetail(params.postId, userId);
 
+    if (post.platform !== 'myriad') {
+      const {data} = await PostAPI.getImporters(post.originPostId, post.platform);
+
+      post.importers = data;
+    }
+
     const importerIds = post.importers ? post.importers.map(importer => importer.id) : [];
 
     const upvoted = post.votes

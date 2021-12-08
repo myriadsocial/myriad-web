@@ -39,13 +39,13 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
             by&nbsp;
             {importers.map((importer, i) => (
               <>
+                <ShowIf condition={i === importers.length - 1}>&nbsp;&amp;&nbsp;</ShowIf>
                 <Link key={importer.id} href={`/profile/${importer.id}`}>
                   <a href={`/profile/${importer.id}`} className={style.link}>
                     {importer.name}
                   </a>
                 </Link>
-                <ShowIf condition={i < importers.length - 2}>&nbsp;&#44;&nbsp;</ShowIf>
-                <ShowIf condition={i < importers.length - 1}>&nbsp;&amp;&nbsp;</ShowIf>
+                <ShowIf condition={i < importers.length - 2}>&#44;&nbsp;</ShowIf>
               </>
             ))}
             &nbsp;via&nbsp;

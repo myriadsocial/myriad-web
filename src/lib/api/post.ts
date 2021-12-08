@@ -5,9 +5,16 @@ import {LoopbackWhere} from './interfaces/loopback-query.interface';
 
 import {Dislike, Like} from 'src/interfaces/interaction';
 import {Post, PostProps, ImportPostProps, PostVisibility} from 'src/interfaces/post';
-import {TimelineSortMethod, TimelineFilter, TimelineType} from 'src/interfaces/timeline';
+import {
+  TimelineSortMethod,
+  TimelineFilter,
+  TimelineType,
+  PostOrigin,
+} from 'src/interfaces/timeline';
+import {User} from 'src/interfaces/user';
 
 type PostList = BaseList<Post>;
+type ImporterList = BaseList<User>;
 type WalletAddress = {
   walletAddress: string;
 };
@@ -366,6 +373,18 @@ export const removePost = async (postId: string): Promise<void> => {
 export const getWalletAddress = async (postId: string): Promise<WalletAddress> => {
   const {data} = await MyriadAPI.request<WalletAddress>({
     url: `/posts/${postId}/walletaddress`,
+    method: 'GET',
+  });
+
+  return data;
+};
+
+export const getImporters = async (
+  originPostId: string,
+  platform: PostOrigin,
+): Promise<ImporterList> => {
+  const {data} = await MyriadAPI.request({
+    url: `/posts/${originPostId}/importers/${platform}`,
     method: 'GET',
   });
 
