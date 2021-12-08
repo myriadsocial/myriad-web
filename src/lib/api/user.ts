@@ -60,11 +60,12 @@ export const updateUser = async (userId: string, values: Partial<User>): Promise
   return data;
 };
 
-export const searchUsers = async (query: string, page = 1): Promise<UserList> => {
+export const searchUsers = async (query: string, userId?: string, page = 1): Promise<UserList> => {
   const {data} = await MyriadAPI.request<UserList>({
     url: '/users',
     method: 'GET',
     params: {
+      userId,
       pageNumber: page,
       pageLimit: PAGINATION_LIMIT,
       filter: {
