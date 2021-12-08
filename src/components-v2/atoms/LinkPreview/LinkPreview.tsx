@@ -18,7 +18,7 @@ export const LinkPreview: React.FC<LinkPreviewProps> = props => {
     window.open(embed.url, '_blank');
   };
 
-  if (!embed) return null;
+  if (!embed || embed.url.length === 0) return null;
 
   return (
     <Card className={styles.root} onClick={handleClick}>

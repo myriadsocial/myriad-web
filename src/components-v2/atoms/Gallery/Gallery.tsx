@@ -152,7 +152,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
                   <img
                     className={style.imageGrid}
                     style={{
-                      height: list.cellHeight,
+                      height: items.length > 3 ? list.cellHeight : list.cols * list.cellHeight + 14,
                       width: '100%',
                       objectFit: 'cover',
                     }}
