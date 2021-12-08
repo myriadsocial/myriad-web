@@ -2,13 +2,22 @@ import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    alert: {
+    root: {
       display: 'flex',
-      padding: '12px 24px',
+      justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#FFD7D7',
-      justifyContent: 'space-between',
-      borderRadius: '0px 0px 10px 10px',
+      position: 'fixed',
+      width: '100%',
+      height: '48px',
+      bottom: 0,
+      left: 0,
+      background: theme.palette.primary.main,
+      zIndex: 9999,
+    },
+    icon: {
+      position: 'absolute',
+      right: '250px',
+      cursor: 'pointer',
     },
     fill: {
       marginRight: '12px',
@@ -16,16 +25,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     text: {
       display: 'flex',
-      color: '#404040',
-      fontSize: '12px',
+      color: '#FFF',
+      fontSize: '14px',
       alignItems: 'center',
-    },
-    hidden: {
-      color: 'red',
-      fontSize: 12,
-      fontWeight: 700,
-      cursor: 'pointer',
-      textDecoration: 'underline',
+      fontWeight: 600,
     },
   }),
 );
