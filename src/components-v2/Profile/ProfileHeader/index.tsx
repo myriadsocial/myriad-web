@@ -248,6 +248,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                   Report account
                 </MenuItem>
               </ShowIf>
+              <MenuItem disabled={isBlocked} onClick={handleOpenPrompt} className={style.delete}>
+                Block this person
+              </MenuItem>
             </Menu>
           </ShowIf>
         </div>

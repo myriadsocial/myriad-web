@@ -20,6 +20,7 @@ import {ReportProps} from 'src/interfaces/report';
 import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
+import {blockedFriendList} from 'src/reducers/friend/actions';
 import {fetchProfileExperience} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
@@ -38,7 +39,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
 
   const dispatch = useDispatch();
 
-  const {makeFriend, removeFriendRequest, toggleRequest} = useFriendHook();
+  const {makeFriend, removeFriendRequest, toggleRequest, reloadFriendStatus} = useFriendHook();
   const {sendReportWithAttributes} = useReport();
   const {openToaster} = useToasterHook();
   const {query} = useQueryParams();
@@ -112,14 +113,20 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     sendReportWithAttributes(payload);
   };
 
-  const handleBlockUser = () => {
+  const handleBlockUser = async () => {
+    if (!profile) return;
+
     if (friendStatus) {
-      toggleRequest(friendStatus, FriendStatus.BLOCKED);
-      openToaster({
-        message: 'User successfully blocked',
-        toasterStatus: Status.SUCCESS,
-      });
+      await toggleRequest(friendStatus, FriendStatus.BLOCKED);
+    } else {
+      await dispatch(blockedFriendList(profile.id));
+      await reloadFriendStatus();
     }
+
+    openToaster({
+      message: 'User successfully blocked',
+      toasterStatus: Status.SUCCESS,
+    });
   };
 
   const handleUnblockUser = (friend: Friend) => {

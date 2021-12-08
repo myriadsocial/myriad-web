@@ -42,8 +42,6 @@ const horizontalGallery = (source: string[], cloudName: string): ImageListProps 
 };
 
 const verticalGallery = (source: string[], cloudName: string): ImageListProps => {
-  console.log('VERTICAL GALLERY');
-
   let listCols = 1;
   let ROWS = 1;
   let cellHeight = 320;

@@ -29,7 +29,7 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
 
       <Link href={`/post/${postId}`}>
         <a href={`/post/${postId}`} className={style.linkGrey}>
-          {getDate(date)}
+          {getDate(date)}&nbsp;
         </a>
       </Link>
 
