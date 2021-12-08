@@ -17,10 +17,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
+import {DropdownMenu} from '../atoms/DropdownMenu/';
 import {FilterDropdownMenu} from '../atoms/FilterDropdownMenu';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import SearchComponent from '../atoms/Search/SearchBox';
-import {friendFilterOptions, FriendType} from './default';
+import {friendFilterOptions, FriendType, sortOptions} from './default';
 import {FriendListProps} from './default';
 import {useStyles} from './friend.style';
 import {FriendDetail, useFriendList} from './hooks/use-friend-list.hook';
@@ -47,6 +48,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     disableFilter = false,
     onSearch,
     onFilter,
+    onSort,
     onLoadNextPage,
   } = props;
   const style = useStyles();
@@ -70,7 +72,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   useEffect(() => {
     const list = useFriendList(friends, user);
     setFriendList(list);
-  }, [friends, user]);
+  }, [friends[0], user]);
 
   useEffect(() => {
     if (isTipSent) {
@@ -206,6 +208,10 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     }
   };
 
+  const handleSortChanged = (sort: string) => {
+    onSort(sort);
+  };
+
   if (friends.length === 0) {
     return (
       <Empty title="Friend list is empty" subtitle="Find or invite your friends to Myriad 😉" />
@@ -215,11 +221,14 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   return (
     <div>
       <ShowIf condition={!disableFilter}>
-        <FilterDropdownMenu
-          title="Filter by"
-          options={friendFilterOptions}
-          onChange={handleFilterSelected}
-        />
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <FilterDropdownMenu
+            title="Filter by"
+            options={friendFilterOptions}
+            onChange={handleFilterSelected}
+          />
+          <DropdownMenu title={'Sort by'} options={sortOptions} onChange={handleSortChanged} />
+        </div>
       </ShowIf>
 
       {router.pathname === '/profile/[id]' ? (

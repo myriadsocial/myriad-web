@@ -134,6 +134,7 @@ export const getPost = async (
   }
 
   const filterParams: Record<string, any> = {
+    order: `createdAt DESC`,
     include: [
       {
         relation: 'user',

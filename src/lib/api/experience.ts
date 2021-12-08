@@ -106,6 +106,7 @@ export const getUserExperience = async (
       pageLimit: PAGINATION_LIMIT,
       filter: {
         where,
+        order: `createdAt DESC`,
         include: [
           'user',
           {

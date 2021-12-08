@@ -55,6 +55,7 @@ export const getFriends = async (userId: string, page = 1): Promise<FriendList> 
           status: FriendStatus.APPROVED,
         },
         include: ['requestee', 'requestor'],
+        order: `createdAt DESC`,
       },
     },
   });
