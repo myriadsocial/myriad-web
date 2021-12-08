@@ -1,4 +1,4 @@
-import {ExclamationCircleIcon} from '@heroicons/react/solid';
+import {ExclamationIcon, XIcon} from '@heroicons/react/solid';
 
 import React from 'react';
 import {useSelector} from 'react-redux';
@@ -50,18 +50,24 @@ const BannerStatusComponent: React.FC<Props> = props => {
   return (
     <>
       <ShowIf condition={open && appStatus !== 'production'}>
-        <div className={style.alert}>
+        <div className={style.root}>
           <Typography className={style.text}>
             <SvgIcon
               classes={{root: style.fill}}
-              color="error"
-              component={ExclamationCircleIcon}
+              color="secondary"
+              component={ExclamationIcon}
               viewBox="0 0 20 20"
             />
             {text}
           </Typography>
-          <Typography className={style.hidden} onClick={setHiddenBanner}>
-            Dismiss
+          <Typography className={`${style.text} ${style.icon}`}>
+            <SvgIcon
+              onClick={setHiddenBanner}
+              classes={{root: style.fill}}
+              color="inherit"
+              component={XIcon}
+              viewBox="0 0 20 20"
+            />
           </Typography>
         </div>
       </ShowIf>
