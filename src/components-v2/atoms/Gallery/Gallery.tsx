@@ -71,8 +71,6 @@ export const Gallery: React.FC<GalleryProps> = props => {
 
   if (items.length === 0) return null;
 
-  console.log('items', items);
-
   return (
     <div className={style.root}>
       <ShowIf condition={variant === 'horizontal'}>

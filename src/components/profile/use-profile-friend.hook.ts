@@ -54,11 +54,17 @@ export const useFriendHook = () => {
     await dispatch(checkFriendedStatus());
   };
 
+  const reloadFriendStatus = async () => {
+    await dispatch(fetchProfileFriend());
+    await dispatch(checkFriendedStatus());
+  };
+
   return {
     loading,
     makeFriend,
     searchFriend,
     removeFriendRequest,
     toggleRequest,
+    reloadFriendStatus,
   };
 };
