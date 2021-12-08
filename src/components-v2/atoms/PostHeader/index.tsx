@@ -143,6 +143,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
             importers={post.importers}
             platform={post.platform}
             url={post.url}
+            totalImporters={post.totalImporter}
           />
         }
         action={

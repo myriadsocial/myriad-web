@@ -60,6 +60,7 @@ export type PostProps = {
   NSFWTag?: string;
   visibility: PostVisibility;
   deletedAt?: Date;
+  totalImporter: number;
 };
 
 export type ImportPostProps = {

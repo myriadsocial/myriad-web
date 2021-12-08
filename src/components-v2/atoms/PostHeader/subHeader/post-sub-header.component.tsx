@@ -14,7 +14,8 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
   postId,
   date,
   platform,
-  importers,
+  importers = [],
+  totalImporters,
   url,
 }) => {
   const style = useStyles();
@@ -34,20 +35,28 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
       </Link>
 
       <ShowIf condition={platform !== 'myriad'}>
-        {importers && importers.length && (
+        {totalImporters > 0 && (
           <>
             by&nbsp;
             {importers.map((importer, i) => (
               <>
-                <ShowIf condition={i === importers.length - 1}>&nbsp;&amp;&nbsp;</ShowIf>
                 <Link key={importer.id} href={`/profile/${importer.id}`}>
                   <a href={`/profile/${importer.id}`} className={style.link}>
                     {importer.name}
                   </a>
                 </Link>
-                <ShowIf condition={i < importers.length - 2}>&#44;&nbsp;</ShowIf>
+                <ShowIf condition={i < importers.length - 2 && importers.length > 1}>
+                  &#44;&nbsp;
+                </ShowIf>
+                <ShowIf
+                  condition={i === importers.length - 1 && totalImporters > importers.length - 1}>
+                  &nbsp;and&nbsp;
+                </ShowIf>
               </>
             ))}
+            <ShowIf condition={totalImporters - importers.length > 0}>
+              {totalImporters - importers.length} other
+            </ShowIf>
             &nbsp;via&nbsp;
             <Link href={url}>
               <a href={url} className={style.link} target="_blank" rel="noreferrer">
