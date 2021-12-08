@@ -5,6 +5,9 @@ import {useRouter} from 'next/router';
 
 import {Button} from '@material-ui/core';
 
+import {DropdownMenu} from '../../atoms/DropdownMenu/';
+import {sortOptions} from './default';
+
 import {ReportContainer} from 'src/components-v2/Report';
 import {SendTipContainer} from 'src/components-v2/SendTip';
 import {Timeline as TimelineComponent} from 'src/components-v2/Timeline';
@@ -51,9 +54,16 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   const [postToRemove, setPostToRemove] = useState<Post | null>(null);
   const sendTipOpened = Boolean(tippedPost);
 
+  const [toggle, setToggle] = useState<string>('');
+  const [postsList, setPostsList] = useState<Post[]>([]);
+
   useEffect(() => {
     filterTimeline(query);
   }, [query]);
+
+  useEffect(() => {
+    setPostsList(posts);
+  }, [posts, toggle]);
 
   const handleUpvote = (reference: Post | Comment) => {
     dispatch(upvote(reference));
@@ -127,6 +137,31 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
       </Empty>
     );
   }
+  const handleSortChanged = (sort: string) => {
+    console.log(sort, 'sooort');
+    let sortPosts;
+    setToggle(sort);
+    switch (sort) {
+      case 'latest':
+        sortPosts = postsList.sort((a, b) => {
+          if (new Date(a.createdAt) < new Date(b.createdAt)) return 1;
+          if (new Date(a.createdAt) > new Date(b.createdAt)) return -1;
+          return 0;
+        });
+        setPostsList(sortPosts);
+        break;
+      case 'oldest':
+        sortPosts = postsList.sort((a, b) => {
+          if (new Date(a.createdAt) < new Date(b.createdAt)) return -1;
+          if (new Date(a.createdAt) > new Date(b.createdAt)) return 1;
+          return 0;
+        });
+        setPostsList(sortPosts);
+        break;
+      default:
+        break;
+    }
+  };
 
   if (!posts.length) {
     return <Empty title="No post yet" subtitle="This user hasn’t posted anything" />;
@@ -134,11 +169,14 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
 
   return (
     <>
-      <TimelineFilterContainer {...props} />
+      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+        <TimelineFilterContainer {...props} />
+        <DropdownMenu title={'Sort by'} options={sortOptions} onChange={handleSortChanged} />
+      </div>
 
       <TimelineComponent
         user={user}
-        posts={posts}
+        posts={postsList}
         anonymous={anonymous}
         loadNextPage={nextPage}
         hasMore={hasMore}

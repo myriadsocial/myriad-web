@@ -15,6 +15,7 @@ export const getUserSocials = async (userId: string): Promise<SocialMediaList> =
           userId: userId,
         },
         include: ['people'],
+        order: `createdAt DESC`,
       },
     },
   });

@@ -18,13 +18,13 @@ import {UserState} from 'src/reducers/user/reducer';
 export type UserMenuTabs = 'post' | 'experience' | 'social' | 'friend' | 'setting';
 
 export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
-  const {detail: people} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const {detail: profileUser} = useSelector<RootState, ProfileState>(state => state.profileState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {experiences} = useSelector<RootState, ExperienceState>(state => state.experienceState);
   const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
 
   const filters: TimelineFilter = {
-    owner: people?.id,
+    owner: profileUser?.id,
   };
 
   const tabs: TabItems<UserMenuTabs>[] = useMemo(() => {
@@ -37,17 +37,17 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
       {
         id: 'experience',
         title: `Experience`,
-        component: <ExperienceTabPanelContainer user={people} />,
+        component: <ExperienceTabPanelContainer user={profileUser} />,
       },
       {
         id: 'friend',
         title: `Friends`,
-        component: <FriendListContainer user={people} />,
+        component: <FriendListContainer user={profileUser} />,
       },
       {
         id: 'social',
         title: `Social Media`,
-        component: <UserSocialContainer user={people} />,
+        component: <UserSocialContainer user={profileUser} />,
         background: 'white',
       },
     ];
@@ -62,7 +62,7 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
     }
 
     return items;
-  }, [people, user, experiences, friends]);
+  }, [profileUser, user, experiences, friends]);
 
   return tabs;
 };

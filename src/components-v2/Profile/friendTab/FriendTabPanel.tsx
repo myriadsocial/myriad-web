@@ -26,6 +26,7 @@ export const FriendTabPanelComponent: React.FC = () => {
         onSearch={console.log}
         onFilter={console.log}
         hasMore={false}
+        onSort={console.log}
         onLoadNextPage={loadNextPage}
       />
     </>
