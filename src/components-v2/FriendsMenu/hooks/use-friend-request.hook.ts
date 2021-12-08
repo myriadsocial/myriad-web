@@ -33,3 +33,20 @@ export const useFriendRequestList = (friends: Friend[], user?: User): FriendRequ
     return list;
   }, []);
 };
+
+export const useBlockList = (blockList: Friend[], user?: User): FriendRequestDetail[] => {
+  if (!user) return [];
+
+  return blockList.reduce(function (list: FriendRequestDetail[], friend) {
+    if (friend.requestorId === user.id && friend.requestee) {
+      list.push({
+        id: friend.requesteeId,
+        avatar: friend.requestee.profilePictureURL,
+        name: friend.requestee.name,
+        friend,
+      });
+    }
+
+    return list;
+  }, []);
+};

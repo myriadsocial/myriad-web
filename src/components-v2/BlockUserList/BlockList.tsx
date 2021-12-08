@@ -9,10 +9,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
-import {
-  useFriendRequestList,
-  FriendRequestDetail,
-} from '../FriendsMenu/hooks/use-friend-request.hook';
+import {useBlockList, FriendRequestDetail} from '../FriendsMenu/hooks/use-friend-request.hook';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {useStyles} from './blocklist.style';
 
@@ -30,7 +27,7 @@ type Props = {
 
 export const BlockListComponent: React.FC<Props> = ({blockList, user, onUnblock}) => {
   const style = useStyles();
-  const list = useFriendRequestList(blockList, user);
+  const list = useBlockList(blockList, user);
 
   const [unblockedUser, setUnblockUser] = useState<Friend | undefined>();
 
