@@ -38,6 +38,7 @@ Timeline.args = {
       originCreatedAt: new Date('2021-08-23T08:50:19.000Z'),
       originPostId: '',
       importers: [],
+      totalImporter: 0,
       metric: {
         likes: 1,
         dislikes: 0,
@@ -132,6 +133,7 @@ Timeline.args = {
           currencies: [],
         },
       ],
+      totalImporter: 1,
       metric: {
         likes: 1,
         dislikes: 0,
@@ -202,6 +204,7 @@ Timeline.args = {
           currencies: [],
         },
       ],
+      totalImporter: 1,
       metric: {
         likes: 1,
         dislikes: 0,

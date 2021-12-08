@@ -1,6 +1,8 @@
 import React from 'react';
 
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
+import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import {RichTextContainer} from '../src/components-v2/Richtext/RichTextContainer';
@@ -17,6 +19,8 @@ import {countNewNotification} from 'src/reducers/notification/actions';
 import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
+
+const {publicRuntimeConfig} = getConfig();
 
 const Home: React.FC = () => {
   const router = useRouter();
@@ -40,6 +44,10 @@ const Home: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
+      <Head>
+        <title>{publicRuntimeConfig.appName} - Home</title>
+      </Head>
+
       <Banner />
       <SearchBoxContainer onSubmitSearch={performSearch} />
       <RichTextContainer />

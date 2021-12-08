@@ -35,6 +35,7 @@ MyriadPost.args = {
     originCreatedAt: new Date('2021-08-23T08:50:19.000Z'),
     originPostId: '',
     importers: [],
+    totalImporter: 0,
     metric: {
       likes: 0,
       dislikes: 0,
@@ -84,6 +85,7 @@ OtherPost.args = {
     },
     originCreatedAt: new Date('2021-04-22T05:49:17.000Z'),
     importers: [],
+    totalImporter: 1,
     metric: {
       upvotes: 0,
       downvotes: 0,
