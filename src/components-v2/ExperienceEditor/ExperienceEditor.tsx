@@ -293,7 +293,6 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
               subtitle={<Typography variant="caption">@{option.username}</Typography>}
               avatar={option.profilePictureURL}
               platform={option.platform}
-              size="medium"
               action={
                 <IconButton className={styles.removePeople}>
                   {state.selected ? (
