@@ -5,7 +5,7 @@ export interface PeopleProps {
   id: string;
   name: string;
   originUserId: string;
-  platform: SocialsEnum;
+  platform?: SocialsEnum;
   profilePictureURL: string;
   username: string;
 }
