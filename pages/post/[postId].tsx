@@ -6,7 +6,7 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import {PostContainer} from 'src/components-v2/PostDedicated/PostDedicated.container';
-import {formatToString} from 'src/components-v2/PostEditor';
+import {deserialize, formatToString} from 'src/components-v2/PostEditor';
 import {ResourceDeleted} from 'src/components-v2/ResourceDeleted';
 import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
@@ -48,14 +48,12 @@ const PostPage: React.FC<PostPageProps> = props => {
     <DefaultLayout isOnProfilePage={false}>
       <Head>
         <title>{title}</title>
-        <meta name="description" content={description} />
-
-        <meta name="og:url" content={publicRuntimeConfig.nextAuthURL + router.asPath} />
-        <meta name="og:title" content={title} />
-        <meta name="og:description" content={description} />
-        {image && <meta name="og:image" content={image} />}
-        <meta name="og:type" content="website" />
-        <meta name="fb:app_id" content={publicRuntimeConfig.facebookAppId} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={publicRuntimeConfig.nextAuthURL + router.asPath} />
+        <meta property="og:description" content={description} />
+        <meta property="og:title" content={title} />
+        {image && <meta property="og:image" content={image} />}
+        <meta property="fb:app_id" content={publicRuntimeConfig.facebookAppId} />
         {/* Twitter Card tags */}
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
@@ -188,12 +186,20 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     ]);
   }
 
+  let description = post.text;
+
+  if (post.platform === 'myriad') {
+    const nodes = deserialize(post);
+
+    description = nodes.map(formatToString).join('');
+  }
+
   return {
     props: {
       session,
       title: post?.title ?? `${post.user.name} on ${publicRuntimeConfig.appName}`,
-      description: post.platform === 'myriad' ? formatToString(post) : post.text,
-      image: null,
+      description,
+      image: post.asset?.images && post.asset.images.length > 0 ? post.asset.images[0] : null,
       removed: showAsDeleted,
     },
   };

@@ -7,6 +7,7 @@ import {CookiesProvider} from 'react-cookie';
 
 import {Provider as AuthProvider} from 'next-auth/client';
 import {AppProps, NextWebVitalsMetric} from 'next/app';
+import getConfig from 'next/config';
 import Head from 'next/head';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -50,6 +51,7 @@ function createEmotionCache() {
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
+const {publicRuntimeConfig} = getConfig();
 
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
@@ -67,19 +69,12 @@ const App = ({classes, ...props}: MyAppProps & WithStyles<typeof snackbarStyles>
     }
   };
 
-  const pageTitle = 'Myriad';
-  const description =
-    'A social platform that’s entirely under your control. Remain anonymous, look for your own topics, choose your interface and control what you see.';
-
   return (
     <CacheProvider value={emotionCache}>
       <Head>
         <link rel="shortcut icon" href="/images/favicon.svg" />
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
-        <meta name="description" content={description}></meta>
-        <meta property="og:title" content={pageTitle} key="ogtitle" />
-        <meta property="og:description" content={description} key="ogdesc" />
-        <title>{pageTitle}</title>
+        <meta property="og:site_name" content={publicRuntimeConfig.appName} />
       </Head>
       <ThemeProvider theme={themeV2}>
         <SnackbarProvider

@@ -43,14 +43,12 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
     <DefaultLayout isOnProfilePage={true}>
       <Head>
         <title>{title}</title>
-        <meta name="description" content={description} />
-
-        <meta name="og:url" content={publicRuntimeConfig.nextAuthURL + router.asPath} />
-        <meta name="og:title" content={title} />
-        <meta name="og:description" content={description} />
-        {image && <meta name="og:image" content={image} />}
-        <meta name="og:type" content="website" />
-        <meta name="fb:app_id" content={publicRuntimeConfig.facebookAppId} />
+        <meta property="og:type" content="profile" />
+        <meta property="og:url" content={publicRuntimeConfig.nextAuthURL + router.asPath} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        {image && <meta property="og:image" content={image} />}
+        <meta property="fb:app_id" content={publicRuntimeConfig.facebookAppId} />
         {/* Twitter Card tags */}
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
