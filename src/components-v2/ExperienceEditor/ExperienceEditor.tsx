@@ -318,7 +318,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
               title={people.name}
               subtitle={<Typography variant="caption">@{people.username}</Typography>}
               avatar={people.profilePictureURL}
-              size="medium"
+              platform={people.platform}
               action={
                 <IconButton onClick={removeSelectedPeople(people)}>
                   <SvgIcon component={XCircleIcon} color="error" />
