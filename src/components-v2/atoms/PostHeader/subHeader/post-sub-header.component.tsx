@@ -25,14 +25,13 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
 
   return (
     <Typography component="div" className={style.root}>
-      <ShowIf condition={platform === 'myriad'}>
-        Imported on&nbsp;
-        <Link href={`/post/${postId}`}>
-          <a href={`/post/${postId}`} className={style.linkGrey}>
-            {getDate(date)}
-          </a>
-        </Link>
-      </ShowIf>
+      <ShowIf condition={platform !== 'myriad'}>Imported on&nbsp;</ShowIf>
+
+      <Link href={`/post/${postId}`}>
+        <a href={`/post/${postId}`} className={style.linkGrey}>
+          {getDate(date)}
+        </a>
+      </Link>
 
       <ShowIf condition={platform !== 'myriad'}>
         {importers && importers.length && (

@@ -39,7 +39,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
 
   useEffect(() => {
     const gallery = buildList(images, variant, cloudName);
-    console.log('GALLERY', gallery);
+
     setList(gallery);
     setItems(gallery.images);
   }, []);
