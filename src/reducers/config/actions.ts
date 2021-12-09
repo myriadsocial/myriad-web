@@ -4,12 +4,7 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {Currency} from 'src/interfaces/currency';
-import {
-  NotificationSettingItems,
-  PrivacySettingType,
-  PrivacyType,
-  PrivacySettings,
-} from 'src/interfaces/setting';
+import {NotificationSettingItems, PrivacySettings} from 'src/interfaces/setting';
 import * as SettingAPI from 'src/lib/api/setting';
 import * as TokenAPI from 'src/lib/api/token';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -21,12 +16,6 @@ import {ThunkActionCreator} from 'src/types/thunk';
 export interface FetchAvailableToken extends Action {
   type: constants.FETCH_AVAILABLE_TOKEN;
   payload: Currency[];
-}
-
-export interface UpdatePrivacySetting extends Action {
-  type: constants.UPDATE_PRIVACY_SETTING;
-  key: PrivacySettingType;
-  value: PrivacyType;
 }
 export interface UpdateNotificationSetting extends Action {
   type: constants.UPDATE_NOTIFICATION_SETTING;
@@ -44,7 +33,6 @@ export interface FetchPrivacySetting extends Action {
 export type Actions =
   | FetchAvailableToken
   | FetchPrivacySetting
-  | UpdatePrivacySetting
   | UpdateNotificationSetting
   | BaseAction;
 
@@ -56,7 +44,7 @@ export type Actions =
 /**
  * Action Creator
  */
-export const fetchAccountSetting: ThunkActionCreator<Action, RootState> =
+export const fetchAccountPrivacySetting: ThunkActionCreator<Action, RootState> =
   (id: string) => async dispatch => {
     dispatch(setLoading(true));
     try {
@@ -76,17 +64,13 @@ export const fetchAccountSetting: ThunkActionCreator<Action, RootState> =
   };
 
 export const updatePrivacySetting: ThunkActionCreator<Action, RootState> =
-  (id: string, key: PrivacySettingType, value: PrivacyType, callback?: () => void) =>
-  async dispatch => {
+  (id: string, payload: PrivacySettings, callback?: () => void) => async dispatch => {
     dispatch(setLoading(true));
-
     try {
-      const settings = {[key]: value};
-      await SettingAPI.updateAccountSettings(id, settings);
+      await SettingAPI.updateAccountSettings(id, payload);
       dispatch({
-        type: constants.UPDATE_PRIVACY_SETTING,
-        key,
-        value,
+        type: constants.FETCH_PRIVACY_SETTING,
+        settings: payload,
       });
       callback && callback();
     } catch (error) {
