@@ -4,7 +4,12 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {Currency} from 'src/interfaces/currency';
-import {NotificationSettingItems, PrivacySettingType, PrivacyType} from 'src/interfaces/setting';
+import {
+  NotificationSettingItems,
+  PrivacySettingType,
+  PrivacyType,
+  PrivacySettings,
+} from 'src/interfaces/setting';
 import * as SettingAPI from 'src/lib/api/setting';
 import * as TokenAPI from 'src/lib/api/token';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -27,6 +32,10 @@ export interface UpdateNotificationSetting extends Action {
   type: constants.UPDATE_NOTIFICATION_SETTING;
   settings: NotificationSettingItems;
 }
+export interface FetchPrivacySetting extends Action {
+  type: constants.FETCH_PRIVACY_SETTING;
+  settings: PrivacySettings;
+}
 
 /**
  * Union Action Types
@@ -34,6 +43,7 @@ export interface UpdateNotificationSetting extends Action {
 
 export type Actions =
   | FetchAvailableToken
+  | FetchPrivacySetting
   | UpdatePrivacySetting
   | UpdateNotificationSetting
   | BaseAction;
@@ -42,25 +52,55 @@ export type Actions =
  *
  * Actions
  */
-export const updatePrivacySetting = (
-  key: PrivacySettingType,
-  value: PrivacyType,
-): UpdatePrivacySetting => ({
-  type: constants.UPDATE_PRIVACY_SETTING,
-  key,
-  value,
-});
 
 /**
  * Action Creator
  */
+export const fetchAccountSetting: ThunkActionCreator<Action, RootState> =
+  (id: string) => async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      const data = await SettingAPI.getAccountSettings(id);
+      dispatch({
+        type: constants.FETCH_PRIVACY_SETTING,
+        settings: {
+          accountPrivacy: data.accountPrivacy,
+          socialMediaPrivacy: data.socialMediaPrivacy,
+        },
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const updatePrivacySetting: ThunkActionCreator<Action, RootState> =
+  (id: string, key: PrivacySettingType, value: PrivacyType, callback?: () => void) =>
+  async dispatch => {
+    dispatch(setLoading(true));
+
+    try {
+      const settings = {[key]: value};
+      await SettingAPI.updateAccountSettings(id, settings);
+      dispatch({
+        type: constants.UPDATE_PRIVACY_SETTING,
+        key,
+        value,
+      });
+      callback && callback();
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
 export const updateNotificationSetting: ThunkActionCreator<Action, RootState> =
   (id: string, settings: NotificationSettingItems, callback?: () => void) => async dispatch => {
     dispatch(setLoading(true));
 
     try {
       await SettingAPI.updateNotificationSettings(id, settings);
-      console.log(settings, 'hmm');
       dispatch({
         type: constants.UPDATE_NOTIFICATION_SETTING,
         settings,
@@ -68,7 +108,6 @@ export const updateNotificationSetting: ThunkActionCreator<Action, RootState> =
       callback && callback();
     } catch (error) {
       dispatch(setError(error.message));
-      console.log(error);
     } finally {
       dispatch(setLoading(false));
     }

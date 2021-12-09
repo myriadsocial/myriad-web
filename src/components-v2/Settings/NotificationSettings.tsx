@@ -44,7 +44,7 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = props =
   };
 
   return (
-    <Paper className={styles.root}>
+    <Paper elevation={0} className={styles.root}>
       <List>
         {settings.map(item => {
           return (
