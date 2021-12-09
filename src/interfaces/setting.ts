@@ -1,7 +1,7 @@
 export type LayoutFilterType = 'people' | 'topic' | 'focus';
 
 export type PrivacyType = 'public' | 'private';
-export type PrivacySettingType = 'account' | 'social';
+export type PrivacySettingType = 'accountPrivacy' | 'socialMediaPrivacy';
 export type NotificationSettingType = 'comments' | 'mentions' | 'friendRequests' | 'tips';
 
 export type PrivacySettings = Record<PrivacySettingType, PrivacyType>;

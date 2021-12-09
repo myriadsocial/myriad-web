@@ -28,6 +28,7 @@ export const getFriendRequests = async (userId: string, page = 1): Promise<Frien
     url: `/friends`,
     method: 'GET',
     params: {
+      mutual: 'true',
       pageNumber: page,
       pageLimit: PAGINATION_LIMIT,
       filter: {
@@ -47,11 +48,12 @@ export const getFriends = async (userId: string, page = 1): Promise<FriendList> 
     url: `/friends`,
     method: 'GET',
     params: {
+      mutual: 'true',
       pageNumber: page,
       pageLimit: PAGINATION_LIMIT,
       filter: {
         where: {
-          or: [{requesteeId: userId}, {requestorId: userId}],
+          or: [{requestorId: userId}],
           status: FriendStatus.APPROVED,
         },
         include: ['requestee', 'requestor'],
@@ -59,7 +61,6 @@ export const getFriends = async (userId: string, page = 1): Promise<FriendList> 
       },
     },
   });
-
   return data;
 };
 
@@ -200,9 +201,10 @@ export const deleteRequest = async (requestId: string): Promise<void> => {
 
 export const blockedUser = async (requesteeId: string, userId: string): Promise<void> => {
   await MyriadAPI.request({
-    url: '/friends/blocked',
+    url: '/friends',
     method: 'POST',
     data: {
+      status: 'blocked',
       requesteeId: requesteeId,
       requestorId: userId,
     },

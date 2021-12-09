@@ -26,8 +26,8 @@ const initalState: ConfigState = {
   settings: {
     version: packageJson.version,
     privacy: {
-      account: 'public',
-      social: 'public',
+      accountPrivacy: 'public',
+      socialMediaPrivacy: 'public',
     },
     notification: {
       comments: true,
@@ -47,15 +47,12 @@ export const ConfigReducer: Redux.Reducer<ConfigState, Actions> = (state = inita
       };
     }
 
-    case constants.UPDATE_PRIVACY_SETTING: {
+    case constants.FETCH_PRIVACY_SETTING: {
       return {
         ...state,
         settings: {
           ...state.settings,
-          privacy: {
-            ...state.settings.privacy,
-            [action.key]: action.value,
-          },
+          privacy: action.settings,
         },
       };
     }
