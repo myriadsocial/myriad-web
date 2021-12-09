@@ -5,6 +5,7 @@ export type FriendRequestDetail = {
   id: string;
   name: string;
   avatar?: string;
+  totalMutual?: number;
   friend: Friend;
 };
 
@@ -17,6 +18,7 @@ export const useFriendRequestList = (friends: Friend[], user?: User): FriendRequ
         id: friend.requesteeId,
         avatar: friend.requestee.profilePictureURL,
         name: friend.requestee.name,
+        totalMutual: friend.totalMutual,
         friend,
       });
     }
@@ -26,6 +28,7 @@ export const useFriendRequestList = (friends: Friend[], user?: User): FriendRequ
         id: friend.requestorId,
         avatar: friend.requestor.profilePictureURL,
         name: friend.requestor.name,
+        totalMutual: friend.totalMutual,
         friend,
       });
     }

@@ -236,10 +236,11 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
           style={{
             background: 'white',
             borderRadius: `20px 20px 0px 0px`,
-            padding: `20px 30px 30px`,
+            padding: `24px 0px`,
           }}>
-          <SearchComponent onSubmit={handleSearch} placeholder={'Search friend'} />
-
+          <div className={style.p3}>
+            <SearchComponent onSubmit={handleSearch} placeholder={'Search friend'} />
+          </div>
           <List>
             <InfiniteScroll
               scrollableTarget="scrollable-timeline"
@@ -266,9 +267,11 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                         </Typography>
                       </a>
                     </Link>
-                    <Typography className={style.friend} component="p" color="textSecondary">
-                      1 mutual friends
-                    </Typography>
+                    <ShowIf condition={!!friend.totalMutual}>
+                      <Typography className={style.friend} component="p" color="textSecondary">
+                        {friend.totalMutual} mutual friends
+                      </Typography>
+                    </ShowIf>
                   </ListItemText>
 
                   <div className="hidden-button">
@@ -294,8 +297,9 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         </div>
       ) : (
         <>
-          <SearchComponent onSubmit={handleSearch} placeholder={'Search friend'} />
-
+          <div className={style.p3}>
+            <SearchComponent onSubmit={handleSearch} placeholder={'Search friend'} />
+          </div>
           <List>
             <InfiniteScroll
               scrollableTarget="scrollable-timeline"
@@ -322,9 +326,11 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                         </Typography>
                       </a>
                     </Link>
-                    <Typography className={style.friend} component="p" color="textSecondary">
-                      1 mutual friends
-                    </Typography>
+                    <ShowIf condition={!!friend.totalMutual}>
+                      <Typography className={style.friend} component="p" color="textSecondary">
+                        {friend.totalMutual} mutual friends
+                      </Typography>
+                    </ShowIf>
                   </ListItemText>
 
                   <div className="hidden-button">

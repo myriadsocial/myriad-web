@@ -46,14 +46,7 @@ export const FriendMenuComponent: React.FC = () => {
       <Typography className={style.title} color="textPrimary">
         Friends
       </Typography>
-      <TabsComponent
-        tabs={tabs}
-        active={activeTab}
-        size={'small'}
-        onChangeTab={handleChangeTab}
-        paddingLeft={30}
-        paddingRight={30}
-      />
+      <TabsComponent tabs={tabs} active={activeTab} size={'small'} onChangeTab={handleChangeTab} />
     </Paper>
   );
 };

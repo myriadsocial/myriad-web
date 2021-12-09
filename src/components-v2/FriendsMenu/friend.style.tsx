@@ -22,8 +22,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     item: {
-      paddingLeft: theme.spacing(0.5),
-      paddingRight: theme.spacing(0.5),
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
       '& .MuiListItemText-root': {
         alignSelf: 'center',
       },
@@ -79,6 +79,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       '&:hover': {
         background: 'rgba(255, 200, 87, 0.15)',
       },
+      '&.MuiListItem-gutters': {
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+      },
     },
     iconbutton: {
       backgroundColor: theme.palette.primary.main,
@@ -101,6 +105,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     m1: {
       marginRight: theme.spacing(3),
+    },
+    p3: {
+      padding: '0px 24px',
     },
   }),
 );

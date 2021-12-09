@@ -11,6 +11,7 @@ export type FriendProps = {
   status: FriendStatus;
   requesteeId: string;
   requestorId: string;
+  totalMutual?: number;
 };
 
 export interface Friend extends FriendProps, BaseModel {

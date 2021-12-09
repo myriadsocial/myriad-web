@@ -20,6 +20,7 @@ import {Empty} from '../atoms/Empty';
 import {useStyles} from './friend.style';
 import {useFriendRequestList} from './hooks/use-friend-request.hook';
 
+import ShowIf from 'src/components/common/show-if.component';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 
@@ -58,9 +59,11 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
                   </Typography>
                 </a>
               </Link>
-              <Typography className={style.friend} component="p" color="textSecondary">
-                1 mutual friends
-              </Typography>
+              <ShowIf condition={!!request.totalMutual}>
+                <Typography className={style.friend} component="p" color="textSecondary">
+                  {request.totalMutual} mutual friends
+                </Typography>
+              </ShowIf>
             </ListItemText>
             <ListItemSecondaryAction>
               <Button
