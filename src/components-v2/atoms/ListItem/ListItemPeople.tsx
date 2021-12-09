@@ -82,6 +82,7 @@ export const ListItemPeopleComponent: React.FC<ListItemComponentProps> = props =
 
   return (
     <ListItem
+      key={title}
       component="div"
       className={styles.root}
       ContainerComponent="div"
