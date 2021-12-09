@@ -226,6 +226,7 @@ export const findPosts = async (user: User, query: string): Promise<PostList> =>
     url: `/posts?q=${encodeURIComponent(query)}`,
     method: 'GET',
     params: {
+      userId: user.id,
       filter: {
         include: [
           {
@@ -246,7 +247,7 @@ export const findPosts = async (user: User, query: string): Promise<PostList> =>
         where: {
           or: [
             {
-              visibility: 'public',
+              visibility: ['public'],
             },
             {
               created_by: user.id,
