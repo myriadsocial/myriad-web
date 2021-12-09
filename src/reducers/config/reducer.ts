@@ -47,19 +47,6 @@ export const ConfigReducer: Redux.Reducer<ConfigState, Actions> = (state = inita
       };
     }
 
-    case constants.UPDATE_PRIVACY_SETTING: {
-      return {
-        ...state,
-        settings: {
-          ...state.settings,
-          privacy: {
-            ...state.settings.privacy,
-            [action.key]: action.value,
-          },
-        },
-      };
-    }
-
     case constants.FETCH_PRIVACY_SETTING: {
       return {
         ...state,
