@@ -19,6 +19,7 @@ type PostActionProps = {
   metrics: PostMetric;
   downvoted?: boolean;
   shareUrl: string;
+  embedUrl: string;
   upvoted?: boolean;
   onUpvote: () => void;
   onDownVote: () => void;
@@ -35,6 +36,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
     downvoted = false,
     upvoted = false,
     shareUrl,
+    embedUrl,
     onUpvote,
     onDownVote,
     onShowComments,
@@ -165,7 +167,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
             <TextField
               label="Copy and paste this code into your website or blog"
               id="copy-post-embed"
-              value={`<iframe src="${shareUrl}></iframe>`}
+              value={`<iframe src="${embedUrl}></iframe>`}
               variant="outlined"
               disabled
               fullWidth
@@ -176,7 +178,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
                 endAdornment: (
                   <InputAdornment position="end">
                     <CopyToClipboard
-                      text={`<iframe src="${shareUrl}"></iframe>`}
+                      text={`<iframe src="${embedUrl}"></iframe>`}
                       onCopy={handleLinkCopied}>
                       <IconButton aria-label="copy-post-embed" style={{padding: 0}}>
                         <SvgIcon component={DuplicateIcon} color="primary" />

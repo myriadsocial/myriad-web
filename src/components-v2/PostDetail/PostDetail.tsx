@@ -232,6 +232,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           onDownVote={handleDownVote}
           onShowComments={toggleShowComments}
           shareUrl={`${urlLink()}/post/${post.id}`}
+          embedUrl={`${urlLink()}/embed?id=${post.id}&type=post`}
           onShared={handleShareLink}
           disableAction={type === 'share'}
         />
