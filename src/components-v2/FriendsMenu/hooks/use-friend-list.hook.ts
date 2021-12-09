@@ -6,6 +6,7 @@ export type FriendDetail = {
   name: string;
   username: string;
   avatar?: string;
+  totalMutual?: number;
 };
 
 export const useFriendList = (friends: Friend[], user?: User): FriendDetail[] => {
@@ -18,18 +19,9 @@ export const useFriendList = (friends: Friend[], user?: User): FriendDetail[] =>
         avatar: friend.requestee.profilePictureURL,
         name: friend.requestee.name,
         username: friend.requestee.username ?? friend.requestee.name.toLowerCase(),
+        totalMutual: friend.totalMutual ?? 0,
       });
     }
-
-    if (friend.requesteeId === user.id && friend.requestor) {
-      list.push({
-        id: friend.requestorId,
-        avatar: friend.requestor.profilePictureURL,
-        name: friend.requestor.name,
-        username: friend.requestor.username ?? friend.requestor.name.toLowerCase(),
-      });
-    }
-
     return list;
   }, []);
 };
