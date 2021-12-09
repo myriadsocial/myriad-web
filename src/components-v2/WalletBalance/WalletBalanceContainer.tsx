@@ -31,3 +31,5 @@ export const WalletBalancesContainer: React.FC = () => {
 
   return <WalletBalancesComponent balances={balanceDetails} />;
 };
+
+export default WalletBalancesContainer;

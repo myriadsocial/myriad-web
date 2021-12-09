@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/nextjs';
+
 import React from 'react';
 
 import {getSession} from 'next-auth/client';
@@ -5,6 +7,7 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
+import axios from 'axios';
 import {PostContainer} from 'src/components-v2/PostDedicated/PostDedicated.container';
 import {deserialize, formatToString} from 'src/components-v2/PostEditor';
 import {ResourceDeleted} from 'src/components-v2/ResourceDeleted';
@@ -117,12 +120,15 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const anonymous = session ? false : true;
   const userId = session?.user.address as string;
-  let post: Post;
+  let post: Post | undefined = undefined;
 
   try {
     post = await PostAPI.getPostDetail(params.postId, userId);
 
-    const importerIds = post.importers ? post.importers.map(importer => importer.id) : [];
+    // TODO: remove this later when friend only post API changed
+    if (!post.id) {
+      throw new Error('Post invalid');
+    }
 
     const upvoted = post.votes
       ? post.votes.filter(vote => vote.userId === userId && vote.state)
@@ -138,6 +144,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       post.text = post.text.replace(new RegExp('&amp;#x200B;', 'g'), '&nbsp;');
     }
 
+    // TODO: remove this later when friend only post API changed
+    const importerIds = post.importers ? post.importers.map(importer => importer.id) : [];
     // show deleted post if the current user is the post creator or importer
     if (post.deletedAt) {
       showAsDeleted = userId !== post.createdBy && !importerIds.includes(userId);
@@ -161,10 +169,16 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     }
 
     dispatch(setPost(post));
-  } catch {
-    return {
-      notFound: true,
-    };
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 403) {
+      showAsDeleted = true;
+    } else {
+      Sentry.captureException(error);
+
+      return {
+        notFound: true,
+      };
+    }
   }
 
   if (anonymous || !userId) {
@@ -182,9 +196,19 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     ]);
   }
 
-  let description = post.text;
+  let description =
+    post?.text ??
+    'The owner might be changed their privacy settings, shared it for certain group of people or it’s been deleted';
+  const title = post
+    ? post?.title ?? `${post.user.name} on ${publicRuntimeConfig.appName}`
+    : 'We cannot find what you are looking for';
+  const image = post
+    ? post.asset?.images && post.asset.images.length > 0
+      ? post.asset.images[0]
+      : null
+    : null;
 
-  if (post.platform === 'myriad') {
+  if (post && post.platform === 'myriad') {
     const nodes = deserialize(post);
 
     description = nodes.map(formatToString).join('');
@@ -193,9 +217,9 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   return {
     props: {
       session,
-      title: post?.title ?? `${post.user.name} on ${publicRuntimeConfig.appName}`,
+      title,
       description,
-      image: post.asset?.images && post.asset.images.length > 0 ? post.asset.images[0] : null,
+      image,
       removed: showAsDeleted,
     },
   };
