@@ -3,13 +3,11 @@ import React from 'react';
 import {Typography} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
 
 import {Experience} from '../..//interfaces/experience';
 import {useStyles} from './experience.style';
 
+import {ListItemPeopleComponent} from 'src/components-v2/atoms/ListItem/ListItemPeople';
 import {acronym} from 'src/helpers/string';
 
 type Props = {
@@ -84,12 +82,13 @@ export const ExperiencePreview: React.FC<Props> = props => {
           person.id === '' ? (
             <></>
           ) : (
-            <ListItem key={person.id} classes={{root: style.list}}>
-              <ListItemAvatar>
-                <Avatar src={person.profilePictureURL} />
-              </ListItemAvatar>
-              <ListItemText primary={person.name} secondary={person.platform} />
-            </ListItem>
+            <ListItemPeopleComponent
+              id="selectable-experience-list-item"
+              title={person.name}
+              subtitle={<Typography variant="caption">@{person.username}</Typography>}
+              avatar={person.profilePictureURL}
+              platform={person.platform}
+            />
           ),
         )}
       </div>

@@ -23,7 +23,7 @@ import ShowIf from '../../components/common/show-if.component';
 import {Experience, Tag} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
 import {Dropzone} from '../atoms/Dropzone';
-import {ListItemComponent} from '../atoms/ListItem';
+import {ListItemPeopleComponent} from '../atoms/ListItem/ListItemPeople';
 import {useStyles} from './Experience.styles';
 
 import {debounce} from 'lodash';
@@ -287,12 +287,12 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         renderOption={(option, state: AutocompleteRenderOptionState) => {
           if (option.id === '') return null;
           return (
-            <ListItemComponent
+            <ListItemPeopleComponent
               id="selectable-experience-list-item"
               title={option.name}
               subtitle={<Typography variant="caption">@{option.username}</Typography>}
               avatar={option.profilePictureURL}
-              size="medium"
+              platform={option.platform}
               action={
                 <IconButton className={styles.removePeople}>
                   {state.selected ? (
@@ -312,13 +312,13 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           people.id === '' ? (
             <></>
           ) : (
-            <ListItemComponent
+            <ListItemPeopleComponent
               id="selected-experience-list-item"
               key={people.id}
               title={people.name}
               subtitle={<Typography variant="caption">@{people.username}</Typography>}
               avatar={people.profilePictureURL}
-              size="medium"
+              platform={people.platform}
               action={
                 <IconButton onClick={removeSelectedPeople(people)}>
                   <SvgIcon component={XCircleIcon} color="error" />
