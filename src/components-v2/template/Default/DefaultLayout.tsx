@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
+import dynamic from 'next/dynamic';
+
 import {MenuContainer} from '../../Menu/MenuContainer';
 import {NotificationsContainer} from '../../Notifications/sidebar/Notifications.container';
 import {ProfileHeaderContainer} from '../../ProfileHeader/ProfileHeaderContainer';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
 import {SocialMediaListContainer} from '../../SocialMediaList/SocialMediaListContainer';
-import {WalletBalancesContainer} from '../../WalletBalance/WalletBalanceContainer';
 import useStyles from './DefaultLayout.styles';
 
 import {withError, WithErrorProps} from 'src/components-v2/Error';
@@ -14,6 +15,13 @@ import ShowIf from 'src/components/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
 import {countNewNotification} from 'src/reducers/notification/actions';
+
+const WalletBalancesContainer = dynamic(
+  () => import('../../WalletBalance/WalletBalanceContainer'),
+  {
+    ssr: false,
+  },
+);
 
 type DefaultLayoutProps = WithErrorProps & {
   isOnProfilePage: boolean;

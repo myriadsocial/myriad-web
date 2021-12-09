@@ -93,6 +93,7 @@ export const usePolkadotApi = () => {
           openTipSummaryForComment();
         }
 
+        // TODO: change to toaster
         showTipAlert({
           severity: 'success',
           title: 'Tip sent!',
@@ -104,6 +105,7 @@ export const usePolkadotApi = () => {
     } catch (error) {
       if (error.message === 'Cancelled') {
         setError(error.message);
+        // TODO: change to toaster
         showAlert({
           severity: 'warning',
           title: 'Aborted!',

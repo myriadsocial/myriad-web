@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/nextjs';
+
 import React from 'react';
 import {useSelector} from 'react-redux';
 
@@ -141,6 +143,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       throw new Error('Profile not found');
     }
   } catch (error) {
+    Sentry.captureException(error);
+
     return {
       notFound: true,
     };
