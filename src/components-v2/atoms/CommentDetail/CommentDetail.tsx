@@ -58,6 +58,8 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
   }, [comment]);
 
   const handleOpenReply = () => {
+    if (!user) return;
+
     setIsReplying(!isReplying);
   };
 
@@ -66,6 +68,8 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
   };
 
   const handleDownVote = () => {
+    if (!user) return;
+
     if (!comment.isDownVoted) {
       setDownvoting(comment);
 
@@ -82,6 +86,8 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
   };
 
   const handleUpvote = () => {
+    if (!user) return;
+
     onUpvote(comment);
   };
 
@@ -157,6 +163,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             />
             {deep < 2 && (
               <Button
+                disabled={!user}
                 onClick={handleOpenReply}
                 classes={{root: style.button}}
                 size="small"
@@ -191,6 +198,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
               Tip history
             </Button>
             <Button
+              disabled={!user}
               classes={{root: style.button}}
               size="small"
               variant="text"

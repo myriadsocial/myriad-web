@@ -47,7 +47,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
           <div className={classes.textAlign}>
             <Typography variant="h5">{user?.name || alias || ''}</Typography>
             <Typography variant="caption" color="textSecondary">
-              @{user?.username || 'username'}
+              @{user?.username || 'anonymous'}
             </Typography>
           </div>
           <div className={classes.customAvatarWrapper}>

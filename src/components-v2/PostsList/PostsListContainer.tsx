@@ -29,7 +29,7 @@ type PostsListContainerProps = {
 };
 
 export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
-  const {anonymous = false, query} = props;
+  const {query} = props;
 
   const dispatch = useDispatch();
 
@@ -46,6 +46,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
   }, [isTipSent]);
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
+  const anonymous = useSelector<RootState, boolean>(state => state.userState.anonymous);
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
   const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | null>(null);
 

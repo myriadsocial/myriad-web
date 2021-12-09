@@ -52,6 +52,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const {
     user,
     post,
+    anonymous,
     onUpvote,
     onRemoveVote,
     onSendTip,
@@ -231,13 +232,13 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           onUpvote={handleUpvote}
           onDownVote={handleDownVote}
           onShowComments={toggleShowComments}
-          shareUrl={`${urlLink()}/post/${post.id}`}
           embedUrl={`${urlLink()}/embed?id=${post.id}&type=post`}
+          postUrl={`${urlLink()}/post/${post.id}`}
           onShared={handleShareLink}
           disableAction={type === 'share'}
         />
 
-        <ShowIf condition={isImportedPost && !isOwnSocialPost && type !== 'share'}>
+        <ShowIf condition={!anonymous && isImportedPost && !isOwnSocialPost && type !== 'share'}>
           <Button
             isDisabled={balanceDetails.length === 0}
             onClick={handleSendTip}

@@ -284,13 +284,8 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
       // TODO: simplify this
       const data = await PostAPI.createPost({
         ...post,
-        platform: 'myriad',
         createdBy: user.id,
         tags: post.tags || [],
-        asset: {
-          images,
-          videos: [],
-        },
       });
 
       dispatch({

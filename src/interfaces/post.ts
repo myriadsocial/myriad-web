@@ -108,3 +108,8 @@ export type UpoadedFile = {
   file: File;
   preview: string;
 };
+
+export enum PostStatus {
+  DRAFT = 'draft',
+  PUBLISHED = 'published',
+}
