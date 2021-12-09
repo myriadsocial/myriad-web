@@ -4,7 +4,7 @@ import {BaseList} from './interfaces/base-list.interface';
 import {LoopbackWhere} from './interfaces/loopback-query.interface';
 
 import {Dislike, Like} from 'src/interfaces/interaction';
-import {Post, PostProps, ImportPostProps, PostVisibility} from 'src/interfaces/post';
+import {Post, PostProps, ImportPostProps, PostVisibility, PostStatus} from 'src/interfaces/post';
 import {
   TimelineSortMethod,
   TimelineFilter,
@@ -191,7 +191,12 @@ export const getPost = async (
     default:
       filterParams.where = where;
 
-      if (!filters?.importer && !filters?.owner && (!filters?.tags || filters.tags?.length === 0)) {
+      if (
+        userId &&
+        !filters?.importer &&
+        !filters?.owner &&
+        (!filters?.tags || filters.tags?.length === 0)
+      ) {
         params.timelineType = TimelineType.ALL;
       }
 
@@ -276,7 +281,10 @@ export const createPost = async (values: PostProps): Promise<Post> => {
   const {data} = await MyriadAPI.request<Post>({
     url: '/posts',
     method: 'POST',
-    data: values,
+    data: {
+      ...values,
+      status: PostStatus.PUBLISHED,
+    },
   });
 
   return data;

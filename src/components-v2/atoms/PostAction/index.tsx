@@ -18,7 +18,7 @@ import ShowIf from 'src/components/common/show-if.component';
 type PostActionProps = {
   metrics: PostMetric;
   downvoted?: boolean;
-  shareUrl: string;
+  postUrl: string;
   embedUrl: string;
   upvoted?: boolean;
   onUpvote: () => void;
@@ -35,7 +35,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
     metrics: {discussions = 0, debates = 0, upvotes = 0, downvotes},
     downvoted = false,
     upvoted = false,
-    shareUrl,
+    postUrl,
     embedUrl,
     onUpvote,
     onDownVote,
@@ -142,7 +142,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
             <TextField
               label="Post URL"
               id="copy-post-url"
-              value={shareUrl}
+              value={postUrl}
               variant="outlined"
               disabled
               fullWidth
@@ -151,7 +151,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <CopyToClipboard text={shareUrl} onCopy={handleLinkCopied}>
+                    <CopyToClipboard text={postUrl} onCopy={handleLinkCopied}>
                       <IconButton aria-label="copy-post-link" style={{padding: 0}}>
                         <SvgIcon component={DuplicateIcon} color="primary" />
                       </IconButton>

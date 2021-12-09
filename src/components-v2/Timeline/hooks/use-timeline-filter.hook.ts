@@ -1,17 +1,19 @@
 import {useSelector, useDispatch} from 'react-redux';
 
-import {TimelineType, TimelineFilter, TimelineSortMethod} from '../../../interfaces/timeline';
-import {RootState} from '../../../reducers';
-import {ProfileState} from '../../../reducers/profile/reducer';
-import {loadTimeline, clearTimeline} from '../../../reducers/timeline/actions';
-import {TimelineState} from '../../../reducers/timeline/reducer';
-
 import {ParsedUrlQuery} from 'querystring';
+import {TimelineType, TimelineFilter, TimelineSortMethod} from 'src/interfaces/timeline';
+import {RootState} from 'src/reducers';
+import {ProfileState} from 'src/reducers/profile/reducer';
+import {loadTimeline, clearTimeline} from 'src/reducers/timeline/actions';
+import {TimelineState} from 'src/reducers/timeline/reducer';
+import {UserState} from 'src/reducers/user/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useTimelineFilter = (filters?: TimelineFilter) => {
   const {filter} = useSelector<RootState, TimelineState>(state => state.timelineState);
   const {detail: people} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
+
   const dispatch = useDispatch();
 
   const filterTimeline = async (query: ParsedUrlQuery) => {
@@ -57,6 +59,10 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
       ...filters,
       tags,
     };
+
+    if (anonymous) {
+      // TODO: anonymous user should only see trending posts
+    }
 
     dispatch(loadTimeline(1, timelineSort, newFilter, timelineType));
   };

@@ -46,7 +46,7 @@ export const UsersList: React.FC<UsersListProps> = ({users, hasMore, loadNextPag
           {users.map(user => (
             <UsersListItem
               title={user.name}
-              subtitle={user.username ? `@${user.username}` : '@username'}
+              subtitle={user.username ? `@${user.username}` : '@anonymous'}
               key={user.id}
               size={'medium'}
               avatar={user.profilePictureURL}

@@ -10,12 +10,10 @@ import {useRouter} from 'next/router';
 import {ProfileTimeline} from 'src/components-v2/Profile/ProfileComponent';
 import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
-import {loginAsAnonymous} from 'src/helpers/auth';
-import {User} from 'src/interfaces/user';
+import {generateAnonymousUser} from 'src/helpers/auth';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
-import {setError} from 'src/reducers/base/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExperience} from 'src/reducers/experience/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
@@ -32,9 +30,11 @@ type ProfilePageProps = {
   image: string | null;
 };
 
+const {publicRuntimeConfig} = getConfig();
+
 const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
   const {title, description, image} = props;
-  const {publicRuntimeConfig} = getConfig();
+
   const router = useRouter();
 
   const {detail: profileDetail} = useSelector<RootState, ProfileState>(state => state.profileState);
@@ -100,16 +100,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  if (!session) {
-    loginAsAnonymous();
-  }
-
-  const anonymous = Boolean(session?.user.anonymous);
+  const anonymous = session ? false : true;
   const userId = session?.user.address as string;
   const profileId = params?.id as string;
 
   if (anonymous || !userId) {
-    const username = session?.user.name as string;
+    const username = generateAnonymousUser();
 
     await dispatch(setAnonymous(username));
   } else {
@@ -123,32 +119,32 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     ]);
   }
 
-  let detail: User | null = null;
+  try {
+    const detail = await UserAPI.getUserDetail(profileId);
 
-  if (profileId) {
-    try {
-      detail = await UserAPI.getUserDetail(profileId);
+    if (detail) {
+      await dispatch(setProfile(detail));
 
-      if (detail) {
-        dispatch(setProfile(detail));
-
+      if (!anonymous) {
         await dispatch(checkFriendedStatus());
       }
-    } catch (error) {
-      setError({
-        message: 'user not found',
-      });
-    }
-  }
 
-  return {
-    props: {
-      session,
-      title: detail?.name ?? null,
-      description: detail?.bio ?? null,
-      image: detail?.profilePictureURL ?? null,
-    },
-  };
+      return {
+        props: {
+          session,
+          title: detail?.name ?? null,
+          description: detail?.bio ?? null,
+          image: detail?.profilePictureURL ?? null,
+        },
+      };
+    } else {
+      throw new Error('Profile not found');
+    }
+  } catch (error) {
+    return {
+      notFound: true,
+    };
+  }
 });
 
 export default ProfilePageComponent;

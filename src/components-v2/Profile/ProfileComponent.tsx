@@ -20,6 +20,7 @@ import {RootState} from 'src/reducers';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';
 import {checkFriendedStatus} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
+import {UserState} from 'src/reducers/user/reducer';
 
 type Props = {
   profile?: User;
@@ -33,15 +34,19 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const {friendStatus} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
   useEffect(() => {
     if (profile?.id) {
       dispatch(fetchProfileFriend());
+    }
+
+    if (profile?.id && !anonymous) {
       dispatch(checkFriendedStatus());
     }
 
     return undefined;
-  }, [profile?.id]);
+  }, [profile?.id, anonymous]);
 
   useEffect(() => {
     const section = router.query.edit as string | undefined;

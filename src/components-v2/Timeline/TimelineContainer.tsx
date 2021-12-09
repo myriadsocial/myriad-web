@@ -39,7 +39,7 @@ type TimelineContainerProps = {
 };
 
 export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
-  const {anonymous = false, filters, enableFilter = true} = props;
+  const {filters, enableFilter = true} = props;
 
   const router = useRouter();
 
@@ -52,6 +52,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const {openToaster} = useToasterHook();
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
+  const anonymous = useSelector<RootState, boolean>(state => state.userState.anonymous);
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
   const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | null>(null);
   const [reported, setReported] = useState<Post | null>(null);
