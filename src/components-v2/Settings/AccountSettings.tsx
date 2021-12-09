@@ -7,6 +7,7 @@ import {
   ListItemText,
   Paper,
   Typography,
+  Button,
 } from '@material-ui/core';
 
 import {DropdownMenu} from '../atoms/DropdownMenu/';
@@ -15,25 +16,37 @@ import {accountPrivacyOptions} from './default';
 import {useAccountSetting} from './hooks/use-account-setting.hook';
 import {SettingsOption} from './hooks/use-setting-list.hook';
 
-import {PrivacySettings, PrivacySettingType, PrivacyType} from 'src/interfaces/setting';
+import {PrivacySettings, PrivacySettingType} from 'src/interfaces/setting';
 
 type AccountSettingsProps = {
   value: PrivacySettings;
-  onSaveSetting: (key: PrivacySettingType, value: PrivacyType) => void;
+  onSaveSetting: (payload: PrivacySettings) => void;
 };
 
 export const AccountSettings: React.FC<AccountSettingsProps> = props => {
   const {value, onSaveSetting} = props;
+  const [privacy, setPrivacy] = React.useState({
+    accountPrivacy: value.accountPrivacy,
+    socialMediaPrivacy: value.socialMediaPrivacy,
+  });
+
+  React.useEffect(() => {
+    setPrivacy(value);
+  }, [value]);
 
   const styles = useStyles();
   const settings = useAccountSetting();
 
   const changePrivacySetting = (item: SettingsOption<PrivacySettingType>) => (selected: string) => {
-    onSaveSetting(item.id, selected as PrivacyType);
+    setPrivacy({...privacy, [item.id]: selected});
+  };
+
+  const savePrivacySetting = () => {
+    onSaveSetting(privacy);
   };
 
   return (
-    <Paper className={styles.root}>
+    <Paper elevation={0} className={styles.root}>
       <List>
         {settings.map(item => {
           return (
@@ -49,7 +62,7 @@ export const AccountSettings: React.FC<AccountSettingsProps> = props => {
               <ListItemSecondaryAction>
                 <DropdownMenu
                   title=""
-                  selected={value[item.id]}
+                  selected={privacy[item.id]}
                   options={accountPrivacyOptions}
                   onChange={changePrivacySetting(item)}
                 />
@@ -58,6 +71,16 @@ export const AccountSettings: React.FC<AccountSettingsProps> = props => {
           );
         })}
       </List>
+      <div className={styles.action}>
+        <Button
+          variant="contained"
+          color="primary"
+          disableElevation
+          fullWidth
+          onClick={savePrivacySetting}>
+          Save Changes
+        </Button>
+      </div>
     </Paper>
   );
 };

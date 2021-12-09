@@ -1,6 +1,27 @@
 import MyriadAPI from './base';
 
-import {NotificationSettingItems} from 'src/interfaces/setting';
+import {NotificationSettingItems, PrivacySettings} from 'src/interfaces/setting';
+
+export const updateAccountSettings = async (
+  userId: string,
+  settings: Partial<PrivacySettings>,
+): Promise<PrivacySettings> => {
+  const {data} = await MyriadAPI.request<PrivacySettings>({
+    url: `/users/${userId}/account-setting`,
+    method: 'PATCH',
+    data: settings,
+  });
+  return data;
+};
+
+export const getAccountSettings = async (userId: string): Promise<PrivacySettings> => {
+  const {data} = await MyriadAPI.request<PrivacySettings>({
+    url: `/users/${userId}/account-setting`,
+    method: 'GET',
+  });
+
+  return data;
+};
 
 export const updateNotificationSettings = async (
   userId: string,
