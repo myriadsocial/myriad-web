@@ -2,7 +2,6 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {SendTip} from '.';
-import {removeMyriad} from '../../helpers/balance';
 import {WalletState} from '../../reducers/wallet/reducer';
 
 import {RootState} from 'src/reducers';
@@ -16,10 +15,6 @@ export const SendTipContainer: React.FC = () => {
   );
 
   return (
-    <SendTip
-      tippedUser={tippedUser}
-      tippedUserId={tippedUserId}
-      balanceDetails={removeMyriad(balanceDetails)}
-    />
+    <SendTip tippedUser={tippedUser} tippedUserId={tippedUserId} balanceDetails={balanceDetails} />
   );
 };

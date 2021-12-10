@@ -64,6 +64,7 @@ export const signAndSendExtrinsic = async (
         if (api) {
           // here we use the api to create a balance transfer to some account of a value of 12345678
           const transferExtrinsic =
+            // Unable to create extrinsic here for MYRIA
             currencyId === 'ACA'
               ? api.tx.balances.transfer(to, value)
               : api.tx.currencies.transfer(to, {TOKEN: currencyId}, value);
