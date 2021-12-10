@@ -12,15 +12,16 @@ import React from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {useSelector} from 'react-redux';
 
-import {Typography} from '@material-ui/core';
-import {IconButton} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
+import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
 
 import {acronym} from '../../../helpers/string';
 import {PromptComponent} from '../../atoms/Prompt/prompt.component';
@@ -208,7 +209,16 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               <Typography className={style.name} component="p">
                 <ShowIf condition={person.username !== 'myriad_official'}>{person.name}</ShowIf>
                 <ShowIf condition={person.username === 'myriad_official'}>
-                  {person.name} <OfficialBadge />
+                  {person.name}
+                  <Tooltip
+                    title={<Typography>Official Account</Typography>}
+                    aria-label="official-account">
+                    <IconButton
+                      aria-label="official-badge"
+                      style={{backgroundColor: 'transparent', paddingLeft: 4}}>
+                      <SvgIcon component={OfficialBadge} viewBox="0 0 24 24" color="primary" />
+                    </IconButton>
+                  </Tooltip>
                 </ShowIf>
               </Typography>
               <Typography className={style.username} component="p">
