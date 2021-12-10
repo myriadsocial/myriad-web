@@ -58,10 +58,6 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
         <Typography component="span" color="textSecondary">
           <ShowIf condition={title.length > 0}>{title}:&nbsp;</ShowIf>
         </Typography>
-
-        <Typography component="span" color="textPrimary" className={styles.selected}>
-          {getSelectedText()}
-        </Typography>
       </div>
 
       <IconButton
@@ -69,6 +65,9 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
         color="primary"
         aria-label="expand"
         className={styles.expand}>
+        <Typography component="span" color="textPrimary" className={styles.selected}>
+          {getSelectedText()}
+        </Typography>
         <SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />
       </IconButton>
 
