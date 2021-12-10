@@ -8,6 +8,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     selected: {
       marginLeft: theme.spacing(1),
       fontWeight: 600,
+      marginRight: theme.spacing(1),
     },
     expand: {
       marginLeft: theme.spacing(1),
