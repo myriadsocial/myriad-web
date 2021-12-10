@@ -6,12 +6,13 @@ type NSFWTagsStyleProps = {
 
 export const useStyles = makeStyles<Theme, NSFWTagsStyleProps>(theme =>
   createStyles({
-    root: {},
+    root: {
+      marginLeft: theme.spacing(5),
+    },
     nsfw: {
       color: props => (props.selected ? theme.status.danger.main : theme.palette.text.secondary),
-      width: 80,
-      marginLeft: 30,
-      marginRight: 30,
+      marginLeft: theme.spacing(4),
+      marginRight: theme.spacing(1),
     },
     expand: {
       marginLeft: theme.spacing(1),

@@ -2,7 +2,7 @@ import {ChevronDownIcon} from '@heroicons/react/outline';
 
 import React, {useState} from 'react';
 
-import {Button, SvgIcon} from '@material-ui/core';
+import {SvgIcon, Typography, IconButton} from '@material-ui/core';
 
 import {PostTags} from '../PostTag/PostTags';
 import {Modal} from '../atoms/Modal';
@@ -38,13 +38,12 @@ export const NSFWTags: React.FC<NSFWTagsProps> = props => {
 
   return (
     <>
-      <Button
-        size="small"
-        onClick={openTag}
-        className={styles.nsfw}
-        endIcon={<SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />}>
-        NSFW
-      </Button>
+      <IconButton onClick={openTag} color="primary" aria-label="expand" className={styles.expand}>
+        <Typography component="span" className={styles.nsfw}>
+          NSFW
+        </Typography>
+        <SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />
+      </IconButton>
 
       <Modal title="NSFW tags" align="left" titleSize="small" open={isOpen} onClose={closeTag}>
         <PostTags selected={tags} options={tagOptions} onConfirm={handleConfirmTags} />
