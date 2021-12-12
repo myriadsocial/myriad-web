@@ -1,6 +1,5 @@
 import createCache from '@emotion/cache';
 import {CacheProvider, EmotionCache} from '@emotion/react';
-import {XIcon} from '@heroicons/react/outline';
 
 import React from 'react';
 import {CookiesProvider} from 'react-cookie';
@@ -11,8 +10,6 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
-import IconButton from '@material-ui/core/IconButton';
-import SvgIcon from '@material-ui/core/SvgIcon';
 import {ThemeProvider} from '@material-ui/core/styles';
 import {withStyles, WithStyles} from '@material-ui/core/styles';
 
@@ -20,8 +17,10 @@ import {wrapper} from '../src/store';
 import themeV2 from '../src/themes/light-theme-v2';
 
 import {SnackbarProvider} from 'notistack';
+import {ToasterSnack} from 'src/components-v2/atoms/ToasterSnack';
 import {SearchProvider} from 'src/components/search/search.context';
 import {AlertProvider} from 'src/context/alert.context';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 
 const snackbarStyles = {
   root: {
@@ -59,15 +58,31 @@ interface MyAppProps extends AppProps {
 
 const App = ({classes, ...props}: MyAppProps & WithStyles<typeof snackbarStyles>) => {
   const {Component, emotionCache = clientSideEmotionCache, pageProps} = props;
+  const {
+    notifications,
+    displayed,
+    clearToasterSnack,
+    saveDisplayedToastSnack,
+    removeDisplayedToastSnack,
+  } = useToasterSnackHook();
   const notistackRef = React.createRef<SnackbarProvider>();
-  const onClickDismiss = (
-    event: React.MouseEvent | React.SyntheticEvent,
-    key: string | number,
-  ): void => {
-    if (notistackRef.current) {
-      notistackRef.current.closeSnackbar(key);
-    }
-  };
+
+  React.useEffect(() => {
+    notifications.forEach(({key, message, variant}) => {
+      if (displayed.includes(key)) {
+        return;
+      }
+      notistackRef?.current?.enqueueSnackbar('', {
+        content: <ToasterSnack key={key} message={message} variant={variant} />,
+        autoHideDuration: 3000,
+        onExited: () => {
+          clearToasterSnack({key: key});
+          removeDisplayedToastSnack(key);
+        },
+      });
+      saveDisplayedToastSnack(key);
+    });
+  }, [notifications, displayed]);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -83,21 +98,6 @@ const App = ({classes, ...props}: MyAppProps & WithStyles<typeof snackbarStyles>
             vertical: 'top',
             horizontal: 'right',
           }}
-          classes={{
-            variantSuccess: classes.success,
-            variantError: classes.error,
-            variantWarning: classes.warning,
-            variantInfo: classes.info,
-            root: classes.root,
-            containerRoot: classes.containerRoot,
-          }}
-          action={key => (
-            <>
-              <IconButton aria-label="close" onClick={e => onClickDismiss(e, key)}>
-                <SvgIcon component={XIcon} viewBox="0 0 24 24" />
-              </IconButton>
-            </>
-          )}
           maxSnack={5}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
