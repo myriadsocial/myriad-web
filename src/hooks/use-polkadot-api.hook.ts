@@ -6,9 +6,9 @@ import {setIsTipSent} from '../reducers/wallet/actions';
 import {WalletState} from '../reducers/wallet/reducer';
 
 import _ from 'lodash';
-import {useSnackbar} from 'notistack';
 import {useTipSummaryHook} from 'src/components/tip-summary/use-tip-summary.hook';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Currency} from 'src/interfaces/currency';
 import {SendTipProps} from 'src/interfaces/send-tips/send-tips';
 import {ContentType} from 'src/interfaces/wallet';
@@ -24,7 +24,7 @@ export const usePolkadotApi = () => {
   const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
   const {showAlert, showTipAlert} = useAlertHook();
   const {openTipSummaryForComment} = useTipSummaryHook();
-  const {enqueueSnackbar} = useSnackbar();
+  const {openToasterSnack} = useToasterSnackHook();
 
   const [loading, setLoading] = useState(false);
   const [isSignerLoading, setSignerLoading] = useState(false);
@@ -174,9 +174,9 @@ export const usePolkadotApi = () => {
       }
     } catch (error) {
       if (error.message === 'Cancelled') {
-        enqueueSnackbar('Transaction signing cancelled', {
+        openToasterSnack({
           variant: 'warning',
-          autoHideDuration: 3000,
+          message: 'Transaction signing cancelled',
         });
       }
     } finally {
