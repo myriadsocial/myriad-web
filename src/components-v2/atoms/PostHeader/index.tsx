@@ -4,7 +4,7 @@ import React from 'react';
 
 import {useRouter} from 'next/router';
 
-import {Menu, MenuItem, Typography} from '@material-ui/core';
+import {capitalize, Menu, MenuItem, Typography} from '@material-ui/core';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
@@ -177,8 +177,8 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
 
         <ShowIf condition={!owner && post.platform !== 'myriad'}>
           <MenuItem onClick={openSourcePost}>View Source Post</MenuItem>
-          <MenuItem onClick={openUserProfile}>Visit {post.user?.name} Profile</MenuItem>
-          <MenuItem onClick={openSourceAccount}>Visit {post.people?.name} Account</MenuItem>
+          <MenuItem onClick={openUserProfile}>Visit Myriad Profile</MenuItem>
+          <MenuItem onClick={openSourceAccount}>Visit {capitalize(post.platform)} Account</MenuItem>
         </ShowIf>
 
         <ShowIf condition={!owner && post.platform === 'myriad'}>
