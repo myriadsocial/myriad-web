@@ -1,13 +1,12 @@
 import {Experience, Tag, UserExperience} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
-import {Status} from '../../interfaces/toaster';
 import * as ExperienceAPI from '../../lib/api/experience';
 import * as PeopleAPI from '../../lib/api/people';
 import * as TagAPI from '../../lib/api/tag';
 import {ThunkActionCreator} from '../../types/thunk';
 import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
-import {ShowToaster, showToaster} from '../toaster/actions';
+import {ShowToasterSnack, showToasterSnack} from '../toaster-snack/actions';
 import * as constants from './constants';
 
 import {Action} from 'redux';
@@ -57,7 +56,7 @@ export type Actions =
   | SearchAllRelatedExperiences
   | SearchPeople
   | SearchTags
-  | ShowToaster
+  | ShowToasterSnack
   | BaseAction;
 
 /**
@@ -170,8 +169,8 @@ export const cloneExperience: ThunkActionCreator<Actions, RootState> =
       );
       callback && callback(cloneExperience.id);
       await dispatch(
-        showToaster({
-          toasterStatus: Status.SUCCESS,
+        showToasterSnack({
+          variant: 'success',
           message: 'Experience succesfully cloned!',
         }),
       );
@@ -323,8 +322,8 @@ export const createExperience: ThunkActionCreator<Actions, RootState> =
       callback && callback(newExperience.id);
 
       await dispatch(
-        showToaster({
-          toasterStatus: Status.SUCCESS,
+        showToasterSnack({
+          variant: 'success',
           message: 'Experience succesfully created!',
         }),
       );
@@ -356,8 +355,8 @@ export const subscribeExperience: ThunkActionCreator<Actions, RootState> =
       callback && callback();
 
       await dispatch(
-        showToaster({
-          toasterStatus: Status.SUCCESS,
+        showToasterSnack({
+          variant: 'success',
           message: 'subscribed successfully!',
         }),
       );
@@ -391,8 +390,8 @@ export const updateExperience: ThunkActionCreator<Actions, RootState> =
       callback && callback(experienceId);
 
       await dispatch(
-        showToaster({
-          toasterStatus: Status.SUCCESS,
+        showToasterSnack({
+          variant: 'success',
           message: 'experience succesfully updated!',
         }),
       );

@@ -10,10 +10,9 @@ import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {WelcomeModule} from './WelcomeModule';
 
 import {useProfileHook} from 'src/hooks/use-profile.hook';
-import {Status} from 'src/interfaces/toaster';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {skipUsername} from 'src/lib/api/activity';
 import {RootState} from 'src/reducers';
-import {showToaster} from 'src/reducers/toaster/actions';
 import {updateUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -25,6 +24,7 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
   const dispatch = useDispatch();
   const router = useRouter();
   const {usernameAvailable, checkUsernameAvailable} = useProfileHook();
+  const {openToasterSnack} = useToasterSnackHook();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [skip, setSkip] = useState(false);
@@ -60,12 +60,10 @@ export const WelcomeContainer: React.FC<WelcomeProps> = props => {
           username,
         },
         () => {
-          dispatch(
-            showToaster({
-              message: 'Success update profile',
-              toasterStatus: Status.SUCCESS,
-            }),
-          );
+          openToasterSnack({
+            message: 'Success update profile',
+            variant: 'success',
+          });
         },
       ),
     );
