@@ -1,7 +1,7 @@
 import {XIcon} from '@heroicons/react/outline';
 
 import React, {useState, useEffect} from 'react';
-import {ErrorCode, FileError, FileRejection, useDropzone} from 'react-dropzone';
+import {ErrorCode, FileError, useDropzone} from 'react-dropzone';
 
 import {
   Button,
@@ -14,12 +14,12 @@ import {
 } from '@material-ui/core';
 import {Skeleton} from '@material-ui/lab';
 
-import {Status, Toaster} from '../Toaster';
 import {useStyles} from './Dropzone.styles';
 
 import {detect} from 'detect-browser';
 import muxjs from 'mux.js';
 import ShowIf from 'src/components-v2/common/show-if.component';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import UploadIcon from 'src/images/Icons/Upload.svg';
 import ImagePlaceholder from 'src/images/Icons/myriad-grey.svg';
 
@@ -56,10 +56,11 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
   } = props;
   const styles = useStyles({border});
 
+  const {openToasterSnack} = useToasterSnackHook();
+
   const [files, setFiles] = useState<FileUploaded[]>([]);
   const [videoCodecSupported, setVideoCodecSupported] = useState(true);
   const [preview, setPreview] = useState<string[]>([]);
-  const [error, setError] = useState<FileRejection[] | null>(null);
 
   useEffect(() => {
     if (value) {
@@ -113,7 +114,10 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
       onImageSelected(newFiles);
     },
     onDropRejected: rejection => {
-      setError(rejection);
+      openToasterSnack({
+        message: getErrorMessage(rejection[0].errors[0]),
+        variant: 'error',
+      });
     },
   });
 
@@ -172,10 +176,6 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
 
   const handleReuploadImage = () => {
     open();
-  };
-
-  const closeError = () => {
-    setError(null);
   };
 
   const getCols = (): number => {
@@ -292,13 +292,6 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
           </Button>
         )}
       </div>
-
-      <Toaster
-        open={Boolean(error)}
-        toasterStatus={Status.DANGER}
-        message={error ? getErrorMessage(error[0].errors[0]) : ''}
-        onClose={closeError}
-      />
     </div>
   );
 };

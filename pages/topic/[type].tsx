@@ -6,7 +6,6 @@ import {useRouter} from 'next/router';
 import {capitalize} from '@material-ui/core';
 
 import {TimelineContainer} from 'src/components-v2/Timeline/TimelineContainer';
-import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {TopNavbarComponent} from 'src/components-v2/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import {Experience} from 'src/interfaces/experience';
@@ -46,8 +45,6 @@ const Topic: React.FC<TopicPageProps> = ({experience}) => {
       />
 
       <TimelineContainer enableFilter={false} />
-
-      <ToasterContainer />
     </DefaultLayout>
   );
 };

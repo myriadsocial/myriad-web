@@ -14,10 +14,9 @@ import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {PostsList} from './PostsList';
 
 import {useTipHistory} from 'src/hooks/tip-history.hook';
-import {useToasterHook} from 'src/hooks/use-toaster.hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
-import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {upvote, setDownvoting, removeVote} from 'src/reducers/timeline/actions';
@@ -35,7 +34,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
   const {page, posts, hasMore, searchPosts, getTippedUserId} = useTimelineHook();
   const {openTipHistory} = useTipHistory();
-  const {openToaster} = useToasterHook();
+  const {openToasterSnack} = useToasterSnackHook();
 
   const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
 
@@ -101,9 +100,9 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
   const handleSharePost = (post: Post, type: 'link' | 'post') => {
     if (type === 'post') {
-      openToaster({
+      openToasterSnack({
         message: 'This post successfully share to your timeline',
-        toasterStatus: Status.SUCCESS,
+        variant: 'success',
       });
     }
   };

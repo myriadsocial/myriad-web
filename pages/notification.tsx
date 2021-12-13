@@ -4,7 +4,6 @@ import {useSelector} from 'react-redux';
 import {getSession} from 'next-auth/client';
 
 import {NotificationsContainer} from 'src/components-v2/Notifications';
-import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -30,8 +29,6 @@ const Notification: React.FC = () => {
         sectionTitle={SectionTitle.NOTIFICATION}
       />
       <NotificationsContainer />
-
-      <ToasterContainer />
     </DefaultLayout>
   );
 };

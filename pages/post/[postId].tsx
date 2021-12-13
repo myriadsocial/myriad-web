@@ -11,7 +11,6 @@ import axios from 'axios';
 import {PostContainer} from 'src/components-v2/PostDedicated/PostDedicated.container';
 import {deserialize, formatToString} from 'src/components-v2/PostEditor';
 import {ResourceDeleted} from 'src/components-v2/ResourceDeleted';
-import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import ShowIf from 'src/components-v2/common/show-if.component';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
@@ -73,8 +72,6 @@ const PostPage: React.FC<PostPageProps> = props => {
       <ShowIf condition={!removed}>
         <PostContainer />
       </ShowIf>
-
-      <ToasterContainer />
     </DefaultLayout>
   );
 };

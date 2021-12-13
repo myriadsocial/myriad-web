@@ -4,7 +4,6 @@ import {useSelector} from 'react-redux';
 import {getSession} from 'next-auth/client';
 
 import {SocialsContainer} from 'src/components-v2/Socials/Socials.container';
-import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -28,7 +27,6 @@ const Socials: React.FC = () => {
       />
 
       <SocialsContainer />
-      <ToasterContainer />
     </DefaultLayout>
   );
 };

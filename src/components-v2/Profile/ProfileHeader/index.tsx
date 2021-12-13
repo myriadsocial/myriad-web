@@ -31,8 +31,8 @@ import {useStyles} from './profile-header.style';
 
 import {format} from 'date-fns';
 import millify from 'millify';
-import {Status, Toaster} from 'src/components-v2/atoms/Toaster';
 import ShowIf from 'src/components-v2/common/show-if.component';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import OfficialBadge from 'src/images/official-badge.svg';
 import {Friend} from 'src/interfaces/friend';
 import {ReportProps} from 'src/interfaces/report';
@@ -81,12 +81,12 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     user,
     status,
   );
+  const {openToasterSnack} = useToasterSnackHook();
 
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorElFriend, setAnchorElFriend] = React.useState<null | HTMLElement>(null);
-  const [linkCopied, setLinkCopied] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [openPrompt, setOpenPrompt] = React.useState(false);
   const [openRemoveFriend, setOpenRemoveFriend] = React.useState(false);
@@ -127,11 +127,10 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
 
   const handleLinkCopied = () => {
     handleClose();
-    setLinkCopied(true);
-  };
-
-  const handleCloseLinkCopied = () => {
-    setLinkCopied(false);
+    openToasterSnack({
+      message: 'Profile link copied!',
+      variant: 'success',
+    });
   };
 
   const handleOpenModal = () => {
@@ -500,13 +499,6 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         user={person}
         open={open}
         onClose={handleCloseModal}
-      />
-
-      <Toaster
-        open={linkCopied}
-        onClose={handleCloseLinkCopied}
-        toasterStatus={Status.SUCCESS}
-        message="Profile link copied!"
       />
     </div>
   );

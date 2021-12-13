@@ -32,8 +32,7 @@ import {Loading} from 'src/components-v2/atoms/Loading';
 import {Modal} from 'src/components-v2/atoms/Modal';
 import ShowIf from 'src/components-v2/common/show-if.component';
 import {acronym} from 'src/helpers/string';
-import {useToasterHook} from 'src/hooks/use-toaster.hook';
-import {Status} from 'src/interfaces/toaster';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {RootState} from 'src/reducers';
 import {blockedFriendList, removedFriendList} from 'src/reducers/friend/actions';
 import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
@@ -65,7 +64,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   const [openBlockUser, setOpenBlockUser] = useState(false);
   const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
 
-  const {openToaster} = useToasterHook();
+  const {openToasterSnack} = useToasterSnackHook();
 
   const dispatch = useDispatch();
 
@@ -175,9 +174,9 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       setFriendList(newFriendList);
       closeConfirmRemoveFriend();
 
-      openToaster({
+      openToasterSnack({
         message: `${currentFriend?.name} has removed from your friend list`,
-        toasterStatus: Status.SUCCESS,
+        variant: 'success',
       });
 
       setCurrentFriend(null);
@@ -199,9 +198,9 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       setFriendList(newFriendList);
       closeConfirmBlockUser();
 
-      openToaster({
+      openToasterSnack({
         message: 'User successfully blocked',
-        toasterStatus: Status.SUCCESS,
+        variant: 'success',
       });
 
       setCurrentFriend(null);

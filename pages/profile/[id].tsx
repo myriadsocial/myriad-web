@@ -10,7 +10,6 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import {ProfileTimeline} from 'src/components-v2/Profile/ProfileComponent';
-import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -59,7 +58,6 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
       </Head>
 
       <ProfileTimeline profile={profileDetail} loading={false} />
-      <ToasterContainer />
     </DefaultLayout>
   );
 };
