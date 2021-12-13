@@ -1,4 +1,3 @@
-// DIPAKAI
 import {useSelector, useDispatch} from 'react-redux';
 
 import {Comment} from 'src/interfaces/comment';

@@ -1,4 +1,3 @@
-// DIPAKAI
 import React from 'react';
 
 const encodedImage = `iVBORw0KGgoAAAANSUhEUgAAAMkAAADJCAYAAACJxhYFAAAABGdBTUEAALGPC/xhBQAAACBjSFJN

@@ -1,4 +1,3 @@
-// DIPAKAI
 import React from 'react';
 
 import getConfig from 'next/config';
