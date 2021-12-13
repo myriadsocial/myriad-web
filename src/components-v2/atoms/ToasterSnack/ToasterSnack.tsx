@@ -17,16 +17,16 @@ import {ToasterSnackProps} from './toaster-snack.interface';
 import useStyles from './toastersnack.style';
 
 import {useSnackbar, SnackbarContent} from 'notistack';
-import {useToasterHook} from 'src/hooks/use-toaster.hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 
 export const ToasterSnack = forwardRef<HTMLDivElement, ToasterSnackProps>((props, ref) => {
   const style = useStyles(props);
   const {closeSnackbar} = useSnackbar();
-  const {clearToaster} = useToasterHook();
+  const {clearToasterSnack} = useToasterSnackHook();
 
   const handleDismiss = useCallback(() => {
     closeSnackbar(props.key);
-    clearToaster();
+    clearToasterSnack({key: props.key});
   }, [props.key, closeSnackbar]);
 
   return (
