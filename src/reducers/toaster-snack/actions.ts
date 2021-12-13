@@ -50,7 +50,7 @@ export const showToasterSnack = (props: ToasterSnackProps): ShowToasterSnack => 
   type: constants.SHOW_TOASTER_SNACK,
   variant: props.variant,
   message: props.message,
-  key: props.key,
+  key: props.key || new Date().getTime() + Math.random(),
 });
 
 export const closeToasterSnack = (payload: {key: string | number}): CloseToasterSnack => ({
