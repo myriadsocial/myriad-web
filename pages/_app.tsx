@@ -18,7 +18,6 @@ import themeV2 from '../src/themes/light-theme-v2';
 
 import {SnackbarProvider} from 'notistack';
 import {ToasterSnack} from 'src/components-v2/atoms/ToasterSnack';
-import {SearchProvider} from 'src/components/search/search.context';
 import {AlertProvider} from 'src/context/alert.context';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 
@@ -122,9 +121,7 @@ const App = ({classes, ...props}: MyAppProps & WithStyles<typeof snackbarStyles>
             session={pageProps.session}>
             <CookiesProvider>
               <AlertProvider>
-                <SearchProvider>
-                  <Component {...pageProps} />
-                </SearchProvider>
+                <Component {...pageProps} />
               </AlertProvider>
             </CookiesProvider>
           </AuthProvider>
