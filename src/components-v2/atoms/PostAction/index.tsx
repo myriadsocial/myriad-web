@@ -13,7 +13,7 @@ import {Status, Toaster} from '../Toaster';
 import {VotingComponent} from '../Voting';
 import {useStyles} from './postAction.style';
 
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 
 type PostActionProps = {
   metrics: PostMetric;

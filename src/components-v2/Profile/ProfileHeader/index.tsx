@@ -32,7 +32,7 @@ import {useStyles} from './profile-header.style';
 import {format} from 'date-fns';
 import millify from 'millify';
 import {Status, Toaster} from 'src/components-v2/atoms/Toaster';
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 import OfficialBadge from 'src/images/official-badge.svg';
 import {Friend} from 'src/interfaces/friend';
 import {ReportProps} from 'src/interfaces/report';

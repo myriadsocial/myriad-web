@@ -11,7 +11,7 @@ import {User} from '../../interfaces/user';
 import {ExperienceList} from '../ExperienceList/';
 import {HeaderWithAction} from '../HeaderWithAction/';
 
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 
 const useStyles = makeStyles(() =>
   createStyles({

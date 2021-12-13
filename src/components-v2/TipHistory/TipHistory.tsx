@@ -29,7 +29,7 @@ import {formatDistanceStrict} from 'date-fns';
 import {debounce} from 'lodash';
 import {Empty} from 'src/components-v2/atoms/Empty';
 import {Loading} from 'src/components-v2/atoms/Loading';
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 
 type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
   hasMore: boolean;

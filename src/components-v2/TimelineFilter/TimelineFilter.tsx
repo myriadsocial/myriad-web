@@ -1,9 +1,9 @@
 import React from 'react';
 
-import ShowIf from '../../components/common/show-if.component';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {FilterDropdownMenu} from '../atoms/FilterDropdownMenu/';
 import {TabList} from '../atoms/TabList';
+import ShowIf from '../common/show-if.component';
 import {useStyles} from './TimelineFilter.styles';
 import {useFilterOption} from './hooks/use-filter-option.hook';
 

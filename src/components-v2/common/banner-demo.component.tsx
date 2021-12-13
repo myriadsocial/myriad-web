@@ -10,7 +10,7 @@ import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 
-import DialogTitle from 'src/components/common/DialogTitle.component';
+import DialogTitle from 'src/components-v2/common/DialogTitle.component';
 import BannerImage from 'src/images/banner-image.svg';
 
 export const useStyles = makeStyles((theme: Theme) =>

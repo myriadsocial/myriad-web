@@ -14,7 +14,7 @@ import {PostHeaderProps} from './postHeader.interface';
 import {useStyles} from './postHeader.style';
 import {PostSubHeader} from './subHeader/post-sub-header.component';
 
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 import {SocialsEnum} from 'src/interfaces/social';
 
 export const HeaderComponent: React.FC<PostHeaderProps> = props => {

@@ -11,7 +11,7 @@ import {PromptComponent} from '../../atoms/Prompt/prompt.component';
 import {SendTipContainer} from 'src/components-v2/SendTip';
 import {useTimelineFilter} from 'src/components-v2/Timeline/hooks/use-timeline-filter.hook';
 import {Modal} from 'src/components-v2/atoms/Modal';
-import {useFriendHook} from 'src/components/profile/use-profile-friend.hook';
+import {useFriendHook} from 'src/hooks/use-profile-friend.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useReport} from 'src/hooks/use-report.hook';
 import {useToasterHook} from 'src/hooks/use-toaster.hook';

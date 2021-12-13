@@ -5,7 +5,7 @@ import {render, screen, fireEvent} from '@testing-library/react';
 
 import React from 'react';
 
-import Banner from 'src/components/common/banner-demo.component';
+import Banner from 'src/components-v2/common/banner-demo.component';
 
 describe('Banner demo test', () => {
   it('renders a banner text', () => {

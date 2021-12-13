@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {WelcomeModule} from './WelcomeModule';
 
-import {useProfileHook} from 'src/components/profile/use-profile.hook';
+import {useProfileHook} from 'src/hooks/use-profile.hook';
 import {Status} from 'src/interfaces/toaster';
 import {skipUsername} from 'src/lib/api/activity';
 import {RootState} from 'src/reducers';

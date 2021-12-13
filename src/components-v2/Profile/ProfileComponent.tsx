@@ -12,7 +12,7 @@ import {ProfileHeaderContainer} from 'src/components-v2/Profile/ProfileHeader/Pr
 import {ProfileEditContainer} from 'src/components-v2/Profile/edit/ProfileEditContainer';
 import {UserMenuContainer} from 'src/components-v2/UserMenu';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 import Illustration from 'src/images/UserStatusIsometric.svg';
 import {FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';

@@ -7,7 +7,7 @@ import {FormControl, FormHelperText, Input, InputLabel, Typography} from '@mater
 import {Embed} from '../atoms/Embed';
 import {useStyles} from './PostImport.styles';
 
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 import {SocialsEnum} from 'src/interfaces/social';
 
 type PostImportProps = {

@@ -15,7 +15,7 @@ import {ReportContainer} from 'src/components-v2/Report';
 import {SendTipContainer} from 'src/components-v2/SendTip';
 import {TipHistoryContainer} from 'src/components-v2/TipHistory';
 import {Modal} from 'src/components-v2/atoms/Modal';
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
 import {Comment, CommentProps} from 'src/interfaces/comment';

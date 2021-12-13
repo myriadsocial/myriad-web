@@ -8,7 +8,7 @@ import {PostSubHeaderProps} from './post-sub-header.interface';
 import {useStyles} from './post-sub-header.style';
 
 import {format} from 'date-fns';
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 
 export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
   postId,

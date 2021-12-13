@@ -17,7 +17,7 @@ import {useStyles} from './CommentDetail.styles';
 import {CommentRender} from './CommentRender';
 
 import {formatDistance, subDays} from 'date-fns';
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {CommentProps} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';

@@ -5,10 +5,10 @@ import {SvgIcon} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 
-import {MyriadIcon} from '../../../../components/common/MyriadIcon';
 import FacebookIcon from '../../../../images/Icons/facebook.svg';
 import RedditIcon from '../../../../images/Icons/reddit.svg';
 import TwitterIcon from '../../../../images/Icons/twitter.svg';
+import {MyriadIcon} from '../../../common/MyriadIcon';
 import StyledBadge from '../Badge.component';
 import {Props} from './post-avatar.interface';
 import {useStyles} from './post-avatar.style';

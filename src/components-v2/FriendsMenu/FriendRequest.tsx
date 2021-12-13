@@ -20,7 +20,7 @@ import {Empty} from '../atoms/Empty';
 import {useStyles} from './friend.style';
 import {useFriendRequestList} from './hooks/use-friend-request.hook';
 
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 

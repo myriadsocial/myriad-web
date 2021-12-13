@@ -14,7 +14,7 @@ import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {useStyles} from './blocklist.style';
 
 import {Empty} from 'src/components-v2/atoms/Empty';
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';

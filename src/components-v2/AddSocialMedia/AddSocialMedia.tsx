@@ -15,12 +15,12 @@ import {
   InputAdornment,
 } from '@material-ui/core';
 
-import ShowIf from '../../components/common/show-if.component';
 import FacebookIcon from '../../images/socials/facebook.svg';
 import RedditIcon from '../../images/socials/reddit.svg';
 import TwitterIcon from '../../images/socials/twitter.svg';
 import {SocialsEnum} from '../../interfaces/social';
 import {Modal, ModalProps} from '../atoms/Modal';
+import ShowIf from '../common/show-if.component';
 import {useStyles} from './AddSocialMedia.styles';
 
 type AddSocialMediaProps = Pick<ModalProps, 'onClose' | 'open'> & {

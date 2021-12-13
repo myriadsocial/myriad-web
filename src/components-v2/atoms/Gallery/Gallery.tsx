@@ -13,7 +13,7 @@ import {useStyles} from './Gallery.styles';
 import {GalleryType, ImageListProps, ImageListItemProps} from './Gallery.types';
 import {buildList} from './util';
 
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 import ImagePlaceholder from 'src/images/Icons/myriad-grey.svg';
 import theme from 'src/themes/light-theme-v2';
 

@@ -3,10 +3,10 @@ import React from 'react';
 import {List} from '@material-ui/core';
 
 import {SearchedExperienceListProps, useStyles} from '.';
-import ShowIf from '../../components/common/show-if.component';
 import {EmptyResult} from '../Search/EmptyResult';
 import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
 import {NonSelectableSimpleCard} from '../atoms/SimpleCard';
+import ShowIf from '../common/show-if.component';
 
 const SearchedExperienceList: React.FC<SearchedExperienceListProps> = ({
   experiences,
