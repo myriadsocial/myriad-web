@@ -18,7 +18,7 @@ import {useStyles} from './Notifications.styles';
 
 import clsx from 'clsx';
 import {formatDistanceStrict, subDays} from 'date-fns';
-import {AvatarComponent} from 'src/components/common/Avatar.component';
+import {AvatarComponent} from 'src/components-v2/common/Avatar.component';
 import {acronym} from 'src/helpers/string';
 import {Notification, NotificationType} from 'src/interfaces/notification';
 import {PAGINATION_LIMIT} from 'src/lib/api/constants/pagination';

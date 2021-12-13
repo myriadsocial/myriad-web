@@ -30,7 +30,7 @@ import {SendTipContainer} from 'src/components-v2/SendTip';
 import {Empty} from 'src/components-v2/atoms/Empty';
 import {Loading} from 'src/components-v2/atoms/Loading';
 import {Modal} from 'src/components-v2/atoms/Modal';
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {useToasterHook} from 'src/hooks/use-toaster.hook';
 import {Status} from 'src/interfaces/toaster';

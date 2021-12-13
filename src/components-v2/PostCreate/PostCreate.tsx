@@ -16,7 +16,7 @@ import {TabPanel} from '../atoms/TabPanel';
 import {useStyles} from './PostCreate.styles';
 import {menuOptions} from './default';
 
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 import {Post, PostVisibility} from 'src/interfaces/post';
 
 type PostCreateProps = {

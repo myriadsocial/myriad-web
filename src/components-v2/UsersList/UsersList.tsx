@@ -5,11 +5,11 @@ import {List} from '@material-ui/core';
 import {createStyles, makeStyles, alpha} from '@material-ui/core/styles';
 
 import {Loading} from '../../components-v2/atoms/Loading';
-import ShowIf from '../../components/common/show-if.component';
 import {User} from '../../interfaces/user';
 import {EmptyResult} from '../Search/EmptyResult';
 import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
 import {UsersListItem} from '../UsersList/UsersListItem';
+import ShowIf from '../common/show-if.component';
 
 export const useStyles = makeStyles(() =>
   createStyles({

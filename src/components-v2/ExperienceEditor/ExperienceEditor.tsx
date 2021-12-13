@@ -19,11 +19,11 @@ import {
   AutocompleteRenderOptionState,
 } from '@material-ui/lab';
 
-import ShowIf from '../../components/common/show-if.component';
 import {Experience, Tag} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
 import {Dropzone} from '../atoms/Dropzone';
 import {ListItemPeopleComponent} from '../atoms/ListItem/ListItemPeople';
+import ShowIf from '../common/show-if.component';
 import {useStyles} from './Experience.styles';
 
 import {debounce} from 'lodash';

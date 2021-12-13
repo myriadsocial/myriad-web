@@ -7,8 +7,8 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import {Login} from 'src/components-v2/Login';
+import AlertComponent from 'src/components-v2/atoms/Alert/Alert.component';
 import {LoginLayout} from 'src/components-v2/template/Login';
-import AlertComponent from 'src/components/alert/Alert.component';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {healthcheck} from 'src/lib/api/healthcheck';
 

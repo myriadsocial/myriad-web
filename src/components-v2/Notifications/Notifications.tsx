@@ -19,7 +19,7 @@ import {useNotificationList} from './hooks/use-notification-list.hook';
 import clsx from 'clsx';
 import {formatDistanceStrict, subDays} from 'date-fns';
 import {Loading} from 'src/components-v2/atoms/Loading';
-import {AvatarComponent} from 'src/components/common/Avatar.component';
+import {AvatarComponent} from 'src/components-v2/common/Avatar.component';
 import {acronym} from 'src/helpers/string';
 import {Notification} from 'src/interfaces/notification';
 

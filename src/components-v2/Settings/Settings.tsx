@@ -4,7 +4,7 @@ import React from 'react';
 
 import {List, ListItem, ListItemText, Paper, SvgIcon, Typography} from '@material-ui/core';
 
-import ShowIf from '../../components/common/show-if.component';
+import ShowIf from '../common/show-if.component';
 import {useStyles} from './Settings.styles';
 import {SettingsOption, useSettingList, SettingsType} from './hooks/use-setting-list.hook';
 

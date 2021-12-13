@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import {version} from '../../../../package.json';
 import useStyles from './banner.style';
 
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 

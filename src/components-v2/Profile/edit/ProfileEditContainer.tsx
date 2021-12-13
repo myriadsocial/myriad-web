@@ -8,7 +8,7 @@ import {Button, Typography} from '@material-ui/core';
 import {PromptComponent} from '../../atoms/Prompt/prompt.component';
 import {ProfileEditComponent} from './ProfileEdit';
 
-import {useProfileHook} from 'src/components/profile/use-profile.hook';
+import {useProfileHook} from 'src/hooks/use-profile.hook';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';

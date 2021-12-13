@@ -4,7 +4,7 @@ import {Tweet} from 'react-twitter-widgets';
 
 import {useStyles} from './Embed.styles';
 
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 import {generateRedditEmbedUrl} from 'src/helpers/url';
 import {SocialsEnum} from 'src/interfaces/social';
 

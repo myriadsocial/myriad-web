@@ -1,3 +1,4 @@
+// DIPAKAI
 import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -6,8 +7,8 @@ import {setIsTipSent} from '../reducers/wallet/actions';
 import {WalletState} from '../reducers/wallet/reducer';
 
 import _ from 'lodash';
-import {useTipSummaryHook} from 'src/components/tip-summary/use-tip-summary.hook';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
+import {useTipSummaryHook} from 'src/hooks/use-tip-summary.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Currency} from 'src/interfaces/currency';
 import {SendTipProps} from 'src/interfaces/send-tips/send-tips';

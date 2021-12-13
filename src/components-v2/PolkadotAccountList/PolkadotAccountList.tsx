@@ -12,8 +12,8 @@ import YouTubeIcon from '@material-ui/icons/YouTube';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import Identicon from '@polkadot/react-identicon';
 
-import ShowIf from '../../components/common/show-if.component';
 import {Modal} from '../atoms/Modal';
+import ShowIf from '../common/show-if.component';
 import {useStyles} from './PolkadotAccountList.styles';
 
 type PolkadotAccountListProps = {

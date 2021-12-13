@@ -19,7 +19,7 @@ import {useStyles} from './Dropzone.styles';
 
 import {detect} from 'detect-browser';
 import muxjs from 'mux.js';
-import ShowIf from 'src/components/common/show-if.component';
+import ShowIf from 'src/components-v2/common/show-if.component';
 import UploadIcon from 'src/images/Icons/Upload.svg';
 import ImagePlaceholder from 'src/images/Icons/myriad-grey.svg';
 
