@@ -48,14 +48,14 @@ export const ToasterSnack = forwardRef<HTMLDivElement, ToasterSnackProps>((props
             }
             viewBox="0 0 20 20"
           />
-          <Typography variant="subtitle2" className={style.typography}>
+          <Typography variant="subtitle2" className={style.typography} color="textPrimary">
             {props.message}
           </Typography>
           <div className={style.icons}>
             <IconButton aria-label="close" onClick={handleDismiss}>
               <SvgIcon
                 component={XIcon}
-                viewBox="0 0 24 24"
+                viewBox="0 0 20 20"
                 classes={{root: style.iconClose}}
                 color="inherit"
               />

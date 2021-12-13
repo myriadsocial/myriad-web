@@ -17,14 +17,15 @@ const useStyles = makeStyles<Theme, VariantProps>(theme => ({
       props?.variant === 'success'
         ? '#47B881'
         : props?.variant === 'error'
-        ? '#FE3333'
+        ? '#FE3636'
         : props?.variant === 'warning'
-        ? '#FFD24D'
+        ? '#F0A200'
         : props?.variant === 'info'
         ? '#1070CA'
         : '#FFFFFF',
     width: '100%',
-    paddingLeft: 15,
+    height: '60px',
+    paddingLeft: 8,
     borderRadius: 10,
   },
   cardInside: {
@@ -39,6 +40,8 @@ const useStyles = makeStyles<Theme, VariantProps>(theme => ({
   },
   typography: {
     fontWeight: 'normal',
+    fontSize: '14px',
+    lineHeight: '17.57px',
   },
   icons: {
     marginLeft: 'auto',
@@ -49,15 +52,16 @@ const useStyles = makeStyles<Theme, VariantProps>(theme => ({
       props?.variant === 'success'
         ? '#47B881'
         : props?.variant === 'error'
-        ? '#FE3333'
+        ? '#FE3636'
         : props?.variant === 'warning'
-        ? '#FFD24D'
+        ? '#F0A200'
         : props?.variant === 'info'
         ? '#1070CA'
         : '#FFFFFF',
   },
   iconClose: {
-    marginRight: '12px',
+    marginRight: '5px',
+    marginLeft: '5px',
     fill: '#66788A',
   },
 }));
