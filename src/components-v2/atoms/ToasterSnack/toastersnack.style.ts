@@ -10,6 +10,7 @@ const useStyles = makeStyles<Theme, VariantProps>(theme => ({
   root: {
     [theme.breakpoints.up('sm')]: {
       minWidth: '344px !important',
+      maxWidth: '344px !important',
     },
   },
   card: {
