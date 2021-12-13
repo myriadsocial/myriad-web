@@ -49,7 +49,7 @@ export const trendingTopic = async (limit?: number): Promise<TrendingList> => {
     params: {
       pageLimit: limit || PAGINATION_LIMIT,
       filter: {
-        order: `count DESC`,
+        order: [`count DESC`, `updatedAt DESC`],
       },
     },
   });

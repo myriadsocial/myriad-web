@@ -699,7 +699,7 @@ export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
 
     try {
       if (user) {
-        const {data: posts, meta} = await PostAPI.findPosts(user, query);
+        const {data: posts, meta} = await PostAPI.findPosts(user, query, page);
 
         dispatch({
           type: constants.LOAD_TIMELINE,

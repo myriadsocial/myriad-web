@@ -2,15 +2,11 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
-import {TimelineFilter, TimelineSortMethod} from '../../../interfaces/timeline';
-import {RootState} from '../../../reducers';
-import {
-  loadTimeline,
-  getDedicatedPost,
-  fetchSearchedPosts,
-} from '../../../reducers/timeline/actions';
-import {TimelineState} from '../../../reducers/timeline/reducer';
-import {fetchTippedUserId} from '../../../reducers/wallet/actions';
+import {TimelineFilter, TimelineSortMethod} from 'src/interfaces/timeline';
+import {RootState} from 'src/reducers';
+import {loadTimeline, getDedicatedPost, fetchSearchedPosts} from 'src/reducers/timeline/actions';
+import {TimelineState} from 'src/reducers/timeline/reducer';
+import {fetchTippedUserId} from 'src/reducers/wallet/actions';
 
 export const useTimelineHook = () => {
   const timelineState = useSelector<RootState, TimelineState>(state => state.timelineState);
