@@ -12,6 +12,7 @@ import {SearchReducer} from './search/reducer';
 import {TagReducer} from './tag/reducer';
 import {TimelineReducer} from './timeline/reducer';
 import {TipSummaryReducer} from './tip-summary/reducer';
+import {ToasterSnackReducer} from './toaster-snack/reducer';
 import {ToasterReducer} from './toaster/reducer';
 import {TransactionReducer} from './transaction/reducer';
 import {UserReducer} from './user/reducer';
@@ -36,6 +37,7 @@ const reducers = {
   experienceState: ExperienceReducer,
   peopleState: PeopleReducer,
   toasterState: ToasterReducer,
+  toasterSnackState: ToasterSnackReducer,
   blockState: BlockReducer,
   searchState: SearchReducer,
 };
