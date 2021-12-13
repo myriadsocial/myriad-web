@@ -3,7 +3,6 @@ import React from 'react';
 import {getSession} from 'next-auth/client';
 
 import NFTContainer from 'src/components-v2/NFT/NFT.container';
-import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -17,7 +16,6 @@ const NFTComponent: React.FC = () => {
   return (
     <DefaultLayout isOnProfilePage={false}>
       <NFTContainer />
-      <ToasterContainer />
     </DefaultLayout>
   );
 };

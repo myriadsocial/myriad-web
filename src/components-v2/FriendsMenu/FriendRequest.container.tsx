@@ -4,9 +4,8 @@ import {useSelector} from 'react-redux';
 import {FriendRequestComponent} from './FriendRequest';
 
 import {useFriendsHook} from 'src/hooks/use-friends-hook';
-import {useToasterHook} from 'src/hooks/use-toaster.hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
-import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {FriendRequestState} from 'src/reducers/friend-request/reducer';
@@ -20,7 +19,7 @@ export const FriendRequestListContainer: React.FC<FriendRequestContainerProps> =
   const {user} = props;
 
   const {loadRequests, toggleRequest, removeFriendRequest} = useFriendsHook(user);
-  const {openToaster} = useToasterHook();
+  const {openToasterSnack} = useToasterSnackHook();
 
   const {requests} = useSelector<RootState, FriendRequestState>(state => state.friendRequestState);
 
@@ -31,18 +30,18 @@ export const FriendRequestListContainer: React.FC<FriendRequestContainerProps> =
   const acceptFriendRequest = (request: Friend) => {
     toggleRequest(request, FriendStatus.APPROVED);
 
-    openToaster({
+    openToasterSnack({
       message: 'Friend request accepted',
-      toasterStatus: Status.SUCCESS,
+      variant: 'success',
     });
   };
 
   const declineFriendRequest = (request: Friend) => {
     removeFriendRequest(request);
 
-    openToaster({
+    openToasterSnack({
       message: 'Friend request rejected',
-      toasterStatus: Status.WARNING,
+      variant: 'warning',
     });
   };
 

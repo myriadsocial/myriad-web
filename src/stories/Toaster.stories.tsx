@@ -2,25 +2,17 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {Toaster, Status, toasterStatuses} from '../components-v2/atoms/Toaster';
+import {ToasterSnack} from '../components-v2/atoms/ToasterSnack';
 
 export default {
-  title: 'UI Revamp v2.0/atoms/Toaster',
-  component: Toaster,
-  argTypes: {
-    toasterStatus: {
-      options: [...toasterStatuses],
-      control: {type: 'radio'},
-    },
-  },
-} as ComponentMeta<typeof Toaster>;
+  title: 'UI Revamp v2.0/atoms/ToasterSnack',
+  component: ToasterSnack,
+} as ComponentMeta<typeof ToasterSnack>;
 
-const Template: ComponentStory<typeof Toaster> = args => <Toaster {...args} />;
+const Template: ComponentStory<typeof ToasterSnack> = args => <ToasterSnack {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  open: true,
-  toasterStatus: Status.SUCCESS,
   message: 'Changes saved successfully',
-  onClose: console.log,
+  variant: 'success',
 };

@@ -14,10 +14,9 @@ import {Modal} from 'src/components-v2/atoms/Modal';
 import {useFriendHook} from 'src/hooks/use-profile-friend.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useReport} from 'src/hooks/use-report.hook';
-import {useToasterHook} from 'src/hooks/use-toaster.hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {ReportProps} from 'src/interfaces/report';
-import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {blockedFriendList} from 'src/reducers/friend/actions';
@@ -41,7 +40,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
 
   const {makeFriend, removeFriendRequest, toggleRequest, reloadFriendStatus} = useFriendHook();
   const {sendReportWithAttributes} = useReport();
-  const {openToaster} = useToasterHook();
+  const {openToasterSnack} = useToasterSnackHook();
   const {query} = useQueryParams();
   const {filterTimeline} = useTimelineFilter({
     owner: profile?.id,
@@ -123,9 +122,9 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
       await reloadFriendStatus();
     }
 
-    openToaster({
+    openToasterSnack({
       message: 'User successfully blocked',
-      toasterStatus: Status.SUCCESS,
+      variant: 'success',
     });
   };
 
@@ -137,9 +136,9 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     if (friendStatus) {
       toggleRequest(friendStatus, FriendStatus.APPROVED);
 
-      openToaster({
+      openToasterSnack({
         message: 'Friend request confirmed',
-        toasterStatus: Status.SUCCESS,
+        variant: 'success',
       });
     }
   };
@@ -148,9 +147,9 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     if (friendStatus) {
       removeFriendRequest(friendStatus);
 
-      openToaster({
+      openToasterSnack({
         message: `${profile?.name} has removed from your friend list`,
-        toasterStatus: Status.SUCCESS,
+        variant: 'success',
       });
     }
   };

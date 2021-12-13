@@ -13,10 +13,9 @@ import {TipHistoryContainer} from 'src/components-v2/TipHistory';
 import {Modal} from 'src/components-v2/atoms/Modal';
 import {PromptComponent} from 'src/components-v2/atoms/Prompt/prompt.component';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
-import {useToasterHook} from 'src/hooks/use-toaster.hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
-import {Status} from 'src/interfaces/toaster';
 import {RootState} from 'src/reducers';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
@@ -35,7 +34,8 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
   const {post, getTippedUserId} = useTimelineHook();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {openTipHistory} = useTipHistory();
-  const {openToaster} = useToasterHook();
+
+  const {openToasterSnack} = useToasterSnackHook();
 
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
   const [removing, setRemoving] = useState(false);
@@ -70,9 +70,9 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
 
   const handleSharePost = (post: Post, type: 'link' | 'post') => {
     if (type === 'post') {
-      openToaster({
+      openToasterSnack({
         message: 'This post successfully share to your timeline',
-        toasterStatus: Status.SUCCESS,
+        variant: 'success',
       });
     }
   };

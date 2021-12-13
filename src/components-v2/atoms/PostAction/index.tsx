@@ -9,11 +9,11 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 
 import {PostMetric} from '../../../interfaces/post';
 import {Modal} from '../Modal';
-import {Status, Toaster} from '../Toaster';
 import {VotingComponent} from '../Voting';
 import {useStyles} from './postAction.style';
 
 import ShowIf from 'src/components-v2/common/show-if.component';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 
 type PostActionProps = {
   metrics: PostMetric;
@@ -44,8 +44,13 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
     disableAction,
   } = props;
 
+<<<<<<< HEAD
+=======
+  const {openToasterSnack} = useToasterSnackHook();
+
+  const [shareAnchorEl, setShareAnchorEl] = useState<null | HTMLElement>(null);
+>>>>>>> MYR-1391: replace old toaster with new toaster
   const [linkAnchorEl, setLinkAnchorEl] = useState<null | HTMLElement>(null);
-  const [linkCopied, setLinkCopied] = useState(false);
 
   const handleClickShareLink = (event: React.MouseEvent<HTMLButtonElement>) => {
     setLinkAnchorEl(event.currentTarget);
@@ -53,18 +58,15 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
 
   const handleLinkCopied = () => {
     setLinkAnchorEl(null);
-    setLinkCopied(true);
-
+    openToasterSnack({
+      message: 'Link copied!',
+      variant: 'success',
+    });
     onShared();
   };
 
   const handleCloseCopyLink = () => {
     setLinkAnchorEl(null);
-    setLinkCopied(false);
-  };
-
-  const handleCloseLinkCopied = () => {
-    setLinkCopied(false);
   };
 
   return (
@@ -168,13 +170,6 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
           </div>
         </Modal>
       </ShowIf>
-
-      <Toaster
-        open={linkCopied}
-        onClose={handleCloseLinkCopied}
-        toasterStatus={Status.SUCCESS}
-        message="Link copied!"
-      />
     </div>
   );
 };

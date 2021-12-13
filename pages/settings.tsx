@@ -4,7 +4,6 @@ import {getSession} from 'next-auth/client';
 import {useRouter} from 'next/router';
 
 import {SettingsContainer, SettingsType, useSettingList} from 'src/components-v2/Settings';
-import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -36,7 +35,6 @@ const Settings: React.FC = () => {
         sectionTitle={SectionTitle.SETTINGS}
       />
       <SettingsContainer />
-      <ToasterContainer />
     </DefaultLayout>
   );
 };

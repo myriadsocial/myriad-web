@@ -3,7 +3,6 @@ import React from 'react';
 import {getSession} from 'next-auth/client';
 
 import {ExperienceEditContainer} from 'src/components-v2/ExperiencePreview/ExperienceEdit.container';
-import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -16,7 +15,6 @@ import {ThunkDispatchAction} from 'src/types/thunk';
 const EditExperience: React.FC = () => {
   return (
     <DefaultLayout isOnProfilePage={false}>
-      <ToasterContainer />
       <ExperienceEditContainer />
     </DefaultLayout>
   );

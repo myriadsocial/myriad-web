@@ -5,7 +5,6 @@ import {Session} from 'next-auth';
 import {getSession} from 'next-auth/client';
 
 import {SearchResultContainer} from '../src/components-v2/Search/SearchResultContainer';
-import {ToasterContainer} from '../src/components-v2/atoms/Toaster/ToasterContainer';
 import {DefaultLayout} from '../src/components-v2/template/Default/DefaultLayout';
 import {healthcheck} from '../src/lib/api/healthcheck';
 import {RootState} from '../src/reducers';
@@ -29,7 +28,6 @@ const Search: React.FC<SearchProps> = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
-      <ToasterContainer />
       <SearchResultContainer />
     </DefaultLayout>
   );

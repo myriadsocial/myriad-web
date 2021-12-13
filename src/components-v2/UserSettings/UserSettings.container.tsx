@@ -2,8 +2,7 @@ import React from 'react';
 
 import {UserSettings} from './UserSettings';
 
-import {useToasterHook} from 'src/hooks/use-toaster.hook';
-import {Status} from 'src/interfaces/toaster';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {User} from 'src/interfaces/user';
 
 type UserSettingsContainerProps = {
@@ -13,12 +12,12 @@ type UserSettingsContainerProps = {
 export const UserSettingsContainer: React.FC<UserSettingsContainerProps> = props => {
   const {user} = props;
 
-  const {openToaster} = useToasterHook();
+  const {openToasterSnack} = useToasterSnackHook();
 
   const handlePublicKeyCopied = () => {
-    openToaster({
+    openToasterSnack({
       message: 'Public key copied!',
-      toasterStatus: Status.SUCCESS,
+      variant: 'success',
     });
   };
 

@@ -8,7 +8,6 @@ import {useRouter} from 'next/router';
 import {RichTextContainer} from '../src/components-v2/Richtext/RichTextContainer';
 import {TimelineContainer} from '../src/components-v2/Timeline/TimelineContainer';
 import {SearchBoxContainer} from '../src/components-v2/atoms/Search/SearchBoxContainer';
-import {ToasterContainer} from '../src/components-v2/atoms/Toaster/ToasterContainer';
 import {DefaultLayout} from '../src/components-v2/template/Default/DefaultLayout';
 
 import Banner from 'src/components-v2/atoms/BannerStatus/BannerStatus';
@@ -52,7 +51,6 @@ const Home: React.FC = () => {
       <SearchBoxContainer onSubmitSearch={performSearch} />
       <RichTextContainer />
       <TimelineContainer />
-      <ToasterContainer />
     </DefaultLayout>
   );
 };

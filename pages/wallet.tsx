@@ -4,7 +4,6 @@ import {useSelector} from 'react-redux';
 import {getSession} from 'next-auth/client';
 import dynamic from 'next/dynamic';
 
-import {ToasterContainer} from 'src/components-v2/atoms/Toaster/ToasterContainer';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar/';
 import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -36,7 +35,6 @@ const Home: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
-      <ToasterContainer />
       <TopNavbarComponent
         sectionTitle={SectionTitle.WALLET}
         description={`${countNumberOfCryptoAssets()} Crypto Assets`}

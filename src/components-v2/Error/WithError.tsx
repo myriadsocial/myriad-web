@@ -1,9 +1,7 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
-import {Status} from '../atoms/Toaster';
-
-import {useToasterHook} from 'src/hooks/use-toaster.hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {RootState} from 'src/reducers';
 import {State as BaseState} from 'src/reducers/base/state';
 
@@ -19,15 +17,15 @@ export function withError<T extends WithErrorProps = WithErrorProps>(
 
   // Creating the inner component. The calculated Props type here is the where the magic happens.
   const ComponentWithError = (props: Omit<T, keyof WithErrorProps>) => {
-    const {openToaster} = useToasterHook();
+    const {openToasterSnack} = useToasterSnackHook();
 
     const {error} = useSelector<RootState, BaseState>(state => state.baseState);
 
     useEffect(() => {
       if (error) {
-        openToaster({
+        openToasterSnack({
           message: error.message,
-          toasterStatus: Status.DANGER,
+          variant: 'error',
         });
       }
     }, [error]);

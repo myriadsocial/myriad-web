@@ -6,8 +6,7 @@ import getConfig from 'next/config';
 
 import Axios from 'axios';
 import axios from 'axios';
-import {useToasterHook} from 'src/hooks/use-toaster.hook';
-import {Status} from 'src/interfaces/toaster';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 
 const {serverRuntimeConfig} = getConfig();
 
@@ -25,7 +24,7 @@ export const useUpload = () => {
   const [image, setImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
-  const {openToaster} = useToasterHook();
+  const {openToasterSnack} = useToasterSnackHook();
 
   const randomIntBetween = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -65,9 +64,9 @@ export const useUpload = () => {
 
       Sentry.captureException(error);
 
-      openToaster({
+      openToasterSnack({
         message: 'failed to upload image',
-        toasterStatus: Status.WARNING,
+        variant: 'warning',
       });
       return null;
     }
@@ -107,9 +106,9 @@ export const useUpload = () => {
 
       Sentry.captureException(error);
 
-      openToaster({
+      openToasterSnack({
         message: 'failed to upload video',
-        toasterStatus: Status.WARNING,
+        variant: 'warning',
       });
 
       return null;

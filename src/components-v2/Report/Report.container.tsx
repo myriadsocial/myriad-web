@@ -3,10 +3,9 @@ import React from 'react';
 import {Report} from './Report';
 
 import {useReport} from 'src/hooks/use-report.hook';
-import {useToasterHook} from 'src/hooks/use-toaster.hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
-import {Status} from 'src/interfaces/toaster';
 
 type ReportContainerProps = {
   reference: Post | Comment | null;
@@ -17,7 +16,7 @@ export const ReportContainer: React.FC<ReportContainerProps> = props => {
   const {reference, onClose} = props;
   const isOpen = Boolean(reference);
 
-  const {openToaster} = useToasterHook();
+  const {openToasterSnack} = useToasterSnackHook();
   const {sendReport} = useReport();
 
   const handleConfirmReport = (type: string, description: string) => {
@@ -26,9 +25,9 @@ export const ReportContainer: React.FC<ReportContainerProps> = props => {
     }
 
     onClose();
-    openToaster({
+    openToasterSnack({
       message: 'Post report has been submitted',
-      toasterStatus: Status.SUCCESS,
+      variant: 'success',
     });
   };
 

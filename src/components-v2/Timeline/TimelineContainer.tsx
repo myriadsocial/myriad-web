@@ -20,11 +20,10 @@ import {useTimelineHook} from './hooks/use-timeline.hook';
 import ShowIf from 'src/components-v2/common/show-if.component';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
-import {useToasterHook} from 'src/hooks/use-toaster.hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 import {TimelineFilter, TimelineType} from 'src/interfaces/timeline';
-import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
@@ -49,7 +48,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const {query} = useQueryParams();
   const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
   const {openTipHistory} = useTipHistory();
-  const {openToaster} = useToasterHook();
+  const {openToasterSnack} = useToasterSnackHook();
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
   const anonymous = useSelector<RootState, boolean>(state => state.userState.anonymous);
@@ -115,9 +114,9 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
   const handleSharePost = (post: Post, type: 'link' | 'post') => {
     if (type === 'post') {
-      openToaster({
+      openToasterSnack({
         message: 'This post successfully share to your timeline',
-        toasterStatus: Status.SUCCESS,
+        variant: 'success',
       });
     }
   };
