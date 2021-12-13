@@ -44,12 +44,8 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
     disableAction,
   } = props;
 
-<<<<<<< HEAD
-=======
   const {openToasterSnack} = useToasterSnackHook();
 
-  const [shareAnchorEl, setShareAnchorEl] = useState<null | HTMLElement>(null);
->>>>>>> MYR-1391: replace old toaster with new toaster
   const [linkAnchorEl, setLinkAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClickShareLink = (event: React.MouseEvent<HTMLButtonElement>) => {
