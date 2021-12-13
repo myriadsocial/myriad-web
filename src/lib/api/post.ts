@@ -226,11 +226,14 @@ export const getPost = async (
   return data;
 };
 
-export const findPosts = async (user: User, query: string): Promise<PostList> => {
+export const findPosts = async (user: User, query: string, page = 1): Promise<PostList> => {
   const {data} = await MyriadAPI.request<PostList>({
     url: `/posts?q=${encodeURIComponent(query)}`,
     method: 'GET',
     params: {
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
+      importers: true,
       userId: user.id,
       filter: {
         include: [
