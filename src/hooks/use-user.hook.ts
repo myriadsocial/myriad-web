@@ -1,11 +1,10 @@
 import {useSelector, useDispatch} from 'react-redux';
 
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {SocialsEnum} from 'src/interfaces';
-import {Status} from 'src/interfaces/toaster';
 import {User} from 'src/interfaces/user';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
 import {RootState} from 'src/reducers';
-import {showToaster} from 'src/reducers/toaster/actions';
 import {updateUser, deleteSocial} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -17,6 +16,8 @@ type UserHookProps = {
 
 export const useUserHook = (): UserHookProps => {
   const dispatch = useDispatch();
+
+  const {openToasterSnack} = useToasterSnackHook();
 
   const {user, socials} = useSelector<RootState, UserState>(state => state.userState);
 
@@ -38,12 +39,10 @@ export const useUserHook = (): UserHookProps => {
     dispatch(updateUser(values));
 
     if (!disableUpdateAlert) {
-      dispatch(
-        showToaster({
-          message: 'Success update profile',
-          toasterStatus: Status.SUCCESS,
-        }),
-      );
+      openToasterSnack({
+        message: 'Success update profile',
+        variant: 'success',
+      });
     }
   };
 

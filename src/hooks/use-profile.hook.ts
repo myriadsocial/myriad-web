@@ -2,20 +2,20 @@ import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useImageUpload} from 'src/hooks/use-image-upload.hook';
-import {Status} from 'src/interfaces/toaster';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {User} from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileDetail} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {updatePostPlatformUser} from 'src/reducers/timeline/actions';
-import {showToaster} from 'src/reducers/toaster/actions';
 import {updateUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const useProfileHook = () => {
   const dispatch = useDispatch();
   const {uploadImage} = useImageUpload();
+  const {openToasterSnack} = useToasterSnackHook();
 
   const [uploadingBanner, setUploadingBanner] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -51,13 +51,10 @@ export const useProfileHook = () => {
             }
 
             dispatch(updatePostPlatformUser(url));
-
-            dispatch(
-              showToaster({
-                message: 'Success update profile',
-                toasterStatus: Status.SUCCESS,
-              }),
-            );
+            openToasterSnack({
+              message: 'Success update profile',
+              variant: 'success',
+            });
           }),
         );
     } finally {
@@ -79,13 +76,10 @@ export const useProfileHook = () => {
             },
             () => {
               setUploadingBanner(false);
-
-              dispatch(
-                showToaster({
-                  message: 'Success update profile',
-                  toasterStatus: Status.SUCCESS,
-                }),
-              );
+              openToasterSnack({
+                message: 'Success update profile',
+                variant: 'success',
+              });
             },
           ),
         );
