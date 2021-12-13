@@ -3,7 +3,7 @@ import {ChatAltIcon, DuplicateIcon, ShareIcon} from '@heroicons/react/outline';
 import React, {useState} from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
-import {Menu, MenuItem, TextField, Typography, InputAdornment} from '@material-ui/core';
+import {TextField, Typography, InputAdornment} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
@@ -44,24 +44,14 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
     disableAction,
   } = props;
 
-  const [shareAnchorEl, setShareAnchorEl] = useState<null | HTMLElement>(null);
   const [linkAnchorEl, setLinkAnchorEl] = useState<null | HTMLElement>(null);
   const [linkCopied, setLinkCopied] = useState(false);
 
-  const handleClickShare = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setShareAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseShare = () => {
-    setShareAnchorEl(null);
-  };
-
-  const handleClickShareLink = (event: React.MouseEvent<HTMLLIElement>) => {
+  const handleClickShareLink = (event: React.MouseEvent<HTMLButtonElement>) => {
     setLinkAnchorEl(event.currentTarget);
   };
 
   const handleLinkCopied = () => {
-    setShareAnchorEl(null);
     setLinkAnchorEl(null);
     setLinkCopied(true);
 
@@ -69,7 +59,6 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
   };
 
   const handleCloseCopyLink = () => {
-    setShareAnchorEl(null);
     setLinkAnchorEl(null);
     setLinkCopied(false);
   };
@@ -104,7 +93,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
 
       <ShowIf condition={!disableAction}>
         <div className={style.section}>
-          <IconButton onClick={handleClickShare} className={style.action} color="primary">
+          <IconButton onClick={handleClickShareLink} className={style.action} color="primary">
             <SvgIcon
               className={style.mr1}
               classes={{root: style.fill}}
@@ -115,18 +104,6 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
               Share
             </Typography>
           </IconButton>
-          <Menu
-            id="share-menu"
-            anchorEl={shareAnchorEl}
-            keepMounted
-            open={Boolean(shareAnchorEl)}
-            onClose={handleCloseShare}>
-            <MenuItem button onClick={handleClickShareLink}>
-              <div style={{width: 170}}>
-                <Typography>Copy Link</Typography>
-              </div>
-            </MenuItem>
-          </Menu>
         </div>
 
         <Modal
