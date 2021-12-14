@@ -169,7 +169,7 @@ export const Socials: React.FC<SocialsProps> = props => {
                     edge="start"
                     color="primary"
                     tabIndex={-1}
-                    checked={selectedPeople === account.peopleId}
+                    checked={selectedPeople === account.peopleId || account.primary}
                     value={account.peopleId}
                     disableRipple
                     onChange={handleSetPrimary(account)}

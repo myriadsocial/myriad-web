@@ -142,7 +142,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
             <TextField
               label="Copy and paste this code into your website or blog"
               id="copy-post-embed"
-              value={`<iframe src="${embedUrl}></iframe>`}
+              value={`<iframe width="700" height="525" src="${embedUrl}></iframe>`}
               variant="outlined"
               disabled
               fullWidth

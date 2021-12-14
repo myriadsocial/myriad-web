@@ -42,7 +42,13 @@ export const NotificationReducer: Redux.Reducer<NotificationState, Actions> = (
     case constants.READ_NOTIFICATION: {
       return {
         ...state,
-        total: 0,
+        notifications: state.notifications.map(notification => {
+          if (notification.id === action.notificationId) {
+            notification.read = true;
+          }
+
+          return notification;
+        }),
       };
     }
 
@@ -50,6 +56,13 @@ export const NotificationReducer: Redux.Reducer<NotificationState, Actions> = (
       return {
         ...state,
         total: action.total,
+      };
+    }
+
+    case constants.CLEAR_NOTIFIACTION_COUNT: {
+      return {
+        ...state,
+        total: 0,
       };
     }
 

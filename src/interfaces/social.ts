@@ -13,12 +13,13 @@ export enum SocialsEnum {
   WEIBO = 'weibo',
 }
 
-export interface SocialMedia extends BaseModel {
+export type SocialMediaProps = {
   verified: boolean;
   platform: SocialsEnum;
   peopleId: string;
   userId: string;
   primary: boolean;
-
+};
+export interface SocialMedia extends SocialMediaProps, BaseModel {
   people?: People;
 }
