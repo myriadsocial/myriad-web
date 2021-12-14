@@ -37,3 +37,10 @@ export const countNewNotification = async (userId: string): Promise<number> => {
 
   return data.count;
 };
+
+export const markAsRead = async (id: string): Promise<void> => {
+  await MyriadAPI.request<TotalNewNotification>({
+    url: `/notifications/${id}/read`,
+    method: 'PATCH',
+  });
+};

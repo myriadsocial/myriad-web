@@ -134,7 +134,9 @@ export const fetchConnectedSocials: ThunkActionCreator<Actions, RootState> =
     if (!user) return;
 
     try {
-      const {data} = await SocialAPI.getUserSocials(user.id);
+      const allSocials = true;
+
+      const {data} = await SocialAPI.getUserSocials(user.id, allSocials);
 
       dispatch({
         type: constants.FETCH_USER_SOCIALS,

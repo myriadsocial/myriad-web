@@ -191,17 +191,12 @@ export const getPost = async (
     default:
       filterParams.where = where;
 
-      if (
-        userId &&
-        !filters?.importer &&
-        !filters?.owner &&
-        (!filters?.tags || filters.tags?.length === 0)
-      ) {
+      if (!filters?.importer && !filters?.owner && (!filters?.tags || filters.tags?.length === 0)) {
         params.timelineType = TimelineType.ALL;
       }
 
       params.filter = filterParams;
-      params.userId = userId;
+      params.userId = userId || 'anonymous';
       break;
   }
 

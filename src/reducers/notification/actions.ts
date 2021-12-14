@@ -18,6 +18,7 @@ export interface FetchNotification extends PaginationAction {
 
 export interface ReadNotification extends Action {
   type: constants.READ_NOTIFICATION;
+  notificationId: string;
 }
 
 export interface TotalNewNotification extends Action {
@@ -25,11 +26,20 @@ export interface TotalNewNotification extends Action {
   total: number;
 }
 
+export interface ClearNotifiactionCount extends Action {
+  type: constants.CLEAR_NOTIFIACTION_COUNT;
+}
+
 /**
  * Union Action Types
  */
 
-export type Actions = FetchNotification | ReadNotification | TotalNewNotification | BaseAction;
+export type Actions =
+  | FetchNotification
+  | ReadNotification
+  | TotalNewNotification
+  | ClearNotifiactionCount
+  | BaseAction;
 
 /**
  *
@@ -71,8 +81,8 @@ export const fetchNotification: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const readAllNotifications: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
+export const readNotification: ThunkActionCreator<Actions, RootState> =
+  (notificationId: string) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
@@ -84,8 +94,41 @@ export const readAllNotifications: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
+      await NotificationAPI.markAsRead(notificationId);
+
       dispatch({
         type: constants.READ_NOTIFICATION,
+        notificationId,
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const readAllNotifications: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+        notificationState: {notifications},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      await Promise.all(
+        notifications.map(notification => {
+          return NotificationAPI.markAsRead(notification.id);
+        }),
+      );
+
+      dispatch({
+        type: constants.CLEAR_NOTIFIACTION_COUNT,
       });
     } catch (error) {
       dispatch(setError(error.message));
@@ -118,4 +161,11 @@ export const countNewNotification: ThunkActionCreator<Actions, RootState> =
     } finally {
       dispatch(setLoading(false));
     }
+  };
+
+export const clearNotificationCount: ThunkActionCreator<Actions, RootState> =
+  () => async dispatch => {
+    dispatch({
+      type: constants.CLEAR_NOTIFIACTION_COUNT,
+    });
   };
