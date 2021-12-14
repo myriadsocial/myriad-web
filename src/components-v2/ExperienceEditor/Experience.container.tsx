@@ -2,14 +2,14 @@ import React from 'react';
 
 import {useRouter} from 'next/router';
 
-import {useExperienceHook} from '../../hooks/use-experience-hook';
-import {Experience} from '../../interfaces/experience';
 import {useStyles} from './Experience.styles';
 import {ExperienceEditor} from './ExperienceEditor';
 
 import {debounce} from 'lodash';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
-import {useImageUpload} from 'src/hooks/use-image-upload.hook';
+import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import {useUpload} from 'src/hooks/use-upload.hook';
+import {Experience} from 'src/interfaces/experience';
 
 export const ExperienceContainer: React.FC = () => {
   const {
@@ -22,8 +22,10 @@ export const ExperienceContainer: React.FC = () => {
     loadExperience,
   } = useExperienceHook();
   const style = useStyles();
-  const {uploadImage} = useImageUpload();
+
+  const {uploadImage} = useUpload();
   const router = useRouter();
+
   const onImageUpload = async (files: File[]) => {
     const url = await uploadImage(files[0]);
     if (url) return url;

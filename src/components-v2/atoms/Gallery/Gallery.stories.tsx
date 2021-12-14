@@ -13,7 +13,6 @@ const Template: ComponentStory<typeof GalleryComponent> = args => <GalleryCompon
 
 export const DefaultGallery = Template.bind({});
 DefaultGallery.args = {
-  cloudName: 'dsget80gs',
   images: [
     'https://res.cloudinary.com/dsget80gs/lhyhjgd8v46cxeqzw5tp.png',
     'https://res.cloudinary.com/dsget80gs/aqzylqjxopgf23nqypac.jpg',
@@ -23,6 +22,5 @@ DefaultGallery.args = {
 
 export const SmallImages = Template.bind({});
 SmallImages.args = {
-  cloudName: 'dsget80gs',
   images: ['https://res.cloudinary.com/dsget80gs/dsccp9uljwazyfudyeew.jpg'],
 };

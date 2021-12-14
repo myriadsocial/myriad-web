@@ -20,11 +20,10 @@ import theme from 'src/themes/light-theme-v2';
 type GalleryProps = {
   images: string[];
   variant?: GalleryType;
-  cloudName: string;
 };
 
 export const Gallery: React.FC<GalleryProps> = props => {
-  const {images, cloudName, variant = 'horizontal'} = props;
+  const {images, variant = 'horizontal'} = props;
 
   const style = useStyles();
 
@@ -38,7 +37,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
   });
 
   useEffect(() => {
-    const gallery = buildList(images, variant, cloudName);
+    const gallery = buildList(images, variant);
 
     setList(gallery);
     setItems(gallery.images);

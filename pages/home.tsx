@@ -30,7 +30,7 @@ const Home: React.FC = () => {
       // shallow push, without rerender page
       router.push(
         {
-          pathname: 'searchresults',
+          pathname: 'search',
           query: {
             q: query,
           },

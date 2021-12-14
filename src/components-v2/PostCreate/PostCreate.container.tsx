@@ -3,15 +3,15 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import {Post} from '../../interfaces/post';
-import {RootState} from '../../reducers';
-import {fetchFriend, searchFriend} from '../../reducers/friend/actions';
-import {createPost, importPost} from '../../reducers/timeline/actions';
 import {useFriendList} from '../FriendsMenu/hooks/use-friend-list.hook';
-import {useUpload} from './hooks/use-upload.hook';
 
 import {debounce} from 'lodash';
+import {useUpload} from 'src/hooks/use-upload.hook';
+import {Post} from 'src/interfaces/post';
+import {RootState} from 'src/reducers';
+import {fetchFriend, searchFriend} from 'src/reducers/friend/actions';
 import {FriendState} from 'src/reducers/friend/reducer';
+import {createPost, importPost} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 type PostCreateContainerType = {
@@ -50,13 +50,17 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     if (type === 'image') {
       const response = await uploadImage(file);
 
-      url = response;
+      if (response) {
+        url = response;
+      }
     }
 
     if (type === 'video') {
       const response = await uploadVideo(file);
 
-      url = response;
+      if (response) {
+        url = response;
+      }
     }
 
     return url;
