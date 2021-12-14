@@ -101,6 +101,7 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
         classes={{
           root: classes.actionArea,
         }}>
+        {activated() && <div className={classes.activatedRibbon} />}
         <div className={`${classes.indicator} ${activated() && classes.indicatorActivated}`} />
         <div className={classes.details}>
           <div className={classes.details}>
