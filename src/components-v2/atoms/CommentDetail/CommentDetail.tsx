@@ -150,8 +150,8 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
           <CardHeader
             title={
               <Typography className={style.text}>
-                <Link href={`profile/${comment.user.id}`}>
-                  <a href={`profile/${comment.user.id}`} className={style.link}>
+                <Link href={`/profile/${comment.user.id}`}>
+                  <a href={`/profile/${comment.user.id}`} className={style.link}>
                     {comment.user.name}
                   </a>
                 </Link>
