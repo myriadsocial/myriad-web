@@ -8,6 +8,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
 import {Timeline as TimelineComponent} from '.';
+import {PostVisibilityContainer} from '../PostVisibility';
 import {ReportContainer} from '../Report';
 import {SendTipContainer} from '../SendTip';
 import {TimelineFilterContainer} from '../TimelineFilter';
@@ -55,6 +56,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
   const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | null>(null);
   const [reported, setReported] = useState<Post | null>(null);
+  const [visibility, setVisibility] = useState<Post | null>(null);
   const [removing, setRemoving] = useState(false);
   const [postToRemove, setPostToRemove] = useState<Post | null>(null);
   const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
@@ -105,6 +107,14 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
   const closeReportPost = () => {
     setReported(null);
+  };
+
+  const handlePostVisibility = (post: Post) => {
+    setVisibility(post);
+  };
+
+  const closePostVisibility = () => {
+    setVisibility(null);
   };
 
   const handleDeletePost = (post: Post) => {
@@ -168,6 +178,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
           onOpenTipHistory={openTipHistory}
           onDelete={handleDeletePost}
           onReport={handleReportPost}
+          onVisibility={handlePostVisibility}
           toggleDownvoting={handleToggleDownvoting}
           onShared={handleSharePost}
           onRemoveVote={handleRemoveVote}
@@ -225,6 +236,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
       <TipHistoryContainer onSendTip={handleSendTip} />
 
       <ReportContainer reference={reported} onClose={closeReportPost} />
+      <PostVisibilityContainer reference={visibility} onClose={closePostVisibility} />
 
       <PromptComponent
         title={'Remove Post'}

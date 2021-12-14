@@ -8,6 +8,7 @@ import {Button} from '@material-ui/core';
 import {DropdownMenu} from '../../atoms/DropdownMenu/';
 import {sortOptions} from './default';
 
+import {PostVisibilityContainer} from 'src/components-v2/PostVisibility';
 import {ReportContainer} from 'src/components-v2/Report';
 import {SendTipContainer} from 'src/components-v2/SendTip';
 import {Timeline as TimelineComponent} from 'src/components-v2/Timeline';
@@ -52,6 +53,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   const [removing, setRemoving] = useState(false);
   const [postToRemove, setPostToRemove] = useState<Post | null>(null);
   const sendTipOpened = Boolean(tippedPost);
+  const [visibility, setVisibility] = useState<Post | null>(null);
 
   const [toggle, setToggle] = useState<string>('');
   const [postsList, setPostsList] = useState<Post[]>([]);
@@ -127,6 +129,14 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     router.push('/home');
   };
 
+  const handlePostVisibility = (post: Post) => {
+    setVisibility(post);
+  };
+
+  const closePostVisibility = () => {
+    setVisibility(null);
+  };
+
   if (!posts.length && filters?.owner === user?.id) {
     return (
       <Empty title="Looks like you haven’t posted yet">
@@ -184,6 +194,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
         onOpenTipHistory={openTipHistory}
         onDelete={handleDeletePost}
         onReport={handleReportPost}
+        onVisibility={handlePostVisibility}
         toggleDownvoting={handleToggleDownvoting}
         onShared={handleSharePost}
         onRemoveVote={handleRemoveVote}
@@ -201,6 +212,8 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
       <TipHistoryContainer onSendTip={handleSendTip} />
 
       <ReportContainer reference={reported} onClose={closeReportPost} />
+
+      <PostVisibilityContainer reference={visibility} onClose={closePostVisibility} />
 
       <PromptComponent
         title={'Remove Post'}

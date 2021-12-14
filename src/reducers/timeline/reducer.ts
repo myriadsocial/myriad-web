@@ -414,6 +414,19 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       };
     }
 
+    case constants.UPDATE_POST_VISIBILITY: {
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post.id === action.postId) {
+            post.visibility = action.payload;
+          }
+
+          return post;
+        }),
+      };
+    }
+
     case BaseConstants.ACTION_LOADING: {
       return update(state, {
         loading: {$set: action.loading},

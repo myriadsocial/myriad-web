@@ -43,6 +43,7 @@ type PostDetailProps = {
   onOpenTipHistory: (post: Post) => void;
   onDelete?: (post: Post) => void;
   onReport: (post: Post) => void;
+  onVisibility: (post: Post) => void;
   onShared: (post: Post, type: 'link' | 'post') => void;
   expanded?: boolean;
   type?: 'share' | 'default';
@@ -60,6 +61,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     onOpenTipHistory,
     onDelete,
     onReport,
+    onVisibility,
     onShared,
     expanded = false,
     type = 'default',
@@ -143,6 +145,10 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     onReport(post);
   };
 
+  const handlePostVisibility = () => {
+    onVisibility(post);
+  };
+
   const handleShareLink = () => {
     onShared(post, 'link');
   };
@@ -166,6 +172,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         onOpenTipHistory={handleOpenTipHistory}
         onDelete={handleDeletePost}
         onReport={handleReportPost}
+        onVisibility={handlePostVisibility}
         disableAction={type === 'share'}
       />
 

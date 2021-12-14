@@ -13,6 +13,7 @@ import {Modal} from '../atoms/Modal';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {PostsList} from './PostsList';
 
+import {PostVisibilityContainer} from 'src/components-v2/PostVisibility';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Comment} from 'src/interfaces/comment';
@@ -49,6 +50,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
   const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | null>(null);
 
+  const [visibility, setVisibility] = useState<Post | null>(null);
   const [reported, setReported] = useState<Post | null>(null);
   const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
   const sendTipOpened = Boolean(tippedPost);
@@ -98,6 +100,14 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
     setReported(null);
   };
 
+  const handlePostVisibility = (post: Post) => {
+    setVisibility(post);
+  };
+
+  const closePostVisibility = () => {
+    setVisibility(null);
+  };
+
   const handleSharePost = (post: Post, type: 'link' | 'post') => {
     if (type === 'post') {
       openToasterSnack({
@@ -126,6 +136,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
         onSendTip={handleSendTip}
         onOpenTipHistory={openTipHistory}
         onReport={handleReportPost}
+        onPostVisibility={handlePostVisibility}
         toggleDownvoting={handleToggleDownvoting}
         onShared={handleSharePost}
         searchedPosts={posts}
@@ -180,6 +191,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
       <TipHistoryContainer onSendTip={handleSendTip} />
       <ReportContainer reference={reported} onClose={closeReportPost} />
+      <PostVisibilityContainer reference={visibility} onClose={closePostVisibility} />
     </>
   );
 };

@@ -7,5 +7,6 @@ export type PostHeaderProps = {
   onDelete: () => void;
   onOpenTipHistory: () => void;
   onReport: () => void;
+  onVisibility: () => void;
   disableAction?: boolean;
 };

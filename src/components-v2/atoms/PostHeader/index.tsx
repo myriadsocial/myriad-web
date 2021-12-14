@@ -18,7 +18,15 @@ import ShowIf from 'src/components-v2/common/show-if.component';
 import {SocialsEnum} from 'src/interfaces/social';
 
 export const HeaderComponent: React.FC<PostHeaderProps> = props => {
-  const {post, owner, disableAction = false, onDelete, onOpenTipHistory, onReport} = props;
+  const {
+    post,
+    owner,
+    disableAction = false,
+    onDelete,
+    onOpenTipHistory,
+    onReport,
+    onVisibility,
+  } = props;
 
   const style = useStyles();
   const router = useRouter();
@@ -72,6 +80,11 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
   const handleDelete = () => {
     onDelete();
     handleClosePostSetting();
+  };
+
+  const handlePostVisibility = () => {
+    handleClosePostSetting();
+    onVisibility();
   };
 
   const handleReport = () => {
@@ -155,7 +168,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
               disableRipple={true}
               disableFocusRipple={true}
               disableTouchRipple>
-              <SvgIcon component={DotsVerticalIcon} />
+              <SvgIcon component={DotsVerticalIcon} viewBox="0 0 20 20" />
             </IconButton>
           ) : null
         }
@@ -192,8 +205,12 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         </ShowIf>
 
         <ShowIf condition={owner && !post.deletedAt}>
+          <MenuItem onClick={handlePostVisibility}>Post Visibility</MenuItem>
+        </ShowIf>
+
+        <ShowIf condition={owner && !post.deletedAt}>
           <MenuItem onClick={handleDelete} className={style.danger} color="danger">
-            Delete
+            Delete Post
           </MenuItem>
         </ShowIf>
       </Menu>

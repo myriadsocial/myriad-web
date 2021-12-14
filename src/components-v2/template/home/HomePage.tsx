@@ -1,3 +1,4 @@
+// UNUSED COMPONENT PLEASE CHECK AGAIN
 import React from 'react';
 
 import {useTheme} from '@material-ui/core/styles';
@@ -81,6 +82,7 @@ const HomePage = (): JSX.Element => {
               onOpenTipHistory={console.log}
               onReport={console.log}
               onShared={console.log}
+              onVisibility={console.log}
               toggleDownvoting={console.log}
               onRemoveVote={console.log}
             />

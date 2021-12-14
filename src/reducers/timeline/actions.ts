@@ -8,7 +8,7 @@ import {Action} from 'redux';
 import {Comment} from 'src/interfaces/comment';
 import {FriendStatus} from 'src/interfaces/friend';
 import {Like, ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
-import {Post, PostProps} from 'src/interfaces/post';
+import {Post, PostProps, PostVisibility} from 'src/interfaces/post';
 import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
 import {UserProps} from 'src/interfaces/user';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
@@ -130,6 +130,12 @@ export interface DecreaseCommentCount extends Action {
   section: SectionType;
 }
 
+export interface UpdatePostVisibility extends Action {
+  type: constants.UPDATE_POST_VISIBILITY;
+  postId: string;
+  payload: PostVisibility;
+}
+
 /**
  * Union Action Types
  */
@@ -155,6 +161,7 @@ export type Actions =
   | IncreaseCommentCount
   | DecreaseCommentCount
   | ShowToasterSnack
+  | UpdatePostVisibility
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -533,6 +540,40 @@ export const deletePost: ThunkActionCreator<Actions, RootState> =
       dispatch({
         type: constants.REMOVE_POST,
         postId,
+      });
+
+      callback && callback();
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const editPost: ThunkActionCreator<Actions, RootState> =
+  (postId: string, payload: Partial<Post>, callback?: () => void) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const visibility = payload.visibility as PostVisibility;
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      await PostAPI.editPost(postId, payload);
+
+      dispatch({
+        type: constants.UPDATE_POST_VISIBILITY,
+        postId,
+        payload: visibility,
       });
 
       callback && callback();

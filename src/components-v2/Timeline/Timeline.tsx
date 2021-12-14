@@ -26,6 +26,7 @@ type TimelineProps = {
   onOpenTipHistory: (post: Post) => void;
   onDelete: (post: Post) => void;
   onReport: (post: Post) => void;
+  onVisibility: (post: Post) => void;
   toggleDownvoting: (reference: Post | Comment | null) => void;
   onShared: (post: Post, type: 'link' | 'post') => void;
   onRemoveVote: (reference: Post | Comment) => void;
@@ -44,6 +45,7 @@ export const Timeline: React.FC<TimelineProps> = props => {
     onOpenTipHistory,
     onDelete,
     onReport,
+    onVisibility,
     onShared,
     toggleDownvoting,
     onRemoveVote,
@@ -103,6 +105,7 @@ export const Timeline: React.FC<TimelineProps> = props => {
               onDelete={onDelete}
               onReport={onReport}
               onShared={onShared}
+              onVisibility={onVisibility}
               onRemoveVote={onRemoveVote}
             />
           ))
