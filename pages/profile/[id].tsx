@@ -112,7 +112,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     await dispatch(fetchUser(userId));
 
     await Promise.all([
-      dispatch(fetchConnectedSocials()),
+      dispatch(fetchConnectedSocials(userId === profileId)),
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
       dispatch(fetchExperience()),

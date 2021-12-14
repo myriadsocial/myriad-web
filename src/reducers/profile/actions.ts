@@ -147,8 +147,9 @@ export const searchProfileFriend: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const fetchConnectedSocials: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
+export const fetchProfileSocials: ThunkActionCreator<Actions, RootState> =
+  (all = true) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     const {
@@ -158,7 +159,7 @@ export const fetchConnectedSocials: ThunkActionCreator<Actions, RootState> =
     if (!detail) return;
 
     try {
-      const {data} = await SocialAPI.getUserSocials(detail.id);
+      const {data} = await SocialAPI.getUserSocials(detail.id, all);
 
       dispatch({
         type: constants.FETCH_PROFILE_SOCIALS,

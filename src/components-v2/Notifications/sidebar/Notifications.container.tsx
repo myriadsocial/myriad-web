@@ -7,8 +7,9 @@ import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {
   readAllNotifications,
+  readNotification,
   fetchNotification,
-  countNewNotification,
+  clearNotificationCount,
 } from 'src/reducers/notification/actions';
 import {NotificationState} from 'src/reducers/notification/reducer';
 
@@ -27,7 +28,7 @@ export const NotificationsContainer: React.FC<NotificationsContainerProps> = pro
     dispatch(fetchNotification());
 
     return () => {
-      dispatch(countNewNotification());
+      dispatch(clearNotificationCount());
     };
   }, []);
 
@@ -35,5 +36,15 @@ export const NotificationsContainer: React.FC<NotificationsContainerProps> = pro
     dispatch(readAllNotifications());
   };
 
-  return <MiniNotifications notifications={notifications} onMarkAllAsRead={markAllAsRead} />;
+  const markItemAsRead = (notificationId: string) => {
+    dispatch(readNotification(notificationId));
+  };
+
+  return (
+    <MiniNotifications
+      notifications={notifications}
+      onMarkAllAsRead={markAllAsRead}
+      onMarkItemAsRead={markItemAsRead}
+    />
+  );
 };

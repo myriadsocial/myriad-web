@@ -26,6 +26,7 @@ import {PAGINATION_LIMIT} from 'src/lib/api/constants/pagination';
 type NotificationsProps = {
   notifications: Notification[];
   onMarkAllAsRead: () => void;
+  onMarkItemAsRead: (notificationId: string) => void;
 };
 
 const StyledBadge = withStyles(() =>
@@ -42,7 +43,7 @@ const StyledBadge = withStyles(() =>
 )(Badge);
 
 export const MiniNotifications: React.FC<NotificationsProps> = props => {
-  const {notifications, onMarkAllAsRead} = props;
+  const {notifications, onMarkAllAsRead, onMarkItemAsRead} = props;
 
   const style = useStyles();
 
@@ -51,6 +52,10 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
   //TODO: this is a duplicate function on PostHeader/index.tsx
   const handleClickAvatar = (): void => {
     console.log('clicked!');
+  };
+
+  const handleReadNotification = (notificationId: string) => () => {
+    onMarkItemAsRead(notificationId);
   };
 
   return (
@@ -77,6 +82,7 @@ export const MiniNotifications: React.FC<NotificationsProps> = props => {
                 <Link key={filteredNotification.id} href={filteredNotification.href} passHref>
                   <ListItem
                     button
+                    onClick={handleReadNotification(filteredNotification.id)}
                     component="a"
                     ContainerComponent="div"
                     key={filteredNotification.id}
