@@ -1,8 +1,8 @@
 import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {useImageUpload} from 'src/hooks/use-image-upload.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import {useUpload} from 'src/hooks/use-upload.hook';
 import {User} from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
@@ -14,7 +14,7 @@ import {UserState} from 'src/reducers/user/reducer';
 
 export const useProfileHook = () => {
   const dispatch = useDispatch();
-  const {uploadImage} = useImageUpload();
+  const {uploadImage} = useUpload();
   const {openToasterSnack} = useToasterSnackHook();
 
   const [uploadingBanner, setUploadingBanner] = useState(false);

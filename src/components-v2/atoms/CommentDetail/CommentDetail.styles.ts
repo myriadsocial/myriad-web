@@ -3,7 +3,7 @@ import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     comment: {
-      // marginBottom: theme.spacing(1),
+      marginBottom: theme.spacing(1),
       boxShadow: 'none',
       backgroundColor: 'rgba(246, 246, 246, 0.5)',
     },

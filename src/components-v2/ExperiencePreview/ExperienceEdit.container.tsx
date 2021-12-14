@@ -2,19 +2,19 @@ import React, {useEffect} from 'react';
 
 import {useRouter} from 'next/router';
 
-import {useExperienceHook} from '../../hooks/use-experience-hook';
-import {Experience} from '../../interfaces/experience';
 import {ExperienceEditor} from '../ExperienceEditor/ExperienceEditor';
 import {useStyles} from './experience.style';
 
 import {debounce} from 'lodash';
 import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
-import {useImageUpload} from 'src/hooks/use-image-upload.hook';
+import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import {useUpload} from 'src/hooks/use-upload.hook';
+import {Experience} from 'src/interfaces/experience';
 
 export const ExperienceEditContainer: React.FC = () => {
   const {searchTags, tags, searchPeople, people, experience, getDetail, updateExperience} =
     useExperienceHook();
-  const {uploadImage} = useImageUpload();
+  const {uploadImage} = useUpload();
   const router = useRouter();
   const {experienceId} = router.query;
   const style = useStyles();
