@@ -37,6 +37,14 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
     else setSelectable(false);
   }, []);
 
+  useEffect(() => {
+    // TODO: make experience as global constant for helper query instead hardcoded
+    if (router.query?.type === 'experience') {
+      const idSelected = router.query?.id?.toString();
+      setSelected(idSelected);
+    }
+  }, [router]);
+
   return (
     <div className={classes.root}>
       {experiences.map(item => (

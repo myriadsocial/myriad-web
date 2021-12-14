@@ -17,6 +17,16 @@ const useStyles = makeStyles((theme: Theme) =>
     activated: {
       border: `1px solid #6E3FC3`,
     },
+    activatedRibbon: {
+      width: 8,
+      height: '100%',
+      backgroundColor: '#6E3FC3',
+      borderTopLeftRadius: 10,
+      borderBottomLeftRadius: 10,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+    },
     indicator: {
       position: 'absolute',
       top: 0,
