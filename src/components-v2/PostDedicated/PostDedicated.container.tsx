@@ -6,6 +6,7 @@ import {useRouter} from 'next/router';
 import {Button} from '@material-ui/core';
 
 import {PostDetail} from 'src/components-v2/PostDetail';
+import {PostVisibilityContainer} from 'src/components-v2/PostVisibility';
 import {ReportContainer} from 'src/components-v2/Report';
 import {SendTipContainer} from 'src/components-v2/SendTip';
 import {useTimelineHook} from 'src/components-v2/Timeline/hooks/use-timeline.hook';
@@ -30,6 +31,7 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
 
   const dispatch = useDispatch();
   const router = useRouter();
+  const [visibility, setVisibility] = useState<Post | null>(null);
 
   const {post, getTippedUserId} = useTimelineHook();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
@@ -106,6 +108,14 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
     dispatch(removeVote(reference));
   };
 
+  const handlePostVisibility = (post: Post) => {
+    setVisibility(post);
+  };
+
+  const closePostVisibility = () => {
+    setVisibility(null);
+  };
+
   if (!post) return null;
 
   return (
@@ -123,6 +133,7 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
         onReport={handleReportPost}
         onShared={handleSharePost}
         onRemoveVote={handleRemoveVote}
+        onVisibility={handlePostVisibility}
         expanded={expanded}
         type={type}
       />
@@ -139,6 +150,8 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
       <TipHistoryContainer onSendTip={handleSendTip} />
 
       <ReportContainer reference={reported} onClose={closeReportPost} />
+
+      <PostVisibilityContainer reference={visibility} onClose={closePostVisibility} />
 
       <PromptComponent
         title={'Remove Post'}

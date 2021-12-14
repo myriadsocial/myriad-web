@@ -337,6 +337,14 @@ export const getPostDetail = async (id: string, userId?: string): Promise<Post> 
   return data;
 };
 
+export const editPost = async (id: string, payload: Partial<PostProps>): Promise<void> => {
+  await MyriadAPI.request<Post>({
+    url: `/posts/${id}`,
+    method: 'PATCH',
+    data: payload,
+  });
+};
+
 export const like = async (userId: string, postId: string): Promise<void> => {
   await MyriadAPI.request({
     url: `/posts/${postId}/likes`,

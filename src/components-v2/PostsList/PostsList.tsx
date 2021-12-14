@@ -24,6 +24,7 @@ type PostsListProps = {
   onSendTip: (post: Post) => void;
   onOpenTipHistory: (post: Post) => void;
   onReport: (post: Post) => void;
+  onPostVisibility: (post: Post) => void;
   toggleDownvoting: (reference: Post | Comment | null) => void;
   onShared: (post: Post, type: 'link' | 'post') => void;
   onRemoveVote: (reference: Post | Comment) => void;
@@ -41,6 +42,7 @@ export const PostsList: React.FC<PostsListProps> = props => {
     onOpenTipHistory,
     onReport,
     onShared,
+    onPostVisibility,
     toggleDownvoting,
     onRemoveVote,
   } = props;
@@ -115,6 +117,7 @@ export const PostsList: React.FC<PostsListProps> = props => {
               onReport={onReport}
               onShared={onShared}
               onRemoveVote={onRemoveVote}
+              onVisibility={onPostVisibility}
             />
           ))
         )}
