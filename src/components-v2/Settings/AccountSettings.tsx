@@ -50,7 +50,7 @@ export const AccountSettings: React.FC<AccountSettingsProps> = props => {
       <List>
         {settings.map(item => {
           return (
-            <ListItem key={item.id} button className={styles.option} alignItems="center">
+            <ListItem key={item.id} className={styles.option} alignItems="center">
               <ListItemText>
                 <Typography variant="h5" color="textPrimary">
                   {item.title}

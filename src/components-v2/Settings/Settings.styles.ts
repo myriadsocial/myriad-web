@@ -24,14 +24,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingTop: 18,
       paddingBottom: 18,
       '&:hover ': {
-        background: `rgba(255, 200, 87, 0.15)`,
+        background: 'transparent',
       },
       '& .hidden-button': {
         display: 'none',
-      },
-      '&:hover .hidden-button': {
-        display: 'flex',
-        paddingRight: 29,
       },
     },
     action: {
