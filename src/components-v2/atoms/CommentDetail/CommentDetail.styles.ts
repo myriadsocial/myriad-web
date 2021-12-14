@@ -3,7 +3,7 @@ import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     comment: {
-      marginBottom: theme.spacing(1),
+      // marginBottom: theme.spacing(1),
       boxShadow: 'none',
       backgroundColor: 'rgba(246, 246, 246, 0.5)',
     },
@@ -43,6 +43,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     avatar: {
       marginRight: 12,
+      cursor: 'pointer',
     },
     fullWidth: {
       width: '100%',
@@ -68,6 +69,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderBottom: '1px solid #E5E5E5',
       borderLeft: '1px solid #E5E5E5',
       borderBottomLeftRadius: '11px',
+    },
+    link: {
+      fontSize: 14,
+      fontWeight: 700,
+      color: theme.palette.text.primary,
+      textDecoration: 'none',
     },
   }),
 );

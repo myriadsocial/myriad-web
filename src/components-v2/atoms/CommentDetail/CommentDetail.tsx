@@ -1,6 +1,9 @@
 import React, {useEffect, useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+import Link from 'next/link';
+import {useRouter} from 'next/router';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -45,6 +48,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
   } = props;
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
   const editorRef = useRef<HTMLDivElement>(null);
@@ -112,6 +116,10 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
     onReply(attributes);
   };
 
+  const handleViewProfile = () => {
+    router.push(`/profile/${comment.userId}`);
+  };
+
   const getDate = (commentDate: Date) => {
     const newFormat = formatDistance(subDays(new Date(commentDate), 0), new Date(), {
       addSuffix: true,
@@ -128,7 +136,10 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
   return (
     <div className={style.flex}>
       <div className={style.tree}>
-        <Avatar className={style.avatar} src={comment.user?.profilePictureURL || ''}>
+        <Avatar
+          className={style.avatar}
+          src={comment.user?.profilePictureURL || ''}
+          onClick={handleViewProfile}>
           {acronym(comment.user?.name)}
         </Avatar>
         {deep !== 2 && comment.replies && <div className={style.verticalTree} />}
@@ -139,7 +150,11 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
           <CardHeader
             title={
               <Typography className={style.text}>
-                {comment.user.name}
+                <Link href={`profile/${comment.user.id}`}>
+                  <a href={`profile/${comment.user.id}`} className={style.link}>
+                    {comment.user.name}
+                  </a>
+                </Link>
                 <span className={style.subText}>
                   <span className={style.dot}>•</span>
                   {getDate(comment.createdAt)}
