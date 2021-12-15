@@ -1,8 +1,8 @@
 import {ImageListProps, ImageListItemProps, GalleryType} from './Gallery.types';
 
-import {generateImageSizes} from 'src/helpers/cloudinary';
+import {generateImageSizes} from 'src/helpers/image';
 
-const horizontalGallery = (source: string[], cloudName: string): ImageListProps => {
+const horizontalGallery = (source: string[]): ImageListProps => {
   let listCols = 1;
   let itemCols = 1;
   let ROWS = 1;
@@ -23,7 +23,7 @@ const horizontalGallery = (source: string[], cloudName: string): ImageListProps 
       itemCols = index === 0 ? listCols : listCols / Math.min(source.length - 1, 3);
     }
 
-    const sizes = generateImageSizes(source[index], cloudName);
+    const sizes = generateImageSizes(source[index]);
 
     images.push({
       cols: itemCols,
@@ -41,7 +41,7 @@ const horizontalGallery = (source: string[], cloudName: string): ImageListProps 
   };
 };
 
-const verticalGallery = (source: string[], cloudName: string): ImageListProps => {
+const verticalGallery = (source: string[]): ImageListProps => {
   let listCols = 1;
   let ROWS = 1;
   let cellHeight = 320;
@@ -58,7 +58,7 @@ const verticalGallery = (source: string[], cloudName: string): ImageListProps =>
       ROWS = index === 0 ? 2 : 1;
     }
 
-    const sizes = generateImageSizes(source[index], cloudName);
+    const sizes = generateImageSizes(source[index]);
 
     images.push({
       cols: 1,
@@ -76,15 +76,11 @@ const verticalGallery = (source: string[], cloudName: string): ImageListProps =>
   };
 };
 
-export const buildList = (
-  source: string[],
-  variant: GalleryType,
-  cloudName: string,
-): ImageListProps => {
+export const buildList = (source: string[], variant: GalleryType): ImageListProps => {
   switch (variant) {
     case 'horizontal':
-      return horizontalGallery(source, cloudName);
+      return horizontalGallery(source);
     default:
-      return verticalGallery(source, cloudName);
+      return verticalGallery(source);
   }
 };

@@ -43,6 +43,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     avatar: {
       marginRight: 12,
+      cursor: 'pointer',
     },
     fullWidth: {
       width: '100%',
@@ -68,6 +69,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderBottom: '1px solid #E5E5E5',
       borderLeft: '1px solid #E5E5E5',
       borderBottomLeftRadius: '11px',
+    },
+    link: {
+      fontSize: 14,
+      fontWeight: 700,
+      color: theme.palette.text.primary,
+      textDecoration: 'none',
     },
   }),
 );

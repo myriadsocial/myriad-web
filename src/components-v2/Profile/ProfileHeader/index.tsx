@@ -247,11 +247,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               transformOrigin={{vertical: 'top', horizontal: 'right'}}
               open={Boolean(anchorEl)}
               onClose={handleClose}>
-              <MenuItem disabled>Message</MenuItem>
               <CopyToClipboard text={linkUrl} onCopy={handleLinkCopied}>
                 <MenuItem>Copy link profile</MenuItem>
               </CopyToClipboard>
-              <MenuItem disabled>Mute account</MenuItem>
               <ShowIf condition={person.username !== 'myriad_official'}>
                 <MenuItem onClick={handleOpenModal} className={style.delete}>
                   Report account

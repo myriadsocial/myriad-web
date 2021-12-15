@@ -92,7 +92,7 @@ export const SearchResultContainer: React.FC = () => {
   const onSubmitSearch = (query: string) => {
     router.push(
       {
-        pathname: 'searchresults',
+        pathname: 'search',
         query: {
           q: query,
         },

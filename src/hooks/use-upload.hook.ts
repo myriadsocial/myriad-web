@@ -1,47 +1,41 @@
 import * as Sentry from '@sentry/nextjs';
 
 import {useState} from 'react';
+import {useSelector} from 'react-redux';
 
-import getConfig from 'next/config';
-
-import Axios from 'axios';
 import axios from 'axios';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
-
-const {serverRuntimeConfig} = getConfig();
-
-const client = Axios.create({
-  baseURL: serverRuntimeConfig.nextAuthURL,
-});
-
-type ResponseImageUpload = {
-  url: string;
-  error?: string;
-};
+import * as UploadAPI from 'src/lib/api/upload';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useUpload = () => {
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {openToasterSnack} = useToasterSnackHook();
+
   const [image, setImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
-  const {openToasterSnack} = useToasterSnackHook();
 
   const randomIntBetween = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
   const uploadImage = async (file: File) => {
-    const formData = new FormData();
+    if (!user) {
+      openToasterSnack({
+        message: 'Login to upload file',
+        variant: 'error',
+      });
 
-    formData.append('image', file);
+      return;
+    }
 
     try {
       setProgress(0);
 
-      const {data} = await client.request<ResponseImageUpload>({
-        method: 'POST',
-        url: '/api/image',
-        data: formData,
+      const data = await UploadAPI.image(user.id, file, {
         onUploadProgress: (event: ProgressEvent) => {
           const fileProgress =
             (Math.round((100 * event.loaded) / event.total) * (randomIntBetween(5, 8) * 10)) / 100;
@@ -50,11 +44,11 @@ export const useUpload = () => {
         },
       });
 
-      setImage(data.url);
+      setImage(data.files[0].url);
 
       setProgress(100);
 
-      return data.url;
+      return data.files[0].url;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setError(error.response?.data.eror);
@@ -73,17 +67,19 @@ export const useUpload = () => {
   };
 
   const uploadVideo = async (file: File) => {
-    const formData = new FormData();
+    if (!user) {
+      openToasterSnack({
+        message: 'Login to upload file',
+        variant: 'error',
+      });
 
-    formData.append('video', file);
+      return;
+    }
 
     try {
       setProgress(0);
 
-      const {data} = await client.request<ResponseImageUpload>({
-        method: 'POST',
-        url: '/api/video',
-        data: formData,
+      const data = await UploadAPI.video(user.id, file, {
         onUploadProgress: (event: ProgressEvent) => {
           const fileProgress =
             (Math.round((100 * event.loaded) / event.total) * (randomIntBetween(5, 8) * 10)) / 100;
@@ -94,9 +90,9 @@ export const useUpload = () => {
 
       setProgress(100);
 
-      setImage(data.url);
+      setImage(data.files[0].url);
 
-      return data.url;
+      return data.files[0].url;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setError(error.response?.data.eror);
