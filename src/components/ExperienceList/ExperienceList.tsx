@@ -13,6 +13,7 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
   user,
   viewPostList,
   onDelete,
+  onUnsubscribe,
 }) => {
   const classes = useStyles();
 
@@ -55,11 +56,13 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
             onSelect={handleClick}
             title={item.experience.name}
             creator={item.experience.user.name}
+            subscribed={item.subscribed}
             imgUrl={item.experience.experienceImageURL || ''}
             experienceId={item.experienceId}
             userExperienceId={item.id}
             isSelectable={selectable}
             onDelete={onDelete}
+            onUnsubscribe={onUnsubscribe}
             selected={selected}
           />
         </div>

@@ -34,7 +34,8 @@ export const ExperienceTabMenuContainer: React.FC = () => {
   const router = useRouter();
 
   // Only load experiences specific to logged user
-  const {loadExperience, experiences, removeExperience} = useExperienceHook();
+  const {loadExperience, experiences, removeExperience, unsubscribeExperience} =
+    useExperienceHook();
   const [myExperience, setMyExperience] = useState<UserExperience[]>([]);
 
   useEffect(() => {
@@ -92,6 +93,12 @@ export const ExperienceTabMenuContainer: React.FC = () => {
     });
   };
 
+  const handleUnsubscribeExperience = (experienceId: string) => {
+    unsubscribeExperience(experienceId, () => {
+      loadExperience();
+    });
+  };
+
   if (anonymous)
     return (
       <>
@@ -109,6 +116,7 @@ export const ExperienceTabMenuContainer: React.FC = () => {
       experiences={myExperience}
       user={user}
       onDelete={handleRemoveExperience}
+      onUnsubscribe={handleUnsubscribeExperience}
     />
   );
 };
