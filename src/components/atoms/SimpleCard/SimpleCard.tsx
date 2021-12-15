@@ -19,14 +19,18 @@ import {useStyles, SimpleCardProps} from '.';
 import {TimelineType} from '../../../interfaces/timeline';
 import {PromptComponent} from '../Prompt/prompt.component';
 
+import ShowIf from 'src/components/common/show-if.component';
+
 const SimpleCard: React.FC<SimpleCardProps> = ({
   user,
   creator,
   title,
   imgUrl,
   isSelectable,
+  subscribed = false,
   filterTimeline,
   onDelete,
+  onUnsubscribe,
   experienceId,
   userExperienceId,
   selected,
@@ -58,6 +62,13 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
   const handleRemove = () => {
     if (userExperienceId && onDelete) onDelete(userExperienceId);
     handleCancel();
+    handleClose();
+  };
+
+  const handleUnsubscribe = () => {
+    if (userExperienceId && onUnsubscribe) {
+      onUnsubscribe(userExperienceId);
+    }
     handleClose();
   };
 
@@ -139,12 +150,26 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
         <Link href={`/experience/${experienceId}/preview`}>
           <MenuItem>See details</MenuItem>
         </Link>
-        <Link href={`/experience/${experienceId}/edit`}>
-          <MenuItem>Edit experience</MenuItem>
-        </Link>
-        <MenuItem onClick={handleOpen} className={classes.delete}>
-          Delete
-        </MenuItem>
+        <ShowIf condition={subscribed}>
+          <Link href={`/experience/${experienceId}/clone`}>
+            <MenuItem>Clone</MenuItem>
+          </Link>
+        </ShowIf>
+        <ShowIf condition={!subscribed}>
+          <Link href={`/experience/${experienceId}/edit`}>
+            <MenuItem>Edit experience</MenuItem>
+          </Link>
+        </ShowIf>
+        <ShowIf condition={subscribed}>
+          <MenuItem onClick={handleUnsubscribe} className={classes.delete}>
+            Unsubscribe
+          </MenuItem>
+        </ShowIf>
+        <ShowIf condition={!subscribed}>
+          <MenuItem onClick={handleOpen} className={classes.delete}>
+            Delete
+          </MenuItem>
+        </ShowIf>
       </Menu>
       <PromptComponent
         onCancel={handleCancel}
