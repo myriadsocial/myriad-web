@@ -2,7 +2,6 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {SendTip} from '.';
-// import {removeMyriad} from '../../helpers/balance';
 import {WalletState} from '../../reducers/wallet/reducer';
 import {BalanceDetail} from '../MyWallet';
 
@@ -36,8 +35,6 @@ export const SendTipContainer: React.FC = () => {
     const defaultCoin = _.remove(newDefaultCoins, function (n) {
       return n.id === defaultCurrencyId;
     });
-
-    // const myriadlessCoins = removeMyriad(newDefaultCoins);
 
     const resultDefaultCoins = [...defaultCoin, ...newDefaultCoins];
 
