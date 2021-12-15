@@ -36,7 +36,17 @@ export const usePolkadotApi = () => {
 
   // TODO: remove only if simplerSendTip works!
   const sendTip = async (
-    {from, to, value, decimals, currencyId, referenceId, contentType, wsAddress, native}: SendTipProps,
+    {
+      from,
+      to,
+      value,
+      decimals,
+      currencyId,
+      referenceId,
+      contentType,
+      wsAddress,
+      native,
+    }: SendTipProps,
     callback?: () => void,
   ) => {
     setLoading(true);

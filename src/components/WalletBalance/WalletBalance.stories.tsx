@@ -25,6 +25,7 @@ WalletBalances.args = {
       decimal: 12,
       rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
       image: 'https://res.cloudinary.com/dsget80gs/coins/ausd.png',
+      native: false,
     },
     {
       freeBalance: 0,
@@ -32,6 +33,7 @@ WalletBalances.args = {
       decimal: 18,
       rpcURL: 'wss://rpc.dev.myriad.systems',
       image: 'https://res.cloudinary.com/dsget80gs/coins/myriad.jpg',
+      native: true,
     },
   ],
 };
