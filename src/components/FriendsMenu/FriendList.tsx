@@ -34,6 +34,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {RootState} from 'src/reducers';
+import {BalanceState} from 'src/reducers/balance/reducer';
 import {blockedFriendList, removedFriendList} from 'src/reducers/friend/actions';
 import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
@@ -54,6 +55,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   const router = useRouter();
 
   const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
+  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentFriend, setCurrentFriend] = useState<null | FriendDetail>(null);
@@ -118,6 +120,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       console.log('no user tipped');
     }
 
+    setSendTipOpened(false);
     setCurrentFriend(null);
   };
 
@@ -373,7 +376,9 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
           open={Boolean(anchorEl)}
           onClose={handleCloseFriendSetting}>
           <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
-          <MenuItem onClick={handleSendTip}>Send direct tip</MenuItem>
+          <MenuItem disabled={balanceDetails.length === 0} onClick={handleSendTip}>
+            Send direct tip
+          </MenuItem>
         </Menu>
       ) : (
         <Menu
@@ -384,7 +389,9 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
           open={Boolean(anchorEl)}
           onClose={handleCloseFriendSetting}>
           <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
-          <MenuItem onClick={handleSendTip}>Send direct tip</MenuItem>
+          <MenuItem disabled={balanceDetails.length === 0} onClick={handleSendTip}>
+            Send direct tip
+          </MenuItem>
           <MenuItem className={style.danger} onClick={handleUnfriend}>
             Unfriend
           </MenuItem>
