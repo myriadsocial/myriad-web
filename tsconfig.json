@@ -32,6 +32,6 @@
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/_error.js"],
   "paths": {
     "@interfaces/*": ["src/interfaces/*"],
-    "@components/*": ["src/components-v2/*"]
+    "@components/*": ["src/components/*"]
   }
 }

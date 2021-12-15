@@ -14,10 +14,10 @@ import {ThemeProvider} from '@material-ui/core/styles';
 import {withStyles, WithStyles} from '@material-ui/core/styles';
 
 import {wrapper} from '../src/store';
-import themeV2 from '../src/themes/light-theme-v2';
+import themeV2 from '../src/themes/light-theme';
 
 import {SnackbarProvider} from 'notistack';
-import {ToasterSnack} from 'src/components-v2/atoms/ToasterSnack';
+import {ToasterSnack} from 'src/components/atoms/ToasterSnack';
 import {AlertProvider} from 'src/context/alert.context';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 

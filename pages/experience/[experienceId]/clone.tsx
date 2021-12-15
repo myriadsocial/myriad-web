@@ -2,8 +2,8 @@ import React from 'react';
 
 import {getSession} from 'next-auth/client';
 
-import {ExperienceCloneContainer} from 'src/components-v2/ExperiencePreview/ExperienceClone.container';
-import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
+import {ExperienceCloneContainer} from 'src/components/ExperiencePreview/ExperienceClone.container';
+import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExperience} from 'src/reducers/experience/actions';

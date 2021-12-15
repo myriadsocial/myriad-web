@@ -3,9 +3,9 @@ import {useSelector} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
 
-import {SocialsContainer} from 'src/components-v2/Socials/Socials.container';
-import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
-import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
+import {SocialsContainer} from 'src/components/Socials/Socials.container';
+import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';

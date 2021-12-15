@@ -4,8 +4,8 @@ import {useSelector} from 'react-redux';
 import {Session} from 'next-auth';
 import {getSession} from 'next-auth/client';
 
-import {SearchResultContainer} from '../src/components-v2/Search/SearchResultContainer';
-import {DefaultLayout} from '../src/components-v2/template/Default/DefaultLayout';
+import {SearchResultContainer} from '../src/components/Search/SearchResultContainer';
+import {DefaultLayout} from '../src/components/template/Default/DefaultLayout';
 import {healthcheck} from '../src/lib/api/healthcheck';
 import {RootState} from '../src/reducers';
 import {fetchAvailableToken} from '../src/reducers/config/actions';

@@ -2,7 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import CustomAvatar from '../components-v2/atoms/Avatar/CustomAvatar';
+import CustomAvatar from '../components/atoms/Avatar/CustomAvatar';
 
 export default {
   title: 'UI Revamp v2.0/atoms',

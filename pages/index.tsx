@@ -6,9 +6,9 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
-import {Login} from 'src/components-v2/Login';
-import AlertComponent from 'src/components-v2/atoms/Alert/Alert.component';
-import {LoginLayout} from 'src/components-v2/template/Login';
+import {Login} from 'src/components/Login';
+import AlertComponent from 'src/components/atoms/Alert/Alert.component';
+import {LoginLayout} from 'src/components/template/Login';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {healthcheck} from 'src/lib/api/healthcheck';
 

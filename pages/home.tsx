@@ -5,12 +5,12 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
-import {RichTextContainer} from '../src/components-v2/Richtext/RichTextContainer';
-import {TimelineContainer} from '../src/components-v2/Timeline/TimelineContainer';
-import {SearchBoxContainer} from '../src/components-v2/atoms/Search/SearchBoxContainer';
-import {DefaultLayout} from '../src/components-v2/template/Default/DefaultLayout';
+import {RichTextContainer} from '../src/components/Richtext/RichTextContainer';
+import {TimelineContainer} from '../src/components/Timeline/TimelineContainer';
+import {SearchBoxContainer} from '../src/components/atoms/Search/SearchBoxContainer';
+import {DefaultLayout} from '../src/components/template/Default/DefaultLayout';
 
-import Banner from 'src/components-v2/atoms/BannerStatus/BannerStatus';
+import Banner from 'src/components/atoms/BannerStatus/BannerStatus';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExperience} from 'src/reducers/experience/actions';
