@@ -15,6 +15,7 @@ import {
   subscribeExperience,
   updateExperience,
   deleteExperience,
+  unsubscribeExperience,
 } from '../reducers/experience/actions';
 import {ExperienceState} from '../reducers/experience/reducer';
 
@@ -119,6 +120,14 @@ export const useExperienceHook = () => {
     dispatch(deleteExperience(experienceId, callback));
   };
 
+  const beUnsubscribeExperience = (experienceId: string, callback?: () => void) => {
+    dispatch(
+      unsubscribeExperience(experienceId, () => {
+        loadExperience();
+      }),
+    );
+  };
+
   return {
     searchPeople: findPeople,
     searchExperience: findExperience,
@@ -138,5 +147,6 @@ export const useExperienceHook = () => {
     subscribeExperience: beSubscribeExperience,
     updateExperience: editExperience,
     removeExperience,
+    unsubscribeExperience: beUnsubscribeExperience,
   };
 };

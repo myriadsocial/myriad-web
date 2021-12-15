@@ -431,3 +431,36 @@ export const deleteExperience: ThunkActionCreator<Actions, RootState> =
       dispatch(setLoading(false));
     }
   };
+
+export const unsubscribeExperience: ThunkActionCreator<Actions, RootState> =
+  (experienceId: string, callback?: () => void) => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      await ExperienceAPI.unsubscribeExperience(experienceId);
+
+      callback && callback();
+
+      await dispatch(
+        showToasterSnack({
+          variant: 'success',
+          message: 'unsubscribed successfully!',
+        }),
+      );
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };

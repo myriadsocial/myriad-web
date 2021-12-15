@@ -146,6 +146,13 @@ export const subscribeExperience = async (userId: string, experienceId: string):
   });
 };
 
+export const unsubscribeExperience = async (userExperienceId: string): Promise<void> => {
+  await MyriadAPI.request<Experience>({
+    url: `/user-experiences/${userExperienceId}`,
+    method: 'DELETE',
+  });
+};
+
 export const updateExperience = async (
   userId: string,
   experienceId: string,
