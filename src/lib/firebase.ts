@@ -1,10 +1,43 @@
 import getConfig from 'next/config';
 
 import firebase from 'firebase/app';
-import 'firebase/messaging';
 import localforage from 'localforage';
 
 const {publicRuntimeConfig} = getConfig();
+
+const firebaseApp = {
+  init: async function (): Promise<void | boolean> {
+    if (!firebase.apps.length) {
+      firebase.initializeApp({
+        apiKey: publicRuntimeConfig.firebaseAPIKey,
+        projectId: publicRuntimeConfig.firebaseProjectId,
+        messagingSenderId: publicRuntimeConfig.firebaseMessagingSenderId,
+        appId: publicRuntimeConfig.firebaseAppId,
+        measurementId: publicRuntimeConfig.firebaseMeasurementId,
+      });
+    }
+  },
+};
+
+const firebaseAnalytics = {
+  init: async function (): Promise<void | boolean> {
+    try {
+      firebase.analytics();
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
+  logScreenView: async function (screenName: string): Promise<void | boolean> {
+    try {
+      const analytics = firebase.analytics();
+      analytics.setCurrentScreen(screenName);
+      analytics.logEvent('screen_view');
+    } catch (error) {
+      console.error(error);
+    }
+  },
+};
 
 const firebaseCloudMessaging = {
   getToken: async (): Promise<string | null> => {
@@ -16,15 +49,6 @@ const firebaseCloudMessaging = {
   },
 
   init: async function (): Promise<void | boolean> {
-    if (!firebase.apps.length) {
-      firebase.initializeApp({
-        apiKey: publicRuntimeConfig.firebaseAPIKey,
-        projectId: publicRuntimeConfig.firebaseProjectId,
-        messagingSenderId: publicRuntimeConfig.firebaseMessagingSenderId,
-        appId: publicRuntimeConfig.firebaseAppId,
-      });
-    }
-
     try {
       if ((await this.getToken()) !== null) {
         return false;
@@ -58,4 +82,4 @@ const firebaseCloudMessaging = {
   },
 };
 
-export {firebaseCloudMessaging};
+export {firebaseApp, firebaseAnalytics, firebaseCloudMessaging};
