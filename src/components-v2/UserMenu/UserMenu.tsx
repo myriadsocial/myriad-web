@@ -41,7 +41,7 @@ export const UserMenu: React.FC<UserMenuProps> = props => {
         tabs={tabs}
         active={activeTab}
         onChangeTab={handleTabChange}
-        background={tabs.filter(tab => tab.id === activeTab)[0].background}
+        background={tabs.filter(tab => tab.id === activeTab)[0]?.background}
         size="small"
       />
     </Paper>
