@@ -8,6 +8,7 @@ firebase.initializeApp({
   projectId: NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   messagingSenderId: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 });
 
 const messaging = firebase.messaging();

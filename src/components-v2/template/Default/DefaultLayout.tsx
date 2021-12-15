@@ -13,7 +13,7 @@ import useStyles from './DefaultLayout.styles';
 import {withError, WithErrorProps} from 'src/components-v2/Error';
 import ShowIf from 'src/components-v2/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
-import {firebaseCloudMessaging} from 'src/lib/firebase';
+import {firebaseApp, firebaseAnalytics, firebaseCloudMessaging} from 'src/lib/firebase';
 import {countNewNotification} from 'src/reducers/notification/actions';
 
 const WalletBalancesContainer = dynamic(
@@ -38,8 +38,14 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
-    initializeMessaging();
+    initializeFirebase();
   }, []);
+
+  const initializeFirebase = async () => {
+    await firebaseApp.init();
+    await firebaseAnalytics.init();
+    await initializeMessaging();
+  };
 
   const initializeMessaging = async () => {
     await firebaseCloudMessaging.init();
