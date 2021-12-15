@@ -29,4 +29,5 @@ export interface SendTipProps {
   referenceId: string;
   contentType: ContentType;
   wsAddress: string;
+  native: boolean;
 }

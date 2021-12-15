@@ -36,7 +36,7 @@ export const usePolkadotApi = () => {
 
   // TODO: remove only if simplerSendTip works!
   const sendTip = async (
-    {from, to, value, decimals, currencyId, referenceId, contentType, wsAddress}: SendTipProps,
+    {from, to, value, decimals, currencyId, referenceId, contentType, wsAddress, native}: SendTipProps,
     callback?: () => void,
   ) => {
     setLoading(true);
@@ -52,6 +52,7 @@ export const usePolkadotApi = () => {
           value,
           currencyId,
           wsAddress,
+          native,
         },
         params => {
           if (params.signerOpened) {
@@ -141,6 +142,7 @@ export const usePolkadotApi = () => {
           value: correctedAmount,
           currencyId: currency.id,
           wsAddress: currency.rpcURL,
+          native: currency.native,
         },
         params => {
           if (params.signerOpened) {

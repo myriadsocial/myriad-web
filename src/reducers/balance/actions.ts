@@ -5,7 +5,7 @@ import * as constants from './constants';
 import {Action} from 'redux';
 import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {Currency, CurrencyId} from 'src/interfaces/currency';
+import {Currency} from 'src/interfaces/currency';
 import {connectToBlockchain} from 'src/lib/services/polkadot-js';
 import {ThunkActionCreator} from 'src/types/thunk';
 
@@ -39,47 +39,29 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
         const api = await connectToBlockchain(provider);
 
         if (api) {
-          switch (availableTokens[i].id) {
-            case CurrencyId.MYRIA: {
-              const {data: balance} = await api.query.system.account(address);
-              const tempBalance = balance.free as unknown;
-              tokenBalances.push({
-                freeBalance: formatNumber(tempBalance as number, availableTokens[i].decimal),
-                id: availableTokens[i].id,
-                decimal: availableTokens[i].decimal,
-                rpcURL: provider,
-                image: availableTokens[i].image,
-              });
-              break;
-            }
-
-            //TODO: make enum based on rpc_address, collect the api calls and use multiqueries
-            case CurrencyId.ACA: {
-              const {data: balance} = await api.query.system.account(address);
-              const tempBalance = balance.free as unknown;
-              tokenBalances.push({
-                freeBalance: formatNumber(tempBalance as number, availableTokens[i].decimal),
-                id: availableTokens[i].id,
-                decimal: availableTokens[i].decimal,
-                rpcURL: provider,
-                image: availableTokens[i].image,
-              });
-              break;
-            }
-
-            // should be for tokens of Acala, e.g. AUSD, DOT
-            default: {
-              const tokenData: any = await api.query.tokens.accounts(address, {
-                TOKEN: availableTokens[i].id,
-              });
-              tokenBalances.push({
-                freeBalance: formatNumber(tokenData.free as number, availableTokens[i].decimal),
-                id: availableTokens[i].id,
-                decimal: availableTokens[i].decimal,
-                rpcURL: provider,
-                image: availableTokens[i].image,
-              });
-            }
+          if (availableTokens[i].native) {
+            const {data: balance} = await api.query.system.account(address);
+            const tempBalance = balance.free as unknown;
+            tokenBalances.push({
+              freeBalance: formatNumber(tempBalance as number, availableTokens[i].decimal),
+              id: availableTokens[i].id,
+              decimal: availableTokens[i].decimal,
+              rpcURL: provider,
+              image: availableTokens[i].image,
+              native: availableTokens[i].native,
+            });
+          } else {
+            const tokenData: any = await api.query.tokens.accounts(address, {
+              TOKEN: availableTokens[i].id,
+            });
+            tokenBalances.push({
+              freeBalance: formatNumber(tokenData.free as number, availableTokens[i].decimal),
+              id: availableTokens[i].id,
+              decimal: availableTokens[i].decimal,
+              rpcURL: provider,
+              image: availableTokens[i].image,
+              native: availableTokens[i].native,
+            });
           }
 
           await api.disconnect();
