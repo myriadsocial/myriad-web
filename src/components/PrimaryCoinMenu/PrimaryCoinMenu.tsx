@@ -7,7 +7,6 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '.';
-import {removeMyriad} from '../../helpers/balance';
 import {User} from '../../interfaces/user';
 import {changeDefaultCurrency} from '../../lib/api/token';
 import {setDefaultCurrency} from '../../reducers/user/actions';
@@ -36,9 +35,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
       return n.id === defaultCurrencyId;
     });
 
-    const myriadlessCoins = removeMyriad(newDefaultCoins);
-
-    const resultDefaultCoins = [...defaultCoin, ...myriadlessCoins];
+    const resultDefaultCoins = [...defaultCoin, ...newDefaultCoins];
 
     return resultDefaultCoins;
   };

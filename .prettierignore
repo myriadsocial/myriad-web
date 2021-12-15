@@ -6,6 +6,7 @@ dist/
 storybook-static/
 docs/
 src/lottie/
+src/lib/firebase.ts
 node_modules/
 /public/sw-env.js
 *.tsbuildinfo

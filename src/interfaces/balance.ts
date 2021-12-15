@@ -4,4 +4,5 @@ export type BalanceDetail = {
   decimal: number;
   image: string;
   rpcURL: string;
+  native: boolean;
 };
