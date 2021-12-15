@@ -6,7 +6,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 import localforage from 'localforage';
 import {delay} from 'lodash';
-import theme from 'src/themes/light';
+import theme from 'src/themes/light-theme';
 
 type TourConfig = {
   index: number;

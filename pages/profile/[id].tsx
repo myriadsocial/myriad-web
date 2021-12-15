@@ -9,8 +9,8 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
-import {ProfileTimeline} from 'src/components-v2/Profile/ProfileComponent';
-import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
+import {ProfileTimeline} from 'src/components/Profile/ProfileComponent';
+import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';

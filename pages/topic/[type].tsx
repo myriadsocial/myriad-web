@@ -5,9 +5,9 @@ import {useRouter} from 'next/router';
 
 import {capitalize} from '@material-ui/core';
 
-import {TimelineContainer} from 'src/components-v2/Timeline/TimelineContainer';
-import {TopNavbarComponent} from 'src/components-v2/atoms/TopNavbar';
-import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
+import {TimelineContainer} from 'src/components/Timeline/TimelineContainer';
+import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
+import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {Experience} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
 import * as ExperienceAPI from 'src/lib/api/experience';

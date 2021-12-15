@@ -5,7 +5,7 @@ import React from 'react';
 import {NextPage} from 'next';
 import NextErrorComponent, {ErrorProps} from 'next/error';
 
-import {Error as ErrorComponent} from 'src/components-v2/Error';
+import {Error as ErrorComponent} from 'src/components/Error';
 
 interface AppErrorProps extends ErrorProps {
   err?: Error;

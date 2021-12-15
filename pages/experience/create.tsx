@@ -2,9 +2,9 @@ import React from 'react';
 
 import {getSession} from 'next-auth/client';
 
-import {DefaultLayout} from '../../src/components-v2/template/Default/DefaultLayout';
+import {DefaultLayout} from '../../src/components/template/Default/DefaultLayout';
 
-import {ExperienceContainer} from 'src/components-v2/ExperienceEditor/Experience.container';
+import {ExperienceContainer} from 'src/components/ExperienceEditor/Experience.container';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExperience} from 'src/reducers/experience/actions';

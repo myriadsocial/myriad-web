@@ -2,7 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {WelcomeModule} from '../components-v2/WelcomeModule/WelcomeModule';
+import {WelcomeModule} from '../components/WelcomeModule/WelcomeModule';
 
 export default {
   title: 'UI Revamp v2.0/components/Welcome Module',

@@ -2,7 +2,7 @@ import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
-import {ExperienceType} from 'src/components-v2/Timeline/default';
+import {ExperienceType} from 'src/components/Timeline/default';
 import {Experience, UserExperience} from 'src/interfaces/experience';
 
 type ExperienceList = BaseList<Experience>;

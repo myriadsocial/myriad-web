@@ -9,7 +9,7 @@ import {
   buttonSizes,
   buttonColors,
   buttonVariants,
-} from '../components-v2/atoms/Button';
+} from '../components/atoms/Button';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Button',

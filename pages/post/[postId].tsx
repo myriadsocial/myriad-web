@@ -8,12 +8,12 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import axios from 'axios';
-import {PostContainer} from 'src/components-v2/PostDedicated/PostDedicated.container';
-import {deserialize, formatToString} from 'src/components-v2/PostEditor';
-import {ResourceDeleted} from 'src/components-v2/ResourceDeleted';
-import {TopNavbarComponent, SectionTitle} from 'src/components-v2/atoms/TopNavbar';
-import ShowIf from 'src/components-v2/common/show-if.component';
-import {DefaultLayout} from 'src/components-v2/template/Default/DefaultLayout';
+import {PostContainer} from 'src/components/PostDedicated/PostDedicated.container';
+import {deserialize, formatToString} from 'src/components/PostEditor';
+import {ResourceDeleted} from 'src/components/ResourceDeleted';
+import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import ShowIf from 'src/components/common/show-if.component';
+import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
 import {FriendStatus} from 'src/interfaces/friend';
 import {Post, PostVisibility} from 'src/interfaces/post';

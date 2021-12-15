@@ -4,8 +4,8 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
-import {PostContainer} from 'src/components-v2/PostDedicated/PostDedicated.container';
-import {formatToString} from 'src/components-v2/PostEditor';
+import {PostContainer} from 'src/components/PostDedicated/PostDedicated.container';
+import {formatToString} from 'src/components/PostEditor';
 import {generateAnonymousUser} from 'src/helpers/auth';
 import {PostVisibility} from 'src/interfaces/post';
 import {healthcheck} from 'src/lib/api/healthcheck';

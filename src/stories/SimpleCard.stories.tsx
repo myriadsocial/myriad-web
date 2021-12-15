@@ -2,7 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {SimpleCard} from '../components-v2/atoms/SimpleCard';
+import {SimpleCard} from '../components/atoms/SimpleCard';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Simple Card',

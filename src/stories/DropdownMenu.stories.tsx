@@ -2,7 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {DropdownMenu} from '../components-v2/atoms/DropdownMenu/DropdownMenu';
+import {DropdownMenu} from '../components/atoms/DropdownMenu/DropdownMenu';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Dropdown Menu',

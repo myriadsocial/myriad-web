@@ -2,7 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {ToasterSnack} from '../components-v2/atoms/ToasterSnack';
+import {ToasterSnack} from '../components/atoms/ToasterSnack';
 
 export default {
   title: 'UI Revamp v2.0/atoms/ToasterSnack',

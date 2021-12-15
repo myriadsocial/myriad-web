@@ -2,7 +2,7 @@ import React from 'react';
 
 import {getSession} from 'next-auth/client';
 
-import {WelcomeContainer} from 'src/components-v2/WelcomeModule/Welcome.container';
+import {WelcomeContainer} from 'src/components/WelcomeModule/Welcome.container';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {setAnonymous, setUser} from 'src/reducers/user/actions';

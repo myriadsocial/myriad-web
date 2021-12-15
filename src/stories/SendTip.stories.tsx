@@ -2,7 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {SendTip} from '../components-v2/SendTip/SendTip';
+import {SendTip} from '../components/SendTip/SendTip';
 
 export default {
   title: 'UI Revamp v2.0/components/SendTip',

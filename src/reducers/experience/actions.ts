@@ -10,7 +10,7 @@ import {ShowToasterSnack, showToasterSnack} from '../toaster-snack/actions';
 import * as constants from './constants';
 
 import {Action} from 'redux';
-import {ExperienceType} from 'src/components-v2/Timeline/default';
+import {ExperienceType} from 'src/components/Timeline/default';
 
 /**
  * Action Types
