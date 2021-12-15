@@ -4,6 +4,8 @@ import * as Sentry from '@sentry/nextjs';
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {Keyring} from '@polkadot/keyring';
 
+const BN = require('bn.js');
+
 export const connectToBlockchain = async (wsProvider: string): Promise<ApiPromise> => {
   const provider = new WsProvider(wsProvider);
   const api: ApiPromise = new ApiPromise(options({provider}));
@@ -17,6 +19,7 @@ interface signAndSendExtrinsicProps {
   value: number;
   currencyId: string;
   wsAddress: string;
+  native: boolean;
 }
 
 interface SignTransactionCallbackProps {
@@ -25,7 +28,7 @@ interface SignTransactionCallbackProps {
 }
 
 export const signAndSendExtrinsic = async (
-  {from, to, value, currencyId, wsAddress}: signAndSendExtrinsicProps,
+  {from, to, value, currencyId, wsAddress, native}: signAndSendExtrinsicProps,
   callback?: (param: SignTransactionCallbackProps) => void,
 ): Promise<string | null> => {
   try {
@@ -63,10 +66,9 @@ export const signAndSendExtrinsic = async (
           });
         if (api) {
           // here we use the api to create a balance transfer to some account of a value of 12345678
-          const transferExtrinsic =
-            currencyId === 'ACA'
-              ? api.tx.balances.transfer(to, value)
-              : api.tx.currencies.transfer(to, {TOKEN: currencyId}, value);
+          const transferExtrinsic = native
+            ? api.tx.balances.transfer(to, new BN(value.toString()))
+            : api.tx.currencies.transfer(to, {TOKEN: currencyId}, value);
 
           // to be able to retrieve the signer interface from this account
           // we can use web3FromSource which will return an InjectedExtension type
@@ -101,6 +103,7 @@ export const signAndSendExtrinsic = async (
     // return null if no txHash is produced
     return null;
   } catch (error) {
+    console.log(error);
     Sentry.captureException(error);
     return error;
   }
