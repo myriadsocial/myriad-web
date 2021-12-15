@@ -93,7 +93,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     if (!currentFriend) {
       router.push('/404');
     } else {
-      router.push(`/profile/${currentFriend.id}`);
+      router.push(`/profile/${currentFriend.id}`, undefined, {shallow: true});
     }
 
     handleCloseFriendSetting();
