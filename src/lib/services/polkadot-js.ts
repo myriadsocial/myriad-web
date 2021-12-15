@@ -4,7 +4,7 @@ import * as Sentry from '@sentry/nextjs';
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {Keyring} from '@polkadot/keyring';
 
-const BN = require('bn.js');
+import BN from 'bn.js';
 
 export const connectToBlockchain = async (wsProvider: string): Promise<ApiPromise> => {
   const provider = new WsProvider(wsProvider);
