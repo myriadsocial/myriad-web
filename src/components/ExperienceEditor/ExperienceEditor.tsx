@@ -113,6 +113,14 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     debounceSubmit();
   };
 
+  const clearSearchPeople = () => {
+    const debounceSubmit = debounce(() => {
+      onSearchPeople('');
+    }, 300);
+
+    debounceSubmit();
+  };
+
   const handleImageUpload = async (files: File[]) => {
     setIsloading(true);
     const url = await onImageUpload(files);
@@ -174,6 +182,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         people: [...people, ...value.filter(option => people.indexOf(option) === -1)],
       }));
     }
+    clearSearchPeople();
   };
 
   const removeSelectedPeople = (selected: People) => () => {
@@ -268,7 +277,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         getOptionLabel={option => option.name}
         disableClearable
         autoHighlight={false}
-        popupIcon={<SvgIcon component={SearchIcon} />}
+        popupIcon={<SvgIcon component={SearchIcon} viewBox={'0 0 20 20'} />}
         onChange={handlePeopleChange}
         renderTags={() => null}
         renderInput={params => (
@@ -296,9 +305,9 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
               action={
                 <IconButton className={styles.removePeople}>
                   {state.selected ? (
-                    <SvgIcon component={XCircleIcon} color="error" />
+                    <SvgIcon component={XCircleIcon} color="error" viewBox={'0 0 20 20'} />
                   ) : (
-                    <SvgIcon component={PlusCircleIcon} />
+                    <SvgIcon component={PlusCircleIcon} viewBox={'0 0 20 20'} />
                   )}
                 </IconButton>
               }
@@ -321,7 +330,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
               platform={people.platform}
               action={
                 <IconButton onClick={removeSelectedPeople(people)}>
-                  <SvgIcon component={XCircleIcon} color="error" />
+                  <SvgIcon component={XCircleIcon} color="error" viewBox={'0 0 20 20'} />
                 </IconButton>
               }
             />
