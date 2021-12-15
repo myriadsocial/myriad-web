@@ -8,6 +8,7 @@ type CurrencyDetail = {
 
 type BalanceDetail = CurrencyDetail & {
   freeBalance: number;
+  native: boolean;
 };
 
 type MyWalletProps = {
