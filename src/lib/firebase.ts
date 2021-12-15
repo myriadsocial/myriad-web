@@ -1,6 +1,8 @@
 import getConfig from 'next/config';
 
 import firebase from 'firebase/app';
+import 'firebase/analytics';
+import 'firebase/messaging';
 import localforage from 'localforage';
 
 const {publicRuntimeConfig} = getConfig();
