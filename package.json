@@ -74,6 +74,7 @@
     "@storybook/cli": "^6.3.7",
     "@udecode/plate": "^3.1.0",
     "axios": "^0.21.1",
+    "bn.js": "^5.2.0",
     "datauri": "^3.0.0",
     "date-fns": "^2.19.0",
     "detect-browser": "^5.2.1",
