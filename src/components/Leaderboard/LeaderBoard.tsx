@@ -35,8 +35,6 @@ export const LeaderBoardComponent: React.FC = () => {
 
   const hasMore = leaderboard.length < meta.totalItemCount && meta.currentPage < limit;
 
-  const hasMore = leaderboard.length < meta.totalItemCount;
-
   React.useEffect(() => {
     fetchLeaderboard();
   }, []);
