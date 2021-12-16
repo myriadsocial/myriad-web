@@ -87,7 +87,8 @@ export const fetchTransactions: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchTransactionsIncludingCurrency: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
+  (page = 1) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
@@ -106,6 +107,7 @@ export const fetchTransactionsIncludingCurrency: ThunkActionCreator<Actions, Roo
 
       const {data: transactions, meta} = await TransactionAPI.getTransactionsIncludingCurrency(
         options,
+        page,
       );
 
       if (transactions.length > 0) {

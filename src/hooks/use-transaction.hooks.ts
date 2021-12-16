@@ -10,7 +10,7 @@ import {UserState} from 'src/reducers/user/reducer';
 export const useTransaction = () => {
   const dispatch = useDispatch();
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {transactions, inboundTxs, outboundTxs} = useSelector<RootState, TransactionState>(
+  const {transactions, inboundTxs, outboundTxs, meta} = useSelector<RootState, TransactionState>(
     state => state.transactionState,
   );
   const [loading, setLoading] = useState(false);
@@ -29,13 +29,14 @@ export const useTransaction = () => {
     setLoading(false);
   };
 
-  const loadTransactionsWithCurrency = async () => {
+  const loadTransactionsWithCurrency = async (page?: number) => {
+    const currentPage = page ? page : 1;
     if (!user) return;
 
     setLoading(true);
 
     try {
-      dispatch(fetchTransactionsIncludingCurrency());
+      dispatch(fetchTransactionsIncludingCurrency(currentPage));
     } catch (error) {
       setError(error);
     }
@@ -45,6 +46,7 @@ export const useTransaction = () => {
   return {
     error,
     loading,
+    meta,
     transactions: transactions,
     inboundTxs: inboundTxs,
     outboundTxs: outboundTxs,
