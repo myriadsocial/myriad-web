@@ -7,15 +7,24 @@ export const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.background.paper,
       paddingLeft: 0,
     },
+    infiniteScroll: {
+      width: '100%',
+    },
     tableRow: {
       '& .MuiTableCell-root': {
         borderBottom: 'none',
         paddingRight: 0,
+        width: '100%',
       },
-      paddingTop: theme.spacing(1.25),
-      paddingBottom: theme.spacing(1.25),
+      display: 'flex',
+      alignItems: 'center',
     },
     tableCell: {
+      '& .MuiTableCell-root': {
+        borderBottom: 'none',
+        paddingRight: 0,
+        width: '100%',
+      },
       display: 'flex',
       justifyContent: 'flex-start',
       alignItems: 'center',
@@ -46,6 +55,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 80,
       height: 24,
       borderRadius: 2,
+      marginLeft: theme.spacing(6),
       background: theme.status.success.surface,
       '& .MuiTypography-root': {
         color: theme.status.success.pressed,
@@ -56,6 +66,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 80,
       height: 24,
       borderRadius: 2,
+      marginLeft: theme.spacing(6),
       background: theme.status.danger.surface,
       '& .MuiTypography-root': {
         color: theme.status.danger.pressed,
