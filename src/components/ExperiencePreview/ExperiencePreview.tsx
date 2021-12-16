@@ -4,7 +4,7 @@ import {Typography} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 
-import {Experience} from '../../interfaces/experience';
+import {Experience, UserExperience} from '../../interfaces/experience';
 import {useStyles} from './experience.style';
 
 import {ListItemPeopleComponent} from 'src/components/atoms/ListItem/ListItemPeople';
@@ -12,14 +12,17 @@ import {acronym} from 'src/helpers/string';
 
 type Props = {
   experience: Experience;
+  userExperiences: UserExperience[];
   userId: string;
   onSubscribe: (experienceId: string) => void;
+  onUnsubscribe: (userExperienceId: string) => void;
   onFollow: (experienceId: string) => void;
   onUpdate: (experienceId: string) => void;
 };
 
 export const ExperiencePreview: React.FC<Props> = props => {
-  const {experience, userId, onSubscribe, onFollow, onUpdate} = props;
+  const {experience, userExperiences, userId, onSubscribe, onUnsubscribe, onFollow, onUpdate} =
+    props;
   const style = useStyles();
 
   const parsingTags = () => {
@@ -41,6 +44,20 @@ export const ExperiencePreview: React.FC<Props> = props => {
 
   const handleSubscribeExperience = () => {
     onSubscribe(experience.id);
+  };
+
+  const handleUnsubscribeExperience = () => {
+    onUnsubscribe(
+      userExperiences.filter(ar => ar.experienceId === experience.id && ar.subscribed === true)[0]
+        .id,
+    );
+  };
+
+  const isSubscribed = () => {
+    return (
+      userExperiences.filter(ar => ar.experienceId === experience.id && ar.subscribed === true)
+        .length > 0
+    );
   };
 
   const handleCloneExperience = () => {
@@ -97,8 +114,11 @@ export const ExperiencePreview: React.FC<Props> = props => {
           <Button variant="outlined" color="secondary" onClick={handleCloneExperience}>
             Clone
           </Button>
-          <Button variant="contained" color="primary" onClick={handleSubscribeExperience}>
-            Subscribe
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={isSubscribed() ? handleUnsubscribeExperience : handleSubscribeExperience}>
+            {isSubscribed() ? 'Unsubscribe' : 'Subscribe'}
           </Button>
         </div>
       )}
