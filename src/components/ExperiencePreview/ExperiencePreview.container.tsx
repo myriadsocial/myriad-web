@@ -13,7 +13,13 @@ import {UserState} from 'src/reducers/user/reducer';
 
 export const ExperiencePreviewContainer: React.FC = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {experience, getDetail, subscribeExperience} = useExperienceHook();
+  const {
+    experience,
+    experiences: userExperience,
+    getDetail,
+    subscribeExperience,
+    unsubscribeExperience,
+  } = useExperienceHook();
   const style = useStyles();
   const router = useRouter();
   const {experienceId} = router.query;
@@ -24,6 +30,10 @@ export const ExperiencePreviewContainer: React.FC = () => {
 
   const handleSubscribeExperience = (experienceId: string) => {
     subscribeExperience(experienceId);
+  };
+
+  const handleUnsubscribeExperience = (userExperienceId: string) => {
+    unsubscribeExperience(userExperienceId);
   };
 
   const handleCloneExperience = (experienceId: string) => {
@@ -46,8 +56,10 @@ export const ExperiencePreviewContainer: React.FC = () => {
           </div>
           <ExperiencePreview
             experience={experience}
+            userExperiences={userExperience}
             userId={user.id}
             onSubscribe={handleSubscribeExperience}
+            onUnsubscribe={handleUnsubscribeExperience}
             onFollow={handleCloneExperience}
             onUpdate={handleEditExperience}
           />
