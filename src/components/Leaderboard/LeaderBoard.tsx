@@ -1,6 +1,7 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import getConfig from 'next/config';
 import Link from 'next/link';
 
 import {
@@ -9,6 +10,8 @@ import {
   ListItemAvatar,
   ListItemText,
   Table,
+  Button,
+  Typography,
   TableBody,
   TableCell,
   TableContainer,
@@ -16,8 +19,6 @@ import {
   Grid,
   TableRow,
 } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './leaderboard.styles';
 import {useLeaderboard} from './use-leaderboard-hook';
@@ -28,17 +29,18 @@ import {acronym} from 'src/helpers/string';
 import MyriadIcon from 'src/images/web/myriad.svg';
 
 export const LeaderBoardComponent: React.FC = () => {
-  const {leaderboard, fetchLeaderboard, loading, meta} = useLeaderboard();
+  const {leaderboard, fetchLeaderboard, loading, meta, limit} = useLeaderboard();
   const style = useStyles();
+  const {publicRuntimeConfig} = getConfig();
 
-  const hasMore = leaderboard.length < meta.totalItemCount;
+  const hasMore = leaderboard.length < meta.totalItemCount && meta.currentPage < limit;
 
   React.useEffect(() => {
     fetchLeaderboard();
   }, []);
 
   const onLoadNextPage = () => {
-    if (meta.currentPage < meta.totalPageCount) {
+    if (meta.currentPage < meta.totalPageCount && meta.currentPage < limit) {
       fetchLeaderboard(meta.currentPage + 1);
     }
   };
@@ -48,8 +50,8 @@ export const LeaderBoardComponent: React.FC = () => {
       <div className={style.container}>
         <div className={style.header}>
           <div className={style.header}>
-            <Link href="https://myriad.social">
-              <a href={'https://myriad.social'} rel="noreferrer">
+            <Link href={publicRuntimeConfig.myriadWebsite}>
+              <a href={publicRuntimeConfig.myriadWebsite} rel="noreferrer">
                 <MyriadIcon />
               </a>
             </Link>

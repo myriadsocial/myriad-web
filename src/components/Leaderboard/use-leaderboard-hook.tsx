@@ -5,6 +5,7 @@ import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import * as LeaderboardAPI from 'src/lib/api/leaderboard';
 
 export const useLeaderboard = () => {
+  const limit = 1000;
   const [loading, setLoading] = useState(false);
   const [leaderboard, setLeaderboard] = useState<User[]>([]);
   const [_meta, setMeta] = useState<ListMeta>({
@@ -35,5 +36,6 @@ export const useLeaderboard = () => {
     fetchLeaderboard,
     loading,
     meta: _meta,
+    limit,
   };
 };
