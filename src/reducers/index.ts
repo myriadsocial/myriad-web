@@ -2,6 +2,7 @@ import {BalanceReducer} from './balance/reducer';
 import {BaseReducer} from './base/reducer';
 import {BlockReducer} from './block/reducer';
 import {ConfigReducer} from './config/reducer';
+import {ExchangeRateReducer} from './exchange-rate/reducer';
 import {ExperienceReducer} from './experience/reducer';
 import {FriendRequestReducer} from './friend-request/reducer';
 import {FriendReducer} from './friend/reducer';
@@ -35,6 +36,7 @@ const reducers = {
   transactionState: TransactionReducer,
   experienceState: ExperienceReducer,
   peopleState: PeopleReducer,
+  exchangeRateState: ExchangeRateReducer,
 
   toasterSnackState: ToasterSnackReducer,
   blockState: BlockReducer,
