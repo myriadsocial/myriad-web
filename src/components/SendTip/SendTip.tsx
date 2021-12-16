@@ -107,7 +107,9 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const input = e.target.value;
-    setTipAmount(input);
+    if (input.length <= 10) {
+      setTipAmount(input);
+    }
   };
 
   const checkTipLength = (tipAmount: string) => {
@@ -195,6 +197,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                 onChange={handleChangeAmount}
                 type="number"
                 variant="outlined"
+                inputProps={{min: 0}}
                 error={Number(tipAmount) > setMaxTippable() || lengthError ? true : false}
                 helperText={
                   lengthError
