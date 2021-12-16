@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import List from '@material-ui/core/List';
@@ -22,7 +23,15 @@ import {useStyles} from './history-detail-list.styles';
 
 import {formatDistanceStrict} from 'date-fns';
 import _ from 'lodash';
+import {Loading} from 'src/components/atoms/Loading';
 import {CurrencyId} from 'src/interfaces/currency';
+
+type metaTrxProps = {
+  currentPage: number;
+  itemsPerPage: number;
+  nextPage?: number;
+  totalPageCount: number;
+};
 
 type HistoryDetailListProps = {
   allTxs: Transaction[];
@@ -30,10 +39,12 @@ type HistoryDetailListProps = {
   inboundTxs: Transaction[];
   isLoading: boolean;
   userId: string;
+  meta: metaTrxProps;
+  nextPage: () => void;
 };
 
 export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
-  const {allTxs, isLoading, inboundTxs, outboundTxs, userId} = props;
+  const {allTxs, meta, isLoading, inboundTxs, outboundTxs, userId, nextPage} = props;
 
   useEffect(() => {
     const newArray = allTxs.map(tx => ({
@@ -166,79 +177,84 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                 <CircularProgress />
               </TableRow>
             )}
-            {defaultTxs.length > 0 &&
-              defaultTxs.map(tx => (
-                <TableRow key={tx.id} className={classes.tableRow}>
-                  <TableCell component="th" scope="row" className={classes.tableCell}>
-                    <CustomAvatar
-                      size={CustomAvatarSize.MEDIUM}
-                      alt={tx.toUser?.id === userId ? tx.fromUser?.id : tx.toUser?.id}
-                      avatar={
-                        tx.toUser?.id === userId
-                          ? tx.fromUser?.profilePictureURL ?? namePlaceholder
-                          : tx.toUser?.profilePictureURL ?? namePlaceholder
-                      }
-                      name={
-                        tx.toUser?.id === userId
-                          ? tx.fromUser?.name ?? namePlaceholder
-                          : tx.toUser?.name ?? namePlaceholder
-                      }
-                    />
+            <InfiniteScroll
+              dataLength={allTxs.length}
+              hasMore={meta.currentPage < meta.totalPageCount}
+              next={nextPage}
+              loader={<Loading />}
+              className={classes.infiniteScroll}>
+              {defaultTxs.length > 0 &&
+                defaultTxs.map(tx => (
+                  <TableRow key={tx.id} className={classes.tableRow}>
+                    <TableCell component="th" scope="row" className={classes.tableCell}>
+                      <CustomAvatar
+                        size={CustomAvatarSize.MEDIUM}
+                        alt={tx.toUser?.id === userId ? tx.fromUser?.id : tx.toUser?.id}
+                        avatar={
+                          tx.toUser?.id === userId
+                            ? tx.fromUser?.profilePictureURL ?? namePlaceholder
+                            : tx.toUser?.profilePictureURL ?? namePlaceholder
+                        }
+                        name={
+                          tx.toUser?.id === userId
+                            ? tx.fromUser?.name ?? namePlaceholder
+                            : tx.toUser?.name ?? namePlaceholder
+                        }
+                      />
 
-                    <div>
-                      <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                        {tx.toUser?.id === userId
-                          ? tx.fromUser?.name ?? namePlaceholder
-                          : tx.toUser?.name ?? namePlaceholder}
-                      </Typography>
-                      <Typography variant="caption" color="textSecondary">
-                        {formatTimeAgo(tx.createdAt)}
-                      </Typography>
-                    </div>
-                  </TableCell>
-
-                  <TableCell align="center">
-                    {tx.toUser?.id === userId && (
-                      <div className={classes.tipStatusGreen}>
-                        <Typography variant="caption">Tipped</Typography>
-                      </div>
-                    )}
-                    {tx.fromUser?.id === userId && (
-                      <div className={classes.tipStatusRed}>
-                        <Typography variant="caption">Received</Typography>
-                      </div>
-                    )}
-                  </TableCell>
-
-                  <TableCell align="right">
-                    <div className={classes.currencyDetailWrapper}>
                       <div>
-                        {tx.toUser?.id === userId && (
-                          <Typography variant="h5" className={classes.textAmountGreen}>
-                            +{tx.amount} {tx.currency.id}
-                          </Typography>
-                        )}
-                        {tx.fromUser?.id === userId && (
-                          <Typography variant="h5" className={classes.textAmountRed}>
-                            -{tx.amount} {tx.currency.id}
-                          </Typography>
-                        )}
+                        <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                          {tx.toUser?.id === userId
+                            ? tx.fromUser?.name ?? namePlaceholder
+                            : tx.toUser?.name ?? namePlaceholder}
+                        </Typography>
                         <Typography variant="caption" color="textSecondary">
-                          {'~15.25 USD'}
+                          {formatTimeAgo(tx.createdAt)}
                         </Typography>
                       </div>
-                      <div>
-                        <CustomAvatar
-                          name={tx.currency.id}
-                          size={CustomAvatarSize.XSMALL}
-                          alt={tx.currency.id}
-                          avatar={tx.currency.image}
-                        />
+                    </TableCell>
+                    <TableCell align="center">
+                      {tx.toUser?.id === userId && (
+                        <div className={classes.tipStatusGreen}>
+                          <Typography variant="caption">Tipped</Typography>
+                        </div>
+                      )}
+                      {tx.fromUser?.id === userId && (
+                        <div className={classes.tipStatusRed}>
+                          <Typography variant="caption">Received</Typography>
+                        </div>
+                      )}
+                    </TableCell>
+                    <TableCell align="right">
+                      <div className={classes.currencyDetailWrapper}>
+                        <div>
+                          {tx.toUser?.id === userId && (
+                            <Typography variant="h5" className={classes.textAmountGreen}>
+                              +{tx.amount} {tx.currency.id}
+                            </Typography>
+                          )}
+                          {tx.fromUser?.id === userId && (
+                            <Typography variant="h5" className={classes.textAmountRed}>
+                              -{tx.amount} {tx.currency.id}
+                            </Typography>
+                          )}
+                          <Typography variant="caption" color="textSecondary">
+                            {'~15.25 USD'}
+                          </Typography>
+                        </div>
+                        <div>
+                          <CustomAvatar
+                            name={tx.currency.id}
+                            size={CustomAvatarSize.XSMALL}
+                            alt={tx.currency.id}
+                            avatar={tx.currency.image}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </InfiniteScroll>
           </TableBody>
         </Table>
       </TableContainer>

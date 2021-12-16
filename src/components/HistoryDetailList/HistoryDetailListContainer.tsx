@@ -9,7 +9,7 @@ import {UserState} from 'src/reducers/user/reducer';
 
 export const HistoryDetailListContainer: React.FC = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {loading, transactions, inboundTxs, outboundTxs, loadTransactions} = useTransaction();
+  const {loading, meta, transactions, inboundTxs, outboundTxs, loadTransactions} = useTransaction();
 
   if (!user) return null;
 
@@ -17,13 +17,20 @@ export const HistoryDetailListContainer: React.FC = () => {
     loadTransactions();
   }, []);
 
+  const handleNextPage = () => {
+    const page = meta.currentPage + 1;
+    loadTransactions(page);
+  };
+
   return (
     <HistoryDetailList
       userId={user.id}
       isLoading={loading}
       allTxs={transactions}
+      meta={meta}
       inboundTxs={inboundTxs}
       outboundTxs={outboundTxs}
+      nextPage={handleNextPage}
     />
   );
 };
