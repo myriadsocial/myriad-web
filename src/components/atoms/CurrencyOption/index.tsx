@@ -60,9 +60,10 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
 
   return (
     <div>
-      <Typography component="span">Change currency</Typography>
-
       <IconButton style={{padding: 0}} onClick={handleClick} color="primary" aria-label="expand">
+        <Typography component="span" color="textPrimary">
+          Change currency
+        </Typography>
         <SvgIcon classes={{root: style.fill}} component={ChevronDownIcon} viewBox="0 0 20 20" />
       </IconButton>
       <Menu
