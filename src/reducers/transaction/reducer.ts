@@ -32,9 +32,13 @@ export const TransactionReducer: Redux.Reducer<TransactionState, Actions> = (
     case constants.FETCH_TRANSACTIONS: {
       return {
         ...state,
-        transactions: action.transactions,
+        transactions:
+          action.meta.currentPage === 1
+            ? action.transactions
+            : [...state.transactions, ...action.transactions],
         inboundTxs: action.inboundTxs,
         outboundTxs: action.outboundTxs,
+        meta: action.meta,
       };
     }
 
