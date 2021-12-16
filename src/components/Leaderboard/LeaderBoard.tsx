@@ -1,4 +1,5 @@
 import React from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Link from 'next/link';
 
@@ -21,17 +22,26 @@ import Typography from '@material-ui/core/Typography';
 import {useStyles} from './leaderboard.styles';
 import {useLeaderboard} from './use-leaderboard-hook';
 
+import {Loading} from 'src/components/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import MyriadIcon from 'src/images/web/myriad.svg';
 
 export const LeaderBoardComponent: React.FC = () => {
-  const {leaderboard, fetchLeaderboard, loading} = useLeaderboard();
+  const {leaderboard, fetchLeaderboard, loading, meta} = useLeaderboard();
   const style = useStyles();
+
+  const hasMore = leaderboard.length < meta.totalItemCount;
 
   React.useEffect(() => {
     fetchLeaderboard();
   }, []);
+
+  const onLoadNextPage = () => {
+    if (meta.currentPage < meta.totalPageCount) {
+      fetchLeaderboard(meta.currentPage + 1);
+    }
+  };
 
   return (
     <div className={style.root}>
@@ -72,37 +82,48 @@ export const LeaderBoardComponent: React.FC = () => {
                 <Typography className={style.th}>Points</Typography>
               </Grid>
             </Grid>
-            <TableContainer>
-              <Table aria-label="simple table">
-                <TableBody>
-                  {leaderboard.map((user, i) => (
-                    <TableRow key={user.id}>
-                      <TableCell align="center" style={{width: '10%'}} className={style.number}>
-                        {i + 1}
-                      </TableCell>
-                      <TableCell classes={{root: style.p}} style={{width: '80%'}}>
-                        <ListItem>
-                          <ListItemAvatar>
-                            <Avatar src={user.profilePictureURL}>{acronym(user.name)}</Avatar>
-                          </ListItemAvatar>
-                          <ListItemText
-                            primary={<Typography className={style.number}>{user.name}</Typography>}
-                            secondary={
-                              <Typography className={style.secondary}>@{user.username}</Typography>
-                            }
-                          />
-                        </ListItem>
-                      </TableCell>
-                      <TableCell align="center" style={{width: '10%'}}>
-                        <Typography color="primary" className={style.number}>
-                          {user.metric?.totalActivity}
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <InfiniteScroll
+              scrollableTarget="scrollable-timeline"
+              dataLength={leaderboard.length}
+              hasMore={hasMore}
+              next={onLoadNextPage}
+              loader={<Loading />}>
+              <TableContainer>
+                <Table aria-label="leader-board">
+                  <TableBody>
+                    {leaderboard.map((user, i) => (
+                      <TableRow key={user.id}>
+                        <TableCell align="center" style={{width: '10%'}} className={style.number}>
+                          {i + 1}
+                        </TableCell>
+                        <TableCell classes={{root: style.p}} style={{width: '80%'}}>
+                          <ListItem>
+                            <ListItemAvatar>
+                              <Avatar src={user.profilePictureURL}>{acronym(user.name)}</Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                              primary={
+                                <Typography className={style.number}>{user.name}</Typography>
+                              }
+                              secondary={
+                                <Typography className={style.secondary}>
+                                  @{user.username}
+                                </Typography>
+                              }
+                            />
+                          </ListItem>
+                        </TableCell>
+                        <TableCell align="center" style={{width: '10%'}}>
+                          <Typography color="primary" className={style.number}>
+                            {user.metric?.totalActivity}
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </InfiniteScroll>
           </div>
         </ShowIf>
       </div>
