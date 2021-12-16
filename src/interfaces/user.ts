@@ -38,6 +38,7 @@ export type UserMetric = {
   totalFriends: number;
   totalKudos: number;
   totalPosts: number;
+  totalActivity: number;
 };
 
 export interface User extends UserProps, BaseModel {
