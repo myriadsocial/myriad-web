@@ -15,7 +15,7 @@ export const useLeaderboard = () => {
     currentPage: 0,
   });
 
-  const fetchLeaderboard = async (page = 1) => {
+  const fetchLeaderboard = async (page = 1, callback?: () => void) => {
     if (_meta.currentPage === 0) setLoading(true);
 
     try {
@@ -24,6 +24,7 @@ export const useLeaderboard = () => {
       setMeta(meta);
 
       setLeaderboard([...leaderboard, ...data]);
+      callback && callback();
     } catch (error) {
       console.log(error);
     } finally {
