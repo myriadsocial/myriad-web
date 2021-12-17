@@ -3,7 +3,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      paddingLeft: '20px',
+      paddingLeft: 20,
       backgroundColor: '#FFC857',
       height: '100vh',
     },
@@ -11,7 +11,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: '100vh',
       padding: theme.spacing(2),
       color: theme.palette.text.secondary,
-      backgroundColor: theme.palette.background.paper,
+      backgroundColor: '#E5E5E5',
+      paddingTop: 80,
     },
     flex: {
       display: 'flex',
@@ -24,22 +25,17 @@ export const useStyles = makeStyles((theme: Theme) =>
       position: 'relative',
     },
     logo: {
-      marginTop: '70px',
-      marginBottom: '10px',
-      fontSize: '500px',
+      marginBottom: 24,
+      height: 48,
     },
     title: {
       fontSize: 16,
       fontWeight: 700,
       lineHeight: '20px',
-      marginBottom: theme.spacing(10),
+      marginBottom: 40,
       color: theme.palette.text.primary,
     },
     titlePrimary: {
-      color: theme.palette.primary.main,
-    },
-    link: {
-      textDecoration: 'none',
       color: theme.palette.primary.main,
     },
     imagePurple: {
