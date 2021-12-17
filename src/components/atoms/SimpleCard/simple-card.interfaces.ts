@@ -1,3 +1,4 @@
+import {UserExperience} from '../../../interfaces/experience';
 import {TimelineType} from '../../../interfaces/timeline';
 import {User} from '../../../interfaces/user';
 
@@ -21,6 +22,7 @@ interface SimpleCardProps {
   ownerId?: string;
   experienceId?: string;
   userExperienceId?: string;
+  userExperience?: UserExperience[];
   selected?: string | undefined;
   subscribed?: boolean;
   filterTimeline: (type: TimelineType) => void;

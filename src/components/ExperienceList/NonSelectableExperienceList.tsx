@@ -17,10 +17,12 @@ import {RootState} from 'src/reducers';
 const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = ({
   isFilterTriggered,
   experiences,
+  userExperience,
   user,
   onPreview,
   onFollow,
   onSubscribe,
+  onUnsubscribe,
 }) => {
   const classes = useStyles();
 
@@ -60,6 +62,7 @@ const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = 
             <NonSelectableSimpleCard
               user={user}
               experienceId={item.experience.id}
+              userExperience={userExperience}
               title={item.experience.name ?? 'Unnamed Experience'}
               creator={item.experience.user.name ?? 'Unnamed Myrian'}
               imgUrl={
@@ -67,6 +70,7 @@ const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = 
                 'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg'
               }
               onSubscribe={onSubscribe}
+              onUnsubscribe={onUnsubscribe}
               onFollow={onFollow}
               onPreview={onPreview}
             />
