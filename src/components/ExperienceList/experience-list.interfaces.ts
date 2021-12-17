@@ -16,10 +16,12 @@ interface ExperienceListProps {
 
 interface NonSelectableExperienceList {
   experiences: UserExperience[];
+  userExperience?: UserExperience[];
   isOnHomePage?: boolean;
   user?: User;
   filterTimeline: (type: TimelineType, experience: Experience) => void;
   onSubscribe?: (experienceId: string) => void;
+  onUnsubscribe?: (experienceId: string) => void;
   onFollow?: (experienceId: string) => void;
   onPreview?: (experienceId: string) => void;
   onDelete?: (experienceId: string) => void;
@@ -33,10 +35,12 @@ type NonSelectableExperienceListProps = Omit<
 
 interface SearchedExperienceList {
   experiences: Experience[];
+  userExperience: UserExperience[];
   isOnHomePage?: boolean;
   user?: User;
   filterTimeline: (type: TimelineType, experience: Experience) => void;
   onSubscribe?: (experienceId: string) => void;
+  onUnsubscribe?: (experienceId: string) => void;
   onFollow?: (experienceId: string) => void;
   onPreview?: (experienceId: string) => void;
   onDelete?: (experienceId: string) => void;

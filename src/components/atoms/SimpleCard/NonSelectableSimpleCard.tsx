@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles, NonSelectableSimpleCardProps} from '.';
 
+import ShowIf from 'src/components/common/show-if.component';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -26,6 +27,8 @@ const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
   imgUrl,
   onFollow,
   onSubscribe,
+  userExperience,
+  onUnsubscribe,
   onPreview,
 }) => {
   const classes = useStyles();
@@ -64,15 +67,43 @@ const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
     return false;
   };
 
+  const checkSubscribed = () => {
+    if (userExperience && userExperience?.length > 0) {
+      if (
+        userExperience.filter(ar => ar.experienceId === experienceId && ar.subscribed === true)
+          .length > 0
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
+
   const handlePreviewExperience = () => {
+    handleClose();
     if (onPreview && experienceId) onPreview(experienceId);
   };
 
   const handleSubscribeExperience = () => {
+    handleClose();
     if (onSubscribe && experienceId) onSubscribe(experienceId);
   };
 
+  const handleUnsubscribeExperience = () => {
+    handleClose();
+    if (onUnsubscribe && userExperience) {
+      const userExperienceId = userExperience.filter(
+        ar => ar.experienceId === experienceId && ar.subscribed === true,
+      )[0].id;
+      onUnsubscribe(userExperienceId);
+    }
+  };
+
   const handleCloneExperience = () => {
+    handleClose();
     if (onFollow && experienceId) onFollow(experienceId);
   };
 
@@ -107,35 +138,29 @@ const NonSelectableSimpleCard: React.FC<NonSelectableSimpleCardProps> = ({
           </IconButton>
         </div>
       </CardActionArea>
-      {checkCreator() ? (
-        <Menu
-          classes={{
-            paper: classes.menu,
-          }}
-          anchorEl={anchorEl}
-          getContentAnchorEl={null}
-          anchorOrigin={{vertical: 'top', horizontal: 'center'}}
-          transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}>
-          <MenuItem onClick={handlePreviewExperience}>View details</MenuItem>
-        </Menu>
-      ) : (
-        <Menu
-          classes={{
-            paper: classes.menu,
-          }}
-          anchorEl={anchorEl}
-          getContentAnchorEl={null}
-          anchorOrigin={{vertical: 'top', horizontal: 'center'}}
-          transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}>
-          <MenuItem onClick={handlePreviewExperience}>View details</MenuItem>
+      <Menu
+        classes={{
+          paper: classes.menu,
+        }}
+        anchorEl={anchorEl}
+        getContentAnchorEl={null}
+        anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+        transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}>
+        <MenuItem onClick={handlePreviewExperience}>View details</MenuItem>
+        <ShowIf condition={!checkCreator()}>
           <MenuItem onClick={handleCloneExperience}>Clone</MenuItem>
+        </ShowIf>
+        <ShowIf condition={!checkCreator() && !checkSubscribed()}>
           <MenuItem onClick={handleSubscribeExperience}>Subscribe</MenuItem>
-        </Menu>
-      )}
+        </ShowIf>
+        <ShowIf condition={!checkCreator() && checkSubscribed()}>
+          <MenuItem onClick={handleUnsubscribeExperience} className={classes.delete}>
+            Unsubscribe
+          </MenuItem>
+        </ShowIf>
+      </Menu>
     </Card>
   );
 };
