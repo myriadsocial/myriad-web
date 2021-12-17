@@ -11,8 +11,8 @@ export const formatNumber = (number: number, decimals: number): number => {
 };
 
 // TODO: check if needs to be removed
-export const formatUsd = (value: number, conversion: number): string | void => {
-  if (value * conversion === 0) return;
+export const formatUsd = (value: number, conversion: number): string => {
+  if (value * conversion === 0) return '';
   return (value * conversion).toFixed(2);
 };
 
