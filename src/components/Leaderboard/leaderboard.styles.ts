@@ -4,7 +4,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      paddingTop: '22px',
+      padding: '22px 0px',
       display: 'flex',
       justifyContent: 'center',
     },
