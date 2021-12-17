@@ -10,6 +10,11 @@ export const fetchLeaderboard = async (page = 1): Promise<UserList> => {
   const params = {
     filter: {
       order: ['totalActivity DESC'],
+      where: {
+        totalActivity: {
+          gt: 0,
+        },
+      },
     },
     pageLimit: PAGINATION_LIMIT,
     pageNumber: page,

@@ -23,7 +23,7 @@ import {
 import {useStyles} from './leaderboard.styles';
 import {useLeaderboard} from './use-leaderboard-hook';
 
-import {Loading} from 'src/components/atoms/Loading';
+import {LoadMore} from 'src/components/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import MyriadIcon from 'src/images/web/myriad.svg';
@@ -41,8 +41,22 @@ export const LeaderBoardComponent: React.FC = () => {
 
   const onLoadNextPage = () => {
     if (meta.currentPage < meta.totalPageCount && meta.currentPage < limit) {
-      fetchLeaderboard(meta.currentPage + 1);
+      fetchLeaderboard(meta.currentPage + 1, () => {
+        handleScroll();
+      });
     }
+  };
+
+  const handleScroll = () => {
+    window.scroll({
+      top: document.body.offsetHeight,
+      left: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const noAction = () => {
+    // handle no action when scroll down
   };
 
   return (
@@ -62,7 +76,7 @@ export const LeaderBoardComponent: React.FC = () => {
           </div>
           <Link href={`/`}>
             <Button color="primary" variant="contained" size="small">
-              Try Myriad
+              Go to App
             </Button>
           </Link>
         </div>
@@ -88,13 +102,13 @@ export const LeaderBoardComponent: React.FC = () => {
               scrollableTarget="scrollable-timeline"
               dataLength={leaderboard.length}
               hasMore={hasMore}
-              next={onLoadNextPage}
-              loader={<Loading />}>
+              next={noAction}
+              loader={<LoadMore handleAction={onLoadNextPage} />}>
               <TableContainer>
                 <Table aria-label="leader-board">
                   <TableBody>
                     {leaderboard.map((user, i) => (
-                      <TableRow key={user.id}>
+                      <TableRow key={user.id + i}>
                         <TableCell align="center" style={{width: '10%'}} className={style.number}>
                           {i + 1}
                         </TableCell>
