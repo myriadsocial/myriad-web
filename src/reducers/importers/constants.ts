@@ -1,0 +1,2 @@
+export const FETCH_IMPORTER = 'FETCH_IMPORTER';
+export type FETCH_IMPORTER = typeof FETCH_IMPORTER;
