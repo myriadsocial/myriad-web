@@ -129,6 +129,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       setIsloading(false);
       setImage(url);
       setNewExperience({...newExperience, experienceImageURL: url});
+    } else {
+      setNewExperience({...newExperience, experienceImageURL: undefined});
     }
   };
 
@@ -235,7 +237,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         <InputLabel htmlFor="experience-picture" shrink={true} className={styles.label}>
           Picture
         </InputLabel>
-        <Dropzone onImageSelected={handleImageUpload} value={image} maxSize={3} />
+        <Dropzone onImageSelected={handleImageUpload} value={image} maxSize={3} isEdit={true} />
         <ShowIf condition={isLoading}>
           <div className={styles.loading}>
             <CircularProgress size={32} color="primary" />
