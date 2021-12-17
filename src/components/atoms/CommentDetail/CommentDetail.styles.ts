@@ -41,6 +41,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       padding: theme.spacing(0, 2),
     },
+    flexSpaceBetween: {
+      display: 'flex',
+      justifyContent: 'space-between',
+    },
     avatar: {
       marginRight: 12,
       cursor: 'pointer',
@@ -75,6 +79,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 700,
       color: theme.palette.text.primary,
       textDecoration: 'none',
+    },
+    cursor: {
+      cursor: 'pointer',
+      textDecoration: 'underline',
     },
   }),
 );

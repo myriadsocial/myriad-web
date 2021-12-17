@@ -11,6 +11,9 @@ import TripleDoubleDotsIcon from '../../images/Icons/TripleDoubleDotsIcon.svg';
 import {BalanceDetail} from '../MyWallet';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
 
+import {formatUsd} from 'src/helpers/balance';
+import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
+
 type DraggableBalanceCardProps = {
   balanceDetail: BalanceDetail;
   index: number;
@@ -19,6 +22,19 @@ type DraggableBalanceCardProps = {
 export const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props => {
   const {balanceDetail, index} = props;
   const classes = useStyles();
+
+  const {loading, exchangeRates} = useExchangeRate();
+
+  const getConversion = (currencyId: string) => {
+    if (loading) {
+      return 0;
+    }
+
+    const found = exchangeRates.find(exchangeRate => exchangeRate.id === currencyId);
+
+    if (found) return found.price;
+    return 0;
+  };
 
   return (
     <Card className={classes.cardRoot}>
@@ -36,12 +52,12 @@ export const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props =
           </div>
 
           <div className={classes.rightJustifiedWrapper}>
-            <div>
+            <div style={{textAlign: 'right'}}>
               <Typography variant="body1" style={{fontWeight: 'bold'}}>
                 {balanceDetail.freeBalance}
               </Typography>
               <Typography variant="caption" color="textSecondary">
-                {'USD 15.25'}
+                {`~${formatUsd(balanceDetail.freeBalance, getConversion(balanceDetail.id))} USD`}
               </Typography>
             </div>
 

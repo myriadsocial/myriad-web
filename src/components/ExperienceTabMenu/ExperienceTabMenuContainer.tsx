@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme: Theme) =>
 export const ExperienceTabMenuContainer: React.FC = () => {
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
   const style = useStyles();
-  const [toggle, setToggle] = useState<string>('');
 
   const router = useRouter();
 
@@ -47,44 +46,10 @@ export const ExperienceTabMenuContainer: React.FC = () => {
 
   useEffect(() => {
     setMyExperience(experiences);
-  }, [experiences, toggle]);
+  }, [experiences]);
 
   const handleViewPostList = (type: TimelineType, experience: Experience) => {
-    console.log('handleViewPostList');
     router.push(`/topic/experience?id=${experience.id}`);
-  };
-
-  const handleFilterExperience = (sort: string) => {
-    let sortExperience;
-    setToggle(sort);
-    switch (sort) {
-      case 'all':
-        sortExperience = myExperience.sort((a, b) => {
-          if (a.experience.createdAt < b.experience.createdAt) return 1;
-          if (a.experience.createdAt > b.experience.createdAt) return -1;
-          return 0;
-        });
-        setMyExperience(sortExperience);
-        break;
-      case 'latest':
-        sortExperience = myExperience.sort((a, b) => {
-          if (a.experience.createdAt < b.experience.createdAt) return -1;
-          if (a.experience.createdAt > b.experience.createdAt) return 1;
-          return 0;
-        });
-        setMyExperience(sortExperience);
-        break;
-      case 'aToZ':
-        sortExperience = myExperience.sort((a, b) => {
-          if (a.experience.name < b.experience.name) return -1;
-          if (a.experience.name > b.experience.name) return 1;
-          return 0;
-        });
-        setMyExperience(sortExperience);
-        break;
-      default:
-        break;
-    }
   };
 
   const handleRemoveExperience = (experienceId: string) => {
@@ -112,7 +77,6 @@ export const ExperienceTabMenuContainer: React.FC = () => {
   return (
     <ExperienceTabMenu
       viewPostList={handleViewPostList}
-      filterExperience={handleFilterExperience}
       experiences={myExperience}
       user={user}
       onDelete={handleRemoveExperience}
