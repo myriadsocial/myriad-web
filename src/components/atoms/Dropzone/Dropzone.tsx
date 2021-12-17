@@ -158,7 +158,9 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
         }
       }
 
-      onImageSelected(newFiles);
+      if (newFiles.length > 0) {
+        onImageSelected(newFiles);
+      }
     },
     onDropRejected: rejection => {
       openToasterSnack({
