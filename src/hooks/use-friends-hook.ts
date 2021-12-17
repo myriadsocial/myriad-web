@@ -29,6 +29,7 @@ export const useFriendsHook = (user?: User) => {
   const [friended, setFriended] = useState<Friend[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [blocklistId, setBlockListId] = useState<string[]>([]);
 
   const loadRequests = () => {
     if (!user) return;
@@ -100,6 +101,27 @@ export const useFriendsHook = (user?: User) => {
     dispatch(getBlockList(user));
   };
 
+  const loadBlockListId = async () => {
+    if (!user) return;
+
+    setLoading(true);
+
+    try {
+      const {data} = await FriendAPI.getBlockList(user.id);
+
+      setBlockListId(
+        data.map(_data => {
+          if (user.id !== _data.requesteeId) return _data.requesteeId;
+          else return _data.requestorId;
+        }),
+      );
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     error,
     loading,
@@ -114,5 +136,7 @@ export const useFriendsHook = (user?: User) => {
     removeFriendRequest,
     checkFriendStatus,
     loadBlockList,
+    loadBlockListId,
+    blocklistId,
   };
 };

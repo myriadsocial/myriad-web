@@ -22,6 +22,7 @@ import {CommentRender} from './CommentRender';
 import {formatDistance, subDays} from 'date-fns';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
+import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {CommentProps} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {RootState} from 'src/reducers';
@@ -56,10 +57,21 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
   const style = useStyles();
 
   const [isReplying, setIsReplying] = React.useState(false);
+  const [isBlocked, setIsBlocked] = React.useState(true);
+  const {blocklistId, loadBlockListId} = useFriendsHook(user);
 
   useEffect(() => {
     handleLoadReplies();
   }, [comment]);
+
+  useEffect(() => {
+    loadBlockListId();
+    handleIsBlocked();
+  }, []);
+
+  useEffect(() => {
+    handleIsBlocked();
+  }, [blocklistId]);
 
   const handleOpenReply = () => {
     if (!user) return;
@@ -120,6 +132,14 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
     router.push(`/profile/${comment.userId}`);
   };
 
+  const handleIsBlocked = () => {
+    setIsBlocked(blocklistId.includes(comment.userId));
+  };
+
+  const handleOpenComment = () => {
+    setIsBlocked(false);
+  };
+
   const getDate = (commentDate: Date) => {
     const newFormat = formatDistance(subDays(new Date(commentDate), 0), new Date(), {
       addSuffix: true,
@@ -147,82 +167,104 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
       </div>
       <div className={style.fullWidth}>
         <Card className={style.comment}>
-          <CardHeader
-            title={
-              <Typography className={style.text}>
-                <Link href={`/profile/${comment.user.id}`}>
-                  <a href={`/profile/${comment.user.id}`} className={style.link}>
-                    {comment.user.name}
-                  </a>
-                </Link>
-                <span className={style.subText}>
-                  <span className={style.dot}>•</span>
-                  {getDate(comment.createdAt)}
-                </span>
-              </Typography>
-            }
-          />
-          <CardContent className={style.content}>
-            <CommentRender comment={comment} max={180} onShowAll={console.log} />
-          </CardContent>
-
-          <CardActions disableSpacing>
-            <VotingComponent
-              isUpVote={Boolean(comment.isUpvoted)}
-              isDownVote={Boolean(comment.isDownVoted)}
-              variant="row"
-              vote={totalVote()}
-              size="small"
-              onDownVote={handleDownVote}
-              onUpvote={handleUpvote}
+          <ShowIf condition={isBlocked}>
+            <CardHeader
+              title={
+                <div className={style.flexSpaceBetween}>
+                  <Typography className={style.text}>
+                    <Link href={`/profile/${comment.user.id}`}>
+                      <a href={`/profile/${comment.user.id}`} className={style.link}>
+                        Blocked user
+                      </a>
+                    </Link>
+                    <span className={style.subText}>
+                      <span className={style.dot}>•</span>
+                      {getDate(comment.createdAt)}
+                    </span>
+                  </Typography>
+                  <Typography className={style.cursor} color="primary" onClick={handleOpenComment}>
+                    show comment
+                  </Typography>
+                </div>
+              }
             />
-            {deep < 2 && (
-              <Button
-                disabled={!user}
-                onClick={handleOpenReply}
-                classes={{root: style.button}}
+          </ShowIf>
+          <ShowIf condition={!isBlocked}>
+            <CardHeader
+              title={
+                <Typography className={style.text}>
+                  <Link href={`/profile/${comment.user.id}`}>
+                    <a href={`/profile/${comment.user.id}`} className={style.link}>
+                      {comment.user.name}
+                    </a>
+                  </Link>
+                  <span className={style.subText}>
+                    <span className={style.dot}>•</span>
+                    {getDate(comment.createdAt)}
+                  </span>
+                </Typography>
+              }
+            />
+            <CardContent className={style.content}>
+              <CommentRender comment={comment} max={180} onShowAll={console.log} />
+            </CardContent>
+            <CardActions disableSpacing>
+              <VotingComponent
+                isUpVote={Boolean(comment.isUpvoted)}
+                isDownVote={Boolean(comment.isDownVoted)}
+                variant="row"
+                vote={totalVote()}
                 size="small"
-                variant="text">
-                Reply
-              </Button>
-            )}
+                onDownVote={handleDownVote}
+                onUpvote={handleUpvote}
+              />
+              {deep < 2 && (
+                <Button
+                  disabled={!user}
+                  onClick={handleOpenReply}
+                  classes={{root: style.button}}
+                  size="small"
+                  variant="text">
+                  Reply
+                </Button>
+              )}
 
-            {
-              // hide button if it's owner's post or balance is not yet loaded
-            }
-            <ShowIf condition={owner || balanceDetails.length === 0}>
-              <></>
-            </ShowIf>
+              {
+                // hide button if it's owner's post or balance is not yet loaded
+              }
+              <ShowIf condition={owner || balanceDetails.length === 0}>
+                <></>
+              </ShowIf>
 
-            <ShowIf condition={!owner}>
+              <ShowIf condition={!owner}>
+                <Button
+                  disabled={balanceDetails.length === 0}
+                  classes={{root: style.button}}
+                  size="small"
+                  variant="text"
+                  onClick={handleSendTip}>
+                  Send tip
+                </Button>
+              </ShowIf>
+
               <Button
-                disabled={balanceDetails.length === 0}
                 classes={{root: style.button}}
                 size="small"
                 variant="text"
-                onClick={handleSendTip}>
-                Send tip
+                onClick={handleOpenTipHistory}>
+                Tip history
               </Button>
-            </ShowIf>
-
-            <Button
-              classes={{root: style.button}}
-              size="small"
-              variant="text"
-              onClick={handleOpenTipHistory}>
-              Tip history
-            </Button>
-            <Button
-              disabled={!user}
-              classes={{root: style.button}}
-              size="small"
-              variant="text"
-              onClick={handleReport}>
-              Report
-            </Button>
-          </CardActions>
+              <Button
+                disabled={!user}
+                classes={{root: style.button}}
+                size="small"
+                variant="text"
+                onClick={handleReport}>
+                Report
+              </Button>
+            </CardActions>
+          </ShowIf>
         </Card>
-
         {user && isReplying && (
           <CommentEditor
             ref={editorRef}
@@ -238,7 +280,6 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             onSubmit={handleSendReply}
           />
         )}
-
         {comment && (
           <CommentList
             section={section}
