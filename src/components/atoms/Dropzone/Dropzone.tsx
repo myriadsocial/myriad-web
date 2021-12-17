@@ -219,7 +219,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
   };
 
   const removeFile = (index?: number) => {
-    if (isEdit && !isFileRemoved) {
+    if (isEdit && !isFileRemoved && editorType !== '') {
       setPreview([]);
       const currentFiles = files.filter((file, i) => index !== -1);
       onImageSelected(currentFiles);
