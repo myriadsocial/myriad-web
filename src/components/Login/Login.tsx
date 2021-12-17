@@ -1,96 +1,79 @@
-import React, {useEffect, useState} from 'react';
-
-import {Button, Link, Typography} from '@material-ui/core';
+import React, {useState} from 'react';
+import {MemoryRouter as Router, Routes, Route} from 'react-router-dom';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
-import {useAuthHook} from '../../hooks/auth.hook';
-import {usePolkadotExtension} from '../../hooks/use-polkadot-app.hook';
-import {PolkadotAccountList} from '../PolkadotAccountList';
-import {PromptComponent as Prompt} from '../atoms/Prompt/prompt.component';
-import {useStyles} from './Login.styles';
+import {Accounts} from './render/Accounts';
+import {Login as LoginComponent} from './render/Login';
+import {Options} from './render/Options';
+import {Profile} from './render/Profile';
+
+import {useAuthHook} from 'src/hooks/auth.hook';
+import {useProfileHook} from 'src/hooks/use-profile.hook';
 
 export const Login: React.FC = () => {
-  const styles = useStyles();
+  const {getUserByAccounts, signInWithAccount, anonymous} = useAuthHook();
+  const {checkUsernameAvailable} = useProfileHook();
 
-  const {enablePolkadotExtension, getPolkadotAccounts} = usePolkadotExtension();
-  const {signInWithAccount, anonymous} = useAuthHook();
-
-  const [extensionInstalled, setExtensionInstalled] = useState(false);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
-  const [signIn, setSignIn] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState<InjectedAccountWithMeta | null>(null);
 
-  useEffect(() => {
-    if (extensionInstalled) {
-      getAvailableAccounts();
-    }
-  }, [extensionInstalled]);
-
-  const getAvailableAccounts = async () => {
-    const accounts = await getPolkadotAccounts();
-
+  const handleOnconnect = (accounts: InjectedAccountWithMeta[]) => {
     setAccounts(accounts);
   };
 
-  const checkExtensionInstalled = async () => {
-    const installed = await enablePolkadotExtension();
-
-    setSignIn(true);
-    setExtensionInstalled(installed);
+  const handleSelectedAccount = (account: InjectedAccountWithMeta) => {
+    setSelectedAccount(account);
   };
 
-  const toggleModal = () => {
-    setSignIn(false);
+  const checkAccountRegistered = async (callback: () => void) => {
+    if (selectedAccount) {
+      const registered = await getUserByAccounts([selectedAccount]);
+
+      if (registered && registered.length > 0) {
+        signInWithAccount(selectedAccount);
+      } else {
+        callback();
+      }
+    }
+  };
+
+  const handleRegister = (name: string, username: string) => {
+    if (selectedAccount) {
+      signInWithAccount(selectedAccount, name, username);
+    }
   };
 
   return (
     <>
-      <Button
-        className={styles.button}
-        color="default"
-        variant="contained"
-        onClick={checkExtensionInstalled}>
-        Sign in
-      </Button>
-      <Typography className={styles.span} component="span" variant="h4" color="textPrimary">
-        Or try our&nbsp;
-        <Button className={styles.link} onClick={anonymous} component="span">
-          demo
-        </Button>
-        &nbsp;first&nbsp;
-        <span role="img" aria-label="emoticon-peace">
-          ✌️
-        </span>
-      </Typography>
-
-      <PolkadotAccountList
-        isOpen={signIn && extensionInstalled}
-        accounts={accounts}
-        onSelect={signInWithAccount}
-        onClose={toggleModal}
-      />
-
-      <Prompt
-        title="Account Not Found"
-        icon="warning"
-        open={signIn && !extensionInstalled}
-        onCancel={toggleModal}
-        subtitle={
-          <Typography>
-            Kindly check if you have{' '}
-            <Link
-              href="https://polkadot.js.org/extension"
-              target="_blank"
-              className={styles.polkadot}>
-              Polkadot.js
-            </Link>{' '}
-            installed on your browser
-          </Typography>
-        }>
-        <Button size="small" variant="contained" color="primary" onClick={toggleModal}>
-          Close
-        </Button>
-      </Prompt>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LoginComponent anonymousLogin={anonymous} />} />
+          <Route path="/wallet" element={<Options onConnect={handleOnconnect} />} />
+          <Route
+            path="/account"
+            element={
+              <Accounts
+                accounts={accounts}
+                onSelect={handleSelectedAccount}
+                onNext={checkAccountRegistered}
+              />
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <Profile
+                account={selectedAccount}
+                onSubmit={handleRegister}
+                checkUsernameAvailabilty={checkUsernameAvailable}
+              />
+            }
+          />
+        </Routes>
+      </Router>
     </>
   );
 };
+
+export default Login;
