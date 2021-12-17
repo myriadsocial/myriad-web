@@ -41,6 +41,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600,
       marginRight: '12px',
       color: theme.palette.primary.main,
+      display: 'inline-block',
     },
     user: {
       fontSize: '16px',

@@ -61,6 +61,14 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       };
     }
 
+    case constants.CLEAR_USER: {
+      return {
+        ...state,
+        anonymous: false,
+        alias: '',
+      };
+    }
+
     case constants.SET_DEFAULT_CURRENCY: {
       return {
         ...state,
