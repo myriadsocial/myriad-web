@@ -58,8 +58,12 @@ export const Profile: React.FC<ProfileProps> = props => {
     }));
   };
 
-  const validateName = () => {
+  const validateName = (): boolean => {
+    let error = false;
+
     if (!profile.name.value || profile.name.value.length === 0) {
+      error = true;
+
       setProfile(prevSetting => ({
         ...prevSetting,
         name: {
@@ -72,6 +76,8 @@ export const Profile: React.FC<ProfileProps> = props => {
       const valid = /^[a-zA-Z ]+$/.test(profile.name.value);
 
       if (!valid) {
+        error = true;
+
         setProfile(prevSetting => ({
           ...prevSetting,
           name: {
@@ -81,6 +87,8 @@ export const Profile: React.FC<ProfileProps> = props => {
           },
         }));
       } else {
+        error = false;
+
         setProfile(prevSetting => ({
           ...prevSetting,
           name: {
@@ -91,15 +99,21 @@ export const Profile: React.FC<ProfileProps> = props => {
         }));
       }
     }
+
+    return !error;
   };
 
-  const validateUsername = () => {
+  const validateUsername = (): boolean => {
+    let error = false;
+
     if (!profile.username.value || profile.username.value.length < 3) {
+      error = true;
+
       setProfile(prevSetting => ({
         ...prevSetting,
         username: {
           ...prevSetting.username,
-          error: true,
+          error,
           helper: 'Username must be provided and contain at least 3 character',
         },
       }));
@@ -107,6 +121,8 @@ export const Profile: React.FC<ProfileProps> = props => {
       const valid = /^[a-zA-Z ]+$/.test(profile.username.value);
 
       if (!valid) {
+        error = true;
+
         setProfile(prevSetting => ({
           ...prevSetting,
           username: {
@@ -116,6 +132,7 @@ export const Profile: React.FC<ProfileProps> = props => {
           },
         }));
       } else {
+        error = false;
         setProfile(prevSetting => ({
           ...prevSetting,
           username: {
@@ -126,17 +143,23 @@ export const Profile: React.FC<ProfileProps> = props => {
         }));
       }
     }
+
+    return !error;
   };
 
   const handleChangeWallet = () => {
     navigate('/wallet');
   };
 
-  const handleSubmit = () => {
-    validateName();
-    validateUsername();
+  const validate = (): boolean => {
+    const validName = validateName();
+    const validUsername = validateUsername();
 
-    const valid = !profile.name.error && !profile.username.error;
+    return validName && validUsername;
+  };
+
+  const handleSubmit = () => {
+    const valid = validate();
 
     if (valid) {
       checkUsernameAvailabilty(profile.username.value, available => {
@@ -192,7 +215,12 @@ export const Profile: React.FC<ProfileProps> = props => {
           Change Wallet
         </Button>
 
-        <Button onClick={handleSubmit} variant="contained" color="primary" size="small">
+        <Button
+          disabled={profile.username.value.length === 0}
+          onClick={handleSubmit}
+          variant="contained"
+          color="primary"
+          size="small">
           Register
         </Button>
       </Grid>
