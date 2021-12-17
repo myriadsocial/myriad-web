@@ -41,19 +41,18 @@ interface ExperienceTabMenuProps {
   experiences: UserExperience[];
   user?: User;
   viewPostList: (type: TimelineType, experience: Experience) => void;
-  filterExperience: (sort: string) => void;
   onDelete: (experienceId: string) => void;
   onUnsubscribe: (experienceId: string) => void;
 }
 
 export const ExperienceTabMenu: React.FC<ExperienceTabMenuProps> = props => {
-  const {experiences, user, viewPostList, filterExperience, onDelete, onUnsubscribe} = props;
+  const {experiences, user, viewPostList, onDelete, onUnsubscribe} = props;
   const style = useStyles();
 
   return (
     <>
       <Typography variant={'h4'}>Experience</Typography>
-      <HeaderWithAction filter={filterExperience} actionText={'+ Create experience'} />
+      <HeaderWithAction actionText={'+ Create experience'} />
       <ExperienceList
         onDelete={onDelete}
         onUnsubscribe={onUnsubscribe}

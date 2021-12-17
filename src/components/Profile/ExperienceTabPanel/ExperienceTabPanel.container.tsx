@@ -32,7 +32,6 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
     state => state.profileState.experience.data,
   );
 
-  const [toggle, setToggle] = useState<string>('');
   const [myExperience, setMyExperience] = useState<UserExperience[]>([]);
 
   useEffect(() => {
@@ -41,40 +40,7 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
 
   useEffect(() => {
     setMyExperience(experiences);
-  }, [experiences, toggle]);
-
-  const handleFilterExperience = (sort: string) => {
-    let sortExperience;
-    setToggle(sort);
-    switch (sort) {
-      case 'all':
-        sortExperience = myExperience.sort((a, b) => {
-          if (a.experience.createdAt < b.experience.createdAt) return 1;
-          if (a.experience.createdAt > b.experience.createdAt) return -1;
-          return 0;
-        });
-        setMyExperience(sortExperience);
-        break;
-      case 'latest':
-        sortExperience = myExperience.sort((a, b) => {
-          if (a.experience.createdAt < b.experience.createdAt) return -1;
-          if (a.experience.createdAt > b.experience.createdAt) return 1;
-          return 0;
-        });
-        setMyExperience(sortExperience);
-        break;
-      case 'aToZ':
-        sortExperience = myExperience.sort((a, b) => {
-          if (a.experience.name < b.experience.name) return -1;
-          if (a.experience.name > b.experience.name) return 1;
-          return 0;
-        });
-        setMyExperience(sortExperience);
-        break;
-      default:
-        break;
-    }
-  };
+  }, [experiences]);
 
   const handleFilterType = (type: ExperienceType) => {
     dispatch(fetchProfileExperience(type));
@@ -105,7 +71,6 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
       onUnsubscribe={handleUnsubscribeExperience}
       onFollow={handleCloneExperience}
       onPreview={handlePreviewExperience}
-      filter={handleFilterExperience}
     />
   );
 };

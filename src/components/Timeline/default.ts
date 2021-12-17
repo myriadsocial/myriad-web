@@ -116,18 +116,3 @@ export const filterOptions: TabListItem<TimelineType>[] = [
     title: 'Experience',
   },
 ];
-
-export const experienceSortOptions: MenuOptions<string>[] = [
-  {
-    id: 'all',
-    title: 'All',
-  },
-  {
-    id: 'aToZ',
-    title: 'A-Z',
-  },
-  {
-    id: 'latest',
-    title: 'Latest',
-  },
-];
