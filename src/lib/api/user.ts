@@ -22,11 +22,12 @@ export const getUserDetail = async (id: string, userId?: string): Promise<User> 
   return data;
 };
 
-export const getUserByAddress = async (address: string[]): Promise<User[]> => {
-  const {data} = await MyriadAPI.request<User[]>({
+export const getUserByAddress = async (address: string[]): Promise<UserList> => {
+  const {data} = await MyriadAPI.request<UserList>({
     url: '/users',
     method: 'GET',
     params: {
+      pageLimit: address.length,
       filter: {
         where: {
           id: {

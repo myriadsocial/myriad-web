@@ -114,6 +114,7 @@
     "react-material-ui-carousel": "^2.3.5",
     "react-player": "^2.9.0",
     "react-redux": "^7.2.4",
+    "react-router-dom": "^6.1.1",
     "react-share": "^4.4.0",
     "react-swipeable-views": "^0.13.9",
     "react-twitter-widgets": "^1.10.0",

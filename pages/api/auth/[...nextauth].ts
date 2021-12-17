@@ -40,6 +40,7 @@ export default NextAuth({
               const user = await UserAPI.createUser({
                 id: credentials.address,
                 name: credentials.name,
+                username: credentials.username,
               });
 
               console.log('[next-auth][debug][authorize] user create', credentials.address);
