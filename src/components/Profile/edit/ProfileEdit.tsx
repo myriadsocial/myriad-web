@@ -42,7 +42,6 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     updateProfilePicture,
     isChanged,
     isAvailable,
-    checkAvailable,
   } = props;
   const [newUser, setNewUser] = useState<Partial<User>>({
     name: user.name,
@@ -50,25 +49,17 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     websiteURL: user.websiteURL,
   });
 
-  const [username, setUsername] = useState<string>(user.username ?? '');
   const [isEdited, setIsEdited] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [usernameError, setUsernameError] = useState(false);
 
   const style = useStyles();
 
   useEffect(() => {
     handleChanges();
     nameValidation();
-    usernameValidation();
-  }, [newUser, username]);
-
-  const handleChangeUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
-    handleUsernameAvailable(event.target.value);
-  };
+  }, [newUser]);
 
   const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewUser(prevUser => ({
@@ -78,8 +69,8 @@ export const ProfileEditComponent: React.FC<Props> = props => {
   };
 
   const saveUser = async () => {
-    if (!isChanged && isAvailable && username !== user.username) {
-      onSave({...newUser, username});
+    if (!isChanged && isAvailable) {
+      onSave(newUser);
     } else {
       if (newUser) {
         onSave(newUser);
@@ -88,18 +79,8 @@ export const ProfileEditComponent: React.FC<Props> = props => {
   };
 
   const saveConfirmation = () => {
-    if (username !== user.username) {
-      handleOpenConfirmation();
-    } else {
-      saveUser();
-    }
+    saveUser();
   };
-
-  const handleUsernameAvailable = debounce((username: string) => {
-    if (username !== user.username) {
-      checkAvailable(username);
-    }
-  }, 300);
 
   const handleRemovePicture = (image: Partial<User>) => {
     onSave(image);
@@ -114,8 +95,6 @@ export const ProfileEditComponent: React.FC<Props> = props => {
   };
 
   const handleError = (): boolean => {
-    if (usernameError) return true;
-    if (!username.length) return true;
     if (isAvailable === undefined) return false;
     if (typeof isAvailable === 'boolean') {
       if (isAvailable === true) return false;
@@ -130,12 +109,6 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     } else {
       setIsError(false);
     }
-  }, 300);
-
-  const usernameValidation = debounce(() => {
-    const validation = /[^a-z0-9._]/g;
-    const isNotValid = validation.test(username);
-    setUsernameError(isNotValid);
   }, 300);
 
   const handleChanges = () => {
@@ -205,21 +178,15 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         <InputLabel htmlFor="username">Username</InputLabel>
         <OutlinedInput
           error={handleError()}
-          disabled={isChanged}
+          disabled
           id="username"
           placeholder="Username"
-          value={username}
-          onChange={handleChangeUsername}
+          value={user.username}
           labelWidth={70}
           startAdornment={'@'}
           inputProps={{maxLength: 16}}
         />
       </FormControl>
-      {username !== user.username && (
-        <Typography className={`${style.available} ${handleError() ? style.red : style.green}`}>
-          {handleError() ? 'Username is not available' : 'Username is available'}
-        </Typography>
-      )}
 
       <Typography className={style.marker}>
         {isChanged
@@ -285,7 +252,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
             color="primary"
             disableElevation
             onClick={saveConfirmation}
-            disabled={isError || handleError()}>
+            disabled={!isEdited || isError || handleError()}>
             Save changes
           </Button>
           {updatingProfile && (

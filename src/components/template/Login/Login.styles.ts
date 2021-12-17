@@ -4,7 +4,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       paddingLeft: 20,
-      backgroundColor: '#FFC857',
+      backgroundColor: '#F6F7FC',
       height: '100vh',
     },
     paper: {
