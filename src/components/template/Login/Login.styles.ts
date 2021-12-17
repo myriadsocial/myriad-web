@@ -4,14 +4,14 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       paddingLeft: 20,
-      backgroundColor: '#F6F7FC',
+      backgroundColor: '#FFC857',
       height: '100vh',
     },
     paper: {
       height: '100vh',
       padding: theme.spacing(2),
       color: theme.palette.text.secondary,
-      backgroundColor: '#E5E5E5',
+      backgroundColor: '#F6F7FC',
       paddingTop: 80,
     },
     flex: {
