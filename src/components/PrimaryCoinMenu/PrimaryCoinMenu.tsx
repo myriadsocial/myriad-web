@@ -67,6 +67,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
     changeDefaultCurrency(values);
     updateCoins(putDefaultFirst(balanceDetails, currencyId));
     dispatch(setDefaultCurrency(currencyId));
+    togglePrimaryCoinMenu();
 
     openToasterSnack({
       message: 'Coin priority changes saved',

@@ -22,6 +22,8 @@ import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 
 import _ from 'lodash';
+import {formatUsd} from 'src/helpers/balance';
+import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
 
 type BalanceDetailListProps = {
   balanceDetails: BalanceDetail[];
@@ -41,10 +43,23 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   const [isOnPrimaryCoinMenu, setIsOnPrimaryCoinMenu] = useState(false);
   const [defaultBalanceDetails, setDefaultBalanceDetails] = useState<BalanceDetail[]>([]);
 
+  const {loading, exchangeRates} = useExchangeRate();
+
+  const getConversion = (currencyId: string) => {
+    if (loading) {
+      return 0;
+    }
+
+    const found = exchangeRates.find(exchangeRate => exchangeRate.id === currencyId);
+
+    if (found) return found.price;
+    return 0;
+  };
+
   const handleSortChanged = (sort: string) => {
     switch (sort) {
       case 'aToZ': {
-        const sortedAtoZBalances = _.sortBy(defaultBalanceDetails, 'name');
+        const sortedAtoZBalances = _.sortBy(defaultBalanceDetails, 'id');
         setDefaultBalanceDetails(sortedAtoZBalances);
         break;
       }
@@ -68,6 +83,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   };
 
   const togglePrimaryCoinMenu = () => {
+    console.log('hello');
     setIsOnPrimaryCoinMenu(!isOnPrimaryCoinMenu);
   };
 
@@ -121,7 +137,10 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
                         {balanceDetail.freeBalance}
                       </Typography>
                       <Typography variant="caption" color="textSecondary">
-                        {'USD 15.25'}
+                        {`~${formatUsd(
+                          balanceDetail.freeBalance,
+                          getConversion(balanceDetail.id),
+                        )} USD`}
                       </Typography>
                     </div>
                   </TableCell>

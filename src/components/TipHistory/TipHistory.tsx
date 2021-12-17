@@ -1,7 +1,7 @@
 import {ChevronDownIcon} from '@heroicons/react/outline';
 import {SearchIcon} from '@heroicons/react/solid';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import {
@@ -30,6 +30,7 @@ import {debounce} from 'lodash';
 import {Empty} from 'src/components/atoms/Empty';
 import {Loading} from 'src/components/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
+import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
 
 type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
   hasMore: boolean;
@@ -43,6 +44,7 @@ type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
 
 export const TipHistory: React.FC<TipHistoryProps> = props => {
   const {tips, hasMore, currencies, open, onClose, sendTip, onSort, onFilter, nextPage} = props;
+  const {loading, exchangeRates, loadExchangeRate} = useExchangeRate();
 
   const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -51,6 +53,21 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  useEffect(() => {
+    loadExchangeRate();
+  }, []);
+
+  const getConversion = (currencyId: string) => {
+    if (loading) {
+      return 0;
+    }
+
+    const found = exchangeRates.find(exchangeRate => exchangeRate.id === currencyId);
+
+    if (found) return found.price;
+    return 0;
   };
 
   const handleFilter = (currency: Currency) => () => {
@@ -175,7 +192,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                         {tip.amount} {tip.currencyId}
                       </Typography>
                       <Typography variant="caption" color="textSecondary">
-                        ~{formatUsd(tip.amount, tip.currency)} USD
+                        {~`${formatUsd(tip.amount, getConversion(tip.currencyId))} USD`}
                       </Typography>
                     </div>
                     <Avatar src={tip.currency.image} className={styles.logo} />
