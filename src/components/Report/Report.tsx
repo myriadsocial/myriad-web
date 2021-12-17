@@ -67,7 +67,11 @@ export const Report: React.FC<ReportProps> = props => {
 
       <List dense={false} className={styles.list}>
         {list.map(option => (
-          <ListItem key={option.id} button selected={type === option.id}>
+          <ListItem
+            key={option.id}
+            button
+            selected={type === option.id}
+            onClick={() => setType(option.id)}>
             <ListItemText primary={option.title} />
             <ListItemSecondaryAction>
               <Radio
