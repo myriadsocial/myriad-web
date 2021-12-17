@@ -1,6 +1,5 @@
 import React, {useMemo} from 'react';
 
-import FacebookIcon from '../../images/socials/facebook.svg';
 import RedditIcon from '../../images/socials/reddit.svg';
 import TwitterIcon from '../../images/socials/twitter.svg';
 import {SocialsEnum, SocialMedia} from '../../interfaces/social';
@@ -22,7 +21,6 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
 
   const icons: Partial<Record<SocialsEnum, JSX.Element>> = useMemo(
     () => ({
-      [SocialsEnum.FACEBOOK]: <FacebookIcon />,
       [SocialsEnum.REDDIT]: <RedditIcon />,
       [SocialsEnum.TWITTER]: <TwitterIcon />,
     }),

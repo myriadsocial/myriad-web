@@ -15,6 +15,7 @@ import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 import {DraggableBalanceCard} from './DraggableBalanceCard';
 
 import _ from 'lodash';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {CurrencyId} from 'src/interfaces/currency';
 
 type PrimaryCoinMenuProps = {
@@ -27,7 +28,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
   const {togglePrimaryCoinMenu, balanceDetails, user} = props;
 
   const dispatch = useDispatch();
-
+  const {openToasterSnack} = useToasterSnackHook();
   const putDefaultFirst = (balanceDetails: BalanceDetail[], defaultCurrencyId: CurrencyId) => {
     const newDefaultCoins = [...balanceDetails];
 
@@ -67,6 +68,11 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
     updateCoins(putDefaultFirst(balanceDetails, currencyId));
     dispatch(setDefaultCurrency(currencyId));
     togglePrimaryCoinMenu();
+
+    openToasterSnack({
+      message: 'Coin priority changes saved',
+      variant: 'success',
+    });
   };
 
   return (

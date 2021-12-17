@@ -28,8 +28,8 @@ export const ProfileHeaderContainer: React.FC<Props> = ({toggleNotification}) =>
 
   const router = useRouter();
 
-  const {enablePolkadotExtension, getPolkadotAccounts} = usePolkadotExtension();
-  const {logout, signInWithAccount} = useAuthHook();
+  const {enablePolkadotExtension} = usePolkadotExtension();
+  const {logout, signInWithAccount, getRegisteredAccounts} = useAuthHook();
 
   const [accountListOpen, setAccountListOpen] = useState(false);
   const [extensionInstalled, setExtensionInstalled] = useState(false);
@@ -49,7 +49,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({toggleNotification}) =>
   };
 
   const getAvailableAccounts = async () => {
-    const accounts = await getPolkadotAccounts();
+    const accounts = await getRegisteredAccounts();
 
     setAccounts(accounts);
   };

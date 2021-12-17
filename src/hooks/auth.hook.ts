@@ -5,6 +5,7 @@ import getConfig from 'next/config';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
+import {map} from 'lodash';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {User} from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
@@ -22,14 +23,24 @@ export const useAuthHook = () => {
   const getUserByAccounts = async (accounts: InjectedAccountWithMeta[]): Promise<User[] | null> => {
     try {
       console.log('accounts', accounts.map(toHexPublicKey));
-      const users: User[] = await UserAPI.getUserByAddress(accounts.map(toHexPublicKey));
-      console.log('users', users);
-      return users;
+      const {data} = await UserAPI.getUserByAddress(accounts.map(toHexPublicKey));
+      console.log('users', data);
+      return data;
     } catch (error) {
       console.log('[useAuthHook][getUserByAccounts][error]', error);
 
       return null;
     }
+  };
+
+  const getRegisteredAccounts = async (): Promise<InjectedAccountWithMeta[]> => {
+    const accounts = await getPolkadotAccounts();
+
+    const users = await getUserByAccounts(accounts);
+
+    return accounts.filter(account => {
+      return map(users, 'id').includes(toHexPublicKey(account));
+    });
   };
 
   const register = async (user: Partial<User>) => {
@@ -39,9 +50,7 @@ export const useAuthHook = () => {
       await signIn('credentials', {
         address: registered.id,
         name: registered.name,
-        callbackUrl: publicRuntimeConfig.nextAuthURL
-          ? publicRuntimeConfig.nextAuthURL + '/welcome'
-          : '/welcome',
+        callbackUrl: publicRuntimeConfig.nextAuthURL,
       });
 
       return registered;
@@ -62,20 +71,21 @@ export const useAuthHook = () => {
       address: null,
       name: name,
       anonymous: true,
-      callbackUrl: publicRuntimeConfig.nextAuthURL
-        ? publicRuntimeConfig.nextAuthURL + '/welcome'
-        : '/welcome',
+      callbackUrl: publicRuntimeConfig.nextAuthURL,
     });
   };
 
-  const signInWithAccount = (account: InjectedAccountWithMeta) => {
+  const signInWithAccount = (
+    account: InjectedAccountWithMeta,
+    name?: string,
+    username?: string,
+  ) => {
     signIn('credentials', {
       address: toHexPublicKey(account),
-      name: account.meta.name,
+      name: name ?? account.meta.name,
+      username,
       anonymous: false,
-      callbackUrl: publicRuntimeConfig.nextAuthURL
-        ? publicRuntimeConfig.nextAuthURL + '/welcome'
-        : '/welcome',
+      callbackUrl: publicRuntimeConfig.nextAuthURL,
     });
   };
 
@@ -118,9 +128,7 @@ export const useAuthHook = () => {
         address: selected.id,
         name: username,
         anonymous,
-        callbackUrl: publicRuntimeConfig.nextAuthURL
-          ? publicRuntimeConfig.nextAuthURL + '/welcome'
-          : '/welcome',
+        callbackUrl: publicRuntimeConfig.nextAuthURL,
       });
     } else {
       console.log('[useAuthHook][login][info]', 'No registered user matched with username');
@@ -149,6 +157,8 @@ export const useAuthHook = () => {
     logout,
     signInWithAccount,
     register,
+    getUserByAccounts,
+    getRegisteredAccounts,
     anonymous,
   };
 };

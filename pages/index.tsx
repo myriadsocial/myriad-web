@@ -3,14 +3,18 @@ import React, {useEffect} from 'react';
 import {GetServerSideProps} from 'next';
 import {getSession} from 'next-auth/client';
 import getConfig from 'next/config';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
-import {Login} from 'src/components/Login';
 import AlertComponent from 'src/components/atoms/Alert/Alert.component';
 import {LoginLayout} from 'src/components/template/Login';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {healthcheck} from 'src/lib/api/healthcheck';
+
+const Login = dynamic(() => import('src/components/Login/Login'), {
+  ssr: false,
+});
 
 const {publicRuntimeConfig} = getConfig();
 
