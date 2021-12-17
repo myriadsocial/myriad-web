@@ -6,6 +6,7 @@ import {useRouter} from 'next/router';
 import {Button} from '@material-ui/core';
 
 import {PostDetail} from 'src/components/PostDetail';
+import {PostImporterContainer} from 'src/components/PostImporterList';
 import {PostVisibilityContainer} from 'src/components/PostVisibility';
 import {ReportContainer} from 'src/components/Report';
 import {SendTipContainer} from 'src/components/SendTip';
@@ -43,6 +44,7 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
   const [removing, setRemoving] = useState(false);
   const [postToRemove, setPostToRemove] = useState<Post | null>(null);
   const [reported, setReported] = useState<Post | null>(null);
+  const [importedPost, setImportedPost] = useState<Post | null>(null);
   const sendTipOpened = Boolean(tippedPost);
 
   const handleUpvote = (reference: Post | Comment) => {
@@ -68,6 +70,14 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
 
   const handleReportPost = (post: Post) => {
     setReported(post);
+  };
+
+  const handleImporters = (post: Post) => {
+    setImportedPost(post);
+  };
+
+  const closeImportedPost = () => {
+    setImportedPost(null);
   };
 
   const handleSharePost = (post: Post, type: 'link' | 'post') => {
@@ -131,6 +141,7 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
         onOpenTipHistory={openTipHistory}
         onDelete={handleDeletePost}
         onReport={handleReportPost}
+        onImporters={handleImporters}
         onShared={handleSharePost}
         onRemoveVote={handleRemoveVote}
         onVisibility={handlePostVisibility}
@@ -150,7 +161,7 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
       <TipHistoryContainer onSendTip={handleSendTip} />
 
       <ReportContainer reference={reported} onClose={closeReportPost} />
-
+      <PostImporterContainer post={importedPost} onClose={closeImportedPost} />
       <PostVisibilityContainer reference={visibility} onClose={closePostVisibility} />
 
       <PromptComponent

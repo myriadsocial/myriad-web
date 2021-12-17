@@ -18,6 +18,7 @@ import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {useTimelineFilter} from './hooks/use-timeline-filter.hook';
 import {useTimelineHook} from './hooks/use-timeline.hook';
 
+import {PostImporterContainer} from 'src/components/PostImporterList';
 import ShowIf from 'src/components/common/show-if.component';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
@@ -27,6 +28,7 @@ import {Post} from 'src/interfaces/post';
 import {TimelineFilter, TimelineType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
+import {removeImporter} from 'src/reducers/importers/actions';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
 import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
@@ -56,6 +58,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
   const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | null>(null);
   const [reported, setReported] = useState<Post | null>(null);
+  const [importedPost, setImportedPost] = useState<Post | null>(null);
   const [visibility, setVisibility] = useState<Post | null>(null);
   const [removing, setRemoving] = useState(false);
   const [postToRemove, setPostToRemove] = useState<Post | null>(null);
@@ -103,6 +106,15 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
   const handleReportPost = (post: Post) => {
     setReported(post);
+  };
+
+  const handleImporters = (post: Post) => {
+    setImportedPost(post);
+  };
+
+  const closeImportedPost = () => {
+    setImportedPost(null);
+    dispatch(removeImporter());
   };
 
   const closeReportPost = () => {
@@ -182,6 +194,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
           toggleDownvoting={handleToggleDownvoting}
           onShared={handleSharePost}
           onRemoveVote={handleRemoveVote}
+          onImporters={handleImporters}
         />
       </div>
 
@@ -236,6 +249,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
       <TipHistoryContainer onSendTip={handleSendTip} />
 
       <ReportContainer reference={reported} onClose={closeReportPost} />
+      <PostImporterContainer post={importedPost} onClose={closeImportedPost} />
       <PostVisibilityContainer reference={visibility} onClose={closePostVisibility} />
 
       <PromptComponent

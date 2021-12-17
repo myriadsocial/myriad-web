@@ -45,6 +45,7 @@ type PostDetailProps = {
   onReport: (post: Post) => void;
   onVisibility: (post: Post) => void;
   onShared: (post: Post, type: 'link' | 'post') => void;
+  onImporters: (post: Post) => void;
   expanded?: boolean;
   type?: 'share' | 'default';
 };
@@ -59,6 +60,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     onSendTip,
     toggleDownvoting,
     onOpenTipHistory,
+    onImporters,
     onDelete,
     onReport,
     onVisibility,
@@ -145,6 +147,10 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     onReport(post);
   };
 
+  const handleImporters = () => {
+    onImporters(post);
+  };
+
   const handlePostVisibility = () => {
     onVisibility(post);
   };
@@ -172,6 +178,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         onOpenTipHistory={handleOpenTipHistory}
         onDelete={handleDeletePost}
         onReport={handleReportPost}
+        onImporters={handleImporters}
         onVisibility={handlePostVisibility}
         disableAction={type === 'share'}
       />

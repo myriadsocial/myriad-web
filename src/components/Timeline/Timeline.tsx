@@ -30,6 +30,7 @@ type TimelineProps = {
   toggleDownvoting: (reference: Post | Comment | null) => void;
   onShared: (post: Post, type: 'link' | 'post') => void;
   onRemoveVote: (reference: Post | Comment) => void;
+  onImporters: (post: Post) => void;
 };
 
 export const Timeline: React.FC<TimelineProps> = props => {
@@ -49,6 +50,7 @@ export const Timeline: React.FC<TimelineProps> = props => {
     onShared,
     toggleDownvoting,
     onRemoveVote,
+    onImporters,
   } = props;
 
   const router = useRouter();
@@ -107,6 +109,7 @@ export const Timeline: React.FC<TimelineProps> = props => {
               onShared={onShared}
               onVisibility={onVisibility}
               onRemoveVote={onRemoveVote}
+              onImporters={onImporters}
             />
           ))
         )}

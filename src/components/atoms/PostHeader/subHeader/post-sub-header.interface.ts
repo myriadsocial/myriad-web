@@ -7,4 +7,5 @@ export type PostSubHeaderProps = {
   importers?: User[];
   totalImporters: number;
   url: string;
+  onImporters: () => void;
 };
