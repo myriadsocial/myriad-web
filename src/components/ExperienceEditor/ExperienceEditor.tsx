@@ -122,12 +122,14 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   };
 
   const handleImageUpload = async (files: File[]) => {
-    setIsloading(true);
-    const url = await onImageUpload(files);
+    if (files.length > 0) {
+      setIsloading(true);
+      const url = await onImageUpload(files);
 
-    setIsloading(false);
-    setImage(url);
-    setNewExperience({...newExperience, experienceImageURL: url});
+      setIsloading(false);
+      setImage(url);
+      setNewExperience({...newExperience, experienceImageURL: url});
+    }
   };
 
   const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {

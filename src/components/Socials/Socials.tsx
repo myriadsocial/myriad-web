@@ -49,13 +49,13 @@ export const Socials: React.FC<SocialsProps> = props => {
 
   const socialList = useSocialMediaList(socials);
 
-  const [selectedSocial, setSelectedSocial] = useState<SocialsEnum>(SocialsEnum.FACEBOOK);
+  const [selectedSocial, setSelectedSocial] = useState<SocialsEnum>(SocialsEnum.TWITTER);
   const [people, setPeople] = useState<SocialMedia[]>([]);
   const [selectedPeople, setSelectedPeople] = useState<string | null>(null);
   const [removing, setRemoving] = useState(false);
   const [peopleToRemove, setPeopleToRemove] = useState<SocialMedia | null>(null);
   const [addSocial, setAddSocial] = useState(false);
-  const enabledSocial = [SocialsEnum.FACEBOOK, SocialsEnum.TWITTER, SocialsEnum.REDDIT];
+  const enabledSocial = [SocialsEnum.TWITTER, SocialsEnum.REDDIT];
 
   useEffect(() => {
     getPeopleList();

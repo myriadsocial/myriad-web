@@ -1,15 +1,14 @@
 import React from 'react';
 import Carousel from 'react-elastic-carousel';
 
-import Link from 'next/link';
-
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import Purple from '../../../images/Bank_note_Isometric_1.svg';
-import Yellow from '../../../images/Conversation__Isometric_1.svg';
-import LogoImage from '../../../images/myriad-logo-black.svg';
 import {useStyles} from './Login.styles';
+
+import Purple from 'src/images/Bank_note_Isometric_1.svg';
+import Yellow from 'src/images/Conversation__Isometric_1.svg';
+import LogoImage from 'src/images/myriad-logo-black.svg';
 
 type LoginProps = {
   children: React.ReactNode;
@@ -23,30 +22,15 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
       <Grid container spacing={0}>
         <Grid item xs={7}>
           <div className={`${style.paper} ${style.flex}`}>
-            <LogoImage className={style.logo} />
+            <div className={style.logo}>
+              <LogoImage />
+            </div>
 
             <Typography variant="h1" className={style.title}>
               Social Media with <span className={style.titlePrimary}>no boundaries</span>
             </Typography>
 
             {children}
-
-            <Typography component="span" variant="h5">
-              To access Myriad, you need to use{' '}
-              <Link href={'https://polkadot.js.org/extension/'}>
-                <a
-                  href={'https://polkadot.js.org/extension/'}
-                  className={style.link}
-                  target="_blank"
-                  rel="noreferrer">
-                  Polkadot.js
-                </a>
-              </Link>
-              , on your browser{' '}
-              <span role="img" aria-label="emoticon-computer">
-                💻
-              </span>
-            </Typography>
           </div>
         </Grid>
         <Grid item xs={5}>
