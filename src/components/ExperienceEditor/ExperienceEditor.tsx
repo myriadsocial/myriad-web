@@ -236,7 +236,13 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         <InputLabel htmlFor="experience-picture" shrink={true} className={styles.label}>
           Picture
         </InputLabel>
-        <Dropzone onImageSelected={handleImageUpload} value={image} maxSize={3} isEdit={true} />
+        <Dropzone
+          onImageSelected={handleImageUpload}
+          value={image}
+          maxSize={3}
+          isEdit={type ? true : false}
+          editorType={type}
+        />
         <ShowIf condition={isLoading}>
           <div className={styles.loading}>
             <CircularProgress size={32} color="primary" />
