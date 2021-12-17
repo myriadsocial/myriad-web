@@ -202,7 +202,7 @@ export const deleteRequest = async (requestId: string): Promise<void> => {
 export const blockedUser = async (requesteeId: string, userId: string): Promise<void> => {
   await MyriadAPI.request({
     url: '/friends',
-    method: 'PATCH',
+    method: 'POST',
     data: {
       status: 'blocked',
       requesteeId: requesteeId,
