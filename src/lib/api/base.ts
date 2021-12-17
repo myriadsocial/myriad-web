@@ -21,7 +21,7 @@ export const initialize = (params?: AuthorizationParams): AxiosInstance => {
 
     API.interceptors.request.use(config => {
       config.headers = {
-        // 'Authorization': '<type> <credentials>',
+        Authorization: `Bearer ${publicRuntimeConfig.apiKey}`,
       };
 
       return config;

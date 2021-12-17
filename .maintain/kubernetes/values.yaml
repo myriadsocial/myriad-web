@@ -18,18 +18,16 @@ config:
   nextAuthURL: ""
   nextSecret: ""
   apiURL: ""
+  apiKey: ""
   rpcWSURL: ""
   firebase:
     projectId: ""
     apiKey: ""
     messagingSenderId: ""
     appId: ""
+    measurementId: ""
   sentry:
     dns: ""
-  cloudinary:
-    cloudName: ""
-    apiKey: ""
-    secret: ""
   facebook:
     appId: ""
   twitter:
