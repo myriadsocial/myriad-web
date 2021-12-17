@@ -58,7 +58,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 24,
     },
     term: {
-      fontWeight: 700,
+      fontWeight: 400,
       textDecoration: 'none',
     },
     checkbox: {

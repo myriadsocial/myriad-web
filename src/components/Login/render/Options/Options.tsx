@@ -19,13 +19,13 @@ import {useStyles} from './Options.style';
 
 import {PromptComponent as Prompt} from 'src/components/atoms/Prompt/prompt.component';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import BinanceIcon from 'src/images/network/binance.svg';
-import EthereumIcon from 'src/images/network/ethereum.svg';
+import BinanceIcon from 'src/images/network/binance-disabled.svg';
+import EthereumIcon from 'src/images/network/ethereum-disabled.svg';
 import PolkadotIcon from 'src/images/network/polkadot.svg';
-import PolygonIcon from 'src/images/network/polygon.svg';
-import CoinbaseIcon from 'src/images/wallet/coinbase.svg';
-import MetamaskIcon from 'src/images/wallet/metamask.svg';
-import TrustIcon from 'src/images/wallet/trust.svg';
+import PolygonIcon from 'src/images/network/polygon-disabled.svg';
+import CoinbaseIcon from 'src/images/wallet/coinbase-disabled.svg';
+import MetamaskIcon from 'src/images/wallet/metamask-disabled.svg';
+import TrustIcon from 'src/images/wallet/trust-disabled.svg';
 
 type OptionProps = {
   network?: string;
@@ -217,9 +217,6 @@ export const Options: React.FC<OptionProps> = props => {
             </Typography>
           }
         />
-        <Link href="/" style={{textAlign: 'center'}}>
-          Myriad Verified Contract
-        </Link>
       </Grid>
 
       <div>
