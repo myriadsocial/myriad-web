@@ -223,7 +223,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                 label={
                   <Typography>
                     I agree to the Myriad{' '}
-                    <a href="/" className={styles.term}>
+                    <a href="/term-of-use" className={styles.term}>
                       Terms of Service
                     </a>
                   </Typography>

@@ -40,10 +40,10 @@ export const ExperienceTabMenuContainer: React.FC = () => {
 
   useEffect(() => {
     //TODO: move this to app level to avoid refetching
-    if (!anonymous) {
+    if (!anonymous && user) {
       loadExperience();
     }
-  }, [anonymous]);
+  }, [anonymous, user]);
 
   useEffect(() => {
     setMyExperience(experiences);

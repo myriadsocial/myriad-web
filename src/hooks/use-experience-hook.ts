@@ -35,14 +35,14 @@ export const useExperienceHook = () => {
     searchExperience: searchedExperiences,
     detail: experience,
   } = useSelector<RootState, ExperienceState>(state => state.experienceState);
-  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
 
   useEffect(() => {
-    if (!anonymous) {
+    if (!anonymous && user) {
       loadExperience();
       loadAllExperiences();
     }
-  }, [anonymous]);
+  }, [anonymous, user]);
 
   const loadAllExperiences = () => {
     dispatch(fetchAllExperiences());

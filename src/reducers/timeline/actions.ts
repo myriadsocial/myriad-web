@@ -591,16 +591,13 @@ export const editPost: ThunkActionCreator<Actions, RootState> =
 export const getDedicatedPost: ThunkActionCreator<Actions, RootState> =
   (postId: string) => async (dispatch, getState) => {
     dispatch(setLoading(true));
+
     try {
       const {
         userState: {user},
       } = getState();
 
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      const post = await PostAPI.getPostDetail(postId, user.id);
+      const post = await PostAPI.getPostDetail(postId, user?.id);
 
       dispatch(setPost(post));
     } catch (error) {

@@ -80,12 +80,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
   useEffect(() => {
     const name = newExperience?.name;
-    const description = newExperience?.description;
     const experienceImageURL = newExperience?.experienceImageURL;
     const people = newExperience?.people?.length;
     const tags = newTags.length;
 
-    setDisable(!name || !description || !experienceImageURL || !people || !tags);
+    setDisable(!name || !experienceImageURL || !people || !tags);
   }, [newExperience, newTags]);
 
   useEffect(() => {
