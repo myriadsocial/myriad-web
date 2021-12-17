@@ -65,6 +65,7 @@ const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = 
               userExperience={userExperience}
               title={item.experience.name ?? 'Unnamed Experience'}
               creator={item.experience.user.name ?? 'Unnamed Myrian'}
+              ownerId={item.experience.user.id}
               imgUrl={
                 item.experience.experienceImageURL ??
                 'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg'
