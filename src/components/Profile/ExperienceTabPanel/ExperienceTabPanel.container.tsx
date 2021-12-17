@@ -19,7 +19,11 @@ type ExperienceTabPanelContainerProps = {
 
 export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerProps> = props => {
   const {user} = props;
-  const {subscribeExperience} = useExperienceHook();
+  const {
+    subscribeExperience,
+    unsubscribeExperience,
+    experiences: userExperience,
+  } = useExperienceHook();
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -80,6 +84,10 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
     subscribeExperience(experienceId);
   };
 
+  const handleUnsubscribeExperience = (experienceId: string) => {
+    unsubscribeExperience(experienceId);
+  };
+
   const handleCloneExperience = (experienceId: string) => {
     router.push(`/experience/${experienceId}/clone`);
   };
@@ -91,8 +99,10 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
   return (
     <ExperienceTabPanel
       experiences={myExperience}
+      userExperience={userExperience}
       onFilter={handleFilterType}
       onSubscribe={handleSubsibeExperience}
+      onUnsubscribe={handleUnsubscribeExperience}
       onFollow={handleCloneExperience}
       onPreview={handlePreviewExperience}
       filter={handleFilterExperience}

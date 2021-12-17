@@ -9,15 +9,26 @@ import {FilterDropdownMenu} from '../../atoms/FilterDropdownMenu';
 
 type ExperienceTabPanelProps = {
   experiences: UserExperience[];
+  userExperience?: UserExperience[];
   onFilter: (type: ExperienceType) => void;
   onSubscribe?: (experienceId: string) => void;
+  onUnsubscribe?: (experienceId: string) => void;
   onFollow?: (experienceId: string) => void;
   onPreview?: (experienceId: string) => void;
   filter: (sort: string) => void;
 };
 
 export const ExperienceTabPanel: React.FC<ExperienceTabPanelProps> = props => {
-  const {experiences, onSubscribe, onFollow, onPreview, onFilter, filter} = props;
+  const {
+    experiences,
+    userExperience,
+    onSubscribe,
+    onUnsubscribe,
+    onFollow,
+    onPreview,
+    onFilter,
+    filter,
+  } = props;
 
   const [filterTriggered, setFilterTriggered] = useState(false);
 
@@ -49,7 +60,9 @@ export const ExperienceTabPanel: React.FC<ExperienceTabPanelProps> = props => {
       <NonSelectableExperienceList
         isFilterTriggered={filterTriggered}
         experiences={experiences}
+        userExperience={userExperience}
         onSubscribe={onSubscribe}
+        onUnsubscribe={onUnsubscribe}
         onFollow={onFollow}
         onPreview={onPreview}
       />

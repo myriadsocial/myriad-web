@@ -10,9 +10,11 @@ import ShowIf from '../common/show-if.component';
 
 const SearchedExperienceList: React.FC<SearchedExperienceListProps> = ({
   experiences,
+  userExperience,
   onPreview,
   onFollow,
   onSubscribe,
+  onUnsubscribe,
 }) => {
   const classes = useStyles();
 
@@ -29,6 +31,7 @@ const SearchedExperienceList: React.FC<SearchedExperienceListProps> = ({
               <NonSelectableSimpleCard
                 ownerId={experience.user.id}
                 experienceId={experience.id}
+                userExperience={userExperience}
                 title={experience.name ?? 'Unnamed Experience'}
                 creator={experience.user.name ?? 'Unnamed Myrian'}
                 imgUrl={
@@ -36,6 +39,7 @@ const SearchedExperienceList: React.FC<SearchedExperienceListProps> = ({
                   'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg'
                 }
                 onSubscribe={onSubscribe}
+                onUnsubscribe={onUnsubscribe}
                 onFollow={onFollow}
                 onPreview={onPreview}
               />

@@ -6,11 +6,20 @@ import {SearchedExperienceList} from '.';
 import {useExperienceHook} from '../../hooks/use-experience-hook';
 
 export const SearchedExperienceListContainer: React.FC = () => {
-  const {searchedExperiences, subscribeExperience} = useExperienceHook();
+  const {
+    searchedExperiences,
+    subscribeExperience,
+    unsubscribeExperience,
+    experiences: userExperience,
+  } = useExperienceHook();
   const router = useRouter();
 
   const handleSubsibeExperience = (experienceId: string) => {
     subscribeExperience(experienceId);
+  };
+
+  const handleUnsubscribeExperience = (experienceId: string) => {
+    unsubscribeExperience(experienceId);
   };
 
   const handleCloneExperience = (experienceId: string) => {
@@ -24,7 +33,9 @@ export const SearchedExperienceListContainer: React.FC = () => {
   return (
     <SearchedExperienceList
       experiences={searchedExperiences}
+      userExperience={userExperience}
       onSubscribe={handleSubsibeExperience}
+      onUnsubscribe={handleUnsubscribeExperience}
       onFollow={handleCloneExperience}
       onPreview={handlePreviewExperience}
     />
