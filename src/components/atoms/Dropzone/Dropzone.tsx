@@ -33,6 +33,7 @@ type DropzoneProps = {
   maxSize?: number;
   multiple?: boolean;
   usage?: string;
+  isEdit?: boolean;
   onImageSelected: (files: File[]) => void;
 };
 
@@ -55,6 +56,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     border = true,
     placeholder = 'File must be .jpeg or .png',
     usage = '',
+    isEdit = false,
   } = props;
   const styles = useStyles({border});
 
@@ -66,9 +68,9 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
 
   useEffect(() => {
     if (value) {
-      setPreview(prevPreview => [...prevPreview, value]);
+      setPreview([value]);
     }
-  }, []);
+  }, [value]);
 
   const {getRootProps, getInputProps, open} = useDropzone({
     accept,
@@ -213,14 +215,20 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     );
   };
 
-  const removeFile = (index: number) => {
-    const currentFiles = files.filter((file, i) => index !== i);
-    const currentPreview = preview.filter((url, i) => index !== i);
+  const removeFile = (index?: number) => {
+    if (isEdit) {
+      setPreview([]);
+      const currentFiles = files.filter((file, i) => index !== -1);
+      onImageSelected(currentFiles);
+    } else {
+      const currentFiles = files.filter((file, i) => index !== i);
+      const currentPreview = preview.filter((url, i) => index !== i);
 
-    setFiles(currentFiles);
-    setPreview(currentPreview);
+      setFiles(currentFiles);
+      setPreview(currentPreview);
 
-    onImageSelected(currentFiles);
+      onImageSelected(currentFiles);
+    }
   };
 
   const handleReuploadImage = () => {
@@ -259,6 +267,21 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
         <input {...getInputProps()} />
         {preview.length ? (
           <>
+            <ShowIf condition={isEdit}>
+              <img
+                style={{visibility: 'visible'}}
+                src={preview[0]}
+                alt=""
+                className={styles.image}
+              />
+              <IconButton
+                size="small"
+                aria-label={`remove image`}
+                className={styles.icon}
+                onClick={() => removeFile()}>
+                <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
+              </IconButton>
+            </ShowIf>
             <ShowIf condition={type === 'image'}>
               <ImageList rowHeight={128} cols={6} className={styles.preview}>
                 {files.map((item, i) => (
@@ -330,7 +353,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
           </>
         )}
 
-        {!loading && (
+        {!loading && preview.length === 0 && (
           <Button
             className={styles.button}
             size="small"
