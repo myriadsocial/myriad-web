@@ -115,12 +115,8 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const handleBlockUser = async () => {
     if (!profile) return;
 
-    if (friendStatus) {
-      await toggleRequest(friendStatus, FriendStatus.BLOCKED);
-    } else {
-      await dispatch(blockedFriendList(profile.id));
-      await reloadFriendStatus();
-    }
+    await dispatch(blockedFriendList(profile.id));
+    await reloadFriendStatus();
 
     openToasterSnack({
       message: 'User successfully blocked',
