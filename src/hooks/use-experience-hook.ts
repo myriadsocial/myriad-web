@@ -81,7 +81,7 @@ export const useExperienceHook = () => {
       description: newExperience.description,
       experienceImageURL: newExperience.experienceImageURL,
     };
-    dispatch(cloneExperience(newExperience.id, experience, callback));
+    dispatch(cloneExperience(experience, callback));
   };
 
   const editExperience = (

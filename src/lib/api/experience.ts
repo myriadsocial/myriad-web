@@ -170,7 +170,7 @@ export const createExperience = async (
   experience: Experience,
 ): Promise<Experience> => {
   const {data} = await MyriadAPI.request<Experience>({
-    url: `/users/${userId}/new-experiences`,
+    url: `/users/${userId}/experiences`,
     method: 'POST',
     data: experience,
   });
