@@ -245,7 +245,11 @@ export const useNotificationList = (notifications: Notification[]): Notification
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/wallet?type=history`,
+            href: `${
+              notification.additionalReferenceId && notification.additionalReferenceId.length > 0
+                ? '/post/' + notification?.additionalReferenceId[0]?.postId
+                : '/wallet?type=history'
+            }`,
           };
 
         case NotificationType.COMMENT_TIPS:
