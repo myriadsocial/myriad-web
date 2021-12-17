@@ -308,6 +308,7 @@ export const getPostDetail = async (id: string, userId?: string): Promise<Post> 
     url: `/posts/${id}`,
     method: 'GET',
     params: {
+      userId: userId ?? 'anonymous',
       importers: true,
       filter: {
         include: [

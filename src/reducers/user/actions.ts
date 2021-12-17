@@ -24,6 +24,10 @@ export interface SetUserAsAnonymous extends Action {
   alias: string;
 }
 
+export interface ClearUser extends Action {
+  type: constants.CLEAR_USER;
+}
+
 export interface FetchUser extends Action {
   type: constants.FETCH_USER;
   user: User;
@@ -73,6 +77,7 @@ export type Actions =
   | SetDefaultCurrency
   | SetUserAsAnonymous
   | UpdateUser
+  | ClearUser
   | FetchUserTransactionDetail
   | SetVerifyingSocial
   | ResetVerifyingSocial
@@ -91,6 +96,10 @@ export const setUser = (user: User): FetchUser => ({
 export const setAnonymous = (alias: string): SetUserAsAnonymous => ({
   type: constants.SET_USER_AS_ANONYMOUS,
   alias,
+});
+
+export const clearUser = (): ClearUser => ({
+  type: constants.CLEAR_USER,
 });
 
 export const setVerifyingSocial = (): SetVerifyingSocial => ({

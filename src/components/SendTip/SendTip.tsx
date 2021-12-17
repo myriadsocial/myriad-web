@@ -49,7 +49,6 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
   //TODO: fetch gas fee using api
   const [gasFee] = useState('0.01');
   const [checked, setChecked] = useState(false);
-  const [url] = useState('https://myriad.social/');
   const [lengthError, setLengthError] = useState(false);
 
   const digitLengthLimit = 10;
@@ -292,9 +291,9 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                   label={
                     <Typography>
                       I agree to the Myriad{' '}
-                      <Link href={url}>
+                      <Link href="/term-of-use">
                         <a
-                          href={url}
+                          href="/term-of-use"
                           target="_blank"
                           rel="noreferrer"
                           className={classes.clickableText}>

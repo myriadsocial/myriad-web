@@ -19,8 +19,8 @@ import {useStyles} from './Options.style';
 
 import {PromptComponent as Prompt} from 'src/components/atoms/Prompt/prompt.component';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import BinanceIcon from 'src/images/network/binance-disabled.svg';
 import EthereumIcon from 'src/images/network/ethereum-disabled.svg';
+import NearIcon from 'src/images/network/near.svg';
 import PolkadotIcon from 'src/images/network/polkadot.svg';
 import PolygonIcon from 'src/images/network/polygon-disabled.svg';
 import CoinbaseIcon from 'src/images/wallet/coinbase-disabled.svg';
@@ -37,6 +37,7 @@ enum NetworkTypeEnum {
   POLKADOT = 'polkadot',
   BINANCE = 'binance',
   POLYGON = 'polygon',
+  NEAR = 'near',
 }
 
 enum WalletTypeEnum {
@@ -58,24 +59,24 @@ export const Options: React.FC<OptionProps> = props => {
   const [wallet, setWallet] = useState<WalletTypeEnum | null>(null);
   const [termApproved, setTermApproved] = useState(false);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
-  const [extensionChecked, setCheckingExtension] = useState(false);
+  const [extensionChecked, setExtensionChecked] = useState(false);
   const [extensionEnabled, setExtensionEnabled] = useState(false);
   const [connectAttempted, setConnectAttempted] = useState(false);
 
-  const setSelectedNetwork = (network: NetworkTypeEnum) => () => {
-    setNetwork(network);
+  const setSelectedNetwork = (value: NetworkTypeEnum) => () => {
+    setNetwork(value);
 
-    if (network === NetworkTypeEnum.POLKADOT) {
-      setSelectedWallet(WalletTypeEnum.POLKADOT);
+    if (value === NetworkTypeEnum.POLKADOT) {
+      setSelectedWallet(WalletTypeEnum.POLKADOT)();
     } else {
       setWallet(null);
     }
   };
 
-  const setSelectedWallet = (wallet: WalletTypeEnum) => () => {
-    switch (wallet) {
+  const setSelectedWallet = (value: WalletTypeEnum) => () => {
+    switch (value) {
       case WalletTypeEnum.POLKADOT:
-        setWallet(wallet);
+        setWallet(value);
         checkPolkdostExtensionInstalled();
         break;
 
@@ -88,7 +89,7 @@ export const Options: React.FC<OptionProps> = props => {
     const installed = await enablePolkadotExtension();
 
     setExtensionEnabled(installed);
-    setCheckingExtension(true);
+    setExtensionChecked(true);
   };
 
   const toggleTermApproved = () => {
@@ -123,7 +124,7 @@ export const Options: React.FC<OptionProps> = props => {
       navigate('/account');
     } else {
       setWallet(null);
-      setCheckingExtension(false);
+      setExtensionChecked(false);
     }
   };
 
@@ -149,10 +150,10 @@ export const Options: React.FC<OptionProps> = props => {
               <Typography>Ethereum</Typography>
             </div>
           </ListItem>
-          <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.BINANCE)}>
+          <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.NEAR)}>
             <div className={styles.card}>
-              <SvgIcon component={BinanceIcon} className={styles.icon} viewBox="0 0 32 32" />
-              <Typography>Binance</Typography>
+              <SvgIcon component={NearIcon} className={styles.icon} viewBox="0 0 32 32" />
+              <Typography>Near</Typography>
             </div>
           </ListItem>
           <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.POLYGON)}>
@@ -181,19 +182,31 @@ export const Options: React.FC<OptionProps> = props => {
             </div>
           </ListItem>
 
-          <ListItem disableGutters disabled onClick={setSelectedWallet(WalletTypeEnum.COINBASE)}>
+          <ListItem
+            style={{visibility: 'hidden'}}
+            disableGutters
+            disabled
+            onClick={setSelectedWallet(WalletTypeEnum.COINBASE)}>
             <div className={styles.card}>
               <SvgIcon component={CoinbaseIcon} className={styles.icon} viewBox="0 0 32 32" />
               <Typography>Coinbase</Typography>
             </div>
           </ListItem>
-          <ListItem disableGutters disabled onClick={setSelectedWallet(WalletTypeEnum.METAMASK)}>
+          <ListItem
+            style={{visibility: 'hidden'}}
+            disableGutters
+            disabled
+            onClick={setSelectedWallet(WalletTypeEnum.METAMASK)}>
             <div className={styles.card}>
               <SvgIcon component={MetamaskIcon} className={styles.icon} viewBox="0 0 32 32" />
               <Typography>Metamask</Typography>
             </div>
           </ListItem>
-          <ListItem disableGutters disabled onClick={setSelectedWallet(WalletTypeEnum.TRUST)}>
+          <ListItem
+            style={{visibility: 'hidden'}}
+            disableGutters
+            disabled
+            onClick={setSelectedWallet(WalletTypeEnum.TRUST)}>
             <div className={styles.card}>
               <SvgIcon component={TrustIcon} className={styles.icon} viewBox="0 0 32 32" />
               <Typography>Trust Wallet</Typography>
@@ -210,11 +223,11 @@ export const Options: React.FC<OptionProps> = props => {
           label={
             <Typography style={{color: '#0A0A0A'}}>
               I already read and accept Myriad&nbsp;
-              <a href="/" className={styles.term}>
+              <a href="/term-of-use" className={styles.term}>
                 Terms of Service
               </a>
               &nbsp;and&nbsp;
-              <a href="/" className={styles.term}>
+              <a href="/privacy-policy" className={styles.term}>
                 Privacy Policy
               </a>
             </Typography>

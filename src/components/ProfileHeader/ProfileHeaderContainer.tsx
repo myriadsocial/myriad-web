@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
-import {signOut} from 'next-auth/client';
+import {signOut, useSession} from 'next-auth/client';
 import {useRouter} from 'next/router';
 
 import {Button, Link, Typography} from '@material-ui/core';
@@ -15,6 +16,7 @@ import {useAuthHook} from 'src/hooks/auth.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {RootState} from 'src/reducers';
 import {NotificationState} from 'src/reducers/notification/reducer';
+import {clearUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {Prompt} from 'src/stories/Prompt.stories';
 
@@ -27,6 +29,8 @@ export const ProfileHeaderContainer: React.FC<Props> = ({toggleNotification}) =>
   const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
 
   const router = useRouter();
+  const dispatch = useDispatch();
+  const [session] = useSession();
 
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {logout, signInWithAccount, getRegisteredAccounts} = useAuthHook();
@@ -64,10 +68,15 @@ export const ProfileHeaderContainer: React.FC<Props> = ({toggleNotification}) =>
     if (anonymous === false) {
       logout();
     } else {
-      await signOut({
-        callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
-        redirect: true,
-      });
+      if (session) {
+        await signOut({
+          callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
+          redirect: true,
+        });
+      } else {
+        dispatch(clearUser());
+        router.push(`/`);
+      }
     }
   };
 
