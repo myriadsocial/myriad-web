@@ -24,6 +24,8 @@ import {useStyles} from './history-detail-list.styles';
 import {formatDistanceStrict} from 'date-fns';
 import _ from 'lodash';
 import {Loading} from 'src/components/atoms/Loading';
+import {formatUsd} from 'src/helpers/balance';
+import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
 import {CurrencyId} from 'src/interfaces/currency';
 
 type metaTrxProps = {
@@ -45,6 +47,7 @@ type HistoryDetailListProps = {
 
 export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const {allTxs, meta, isLoading, inboundTxs, outboundTxs, userId, nextPage} = props;
+  const {loading, exchangeRates} = useExchangeRate();
 
   useEffect(() => {
     const newArray = allTxs.map(tx => ({
@@ -68,6 +71,17 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const getUniqueListBy = (arr: Array<any>, key: string) => {
     return [...new Map(arr.map(item => [item[key], item])).values()];
+  };
+
+  const getConversion = (currencyId: string) => {
+    if (loading) {
+      return 0;
+    }
+
+    const found = exchangeRates.find(exchangeRate => exchangeRate.id === currencyId);
+
+    if (found) return found.price;
+    return 0;
   };
 
   const handleSortChange = (sort: string) => {
@@ -239,7 +253,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                             </Typography>
                           )}
                           <Typography variant="caption" color="textSecondary">
-                            {'~15.25 USD'}
+                            {`~${formatUsd(tx.amount, getConversion(tx.currencyId))} USD`}
                           </Typography>
                         </div>
                         <div>

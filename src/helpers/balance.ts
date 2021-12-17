@@ -1,5 +1,5 @@
 import {BalanceDetail} from '../interfaces/balance';
-import {Currency, CurrencyId} from '../interfaces/currency';
+import {CurrencyId} from '../interfaces/currency';
 
 import _ from 'lodash';
 
@@ -11,8 +11,9 @@ export const formatNumber = (number: number, decimals: number): number => {
 };
 
 // TODO: check if needs to be removed
-export const formatUsd = (value: number, currency: Currency): number => {
-  return value;
+export const formatUsd = (value: number, conversion: number): string | void => {
+  if (value * conversion === 0) return;
+  return (value * conversion).toFixed(2);
 };
 
 export const removeMyriad = (balanceDetails: BalanceDetail[]): BalanceDetail[] => {
