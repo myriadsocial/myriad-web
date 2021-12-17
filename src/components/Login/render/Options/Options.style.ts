@@ -8,6 +8,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: 30,
       background: '#FFFFFF',
       borderRadius: 10,
+      boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
     },
     wrapper: {
       marginBottom: 8,

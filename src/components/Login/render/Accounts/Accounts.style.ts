@@ -9,6 +9,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#FFFFFF',
       borderRadius: 10,
       padding: 30,
+      boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
     },
     list: {
       paddingTop: 0,
