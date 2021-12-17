@@ -188,12 +188,6 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         />
       </FormControl>
 
-      <Typography className={style.marker}>
-        {isChanged
-          ? 'You already set username'
-          : 'Max 16 char. Please be aware that you can only change username once'}
-      </Typography>
-
       <FormControl fullWidth variant="outlined">
         <InputLabel htmlFor="display-name">Display Name</InputLabel>
         <OutlinedInput
