@@ -64,7 +64,12 @@ export const Options: React.FC<OptionProps> = props => {
 
   const setSelectedNetwork = (network: NetworkTypeEnum) => () => {
     setNetwork(network);
-    setWallet(null);
+
+    if (network === NetworkTypeEnum.POLKADOT) {
+      setSelectedWallet(WalletTypeEnum.POLKADOT);
+    } else {
+      setWallet(null);
+    }
   };
 
   const setSelectedWallet = (wallet: WalletTypeEnum) => () => {
@@ -122,9 +127,6 @@ export const Options: React.FC<OptionProps> = props => {
     }
   };
 
-  console.log('TERM APPROVED', termApproved);
-  console.log('EXTENSION CHECKED', extensionChecked);
-
   return (
     <div className={styles.root}>
       <div className={styles.wrapper}>
@@ -132,6 +134,15 @@ export const Options: React.FC<OptionProps> = props => {
           <Typography variant="h5">Select Network</Typography>
         </div>
         <List disablePadding classes={{root: styles.list}}>
+          <ListItem
+            disableGutters
+            selected={network === NetworkTypeEnum.POLKADOT}
+            onClick={setSelectedNetwork(NetworkTypeEnum.POLKADOT)}>
+            <div className={styles.card}>
+              <SvgIcon component={PolkadotIcon} className={styles.icon} viewBox="0 0 32 32" />
+              <Typography>Polkadot</Typography>
+            </div>
+          </ListItem>
           <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.ETHEREUM)}>
             <div className={styles.card}>
               <SvgIcon component={EthereumIcon} className={styles.icon} viewBox="0 0 32 32" />
@@ -150,15 +161,6 @@ export const Options: React.FC<OptionProps> = props => {
               <Typography>Polygon</Typography>
             </div>
           </ListItem>
-          <ListItem
-            disableGutters
-            selected={network === NetworkTypeEnum.POLKADOT}
-            onClick={setSelectedNetwork(NetworkTypeEnum.POLKADOT)}>
-            <div className={styles.card}>
-              <SvgIcon component={PolkadotIcon} className={styles.icon} viewBox="0 0 32 32" />
-              <Typography>Polkadot</Typography>
-            </div>
-          </ListItem>
         </List>
       </div>
 
@@ -168,6 +170,17 @@ export const Options: React.FC<OptionProps> = props => {
         </div>
 
         <List disablePadding classes={{root: styles.list}}>
+          <ListItem
+            disableGutters
+            disabled={network === null}
+            selected={wallet === WalletTypeEnum.POLKADOT}
+            onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}>
+            <div className={styles.card}>
+              <SvgIcon component={PolkadotIcon} className={styles.icon} viewBox="0 0 32 32" />
+              <Typography>Polkadot.js</Typography>
+            </div>
+          </ListItem>
+
           <ListItem disableGutters disabled onClick={setSelectedWallet(WalletTypeEnum.COINBASE)}>
             <div className={styles.card}>
               <SvgIcon component={CoinbaseIcon} className={styles.icon} viewBox="0 0 32 32" />
@@ -186,16 +199,6 @@ export const Options: React.FC<OptionProps> = props => {
               <Typography>Trust Wallet</Typography>
             </div>
           </ListItem>
-          <ListItem
-            disableGutters
-            disabled={network === null}
-            selected={wallet === WalletTypeEnum.POLKADOT}
-            onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}>
-            <div className={styles.card}>
-              <SvgIcon component={PolkadotIcon} className={styles.icon} viewBox="0 0 32 32" />
-              <Typography>Polkadot.js</Typography>
-            </div>
-          </ListItem>
         </List>
       </div>
 
@@ -205,7 +208,7 @@ export const Options: React.FC<OptionProps> = props => {
           onChange={toggleTermApproved}
           control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
           label={
-            <Typography>
+            <Typography style={{color: '#0A0A0A'}}>
               I already read and accept Myriad&nbsp;
               <a href="/" className={styles.term}>
                 Terms of Service

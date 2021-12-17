@@ -9,6 +9,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#FFFFFF',
       borderRadius: 10,
       padding: 40,
+      boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
 
       '& .MuiFormHelperText-contained': {
         marginLeft: 0,
