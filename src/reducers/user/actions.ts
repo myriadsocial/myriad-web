@@ -368,12 +368,6 @@ export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
             variant: 'error',
           }),
         );
-
-        dispatch(
-          setError({
-            message: 'Token is already on your wallet!',
-          }),
-        );
       } else {
         dispatch(setError(error.message));
       }
