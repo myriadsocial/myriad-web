@@ -73,7 +73,8 @@ jobs:
             FIREBASE_MEASUREMENT_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             FACEBOOK_APP_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_API_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/TWITTER_API_KEY
+            TWITTER_BEARER_TOKEN:${{ secrets.DEV_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            DNS_WEB:${{ secrets.DEV_GCP_PROJECT_ID }}/DNS_WEB
             SSH_HOST:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_KEY
@@ -87,9 +88,9 @@ jobs:
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
-            helm repo add myriadsocial https://charts.myriad.social
+            helm repo add myriad https://charts.myriad.systems
             helm repo update
-            helm upgrade myriad-web myriadsocial/myriad-web \
+            helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.sha_short }}-${{ needs.compute-build-info.outputs.date }} \
               --set-string config.appName="Myriad Development" \
@@ -166,7 +167,8 @@ jobs:
             FIREBASE_MEASUREMENT_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             FACEBOOK_APP_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_API_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/TWITTER_API_KEY
+            TWITTER_BEARER_TOKEN:${{ secrets.STG_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            DNS_WEB:${{ secrets.STG_GCP_PROJECT_ID }}/DNS_WEB
             SSH_HOST:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_KEY
@@ -180,9 +182,9 @@ jobs:
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
-            helm repo add myriadsocial https://charts.myriad.social
+            helm repo add myriad https://charts.myriad.systems
             helm repo update
-            helm upgrade myriad-web myriadsocial/myriad-web \
+            helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string image.pullPolicy=Always \
@@ -260,7 +262,8 @@ jobs:
             FIREBASE_MEASUREMENT_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             FACEBOOK_APP_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_API_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/TWITTER_API_KEY
+            TWITTER_BEARER_TOKEN:${{ secrets.TESTNET_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            DNS_WEB:${{ secrets.TESTNET_GCP_PROJECT_ID }}/DNS_WEB
             SSH_HOST:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_KEY
@@ -274,9 +277,9 @@ jobs:
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
-            helm repo add myriadsocial https://charts.myriad.social
+            helm repo add myriad https://charts.myriad.systems
             helm repo update
-            helm upgrade myriad-web myriadsocial/myriad-web \
+            helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName="Myriad Testnet" \
@@ -353,7 +356,8 @@ jobs:
             FIREBASE_MEASUREMENT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             FACEBOOK_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/TWITTER_API_KEY
+            TWITTER_BEARER_TOKEN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            DNS_WEB:${{ secrets.MAINNET_GCP_PROJECT_ID }}/DNS_WEB
             SSH_HOST:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_KEY
@@ -367,9 +371,9 @@ jobs:
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
-            helm repo add myriadsocial https://charts.myriad.social
+            helm repo add myriad https://charts.myriad.systems
             helm repo update
-            helm upgrade myriad-web myriadsocial/myriad-web \
+            helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName=Myriad \
@@ -446,7 +450,8 @@ jobs:
             FIREBASE_MEASUREMENT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             FACEBOOK_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/TWITTER_API_KEY
+            TWITTER_BEARER_TOKEN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            DNS_WEB:${{ secrets.MAINNET_GCP_PROJECT_ID }}/DNS_WEB
             SSH_HOST:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_KEY
@@ -460,9 +465,9 @@ jobs:
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
-            helm repo add myriadsocial https://charts.myriad.social
+            helm repo add myriad https://charts.myriad.systems
             helm repo update
-            helm upgrade myriad-web myriadsocial/myriad-web \
+            helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName=Myriad \
