@@ -8,6 +8,7 @@ import {Button} from '@material-ui/core';
 import {DropdownMenu} from '../../atoms/DropdownMenu';
 import {sortOptions} from './default';
 
+import {PostImporterContainer} from 'src/components/PostImporterList';
 import {PostVisibilityContainer} from 'src/components/PostVisibility';
 import {ReportContainer} from 'src/components/Report';
 import {SendTipContainer} from 'src/components/SendTip';
@@ -27,6 +28,7 @@ import {Post} from 'src/interfaces/post';
 import {TimelineFilter} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
+import {removeImporter} from 'src/reducers/importers/actions';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
 
 type TimelineContainerProps = {
@@ -50,6 +52,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
   const [reported, setReported] = useState<Post | null>(null);
+  const [importedPost, setImportedPost] = useState<Post | null>(null);
   const [removing, setRemoving] = useState(false);
   const [postToRemove, setPostToRemove] = useState<Post | null>(null);
   const sendTipOpened = Boolean(tippedPost);
@@ -88,6 +91,15 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
 
   const handleReportPost = (post: Post) => {
     setReported(post);
+  };
+
+  const handleImportedPost = (post: Post) => {
+    setImportedPost(post);
+  };
+
+  const closeImporters = () => {
+    setImportedPost(null);
+    dispatch(removeImporter());
   };
 
   const closeReportPost = () => {
@@ -198,6 +210,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
         toggleDownvoting={handleToggleDownvoting}
         onShared={handleSharePost}
         onRemoveVote={handleRemoveVote}
+        onImporters={handleImportedPost}
       />
 
       <Modal
@@ -212,6 +225,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
       <TipHistoryContainer onSendTip={handleSendTip} />
 
       <ReportContainer reference={reported} onClose={closeReportPost} />
+      <PostImporterContainer post={importedPost} onClose={closeImporters} />
 
       <PostVisibilityContainer reference={visibility} onClose={closePostVisibility} />
 

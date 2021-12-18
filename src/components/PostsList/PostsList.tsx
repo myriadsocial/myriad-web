@@ -28,6 +28,7 @@ type PostsListProps = {
   toggleDownvoting: (reference: Post | Comment | null) => void;
   onShared: (post: Post, type: 'link' | 'post') => void;
   onRemoveVote: (reference: Post | Comment) => void;
+  onImporters: (post: Post) => void;
 };
 
 export const PostsList: React.FC<PostsListProps> = props => {
@@ -45,6 +46,7 @@ export const PostsList: React.FC<PostsListProps> = props => {
     onPostVisibility,
     toggleDownvoting,
     onRemoveVote,
+    onImporters,
   } = props;
 
   const classes = useStyles();
@@ -118,6 +120,7 @@ export const PostsList: React.FC<PostsListProps> = props => {
               onShared={onShared}
               onRemoveVote={onRemoveVote}
               onVisibility={onPostVisibility}
+              onImporters={onImporters}
             />
           ))
         )}
