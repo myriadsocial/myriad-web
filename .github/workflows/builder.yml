@@ -32,9 +32,9 @@ jobs:
           LATEST_TAG=latest-pre-alpha
           PRE_RELEASE=true
 
-          if [[ $GITHUB_REF =~ refs/heads/tags/ ]] ;
+          if [[ $GITHUB_REF =~ refs/tags/ ]] ;
           then
-            TAG=${GITHUB_REF#refs/heads/tags/}
+            TAG=${GITHUB_REF#refs/tags/}
             VERSION=${TAG%.*}.$((${TAG##*.}))
             REVISION_TAG=$TAG
 
