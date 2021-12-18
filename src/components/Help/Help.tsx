@@ -15,7 +15,7 @@ export const HelpComponent: React.FC = () => {
   const style = useStyles();
 
   const handleRedirectMyriadSocial = () => {
-    window.open(publicRuntimeConfig.myriadWebsite, '_blank');
+    window.open(publicRuntimeConfig.myriadWebsiteURL, '_blank');
   };
 
   const handleRedirectToTelegram = () => {

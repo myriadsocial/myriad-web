@@ -5,7 +5,7 @@ import Axios from 'axios';
 const {publicRuntimeConfig} = getConfig();
 
 const MyriadAPI = Axios.create({
-  baseURL: publicRuntimeConfig.apiURL,
+  baseURL: publicRuntimeConfig.myriadAPIURL,
 });
 
 export const getWalletAddress = async (postId: string) => {

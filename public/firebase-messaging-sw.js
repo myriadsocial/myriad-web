@@ -8,6 +8,7 @@ firebase.initializeApp({
   projectId: NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   messagingSenderId: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 });
 
 const messaging = firebase.messaging();
@@ -40,7 +41,7 @@ messaging.onBackgroundMessage(function (payload) {
   setTimeout(() => {
     const notificationOptions = {
       body,
-      icon: 'https://res.cloudinary.com/dsget80gs/image/upload/myriad/myriad-purple-logo.jpg',
+      icon: 'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg',
     };
 
     self.registration.showNotification(title, notificationOptions);

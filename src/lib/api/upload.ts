@@ -5,7 +5,7 @@ import Axios from 'axios';
 const {publicRuntimeConfig} = getConfig();
 
 const MyriadAPI = Axios.create({
-  baseURL: publicRuntimeConfig.apiURL,
+  baseURL: publicRuntimeConfig.myriadAPIURL,
 });
 
 export enum Kind {

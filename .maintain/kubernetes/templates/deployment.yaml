@@ -54,9 +54,14 @@ spec:
               value: {{ .Values.config.nextAuthURL }}
             - name: SECRET
               value: {{ .Values.config.nextSecret }}
-            - name: NEXT_PUBLIC_API_URL
+            - name: NEXT_PUBLIC_MYRIAD_API_URL
               value: {{ .Values.config.apiURL }}
-            - name: NEXT_PUBLIC_MYRIAD_WS_RPC
+            - name: NEXT_PUBLIC_MYRIAD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "myriad-web.apiSecretName" . }}
+                  key: key
+            - name: NEXT_PUBLIC_MYRIAD_RPC_WS_URL
               value: {{ .Values.config.rpcWSURL }}
             - name: NEXT_PUBLIC_FIREBASE_PROJECT_ID
               valueFrom:
@@ -78,6 +83,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "myriad-web.firebaseSecretName" . }}
                   key: appId
+            - name: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "myriad-web.firebaseSecretName" . }}
+                  key: measurementId
             {{- if .Values.config.sentry.dns }}
             - name: SENTRY_DSN
               valueFrom:
@@ -85,27 +95,12 @@ spec:
                   name: {{ include "myriad-web.sentrySecretName" . }}
                   key: dns
             {{- end }}
-            - name: NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "myriad-web.cloudinarySecretName" . }}
-                  key: cloudName
-            - name: CLOUDINARY_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "myriad-web.cloudinarySecretName" . }}
-                  key: apiKey
-            - name: CLOUDINARY_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "myriad-web.cloudinarySecretName" . }}
-                  key: secret
             - name: NEXT_PUBLIC_FACEBOOK_APP_ID
               valueFrom:
                 secretKeyRef:
                   name: {{ include "myriad-web.facebookSecretName" . }}
                   key: appId
-            - name: TWITTER_BEARER_TOKEN
+            - name: TWITTER_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "myriad-web.twitterSecretName" . }}

@@ -62,6 +62,13 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
+Create the name of API secret.
+*/}}
+{{- define "myriad-web.apiSecretName" -}}
+{{- printf "%s-%s" (include "myriad-web.fullname" .) "api" | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
 Create the name of firebase secret.
 */}}
 {{- define "myriad-web.firebaseSecretName" -}}
@@ -73,13 +80,6 @@ Create the name of sentry secret.
 */}}
 {{- define "myriad-web.sentrySecretName" -}}
 {{- printf "%s-%s" (include "myriad-web.fullname" .) "sentry" | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Create the name of cloudinary secret.
-*/}}
-{{- define "myriad-web.cloudinarySecretName" -}}
-{{- printf "%s-%s" (include "myriad-web.fullname" .) "cloudinary" | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*

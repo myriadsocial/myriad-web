@@ -62,6 +62,7 @@ jobs:
         with:
           secrets: |-
             API_URL:${{ secrets.DEV_GCP_PROJECT_ID }}/API_URL
+            API_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/API_KEY
             RPC_WS_URL:${{ secrets.DEV_GCP_PROJECT_ID }}/RPC_WS_URL
             BASE_WEBSITE:${{ secrets.DEV_GCP_PROJECT_ID }}/BASE_WEBSITE
             SUPPORT_MAIL:${{ secrets.DEV_GCP_PROJECT_ID }}/SUPPORT_MAIL
@@ -69,12 +70,10 @@ jobs:
             FIREBASE_API_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
             FIREBASE_APP_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FIREBASE_APP_ID
+            FIREBASE_MEASUREMENT_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
-            CLOUDINARY_CLOUND_NAME:${{ secrets.DEV_GCP_PROJECT_ID }}/CLOUDINARY_CLOUND_NAME
-            CLOUDINARY_API_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/CLOUDINARY_API_KEY
-            CLOUDINARY_SECRET:${{ secrets.DEV_GCP_PROJECT_ID }}/CLOUDINARY_SECRET
             FACEBOOK_APP_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_BEARER_TOKEN:${{ secrets.DEV_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            TWITTER_API_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/TWITTER_API_KEY
             SSH_HOST:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_KEY
@@ -97,6 +96,7 @@ jobs:
               --set-string config.nextAuthURL=https://app.dev.myriad.systems \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
+              --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.rpcWSURL=${{ steps.secrets.outputs.RPC_WS_URL }} \
               --set-string config.baseWebsite=${{ steps.secrets.outputs.BASE_WEBSITE }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
@@ -104,12 +104,10 @@ jobs:
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
               --set-string config.firebase.appId=${{ steps.secrets.outputs.FIREBASE_APP_ID }} \
+              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dns=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
-              --set-string config.cloudinary.cloudName=${{ steps.secrets.outputs.CLOUDINARY_CLOUND_NAME }} \
-              --set-string config.cloudinary.apiKey=${{ steps.secrets.outputs.CLOUDINARY_API_KEY }} \
-              --set-string config.cloudinary.secret=${{ steps.secrets.outputs.CLOUDINARY_SECRET }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
+              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -157,6 +155,7 @@ jobs:
         with:
           secrets: |-
             API_URL:${{ secrets.STG_GCP_PROJECT_ID }}/API_URL
+            API_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/API_KEY
             RPC_WS_URL:${{ secrets.STG_GCP_PROJECT_ID }}/RPC_WS_URL
             BASE_WEBSITE:${{ secrets.STG_GCP_PROJECT_ID }}/BASE_WEBSITE
             SUPPORT_MAIL:${{ secrets.STG_GCP_PROJECT_ID }}/SUPPORT_MAIL
@@ -164,12 +163,10 @@ jobs:
             FIREBASE_API_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
             FIREBASE_APP_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FIREBASE_APP_ID
+            FIREBASE_MEASUREMENT_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
-            CLOUDINARY_CLOUND_NAME:${{ secrets.STG_GCP_PROJECT_ID }}/CLOUDINARY_CLOUND_NAME
-            CLOUDINARY_API_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/CLOUDINARY_API_KEY
-            CLOUDINARY_SECRET:${{ secrets.STG_GCP_PROJECT_ID }}/CLOUDINARY_SECRET
             FACEBOOK_APP_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_BEARER_TOKEN:${{ secrets.STG_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            TWITTER_API_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/TWITTER_API_KEY
             SSH_HOST:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_KEY
@@ -193,6 +190,7 @@ jobs:
               --set-string config.nextAuthURL=https://app.stg.myriad.systems \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
+              --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.rpcWSURL=${{ steps.secrets.outputs.RPC_WS_URL }} \
               --set-string config.baseWebsite=${{ steps.secrets.outputs.BASE_WEBSITE }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
@@ -200,12 +198,10 @@ jobs:
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
               --set-string config.firebase.appId=${{ steps.secrets.outputs.FIREBASE_APP_ID }} \
+              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dns=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
-              --set-string config.cloudinary.cloudName=${{ steps.secrets.outputs.CLOUDINARY_CLOUND_NAME }} \
-              --set-string config.cloudinary.apiKey=${{ steps.secrets.outputs.CLOUDINARY_API_KEY }} \
-              --set-string config.cloudinary.secret=${{ steps.secrets.outputs.CLOUDINARY_SECRET }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
+              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -253,6 +249,7 @@ jobs:
         with:
           secrets: |-
             API_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/API_URL
+            API_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/API_KEY
             RPC_WS_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/RPC_WS_URL
             BASE_WEBSITE:${{ secrets.TESTNET_GCP_PROJECT_ID }}/BASE_WEBSITE
             SUPPORT_MAIL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SUPPORT_MAIL
@@ -260,12 +257,10 @@ jobs:
             FIREBASE_API_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
             FIREBASE_APP_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_APP_ID
+            FIREBASE_MEASUREMENT_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
-            CLOUDINARY_CLOUND_NAME:${{ secrets.TESTNET_GCP_PROJECT_ID }}/CLOUDINARY_CLOUND_NAME
-            CLOUDINARY_API_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/CLOUDINARY_API_KEY
-            CLOUDINARY_SECRET:${{ secrets.TESTNET_GCP_PROJECT_ID }}/CLOUDINARY_SECRET
             FACEBOOK_APP_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_BEARER_TOKEN:${{ secrets.TESTNET_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            TWITTER_API_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/TWITTER_API_KEY
             SSH_HOST:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_KEY
@@ -288,6 +283,7 @@ jobs:
               --set-string config.nextAuthURL=https://app.testnet.myriad.systems \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
+              --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.rpcWSURL=${{ steps.secrets.outputs.RPC_WS_URL }} \
               --set-string config.baseWebsite=${{ steps.secrets.outputs.BASE_WEBSITE }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
@@ -295,12 +291,10 @@ jobs:
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
               --set-string config.firebase.appId=${{ steps.secrets.outputs.FIREBASE_APP_ID }} \
+              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dns=${{ steps.secrets.outputs.SENTRY_DSN }} \
-              --set-string config.cloudinary.cloudName=${{ steps.secrets.outputs.CLOUDINARY_CLOUND_NAME }} \
-              --set-string config.cloudinary.apiKey=${{ steps.secrets.outputs.CLOUDINARY_API_KEY }} \
-              --set-string config.cloudinary.secret=${{ steps.secrets.outputs.CLOUDINARY_SECRET }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
+              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -348,6 +342,7 @@ jobs:
         with:
           secrets: |-
             API_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_URL
+            API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_KEY
             RPC_WS_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/RPC_WS_URL
             BASE_WEBSITE:${{ secrets.MAINNET_GCP_PROJECT_ID }}/BASE_WEBSITE
             SUPPORT_MAIL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SUPPORT_MAIL
@@ -355,12 +350,10 @@ jobs:
             FIREBASE_API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
             FIREBASE_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_APP_ID
+            FIREBASE_MEASUREMENT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
-            CLOUDINARY_CLOUND_NAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/CLOUDINARY_CLOUND_NAME
-            CLOUDINARY_API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/CLOUDINARY_API_KEY
-            CLOUDINARY_SECRET:${{ secrets.MAINNET_GCP_PROJECT_ID }}/CLOUDINARY_SECRET
             FACEBOOK_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_BEARER_TOKEN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            TWITTER_API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/TWITTER_API_KEY
             SSH_HOST:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_KEY
@@ -383,6 +376,7 @@ jobs:
               --set-string config.nextAuthURL=https://app.myriad.systems \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
+              --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.rpcWSURL=${{ steps.secrets.outputs.RPC_WS_URL }} \
               --set-string config.baseWebsite=${{ steps.secrets.outputs.BASE_WEBSITE }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
@@ -390,12 +384,10 @@ jobs:
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
               --set-string config.firebase.appId=${{ steps.secrets.outputs.FIREBASE_APP_ID }} \
+              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dns=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
-              --set-string config.cloudinary.cloudName=${{ steps.secrets.outputs.CLOUDINARY_CLOUND_NAME }} \
-              --set-string config.cloudinary.apiKey=${{ steps.secrets.outputs.CLOUDINARY_API_KEY }} \
-              --set-string config.cloudinary.secret=${{ steps.secrets.outputs.CLOUDINARY_SECRET }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
+              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -443,6 +435,7 @@ jobs:
         with:
           secrets: |-
             API_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_URL
+            API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_KEY
             RPC_WS_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/RPC_WS_URL
             BASE_WEBSITE:${{ secrets.MAINNET_GCP_PROJECT_ID }}/BASE_WEBSITE
             SUPPORT_MAIL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SUPPORT_MAIL
@@ -450,12 +443,10 @@ jobs:
             FIREBASE_API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
             FIREBASE_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_APP_ID
+            FIREBASE_MEASUREMENT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
-            CLOUDINARY_CLOUND_NAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/CLOUDINARY_CLOUND_NAME
-            CLOUDINARY_API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/CLOUDINARY_API_KEY
-            CLOUDINARY_SECRET:${{ secrets.MAINNET_GCP_PROJECT_ID }}/CLOUDINARY_SECRET
             FACEBOOK_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_BEARER_TOKEN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            TWITTER_API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/TWITTER_API_KEY
             SSH_HOST:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_KEY
@@ -478,6 +469,7 @@ jobs:
               --set-string config.nextAuthURL=https://app.myriad.systems \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
+              --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.rpcWSURL=${{ steps.secrets.outputs.RPC_WS_URL }} \
               --set-string config.baseWebsite=${{ steps.secrets.outputs.BASE_WEBSITE }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
@@ -485,12 +477,10 @@ jobs:
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
               --set-string config.firebase.appId=${{ steps.secrets.outputs.FIREBASE_APP_ID }} \
+              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dns=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
-              --set-string config.cloudinary.cloudName=${{ steps.secrets.outputs.CLOUDINARY_CLOUND_NAME }} \
-              --set-string config.cloudinary.apiKey=${{ steps.secrets.outputs.CLOUDINARY_API_KEY }} \
-              --set-string config.cloudinary.secret=${{ steps.secrets.outputs.CLOUDINARY_SECRET }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
+              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
