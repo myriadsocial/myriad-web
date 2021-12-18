@@ -63,16 +63,16 @@ jobs:
           secrets: |-
             API_URL:${{ secrets.DEV_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/API_KEY
-            BASE_WEBSITE:${{ secrets.DEV_GCP_PROJECT_ID }}/BASE_WEBSITE
+            WEBSITE_URL:${{ secrets.DEV_GCP_PROJECT_ID }}/WEBSITE_URL
             SUPPORT_MAIL:${{ secrets.DEV_GCP_PROJECT_ID }}/SUPPORT_MAIL
             FIREBASE_PROJECT_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
             FIREBASE_API_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
-            FIREBASE_APP_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FIREBASE_APP_ID
-            FIREBASE_MEASUREMENT_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
+            WEB_FIREBASE_APP_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_FIREBASE_APP_ID
+            WEB_FIREBASE_MEASUREMENT_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
-            FACEBOOK_APP_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            DNS_WEB:${{ secrets.DEV_GCP_PROJECT_ID }}/DNS_WEB
+            WEB_FACEBOOK_APP_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
+            WEB_DNS:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_DNS
             SSH_HOST:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_KEY
@@ -92,29 +92,29 @@ jobs:
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.sha_short }}-${{ needs.compute-build-info.outputs.date }} \
               --set-string config.appName="Myriad Development" \
-              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
-              --set-string config.websiteURL=${{ steps.secrets.outputs.BASE_WEBSITE }} \
+              --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
-              --set-string config.firebase.appId=${{ steps.secrets.outputs.FIREBASE_APP_ID }} \
-              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
+              --set-string config.firebase.appId=${{ steps.secrets.outputs.WEB_FIREBASE_APP_ID }} \
+              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.WEB_FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
-              --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
+              --set-string config.facebook.appId=${{ steps.secrets.outputs.WEB_FACEBOOK_APP_ID }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
               --set-string ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"="100m" \
               --set-string ingress.annotations."nginx\.org/client-max-body-size"="100m" \
-              --set-string ingress.hosts[0].host=${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string ingress.hosts[0].host=${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string ingress.hosts[0].paths[0].path=/ \
               --set-string ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
               --set-string ingress.tls[0].secretName=myriad-app-tls \
-              --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string resources.requests.cpu=300m \
               --set-string resources.requests.memory=512Mi \
               --set-string resources.limits.cpu=500m \
@@ -152,16 +152,16 @@ jobs:
           secrets: |-
             API_URL:${{ secrets.STG_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/API_KEY
-            BASE_WEBSITE:${{ secrets.STG_GCP_PROJECT_ID }}/BASE_WEBSITE
+            WEBSITE_URL:${{ secrets.STG_GCP_PROJECT_ID }}/WEBSITE_URL
             SUPPORT_MAIL:${{ secrets.STG_GCP_PROJECT_ID }}/SUPPORT_MAIL
             FIREBASE_PROJECT_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
             FIREBASE_API_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
-            FIREBASE_APP_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FIREBASE_APP_ID
-            FIREBASE_MEASUREMENT_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
+            WEB_FIREBASE_APP_ID:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_FIREBASE_APP_ID
+            WEB_FIREBASE_MEASUREMENT_ID:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
-            FACEBOOK_APP_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            DNS_WEB:${{ secrets.STG_GCP_PROJECT_ID }}/DNS_WEB
+            WEB_FACEBOOK_APP_ID:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
+            WEB_DNS:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_DNS
             SSH_HOST:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_KEY
@@ -182,29 +182,29 @@ jobs:
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string image.pullPolicy=Always \
               --set-string config.appName="Myriad Staging" \
-              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
-              --set-string config.websiteURL=${{ steps.secrets.outputs.BASE_WEBSITE }} \
+              --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
-              --set-string config.firebase.appId=${{ steps.secrets.outputs.FIREBASE_APP_ID }} \
-              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
+              --set-string config.firebase.appId=${{ steps.secrets.outputs.WEB_FIREBASE_APP_ID }} \
+              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.WEB_FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
-              --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
+              --set-string config.facebook.appId=${{ steps.secrets.outputs.WEB_FACEBOOK_APP_ID }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
               --set-string ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"="100m" \
               --set-string ingress.annotations."nginx\.org/client-max-body-size"="100m" \
-              --set-string ingress.hosts[0].host=${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string ingress.hosts[0].host=${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string ingress.hosts[0].paths[0].path=/ \
               --set-string ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
               --set-string ingress.tls[0].secretName=myriad-app-tls \
-              --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string resources.requests.cpu=300m \
               --set-string resources.requests.memory=512Mi \
               --set-string resources.limits.cpu=500m \
@@ -242,16 +242,16 @@ jobs:
           secrets: |-
             API_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/API_KEY
-            BASE_WEBSITE:${{ secrets.TESTNET_GCP_PROJECT_ID }}/BASE_WEBSITE
+            WEBSITE_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEBSITE_URL
             SUPPORT_MAIL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SUPPORT_MAIL
             FIREBASE_PROJECT_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
             FIREBASE_API_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
-            FIREBASE_APP_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_APP_ID
-            FIREBASE_MEASUREMENT_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
+            WEB_FIREBASE_APP_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_FIREBASE_APP_ID
+            WEB_FIREBASE_MEASUREMENT_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
-            FACEBOOK_APP_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            DNS_WEB:${{ secrets.TESTNET_GCP_PROJECT_ID }}/DNS_WEB
+            WEB_FACEBOOK_APP_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
+            WEB_DNS:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_DNS
             SSH_HOST:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_KEY
@@ -271,29 +271,29 @@ jobs:
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName="Myriad Testnet" \
-              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
-              --set-string config.websiteURL=${{ steps.secrets.outputs.BASE_WEBSITE }} \
+              --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
-              --set-string config.firebase.appId=${{ steps.secrets.outputs.FIREBASE_APP_ID }} \
-              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
+              --set-string config.firebase.appId=${{ steps.secrets.outputs.WEB_FIREBASE_APP_ID }} \
+              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.WEB_FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
-              --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
+              --set-string config.facebook.appId=${{ steps.secrets.outputs.WEB_FACEBOOK_APP_ID }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
               --set-string ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"="100m" \
               --set-string ingress.annotations."nginx\.org/client-max-body-size"="100m" \
-              --set-string ingress.hosts[0].host=${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string ingress.hosts[0].host=${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string ingress.hosts[0].paths[0].path=/ \
               --set-string ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
               --set-string ingress.tls[0].secretName=myriad-app-tls \
-              --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string resources.requests.cpu=300m \
               --set-string resources.requests.memory=512Mi \
               --set-string resources.limits.cpu=500m \
@@ -331,16 +331,16 @@ jobs:
           secrets: |-
             API_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_KEY
-            BASE_WEBSITE:${{ secrets.MAINNET_GCP_PROJECT_ID }}/BASE_WEBSITE
+            WEBSITE_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEBSITE_URL
             SUPPORT_MAIL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SUPPORT_MAIL
             FIREBASE_PROJECT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
             FIREBASE_API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
-            FIREBASE_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_APP_ID
-            FIREBASE_MEASUREMENT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
+            WEB_FIREBASE_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_FIREBASE_APP_ID
+            WEB_FIREBASE_MEASUREMENT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
-            FACEBOOK_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            DNS_WEB:${{ secrets.MAINNET_GCP_PROJECT_ID }}/DNS_WEB
+            WEB_FACEBOOK_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
+            WEB_DNS:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_DNS
             SSH_HOST:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_KEY
@@ -360,29 +360,29 @@ jobs:
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName=Myriad \
-              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
-              --set-string config.websiteURL=${{ steps.secrets.outputs.BASE_WEBSITE }} \
+              --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
-              --set-string config.firebase.appId=${{ steps.secrets.outputs.FIREBASE_APP_ID }} \
-              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
+              --set-string config.firebase.appId=${{ steps.secrets.outputs.WEB_FIREBASE_APP_ID }} \
+              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.WEB_FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
-              --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
+              --set-string config.facebook.appId=${{ steps.secrets.outputs.WEB_FACEBOOK_APP_ID }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
               --set-string ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"="100m" \
               --set-string ingress.annotations."nginx\.org/client-max-body-size"="100m" \
-              --set-string ingress.hosts[0].host=${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string ingress.hosts[0].host=${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string ingress.hosts[0].paths[0].path=/ \
               --set-string ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
               --set-string ingress.tls[0].secretName=myriad-app-tls \
-              --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string resources.requests.cpu=300m \
               --set-string resources.requests.memory=512Mi \
               --set-string resources.limits.cpu=500m \
@@ -420,16 +420,16 @@ jobs:
           secrets: |-
             API_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_KEY
-            BASE_WEBSITE:${{ secrets.MAINNET_GCP_PROJECT_ID }}/BASE_WEBSITE
+            WEBSITE_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEBSITE_URL
             SUPPORT_MAIL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SUPPORT_MAIL
             FIREBASE_PROJECT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
             FIREBASE_API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
-            FIREBASE_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_APP_ID
-            FIREBASE_MEASUREMENT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
+            WEB_FIREBASE_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_FIREBASE_APP_ID
+            WEB_FIREBASE_MEASUREMENT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
-            FACEBOOK_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            DNS_WEB:${{ secrets.MAINNET_GCP_PROJECT_ID }}/DNS_WEB
+            WEB_FACEBOOK_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
+            WEB_DNS:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_DNS
             SSH_HOST:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_KEY
@@ -449,29 +449,30 @@ jobs:
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName=Myriad \
-              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
+              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
-              --set-string config.websiteURL=${{ steps.secrets.outputs.BASE_WEBSITE }} \
+              --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
-              --set-string config.firebase.appId=${{ steps.secrets.outputs.FIREBASE_APP_ID }} \
-              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
+              --set-string config.firebase.appId=${{ steps.secrets.outputs.WEB_FIREBASE_APP_ID }} \
+              --set-string config.firebase.measurementId=${{ steps.secrets.outputs.WEB_FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
-              --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
+              --set-string config.facebook.appId=${{ steps.secrets.outputs.WEB_FACEBOOK_APP_ID }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
               --set-string ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"="100m" \
               --set-string ingress.annotations."nginx\.org/client-max-body-size"="100m" \
-              --set-string ingress.hosts[0].host=${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string ingress.hosts[0].host=${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string ingress.hosts[0].paths[0].path=/ \
               --set-string ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
               --set-string ingress.tls[0].secretName=myriad-app-tls \
-              --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.DNS_WEB }} \
+              --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string resources.requests.cpu=300m \
               --set-string resources.requests.memory=512Mi \
               --set-string resources.limits.cpu=500m \
