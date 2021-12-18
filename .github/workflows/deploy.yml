@@ -99,7 +99,7 @@ jobs:
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.rpcWSURL=${{ steps.secrets.outputs.RPC_WS_URL }} \
-              --set-string config.baseWebsite=${{ steps.secrets.outputs.BASE_WEBSITE }} \
+              --set-string config.websiteURL=${{ steps.secrets.outputs.BASE_WEBSITE }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
@@ -108,7 +108,7 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
+              --set-string config.twitter.apiKey=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -194,7 +194,7 @@ jobs:
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.rpcWSURL=${{ steps.secrets.outputs.RPC_WS_URL }} \
-              --set-string config.baseWebsite=${{ steps.secrets.outputs.BASE_WEBSITE }} \
+              --set-string config.websiteURL=${{ steps.secrets.outputs.BASE_WEBSITE }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
@@ -203,7 +203,7 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
+              --set-string config.twitter.apiKey=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -288,7 +288,7 @@ jobs:
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.rpcWSURL=${{ steps.secrets.outputs.RPC_WS_URL }} \
-              --set-string config.baseWebsite=${{ steps.secrets.outputs.BASE_WEBSITE }} \
+              --set-string config.websiteURL=${{ steps.secrets.outputs.BASE_WEBSITE }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
@@ -297,7 +297,7 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
+              --set-string config.twitter.apiKey=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -382,7 +382,7 @@ jobs:
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.rpcWSURL=${{ steps.secrets.outputs.RPC_WS_URL }} \
-              --set-string config.baseWebsite=${{ steps.secrets.outputs.BASE_WEBSITE }} \
+              --set-string config.websiteURL=${{ steps.secrets.outputs.BASE_WEBSITE }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
@@ -391,7 +391,7 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
+              --set-string config.twitter.apiKey=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -476,7 +476,7 @@ jobs:
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.rpcWSURL=${{ steps.secrets.outputs.RPC_WS_URL }} \
-              --set-string config.baseWebsite=${{ steps.secrets.outputs.BASE_WEBSITE }} \
+              --set-string config.websiteURL=${{ steps.secrets.outputs.BASE_WEBSITE }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
@@ -485,7 +485,7 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
+              --set-string config.twitter.apiKey=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
