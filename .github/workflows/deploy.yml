@@ -4,7 +4,7 @@ on:
   release:
     types: [published]
   workflow_run:
-    workflows: ['Main automation']
+    workflows: ['Builder']
     branches: [main]
     types:
       - completed
