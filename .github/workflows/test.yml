@@ -1,18 +1,17 @@
-name: Pull request automation
+name: Test
 
 on:
   pull_request:
     branches:
       - main
-      - gundb
 
 concurrency:
-  group: test-code-${{ github.event.pull_request.number }}
+  group: test-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
   test-code:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -29,7 +28,7 @@ jobs:
         run: yarn test
 
   check-link-markdown:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

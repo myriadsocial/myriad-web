@@ -1,0 +1,112 @@
+name: Builder
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+*'
+
+concurrency:
+  group: builder
+
+jobs:
+  compute-build-info:
+    runs-on: ubuntu-20.04
+    outputs:
+      sha_short: ${{ steps.build-info.outputs.sha_short }}
+      revision_tag: ${{ steps.build-info.outputs.revision_tag }}
+      latest_tag: ${{ steps.build-info.outputs.latest_tag }}
+      pre_release: ${{ steps.build-info.outputs.pre_release }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Compute build info
+        id: build-info
+        shell: bash
+        run: |
+          SHA_SHORT=$(git rev-parse --short HEAD)
+          REVISION_TAG=$SHA_SHORT
+          LATEST_TAG=latest-pre-alpha
+          PRE_RELEASE=true
+
+          if [[ $GITHUB_REF =~ refs/heads/tags/ ]] ;
+          then
+            TAG=${GITHUB_REF#refs/heads/tags/}
+            VERSION=${TAG%.*}.$((${TAG##*.}))
+            REVISION_TAG=$TAG
+
+            if [[ $TAG =~ [0-9]+.[0-9]+.[0-9]+$ ]] ;
+            then
+                LATEST_TAG=latest
+                PRE_RELEASE=false
+            else
+                SUFFIX=$(tmp=${TAG#$VERSION-} ; echo $tmp | sed -r 's/[0-9]//g' )
+                LATEST_TAG=latest-$SUFFIX
+            fi
+          fi
+          echo "::set-output name=sha_short::$SHA_SHORT"
+          echo "::set-output name=revision_tag::$REVISION_TAG"
+          echo "::set-output name=latest_tag::$LATEST_TAG"
+          echo "::set-output name=pre_release::$version"
+
+  build:
+    runs-on: ubuntu-20.04
+    needs:
+      - compute-build-info
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-main
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          file: .maintain/docker/Dockerfile
+          tags: |
+            ${{ github.repository }}:${{ needs.compute-build-info.outputs.revision_tag }}
+            ${{ github.repository }}:${{ needs.compute-build-info.outputs.latest_tag }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+      # Temp fix
+      # https://github.com/docker/build-push-action/issues/252
+      # https://github.com/moby/buildkit/issues/1896
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      # publish-draft-release
+      - name: Build changelog
+        if: "startsWith(github.ref, 'refs/tags/')"
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          configuration: '.github/workflows/rcb_config.json'
+      - name: Create draft release
+        if: "startsWith(github.ref, 'refs/tags/')"
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{ steps.build_changelog.outputs.changelog }}
+          draft: true
+          prerelease: ${{ needs.compute-build-info.outputs.pre_release }}
