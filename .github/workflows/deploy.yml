@@ -61,6 +61,8 @@ jobs:
         uses: google-github-actions/get-secretmanager-secrets@main
         with:
           secrets: |-
+            WEB_APP_NAME:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_APP_NAME
+            WEB_APP_STATUS:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_APP_STATUS
             API_URL:${{ secrets.DEV_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.DEV_GCP_PROJECT_ID }}/WEBSITE_URL
@@ -91,7 +93,8 @@ jobs:
             helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.sha_short }}-${{ needs.compute-build-info.outputs.date }} \
-              --set-string config.appName="Myriad Development" \
+              --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
+              --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
@@ -150,6 +153,8 @@ jobs:
         uses: google-github-actions/get-secretmanager-secrets@main
         with:
           secrets: |-
+            WEB_APP_NAME:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_APP_NAME
+            WEB_APP_STATUS:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_APP_STATUS
             API_URL:${{ secrets.STG_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.STG_GCP_PROJECT_ID }}/WEBSITE_URL
@@ -180,8 +185,8 @@ jobs:
             helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
-              --set-string image.pullPolicy=Always \
-              --set-string config.appName="Myriad Staging" \
+              --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
+              --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
@@ -240,6 +245,8 @@ jobs:
         uses: google-github-actions/get-secretmanager-secrets@main
         with:
           secrets: |-
+            WEB_APP_NAME:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_APP_NAME
+            WEB_APP_STATUS:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_APP_STATUS
             API_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEBSITE_URL
@@ -270,7 +277,8 @@ jobs:
             helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
-              --set-string config.appName="Myriad Testnet" \
+              --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
+              --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
@@ -329,6 +337,8 @@ jobs:
         uses: google-github-actions/get-secretmanager-secrets@main
         with:
           secrets: |-
+            WEB_APP_NAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_NAME
+            WEB_APP_STATUS:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_STATUS
             API_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEBSITE_URL
@@ -359,7 +369,8 @@ jobs:
             helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
-              --set-string config.appName=Myriad \
+              --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
+              --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
@@ -418,6 +429,8 @@ jobs:
         uses: google-github-actions/get-secretmanager-secrets@main
         with:
           secrets: |-
+            WEB_APP_NAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_NAME
+            WEB_APP_STATUS:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_STATUS
             API_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEBSITE_URL
@@ -448,7 +461,7 @@ jobs:
             helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
-              --set-string config.appName=Myriad \
+              --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
               --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
