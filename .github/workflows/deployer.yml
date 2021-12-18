@@ -95,9 +95,9 @@ jobs:
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           script: |
-            helm repo add myriad https://charts.myriad.systems
+            helm repo add myriadsocial https://charts.myriad.social
             helm repo update
-            helm upgrade myriad-web myriad/myriad-web \
+            helm upgrade myriad-web myriadsocial/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.sha_short }} \
               --set-string config.appEnvironment=${{ steps.secrets.outputs.WEB_APP_ENVIRONMENT }} \
@@ -189,9 +189,9 @@ jobs:
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           script: |
-            helm repo add myriad https://charts.myriad.systems
+            helm repo add myriadsocial https://charts.myriad.social
             helm repo update
-            helm upgrade myriad-web myriad/myriad-web \
+            helm upgrade myriad-web myriadsocial/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appEnvironment=${{ steps.secrets.outputs.WEB_APP_ENVIRONMENT }} \
@@ -283,9 +283,9 @@ jobs:
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           script: |
-            helm repo add myriad https://charts.myriad.systems
+            helm repo add myriadsocial https://charts.myriad.social
             helm repo update
-            helm upgrade myriad-web myriad/myriad-web \
+            helm upgrade myriad-web myriadsocial/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appEnvironment=${{ steps.secrets.outputs.WEB_APP_ENVIRONMENT }} \
@@ -377,9 +377,9 @@ jobs:
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           script: |
-            helm repo add myriad https://charts.myriad.systems
+            helm repo add myriadsocial https://charts.myriad.social
             helm repo update
-            helm upgrade myriad-web myriad/myriad-web \
+            helm upgrade myriad-web myriadsocial/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appEnvironment=${{ steps.secrets.outputs.WEB_APP_ENVIRONMENT }} \
@@ -471,9 +471,9 @@ jobs:
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           script: |
-            helm repo add myriad https://charts.myriad.systems
+            helm repo add myriadsocial https://charts.myriad.social
             helm repo update
-            helm upgrade myriad-web myriad/myriad-web \
+            helm upgrade myriad-web myriadsocial/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appEnvironment=${{ steps.secrets.outputs.WEB_APP_ENVIRONMENT }} \
