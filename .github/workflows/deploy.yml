@@ -73,7 +73,7 @@ jobs:
             FIREBASE_MEASUREMENT_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             FACEBOOK_APP_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_BEARER_TOKEN:${{ secrets.DEV_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            TWITTER_API_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/TWITTER_API_KEY
             SSH_HOST:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_KEY
@@ -107,7 +107,7 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dns=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
+              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -166,7 +166,7 @@ jobs:
             FIREBASE_MEASUREMENT_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             FACEBOOK_APP_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_BEARER_TOKEN:${{ secrets.STG_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            TWITTER_API_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/TWITTER_API_KEY
             SSH_HOST:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_KEY
@@ -201,7 +201,7 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dns=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
+              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -260,7 +260,7 @@ jobs:
             FIREBASE_MEASUREMENT_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             FACEBOOK_APP_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_BEARER_TOKEN:${{ secrets.TESTNET_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            TWITTER_API_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/TWITTER_API_KEY
             SSH_HOST:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_KEY
@@ -294,7 +294,7 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dns=${{ steps.secrets.outputs.SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
+              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -353,7 +353,7 @@ jobs:
             FIREBASE_MEASUREMENT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             FACEBOOK_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_BEARER_TOKEN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            TWITTER_API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/TWITTER_API_KEY
             SSH_HOST:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_KEY
@@ -387,7 +387,7 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dns=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
+              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -446,7 +446,7 @@ jobs:
             FIREBASE_MEASUREMENT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             FACEBOOK_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FACEBOOK_APP_ID
-            TWITTER_BEARER_TOKEN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/TWITTER_BEARER_TOKEN
+            TWITTER_API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/TWITTER_API_KEY
             SSH_HOST:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_HOST
             SSH_USERNAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_USERNAME
             SSH_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_KEY
@@ -480,7 +480,7 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dns=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.FACEBOOK_APP_ID }} \
-              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_BEARER_TOKEN }} \
+              --set-string config.twitter.bearerToken=${{ steps.secrets.outputs.TWITTER_API_KEY }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \

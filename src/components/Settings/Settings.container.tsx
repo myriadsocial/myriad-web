@@ -26,7 +26,7 @@ export const SettingsContainer: React.FC = () => {
 
   const handleChangeSection = (section: SettingsType) => {
     if (section === 'about') {
-      window.open(publicRuntimeConfig.myriadWebsite, '_ blank');
+      window.open(publicRuntimeConfig.myriadWebsiteURL, '_ blank');
     } else {
       router.push(
         {

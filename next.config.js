@@ -10,26 +10,23 @@ const moduleExports = {
   },
   serverRuntimeConfig: {
     // Will only be available on the server side
-    nextAuthURL: process.env.NEXTAUTH_URL,
     secret: process.env.SECRET,
-    twitterBearerToken: process.env.TWITTER_BEARER_TOKEN,
   },
   publicRuntimeConfig: {
     // Will be available on both server and client
     appName: process.env.NEXT_PUBLIC_APP_NAME,
-    appStatus: process.env.NEXT_PUBLIC_APP_STATUS,
-    apiURL: process.env.NEXT_PUBLIC_API_URL,
-    apiKey: process.env.NEXT_PUBLIC_API_KEY,
+    appStatus: process.env.NEXT_PUBLIC_APP_STATUS ?? 'development',
     nextAuthURL: process.env.NEXTAUTH_URL,
-    facebookAppId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
-    myriadWsRPC: process.env.NEXT_PUBLIC_MYRIAD_WS_RPC,
-    myriadWebsite: process.env.NEXT_PUBLIC_MYRIAD_WEBSITE ?? 'https://www.myriad.social',
+    myriadAPIURL: process.env.NEXT_PUBLIC_MYRIAD_API_URL,
+    myriadAPIKey: process.env.NEXT_PUBLIC_MYRIAD_API_KEY,
+    myriadWebsiteURL: process.env.NEXT_PUBLIC_MYRIAD_WEBSITE_URL ?? 'https://www.myriad.social',
     myriadSupportMail: process.env.NEXT_PUBLIC_MYRIAD_SUPPORT_MAIL ?? 'support@myriad.social',
     firebaseAPIKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     firebaseProjectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
     firebaseMessagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     firebaseAppId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     firebaseMeasurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+    facebookAppId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
   },
   sentry: {
     disableServerWebpackPlugin: true,

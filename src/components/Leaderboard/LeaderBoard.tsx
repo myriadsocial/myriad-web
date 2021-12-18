@@ -64,8 +64,8 @@ export const LeaderBoardComponent: React.FC = () => {
       <div className={style.container}>
         <div className={style.header}>
           <div className={style.header}>
-            <Link href={publicRuntimeConfig.myriadWebsite}>
-              <a href={publicRuntimeConfig.myriadWebsite} rel="noreferrer">
+            <Link href={publicRuntimeConfig.myriadWebsiteURL}>
+              <a href={publicRuntimeConfig.myriadWebsiteURL} rel="noreferrer">
                 <MyriadIcon />
               </a>
             </Link>
