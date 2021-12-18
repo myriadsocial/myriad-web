@@ -67,8 +67,8 @@ export const video = async (
     url: `/buckets/${userId}/${kind}`,
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${publicRuntimeConfig.myriadAPIKey}`,
       'Content-Type': 'multipart/form-data',
+      Authorization: `Bearer ${publicRuntimeConfig.myriadAPIKey}`,
     },
     data: formData,
     onUploadProgress: options.onUploadProgress,
