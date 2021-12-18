@@ -8,14 +8,6 @@ const MyriadAPI = Axios.create({
   baseURL: publicRuntimeConfig.myriadAPIURL,
 });
 
-MyriadAPI.interceptors.request.use(config => {
-  config.headers = {
-    Authorization: `Bearer ${publicRuntimeConfig.myriadAPIKey}`,
-  };
-
-  return config;
-});
-
 export enum Kind {
   IMAGE = 'image',
   VIDEO = 'video',
@@ -51,6 +43,7 @@ export const image = async (
     url: `/buckets/${userId}/${kind}`,
     method: 'POST',
     headers: {
+      Authorization: `Bearer ${publicRuntimeConfig.myriadAPIKey}`,
       'Content-Type': 'multipart/form-data',
     },
     data: formData,
@@ -74,6 +67,7 @@ export const video = async (
     url: `/buckets/${userId}/${kind}`,
     method: 'POST',
     headers: {
+      Authorization: `Bearer ${publicRuntimeConfig.myriadAPIKey}`,
       'Content-Type': 'multipart/form-data',
     },
     data: formData,
