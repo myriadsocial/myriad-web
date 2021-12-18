@@ -8,5 +8,6 @@ export type PostHeaderProps = {
   onOpenTipHistory: () => void;
   onReport: () => void;
   onVisibility: () => void;
+  onImporters: () => void;
   disableAction?: boolean;
 };

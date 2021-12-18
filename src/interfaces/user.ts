@@ -41,6 +41,8 @@ export type UserMetric = {
   totalActivity: number;
 };
 
+export interface Importer extends UserProps, BaseModel {}
+
 export interface User extends UserProps, BaseModel {
   currencies: Currency[];
   people?: People[];

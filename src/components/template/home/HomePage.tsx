@@ -85,6 +85,7 @@ const HomePage = (): JSX.Element => {
               onVisibility={console.log}
               toggleDownvoting={console.log}
               onRemoveVote={console.log}
+              onImporters={console.log}
             />
           </div>
         </div>

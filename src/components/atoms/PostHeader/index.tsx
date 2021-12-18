@@ -26,6 +26,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
     onOpenTipHistory,
     onReport,
     onVisibility,
+    onImporters,
   } = props;
 
   const style = useStyles();
@@ -90,6 +91,10 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
   const handleReport = () => {
     onReport();
     handleClosePostSetting();
+  };
+
+  const handleImporter = () => {
+    onImporters();
   };
 
   const handleOpenTipHistory = () => {
@@ -157,6 +162,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
             platform={post.platform}
             url={post.url}
             totalImporters={post.totalImporter}
+            onImporters={handleImporter}
           />
         }
         action={

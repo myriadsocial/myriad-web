@@ -5,6 +5,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import {PostImporterContainer} from '../PostImporterList';
 import {ReportContainer} from '../Report';
 import {SendTipContainer} from '../SendTip';
 import {useTimelineHook} from '../Timeline/hooks/use-timeline.hook';
@@ -20,6 +21,7 @@ import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
+import {removeImporter} from 'src/reducers/importers/actions';
 import {upvote, setDownvoting, removeVote} from 'src/reducers/timeline/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
@@ -52,6 +54,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
   const [visibility, setVisibility] = useState<Post | null>(null);
   const [reported, setReported] = useState<Post | null>(null);
+  const [importedPost, setImportedPost] = useState<Post | null>(null);
   const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
   const sendTipOpened = Boolean(tippedPost);
 
@@ -94,6 +97,15 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
   const handleReportPost = (post: Post) => {
     setReported(post);
+  };
+
+  const handleImportedPost = (post: Post) => {
+    setImportedPost(post);
+  };
+
+  const closeImporters = () => {
+    setImportedPost(null);
+    dispatch(removeImporter());
   };
 
   const closeReportPost = () => {
@@ -141,6 +153,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
         onShared={handleSharePost}
         searchedPosts={posts}
         onRemoveVote={handleRemoveVote}
+        onImporters={handleImportedPost}
       />
 
       <Modal
@@ -191,6 +204,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
       <TipHistoryContainer onSendTip={handleSendTip} />
       <ReportContainer reference={reported} onClose={closeReportPost} />
+      <PostImporterContainer post={importedPost} onClose={closeImporters} />
       <PostVisibilityContainer reference={visibility} onClose={closePostVisibility} />
     </>
   );

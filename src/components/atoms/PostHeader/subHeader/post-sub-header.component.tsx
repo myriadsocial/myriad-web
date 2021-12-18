@@ -17,6 +17,7 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
   importers = [],
   totalImporters,
   url,
+  onImporters,
 }) => {
   const style = useStyles();
 
@@ -24,48 +25,55 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
     return format(new Date(datePost), 'd MMM y');
   };
 
+  const handleImporterList = () => {
+    onImporters();
+  };
+
   return (
-    <Typography component="div" className={style.root}>
-      <ShowIf condition={platform !== 'myriad'}>Imported on&nbsp;</ShowIf>
+    <>
+      <Typography component="div" className={style.root}>
+        <ShowIf condition={platform !== 'myriad'}>Imported on&nbsp;</ShowIf>
 
-      <Link href={`/post/${postId}`}>
-        <a href={`/post/${postId}`} className={style.linkGrey}>
-          {getDate(date)}&nbsp;
-        </a>
-      </Link>
+        <Link href={`/post/${postId}`}>
+          <a href={`/post/${postId}`} className={style.linkGrey}>
+            {getDate(date)}&nbsp;
+          </a>
+        </Link>
 
-      <ShowIf condition={platform !== 'myriad'}>
-        {totalImporters > 0 && (
-          <>
-            by&nbsp;
-            {importers.map((importer, i) => (
-              <>
-                <Link key={importer.id} href={`/profile/${importer.id}`}>
-                  <a href={`/profile/${importer.id}`} className={style.link}>
-                    {importer.name}
-                  </a>
-                </Link>
-                <ShowIf condition={i < importers.length - 2 && importers.length > 1}>
-                  &#44;&nbsp;
-                </ShowIf>
-                <ShowIf
-                  condition={i === importers.length - 1 && totalImporters > importers.length - 1}>
-                  &nbsp;and&nbsp;
-                </ShowIf>
-              </>
-            ))}
-            <ShowIf condition={totalImporters - importers.length > 0}>
-              {totalImporters - importers.length} other
-            </ShowIf>
-            &nbsp;via&nbsp;
-            <Link href={url}>
-              <a href={url} className={style.link} target="_blank" rel="noreferrer">
-                {platform}
-              </a>
-            </Link>
-          </>
-        )}
-      </ShowIf>
-    </Typography>
+        <ShowIf condition={platform !== 'myriad'}>
+          {totalImporters > 0 && (
+            <>
+              by&nbsp;
+              {importers.map(importer => (
+                <>
+                  <Link key={importer.id} href={`/profile/${importer.id}`}>
+                    <a href={`/profile/${importer.id}`} className={style.link}>
+                      {importer.name}
+                    </a>
+                  </Link>
+                  <ShowIf condition={totalImporters > 1}>&nbsp;and&nbsp;</ShowIf>
+                </>
+              ))}
+              <ShowIf condition={totalImporters > 1}>
+                <span
+                  className={style.link}
+                  style={{cursor: 'pointer'}}
+                  onMouseEnter={handleImporterList}>
+                  {totalImporters - 1}&nbsp;
+                  <ShowIf condition={totalImporters - 1 === 1}>other</ShowIf>
+                  <ShowIf condition={totalImporters - 1 > 1}>others</ShowIf>
+                </span>
+              </ShowIf>
+              &nbsp;via&nbsp;
+              <Link href={url}>
+                <a href={url} className={style.link} target="_blank" rel="noreferrer">
+                  {platform}
+                </a>
+              </Link>
+            </>
+          )}
+        </ShowIf>
+      </Typography>
+    </>
   );
 };
