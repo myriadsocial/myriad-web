@@ -15,7 +15,6 @@ const firebaseApp = {
         projectId: publicRuntimeConfig.firebaseProjectId,
         messagingSenderId: publicRuntimeConfig.firebaseMessagingSenderId,
         appId: publicRuntimeConfig.firebaseAppId,
-        measurementId: publicRuntimeConfig.firebaseMeasurementId,
       });
     }
   },
