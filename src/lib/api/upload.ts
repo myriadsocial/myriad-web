@@ -8,6 +8,14 @@ const MyriadAPI = Axios.create({
   baseURL: publicRuntimeConfig.myriadAPIURL,
 });
 
+MyriadAPI.interceptors.request.use(config => {
+  config.headers = {
+    Authorization: `Bearer ${publicRuntimeConfig.myriadAPIKey}`,
+  };
+
+  return config;
+});
+
 export enum Kind {
   IMAGE = 'image',
   VIDEO = 'video',
