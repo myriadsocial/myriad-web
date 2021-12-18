@@ -88,9 +88,9 @@ jobs:
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
-            helm repo add myriadsocial https://charts.myriad.social
+            helm repo add myriad https://charts.myriad.systems
             helm repo update
-            helm upgrade myriad-web myriadsocial/myriad-web \
+            helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=latest-pre-alpha \
               --set-string image.pullPolicy=Always \
@@ -181,9 +181,9 @@ jobs:
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
-            helm repo add myriadsocial https://charts.myriad.social
+            helm repo add myriad https://charts.myriad.systems
             helm repo update
-            helm upgrade myriad-web myriadsocial/myriad-web \
+            helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
@@ -273,9 +273,9 @@ jobs:
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
-            helm repo add myriadsocial https://charts.myriad.social
+            helm repo add myriad https://charts.myriad.systems
             helm repo update
-            helm upgrade myriad-web myriadsocial/myriad-web \
+            helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
@@ -365,9 +365,9 @@ jobs:
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
-            helm repo add myriadsocial https://charts.myriad.social
+            helm repo add myriad https://charts.myriad.systems
             helm repo update
-            helm upgrade myriad-web myriadsocial/myriad-web \
+            helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
@@ -457,9 +457,9 @@ jobs:
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
-            helm repo add myriadsocial https://charts.myriad.social
+            helm repo add myriad https://charts.myriad.systems
             helm repo update
-            helm upgrade myriad-web myriadsocial/myriad-web \
+            helm upgrade myriad-web myriad/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
