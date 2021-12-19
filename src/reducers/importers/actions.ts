@@ -18,7 +18,7 @@ export interface LoadImporters extends PaginationAction {
 export type Actions = LoadImporters | BaseAction;
 
 export const fetchImporter: ThunkActionCreator<Actions, RootState> =
-  (originPostId: string, platform: string, page = 1) =>
+  (originPostId: string, platform: string, postCreator: string, page = 1) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
 
@@ -36,7 +36,7 @@ export const fetchImporter: ThunkActionCreator<Actions, RootState> =
 
       dispatch({
         type: constants.FETCH_IMPORTER,
-        importers,
+        importers: importers.filter(importer => importer && importer.id !== postCreator),
         meta,
       });
     } catch (error) {

@@ -1,4 +1,5 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {List, ListItem, ListItemText, Link, Typography} from '@material-ui/core';
@@ -9,7 +10,6 @@ import {Loading} from '../atoms/Loading';
 import {Modal} from '../atoms/Modal';
 import {useStyles} from './PostImporter.styles';
 
-import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
@@ -27,15 +27,25 @@ export const PostImporter: React.FC<Props> = props => {
   const styles = useStyles();
   const dispatch = useDispatch();
 
-  const {importers, loading} = useSelector<RootState, ImporterState>(state => state.importersState);
+  const {
+    importers,
+    meta: {totalItemCount: totalImporter, currentPage},
+  } = useSelector<RootState, ImporterState>(state => state.importersState);
+  const [importer, setImporter] = useState<string | undefined>(undefined);
+  const hasMore = importers.length < totalImporter;
+
+  const onHover = (userId: string | undefined) => () => setImporter(userId);
+  const onLoadNextPage = () => {
+    if (post) {
+      dispatch(fetchImporter(post.originPostId, post.platform, post.createdBy));
+    }
+  };
 
   useEffect(() => {
     if (post) {
-      dispatch(fetchImporter(post.originPostId, post.platform));
+      dispatch(fetchImporter(post.originPostId, post.platform, post.createdBy, currentPage + 1));
     }
   }, [dispatch, post]);
-
-  console.log(post);
 
   return (
     <Modal
@@ -44,34 +54,47 @@ export const PostImporter: React.FC<Props> = props => {
       open={open}
       onClose={onClose}
       subtitle={`${!post ? 0 : post.totalImporter - 1} users imported this post`}
-      className={styles.root}>
-      {loading ? (
+      className={styles.root}
+      gutter="custom">
+      {importers.length === 0 ? (
         <Loading />
       ) : (
-        importers.map(importer => {
-          return (
-            <ShowIf key={importer.id} condition={Boolean(post) && importer.id !== post?.createdBy}>
-              <List>
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar alt={'name'} className={styles.avatar} src={importer.profilePictureURL}>
-                      {acronym(importer.name)}
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText>
-                    <Link href={`/profile/${importer.id}`}>
-                      <a href={`/profile/${importer.id}`} className={styles.link}>
-                        <Typography className={styles.name} component="span" color="textPrimary">
-                          {importer.name}
-                        </Typography>
-                      </a>
-                    </Link>
-                  </ListItemText>
-                </ListItem>
-              </List>
-            </ShowIf>
-          );
-        })
+        <List style={{padding: 0}}>
+          <InfiniteScroll
+            scrollableTarget="scrollable-timeline"
+            dataLength={importers.length}
+            hasMore={hasMore}
+            next={onLoadNextPage}
+            loader={<Loading />}>
+            {importers.map(e => {
+              return (
+                <Link
+                  key={e.id}
+                  href={`/profile/${e.id}`}
+                  style={{cursor: 'pointer', textDecoration: 'none'}}>
+                  <ListItem
+                    style={{
+                      background: importer === e.id ? 'rgba(255, 200, 87, 0.2)' : '#FFF',
+                      padding: '8px 30px',
+                    }}
+                    onMouseEnter={onHover(e.id)}
+                    onMouseLeave={onHover(undefined)}>
+                    <ListItemAvatar>
+                      <Avatar alt={'name'} className={styles.avatar} src={e.profilePictureURL}>
+                        {acronym(e.name)}
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText>
+                      <Typography className={styles.name} component="span" color="textPrimary">
+                        {e.name}
+                      </Typography>
+                    </ListItemText>
+                  </ListItem>
+                </Link>
+              );
+            })}
+          </InfiniteScroll>
+        </List>
       )}
     </Modal>
   );

@@ -19,6 +19,7 @@ import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
+import {removeImporter} from 'src/reducers/importers/actions';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -73,6 +74,7 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
   };
 
   const handleImporters = (post: Post) => {
+    dispatch(removeImporter());
     setImportedPost(post);
   };
 

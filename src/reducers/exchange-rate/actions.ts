@@ -19,8 +19,6 @@ export const fetchExchangeRates: ThunkActionCreator<Actions, RootState> = () => 
   try {
     const exchangeRates = await ExchangeRateApi.getExchangeRate();
 
-    console.log(exchangeRates);
-
     dispatch({
       type: constants.FETCH_EXCHANGE_RATES,
       exchangeRates,
