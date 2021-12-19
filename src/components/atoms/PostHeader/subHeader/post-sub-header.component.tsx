@@ -54,14 +54,24 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
                   <ShowIf condition={totalImporters > 1}>&nbsp;and&nbsp;</ShowIf>
                 </>
               ))}
-              <ShowIf condition={totalImporters > 1}>
+              <ShowIf condition={importers.length === 0}>
                 <span
                   className={style.link}
                   style={{cursor: 'pointer'}}
                   onMouseEnter={handleImporterList}>
-                  {totalImporters - 1}&nbsp;
-                  <ShowIf condition={totalImporters - 1 === 1}>other</ShowIf>
-                  <ShowIf condition={totalImporters - 1 > 1}>others</ShowIf>
+                  {totalImporters}&nbsp;
+                  <ShowIf condition={totalImporters === 1}>other</ShowIf>
+                  <ShowIf condition={totalImporters > 1}>others</ShowIf>
+                </span>
+              </ShowIf>
+              <ShowIf condition={importers.length > 0 && totalImporters > importers.length}>
+                <span
+                  className={style.link}
+                  style={{cursor: 'pointer'}}
+                  onMouseEnter={handleImporterList}>
+                  {totalImporters - importers.length}&nbsp;
+                  <ShowIf condition={totalImporters - importers.length === 1}>other</ShowIf>
+                  <ShowIf condition={totalImporters - importers.length > 1}>others</ShowIf>
                 </span>
               </ShowIf>
               &nbsp;via&nbsp;
