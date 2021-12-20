@@ -109,12 +109,12 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   };
 
   const handleImporters = (post: Post) => {
+    dispatch(removeImporter());
     setImportedPost(post);
   };
 
   const closeImportedPost = () => {
     setImportedPost(null);
-    dispatch(removeImporter());
   };
 
   const closeReportPost = () => {

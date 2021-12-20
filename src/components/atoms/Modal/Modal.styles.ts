@@ -5,7 +5,7 @@ import {AllignTitle, TitleSize} from './Modal.types';
 type StylesProps = {
   align: AllignTitle;
   titleSize: TitleSize;
-  gutter: 'none' | 'default';
+  gutter: 'none' | 'default' | 'custom';
 };
 
 export const useStyles = makeStyles<Theme, StylesProps>(theme =>
@@ -34,7 +34,12 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       },
     },
     content: {
-      padding: props => (props.gutter === 'default' ? '0 30px 30px 30px' : 0),
+      padding: props =>
+        props.gutter === 'default'
+          ? '0 30px 30px 30px'
+          : props.gutter === 'none'
+          ? 0
+          : '0 0 30px 0',
     },
   }),
 );

@@ -16,7 +16,7 @@ export type ModalProps = DialogProps & {
   children: React.ReactNode;
   align?: AllignTitle;
   titleSize?: TitleSize;
-  gutter?: 'none' | 'default';
+  gutter?: 'none' | 'default' | 'custom';
   onClose: () => void;
 };
 

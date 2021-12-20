@@ -192,7 +192,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                         {tip.amount} {tip.currencyId}
                       </Typography>
                       <Typography variant="caption" color="textSecondary">
-                        {~`${formatUsd(tip.amount, getConversion(tip.currencyId))} USD`}
+                        {`~${formatUsd(tip.amount, getConversion(tip.currencyId))} USD`}
                       </Typography>
                     </div>
                     <Avatar src={tip.currency.image} className={styles.logo} />
