@@ -28,6 +28,7 @@ export type FriendListProps = {
   user?: User;
   background?: boolean;
   disableFilter?: boolean;
+  disableSort?: boolean;
   friends: Friend[];
   hasMore: boolean;
   onSearch: (query: string) => void;

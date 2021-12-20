@@ -13,10 +13,11 @@ import {FriendState} from 'src/reducers/friend/reducer';
 type FriendListContainerProps = {
   user?: User;
   disableFilter?: boolean;
+  disableSort?: boolean;
 };
 
 export const FriendListContainer: React.FC<FriendListContainerProps> = props => {
-  const {user, disableFilter} = props;
+  const {user, disableFilter = false, disableSort = false} = props;
   const {loadFriends, searchFriend, loadMoreFriends} = useFriendsHook(user);
 
   const [toggle, setToggle] = useState<string>('');
@@ -69,6 +70,7 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
     <>
       <FriendListComponent
         disableFilter={disableFilter}
+        disableSort={disableSort}
         friends={friendList}
         user={user}
         hasMore={hasMore}

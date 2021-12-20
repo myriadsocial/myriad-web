@@ -2,7 +2,7 @@ import {ChevronDownIcon} from '@heroicons/react/outline';
 
 import React, {useEffect, useState} from 'react';
 
-import {Typography} from '@material-ui/core';
+import {Grid, Typography} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -54,27 +54,30 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
 
   return (
     <div className={styles.root}>
-      <div>
+      <Grid container justifyContent="space-between">
         <Typography component="span" color="textSecondary">
           <ShowIf condition={title.length > 0}>{title}:&nbsp;</ShowIf>
         </Typography>
-      </div>
 
-      <IconButton
-        onClick={handleClick}
-        color="primary"
-        aria-label="expand"
-        className={styles.expand}>
-        <Typography component="span" color="textPrimary" className={styles.selected}>
-          {getSelectedText()}
-        </Typography>
-        <SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />
-      </IconButton>
+        <div>
+          <Typography component="span" color="textPrimary" className={styles.selected}>
+            {getSelectedText()}
+          </Typography>
+
+          <IconButton
+            onClick={handleClick}
+            color="primary"
+            aria-label="expand"
+            className={styles.expand}>
+            <SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />
+          </IconButton>
+        </div>
+      </Grid>
 
       <Menu
         anchorEl={anchorEl}
         getContentAnchorEl={null}
-        anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+        anchorOrigin={{vertical: 'top', horizontal: 'right'}}
         transformOrigin={{vertical: 'top', horizontal: 'center'}}
         open={Boolean(anchorEl)}
         onClose={handleClose}>
