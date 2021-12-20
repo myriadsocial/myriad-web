@@ -92,8 +92,7 @@ jobs:
             helm repo update
             helm upgrade myriad-web myriadsocial/myriad-web \
               --install \
-              --set-string image.tag=latest-pre-alpha \
-              --set-string image.pullPolicy=Always \
+              --set-string image.tag=${{ needs.compute-build-info.outputs.sha_short }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
               --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
