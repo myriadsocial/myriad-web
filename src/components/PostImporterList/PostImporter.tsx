@@ -29,6 +29,7 @@ export const PostImporter: React.FC<Props> = props => {
 
   const {
     importers,
+    loading,
     meta: {totalItemCount: totalImporter, currentPage},
   } = useSelector<RootState, ImporterState>(state => state.importersState);
   const [importer, setImporter] = useState<string | undefined>(undefined);
@@ -56,7 +57,7 @@ export const PostImporter: React.FC<Props> = props => {
       subtitle={`${!post ? 0 : post.totalImporter - 1} users imported this post`}
       className={styles.root}
       gutter="custom">
-      {importers.length === 0 ? (
+      {loading ? (
         <Loading />
       ) : (
         <List style={{padding: 0}}>
