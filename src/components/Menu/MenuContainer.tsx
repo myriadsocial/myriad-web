@@ -34,7 +34,7 @@ export const MenuContainer: React.FC = () => {
   };
 
   const handleChangeMenu = (path: string) => {
-    router.push(path);
+    router.push(path, undefined, {shallow: true});
   };
 
   return <Menu selected={selected} onChange={handleChangeMenu} />;
