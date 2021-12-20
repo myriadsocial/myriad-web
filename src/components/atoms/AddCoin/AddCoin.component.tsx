@@ -7,7 +7,6 @@ import {useSelector, useDispatch} from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import InputBase from '@material-ui/core/InputBase';
 import List from '@material-ui/core/List';
@@ -70,10 +69,6 @@ export const AddCoin: React.FC<Props> = props => {
     else setSelectedAsset(currency);
   };
 
-  const handleAddCustomAsset = () => {
-    // code
-  };
-
   const isSelected = (code: string) => {
     if (selectedAsset === code) return style.selected;
     else return;
@@ -126,21 +121,6 @@ export const AddCoin: React.FC<Props> = props => {
         />
 
         <List>
-          <ListItem onClick={handleAddCustomAsset} className={style.item} alignItems="center">
-            <ListItemAvatar>
-              <Avatar className={style.avatar} alt={'name'} src={''}></Avatar>
-            </ListItemAvatar>
-            <ListItemText>
-              <Typography className={style.header} component="span" color="textPrimary">
-                Custom asset
-              </Typography>
-              <Typography className={style.subHeader} component="p" color="textSecondary">
-                Add custom asset
-              </Typography>
-            </ListItemText>
-          </ListItem>
-          <Divider />
-
           {loading && <LoadingComponent />}
           {!loading &&
             searchedCurrencies.map(currency => (
