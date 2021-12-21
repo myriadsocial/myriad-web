@@ -9,7 +9,7 @@ import {User} from '../../interfaces/user';
 import {useStyles} from './UserSettings.styles';
 
 type UserSettingsProps = {
-  user: User;
+  user: User | undefined;
   onPublicKeyCopied: () => void;
 };
 
@@ -25,8 +25,8 @@ export const UserSettings: React.FC<UserSettingsProps> = props => {
       </Typography>
 
       <div className={styles.account}>
-        <Typography variant="body1">{user.id}</Typography>
-        <CopyToClipboard text={user.id} onCopy={onPublicKeyCopied}>
+        <Typography variant="body1">{user?.id}</Typography>
+        <CopyToClipboard text={user?.id} onCopy={onPublicKeyCopied}>
           <IconButton aria-label="copy-public-key" style={{padding: 0}}>
             <SvgIcon component={DuplicateIcon} color="primary" />
           </IconButton>
