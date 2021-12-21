@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {FacebookShareButton, RedditShareButton, TwitterShareButton} from 'react-share';
 
+import getConfig from 'next/config';
+
 import {
   Button,
   Checkbox,
@@ -51,7 +53,9 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
   const [shared, setShared] = useState(false);
   const [termApproved, setTermApproved] = useState(false);
 
-  const APP_URL = 'https://app.myriad.systems';
+  const {publicRuntimeConfig} = getConfig();
+
+  const APP_URL = publicRuntimeConfig.nextAuthURL ?? '';
   const message = `I'm part of the @myriad_social ${publicKey}\n\nhttps://www.myriad.social`;
 
   useEffect(() => {
