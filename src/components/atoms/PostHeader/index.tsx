@@ -150,7 +150,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
           />
         }
         title={
-          <Typography variant="h5">
+          <Typography variant="h5" onClick={openContentProfileUrl} style={{cursor: 'pointer'}}>
             {post.platform === 'myriad' ? post.user?.name : (post.people?.name as string)}
           </Typography>
         }
