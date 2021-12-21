@@ -1,12 +1,4 @@
-import getConfig from 'next/config';
-
-import Axios from 'axios';
-
-const {publicRuntimeConfig} = getConfig();
-
-const MyriadAPI = Axios.create({
-  baseURL: publicRuntimeConfig.myriadAPIURL,
-});
+import MyriadAPI from './base';
 
 export enum Kind {
   IMAGE = 'image',
@@ -43,7 +35,6 @@ export const image = async (
     url: `/buckets/${userId}/${kind}`,
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${publicRuntimeConfig.myriadAPIKey}`,
       'Content-Type': 'multipart/form-data',
     },
     data: formData,
@@ -68,7 +59,6 @@ export const video = async (
     method: 'POST',
     headers: {
       'Content-Type': 'multipart/form-data',
-      Authorization: `Bearer ${publicRuntimeConfig.myriadAPIKey}`,
     },
     data: formData,
     onUploadProgress: options.onUploadProgress,

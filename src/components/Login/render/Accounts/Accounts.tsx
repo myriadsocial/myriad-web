@@ -22,6 +22,7 @@ export const Accounts: React.FC<AccountListProps> = props => {
   const navigate = useNavigate();
 
   const [selectedAccount, setSelectedAccount] = useState<InjectedAccountWithMeta | null>(null);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSelectAccount = (account: InjectedAccountWithMeta) => () => {
     onSelect(account);
@@ -34,6 +35,8 @@ export const Accounts: React.FC<AccountListProps> = props => {
   };
 
   const handleNext = () => {
+    setSubmitted(true);
+
     onNext(() => {
       navigate('/profile');
     });
@@ -65,11 +68,16 @@ export const Accounts: React.FC<AccountListProps> = props => {
       </List>
 
       <Grid container justifyContent="space-between" style={{marginTop: 24}}>
-        <Button variant="outlined" color="secondary" size="small" onClick={handleBack}>
+        <Button
+          disabled={submitted}
+          variant="outlined"
+          color="secondary"
+          size="small"
+          onClick={handleBack}>
           Back
         </Button>
         <Button
-          disabled={selectedAccount === null}
+          disabled={selectedAccount === null || submitted}
           variant="contained"
           color="primary"
           size="small"

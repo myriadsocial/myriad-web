@@ -190,7 +190,12 @@ export const Socials: React.FC<SocialsProps> = props => {
                     aria-label="remove"
                     className={styles.remove}
                     onClick={() => handleDisconnectSocial(account)}>
-                    <SvgIcon component={XCircleIcon} color="error" fontSize="medium" />
+                    <SvgIcon
+                      component={XCircleIcon}
+                      color="error"
+                      fontSize="medium"
+                      viewBox="0 0 20 20"
+                    />
                   </IconButton>
                 </ListItemSecondaryAction>
               </ListItem>

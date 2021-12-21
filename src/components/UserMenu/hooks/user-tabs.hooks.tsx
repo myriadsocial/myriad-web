@@ -23,6 +23,8 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
   const {experiences} = useSelector<RootState, ExperienceState>(state => state.experienceState);
   const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
 
+  const isOwnProfile = profileUser?.id === user?.id;
+
   const filters: TimelineFilter = {
     owner: profileUser?.id,
   };
@@ -42,7 +44,7 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
       {
         id: 'friend',
         title: `Friends`,
-        component: <FriendListContainer user={profileUser} />,
+        component: <FriendListContainer user={profileUser} disableFilter={isOwnProfile} />,
       },
       {
         id: 'social',

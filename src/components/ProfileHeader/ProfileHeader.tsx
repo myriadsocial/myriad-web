@@ -2,7 +2,7 @@ import {ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/outline';
 
 import React, {useState} from 'react';
 
-import {Badge} from '@material-ui/core';
+import {Badge, Grid} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -33,24 +33,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   return (
     <div className={classes.root}>
       <div className={classes.box}>
-        <div className={classes.secondRoot}>
-          <div className={classes.iconButtonWrapper}>
-            <IconButton aria-label="avatar" disabled={!!alias} onClick={onShowNotificationList}>
-              <Badge
-                className={classes.notification}
-                variant="dot"
-                invisible={notificationCount === 0}>
-                <SvgIcon component={BellIconDefault} />
-              </Badge>
-            </IconButton>
-          </div>
-          <div className={classes.textAlign}>
-            <Typography variant="h5">{user?.name || alias || ''}</Typography>
-            <Typography variant="caption" color="textSecondary">
-              @{user?.username || 'anonymous'}
-            </Typography>
-          </div>
-          <div className={classes.customAvatarWrapper}>
+        <Grid container justifyContent="space-between" alignItems="center">
+          <div className={classes.avatar}>
             <CustomAvatar
               avatar={user?.profilePictureURL || ''}
               size={CustomAvatarSize.MEDIUM}
@@ -58,8 +42,22 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
               onClick={onViewProfile}
             />
           </div>
-        </div>
+          <div className={classes.name}>
+            <Typography variant="h5">{user?.name || alias || ''}</Typography>
+            <Typography variant="caption" color="textSecondary">
+              @{user?.username || 'anonymous'}
+            </Typography>
+          </div>
+          <div className={classes.notification}>
+            <IconButton aria-label="avatar" disabled={!!alias} onClick={onShowNotificationList}>
+              <Badge variant="dot" invisible={notificationCount === 0}>
+                <SvgIcon component={BellIconDefault} />
+              </Badge>
+            </IconButton>
+          </div>
+        </Grid>
       </div>
+
       <div className={`${classes.content} ${expanding ? classes.open : classes.close}`}>
         {user && (
           <>
@@ -96,6 +94,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
           </ListItemText>
         </ListItem>
       </div>
+
       <div
         className={classes.downIconButton}
         onClick={handleMenuProfileHeader}

@@ -4,43 +4,54 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       position: 'relative',
-      width: 311,
+      width: 310,
       '& .MuiSvgIcon-root': {
         fill: 'none',
       },
-      '&::after': {
+      '&::before': {
         content: '""',
         position: 'absolute',
-        top: '35px',
-        right: 0,
+        top: 35,
+        left: 0,
         width: 8,
         height: 40,
-        borderRadius: theme.spacing(1.25, 0, 0, 1.25),
+        borderRadius: theme.spacing(0, 1.25, 1.25, 0),
         background: theme.palette.primary.main,
-      },
-    },
-    secondRoot: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-    },
-    iconButtonWrapper: {
-      position: 'absolute',
-      left: 0,
-      paddingLeft: 15,
-    },
-    customAvatarWrapper: {
-      padding: 12,
-      '&:hover': {
-        cursor: 'pointer',
       },
     },
     box: {
       background: '#FFF',
-      paddingBottom: '0px',
-      padding: theme.spacing(3, 3.75),
+      paddingBottom: 4,
+      padding: '30px 28px',
       boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
+    },
+    avatar: {
+      width: 48,
+      marginRight: 4,
+
+      '&:hover': {
+        cursor: 'pointer',
+      },
+    },
+    name: {
+      width: 162,
+
+      '& .MuiTypography-h5': {
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        wordWrap: 'break-word',
+      },
+    },
+    notification: {
+      width: 40,
+
+      '& .MuiIconButton-root': {
+        padding: 8,
+      },
+      '& .MuiBadge-dot': {
+        backgroundColor: theme.status.danger.main,
+      },
     },
     text: {
       fontSize: '12px',
@@ -50,12 +61,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     textAlign: {
-      textAlign: 'right',
-    },
-    notification: {
-      '& .MuiBadge-dot': {
-        backgroundColor: theme.status.danger.main,
-      },
+      textAlign: 'left',
     },
     downIconButton: {
       width: '100%',

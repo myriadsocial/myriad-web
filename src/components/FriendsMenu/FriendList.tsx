@@ -7,7 +7,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
-import {IconButton, Menu, MenuItem, Button} from '@material-ui/core';
+import {IconButton, Menu, MenuItem, Button, Grid} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import List from '@material-ui/core/List';
@@ -46,6 +46,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     hasMore,
     background = false,
     disableFilter = false,
+    disableSort = false,
     onSearch,
     onFilter,
     onSort,
@@ -222,15 +223,22 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
 
   return (
     <div>
-      <ShowIf condition={!disableFilter}>
-        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <FilterDropdownMenu
-            title="Filter by"
-            options={friendFilterOptions}
-            onChange={handleFilterSelected}
-          />
-          <DropdownMenu title={'Sort by'} options={sortOptions} onChange={handleSortChanged} />
-        </div>
+      <ShowIf condition={!disableFilter || !disableSort}>
+        <Grid
+          container
+          justifyContent={disableFilter ? 'flex-end' : 'space-between'}
+          alignItems="center">
+          <ShowIf condition={!disableFilter}>
+            <FilterDropdownMenu
+              title="Filter by"
+              options={friendFilterOptions}
+              onChange={handleFilterSelected}
+            />
+          </ShowIf>
+          <ShowIf condition={!disableSort}>
+            <DropdownMenu title={'Sort by'} options={sortOptions} onChange={handleSortChanged} />
+          </ShowIf>
+        </Grid>
       </ShowIf>
 
       {router.pathname === '/profile/[id]' ? (

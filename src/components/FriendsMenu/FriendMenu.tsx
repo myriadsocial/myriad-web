@@ -24,7 +24,7 @@ export const FriendMenuComponent: React.FC = () => {
     {
       id: '0',
       title: 'Friend List',
-      component: <FriendListContainer user={user} disableFilter />,
+      component: <FriendListContainer user={user} disableFilter disableSort />,
     },
     {
       id: '1',
