@@ -16,6 +16,16 @@ export const useStyles = makeStyles((theme: Theme) =>
         marginRight: 0,
       },
     },
+    box: {
+      position: 'relative',
+    },
+    count: {
+      fontSize: 12,
+      color: theme.palette.text.secondary,
+      position: 'absolute',
+      right: 0,
+      bottom: 32,
+    },
     action: {
       marginTop: 80,
     },

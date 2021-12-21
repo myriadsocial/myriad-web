@@ -300,6 +300,10 @@ export const importPost = async (values: ImportPostProps): Promise<Post> => {
     data: attributes,
   });
 
+  if (data.platform === 'reddit') {
+    data.text = data.text.replace(new RegExp('&amp;#x200B;', 'g'), '&nbsp;');
+  }
+
   return data;
 };
 

@@ -103,8 +103,6 @@ export const Options: React.FC<OptionProps> = props => {
   const handleConnect = async () => {
     const accounts: InjectedAccountWithMeta[] = [];
 
-    setConnectAttempted(true);
-
     switch (wallet) {
       case WalletTypeEnum.POLKADOT:
         // eslint-disable-next-line no-case-declarations
@@ -116,6 +114,8 @@ export const Options: React.FC<OptionProps> = props => {
       default:
         break;
     }
+
+    setConnectAttempted(true);
 
     if (accounts.length > 0) {
       setAccounts(accounts);
@@ -249,7 +249,7 @@ export const Options: React.FC<OptionProps> = props => {
       <Prompt
         title="Extension Not Found"
         icon="warning"
-        open={connectAttempted && !extensionEnabled}
+        open={connectAttempted && extensionChecked && !extensionEnabled}
         onCancel={closeExtensionDisableModal}
         subtitle={
           <Typography>
@@ -275,7 +275,7 @@ export const Options: React.FC<OptionProps> = props => {
       <Prompt
         title="Account Not Found"
         icon="warning"
-        open={connectAttempted && extensionEnabled && accounts.length === 0}
+        open={connectAttempted && extensionChecked && extensionEnabled && accounts.length === 0}
         onCancel={closeExtensionDisableModal}
         subtitle={<Typography>There is no account in the wallet you selected.</Typography>}>
         <Button

@@ -4,11 +4,11 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
+      marginBottom: theme.spacing(2.5),
+      marginTop: theme.spacing(2.5),
     },
     selected: {
-      marginLeft: theme.spacing(1),
       fontWeight: 600,
-      marginRight: theme.spacing(1),
     },
     expand: {
       marginLeft: theme.spacing(1),

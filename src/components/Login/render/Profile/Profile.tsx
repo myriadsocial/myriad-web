@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router';
 
-import {Button, Grid, TextField} from '@material-ui/core';
+import {Button, Grid, TextField, Typography} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
@@ -13,24 +13,27 @@ type ProfileProps = {
   onSubmit: (name: string, username: string) => void;
 };
 
+const DEFAULT_HELPER_TEXT = 'You can use 3 or more characters.';
+const USERNAME_MAX_LENGTH = 16;
+const DISPLAY_NAME_MAX_LENGTH = 22;
+
 export const Profile: React.FC<ProfileProps> = props => {
   const styles = useStyles();
 
-  const {account, onSubmit, checkUsernameAvailabilty} = props;
+  const {onSubmit, checkUsernameAvailabilty} = props;
 
   const navigate = useNavigate();
 
-  const defaultHelperText = 'You can use 3 or more characters.';
   const [profile, setProfile] = useState({
     name: {
-      value: account?.meta.name ?? '',
+      value: '',
       error: false,
-      helper: defaultHelperText,
+      helper: DEFAULT_HELPER_TEXT,
     },
     username: {
       value: '',
       error: false,
-      helper: defaultHelperText,
+      helper: DEFAULT_HELPER_TEXT,
     },
   });
 
@@ -41,7 +44,7 @@ export const Profile: React.FC<ProfileProps> = props => {
       ...prevProfile,
       name: {
         ...prevProfile.name,
-        value: name,
+        value: name.trim().replace(/\s\s+/g, ' '),
       },
     }));
   };
@@ -53,7 +56,7 @@ export const Profile: React.FC<ProfileProps> = props => {
       ...prevProfile,
       username: {
         ...prevProfile.username,
-        value: username,
+        value: username.trim(),
       },
     }));
   };
@@ -73,7 +76,7 @@ export const Profile: React.FC<ProfileProps> = props => {
         },
       }));
     } else {
-      const valid = /^[a-zA-Z ]+$/.test(profile.name.value);
+      const valid = /^([^"'*\\]*)$/.test(profile.name.value);
 
       if (!valid) {
         error = true;
@@ -83,7 +86,7 @@ export const Profile: React.FC<ProfileProps> = props => {
           name: {
             ...prevSetting.name,
             error: true,
-            helper: "Display name can't contain symbol",
+            helper: 'Display name contain disallowed character',
           },
         }));
       } else {
@@ -94,7 +97,7 @@ export const Profile: React.FC<ProfileProps> = props => {
           name: {
             ...prevSetting.name,
             error: false,
-            helper: defaultHelperText,
+            helper: DEFAULT_HELPER_TEXT,
           },
         }));
       }
@@ -118,7 +121,8 @@ export const Profile: React.FC<ProfileProps> = props => {
         },
       }));
     } else {
-      const valid = /^[a-zA-Z ]+$/.test(profile.username.value);
+      // only allow alphanumeric char
+      const valid = /^[a-zA-Z0-9]+$/.test(profile.username.value);
 
       if (!valid) {
         error = true;
@@ -128,7 +132,7 @@ export const Profile: React.FC<ProfileProps> = props => {
           username: {
             ...prevSetting.username,
             error: true,
-            helper: "Username can't contain symbol",
+            helper: 'Display name contain disallowed character',
           },
         }));
       } else {
@@ -138,7 +142,7 @@ export const Profile: React.FC<ProfileProps> = props => {
           username: {
             ...prevSetting.username,
             error: false,
-            helper: defaultHelperText,
+            helper: DEFAULT_HELPER_TEXT,
           },
         }));
       }
@@ -181,34 +185,43 @@ export const Profile: React.FC<ProfileProps> = props => {
 
   return (
     <div className={styles.root}>
-      <TextField
-        id="name"
-        placeholder="Insert display name"
-        helperText={profile.name.helper}
-        error={profile.name.error}
-        fullWidth
-        defaultValue={account?.meta.name}
-        variant="outlined"
-        onChange={handleChangeName}
-        inputProps={{maxLength: 22}}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
+      <div className={styles.box}>
+        <TextField
+          id="name"
+          placeholder="Insert display name"
+          helperText={profile.name.helper}
+          error={profile.name.error}
+          fullWidth
+          variant="outlined"
+          onChange={handleChangeName}
+          inputProps={{maxLength: DISPLAY_NAME_MAX_LENGTH}}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <Typography className={`${styles.count}`} component="span">
+          ({profile.username.value.length}/{DISPLAY_NAME_MAX_LENGTH})
+        </Typography>
+      </div>
 
-      <TextField
-        id="username"
-        placeholder="username"
-        helperText={profile.username.helper}
-        error={profile.username.error}
-        fullWidth
-        variant="outlined"
-        onChange={handleChangeUsername}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        inputProps={{maxLength: 16, style: {textTransform: 'lowercase'}}}
-      />
+      <div className={styles.box}>
+        <TextField
+          id="username"
+          placeholder="username"
+          helperText={profile.username.helper}
+          error={profile.username.error}
+          fullWidth
+          variant="outlined"
+          onChange={handleChangeUsername}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          inputProps={{maxLength: USERNAME_MAX_LENGTH, style: {textTransform: 'lowercase'}}}
+        />
+        <Typography className={`${styles.count}`} component="span">
+          ({profile.username.value.length}/{USERNAME_MAX_LENGTH})
+        </Typography>
+      </div>
 
       <Grid container className={styles.action} justifyContent="space-between">
         <Button onClick={handleChangeWallet} variant="outlined" color="secondary" size="small">
