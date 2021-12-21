@@ -26,7 +26,7 @@ export const UserSettings: React.FC<UserSettingsProps> = props => {
 
       <div className={styles.account}>
         <Typography variant="body1">{user?.id}</Typography>
-        <CopyToClipboard text={user?.id} onCopy={onPublicKeyCopied}>
+        <CopyToClipboard text={user ? user.id : ''} onCopy={onPublicKeyCopied}>
           <IconButton aria-label="copy-public-key" style={{padding: 0}}>
             <SvgIcon component={DuplicateIcon} color="primary" />
           </IconButton>
