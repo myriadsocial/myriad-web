@@ -2,13 +2,13 @@ import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
-import {User, UserTransactionDetail, ActivityLog} from 'src/interfaces/user';
+import {User, UserTransactionDetail, ActivityLog, BlockedProps} from 'src/interfaces/user';
 
 type UserList = BaseList<User>;
 type ActivityList = BaseList<ActivityLog>;
 
-export const getUserDetail = async (id: string, userId?: string): Promise<User> => {
-  const {data} = await MyriadAPI.request<User>({
+export const getUserDetail = async (id: string, userId?: string): Promise<User & BlockedProps> => {
+  const {data} = await MyriadAPI.request<User & BlockedProps>({
     url: `users/${id}`,
     method: 'GET',
     params: {

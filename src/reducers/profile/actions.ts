@@ -8,7 +8,7 @@ import {ExperienceType} from 'src/components/TimelineFilter/hooks/use-filter-opt
 import {UserExperience} from 'src/interfaces/experience';
 import {Friend} from 'src/interfaces/friend';
 import {SocialMedia} from 'src/interfaces/social';
-import {User} from 'src/interfaces/user';
+import {BlockedProps, User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
 import * as SocialAPI from 'src/lib/api/social';
 import * as UserAPI from 'src/lib/api/user';
@@ -20,7 +20,7 @@ import {ThunkActionCreator} from 'src/types/thunk';
 
 export interface FetchProfileDetail extends Action {
   type: constants.FETCH_PROFILE_DETAIL;
-  detail: User;
+  detail: User & BlockedProps;
 }
 
 export interface FetchProfileFriend extends PaginationAction {
@@ -66,9 +66,9 @@ export type Actions =
  *
  * Actions
  */
-export const setProfile = (profle: User): FetchProfileDetail => ({
+export const setProfile = (profile: User & BlockedProps): FetchProfileDetail => ({
   type: constants.FETCH_PROFILE_DETAIL,
-  detail: profle,
+  detail: profile,
 });
 
 /**
@@ -79,7 +79,7 @@ export const fetchProfileDetail: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const detail: User = await UserAPI.getUserDetail(userId);
+      const detail: User & BlockedProps = await UserAPI.getUserDetail(userId);
 
       dispatch(setProfile(detail));
     } catch (error) {
