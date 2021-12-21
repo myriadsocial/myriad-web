@@ -58,7 +58,7 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
       items.push({
         id: 'setting',
         title: `Public Key`,
-        component: <UserSettingsContainer user={user} />,
+        component: <UserSettingsContainer user={profileUser} />,
         background: 'white',
       });
     }

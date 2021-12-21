@@ -6,7 +6,7 @@ import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {User} from 'src/interfaces/user';
 
 type UserSettingsContainerProps = {
-  user: User;
+  user: User | undefined;
 };
 
 export const UserSettingsContainer: React.FC<UserSettingsContainerProps> = props => {
