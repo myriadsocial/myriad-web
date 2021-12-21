@@ -8,18 +8,24 @@ import {RootState} from 'src/reducers';
 import {
   fetchNotification,
   countNewNotification,
+  readNotification,
   readAllNotifications,
 } from 'src/reducers/notification/actions';
 import {NotificationState} from 'src/reducers/notification/reducer';
 
 type NotificationsContainerProps = {
   user?: User;
+  infinite: boolean;
+  gutter?: number;
+  size?: 'small' | 'medium';
 };
 
 export const NotificationsContainer: React.FC<NotificationsContainerProps> = props => {
+  const {infinite, gutter, size} = props;
   const dispatch = useDispatch();
 
   const {
+    total,
     notifications,
     meta: {totalItemCount: totalNotifications, currentPage, totalPageCount},
   } = useSelector<RootState, NotificationState>(state => state.notificationState);
@@ -31,7 +37,7 @@ export const NotificationsContainer: React.FC<NotificationsContainerProps> = pro
   }, []);
 
   const loadNextPage = () => {
-    if (currentPage < totalPageCount) {
+    if (infinite && currentPage < totalPageCount) {
       dispatch(fetchNotification(currentPage + 1));
     }
   };
@@ -40,13 +46,21 @@ export const NotificationsContainer: React.FC<NotificationsContainerProps> = pro
     dispatch(readAllNotifications());
   };
 
+  const markItemAsRead = (notificationId: string, callback: () => void) => {
+    dispatch(readNotification(notificationId, callback));
+  };
+
   return (
     <Notifications
       notifications={notifications}
-      total={totalNotifications}
+      unread={total}
       hasMore={hasMore}
+      infinite={infinite}
+      gutter={gutter}
+      size={size}
       onLoadNextPage={loadNextPage}
       onMarkAllAsRead={markAllAsRead}
+      onMarkItemAsRead={markItemAsRead}
     />
   );
 };

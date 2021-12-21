@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 2,
       minWidth: 644,
       margin: `0 20px`,
+
+      [theme.breakpoints.down(1346)]: {
+        minWidth: 538,
+      },
     },
 
     innerSecondColWrapper: {
