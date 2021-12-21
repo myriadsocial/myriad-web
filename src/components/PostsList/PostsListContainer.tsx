@@ -173,8 +173,10 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
         subtitle={
           <Typography component="div">
             Tip to{' '}
-            <Box fontWeight={700} display="inline">
-              {tippedContentForHistory?.user.name ?? 'Unknown Myrian'}
+            <Box fontWeight={400} display="inline">
+              {tippedContentForHistory?.createdBy && tippedContentForHistory?.createdBy.length > 0
+                ? tippedContentForHistory?.people?.name
+                : tippedContentForHistory?.user.name ?? 'Unknown Myrian'}
             </Box>{' '}
             sent successfully
           </Typography>

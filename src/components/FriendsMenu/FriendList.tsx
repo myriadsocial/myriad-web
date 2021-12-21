@@ -467,7 +467,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         subtitle={
           <Typography component="div">
             Tip to{' '}
-            <Box fontWeight={700} display="inline">
+            <Box fontWeight={400} display="inline">
               {tippedFriendForHistory?.name ?? 'Unknown Myrian'}
             </Box>{' '}
             sent successfully
