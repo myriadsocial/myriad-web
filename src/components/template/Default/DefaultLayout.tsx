@@ -4,13 +4,13 @@ import {useDispatch} from 'react-redux';
 import dynamic from 'next/dynamic';
 
 import {MenuContainer} from '../../Menu/MenuContainer';
-import {NotificationsContainer} from '../../Notifications/sidebar/Notifications.container';
 import {ProfileHeaderContainer} from '../../ProfileHeader/ProfileHeaderContainer';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
 import {SocialMediaListContainer} from '../../SocialMediaList/SocialMediaListContainer';
 import useStyles from './DefaultLayout.styles';
 
 import {withError, WithErrorProps} from 'src/components/Error';
+import {NotificationsContainer} from 'src/components/Notifications/Notifications.container';
 import ShowIf from 'src/components/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {firebaseApp, firebaseAnalytics, firebaseCloudMessaging} from 'src/lib/firebase';
@@ -100,7 +100,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
                 <RightMenuBar />
               </ShowIf>
               <ShowIf condition={showNotification}>
-                <NotificationsContainer />
+                <NotificationsContainer infinite={false} size="small" />
               </ShowIf>
             </div>
           </div>

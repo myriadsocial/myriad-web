@@ -1,11 +1,17 @@
 import {createStyles, Theme, makeStyles, alpha} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+type NotificationComponentProps = {
+  gutter?: number;
+  size?: 'small' | 'medium';
+};
+
+export const useStyles = makeStyles<Theme, NotificationComponentProps>(theme =>
   createStyles({
     root: {
       width: '100%',
-      margin: '8px 0',
-      padding: 16,
+      margin: theme.spacing(1, 0),
+      padding: props => (props.gutter ? theme.spacing(1 * props.gutter) : 0),
+      borderRadius: props => (props.size === 'medium' ? 10 : 20),
     },
     header: {
       paddingTop: 14,
@@ -27,15 +33,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600,
     },
     list: {
-      marginLeft: theme.spacing(-2),
-      marginRight: theme.spacing(-2),
+      marginLeft: props => (props.gutter ? theme.spacing(-1 * props.gutter) : 0),
+      marginRight: props => (props.gutter ? theme.spacing(-1 * props.gutter) : 0),
       '& .MuiListItem-button:hover': {
         backgroundColor: alpha('#FFC857', 0.15),
       },
     },
     item: {
       marginBottom: theme.spacing(0.5),
-      paddingRight: theme.spacing(0.5),
+      paddingRight: 0,
+      paddingTop: props => (props.gutter ? theme.spacing(0.5 * props.gutter) : 0),
       position: 'relative',
 
       '& .MuiListItemText-root': {
@@ -74,11 +81,23 @@ export const useStyles = makeStyles((theme: Theme) =>
     avatarItem: {
       paddingLeft: 14,
     },
-    secondaryItem: {
-      paddingRight: 14,
+    description: {
+      width: 'calc(100% - 86px)',
+      fontWeight: 400,
+    },
+    time: {
+      top: 8,
+      transform: 'none',
+      textAlign: 'right',
+      paddingRight: props => (props.size === 'medium' ? 14 : 0),
+      width: props => (props.size === 'medium' ? 106 : 80),
     },
     textItem: {
       paddingLeft: 6,
+    },
+    footer: {
+      textAlign: 'center',
+      paddingBottom: 20,
     },
   }),
 );

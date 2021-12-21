@@ -156,6 +156,9 @@ const theme = createTheme({
     subtitle1: {
       fontSize: textXs,
     },
+    subtitle2: {
+      fontSize: textSm,
+    },
     caption: {
       fontSize: textSm,
     },

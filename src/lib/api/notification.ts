@@ -44,3 +44,11 @@ export const markAsRead = async (id: string): Promise<void> => {
     method: 'PATCH',
   });
 };
+
+export const markItemsAsRead = async (ids: string[]): Promise<void> => {
+  await MyriadAPI.request<TotalNewNotification>({
+    url: `/notifications/read`,
+    method: 'PATCH',
+    data: ids,
+  });
+};

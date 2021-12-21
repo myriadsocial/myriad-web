@@ -48,10 +48,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: '70px',
     },
     blocked: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
       height: 'calc(100vh - 360px)',
+    },
+    blockedTitle: {
+      fontWeight: 700,
+      marginBottom: 20,
     },
   }),
 );

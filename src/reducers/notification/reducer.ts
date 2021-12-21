@@ -59,6 +59,17 @@ export const NotificationReducer: Redux.Reducer<NotificationState, Actions> = (
       };
     }
 
+    case constants.MARK_ALL_READ: {
+      return {
+        ...state,
+        notifications: state.notifications.map(notification => {
+          notification.read = true;
+
+          return notification;
+        }),
+      };
+    }
+
     case constants.CLEAR_NOTIFIACTION_COUNT: {
       return {
         ...state,

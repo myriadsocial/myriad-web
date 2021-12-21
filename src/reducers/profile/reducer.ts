@@ -8,11 +8,11 @@ import * as Redux from 'redux';
 import {UserExperience} from 'src/interfaces/experience';
 import {Friend} from 'src/interfaces/friend';
 import {SocialMedia} from 'src/interfaces/social';
-import {User} from 'src/interfaces/user';
+import {BlockedProps, User} from 'src/interfaces/user';
 
 export interface ProfileState extends BaseState {
   userId?: string;
-  detail?: User;
+  detail?: User & BlockedProps;
   socials: SocialMedia[];
   friends: {
     data: Friend[];

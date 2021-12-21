@@ -28,7 +28,7 @@ const Notification: React.FC = () => {
         description={`${total} new notifications`}
         sectionTitle={SectionTitle.NOTIFICATION}
       />
-      <NotificationsContainer />
+      <NotificationsContainer gutter={2} infinite />
     </DefaultLayout>
   );
 };

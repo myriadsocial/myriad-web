@@ -1,5 +1,6 @@
 import {BaseModel} from './base.interface';
 import {Currency, CurrencyId} from './currency';
+import {FriendStatus} from './friend';
 import {People} from './people';
 import {TransactionDetail} from './transaction';
 
@@ -31,6 +32,11 @@ export type UserProps = BaseUser & {
   skipWelcome?: boolean;
   websiteURL?: string;
   username?: string;
+};
+
+export type BlockedProps = {
+  status: FriendStatus;
+  blocker: string;
 };
 
 export type UserMetric = {

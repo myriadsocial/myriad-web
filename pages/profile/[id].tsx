@@ -120,7 +120,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   try {
-    const detail = await UserAPI.getUserDetail(profileId);
+    const detail = await UserAPI.getUserDetail(profileId, userId);
 
     if (detail) {
       await dispatch(setProfile(detail));
