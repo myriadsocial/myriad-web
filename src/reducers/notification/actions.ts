@@ -26,6 +26,10 @@ export interface TotalNewNotification extends Action {
   total: number;
 }
 
+export interface MarkAllRead extends Action {
+  type: constants.MARK_ALL_READ;
+}
+
 export interface ClearNotifiactionCount extends Action {
   type: constants.CLEAR_NOTIFIACTION_COUNT;
 }
@@ -38,6 +42,7 @@ export type Actions =
   | FetchNotification
   | ReadNotification
   | TotalNewNotification
+  | MarkAllRead
   | ClearNotifiactionCount
   | BaseAction;
 
@@ -82,7 +87,7 @@ export const fetchNotification: ThunkActionCreator<Actions, RootState> =
   };
 
 export const readNotification: ThunkActionCreator<Actions, RootState> =
-  (notificationId: string) => async (dispatch, getState) => {
+  (notificationId: string, callback?: () => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
@@ -100,6 +105,8 @@ export const readNotification: ThunkActionCreator<Actions, RootState> =
         type: constants.READ_NOTIFICATION,
         notificationId,
       });
+
+      callback && callback();
     } catch (error) {
       dispatch(setError(error.message));
     } finally {
@@ -121,11 +128,11 @@ export const readAllNotifications: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      await Promise.all(
-        notifications.map(notification => {
-          return NotificationAPI.markAsRead(notification.id);
-        }),
-      );
+      await NotificationAPI.markItemsAsRead(notifications.map(notification => notification.id));
+
+      dispatch({
+        type: constants.MARK_ALL_READ,
+      });
 
       dispatch({
         type: constants.CLEAR_NOTIFIACTION_COUNT,

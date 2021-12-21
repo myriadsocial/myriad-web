@@ -9,17 +9,19 @@ import {
 
 import React from 'react';
 
-import {SvgIcon, Typography} from '@material-ui/core';
+import {SvgIcon} from '@material-ui/core';
 
-import {PostOrigin} from '../../../interfaces/timeline';
 import {useStyles} from '../Notifications.styles';
 
 import {Notification, NotificationType} from 'src/interfaces/notification';
+import {PostOrigin} from 'src/interfaces/timeline';
+import {PAGINATION_LIMIT} from 'src/lib/api/constants/pagination';
 
-type NotificationList = {
+export type NotificationList = {
   id: string;
   type?: NotificationType;
   user: string;
+  userId?: string;
   avatar?: string;
   description: React.ReactNode;
   badge: React.ReactNode;
@@ -35,13 +37,19 @@ const getPlatform = (message: string) => {
   return result[2];
 };
 
-export const useNotificationList = (notifications: Notification[]): NotificationList[] => {
-  const style = useStyles();
+export const useNotificationList = (
+  notifications: Notification[],
+  infinite = true,
+  exclude: NotificationType[] = [],
+): NotificationList[] => {
+  const style = useStyles({});
+
+  const excludes = [NotificationType.POST_VOTE, NotificationType.COMMENT_VOTE].concat(exclude);
 
   return notifications
-    .filter(notification => notification.type !== NotificationType.POST_VOTE)
-    .filter(notification => notification.type !== NotificationType.COMMENT_VOTE)
+    .filter(notification => !excludes.includes(notification.type))
     .filter(notification => Boolean(notification.fromUserId) && Boolean(notification.toUserId))
+    .slice(0, infinite ? notifications.length : PAGINATION_LIMIT)
     .map(notification => {
       switch (notification.type) {
         case NotificationType.FRIEND_ACCEPT:
@@ -49,6 +57,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.FRIEND_ACCEPT,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
             description: 'Accepted your friend request',
@@ -70,6 +79,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.FRIEND_REQUEST,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
             description: 'Wants to be your friend',
@@ -91,9 +101,10 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.POST_COMMENT,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
-            description: <Typography component="span">Commented on your Post</Typography>,
+            description: 'Commented on your Post',
             badge: (
               <div className={style.circle}>
                 <SvgIcon
@@ -115,6 +126,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.COMMENT_COMMENT,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
             description: 'Commented on your reply',
@@ -137,6 +149,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.POST_MENTION,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
             description: 'Mention you in a post',
@@ -158,6 +171,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.POST_VOTE,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
             description: notification.message,
@@ -179,6 +193,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.COMMENT_VOTE,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
             description: notification.message,
@@ -200,15 +215,10 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.USER_TIPS,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: 'Tips received',
             avatar: notification.fromUserId.profilePictureURL,
-            description: (
-              <Typography component="span">
-                You recieved tip from&nbsp;
-                {notification.fromUserId.name}
-                &nbsp;{`(${notification.message})`}
-              </Typography>
-            ),
+            description: `You received tip from ${notification.fromUserId.name} (${notification.message})}`,
             badge: (
               <div className={style.circleSuccess}>
                 <SvgIcon
@@ -227,14 +237,10 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.POST_TIPS,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: 'Tips received',
             avatar: notification.fromUserId.profilePictureURL,
-            description: (
-              <Typography component="span">
-                Your post recieved tip from {notification.fromUserId.name}&nbsp;
-                {`(${notification.message})`}
-              </Typography>
-            ),
+            description: `Your post received tip from ${notification.fromUserId.name} (${notification.message})`,
             badge: (
               <div className={style.circleSuccess}>
                 <SvgIcon
@@ -257,15 +263,10 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.COMMENT_TIPS,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: 'Tips received',
             avatar: notification.fromUserId.profilePictureURL,
-            description: (
-              <Typography component="span">
-                Your reply recieved tip from&nbsp;
-                {notification.fromUserId.name}
-                &nbsp;{`(${notification.message})`}
-              </Typography>
-            ),
+            description: `Your reply recieved tip from ${notification.fromUserId.name} (${notification.message})}`,
             badge: (
               <div className={style.circleSuccess}>
                 <SvgIcon
@@ -288,6 +289,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.USER_CLAIM_TIPS,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: 'Tips claimed',
             avatar: notification.fromUserId.profilePictureURL,
             description: `${notification.message}`,
@@ -309,6 +311,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.USER_REWARD,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: 'Tips reward',
             avatar: notification.fromUserId.profilePictureURL,
             description: `${notification.message}`,
@@ -372,6 +375,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.USER_BANNED,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: 'User reported',
             avatar: notification.fromUserId.profilePictureURL,
             description: notification.message,
@@ -393,6 +397,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.CONNECTED_SOCIAL_MEDIA,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: 'Account linked',
             avatar: notification.toUserId.profilePictureURL ?? notification.toUserId.name,
             description:
@@ -418,6 +423,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
             id: notification.id,
             type: NotificationType.DISCONNECTED_SOCIAL_MEDIA,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: 'Account unlinked',
             avatar: notification.toUserId.profilePictureURL ?? notification.toUserId.name,
             description:
@@ -442,6 +448,7 @@ export const useNotificationList = (notifications: Notification[]): Notification
           return {
             id: notification.id,
             read: notification.read,
+            userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
             description: notification.message,
