@@ -186,7 +186,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
         subtitle={
           <Typography component="div">
             Tip to{' '}
-            <Box fontWeight={700} display="inline">
+            <Box fontWeight={400} display="inline">
               {tippedUserForHistory?.name ?? 'Unknown Myrian'}
             </Box>{' '}
             sent successfully
