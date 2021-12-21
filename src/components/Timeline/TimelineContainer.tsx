@@ -171,8 +171,6 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     dispatch(removeVote(reference));
   };
 
-  console.log({tippedContentForHistory});
-
   return (
     <>
       <ShowIf condition={enableFilter}>

@@ -136,7 +136,6 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
   const handleRemoveVote = (reference: Post | Comment) => {
     dispatch(removeVote(reference));
   };
-  console.log({tippedContentForHistory});
 
   return (
     <>
