@@ -171,6 +171,8 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     dispatch(removeVote(reference));
   };
 
+  console.log({tippedContentForHistory});
+
   return (
     <>
       <ShowIf condition={enableFilter}>
@@ -215,8 +217,8 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
         subtitle={
           <Typography component="div">
             Tip to{' '}
-            <Box fontWeight={700} display="inline">
-              {tippedContentForHistory?.importers && tippedContentForHistory?.importers.length > 0
+            <Box fontWeight={400} display="inline">
+              {tippedContentForHistory?.createdBy && tippedContentForHistory?.createdBy.length > 0
                 ? tippedContentForHistory?.people?.name
                 : tippedContentForHistory?.user.name ?? 'Unknown Myrian'}
             </Box>{' '}
