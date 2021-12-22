@@ -135,7 +135,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     <div className={style.root}>
       <Typography className={style.title}>Edit Profile</Typography>
 
-      <FormControl fullWidth variant="outlined" focused>
+      <FormControl classes={{root: style.mb}} fullWidth variant="outlined" focused>
         <InputLabel htmlFor="profile-picture" shrink={true} className={style.label}>
           Profile Picture
         </InputLabel>
@@ -159,7 +159,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         </div>
       </FormControl>
 
-      <FormControl fullWidth variant="outlined" focused>
+      <FormControl classes={{root: style.mb}} fullWidth variant="outlined" focused>
         <InputLabel htmlFor="background-images" shrink={true} className={style.label}>
           Background Image
         </InputLabel>
@@ -174,7 +174,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         </div>
       </FormControl>
 
-      <FormControl className={style.mb} fullWidth variant="outlined">
+      <FormControl classes={{root: style.mb}} fullWidth variant="outlined">
         <InputLabel htmlFor="username">Username</InputLabel>
         <OutlinedInput
           error={handleError()}
@@ -188,7 +188,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         />
       </FormControl>
 
-      <FormControl fullWidth variant="outlined">
+      <FormControl classes={{root: style.mb}} fullWidth variant="outlined">
         <InputLabel htmlFor="display-name">Display Name</InputLabel>
         <OutlinedInput
           id="display-name"
@@ -207,7 +207,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         </Typography>
       )}
 
-      <FormControl fullWidth variant="outlined">
+      <FormControl classes={{root: style.mb}} fullWidth variant="outlined">
         <InputLabel htmlFor="bio">Bio</InputLabel>
         <OutlinedInput
           id="bio"
@@ -220,7 +220,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         />
       </FormControl>
 
-      <FormControl fullWidth variant="outlined">
+      <FormControl classes={{root: style.mb}} fullWidth variant="outlined">
         <InputLabel htmlFor="website">Website</InputLabel>
         <OutlinedInput
           id="website"
@@ -231,8 +231,8 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         />
       </FormControl>
 
-      <div className={style.flex}>
-        <FormControl className={style.button} variant="outlined">
+      <div className={`${style.flex} ${style.button}`}>
+        <FormControl variant="outlined">
           <Button variant="outlined" color="secondary" disableElevation onClick={handleCancel}>
             Cancel
           </Button>
@@ -240,7 +240,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
             <CircularProgress size={24} color="primary" className={style.buttonProgress} />
           )}
         </FormControl>
-        <FormControl className={style.button} variant="outlined">
+        <FormControl variant="outlined">
           <Button
             variant="contained"
             color="primary"

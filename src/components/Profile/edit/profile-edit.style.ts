@@ -54,7 +54,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
     },
     button: {
-      marginTop: '107px',
+      marginTop: '16px',
     },
     marker: {
       fontSize: '12px',
@@ -72,7 +72,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: 'green',
     },
     mb: {
-      marginBottom: '12px',
+      marginBottom: theme.spacing(3),
     },
     validation: {
       position: 'absolute',
