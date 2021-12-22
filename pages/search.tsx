@@ -4,17 +4,16 @@ import {useSelector} from 'react-redux';
 import {Session} from 'next-auth';
 import {getSession} from 'next-auth/client';
 
-import {SearchResultContainer} from '../src/components/Search/SearchResultContainer';
-import {DefaultLayout} from '../src/components/template/Default/DefaultLayout';
-import {healthcheck} from '../src/lib/api/healthcheck';
-import {RootState} from '../src/reducers';
-import {fetchAvailableToken} from '../src/reducers/config/actions';
-import {setAnonymous, fetchConnectedSocials, fetchUser} from '../src/reducers/user/actions';
-import {UserState} from '../src/reducers/user/reducer';
-import {wrapper} from '../src/store';
-
+import {SearchResultContainer} from 'src/components/Search/SearchResultContainer';
+import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
+import {healthcheck} from 'src/lib/api/healthcheck';
+import {RootState} from 'src/reducers';
+import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExperience} from 'src/reducers/experience/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
+import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
+import {UserState} from 'src/reducers/user/reducer';
+import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
 type SearchProps = {

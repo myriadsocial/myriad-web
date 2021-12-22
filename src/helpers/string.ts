@@ -45,3 +45,9 @@ export const parseHashtag = (
 export const validateImageUrl = (url: string) => {
   return url.match(/^http[^\?]*.(jpg|jpeg|png)(\?(.*))?$/gim) != null;
 };
+
+export const isHashtag = (value: string): boolean => {
+  const hashtagRule = /([#|＃][^\s]+)/g;
+
+  return hashtagRule.test(value);
+};
