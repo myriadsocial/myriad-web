@@ -16,6 +16,7 @@ import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
+import {fetchAccountPrivacySetting} from 'src/reducers/config/actions';
 import {fetchExperience} from 'src/reducers/experience/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {checkFriendedStatus, setProfile} from 'src/reducers/profile/actions';
@@ -116,6 +117,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
       dispatch(fetchExperience()),
+      dispatch(fetchAccountPrivacySetting(profileId)),
     ]);
   }
 
