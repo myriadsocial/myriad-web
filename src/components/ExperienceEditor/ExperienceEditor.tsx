@@ -305,22 +305,24 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         renderOption={(option, state: AutocompleteRenderOptionState) => {
           if (option.id === '') return null;
           return (
-            <ListItemPeopleComponent
-              id="selectable-experience-list-item"
-              title={option.name}
-              subtitle={<Typography variant="caption">@{option.username}</Typography>}
-              avatar={option.profilePictureURL}
-              platform={option.platform}
-              action={
-                <IconButton className={styles.removePeople}>
-                  {state.selected ? (
-                    <SvgIcon component={XCircleIcon} color="error" viewBox={'0 0 20 20'} />
-                  ) : (
-                    <SvgIcon component={PlusCircleIcon} viewBox={'0 0 20 20'} />
-                  )}
-                </IconButton>
-              }
-            />
+            <div className={styles.option}>
+              <ListItemPeopleComponent
+                id="selectable-experience-list-item"
+                title={option.name}
+                subtitle={<Typography variant="caption">@{option.username}</Typography>}
+                avatar={option.profilePictureURL}
+                platform={option.platform}
+                action={
+                  <IconButton className={styles.removePeople}>
+                    {state.selected ? (
+                      <SvgIcon component={XCircleIcon} color="error" viewBox={'0 0 20 20'} />
+                    ) : (
+                      <SvgIcon component={PlusCircleIcon} viewBox={'0 0 20 20'} />
+                    )}
+                  </IconButton>
+                }
+              />
+            </div>
           );
         }}
       />
