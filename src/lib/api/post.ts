@@ -3,6 +3,7 @@ import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 import {LoopbackWhere} from './interfaces/loopback-query.interface';
 
+import {isHashtag} from 'src/helpers/string';
 import {Dislike, Like} from 'src/interfaces/interaction';
 import {Post, PostProps, ImportPostProps, PostVisibility, PostStatus} from 'src/interfaces/post';
 import {
@@ -222,8 +223,51 @@ export const getPost = async (
 };
 
 export const findPosts = async (user: User, query: string, page = 1): Promise<PostList> => {
+  const search = query.replace('#', '');
+  const findingHashtag = isHashtag(query);
+  let path = `/posts?q=${encodeURIComponent(search)}`;
+
+  const availabilityFilter: Record<string, any> = {
+    or: [
+      {
+        visibility: {
+          inq: ['public'],
+        },
+      },
+      {
+        or: [
+          {created_by: user.id},
+          {
+            importers: {
+              inq: [user.id],
+            },
+          },
+        ],
+      },
+    ],
+  };
+
+  let where = availabilityFilter;
+
+  if (findingHashtag) {
+    path = '/posts';
+
+    where = {
+      and: [
+        {
+          tags: {
+            inq: [search],
+          },
+        },
+        {
+          ...availabilityFilter,
+        },
+      ],
+    };
+  }
+
   const {data} = await MyriadAPI.request<PostList>({
-    url: `/posts?q=${encodeURIComponent(query)}`,
+    url: path,
     method: 'GET',
     params: {
       pageNumber: page,
@@ -247,19 +291,7 @@ export const findPosts = async (user: User, query: string, page = 1): Promise<Po
             },
           },
         ],
-        where: {
-          or: [
-            {
-              visibility: ['public'],
-            },
-            {
-              created_by: user.id,
-              importers: {
-                inq: [user.id],
-              },
-            },
-          ],
-        },
+        where,
       },
     },
   });

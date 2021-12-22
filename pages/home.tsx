@@ -25,7 +25,7 @@ const Home: React.FC = () => {
   const router = useRouter();
 
   const performSearch = (query: string) => {
-    const DELAY = 2000;
+    const DELAY = 300;
     setTimeout(() => {
       // shallow push, without rerender page
       router.push(
