@@ -56,6 +56,7 @@ export const ExperienceContainer: React.FC = () => {
         />
       </div>
       <ExperienceEditor
+        isEdit={false}
         experience={selectedExperience}
         tags={tags}
         people={people}

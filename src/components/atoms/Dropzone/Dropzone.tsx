@@ -60,7 +60,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     isEdit = false,
     editorType = '',
   } = props;
-  const styles = useStyles({border});
+  const styles = useStyles({border, multiple});
 
   const {openToasterSnack} = useToasterSnackHook();
 
@@ -254,6 +254,9 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
       if (type == 'video' && files.length > 0) return `Replace ${capitalize(type)}`;
       return `Add ${capitalize(type)}`;
     }
+    if (!multiple && preview.length === 1) {
+      return `Reupload ${capitalize(type)}`;
+    }
     return `Upload ${capitalize(type)}`;
   };
 
@@ -290,50 +293,60 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
                 </ImageListItem>
               </ImageList>
             </ShowIf>
-            <ShowIf condition={type === 'image' && isEdit === true}>
-              <ImageList rowHeight={128} cols={6} className={styles.preview}>
-                {files.map((item, i) => (
-                  <ImageListItem
-                    key={i}
-                    cols={getCols()}
-                    rows={getRows()}
-                    classes={{item: styles.item}}>
-                    {item.loading && (
-                      <Skeleton
-                        variant="rect"
-                        animation={false}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                        width={115 * getCols()}
-                        height={128 * getRows()}>
-                        <SvgIcon
-                          component={ImagePlaceholder}
-                          viewBox="0 0 50 50"
-                          style={{width: 50, height: 50, visibility: 'visible'}}
-                        />
-                      </Skeleton>
-                    )}
-                    <img
-                      style={{visibility: item.loading ? 'hidden' : 'visible'}}
-                      src={item.preview}
-                      alt=""
-                      className={styles.image}
-                      onLoad={imageLoaded(i)}
-                    />
+            <ShowIf condition={type === 'image' && !isEdit}>
+              <ShowIf condition={!multiple}>
+                <img
+                  style={{visibility: 'visible'}}
+                  src={preview[0]}
+                  alt=""
+                  className={styles.image}
+                />
+              </ShowIf>
+              <ShowIf condition={multiple}>
+                <ImageList rowHeight={128} cols={6} className={styles.preview}>
+                  {files.map((item, i) => (
+                    <ImageListItem
+                      key={i}
+                      cols={getCols()}
+                      rows={getRows()}
+                      classes={{item: styles.item}}>
+                      {item.loading && (
+                        <Skeleton
+                          variant="rect"
+                          animation={false}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                          width={115 * getCols()}
+                          height={128 * getRows()}>
+                          <SvgIcon
+                            component={ImagePlaceholder}
+                            viewBox="0 0 50 50"
+                            style={{width: 50, height: 50, visibility: 'visible'}}
+                          />
+                        </Skeleton>
+                      )}
+                      <img
+                        style={{visibility: item.loading ? 'hidden' : 'visible'}}
+                        src={item.preview}
+                        alt=""
+                        className={styles.image}
+                        onLoad={imageLoaded(i)}
+                      />
 
-                    <IconButton
-                      size="small"
-                      aria-label={`remove image`}
-                      className={styles.icon}
-                      onClick={() => removeFile(i)}>
-                      <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
-                    </IconButton>
-                  </ImageListItem>
-                ))}
-              </ImageList>
+                      <IconButton
+                        size="small"
+                        aria-label={`remove image`}
+                        className={styles.icon}
+                        onClick={() => removeFile(i)}>
+                        <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
+                      </IconButton>
+                    </ImageListItem>
+                  ))}
+                </ImageList>
+              </ShowIf>
             </ShowIf>
 
             <ShowIf condition={type === 'video'}>

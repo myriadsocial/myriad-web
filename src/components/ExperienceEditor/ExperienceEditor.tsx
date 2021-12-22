@@ -31,6 +31,7 @@ import {SocialsEnum} from 'src/interfaces/social';
 
 type ExperienceEditorProps = {
   type?: string;
+  isEdit?: boolean;
   experience?: Experience | null;
   tags: Tag[];
   people: People[];
@@ -41,8 +42,17 @@ type ExperienceEditorProps = {
 };
 
 export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
-  const {type, experience, people, tags, onSave, onImageUpload, onSearchTags, onSearchPeople} =
-    props;
+  const {
+    type,
+    isEdit,
+    experience,
+    people,
+    tags,
+    onSave,
+    onImageUpload,
+    onSearchTags,
+    onSearchPeople,
+  } = props;
   const styles = useStyles();
 
   const [newExperience, setNewExperience] = useState<Partial<Experience>>({
@@ -240,7 +250,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           onImageSelected={handleImageUpload}
           value={image}
           maxSize={3}
-          isEdit={type ? true : false}
+          isEdit={isEdit ? isEdit : type ? true : false}
           editorType={type}
         />
         <ShowIf condition={isLoading}>
