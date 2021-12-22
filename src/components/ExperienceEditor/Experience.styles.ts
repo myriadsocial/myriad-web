@@ -54,7 +54,7 @@ export const useStyles = makeStyles((theme: Theme) =>
           content: '""',
           position: 'absolute',
           width: 30,
-          height: 68,
+          height: 70,
           top: 0,
           backgroundColor: alpha('#FFC857', 0.15),
         },
@@ -92,6 +92,20 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       height: '100%',
       textAlign: 'center',
+    },
+    option: {
+      width: '100%',
+      '& .MuiListItem-container': {
+        '& .MuiListItemSecondaryAction-root': {
+          display: 'none',
+        },
+
+        '&:hover': {
+          '& .MuiListItemSecondaryAction-root': {
+            display: 'flex',
+          },
+        },
+      },
     },
   }),
 );

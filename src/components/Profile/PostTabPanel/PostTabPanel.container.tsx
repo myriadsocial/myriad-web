@@ -4,6 +4,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useRouter} from 'next/router';
 
 import {Button} from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 
 import {DropdownMenu} from '../../atoms/DropdownMenu';
 import {sortOptions} from './default';
@@ -32,6 +34,7 @@ import {ConfigState} from 'src/reducers/config/reducer';
 import {removeImporter} from 'src/reducers/importers/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
+import {WalletState} from 'src/reducers/wallet/reducer';
 
 type TimelineContainerProps = {
   filters?: TimelineFilter;
@@ -50,11 +53,20 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   const {query} = useQueryParams();
   const {openTipHistory} = useTipHistory();
   const {openToasterSnack} = useToasterSnackHook();
+  
+  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
+
+  useEffect(() => {
+    if (isTipSent) {
+      closeSendTip();
+    }
+  }, [isTipSent]);
 
   const {detail, friendStatus} = useSelector<RootState, ProfileState>(state => state.profileState);
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
+  const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | null>(null);
   const [reported, setReported] = useState<Post | null>(null);
   const [importedPost, setImportedPost] = useState<Post | null>(null);
   const [removing, setRemoving] = useState(false);
@@ -67,6 +79,8 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   const isFriend = friendStatus?.status == 'approved';
   const isOwner = detail?.id == user?.id;
   const isPrivate = settings.privacy.accountPrivacy == 'private';
+
+  const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
 
   useEffect(() => {
     filterTimeline(query);
@@ -93,7 +107,24 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   };
 
   const closeSendTip = () => {
+    if (isTipSent && tippedPost) {
+      setOpenSuccessPrompt(true);
+      setTippedContentForHistory(tippedPost);
+    } else {
+      console.log('no post tipped');
+    }
     setTippedPost(null);
+  };
+
+  const handleCloseSuccessPrompt = (): void => {
+    setOpenSuccessPrompt(false);
+  };
+
+  const handleOpenTipHistory = (): void => {
+    if (tippedContentForHistory) {
+      openTipHistory(tippedContentForHistory);
+      setOpenSuccessPrompt(false);
+    }
   };
 
   const handleReportPost = (post: Post) => {
@@ -175,7 +206,6 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     );
   }
   const handleSortChanged = (sort: string) => {
-    console.log(sort, 'sooort');
     let sortPosts;
     setToggle(sort);
     switch (sort) {
@@ -244,6 +274,45 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
       <PostImporterContainer post={importedPost} onClose={closeImporters} />
 
       <PostVisibilityContainer reference={visibility} onClose={closePostVisibility} />
+
+      <PromptComponent
+        icon={'success'}
+        open={openSuccessPrompt}
+        onCancel={handleCloseSuccessPrompt}
+        title={'Success'}
+        subtitle={
+          <Typography component="div">
+            Tip to{' '}
+            <Box fontWeight={400} display="inline">
+              {tippedContentForHistory?.createdBy && tippedContentForHistory?.createdBy.length > 0
+                ? tippedContentForHistory?.people?.name ?? tippedContentForHistory?.user.name
+                : tippedContentForHistory?.user.name ?? 'Unknown Myrian'}
+            </Box>{' '}
+            sent successfully
+          </Typography>
+        }>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            style={{marginRight: '12px'}}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={handleOpenTipHistory}>
+            See tip history
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={handleCloseSuccessPrompt}>
+            Return
+          </Button>
+        </div>
+      </PromptComponent>
 
       <PromptComponent
         title={'Remove Post'}

@@ -1,6 +1,6 @@
 import {CheckCircleIcon} from '@heroicons/react/solid';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {
   Button,
@@ -32,6 +32,10 @@ export const PostVisibility: React.FC<ReportProps> = props => {
 
   const list = usePostVisibilityList();
   const [type, setType] = useState<Visibility | null>(null);
+
+  useEffect(() => {
+    reference.visibility && setType(reference.visibility);
+  }, []);
 
   const handleSelectItem =
     (value: Visibility | string) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,7 +97,11 @@ export const PostVisibility: React.FC<ReportProps> = props => {
           Cancel
         </Button>
 
-        <Button disabled={!type} variant="contained" color="primary" onClick={handlePostVisibility}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handlePostVisibility}
+          disabled={reference.visibility === type}>
           Confirm
         </Button>
       </div>
