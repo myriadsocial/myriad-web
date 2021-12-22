@@ -44,12 +44,12 @@ export const PostVisibilityContainer: React.FC<ReportContainerProps> = props => 
     if (type === Visibility.PRIVATE) {
       handleOpenConfirmation();
     } else {
-      handleSaveChanges();
+      handleSaveChanges(type);
     }
   };
 
-  const handleSaveChanges = () => {
-    const newVisibility = {visibility: visibility};
+  const handleSaveChanges = (type?: string) => {
+    const newVisibility = {visibility: type ?? visibility};
 
     reference &&
       dispatch(
@@ -109,7 +109,11 @@ export const PostVisibilityContainer: React.FC<ReportContainerProps> = props => 
             onClick={handleOpenConfirmation}>
             No, Let me think
           </Button>
-          <Button size="small" variant="contained" color="primary" onClick={handleSaveChanges}>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => handleSaveChanges()}>
             Yes, Let’s go
           </Button>
         </div>
