@@ -9,10 +9,7 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
-  ListItemSecondaryAction,
-  Radio,
   SvgIcon,
   NoSsr,
 } from '@material-ui/core';
@@ -22,9 +19,10 @@ import {SocialMedia, SocialsEnum} from '../../interfaces/social';
 import {User} from '../../interfaces/user';
 import {AddSocialMedia} from '../AddSocialMedia';
 import {useSocialMediaList} from '../SocialMediaList/use-social-media-list.hook';
-import {ListItemComponent} from '../atoms/ListItem';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {useStyles} from './Socials.styles';
+
+import {ListItemSocialComponent} from 'src/components/atoms/ListItem/ListItemSocial';
 
 type SocialsProps = {
   user: User;
@@ -154,53 +152,27 @@ export const Socials: React.FC<SocialsProps> = props => {
         </Typography>
 
         <List className={styles.preview}>
-          {people.map((account, index) => {
-            const labelId = `checkbox-list-label-${account}`;
+          {people.map((account, index) => (
+            <ListItemSocialComponent
+              key={account.peopleId}
+              className={styles.listItem}
+              account={account}
+              selectedPeople={selectedPeople}
+              title={account.people?.name || ''}
+              subtitle={account.primary ? '(Primary account)' : undefined}
+              avatar={account.people?.profilePictureURL}
+              handleChange={handleSetPrimary(account)}
+              action={
+                <IconButton
+                  className={styles.remove}
+                  aria-label="remove-social"
+                  onClick={() => handleDisconnectSocial(account)}>
+                  <SvgIcon component={XCircleIcon} color="error" viewBox="0 0 20 20" />
+                </IconButton>
+              }
+            />
+          ))}
 
-            return (
-              <ListItem
-                key={account.peopleId}
-                className={styles.listItem}
-                role={undefined}
-                disableGutters
-                selected={selectedPeople === account.peopleId}>
-                <ListItemIcon className={styles.itemIcon}>
-                  <Radio
-                    edge="start"
-                    color="primary"
-                    tabIndex={-1}
-                    checked={selectedPeople === account.peopleId || account.primary}
-                    value={account.peopleId}
-                    disableRipple
-                    onChange={handleSetPrimary(account)}
-                    inputProps={{'aria-labelledby': labelId}}
-                  />
-                </ListItemIcon>
-                <ListItemText id={labelId} disableTypography>
-                  <ListItemComponent
-                    title={account.people?.name || ''}
-                    subtitle={account.primary ? '(Primary account)' : undefined}
-                    size="medium"
-                    avatar={account.people?.profilePictureURL}
-                  />
-                </ListItemText>
-                <ListItemSecondaryAction>
-                  <IconButton
-                    edge="end"
-                    aria-label="remove"
-                    className={styles.remove}
-                    onClick={() => handleDisconnectSocial(account)}>
-                    <SvgIcon
-                      component={XCircleIcon}
-                      color="error"
-                      fontSize="medium"
-                      viewBox="0 0 20 20"
-                    />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            );
-          })}
           <ListItem role={undefined} disableGutters>
             <ListItemText disableTypography className={styles.action}>
               <Button color="primary" disableRipple variant="text" onClick={toggleAddSocialMedia}>
