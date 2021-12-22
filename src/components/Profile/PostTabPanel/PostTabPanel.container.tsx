@@ -53,7 +53,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   const {query} = useQueryParams();
   const {openTipHistory} = useTipHistory();
   const {openToasterSnack} = useToasterSnackHook();
-  
+
   const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
 
   useEffect(() => {
