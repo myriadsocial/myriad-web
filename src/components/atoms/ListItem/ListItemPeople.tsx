@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
     small: {
       width: theme.spacing(3.75),
       height: theme.spacing(3.75),
-      fontSize: theme.spacing(2),
+      fontSize: theme.typography.h5.fontSize,
     },
     medium: {
       width: theme.spacing(6),

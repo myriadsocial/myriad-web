@@ -48,7 +48,7 @@ export const ToasterSnack = forwardRef<HTMLDivElement, ToasterSnackProps>((props
             }
             viewBox="0 0 20 20"
           />
-          <Typography variant="subtitle2" className={style.typography} color="textPrimary">
+          <Typography variant="body1" className={style.typography} color="textPrimary">
             {props.message}
           </Typography>
           <div className={style.icons}>

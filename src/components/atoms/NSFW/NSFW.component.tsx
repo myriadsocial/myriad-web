@@ -26,10 +26,10 @@ export const NSFW: React.FC<Props> = props => {
         component={EyeOffIcon}
         viewBox="0 0 24 24"
       />
-      <Typography className={style.title} component="p">
+      <Typography variant="h4" className={style.title} component="p">
         NSFW Content
       </Typography>
-      <Typography className={style.subTitle} component="p">
+      <Typography variant="body1" className={style.subTitle} component="p">
         this post may contain sensitive content
       </Typography>
       <Button onClick={handleClick} size="small" color="primary" variant="contained">

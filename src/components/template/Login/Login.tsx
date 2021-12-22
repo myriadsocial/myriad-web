@@ -26,7 +26,7 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
               <LogoImage />
             </div>
 
-            <Typography variant="h1" className={style.title}>
+            <Typography variant="h5" component="h1" className={style.title}>
               Social Media with <span className={style.titlePrimary}>no boundaries</span>
             </Typography>
 
@@ -43,27 +43,51 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
               <Carousel isRTL={false} itemsToShow={1}>
                 <div>
                   <div className={`${style.mb1}`}>
-                    <Typography className={`${style.caption}`} component="span" color="textPrimary">
-                      <Typography className={style.caption} component="span" color="primary">
+                    <Typography
+                      variant="h2"
+                      className={`${style.caption}`}
+                      component="span"
+                      color="textPrimary">
+                      <Typography
+                        variant="h2"
+                        className={style.caption}
+                        component="span"
+                        color="primary">
                         Limitless
                       </Typography>{' '}
                       Conversation
                     </Typography>
                   </div>
-                  <Typography className={style.subtitle} component="p" color="textPrimary">
+                  <Typography
+                    variant="h4"
+                    className={style.subtitle}
+                    component="p"
+                    color="textPrimary">
                     No limitation on what you said in Myriad Fredom of Speech is Our Vision
                   </Typography>
                 </div>
                 <div>
                   <div className={`${style.mb1}`}>
-                    <Typography className={style.caption} component="span" color="textPrimary">
-                      <Typography className={style.caption} component="span" color="primary">
+                    <Typography
+                      variant="h2"
+                      className={style.caption}
+                      component="span"
+                      color="textPrimary">
+                      <Typography
+                        variant="h2"
+                        className={style.caption}
+                        component="span"
+                        color="primary">
                         Monetize
                       </Typography>{' '}
                       your Idea
                     </Typography>
                   </div>
-                  <Typography className={style.subtitle} component="p" color="textPrimary">
+                  <Typography
+                    variant="h4"
+                    className={style.subtitle}
+                    component="p"
+                    color="textPrimary">
                     Speak what inside your mind and get a chance to earn coins
                   </Typography>
                 </div>

@@ -18,7 +18,6 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       '& .MuiTypography-h4': {
         lineHeight: '30px',
         fontWeight: props => (props.titleSize === 'small' ? 400 : 700),
-        fontSize: props => (props.titleSize === 'small' ? 16 : 18),
         color: '#000000',
         marginBottom: theme.spacing(1),
       },
