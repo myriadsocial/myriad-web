@@ -23,6 +23,27 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiListItem-root.Mui-selected': {
         backgroundColor: alpha('#FFC857', 0.15),
       },
+
+      '& .MuiListItem-container': {
+        '& .MuiListItemSecondaryAction-root': {
+          display: 'none',
+        },
+
+        '&:hover': {
+          '& .MuiListItemSecondaryAction-root': {
+            display: 'block',
+          },
+        },
+      },
+
+      '& .MuiListItem-root': {
+        '&:hover': {
+          backgroundColor: alpha('#FFC857', 0.15),
+        },
+        '&:last-child:hover': {
+          backgroundColor: 'transparent',
+        },
+      },
     },
     listItem: {
       paddingRight: 30,
@@ -34,9 +55,6 @@ export const useStyles = makeStyles((theme: Theme) =>
         '& .MuiListItem-root': {
           padding: 0,
         },
-      },
-      '&:hover': {
-        backgroundColor: alpha('#FFC857', 0.15),
       },
     },
     icon: {
