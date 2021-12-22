@@ -2,6 +2,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 type StylesProps = {
   border: boolean;
+  multiple?: boolean;
 };
 
 export const useStyles = makeStyles<Theme, StylesProps>(theme =>
@@ -26,6 +27,9 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
     dropzone: {
       textAlign: 'center',
       width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
     },
     preview: {
       width: '100%',
@@ -41,8 +45,9 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
     image: {
       objectFit: 'cover',
       objectPosition: 'center',
-      height: '100%',
-      width: '100%',
+      height: props => (props.multiple === false ? '80px' : '100%'),
+      width: props => (props.multiple === false ? '80px' : '100%'),
+      marginTop: 20,
     },
     icon: {
       filter: 'drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.16))',

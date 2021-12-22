@@ -51,7 +51,7 @@ export const Upload: React.FC<UploadProps> = props => {
         placeholder={placeholder}
         maxSize={maxSize}
         usage={usage}
-        isEdit={true}
+        isEdit={false}
       />
 
       <div className={styles.confirm}>
