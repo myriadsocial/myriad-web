@@ -11,6 +11,9 @@ import {socials as socialsIcon} from 'src/components/atoms/Icons';
 
 type UserSocialsProps = {
   socials: SocialMedia[];
+  isPrivate: boolean;
+  isFriend: boolean;
+  isOwner: boolean;
 };
 
 const StyledBadge = withStyles((theme: Theme) =>
@@ -27,9 +30,26 @@ const StyledBadge = withStyles((theme: Theme) =>
 )(Badge);
 
 export const UserSocials: React.FC<UserSocialsProps> = props => {
-  const {socials} = props;
+  const {socials, isPrivate, isFriend, isOwner} = props;
 
   const styles = useStyles();
+  if (isPrivate && !isFriend && !isOwner) {
+    return (
+      <Empty
+        title="No Social Media"
+        subtitle="this user hasn't connecting their social media or set as private"
+      />
+    );
+  }
+
+  if (socials.length === 0) {
+    return (
+      <Empty
+        title="No social media connected yet"
+        subtitle="connect your socials and you may get some reward"
+      />
+    );
+  }
 
   if (socials.length === 0) {
     return (

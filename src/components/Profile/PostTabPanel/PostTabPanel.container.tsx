@@ -30,7 +30,9 @@ import {Post} from 'src/interfaces/post';
 import {TimelineFilter} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
+import {ConfigState} from 'src/reducers/config/reducer';
 import {removeImporter} from 'src/reducers/importers/actions';
+import {ProfileState} from 'src/reducers/profile/reducer';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
@@ -60,6 +62,8 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     }
   }, [isTipSent]);
 
+  const {detail, friendStatus} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
   const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | null>(null);
@@ -72,6 +76,9 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
 
   const [toggle, setToggle] = useState<string>('');
   const [postsList, setPostsList] = useState<Post[]>([]);
+  const isFriend = friendStatus?.status == 'approved';
+  const isOwner = detail?.id == user?.id;
+  const isPrivate = settings.privacy.accountPrivacy == 'private';
 
   const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
 
@@ -179,6 +186,15 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   const closePostVisibility = () => {
     setVisibility(null);
   };
+
+  if (isPrivate && !isFriend && !isOwner) {
+    return (
+      <Empty
+        title="This account is private"
+        subtitle="Add user to your friend list to see their post and other informations"
+      />
+    );
+  }
 
   if (!posts.length && filters?.owner === user?.id) {
     return (
