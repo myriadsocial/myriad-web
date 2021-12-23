@@ -22,9 +22,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     mr1: {
       marginRight: theme.spacing(1),
     },
-    text: {
-      fontSize: '12px',
-    },
     fill: {
       fill: 'none',
     },
@@ -36,7 +33,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     subtitle: {
       fontWeight: theme.typography.fontWeightMedium,
-      fontSize: '18px',
       marginBottom: 26,
       lineHeight: 1,
     },

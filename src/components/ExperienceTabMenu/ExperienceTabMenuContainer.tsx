@@ -9,6 +9,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {ExperienceTabMenu} from './ExperienceTabMenu';
 
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Experience, UserExperience} from 'src/interfaces/experience';
 import {TimelineType} from 'src/interfaces/timeline';
 import {RootState} from 'src/reducers';
@@ -35,6 +36,7 @@ export const ExperienceTabMenuContainer: React.FC = () => {
   // Only load experiences specific to logged user
   const {loadExperience, experiences, removeExperience, unsubscribeExperience} =
     useExperienceHook();
+  const {openToasterSnack} = useToasterSnackHook();
   const [myExperience, setMyExperience] = useState<UserExperience[]>([]);
 
   useEffect(() => {
@@ -64,6 +66,28 @@ export const ExperienceTabMenuContainer: React.FC = () => {
     });
   };
 
+  const handleCloneExperience = (experienceId: string) => {
+    if (experiences.length === 10) {
+      openToasterSnack({
+        message: 'You can only add up to 10 experiences max',
+        variant: 'warning',
+      });
+    } else {
+      router.push(`/experience/${experienceId}/clone`);
+    }
+  };
+
+  const handleCreateExperience = () => {
+    if (experiences.length === 10) {
+      openToasterSnack({
+        message: 'You can only add up to 10 experiences max',
+        variant: 'warning',
+      });
+    } else {
+      router.push('/experience/create');
+    }
+  };
+
   if (anonymous)
     return (
       <>
@@ -81,6 +105,8 @@ export const ExperienceTabMenuContainer: React.FC = () => {
       user={user}
       onDelete={handleRemoveExperience}
       onUnsubscribe={handleUnsubscribeExperience}
+      onCreateExperience={handleCreateExperience}
+      onCloneExperience={handleCloneExperience}
     />
   );
 };

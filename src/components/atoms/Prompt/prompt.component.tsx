@@ -45,8 +45,12 @@ export const PromptComponent: React.FC<Prompt> = props => {
             component={pickIcon()}
             viewBox="0 0 20 20"
           />
-          <Typography className={style.title}>{title}</Typography>
-          <Typography className={`${style.text} ${style['m-vertical1']}`}>{subtitle}</Typography>
+          <Typography variant="h4" className={style.title}>
+            {title}
+          </Typography>
+          <Typography variant="body1" className={`${style.text} ${style['m-vertical1']}`}>
+            {subtitle}
+          </Typography>
           {children}
         </div>
       </DialogContent>

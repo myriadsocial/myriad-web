@@ -31,6 +31,7 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
   filterTimeline,
   onDelete,
   onUnsubscribe,
+  onFollow,
   experienceId,
   userExperienceId,
   selected,
@@ -68,6 +69,13 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
   const handleUnsubscribe = () => {
     if (userExperienceId && onUnsubscribe) {
       onUnsubscribe(userExperienceId);
+    }
+    handleClose();
+  };
+
+  const handleClone = () => {
+    if (experienceId && onFollow) {
+      onFollow(experienceId);
     }
     handleClose();
   };
@@ -151,9 +159,7 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
           <MenuItem>See details</MenuItem>
         </Link>
         <ShowIf condition={subscribed}>
-          <Link href={`/experience/${experienceId}/clone`}>
-            <MenuItem>Clone</MenuItem>
-          </Link>
+          <MenuItem onClick={handleClone}>Clone</MenuItem>
         </ShowIf>
         <ShowIf condition={!subscribed}>
           <Link href={`/experience/${experienceId}/edit`}>

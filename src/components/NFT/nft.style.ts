@@ -1,16 +1,20 @@
-import {createStyles, makeStyles} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     mb: {
-      marginBottom: '10px',
+      marginBottom: 10,
     },
     emptyUser: {
       textAlign: 'center',
       background: '#FFF',
       borderRadius: 20,
-      height: '643px',
+      height: 644,
       padding: 30,
+
+      [theme.breakpoints.down(1346)]: {
+        minWidth: 600,
+      },
     },
     text: {
       marginBottom: '20px',

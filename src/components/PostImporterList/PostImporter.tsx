@@ -38,13 +38,21 @@ export const PostImporter: React.FC<Props> = props => {
   const onHover = (userId: string | undefined) => () => setImporter(userId);
   const onLoadNextPage = () => {
     if (post) {
-      dispatch(fetchImporter(post.originPostId, post.platform, post.createdBy));
+      if (post.importers?.length === 0) {
+        dispatch(fetchImporter(post.originPostId, post.platform, ''));
+      } else {
+        dispatch(fetchImporter(post.originPostId, post.platform, post.createdBy));
+      }
     }
   };
 
   useEffect(() => {
     if (post) {
-      dispatch(fetchImporter(post.originPostId, post.platform, post.createdBy, currentPage + 1));
+      if (post.importers?.length === 0) {
+        dispatch(fetchImporter(post.originPostId, post.platform, '', currentPage + 1));
+      } else {
+        dispatch(fetchImporter(post.originPostId, post.platform, post.createdBy, currentPage + 1));
+      }
     }
   }, [dispatch, post]);
 
@@ -54,7 +62,15 @@ export const PostImporter: React.FC<Props> = props => {
       align="left"
       open={open}
       onClose={onClose}
-      subtitle={`${!post ? 0 : post.totalImporter - 1} users imported this post`}
+      subtitle={`${
+        !post
+          ? 0
+          : !post.importers
+          ? 0
+          : post.importers.length === 0
+          ? post.totalImporter
+          : post.totalImporter - 1
+      } users imported this post`}
       className={styles.root}
       gutter="custom">
       {loading ? (

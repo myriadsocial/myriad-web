@@ -14,6 +14,7 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
   viewPostList,
   onDelete,
   onUnsubscribe,
+  onFollow,
 }) => {
   const classes = useStyles();
 
@@ -29,7 +30,6 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
   };
 
   const handleViewExperience = (experience: Experience) => (type: TimelineType) => {
-    console.log('handleViewExperience', experience);
     viewPostList(type, experience);
   };
 
@@ -63,6 +63,7 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
             isSelectable={selectable}
             onDelete={onDelete}
             onUnsubscribe={onUnsubscribe}
+            onFollow={onFollow}
             selected={selected}
           />
         </div>

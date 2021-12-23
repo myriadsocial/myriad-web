@@ -9,6 +9,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     firstCol: {
       width: 312,
+
+      [theme.breakpoints.down(1346)]: {
+        width: 290,
+      },
     },
 
     innerFirstColWrapper: {
@@ -16,15 +20,19 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       rowGap: 12,
+
+      [theme.breakpoints.down(1346)]: {
+        width: 290,
+      },
     },
 
     secondCol: {
       flexGrow: 2,
-      minWidth: 644,
+      maxWidth: 644,
       margin: `0 20px`,
 
       [theme.breakpoints.down(1346)]: {
-        minWidth: 538,
+        maxWidth: 600,
       },
     },
 
@@ -41,6 +49,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
     thirdCol: {
       width: 312,
+
+      [theme.breakpoints.down(1346)]: {
+        width: 290,
+      },
     },
 
     innerThirdColWrapper: {
@@ -48,6 +60,10 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       rowGap: theme.spacing(1),
+
+      [theme.breakpoints.down(1346)]: {
+        width: 290,
+      },
     },
   }),
 );

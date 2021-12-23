@@ -48,16 +48,17 @@ export const CommentRender: React.FC<CommentRenderProps> = props => {
           const splitNewLine = node.text.split('\n');
 
           return splitNewLine.map((item: string, key: number) => (
-            <span key={key}>
+            <Typography variant="body1" component="span" key={key}>
               {item}
               {key !== splitNewLine.length - 1 && <br />}
-            </span>
+            </Typography>
           ));
         }
 
         return (
           <Typography
             component="span"
+            variant="body1"
             style={{
               fontWeight: node.bold ? 600 : 400,
               fontStyle: node.italic ? 'italic' : 'none',
