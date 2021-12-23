@@ -1,11 +1,14 @@
 import React from 'react';
 
+import getConfig from 'next/config';
 import Link from 'next/link';
 
 import {Paper} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import MyriadIcon from 'src/images/web/myriad.svg';
+
+const {publicRuntimeConfig} = getConfig();
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -813,7 +816,7 @@ const TermOfUse: React.FC = () => {
           </h2>
           <p className={`${style.paragraph}`}>
             You can reach or notify us at:&nbsp;
-            <a href="mailto:support@myriad.social" className={style.link}>
+            <a href={`mailto:${publicRuntimeConfig.myriadSupportMail}`} className={style.link}>
               support@myriad.social
             </a>
           </p>
