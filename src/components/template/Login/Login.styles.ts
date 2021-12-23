@@ -29,7 +29,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: 48,
     },
     title: {
-      fontSize: 16,
       fontWeight: 700,
       lineHeight: '20px',
       marginBottom: 40,
@@ -81,7 +80,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     caption: {
-      fontSize: '28px',
       lineHeight: '35.14px',
       fontWeight: 700,
     },
@@ -90,7 +88,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     subtitle: {
       fontWeight: theme.typography.fontWeightRegular,
-      fontSize: '18px',
       lineHeight: '26px',
     },
     border: {

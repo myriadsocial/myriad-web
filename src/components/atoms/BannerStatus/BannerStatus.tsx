@@ -51,7 +51,7 @@ const BannerStatusComponent: React.FC<Props> = props => {
     <>
       <ShowIf condition={open && appStatus !== 'production'}>
         <div className={style.root}>
-          <Typography className={style.text}>
+          <Typography variant="body1" className={style.text}>
             <SvgIcon
               classes={{root: style.fill}}
               color="secondary"
@@ -60,7 +60,7 @@ const BannerStatusComponent: React.FC<Props> = props => {
             />
             {text}
           </Typography>
-          <Typography className={`${style.text} ${style.icon}`}>
+          <Typography variant="body1" className={`${style.text} ${style.icon}`}>
             <SvgIcon
               onClick={setHiddenBanner}
               classes={{root: style.fill}}

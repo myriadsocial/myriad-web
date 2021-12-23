@@ -2,7 +2,7 @@ import {CarouselStyles} from 'react-images';
 
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 
-import theme from '../../../themes/light-theme';
+import theme from 'src/themes/light-theme';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,18 +24,25 @@ export const useStyles = makeStyles((theme: Theme) =>
     tileTitle: {
       height: 200,
       textAlign: 'center',
-      fontSize: 18,
+      fontSize: theme.typography.h4.fontSize,
       fontWeight: 700,
+      [theme.breakpoints.down('lg')]: {
+        fontSize: theme.typography.h5.fontSize,
+      },
     },
     tileTitleVertical: {
       height: 162,
       textAlign: 'center',
-      fontSize: 18,
+      fontSize: theme.typography.h4.fontSize,
       fontWeight: 700,
       top: 4,
       left: 4,
       right: 4,
       bottom: 4,
+
+      [theme.breakpoints.down('lg')]: {
+        fontSize: theme.typography.h5.fontSize,
+      },
     },
     imageGrid: {
       width: '100%',

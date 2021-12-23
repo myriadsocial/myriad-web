@@ -14,11 +14,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     title: {
       marginTop: 54,
       fontWeight: 700,
-      fontSize: '18px',
-      marginBottom: '12px',
-    },
-    subtitle: {
-      fontSize: '14px',
+      marginBottom: 12,
     },
   }),
 );

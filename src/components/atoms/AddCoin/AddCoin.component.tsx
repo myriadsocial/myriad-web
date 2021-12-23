@@ -135,10 +135,18 @@ export const AddCoin: React.FC<Props> = props => {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText>
-                  <Typography className={style.header} component="span" color="textPrimary">
+                  <Typography
+                    variant="h5"
+                    className={style.header}
+                    component="span"
+                    color="textPrimary">
                     {currency.id}
                   </Typography>
-                  <Typography className={style.subHeader} component="p" color="textSecondary">
+                  <Typography
+                    variant="caption"
+                    className={style.subHeader}
+                    component="p"
+                    color="textSecondary">
                     {currency.id} Token
                   </Typography>
                 </ListItemText>

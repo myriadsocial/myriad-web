@@ -2,16 +2,13 @@ import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {width: '460px', marginTop: '8px'},
-    flex: {display: 'flex', justifyContent: 'space-between'},
-    color: {
-      color: theme.palette.primary.main,
-      fontWeight: 600,
-      fontSize: '16px',
+    root: {
+      width: 460,
+      marginTop: 8,
     },
-    text: {
-      fontSize: '16px',
-      marginBottom: '8px',
+    flex: {display: 'flex', justifyContent: 'space-between'},
+    name: {
+      color: theme.palette.primary.main,
       fontWeight: 600,
     },
     secondaryText: {
@@ -21,13 +18,13 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     box: {
       position: 'relative',
+      paddingTop: 30,
     },
     count: {
-      fontSize: '12px',
       color: theme.palette.text.secondary,
       position: 'absolute',
-      right: '10px',
-      bottom: '40px',
+      right: 10,
+      bottom: 40,
     },
   }),
 );

@@ -2,7 +2,15 @@ import {alpha, createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {width: '643px', borderRadius: '20px', padding: 0},
+    root: {
+      width: 644,
+      borderRadius: 20,
+      padding: 0,
+
+      [theme.breakpoints.down(1346)]: {
+        minWidth: 600,
+      },
+    },
     flex: {
       display: 'flex',
       alignItems: 'center',

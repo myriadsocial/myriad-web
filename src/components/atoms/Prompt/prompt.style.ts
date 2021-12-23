@@ -9,7 +9,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: 30,
     },
     text: {
-      fontSize: '14px',
       fontWeight: 400,
       lineHeight: '17.57px',
     },
@@ -36,7 +35,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       fill: 'currentColor',
     },
     title: {
-      fontSize: '18px',
       fontWeight: 700,
       lineHeight: '22.59px',
     },

@@ -41,7 +41,6 @@ const useStyles = makeStyles<Theme, VariantProps>(theme => ({
   },
   typography: {
     fontWeight: 'normal',
-    fontSize: '14px',
     lineHeight: '17.57px',
   },
   icons: {

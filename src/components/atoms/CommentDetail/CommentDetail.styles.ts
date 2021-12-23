@@ -19,13 +19,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 2),
     },
     text: {
-      fontSize: '14px',
       fontWeight: 700,
-    },
-    subText: {
-      fontSize: '12px',
-      color: theme.palette.text.secondary,
-      fontWeight: 400,
     },
     dot: {
       color: '#C4C4C4',
@@ -75,7 +69,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderBottomLeftRadius: '11px',
     },
     link: {
-      fontSize: 14,
       fontWeight: 700,
       color: theme.palette.text.primary,
       textDecoration: 'none',
