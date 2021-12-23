@@ -51,46 +51,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       letterSpacing: '0em',
       marginBottom: '4px',
     },
-    username: {
-      fontSize: '14px',
-      fontWeight: 700,
-      lineHeight: '17.57px',
-    },
-    adition: {
-      fontSize: '12px',
-      fontWeight: 700,
-      lineHeight: '15.06px',
-    },
-    aditionLite: {
-      fontSize: '12px',
-      fontWeight: 400,
-      lineHeight: '15.06px',
-    },
-    total: {
-      fontSize: '16px',
-      fontWeight: 700,
-      lineHeight: '20.08px',
-    },
     solid: {
       fill: 'currentColor',
     },
     action: {
       background: 'rgba(115, 66, 204, 0.2)',
       padding: '8px',
-    },
-    flex: {
-      display: 'flex',
-      alignItems: 'flex-start ',
-      justifyContent: 'space-between',
-    },
-    flexEnd: {
-      display: 'flex',
-      alignItems: 'flex-end',
-      justifyContent: 'space-between',
-    },
-    flexCenter: {
-      display: 'flex',
-      alignItems: 'center',
     },
     mt22: {
       marginTop: '22px',
@@ -105,19 +71,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 'auto',
       minWidth: '120px',
     },
-    icon: {
-      marginRight: theme.spacing(1),
-      fontSize: '20px',
-    },
-    ml20: {
-      marginLeft: '20px',
-    },
     fill: {
       fill: 'none',
-    },
-    text: {
-      display: 'inline-block',
-      marginRight: '20px',
     },
     menu: {
       borderRadius: '10px',
@@ -125,10 +80,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     delete: {
       color: '#FE3636',
-    },
-    'flex-center': {
-      display: 'flex',
-      justifyContent: 'center',
     },
     m1: {
       marginRight: theme.spacing(1.5),
@@ -139,9 +90,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       '&:hover': {
         color: theme.palette.text.primary,
       },
-    },
-    link: {
-      color: '#FFF',
     },
   }),
 );

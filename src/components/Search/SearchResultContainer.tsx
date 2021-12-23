@@ -112,6 +112,7 @@ export const SearchResultContainer: React.FC = () => {
         active={searchResultTabTexts[0].id}
         tabs={searchResultTabTexts}
         mark="underline"
+        background={selectedTab === 'users-tab' ? 'white' : 'transparent'}
         position="left"
         size="medium"
         padding={selectedTab === 'experience-tab' ? 0 : 3.75}

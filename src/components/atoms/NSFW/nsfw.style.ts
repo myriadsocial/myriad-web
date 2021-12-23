@@ -12,13 +12,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: '20px',
     },
     title: {
-      fontSize: '18px',
       marginBottom: '8px',
       fontWeight: 400,
     },
     subTitle: {
-      fontSize: '14px',
-      marginBottom: '20px',
+      marginBottom: 20,
       fontWeight: 400,
     },
     fill: {

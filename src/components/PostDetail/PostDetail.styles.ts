@@ -4,8 +4,12 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       borderRadius: 10,
-      minWidth: 643,
+      minWidth: 644,
       marginBottom: 12,
+
+      [theme.breakpoints.down(1346)]: {
+        minWidth: 600,
+      },
     },
     content: {
       padding: theme.spacing(0.5, 2.5),

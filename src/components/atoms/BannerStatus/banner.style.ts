@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme: Theme) =>
     text: {
       display: 'flex',
       color: '#FFF',
-      fontSize: '14px',
       alignItems: 'center',
       fontWeight: 600,
     },

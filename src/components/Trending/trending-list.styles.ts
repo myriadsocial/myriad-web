@@ -5,7 +5,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'block',
       '& .MuiList-padding': {
-        paddingTop: theme.spacing(3.75),
+        paddingTop: 30,
       },
     },
     list: {
@@ -17,7 +17,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     item: {
       '& .MuiListItemText-primary': {
         fontWeight: 400,
-        fontSize: 16,
         lineHeight: '19px',
       },
 

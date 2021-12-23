@@ -111,7 +111,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
           open={Boolean(linkAnchorEl)}
           onClose={handleCloseCopyLink}>
           <div className={style.copy}>
-            <Typography component="p" className={style.subtitle} color="primary" variant="caption">
+            <Typography component="p" className={style.subtitle} color="primary" variant="h4">
               Post URL
             </Typography>
             <TextField
@@ -136,7 +136,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
               }}
             />
             <div className={style.divider} />
-            <Typography component="p" className={style.subtitle} color="primary" variant="caption">
+            <Typography component="p" className={style.subtitle} color="primary" variant="h4">
               Embed Link
             </Typography>
             <TextField

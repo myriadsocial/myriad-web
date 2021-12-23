@@ -36,12 +36,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#E0E0E0',
     },
     header: {
-      fontSize: '16px',
       lineHeight: '20.08px',
       fontWeight: 400,
     },
     subHeader: {
-      fontSize: '12px',
       lineHeight: '15.06px',
       fontWeight: 400,
     },

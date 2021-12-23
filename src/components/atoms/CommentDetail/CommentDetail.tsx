@@ -171,18 +171,26 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             <CardHeader
               title={
                 <div className={style.flexSpaceBetween}>
-                  <Typography className={style.text}>
-                    <Link href={`/profile/${comment.user.id}`}>
-                      <a href={`/profile/${comment.user.id}`} className={style.link}>
-                        Blocked user
-                      </a>
-                    </Link>
-                    <span className={style.subText}>
-                      <span className={style.dot}>•</span>
-                      {getDate(comment.createdAt)}
-                    </span>
+                  <Link href={`/profile/${comment.user.id}`}>
+                    <Typography
+                      variant="body1"
+                      className={style.link}
+                      component="a"
+                      href={`/profile/${comment.user.id}`}>
+                      Blocked user
+                    </Typography>
+                  </Link>
+
+                  <Typography variant="caption" color="textSecondary">
+                    <span className={style.dot}>•</span>
+                    {getDate(comment.createdAt)}
                   </Typography>
-                  <Typography className={style.cursor} color="primary" onClick={handleOpenComment}>
+
+                  <Typography
+                    variant="body1"
+                    className={style.cursor}
+                    color="primary"
+                    onClick={handleOpenComment}>
                     show comment
                   </Typography>
                 </div>
@@ -192,17 +200,22 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
           <ShowIf condition={!isBlocked}>
             <CardHeader
               title={
-                <Typography className={style.text}>
+                <>
                   <Link href={`/profile/${comment.user.id}`}>
-                    <a href={`/profile/${comment.user.id}`} className={style.link}>
-                      {comment.user.name}
-                    </a>
+                    <Typography
+                      variant="body1"
+                      className={style.link}
+                      component="a"
+                      href={`/profile/${comment.user.id}`}>
+                      Blocked user
+                    </Typography>
                   </Link>
-                  <span className={style.subText}>
+
+                  <Typography variant="caption" color="textSecondary">
                     <span className={style.dot}>•</span>
                     {getDate(comment.createdAt)}
-                  </span>
-                </Typography>
+                  </Typography>
+                </>
               }
             />
             <CardContent className={style.content}>
