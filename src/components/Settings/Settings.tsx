@@ -43,6 +43,7 @@ export const Settings: React.FC<SettingsProps> = props => {
                   key={item.id}
                   button
                   onClick={selectSettings(item)}
+                  disabled={item.id == 'version'}
                   className={styles.option}
                   alignItems="center">
                   <ListItemText>

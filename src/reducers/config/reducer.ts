@@ -1,4 +1,5 @@
-import packageJson from '../../../package.json';
+import getConfig from 'next/config';
+
 import {State as BaseState} from '../base/state';
 import {Actions} from './actions';
 import * as constants from './constants';
@@ -6,6 +7,8 @@ import * as constants from './constants';
 import * as Redux from 'redux';
 import {Currency} from 'src/interfaces/currency';
 import {UserSettings} from 'src/interfaces/setting';
+
+const {publicRuntimeConfig} = getConfig();
 
 export interface ConfigState extends BaseState {
   availableCurrencies: Currency[];
@@ -24,7 +27,7 @@ const initalState: ConfigState = {
     focus: false,
   },
   settings: {
-    version: packageJson.version,
+    version: publicRuntimeConfig.appVersion,
     privacy: {
       accountPrivacy: 'public',
       socialMediaPrivacy: 'public',

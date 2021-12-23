@@ -25,17 +25,24 @@ export const SettingsContainer: React.FC = () => {
   }, [router.query]);
 
   const handleChangeSection = (section: SettingsType) => {
-    if (section === 'about') {
-      window.open(publicRuntimeConfig.myriadWebsiteURL, '_ blank');
-    } else {
-      router.push(
-        {
-          pathname: '/settings',
-          query: {section},
-        },
-        undefined,
-        {shallow: true},
-      );
+    switch (section) {
+      case 'feedback':
+        window.open(
+          `mailto:${publicRuntimeConfig.myriadSupportMail}?subject=${publicRuntimeConfig.appName} Feedback`,
+        );
+        break;
+      case 'about':
+        window.open(publicRuntimeConfig.myriadWebsiteURL, '_ blank');
+        break;
+      default:
+        router.push(
+          {
+            pathname: '/settings',
+            query: {section},
+          },
+          undefined,
+          {shallow: true},
+        );
     }
   };
 
