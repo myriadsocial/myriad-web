@@ -23,7 +23,7 @@ export const postFilterOptions: MenuOptions<string>[] = [
 export const experienceFilterOptions: MenuOptions<ExperienceType>[] = [
   {id: 'all', title: 'All Experience'},
   {id: 'personal', title: 'Personal Experience'},
-  {id: 'other', title: 'Other Experience'},
+  {id: 'other', title: 'Subscribed Experience'},
 ];
 
 // Sort options
@@ -34,11 +34,11 @@ export const sortOptions: MenuOptions<TimelineSortMethod>[] = [
   },
   {
     id: 'trending',
-    title: 'Popular',
+    title: 'Popularity',
   },
   {
     id: 'like',
-    title: 'Most like',
+    title: 'Most liked',
   },
   {
     id: 'comment',

@@ -21,7 +21,7 @@ export const useFilterOption = () => {
     },
     {
       id: 'myriad',
-      title: !anonymous && people?.id == user?.id ? 'Myriad post' : `${people?.name} Post`,
+      title: !anonymous && people?.id == user?.id ? 'Myriad Posts' : `${people?.name} Post`,
     },
     {
       id: 'imported',

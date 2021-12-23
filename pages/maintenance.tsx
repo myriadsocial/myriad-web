@@ -75,7 +75,7 @@ const Maintenance: React.FC = () => {
         </div>
         <Typography className={style.title}>Yep there&rsquo;s no one here</Typography>
         <Typography className={style.subtitle}>
-          We&rsquo;re currently under maintenance, please comeback latter
+          We&rsquo;re currently under maintenance, please come back later
         </Typography>
         <Button onClick={handleAction} className={style.button} variant="contained" color="primary">
           Myriad web

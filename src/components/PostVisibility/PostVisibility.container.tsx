@@ -71,7 +71,16 @@ export const PostVisibilityContainer: React.FC<ReportContainerProps> = props => 
       />
       <PromptComponent
         title="Post visibility changed!"
-        subtitle={<Typography>Post visibility successfully changed to {visibility}</Typography>}
+        subtitle={
+          <Typography>
+            Post visibility successfully changed to{' '}
+            {visibility === Visibility.FRIEND
+              ? 'friends only'
+              : visibility === Visibility.PRIVATE
+              ? 'Only Me'
+              : visibility}
+          </Typography>
+        }
         icon="success"
         open={open}
         onCancel={openPrompt}>
@@ -83,18 +92,8 @@ export const PostVisibilityContainer: React.FC<ReportContainerProps> = props => 
         title="Are you sure?"
         subtitle={
           <>
-            <Typography>
-              Your about to change visibility to&nbsp;
-              <Typography component="span" color="primary">
-                Only me,
-              </Typography>
-            </Typography>
-            <Typography>
-              this post might&nbsp;
-              <Typography component="span" color="error">
-                lose a chance to gain tip
-              </Typography>
-            </Typography>
+            <Typography>By setting the visibility setting to&nbsp; "Only Me",</Typography>
+            <Typography>you will not be able to receive any tips from other users.</Typography>
           </>
         }
         icon="warning"

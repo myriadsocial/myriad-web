@@ -76,9 +76,16 @@ export const ExperienceTabMenu: React.FC<ExperienceTabMenuProps> = props => {
           <Typography className={style.title} component="p">
             Uh-oh!
           </Typography>
-          <Typography className={style.subtitle} color="textSecondary" component="p">
-            It seems you don’t have an experience yet
-          </Typography>
+          <div style={{paddingLeft: 8, paddingRight: 8}}>
+            <Typography
+              className={style.subtitle}
+              align="center"
+              color="textSecondary"
+              component="p">
+              You haven't created any experience yet. Experience allows you to customize various
+              tags and people to be shown in your timeline.
+            </Typography>
+          </div>
           <Link href={'/experience/create'}>
             <Button color="primary" variant="contained" size="small">
               Create Experience

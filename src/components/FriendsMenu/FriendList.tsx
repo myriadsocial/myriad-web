@@ -371,7 +371,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         open={sendTipOpened}
         onClose={closeSendTip}
         title="Send Tip"
-        subtitle="Finding this post is insightful? Send a tip!">
+        subtitle="Find this post insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
 

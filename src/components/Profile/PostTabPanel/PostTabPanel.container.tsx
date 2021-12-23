@@ -188,6 +188,24 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     setVisibility(null);
   };
 
+  if (isPrivate && !isFriend && !isOwner) {
+    return (
+      <Empty
+        title="This account is private"
+        subtitle="Add user to your friend list to see their post and other informations"
+      />
+    );
+  }
+
+  if (!posts.length && filters?.owner === user?.id) {
+    return (
+      <Empty title="Nothing to see here!" subtitle="You haven't posted anything yet.">
+        <Button onClick={handleGoHome} variant="contained" size="small" color="primary">
+          Create my first post
+        </Button>
+      </Empty>
+    );
+  }
   const handleSortChanged = (sort: string) => {
     let sortPosts;
     setToggle(sort);
@@ -213,13 +231,8 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     }
   };
 
-  if (isPrivate && !isFriend && !isOwner) {
-    return (
-      <Empty
-        title="This account is private"
-        subtitle="Add user to your friend list to see their post and other informations"
-      />
-    );
+  if (!posts.length) {
+    return <Empty title="Nothing to see here!" subtitle="This user haven't posted anything yet." />;
   }
 
   return (
@@ -266,7 +279,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
         open={sendTipOpened}
         onClose={closeSendTip}
         title="Send Tip"
-        subtitle="Finding this post is insightful? Send a tip!">
+        subtitle="Find this post insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
 

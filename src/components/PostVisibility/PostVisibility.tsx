@@ -55,16 +55,14 @@ export const PostVisibility: React.FC<ReportProps> = props => {
 
   return (
     <Modal title="Post Visibility" open={open} onClose={onClose} className={styles.root}>
-      <Typography variant="h5">Select audience allowed to see this post</Typography>
+      <Typography variant="h5">Filter the audience who can see this post</Typography>
       <Typography variant="subtitle1" color="textSecondary" className={styles.fontSize}>
-        This post currently set for&nbsp;
-        <Typography
-          variant="subtitle1"
-          component="span"
-          color="primary"
-          className={styles.fontSize}>
-          {reference.visibility}
-        </Typography>
+        This post is visible to&nbsp;
+        {reference.visibility === Visibility.FRIEND
+          ? 'Friends Only'
+          : reference.visibility === Visibility.PRIVATE
+          ? 'you only'
+          : reference.visibility}
       </Typography>
 
       <List dense={false} className={styles.list}>
@@ -87,8 +85,8 @@ export const PostVisibility: React.FC<ReportProps> = props => {
 
       <div className={styles.info}>
         <Typography variant="subtitle1" color="textSecondary" className={styles.fontSize}>
-          Your post has a chance to gain tip based on exposure, you might lose it if you change this
-          post visibility.
+          By limiting audience exposure to this post, the number of users who can tip you will also
+          get smaller.
         </Typography>
       </div>
 

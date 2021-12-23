@@ -1,8 +1,6 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
-import {useRouter} from 'next/router';
-
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
@@ -11,6 +9,7 @@ import {NonSelectableExperienceListProps, useStyles} from '.';
 import {NonSelectableSimpleCard} from '../atoms/SimpleCard';
 
 import {Empty} from 'src/components/atoms/Empty';
+import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 
@@ -26,31 +25,40 @@ const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = 
 }) => {
   const classes = useStyles();
 
+  const {query} = useQueryParams();
+
   const userLogin = useSelector<RootState, User | undefined>(state => state.userState.user);
-
-  const router = useRouter();
-
-  const handleCreateExperience = () => {
-    router.push('/experience/create');
-  };
 
   if (!experiences.length && isFilterTriggered) {
     return <></>;
   }
 
-  if (!experiences.length && userLogin?.id === user?.id) {
+  if (!experiences.length && userLogin?.id === (query.id as string)) {
     return (
-      <Empty title="You haven’t created any experiences yet">
-        <Button onClick={handleCreateExperience} variant="contained" size="small" color="primary">
-          Create my experience
-        </Button>
-      </Empty>
+      <div className={classes.empty}>
+        <Typography className={classes.title} component="p">
+          Nothing to see here!
+        </Typography>
+        <div style={{paddingLeft: 8, paddingRight: 8}}>
+          <Typography
+            className={classes.subtitle}
+            align="center"
+            color="textSecondary"
+            component="p">
+            You haven't created any experience yet. Experience allows you to customize various tags
+            and people to be shown in your timeline.
+          </Typography>
+        </div>
+      </div>
     );
   }
 
   if (!experiences.length) {
     return (
-      <Empty title="No experience yet" subtitle="This user hasn't created an experience yet" />
+      <Empty
+        title="Nothing to see here!"
+        subtitle="This user haven't created any experience yet."
+      />
     );
   }
 
