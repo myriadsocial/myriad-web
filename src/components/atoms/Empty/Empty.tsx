@@ -15,10 +15,10 @@ export const Empty: React.FC<EmptyProps> = props => {
 
   return (
     <div className={styles.root}>
-      <Typography className={styles.title} component="p">
+      <Typography variant="h4" className={styles.title} component="p">
         {title}
       </Typography>
-      <Typography className={styles.subtitle} color="textSecondary" component="p">
+      <Typography variant="body1" color="textSecondary" component="p">
         {subtitle}
       </Typography>
       {children}

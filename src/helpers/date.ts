@@ -1,4 +1,4 @@
-import {formatDistance} from 'date-fns';
+import {formatDistance, format} from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 
 const formatDistanceLocale: Record<any, string> = {
@@ -44,4 +44,9 @@ export const timeAgo = (value: string | Date): string => {
       formatDistance: customFormatDistance,
     },
   });
+};
+
+export const formatDate = (date: Date): string => {
+  const newFormat = format(new Date(date), 'd MMMM y');
+  return newFormat;
 };

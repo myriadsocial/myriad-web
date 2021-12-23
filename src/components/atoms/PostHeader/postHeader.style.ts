@@ -20,7 +20,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderRadius: 10,
 
       '& .MuiCardHeader-title': {
-        fontSize: 18,
+        fontSize: theme.typography.h4.fontSize,
         lineHeight: '24px',
         fontWeight: 'bold',
       },

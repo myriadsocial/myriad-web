@@ -29,3 +29,13 @@ export const generateRedditEmbedUrl = (url: string): string => {
 
   return embedUrl.toString();
 };
+
+export const forceHttps = (url: string) => {
+  if (url.length === 0) return url;
+
+  if (url.search('http') === -1) {
+    return 'https://' + url;
+  }
+
+  return url;
+};

@@ -14,6 +14,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiBox-root': {
         paddingTop: 0,
       },
+
+      [theme.breakpoints.down(1346)]: {
+        minWidth: 600,
+      },
     },
   }),
 );

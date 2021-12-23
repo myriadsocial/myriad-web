@@ -1,37 +1,30 @@
-import {
-  CalendarIcon,
-  ChevronDownIcon,
-  CurrencyDollarIcon,
-  GlobeAltIcon,
-  UserAddIcon,
-  UserIcon,
-} from '@heroicons/react/outline';
+import {ChevronDownIcon, CurrencyDollarIcon, UserAddIcon, UserIcon} from '@heroicons/react/outline';
 import {DotsVerticalIcon} from '@heroicons/react/solid';
 
 import React from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {useSelector} from 'react-redux';
 
+import {Grid} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
 import IconButton from '@material-ui/core/IconButton';
-import Link from '@material-ui/core/Link';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
-import {acronym} from '../../../helpers/string';
-import {PromptComponent} from '../../atoms/Prompt/prompt.component';
-import {ReportComponent} from '../../atoms/Report/Report.component';
 import {useFriendOptions} from './hooks/use-friend-options.hook';
 import {useStyles} from './profile-header.style';
+import {Metric} from './render/Metric';
+import {Website} from './render/Website';
 
-import {format} from 'date-fns';
-import millify from 'millify';
+import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
+import {ReportComponent} from 'src/components/atoms/Report/Report.component';
 import ShowIf from 'src/components/common/show-if.component';
+import {acronym} from 'src/helpers/string';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import OfficialBadge from 'src/images/official-badge.svg';
 import {Friend} from 'src/interfaces/friend';
@@ -108,19 +101,6 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     }
   };
 
-  const formatNumber = (num: number) => {
-    const vote = millify(num, {
-      precision: 1,
-      lowercase: true,
-    });
-    return vote;
-  };
-
-  const formatDate = (date: Date) => {
-    const newFormat = format(new Date(date), 'd MMMM y');
-    return newFormat;
-  };
-
   const handleOpenEdit = () => {
     if (onEdit) onEdit();
   };
@@ -164,13 +144,6 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     }
   };
 
-  const handleURL = (url: string): string => {
-    if (url.search('http') === -1) {
-      return 'https://' + url;
-    }
-    return url;
-  };
-
   const confirmRemoveFriend = () => {
     setOpenRemoveFriend(true);
   };
@@ -195,8 +168,8 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         />
         <div className={style.screen} />
 
-        <div className={style.flex}>
-          <div className={style.flexCenter}>
+        <Grid container alignItems="flex-start" justifyContent="space-between" wrap="nowrap">
+          <Grid container alignItems="center">
             <Avatar
               alt={person.name}
               src={person.profilePictureURL}
@@ -205,7 +178,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               {acronym(person.name)}
             </Avatar>
             <div>
-              <Typography className={style.name} component="p">
+              <Typography variant="body1" className={style.name} component="p">
                 <ShowIf condition={person.username !== 'myriad_official'}>{person.name}</ShowIf>
                 <ShowIf condition={person.username === 'myriad_official'}>
                   {person.name}
@@ -220,11 +193,11 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                   </Tooltip>
                 </ShowIf>
               </Typography>
-              <Typography className={style.username} component="p">
+              <Typography variant="body1" component="p">
                 @{person.username || 'username'}
               </Typography>
             </div>
-          </div>
+          </Grid>
 
           <ShowIf condition={!self}>
             <IconButton
@@ -260,87 +233,15 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               </MenuItem>
             </Menu>
           </ShowIf>
-        </div>
+        </Grid>
 
-        <Typography className={`${style.username} ${style.mt22}`} component="p">
-          {person.bio}
-        </Typography>
-        {person.websiteURL ? (
-          <Typography
-            className={`${style.aditionLite} ${style.flexCenter} ${style.mt22}`}
-            component="p">
-            <SvgIcon
-              classes={{root: style.fill}}
-              className={`${style.icon}`}
-              component={GlobeAltIcon}
-              viewBox="0 0 24 24"
-            />
-            <Link
-              className={style.link}
-              href={handleURL(person.websiteURL ?? '')}
-              rel="noreferrer"
-              target="_blank">
-              {person.websiteURL ?? ''}
-            </Link>
-            <SvgIcon
-              classes={{root: style.fill}}
-              className={`${style.icon} ${style.ml20}`}
-              component={CalendarIcon}
-              viewBox="0 0 24 24"
-            />
-            {formatDate(person.createdAt)}
-          </Typography>
-        ) : (
-          <Typography
-            className={`${style.aditionLite} ${style.flexCenter} ${style.mt22}`}
-            component="p">
-            <SvgIcon
-              classes={{root: style.fill}}
-              className={`${style.icon}`}
-              component={CalendarIcon}
-              viewBox="0 0 24 24"
-            />
-            {formatDate(person.createdAt)}
-          </Typography>
-        )}
+        <Typography variant="body1">{person.bio}</Typography>
 
-        <div className={`${style.mt15} ${style.flexEnd}`}>
-          <div>
-            <div className={style.text}>
-              <Typography className={`${style.username}`} component="p">
-                Post
-              </Typography>
-              <Typography className={style.total} component="p">
-                {formatNumber(person.metric?.totalPosts ?? 0)}
-              </Typography>
-            </div>
-            <div className={style.text}>
-              <Typography className={`${style.username}`} component="p">
-                Kudos
-              </Typography>
-              <Typography className={style.total} component="p">
-                {formatNumber(person.metric?.totalKudos ?? 0)}
-              </Typography>
-            </div>
-            <ShowIf condition={person.username !== 'myriad_official'}>
-              <div className={style.text}>
-                <Typography className={`${style.username}`} component="p">
-                  Friends
-                </Typography>
-                <Typography className={style.total} component="p">
-                  {formatNumber(person.metric?.totalFriends ?? 0)}
-                </Typography>
-              </div>
-            </ShowIf>
-            <div className={style.text}>
-              <Typography className={`${style.username}`} component="p">
-                Experience
-              </Typography>
-              <Typography className={style.total} component="p">
-                {formatNumber(person.metric?.totalExperiences ?? 0)}
-              </Typography>
-            </div>
-          </div>
+        <Website url={person.websiteURL} joinDate={person.createdAt} />
+
+        <Grid container alignItems="flex-end" justifyContent="space-between" className={style.mt15}>
+          <Metric data={person.metric} official={person.username === 'myriad_official'} />
+
           <div>
             <ShowIf condition={self}>
               <Button
@@ -439,7 +340,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               </ShowIf>
             </ShowIf>
           </div>
-        </div>
+        </Grid>
       </div>
 
       <PromptComponent
@@ -448,7 +349,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         icon="danger"
         title="Block User?"
         subtitle="You will not able to search and see post from this user">
-        <div className={`${style['flex-center']}`}>
+        <Grid container alignItems="center">
           <Button
             onClick={handleClosePrompt}
             className={style.m1}
@@ -464,7 +365,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             variant="contained">
             Block Now
           </Button>
-        </div>
+        </Grid>
       </PromptComponent>
 
       <PromptComponent
@@ -473,7 +374,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         icon="danger"
         title={`Unfriend ${person.name}?`}
         subtitle="You will not able to search and see post from this user">
-        <div className={`${style['flex-center']}`}>
+        <Grid container alignItems="center">
           <Button
             onClick={closeConfirmRemoveFriend}
             className={style.m1}
@@ -489,7 +390,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             variant="contained">
             Unfriend Now
           </Button>
-        </div>
+        </Grid>
       </PromptComponent>
 
       <ReportComponent
