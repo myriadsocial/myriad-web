@@ -171,20 +171,22 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
             <CardHeader
               title={
                 <div className={style.flexSpaceBetween}>
-                  <Link href={`/profile/${comment.user.id}`}>
-                    <Typography
-                      variant="body1"
-                      className={style.link}
-                      component="a"
-                      href={`/profile/${comment.user.id}`}>
-                      Blocked user
-                    </Typography>
-                  </Link>
+                  <div>
+                    <Link href={`/profile/${comment.user.id}`}>
+                      <Typography
+                        variant="body1"
+                        className={style.link}
+                        component="a"
+                        href={`/profile/${comment.user.id}`}>
+                        Blocked user
+                      </Typography>
+                    </Link>
 
-                  <Typography variant="caption" color="textSecondary">
-                    <span className={style.dot}>•</span>
-                    {getDate(comment.createdAt)}
-                  </Typography>
+                    <Typography variant="caption" color="textSecondary">
+                      <span className={style.dot}>•</span>
+                      {getDate(comment.createdAt)}
+                    </Typography>
+                  </div>
 
                   <Typography
                     variant="body1"
