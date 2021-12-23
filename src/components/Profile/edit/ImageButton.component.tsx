@@ -82,6 +82,7 @@ export const ImageButton: React.FC<ButtonUploadProps> = ({
     if (!uploadField) return;
 
     uploadField.click();
+    handleClose();
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
