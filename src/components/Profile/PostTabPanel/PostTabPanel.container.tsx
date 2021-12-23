@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {useRouter} from 'next/router';
-
 import {Button} from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -46,7 +44,6 @@ type TimelineContainerProps = {
 
 export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   const {anonymous = false, filters} = props;
-  const router = useRouter();
 
   const dispatch = useDispatch();
   const {posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
@@ -176,10 +173,6 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     dispatch(removeVote(reference));
   };
 
-  const handleGoHome = () => {
-    router.push('/home');
-  };
-
   const handlePostVisibility = (post: Post) => {
     setVisibility(post);
   };
@@ -188,24 +181,6 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     setVisibility(null);
   };
 
-  if (isPrivate && !isFriend && !isOwner) {
-    return (
-      <Empty
-        title="This account is private"
-        subtitle="Add user to your friend list to see their post and other informations"
-      />
-    );
-  }
-
-  if (!posts.length && filters?.owner === user?.id) {
-    return (
-      <Empty title="Nothing to see here!" subtitle="You haven't posted anything yet.">
-        <Button onClick={handleGoHome} variant="contained" size="small" color="primary">
-          Create my first post
-        </Button>
-      </Empty>
-    );
-  }
   const handleSortChanged = (sort: string) => {
     let sortPosts;
     setToggle(sort);
@@ -231,8 +206,13 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     }
   };
 
-  if (!posts.length) {
-    return <Empty title="Nothing to see here!" subtitle="This user haven't posted anything yet." />;
+  if (isPrivate && !isFriend && !isOwner) {
+    return (
+      <Empty
+        title="This account is private"
+        subtitle="Add user to your friend list to see their post and other informations"
+      />
+    );
   }
 
   return (
@@ -243,11 +223,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
       </div>
 
       <ShowIf condition={!posts.length && filters?.owner === user?.id}>
-        <Empty title="Looks like you haven’t posted yet">
-          <Button onClick={handleGoHome} variant="contained" size="small" color="primary">
-            Create my first post
-          </Button>
-        </Empty>
+        <Empty title="Nothing to see here!" subtitle="You haven't posted anything yet." />
       </ShowIf>
 
       <ShowIf condition={!posts.length && filters?.owner !== user?.id}>
