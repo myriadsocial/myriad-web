@@ -18,6 +18,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     actionText: {
       fontFamily: ['Mulish', 'serif'].join(','),
       fontWeight: theme.typography.fontWeightMedium,
+      cursor: 'pointer',
+      '&:hover': {
+        textDecoration: 'underline',
+      },
     },
   }),
 );
