@@ -5,7 +5,14 @@ import {HelpComponent} from '../../Help/Help';
 import {AccountSettingsContainer} from '../AccountSettingsContainer';
 import {NotificationSettingsContainer} from '../NotificationSettings.container';
 
-export type SettingsType = 'account' | 'notification' | 'block' | 'about' | 'help' | 'version';
+export type SettingsType =
+  | 'account'
+  | 'notification'
+  | 'block'
+  | 'about'
+  | 'feedback'
+  | 'help'
+  | 'version';
 export type SettingsOption<T> = {
   id: T;
   title: string;
@@ -43,6 +50,11 @@ export const useSettingList = (): SettingsOption<SettingsType>[] => {
       id: 'about',
       title: 'About Myriad',
       subtitle: 'Read more about Myriad',
+    },
+    {
+      id: 'feedback',
+      title: 'Submit Feedback',
+      subtitle: 'Please feel free to provide feedback by send email',
     },
     {
       id: 'version',
