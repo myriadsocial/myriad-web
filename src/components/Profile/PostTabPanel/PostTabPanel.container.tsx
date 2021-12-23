@@ -22,6 +22,7 @@ import {TipHistoryContainer} from 'src/components/TipHistory';
 import {Empty} from 'src/components/atoms/Empty';
 import {Modal} from 'src/components/atoms/Modal';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
+import ShowIf from 'src/components/common/show-if.component';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
@@ -187,24 +188,6 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     setVisibility(null);
   };
 
-  if (isPrivate && !isFriend && !isOwner) {
-    return (
-      <Empty
-        title="This account is private"
-        subtitle="Add user to your friend list to see their post and other informations"
-      />
-    );
-  }
-
-  if (!posts.length && filters?.owner === user?.id) {
-    return (
-      <Empty title="Looks like you haven’t posted yet">
-        <Button onClick={handleGoHome} variant="contained" size="small" color="primary">
-          Create my first post
-        </Button>
-      </Empty>
-    );
-  }
   const handleSortChanged = (sort: string) => {
     let sortPosts;
     setToggle(sort);
@@ -230,8 +213,13 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     }
   };
 
-  if (!posts.length) {
-    return <Empty title="No post yet" subtitle="This user hasn’t posted anything" />;
+  if (isPrivate && !isFriend && !isOwner) {
+    return (
+      <Empty
+        title="This account is private"
+        subtitle="Add user to your friend list to see their post and other informations"
+      />
+    );
   }
 
   return (
@@ -241,23 +229,37 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
         <DropdownMenu title={'Sort by'} options={sortOptions} onChange={handleSortChanged} />
       </div>
 
-      <TimelineComponent
-        user={user}
-        posts={postsList}
-        anonymous={anonymous}
-        loadNextPage={nextPage}
-        hasMore={hasMore}
-        upvote={handleUpvote}
-        onSendTip={handleSendTip}
-        onOpenTipHistory={openTipHistory}
-        onDelete={handleDeletePost}
-        onReport={handleReportPost}
-        onVisibility={handlePostVisibility}
-        toggleDownvoting={handleToggleDownvoting}
-        onShared={handleSharePost}
-        onRemoveVote={handleRemoveVote}
-        onImporters={handleImportedPost}
-      />
+      <ShowIf condition={!posts.length && filters?.owner === user?.id}>
+        <Empty title="Looks like you haven’t posted yet">
+          <Button onClick={handleGoHome} variant="contained" size="small" color="primary">
+            Create my first post
+          </Button>
+        </Empty>
+      </ShowIf>
+
+      <ShowIf condition={!posts.length && filters?.owner !== user?.id}>
+        <Empty title="No post yet" subtitle="This user hasn’t posted anything" />;
+      </ShowIf>
+
+      <ShowIf condition={!!posts.length}>
+        <TimelineComponent
+          user={user}
+          posts={postsList}
+          anonymous={anonymous}
+          loadNextPage={nextPage}
+          hasMore={hasMore}
+          upvote={handleUpvote}
+          onSendTip={handleSendTip}
+          onOpenTipHistory={openTipHistory}
+          onDelete={handleDeletePost}
+          onReport={handleReportPost}
+          onVisibility={handlePostVisibility}
+          toggleDownvoting={handleToggleDownvoting}
+          onShared={handleSharePost}
+          onRemoveVote={handleRemoveVote}
+          onImporters={handleImportedPost}
+        />
+      </ShowIf>
 
       <Modal
         gutter="none"
