@@ -251,7 +251,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
       </ShowIf>
 
       <ShowIf condition={!posts.length && filters?.owner !== user?.id}>
-        <Empty title="No post yet" subtitle="This user hasn’t posted anything" />;
+        <Empty title="Nothing to see here!" subtitle="This user haven't posted anything yet." />;
       </ShowIf>
 
       <ShowIf condition={!!posts.length}>
