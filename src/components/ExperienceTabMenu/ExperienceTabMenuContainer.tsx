@@ -51,7 +51,11 @@ export const ExperienceTabMenuContainer: React.FC = () => {
   }, [experiences]);
 
   const handleViewPostList = (type: TimelineType, experience: Experience) => {
-    router.push(`/topic/experience?id=${experience.id}`);
+    if (['/home'].includes(router.route)) {
+      router.push(`/home?type=experience&id=${experience.id}`);
+    } else {
+      router.push(`/topic/experience?id=${experience.id}`);
+    }
   };
 
   const handleRemoveExperience = (experienceId: string) => {

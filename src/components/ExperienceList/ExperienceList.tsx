@@ -21,7 +21,6 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
   const router = useRouter();
 
   const [selected, setSelected] = useState<undefined | string>(undefined);
-  const [selectable, setSelectable] = useState(true);
 
   //TODO: still unable to only select one experience card
   const handleClick = (id?: string) => {
@@ -34,15 +33,17 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
   };
 
   useEffect(() => {
-    if (['/home', '/topic/[type]'].includes(router.route)) setSelectable(true);
-    else setSelectable(false);
-  }, []);
-
-  useEffect(() => {
     // TODO: make experience as global constant for helper query instead hardcoded
     if (router.query?.type === 'experience') {
-      const idSelected = router.query?.id?.toString();
+      let idSelected = undefined;
+      if (router.query.id) {
+        idSelected = router.query?.id?.toString();
+      } else {
+        router.push(`/home?type=experience&id=${experiences[0].experienceId}`);
+      }
       setSelected(idSelected);
+    } else {
+      setSelected(undefined);
     }
   }, [router]);
 
@@ -60,7 +61,7 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
             imgUrl={item.experience.experienceImageURL || ''}
             experienceId={item.experienceId}
             userExperienceId={item.id}
-            isSelectable={selectable}
+            isSelectable={true}
             onDelete={onDelete}
             onUnsubscribe={onUnsubscribe}
             onFollow={onFollow}

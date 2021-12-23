@@ -1,7 +1,9 @@
 import {useSelector, useDispatch} from 'react-redux';
 
 import {ParsedUrlQuery} from 'querystring';
+import {People} from 'src/interfaces/people';
 import {TimelineType, TimelineFilter, TimelineSortMethod} from 'src/interfaces/timeline';
+import * as ExperienceAPI from 'src/lib/api/experience';
 import {RootState} from 'src/reducers';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {loadTimeline, clearTimeline} from 'src/reducers/timeline/actions';
@@ -64,7 +66,20 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
       // TODO: anonymous user should only see trending posts
     }
 
-    dispatch(loadTimeline(1, timelineSort, newFilter, timelineType));
+    if (query.type === TimelineType.EXPERIENCE && query.id) {
+      let experience: any | null = null;
+      experience = await ExperienceAPI.getExperience(query.id as string);
+      const expFilter: TimelineFilter = {
+        ...filter,
+        tags: experience.tags ? (experience.tags as string[]) : [],
+        people: experience.people
+          .filter((person: People) => !person.hide)
+          .map((person: People) => person.id),
+      };
+      dispatch(loadTimeline(1, timelineSort, expFilter, timelineType));
+    } else {
+      dispatch(loadTimeline(1, timelineSort, newFilter, timelineType));
+    }
   };
 
   const filterByOrigin = async (origin: string) => {
