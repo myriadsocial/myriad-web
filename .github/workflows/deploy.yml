@@ -20,6 +20,7 @@ jobs:
       sha_short: ${{ steps.build-info.outputs.sha_short }}
       date: ${{ steps.build-info.outputs.date }}
       latest_tag: ${{ steps.build-info.outputs.latest_tag }}
+      package_version: ${{ steps.build-info.outputs.package_version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -35,6 +36,9 @@ jobs:
           version=${GITHUB_REF#refs/*/}
           echo $version
           echo "::set-output name=latest_tag::$version"
+
+          package_version=$(cat ./package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+          echo ::set-output name=current-version::$package_version
 
   deploy-dev:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -95,6 +99,7 @@ jobs:
               --set-string image.tag=${{ needs.compute-build-info.outputs.sha_short }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
               --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
+              --set-string config.appVersion=${{ needs.compute-build-info.outputs.package_version }}-${{ needs.compute-build-info.outputs.sha_short }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
@@ -187,6 +192,7 @@ jobs:
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
               --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
+              --set-string config.appVersion=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
@@ -279,6 +285,7 @@ jobs:
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
               --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
+              --set-string config.appVersion=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
@@ -371,6 +378,7 @@ jobs:
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
               --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
+              --set-string config.appVersion=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
@@ -463,6 +471,7 @@ jobs:
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
               --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
+              --set-string config.appVersion=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \

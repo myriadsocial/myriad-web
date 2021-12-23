@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const {withSentryConfig} = require('@sentry/nextjs');
+const {version} = require('./package.json');
 
 const moduleExports = {
   future: {
@@ -16,6 +17,7 @@ const moduleExports = {
     // Will be available on both server and client
     appName: process.env.NEXT_PUBLIC_APP_NAME,
     appStatus: process.env.NEXT_PUBLIC_APP_STATUS ?? 'development',
+    appVersion: `v${process.env.NEXT_PUBLIC_APP_VERSION ?? version}`,
     nextAuthURL: process.env.NEXTAUTH_URL,
     myriadAPIURL: process.env.NEXT_PUBLIC_MYRIAD_API_URL,
     myriadAPIKey: process.env.NEXT_PUBLIC_MYRIAD_API_KEY,
