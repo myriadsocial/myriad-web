@@ -26,7 +26,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       fontSize: theme.typography.h4.fontSize,
       fontWeight: 700,
-      [theme.breakpoints.down('lg')]: {
+      [theme.breakpoints.down(1346)]: {
         fontSize: theme.typography.h5.fontSize,
       },
     },
@@ -40,7 +40,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       right: 4,
       bottom: 4,
 
-      [theme.breakpoints.down('lg')]: {
+      [theme.breakpoints.down(1346)]: {
         fontSize: theme.typography.h5.fontSize,
       },
     },

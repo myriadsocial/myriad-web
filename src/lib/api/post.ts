@@ -50,7 +50,7 @@ export const getPost = async (
   if (filters && filters.tags && filters.tags.length) {
     const condition = {
       tags: {
-        inq: filters.tags,
+        inq: filters.tags.map(tag => tag.toLowerCase()),
       },
     };
 
@@ -256,7 +256,7 @@ export const findPosts = async (user: User, query: string, page = 1): Promise<Po
       and: [
         {
           tags: {
-            inq: [search],
+            inq: [search.toLowerCase()],
           },
         },
         {
@@ -323,7 +323,7 @@ export const createPost = async (values: PostProps): Promise<Post> => {
 export const importPost = async (values: ImportPostProps): Promise<Post> => {
   const attributes: ImportPostProps = {
     ...values,
-    tags: values.tags ?? [],
+    tags: values.tags ? values.tags.map(tag => tag.toLowerCase()) : [],
   };
 
   const {data} = await MyriadAPI.request<Post>({

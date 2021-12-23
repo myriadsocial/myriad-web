@@ -164,14 +164,14 @@ const theme = createTheme({
     caption: {
       fontSize: textSm,
 
-      [breakpoints.down('lg')]: {
+      [breakpoints.down(1346)]: {
         fontSize: textXs,
       },
     },
     body1: {
       fontSize: textBs,
 
-      [breakpoints.down('lg')]: {
+      [breakpoints.down(1346)]: {
         fontSize: textSm,
       },
     },
@@ -182,35 +182,35 @@ const theme = createTheme({
     h5: {
       fontSize: textMd,
 
-      [breakpoints.down('lg')]: {
+      [breakpoints.down(1346)]: {
         fontSize: textBs,
       },
     },
     h4: {
       fontSize: textLg,
 
-      [breakpoints.down('lg')]: {
+      [breakpoints.down(1346)]: {
         fontSize: textMd,
       },
     },
     h3: {
       fontSize: textXl,
 
-      [breakpoints.down('lg')]: {
+      [breakpoints.down(1346)]: {
         fontSize: textLg,
       },
     },
     h2: {
       fontSize: text2Xl,
 
-      [breakpoints.down('lg')]: {
+      [breakpoints.down(1346)]: {
         fontSize: textXl,
       },
     },
     h1: {
       fontSize: text3Xl,
 
-      [breakpoints.down('lg')]: {
+      [breakpoints.down(1346)]: {
         fontSize: text2Xl,
       },
     },
