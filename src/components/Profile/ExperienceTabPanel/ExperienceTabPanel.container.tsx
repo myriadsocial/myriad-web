@@ -7,6 +7,7 @@ import {useExperienceHook} from '../../../hooks/use-experience-hook';
 import {ExperienceTabPanel} from './ExperienceTabPanel';
 
 import {ExperienceType} from 'src/components/Timeline/default';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {UserExperience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
@@ -24,6 +25,7 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
     unsubscribeExperience,
     experiences: userExperience,
   } = useExperienceHook();
+  const {openToasterSnack} = useToasterSnackHook();
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -47,7 +49,14 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
   };
 
   const handleSubsibeExperience = (experienceId: string) => {
-    subscribeExperience(experienceId);
+    if (userExperience.length === 10) {
+      openToasterSnack({
+        message: 'You can only add up to 10 experiences max',
+        variant: 'warning',
+      });
+    } else {
+      subscribeExperience(experienceId);
+    }
   };
 
   const handleUnsubscribeExperience = (experienceId: string) => {
@@ -55,7 +64,14 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
   };
 
   const handleCloneExperience = (experienceId: string) => {
-    router.push(`/experience/${experienceId}/clone`);
+    if (userExperience.length === 10) {
+      openToasterSnack({
+        message: 'You can only add up to 10 experiences max',
+        variant: 'warning',
+      });
+    } else {
+      router.push(`/experience/${experienceId}/clone`);
+    }
   };
 
   const handlePreviewExperience = (experienceId: string) => {
