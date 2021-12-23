@@ -63,7 +63,14 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
                     className={style.subtitle}
                     component="p"
                     color="textPrimary">
-                    No limitations on what you say in Myriad Freedom of speech is our vision
+                    No limitations on what you say in Myriad
+                  </Typography>
+                  <Typography
+                    variant="h4"
+                    className={style.subtitle}
+                    component="p"
+                    color="textPrimary">
+                    Freedom of speech is our vision
                   </Typography>
                 </div>
                 <div>
