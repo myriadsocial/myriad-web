@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 20,
       fontWeight: 700,
       fontSize: 28,
-      [theme.breakpoints.down(1346)]: {
+      [theme.breakpoints.down('lg')]: {
         marginBottom: 8,
         fontSize: 20,
       },
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 84,
       fontSize: 20,
       color: theme.palette.error.main,
-      [theme.breakpoints.down(1346)]: {
+      [theme.breakpoints.down('lg')]: {
         marginBottom: 42,
         fontSize: 14,
       },

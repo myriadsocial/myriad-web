@@ -8,7 +8,12 @@ const useStyles = makeStyles((theme: Theme) =>
       boxSizing: `border-box`,
       borderRadius: 10,
       display: 'flex',
-      minWidth: 311,
+      minWidth: 312,
+
+      [theme.breakpoints.down('lg')]: {
+        maxWidth: 290,
+      },
+
       '& .MuiCardActionArea-focusVisible': {backgroundColor: '#FFF'},
       '&:hover': {backgroundColor: '#FFF'},
       /* Drop shadow */

@@ -12,8 +12,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: 644,
       padding: 30,
 
-      [theme.breakpoints.down(1346)]: {
-        minWidth: 600,
+      [theme.breakpoints.down('lg')]: {
+        minWidth: 590,
       },
     },
     text: {

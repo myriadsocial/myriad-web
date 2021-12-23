@@ -7,8 +7,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       minWidth: 644,
       marginBottom: 12,
 
-      [theme.breakpoints.down(1346)]: {
-        minWidth: 600,
+      [theme.breakpoints.down('lg')]: {
+        minWidth: 590,
       },
     },
     content: {

@@ -112,6 +112,16 @@ const DISABLED_PROPS = {
 const {breakpoints} = createTheme();
 
 const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 600,
+      sm: 960,
+      md: 1280,
+      // design size
+      lg: 1440,
+      xl: 1920,
+    },
+  },
   status: {
     success: {
       main: primaryGreen,
@@ -164,14 +174,14 @@ const theme = createTheme({
     caption: {
       fontSize: textSm,
 
-      [breakpoints.down(1346)]: {
+      [breakpoints.down('lg')]: {
         fontSize: textXs,
       },
     },
     body1: {
       fontSize: textBs,
 
-      [breakpoints.down(1346)]: {
+      [breakpoints.down('lg')]: {
         fontSize: textSm,
       },
     },
@@ -182,35 +192,35 @@ const theme = createTheme({
     h5: {
       fontSize: textMd,
 
-      [breakpoints.down(1346)]: {
+      [breakpoints.down('lg')]: {
         fontSize: textBs,
       },
     },
     h4: {
       fontSize: textLg,
 
-      [breakpoints.down(1346)]: {
+      [breakpoints.down('lg')]: {
         fontSize: textMd,
       },
     },
     h3: {
       fontSize: textXl,
 
-      [breakpoints.down(1346)]: {
+      [breakpoints.down('lg')]: {
         fontSize: textLg,
       },
     },
     h2: {
       fontSize: text2Xl,
 
-      [breakpoints.down(1346)]: {
+      [breakpoints.down('lg')]: {
         fontSize: textXl,
       },
     },
     h1: {
       fontSize: text3Xl,
 
-      [breakpoints.down(1346)]: {
+      [breakpoints.down('lg')]: {
         fontSize: text2Xl,
       },
     },
