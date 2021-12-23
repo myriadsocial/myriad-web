@@ -304,7 +304,7 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
 
       dispatch(
         showToasterSnack({
-          message: 'Success created post!',
+          message: 'Post successfully created!',
           variant: 'success',
         }),
       );
@@ -347,7 +347,7 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
 
       dispatch(
         showToasterSnack({
-          message: 'Success created post!',
+          message: 'Post successfully imported!',
           variant: 'success',
         }),
       );

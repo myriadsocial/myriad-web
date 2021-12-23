@@ -63,7 +63,14 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
                     className={style.subtitle}
                     component="p"
                     color="textPrimary">
-                    No limitation on what you said in Myriad Fredom of Speech is Our Vision
+                    No limitations on what you say in Myriad
+                  </Typography>
+                  <Typography
+                    variant="h4"
+                    className={style.subtitle}
+                    component="p"
+                    color="textPrimary">
+                    Freedom of speech is our vision
                   </Typography>
                 </div>
                 <div>
@@ -88,7 +95,7 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
                     className={style.subtitle}
                     component="p"
                     color="textPrimary">
-                    Speak what inside your mind and get a chance to earn coins
+                    Speak what's inside your mind and get a chance to earn coins
                   </Typography>
                 </div>
               </Carousel>

@@ -31,13 +31,13 @@ export const useSettingList = (): SettingsOption<SettingsType>[] => {
     {
       id: 'notification',
       title: 'Notification',
-      subtitle: 'Configure any type of notification',
+      subtitle: 'Manage your notifications',
       component: <NotificationSettingsContainer />,
     },
     {
       id: 'block',
       title: 'Blocked User',
-      subtitle: 'List of people you blocked on myriad',
+      subtitle: 'Manage your blocked list',
       component: <BlockListContainer />,
     },
     {

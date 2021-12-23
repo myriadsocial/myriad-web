@@ -45,17 +45,8 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
   if (socials.length === 0) {
     return (
       <Empty
-        title="No social media connected yet"
-        subtitle="connect your socials and you may get some reward"
-      />
-    );
-  }
-
-  if (socials.length === 0) {
-    return (
-      <Empty
-        title="No social media connected yet"
-        subtitle="connect your socials and you may get some reward"
+        title="Nothing to see here!"
+        subtitle="This user haven't connected to any social media yet."
       />
     );
   }

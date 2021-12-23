@@ -9,6 +9,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'start',
+      textAlign: 'center',
       height: '335px',
     },
     title: {

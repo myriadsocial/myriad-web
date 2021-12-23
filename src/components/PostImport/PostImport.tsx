@@ -93,7 +93,7 @@ export const PostImport: React.FC<PostImportProps> = props => {
         <Input id="link-to-post" value={url} onChange={handleUrlChange} />
         <ShowIf condition={showError}>
           <FormHelperText id="component-error-text">
-            Curently we only can import post from reddit and twitter
+            Currently we can only import post from reddit and twitter
           </FormHelperText>
         </ShowIf>
       </FormControl>

@@ -70,7 +70,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
     togglePrimaryCoinMenu();
 
     openToasterSnack({
-      message: 'Coin priority changes saved',
+      message: 'Changes successfully saved',
       variant: 'success',
     });
   };
