@@ -5,6 +5,7 @@ import {Button, Grid, TextField, Typography} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
+import {PromptComponent} from '../../../atoms/Prompt/prompt.component';
 import {useStyles} from './Profile.style';
 
 type ProfileProps = {
@@ -36,6 +37,11 @@ export const Profile: React.FC<ProfileProps> = props => {
       helper: DEFAULT_HELPER_TEXT,
     },
   });
+  const [confirmation, setConfirmation] = useState(false);
+
+  const toggleConfirmation = () => {
+    setConfirmation(!confirmation);
+  };
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value;
@@ -162,13 +168,13 @@ export const Profile: React.FC<ProfileProps> = props => {
     return validName && validUsername;
   };
 
-  const handleSubmit = () => {
+  const handleConfirmation = () => {
     const valid = validate();
 
     if (valid) {
       checkUsernameAvailabilty(profile.username.value, available => {
         if (available) {
-          onSubmit(profile.name.value, profile.username.value);
+          toggleConfirmation();
         } else {
           setProfile(prevProfile => ({
             ...prevProfile,
@@ -181,6 +187,10 @@ export const Profile: React.FC<ProfileProps> = props => {
         }
       });
     }
+  };
+
+  const handleSubmit = () => {
+    onSubmit(profile.name.value, profile.username.value);
   };
 
   return (
@@ -230,13 +240,50 @@ export const Profile: React.FC<ProfileProps> = props => {
 
         <Button
           disabled={profile.username.value.length === 0}
-          onClick={handleSubmit}
+          onClick={handleConfirmation}
           variant="contained"
           color="primary"
           size="small">
           Register
         </Button>
       </Grid>
+
+      <PromptComponent
+        title={'Are you sure?'}
+        subtitle={
+          <Typography>
+            Your username&nbsp;
+            <Typography component="span" color="primary" style={{fontWeight: 600}}>
+              @{profile.username.value}
+            </Typography>
+            &nbsp;and&nbsp;
+            <Typography component="span" color="error" style={{fontWeight: 600}}>
+              cannot be change later
+            </Typography>
+            . are you really want to use it?
+          </Typography>
+        }
+        open={confirmation}
+        icon="warning"
+        onCancel={toggleConfirmation}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            style={{marginRight: '12px'}}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={toggleConfirmation}>
+            No, let me rethink
+          </Button>
+          <Button size="small" variant="contained" color="primary" onClick={handleSubmit}>
+            Yes, Let’s go
+          </Button>
+        </div>
+      </PromptComponent>
     </div>
   );
 };
