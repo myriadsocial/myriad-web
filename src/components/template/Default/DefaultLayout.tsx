@@ -3,6 +3,8 @@ import {useDispatch} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
+import {Container} from '@material-ui/core';
+
 import {MenuContainer} from '../../Menu/MenuContainer';
 import {ProfileHeaderContainer} from '../../ProfileHeader/ProfileHeaderContainer';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
@@ -70,7 +72,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   };
 
   return (
-    <>
+    <Container maxWidth="lg" disableGutters>
       <div className={classes.root}>
         <div className={classes.firstCol}>
           <div className={classes.innerFirstColWrapper}>
@@ -106,7 +108,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
           </div>
         </div>
       </div>
-    </>
+    </Container>
   );
 };
 

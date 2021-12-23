@@ -4,7 +4,12 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       position: 'relative',
-      width: 310,
+      width: 312,
+
+      [theme.breakpoints.down('lg')]: {
+        maxWidth: 290,
+      },
+
       '& .MuiSvgIcon-root': {
         fill: 'none',
       },
@@ -34,7 +39,11 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     name: {
-      width: 162,
+      maxWidth: 162,
+
+      [theme.breakpoints.down('lg')]: {
+        maxWidth: 142,
+      },
 
       '& .MuiTypography-h5': {
         whiteSpace: 'nowrap',
