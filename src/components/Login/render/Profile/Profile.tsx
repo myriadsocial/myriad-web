@@ -14,9 +14,12 @@ type ProfileProps = {
   onSubmit: (name: string, username: string) => void;
 };
 
-const DEFAULT_HELPER_TEXT = 'You can use 3 or more characters.';
 const USERNAME_MAX_LENGTH = 16;
+const USERNAME_MIN_LENGTH = 3;
 const DISPLAY_NAME_MAX_LENGTH = 22;
+const DISPLAY_NAME_MIN_LENGTH = 2;
+const NAME_HELPER_TEXT = `You can use ${DISPLAY_NAME_MIN_LENGTH} or more characters.`;
+const USERNAME_HELPER_TEXT = `You can use ${USERNAME_MIN_LENGTH} or more characters.`;
 
 export const Profile: React.FC<ProfileProps> = props => {
   const styles = useStyles();
@@ -29,12 +32,12 @@ export const Profile: React.FC<ProfileProps> = props => {
     name: {
       value: '',
       error: false,
-      helper: DEFAULT_HELPER_TEXT,
+      helper: NAME_HELPER_TEXT,
     },
     username: {
       value: '',
       error: false,
-      helper: DEFAULT_HELPER_TEXT,
+      helper: USERNAME_HELPER_TEXT,
     },
   });
   const [confirmation, setConfirmation] = useState(false);
@@ -70,7 +73,7 @@ export const Profile: React.FC<ProfileProps> = props => {
   const validateName = (): boolean => {
     let error = false;
 
-    if (!profile.name.value || profile.name.value.length === 0) {
+    if (!profile.name.value || profile.name.value.length < DISPLAY_NAME_MIN_LENGTH) {
       error = true;
 
       setProfile(prevSetting => ({
@@ -78,7 +81,7 @@ export const Profile: React.FC<ProfileProps> = props => {
         name: {
           ...prevSetting.name,
           error: true,
-          helper: 'Display name must be provided and contain at least 3 character',
+          helper: `Display name must be provided and contain at least ${DISPLAY_NAME_MIN_LENGTH} character`,
         },
       }));
     } else {
@@ -103,7 +106,7 @@ export const Profile: React.FC<ProfileProps> = props => {
           name: {
             ...prevSetting.name,
             error: false,
-            helper: DEFAULT_HELPER_TEXT,
+            helper: NAME_HELPER_TEXT,
           },
         }));
       }
@@ -115,7 +118,7 @@ export const Profile: React.FC<ProfileProps> = props => {
   const validateUsername = (): boolean => {
     let error = false;
 
-    if (!profile.username.value || profile.username.value.length < 3) {
+    if (!profile.username.value || profile.username.value.length < USERNAME_MIN_LENGTH) {
       error = true;
 
       setProfile(prevSetting => ({
@@ -123,7 +126,7 @@ export const Profile: React.FC<ProfileProps> = props => {
         username: {
           ...prevSetting.username,
           error,
-          helper: 'Username must be provided and contain at least 3 character',
+          helper: `Username must be provided and contain at least ${USERNAME_MIN_LENGTH} character`,
         },
       }));
     } else {
@@ -148,7 +151,7 @@ export const Profile: React.FC<ProfileProps> = props => {
           username: {
             ...prevSetting.username,
             error: false,
-            helper: DEFAULT_HELPER_TEXT,
+            helper: USERNAME_HELPER_TEXT,
           },
         }));
       }
@@ -210,7 +213,7 @@ export const Profile: React.FC<ProfileProps> = props => {
           }}
         />
         <Typography className={`${styles.count}`} component="span">
-          ({profile.username.value.length}/{DISPLAY_NAME_MAX_LENGTH})
+          ({profile.name.value.length}/{DISPLAY_NAME_MAX_LENGTH})
         </Typography>
       </div>
 
