@@ -39,7 +39,9 @@ const ExperienceList: React.FC<ExperienceListProps> = ({
       if (router.query.id) {
         idSelected = router.query?.id?.toString();
       } else {
-        router.push(`/home?type=experience&id=${experiences[0].experienceId}`);
+        if (experiences.length > 0) {
+          router.push(`/home?type=experience&id=${experiences[0].experienceId}`);
+        }
       }
       setSelected(idSelected);
     } else {
