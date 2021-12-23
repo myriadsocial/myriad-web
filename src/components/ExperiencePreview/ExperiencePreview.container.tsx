@@ -8,6 +8,7 @@ import {useStyles} from './experience.style';
 
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -20,6 +21,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
     subscribeExperience,
     unsubscribeExperience,
   } = useExperienceHook();
+  const {openToasterSnack} = useToasterSnackHook();
   const style = useStyles();
   const router = useRouter();
   const {experienceId} = router.query;
@@ -29,7 +31,14 @@ export const ExperiencePreviewContainer: React.FC = () => {
   }, [experienceId]);
 
   const handleSubscribeExperience = (experienceId: string) => {
-    subscribeExperience(experienceId);
+    if (userExperience.length === 10) {
+      openToasterSnack({
+        message: 'You can only add up to 10 experiences max',
+        variant: 'warning',
+      });
+    } else {
+      subscribeExperience(experienceId);
+    }
   };
 
   const handleUnsubscribeExperience = (userExperienceId: string) => {
@@ -37,7 +46,14 @@ export const ExperiencePreviewContainer: React.FC = () => {
   };
 
   const handleCloneExperience = (experienceId: string) => {
-    router.push(`/experience/${experienceId}/clone`);
+    if (userExperience.length === 10) {
+      openToasterSnack({
+        message: 'You can only add up to 10 experiences max',
+        variant: 'warning',
+      });
+    } else {
+      router.push(`/experience/${experienceId}/clone`);
+    }
   };
 
   const handleEditExperience = (experienceId: string) => {

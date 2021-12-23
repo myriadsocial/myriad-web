@@ -275,23 +275,12 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
         {preview.length ? (
           <>
             <ShowIf condition={isEdit && !isFileRemoved && editorType !== ''}>
-              <ImageList rowHeight={128} cols={6} className={styles.preview}>
-                <ImageListItem cols={getCols()} rows={getRows()} classes={{item: styles.item}}>
-                  <img
-                    style={{visibility: 'visible'}}
-                    src={preview[0]}
-                    alt=""
-                    className={styles.image}
-                  />
-                  <IconButton
-                    size="small"
-                    aria-label={`remove image`}
-                    className={styles.icon}
-                    onClick={() => removeFile()}>
-                    <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
-                  </IconButton>
-                </ImageListItem>
-              </ImageList>
+              <img
+                style={{visibility: 'visible'}}
+                src={preview[0]}
+                alt=""
+                className={styles.image}
+              />
             </ShowIf>
             <ShowIf condition={type === 'image' && !isEdit}>
               <ShowIf condition={!multiple}>

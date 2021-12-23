@@ -73,9 +73,6 @@ export const Timeline: React.FC<TimelineProps> = props => {
           <TimelineEmptyComponent
             title={'No Experience posts yet'}
             subtitle={'Create your own timeline experience and see only posts which interest you'}
-            iconPath={'/images/Empty_experience_post_illustration.svg'}
-            width={90}
-            height={90}
             action={
               <Button
                 variant={ButtonVariant.CONTAINED}
@@ -89,9 +86,6 @@ export const Timeline: React.FC<TimelineProps> = props => {
           <TimelineEmptyComponent
             title={'No posts from friends yet'}
             subtitle={'let’s make friends and you might get some valuable insights'}
-            iconPath={'/images/Empty_friend_post_illustration.svg'}
-            width={90}
-            height={90}
           />
         ) : (
           posts.map(post => (
