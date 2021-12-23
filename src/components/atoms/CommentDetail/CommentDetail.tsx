@@ -207,7 +207,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
                       className={style.link}
                       component="a"
                       href={`/profile/${comment.user.id}`}>
-                      Blocked user
+                      {comment.user.name}
                     </Typography>
                   </Link>
 
