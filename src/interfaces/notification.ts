@@ -26,6 +26,10 @@ export interface AdditionalReferenceIdItem {
   postId: string;
   firstCommentId: string;
   secondCommentId: string;
+  peopleId: string;
+  peopleName: string;
+  peoplePlatftorm: string;
+  peopleUsername: string;
 }
 
 export type NotificationProps = {
