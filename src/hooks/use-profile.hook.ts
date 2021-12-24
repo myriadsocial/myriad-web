@@ -1,22 +1,20 @@
 import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {useUpload} from 'src/hooks/use-upload.hook';
 import {User} from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileDetail} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
-import {updatePostPlatformUser} from 'src/reducers/timeline/actions';
 import {updateUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const useProfileHook = () => {
   const dispatch = useDispatch();
   const {uploadImage} = useUpload();
-  const {openToasterSnack} = useToasterSnackHook();
 
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
   const [uploadingBanner, setUploadingBanner] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [usernameStatus, setUsernameStatus] = useState(false);
@@ -27,11 +25,13 @@ export const useProfileHook = () => {
   );
 
   const updateProfile = (attributes: Partial<User>, callback?: () => void) => {
+    setLoadingUpdate(true);
     dispatch(
       updateUser(attributes, () => {
         if (user && profileDetail?.id === user.id) {
           dispatch(fetchProfileDetail(user.id));
           callback && callback();
+          setLoadingUpdate(false);
         }
       }),
     );
@@ -39,55 +39,28 @@ export const useProfileHook = () => {
 
   const updateProfilePicture = async (image: File) => {
     setUploadingAvatar(true);
-
+    setLoadingUpdate(true);
     try {
       const url = await uploadImage(image);
-
-      if (url)
-        dispatch(
-          updateUser({profilePictureURL: url}, () => {
-            if (user && profileDetail?.id === user.id) {
-              dispatch(fetchProfileDetail(user.id));
-            }
-
-            dispatch(updatePostPlatformUser(url));
-            openToasterSnack({
-              message: 'Success update profile',
-              variant: 'success',
-            });
-          }),
-        );
+      return url;
     } finally {
       setUploadingAvatar(false);
+      setLoadingUpdate(false);
     }
   };
 
-  const updateProfileBanner = async (image: File): Promise<void> => {
+  const updateProfileBanner = async (image: File) => {
     setUploadingBanner(true);
-
+    setLoadingUpdate(true);
     try {
       const url = await uploadImage(image);
-
-      if (url) {
-        dispatch(
-          updateUser(
-            {
-              bannerImageUrl: url,
-            },
-            () => {
-              setUploadingBanner(false);
-              openToasterSnack({
-                message: 'Success update profile',
-                variant: 'success',
-              });
-            },
-          ),
-        );
-      }
+      return url;
     } catch (error) {
       console.log('[useProfileHook][updateProfileBanner][error]', error);
+      return false;
     } finally {
       setUploadingBanner(false);
+      setLoadingUpdate(false);
     }
   };
 
@@ -125,6 +98,7 @@ export const useProfileHook = () => {
 
   return {
     loading,
+    loadingUpdate,
     uploadingAvatar,
     uploadingBanner,
     updateProfile,
