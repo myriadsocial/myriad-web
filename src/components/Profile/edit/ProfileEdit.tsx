@@ -18,6 +18,8 @@ import {debounce} from 'lodash';
 
 export type Props = {
   user: User;
+  imageProfile: File | string | undefined;
+  imageBanner: File | string | undefined;
   onSave: (user: Partial<User>) => void;
   onCancel: () => void;
   uploadingAvatar: boolean;
@@ -26,13 +28,15 @@ export type Props = {
   isChanged: boolean;
   isAvailable?: boolean;
   updateProfileBanner: (image: File) => void;
-  updateProfilePicture: (image: File) => void;
+  updateProfilePicture: (image: File | undefined) => void;
   checkAvailable: (username: string) => void;
 };
 
 export const ProfileEditComponent: React.FC<Props> = props => {
   const {
     user,
+    imageProfile,
+    imageBanner,
     onSave,
     onCancel,
     updatingProfile,
@@ -83,15 +87,18 @@ export const ProfileEditComponent: React.FC<Props> = props => {
   };
 
   const handleRemovePicture = (image: Partial<User>) => {
-    onSave(image);
+    updateProfilePicture(undefined);
+    setIsEdited(true);
   };
 
   const hanleUpdateBannerImage = (image: File): void => {
     updateProfileBanner(image);
+    setIsEdited(true);
   };
 
   const handleUpdateProfilePicture = (image: File): void => {
     updateProfilePicture(image);
+    setIsEdited(true);
   };
 
   const handleError = (): boolean => {
@@ -143,7 +150,13 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           <div className={style.box}>
             <Avatar
               alt={user.name}
-              src={user.profilePictureURL}
+              src={
+                imageProfile
+                  ? imageProfile instanceof File
+                    ? URL.createObjectURL(imageProfile)
+                    : imageProfile
+                  : ''
+              }
               variant="circle"
               className={style.avatar}>
               {acronym(user.name)}
@@ -164,7 +177,17 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           Background Image
         </InputLabel>
         <div className={style.bgBox}>
-          <CardMedia className={style.media} image={user.bannerImageUrl} title={user.name} />
+          <CardMedia
+            className={style.media}
+            image={
+              imageBanner
+                ? imageBanner instanceof File
+                  ? URL.createObjectURL(imageBanner)
+                  : user.bannerImageUrl
+                : ''
+            }
+            title={user.name}
+          />
           <IconButtonUpload
             title="Edit Banner Image"
             onImageSelected={hanleUpdateBannerImage}
@@ -236,9 +259,6 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           <Button variant="outlined" color="secondary" disableElevation onClick={handleCancel}>
             Cancel
           </Button>
-          {updatingProfile && (
-            <CircularProgress size={24} color="primary" className={style.buttonProgress} />
-          )}
         </FormControl>
         <FormControl variant="outlined">
           <Button
@@ -246,7 +266,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
             color="primary"
             disableElevation
             onClick={saveConfirmation}
-            disabled={!isEdited || isError || handleError()}>
+            disabled={isError || handleError() || updatingProfile}>
             Save changes
           </Button>
           {updatingProfile && (

@@ -9,6 +9,7 @@ import {PromptComponent} from '../../atoms/Prompt/prompt.component';
 import {ProfileEditComponent} from './ProfileEdit';
 
 import {useProfileHook} from 'src/hooks/use-profile.hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -21,9 +22,13 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
   const router = useRouter();
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [open, setOpen] = React.useState(false);
+  const [profilePic, setProfilePic] = React.useState<File | undefined | string>(
+    user?.profilePictureURL,
+  );
+  const [bannerPic, setBannerPic] = React.useState<File | undefined | string>(user?.bannerImageUrl);
   const {
     updateProfile,
-    loading,
+    loadingUpdate,
     uploadingAvatar,
     uploadingBanner,
     updateProfileBanner,
@@ -33,27 +38,51 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
     usernameStatus,
     usernameAvailable,
   } = useProfileHook();
+  const {openToasterSnack} = useToasterSnackHook();
 
   useEffect(() => {
     checkUsernameStatus();
   }, []);
 
   const hanleUpdateBannerImage = async (image: File): Promise<void> => {
-    updateProfileBanner(image);
+    setBannerPic(image);
   };
 
-  const handleUpdateProfilePicture = (image: File): void => {
-    updateProfilePicture(image);
+  const handleUpdateProfilePicture = (image: File | undefined): void => {
+    setProfilePic(image);
   };
 
   const handleUsernameAvailable = (username: string): void => {
     checkUsernameAvailable(username);
   };
 
-  const onSave = (newUser: Partial<User>) => {
-    updateProfile(newUser, () => {
-      openPrompt();
-    });
+  const onSave = async (newUser: Partial<User>) => {
+    try {
+      if (profilePic instanceof File) {
+        const newUrlProfilePic = await updateProfilePicture(profilePic);
+        if (typeof newUrlProfilePic === 'string') {
+          newUser.profilePictureURL = newUrlProfilePic;
+          setProfilePic(newUrlProfilePic);
+        }
+      } else if (profilePic === undefined) {
+        newUser.profilePictureURL = '';
+      }
+      if (bannerPic instanceof File) {
+        const newUrlBannerPic = await updateProfileBanner(bannerPic);
+        if (typeof newUrlBannerPic === 'string') {
+          newUser.bannerImageUrl = newUrlBannerPic;
+        }
+      }
+      updateProfile(newUser, () => {
+        openPrompt();
+      });
+    } catch (err) {
+      console.log(err);
+      openToasterSnack({
+        message: 'something went wrong!',
+        variant: 'error',
+      });
+    }
   };
 
   const finishedEditProfile = () => {
@@ -80,8 +109,10 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
       {user && (
         <ProfileEditComponent
           user={user}
+          imageProfile={profilePic}
+          imageBanner={bannerPic}
           onSave={onSave}
-          updatingProfile={loading}
+          updatingProfile={loadingUpdate}
           uploadingAvatar={uploadingAvatar}
           uploadingBanner={uploadingBanner}
           updateProfileBanner={hanleUpdateBannerImage}
