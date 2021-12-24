@@ -429,7 +429,11 @@ export const useNotificationList = (
             description:
               'Your ' +
               getPlatform(notification.message) +
-              ` account ${notification.fromUserId.name} successfully disconnected from Myriad`,
+              ' account @' +
+              (notification.additionalReferenceId &&
+                notification.additionalReferenceId[0].peopleUsername) +
+              ' successfully disconnected from Myriad by @' +
+              notification.fromUserId.username,
             badge: (
               <div className={style.circleError}>
                 <SvgIcon
