@@ -32,13 +32,13 @@ export const FriendReducer: Redux.Reducer<FriendState, Actions> = (state = inita
           friends: action.friends,
           meta: action.meta,
         };
-      } else {
-        return {
-          ...state,
-          friends: [...state.friends, ...action.friends],
-          meta: action.meta,
-        };
       }
+
+      return {
+        ...state,
+        friends: [...state.friends, ...action.friends],
+        meta: action.meta,
+      };
     }
 
     case constants.FILTER_FRIEND: {
