@@ -36,6 +36,7 @@ import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {blockedFriendList, removedFriendList} from 'src/reducers/friend/actions';
+import {UserState} from 'src/reducers/user/reducer';
 import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
@@ -57,6 +58,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
 
   const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
+  const {user: currentUser} = useSelector<RootState, UserState>(state => state.userState);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentFriend, setCurrentFriend] = useState<null | FriendDetail>(null);
@@ -74,7 +76,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   useEffect(() => {
     const list = useFriendList(friends, user);
     setFriendList(list);
-  }, [friends[0], user]);
+  }, [friends, user]);
 
   useEffect(() => {
     if (isTipSent) {
@@ -400,12 +402,15 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
           <MenuItem disabled={balanceDetails.length === 0} onClick={handleSendTip}>
             Send direct tip
           </MenuItem>
-          <MenuItem className={style.danger} onClick={handleUnfriend}>
-            Unfriend
-          </MenuItem>
-          <MenuItem className={style.danger} onClick={handleBlock}>
-            Block this person
-          </MenuItem>
+          <ShowIf condition={currentUser?.id === user?.id}>
+            <MenuItem className={style.danger} onClick={handleUnfriend}>
+              Unfriend
+            </MenuItem>
+
+            <MenuItem className={style.danger} onClick={handleBlock}>
+              Block this person
+            </MenuItem>
+          </ShowIf>
         </Menu>
       )}
 
