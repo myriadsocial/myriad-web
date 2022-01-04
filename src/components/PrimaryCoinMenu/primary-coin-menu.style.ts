@@ -61,5 +61,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       columnGap: theme.spacing(1.875),
     },
+    cursor: {
+      cursor: 'pointer',
+    },
   }),
 );
