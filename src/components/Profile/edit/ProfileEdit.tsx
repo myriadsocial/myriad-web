@@ -256,7 +256,12 @@ export const ProfileEditComponent: React.FC<Props> = props => {
 
       <div className={`${style.flex} ${style.button}`}>
         <FormControl variant="outlined">
-          <Button variant="outlined" color="secondary" disableElevation onClick={handleCancel}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            disableElevation
+            onClick={handleCancel}
+            classes={{root: style.width}}>
             Cancel
           </Button>
         </FormControl>
@@ -266,7 +271,8 @@ export const ProfileEditComponent: React.FC<Props> = props => {
             color="primary"
             disableElevation
             onClick={saveConfirmation}
-            disabled={isError || handleError() || updatingProfile}>
+            disabled={isError || handleError() || updatingProfile}
+            classes={{root: style.width}}>
             Save changes
           </Button>
           {updatingProfile && (
