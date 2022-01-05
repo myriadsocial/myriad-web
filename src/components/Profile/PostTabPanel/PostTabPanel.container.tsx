@@ -209,8 +209,8 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   if (isPrivate && !isFriend && !isOwner) {
     return (
       <Empty
-        title="This account is private"
-        subtitle="Add user to your friend list to see their post and other informations"
+        title="Nothing to see here!"
+        subtitle="This account is private. Send them a friend request to see their full profile."
       />
     );
   }

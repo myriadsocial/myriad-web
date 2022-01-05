@@ -7,11 +7,14 @@ import {useExperienceHook} from '../../../hooks/use-experience-hook';
 import {ExperienceTabPanel} from './ExperienceTabPanel';
 
 import {ExperienceType} from 'src/components/Timeline/default';
+import {Empty} from 'src/components/atoms/Empty';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {UserExperience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
+import {ConfigState} from 'src/reducers/config/reducer';
 import {fetchProfileExperience} from 'src/reducers/profile/actions';
+import {ProfileState} from 'src/reducers/profile/reducer';
 
 type ExperienceTabPanelContainerProps = {
   type?: ExperienceType;
@@ -33,8 +36,14 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
   const experiences = useSelector<RootState, UserExperience[]>(
     state => state.profileState.experience.data,
   );
+  const {detail, friendStatus} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
+  const userLogin = useSelector<RootState, User | undefined>(state => state.userState.user);
 
   const [myExperience, setMyExperience] = useState<UserExperience[]>([]);
+  const isFriend = friendStatus?.status == 'approved';
+  const isOwner = detail?.id == userLogin?.id;
+  const isPrivate = settings.privacy.accountPrivacy == 'private';
 
   useEffect(() => {
     dispatch(fetchProfileExperience());
@@ -77,6 +86,15 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
   const handlePreviewExperience = (experienceId: string) => {
     router.push(`/experience/${experienceId}/preview`);
   };
+
+  if (isPrivate && !isFriend && !isOwner) {
+    return (
+      <Empty
+        title="Nothing to see here!"
+        subtitle="This account is private. Send them a friend request to see their full profile."
+      />
+    );
+  }
 
   return (
     <ExperienceTabPanel
