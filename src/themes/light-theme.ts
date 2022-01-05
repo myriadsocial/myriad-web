@@ -1,6 +1,7 @@
 import '@fontsource/mulish';
 
 import {createTheme, alpha} from '@material-ui/core/styles';
+import {BreakpointValues} from '@material-ui/core/styles/createBreakpoints';
 
 declare module '@material-ui/core/styles' {
   interface Theme {
@@ -111,16 +112,17 @@ const DISABLED_PROPS = {
 
 const {breakpoints} = createTheme();
 
+const breakpointsValue: BreakpointValues = {
+  xs: 600,
+  sm: 960,
+  md: 1280,
+  lg: 1366,
+  xl: 1920,
+};
+
 const theme = createTheme({
   breakpoints: {
-    values: {
-      xs: 600,
-      sm: 960,
-      md: 1280,
-      // design size
-      lg: 1440,
-      xl: 1920,
-    },
+    values: breakpointsValue,
   },
   status: {
     success: {
@@ -174,14 +176,14 @@ const theme = createTheme({
     caption: {
       fontSize: textSm,
 
-      [breakpoints.down('lg')]: {
+      [breakpoints.down(breakpointsValue.lg)]: {
         fontSize: textXs,
       },
     },
     body1: {
       fontSize: textBs,
 
-      [breakpoints.down('lg')]: {
+      [breakpoints.down(breakpointsValue.lg)]: {
         fontSize: textSm,
       },
     },
@@ -192,35 +194,35 @@ const theme = createTheme({
     h5: {
       fontSize: textMd,
 
-      [breakpoints.down('lg')]: {
+      [breakpoints.down(breakpointsValue.lg)]: {
         fontSize: textBs,
       },
     },
     h4: {
       fontSize: textLg,
 
-      [breakpoints.down('lg')]: {
+      [breakpoints.down(breakpointsValue.lg)]: {
         fontSize: textMd,
       },
     },
     h3: {
       fontSize: textXl,
 
-      [breakpoints.down('lg')]: {
+      [breakpoints.down(breakpointsValue.lg)]: {
         fontSize: textLg,
       },
     },
     h2: {
       fontSize: text2Xl,
 
-      [breakpoints.down('lg')]: {
+      [breakpoints.down(breakpointsValue.lg)]: {
         fontSize: textXl,
       },
     },
     h1: {
       fontSize: text3Xl,
 
-      [breakpoints.down('lg')]: {
+      [breakpoints.down(breakpointsValue.lg)]: {
         fontSize: text2Xl,
       },
     },
