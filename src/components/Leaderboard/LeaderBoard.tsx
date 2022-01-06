@@ -95,7 +95,7 @@ export const LeaderBoardComponent: React.FC = () => {
                 <Typography className={style.th}>Name</Typography>
               </Grid>
               <Grid item xs={2} style={{textAlign: 'right', paddingRight: '5px'}}>
-                <Typography className={style.th}>Points</Typography>
+                <Typography className={style.th}>Kudos</Typography>
               </Grid>
             </Grid>
             <InfiniteScroll
@@ -131,7 +131,7 @@ export const LeaderBoardComponent: React.FC = () => {
                         </TableCell>
                         <TableCell align="center" style={{width: '10%'}}>
                           <Typography color="primary" className={style.number}>
-                            {user.metric?.totalActivity}
+                            {user.metric?.totalKudos}
                           </Typography>
                         </TableCell>
                       </TableRow>
