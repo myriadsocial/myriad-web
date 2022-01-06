@@ -89,10 +89,12 @@ export const ExperienceTabPanelContainer: React.FC<ExperienceTabPanelContainerPr
 
   if (isPrivate && !isFriend && !isOwner) {
     return (
-      <Empty
-        title="Nothing to see here!"
-        subtitle="This account is private. Send them a friend request to see their full profile."
-      />
+      <div style={{marginTop: '27px'}}>
+        <Empty
+          title="Nothing to see here!"
+          subtitle="This account is private. Send them a friend request to see their full profile."
+        />
+      </div>
     );
   }
 

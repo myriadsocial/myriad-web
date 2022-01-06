@@ -80,10 +80,12 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
 
   if (isPrivate && !isFriend && !isOwner && isProfile) {
     return (
-      <Empty
-        title="Nothing to see here!"
-        subtitle="This account is private. Send them a friend request to see their full profile."
-      />
+      <div style={{marginTop: '27px'}}>
+        <Empty
+          title="Nothing to see here!"
+          subtitle="This account is private. Send them a friend request to see their full profile."
+        />
+      </div>
     );
   }
 

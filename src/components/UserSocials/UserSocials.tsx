@@ -35,19 +35,23 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
   const styles = useStyles();
   if (isPrivate && !isFriend && !isOwner) {
     return (
-      <Empty
-        title="No Social Media"
-        subtitle="this user hasn't connecting their social media or set as private"
-      />
+      <div style={{marginTop: '27px'}}>
+        <Empty
+          title="No Social Media"
+          subtitle="this user hasn't connecting their social media or set as private"
+        />
+      </div>
     );
   }
 
   if (socials.length === 0) {
     return (
-      <Empty
-        title="Nothing to see here!"
-        subtitle="This user haven't connected to any social media yet."
-      />
+      <div style={{marginTop: '27px'}}>
+        <Empty
+          title="Nothing to see here!"
+          subtitle="This user haven't connected to any social media yet."
+        />
+      </div>
     );
   }
 

@@ -3,7 +3,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      marginTop: 12,
+      marginTop: 27,
       padding: theme.spacing(2.5, 3.75, 3),
     },
     title: {
