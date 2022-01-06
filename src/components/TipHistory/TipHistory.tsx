@@ -108,7 +108,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
   };
 
   return (
-    <Modal title="Tip History" open={open} onClose={onClose} className={styles.root}>
+    <Modal title="Tip History" open={open} onClose={onClose}>
       <div className={styles.root}>
         <div className={styles.options}>
           <DropdownMenu title="Sort by" options={sortOptions} onChange={handleSortChange} />
@@ -170,38 +170,39 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
         <ShowIf condition={tips.length === 0}>
           <Empty title="Tip empty" subtitle="" />
         </ShowIf>
-
-        <List className={styles.list} id="scrollable-tip-history">
-          <InfiniteScroll
-            scrollableTarget="scrollable-tip-history"
-            dataLength={tips.length}
-            hasMore={hasMore}
-            next={nextPage}
-            loader={<Loading />}>
-            {tips.map(tip => (
-              <ListItemComponent
-                key={tip.id}
-                avatar={tip.fromUser.profilePictureURL || tip.fromUser.name}
-                title={tip.fromUser.name}
-                subtitle={formatTimeAgo(tip.createdAt)}
-                size="medium"
-                action={
-                  <div className={styles.tip}>
-                    <div>
-                      <Typography variant="h5">
-                        {tip.amount} {tip.currencyId}
-                      </Typography>
-                      <Typography variant="caption" color="textSecondary">
-                        {`~${formatUsd(tip.amount, getConversion(tip.currencyId))} USD`}
-                      </Typography>
+        <ShowIf condition={!!tips.length}>
+          <List className={styles.list} id="scrollable-tip-history">
+            <InfiniteScroll
+              scrollableTarget="scrollable-tip-history"
+              dataLength={tips.length}
+              hasMore={hasMore}
+              next={nextPage}
+              loader={<Loading />}>
+              {tips.map(tip => (
+                <ListItemComponent
+                  key={tip.id}
+                  avatar={tip.fromUser.profilePictureURL || tip.fromUser.name}
+                  title={tip.fromUser.name}
+                  subtitle={formatTimeAgo(tip.createdAt)}
+                  size="medium"
+                  action={
+                    <div className={styles.tip}>
+                      <div>
+                        <Typography variant="h5">
+                          {tip.amount} {tip.currencyId}
+                        </Typography>
+                        <Typography variant="caption" color="textSecondary">
+                          {`~${formatUsd(tip.amount, getConversion(tip.currencyId))} USD`}
+                        </Typography>
+                      </div>
+                      <Avatar src={tip.currency.image} className={styles.logo} />
                     </div>
-                    <Avatar src={tip.currency.image} className={styles.logo} />
-                  </div>
-                }
-              />
-            ))}
-          </InfiniteScroll>
-        </List>
+                  }
+                />
+              ))}
+            </InfiniteScroll>
+          </List>
+        </ShowIf>
       </div>
 
       <div className={styles.action}>

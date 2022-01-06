@@ -9,9 +9,9 @@ type UserList = BaseList<User>;
 export const fetchLeaderboard = async (page = 1): Promise<UserList> => {
   const params = {
     filter: {
-      order: ['totalActivity DESC'],
+      order: ['metric.totalKudos DESC'],
       where: {
-        totalActivity: {
+        'metric.totalKudos': {
           gt: 0,
         },
       },
@@ -21,7 +21,7 @@ export const fetchLeaderboard = async (page = 1): Promise<UserList> => {
   };
 
   const {data} = await MyriadAPI.request<UserList>({
-    url: '/leader-boards',
+    url: '/users',
     method: 'GET',
     params,
   });
