@@ -2,6 +2,7 @@ import next from 'next';
 
 import * as dotenv from 'dotenv';
 import express from 'express';
+import {createProxyMiddleware} from 'http-proxy-middleware';
 import path from 'path';
 import serveIndex from 'serve-index';
 
@@ -22,6 +23,19 @@ app.prepare().then(() => {
     '/docs',
     express.static(path.join(__dirname, '../docs')),
     serveIndex(path.join(__dirname, '../docs')),
+  );
+
+  server.use(
+    /^\/api\/((?!auth).)+$/,
+    createProxyMiddleware({
+      target: process.env.MYRIAD_API_URL,
+      pathRewrite: path => path.replace('/api', '/'),
+      changeOrigin: true,
+      headers: {
+        Authorization: `Bearer ${process.env.MYRIAD_API_KEY}`,
+      },
+      logLevel: dev ? 'debug' : undefined,
+    }),
   );
 
   server.all('*', (req, res) => {
