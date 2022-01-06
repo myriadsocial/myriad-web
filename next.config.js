@@ -34,6 +34,20 @@ const moduleExports = {
     disableServerWebpackPlugin: true,
     disableClientWebpackPlugin: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        has: [
+          {
+            type: 'header',
+            key: 'Authorization',
+          },
+        ],
+        destination: (process.env.NEXT_PUBLIC_MYRIAD_API_URL ?? '') + '/:path*',
+      },
+    ];
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.mjs$/,
