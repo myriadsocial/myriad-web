@@ -12,3 +12,6 @@ export type SET_TIPPED_USER = typeof SET_TIPPED_USER;
 
 export const SET_IS_TIP_SENT = 'SET_IS_TIP_SENT';
 export type SET_IS_TIP_SENT = typeof SET_IS_TIP_SENT;
+
+export const SET_FEE = 'SET_FEE';
+export type SET_FEE = typeof SET_FEE;

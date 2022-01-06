@@ -41,6 +41,11 @@ export interface SetIsTipSent extends Action {
   isTipSent: boolean;
 }
 
+export interface SetFee extends Action {
+  type: constants.SET_FEE;
+  fee: string | null;
+}
+
 /**
  * Union Action Types
  */
@@ -51,6 +56,7 @@ export type Actions =
   | SetTippedUserId
   | SetTippedUser
   | SetIsTipSent
+  | SetFee
   | BaseAction;
 
 /**
@@ -79,6 +85,11 @@ export const setTippedUser = (name: string, profilePictureURL: string): SetTippe
 export const setIsTipSent = (isTipSent: boolean): SetIsTipSent => ({
   type: constants.SET_IS_TIP_SENT,
   isTipSent,
+});
+
+export const setFee = (fee: string | null): SetFee => ({
+  type: constants.SET_FEE,
+  fee,
 });
 
 /**
