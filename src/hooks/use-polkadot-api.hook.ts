@@ -1,19 +1,22 @@
+import * as Sentry from '@sentry/nextjs';
+
 import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {SimpleSendTipProps} from '../interfaces/transaction';
-import {setIsTipSent} from '../reducers/wallet/actions';
+import {setIsTipSent, setFee} from '../reducers/wallet/actions';
 import {WalletState} from '../reducers/wallet/reducer';
 
 import _ from 'lodash';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {useTipSummaryHook} from 'src/hooks/use-tip-summary.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency} from 'src/interfaces/currency';
 import {SendTipProps} from 'src/interfaces/send-tips/send-tips';
 import {ContentType} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
-import {signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
+import {estimateFee, signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {fetchBalances} from 'src/reducers/balance/actions';
 import {BalanceState} from 'src/reducers/balance/reducer';
@@ -27,6 +30,7 @@ export const usePolkadotApi = () => {
   const {openToasterSnack} = useToasterSnackHook();
 
   const [loading, setLoading] = useState(false);
+  const [isFetchingFee, setIsFetchingFee] = useState(false);
   const [isSignerLoading, setSignerLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -129,6 +133,23 @@ export const usePolkadotApi = () => {
     }
   };
 
+  const getEstimatedFee = async (from: string, to: string, selectedCurrency: BalanceDetail) => {
+    try {
+      setIsFetchingFee(true);
+      const {partialFee: estimatedFee, api} = await estimateFee(from, to, selectedCurrency);
+
+      if (api) await api.disconnect();
+
+      if (estimatedFee) dispatch(setFee(estimatedFee));
+    } catch (error) {
+      console.log({error});
+      Sentry.captureException(error);
+      return error;
+    } finally {
+      setIsFetchingFee(false);
+    }
+  };
+
   const simplerSendTip = async (
     {from, to, amount, currency, type, referenceId}: SimpleSendTipProps,
     callback?: () => void,
@@ -201,9 +222,11 @@ export const usePolkadotApi = () => {
     loadingBalance: balanceState.loading,
     loading,
     isSignerLoading,
+    isFetchingFee,
     error,
     load,
     sendTip,
     simplerSendTip,
+    getEstimatedFee,
   };
 };

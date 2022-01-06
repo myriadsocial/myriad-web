@@ -17,7 +17,6 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles, TableCell} from '.';
-import {usePolkadotApi} from '../../hooks/use-polkadot-api.hook';
 import {BalanceDetail} from '../../interfaces/balance';
 import {RootState} from '../../reducers';
 import {TimelineState} from '../../reducers/timeline/reducer';
@@ -26,6 +25,9 @@ import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
 import {Button, ButtonVariant} from '../atoms/Button';
 import {CurrencyOptionComponent} from '../atoms/CurrencyOption';
 import {ListItemComponent} from '../atoms/ListItem';
+
+import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
+import {WalletState} from 'src/reducers/wallet/reducer';
 
 type SendTipProps = {
   balanceDetails: BalanceDetail[];
@@ -40,14 +42,13 @@ type SendTipProps = {
 export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tippedUserId}) => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {tippedContent} = useSelector<RootState, TimelineState>(state => state.timelineState);
+  const {fee} = useSelector<RootState, WalletState>(state => state.walletState);
 
-  const {simplerSendTip, isSignerLoading} = usePolkadotApi();
+  const {simplerSendTip, getEstimatedFee, isFetchingFee, isSignerLoading} = usePolkadotApi();
 
   const [tipAmount, setTipAmount] = useState('');
   const [verifiedTipAmount, setVerifiedTipAmount] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState<BalanceDetail>(balanceDetails[0]);
-  //TODO: fetch gas fee using api
-  const [gasFee] = useState('0.01');
   const [checked, setChecked] = useState(false);
   const [lengthError, setLengthError] = useState(false);
 
@@ -66,6 +67,10 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
       handleSendTip();
     }
   }, [openSigner]);
+
+  useEffect(() => {
+    getEstimatedFee(user.id, tippedUserId, selectedCurrency);
+  }, [selectedCurrency]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
@@ -91,8 +96,19 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
     return '';
   };
 
+  const parseEstimatedFee = (estimatedFee: string | null) => {
+    let amount: number | null = null;
+    if (estimatedFee) {
+      // Split estimated fee (e.g. '14.2000 mMYRIA') into array
+      const splittedStrings = estimatedFee.split(' ');
+
+      if (splittedStrings[1][1] === 'm') amount = Number(splittedStrings[1][0]) * 10 ** -3;
+    }
+    return amount;
+  };
+
   const setMaxTippable = () => {
-    const maxTippable = selectedCurrency.freeBalance - Number(gasFee);
+    const maxTippable = selectedCurrency.freeBalance - Number(parseEstimatedFee(fee) ?? '0.01');
     return maxTippable;
   };
 
@@ -162,7 +178,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
     setOpenSigner(true);
   };
 
-  if (!tippedUser)
+  if (!tippedUser && !fee)
     return (
       <Backdrop className={classes.backdrop} open={!tippedUser}>
         <CircularProgress color="primary" />
@@ -252,7 +268,11 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                         </TableCell>
                         <TableCell align="right">
                           <Typography variant="body1" color="textSecondary">
-                            {gasFee} {selectedCurrency.id}
+                            {isFetchingFee ? (
+                              <Typography>Loading</Typography>
+                            ) : (
+                              fee ?? `0.01 ${selectedCurrency.id}`
+                            )}{' '}
                           </Typography>
                         </TableCell>
                       </TableRow>
@@ -266,7 +286,9 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                           <Typography className={classes.subHeader}>
                             <span className={classes.clickableText}>
                               {Number(
-                                (Number(tipAmount) + Number(gasFee)).toFixed(digitLengthLimit),
+                                (
+                                  Number(tipAmount) + Number(parseEstimatedFee(fee) ?? '0.01')
+                                ).toFixed(digitLengthLimit),
                               ).toString()}{' '}
                               {selectedCurrency.id}
                             </span>
