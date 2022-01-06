@@ -56,6 +56,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     button: {
       marginTop: '16px',
     },
+    width: {
+      width: '250px',
+    },
     marker: {
       fontSize: '12px',
       color: theme.palette.text.secondary,
