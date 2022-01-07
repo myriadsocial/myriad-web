@@ -4,24 +4,36 @@ import {useSelector} from 'react-redux';
 import {FriendListComponent} from './FriendList';
 import {FriendType} from './default';
 
+import {Empty} from 'src/components/atoms/Empty';
 import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
+import {ConfigState} from 'src/reducers/config/reducer';
 import {FriendState} from 'src/reducers/friend/reducer';
+import {ProfileState} from 'src/reducers/profile/reducer';
 
 type FriendListContainerProps = {
   user?: User;
   disableFilter?: boolean;
   disableSort?: boolean;
+  isProfile?: boolean;
 };
 
 export const FriendListContainer: React.FC<FriendListContainerProps> = props => {
-  const {user, disableFilter = false, disableSort = false} = props;
+  const {user, disableFilter = false, disableSort = false, isProfile = false} = props;
   const {loadFriends, searchFriend, loadMoreFriends} = useFriendsHook(user);
 
   const [toggle, setToggle] = useState<string>('');
   const [friendList, setFriendList] = useState<Friend[]>([]);
+
+  const {detail, friendStatus} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
+  const userLogin = useSelector<RootState, User | undefined>(state => state.userState.user);
+
+  const isFriend = friendStatus?.status == 'approved';
+  const isOwner = detail?.id == userLogin?.id;
+  const isPrivate = settings.privacy.accountPrivacy == 'private';
 
   const {
     friends,
@@ -65,6 +77,17 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
         break;
     }
   };
+
+  if (isPrivate && !isFriend && !isOwner && isProfile) {
+    return (
+      <div style={{marginTop: '27px'}}>
+        <Empty
+          title="Nothing to see here!"
+          subtitle="This account is private. Send them a friend request to see their full profile."
+        />
+      </div>
+    );
+  }
 
   return (
     <>
