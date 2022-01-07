@@ -17,10 +17,11 @@ import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
 type DraggableBalanceCardProps = {
   balanceDetail: BalanceDetail;
   index: number;
+  onClick: (index: number) => void;
 };
 
 export const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props => {
-  const {balanceDetail, index} = props;
+  const {balanceDetail, index, onClick} = props;
   const classes = useStyles();
 
   const {loading, exchangeRates} = useExchangeRate();
@@ -34,6 +35,10 @@ export const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props =
 
     if (found) return found.price;
     return 0;
+  };
+
+  const handleOnClick = () => {
+    onClick(index);
   };
 
   return (
@@ -64,7 +69,9 @@ export const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props =
             <SvgIcon
               style={index === 0 ? {transform: 'rotate(180deg)'} : {transform: 'rotate(0deg)'}}
               component={FullVectorIcon}
-              viewBox="0 0 18 20"
+              className={classes.cursor}
+              onClick={handleOnClick}
+              viewBox="0 0 20 20"
             />
 
             <SvgIcon component={TripleDoubleDotsIcon} viewBox="0 0 18 20" />

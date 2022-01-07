@@ -56,6 +56,16 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
     updateCoins(items);
   };
 
+  const handleMoveCoin = (index: number) => {
+    const items = Array.from(coins);
+    const [reorderedItem] = items.splice(index, 1);
+
+    if (index !== 0) items.splice(0, 0, reorderedItem);
+    else items.splice(1, 0, reorderedItem);
+
+    updateCoins(items);
+  };
+
   const handleSetDefaultCurrency = () => {
     const currencyId = coins[0].id as CurrencyId;
 
@@ -111,7 +121,11 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}>
-                                <DraggableBalanceCard balanceDetail={coin} index={index} />
+                                <DraggableBalanceCard
+                                  balanceDetail={coin}
+                                  index={index}
+                                  onClick={handleMoveCoin}
+                                />
                               </ListItem>
                             </>
                           ) : (
@@ -120,7 +134,11 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}>
-                                <DraggableBalanceCard balanceDetail={coin} index={index} />
+                                <DraggableBalanceCard
+                                  balanceDetail={coin}
+                                  index={index}
+                                  onClick={handleMoveCoin}
+                                />
                               </ListItem>
                             </>
                           )
