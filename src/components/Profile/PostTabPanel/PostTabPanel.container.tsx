@@ -26,7 +26,7 @@ import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
-import {TimelineFilter} from 'src/interfaces/timeline';
+import {TimelineFilter, TimelineSortOrder} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
@@ -47,7 +47,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
 
   const dispatch = useDispatch();
   const {posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
-  const {filterTimeline} = useTimelineFilter(filters);
+  const {filterTimeline, sortByOrder} = useTimelineFilter(filters);
   const {query} = useQueryParams();
   const {openTipHistory} = useTipHistory();
   const {openToasterSnack} = useToasterSnackHook();
@@ -72,7 +72,6 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   const sendTipOpened = Boolean(tippedPost);
   const [visibility, setVisibility] = useState<Post | null>(null);
 
-  const [toggle, setToggle] = useState<string>('');
   const [postsList, setPostsList] = useState<Post[]>([]);
   const isFriend = friendStatus?.status == 'approved';
   const isOwner = detail?.id == user?.id;
@@ -86,7 +85,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
 
   useEffect(() => {
     setPostsList(posts);
-  }, [posts, toggle]);
+  }, [posts]);
 
   const handleUpvote = (reference: Post | Comment) => {
     dispatch(upvote(reference));
@@ -181,29 +180,9 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     setVisibility(null);
   };
 
-  const handleSortChanged = (sort: string) => {
-    let sortPosts;
-    setToggle(sort);
-    switch (sort) {
-      case 'latest':
-        sortPosts = postsList.sort((a, b) => {
-          if (new Date(a.createdAt) < new Date(b.createdAt)) return 1;
-          if (new Date(a.createdAt) > new Date(b.createdAt)) return -1;
-          return 0;
-        });
-        setPostsList(sortPosts);
-        break;
-      case 'oldest':
-        sortPosts = postsList.sort((a, b) => {
-          if (new Date(a.createdAt) < new Date(b.createdAt)) return -1;
-          if (new Date(a.createdAt) > new Date(b.createdAt)) return 1;
-          return 0;
-        });
-        setPostsList(sortPosts);
-        break;
-      default:
-        break;
-    }
+  const handleSortChanged = (_sort: string) => {
+    const sort = _sort as TimelineSortOrder;
+    sortByOrder(sort);
   };
 
   if (isPrivate && !isFriend && !isOwner) {

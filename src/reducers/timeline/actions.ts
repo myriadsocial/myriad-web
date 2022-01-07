@@ -9,7 +9,12 @@ import {Comment} from 'src/interfaces/comment';
 import {FriendStatus} from 'src/interfaces/friend';
 import {Like, ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
 import {Post, PostProps, PostVisibility} from 'src/interfaces/post';
-import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
+import {
+  TimelineFilter,
+  TimelineSortMethod,
+  TimelineSortOrder,
+  TimelineType,
+} from 'src/interfaces/timeline';
 import {UserProps} from 'src/interfaces/user';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 import * as InteractionAPI from 'src/lib/api/interaction';
@@ -28,6 +33,7 @@ export interface LoadTimeline extends Action {
     sort?: TimelineSortMethod;
     filter?: TimelineFilter;
     type?: TimelineType;
+    order?: TimelineSortOrder;
     meta: ListMeta;
   };
 }
@@ -215,7 +221,13 @@ export const decreaseCommentCount = (
  * Action Creator
  */
 export const loadTimeline: ThunkActionCreator<Actions, RootState> =
-  (page = 1, sort?: TimelineSortMethod, filter?: TimelineFilter, type?: TimelineType) =>
+  (
+    page = 1,
+    sort?: TimelineSortMethod,
+    filter?: TimelineFilter,
+    type?: TimelineType,
+    order?: TimelineSortOrder,
+  ) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
     let asFriend = false;
@@ -231,6 +243,7 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
       const timelineType = type ?? timelineState.type;
       const timelineFilter = filter ?? timelineState.filter;
       const timelineSort = sort ?? timelineState.sort;
+      const timelineOrder = order ?? timelineState.order;
 
       if (user && (timelineFilter?.owner || timelineFilter?.importer)) {
         asFriend = friendStatus?.status === FriendStatus.APPROVED;
@@ -243,6 +256,7 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
         timelineSort,
         timelineFilter,
         asFriend,
+        timelineOrder,
       );
 
       dispatch({
@@ -261,6 +275,7 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
           filter: timelineFilter,
           type,
           meta,
+          order,
         },
       });
     } catch (error) {
