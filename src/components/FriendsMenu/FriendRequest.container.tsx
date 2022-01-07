@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux';
 
 import {FriendRequestComponent} from './FriendRequest';
 
+import {debounce} from 'lodash';
 import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
@@ -27,14 +28,14 @@ export const FriendRequestListContainer: React.FC<FriendRequestContainerProps> =
     loadRequests();
   }, [user]);
 
-  const acceptFriendRequest = (request: Friend) => {
+  const acceptFriendRequest = debounce((request: Friend) => {
     toggleRequest(request, FriendStatus.APPROVED);
 
     openToasterSnack({
       message: 'Friend request accepted',
       variant: 'success',
     });
-  };
+  }, 300);
 
   const declineFriendRequest = (request: Friend) => {
     removeFriendRequest(request);

@@ -35,18 +35,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     preview: {
       marginBottom: 30,
 
-      '& .MuiListItem-container': {
-        '& .MuiListItemSecondaryAction-root': {
-          display: 'none',
-        },
-
-        '&:hover': {
-          '& .MuiListItemSecondaryAction-root': {
-            display: 'block',
-          },
-        },
-      },
-
       '& .MuiListItem-root:hover': {
         backgroundColor: alpha('#FFC857', 0.15),
 
@@ -54,7 +42,7 @@ export const useStyles = makeStyles((theme: Theme) =>
           content: '""',
           position: 'absolute',
           width: 30,
-          height: 70,
+          height: '100%',
           top: 0,
           backgroundColor: alpha('#FFC857', 0.15),
         },
@@ -95,17 +83,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     option: {
       width: '100%',
-      '& .MuiListItem-container': {
-        '& .MuiListItemSecondaryAction-root': {
-          display: 'none',
-        },
-
-        '&:hover': {
-          '& .MuiListItemSecondaryAction-root': {
-            display: 'flex',
-          },
-        },
-      },
     },
   }),
 );

@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import {ProfileHeaderComponent} from '.';
 import {PromptComponent} from '../../atoms/Prompt/prompt.component';
 
+import {debounce} from 'lodash';
 import {SendTipContainer} from 'src/components/SendTip';
 import {useTimelineFilter} from 'src/components/Timeline/hooks/use-timeline-filter.hook';
 import {Modal} from 'src/components/atoms/Modal';
@@ -72,11 +73,11 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     }
   }, [isTipSent]);
 
-  const sendFriendReqest = () => {
+  const sendFriendReqest = debounce(() => {
     if (!profile) return;
 
     makeFriend(profile);
-  };
+  }, 300);
 
   const declineFriendRequest = () => {
     if (!friendStatus) return;
@@ -128,7 +129,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     toggleRequest(friend, FriendStatus.PENDING);
   };
 
-  const handleAcceptFriend = () => {
+  const handleAcceptFriend = debounce(() => {
     if (friendStatus) {
       toggleRequest(friendStatus, FriendStatus.APPROVED);
 
@@ -137,7 +138,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
         variant: 'success',
       });
     }
-  };
+  }, 300);
 
   const handleRemoveFriend = () => {
     if (friendStatus) {
