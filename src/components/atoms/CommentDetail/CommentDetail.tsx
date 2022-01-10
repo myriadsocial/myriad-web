@@ -59,6 +59,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
   const [isReplying, setIsReplying] = React.useState(false);
   const [isBlocked, setIsBlocked] = React.useState(true);
   const {blocklistId, loadBlockListId} = useFriendsHook(user);
+  const [maxLength, setMaxLength] = React.useState<number | undefined>(180);
 
   useEffect(() => {
     handleLoadReplies();
@@ -221,7 +222,11 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
               }
             />
             <CardContent className={style.content}>
-              <CommentRender comment={comment} max={180} onShowAll={console.log} />
+              <CommentRender
+                comment={comment}
+                max={maxLength}
+                onShowAll={() => setMaxLength(undefined)}
+              />
             </CardContent>
             <CardActions disableSpacing>
               <VotingComponent
