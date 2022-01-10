@@ -41,6 +41,7 @@ import {HeadingToolbar} from '@udecode/plate-toolbar';
 
 import React, {useMemo, useEffect, useState} from 'react';
 
+import {Typography} from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import {Link} from '@material-ui/icons';
 
@@ -56,6 +57,8 @@ import {ToolbarElementList} from './Toolbar/ToolbarElement';
 import {ToolbarButtonsList} from './Toolbar/ToolbarList';
 import {ToolbarButtonsMarks, plugins as markPlugins} from './Toolbar/ToolbarMark';
 import {ToolbarMedia} from './Toolbar/ToolbarMedia';
+import {formatToString} from './formatter';
+import {createCharLimitPlugin} from './plugins/charLimit';
 import {createHashtagPlugin, ELEMENT_HASHTAG} from './plugins/hashtag';
 
 import {Transforms, Selection, Editor} from 'slate';
@@ -78,6 +81,8 @@ const resetBlockTypesCommonRule = {
   types: [ELEMENT_BLOCKQUOTE, ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED],
   defaultType: ELEMENT_PARAGRAPH,
 };
+
+const MAX_CHARACTER_LIMIT = 5000;
 
 export const PostEditor: React.FC<PostEditorProps> = props => {
   const styles = useStyles();
@@ -224,6 +229,9 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
       }),
 
       createHashtagPlugin(),
+      createCharLimitPlugin({
+        max: MAX_CHARACTER_LIMIT,
+      }),
       mentionPlugin,
     ];
 
@@ -238,7 +246,9 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   ];
 
   const editor = useStoreEditorState('post-editor');
+
   const [initialValue] = useState(value || initial);
+  const [currentValue, setCurrentValue] = useState<TNode[]>([]);
   const [showImageUpload, toggleImageUpload] = useState(false);
   const [imageUploadType, setImageUploadType] = useState<'upload' | 'link' | null>(null);
   const [showModalLink, toggleModalLink] = useState(false);
@@ -268,7 +278,13 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
       console.log('[DEBUG]:', value);
     }
 
+    setCurrentValue(value);
+
     onChange && onChange(value);
+  };
+
+  const getCharLength = (): number => {
+    return currentValue.map(formatToString).join('').length;
   };
 
   const closeImageUpload = () => {
@@ -415,26 +431,33 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
 
   return (
     <Box className={styles.root}>
-      <Plate
-        id="post-editor"
-        initialValue={initialValue}
-        editableProps={editableProps}
-        onChange={onChangeDebug}
-        plugins={plugins}
-        components={components}
-        options={options}>
-        <HeadingToolbar className={styles.header}>
-          <ToolbarElementList />
-          <ToolbarButtonsMarks />
-          <ToolbarButtonsAlign />
-          <ToolbarButtonsList />
-          <ToolbarLink icon={<Link />} onMouseDown={openLinkEditor} />
-          <ToolbarMedia openImageUpload={getImageUrl} openVideoUpload={getVideoUrl} />
-        </HeadingToolbar>
+      <div style={{position: 'relative'}}>
+        <Plate
+          id="post-editor"
+          initialValue={initialValue}
+          editableProps={editableProps}
+          onChange={onChangeDebug}
+          plugins={plugins}
+          components={components}
+          options={options}>
+          <HeadingToolbar className={styles.header}>
+            <ToolbarElementList />
+            <ToolbarButtonsMarks />
+            <ToolbarButtonsAlign />
+            <ToolbarButtonsList />
+            <ToolbarLink icon={<Link />} onMouseDown={openLinkEditor} />
+            <ToolbarMedia openImageUpload={getImageUrl} openVideoUpload={getVideoUrl} />
+          </HeadingToolbar>
 
-        <MentionSelect {...getMentionSelectProps()} renderLabel={renderMentionLabel} />
-      </Plate>
-
+          <MentionSelect {...getMentionSelectProps()} renderLabel={renderMentionLabel} />
+        </Plate>
+        <Typography
+          variant="body1"
+          component="div"
+          style={{position: 'absolute', right: 0, bottom: 0}}>
+          {getCharLength()}/{MAX_CHARACTER_LIMIT}
+        </Typography>
+      </div>
       <Modal
         title="Upload Picture"
         align="left"

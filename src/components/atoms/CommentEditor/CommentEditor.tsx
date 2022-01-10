@@ -37,6 +37,7 @@ import {
   MentionSelect,
   renderMentionLabel,
 } from 'src/components/PostEditor/Render/Mention';
+import {createCharLimitPlugin} from 'src/components/PostEditor/plugins/charLimit';
 import {acronym} from 'src/helpers/string';
 import {CommentProps} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
@@ -60,6 +61,8 @@ const resetBlockTypesCommonRule = {
   types: [ELEMENT_BLOCKQUOTE],
   defaultType: ELEMENT_PARAGRAPH,
 };
+
+const MAX_CHARACTER_LIMIT = 180;
 
 export const CommentEditor: React.FC<PostEditorProps> = props => {
   const styles = useStyles();
@@ -147,6 +150,9 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
             predicate: isSelectionAtBlockStart,
           },
         ],
+      }),
+      createCharLimitPlugin({
+        max: MAX_CHARACTER_LIMIT,
       }),
       mentionPlugin,
     ];
