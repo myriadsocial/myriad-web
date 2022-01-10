@@ -54,7 +54,7 @@ export default function Index() {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const {res, req} = context;
+  const {req} = context;
   const {headers} = req;
 
   if (typeof window === 'undefined' && headers['user-agent']) {
@@ -79,17 +79,23 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const available = await healthcheck();
 
   if (!available) {
-    res.setHeader('location', '/maintenance');
-    res.statusCode = 302;
-    res.end();
+    return {
+      redirect: {
+        destination: '/maintenance',
+        permanent: false,
+      },
+    };
   }
 
   const session = await getSession(context);
 
   if (session) {
-    res.setHeader('location', '/home');
-    res.statusCode = 302;
-    res.end();
+    return {
+      redirect: {
+        destination: '/home',
+        permanent: false,
+      },
+    };
   }
 
   return {

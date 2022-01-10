@@ -5,7 +5,6 @@ import Avatar from '@material-ui/core/Avatar';
 import ListItem, {ListItemProps} from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Radio from '@material-ui/core/Radio';
 import {createStyles, makeStyles, Theme, alpha} from '@material-ui/core/styles';
@@ -39,6 +38,10 @@ const useStyles = makeStyles((theme: Theme) =>
       },
       '&:hover': {
         backgroundColor: alpha('#FFC857', 0.15),
+
+        '& #remove-item': {
+          display: 'block',
+        },
       },
     },
     avatar: {
@@ -79,7 +82,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: theme.spacing(9),
     },
     action: {
-      right: theme.spacing(1),
+      display: 'none',
     },
   }),
 );
@@ -139,7 +142,9 @@ export const ListItemSocialComponent: React.FC<ListItemSocialComponentProps> = p
       />
 
       {action && (
-        <ListItemSecondaryAction className={styles.action}>{action}</ListItemSecondaryAction>
+        <div id="remove-item" className={styles.action}>
+          {action}
+        </div>
       )}
     </ListItem>
   );
