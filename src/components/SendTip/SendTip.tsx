@@ -27,6 +27,7 @@ import {CurrencyOptionComponent} from '../atoms/CurrencyOption';
 import {ListItemComponent} from '../atoms/ListItem';
 
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
+import {CurrencyId} from 'src/interfaces/currency';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
 type SendTipProps = {
@@ -96,19 +97,20 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
     return '';
   };
 
-  const parseEstimatedFee = (estimatedFee: string | null) => {
+  const parseEstimatedFee = (estimatedFee: string | null, selectedCurrency: BalanceDetail) => {
     let amount: number | null = null;
-    if (estimatedFee) {
-      // Split estimated fee (e.g. '14.2000 mMYRIA') into array
-      const splittedStrings = estimatedFee.split(' ');
-
-      if (splittedStrings[1][1] === 'm') amount = Number(splittedStrings[1][0]) * 10 ** -3;
+    if (estimatedFee && selectedCurrency.id === CurrencyId.MYRIA) {
+      const {decimal} = selectedCurrency;
+      amount = Number(estimatedFee) / 10 ** decimal;
+    } else {
+      amount = Number(estimatedFee);
     }
     return amount;
   };
 
   const setMaxTippable = () => {
-    const maxTippable = selectedCurrency.freeBalance - Number(parseEstimatedFee(fee) ?? '0.01');
+    const maxTippable =
+      selectedCurrency.freeBalance - Number(parseEstimatedFee(fee, selectedCurrency) ?? '0.01');
     return maxTippable;
   };
 
@@ -270,8 +272,11 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                           <Typography variant="body1" color="textSecondary">
                             {isFetchingFee ? (
                               <Typography>Loading</Typography>
+                            ) : fee ? (
+                              parseEstimatedFee(fee, selectedCurrency).toFixed(10) +
+                              ` ${selectedCurrency.id}`
                             ) : (
-                              fee ?? `0.01 ${selectedCurrency.id}`
+                              `0.01 ${selectedCurrency.id}`
                             )}{' '}
                           </Typography>
                         </TableCell>
@@ -287,7 +292,8 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                             <span className={classes.clickableText}>
                               {Number(
                                 (
-                                  Number(tipAmount) + Number(parseEstimatedFee(fee) ?? '0.01')
+                                  Number(tipAmount) +
+                                  Number(parseEstimatedFee(fee, selectedCurrency) ?? '0.01')
                                 ).toFixed(digitLengthLimit),
                               ).toString()}{' '}
                               {selectedCurrency.id}

@@ -6,6 +6,7 @@ import {Keyring} from '@polkadot/keyring';
 
 import BN from 'bn.js';
 import {BalanceDetail} from 'src/interfaces/balance';
+import {CurrencyId} from 'src/interfaces/currency';
 
 interface signAndSendExtrinsicProps {
   from: string;
@@ -33,6 +34,30 @@ export const connectToBlockchain = async (wsProvider: string): Promise<ApiPromis
   return api;
 };
 
+export const convertAcaBasedTxFee = async (
+  api: ApiPromise,
+  selectedCurrency: BalanceDetail,
+): Promise<number | null> => {
+  try {
+    const acaBasedTokenPoolInString = (
+      await api.query.dex.liquidityPool([{TOKEN: 'ACA'}, {TOKEN: selectedCurrency.id}])
+    ).toString();
+
+    const acaBasedTokenPools = acaBasedTokenPoolInString
+      .substring(1, acaBasedTokenPoolInString.length - 1)
+      .replace(/"/g, '')
+      .split(',');
+
+    const acaBasedTokenPool = parseInt(acaBasedTokenPools[1]) / 10 ** selectedCurrency.decimal;
+    const acaPool = parseInt(acaBasedTokenPools[0]) / 10 ** 13;
+    const tokenPerAca = acaBasedTokenPool / acaPool;
+    return tokenPerAca;
+  } catch (error) {
+    console.log({error});
+    return null;
+  }
+};
+
 export const estimateFee = async (
   from: string,
   to: string,
@@ -47,7 +72,9 @@ export const estimateFee = async (
 
     const baseAddress = keyring.encodeAddress(from);
 
-    let partialFee: string | null = null;
+    let finalPartialFee: string | null = null;
+
+    let acaBasedTxFee: number | null = null;
 
     let api: ApiPromise | null = null;
 
@@ -73,22 +100,33 @@ export const estimateFee = async (
         if (api) {
           const RAND_AMOUNT = 123;
 
-          const info = selectedCurrency.image
+          const {partialFee} = selectedCurrency.native
             ? await api.tx.balances.transfer(to, RAND_AMOUNT).paymentInfo(from)
             : await api.tx.currencies
                 .transfer(to, {TOKEN: selectedCurrency.id}, RAND_AMOUNT)
                 .paymentInfo(from);
 
-          if (info) partialFee = info.partialFee.toHuman();
+          if (selectedCurrency.id === CurrencyId.AUSD) {
+            const tokenPerAca = await convertAcaBasedTxFee(api, selectedCurrency);
+            acaBasedTxFee = Number(partialFee.toString()) / 10 ** 13;
+            if (tokenPerAca) {
+              finalPartialFee = (acaBasedTxFee * tokenPerAca).toString();
+
+              console.log('if ausd', {tokenPerAca, acaBasedTxFee, finalPartialFee});
+            }
+          } else {
+            finalPartialFee = partialFee.toString();
+            console.log('else', {finalPartialFee});
+          }
         }
       }
     }
     return {
-      partialFee,
+      partialFee: finalPartialFee,
       api,
     };
   } catch (error) {
-    console.log(error);
+    console.log({error});
     Sentry.captureException(error);
     return error;
   }
