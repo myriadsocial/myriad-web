@@ -11,6 +11,8 @@ export type PostOrigin = 'facebook' | 'twitter' | 'reddit' | 'myriad';
 
 export type TimelineSortMethod = 'created' | 'like' | 'comment' | 'trending';
 
+export type TimelineSortOrder = 'latest' | 'oldest';
+
 export type TimelineFilter = {
   tags?: string[];
   people?: string[];

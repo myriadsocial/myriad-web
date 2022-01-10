@@ -4,7 +4,6 @@ import {Typography} from '@material-ui/core';
 import ListItem, {ListItemProps} from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
@@ -28,6 +27,12 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       paddingLeft: 0,
+      '& .hidden-button': {
+        display: 'none',
+      },
+      '&:hover .hidden-button': {
+        display: 'flex',
+      },
     },
     avatar: {
       minWidth: theme.spacing(3.75),
@@ -118,9 +123,7 @@ export const ListItemPeopleComponent: React.FC<ListItemComponentProps> = props =
         }
       />
 
-      {action && (
-        <ListItemSecondaryAction className={styles.action}>{action}</ListItemSecondaryAction>
-      )}
+      {action && <div className={`${styles.action} hidden-button`}>{action}</div>}
     </ListItem>
   );
 };

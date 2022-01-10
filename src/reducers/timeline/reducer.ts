@@ -10,12 +10,18 @@ import * as Redux from 'redux';
 import {Comment} from 'src/interfaces/comment';
 import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
-import {TimelineType, TimelineSortMethod, TimelineFilter} from 'src/interfaces/timeline';
+import {
+  TimelineType,
+  TimelineSortMethod,
+  TimelineFilter,
+  TimelineSortOrder,
+} from 'src/interfaces/timeline';
 import {WalletDetail} from 'src/interfaces/wallet';
 
 export interface TimelineState extends BasePaginationState {
   type: TimelineType;
   sort: TimelineSortMethod;
+  order: TimelineSortOrder;
   filter?: TimelineFilter;
   search?: string;
   hasMore: boolean;
@@ -35,6 +41,7 @@ const initalState: TimelineState = {
   loading: true,
   type: TimelineType.TRENDING,
   sort: 'created',
+  order: 'latest',
   hasMore: false,
   posts: [],
   tippedContent: {
@@ -73,6 +80,7 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
             : [...state.posts, ...action.payload.posts],
         type: action.payload.type ?? state.type,
         sort: action.payload.sort ?? state.sort,
+        order: action.payload.order ?? state.order,
         filter: action.payload.filter ?? state.filter,
         hasMore: meta.currentPage < meta.totalPageCount,
         meta,

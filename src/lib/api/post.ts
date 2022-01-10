@@ -8,6 +8,7 @@ import {Dislike, Like} from 'src/interfaces/interaction';
 import {Post, PostProps, ImportPostProps, PostVisibility, PostStatus} from 'src/interfaces/post';
 import {
   TimelineSortMethod,
+  TimelineSortOrder,
   TimelineFilter,
   TimelineType,
   PostOrigin,
@@ -27,10 +28,12 @@ export const getPost = async (
   sort?: TimelineSortMethod,
   filters?: TimelineFilter,
   asFriend = false,
+  sortOrder?: TimelineSortOrder,
 ): Promise<PostList> => {
   const where: LoopbackWhere<PostProps> = {};
 
   let sortField = 'latest';
+  let orderField = 'DESC';
 
   switch (sort) {
     case 'comment':
@@ -43,6 +46,17 @@ export const getPost = async (
       sortField = 'popular';
       break;
     case 'created':
+    default:
+      break;
+  }
+
+  switch (sortOrder) {
+    case 'latest':
+      orderField = 'DESC';
+      break;
+    case 'oldest':
+      orderField = 'ASC';
+      break;
     default:
       break;
   }
@@ -142,7 +156,6 @@ export const getPost = async (
   }
 
   const filterParams: Record<string, any> = {
-    order: `createdAt DESC`,
     include: [
       {
         relation: 'user',
@@ -163,7 +176,7 @@ export const getPost = async (
 
   const params: Record<string, any> = {
     sortBy: sortField,
-    order: `DESC`,
+    order: orderField,
     importers: true,
     pageNumber: page,
     pageLimit: PAGINATION_LIMIT,
