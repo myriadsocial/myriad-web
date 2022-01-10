@@ -39,7 +39,7 @@
     "docker:down": "./.maintain/docker/stop-docker-compose.sh",
     "prestart": "yarn run rebuild",
     "start": "node .",
-    "start:docker": "yarn export-env && next node .",
+    "start:docker": "yarn export-env && node .",
     "start:storybook": "start-storybook -p 6006"
   },
   "lint-staged": {
