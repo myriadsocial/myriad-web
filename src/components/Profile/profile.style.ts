@@ -32,7 +32,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: 644,
       padding: 30,
 
-      [theme.breakpoints.down('lg')]: {
+      [theme.breakpoints.down('md')]: {
         minWidth: 590,
       },
     },

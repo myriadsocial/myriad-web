@@ -82,6 +82,7 @@
     "express": "^4.17.1",
     "firebase": "^8.6.2",
     "html-react-parser": "^1.2.7",
+    "http-proxy-middleware": "^2.0.1",
     "immutability-helper": "^3.1.1",
     "link-preview-js": "^2.1.8",
     "localforage": "^1.9.0",

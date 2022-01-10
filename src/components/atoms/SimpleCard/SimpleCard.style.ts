@@ -8,10 +8,10 @@ const useStyles = makeStyles((theme: Theme) =>
       boxSizing: `border-box`,
       borderRadius: 10,
       display: 'flex',
-      minWidth: 312,
+      width: 312,
 
-      [theme.breakpoints.down('lg')]: {
-        maxWidth: 290,
+      [theme.breakpoints.down('md')]: {
+        width: 290,
       },
 
       '& .MuiCardActionArea-focusVisible': {backgroundColor: '#FFF'},

@@ -7,7 +7,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderRadius: 20,
       padding: 0,
 
-      [theme.breakpoints.down('lg')]: {
+      [theme.breakpoints.down('md')]: {
         minWidth: 590,
       },
     },

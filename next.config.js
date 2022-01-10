@@ -12,6 +12,9 @@ const moduleExports = {
   serverRuntimeConfig: {
     // Will only be available on the server side
     secret: process.env.SECRET,
+    // API
+    myriadAPIURL: process.env.MYRIAD_API_URL,
+    myriadAPIKey: process.env.MYRIAD_API_KEY,
   },
   publicRuntimeConfig: {
     // Will be available on both server and client
@@ -19,8 +22,6 @@ const moduleExports = {
     appStatus: process.env.NEXT_PUBLIC_APP_STATUS ?? 'development',
     appVersion: `v${process.env.NEXT_PUBLIC_APP_VERSION ?? version}`,
     nextAuthURL: process.env.NEXTAUTH_URL,
-    myriadAPIURL: process.env.NEXT_PUBLIC_MYRIAD_API_URL,
-    myriadAPIKey: process.env.NEXT_PUBLIC_MYRIAD_API_KEY,
     myriadWebsiteURL: process.env.NEXT_PUBLIC_MYRIAD_WEBSITE_URL ?? 'https://www.myriad.social',
     myriadSupportMail: process.env.NEXT_PUBLIC_MYRIAD_SUPPORT_MAIL ?? 'support@myriad.social',
     firebaseAPIKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,

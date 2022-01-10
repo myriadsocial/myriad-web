@@ -16,12 +16,12 @@ const {publicRuntimeConfig} = getConfig();
 export const initialize = (params?: AuthorizationParams): AxiosInstance => {
   if (!API) {
     API = axios.create({
-      baseURL: publicRuntimeConfig.myriadAPIURL,
+      baseURL: publicRuntimeConfig.nextAuthURL + '/api',
     });
 
     API.interceptors.request.use(config => {
       config.headers = {
-        Authorization: `Bearer ${publicRuntimeConfig.myriadAPIKey}`,
+        // Authorization: `Bearer [SAMPLE_TOKEN]`,
       };
 
       return config;

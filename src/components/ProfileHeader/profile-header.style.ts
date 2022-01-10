@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'relative',
       width: 312,
 
-      [theme.breakpoints.down('lg')]: {
+      [theme.breakpoints.down('md')]: {
         maxWidth: 290,
       },
 
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
     name: {
       maxWidth: 162,
 
-      [theme.breakpoints.down('lg')]: {
+      [theme.breakpoints.down('md')]: {
         maxWidth: 142,
       },
 

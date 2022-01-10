@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
     firstCol: {
       width: 312,
 
-      [theme.breakpoints.down('lg')]: {
+      [theme.breakpoints.down('md')]: {
         width: 290,
       },
     },
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       rowGap: 12,
 
-      [theme.breakpoints.down('lg')]: {
+      [theme.breakpoints.down('md')]: {
         width: 290,
       },
     },
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
       maxWidth: 644,
       margin: `0 20px`,
 
-      [theme.breakpoints.down('lg')]: {
+      [theme.breakpoints.down('md')]: {
         maxWidth: 590,
       },
     },
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
     thirdCol: {
       width: 312,
 
-      [theme.breakpoints.down('lg')]: {
+      [theme.breakpoints.down('md')]: {
         width: 290,
       },
     },
@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       rowGap: theme.spacing(1),
 
-      [theme.breakpoints.down('lg')]: {
+      [theme.breakpoints.down('md')]: {
         width: 290,
       },
     },
