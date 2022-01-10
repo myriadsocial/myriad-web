@@ -431,7 +431,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
 
   return (
     <Box className={styles.root}>
-      <div style={{position: 'relative'}}>
+      <div className={styles.wrapper}>
         <Plate
           id="post-editor"
           initialValue={initialValue}
@@ -451,10 +451,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
 
           <MentionSelect {...getMentionSelectProps()} renderLabel={renderMentionLabel} />
         </Plate>
-        <Typography
-          variant="body1"
-          component="div"
-          style={{position: 'absolute', right: 0, bottom: 0}}>
+        <Typography variant="body1" component="div" className={styles.limit}>
           {getCharLength()}/{MAX_CHARACTER_LIMIT}
         </Typography>
       </div>
