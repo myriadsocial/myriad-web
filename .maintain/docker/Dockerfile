@@ -30,4 +30,4 @@ USER myriad
 # Set environment variable
 ENV NODE_ENV=production HOST=0.0.0.0 PORT=3000
 EXPOSE ${PORT}
-ENTRYPOINT ["yarn", "start:docker"]
+ENTRYPOINT ["yarn", "start"]
