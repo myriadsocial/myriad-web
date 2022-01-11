@@ -45,6 +45,9 @@ export type UPVOTE_POST = typeof UPVOTE_POST;
 export const SET_DOWNVOTING = 'SET_DOWNVOTING';
 export type SET_DOWNVOTING = typeof SET_DOWNVOTING;
 
+export const RESET_DOWNVOTING = 'RESET_DOWNVOTING';
+export type RESET_DOWNVOTING = typeof RESET_DOWNVOTING;
+
 export const DOWNVOTE_POST = 'DOWNVOTE_POST';
 export type DOWNVOTE_POST = typeof DOWNVOTE_POST;
 

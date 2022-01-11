@@ -137,6 +137,15 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       };
     }
 
+    case constants.RESET_DOWNVOTING: {
+      return {
+        ...state,
+        interaction: {
+          downvoting: null,
+        },
+      };
+    }
+
     case constants.LIKE_POST: {
       return {
         ...state,

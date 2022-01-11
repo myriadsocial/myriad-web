@@ -249,13 +249,6 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
                 </Button>
               )}
 
-              {
-                // hide button if it's owner's post or balance is not yet loaded
-              }
-              <ShowIf condition={owner || balanceDetails.length === 0}>
-                <></>
-              </ShowIf>
-
               <ShowIf condition={!owner}>
                 <Button
                   disabled={balanceDetails.length === 0}
