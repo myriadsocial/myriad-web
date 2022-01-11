@@ -95,7 +95,7 @@ export const Profile: React.FC<ProfileProps> = props => {
           name: {
             ...prevSetting.name,
             error: true,
-            helper: 'Display name contain disallowed character',
+            helper: 'Display name cannot contain disallowed character.',
           },
         }));
       } else {
@@ -141,7 +141,7 @@ export const Profile: React.FC<ProfileProps> = props => {
           username: {
             ...prevSetting.username,
             error: true,
-            helper: 'Display name contain disallowed character',
+            helper: 'Display name cannot contain disallowed character.',
           },
         }));
       } else {
@@ -253,19 +253,7 @@ export const Profile: React.FC<ProfileProps> = props => {
 
       <PromptComponent
         title={'Are you sure?'}
-        subtitle={
-          <Typography>
-            Your username&nbsp;
-            <Typography component="span" color="primary" style={{fontWeight: 600}}>
-              @{profile.username.value}
-            </Typography>
-            &nbsp;and&nbsp;
-            <Typography component="span" color="error" style={{fontWeight: 600}}>
-              cannot be change later
-            </Typography>
-            . are you really want to use it?
-          </Typography>
-        }
+        subtitle={<Typography>Are you sure? You can only set your username once.</Typography>}
         open={confirmation}
         icon="warning"
         onCancel={toggleConfirmation}>

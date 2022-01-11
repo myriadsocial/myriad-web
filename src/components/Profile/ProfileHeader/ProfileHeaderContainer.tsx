@@ -145,7 +145,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
       removeFriendRequest(friendStatus);
 
       openToasterSnack({
-        message: `${profile?.name} has removed from your friend list`,
+        message: `${profile?.name} has been removed from your friend lists`,
         variant: 'success',
       });
     }
@@ -175,7 +175,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
         open={sendTipOpened}
         onClose={closeSendTip}
         title="Send Tip"
-        subtitle="Find this post insightful? Send a tip!">
+        subtitle="Find this user insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
 

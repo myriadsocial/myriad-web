@@ -71,8 +71,8 @@ export const Timeline: React.FC<TimelineProps> = props => {
         loader={<Loading />}>
         {timelineType === TimelineType.EXPERIENCE && posts.length === 0 ? (
           <TimelineEmptyComponent
-            title={'No Experience posts yet'}
-            subtitle={'Create your own timeline experience and see only posts which interest you'}
+            title={'No post to show'}
+            subtitle={'Once you create an experience, it will show up here.'}
             action={
               <Button
                 variant={ButtonVariant.CONTAINED}
@@ -84,8 +84,8 @@ export const Timeline: React.FC<TimelineProps> = props => {
           />
         ) : timelineType === TimelineType.FRIEND && posts.length === 0 ? (
           <TimelineEmptyComponent
-            title={'No posts from friends yet'}
-            subtitle={'let’s make friends and you might get some valuable insights'}
+            title={'No post to show'}
+            subtitle={'Once you add some new friends, their posts will show up here.'}
           />
         ) : (
           posts.map(post => (

@@ -348,7 +348,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         open={openPrompt}
         icon="danger"
         title="Block User?"
-        subtitle="You will not able to search and see post from this user">
+        subtitle="You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?">
         <Grid container alignItems="center">
           <Button
             onClick={handleClosePrompt}
@@ -373,7 +373,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         open={openRemoveFriend}
         icon="danger"
         title={`Unfriend ${person.name}?`}
-        subtitle="You will not able to search and see post from this user">
+        subtitle="You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?">
         <Grid container alignItems="center">
           <Button
             onClick={closeConfirmRemoveFriend}
