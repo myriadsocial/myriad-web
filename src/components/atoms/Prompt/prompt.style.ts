@@ -10,7 +10,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     text: {
       fontWeight: 400,
-      lineHeight: '17.57px',
+      lineHeight: '20px',
+      fontSize: '14px',
+      whiteSpace: 'pre-line',
     },
     'm-vertical1': {
       marginBottom: 30,
@@ -35,8 +37,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       fill: 'currentColor',
     },
     title: {
-      fontWeight: 700,
+      fontWeight: 600,
       lineHeight: '22.59px',
+      fontSize: '18px',
     },
     danger: {
       color: '#FE3636',
