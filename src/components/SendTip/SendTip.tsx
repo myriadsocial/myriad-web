@@ -295,13 +295,17 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                         <TableCell align="right">
                           <Typography className={classes.subHeader}>
                             <span className={classes.clickableText}>
-                              {Number(
-                                (
-                                  Number(tipAmount) +
-                                  Number(parseEstimatedFee(fee, selectedCurrency) ?? '0.01')
-                                ).toFixed(digitLengthLimit),
-                              ).toString()}{' '}
-                              {selectedCurrency.id}
+                              {isFetchingFee ? (
+                                <Typography>Loading</Typography>
+                              ) : (
+                                Number(
+                                  (
+                                    Number(tipAmount) +
+                                    Number(parseEstimatedFee(fee, selectedCurrency) ?? '0.01')
+                                  ).toFixed(digitLengthLimit),
+                                ).toString()
+                              )}{' '}
+                              {isFetchingFee ? '' : selectedCurrency.id}
                             </span>
                           </Typography>
                         </TableCell>
