@@ -43,12 +43,14 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const dispatch = useDispatch();
   const {
     comments,
+    hasMoreComment,
     loadInitComment,
     reply,
     updateUpvote,
     updateDownvote,
     updateRemoveUpvote,
     loadReplies,
+    loadMoreComment,
   } = useCommentHook(referenceId);
   const {openTipHistory} = useTipHistory();
 
@@ -178,6 +180,15 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     }
   }, 300);
 
+  // useEffect(() => {
+  //   console.log(comments);
+  // }, [comments])
+
+  const handleLoadMoreComment = (): void => {
+    console.log('INI LOAD MORE COMMENT');
+    loadMoreComment();
+  };
+
   return (
     <>
       <ShowIf condition={!anonymous}>
@@ -214,6 +225,12 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         onSendTip={handleSendTip}
         onSearchPeople={handleSearchPeople}
       />
+
+      <ShowIf condition={hasMoreComment}>
+        <div style={{marginLeft: '69px', cursor: 'pointer'}} onClick={handleLoadMoreComment}>
+          <Typography color="primary">View more comments</Typography>
+        </div>
+      </ShowIf>
 
       <Modal
         gutter="none"
