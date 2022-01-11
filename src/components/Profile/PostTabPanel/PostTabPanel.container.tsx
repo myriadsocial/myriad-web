@@ -208,7 +208,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
       </ShowIf>
 
       <ShowIf condition={!posts.length && filters?.owner !== user?.id}>
-        <Empty title="Nothing to see here!" subtitle="This user haven't posted anything yet." />;
+        <Empty title="Nothing to see here!" subtitle="This user hasn't posted anything yet." />;
       </ShowIf>
 
       <ShowIf condition={!!posts.length}>
@@ -236,7 +236,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
         open={sendTipOpened}
         onClose={closeSendTip}
         title="Send Tip"
-        subtitle="Find this post insightful? Send a tip!">
+        subtitle="Find this user insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
 

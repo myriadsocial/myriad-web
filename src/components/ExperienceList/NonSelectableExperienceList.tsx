@@ -55,10 +55,7 @@ const NonSelectableExperienceList: React.FC<NonSelectableExperienceListProps> = 
 
   if (!experiences.length) {
     return (
-      <Empty
-        title="Nothing to see here!"
-        subtitle="This user haven't created any experience yet."
-      />
+      <Empty title="Nothing to see here!" subtitle="This user hasn't created any Experience yet." />
     );
   }
 

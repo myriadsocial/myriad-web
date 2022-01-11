@@ -37,8 +37,8 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
     return (
       <div style={{marginTop: '27px'}}>
         <Empty
-          title="No Social Media"
-          subtitle="this user hasn't connecting their social media or set as private"
+          title="Nothing to see here!"
+          subtitle="This account is private. Send them a friend request to see their full profile."
         />
       </div>
     );
@@ -49,7 +49,7 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
       <div style={{marginTop: '27px'}}>
         <Empty
           title="Nothing to see here!"
-          subtitle="This user haven't connected to any social media yet."
+          subtitle="This user hasn't connected to any social media yet."
         />
       </div>
     );

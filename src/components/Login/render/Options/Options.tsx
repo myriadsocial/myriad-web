@@ -222,7 +222,7 @@ export const Options: React.FC<OptionProps> = props => {
           control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
           label={
             <Typography style={{color: '#0A0A0A'}}>
-              I already read and accept Myriad&nbsp;
+              I have already read, and I accept Myriad&nbsp;
               <a href="/term-of-use" className={styles.term}>
                 Terms of Service
               </a>
