@@ -70,8 +70,10 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
   }, [openSigner]);
 
   useEffect(() => {
-    getEstimatedFee(user.id, tippedUserId, selectedCurrency);
-  }, [selectedCurrency]);
+    if (tippedUserId.length > 0) {
+      getEstimatedFee(user.id, tippedUserId, selectedCurrency);
+    }
+  }, [selectedCurrency, tippedUserId]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
@@ -180,12 +182,15 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
     setOpenSigner(true);
   };
 
-  if (!tippedUser && !fee)
+  if (!tippedUser || (tippedUserId.length === 0 && !tippedUserId)) {
     return (
-      <Backdrop className={classes.backdrop} open={!tippedUser}>
+      <Backdrop
+        className={classes.backdrop}
+        open={!tippedUser || (tippedUserId.length === 0 && !tippedUserId)}>
         <CircularProgress color="primary" />
       </Backdrop>
     );
+  }
 
   return (
     <Paper className={classes.root}>
