@@ -180,12 +180,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     }
   }, 300);
 
-  // useEffect(() => {
-  //   console.log(comments);
-  // }, [comments])
-
   const handleLoadMoreComment = (): void => {
-    console.log('INI LOAD MORE COMMENT');
     loadMoreComment();
   };
 
