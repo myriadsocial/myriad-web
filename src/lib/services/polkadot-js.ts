@@ -111,12 +111,9 @@ export const estimateFee = async (
             acaBasedTxFee = Number(partialFee.toString()) / 10 ** 13;
             if (tokenPerAca) {
               finalPartialFee = (acaBasedTxFee * tokenPerAca).toString();
-
-              console.log('if ausd', {tokenPerAca, acaBasedTxFee, finalPartialFee});
             }
           } else {
             finalPartialFee = partialFee.toString();
-            console.log('else', {finalPartialFee});
           }
         }
       }
