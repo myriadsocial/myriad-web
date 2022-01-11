@@ -375,8 +375,6 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
           variant: 'success',
         }),
       );
-
-      callback && callback();
     } catch (error) {
       let message = error.message;
 
@@ -384,11 +382,15 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
         message = error.response.data.error.message;
       }
 
-      dispatch(
-        setError({
-          message,
-        }),
-      );
+      if (callback) {
+        callback();
+      } else {
+        dispatch(
+          setError({
+            message: message,
+          }),
+        );
+      }
     } finally {
       dispatch(setLoading(false));
     }

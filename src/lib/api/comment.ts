@@ -8,6 +8,7 @@ import {SectionType} from 'src/interfaces/interaction';
 type CommentList = BaseList<Comment>;
 
 export const loadComments = async (
+  pageNumber: number,
   referenceId: string,
   section?: SectionType,
   excludeUser?: string,
@@ -42,7 +43,7 @@ export const loadComments = async (
         where,
         include: ['user', 'votes'],
       },
-      pageNumber: 1,
+      pageNumber: pageNumber,
       pageLimit: PAGINATION_LIMIT,
     },
   });

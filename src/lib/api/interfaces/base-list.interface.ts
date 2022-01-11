@@ -5,6 +5,7 @@ export interface ListMeta {
   itemsPerPage: number;
   totalItemCount: number;
   totalPageCount: number;
+  nextPage?: number;
 }
 
 export interface BaseList<T> extends SuccessResponse<T[]> {

@@ -1,9 +1,12 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
+import {Button} from '@material-ui/core';
+
 import {useFriendList} from '../FriendsMenu/hooks/use-friend-list.hook';
+import {PromptComponent} from '../atoms/Prompt/prompt.component';
 
 import {debounce} from 'lodash';
 import {useUpload} from 'src/hooks/use-upload.hook';
@@ -31,6 +34,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const mentionable = useFriendList(friends, user);
+  const [openFailedImport, setOpenFailedImport] = useState(false);
 
   useEffect(() => {
     if (user && friends.length === 0) {
@@ -68,7 +72,11 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
 
   const submitPost = (post: string | Partial<Post>) => {
     if (typeof post === 'string') {
-      dispatch(importPost(post));
+      dispatch(
+        importPost(post, () => {
+          setOpenFailedImport(true);
+        }),
+      );
     } else {
       dispatch(createPost(post));
     }
@@ -77,14 +85,36 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   };
 
   return (
-    <PostCreate
-      open={open}
-      people={mentionable}
-      uploadProgress={progress}
-      onClose={onClose}
-      onSubmit={submitPost}
-      onSearchPeople={handleSearchPeople}
-      onUploadFile={handleFileUpload}
-    />
+    <>
+      <PostCreate
+        open={open}
+        people={mentionable}
+        uploadProgress={progress}
+        onClose={onClose}
+        onSubmit={submitPost}
+        onSearchPeople={handleSearchPeople}
+        onUploadFile={handleFileUpload}
+      />
+      <PromptComponent
+        title={'Import Failed!'}
+        subtitle={`You are trying to import a post formerly deleted \n by a Myriad administrator`}
+        open={openFailedImport}
+        icon="warning"
+        onCancel={() => setOpenFailedImport(false)}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => setOpenFailedImport(false)}>
+            Okay
+          </Button>
+        </div>
+      </PromptComponent>
+    </>
   );
 };

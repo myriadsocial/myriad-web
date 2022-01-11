@@ -5,6 +5,7 @@ import {Comment, CommentProps} from 'src/interfaces/comment';
 import {SectionType, Vote} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import * as CommentAPI from 'src/lib/api/comment';
+import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {RootState} from 'src/reducers';
 import {increaseCommentCount} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
@@ -13,6 +14,7 @@ type useCommentHookProps = {
   error: any;
   loading: boolean;
   comments: Comment[];
+  hasMoreComment: boolean;
   loadInitComment: (section?: SectionType) => void;
   loadMoreComment: () => void;
   reply: (user: User, comment: CommentProps, callback?: () => void) => void;
@@ -28,13 +30,20 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
+  const [dataMeta, setDataMeta] = useState<ListMeta>({
+    currentPage: 0,
+    itemsPerPage: 0,
+    totalItemCount: 0,
+    totalPageCount: 0,
+    nextPage: 0,
+  });
 
   const load = async (section?: SectionType) => {
     setLoading(true);
 
     try {
-      const {data: comments} = await CommentAPI.loadComments(referenceId, section);
-
+      const {data: comments, meta} = await CommentAPI.loadComments(1, referenceId, section);
+      setDataMeta(meta);
       setComments(
         comments.map(comment => {
           const upvoted = comment.votes?.filter(vote => vote.userId === user?.id && vote.state);
@@ -55,8 +64,8 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
 
   const loadMore = async () => {
     try {
-      const {data} = await CommentAPI.loadComments(referenceId);
-
+      const {data, meta} = await CommentAPI.loadComments(dataMeta.nextPage ?? 1, referenceId);
+      setDataMeta(meta);
       setComments([
         ...comments,
         ...data.map(comment => {
@@ -240,7 +249,7 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
 
   const loadReplies = async (referenceId: string, deep: number) => {
     try {
-      const {data} = await CommentAPI.loadComments(referenceId);
+      const {data} = await CommentAPI.loadComments(1, referenceId);
 
       const comments = data.map(comment => {
         const upvoted = comment.votes?.filter(vote => vote.userId === user?.id && vote.state);
@@ -284,6 +293,7 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
     error,
     loading,
     comments,
+    hasMoreComment: dataMeta.totalPageCount > dataMeta.currentPage,
     loadInitComment: load,
     loadMoreComment: loadMore,
     reply,
