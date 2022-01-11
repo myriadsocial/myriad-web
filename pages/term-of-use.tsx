@@ -36,14 +36,6 @@ const TermOfUse: React.FC = () => {
       <MyriadIcon />
       <div className={style.content}>
         <h1 className={`${style.center} ${style.title}`}>TERMS OF USE</h1>
-        <h3 className={`${style.center} ${style.subtitle}`}>Subject to Change</h3>
-        <p className={`${style.paragraph}`}>
-          [Please be noted that this terms of use may be subject to changes in accordance with the
-          local data protection laws applicable in certain jurisdictions. We advised to also consult
-          with other local counsel if Myriad will be offered in other jurisdictions that has strict
-          data protection laws, such as Estonia, etc. before offering Myriad service in that
-          particular country]
-        </p>
         <p className={`${style.paragraph}`}>
           THESE TERMS OF USE MUST BE READ BEFORE USING MYRIAD SERVICE. THE USAGE OF ANY PART OF THE
           MYRIAD SERVICE INDICATES ACCEPTANCE OF THESE TERMS OF USE.
@@ -84,41 +76,22 @@ const TermOfUse: React.FC = () => {
           <h2>
             <li>YOUR ACCOUNT WITH US</li>
           </h2>
-
           <p className={`${style.paragraph}`}>
-            The www.myriad.social site, mobile application, as well as any application listed on
-            this website as produced by Myriad (“Platform”) is managed by Myriad.Social including
-            its subsidiaries and affiliated companies (hereinafter referred to as “we”, “us”, “our”,
-            “Myriad”, or “Platform”). By accessing and/or using any part of the Platform and our
-            related websites, services, applications, products and content (collectively, the
-            “Service”) you acknowledge that you have read and understood, and agree to the Terms of
-            Use (“Terms”) and other terms and conditions in relation to the Platform as referred to
-            in these Terms. If you do not agree to be bound by these Terms, you may not access or
-            use any part of the Platform.
+            To access or use some of our Services, you must create an account with us. When you
+            create this account, you must provide your user account information. It is important
+            that you cannot change your user account which is different from the first time you
+            register your account on our Service.
           </p>
           <p className={`${style.paragraph}`}>
-            These Terms constitute a binding legal agreement between you as an individual user of
-            the Platform (“you”, “your”, “user”) and Myriad. Users of the Platform shall include
-            community operator, content hosters, server operator, advertisers, experience creators,
-            and ad-space operator, any other ad-relevant content creators, and Myriad users. You
-            must comply with the age of majority as specified under the applicable laws to these
-            Terms to use the Platform. If you are accepting these Terms and using the Services on
-            behalf of a company, organization, government, or other legal entity, you represent and
-            warrant that you are authorized to do so and have the authority to bind such entity to
-            these Terms, in which case the words “you” and “your” as used in these Terms shall refer
-            to such entity.
+            These terms are also accessible to you on the Platform and when you are using our
+            Services at all times. We will process your registration, and your account will be
+            automatically active after the registration. It is important that you keep your account
+            password (or a private key) confidential and that you do not disclose it to any third
+            party. If you know or suspect that any third party knows your password or has accessed
+            your account, you must notify us immediately. We may require you to authenticate certain
+            actions taken when you are using the Platform and/or Services by using a digital
+            signature or similar electronic authentication process.
           </p>
-          <p className={`${style.paragraph}`}>
-            Please note that we may change, modify, add and delete these Terms at any time for any
-            reason, including but not limited to the necessity to comply with any law or regulation
-            binding on us or to reflect a change to our operational practices, provided that in any
-            case, we will use reasonable effort to provide notice of material changes on the
-            Platform. Every time you use the Platform or our service, please check [these Terms -
-            insert hyperlink to Myriad&apos;s T&C] to ensure that you have reviewed the current
-            version. By continuing to use any part of the Platform after such changes to these
-            Terms, you agree and consent to the changes.
-          </p>
-
           <h2>
             <li>USING OUR SERVICES</li>
           </h2>
@@ -253,22 +226,24 @@ const TermOfUse: React.FC = () => {
           <h2>
             <li>OUR POLICY ON SUSPENSION OR WITHDRAWAL OF PLATFORM</li>
           </h2>
+          <p className={`${style.paragraph}`}>Our Platform is made available free of charge.</p>
           <p className={`${style.paragraph}`}>
-            Our Platform is made available free of charge. We do not guarantee that our Platform, or
-            any content on it, will always be available or be uninterrupted. We may suspend or
-            withdraw or restrict the availability of any or any part of our Platform for business
-            and operational reasons. We will try to give you reasonable notice of any suspension or
-            withdrawal. You are also responsible for ensuring that all persons who access our
-            Platform through your internet connection are aware of these terms and conditions and
-            other applicable terms and conditions, and that they comply with them.
+            We do not guarantee that our Platform, or any content on it, will always be available or
+            be uninterrupted. We may suspend or withdraw or restrict the availability of any or any
+            part of our Platform for business and operational reasons. We will try to give you
+            reasonable notice of any suspension or withdrawal.
           </p>
-
+          <p className={`${style.paragraph}`}>
+            You are also responsible for ensuring that all persons who access our Platform through
+            your internet connection are aware of these terms and conditions and other applicable
+            terms and conditions, and that they comply with them.
+          </p>
           <h2>
             <li>CONTENT ON THE PLATFORM</li>
           </h2>
           <p className={`${style.paragraph}`}>
             YOUR UPLOADED OR HOSTED TEXT, IMAGES, VIDEOS, SOUNDS, AND OR ANY OTHER MATERIALS
-            (HEREINAFTER REFERRED TO AS THE “CONTENT”) ON OUR PLATFORM IS YOUR OWNERSHIP AND
+            (HEREINAFTER REFERRED TO AS THE “<b>CONTENT</b>”) ON OUR PLATFORM IS YOUR OWNERSHIP AND
             RESPONSIBILITY TO THE EXTENT PERMITTED BY THE APPLICABLE LAWS. WE DO NOT CLAIM OWNERSHIP
             NOR RESPONSIBILITY OF YOUR CONTENT FOR ANY WHATEVER REASONS.
           </p>
@@ -282,13 +257,17 @@ const TermOfUse: React.FC = () => {
           <p className={`${style.paragraph}`}>
             You should only provide Content that you are comfortable sharing with others. Any use or
             reliance on any Content or materials posted through the Platform or obtained by you
-            through the Platform is at your own risk. We do not endorse, support, represent or
-            guarantee the completeness, truthfulness, accuracy, or reliability of any Content or
-            communications posted via the Platform or endorse any opinions expressed via the
-            Platform. We do not verify nor approve Your Content posted via the Services and, we
-            cannot take responsibility for Your Content. The views expressed by Users on our
-            Platform do not represent our views or values nor intended to amount to advice on which
-            you should rely.{' '}
+            through the Platform is at your own risk.
+          </p>
+          <p className={`${style.paragraph}`}>
+            We do not endorse, support, represent or guarantee the completeness, truthfulness,
+            accuracy, or reliability of any Content or communications posted via the Platform or
+            endorse any opinions expressed via the Platform.
+          </p>
+          <p className={`${style.paragraph}`}>
+            We do not verify nor approve Your Content posted via the Services and, we cannot take
+            responsibility for Your Content. The views expressed by Users on our Platform do not
+            represent our views or values nor intended to amount to advice on which you should rely.
           </p>
           <p className={`${style.paragraph}`}>
             You understand that by using our Platform or our Services, you may be exposed to Content
@@ -304,7 +283,9 @@ const TermOfUse: React.FC = () => {
             that we have blocked your uploaded content in our Platform, please contact us.
           </p>
           <ol>
-            <li>Our Content</li>
+            <li>
+              <b>Our Content</b>
+            </li>
             <ul>
               <li>
                 <b>We Own Content Solely Provided By Us (Excluding User Content)</b>. As between you
@@ -319,7 +300,7 @@ const TermOfUse: React.FC = () => {
                 expressly granted in and to such content and materials.
               </li>
               <li>
-                <b>Grant of Rights from You to Us</b>. Subject to these Terms, you are hereby
+                <b>Grant of Rights from Us to You</b>. Subject to these Terms, you are hereby
                 granted a non-exclusive, limited, non-transferable, non-sublicensable, revocable,
                 worldwide license to access and use the Services, including to download the Platform
                 on a permitted device, and to access the Service solely for your personal or
@@ -343,7 +324,9 @@ const TermOfUse: React.FC = () => {
                 User Content).
               </li>
             </ul>
-            <li>User-Generated Content</li>
+            <li>
+              <b>User-Generated Content</b>
+            </li>
             <ul>
               <li>
                 <b>Create or Post Content</b>. Users of the Services may be permitted to upload,
@@ -367,8 +350,8 @@ const TermOfUse: React.FC = () => {
                 been verified or approved by us. The views expressed by other users on the Services
                 (including through use of the Myriad Tokens) do not represent our views or values.
                 You have the right to sell your Content posted in our Platform to other Myriad’s
-                User and/or other third party. You also have the right to sell the [Myriad Tokens,
-                Social Currency, and NFTs] in the third-party provider, provided that if you wish to
+                User and/or other third party. You also have the right to sell the Myriad Tokens,
+                Social Currency, and NFTs in the third-party provider, provided that if you wish to
                 sell any User Content in a third-party provider, you will be subject to the terms
                 and conditions set out in such third-party provider (e.g.&nbsp;
                 <Link href={`https://opensea.io`}>
@@ -417,23 +400,23 @@ const TermOfUse: React.FC = () => {
                 the content to submit it to the Services.
               </li>
               <li>
-                <b>You Own Your Content</b>. Except as expressly provided otherwise in these Terms,
-                you or the owner of your User Content still own the copyright and any other
-                intellectual property rights in User Content sent to us, but by submitting User
-                Content via the Services, you hereby grant (i) to us and our affiliates, agents,
-                services providers, partners and other connected third parties an unconditional
-                irrevocable, non-exclusive, royalty-free, fully transferable (including
-                sub-licensable), perpetual worldwide licence to use, modify, adapt, reproduce, make
-                derivative works of, publish and/or transmit, and/or distribute and to authorize
-                others users of the Services and other third-parties to view, access, use, download,
-                modify, adapt, reproduce, make derivative works of, publish and/or transmit your
-                User Content in any format and on any platform, either now known or hereinafter
-                invented; (ii) to other users of the Services an unconditional irrevocable,
-                non-exclusive, royalty-free, perpetual worldwide licence to use, modify, adapt,
-                reproduce, make derivative works of, download, publish and/or transmit, and/or
-                distribute some or all of your User Content in any format and on any platform,
-                either now known or hereinafter invented for the purpose of generating other User
-                Content or viewing your User Content for entertainment or other private,
+                <b>You Own Your Content and Grant of Rights from You to Us</b>. Except as expressly
+                provided otherwise in these Terms, you or the owner of your User Content still own
+                the copyright and any other intellectual property rights in User Content sent to us,
+                but by submitting User Content via the Services, you hereby grant (i) to us and our
+                affiliates, agents, services providers, partners and other connected third parties
+                an unconditional irrevocable, non-exclusive, royalty-free, fully transferable
+                (including sub-licensable), perpetual worldwide licence to use, modify, adapt,
+                reproduce, make derivative works of, publish and/or transmit, and/or distribute and
+                to authorize others users of the Services and other third-parties to view, access,
+                use, download, modify, adapt, reproduce, make derivative works of, publish and/or
+                transmit your User Content in any format and on any platform, either now known or
+                hereinafter invented; (ii) to other users of the Services an unconditional
+                irrevocable, non-exclusive, royalty-free, perpetual worldwide licence to use,
+                modify, adapt, reproduce, make derivative works of, download, publish and/or
+                transmit, and/or distribute some or all of your User Content in any format and on
+                any platform, either now known or hereinafter invented for the purpose of generating
+                other User Content or viewing your User Content for entertainment or other private,
                 non-commercial purposes. You further grant us and our affiliates, agents, services
                 providers, partners and other connected third parties a royalty-free license to use
                 your username, image, voice, and likeness to identify you as the source of any of
@@ -458,12 +441,11 @@ const TermOfUse: React.FC = () => {
               </li>
             </ul>
           </ol>
-
           <h2>
             <li>TIPPING AND NFT FEATURES</li>
           </h2>
           <p className={`${style.paragraph}`}>
-            In addition to Myriad rights under these Terms, User grants Myriad an unconditional
+            In addition to Myriad User rights under these Terms, User grants Myriad an unconditional
             irrevocable, non-exclusive, royalty-free, fully transferable (including sub-licensable),
             perpetual worldwide licence to:
           </p>
@@ -557,13 +539,16 @@ const TermOfUse: React.FC = () => {
           </h2>
           <p className={`${style.paragraph}`}>
             You may use the Service or install any Myriad element only at Your facilities at Your
-            direct possession. You must be appropriately licensed as stated in these Terms for any
-            individual that uses Your service. We grant You a non-exclusive, non-transferable,
-            perpetual (except for subscription based licenses) to use our Service or install any
-            Myriad element. You must not: (i) lease, loan, resell, sublicense or otherwise
-            distribute the Myriad materials; (ii) distribute or publish keycode(s); (iii) make any
-            use of the Service or Platform or Myriad element with respect to these Terms other than
-            as expressly permitted in accordance with these Terms.
+            direct possession or control. You must be appropriately licensed as stated in these
+            Terms for any individual that uses Your service. We grant you a non-exclusive,
+            non-transferable, perpetual (except for subscription based licenses) to use our Service
+            or install any Myriad element subject to and in accordance with the terms of this
+            agreement and strictly adopt licensing requirement under GNU AFFERO GENERAL PUBLIC
+            LICENSE [https://www.gnu.org/licenses/agpl-3.0-standalone.html. You must not: (i) lease,
+            loan, resell, sublicense or otherwise distribute the Myriad materials; (ii) distribute
+            or publish keycode(s); (iii) make any use of the Service or Platform or Myriad element
+            with respect to these Terms other than as expressly permitted in accordance with these
+            Terms.
           </p>
           <p className={`${style.paragraph}`}>
             With Myriad’s prior written consent, You may permit any third party to access the
@@ -583,16 +568,15 @@ const TermOfUse: React.FC = () => {
             own business operations; (v) You shall be responsible for any additional software,
             migration tools, or third party software needed to effect such transition.
           </p>
-
           <h2>
-            <li>MYRIAD FEDERATION</li>
+            <li>CRYPTO CURRENCY POLICY</li>
           </h2>
           <p className={`${style.paragraph}`}>
             As a Myriad’s User, you may be provided or obtained, a Myriad Token ($MYRIA) subject to
             the terms and conditions set out under this section. Myriad token is a digital asset
-            designed to work as a utility token that provides access to the Myriad’s products and
+            designed to work as a utility token that provides access to Myriad’s products and
             services, including Myriad Platform. You may also send a tip using a cryptocurrency on
-            our Platform.
+            our Platform in accordance with these Terms.
           </p>
           <p className={`${style.paragraph}`}>
             <b>Who can obtain Myriad Token?</b>
@@ -659,7 +643,6 @@ const TermOfUse: React.FC = () => {
               balance to other cryptocurrency, token, or fiat currency.
             </li>
           </ul>
-
           <h2>
             <li>INDEMNITY</li>
           </h2>
@@ -713,21 +696,26 @@ const TermOfUse: React.FC = () => {
               BE LIMITED TO THE AMOUNT PAID BY YOU TO MYRIAD WITHIN THE LAST 12 MONTHS.
             </li>
             <li>ANY LOSS OR DAMAGE WHICH MAY BE INCURRED BY YOU AS A RESULT OF: </li>
-            <li>
-              ANY RELIANCE PLACE BY YOU ON THE COMPLETENESS ACCURACY OR EXISTENCE OF ANY
-              ADVERTISING, OR AS A RESULT OF ANY RELATIONSHIP OR TRANSACTION BETWEEN YOU AND ANY
-              ADVERTISER OR SPONSOR WHOSE ADVERTISING APPEARS ON THE SERVICE;
-            </li>
-            <li>
-              ANY CHANGES WHICH WE MAY MAKE TO THE SERVICES, OR FOR ANY PERMANENT OR TEMPORARY
-              CESSATION IN THE PROVISION OF THE SERVICES (OR ANY FEATURES WITHIN THE SERVICES);
-            </li>
-            <li>
-              THE DELETION OF, CORRUPTION OF, OR FAILURE TO STORE, ANY CONTENT AND OTHER
-              COMMUNICATIONS DATA MAINTAINED OR TRANSMITTED BY OR THROUGH YOUR USE OF THE SERVICES;
-            </li>
-            <li>YOUR FAILURE TO PROVIDE US WITH ACCURATE ACCOUNT INFORMATION; OR</li>
-            <li>YOUR FAILURE TO KEEP YOUR PASSWORD OR ACCOUNT DETAILS SECURE AND CONFIDENTIAL.</li>
+            <ul>
+              <li>
+                ANY RELIANCE PLACE BY YOU ON THE COMPLETENESS ACCURACY OR EXISTENCE OF ANY
+                ADVERTISING, OR AS A RESULT OF ANY RELATIONSHIP OR TRANSACTION BETWEEN YOU AND ANY
+                ADVERTISER OR SPONSOR WHOSE ADVERTISING APPEARS ON THE SERVICE;
+              </li>
+              <li>
+                ANY CHANGES WHICH WE MAY MAKE TO THE SERVICES, OR FOR ANY PERMANENT OR TEMPORARY
+                CESSATION IN THE PROVISION OF THE SERVICES (OR ANY FEATURES WITHIN THE SERVICES);
+              </li>
+              <li>
+                THE DELETION OF, CORRUPTION OF, OR FAILURE TO STORE, ANY CONTENT AND OTHER
+                COMMUNICATIONS DATA MAINTAINED OR TRANSMITTED BY OR THROUGH YOUR USE OF THE
+                SERVICES;
+              </li>
+              <li>YOUR FAILURE TO PROVIDE US WITH ACCURATE ACCOUNT INFORMATION; OR</li>
+              <li>
+                YOUR FAILURE TO KEEP YOUR PASSWORD OR ACCOUNT DETAILS SECURE AND CONFIDENTIAL.
+              </li>
+            </ul>
           </ol>
           <p className={`${style.paragraph}`}>
             PLEASE NOTE THAT WE ONLY PROVIDE OUR PLATFORM FOR DOMESTIC AND PRIVATE USE. SHOULD YOU
@@ -746,8 +734,10 @@ const TermOfUse: React.FC = () => {
           </p>
           <p className={`${style.paragraph}`}>
             THESE LIMITATIONS ON OUR LIABILITY TO YOU SHALL APPLY WHETHER OR NOT WE HAVE BEEN
-            ADVISED OF OR SHOULD HAVE BEEN AWARE OF THE POSSIBILITY OF ANY SUCH LOSSES ARISING. YOU
-            ARE RESPONSIBLE FOR ANY MOBILE CHARGES THAT MAY APPLY TO YOUR USE OF OUR SERVICE,
+            ADVISED OF OR SHOULD HAVE BEEN AWARE OF THE POSSIBILITY OF ANY SUCH LOSSES ARISING.
+          </p>
+          <p className={`${style.paragraph}`}>
+            YOU ARE RESPONSIBLE FOR ANY MOBILE CHARGES THAT MAY APPLY TO YOUR USE OF OUR SERVICE,
             INCLUDING TEXT-MESSAGING AND DATA CHARGES. IF YOU’RE UNSURE WHAT THOSE CHARGES MAY BE,
             YOU SHOULD ASK YOUR SERVICE PROVIDER BEFORE USING THE SERVICE.
           </p>
@@ -784,9 +774,9 @@ const TermOfUse: React.FC = () => {
             agreement does not (a) govern any Claim by Myriad for infringement of its intellectual
             property or access to the Services that is unauthorized or exceeds authorization granted
             in these Terms or (b) bar you from making use of applicable small claims court
-            procedures in appropriate cases. You agree that the Arbitration Court of the Chamber of
-            Commerce and Industry of Estonia in Tallinn (hereinafter: the Arbitration Court) governs
-            the interpretation and enforcement of this provision, and that you and Myriad are each
+            procedures in appropriate cases. You agree that the Vilnius Court of Commercial
+            Arbitration in in Vilnius, Lithuania (hereinafter: the Arbitration Court) governs the
+            interpretation and enforcement of this provision, and that you and Myriad are each
             waiving the right to a trial by jury or to participate in a class action. This
             arbitration provision will survive any termination of these Terms. If you wish to begin
             an arbitration proceeding, after following the informal dispute resolution procedure,
@@ -817,7 +807,7 @@ const TermOfUse: React.FC = () => {
           <p className={`${style.paragraph}`}>
             You can reach or notify us at:&nbsp;
             <a href={`mailto:${publicRuntimeConfig.myriadSupportMail}`} className={style.link}>
-              support@myriad.social
+              {publicRuntimeConfig.myriadSupportMail}
             </a>
           </p>
           <h2>
@@ -865,7 +855,7 @@ const TermOfUse: React.FC = () => {
           <p className={`${style.paragraph}`}>
             <b>Security</b>. We do not guarantee that our Services will be secure or free from bugs
             or viruses. You are responsible for configuring your information technology, computer
-            programme and platform to access our Platform. You should use your own virus protection
+            programmes and platform to access our Platform. You should use your own virus protection
             software.
           </p>
           <p className={`${style.paragraph}`}>
@@ -878,7 +868,7 @@ const TermOfUse: React.FC = () => {
             <b>Governing Law</b>. These Terms and any dispute or claim (including non-contractual
             disputes or claims) arising out of or in connection with it or its subject matter or
             formation shall be governed by and construed in accordance with the laws of the Republic
-            of Estonia.
+            of Lithuania.
           </p>
         </ol>
       </div>
