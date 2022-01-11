@@ -26,7 +26,7 @@ const BannerStatusComponent: React.FC<Props> = props => {
   const appName = publicRuntimeConfig.appName;
   const appStatus = publicRuntimeConfig.appStatus;
   const {
-    text = `You are currently using ${appName} ${publicRuntimeConfig.appVersion}. It’s not audited so use it at your own risk!`,
+    text = `${appName} Development ${publicRuntimeConfig.appVersion} is not fully audited, please use at your own risk.`,
   } = props;
 
   React.useEffect(() => {

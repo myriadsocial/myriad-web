@@ -455,7 +455,10 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
-            description: notification.message,
+            description:
+              notification.message === 'mentioned you'
+                ? 'mentioned you in a comment'
+                : notification.message,
             badge: (
               <div className={style.circleSuccess}>
                 <SvgIcon
