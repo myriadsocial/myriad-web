@@ -17,6 +17,7 @@ export interface WalletState extends BaseState {
     profilePictureURL: string;
   };
   isTipSent: boolean;
+  fee: string | null;
 }
 
 const initialState: WalletState = {
@@ -28,6 +29,7 @@ const initialState: WalletState = {
   },
   tippedUserId: '',
   isTipSent: false,
+  fee: null,
 };
 
 export const WalletReducer: Redux.Reducer<WalletState, Actions> = (
@@ -74,6 +76,13 @@ export const WalletReducer: Redux.Reducer<WalletState, Actions> = (
       return {
         ...state,
         isTipSent: action.isTipSent,
+      };
+    }
+
+    case constants.SET_FEE: {
+      return {
+        ...state,
+        fee: action.fee,
       };
     }
 

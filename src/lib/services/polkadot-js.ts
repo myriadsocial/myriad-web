@@ -5,13 +5,8 @@ import {ApiPromise, WsProvider} from '@polkadot/api';
 import {Keyring} from '@polkadot/keyring';
 
 import BN from 'bn.js';
-
-export const connectToBlockchain = async (wsProvider: string): Promise<ApiPromise> => {
-  const provider = new WsProvider(wsProvider);
-  const api: ApiPromise = new ApiPromise(options({provider}));
-  await api.isReadyOrError;
-  return api;
-};
+import {BalanceDetail} from 'src/interfaces/balance';
+import {CurrencyId} from 'src/interfaces/currency';
 
 interface signAndSendExtrinsicProps {
   from: string;
@@ -27,12 +22,119 @@ interface SignTransactionCallbackProps {
   signerOpened?: boolean;
 }
 
+interface EstimateFeeResponseProps {
+  partialFee: string | null;
+  api: ApiPromise | null;
+}
+
+export const connectToBlockchain = async (wsProvider: string): Promise<ApiPromise> => {
+  const provider = new WsProvider(wsProvider);
+  const api: ApiPromise = new ApiPromise(options({provider}));
+  await api.isReadyOrError;
+  return api;
+};
+
+export const convertAcaBasedTxFee = async (
+  api: ApiPromise,
+  selectedCurrency: BalanceDetail,
+): Promise<number | null> => {
+  try {
+    const acaBasedTokenPoolInString = (
+      await api.query.dex.liquidityPool([{TOKEN: 'ACA'}, {TOKEN: selectedCurrency.id}])
+    ).toString();
+
+    const acaBasedTokenPools = acaBasedTokenPoolInString
+      .substring(1, acaBasedTokenPoolInString.length - 1)
+      .replace(/"/g, '')
+      .split(',');
+
+    const acaBasedTokenPool = parseInt(acaBasedTokenPools[1]) / 10 ** selectedCurrency.decimal;
+    const acaPool = parseInt(acaBasedTokenPools[0]) / 10 ** 13;
+    const tokenPerAca = acaBasedTokenPool / acaPool;
+    return tokenPerAca;
+  } catch (error) {
+    console.log({error});
+    return null;
+  }
+};
+
+export const estimateFee = async (
+  from: string,
+  to: string,
+  selectedCurrency: BalanceDetail,
+): Promise<EstimateFeeResponseProps> => {
+  try {
+    const {enableExtension} = await import('src/helpers/extension');
+
+    const allAccounts = await enableExtension();
+
+    const keyring = new Keyring();
+
+    const baseAddress = keyring.encodeAddress(from);
+
+    let finalPartialFee: string | null = null;
+
+    let acaBasedTxFee: number | null = null;
+
+    let api: ApiPromise | null = null;
+
+    if (allAccounts) {
+      // We select the first account matching baseAddress
+      // `account` is of type InjectedAccountWithMeta
+      const account = allAccounts.find(account => {
+        // address from session must match address on polkadot extension
+        return account.address === baseAddress;
+      });
+
+      // if account has not yet been imported to Polkadot.js extension
+      if (!account) {
+        throw {
+          Error: 'Please import your account first!',
+        };
+      }
+
+      // otherwise if account found
+      if (account) {
+        api = await connectToBlockchain(selectedCurrency.rpcURL);
+
+        if (api) {
+          const RAND_AMOUNT = 123;
+
+          const {partialFee} = selectedCurrency.native
+            ? await api.tx.balances.transfer(to, RAND_AMOUNT).paymentInfo(from)
+            : await api.tx.currencies
+                .transfer(to, {TOKEN: selectedCurrency.id}, RAND_AMOUNT)
+                .paymentInfo(from);
+
+          if (selectedCurrency.id === CurrencyId.AUSD) {
+            const tokenPerAca = await convertAcaBasedTxFee(api, selectedCurrency);
+            acaBasedTxFee = Number(partialFee.toString()) / 10 ** 13;
+            if (tokenPerAca) {
+              finalPartialFee = (acaBasedTxFee * tokenPerAca).toString();
+            }
+          } else {
+            finalPartialFee = partialFee.toString();
+          }
+        }
+      }
+    }
+    return {
+      partialFee: finalPartialFee,
+      api,
+    };
+  } catch (error) {
+    console.log({error});
+    Sentry.captureException(error);
+    return error;
+  }
+};
+
 export const signAndSendExtrinsic = async (
   {from, to, value, currencyId, wsAddress, native}: signAndSendExtrinsicProps,
   callback?: (param: SignTransactionCallbackProps) => void,
 ): Promise<string | null> => {
   try {
-    const {enableExtension} = await import('../../helpers/extension');
+    const {enableExtension} = await import('src/helpers/extension');
     const {web3FromSource} = await import('@polkadot/extension-dapp');
 
     const allAccounts = await enableExtension();
