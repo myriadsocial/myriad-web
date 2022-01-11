@@ -26,7 +26,7 @@ app.prepare().then(() => {
   );
 
   server.use(
-    /^\/api\/((?!auth).)+$/,
+    /^\/api\/((?!auth|healthcheck).)+$/,
     createProxyMiddleware({
       target: process.env.MYRIAD_API_URL,
       pathRewrite: path => path.replace('/api', '/'),

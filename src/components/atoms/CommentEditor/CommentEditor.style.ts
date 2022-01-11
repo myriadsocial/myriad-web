@@ -9,6 +9,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginRight: 12,
     },
     editor: {
+      width: 'calc(100% - 52px)',
       backgroundColor: theme.palette.background.paper,
       borderRadius: theme.spacing(1),
       marginBottom: theme.spacing(1),

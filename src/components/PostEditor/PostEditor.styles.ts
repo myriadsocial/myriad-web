@@ -21,5 +21,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       border: '1px solid #F6F6F6',
       borderRadius: theme.spacing(1.25, 1.25, 0, 0),
     },
+    wrapper: {
+      position: 'relative',
+    },
+    limit: {
+      position: 'absolute',
+      right: 0,
+      bottom: 0,
+    },
   }),
 );
