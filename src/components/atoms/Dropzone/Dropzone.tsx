@@ -279,7 +279,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
                 style={{visibility: 'visible'}}
                 src={preview[0]}
                 alt=""
-                className={styles.image}
+                className={styles.imageSingle}
               />
             </ShowIf>
             <ShowIf condition={type === 'image' && !isEdit}>
@@ -292,49 +292,66 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
                 />
               </ShowIf>
               <ShowIf condition={multiple}>
-                <ImageList rowHeight={128} cols={6} className={styles.preview}>
-                  {files.map((item, i) => (
-                    <ImageListItem
-                      key={i}
-                      cols={getCols()}
-                      rows={getRows()}
-                      classes={{item: styles.item}}>
-                      {item.loading && (
-                        <Skeleton
-                          variant="rect"
-                          animation={false}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                          width={115 * getCols()}
-                          height={128 * getRows()}>
-                          <SvgIcon
-                            component={ImagePlaceholder}
-                            viewBox="0 0 50 50"
-                            style={{width: 50, height: 50, visibility: 'visible'}}
-                          />
-                        </Skeleton>
-                      )}
-                      <img
-                        style={{visibility: item.loading ? 'hidden' : 'visible'}}
-                        src={item.preview}
-                        alt=""
-                        className={styles.image}
-                        onLoad={imageLoaded(i)}
-                      />
+                <ShowIf condition={files.length === 1}>
+                  <img
+                    style={{visibility: 'visible'}}
+                    src={preview[0]}
+                    alt=""
+                    className={styles.imageSingle}
+                  />
+                  <IconButton
+                    size="small"
+                    aria-label={`remove image`}
+                    className={styles.iconSingle}
+                    onClick={() => removeFile(0)}>
+                    <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
+                  </IconButton>
+                </ShowIf>
+                <ShowIf condition={files.length > 1}>
+                  <ImageList rowHeight={128} cols={6} className={styles.preview}>
+                    {files.map((item, i) => (
+                      <ImageListItem
+                        key={i}
+                        cols={getCols()}
+                        rows={getRows()}
+                        classes={{item: styles.item}}>
+                        {item.loading && (
+                          <Skeleton
+                            variant="rect"
+                            animation={false}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                            width={115 * getCols()}
+                            height={128 * getRows()}>
+                            <SvgIcon
+                              component={ImagePlaceholder}
+                              viewBox="0 0 50 50"
+                              style={{width: 50, height: 50, visibility: 'visible'}}
+                            />
+                          </Skeleton>
+                        )}
+                        <img
+                          style={{visibility: item.loading ? 'hidden' : 'visible'}}
+                          src={item.preview}
+                          alt=""
+                          className={styles.image}
+                          onLoad={imageLoaded(i)}
+                        />
 
-                      <IconButton
-                        size="small"
-                        aria-label={`remove image`}
-                        className={styles.icon}
-                        onClick={() => removeFile(i)}>
-                        <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
-                      </IconButton>
-                    </ImageListItem>
-                  ))}
-                </ImageList>
+                        <IconButton
+                          size="small"
+                          aria-label={`remove image`}
+                          className={styles.icon}
+                          onClick={() => removeFile(i)}>
+                          <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
+                        </IconButton>
+                      </ImageListItem>
+                    ))}
+                  </ImageList>
+                </ShowIf>
               </ShowIf>
             </ShowIf>
 

@@ -45,8 +45,15 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
     image: {
       objectFit: 'cover',
       objectPosition: 'center',
-      height: props => (props.multiple === false ? '80px' : '100%'),
-      width: props => (props.multiple === false ? '80px' : '100%'),
+      height: '100%',
+      width: '100%',
+      marginTop: 20,
+    },
+    imageSingle: {
+      objectFit: 'cover',
+      objectPosition: 'center',
+      height: '80px',
+      width: '80px',
       marginTop: 20,
     },
     icon: {
@@ -60,6 +67,23 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       position: 'absolute',
       top: 0,
       right: 0,
+
+      '&:hover': {
+        background: '#FFF',
+      },
+    },
+    iconSingle: {
+      filter: 'drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.16))',
+      color: theme.palette.primary.main,
+      background: '#FFF',
+      padding: 0,
+      height: 24,
+      width: 24,
+      fontSize: '1rem',
+      alignSelf: 'center',
+      position: 'absolute',
+      top: '15px',
+      marginLeft: '80px',
 
       '&:hover': {
         background: '#FFF',
