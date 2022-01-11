@@ -106,6 +106,10 @@ export interface SetDownvoting extends Action {
   reference: Post | Comment | null;
 }
 
+export interface ResetDownvoting extends Action {
+  type: constants.RESET_DOWNVOTING;
+}
+
 export interface DownvotePost extends Action {
   type: constants.DOWNVOTE_POST;
   postId: string;
@@ -168,6 +172,7 @@ export type Actions =
   | DecreaseCommentCount
   | ShowToasterSnack
   | UpdatePostVisibility
+  | ResetDownvoting
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -197,6 +202,10 @@ export const setPost = (post: Post): FetchDedicatedPost => ({
 export const setDownvoting = (reference: Post | Comment | null): SetDownvoting => ({
   type: constants.SET_DOWNVOTING,
   reference,
+});
+
+export const resetDownvoting = (): ResetDownvoting => ({
+  type: constants.RESET_DOWNVOTING,
 });
 
 export const increaseCommentCount = (
@@ -685,6 +694,8 @@ export const downvote: ThunkActionCreator<Actions, RootState> =
           vote,
         });
       }
+
+      dispatch(resetDownvoting());
 
       callback && callback(vote);
     } catch (error) {
