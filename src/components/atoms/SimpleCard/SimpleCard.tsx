@@ -182,8 +182,7 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
         open={isOpen}
         icon="danger"
         title="Delete Experience?"
-        subtitle="You will not able to get post update
-based on this experience">
+        subtitle="Their posts won't be shown in your timeline anymore and you may or may not be able to see their complete profile. Are you sure?">
         <div className={`${classes['flex-center']}`}>
           <Button
             onClick={handleCancel}

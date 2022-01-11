@@ -152,7 +152,7 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
-            description: 'Mention you in a post',
+            description: 'Mentioned you in a post',
             badge: (
               <div className={style.circle}>
                 <SvgIcon
@@ -266,7 +266,7 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: 'Tips received',
             avatar: notification.fromUserId.profilePictureURL,
-            description: `Your reply recieved tip from ${notification.fromUserId.name} (${notification.message})}`,
+            description: `Your reply received tip from ${notification.fromUserId.name} (${notification.message})`,
             badge: (
               <div className={style.circleSuccess}>
                 <SvgIcon
@@ -455,7 +455,10 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
-            description: notification.message,
+            description:
+              notification.message === 'mentioned you'
+                ? 'mentioned you in a comment'
+                : notification.message,
             badge: (
               <div className={style.circleSuccess}>
                 <SvgIcon

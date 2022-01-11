@@ -125,7 +125,7 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
       )}
       <PromptComponent
         title="Profile saved!"
-        subtitle={<Typography>Your profile changes has saved</Typography>}
+        subtitle={<Typography>You have saved your changes.</Typography>}
         icon="success"
         open={open}
         onCancel={openPrompt}>

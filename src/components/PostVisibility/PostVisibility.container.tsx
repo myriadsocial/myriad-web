@@ -93,7 +93,9 @@ export const PostVisibilityContainer: React.FC<ReportContainerProps> = props => 
         subtitle={
           <>
             <Typography>By setting the visibility setting to&nbsp; "Only Me",</Typography>
-            <Typography>you will not be able to receive any tips from other users.</Typography>
+            <Typography>
+              this post will not be able to receive any tips from other users.
+            </Typography>
           </>
         }
         icon="warning"

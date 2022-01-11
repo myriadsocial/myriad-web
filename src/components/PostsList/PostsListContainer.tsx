@@ -161,7 +161,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
         open={sendTipOpened}
         onClose={closeSendTip}
         title="Send Tip"
-        subtitle="Find this post insightful? Send a tip!">
+        subtitle="Find this user insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
 

@@ -13,7 +13,7 @@ import {debounce} from 'lodash';
 const SearchBox: React.FC<SearchBoxProps> = ({
   color = SearchBoxColor.PRIMARY,
   ariaLabel = 'search-box',
-  placeholder = 'Search for people, topics or experience in Myriad',
+  placeholder = 'Search for people, topics, or experiences in Myriad',
   isDisabled = false,
   onSubmit,
   ...props

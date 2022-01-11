@@ -55,14 +55,13 @@ export const PostVisibility: React.FC<ReportProps> = props => {
 
   return (
     <Modal title="Post Visibility" open={open} onClose={onClose} className={styles.root}>
-      <Typography variant="h5">Filter the audience who can see this post</Typography>
+      <Typography variant="h5">Define who can see this post.</Typography>
       <Typography variant="subtitle1" color="textSecondary" className={styles.fontSize}>
-        This post is visible to&nbsp;
         {reference.visibility === Visibility.FRIEND
-          ? 'Friends Only'
+          ? 'Only you and your friends can see this post.'
           : reference.visibility === Visibility.PRIVATE
-          ? 'you only'
-          : reference.visibility}
+          ? 'Only you can see this post.'
+          : 'This post is visible to everyone'}
       </Typography>
 
       <List dense={false} className={styles.list}>

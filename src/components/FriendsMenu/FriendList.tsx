@@ -181,7 +181,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       closeConfirmRemoveFriend();
 
       openToasterSnack({
-        message: `${currentFriend?.name} has removed from your friend list`,
+        message: `${currentFriend?.name} has been removed from your friend lists`,
         variant: 'success',
       });
 
@@ -377,7 +377,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         open={sendTipOpened}
         onClose={closeSendTip}
         title="Send Tip"
-        subtitle="Find this post insightful? Send a tip!">
+        subtitle="Find this user insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
 
@@ -423,7 +423,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         open={openRemoveFriend}
         icon="danger"
         title={`Unfriend ${currentFriend ? currentFriend.name : 'Unknown'}?`}
-        subtitle="You will not able to search and see post from this user">
+        subtitle="Their posts won't be shown in your timeline anymore and you may or may not be able to see their complete profile. Are you sure?">
         <div className={`${style.flexCenter}`}>
           <Button
             onClick={closeConfirmRemoveFriend}
@@ -448,7 +448,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         open={openBlockUser}
         icon="danger"
         title="Block User?"
-        subtitle="You will not able to search and see post from this user">
+        subtitle="Their posts won't be shown in your timeline anymore and you may or may not be able to see their complete profile. Are you sure?">
         <div className={`${style.flexCenter}`}>
           <Button
             onClick={closeConfirmBlockUser}
