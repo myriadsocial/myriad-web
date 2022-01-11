@@ -46,6 +46,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: 40,
       marginRight: 16,
       background: '#424242',
+      cursor: 'pointer',
     },
     link: {textDecoration: 'none'},
     name: {

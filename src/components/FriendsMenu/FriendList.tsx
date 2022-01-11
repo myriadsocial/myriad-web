@@ -267,9 +267,11 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                   className={style.option}
                   alignItems="center">
                   <ListItemAvatar>
-                    <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
-                      {acronym(friend.name)}
-                    </Avatar>
+                    <Link href={`/profile/${friend.id}`}>
+                      <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
+                        {acronym(friend.name)}
+                      </Avatar>
+                    </Link>
                   </ListItemAvatar>
                   <ListItemText>
                     <Link href={`/profile/${friend.id}`}>
@@ -326,9 +328,11 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                   className={style.option}
                   alignItems="center">
                   <ListItemAvatar>
-                    <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
-                      {acronym(friend.name)}
-                    </Avatar>
+                    <Link href={`/profile/${friend.id}`}>
+                      <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
+                        {acronym(friend.name)}
+                      </Avatar>
+                    </Link>
                   </ListItemAvatar>
                   <ListItemText>
                     <Link href={`/profile/${friend.id}`}>
