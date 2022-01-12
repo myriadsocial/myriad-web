@@ -3,8 +3,10 @@ import {Balance, OrmlAccountData} from '@open-web3/orml-types/interfaces';
 import * as Sentry from '@sentry/nextjs';
 
 import {ApiPromise, WsProvider} from '@polkadot/api';
+import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {Keyring} from '@polkadot/keyring';
 import {u128, u32, UInt} from '@polkadot/types';
+import {numberToHex} from '@polkadot/util';
 
 import {NoAccountException} from './errors/NoAccountException';
 
@@ -135,6 +137,33 @@ export const estimateFee = async (
     console.log({error});
     Sentry.captureException(error);
     return error;
+  }
+};
+
+export const signWithExtension = async (
+  account: InjectedAccountWithMeta,
+): Promise<string | null> => {
+  try {
+    const {web3FromSource} = await import('@polkadot/extension-dapp');
+
+    const injector = await web3FromSource(account.meta.source);
+    const signRaw = injector?.signer?.signRaw;
+
+    if (signRaw) {
+      const {signature} = await signRaw({
+        address: account.address,
+        data: numberToHex(1),
+        type: 'bytes',
+      });
+
+      console.log({signature});
+      return signature;
+    } else {
+      throw 'signRaw error!';
+    }
+  } catch (error) {
+    console.log({error});
+    return null;
   }
 };
 
