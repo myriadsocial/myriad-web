@@ -11,6 +11,7 @@ import {User} from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
+import {signWithExtension} from 'src/lib/services/polkadot-js';
 import {setError} from 'src/reducers/base/actions';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
@@ -19,6 +20,30 @@ export const useAuthHook = () => {
   const {publicRuntimeConfig} = getConfig();
 
   const dispatch = useDispatch();
+
+  const signInUsingPolkadotExt = async (
+    account: InjectedAccountWithMeta,
+  ): Promise<string | null> => {
+    try {
+      const signature = await signWithExtension(account);
+
+      return signature;
+    } catch (error) {
+      console.log({error});
+      return null;
+    }
+  };
+
+  const fetchUserNonce = async (account: InjectedAccountWithMeta): Promise<number | null> => {
+    try {
+      const data = await UserAPI.getUserNonce(toHexPublicKey(account));
+
+      return data;
+    } catch (error) {
+      console.log('[useAuthHook][getUserNonce][error]', {error});
+      return null;
+    }
+  };
 
   const getUserByAccounts = async (accounts: InjectedAccountWithMeta[]): Promise<User[] | null> => {
     try {
@@ -160,5 +185,7 @@ export const useAuthHook = () => {
     getUserByAccounts,
     getRegisteredAccounts,
     anonymous,
+    fetchUserNonce,
+    signInUsingPolkadotExt,
   };
 };
