@@ -6,6 +6,7 @@ import {Action} from 'redux';
 import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency} from 'src/interfaces/currency';
+import * as TokenAPI from 'src/lib/api/token';
 import {connectToBlockchain} from 'src/lib/services/polkadot-js';
 import {ThunkActionCreator} from 'src/types/thunk';
 
@@ -18,11 +19,16 @@ export interface FetchBalances extends Action {
   balanceDetails: BalanceDetail[];
 }
 
+export interface FetchCurrenciesId extends Action {
+  type: constants.FETCH_CURRENCIES_ID;
+  currenciesId: string[];
+}
+
 /**
  * Union Action Types
  */
 
-export type Actions = FetchBalances | BaseAction;
+export type Actions = FetchBalances | BaseAction | FetchCurrenciesId;
 
 /**
  * Action Creator
@@ -77,6 +83,36 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
         setError({
           title: 'something is wrong',
           message: 'ooopps!',
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const getUserCurrencies: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const {data} = await TokenAPI.getUserCurrencies(user.id);
+      const currenciesId = data.map(currency => currency.currencyId);
+      dispatch({
+        type: constants.FETCH_CURRENCIES_ID,
+        currenciesId,
+      });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
         }),
       );
     } finally {
