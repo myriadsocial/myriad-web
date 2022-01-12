@@ -13,6 +13,15 @@ import {
 type UserList = BaseList<User>;
 type ActivityList = BaseList<ActivityLog>;
 
+export const getUserNonce = async (id: string): Promise<number> => {
+  const {data} = await MyriadAPI.request({
+    url: `users/${id}/nonce`,
+    method: 'GET',
+  });
+
+  return data;
+};
+
 export const getUserDetail = async (id: string, userId?: string): Promise<User & BlockedProps> => {
   const {data} = await MyriadAPI.request<User & BlockedProps>({
     url: `users/${id}`,
