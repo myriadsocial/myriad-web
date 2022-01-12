@@ -17,6 +17,7 @@ import {
 } from 'src/interfaces/timeline';
 import {UserProps} from 'src/interfaces/user';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
+import * as FriendAPI from 'src/lib/api/friends';
 import * as InteractionAPI from 'src/lib/api/interaction';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import * as PostAPI from 'src/lib/api/post';
@@ -765,11 +766,20 @@ export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
     try {
       if (user) {
         const {data: posts, meta} = await PostAPI.findPosts(user, query, page);
+        const {data: friends} = await FriendAPI.getFriendId(userId);
+        const friendIds = friends.map(friend => friend.requesteeId);
+
+        const filteredPost = posts.filter(post => {
+          if (post.visibility === PostVisibility.FRIEND) {
+            return friendIds.includes(post.createdBy);
+          }
+          return true;
+        });
 
         dispatch({
           type: constants.LOAD_TIMELINE,
           payload: {
-            posts: posts.map(post => {
+            posts: filteredPost.map(post => {
               const upvoted = post.votes?.filter(vote => vote.userId === userId && vote.state);
               const downvoted = post.votes?.filter(vote => vote.userId === userId && !vote.state);
 

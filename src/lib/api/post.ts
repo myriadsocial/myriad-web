@@ -244,7 +244,7 @@ export const findPosts = async (user: User, query: string, page = 1): Promise<Po
     or: [
       {
         visibility: {
-          inq: ['public'],
+          inq: [PostVisibility.PUBLIC],
         },
       },
       {
