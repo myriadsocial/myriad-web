@@ -74,13 +74,16 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
     if (query.type === TimelineType.EXPERIENCE && query.id) {
       let experience: any | null = null;
       experience = await ExperienceAPI.getExperience(query.id as string);
+
       const expFilter: TimelineFilter = {
         ...filter,
         tags: experience.tags ? (experience.tags as string[]) : [],
         people: experience.people
           .filter((person: People) => !person.hide)
           .map((person: People) => person.id),
+        experienceId: experience.id,
       };
+
       dispatch(loadTimeline(1, timelineSort, expFilter, timelineType));
     } else {
       dispatch(loadTimeline(1, timelineSort, newFilter, timelineType));
