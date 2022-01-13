@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, forwardRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import Link from 'next/link';
@@ -29,7 +29,7 @@ import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {setTippedContent} from 'src/reducers/timeline/actions';
 
-export const CommentDetail: React.FC<CommentDetailProps> = props => {
+export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((props, ref) => {
   const {
     section,
     comment,
@@ -155,7 +155,7 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
   const owner = comment.userId === user?.id;
 
   return (
-    <div className={style.flex}>
+    <div className={style.flex} ref={ref}>
       <div className={style.tree}>
         <Avatar
           className={style.avatar}
@@ -315,4 +315,4 @@ export const CommentDetail: React.FC<CommentDetailProps> = props => {
       </div>
     </div>
   );
-};
+});
