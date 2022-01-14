@@ -15,11 +15,10 @@ export const withCharLimit =
 
     editor.insertText = (text: string) => {
       const children = editor.children as TNode[];
-
       const currentRawString = children.map(formatToString).join('');
 
       if (currentRawString.length < options.max) {
-        return insertText(text);
+        return insertText(text.slice(0, options.max - currentRawString.length));
       }
     };
 
