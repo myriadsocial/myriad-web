@@ -20,4 +20,5 @@ export type TimelineFilter = {
   platform?: PostOrigin[];
   owner?: string;
   importer?: string;
+  experienceId?: string;
 };

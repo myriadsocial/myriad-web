@@ -58,23 +58,18 @@ export const searchExperience = async (query: string): Promise<UserExperienceLis
   return data;
 };
 
-export const searchExperiencesByQuery = async (query: string): Promise<ExperienceList> => {
+export const searchExperiencesByQuery = async (
+  query: string,
+  userId: string,
+): Promise<ExperienceList> => {
   //const pattern = new RegExp('.*' + query + '.*', 'i');
   const {data} = await MyriadAPI.request<ExperienceList>({
     url: `/experiences`,
     method: 'GET',
     params: {
+      q: query,
+      userId: userId,
       filter: {
-        where: {
-          and: [
-            {
-              name: {
-                like: `.*${query}.*`,
-                options: 'i',
-              },
-            },
-          ],
-        },
         include: ['user'],
       },
     },

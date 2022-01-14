@@ -193,7 +193,10 @@ export const searchAllRelatedExperiences: ThunkActionCreator<Actions, RootState>
         throw new Error('User not found');
       }
 
-      const {meta, data: experiences} = await ExperienceAPI.searchExperiencesByQuery(query);
+      const {meta, data: experiences} = await ExperienceAPI.searchExperiencesByQuery(
+        query,
+        user.id,
+      );
 
       dispatch({
         type: constants.SEARCH_ALL_RELATED_EXPERIENCES,
