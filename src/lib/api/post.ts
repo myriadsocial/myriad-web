@@ -192,15 +192,8 @@ export const getPost = async (
     case TimelineType.EXPERIENCE:
       params.filter = filterParams;
       params.userId = userId;
-
-      if (
-        filters &&
-        ((filters.tags && filters.tags.length > 0) || (filters.people && filters.people.length > 0))
-      ) {
-        filterParams.where = where;
-      } else {
-        params.timelineType = type;
-      }
+      params.timelineType = type;
+      params.experienceId = filters?.experienceId;
       break;
     default:
       filterParams.where = where;
