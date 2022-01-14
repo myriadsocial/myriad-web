@@ -76,7 +76,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   useEffect(() => {
     const list = useFriendList(friends, user);
     setFriendList(list);
-  }, [friends, user]);
+  }, [friends, friends[0], user]);
 
   useEffect(() => {
     if (isTipSent) {
