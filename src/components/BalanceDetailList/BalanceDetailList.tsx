@@ -83,7 +83,6 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   };
 
   const togglePrimaryCoinMenu = () => {
-    console.log('hello');
     setIsOnPrimaryCoinMenu(!isOnPrimaryCoinMenu);
   };
 

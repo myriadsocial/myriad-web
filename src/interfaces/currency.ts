@@ -17,3 +17,10 @@ export enum CurrencyId {
 export interface Currency extends CurrencyProps, Omit<BaseModel, 'id'> {
   id: CurrencyId;
 }
+
+export interface UserCurrency extends BaseModel {
+  priority: number;
+  userId: string;
+  currencyId: string;
+  currency?: Currency;
+}

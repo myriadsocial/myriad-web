@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import {Typography} from '@material-ui/core';
@@ -9,10 +9,29 @@ import {RootState} from '../../reducers';
 import {UserState} from '../../reducers/user/reducer';
 import {BoxComponent} from '../atoms/Box';
 
+import {BalanceDetail} from 'src/components/MyWallet';
 import {BalanceState} from 'src/reducers/balance/reducer';
 
 export const WalletBalancesContainer: React.FC = () => {
   const {user, currencies, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const {balanceDetails, currenciesId} = useSelector<RootState, BalanceState>(
+    state => state.balanceState,
+  );
+
+  const handleFilterCurrencies = () => {
+    const data: BalanceDetail[] | [] = [];
+    if (currenciesId.length) {
+      balanceDetails.forEach(coin => {
+        data[currenciesId.indexOf(coin.id)] = coin;
+      });
+    } else {
+      return balanceDetails;
+    }
+
+    return data;
+  };
+
+  const [filteredBalances, setFilteredBalanced] = useState(handleFilterCurrencies());
 
   const {load} = usePolkadotApi();
 
@@ -20,7 +39,9 @@ export const WalletBalancesContainer: React.FC = () => {
     if (user) load(user.id, currencies);
   }, [currencies, user]);
 
-  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
+  useEffect(() => {
+    setFilteredBalanced(handleFilterCurrencies());
+  }, [balanceDetails, currenciesId]);
 
   if (anonymous)
     return (
@@ -29,7 +50,7 @@ export const WalletBalancesContainer: React.FC = () => {
       </BoxComponent>
     );
 
-  return <WalletBalancesComponent balances={balanceDetails} />;
+  return <WalletBalancesComponent balances={filteredBalances} />;
 };
 
 export default WalletBalancesContainer;

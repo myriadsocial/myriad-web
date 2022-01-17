@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {DragDropContext, Droppable, Draggable, DropResult} from 'react-beautiful-dnd';
-import {useDispatch} from 'react-redux';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -8,13 +7,12 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '.';
 import {User} from '../../interfaces/user';
-import {changeDefaultCurrency} from '../../lib/api/token';
-import {setDefaultCurrency} from '../../reducers/user/actions';
 import {BalanceDetail} from '../MyWallet';
 import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 import {DraggableBalanceCard} from './DraggableBalanceCard';
 
 import _ from 'lodash';
+import {useCurrency} from 'src/hooks/use-currency.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {CurrencyId} from 'src/interfaces/currency';
 
@@ -22,13 +20,29 @@ type PrimaryCoinMenuProps = {
   balanceDetails: BalanceDetail[];
   togglePrimaryCoinMenu: () => void;
   user: User;
+  currenciesId: string[];
 };
 
 export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
-  const {togglePrimaryCoinMenu, balanceDetails, user} = props;
+  const {togglePrimaryCoinMenu, balanceDetails, user, currenciesId} = props;
+  const classes = useStyles();
 
-  const dispatch = useDispatch();
   const {openToasterSnack} = useToasterSnackHook();
+  const {updateCurrencySet} = useCurrency();
+
+  const initialCoinState = () => {
+    const data: BalanceDetail[] | [] = [];
+    if (currenciesId.length) {
+      balanceDetails.forEach(coin => {
+        data[currenciesId.indexOf(coin.id)] = coin;
+      });
+    } else {
+      return putDefaultFirst(balanceDetails, user.defaultCurrency);
+    }
+
+    return data;
+  };
+
   const putDefaultFirst = (balanceDetails: BalanceDetail[], defaultCurrencyId: CurrencyId) => {
     const newDefaultCoins = [...balanceDetails];
 
@@ -41,9 +55,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
     return resultDefaultCoins;
   };
 
-  const [coins, updateCoins] = useState(putDefaultFirst(balanceDetails, user.defaultCurrency));
-
-  const classes = useStyles();
+  const [coins, updateCoins] = useState(initialCoinState());
 
   const handleOnDragEnd = ({source, destination}: DropResult) => {
     // Handle if dragging out of bounds
@@ -60,7 +72,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
     const items = Array.from(coins);
     const [reorderedItem] = items.splice(index, 1);
 
-    if (index !== 0) items.splice(0, 0, reorderedItem);
+    if (index !== 0) items.splice(index - 1, 0, reorderedItem);
     else items.splice(1, 0, reorderedItem);
 
     updateCoins(items);
@@ -68,21 +80,17 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
 
   const handleSetDefaultCurrency = () => {
     const currencyId = coins[0].id as CurrencyId;
+    const coinsId = coins.map(coin => coin.id);
 
-    const values = {
-      userId: user.id,
-      currencyId,
-    };
-
-    changeDefaultCurrency(values);
-    updateCoins(putDefaultFirst(balanceDetails, currencyId));
-    dispatch(setDefaultCurrency(currencyId));
-    togglePrimaryCoinMenu();
-
-    openToasterSnack({
-      message: 'You have saved your changes.',
-      variant: 'success',
+    updateCurrencySet(user.id, coinsId, () => {
+      openToasterSnack({
+        message: 'You have saved your changes.',
+        variant: 'success',
+      });
     });
+
+    updateCoins(putDefaultFirst(balanceDetails, currencyId));
+    togglePrimaryCoinMenu();
   };
 
   return (
