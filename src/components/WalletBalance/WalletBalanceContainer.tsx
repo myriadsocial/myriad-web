@@ -4,44 +4,37 @@ import {useSelector} from 'react-redux';
 import {Typography} from '@material-ui/core';
 
 import {WalletBalances as WalletBalancesComponent} from '.';
-import {usePolkadotApi} from '../../hooks/use-polkadot-api.hook';
-import {RootState} from '../../reducers';
-import {UserState} from '../../reducers/user/reducer';
 import {BoxComponent} from '../atoms/Box';
 
-import {BalanceDetail} from 'src/components/MyWallet';
+import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
+import {BalanceDetail} from 'src/interfaces/balance';
+import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
+import {UserState} from 'src/reducers/user/reducer';
 
 export const WalletBalancesContainer: React.FC = () => {
-  const {user, currencies, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const {balanceDetails, currenciesId} = useSelector<RootState, BalanceState>(
-    state => state.balanceState,
-  );
+  const {balanceDetails} = usePolkadotApi();
 
-  const handleFilterCurrencies = () => {
-    const data: BalanceDetail[] | [] = [];
+  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const {currenciesId} = useSelector<RootState, BalanceState>(state => state.balanceState);
+
+  const [filteredBalances, setFilteredBalanced] = useState<BalanceDetail[]>([]);
+
+  useEffect(() => {
+    handleFilterCurrencies();
+  }, [balanceDetails, currenciesId]);
+
+  const handleFilterCurrencies = (): void => {
+    const data: BalanceDetail[] = [];
+
     if (currenciesId.length) {
       balanceDetails.forEach(coin => {
         data[currenciesId.indexOf(coin.id)] = coin;
       });
-    } else {
-      return balanceDetails;
     }
 
-    return data;
+    setFilteredBalanced(data);
   };
-
-  const [filteredBalances, setFilteredBalanced] = useState(handleFilterCurrencies());
-
-  const {load} = usePolkadotApi();
-
-  useEffect(() => {
-    if (user) load(user.id, currencies);
-  }, [currencies, user]);
-
-  useEffect(() => {
-    setFilteredBalanced(handleFilterCurrencies());
-  }, [balanceDetails, currenciesId]);
 
   if (anonymous)
     return (

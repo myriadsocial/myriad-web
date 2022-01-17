@@ -1,8 +1,6 @@
-export type BalanceDetail = {
-  id: string;
+import {Currency} from './currency';
+
+export type BalanceDetail = Currency & {
   freeBalance: number;
-  decimal: number;
-  image: string;
-  rpcURL: string;
-  native: boolean;
+  previousNonce: number;
 };

@@ -43,6 +43,32 @@ export const BalanceReducer: Redux.Reducer<BalanceState, Actions> = (
       };
     }
 
+    case constants.INCREASE_BALANCE: {
+      return {
+        ...state,
+        balanceDetails: state.balanceDetails.map(balance => {
+          if (balance.id === action.currencyId) {
+            balance.freeBalance += action.change;
+          }
+
+          return balance;
+        }),
+      };
+    }
+
+    case constants.DECREASE_BALANCE: {
+      return {
+        ...state,
+        balanceDetails: state.balanceDetails.map(balance => {
+          if (balance.id === action.currencyId) {
+            balance.freeBalance -= action.change;
+          }
+
+          return balance;
+        }),
+      };
+    }
+
     case BaseConstants.ACTION_LOADING: {
       return update(state, {
         loading: {$set: action.loading},

@@ -1,12 +1,16 @@
 import {options} from '@acala-network/api';
+import {OrmlAccountData} from '@open-web3/orml-types/interfaces';
 import * as Sentry from '@sentry/nextjs';
 
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {Keyring} from '@polkadot/keyring';
+import {u128, u32, UInt} from '@polkadot/types';
+
+import {NoAccountException} from './errors/NoAccountException';
 
 import BN from 'bn.js';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {CurrencyId} from 'src/interfaces/currency';
+import {Currency, CurrencyId} from 'src/interfaces/currency';
 
 interface signAndSendExtrinsicProps {
   from: string;
@@ -26,6 +30,11 @@ interface EstimateFeeResponseProps {
   partialFee: string | null;
   api: ApiPromise | null;
 }
+
+type CheckBalanceResult = {
+  free: u128 | UInt;
+  nonce?: u32;
+};
 
 export const connectToBlockchain = async (wsProvider: string): Promise<ApiPromise> => {
   const provider = new WsProvider(wsProvider);
@@ -139,74 +148,128 @@ export const signAndSendExtrinsic = async (
 
     const allAccounts = await enableExtension();
 
+    if (!allAccounts || allAccounts.length === 0) {
+      throw new NoAccountException('Please import your account first!');
+    }
+
     const keyring = new Keyring();
 
     const baseAddress = keyring.encodeAddress(from);
 
-    if (allAccounts) {
-      // We select the first account matching baseAddress
-      // `account` is of type InjectedAccountWithMeta
-      const account = allAccounts.find(account => {
-        // address from session must match address on polkadot extension
-        return account.address === baseAddress;
-      });
+    // We select the first account matching baseAddress
+    // `account` is of type InjectedAccountWithMeta
+    const account = allAccounts.find(account => {
+      // address from session must match address on polkadot extension
+      return account.address === baseAddress;
+    });
 
-      // if account has not yet been imported to Polkadot.js extension
-      if (!account) {
-        throw {
-          Error: 'Please import your account first!',
-        };
-      }
-
-      // otherwise if account found
-      if (account) {
-        const api = await connectToBlockchain(wsAddress);
-
-        callback &&
-          callback({
-            apiConnected: true,
-          });
-        if (api) {
-          // here we use the api to create a balance transfer to some account of a value of 12345678
-          const transferExtrinsic = native
-            ? api.tx.balances.transfer(to, new BN(value.toString()))
-            : api.tx.currencies.transfer(to, {TOKEN: currencyId}, value);
-
-          // to be able to retrieve the signer interface from this account
-          // we can use web3FromSource which will return an InjectedExtension type
-          const injector = await web3FromSource(account.meta.source);
-
-          callback &&
-            callback({
-              apiConnected: true,
-              signerOpened: true,
-            });
-
-          if (transferExtrinsic) {
-            // passing the injected account address as the first argument of signAndSend
-            // will allow the api to retrieve the signer and the user will see the extension
-            // popup asking to sign the balance transfer transaction
-            const txInfo = await transferExtrinsic.signAndSend(from, {
-              signer: injector.signer,
-              // make sure nonce does not stuck
-              nonce: -1,
-            });
-
-            if (txInfo) {
-              return txInfo.toHex();
-            }
-
-            await api.disconnect();
-          }
-        }
-      }
+    // if sender account not yet been imported to Polkadot.js extension
+    if (!account) {
+      throw new NoAccountException('Account not registered on Polkadot.js extension');
     }
 
-    // return null if no txHash is produced
-    return null;
+    // otherwise if account found
+    const api = await connectToBlockchain(wsAddress);
+
+    callback && callback({apiConnected: true});
+
+    // to be able to retrieve the signer interface from this account
+    // we can use web3FromSource which will return an InjectedExtension type
+    const injector = await web3FromSource(account.meta.source);
+
+    callback &&
+      callback({
+        apiConnected: true,
+        signerOpened: true,
+      });
+
+    // here we use the api to create a balance transfer to some account of a value of 12345678
+    const transferExtrinsic = native
+      ? api.tx.balances.transfer(to, new BN(value.toString()))
+      : api.tx.currencies.transfer(to, {TOKEN: currencyId}, value);
+
+    // passing the injected account address as the first argument of signAndSend
+    // will allow the api to retrieve the signer and the user will see the extension
+    // popup asking to sign the balance transfer transaction
+    const txInfo = await transferExtrinsic.signAsync(from, {
+      signer: injector.signer,
+      // make sure nonce does not stuck
+      nonce: -1,
+    });
+
+    const unsub = await txInfo.send(result => {
+      console.log(`Current status is ${result.status}`);
+
+      if (result.status.isInBlock) {
+        console.log(`Transaction included at blockHash ${result.status.asInBlock}`);
+      } else if (result.status.isFinalized) {
+        console.log(`Transaction finalized at blockHash ${result.status.asFinalized}`);
+        unsub();
+
+        api.disconnect();
+      }
+    });
+
+    return txInfo.toHex();
   } catch (error) {
-    console.log(error);
-    Sentry.captureException(error);
-    return error;
+    if (!(error instanceof NoAccountException)) {
+      Sentry.captureException(error);
+    }
+
+    throw error;
   }
+};
+
+export const checkAccountBalance = async (
+  account: string,
+  currency: Currency,
+  callback: (change: BN) => void,
+): Promise<CheckBalanceResult> => {
+  let free: u128 | UInt;
+  let nonce: u32 | undefined;
+  console.log('checkAccountBalance', currency);
+  const api = await connectToBlockchain(currency.rpcURL);
+
+  if (currency.native) {
+    const result = await api.query.system.account(account);
+
+    free = result.data.free;
+    nonce = result.nonce;
+
+    listenToSystemBalanceChange(account, currency, free as u128, callback);
+  } else {
+    const result = await api.query.tokens.accounts<OrmlAccountData>(account, {
+      TOKEN: currency.id,
+    });
+
+    free = result.free;
+  }
+
+  return {
+    free,
+    nonce,
+  };
+};
+
+const listenToSystemBalanceChange = async (
+  account: string,
+  currency: Currency,
+  previousFree: u128,
+  callback: (change: BN) => void,
+) => {
+  const api = await connectToBlockchain(currency.rpcURL);
+
+  api.query.system.account(account, ({data: {free}, nonce}) => {
+    console.log('listenToSystemBalanceChange', currency);
+    // Calculate the delta
+    const change = free.sub(previousFree);
+
+    // Only display positive value changes (Since we are pulling `previous` above already,
+    // the initial balance change will also be zero)
+    if (!change.isZero()) {
+      console.log(`New balance change of ${change}, nonce ${nonce}`);
+
+      callback(change);
+    }
+  });
 };

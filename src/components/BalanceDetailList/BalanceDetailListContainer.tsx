@@ -1,55 +1,53 @@
 import React, {useState, useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import NoSsr from '@material-ui/core/NoSsr';
 
 import {BalanceDetailList} from '.';
 
-import {BalanceDetail} from 'src/components/MyWallet';
 import {AddCoin} from 'src/components/atoms/AddCoin/AddCoin.component';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
+import {BalanceDetail} from 'src/interfaces/balance';
 import {RootState} from 'src/reducers';
+import {fetchBalances} from 'src/reducers/balance/actions';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const BalanceDetailListContainer: React.FC = () => {
-  const {loading, balanceDetails, currenciesId} = useSelector<RootState, BalanceState>(
-    state => state.balanceState,
-  );
-  const {user, currencies} = useSelector<RootState, UserState>(state => state.userState);
+  const dispatch = useDispatch();
+  const {balanceDetails} = usePolkadotApi();
 
-  if (!user) return null;
+  const {loading, currenciesId} = useSelector<RootState, BalanceState>(state => state.balanceState);
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
 
-  const {load} = usePolkadotApi();
-
+  const [filteredBalances, setFilteredBalanced] = useState<BalanceDetail[]>([]);
   const [showAddCoin, setShowAddCoin] = useState(false);
 
-  const handleFilterCurrencies = () => {
-    const data: BalanceDetail[] | [] = [];
+  useEffect(() => {
+    handleFilterCurrencies();
+  }, [balanceDetails, currenciesId]);
+
+  const handleFilterCurrencies = (): void => {
+    const data: BalanceDetail[] = [];
+
     if (currenciesId.length) {
       balanceDetails.forEach(coin => {
         data[currenciesId.indexOf(coin.id)] = coin;
       });
-    } else {
-      return balanceDetails;
     }
 
-    return data;
+    setFilteredBalanced(data);
   };
 
-  const [filteredBalances, setFilteredBalanced] = useState(handleFilterCurrencies());
-
-  useEffect(() => {
-    setFilteredBalanced(handleFilterCurrencies());
-  }, [balanceDetails, currenciesId]);
-
   const handleRefresh = () => {
-    load(user?.id, currencies);
+    dispatch(fetchBalances());
   };
 
   const toggleAddCoinModal = () => {
     setShowAddCoin(!showAddCoin);
   };
+
+  if (!user) return null;
 
   return (
     <NoSsr>
