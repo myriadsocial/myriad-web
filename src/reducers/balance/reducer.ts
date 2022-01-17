@@ -11,11 +11,13 @@ import {BalanceDetail} from 'src/interfaces/balance';
 
 export interface BalanceState extends BaseState {
   balanceDetails: BalanceDetail[];
+  currenciesId: string[];
 }
 
 const initialState: BalanceState = {
   loading: false,
   balanceDetails: [],
+  currenciesId: [],
 };
 
 export const BalanceReducer: Redux.Reducer<BalanceState, Actions> = (
@@ -31,6 +33,13 @@ export const BalanceReducer: Redux.Reducer<BalanceState, Actions> = (
       return {
         ...state,
         balanceDetails: action.balanceDetails,
+      };
+    }
+
+    case constants.FETCH_CURRENCIES_ID: {
+      return {
+        ...state,
+        currenciesId: action.currenciesId,
       };
     }
 

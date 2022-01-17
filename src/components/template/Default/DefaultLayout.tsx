@@ -14,6 +14,7 @@ import useStyles from './DefaultLayout.styles';
 import {withError, WithErrorProps} from 'src/components/Error';
 import {NotificationsContainer} from 'src/components/Notifications/Notifications.container';
 import ShowIf from 'src/components/common/show-if.component';
+import {useCurrency} from 'src/hooks/use-currency.hook';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {firebaseApp, firebaseAnalytics, firebaseCloudMessaging} from 'src/lib/firebase';
 import {countNewNotification} from 'src/reducers/notification/actions';
@@ -36,11 +37,13 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const {updateUserFcmToken} = useUserHook();
+  const {fetchUserCurrencies} = useCurrency();
 
   const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
     initializeFirebase();
+    fetchUserCurrencies();
   }, []);
 
   const initializeFirebase = async () => {
