@@ -227,7 +227,6 @@ export const checkAccountBalance = async (
 ): Promise<CheckBalanceResult> => {
   let free: u128 | UInt;
   let nonce: u32 | undefined;
-
   const api = await connectToBlockchain(currency.rpcURL);
 
   if (currency.native) {
