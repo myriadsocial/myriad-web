@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {createRef, useEffect} from 'react';
 
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {CommentDetail} from '../CommentDetail';
 
 import {FriendDetail} from 'src/components/FriendsMenu/hooks/use-friend-list.hook';
+import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {Comment, CommentProps} from 'src/interfaces/comment';
 import {SectionType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
@@ -30,6 +31,8 @@ type CommentListProps = {
   onBeforeDownvote?: () => void;
 };
 
+type refComment = Record<any, React.RefObject<HTMLDivElement>>;
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
@@ -54,13 +57,37 @@ export const CommentList: React.FC<CommentListProps> = props => {
     setDownvoting,
     onBeforeDownvote,
   } = props;
+  const {query} = useQueryParams();
 
   const styles = useStyles();
+
+  let refs: any = comments.reduce((acc: refComment, value: any) => {
+    acc[value.id] = createRef<HTMLDivElement>();
+    return acc;
+  }, {});
+
+  useEffect(() => {
+    if (Object.keys(refs).length > 0) {
+      if (!Array.isArray(query.comment) && query.comment) {
+        if (refs[query.comment]?.current) {
+          refs[query.comment].current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
+      }
+    }
+
+    () => {
+      refs = {};
+    };
+  }, [refs]);
 
   return (
     <div className={styles.root}>
       {comments.map(comment => (
         <CommentDetail
+          ref={refs[comment.id]}
           section={section}
           user={user}
           key={comment.id}

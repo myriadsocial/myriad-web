@@ -140,8 +140,10 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            //TODO: dedicated comment display not yet available
-            href: `/home`,
+            href:
+              notification.additionalReferenceId && notification.additionalReferenceId.length > 0
+                ? `/post/${notification.additionalReferenceId[0].postId}?comment=${notification.additionalReferenceId[1].firstCommentId}`
+                : `/404`,
           };
 
         case NotificationType.POST_MENTION:
@@ -306,6 +308,28 @@ export const useNotificationList = (
             href: `/wallet?type=history`,
           };
 
+        case NotificationType.USER_INITIAL_TIPS:
+          return {
+            id: notification.id,
+            type: NotificationType.USER_INITIAL_TIPS,
+            read: notification.read,
+            userId: notification.fromUserId.id,
+            user: 'Tips claimed',
+            avatar: notification.fromUserId.profilePictureURL,
+            description: `${notification.message}`,
+            badge: (
+              <div className={style.circleSuccess}>
+                <SvgIcon
+                  component={ArrowCircleLeftIcon}
+                  viewBox="2 2 20 20"
+                  style={{fill: '#47B881', color: '#FFF'}}
+                />
+              </div>
+            ),
+            createdAt: notification.createdAt,
+            href: `/wallet?type=history`,
+          };
+
         case NotificationType.USER_REWARD:
           return {
             id: notification.id,
@@ -403,7 +427,10 @@ export const useNotificationList = (
             description:
               'Your ' +
               getPlatform(notification.message) +
-              ` account ${notification.fromUserId.name} successfully connected to Myriad`,
+              ' account @' +
+              (notification.additionalReferenceId &&
+                notification.additionalReferenceId[0].peopleUsername) +
+              ' successfully connected to Myriad',
             badge: (
               <div className={style.circleError}>
                 <SvgIcon
