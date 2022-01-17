@@ -242,7 +242,7 @@ export const findPosts = async (user: User, query: string, page = 1): Promise<Po
       },
       {
         or: [
-          {created_by: user.id},
+          {createdBy: user.id},
           {
             importers: {
               inq: [user.id],
