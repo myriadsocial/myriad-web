@@ -1,6 +1,6 @@
 import {Currency} from './currency';
 
-export type BalanceDetail = Currency & {
+export type BalanceDetail = Omit<Currency, 'createdAt' | 'updatedAt'> & {
   freeBalance: number;
   previousNonce: number;
 };

@@ -28,15 +28,17 @@ export const BalanceDetailListContainer: React.FC = () => {
   }, [balanceDetails, currenciesId]);
 
   const handleFilterCurrencies = (): void => {
-    const data: BalanceDetail[] = [];
-
     if (currenciesId.length) {
+      const data: BalanceDetail[] = [];
+
       balanceDetails.forEach(coin => {
         data[currenciesId.indexOf(coin.id)] = coin;
       });
-    }
 
-    setFilteredBalanced(data);
+      setFilteredBalanced(data);
+    } else {
+      setFilteredBalanced(balanceDetails);
+    }
   };
 
   const handleRefresh = () => {

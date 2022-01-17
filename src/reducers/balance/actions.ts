@@ -83,12 +83,12 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
     try {
       for (const currency of currencies) {
         const {free, nonce} = await checkAccountBalance(address, currency, change => {
-          const amount = formatNumber(change.toNumber(), currency.decimal);
+          const amount = formatNumber(+change.toString(), currency.decimal);
 
           if (amount > 0) {
             dispatch(increaseBalance(currency.id, amount));
           } else {
-            dispatch(decreaseBalance(currency.id, amount));
+            dispatch(decreaseBalance(currency.id, Math.abs(amount)));
           }
         });
 

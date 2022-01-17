@@ -1,5 +1,5 @@
 import {options} from '@acala-network/api';
-import {OrmlAccountData} from '@open-web3/orml-types/interfaces';
+import {Balance, OrmlAccountData} from '@open-web3/orml-types/interfaces';
 import * as Sentry from '@sentry/nextjs';
 
 import {ApiPromise, WsProvider} from '@polkadot/api';
@@ -227,7 +227,7 @@ export const checkAccountBalance = async (
 ): Promise<CheckBalanceResult> => {
   let free: u128 | UInt;
   let nonce: u32 | undefined;
-  console.log('checkAccountBalance', currency);
+
   const api = await connectToBlockchain(currency.rpcURL);
 
   if (currency.native) {
@@ -243,6 +243,8 @@ export const checkAccountBalance = async (
     });
 
     free = result.free;
+
+    listenToTokenBalanceChange(account, currency, result.free, callback);
   }
 
   return {
@@ -260,7 +262,6 @@ const listenToSystemBalanceChange = async (
   const api = await connectToBlockchain(currency.rpcURL);
 
   api.query.system.account(account, ({data: {free}, nonce}) => {
-    console.log('listenToSystemBalanceChange', currency);
     // Calculate the delta
     const change = free.sub(previousFree);
 
@@ -272,4 +273,32 @@ const listenToSystemBalanceChange = async (
       callback(change);
     }
   });
+};
+
+const listenToTokenBalanceChange = async (
+  account: string,
+  currency: Currency,
+  previousFree: Balance,
+  callback: (change: BN) => void,
+) => {
+  const api = await connectToBlockchain(currency.rpcURL);
+
+  api.query.tokens.accounts(
+    account,
+    {
+      TOKEN: currency.id,
+    },
+    ({free}: OrmlAccountData) => {
+      // Calculate the delta
+      const change = free.sub(previousFree);
+
+      // Only display positive value changes (Since we are pulling `previous` above already,
+      // the initial balance change will also be zero)
+      if (!change.isZero()) {
+        console.log(`New balance change of ${change}`);
+
+        callback(change);
+      }
+    },
+  );
 };
