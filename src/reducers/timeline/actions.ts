@@ -344,7 +344,12 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
   };
 
 export const importPost: ThunkActionCreator<Actions, RootState> =
-  (postUrl: string, callback?: () => void) => async (dispatch, getState) => {
+  (
+    postUrl: string,
+    attributes: Pick<PostProps, 'isNSFW' | 'NSFWTag' | 'visibility'>,
+    callback?: () => void,
+  ) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
@@ -359,6 +364,7 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
       const post = await PostAPI.importPost({
         url: postUrl,
         importer: user.id,
+        ...attributes,
       });
 
       // creator relation data

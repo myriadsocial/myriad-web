@@ -25,7 +25,10 @@ type PostCreateProps = {
   people: FriendDetail[];
   uploadProgress: number;
   onClose: () => void;
-  onSubmit: (post: Partial<Post> | string) => void;
+  onSubmit: (
+    post: Partial<Post> | string,
+    attributes?: Pick<Post, 'isNSFW' | 'NSFWTag' | 'visibility'>,
+  ) => void;
   onSearchPeople: (query: string) => void;
   onUploadFile: (file: File, type: 'image' | 'video') => Promise<string | null>;
 };
@@ -100,7 +103,11 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
   const handleSubmit = () => {
     if (activeTab === 'import' && importUrl) {
-      onSubmit(importUrl);
+      onSubmit(importUrl, {
+        isNSFW: post.isNSFW,
+        NSFWTag: post.NSFWTag,
+        visibility: post.visibility ?? PostVisibility.PUBLIC,
+      });
     }
 
     if (activeTab === 'create') {
