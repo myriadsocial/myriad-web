@@ -8,6 +8,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {map} from 'lodash';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {User} from 'src/interfaces/user';
+import * as AuthAPI from 'src/lib/api/ext-auth';
 import * as UserAPI from 'src/lib/api/user';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
@@ -21,11 +22,12 @@ export const useAuthHook = () => {
 
   const dispatch = useDispatch();
 
-  const signInUsingPolkadotExt = async (
+  const createSignaturePolkadotExt = async (
     account: InjectedAccountWithMeta,
+    nonce: number,
   ): Promise<string | null> => {
     try {
-      const signature = await signWithExtension(account);
+      const signature = await signWithExtension(account, nonce);
 
       return signature;
     } catch (error) {
@@ -66,6 +68,52 @@ export const useAuthHook = () => {
     return accounts.filter(account => {
       return map(users, 'id').includes(toHexPublicKey(account));
     });
+  };
+
+  const loginWithExternalAuth = async (nonce: number, signature: string, publicAddress: string) => {
+    const accessToken = AuthAPI.login({
+      nonce,
+      signature,
+      publicAddress,
+    });
+
+    return accessToken;
+  };
+
+  const signUpWithExternalAuth = async (
+    id: string,
+    name: string,
+    username: string,
+    account: InjectedAccountWithMeta,
+  ) => {
+    let nonce = null;
+    const data = await AuthAPI.signUp({id, name, username});
+
+    if (data) nonce = data.nonce;
+
+    if (nonce && nonce > 0) {
+      const signature = await createSignaturePolkadotExt(account, nonce);
+
+      if (signature) {
+        const data = await AuthAPI.login({
+          nonce,
+          signature,
+          publicAddress: toHexPublicKey(account),
+        });
+
+        let token = '';
+
+        if (data) token = data.accessToken;
+
+        signIn('credentials', {
+          name: name ?? account.meta.name,
+          username,
+          anonymous: false,
+          callbackUrl: publicRuntimeConfig.nextAuthURL,
+          token, // jangan lupa di-encrypt dulu
+        });
+      }
+    }
   };
 
   const register = async (user: Partial<User>) => {
@@ -186,6 +234,8 @@ export const useAuthHook = () => {
     getRegisteredAccounts,
     anonymous,
     fetchUserNonce,
-    signInUsingPolkadotExt,
+    createSignaturePolkadotExt,
+    loginWithExternalAuth,
+    signUpWithExternalAuth,
   };
 };
