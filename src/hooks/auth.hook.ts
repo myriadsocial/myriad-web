@@ -107,6 +107,7 @@ export const useAuthHook = () => {
 
         signIn('credentials', {
           name: name ?? account.meta.name,
+          address: toHexPublicKey(account),
           username,
           anonymous: false,
           callbackUrl: publicRuntimeConfig.nextAuthURL,
