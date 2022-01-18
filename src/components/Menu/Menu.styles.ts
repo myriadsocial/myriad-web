@@ -46,6 +46,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginLeft: 30,
       marginTop: 30,
       marginBottom: 32,
+      cursor: 'pointer',
     },
   }),
 );
