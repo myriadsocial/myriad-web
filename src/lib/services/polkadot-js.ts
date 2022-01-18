@@ -142,6 +142,7 @@ export const estimateFee = async (
 
 export const signWithExtension = async (
   account: InjectedAccountWithMeta,
+  nonce: number,
 ): Promise<string | null> => {
   try {
     const {web3FromSource} = await import('@polkadot/extension-dapp');
@@ -152,11 +153,10 @@ export const signWithExtension = async (
     if (signRaw) {
       const {signature} = await signRaw({
         address: account.address,
-        data: numberToHex(1),
+        data: numberToHex(nonce),
         type: 'bytes',
       });
 
-      console.log({signature});
       return signature;
     } else {
       throw 'signRaw error!';
