@@ -363,7 +363,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
             mentionables={mentionables}
             onSearchPeople={onSearchPeople}
             onBeforeDownvote={handleOpenReply}
-            hasMoreReplies={hasMoreReplies}
+            hasMoreComment={hasMoreReplies}
             onLoadMoreReplies={loadMoreReplies}
           />
         )}

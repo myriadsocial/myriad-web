@@ -205,7 +205,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         placeholder={placeholder}
         focus={focus}
         expand={expand}
-        hasMoreReplies={false}
+        hasMoreComment={hasMoreComment}
         onUpvote={handleUpvote}
         onRemoveVote={handleRemoveVote}
         onReport={handleReport}

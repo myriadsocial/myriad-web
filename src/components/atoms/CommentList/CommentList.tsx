@@ -20,7 +20,7 @@ type CommentListProps = {
   placeholder?: string;
   focus?: boolean;
   expand?: boolean;
-  hasMoreReplies: boolean;
+  hasMoreComment: boolean;
   onLoadMoreReplies: () => void;
   onUpvote: (comment: Comment) => void;
   onRemoveVote: (comment: Comment) => void;
@@ -48,7 +48,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
     comments = [],
     mentionables,
     deep = 0,
-    hasMoreReplies = false,
+    hasMoreComment = false,
     onUpvote,
     onRemoveVote,
     onOpenTipHistory,
@@ -105,7 +105,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
         />
       ))}
 
-      {comments.length > 0 && deep > 0 && hasMoreReplies && (
+      {comments.length > 0 && deep > 0 && hasMoreComment && (
         <div style={{marginLeft: '69px', cursor: 'pointer'}} onClick={onLoadMoreReplies}>
           <Typography color="primary">View more replies</Typography>
         </div>
