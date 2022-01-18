@@ -31,10 +31,7 @@ app.prepare().then(() => {
       target: process.env.MYRIAD_API_URL,
       pathRewrite: path => path.replace('/api', '/'),
       changeOrigin: true,
-      headers: {
-        Authorization: `Bearer ${process.env.MYRIAD_API_KEY}`,
-      },
-      logLevel: process.env.LOG_LEVEL as Options['logLevel'],
+      logLevel: dev ? 'debug' : undefined,
     }),
   );
 
