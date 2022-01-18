@@ -4,9 +4,6 @@ import getConfig from 'next/config';
 
 import APIAdapter from '../../../adapters/api';
 
-import * as UserAPI from 'src/lib/api/user';
-import {userToSession} from 'src/lib/serializers/session';
-
 const {serverRuntimeConfig} = getConfig();
 
 // For more information on each option (and a full list of options) go to
@@ -30,36 +27,20 @@ export default NextAuth({
 
         if (credentials.anonymous === 'false') {
           try {
-            const user = await UserAPI.getUserDetail(credentials.address);
-
             console.log('[next-auth][debug][authorize] user exist', credentials.address);
-
-            return userToSession(user);
           } catch (error) {
-            try {
-              const user = await UserAPI.createUser({
-                id: credentials.address,
-                name: credentials.name,
-                username: credentials.username,
-              });
-
-              console.log('[next-auth][debug][authorize] user create', credentials.address);
-
-              return userToSession(user);
-            } catch (error) {
-              console.error(
-                '[next-auth][debug][authorize] user create error',
-                error.response.data.error,
-              );
-              throw new Error('Failed to login');
-            }
+            console.error(
+              '[next-auth][debug][authorize] user create error',
+              error.response.data.error,
+            );
+            throw new Error('Failed to login');
           }
         }
 
         return {
           name: credentials.name,
           address: credentials.address,
-          anonymous: credentials.anonymous === 'true',
+          anonymous: credentials.anonymous,
         };
       },
     }),
