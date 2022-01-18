@@ -70,14 +70,28 @@ export const useAuthHook = () => {
     });
   };
 
-  const loginWithExternalAuth = async (nonce: number, signature: string, publicAddress: string) => {
-    const accessToken = AuthAPI.login({
+  const loginWithExternalAuth = async (
+    nonce: number,
+    signature: string,
+    account: InjectedAccountWithMeta,
+  ) => {
+    const data = await AuthAPI.login({
       nonce,
       signature,
-      publicAddress,
+      publicAddress: toHexPublicKey(account),
     });
 
-    return accessToken;
+    let token = '';
+
+    if (data) token = data.accessToken;
+
+    signIn('credentials', {
+      name: account.meta.name,
+      address: toHexPublicKey(account),
+      anonymous: false,
+      callbackUrl: publicRuntimeConfig.nextAuthURL,
+      token, // jangan lupa di-encrypt dulu
+    });
   };
 
   const signUpWithExternalAuth = async (
