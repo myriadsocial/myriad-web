@@ -23,24 +23,11 @@ export default NextAuth({
         address: {label: 'Address', type: 'text'},
       },
       async authorize(credentials: Record<string, string>) {
-        console.log('[next-auth][debug][authorize] credentials', credentials);
-
-        if (credentials.anonymous === 'false') {
-          try {
-            console.log('[next-auth][debug][authorize] user exist', credentials.address);
-          } catch (error) {
-            console.error(
-              '[next-auth][debug][authorize] user create error',
-              error.response.data.error,
-            );
-            throw new Error('Failed to login');
-          }
-        }
-
         return {
           name: credentials.name,
           address: credentials.address,
-          anonymous: credentials.anonymous,
+          anonymous: credentials.anonymous === 'true',
+          token: credentials.token,
         };
       },
     }),
