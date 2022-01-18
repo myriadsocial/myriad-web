@@ -12,7 +12,15 @@ type SignUpProps = {
   username: string;
 };
 
-export const login = async (values: LoginProps): Promise<string | null> => {
+type SignUpResponseProps = {
+  nonce: number;
+};
+
+type LoginResponseProps = {
+  accessToken: string;
+};
+
+export const login = async (values: LoginProps): Promise<LoginResponseProps | null> => {
   try {
     const {data} = await MyriadAPI.request({
       url: '/login',
@@ -27,13 +35,14 @@ export const login = async (values: LoginProps): Promise<string | null> => {
   }
 };
 
-export const signUp = async (values: SignUpProps): Promise<number | null> => {
+export const signUp = async (values: SignUpProps): Promise<SignUpResponseProps | null> => {
   try {
     const {data} = await MyriadAPI.request({
       url: '/signup',
       method: 'POST',
       data: values,
     });
+
     return data;
   } catch (error) {
     console.log({error});
