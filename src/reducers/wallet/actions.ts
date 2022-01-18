@@ -124,24 +124,35 @@ export const fetchRecipientDetail: ThunkActionCreator<Actions, RootState> =
 export const fetchTippedUserId: ThunkActionCreator<Actions, RootState> =
   (postId: string) => async (dispatch, getState) => {
     const {
-      timelineState: {posts},
+      timelineState: {posts, post},
     } = getState();
 
     dispatch(setLoading(true));
 
     try {
-      const tippablePosts = posts;
-
-      const {people} = tippablePosts.find(post => post.id === postId) ?? {};
-
       const {walletAddress} = await PostAPI.getWalletAddress(postId);
 
-      if (!people) {
-        const user = await UserAPI.getUserDetail(walletAddress);
-        dispatch(setTippedUser(user.name, user.profilePictureURL ?? acronym(user.name)));
-      } else {
-        dispatch(setTippedUser(people.name, people.profilePictureURL));
+      if (post) {
+        const {people, user} = post;
+        if (people) {
+          dispatch(setTippedUser(people.name, people.profilePictureURL));
+        } else {
+          dispatch(setTippedUser(user.name, user.profilePictureURL ?? acronym(user.name)));
+        }
       }
+
+      if (posts.length) {
+        const tippablePosts = posts;
+
+        const {people} = tippablePosts.find(post => post.id === postId) ?? {};
+        if (people) {
+          dispatch(setTippedUser(people.name, people.profilePictureURL));
+        } else {
+          const user = await UserAPI.getUserDetail(walletAddress);
+          dispatch(setTippedUser(user.name, user.profilePictureURL ?? acronym(user.name)));
+        }
+      }
+
       dispatch(setTippedUserId(walletAddress));
     } catch (error) {
       dispatch(
