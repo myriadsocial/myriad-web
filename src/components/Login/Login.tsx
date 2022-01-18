@@ -19,8 +19,13 @@ import {toHexPublicKey} from 'src/lib/crypto';
 export const Login: React.FC = () => {
   const styles = useStyles();
 
-  const {createSignaturePolkadotExt, anonymous, fetchUserNonce, signUpWithExternalAuth} =
-    useAuthHook();
+  const {
+    createSignaturePolkadotExt,
+    anonymous,
+    fetchUserNonce,
+    signUpWithExternalAuth,
+    loginWithExternalAuth,
+  } = useAuthHook();
   const {checkUsernameAvailable} = useProfileHook();
 
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
@@ -43,10 +48,10 @@ export const Login: React.FC = () => {
 
       if (nonce && nonce > 0) {
         const signature = await createSignaturePolkadotExt(selectedAccount, nonce);
-        console.log({signature});
 
-        // di sini panggil POST /login
-        //signInWithAccount(selectedAccount);
+        if (signature) {
+          await loginWithExternalAuth(nonce, signature, selectedAccount);
+        }
       } else {
         setLoading(false);
         callback();
