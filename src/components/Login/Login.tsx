@@ -14,11 +14,13 @@ import {Profile} from './render/Profile';
 
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
+import {toHexPublicKey} from 'src/lib/crypto';
 
 export const Login: React.FC = () => {
   const styles = useStyles();
 
-  const {getUserByAccounts, signInWithAccount, anonymous} = useAuthHook();
+  const {createSignaturePolkadotExt, anonymous, fetchUserNonce, signUpWithExternalAuth} =
+    useAuthHook();
   const {checkUsernameAvailable} = useProfileHook();
 
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
@@ -37,10 +39,14 @@ export const Login: React.FC = () => {
     if (selectedAccount) {
       setLoading(true);
 
-      const registered = await getUserByAccounts([selectedAccount]);
+      const nonce = await fetchUserNonce(selectedAccount);
 
-      if (registered && registered.length > 0) {
-        signInWithAccount(selectedAccount);
+      if (nonce && nonce > 0) {
+        const signature = await createSignaturePolkadotExt(selectedAccount, nonce);
+        console.log({signature});
+
+        // di sini panggil POST /login
+        //signInWithAccount(selectedAccount);
       } else {
         setLoading(false);
         callback();
@@ -48,9 +54,9 @@ export const Login: React.FC = () => {
     }
   };
 
-  const handleRegister = (name: string, username: string) => {
+  const handleRegister = async (name: string, username: string) => {
     if (selectedAccount) {
-      signInWithAccount(selectedAccount, name, username);
+      signUpWithExternalAuth(toHexPublicKey(selectedAccount), name, username, selectedAccount);
     }
   };
 

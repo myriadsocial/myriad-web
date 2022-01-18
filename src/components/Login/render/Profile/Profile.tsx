@@ -24,7 +24,7 @@ const USERNAME_HELPER_TEXT = `You can use ${USERNAME_MIN_LENGTH} or more charact
 export const Profile: React.FC<ProfileProps> = props => {
   const styles = useStyles();
 
-  const {onSubmit, checkUsernameAvailabilty} = props;
+  const {onSubmit, account} = props;
 
   const navigate = useNavigate();
 
@@ -173,29 +173,31 @@ export const Profile: React.FC<ProfileProps> = props => {
     return validName && validUsername;
   };
 
-  const handleConfirmation = () => {
+  const handleConfirmation = async () => {
     const valid = validate();
 
-    if (valid) {
-      checkUsernameAvailabilty(profile.username.value, available => {
-        if (available) {
-          toggleConfirmation();
-        } else {
-          setProfile(prevProfile => ({
-            ...prevProfile,
-            username: {
-              ...prevProfile.username,
-              error: true,
-              helper: 'Username already taken',
-            },
-          }));
-        }
-      });
+    if (valid && account) {
+      //checkUsernameAvailabilty(profile.username.value, available => {
+      //if (available) {
+      toggleConfirmation();
+      //} else {
+      //setProfile(prevProfile => ({
+      //...prevProfile,
+      //username: {
+      //...prevProfile.username,
+      //error: true,
+      //helper: 'Username already taken',
+      //},
+      //}));
+      //}
+      //});
     }
   };
 
   const handleSubmit = () => {
-    onSubmit(profile.name.value, profile.username.value);
+    if (account) {
+      onSubmit(profile.name.value, profile.username.value);
+    }
   };
 
   return (
