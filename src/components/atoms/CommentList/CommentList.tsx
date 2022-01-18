@@ -1,5 +1,6 @@
 import React, {createRef, useEffect} from 'react';
 
+import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {CommentDetail} from '../CommentDetail';
@@ -19,6 +20,7 @@ type CommentListProps = {
   placeholder?: string;
   focus?: boolean;
   expand?: boolean;
+  hasMoreReplies?: boolean;
   onComment: (comment: Partial<CommentProps>) => void;
   onUpvote: (comment: Comment) => void;
   onRemoveVote: (comment: Comment) => void;
@@ -29,6 +31,13 @@ type CommentListProps = {
   onSearchPeople: (query: string) => void;
   setDownvoting: (comment: Comment) => void;
   onBeforeDownvote?: () => void;
+  onCommentReplies?: (comment: Partial<CommentProps>) => void;
+  onLoadMoreReplies?: () => void;
+  onUpvoteReplies?: (replies: Comment) => void;
+  onRemoveVoteReplies?: (replies: Comment) => void;
+  setDownvotingReplies?: (replies: Comment) => void;
+  onReportReplies?: (replies: Comment) => void;
+  onSendTipReplies?: (replies: Comment) => void;
 };
 
 type refComment = Record<any, React.RefObject<HTMLDivElement>>;
@@ -46,6 +55,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
     comments = [],
     mentionables,
     deep = 0,
+    hasMoreReplies = false,
     onComment,
     onUpvote,
     onRemoveVote,
@@ -56,6 +66,13 @@ export const CommentList: React.FC<CommentListProps> = props => {
     onSearchPeople,
     setDownvoting,
     onBeforeDownvote,
+    onLoadMoreReplies,
+    onCommentReplies = () => {},
+    onUpvoteReplies = () => {},
+    onRemoveVoteReplies = () => {},
+    setDownvotingReplies = () => {},
+    onReportReplies = () => {},
+    onSendTipReplies = () => {}
   } = props;
   const {query} = useQueryParams();
 
@@ -94,18 +111,25 @@ export const CommentList: React.FC<CommentListProps> = props => {
           comment={comment}
           mentionables={mentionables}
           deep={deep}
-          onReply={onComment}
-          onUpvote={onUpvote}
-          onRemoveVote={onRemoveVote}
+          onReply={deep === 0 ? onComment : onCommentReplies}
+          onUpvote={deep === 0 ? onUpvote : onUpvoteReplies}
+          onRemoveVote={deep === 0 ? onRemoveVote : onRemoveVoteReplies}
           onLoadReplies={onLoadReplies}
           onOpenTipHistory={onOpenTipHistory}
-          onReport={onReport}
-          onSendTip={onSendTip}
+          onReport={deep === 0 ? onReport : onReportReplies}
+          onSendTip={deep === 0 ? onSendTip : onSendTipReplies}
           onSearchPeople={onSearchPeople}
-          setDownvoting={setDownvoting}
+          setDownvoting={deep === 0 ? setDownvoting : setDownvotingReplies}
           onBeforeDownvote={onBeforeDownvote}
         />
       ))}
+      {
+        comments.length > 0 && deep > 0 && 
+        hasMoreReplies &&
+        <div style={{marginLeft: '69px', cursor: 'pointer'}} onClick={onLoadMoreReplies}>
+          <Typography color="primary">View more replies</Typography>
+        </div>
+      }
     </div>
   );
 };
