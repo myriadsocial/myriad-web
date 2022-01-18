@@ -6,7 +6,6 @@ export const userToSession = (user: User): UserSession => {
     anonymous: false,
     name: user.name,
     profilePictureURL: user.profilePictureURL || '',
-    address: user.id,
     welcome: user.activityLogs
       ? user.activityLogs.filter(log =>
           [ActivityLogType.SKIP, ActivityLogType.USERNAME].includes(log.type),
@@ -19,10 +18,10 @@ export const userToSession = (user: User): UserSession => {
 
 export const credentialToSession = (credential: SignInCredential): UserSession => {
   const session: UserSession = {
+    token: credential.token,
     anonymous: credential.anonymous,
     name: credential.name,
     profilePictureURL: '',
-    address: credential.address,
     welcome: false,
   };
 

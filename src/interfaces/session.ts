@@ -1,12 +1,12 @@
 export interface SignInCredential {
-  address: string;
   name: string;
   anonymous: boolean;
+  token: string;
 }
 export interface UserSession {
+  token?: string;
   name: string;
   profilePictureURL?: string;
-  address: string;
   anonymous: boolean;
   welcome: boolean;
 }
