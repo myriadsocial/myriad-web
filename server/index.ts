@@ -2,7 +2,7 @@ import next from 'next';
 
 import * as dotenv from 'dotenv';
 import express from 'express';
-import {createProxyMiddleware, Options} from 'http-proxy-middleware';
+import {createProxyMiddleware} from 'http-proxy-middleware';
 import path from 'path';
 import serveIndex from 'serve-index';
 
