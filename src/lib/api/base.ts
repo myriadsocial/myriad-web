@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/nextjs';
 
+import {getSession} from 'next-auth/client';
 import getConfig from 'next/config';
 
 import axios, {AxiosInstance} from 'axios';
@@ -19,11 +20,20 @@ export const initialize = (params?: AuthorizationParams): AxiosInstance => {
       baseURL: publicRuntimeConfig.nextAuthURL + '/api',
     });
 
-    API.interceptors.request.use(config => {
-      config.headers = {
-        // Authorization: `Bearer [SAMPLE_TOKEN]`,
-      };
+    API.interceptors.request.use(async config => {
+      try {
+        const session = await getSession();
 
+        //@ts-ignore
+        if (session && session?.user) {
+          config.headers = {
+            //@ts-ignore
+            Authorization: `Bearer ${session.user.token}`,
+          };
+        }
+      } catch (error) {
+        Sentry.captureException(error);
+      }
       return config;
     });
 
@@ -32,7 +42,7 @@ export const initialize = (params?: AuthorizationParams): AxiosInstance => {
         return response;
       },
       error => {
-        console.error('[myriad-api][error]', error);
+        console.error('[myriad-api][error]', error.message);
 
         Sentry.captureException(error);
 
