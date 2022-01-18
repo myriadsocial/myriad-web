@@ -24,7 +24,7 @@ import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
 import {fetchFriend, searchFriend} from 'src/reducers/friend/actions';
 import {FriendState} from 'src/reducers/friend/reducer';
-import {upvote, downvote, removeVote, setDownvoting} from 'src/reducers/timeline/actions';
+import {downvote, removeVote, upvote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {setTippedUser, setTippedUserId} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
@@ -46,11 +46,10 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     hasMoreComment,
     loadInitComment,
     reply,
-    updateUpvote,
-    updateDownvote,
-    updateRemoveUpvote,
-    loadReplies,
+    updateDownvote: updateDownpipe,
     loadMoreComment,
+    updateUpvote,
+    updateRemoveUpvote,
   } = useCommentHook(referenceId);
   const {openTipHistory} = useTipHistory();
 
@@ -102,7 +101,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
               downvote(downvoting, section, (vote: Vote) => {
                 // update vote count if reference is a comment
                 if ('section' in downvoting) {
-                  updateDownvote(downvoting.id, downvoting.metric.downvotes + 1, vote);
+                  updateDownpipe(downvoting.id, downvoting.metric.downvotes + 1, vote);
                 }
               }),
             );
@@ -122,10 +121,6 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         }),
       );
     }
-  };
-
-  const handleSetDownvoting = (comment: Comment) => {
-    dispatch(setDownvoting(comment));
   };
 
   const handleRemoveVote = (comment: Comment) => {
@@ -208,16 +203,15 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         comments={comments || []}
         mentionables={mentionables}
         placeholder={placeholder}
-        onComment={handleSubmitComment}
-        onUpvote={handleUpvote}
-        onRemoveVote={handleRemoveVote}
-        onLoadReplies={loadReplies}
-        onOpenTipHistory={openTipHistory}
-        setDownvoting={handleSetDownvoting}
         focus={focus}
         expand={expand}
+        hasMoreReplies={false}
+        onUpvote={handleUpvote}
+        onRemoveVote={handleRemoveVote}
         onReport={handleReport}
         onSendTip={handleSendTip}
+        onOpenTipHistory={openTipHistory}
+        onLoadMoreReplies={console.log}
         onSearchPeople={handleSearchPeople}
       />
 

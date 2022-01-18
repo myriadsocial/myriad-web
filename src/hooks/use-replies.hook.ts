@@ -15,10 +15,10 @@ type useCommentHookProps = {
   loading: boolean;
   replies: Comment[];
   hasMoreReplies: boolean;
-  replyComment: (user: User, comment: CommentProps, callback?: () => void) => void;
-  updateUpvoteReplies: (commentId: string, total: number, vote: Vote) => void;
-  updateDownvoteReplies: (commentId: string, total: number, vote: Vote) => void;
-  updateRemoveUpvoteReplies: (commentId: string) => void;
+  reply: (user: User, comment: CommentProps, callback?: () => void) => void;
+  updateReplyUpvote: (commentId: string, total: number, vote: Vote) => void;
+  updateReplyDownvote: (commentId: string, total: number, vote: Vote) => void;
+  removeReplyVote: (commentId: string) => void;
   loadReplies: () => void;
   loadMoreReplies: () => void;
 };
@@ -38,42 +38,14 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
   });
 
   const reply = async (user: User, comment: CommentProps, callback?: () => void) => {
+    console.log('REPLY COMMENT ATTR: ', referenceId, comment.referenceId);
+
     const data = await CommentAPI.reply(comment);
     const postId = data.postId;
 
-    // if replying post
-    // if (comment.referenceId === referenceId) {
-    //   setReplies(prevComments => [...prevComments, {...data, user}]);
-    // } else {
-    //   const newComment = replies.map(item => {
-    //     if (item.id === data.referenceId) {
-    //       item.replies?.push({...data, user});
-    //     }
+    console.log('REPLY COMMENT RES: ', referenceId, data.referenceId);
 
-    //     if (item.replies) {
-    //       item.replies.map(reply => {
-    //         if (reply.id === data.referenceId) {
-    //           reply.replies?.push({...data, user});
-    //         }
-    //         return reply;
-    //       });
-    //     }
-    //     return item;
-    //   });
-
-      // setReplies(prevReplies => 
-      //   ...prevReplies,
-      //   data
-      // )
-    // }
-    console.log('LOGGING REPLIES HOOK');
-    console.log(referenceId, data.referenceId);
-    setReplies(prevReplies => (
-      [
-        ...prevReplies,
-        {...data, user}
-      ]
-    ))
+    setReplies(prevReplies => [...prevReplies, {...data, user}]);
 
     distpatch(increaseCommentCount(postId, comment.section));
 
@@ -166,7 +138,7 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
     });
   };
 
-  const updateRemoveUpvote = (commentId: string) => {
+  const updateRemoveVote = (commentId: string) => {
     const modifyVotes = (comment: Comment) => {
       if (comment.id === commentId) {
         if (comment.isDownVoted) {
@@ -246,12 +218,9 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
 
         return comment;
       });
-      
+
       setDataMeta(meta);
-      setReplies([
-        ...replies,
-        ...repliesData
-      ])
+      setReplies([...replies, ...repliesData]);
     } catch (error) {
       setError(error);
     } finally {
@@ -264,10 +233,10 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
     loading,
     replies,
     hasMoreReplies: dataMeta.totalPageCount > dataMeta.currentPage,
-    replyComment: reply,
-    updateUpvoteReplies: updateUpvote,
-    updateDownvoteReplies: updateDownvote,
-    updateRemoveUpvoteReplies: updateRemoveUpvote,
+    reply: reply,
+    updateReplyUpvote: updateUpvote,
+    updateReplyDownvote: updateDownvote,
+    removeReplyVote: updateRemoveVote,
     loadMoreReplies,
     loadReplies,
   };
