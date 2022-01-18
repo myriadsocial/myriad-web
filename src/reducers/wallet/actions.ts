@@ -132,6 +132,7 @@ export const fetchTippedUserId: ThunkActionCreator<Actions, RootState> =
     try {
       const {walletAddress} = await PostAPI.getWalletAddress(postId);
 
+      // when tipping on dedicated post page
       if (post) {
         const {people, user} = post;
         if (people) {
@@ -141,6 +142,7 @@ export const fetchTippedUserId: ThunkActionCreator<Actions, RootState> =
         }
       }
 
+      // when tipping on timeline
       if (posts.length) {
         const tippablePosts = posts;
 
