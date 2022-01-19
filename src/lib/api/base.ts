@@ -19,20 +19,12 @@ export const initialize = (params?: AuthorizationParams): AxiosInstance => {
       baseURL: publicRuntimeConfig.nextAuthURL + '/api',
     });
 
-    API.interceptors.request.use(config => {
-      config.headers = {
-        // Authorization: `Bearer [SAMPLE_TOKEN]`,
-      };
-
-      return config;
-    });
-
     API.interceptors.response.use(
       response => {
         return response;
       },
       error => {
-        console.error('[myriad-api][error]', error);
+        console.error('[myriad-api][error]', error.response.data);
 
         Sentry.captureException(error);
 
@@ -42,6 +34,22 @@ export const initialize = (params?: AuthorizationParams): AxiosInstance => {
   }
 
   return API;
+};
+
+export const setHeaders = (headers: {cookie: string}): void => {
+  console.log('setHeaders', headers);
+
+  if (API) {
+    console.log('setHeaders jadi');
+    API.interceptors.request.use(config => {
+      config.headers = {
+        ...config.headers,
+        cookie: headers.cookie,
+      };
+
+      return config;
+    });
+  }
 };
 
 export default initialize();
