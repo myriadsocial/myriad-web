@@ -46,7 +46,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     hasMoreComment,
     loadInitComment,
     reply,
-    updateDownvote: updateDownpipe,
+    updateDownvote,
     loadMoreComment,
     updateUpvote,
     updateRemoveUpvote,
@@ -101,7 +101,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
               downvote(downvoting, section, (vote: Vote) => {
                 // update vote count if reference is a comment
                 if ('section' in downvoting) {
-                  updateDownpipe(downvoting.id, downvoting.metric.downvotes + 1, vote);
+                  updateDownvote(downvoting.id, downvoting.metric.downvotes + 1, vote);
                 }
               }),
             );
@@ -208,6 +208,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         hasMoreComment={hasMoreComment}
         onUpvote={handleUpvote}
         onRemoveVote={handleRemoveVote}
+        onUpdateDownvote={updateDownvote}
         onReport={handleReport}
         onSendTip={handleSendTip}
         onOpenTipHistory={openTipHistory}

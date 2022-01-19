@@ -47,6 +47,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     mentionables,
     onUpvote,
     onRemoveVote,
+    onUpdateDownvote,
     onOpenTipHistory,
     onReport,
     onSendTip,
@@ -111,9 +112,9 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
         if (downvoting && downvoting.id === comment.id) {
           dispatch(
             downvote(comment, section, (vote: Vote) => {
-              // update vote count if reference is a comment
+              // update parent downvote if downvoting on reply
               if ('section' in downvoting) {
-                updateReplyDownvote(downvoting.id, downvoting.metric.downvotes + 1, vote);
+                onUpdateDownvote(downvoting.id, downvoting.metric.downvotes + 1, vote);
               }
             }),
           );
@@ -132,7 +133,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     if (!user) return;
 
     if (!comment.isDownVoted) {
-      setDownvoting(comment);
+      dispatch(setDownvoting(comment));
 
       if (deep < 2) {
         handleOpenReply();
@@ -355,6 +356,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
             comments={replies || []}
             onUpvote={handleRepliesUpvote}
             onRemoveVote={handleRepliesRemoveVote}
+            onUpdateDownvote={updateReplyDownvote}
             onOpenTipHistory={onOpenTipHistory}
             onReport={onReport}
             onReportReplies={handleReport}

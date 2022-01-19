@@ -38,12 +38,8 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
   });
 
   const reply = async (user: User, comment: CommentProps, callback?: () => void) => {
-    console.log('REPLY COMMENT ATTR: ', referenceId, comment.referenceId);
-
     const data = await CommentAPI.reply(comment);
     const postId = data.postId;
-
-    console.log('REPLY COMMENT RES: ', referenceId, data.referenceId);
 
     setReplies(prevReplies => [...prevReplies, {...data, user}]);
 
@@ -73,24 +69,6 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
       return prevComments.map(comment => {
         comment = modifyVotes(comment);
 
-        if (comment.replies) {
-          comment.replies.map(reply => {
-            if (reply.id === commentId) {
-              reply = modifyVotes(reply);
-            }
-
-            if (reply.replies) {
-              reply.replies.map(item => {
-                item = modifyVotes(item);
-
-                return item;
-              });
-            }
-
-            return reply;
-          });
-        }
-
         return comment;
       });
     });
@@ -113,25 +91,9 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
       return comment;
     };
 
-    setReplies(prevComments => {
-      return prevComments.map(comment => {
+    setReplies(prevReplies => {
+      return prevReplies.map(comment => {
         comment = modifyVotes(comment);
-
-        if (comment.replies) {
-          comment.replies.map(reply => {
-            reply = modifyVotes(reply);
-
-            if (reply.replies) {
-              reply.replies.map(item => {
-                item = modifyVotes(item);
-
-                return item;
-              });
-            }
-
-            return reply;
-          });
-        }
 
         return comment;
       });
@@ -157,25 +119,9 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
       return comment;
     };
 
-    setReplies(prevComments => {
-      return prevComments.map(comment => {
+    setReplies(prevReplies => {
+      return prevReplies.map(comment => {
         comment = modifyVotes(comment);
-
-        if (comment.replies) {
-          comment.replies.map(reply => {
-            reply = modifyVotes(reply);
-
-            if (reply.replies) {
-              reply.replies.map(item => {
-                item = modifyVotes(item);
-
-                return item;
-              });
-            }
-
-            return reply;
-          });
-        }
 
         return comment;
       });

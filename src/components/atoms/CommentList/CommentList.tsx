@@ -8,7 +8,7 @@ import {CommentDetail} from '../CommentDetail';
 import {FriendDetail} from 'src/components/FriendsMenu/hooks/use-friend-list.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {Comment} from 'src/interfaces/comment';
-import {SectionType} from 'src/interfaces/interaction';
+import {SectionType, Vote} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 
 type CommentListProps = {
@@ -24,6 +24,7 @@ type CommentListProps = {
   onLoadMoreReplies: () => void;
   onUpvote: (comment: Comment) => void;
   onRemoveVote: (comment: Comment) => void;
+  onUpdateDownvote: (commentId: string, total: number, vote: Vote) => void;
   onOpenTipHistory: (comment: Comment) => void;
   onSendTip: (comment: Comment) => void;
   onReport: (comment: Comment) => void;
@@ -51,6 +52,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
     hasMoreComment = false,
     onUpvote,
     onRemoveVote,
+    onUpdateDownvote,
     onOpenTipHistory,
     onReport,
     onSendTip,
@@ -97,6 +99,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
           deep={deep}
           onUpvote={onUpvote}
           onRemoveVote={onRemoveVote}
+          onUpdateDownvote={onUpdateDownvote}
           onOpenTipHistory={onOpenTipHistory}
           onReport={onReport}
           onSendTip={onSendTip}
