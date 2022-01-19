@@ -23,6 +23,7 @@ import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {removeImporter} from 'src/reducers/importers/actions';
 import {upvote, setDownvoting, removeVote} from 'src/reducers/timeline/actions';
+import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
 type PostsListContainerProps = {
@@ -81,6 +82,8 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
     } else {
       console.log('no post tipped');
     }
+    dispatch(setIsTipSent(false));
+
     setTippedPost(null);
   };
 

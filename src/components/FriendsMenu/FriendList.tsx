@@ -37,6 +37,7 @@ import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {blockedFriendList, removedFriendList} from 'src/reducers/friend/actions';
 import {UserState} from 'src/reducers/user/reducer';
+import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
@@ -122,6 +123,8 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     } else {
       console.log('no user tipped');
     }
+
+    dispatch(setIsTipSent(false));
 
     setSendTipOpened(false);
     setCurrentFriend(null);

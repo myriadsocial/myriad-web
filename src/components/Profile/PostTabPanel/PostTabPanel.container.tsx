@@ -33,6 +33,7 @@ import {ConfigState} from 'src/reducers/config/reducer';
 import {removeImporter} from 'src/reducers/importers/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
+import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
 type TimelineContainerProps = {
@@ -110,6 +111,9 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     } else {
       console.log('no post tipped');
     }
+
+    dispatch(setIsTipSent(false));
+
     setTippedPost(null);
   };
 
