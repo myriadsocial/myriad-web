@@ -1,7 +1,7 @@
 import {ChevronDownIcon} from '@heroicons/react/outline';
 import {SearchIcon} from '@heroicons/react/solid';
 
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import {
@@ -44,7 +44,7 @@ type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
 
 export const TipHistory: React.FC<TipHistoryProps> = props => {
   const {tips, hasMore, currencies, open, onClose, sendTip, onSort, onFilter, nextPage} = props;
-  const {loading, exchangeRates, loadExchangeRate} = useExchangeRate();
+  const {loading, exchangeRates} = useExchangeRate();
 
   const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -54,10 +54,6 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  useEffect(() => {
-    loadExchangeRate();
-  }, []);
 
   const getConversion = (currencyId: string) => {
     if (loading) {

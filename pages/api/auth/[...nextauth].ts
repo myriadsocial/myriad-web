@@ -128,8 +128,6 @@ export default NextAuth({
     // async redirect(url, baseUrl) { return baseUrl },
     // @ts-ignore
     async session(session, user: Record<string, string>) {
-      console.log('[next-auth][debug][session]', session, user);
-
       return {
         ...session,
         user,
@@ -142,8 +140,6 @@ export default NextAuth({
         token.address = profile.address;
         token.anonymous = profile.anonymous;
       }
-
-      console.log('[next-auth][debug][jwt] token', token);
 
       return token;
     },

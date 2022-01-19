@@ -22,7 +22,7 @@ import {Comment, CommentProps} from 'src/interfaces/comment';
 import {SectionType, ReferenceType, Vote} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
-import {fetchFriend, searchFriend} from 'src/reducers/friend/actions';
+import {searchFriend} from 'src/reducers/friend/actions';
 import {FriendState} from 'src/reducers/friend/reducer';
 import {downvote, removeVote, upvote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
@@ -66,12 +66,6 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
 
   const sendTipOpened = Boolean(tippedComment);
   const mentionables = useFriendList(friends, user);
-
-  useEffect(() => {
-    if (user) {
-      dispatch(fetchFriend(user));
-    }
-  }, [user]);
 
   useEffect(() => {
     if (isTipSent) {
