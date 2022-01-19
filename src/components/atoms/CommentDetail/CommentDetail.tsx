@@ -23,11 +23,20 @@ import {formatDistance, subDays} from 'date-fns';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {useFriendsHook} from 'src/hooks/use-friends-hook';
+import {useRepliesHook} from 'src/hooks/use-replies.hook';
+import {Comment} from 'src/interfaces/comment';
 import {CommentProps} from 'src/interfaces/comment';
-import {ReferenceType} from 'src/interfaces/interaction';
+import {ReferenceType, Vote} from 'src/interfaces/interaction';
+import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
-import {setTippedContent} from 'src/reducers/timeline/actions';
+import {
+  setTippedContent,
+  upvote,
+  downvote,
+  removeVote,
+  setDownvoting,
+} from 'src/reducers/timeline/actions';
 
 export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((props, ref) => {
   const {
@@ -37,24 +46,36 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     user,
     mentionables,
     onUpvote,
-    onReply,
-    onLoadReplies,
+    onRemoveVote,
+    onUpdateDownvote,
     onOpenTipHistory,
     onReport,
     onSendTip,
     onSearchPeople,
-    onRemoveVote,
-    setDownvoting,
     onBeforeDownvote,
   } = props;
 
+  const {
+    replies,
+    hasMoreReplies,
+    reply,
+    loadReplies,
+    loadMoreReplies,
+    updateReplyUpvote,
+    updateReplyDownvote,
+    removeReplyVote,
+  } = useRepliesHook(comment.id, deep);
+
   const dispatch = useDispatch();
+  const style = useStyles();
   const router = useRouter();
 
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
-  const editorRef = useRef<HTMLDivElement>(null);
+  const downvoting = useSelector<RootState, Post | Comment | null>(
+    state => state.timelineState.interaction.downvoting,
+  );
 
-  const style = useStyles();
+  const editorRef = useRef<HTMLDivElement>(null);
 
   const [isReplying, setIsReplying] = React.useState(false);
   const [isBlocked, setIsBlocked] = React.useState(true);
@@ -62,12 +83,8 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   const [maxLength, setMaxLength] = React.useState<number | undefined>(180);
 
   useEffect(() => {
-    handleLoadReplies();
-  }, [comment]);
-
-  useEffect(() => {
     loadBlockListId();
-    handleIsBlocked();
+    loadReplies();
   }, []);
 
   useEffect(() => {
@@ -80,15 +97,43 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     setIsReplying(!isReplying);
   };
 
-  const handleLoadReplies = () => {
-    onLoadReplies(comment.id, deep);
+  const handleSubmitComment = (attributes: Partial<CommentProps>) => {
+    if (user) {
+      setIsReplying(false);
+
+      const value = {
+        ...attributes,
+        section,
+        userId: user.id,
+        postId: comment.postId,
+      } as CommentProps;
+
+      reply(user, value, () => {
+        if (downvoting && downvoting.id === comment.id) {
+          dispatch(
+            downvote(comment, section, (vote: Vote) => {
+              // update parent downvote if downvoting on reply
+              if ('section' in downvoting) {
+                onUpdateDownvote(downvoting.id, downvoting.metric.downvotes + 1, vote);
+              }
+            }),
+          );
+        }
+      });
+    }
+  };
+
+  const handleUpvote = () => {
+    if (!user) return;
+
+    onUpvote(comment);
   };
 
   const handleDownVote = () => {
     if (!user) return;
 
     if (!comment.isDownVoted) {
-      setDownvoting(comment);
+      dispatch(setDownvoting(comment));
 
       if (deep < 2) {
         handleOpenReply();
@@ -102,10 +147,24 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     }
   };
 
-  const handleUpvote = () => {
-    if (!user) return;
+  const handleRepliesUpvote = (comment: Comment) => {
+    if (comment.isUpvoted) {
+      handleRepliesRemoveVote(comment);
+    } else {
+      dispatch(
+        upvote(comment, section, (vote: Vote) => {
+          updateReplyUpvote(comment.id, comment.metric.upvotes + 1, vote);
+        }),
+      );
+    }
+  };
 
-    onUpvote(comment);
+  const handleRepliesRemoveVote = (comment: Comment) => {
+    dispatch(
+      removeVote(comment, () => {
+        removeReplyVote(comment.id);
+      }),
+    );
   };
 
   const handleOpenTipHistory = () => {
@@ -121,12 +180,6 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     const contentType = 'comment';
     const referenceId = comment.id;
     dispatch(setTippedContent(contentType, referenceId));
-  };
-
-  const handleSendReply = (attributes: Partial<CommentProps>) => {
-    setIsReplying(false);
-
-    onReply(attributes);
   };
 
   const handleViewProfile = () => {
@@ -278,6 +331,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
             </CardActions>
           </ShowIf>
         </Card>
+
         {user && isReplying && (
           <CommentEditor
             ref={editorRef}
@@ -290,26 +344,29 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
               avatar: item.avatar,
             }))}
             onSearchMention={onSearchPeople}
-            onSubmit={handleSendReply}
+            onSubmit={handleSubmitComment}
           />
         )}
+
         {comment && (
           <CommentList
             section={section}
             user={user}
             deep={deep + 1}
-            onUpvote={onUpvote}
-            onRemoveVote={onRemoveVote}
-            comments={comment.replies || []}
-            onComment={onReply}
-            onLoadReplies={onLoadReplies}
+            comments={replies || []}
+            onUpvote={handleRepliesUpvote}
+            onRemoveVote={handleRepliesRemoveVote}
+            onUpdateDownvote={updateReplyDownvote}
             onOpenTipHistory={onOpenTipHistory}
             onReport={onReport}
+            onReportReplies={handleReport}
             onSendTip={onSendTip}
+            onSendTipReplies={handleSendTip}
             mentionables={mentionables}
             onSearchPeople={onSearchPeople}
-            setDownvoting={setDownvoting}
             onBeforeDownvote={handleOpenReply}
+            hasMoreComment={hasMoreReplies}
+            onLoadMoreReplies={loadMoreReplies}
           />
         )}
       </div>
