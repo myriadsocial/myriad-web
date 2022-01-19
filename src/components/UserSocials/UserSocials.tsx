@@ -3,7 +3,7 @@ import React from 'react';
 import {List, ListItem, ListItemText, Avatar, ListItemAvatar, Badge} from '@material-ui/core';
 import {Theme, withStyles, createStyles} from '@material-ui/core/styles';
 
-import {SocialMedia} from '../../interfaces/social';
+import {SocialMedia, SocialsEnum} from '../../interfaces/social';
 import {useStyles} from './UserSocials.styles';
 
 import {Empty} from 'src/components/atoms/Empty';
@@ -31,6 +31,27 @@ const StyledBadge = withStyles((theme: Theme) =>
 
 export const UserSocials: React.FC<UserSocialsProps> = props => {
   const {socials, isPrivate, isFriend, isOwner} = props;
+
+  const getPlatformProfileUrl = (selectedSocials: SocialMedia) => {
+    let url = '';
+
+    switch (selectedSocials.platform) {
+      case SocialsEnum.TWITTER:
+        url = `https://twitter.com/${selectedSocials.people?.username as string}`;
+        break;
+      case SocialsEnum.REDDIT:
+        url = `https://reddit.com/user/${selectedSocials.people?.username as string}`;
+        break;
+    }
+
+    return url;
+  };
+
+  const openSourceAccount = (social: SocialMedia) => {
+    const url = getPlatformProfileUrl(social);
+
+    window.open(url, '_blank');
+  };
 
   const styles = useStyles();
   if (isPrivate && !isFriend && !isOwner) {
@@ -60,7 +81,10 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
       <List component="div" className={styles.list}>
         {socials.map(social => {
           return (
-            <ListItem key={social.id} className={styles.item}>
+            <ListItem
+              key={social.id}
+              className={styles.item}
+              onClick={() => openSourceAccount(social)}>
               <ListItemAvatar>
                 <StyledBadge badgeContent={socialsIcon[social.platform]}>
                   <Avatar

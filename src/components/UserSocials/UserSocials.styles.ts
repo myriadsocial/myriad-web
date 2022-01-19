@@ -20,6 +20,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiListItemIcon-root': {
         minWidth: 40,
       },
+      cursor: 'pointer',
     },
     avatar: {
       height: 56,

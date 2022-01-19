@@ -4,7 +4,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     prompt: {
       width: '480px',
-      height: '260px',
+      minHeight: '260px',
       textAlign: 'center',
       padding: 30,
     },
