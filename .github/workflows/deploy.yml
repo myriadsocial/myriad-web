@@ -128,10 +128,11 @@ jobs:
               --set-string resources.requests.memory=512Mi \
               --set-string resources.limits.cpu=500m \
               --set-string resources.limits.memory=1024Mi \
-              --set replicaCount=3 \
+              --set replicaCount=1 \
               --set autoscaling.enabled=true \
-              --set autoscaling.minReplicas=3 \
-              --set autoscaling.maxReplicas=100
+              --set autoscaling.minReplicas=1 \
+              --set autoscaling.maxReplicas=100 \
+              --set-string nodeSelector.pool=general
             kubectl rollout status deployment/myriad-web
 
   deploy-alpha-release:
@@ -221,10 +222,11 @@ jobs:
               --set-string resources.requests.memory=512Mi \
               --set-string resources.limits.cpu=500m \
               --set-string resources.limits.memory=1024Mi \
-              --set replicaCount=3 \
+              --set replicaCount=1 \
               --set autoscaling.enabled=true \
-              --set autoscaling.minReplicas=3 \
-              --set autoscaling.maxReplicas=100
+              --set autoscaling.minReplicas=1 \
+              --set autoscaling.maxReplicas=100 \
+              --set-string nodeSelector.pool=general
             kubectl rollout status deployment/myriad-web
 
   deploy-beta-release:
@@ -317,7 +319,8 @@ jobs:
               --set replicaCount=3 \
               --set autoscaling.enabled=true \
               --set autoscaling.minReplicas=3 \
-              --set autoscaling.maxReplicas=100
+              --set autoscaling.maxReplicas=100 \
+              --set-string nodeSelector.pool=general
             kubectl rollout status deployment/myriad-web
 
   deploy-pre-release:
@@ -503,5 +506,6 @@ jobs:
               --set replicaCount=3 \
               --set autoscaling.enabled=true \
               --set autoscaling.minReplicas=3 \
-              --set autoscaling.maxReplicas=100
+              --set autoscaling.maxReplicas=100 \
+              --set-string nodeSelector.pool=general
             kubectl rollout status deployment/myriad-web
