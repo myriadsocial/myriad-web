@@ -106,6 +106,10 @@ const useStyles = makeStyles((theme: Theme) =>
       overflow: 'hidden',
       transition: 'all 0.5s cubic-bezier(0,1,0,1)',
     },
+    flex: {
+      display: 'flex',
+      alignItems: 'center',
+    },
   }),
 );
 
