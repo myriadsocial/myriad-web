@@ -44,11 +44,11 @@ export const useFriendsHook = (user?: User) => {
   const loadFriends = () => {
     if (!user) return;
 
-    dispatch(fetchFriend(user));
+    dispatch(fetchFriend());
   };
 
   const loadMoreFriends = () => {
-    dispatch(fetchFriend(user, currentFriendPage + 1));
+    dispatch(fetchFriend(currentFriendPage + 1));
   };
 
   const searchFriends = (query: string) => {

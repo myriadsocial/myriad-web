@@ -118,7 +118,7 @@ export const toggleFriendRequest: ThunkActionCreator<Actions, RootState> =
       await FriendAPI.toggleRequest(request.id, status);
 
       if (status === FriendStatus.APPROVED) {
-        dispatch(fetchFriend(user));
+        dispatch(fetchFriend());
       }
 
       dispatch(fetchFriendRequest(user));

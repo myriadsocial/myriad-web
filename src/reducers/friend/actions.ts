@@ -37,9 +37,17 @@ export type Actions = LoadFriends | FilterFriend | BaseAction;
  * Action Creator
  */
 export const fetchFriend: ThunkActionCreator<Actions, RootState> =
-  (user: User, page = 1) =>
+  (page = 1) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
+
+    const {
+      userState: {user},
+    } = getState();
+
+    if (!user) {
+      throw new Error('User not found');
+    }
 
     try {
       const {meta, data: friends} = await FriendAPI.getFriends(user.id, page);
@@ -98,7 +106,7 @@ export const removedFriendList: ThunkActionCreator<Actions, RootState> =
       }
       await FriendAPI.deleteRequest(request.id);
 
-      dispatch(fetchFriend(user));
+      dispatch(fetchFriend());
     } catch (error) {
       dispatch(setError(error.message));
     } finally {
@@ -120,7 +128,7 @@ export const blockedFriendList: ThunkActionCreator<Actions, RootState> =
       }
       await FriendAPI.blockedUser(requesteeId, user.id);
 
-      dispatch(fetchFriend(user));
+      dispatch(fetchFriend());
     } catch (error) {
       dispatch(setError(error.message));
     } finally {

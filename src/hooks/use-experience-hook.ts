@@ -1,4 +1,3 @@
-import {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {Experience} from '../interfaces/experience';
@@ -9,7 +8,6 @@ import {
   searchTags,
   cloneExperience,
   fetchExperience,
-  fetchAllExperiences,
   createExperience,
   fetchDetailExperience,
   subscribeExperience,
@@ -18,8 +16,6 @@ import {
   unsubscribeExperience,
 } from '../reducers/experience/actions';
 import {ExperienceState} from '../reducers/experience/reducer';
-
-import {UserState} from 'src/reducers/user/reducer';
 
 //TODO: isn't it better to rename this to something more general like, useSearchHook?
 // it's not obvious if we want to searchPeople we can use this hook
@@ -35,18 +31,6 @@ export const useExperienceHook = () => {
     searchExperience: searchedExperiences,
     detail: experience,
   } = useSelector<RootState, ExperienceState>(state => state.experienceState);
-  const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
-
-  useEffect(() => {
-    if (!anonymous && user) {
-      loadExperience();
-      loadAllExperiences();
-    }
-  }, [anonymous, user]);
-
-  const loadAllExperiences = () => {
-    dispatch(fetchAllExperiences());
-  };
 
   const loadExperience = () => {
     dispatch(fetchExperience());
@@ -137,7 +121,6 @@ export const useExperienceHook = () => {
     loadExperience,
     experiences,
     selectedExperience,
-    loadAllExperiences,
     allExperiences,
     saveExperience,
     tags,

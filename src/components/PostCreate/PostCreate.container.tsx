@@ -38,7 +38,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
 
   useEffect(() => {
     if (user && friends.length === 0) {
-      dispatch(fetchFriend(user));
+      dispatch(fetchFriend());
     }
   }, [dispatch, user]);
 
