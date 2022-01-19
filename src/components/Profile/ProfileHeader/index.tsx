@@ -349,7 +349,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         icon="danger"
         title="Block User?"
         subtitle="You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?">
-        <Grid container alignItems="center">
+        <div className={`${style['flex-center']}`}>
           <Button
             onClick={handleClosePrompt}
             className={style.m1}
@@ -365,7 +365,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             variant="contained">
             Block Now
           </Button>
-        </Grid>
+        </div>
       </PromptComponent>
 
       <PromptComponent
@@ -374,7 +374,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         icon="danger"
         title={`Unfriend ${person.name}?`}
         subtitle="You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?">
-        <Grid container alignItems="center">
+        <div className={`${style['flex-center']}`}>
           <Button
             onClick={closeConfirmRemoveFriend}
             className={style.m1}
@@ -390,7 +390,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             variant="contained">
             Unfriend Now
           </Button>
-        </Grid>
+        </div>
       </PromptComponent>
 
       <ReportComponent
