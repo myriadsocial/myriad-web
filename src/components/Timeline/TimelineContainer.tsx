@@ -216,9 +216,9 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
           <Typography component="div">
             Tip to{' '}
             <Box fontWeight={400} display="inline">
-              {tippedContentForHistory?.createdBy && tippedContentForHistory?.createdBy.length > 0
-                ? tippedContentForHistory?.people?.name
-                : tippedContentForHistory?.user.name ?? 'Unknown Myrian'}
+              {tippedContentForHistory?.platform === 'myriad'
+                ? tippedContentForHistory?.user.name
+                : tippedContentForHistory?.people?.name ?? 'Unknown Myrian'}
             </Box>{' '}
             sent successfully
           </Typography>

@@ -33,6 +33,7 @@ import {ConfigState} from 'src/reducers/config/reducer';
 import {removeImporter} from 'src/reducers/importers/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
+import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
 type TimelineContainerProps = {
@@ -110,6 +111,9 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     } else {
       console.log('no post tipped');
     }
+
+    dispatch(setIsTipSent(false));
+
     setTippedPost(null);
   };
 
@@ -256,9 +260,9 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
           <Typography component="div">
             Tip to{' '}
             <Box fontWeight={400} display="inline">
-              {tippedContentForHistory?.createdBy && tippedContentForHistory?.createdBy.length > 0
-                ? tippedContentForHistory?.people?.name ?? tippedContentForHistory?.user.name
-                : tippedContentForHistory?.user.name ?? 'Unknown Myrian'}
+              {tippedContentForHistory?.platform === 'myriad'
+                ? tippedContentForHistory?.user.name
+                : tippedContentForHistory?.people?.name ?? 'Unknown Myrian'}
             </Box>{' '}
             sent successfully
           </Typography>
