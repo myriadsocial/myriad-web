@@ -23,6 +23,7 @@ import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {removeImporter} from 'src/reducers/importers/actions';
 import {upvote, setDownvoting, removeVote} from 'src/reducers/timeline/actions';
+import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
 type PostsListContainerProps = {
@@ -81,6 +82,8 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
     } else {
       console.log('no post tipped');
     }
+    dispatch(setIsTipSent(false));
+
     setTippedPost(null);
   };
 
@@ -174,9 +177,9 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
           <Typography component="div">
             Tip to{' '}
             <Box fontWeight={400} display="inline">
-              {tippedContentForHistory?.createdBy && tippedContentForHistory?.createdBy.length > 0
-                ? tippedContentForHistory?.people?.name
-                : tippedContentForHistory?.user.name ?? 'Unknown Myrian'}
+              {tippedContentForHistory?.platform === 'myriad'
+                ? tippedContentForHistory?.user.name
+                : tippedContentForHistory?.people?.name ?? 'Unknown Myrian'}
             </Box>{' '}
             sent successfully
           </Typography>

@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
 import {Button} from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 
 import {PostDetail} from 'src/components/PostDetail';
 import {PostImporterContainer} from 'src/components/PostImporterList';
@@ -22,6 +24,8 @@ import {RootState} from 'src/reducers';
 import {removeImporter} from 'src/reducers/importers/actions';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
+import {setIsTipSent} from 'src/reducers/wallet/actions';
+import {WalletState} from 'src/reducers/wallet/reducer';
 
 type PostContainerProps = {
   type?: 'share' | 'default';
@@ -34,19 +38,28 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [visibility, setVisibility] = useState<Post | null>(null);
+  const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
 
   const {post, getTippedUserId} = useTimelineHook();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
   const {openTipHistory} = useTipHistory();
 
   const {openToasterSnack} = useToasterSnackHook();
 
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
+  const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | null>(null);
   const [removing, setRemoving] = useState(false);
   const [postToRemove, setPostToRemove] = useState<Post | null>(null);
   const [reported, setReported] = useState<Post | null>(null);
   const [importedPost, setImportedPost] = useState<Post | null>(null);
   const sendTipOpened = Boolean(tippedPost);
+
+  useEffect(() => {
+    if (isTipSent) {
+      closeSendTip();
+    }
+  }, [isTipSent]);
 
   const handleUpvote = (reference: Post | Comment) => {
     dispatch(upvote(reference));
@@ -62,6 +75,10 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
 
   const handleToggleDownvoting = (reference: Post | Comment | null) => {
     dispatch(setDownvoting(reference));
+  };
+
+  const handleCloseSuccessPrompt = (): void => {
+    setOpenSuccessPrompt(false);
   };
 
   const handleDeletePost = (post: Post) => {
@@ -92,6 +109,15 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
   };
 
   const closeSendTip = () => {
+    if (isTipSent && tippedPost) {
+      setOpenSuccessPrompt(true);
+      setTippedContentForHistory(tippedPost);
+    } else {
+      console.log('no post tipped');
+    }
+
+    dispatch(setIsTipSent(false));
+
     setTippedPost(null);
   };
 
@@ -128,6 +154,13 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
     setVisibility(null);
   };
 
+  const handleOpenTipHistory = (): void => {
+    if (tippedContentForHistory) {
+      openTipHistory(tippedContentForHistory);
+      setOpenSuccessPrompt(false);
+    }
+  };
+
   if (!post) return null;
 
   return (
@@ -159,6 +192,45 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
         subtitle="Find this user insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
+
+      <PromptComponent
+        icon={'success'}
+        open={openSuccessPrompt}
+        onCancel={handleCloseSuccessPrompt}
+        title={'Success'}
+        subtitle={
+          <Typography component="div">
+            Tip to{' '}
+            <Box fontWeight={400} display="inline">
+              {tippedContentForHistory?.platform === 'myriad'
+                ? tippedContentForHistory?.user.name
+                : tippedContentForHistory?.people?.name ?? 'Unknown Myrian'}
+            </Box>{' '}
+            sent successfully
+          </Typography>
+        }>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            style={{marginRight: '12px'}}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={handleOpenTipHistory}>
+            See tip history
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={handleCloseSuccessPrompt}>
+            Return
+          </Button>
+        </div>
+      </PromptComponent>
 
       <TipHistoryContainer onSendTip={handleSendTip} />
 
