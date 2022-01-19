@@ -413,7 +413,8 @@ jobs:
               --set replicaCount=3 \
               --set autoscaling.enabled=true \
               --set autoscaling.minReplicas=3 \
-              --set autoscaling.maxReplicas=100
+              --set autoscaling.maxReplicas=100 \
+              --set-string nodeSelector.pool=general
             kubectl rollout status deployment/myriad-web
 
   deploy-release:
