@@ -134,7 +134,10 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
           <ListItem>
             <ListItemText disableTypography>
               <Typography component="h1" variant="body1" gutterBottom>
-                <b>Step 2:</b> Copy Text below and post it on your timeline
+                <b>Step 2:</b>{' '}
+                {social == SocialsEnum.REDDIT
+                  ? 'Copy the text below and post it on your Reddit profile. Do not post the text on a Subreddit.'
+                  : 'Copy Text below and post it on your timeline'}
               </Typography>
 
               <TextField

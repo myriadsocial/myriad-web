@@ -91,5 +91,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         color: theme.palette.text.primary,
       },
     },
+    'flex-center': {
+      display: 'flex',
+      justifyContent: 'center',
+    },
   }),
 );
