@@ -12,6 +12,7 @@ import {useRouter} from 'next/router';
 import {ProfileTimeline} from 'src/components/Profile/ProfileComponent';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
+import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
@@ -100,6 +101,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const session = await getSession(context);
+
+  setHeaders({cookie: req.headers.cookie as string});
 
   const anonymous = session ? false : true;
   const userId = session?.user.address as string;

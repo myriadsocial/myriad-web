@@ -4,6 +4,7 @@ import {getSession} from 'next-auth/client';
 
 import {ExperienceEditContainer} from 'src/components/ExperiencePreview/ExperienceEdit.container';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
+import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -56,6 +57,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const session = await getSession(context);
+
+  setHeaders({cookie: req.headers.cookie as string});
 
   if (!session) {
     return {
