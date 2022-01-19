@@ -15,7 +15,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '.';
-import {BalanceDetail} from '../../interfaces/balance';
 import {PrimaryCoinMenuContainer} from '../PrimaryCoinMenu/PrimaryCoinMenuContainer';
 import {balanceSortOptions} from '../Timeline/default';
 import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
@@ -24,6 +23,7 @@ import {DropdownMenu} from '../atoms/DropdownMenu';
 import _ from 'lodash';
 import {formatUsd} from 'src/helpers/balance';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
+import {BalanceDetail} from 'src/interfaces/balance';
 
 type BalanceDetailListProps = {
   balanceDetails: BalanceDetail[];
