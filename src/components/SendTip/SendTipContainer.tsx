@@ -2,14 +2,14 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {SendTip} from '.';
-import {WalletState} from '../../reducers/wallet/reducer';
-import {BalanceDetail} from '../MyWallet';
 
 import _ from 'lodash';
+import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
+import {WalletState} from 'src/reducers/wallet/reducer';
 
 export const SendTipContainer: React.FC = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);

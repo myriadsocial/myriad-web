@@ -31,7 +31,8 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
   const {updateCurrencySet} = useCurrency();
 
   const initialCoinState = () => {
-    const data: BalanceDetail[] | [] = [];
+    const data: BalanceDetail[] = [];
+
     if (currenciesId.length) {
       balanceDetails.forEach(coin => {
         data[currenciesId.indexOf(coin.id)] = coin;

@@ -34,19 +34,21 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
     <div className={classes.root}>
       <div className={classes.box}>
         <Grid container justifyContent="space-between" alignItems="center">
-          <div className={classes.avatar}>
-            <CustomAvatar
-              avatar={user?.profilePictureURL || ''}
-              size={CustomAvatarSize.MEDIUM}
-              name={user?.name || alias || ''}
-              onClick={onViewProfile}
-            />
-          </div>
-          <div className={classes.name}>
-            <Typography variant="h5">{user?.name || alias || ''}</Typography>
-            <Typography variant="caption" color="textSecondary">
-              @{user?.username || 'anonymous'}
-            </Typography>
+          <div className={classes.flex}>
+            <div className={classes.avatar}>
+              <CustomAvatar
+                avatar={user?.profilePictureURL || ''}
+                size={CustomAvatarSize.MEDIUM}
+                name={user?.name || alias || ''}
+                onClick={onViewProfile}
+              />
+            </div>
+            <div className={classes.name}>
+              <Typography variant="h5">{user?.name || alias || ''}</Typography>
+              <Typography variant="caption" color="textSecondary">
+                @{user?.username || 'anonymous'}
+              </Typography>
+            </div>
           </div>
           <div className={classes.notification}>
             <IconButton aria-label="avatar" disabled={!!alias} onClick={onShowNotificationList}>

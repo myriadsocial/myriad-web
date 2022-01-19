@@ -12,12 +12,11 @@ const MyWalletContainer: React.FC = () => {
   const {user, currencies} = useSelector<RootState, UserState>(state => state.userState);
   const {loadExchangeRate} = useExchangeRate();
 
-  const {load} = usePolkadotApi();
+  const {loading} = usePolkadotApi();
 
-  if (!user) return null;
+  if (!user || loading) return null;
 
   useEffect(() => {
-    load(user.id, currencies);
     loadExchangeRate();
   }, [currencies, user]);
 

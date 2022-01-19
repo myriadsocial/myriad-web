@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/nextjs';
 
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {SimpleSendTipProps} from '../interfaces/transaction';
@@ -12,7 +12,6 @@ import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {useTipSummaryHook} from 'src/hooks/use-tip-summary.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {Currency} from 'src/interfaces/currency';
 import {SendTipProps} from 'src/interfaces/send-tips/send-tips';
 import {ContentType} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
@@ -20,11 +19,17 @@ import {estimateFee, signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {fetchBalances} from 'src/reducers/balance/actions';
 import {BalanceState} from 'src/reducers/balance/reducer';
+import {UserState} from 'src/reducers/user/reducer';
 
 export const usePolkadotApi = () => {
   const dispatch = useDispatch();
-  const balanceState = useSelector<RootState, BalanceState>(state => state.balanceState);
+
+  const {anonymous, currencies} = useSelector<RootState, UserState>(state => state.userState);
+  const {balanceDetails, loading: loadingBalance} = useSelector<RootState, BalanceState>(
+    state => state.balanceState,
+  );
   const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
+
   const {showAlert, showTipAlert} = useAlertHook();
   const {openTipSummaryForComment} = useTipSummaryHook();
   const {openToasterSnack} = useToasterSnackHook();
@@ -34,9 +39,11 @@ export const usePolkadotApi = () => {
   const [isSignerLoading, setSignerLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const load = async (address: string, availableTokens: Currency[]) => {
-    dispatch(fetchBalances(address, availableTokens));
-  };
+  useEffect(() => {
+    if (!anonymous && currencies.length > 0 && balanceDetails.length === 0) {
+      dispatch(fetchBalances());
+    }
+  }, [anonymous, currencies, balanceDetails]);
 
   // TODO: remove only if simplerSendTip works!
   const sendTip = async (
@@ -211,6 +218,11 @@ export const usePolkadotApi = () => {
           variant: 'warning',
           message: 'Transaction signing cancelled',
         });
+      } else {
+        openToasterSnack({
+          variant: 'warning',
+          message: error.message,
+        });
       }
     } finally {
       setLoading(false);
@@ -219,12 +231,12 @@ export const usePolkadotApi = () => {
   };
 
   return {
-    loadingBalance: balanceState.loading,
+    loadingBalance,
     loading,
+    balanceDetails,
     isSignerLoading,
     isFetchingFee,
     error,
-    load,
     sendTip,
     simplerSendTip,
     getEstimatedFee,

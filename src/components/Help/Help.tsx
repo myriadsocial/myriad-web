@@ -14,8 +14,12 @@ const {publicRuntimeConfig} = getConfig();
 export const HelpComponent: React.FC = () => {
   const style = useStyles();
 
-  const handleRedirectMyriadSocial = () => {
-    window.open(publicRuntimeConfig.myriadWebsiteURL, '_blank');
+  const handleRedirectTermsAndConditions = () => {
+    window.open(`/term-of-use`, '_blank');
+  };
+
+  const handleRedirectPrivacyAndPolicy = () => {
+    window.open(`/privacy-policy`, '_blank');
   };
 
   const handleRedirectToTelegram = () => {
@@ -25,14 +29,14 @@ export const HelpComponent: React.FC = () => {
   return (
     <List className={style.root}>
       <ListItem className={style.item} alignItems="center">
-        <ListItemText onClick={handleRedirectMyriadSocial}>
+        <ListItemText onClick={handleRedirectTermsAndConditions}>
           <Typography className={style.name} component="span" color="textPrimary">
             Terms and conditions
           </Typography>
         </ListItemText>
       </ListItem>
       <ListItem className={style.item} alignItems="center">
-        <ListItemText onClick={handleRedirectMyriadSocial}>
+        <ListItemText onClick={handleRedirectPrivacyAndPolicy}>
           <Typography className={style.name} component="span" color="textPrimary">
             Privacy and Policy
           </Typography>

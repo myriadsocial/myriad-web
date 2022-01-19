@@ -37,14 +37,14 @@ export const FriendRequestListContainer: React.FC<FriendRequestContainerProps> =
     });
   }, 300);
 
-  const declineFriendRequest = (request: Friend) => {
+  const declineFriendRequest = debounce((request: Friend) => {
     removeFriendRequest(request);
 
     openToasterSnack({
       message: 'Friend request rejected',
       variant: 'warning',
     });
-  };
+  }, 300);
 
   return (
     <FriendRequestComponent

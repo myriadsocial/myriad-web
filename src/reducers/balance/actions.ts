@@ -5,9 +5,9 @@ import * as constants from './constants';
 import {Action} from 'redux';
 import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {Currency} from 'src/interfaces/currency';
+import {CurrencyId} from 'src/interfaces/currency';
 import * as TokenAPI from 'src/lib/api/token';
-import {connectToBlockchain} from 'src/lib/services/polkadot-js';
+import {checkAccountBalance} from 'src/lib/services/polkadot-js';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -24,54 +24,79 @@ export interface FetchCurrenciesId extends Action {
   currenciesId: string[];
 }
 
+export interface IncreaseBalance extends Action {
+  type: constants.INCREASE_BALANCE;
+  currencyId: CurrencyId;
+  change: number;
+}
+
+export interface DecreaseBalance extends Action {
+  type: constants.DECREASE_BALANCE;
+  currencyId: CurrencyId;
+  change: number;
+}
+
 /**
  * Union Action Types
  */
 
-export type Actions = FetchBalances | BaseAction | FetchCurrenciesId;
+export type Actions =
+  | FetchBalances
+  | IncreaseBalance
+  | DecreaseBalance
+  | FetchCurrenciesId
+  | BaseAction;
+
+/**
+ *
+ * Actions
+ */
+export const increaseBalance = (currencyId: CurrencyId, change: number): IncreaseBalance => ({
+  type: constants.INCREASE_BALANCE,
+  currencyId,
+  change,
+});
+
+export const decreaseBalance = (currencyId: CurrencyId, change: number): DecreaseBalance => ({
+  type: constants.DECREASE_BALANCE,
+  currencyId,
+  change,
+});
 
 /**
  * Action Creator
  */
 
 export const fetchBalances: ThunkActionCreator<Actions, RootState> =
-  (address: string, availableTokens: Currency[]) => async dispatch => {
+  () => async (dispatch, getState) => {
+    const {
+      userState: {currencies, user, anonymous},
+    } = getState();
+
+    if (anonymous || !user) return;
+
+    const address: string = user.id;
+    const tokenBalances: BalanceDetail[] = [];
+
     dispatch(setLoading(true));
-    const tokenBalances = [];
 
     try {
-      for (let i = 0; i < availableTokens.length; i++) {
-        const provider = availableTokens[i].rpcURL;
-        const api = await connectToBlockchain(provider);
+      for (const currency of currencies) {
+        const {free, nonce} = await checkAccountBalance(address, currency, change => {
+          const amount = formatNumber(+change.toString(), currency.decimal);
 
-        if (api) {
-          if (availableTokens[i].native) {
-            const {data: balance} = await api.query.system.account(address);
-            const tempBalance = balance.free as unknown;
-            tokenBalances.push({
-              freeBalance: formatNumber(tempBalance as number, availableTokens[i].decimal),
-              id: availableTokens[i].id,
-              decimal: availableTokens[i].decimal,
-              rpcURL: provider,
-              image: availableTokens[i].image,
-              native: availableTokens[i].native,
-            });
+          if (amount > 0) {
+            dispatch(increaseBalance(currency.id, amount));
           } else {
-            const tokenData: any = await api.query.tokens.accounts(address, {
-              TOKEN: availableTokens[i].id,
-            });
-            tokenBalances.push({
-              freeBalance: formatNumber(tokenData.free as number, availableTokens[i].decimal),
-              id: availableTokens[i].id,
-              decimal: availableTokens[i].decimal,
-              rpcURL: provider,
-              image: availableTokens[i].image,
-              native: availableTokens[i].native,
-            });
+            dispatch(decreaseBalance(currency.id, Math.abs(amount)));
           }
+        });
 
-          await api.disconnect();
-        }
+        tokenBalances.push({
+          ...currency,
+          freeBalance: formatNumber(+free.toString(), currency.decimal),
+          previousNonce: nonce ? +nonce.toString() : 0,
+        });
       }
 
       dispatch({
