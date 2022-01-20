@@ -59,7 +59,9 @@ export const Profile: React.FC<ProfileProps> = props => {
   };
 
   const handleChangeUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const username = event.target.value;
+    let username = event.target.value;
+
+    username = username.toLowerCase();
 
     setProfile(prevProfile => ({
       ...prevProfile,
