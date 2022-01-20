@@ -16,7 +16,7 @@ export const BlockListContainer: React.FC = () => {
   const {users} = useSelector<RootState, BlockState>(state => state.blockState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
 
-  const {loadBlockList} = useFriendsHook(user);
+  const {loadBlockList} = useFriendsHook();
 
   useEffect(() => {
     loadBlockList();

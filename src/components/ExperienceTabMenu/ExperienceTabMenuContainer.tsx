@@ -40,13 +40,6 @@ export const ExperienceTabMenuContainer: React.FC = () => {
   const [myExperience, setMyExperience] = useState<UserExperience[]>([]);
 
   useEffect(() => {
-    //TODO: move this to app level to avoid refetching
-    if (!anonymous && user) {
-      loadExperience();
-    }
-  }, [anonymous, user]);
-
-  useEffect(() => {
     setMyExperience(experiences);
   }, [experiences]);
 

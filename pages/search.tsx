@@ -8,8 +8,11 @@ import {SearchResultContainer} from 'src/components/Search/SearchResultContainer
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {RootState} from 'src/reducers';
+import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
+import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchExperience} from 'src/reducers/experience/actions';
+import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
@@ -94,8 +97,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
       dispatch(fetchExperience()),
+      dispatch(getUserCurrencies()),
+      dispatch(fetchFriend()),
     ]);
   }
+
+  await dispatch(fetchExchangeRates());
 
   return {
     props: {

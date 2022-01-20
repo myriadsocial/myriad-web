@@ -22,7 +22,6 @@ import {CommentRender} from './CommentRender';
 import {formatDistance, subDays} from 'date-fns';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
-import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {useRepliesHook} from 'src/hooks/use-replies.hook';
 import {Comment} from 'src/interfaces/comment';
 import {CommentProps} from 'src/interfaces/comment';
@@ -45,6 +44,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     deep,
     user,
     mentionables,
+    blockedUserIds,
     onUpvote,
     onRemoveVote,
     onUpdateDownvote,
@@ -78,18 +78,15 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   const editorRef = useRef<HTMLDivElement>(null);
 
   const [isReplying, setIsReplying] = React.useState(false);
-  const [isBlocked, setIsBlocked] = React.useState(true);
-  const {blocklistId, loadBlockListId} = useFriendsHook(user);
+  const [isBlocked, setIsBlocked] = React.useState(blockedUserIds.includes(comment.userId));
   const [maxLength, setMaxLength] = React.useState<number | undefined>(180);
 
-  useEffect(() => {
-    loadBlockListId();
-    loadReplies();
-  }, []);
+  const totalVote = comment.metric.upvotes - comment.metric.downvotes;
+  const isOwnComment = comment.userId === user?.id;
 
   useEffect(() => {
-    handleIsBlocked();
-  }, [blocklistId]);
+    loadReplies();
+  }, []);
 
   const handleOpenReply = () => {
     if (!user) return;
@@ -186,10 +183,6 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     router.push(`/profile/${comment.userId}`);
   };
 
-  const handleIsBlocked = () => {
-    setIsBlocked(blocklistId.includes(comment.userId));
-  };
-
   const handleOpenComment = () => {
     setIsBlocked(false);
   };
@@ -201,12 +194,6 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     return newFormat;
   };
 
-  const totalVote = () => {
-    return comment.metric.upvotes - comment.metric.downvotes;
-  };
-
-  const owner = comment.userId === user?.id;
-
   return (
     <div className={style.flex} ref={ref}>
       <div className={style.tree}>
@@ -216,8 +203,8 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
           onClick={handleViewProfile}>
           {acronym(comment.user?.name)}
         </Avatar>
-        {deep !== 2 && comment.replies && <div className={style.verticalTree} />}
-        {deep !== 0 && <div className={style.horizontalTree} />}
+        {(deep === 0 || replies.length > 0) && <div className={style.verticalTree} />}
+        {deep > 0 && <div className={style.horizontalTree} />}
       </div>
       <div className={style.fullWidth}>
         <Card className={style.comment}>
@@ -286,7 +273,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                 isUpVote={Boolean(comment.isUpvoted)}
                 isDownVote={Boolean(comment.isDownVoted)}
                 variant="row"
-                vote={totalVote()}
+                vote={totalVote}
                 size="small"
                 onDownVote={handleDownVote}
                 onUpvote={handleUpvote}
@@ -302,7 +289,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                 </Button>
               )}
 
-              <ShowIf condition={!owner}>
+              <ShowIf condition={!isOwnComment}>
                 <Button
                   disabled={balanceDetails.length === 0}
                   classes={{root: style.button}}
@@ -354,6 +341,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
             user={user}
             deep={deep + 1}
             comments={replies || []}
+            blockedUserIds={blockedUserIds}
             onUpvote={handleRepliesUpvote}
             onRemoveVote={handleRepliesRemoveVote}
             onUpdateDownvote={updateReplyDownvote}

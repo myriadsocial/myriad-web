@@ -18,11 +18,12 @@ import {Modal} from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
+import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {Comment, CommentProps} from 'src/interfaces/comment';
 import {SectionType, ReferenceType, Vote} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
-import {fetchFriend, searchFriend} from 'src/reducers/friend/actions';
+import {searchFriend} from 'src/reducers/friend/actions';
 import {FriendState} from 'src/reducers/friend/reducer';
 import {downvote, removeVote, upvote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
@@ -53,6 +54,8 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   } = useCommentHook(referenceId);
   const {openTipHistory} = useTipHistory();
 
+  const {blocklistId, loadBlockListId} = useFriendsHook();
+
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
   const downvoting = useSelector<RootState, Post | Comment | null>(
@@ -68,10 +71,8 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const mentionables = useFriendList(friends, user);
 
   useEffect(() => {
-    if (user) {
-      dispatch(fetchFriend(user));
-    }
-  }, [user]);
+    loadBlockListId();
+  }, []);
 
   useEffect(() => {
     if (isTipSent) {
@@ -202,6 +203,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         user={user}
         comments={comments || []}
         mentionables={mentionables}
+        blockedUserIds={blocklistId}
         placeholder={placeholder}
         focus={focus}
         expand={expand}

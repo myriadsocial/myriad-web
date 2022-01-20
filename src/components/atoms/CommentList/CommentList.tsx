@@ -16,6 +16,7 @@ type CommentListProps = {
   user?: User;
   comments: Comment[];
   mentionables: FriendDetail[];
+  blockedUserIds: string[];
   deep?: number;
   placeholder?: string;
   focus?: boolean;
@@ -48,6 +49,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
     user,
     comments = [],
     mentionables,
+    blockedUserIds,
     deep = 0,
     hasMoreComment = false,
     onUpvote,
@@ -96,6 +98,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
           key={comment.id}
           comment={comment}
           mentionables={mentionables}
+          blockedUserIds={blockedUserIds}
           deep={deep}
           onUpvote={onUpvote}
           onRemoveVote={onRemoveVote}

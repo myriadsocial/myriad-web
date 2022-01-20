@@ -12,8 +12,11 @@ import {Experience} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
+import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchExperience} from 'src/reducers/experience/actions';
+import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {fetchPopularTopic} from 'src/reducers/tag/actions';
 import {updateFilter} from 'src/reducers/timeline/actions';
@@ -117,8 +120,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(countNewNotification()),
       dispatch(fetchExperience()),
       dispatch(fetchPopularTopic()),
+      dispatch(getUserCurrencies()),
+      dispatch(fetchFriend()),
     ]);
   }
+
+  await dispatch(fetchExchangeRates());
 
   let experience: any | null = null;
 
