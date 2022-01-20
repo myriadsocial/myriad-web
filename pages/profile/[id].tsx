@@ -15,9 +15,12 @@ import {generateAnonymousUser} from 'src/helpers/auth';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
+import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchAccountPrivacySetting} from 'src/reducers/config/actions';
+import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchExperience} from 'src/reducers/experience/actions';
+import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {checkFriendedStatus, setProfile} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
@@ -118,8 +121,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(countNewNotification()),
       dispatch(fetchExperience()),
       dispatch(fetchAccountPrivacySetting(profileId)),
+      dispatch(getUserCurrencies()),
+      dispatch(fetchFriend()),
     ]);
   }
+
+  await dispatch(fetchExchangeRates());
 
   try {
     const detail = await UserAPI.getUserDetail(profileId, userId);

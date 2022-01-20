@@ -20,8 +20,11 @@ import {Post, PostVisibility} from 'src/interfaces/post';
 import * as FriendAPI from 'src/lib/api/friends';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as PostAPI from 'src/lib/api/post';
+import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
+import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchExperience} from 'src/reducers/experience/actions';
+import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {setPost} from 'src/reducers/timeline/actions';
 import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
@@ -190,8 +193,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
       dispatch(fetchExperience()),
+      dispatch(getUserCurrencies()),
+      dispatch(fetchFriend()),
     ]);
   }
+
+  await dispatch(fetchExchangeRates());
 
   let description =
     post?.text ??

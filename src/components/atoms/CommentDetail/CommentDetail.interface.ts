@@ -9,6 +9,7 @@ export interface CommentDetailProps {
   comment: Comment;
   deep: number;
   mentionables: FriendDetail[];
+  blockedUserIds: string[];
   onUpvote: (comment: Comment) => void;
   onRemoveVote: (comment: Comment) => void;
   onUpdateDownvote: (commentId: string, total: number, vote: Vote) => void;
