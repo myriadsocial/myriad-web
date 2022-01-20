@@ -3,7 +3,6 @@ import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 import {LoopbackWhere} from './interfaces/loopback-query.interface';
 
-import {isHashtag} from 'src/helpers/string';
 import {Dislike, Like} from 'src/interfaces/interaction';
 import {Post, PostProps, ImportPostProps, PostVisibility, PostStatus} from 'src/interfaces/post';
 import {
@@ -59,24 +58,6 @@ export const getPost = async (
       break;
     default:
       break;
-  }
-
-  if (filters && filters.tags && filters.tags.length) {
-    const condition = {
-      tags: {
-        inq: filters.tags.map(tag => tag.toLowerCase()),
-      },
-    };
-
-    if (where.or) {
-      where.or.push(condition);
-    } else {
-      where.or = [condition];
-    }
-
-    where.visibility = {
-      inq: [PostVisibility.PUBLIC],
-    };
   }
 
   if (filters && filters.people && filters.people.length) {
@@ -186,12 +167,10 @@ export const getPost = async (
     case TimelineType.FRIEND:
     case TimelineType.TRENDING:
       params.filter = filterParams;
-      params.userId = userId;
       params.timelineType = type;
       break;
     case TimelineType.EXPERIENCE:
       params.filter = filterParams;
-      params.userId = userId;
       params.timelineType = type;
       params.experienceId = filters?.experienceId;
       break;
@@ -202,8 +181,11 @@ export const getPost = async (
         params.timelineType = TimelineType.ALL;
       }
 
+      if (filters?.tags?.length) {
+        params.topic = filters.tags;
+      }
+
       params.filter = filterParams;
-      params.userId = userId || 'anonymous';
       break;
   }
 
@@ -230,8 +212,7 @@ export const getPost = async (
 
 export const findPosts = async (user: User, query: string, page = 1): Promise<PostList> => {
   const search = query.replace('#', '');
-  const findingHashtag = isHashtag(query);
-  let path = `/posts?q=${encodeURIComponent(search)}`;
+  const path = `/posts?q=${encodeURIComponent(search)}`;
 
   const availabilityFilter: Record<string, any> = {
     or: [
@@ -253,24 +234,7 @@ export const findPosts = async (user: User, query: string, page = 1): Promise<Po
     ],
   };
 
-  let where = availabilityFilter;
-
-  if (findingHashtag) {
-    path = '/posts';
-
-    where = {
-      and: [
-        {
-          tags: {
-            inq: [search.toLowerCase()],
-          },
-        },
-        {
-          ...availabilityFilter,
-        },
-      ],
-    };
-  }
+  const where = availabilityFilter;
 
   const {data} = await MyriadAPI.request<PostList>({
     url: path,
@@ -279,7 +243,6 @@ export const findPosts = async (user: User, query: string, page = 1): Promise<Po
       pageNumber: page,
       pageLimit: PAGINATION_LIMIT,
       importers: true,
-      userId: user.id,
       filter: {
         include: [
           {
