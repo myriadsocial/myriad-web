@@ -155,14 +155,20 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
         transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
         open={Boolean(anchorEl)}
         onClose={handleClose}>
-        <Link href={`/experience/${experienceId}/preview`}>
+        <Link
+          href={`/experience/[experienceId]/preview`}
+          as={`/experience/${experienceId}/preview`}
+          passHref>
           <MenuItem>See details</MenuItem>
         </Link>
         <ShowIf condition={subscribed}>
           <MenuItem onClick={handleClone}>Clone</MenuItem>
         </ShowIf>
         <ShowIf condition={!subscribed}>
-          <Link href={`/experience/${experienceId}/edit`}>
+          <Link
+            href={`/experience/[experienceId]/edit`}
+            as={`/experience/${experienceId}/edit`}
+            passHref>
             <MenuItem>Edit experience</MenuItem>
           </Link>
         </ShowIf>

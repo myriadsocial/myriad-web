@@ -173,7 +173,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             <Avatar
               alt={person.name}
               src={person.profilePictureURL}
-              variant="circle"
+              variant="circular"
               className={style.avatar}>
               {acronym(person.name)}
             </Avatar>

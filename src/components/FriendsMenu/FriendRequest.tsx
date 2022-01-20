@@ -52,12 +52,10 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
               </Avatar>
             </ListItemAvatar>
             <ListItemText>
-              <Link href={`/profile/${request.id}`}>
-                <a href={`/profile/${request.id}`} className={style.link}>
-                  <Typography className={style.name} component="span" color="textPrimary">
-                    {request.name}
-                  </Typography>
-                </a>
+              <Link href={'/profile/[id]'} as={`/profile/${request.id}`} shallow>
+                <Typography className={style.name} component="a" color="textPrimary">
+                  {request.name}
+                </Typography>
               </Link>
               <ShowIf condition={!!request.totalMutual}>
                 <Typography className={style.friend} component="p" color="textSecondary">

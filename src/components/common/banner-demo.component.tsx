@@ -1,7 +1,5 @@
 import React from 'react';
 
-import Link from 'next/link';
-
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -129,17 +127,15 @@ const BannerDemo: React.FC = () => {
             Feel free to click around, and don{"'"}t forget to join our:
           </Typography>
           <div className={`${style.mb} ${style['flex-col']}`}>
-            <Link href="https://t.me/myriadsocial">
-              <a href="https://t.me/myriadsocial" target="_blank" rel="noreferrer">
-                <Button
-                  className={style.button}
-                  variant="outlined"
-                  color="primary"
-                  startIcon={<SendOutlinedIcon />}>
-                  Telegram channel
-                </Button>
-              </a>
-            </Link>
+            <a href="https://t.me/myriadsocial" target="_blank" rel="noreferrer">
+              <Button
+                className={style.button}
+                variant="outlined"
+                color="primary"
+                startIcon={<SendOutlinedIcon />}>
+                Telegram channel
+              </Button>
+            </a>
           </div>
           <Typography className={`${style.paragraph} ${style.mb} ${style.center}`}>
             Contact us if you have any queries, feedback, bug reports or if you just want to say

@@ -121,7 +121,7 @@ export const ListItemSocialComponent: React.FC<ListItemSocialComponentProps> = p
       </ListItemIcon>
 
       <ListItemAvatar className={styles.avatar}>
-        <Avatar alt={title} src={avatar} variant="circle" className={styles['medium']}>
+        <Avatar alt={title} src={avatar} variant="circular" className={styles['medium']}>
           {acronym(title)}
         </Avatar>
       </ListItemAvatar>

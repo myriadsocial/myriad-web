@@ -34,10 +34,8 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
       <Typography component="div" className={style.root}>
         <ShowIf condition={platform !== 'myriad'}>Imported on&nbsp;</ShowIf>
 
-        <Link href={`/post/${postId}`}>
-          <a href={`/post/${postId}`} className={style.linkGrey}>
-            {getDate(date)}&nbsp;
-          </a>
+        <Link href={`/post/[id]`} as={`/post/${postId}`} shallow>
+          <a className={style.linkGrey}>{getDate(date)}&nbsp;</a>
         </Link>
 
         <ShowIf condition={platform !== 'myriad'}>
@@ -45,14 +43,12 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
             <>
               by&nbsp;
               {importers.map(importer => (
-                <>
-                  <Link key={importer.id} href={`/profile/${importer.id}`}>
-                    <a href={`/profile/${importer.id}`} className={style.link}>
-                      {importer.name}
-                    </a>
+                <span key={importer.id}>
+                  <Link href={'/profile/[id]'} as={`/profile/${importer.id}`} shallow>
+                    <a className={style.link}>{importer.name}</a>
                   </Link>
                   <ShowIf condition={totalImporters > 1}>&nbsp;and&nbsp;</ShowIf>
-                </>
+                </span>
               ))}
               <ShowIf condition={importers.length === 0}>
                 <span
@@ -75,11 +71,9 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
                 </span>
               </ShowIf>
               &nbsp;via&nbsp;
-              <Link href={url}>
-                <a href={url} className={style.link} target="_blank" rel="noreferrer">
-                  {platform}
-                </a>
-              </Link>
+              <a href={url} className={style.link} target="_blank" rel="noreferrer">
+                {platform}
+              </a>
             </>
           )}
         </ShowIf>

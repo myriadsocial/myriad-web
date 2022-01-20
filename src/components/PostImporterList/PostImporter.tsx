@@ -2,7 +2,9 @@ import React, {useEffect, useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {List, ListItem, ListItemText, Link, Typography} from '@material-ui/core';
+import Link from 'next/link';
+
+import {List, ListItem, ListItemText, Typography} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 
@@ -85,28 +87,27 @@ export const PostImporter: React.FC<Props> = props => {
             loader={<Loading />}>
             {importers.map(e => {
               return (
-                <Link
-                  key={e.id}
-                  href={`/profile/${e.id}`}
-                  style={{cursor: 'pointer', textDecoration: 'none'}}>
-                  <ListItem
-                    style={{
-                      background: importer === e.id ? 'rgba(255, 200, 87, 0.2)' : '#FFF',
-                      padding: '8px 30px',
-                    }}
-                    onMouseEnter={onHover(e.id)}
-                    onMouseLeave={onHover(undefined)}>
-                    <ListItemAvatar>
-                      <Avatar alt={'name'} className={styles.avatar} src={e.profilePictureURL}>
-                        {acronym(e.name)}
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                      <Typography className={styles.name} component="span" color="textPrimary">
-                        {e.name}
-                      </Typography>
-                    </ListItemText>
-                  </ListItem>
+                <Link key={e.id} href={'/profile/[id]'} as={`/profile/${e.id}`} shallow passHref>
+                  <a style={{cursor: 'pointer', textDecoration: 'none'}}>
+                    <ListItem
+                      style={{
+                        background: importer === e.id ? 'rgba(255, 200, 87, 0.2)' : '#FFF',
+                        padding: '8px 30px',
+                      }}
+                      onMouseEnter={onHover(e.id)}
+                      onMouseLeave={onHover(undefined)}>
+                      <ListItemAvatar>
+                        <Avatar alt={'name'} className={styles.avatar} src={e.profilePictureURL}>
+                          {acronym(e.name)}
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText>
+                        <Typography className={styles.name} component="span" color="textPrimary">
+                          {e.name}
+                        </Typography>
+                      </ListItemText>
+                    </ListItem>
+                  </a>
                 </Link>
               );
             })}

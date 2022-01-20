@@ -2,7 +2,6 @@ import React from 'react';
 
 import {Typography} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -37,12 +36,13 @@ export const PolkadotAccountList: React.FC<PolkadotAccountListProps> = ({
         <ShowIf condition={accounts.length == 0}>
           <Typography className={styles.help}>
             Please open your
-            <Link
+            <a
               href="https://polkadot.js.org/extension"
               target="_blank"
-              className={styles.polkadot}>
+              className={styles.polkadot}
+              rel="noreferrer">
               Polkadot.js
-            </Link>{' '}
+            </a>{' '}
             extension and create new account or import existing.Then reload this page.
           </Typography>
 

@@ -2,7 +2,17 @@
 const {withSentryConfig} = require('@sentry/nextjs');
 const {version} = require('./package.json');
 
+/**
+ * @type {import('next').NextConfig}
+ */
 const moduleExports = {
+  generateBuildId: async () => {
+    if (process.env.BUILD_ID) {
+      return process.env.BUILD_ID;
+    } else {
+      return `${new Date().getTime()}`;
+    }
+  },
   future: {
     webpack5: false,
   },

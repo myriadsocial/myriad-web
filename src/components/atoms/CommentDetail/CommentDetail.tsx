@@ -213,12 +213,8 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
               title={
                 <div className={style.flexSpaceBetween}>
                   <div>
-                    <Link href={`/profile/${comment.user.id}`}>
-                      <Typography
-                        variant="body1"
-                        className={style.link}
-                        component="a"
-                        href={`/profile/${comment.user.id}`}>
+                    <Link href={'/profile/[id]'} as={`/profile/${comment.user.id}`} shallow>
+                      <Typography variant="body1" className={style.link} component="a">
                         Blocked user
                       </Typography>
                     </Link>
@@ -244,12 +240,8 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
             <CardHeader
               title={
                 <>
-                  <Link href={`/profile/${comment.user.id}`}>
-                    <Typography
-                      variant="body1"
-                      className={style.link}
-                      component="a"
-                      href={`/profile/${comment.user.id}`}>
+                  <Link href={'/profile/[id]'} as={`/profile/${comment.user.id}`} shallow>
+                    <Typography variant="body1" className={style.link} component="a">
                       {comment.user.name}
                     </Typography>
                   </Link>

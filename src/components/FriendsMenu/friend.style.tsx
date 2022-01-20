@@ -48,11 +48,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#424242',
       cursor: 'pointer',
     },
-    link: {textDecoration: 'none'},
     name: {
       fontSize: '16px',
       lineHeight: '20.08px',
       fontWeight: 400,
+      textDecoration: 'none',
     },
     friend: {
       fontSize: '12px',
