@@ -1,13 +1,14 @@
 import React, {createRef, useEffect} from 'react';
 
+import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {CommentDetail} from '../CommentDetail';
 
 import {FriendDetail} from 'src/components/FriendsMenu/hooks/use-friend-list.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
-import {Comment, CommentProps} from 'src/interfaces/comment';
-import {SectionType} from 'src/interfaces/interaction';
+import {Comment} from 'src/interfaces/comment';
+import {SectionType, Vote} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 
 type CommentListProps = {
@@ -19,16 +20,18 @@ type CommentListProps = {
   placeholder?: string;
   focus?: boolean;
   expand?: boolean;
-  onComment: (comment: Partial<CommentProps>) => void;
+  hasMoreComment: boolean;
+  onLoadMoreReplies: () => void;
   onUpvote: (comment: Comment) => void;
   onRemoveVote: (comment: Comment) => void;
-  onLoadReplies: (referenceId: string, deep: number) => void;
+  onUpdateDownvote: (commentId: string, total: number, vote: Vote) => void;
   onOpenTipHistory: (comment: Comment) => void;
   onSendTip: (comment: Comment) => void;
   onReport: (comment: Comment) => void;
   onSearchPeople: (query: string) => void;
-  setDownvoting: (comment: Comment) => void;
   onBeforeDownvote?: () => void;
+  onReportReplies?: (replies: Comment) => void;
+  onSendTipReplies?: (replies: Comment) => void;
 };
 
 type refComment = Record<any, React.RefObject<HTMLDivElement>>;
@@ -46,16 +49,16 @@ export const CommentList: React.FC<CommentListProps> = props => {
     comments = [],
     mentionables,
     deep = 0,
-    onComment,
+    hasMoreComment = false,
     onUpvote,
     onRemoveVote,
-    onLoadReplies,
+    onUpdateDownvote,
     onOpenTipHistory,
     onReport,
     onSendTip,
     onSearchPeople,
-    setDownvoting,
     onBeforeDownvote,
+    onLoadMoreReplies,
   } = props;
   const {query} = useQueryParams();
 
@@ -94,18 +97,22 @@ export const CommentList: React.FC<CommentListProps> = props => {
           comment={comment}
           mentionables={mentionables}
           deep={deep}
-          onReply={onComment}
           onUpvote={onUpvote}
           onRemoveVote={onRemoveVote}
-          onLoadReplies={onLoadReplies}
+          onUpdateDownvote={onUpdateDownvote}
           onOpenTipHistory={onOpenTipHistory}
           onReport={onReport}
           onSendTip={onSendTip}
           onSearchPeople={onSearchPeople}
-          setDownvoting={setDownvoting}
           onBeforeDownvote={onBeforeDownvote}
         />
       ))}
+
+      {comments.length > 0 && deep > 0 && hasMoreComment && (
+        <div style={{marginLeft: '69px', cursor: 'pointer'}} onClick={onLoadMoreReplies}>
+          <Typography color="primary">View more replies</Typography>
+        </div>
+      )}
     </div>
   );
 };

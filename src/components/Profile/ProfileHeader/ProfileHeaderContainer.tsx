@@ -79,11 +79,11 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     makeFriend(profile);
   }, 300);
 
-  const declineFriendRequest = () => {
+  const declineFriendRequest = debounce(() => {
     if (!friendStatus) return;
 
     removeFriendRequest(friendStatus);
-  };
+  }, 300);
 
   const handleSendTip = () => {
     if (profile) {

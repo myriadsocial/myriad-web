@@ -37,6 +37,7 @@ import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {blockedFriendList, removedFriendList} from 'src/reducers/friend/actions';
 import {UserState} from 'src/reducers/user/reducer';
+import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
@@ -122,6 +123,8 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     } else {
       console.log('no user tipped');
     }
+
+    dispatch(setIsTipSent(false));
 
     setSendTipOpened(false);
     setCurrentFriend(null);
@@ -423,7 +426,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         open={openRemoveFriend}
         icon="danger"
         title={`Unfriend ${currentFriend ? currentFriend.name : 'Unknown'}?`}
-        subtitle="Their posts won't be shown in your timeline anymore and you may or may not be able to see their complete profile. Are you sure?">
+        subtitle="You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?">
         <div className={`${style.flexCenter}`}>
           <Button
             onClick={closeConfirmRemoveFriend}
@@ -448,7 +451,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         open={openBlockUser}
         icon="danger"
         title="Block User?"
-        subtitle="Their posts won't be shown in your timeline anymore and you may or may not be able to see their complete profile. Are you sure?">
+        subtitle="You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?">
         <div className={`${style.flexCenter}`}>
           <Button
             onClick={closeConfirmBlockUser}

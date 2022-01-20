@@ -72,7 +72,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     error: {
-      background: theme.palette.secondary.main,
+      background: '#FE3636',
       color: '#FFF',
       '&:hover': {
         color: theme.palette.text.primary,
@@ -113,7 +113,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
     },
     m1: {
-      marginRight: theme.spacing(3),
+      marginRight: theme.spacing(1.5),
     },
     p3: {
       padding: '0px 24px',
