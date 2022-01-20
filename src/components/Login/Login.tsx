@@ -44,8 +44,13 @@ export const Login: React.FC = () => {
     if (selectedAccount) {
       setLoading(true);
 
-      const nonce = await fetchUserNonce(selectedAccount);
+      const data = await fetchUserNonce(selectedAccount);
 
+      let nonce = 0;
+
+      if (data) nonce = data.nonce;
+
+      // login
       if (nonce && nonce > 0) {
         const signature = await createSignaturePolkadotExt(selectedAccount, nonce);
 
@@ -53,6 +58,7 @@ export const Login: React.FC = () => {
           await loginWithExternalAuth(nonce, signature, selectedAccount);
         }
       } else {
+        // register
         setLoading(false);
         callback();
       }
@@ -87,7 +93,7 @@ export const Login: React.FC = () => {
               <Profile
                 account={selectedAccount}
                 onSubmit={handleRegister}
-                checkUsernameAvailabilty={checkUsernameAvailable}
+                checkUsernameAvailability={checkUsernameAvailable}
               />
             }
           />
