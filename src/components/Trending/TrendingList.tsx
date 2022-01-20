@@ -30,7 +30,7 @@ export const TrendingList: React.FC<TrendingListProps> = props => {
         {trendings.map((trending, i) => (
           <ListItem className={style.item} key={uuid()}>
             <ListItemText disableTypography className={style.text}>
-              <Link href={`/topic/hashtag?tag=${trending.id}`} shallow={false}>
+              <Link href={`/topic/hashtag?tag=${trending.id}`} shallow>
                 <a href={`/topic/hashtag?tag=${trending.id}`}>
                   <Typography variant="body1" color="textPrimary">{`#${trending.id}`}</Typography>
                   <Typography

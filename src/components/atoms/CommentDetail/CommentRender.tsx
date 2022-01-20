@@ -90,19 +90,17 @@ export const CommentRender: React.FC<CommentRenderProps> = props => {
           }
         case ELEMENT_MENTION:
           return (
-            <Link href={`/profile/${node.value}`} shallow={true}>
-              <a href={`/profile/${node.value}`}>
-                <Typography
-                  component="span"
-                  style={{
-                    cursor: 'pointer',
-                    fontWeight: 600,
-                    color: theme.palette.primary.main,
-                    display: 'inline-block',
-                  }}>
-                  @{node.name}
-                </Typography>
-              </a>
+            <Link href={'/profile/[id]'} as={`/profile/${node.value}`} shallow>
+              <Typography
+                component="a"
+                style={{
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  color: theme.palette.primary.main,
+                  display: 'inline-block',
+                }}>
+                @{node.name}
+              </Typography>
             </Link>
           );
         case ELEMENT_SHOW_MORE:

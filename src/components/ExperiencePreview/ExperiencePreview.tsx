@@ -82,7 +82,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
           <Avatar
             alt={experience.user.name}
             src={experience.user.profilePictureURL}
-            variant="circle"
+            variant="circular"
             className={style.photo}>
             {acronym(experience.user.name)}
           </Avatar>

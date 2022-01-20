@@ -1,8 +1,6 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 
-import Link from 'next/link';
-
 import {Button, Typography} from '@material-ui/core';
 
 import {useStyles} from './Login.style';
@@ -39,15 +37,13 @@ export const Login: React.FC<LoginProps> = props => {
 
       <Typography component="span" variant="h5">
         To access Myriad, you need to use{' '}
-        <Link href={'https://polkadot.js.org/extension/'}>
-          <a
-            href={'https://polkadot.js.org/extension/'}
-            className={styles.polkadotLink}
-            target="_blank"
-            rel="noreferrer">
-            Polkadot.js
-          </a>
-        </Link>
+        <a
+          href={'https://polkadot.js.org/extension/'}
+          className={styles.polkadotLink}
+          target="_blank"
+          rel="noreferrer">
+          Polkadot.js
+        </a>
         , on your browser{' '}
         <span role="img" aria-label="emoticon-computer">
           💻

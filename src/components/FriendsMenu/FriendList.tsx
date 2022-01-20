@@ -270,19 +270,17 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                   className={style.option}
                   alignItems="center">
                   <ListItemAvatar>
-                    <Link href={`/profile/${friend.id}`}>
+                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} passHref shallow>
                       <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
                         {acronym(friend.name)}
                       </Avatar>
                     </Link>
                   </ListItemAvatar>
                   <ListItemText>
-                    <Link href={`/profile/${friend.id}`}>
-                      <a href={`/profile/${friend.id}`} className={style.link}>
-                        <Typography className={style.name} component="span" color="textPrimary">
-                          {friend.name}
-                        </Typography>
-                      </a>
+                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} shallow>
+                      <Typography className={style.name} component="span" color="textPrimary">
+                        {friend.name}
+                      </Typography>
                     </Link>
                     <ShowIf condition={!!friend.totalMutual}>
                       <Typography className={style.friend} component="p" color="textSecondary">
@@ -331,19 +329,17 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                   className={style.option}
                   alignItems="center">
                   <ListItemAvatar>
-                    <Link href={`/profile/${friend.id}`}>
+                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} shallow>
                       <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
                         {acronym(friend.name)}
                       </Avatar>
                     </Link>
                   </ListItemAvatar>
                   <ListItemText>
-                    <Link href={`/profile/${friend.id}`}>
-                      <a href={`/profile/${friend.id}`} className={style.link}>
-                        <Typography className={style.name} component="span" color="textPrimary">
-                          {friend.name}
-                        </Typography>
-                      </a>
+                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} shallow>
+                      <Typography className={style.name} component="span" color="textPrimary">
+                        {friend.name}
+                      </Typography>
                     </Link>
                     <ShowIf condition={!!friend.totalMutual}>
                       <Typography className={style.friend} component="p" color="textSecondary">

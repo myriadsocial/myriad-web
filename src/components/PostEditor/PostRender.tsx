@@ -31,6 +31,7 @@ import {deserialize, formatToString} from './formatter';
 import {ELEMENT_HASHTAG} from './plugins/hashtag';
 
 import escapeHtml from 'escape-html';
+import {uniqueId} from 'lodash';
 import {Gallery} from 'src/components/atoms/Gallery';
 import {Video} from 'src/components/atoms/Video/Video';
 import {Post} from 'src/interfaces/post';
@@ -69,7 +70,7 @@ export const PostRender: React.FC<PostRenderProps> = props => {
           imageUrls = [];
         }
       } else {
-        render.push(renderElement(nodes[i]));
+        render.push(renderElement(nodes[i], []));
       }
     }
 
@@ -78,6 +79,8 @@ export const PostRender: React.FC<PostRenderProps> = props => {
 
   const renderElement = useCallback(
     (node, images: string[] = []) => {
+      const id = uniqueId();
+
       if (node.text) {
         if (Object.keys(node).length === 1) {
           const splitNewLine = node.text.split('\n');
@@ -92,6 +95,7 @@ export const PostRender: React.FC<PostRenderProps> = props => {
 
         return (
           <Typography
+            key={id}
             component="span"
             style={{
               fontWeight: node.bold ? 600 : 400,
@@ -112,15 +116,15 @@ export const PostRender: React.FC<PostRenderProps> = props => {
       switch (node.type) {
         case ELEMENT_BLOCKQUOTE:
           return (
-            <blockquote>
+            <blockquote key={id}>
               <p>{children}</p>
             </blockquote>
           );
         case ELEMENT_PARAGRAPH:
           if (showMore) {
-            return <span>{children}</span>;
+            return <span key={id}>{children}</span>;
           } else {
-            return <p>{children}</p>;
+            return <p key={id}>{children}</p>;
           }
         case ELEMENT_H1:
         case ELEMENT_H2:
@@ -129,78 +133,90 @@ export const PostRender: React.FC<PostRenderProps> = props => {
         case ELEMENT_H5:
         case ELEMENT_H6:
           return (
-            <Typography variant={node.type as TypographyVariant} component="div">
+            <Typography key={id} variant={node.type as TypographyVariant} component="div">
               {children}
             </Typography>
           );
         case ELEMENT_ALIGN_CENTER:
           return (
-            <Typography variant={node.type as TypographyVariant} component="div" align="center">
+            <Typography
+              key={id}
+              variant={node.type as TypographyVariant}
+              component="div"
+              align="center">
               {children}
             </Typography>
           );
         case ELEMENT_ALIGN_RIGHT:
           return (
-            <Typography variant={node.type as TypographyVariant} component="div" align="right">
+            <Typography
+              key={id}
+              variant={node.type as TypographyVariant}
+              component="div"
+              align="right">
               {children}
             </Typography>
           );
         case ELEMENT_ALIGN_JUSTIFY:
           return (
-            <Typography variant={node.type as TypographyVariant} component="div" align="justify">
+            <Typography
+              key={id}
+              variant={node.type as TypographyVariant}
+              component="div"
+              align="justify">
               {children}
             </Typography>
           );
         case ELEMENT_UL:
-          return <ul>{children}</ul>;
+          return <ul key={id}>{children}</ul>;
         case ELEMENT_OL:
-          return <ol>{children}</ol>;
+          return <ol key={id}>{children}</ol>;
         case ELEMENT_LIC:
-          return <li>{children}</li>;
+          return <li key={id}>{children}</li>;
         case ELEMENT_LINK:
-          return <a href={escapeHtml(node.url)}>{children}</a>;
+          return (
+            <a key={id} href={escapeHtml(node.url)}>
+              {children}
+            </a>
+          );
         case ELEMENT_HASHTAG:
           return (
-            <Link href={`/topic/hashtag?tag=${node.hashtag}`} shallow={true}>
-              <a href={`/topic/hashtag?tag=${node.hashtag}`}>
-                <Typography
-                  component="span"
-                  style={{
-                    cursor: 'pointer',
-                    fontWeight: 600,
-                    color: theme.palette.primary.main,
-                    display: 'inline-block',
-                  }}>
-                  #{node.hashtag}
-                </Typography>
-              </a>
+            <Link key={id} href={`/topic/hashtag?tag=${node.hashtag}`} shallow passHref>
+              <Typography
+                component="a"
+                style={{
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  color: theme.palette.primary.main,
+                  display: 'inline-block',
+                }}>
+                #{node.hashtag}
+              </Typography>
             </Link>
           );
         case ELEMENT_IMAGE:
-          return <Gallery images={images} variant="vertical" />;
+          return <Gallery key={id} images={images} variant="vertical" />;
         case ELEMENT_IMAGE_LIST:
-          return <Gallery images={node.url} variant="vertical" />;
+          return <Gallery key={id} images={node.url} variant="vertical" />;
         case ELEMENT_MEDIA_EMBED:
-          return <Video url={node.url} />;
+          return <Video key={id} url={node.url} />;
         case ELEMENT_MENTION:
           return (
-            <Link href={`/profile/${node.value}`} shallow={true}>
-              <a href={`/profile/${node.value}`}>
-                <Typography
-                  component="span"
-                  style={{
-                    cursor: 'pointer',
-                    fontWeight: 600,
-                    color: theme.palette.primary.main,
-                    display: 'inline-block',
-                  }}>
-                  @{node.name}
-                </Typography>
-              </a>
+            <Link key={id} href={'/profile/[id]'} as={`/profile/${node.value}`} shallow passHref>
+              <Typography
+                component="span"
+                style={{
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  color: theme.palette.primary.main,
+                  display: 'inline-block',
+                }}>
+                @{node.name}
+              </Typography>
             </Link>
           );
         case ELEMENT_SHOW_MORE:
-          return <ShowMore onClick={onShowAll} />;
+          return <ShowMore key={id} onClick={onShowAll} />;
         default:
           return children;
       }

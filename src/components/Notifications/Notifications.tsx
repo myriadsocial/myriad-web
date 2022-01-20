@@ -162,7 +162,7 @@ export const Notifications: React.FC<NotificationsProps> = props => {
       <ShowIf condition={!infinite}>
         <div className={style.footer}>
           <Link href="/notification">
-            <a href={`/notification`} className={style.link}>
+            <a className={style.link}>
               <Typography style={{fontWeight: 'bold'}}>View all notifications</Typography>
             </a>
           </Link>

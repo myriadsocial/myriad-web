@@ -157,7 +157,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
                     : imageProfile
                   : ''
               }
-              variant="circle"
+              variant="circular"
               className={style.avatar}>
               {acronym(user.name)}
             </Avatar>

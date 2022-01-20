@@ -64,11 +64,9 @@ export const LeaderBoardComponent: React.FC = () => {
       <div className={style.container}>
         <div className={style.header}>
           <div className={style.header}>
-            <Link href={publicRuntimeConfig.myriadWebsiteURL}>
-              <a href={publicRuntimeConfig.myriadWebsiteURL} rel="noreferrer">
-                <MyriadIcon />
-              </a>
-            </Link>
+            <a href={publicRuntimeConfig.myriadWebsiteURL} rel="noreferrer">
+              <MyriadIcon />
+            </a>
             <div className={style.divider} />
             <Typography className={style.text} color="primary">
               Airdrop Leaderboard
