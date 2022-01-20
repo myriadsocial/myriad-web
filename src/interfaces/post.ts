@@ -66,7 +66,6 @@ export type PostProps = {
 export type ImportPostProps = {
   url: string;
   importer: string;
-  isNSFW?: boolean;
   NSFWTag?: string;
   visibility: PostVisibility;
 };

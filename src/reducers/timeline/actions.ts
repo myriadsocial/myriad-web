@@ -344,11 +344,7 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
   };
 
 export const importPost: ThunkActionCreator<Actions, RootState> =
-  (
-    postUrl: string,
-    attributes: Pick<PostProps, 'isNSFW' | 'NSFWTag' | 'visibility'>,
-    callback?: () => void,
-  ) =>
+  (postUrl: string, attributes: Pick<PostProps, 'NSFWTag' | 'visibility'>, callback?: () => void) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
 

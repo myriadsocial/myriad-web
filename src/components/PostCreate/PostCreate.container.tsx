@@ -72,7 +72,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
 
   const submitPost = (
     post: string | Partial<Post>,
-    attributes?: Pick<Post, 'isNSFW' | 'NSFWTag' | 'visibility'>,
+    attributes?: Pick<Post, 'NSFWTag' | 'visibility'>,
   ) => {
     if (typeof post === 'string') {
       dispatch(
