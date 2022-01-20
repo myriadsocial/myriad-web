@@ -19,7 +19,7 @@ type FriendRequestContainerProps = {
 export const FriendRequestListContainer: React.FC<FriendRequestContainerProps> = props => {
   const {user} = props;
 
-  const {loadRequests, toggleRequest, removeFriendRequest} = useFriendsHook(user);
+  const {loadRequests, toggleRequest, removeFriendRequest} = useFriendsHook();
   const {openToasterSnack} = useToasterSnackHook();
 
   const {requests} = useSelector<RootState, FriendRequestState>(state => state.friendRequestState);

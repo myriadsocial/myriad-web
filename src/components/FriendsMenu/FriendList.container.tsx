@@ -22,7 +22,7 @@ type FriendListContainerProps = {
 
 export const FriendListContainer: React.FC<FriendListContainerProps> = props => {
   const {user, disableFilter = false, disableSort = false, isProfile = false} = props;
-  const {loadFriends, searchFriend, loadMoreFriends} = useFriendsHook(user);
+  const {loadFriends, searchFriend, loadMoreFriends} = useFriendsHook();
 
   const [toggle, setToggle] = useState<string>('');
   const [friendList, setFriendList] = useState<Friend[]>([]);
