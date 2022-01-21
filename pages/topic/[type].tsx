@@ -66,9 +66,9 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   if (typeof window === 'undefined' && headers['user-agent']) {
     const UAParser = eval('require("ua-parser-js")');
     const parser = new UAParser();
-    const browser = parser.setUA(headers['user-agent']).getBrowser();
+    const device = parser.setUA(headers['user-agent']).getDevice();
 
-    if (!browser.version) {
+    if (device.type === 'mobile') {
       return {
         redirect: {
           destination: '/mobile',
