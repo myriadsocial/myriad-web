@@ -82,6 +82,7 @@ jobs:
         with:
           push: true
           file: .maintain/docker/Dockerfile
+          build-args: VCS_REF=${{ needs.compute-build-info.outputs.sha_short }}
           tags: |
             ${{ github.repository }}:${{ needs.compute-build-info.outputs.revision_tag }}
             ${{ github.repository }}:${{ needs.compute-build-info.outputs.latest_tag }}
