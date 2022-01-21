@@ -97,7 +97,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     const parser = new UAParser();
     const device = parser.setUA(headers['user-agent']).getDevice();
 
-    if (device.type === 'mobile') {
+    if (device.type !== 'mobile') {
       return {
         redirect: {
           destination: '/home',

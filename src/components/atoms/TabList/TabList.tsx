@@ -66,10 +66,12 @@ export const TabList: React.FC<TabListProps> = props => {
           {
             if (tab.id === 'chatTabPanel')
               return (
-                <Tooltip title={<Typography>Chat feature, coming soon</Typography>} arrow>
+                <Tooltip
+                  key={`tab-${tab.id}`}
+                  title={<Typography component="span">Chat feature, coming soon</Typography>}
+                  arrow>
                   <span>
                     <Tab
-                      key={`tab-${tab.id}`}
                       label={tab.title}
                       value={tab.id}
                       icon={tab.icon}
