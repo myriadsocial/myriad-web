@@ -13,7 +13,11 @@ import {
 type UserList = BaseList<User>;
 type ActivityList = BaseList<ActivityLog>;
 
-export const getUserNonce = async (id: string): Promise<number> => {
+type UserNonceProps = {
+  nonce: number;
+};
+
+export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
   const {data} = await MyriadAPI.request({
     url: `users/${id}/nonce`,
     method: 'GET',
@@ -164,6 +168,15 @@ export const checkUsername = async (userId: string): Promise<ActivityList> => {
         },
       },
     },
+  });
+
+  return data;
+};
+
+export const getUsername = async (username: string): Promise<boolean> => {
+  const {data} = await MyriadAPI.request({
+    url: `/username/${username}`,
+    method: 'GET',
   });
 
   return data;
