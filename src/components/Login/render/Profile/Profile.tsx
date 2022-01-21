@@ -10,7 +10,7 @@ import {useStyles} from './Profile.style';
 
 type ProfileProps = {
   account: InjectedAccountWithMeta | null;
-  checkUsernameAvailabilty: (username: string, callback: (available: boolean) => void) => void;
+  checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
   onSubmit: (name: string, username: string) => void;
 };
 
@@ -24,7 +24,7 @@ const USERNAME_HELPER_TEXT = `You can use ${USERNAME_MIN_LENGTH} or more charact
 export const Profile: React.FC<ProfileProps> = props => {
   const styles = useStyles();
 
-  const {onSubmit, account} = props;
+  const {onSubmit, account, checkUsernameAvailability} = props;
 
   const navigate = useNavigate();
 
@@ -177,20 +177,20 @@ export const Profile: React.FC<ProfileProps> = props => {
     const valid = validate();
 
     if (valid && account) {
-      //checkUsernameAvailabilty(profile.username.value, available => {
-      //if (available) {
-      toggleConfirmation();
-      //} else {
-      //setProfile(prevProfile => ({
-      //...prevProfile,
-      //username: {
-      //...prevProfile.username,
-      //error: true,
-      //helper: 'Username already taken',
-      //},
-      //}));
-      //}
-      //});
+      checkUsernameAvailability(profile.username.value, available => {
+        if (available) {
+          toggleConfirmation();
+        } else {
+          setProfile(prevProfile => ({
+            ...prevProfile,
+            username: {
+              ...prevProfile.username,
+              error: true,
+              helper: 'Username already taken',
+            },
+          }));
+        }
+      });
     }
   };
 
