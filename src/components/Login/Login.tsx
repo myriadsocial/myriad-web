@@ -67,7 +67,12 @@ export const Login: React.FC = () => {
 
   const handleRegister = async (name: string, username: string) => {
     if (selectedAccount) {
-      signUpWithExternalAuth(toHexPublicKey(selectedAccount), name, username, selectedAccount);
+      await signUpWithExternalAuth(
+        toHexPublicKey(selectedAccount),
+        name,
+        username,
+        selectedAccount,
+      );
     }
   };
 
