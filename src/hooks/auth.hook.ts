@@ -16,6 +16,10 @@ import {signWithExtension} from 'src/lib/services/polkadot-js';
 import {setError} from 'src/reducers/base/actions';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
+type UserNonceProps = {
+  nonce: number;
+};
+
 export const useAuthHook = () => {
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
@@ -36,7 +40,9 @@ export const useAuthHook = () => {
     }
   };
 
-  const fetchUserNonce = async (account: InjectedAccountWithMeta): Promise<number | null> => {
+  const fetchUserNonce = async (
+    account: InjectedAccountWithMeta,
+  ): Promise<UserNonceProps | null> => {
     try {
       const data = await UserAPI.getUserNonce(toHexPublicKey(account));
 
@@ -75,22 +81,13 @@ export const useAuthHook = () => {
     signature: string,
     account: InjectedAccountWithMeta,
   ) => {
-    const data = await AuthAPI.login({
-      nonce,
-      signature,
-      publicAddress: toHexPublicKey(account),
-    });
-
-    let token = '';
-
-    if (data) token = data.accessToken;
-
     signIn('credentials', {
       name: account.meta.name,
       address: toHexPublicKey(account),
       anonymous: false,
       callbackUrl: publicRuntimeConfig.nextAuthURL,
-      token, // jangan lupa di-encrypt dulu
+      signature,
+      nonce,
     });
   };
 
@@ -109,24 +106,7 @@ export const useAuthHook = () => {
       const signature = await createSignaturePolkadotExt(account, nonce);
 
       if (signature) {
-        const data = await AuthAPI.login({
-          nonce,
-          signature,
-          publicAddress: toHexPublicKey(account),
-        });
-
-        let token = '';
-
-        if (data) token = data.accessToken;
-
-        signIn('credentials', {
-          name: name ?? account.meta.name,
-          address: toHexPublicKey(account),
-          username,
-          anonymous: false,
-          callbackUrl: publicRuntimeConfig.nextAuthURL,
-          token, // jangan lupa di-encrypt dulu
-        });
+        await loginWithExternalAuth(nonce, signature, account);
       }
     }
   };
@@ -135,11 +115,11 @@ export const useAuthHook = () => {
     try {
       const registered = await UserAPI.createUser(user);
 
-      await signIn('credentials', {
-        address: registered.id,
-        name: registered.name,
-        callbackUrl: publicRuntimeConfig.nextAuthURL,
-      });
+      //await signIn('credentials', {
+      //address: registered.id,
+      //name: registered.name,
+      //callbackUrl: publicRuntimeConfig.nextAuthURL,
+      //});
 
       return registered;
     } catch (error) {
@@ -163,19 +143,19 @@ export const useAuthHook = () => {
     });
   };
 
-  const signInWithAccount = (
-    account: InjectedAccountWithMeta,
-    name?: string,
-    username?: string,
-  ) => {
-    signIn('credentials', {
-      address: toHexPublicKey(account),
-      name: name ?? account.meta.name,
-      username,
-      anonymous: false,
-      callbackUrl: publicRuntimeConfig.nextAuthURL,
-    });
-  };
+  //const signInWithAccount = (
+  //account: InjectedAccountWithMeta,
+  //name?: string,
+  //username?: string,
+  //) => {
+  //signIn('credentials', {
+  //address: toHexPublicKey(account),
+  //name: name ?? account.meta.name,
+  //username,
+  //anonymous: false,
+  //callbackUrl: publicRuntimeConfig.nextAuthURL,
+  //});
+  //};
 
   const login = async (username: string) => {
     const accounts = await getPolkadotAccounts();
@@ -212,12 +192,12 @@ export const useAuthHook = () => {
     );
 
     if (selected) {
-      signIn('credentials', {
-        address: selected.id,
-        name: username,
-        anonymous,
-        callbackUrl: publicRuntimeConfig.nextAuthURL,
-      });
+      //signIn('credentials', {
+      //address: selected.id,
+      //name: username,
+      //anonymous,
+      //callbackUrl: publicRuntimeConfig.nextAuthURL,
+      //});
     } else {
       console.log('[useAuthHook][login][info]', 'No registered user matched with username');
 
@@ -243,7 +223,7 @@ export const useAuthHook = () => {
   return {
     login,
     logout,
-    signInWithAccount,
+    //signInWithAccount,
     register,
     getUserByAccounts,
     getRegisteredAccounts,
