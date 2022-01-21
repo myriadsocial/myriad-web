@@ -93,17 +93,16 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const {headers} = req;
 
   if (typeof window === 'undefined' && headers['user-agent']) {
-    const DeviceDetect = eval('require("node-device-detector")');
-    const device = new DeviceDetect();
-    const {
-      device: {type},
-    } = device.detect(context.req.headers['user-agent']);
+    const UAParser = eval('require("ua-parser-js")');
+    const parser = new UAParser();
+    const browser = parser.setUA(headers['user-agent']).getBrowser();
 
-    if (type === 'desktop') {
+    if (browser.version) {
       return {
         redirect: {
           destination: '/home',
           permanent: false,
+          headers,
         },
       };
     }
