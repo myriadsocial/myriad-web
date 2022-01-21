@@ -73,14 +73,11 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const dispatch = store.dispatch as ThunkDispatchAction;
 
   if (typeof window === 'undefined' && headers['user-agent']) {
-    const DeviceDetect = eval('require("node-device-detector")');
+    const UAParser = eval('require("ua-parser-js")');
+    const parser = new UAParser();
+    const browser = parser.setUA(headers['user-agent']).getBrowser();
 
-    const device = new DeviceDetect();
-    const {
-      device: {type},
-    } = device.detect(headers['user-agent']);
-
-    if (type === 'smartphone') {
+    if (!browser.version) {
       return {
         redirect: {
           destination: '/mobile',

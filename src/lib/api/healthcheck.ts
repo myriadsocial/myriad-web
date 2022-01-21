@@ -1,8 +1,16 @@
-import MyriadAPI from 'src/lib/api/base';
+import getConfig from 'next/config';
+
+import axios from 'axios';
 
 export const healthcheck = async (): Promise<boolean> => {
+  const {serverRuntimeConfig} = getConfig();
+
+  const API = axios.create({
+    baseURL: serverRuntimeConfig.myriadAPIURL,
+  });
+
   try {
-    await MyriadAPI.request({
+    await API.request({
       url: `/health`,
       method: 'GET',
     });

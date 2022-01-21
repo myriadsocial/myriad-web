@@ -2,7 +2,7 @@ import next from 'next';
 
 import * as dotenv from 'dotenv';
 import express from 'express';
-import {createProxyMiddleware} from 'http-proxy-middleware';
+import {createProxyMiddleware, Options} from 'http-proxy-middleware';
 import path from 'path';
 import serveIndex from 'serve-index';
 
@@ -34,7 +34,7 @@ app.prepare().then(() => {
       headers: {
         Authorization: `Bearer ${process.env.MYRIAD_API_KEY}`,
       },
-      logLevel: dev ? 'debug' : undefined,
+      logLevel: process.env.LOG_LEVEL as Options['logLevel'],
     }),
   );
 
