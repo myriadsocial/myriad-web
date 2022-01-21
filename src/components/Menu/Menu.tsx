@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {useRouter} from 'next/router';
+
 import MyriadIcon from '../../images/web/myriad.svg';
 import {BoxComponent} from '../atoms/Box';
 import {ListItemComponent} from '../atoms/ListItem';
@@ -15,8 +17,13 @@ export const Menu: React.FC<MenuProps> = props => {
   const {selected, onChange} = props;
 
   const styles = useStyles();
+  const router = useRouter();
 
   const menu = useMenuList(selected);
+
+  const gotoHome = () => {
+    router.push('/home', undefined, {shallow: true});
+  };
 
   const openMenu = (item: MenuDetail) => () => {
     onChange(item.url);
@@ -25,7 +32,7 @@ export const Menu: React.FC<MenuProps> = props => {
   return (
     <div className={styles.root}>
       <BoxComponent paddingLeft={0} paddingRight={0}>
-        <div className={styles.head}>
+        <div className={styles.head} onClick={gotoHome}>
           <MyriadIcon />
         </div>
 

@@ -66,7 +66,8 @@ export type PostProps = {
 export type ImportPostProps = {
   url: string;
   importer: string;
-  tags?: string[];
+  NSFWTag?: string;
+  visibility: PostVisibility;
 };
 
 export type MentionUserProps = {

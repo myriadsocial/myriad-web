@@ -57,13 +57,11 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.addEventListener('message', () => {
-        console.log('addEventListener');
         dispatch(countNewNotification());
       });
     }
 
     firebaseCloudMessaging.onMessageListener(payload => {
-      console.log('onMessageListener', payload);
       dispatch(countNewNotification());
     });
   };

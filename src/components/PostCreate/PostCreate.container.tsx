@@ -70,10 +70,13 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     return url;
   };
 
-  const submitPost = (post: string | Partial<Post>) => {
+  const submitPost = (
+    post: string | Partial<Post>,
+    attributes?: Pick<Post, 'NSFWTag' | 'visibility'>,
+  ) => {
     if (typeof post === 'string') {
       dispatch(
-        importPost(post, () => {
+        importPost(post, attributes, () => {
           setOpenFailedImport(true);
         }),
       );
