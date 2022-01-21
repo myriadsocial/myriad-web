@@ -112,7 +112,7 @@ export const Report: React.FC<ReportProps> = props => {
           <Typography gutterBottom variant="caption" component="h2">
             Not sure if something breaking the rules?
           </Typography>
-          <Link href="#">
+          <Link href="/term-of-use" target="_blank">
             <Typography variant="caption" color="primary" component="a">
               Review Myriad’s content policy
             </Typography>
