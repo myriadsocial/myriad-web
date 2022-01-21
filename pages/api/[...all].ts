@@ -19,7 +19,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const {secret} = serverRuntimeConfig;
     const session = await getSession({req});
-    console.log('SESSION USER', session?.user);
+    console.log('SESSION', session);
+    console.log('>>>>', req.url);
 
     let headers = {};
     if (session && session.user) {

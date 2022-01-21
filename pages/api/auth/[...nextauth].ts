@@ -45,9 +45,12 @@ export default NextAuth({
             serverRuntimeConfig.secret,
           );
 
+          console.log('encrypted accessToken: ', {encryptedString});
+
           return {
             name: credentials.name,
             anonymous: credentials.anonymous === 'true',
+            address: credentials.address,
             token: encryptedString,
             nonce: +credentials.nonce,
             encryptionNonce,
