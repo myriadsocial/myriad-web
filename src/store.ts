@@ -20,7 +20,12 @@ const reducer: Reducer<RootState, AnyAction> = (state, action) => {
 };
 
 const makeStore = () => {
-  const store: Store = createStore(reducer, composeWithDevTools(applyMiddleware(thunkMiddleware)));
+  const enhancers =
+    process.env.NODE_ENV === 'production'
+      ? applyMiddleware(thunkMiddleware)
+      : composeWithDevTools(applyMiddleware(thunkMiddleware));
+
+  const store: Store = createStore(reducer, enhancers);
 
   return store;
 };

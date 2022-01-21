@@ -2,7 +2,8 @@ import React from 'react';
 
 import Typography, {TypographyProps} from '@material-ui/core/Typography';
 
-import {parseHashtag} from '../../helpers/string';
+import {uniqueId} from 'lodash';
+import {parseHashtag} from 'src/helpers/string';
 
 type LinkifyProps = TypographyProps & {
   text: string;
@@ -23,7 +24,7 @@ const LinkifyComponent: React.FC<LinkifyProps> = ({text, handleClick, ...props})
     React.createElement(
       'a',
       {
-        key: hashtag,
+        key: `${hashtag}-${uniqueId()}`,
         href: `${hashtag}`,
         onClick: action ? (e: React.SyntheticEvent) => action(e, hashtag) : null,
       },
