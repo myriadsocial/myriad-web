@@ -4,6 +4,9 @@ import getConfig from 'next/config';
 
 import APIAdapter from '../../../adapters/api';
 
+import * as AuthAPI from 'src/lib/api/ext-auth';
+import {encryptMessage} from 'src/lib/crypto';
+
 const {serverRuntimeConfig} = getConfig();
 
 // For more information on each option (and a full list of options) go to
@@ -22,13 +25,34 @@ export default NextAuth({
         name: {label: 'Name', type: 'text'},
         address: {label: 'Address', type: 'text'},
       },
+      //@ts-expect-error
       async authorize(credentials: Record<string, string>) {
-        return {
-          name: credentials.name,
-          address: credentials.address,
-          anonymous: credentials.anonymous === 'true',
-          token: credentials.token,
-        };
+        if (!credentials?.signature) throw Error('no signature!');
+
+        if (credentials.signature) {
+          console.log('authorize in nextauth: ', {credentials});
+
+          const data = await AuthAPI.login({
+            nonce: +credentials.nonce,
+            signature: credentials.signature,
+            publicAddress: credentials.address,
+          });
+
+          if (!data?.accessToken) throw Error('authorization problem!');
+
+          const {encryptedString, nonce: encryptionNonce} = encryptMessage(
+            data.accessToken,
+            serverRuntimeConfig.secret,
+          );
+
+          return {
+            name: credentials.name,
+            anonymous: credentials.anonymous === 'true',
+            token: encryptedString,
+            nonce: +credentials.nonce,
+            encryptionNonce,
+          };
+        }
       },
     }),
   ],
