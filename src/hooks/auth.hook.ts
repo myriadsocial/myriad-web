@@ -143,19 +143,19 @@ export const useAuthHook = () => {
     });
   };
 
-  //const signInWithAccount = (
-  //account: InjectedAccountWithMeta,
-  //name?: string,
-  //username?: string,
-  //) => {
-  //signIn('credentials', {
-  //address: toHexPublicKey(account),
-  //name: name ?? account.meta.name,
-  //username,
-  //anonymous: false,
-  //callbackUrl: publicRuntimeConfig.nextAuthURL,
-  //});
-  //};
+  const signInWithAccount = (
+    account: InjectedAccountWithMeta,
+    name?: string,
+    username?: string,
+  ) => {
+    signIn('credentials', {
+      address: toHexPublicKey(account),
+      name: name ?? account.meta.name,
+      username,
+      anonymous: false,
+      callbackUrl: publicRuntimeConfig.nextAuthURL,
+    });
+  };
 
   const login = async (username: string) => {
     const accounts = await getPolkadotAccounts();
@@ -223,7 +223,7 @@ export const useAuthHook = () => {
   return {
     login,
     logout,
-    //signInWithAccount,
+    signInWithAccount,
     register,
     getUserByAccounts,
     getRegisteredAccounts,
