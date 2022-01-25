@@ -107,6 +107,8 @@ export const useAuthHook = () => {
 
       if (signature) {
         await loginWithExternalAuth(nonce, signature, account);
+      } else {
+        return null;
       }
     }
   };
