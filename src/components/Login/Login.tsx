@@ -18,11 +18,13 @@ import {useProfileHook} from 'src/hooks/use-profile.hook';
 export const Login: React.FC = () => {
   const styles = useStyles();
 
-  const {getUserByAccounts, signInWithAccount, anonymous} = useAuthHook();
+  const {createSignaturePolkadotExt, anonymous, fetchUserNonce, loginWithExternalAuth} =
+    useAuthHook();
   const {checkUsernameAvailable} = useProfileHook();
 
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
   const [selectedAccount, setSelectedAccount] = useState<InjectedAccountWithMeta | null>(null);
+  const [signatureCancelled, setSignatureCancelled] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleOnconnect = (accounts: InjectedAccountWithMeta[]) => {
@@ -37,20 +39,29 @@ export const Login: React.FC = () => {
     if (selectedAccount) {
       setLoading(true);
 
-      const registered = await getUserByAccounts([selectedAccount]);
+      setSignatureCancelled(false);
 
-      if (registered && registered.length > 0) {
-        signInWithAccount(selectedAccount);
+      const data = await fetchUserNonce(selectedAccount);
+
+      let nonce = 0;
+
+      if (data) nonce = data.nonce;
+
+      // login
+      if (nonce && nonce > 0) {
+        const signature = await createSignaturePolkadotExt(selectedAccount, nonce);
+
+        if (signature) {
+          await loginWithExternalAuth(nonce, signature, selectedAccount);
+        } else {
+          setLoading(false);
+          setSignatureCancelled(true);
+        }
       } else {
+        // register
         setLoading(false);
         callback();
       }
-    }
-  };
-
-  const handleRegister = (name: string, username: string) => {
-    if (selectedAccount) {
-      signInWithAccount(selectedAccount, name, username);
     }
   };
 
@@ -67,6 +78,7 @@ export const Login: React.FC = () => {
                 accounts={accounts}
                 onSelect={handleSelectedAccount}
                 onNext={checkAccountRegistered}
+                signature={signatureCancelled}
               />
             }
           />
@@ -75,8 +87,7 @@ export const Login: React.FC = () => {
             element={
               <Profile
                 account={selectedAccount}
-                onSubmit={handleRegister}
-                checkUsernameAvailabilty={checkUsernameAvailable}
+                checkUsernameAvailability={checkUsernameAvailable}
               />
             }
           />

@@ -96,6 +96,7 @@
     "next": "^10.2.*",
     "next-auth": "~3.13.1",
     "next-connect": "^0.10.1",
+    "next-http-proxy-middleware": "^1.1.2",
     "next-redux-wrapper": "^7.0.2",
     "next-transpile-modules": "^6.4.0",
     "node-fetch": "^2.6.1",

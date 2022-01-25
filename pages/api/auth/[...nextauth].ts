@@ -4,8 +4,8 @@ import getConfig from 'next/config';
 
 import APIAdapter from '../../../adapters/api';
 
-import * as UserAPI from 'src/lib/api/user';
-import {userToSession} from 'src/lib/serializers/session';
+import * as AuthAPI from 'src/lib/api/ext-auth';
+import {encryptMessage} from 'src/lib/crypto';
 
 const {serverRuntimeConfig} = getConfig();
 
@@ -25,42 +25,33 @@ export default NextAuth({
         name: {label: 'Name', type: 'text'},
         address: {label: 'Address', type: 'text'},
       },
+      //@ts-expect-error
       async authorize(credentials: Record<string, string>) {
-        console.log('[next-auth][debug][authorize] credentials', credentials);
+        if (!credentials?.signature) throw Error('no signature!');
 
-        if (credentials.anonymous === 'false') {
-          try {
-            const user = await UserAPI.getUserDetail(credentials.address);
+        if (credentials.signature) {
+          const data = await AuthAPI.login({
+            nonce: Number(credentials.nonce),
+            signature: credentials.signature,
+            publicAddress: credentials.address,
+          });
 
-            console.log('[next-auth][debug][authorize] user exist', credentials.address);
+          if (!data?.accessToken) throw Error('authorization problem!');
 
-            return userToSession(user);
-          } catch (error) {
-            try {
-              const user = await UserAPI.createUser({
-                id: credentials.address,
-                name: credentials.name,
-                username: credentials.username,
-              });
+          const {encryptedMessage, initVec} = encryptMessage(
+            data.accessToken,
+            serverRuntimeConfig.secret,
+          );
 
-              console.log('[next-auth][debug][authorize] user create', credentials.address);
-
-              return userToSession(user);
-            } catch (error) {
-              console.error(
-                '[next-auth][debug][authorize] user create error',
-                error.response.data.error,
-              );
-              throw new Error('Failed to login');
-            }
-          }
+          return {
+            name: credentials.name,
+            anonymous: credentials.anonymous === 'true',
+            address: credentials.address,
+            token: encryptedMessage,
+            nonce: credentials.nonce,
+            initVec,
+          };
         }
-
-        return {
-          name: credentials.name,
-          address: credentials.address,
-          anonymous: credentials.anonymous === 'true',
-        };
       },
     }),
   ],

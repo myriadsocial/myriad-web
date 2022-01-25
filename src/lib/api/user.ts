@@ -13,6 +13,19 @@ import {
 type UserList = BaseList<User>;
 type ActivityList = BaseList<ActivityLog>;
 
+type UserNonceProps = {
+  nonce: number;
+};
+
+export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
+  const {data} = await MyriadAPI.request({
+    url: `users/${id}/nonce`,
+    method: 'GET',
+  });
+
+  return data;
+};
+
 export const getUserDetail = async (id: string, userId?: string): Promise<User & BlockedProps> => {
   const {data} = await MyriadAPI.request<User & BlockedProps>({
     url: `users/${id}`,
@@ -155,6 +168,15 @@ export const checkUsername = async (userId: string): Promise<ActivityList> => {
         },
       },
     },
+  });
+
+  return data;
+};
+
+export const getUsername = async (username: string): Promise<boolean> => {
+  const {data} = await MyriadAPI.request({
+    url: `/username/${username}`,
+    method: 'GET',
   });
 
   return data;

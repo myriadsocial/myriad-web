@@ -11,6 +11,7 @@ import {SearchBoxContainer} from '../src/components/atoms/Search/SearchBoxContai
 import {DefaultLayout} from '../src/components/template/Default/DefaultLayout';
 
 import Banner from 'src/components/atoms/BannerStatus/BannerStatus';
+import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -92,6 +93,10 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const session = await getSession(context);
+
+  console.log('session in home:', {session});
+
+  setHeaders({cookie: req.headers.cookie as string});
 
   if (!session) {
     return {
