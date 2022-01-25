@@ -30,6 +30,7 @@ export const Login: React.FC = () => {
 
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
   const [selectedAccount, setSelectedAccount] = useState<InjectedAccountWithMeta | null>(null);
+  const [signatureCancelled, setSignatureCancelled] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleOnconnect = (accounts: InjectedAccountWithMeta[]) => {
@@ -44,6 +45,8 @@ export const Login: React.FC = () => {
     if (selectedAccount) {
       setLoading(true);
 
+      setSignatureCancelled(false);
+
       const data = await fetchUserNonce(selectedAccount);
 
       let nonce = 0;
@@ -56,6 +59,9 @@ export const Login: React.FC = () => {
 
         if (signature) {
           await loginWithExternalAuth(nonce, signature, selectedAccount);
+        } else {
+          setLoading(false);
+          setSignatureCancelled(true);
         }
       } else {
         // register
@@ -76,6 +82,8 @@ export const Login: React.FC = () => {
     }
   };
 
+  console.log({signatureCancelled});
+
   return (
     <div className={styles.root}>
       <Router>
@@ -89,6 +97,7 @@ export const Login: React.FC = () => {
                 accounts={accounts}
                 onSelect={handleSelectedAccount}
                 onNext={checkAccountRegistered}
+                signature={signatureCancelled}
               />
             }
           />
