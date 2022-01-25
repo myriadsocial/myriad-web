@@ -31,7 +31,7 @@ export default NextAuth({
 
         if (credentials.signature) {
           const data = await AuthAPI.login({
-            nonce: +credentials.nonce,
+            nonce: Number(credentials.nonce),
             signature: credentials.signature,
             publicAddress: credentials.address,
           });
