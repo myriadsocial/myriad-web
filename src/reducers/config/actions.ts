@@ -4,7 +4,11 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {Currency} from 'src/interfaces/currency';
-import {NotificationSettingItems, PrivacySettings} from 'src/interfaces/setting';
+import {
+  NotificationSettingItems,
+  PrivacySettings,
+  LanguageSettingType,
+} from 'src/interfaces/setting';
 import * as SettingAPI from 'src/lib/api/setting';
 import * as TokenAPI from 'src/lib/api/token';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -12,7 +16,6 @@ import {ThunkActionCreator} from 'src/types/thunk';
 /**
  * Action Types
  */
-
 export interface FetchAvailableToken extends Action {
   type: constants.FETCH_AVAILABLE_TOKEN;
   payload: Currency[];
@@ -26,6 +29,11 @@ export interface FetchPrivacySetting extends Action {
   settings: PrivacySettings;
 }
 
+export interface SetLanguageSetting extends Action {
+  type: constants.SET_LANGUAGE_SETTING;
+  lang: LanguageSettingType;
+}
+
 /**
  * Union Action Types
  */
@@ -34,6 +42,7 @@ export type Actions =
   | FetchAvailableToken
   | FetchPrivacySetting
   | UpdateNotificationSetting
+  | SetLanguageSetting
   | BaseAction;
 
 /**
@@ -135,3 +144,25 @@ export const fetchAvailableToken: ThunkActionCreator<Actions, RootState> = () =>
     dispatch(setLoading(false));
   }
 };
+
+export const fetchLanguageSetting: ThunkActionCreator<Actions, RootState> =
+  (id: string) => async dispatch => {
+    dispatch(setLoading(true));
+
+    try {
+      // TODO fetch data language from backend
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const updateLanguageSetting: ThunkActionCreator<Actions, RootState> =
+  (id: string, language: LanguageSettingType) => async dispatch => {
+    //TODO hit backend to store the preferred language
+    dispatch({
+      type: constants.SET_LANGUAGE_SETTING,
+      lang: language,
+    });
+  };

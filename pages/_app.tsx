@@ -13,10 +13,14 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import {ThemeProvider} from '@material-ui/core/styles';
 import {withStyles, WithStyles} from '@material-ui/core/styles';
 
+import {allMessage, optionDetection} from '../src/locale';
 import {wrapper} from '../src/store';
 import themeV2 from '../src/themes/light-theme';
 
+import i18n from 'i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
 import {SnackbarProvider} from 'notistack';
+import {initReactI18next} from 'react-i18next';
 import {ToasterSnack} from 'src/components/atoms/ToasterSnack';
 import {AlertProvider} from 'src/context/alert.context';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
@@ -54,6 +58,21 @@ const {publicRuntimeConfig} = getConfig();
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
+
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources: {
+      en: {translation: allMessage.en},
+      id: {translation: allMessage.id},
+    },
+    fallbackLng: 'en',
+    detection: optionDetection,
+    interpolation: {
+      escapeValue: false,
+    },
+  });
 
 const App = ({classes, ...props}: MyAppProps & WithStyles<typeof snackbarStyles>) => {
   const {Component, emotionCache = clientSideEmotionCache, pageProps} = props;

@@ -1,0 +1,21 @@
+{
+  "Setting": {
+    "List_Menu": {
+      "Account_Title": "Akun",
+      "Account_Subtitle": "Privasi akun, privasi sosial media",
+      "Notification_Title": "Notifikasi",
+      "Notification_Subtitle": "Pengaturan notifikasi",
+      "Blocked_Title": "Pengguna Diblokir",
+      "Blocked_Subtitle": "Pengaturan daftar pengguna yang diblokir",
+      "Language_Title": "Bahasa",
+      "Language_Subtitle": "Ubah bahasa yang digunakan pada layanan antar muka",
+      "Help_Title": "Bantuan",
+      "Help_Subtitle": "Syarat dan ketentuan, kebijakan privasi, hubungi kami",
+      "About_Title": "Tentang Myriad",
+      "About_Subtitle": "Ketahui lebih banyak tentang Myriad",
+      "Feedback_Title": "Berikan Tanggapan",
+      "Feedback_Subtitle": "Silahkan berikan pengalaman kamu melalui email",
+      "Version_Title": "Myriad versi"
+    }
+  }
+}
