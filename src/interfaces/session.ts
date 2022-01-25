@@ -1,7 +1,7 @@
 export interface SignInCredential {
   token: string;
   initVec: string;
-  nonce: string;
+  nonce: number;
   signature: string;
   name: string;
   anonymous: boolean;
@@ -10,7 +10,7 @@ export interface SignInCredential {
 export interface UserSession {
   token?: string;
   initVec?: string;
-  nonce?: string;
+  nonce?: number;
   signature?: string;
   name: string;
   profilePictureURL?: string;
