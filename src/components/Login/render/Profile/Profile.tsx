@@ -8,10 +8,12 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {PromptComponent} from '../../../atoms/Prompt/prompt.component';
 import {useStyles} from './Profile.style';
 
+import {useAuthHook} from 'src/hooks/auth.hook';
+import {toHexPublicKey} from 'src/lib/crypto';
+
 type ProfileProps = {
   account: InjectedAccountWithMeta | null;
-  checkUsernameAvailabilty: (username: string, callback: (available: boolean) => void) => void;
-  onSubmit: (name: string, username: string) => void;
+  checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
 };
 
 const USERNAME_MAX_LENGTH = 16;
@@ -24,7 +26,9 @@ const USERNAME_HELPER_TEXT = `You can use ${USERNAME_MIN_LENGTH} or more charact
 export const Profile: React.FC<ProfileProps> = props => {
   const styles = useStyles();
 
-  const {onSubmit, checkUsernameAvailabilty} = props;
+  const {account, checkUsernameAvailability} = props;
+
+  const {signUpWithExternalAuth} = useAuthHook();
 
   const navigate = useNavigate();
 
@@ -173,11 +177,11 @@ export const Profile: React.FC<ProfileProps> = props => {
     return validName && validUsername;
   };
 
-  const handleConfirmation = () => {
+  const handleConfirmation = async () => {
     const valid = validate();
 
-    if (valid) {
-      checkUsernameAvailabilty(profile.username.value, available => {
+    if (valid && account) {
+      checkUsernameAvailability(profile.username.value, available => {
         if (available) {
           toggleConfirmation();
         } else {
@@ -194,8 +198,19 @@ export const Profile: React.FC<ProfileProps> = props => {
     }
   };
 
-  const handleSubmit = () => {
-    onSubmit(profile.name.value, profile.username.value);
+  const handleSubmit = async () => {
+    if (account) {
+      const registered = await signUpWithExternalAuth(
+        toHexPublicKey(account),
+        profile.name.value,
+        profile.username.value,
+        account,
+      );
+
+      if (!registered) {
+        navigate('/wallet');
+      }
+    }
   };
 
   return (

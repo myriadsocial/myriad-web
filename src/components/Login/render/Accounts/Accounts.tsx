@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router';
 
 import {Button, Grid, List, ListItem, ListItemAvatar, ListItemText} from '@material-ui/core';
@@ -12,17 +12,24 @@ type AccountListProps = {
   onSelect: (account: InjectedAccountWithMeta) => void;
   onNext: (callback: () => void) => void;
   accounts: InjectedAccountWithMeta[];
+  signature: boolean;
 };
 
 export const Accounts: React.FC<AccountListProps> = props => {
   const styles = useStyles();
 
-  const {accounts, onSelect, onNext} = props;
+  const {accounts, onSelect, onNext, signature} = props;
+
+  const [submitted, setSubmitted] = useState(false);
+  useEffect(() => {
+    if (signature) {
+      setSubmitted(false);
+    }
+  }, [signature]);
 
   const navigate = useNavigate();
 
   const [selectedAccount, setSelectedAccount] = useState<InjectedAccountWithMeta | null>(null);
-  const [submitted, setSubmitted] = useState(false);
 
   const handleSelectAccount = (account: InjectedAccountWithMeta) => () => {
     onSelect(account);

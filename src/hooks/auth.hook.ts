@@ -8,17 +8,50 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {map} from 'lodash';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {User} from 'src/interfaces/user';
+import * as AuthAPI from 'src/lib/api/ext-auth';
 import * as UserAPI from 'src/lib/api/user';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
+import {signWithExtension} from 'src/lib/services/polkadot-js';
 import {setError} from 'src/reducers/base/actions';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
+
+type UserNonceProps = {
+  nonce: number;
+};
 
 export const useAuthHook = () => {
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
 
   const dispatch = useDispatch();
+
+  const createSignaturePolkadotExt = async (
+    account: InjectedAccountWithMeta,
+    nonce: number,
+  ): Promise<string | null> => {
+    try {
+      const signature = await signWithExtension(account, nonce);
+
+      return signature;
+    } catch (error) {
+      console.log({error});
+      return null;
+    }
+  };
+
+  const fetchUserNonce = async (
+    account: InjectedAccountWithMeta,
+  ): Promise<UserNonceProps | null> => {
+    try {
+      const data = await UserAPI.getUserNonce(toHexPublicKey(account));
+
+      return data;
+    } catch (error) {
+      console.log('[useAuthHook][getUserNonce][error]', {error});
+      return null;
+    }
+  };
 
   const getUserByAccounts = async (accounts: InjectedAccountWithMeta[]): Promise<User[] | null> => {
     try {
@@ -43,15 +76,55 @@ export const useAuthHook = () => {
     });
   };
 
+  const loginWithExternalAuth = async (
+    nonce: number,
+    signature: string,
+    account: InjectedAccountWithMeta,
+  ) => {
+    signIn('credentials', {
+      name: account.meta.name,
+      address: toHexPublicKey(account),
+      anonymous: false,
+      callbackUrl: publicRuntimeConfig.nextAuthURL,
+      signature,
+      nonce,
+    });
+  };
+
+  const signUpWithExternalAuth = async (
+    id: string,
+    name: string,
+    username: string,
+    account: InjectedAccountWithMeta,
+  ): Promise<true | null> => {
+    let nonce = null;
+    const data = await AuthAPI.signUp({id, name, username});
+
+    if (data) nonce = data.nonce;
+
+    if (nonce && nonce > 0) {
+      const signature = await createSignaturePolkadotExt(account, nonce);
+
+      if (signature) {
+        await loginWithExternalAuth(nonce, signature, account);
+        return true;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  };
+
   const register = async (user: Partial<User>) => {
     try {
       const registered = await UserAPI.createUser(user);
 
-      await signIn('credentials', {
-        address: registered.id,
-        name: registered.name,
-        callbackUrl: publicRuntimeConfig.nextAuthURL,
-      });
+      //await signIn('credentials', {
+      //address: registered.id,
+      //name: registered.name,
+      //callbackUrl: publicRuntimeConfig.nextAuthURL,
+      //});
 
       return registered;
     } catch (error) {
@@ -124,12 +197,12 @@ export const useAuthHook = () => {
     );
 
     if (selected) {
-      signIn('credentials', {
-        address: selected.id,
-        name: username,
-        anonymous,
-        callbackUrl: publicRuntimeConfig.nextAuthURL,
-      });
+      //signIn('credentials', {
+      //address: selected.id,
+      //name: username,
+      //anonymous,
+      //callbackUrl: publicRuntimeConfig.nextAuthURL,
+      //});
     } else {
       console.log('[useAuthHook][login][info]', 'No registered user matched with username');
 
@@ -160,5 +233,9 @@ export const useAuthHook = () => {
     getUserByAccounts,
     getRegisteredAccounts,
     anonymous,
+    fetchUserNonce,
+    createSignaturePolkadotExt,
+    loginWithExternalAuth,
+    signUpWithExternalAuth,
   };
 };

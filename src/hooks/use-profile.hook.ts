@@ -78,15 +78,15 @@ export const useProfileHook = () => {
   };
 
   const checkUsernameAvailable = async (
-    query: string,
+    username: string,
     callback?: (valid: boolean) => void,
   ): Promise<void> => {
     let available = false;
 
     try {
-      const {data} = await UserAPI.searchUsername(query);
+      const data = await UserAPI.getUsername(username);
 
-      available = data.length === 0;
+      available = !data;
     } catch (error) {
       console.log(error);
     }
