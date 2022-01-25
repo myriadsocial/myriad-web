@@ -270,7 +270,7 @@ export const Profile: React.FC<ProfileProps> = props => {
 
       <PromptComponent
         title={'Are you sure?'}
-        subtitle={<Typography>Are you sure? You can only set your username once.</Typography>}
+        subtitle={<Typography>You can only set your username once.</Typography>}
         open={confirmation}
         icon="warning"
         onCancel={toggleConfirmation}>
