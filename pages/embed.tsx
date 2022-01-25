@@ -93,7 +93,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       post.text = post.text.replace(new RegExp('&amp;#x200B;', 'g'), '&nbsp;');
     }
 
-    if (post.deletedAt || post.visibility !== PostVisibility.PUBLIC) {
+    if (
+      post.deletedAt ||
+      post.visibility !== PostVisibility.PUBLIC ||
+      post.isNSFW ||
+      post.NSFWTag
+    ) {
       return {
         notFound: true,
       };

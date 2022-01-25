@@ -68,6 +68,7 @@ jobs:
           secrets: |-
             WEB_APP_NAME:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_APP_NAME
             WEB_APP_STATUS:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_APP_STATUS
+            WEB_APP_SECRET:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_APP_SECRET
             API_URL:${{ secrets.DEV_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.DEV_GCP_PROJECT_ID }}/WEBSITE_URL
@@ -102,7 +103,7 @@ jobs:
               --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.appVersion=${{ needs.compute-build-info.outputs.package_version }}-${{ needs.compute-build-info.outputs.sha_short }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
+              --set-string config.nextSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
@@ -162,6 +163,7 @@ jobs:
           secrets: |-
             WEB_APP_NAME:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_APP_NAME
             WEB_APP_STATUS:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_APP_STATUS
+            WEB_APP_SECRET:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_APP_SECRET
             API_URL:${{ secrets.STG_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.STG_GCP_PROJECT_ID }}/WEBSITE_URL
@@ -196,7 +198,7 @@ jobs:
               --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.appVersion=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
+              --set-string config.nextSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
@@ -256,6 +258,7 @@ jobs:
           secrets: |-
             WEB_APP_NAME:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_APP_NAME
             WEB_APP_STATUS:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_APP_STATUS
+            WEB_APP_SECRET:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_APP_SECRET
             API_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEBSITE_URL
@@ -290,7 +293,7 @@ jobs:
               --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.appVersion=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
+              --set-string config.nextSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
@@ -350,6 +353,7 @@ jobs:
           secrets: |-
             WEB_APP_NAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_NAME
             WEB_APP_STATUS:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_STATUS
+            WEB_APP_SECRET:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_SECRET
             API_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEBSITE_URL
@@ -384,7 +388,7 @@ jobs:
               --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.appVersion=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
+              --set-string config.nextSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
@@ -444,6 +448,7 @@ jobs:
           secrets: |-
             WEB_APP_NAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_NAME
             WEB_APP_STATUS:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_STATUS
+            WEB_APP_SECRET:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_SECRET
             API_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_URL
             API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEBSITE_URL
@@ -478,7 +483,7 @@ jobs:
               --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.appVersion=${{ needs.compute-build-info.outputs.latest_tag }} \
               --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string config.nextSecret=b53fdfd09ee04c267efcde87b4eab030 \
+              --set-string config.nextSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
               --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \

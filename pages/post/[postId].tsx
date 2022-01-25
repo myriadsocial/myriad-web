@@ -200,10 +200,10 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   let description =
     post?.text ??
     'The owner might be changed their privacy settings, shared it for certain group of people or it’s been deleted';
-  const title = post
+  let title = post
     ? post?.title ?? `${post.user.name} on ${publicRuntimeConfig.appName}`
     : 'We cannot find what you are looking for';
-  const image = post
+  let image = post
     ? post.asset?.images && post.asset.images.length > 0
       ? post.asset.images[0]
       : null
@@ -213,6 +213,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     const nodes = deserialize(post);
 
     description = nodes.map(formatToString).join('');
+  }
+
+  if (post?.deletedAt || post?.isNSFW || post?.NSFWTag) {
+    title = 'Login with Myriad Account';
+    description = 'Log in to Myriad Social! Not a Myriad user? Sign up for free.';
+    image = null;
   }
 
   return {
