@@ -14,6 +14,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     hover: {
       '&:hover': {
         backgroundColor: 'rgba(255, 200, 87, 0.15)',
+        cursor: 'pointer',
       },
     },
     fill: {
@@ -24,9 +25,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingRight: theme.spacing(0.5),
       '& .MuiListItemText-root': {
         alignSelf: 'center',
-      },
-      '&:hover': {
-        cursor: 'pointer',
       },
     },
     avatar: {

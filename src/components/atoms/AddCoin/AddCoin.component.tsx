@@ -21,17 +21,19 @@ import {acronym} from '../../../helpers/string';
 import {RootState} from '../../../reducers';
 import {ConfigState} from '../../../reducers/config/reducer';
 import {addUserCurrency} from '../../../reducers/user/actions';
+import {UserState} from '../../../reducers/user/reducer';
 import {Modal} from '../Modal';
 import {useStyles} from './AddCoin.style';
 import {Props} from './addCoin.interface';
 
 import {debounce} from 'lodash';
-import {Currency} from 'src/interfaces/currency';
+import {Currency, CurrencyId} from 'src/interfaces/currency';
 
 export const AddCoin: React.FC<Props> = props => {
   const {open, onClose} = props;
   const dispatch = useDispatch();
   const {availableCurrencies} = useSelector<RootState, ConfigState>(state => state.configState);
+  const {currencies} = useSelector<RootState, UserState>(state => state.userState);
   const style = useStyles();
 
   const [searchedCurrencies, setSearchedCurrencies] = useState<Currency[]>([]);
@@ -39,10 +41,12 @@ export const AddCoin: React.FC<Props> = props => {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
+  const [myAsset, setMyAsset] = useState<CurrencyId[]>([]);
 
   useEffect(() => {
     setSearchedCurrencies(availableCurrencies);
-  }, []);
+    setMyAsset(assetId());
+  }, [currencies]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // TODO FILTER WHEN TYPING
@@ -52,6 +56,10 @@ export const AddCoin: React.FC<Props> = props => {
     }, 300);
 
     debounceSubmit();
+  };
+
+  const assetId = () => {
+    return currencies.map(currency => currency.id);
   };
 
   const submitSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -64,8 +72,8 @@ export const AddCoin: React.FC<Props> = props => {
     }
   };
 
-  const handleSelectAsset = (currency: string) => {
-    if (currency === selectedAsset) setSelectedAsset(null);
+  const handleSelectAsset = (currency: CurrencyId) => {
+    if (currency === selectedAsset || isAdded(currency)) setSelectedAsset(null);
     else setSelectedAsset(currency);
   };
 
@@ -84,15 +92,13 @@ export const AddCoin: React.FC<Props> = props => {
 
   const handleAddNewCurrency = () => {
     if (selectedAsset) {
-      dispatch(
-        addUserCurrency(filterSelectedCurrency(), () => {
-          setLoading(true);
-        }),
-      );
+      setLoading(true);
+      dispatch(addUserCurrency(filterSelectedCurrency()));
     }
 
     onClose();
     setLoading(false);
+    setSelectedAsset(null);
   };
 
   const LoadingComponent = () => {
@@ -101,6 +107,10 @@ export const AddCoin: React.FC<Props> = props => {
         <CircularProgress />
       </Grid>
     );
+  };
+
+  const isAdded = (selectedId: CurrencyId) => {
+    return myAsset.includes(selectedId);
   };
 
   return (
@@ -125,9 +135,12 @@ export const AddCoin: React.FC<Props> = props => {
           {!loading &&
             searchedCurrencies.map(currency => (
               <ListItem
+                disabled={isAdded(currency.id)}
                 key={currency.id}
                 onClick={() => handleSelectAsset(currency.id)}
-                className={`${style.hover} ${style.item} ${isSelected('ACA')}`}
+                className={`${!isAdded(currency.id) && style.hover} ${style.item} ${isSelected(
+                  'ACA',
+                )}`}
                 alignItems="center">
                 <ListItemAvatar>
                   <Avatar className={style.avatar} alt={currency.id} src={currency.image}>
@@ -164,6 +177,7 @@ export const AddCoin: React.FC<Props> = props => {
             ))}
         </List>
         <Button
+          disabled={selectedAsset === null}
           onClick={handleAddNewCurrency}
           className={style.button}
           fullWidth
