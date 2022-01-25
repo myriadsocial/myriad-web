@@ -1,8 +1,10 @@
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {Keyring, decodeAddress} from '@polkadot/keyring';
 import type {KeyringPair} from '@polkadot/keyring/types';
-import {u8aToHex, stringToU8a, u8aToString} from '@polkadot/util';
-import {mnemonicGenerate, naclDecrypt, naclEncrypt} from '@polkadot/util-crypto';
+import {u8aToHex} from '@polkadot/util';
+import {mnemonicGenerate} from '@polkadot/util-crypto';
+
+import crypto from 'crypto';
 
 type KeyDetail = {
   mnemonic: string;
@@ -10,46 +12,44 @@ type KeyDetail = {
 };
 
 type EncryptionPayload = {
-  encryptedString: string;
-  nonce: Uint8Array;
+  encryptedMessage: string;
+  initVec: string;
 };
 
 export const encryptMessage = (message: string, secret: string): EncryptionPayload => {
-  const messagePreEncryption = stringToU8a(message);
-  const modifiedSecret = stringToU8a(secret);
+  const algorithm = 'aes-256-cbc';
 
-  // Encrypt the message
-  const {encrypted, nonce} = naclEncrypt(messagePreEncryption, modifiedSecret);
+  // generate 16 bytes of random data
+  const initVector = crypto.randomBytes(16).toString('hex').slice(0, 16);
 
-  // Show contents of the encrypted message
-  //console.log(`Encrypted message: ${JSON.stringify(encrypted, null, 2)}`);
+  // the cipher function
+  const cipher = crypto.createCipheriv(algorithm, secret, initVector);
 
-  // Convert each Uint8Array to a string for comparison
-  //const isMatch = u8aToString(messagePreEncryption) === u8aToString(messageDecrypted);
+  // encrypt the message
+  // input encoding
+  // output encoding
+  let encryptedMessage = cipher.update(message, 'utf-8', 'hex');
 
-  // Verify that the decrypted message matches the original message
-  //console.log(`Does the decrypted message match the original message? ${isMatch}`);
-  const encryptedString = JSON.stringify(encrypted, null, 2);
+  encryptedMessage += cipher.final('hex');
 
   const encryptionPayload = {
-    encryptedString,
-    nonce,
+    encryptedMessage,
+    initVec: initVector,
   };
 
   return encryptionPayload;
 };
 
-export const decryptMessage = (
-  encrypted: Uint8Array,
-  nonce: Uint8Array,
-  secret: Uint8Array,
-): string => {
-  // Decrypt the message
-  const messageDecrypted = naclDecrypt(encrypted, nonce, secret);
+export const decryptMessage = (encrypted: string, secret: string, initVector: string): string => {
+  const algorithm = 'aes-256-cbc';
 
-  const decryptedString = u8aToString(messageDecrypted);
+  const decipher = crypto.createDecipheriv(algorithm, secret, initVector);
 
-  return decryptedString;
+  let decryptedMessage = decipher.update(encrypted, 'hex', 'utf-8');
+
+  decryptedMessage += decipher.final('utf-8');
+
+  return decryptedMessage;
 };
 
 export const toHexPublicKey = (account: InjectedAccountWithMeta): string => {
