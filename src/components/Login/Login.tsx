@@ -14,18 +14,12 @@ import {Profile} from './render/Profile';
 
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
-import {toHexPublicKey} from 'src/lib/crypto';
 
 export const Login: React.FC = () => {
   const styles = useStyles();
 
-  const {
-    createSignaturePolkadotExt,
-    anonymous,
-    fetchUserNonce,
-    signUpWithExternalAuth,
-    loginWithExternalAuth,
-  } = useAuthHook();
+  const {createSignaturePolkadotExt, anonymous, fetchUserNonce, loginWithExternalAuth} =
+    useAuthHook();
   const {checkUsernameAvailable} = useProfileHook();
 
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
@@ -71,19 +65,6 @@ export const Login: React.FC = () => {
     }
   };
 
-  const handleRegister = async (name: string, username: string) => {
-    if (selectedAccount) {
-      await signUpWithExternalAuth(
-        toHexPublicKey(selectedAccount),
-        name,
-        username,
-        selectedAccount,
-      );
-    }
-  };
-
-  console.log({signatureCancelled});
-
   return (
     <div className={styles.root}>
       <Router>
@@ -106,7 +87,6 @@ export const Login: React.FC = () => {
             element={
               <Profile
                 account={selectedAccount}
-                onSubmit={handleRegister}
                 checkUsernameAvailability={checkUsernameAvailable}
               />
             }
