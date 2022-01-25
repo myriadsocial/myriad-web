@@ -27,22 +27,14 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
     [],
   );
 
-  const isSocialConnected = (social: SocialsEnum): boolean => {
-    const match = connected.find(item => item.platform === social);
+  const getPrimaryAccount = (social: SocialsEnum): SocialMedia | null => {
+    let match = connected.find(item => item.platform === social && item.primary);
 
-    return !!match && match.verified;
-  };
+    if (!match) {
+      match = connected.find(item => item.platform === social);
+    }
 
-  const getSocialOrigin = (social: SocialsEnum): string | null => {
-    const match = connected.find(item => item.platform === social);
-
-    return match && match.people ? match.people?.originUserId : null;
-  };
-
-  const getSocialUsername = (social: SocialsEnum): string | null => {
-    const match = connected.find(item => item.platform === social);
-
-    return match && match.people ? match.people?.username : null;
+    return match ?? null;
   };
 
   for (const key of enumKeys(SocialsEnum)) {
@@ -50,12 +42,14 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
 
     if (!icons[social]) continue;
 
+    const item = getPrimaryAccount(social);
+
     socials.push({
       id: social,
       icon: icons[social] as JSX.Element,
-      originId: getSocialOrigin(social),
-      connected: isSocialConnected(social),
-      username: getSocialUsername(social),
+      originId: item?.people?.originUserId ?? null,
+      connected: !!item && item.verified,
+      username: item?.people?.username ?? null,
     });
   }
 
