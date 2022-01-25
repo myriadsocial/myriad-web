@@ -106,7 +106,11 @@ export const SearchResultContainer: React.FC = () => {
     <>
       <SearchBoxContainer onSubmitSearch={onSubmitSearch} />
       <Typography className={style.text}>
-        Search result for &quot;{searchKeyword}&quot; :
+        Search results for &quot;
+        <Typography variant="inherit" color="primary">
+          {searchKeyword}
+        </Typography>
+        &quot; :
       </Typography>
       <TabsComponent
         active={searchResultTabTexts[0].id}
