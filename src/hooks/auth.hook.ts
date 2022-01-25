@@ -96,7 +96,7 @@ export const useAuthHook = () => {
     name: string,
     username: string,
     account: InjectedAccountWithMeta,
-  ) => {
+  ): Promise<true | null> => {
     let nonce = null;
     const data = await AuthAPI.signUp({id, name, username});
 
@@ -107,9 +107,12 @@ export const useAuthHook = () => {
 
       if (signature) {
         await loginWithExternalAuth(nonce, signature, account);
+        return true;
       } else {
         return null;
       }
+    } else {
+      return null;
     }
   };
 
