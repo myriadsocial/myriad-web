@@ -1,13 +1,9 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {useRouter} from 'next/router';
-
-import {Button, Typography} from '@material-ui/core';
-
 import {AccountSettings} from './AccountSettings';
 
-import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {PrivacySettings} from 'src/interfaces/setting';
 import {RootState} from 'src/reducers';
 import {updatePrivacySetting, fetchAccountPrivacySetting} from 'src/reducers/config/actions';
@@ -18,8 +14,7 @@ export const AccountSettingsContainer: React.FC = () => {
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const dispatch = useDispatch();
-  const router = useRouter();
-  const [open, setOpen] = React.useState(false);
+  const {openToasterSnack} = useToasterSnackHook();
 
   React.useEffect(() => {
     user && dispatch(fetchAccountPrivacySetting(user.id));
@@ -28,60 +23,13 @@ export const AccountSettingsContainer: React.FC = () => {
   const handleSave = (payload: PrivacySettings) => {
     dispatch(
       updatePrivacySetting(user?.id, payload, () => {
-        openPrompt();
+        openToasterSnack({
+          message: 'New privacy setting applied',
+          variant: 'success',
+        });
       }),
     );
   };
 
-  const openPrompt = () => {
-    setOpen(!open);
-  };
-
-  const handleGoHome = () => {
-    openPrompt();
-    router.push(
-      {
-        pathname: '/home',
-      },
-      undefined,
-      {shallow: true},
-    );
-  };
-
-  const handleGoSetting = () => {
-    openPrompt();
-    router.push(
-      {
-        pathname: '/settings',
-      },
-      undefined,
-      {shallow: true},
-    );
-  };
-
-  return (
-    <>
-      <AccountSettings value={settings.privacy} onSaveSetting={handleSave} />
-      <PromptComponent
-        title="Success!"
-        subtitle={<Typography>New privacy setting applied</Typography>}
-        icon="success"
-        open={open}
-        onCancel={openPrompt}>
-        <div style={{display: 'flex', justifyContent: 'center'}}>
-          <Button
-            style={{marginRight: 12}}
-            size="small"
-            variant="outlined"
-            color="secondary"
-            onClick={handleGoSetting}>
-            Setting
-          </Button>
-          <Button size="small" variant="contained" color="primary" onClick={handleGoHome}>
-            Back to Home
-          </Button>
-        </div>
-      </PromptComponent>
-    </>
-  );
+  return <AccountSettings value={settings.privacy} onSaveSetting={handleSave} />;
 };
