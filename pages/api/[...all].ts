@@ -3,8 +3,6 @@ import {getSession} from 'next-auth/client';
 import httpProxyMiddleware from 'next-http-proxy-middleware';
 import getConfig from 'next/config';
 
-import {stringToU8a} from '@polkadot/util';
-
 import {decryptMessage} from 'src/lib/crypto';
 
 const {serverRuntimeConfig} = getConfig();
@@ -19,20 +17,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const {secret} = serverRuntimeConfig;
     const session = await getSession({req});
-    console.log('SESSION', session);
-    console.log('>>>>', req.url);
 
     let headers = {};
     if (session && session.user) {
       let userToken = '';
 
       userToken = decryptMessage(
-        stringToU8a(session.user.token as string),
-        session.user.nonce as Uint8Array,
-        stringToU8a(secret),
+        session.user.token as string,
+        secret,
+        session.user.initVec as string,
       );
-
-      console.log('in api all.ts: ', {userToken});
 
       headers = {
         Authorization: `Bearer ${userToken}`,

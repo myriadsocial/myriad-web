@@ -30,8 +30,6 @@ export default NextAuth({
         if (!credentials?.signature) throw Error('no signature!');
 
         if (credentials.signature) {
-          console.log('authorize in nextauth: ', {credentials});
-
           const data = await AuthAPI.login({
             nonce: +credentials.nonce,
             signature: credentials.signature,
@@ -40,20 +38,18 @@ export default NextAuth({
 
           if (!data?.accessToken) throw Error('authorization problem!');
 
-          const {encryptedString, nonce: encryptionNonce} = encryptMessage(
+          const {encryptedMessage, initVec} = encryptMessage(
             data.accessToken,
             serverRuntimeConfig.secret,
           );
-
-          console.log('encrypted accessToken: ', {encryptedString});
 
           return {
             name: credentials.name,
             anonymous: credentials.anonymous === 'true',
             address: credentials.address,
-            token: encryptedString,
-            nonce: +credentials.nonce,
-            encryptionNonce,
+            token: encryptedMessage,
+            nonce: credentials.nonce,
+            initVec,
           };
         }
       },
