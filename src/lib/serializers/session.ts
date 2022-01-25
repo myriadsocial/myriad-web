@@ -20,7 +20,6 @@ export const userToSession = (user: User): UserSession => {
 export const credentialToSession = (credential: SignInCredential): UserSession => {
   const session: UserSession = {
     token: credential.token,
-    encryptionNonce: credential.encryptionNonce,
     nonce: credential.nonce,
     signature: credential.signature,
     address: credential.address,

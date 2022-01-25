@@ -1,16 +1,16 @@
 export interface SignInCredential {
+  token: string;
+  initVec: string;
+  nonce: string;
+  signature: string;
   name: string;
   anonymous: boolean;
-  token: string;
-  nonce: string;
-  initVec: string;
-  signature: string;
   address: string;
 }
 export interface UserSession {
   token?: string;
-  nonce?: string;
   initVec?: string;
+  nonce?: string;
   signature?: string;
   name: string;
   profilePictureURL?: string;
