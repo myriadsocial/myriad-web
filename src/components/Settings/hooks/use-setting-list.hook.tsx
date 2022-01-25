@@ -3,12 +3,16 @@ import React from 'react';
 import {BlockListContainer} from '../../BlockUserList/BlockList.container';
 import {HelpComponent} from '../../Help/Help';
 import {AccountSettingsContainer} from '../AccountSettingsContainer';
+import {LanguageSettingsContainer} from '../LanguageSettingsContainer';
 import {NotificationSettingsContainer} from '../NotificationSettings.container';
+
+import i18n from 'src/locale';
 
 export type SettingsType =
   | 'account'
   | 'notification'
   | 'block'
+  | 'language'
   | 'about'
   | 'feedback'
   | 'help'
@@ -24,41 +28,47 @@ export const useSettingList = (): SettingsOption<SettingsType>[] => {
   return [
     {
       id: 'account',
-      title: 'Account',
-      subtitle: 'Account privacy, social media privacy',
+      title: i18n.t('Setting.List_Menu.Account_Title'),
+      subtitle: i18n.t('Setting.List_Menu.Account_Subtitle'),
       component: <AccountSettingsContainer />,
     },
     {
       id: 'notification',
-      title: 'Notification',
-      subtitle: 'Manage your notifications',
+      title: i18n.t('Setting.List_Menu.Notification_Title'),
+      subtitle: i18n.t('Setting.List_Menu.Notification_Subtitle'),
       component: <NotificationSettingsContainer />,
     },
     {
       id: 'block',
-      title: 'Blocked User',
-      subtitle: 'Manage your blocked list',
+      title: i18n.t('Setting.List_Menu.Blocked_Title'),
+      subtitle: i18n.t('Setting.List_Menu.Blocked_Subtitle'),
       component: <BlockListContainer />,
     },
     {
+      id: 'language',
+      title: i18n.t('Setting.List_Menu.Language_Title'),
+      subtitle: i18n.t('Setting.List_Menu.Language_Subtitle'),
+      component: <LanguageSettingsContainer />,
+    },
+    {
       id: 'help',
-      title: 'Help',
-      subtitle: 'Terms and conditions, privacy policy, contact us',
+      title: i18n.t('Setting.List_Menu.Help_Title'),
+      subtitle: i18n.t('Setting.List_Menu.Help_Subtitle'),
       component: <HelpComponent />,
     },
     {
       id: 'about',
-      title: 'About Myriad',
-      subtitle: 'Read more about Myriad',
+      title: i18n.t('Setting.List_Menu.About_Title'),
+      subtitle: i18n.t('Setting.List_Menu.About_Subtitle'),
     },
     {
       id: 'feedback',
-      title: 'Submit Feedback',
-      subtitle: 'Please feel free to provide feedback by send email',
+      title: i18n.t('Setting.List_Menu.Feedback_Title'),
+      subtitle: i18n.t('Setting.List_Menu.Feedback_Subtitle'),
     },
     {
       id: 'version',
-      title: 'Myriad version',
+      title: i18n.t('Setting.List_Menu.Version_Title'),
     },
   ];
 };

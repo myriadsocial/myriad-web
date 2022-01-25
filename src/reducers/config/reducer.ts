@@ -38,6 +38,7 @@ const initalState: ConfigState = {
       mentions: true,
       friendRequests: true,
     },
+    language: 'en',
   },
 };
 
@@ -66,6 +67,17 @@ export const ConfigReducer: Redux.Reducer<ConfigState, Actions> = (state = inita
         settings: {
           ...state.settings,
           notification: action.settings,
+        },
+      };
+    }
+
+    case constants.SET_LANGUAGE_SETTING: {
+      console.log(action);
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          language: action.lang,
         },
       };
     }

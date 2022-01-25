@@ -13,10 +13,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import {ThemeProvider} from '@material-ui/core/styles';
 import {withStyles, WithStyles} from '@material-ui/core/styles';
 
+import i18n from '../src/locale';
 import {wrapper} from '../src/store';
 import themeV2 from '../src/themes/light-theme';
 
 import {SnackbarProvider} from 'notistack';
+import {I18nextProvider} from 'react-i18next';
 import {ToasterSnack} from 'src/components/atoms/ToasterSnack';
 import {AlertProvider} from 'src/context/alert.context';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
@@ -84,50 +86,52 @@ const App = ({classes, ...props}: MyAppProps & WithStyles<typeof snackbarStyles>
   }, [notifications, displayed]);
 
   return (
-    <CacheProvider value={emotionCache}>
-      <Head>
-        <link rel="shortcut icon" href="/images/favicon.svg" />
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
-        <meta property="og:site_name" content={publicRuntimeConfig.appName} />
-      </Head>
-      <ThemeProvider theme={themeV2}>
-        <SnackbarProvider
-          ref={notistackRef}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          maxSnack={5}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <AuthProvider
-            // Provider options are not required but can be useful in situations where
-            // you have a short session maxAge time. Shown here with default values.
-            options={{
-              // Client Max Age controls how often the useSession in the client should
-              // contact the server to sync the session state. Value in seconds.
-              // e.g.
-              // * 0  - Disabled (always use cache value)
-              // * 60 - Sync session state with server if it's older than 60 seconds
-              clientMaxAge: 0,
-              // Keep Alive tells windows / tabs that are signed in to keep sending
-              // a keep alive request (which extends the current session expiry) to
-              // prevent sessions in open windows from expiring. Value in seconds.
-              //
-              // Note: If a session has expired when keep alive is triggered, all open
-              // windows / tabs will be updated to reflect the user is signed out.
-              keepAlive: 0,
+    <I18nextProvider i18n={i18n}>
+      <CacheProvider value={emotionCache}>
+        <Head>
+          <link rel="shortcut icon" href="/images/favicon.svg" />
+          <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+          <meta property="og:site_name" content={publicRuntimeConfig.appName} />
+        </Head>
+        <ThemeProvider theme={themeV2}>
+          <SnackbarProvider
+            ref={notistackRef}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
             }}
-            session={pageProps.session}>
-            <CookiesProvider>
-              <AlertProvider>
-                <Component {...pageProps} />
-              </AlertProvider>
-            </CookiesProvider>
-          </AuthProvider>
-        </SnackbarProvider>
-      </ThemeProvider>
-    </CacheProvider>
+            maxSnack={5}>
+            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+            <CssBaseline />
+            <AuthProvider
+              // Provider options are not required but can be useful in situations where
+              // you have a short session maxAge time. Shown here with default values.
+              options={{
+                // Client Max Age controls how often the useSession in the client should
+                // contact the server to sync the session state. Value in seconds.
+                // e.g.
+                // * 0  - Disabled (always use cache value)
+                // * 60 - Sync session state with server if it's older than 60 seconds
+                clientMaxAge: 0,
+                // Keep Alive tells windows / tabs that are signed in to keep sending
+                // a keep alive request (which extends the current session expiry) to
+                // prevent sessions in open windows from expiring. Value in seconds.
+                //
+                // Note: If a session has expired when keep alive is triggered, all open
+                // windows / tabs will be updated to reflect the user is signed out.
+                keepAlive: 0,
+              }}
+              session={pageProps.session}>
+              <CookiesProvider>
+                <AlertProvider>
+                  <Component {...pageProps} />
+                </AlertProvider>
+              </CookiesProvider>
+            </AuthProvider>
+          </SnackbarProvider>
+        </ThemeProvider>
+      </CacheProvider>
+    </I18nextProvider>
   );
 };
 

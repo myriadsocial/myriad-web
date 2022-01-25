@@ -1,0 +1,21 @@
+{
+  "Setting": {
+    "List_Menu": {
+      "Account_Title": "Account",
+      "Account_Subtitle": "Account privacy, social media privacy",
+      "Notification_Title": "Notification",
+      "Notification_Subtitle": "Manage your notification",
+      "Blocked_Title": "Blocked User",
+      "Blocked_Subtitle": "Manage your blocked list",
+      "Language_Title": "Language",
+      "Language_Subtitle": "Change the language used in the user interface",
+      "Help_Title": "Help",
+      "Help_Subtitle": "Terms and conditions, privacy policy, contact us",
+      "About_Title": "About Myriad",
+      "About_Subtitle": "Read more about Myriad",
+      "Feedback_Title": "Submit Feedback",
+      "Feedback_Subtitle": "Please feel free to provide feedback by send email",
+      "Version_Title": "Myriad version"
+    }
+  }
+}
