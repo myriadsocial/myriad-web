@@ -24,6 +24,7 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
+    fallbackLng: 'en',
     detection: optionDetection,
     interpolation: {
       escapeValue: false,
