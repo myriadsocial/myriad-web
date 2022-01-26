@@ -94,8 +94,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  console.log('session in home:', {session});
-
   setHeaders({cookie: req.headers.cookie as string});
 
   if (!session) {

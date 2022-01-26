@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {MemoryRouter as Router, Routes, Route} from 'react-router-dom';
 
 import {CircularProgress} from '@material-ui/core';
@@ -18,8 +18,7 @@ import {useProfileHook} from 'src/hooks/use-profile.hook';
 export const Login: React.FC = () => {
   const styles = useStyles();
 
-  const {createSignaturePolkadotExt, anonymous, fetchUserNonce, loginWithExternalAuth} =
-    useAuthHook();
+  const {anonymous, fetchUserNonce, signInWithExternalAuth} = useAuthHook();
   const {checkUsernameAvailable} = useProfileHook();
 
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
@@ -35,41 +34,47 @@ export const Login: React.FC = () => {
     setSelectedAccount(account);
   };
 
-  const checkAccountRegistered = async (callback: () => void) => {
-    if (selectedAccount) {
-      setLoading(true);
+  const switchAccount = async (account: InjectedAccountWithMeta, callback: () => void) => {
+    handleSelectedAccount(account);
 
-      setSignatureCancelled(false);
-
-      const data = await fetchUserNonce(selectedAccount);
-
-      let nonce = 0;
-
-      if (data) nonce = data.nonce;
-
-      // login
-      if (nonce && nonce > 0) {
-        const signature = await createSignaturePolkadotExt(selectedAccount, nonce);
-
-        if (signature) {
-          await loginWithExternalAuth(nonce, signature, selectedAccount);
-        } else {
-          setLoading(false);
-          setSignatureCancelled(true);
-        }
-      } else {
-        // register
-        setLoading(false);
-        callback();
-      }
-    }
+    checkAccountRegistered(callback, account);
   };
+
+  const checkAccountRegistered = useCallback(
+    async (callback: () => void, account?: InjectedAccountWithMeta) => {
+      const currentAccount = account ?? selectedAccount;
+
+      if (currentAccount) {
+        setLoading(true);
+        setSignatureCancelled(false);
+
+        const {nonce} = await fetchUserNonce(currentAccount);
+
+        if (nonce > 0) {
+          const success = await signInWithExternalAuth(currentAccount, nonce);
+
+          if (!success) {
+            setSignatureCancelled(true);
+            setLoading(false);
+          }
+        } else {
+          // register
+          setLoading(false);
+          callback();
+        }
+      }
+    },
+    [selectedAccount],
+  );
 
   return (
     <div className={styles.root}>
       <Router>
         <Routes>
-          <Route path="/" element={<LoginComponent anonymousLogin={anonymous} />} />
+          <Route
+            path="/"
+            element={<LoginComponent anonymousLogin={anonymous} switchAccount={switchAccount} />}
+          />
           <Route path="/wallet" element={<Options onConnect={handleOnconnect} />} />
           <Route
             path="/account"

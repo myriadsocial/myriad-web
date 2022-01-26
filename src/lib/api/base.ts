@@ -37,10 +37,7 @@ export const initialize = (params?: AuthorizationParams): AxiosInstance => {
 };
 
 export const setHeaders = (headers: {cookie: string}): void => {
-  console.log('setHeaders', headers);
-
   if (API) {
-    console.log('setHeaders jadi');
     API.interceptors.request.use(config => {
       config.headers = {
         ...config.headers,

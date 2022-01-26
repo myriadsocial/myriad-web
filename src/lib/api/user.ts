@@ -23,7 +23,7 @@ export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
     method: 'GET',
   });
 
-  return data;
+  return data ? data : {nonce: 0};
 };
 
 export const getUserDetail = async (id: string, userId?: string): Promise<User & BlockedProps> => {

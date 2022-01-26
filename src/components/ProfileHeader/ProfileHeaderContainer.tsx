@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
 
@@ -14,6 +14,7 @@ import {PolkadotAccountList} from '../PolkadotAccountList';
 
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
+import {toHexPublicKey} from 'src/lib/crypto';
 import {RootState} from 'src/reducers';
 import {NotificationState} from 'src/reducers/notification/reducer';
 import {clearUser} from 'src/reducers/user/actions';
@@ -33,29 +34,25 @@ export const ProfileHeaderContainer: React.FC<Props> = ({toggleNotification}) =>
   const [session] = useSession();
 
   const {enablePolkadotExtension} = usePolkadotExtension();
-  const {logout, signInWithAccount, getRegisteredAccounts} = useAuthHook();
+  const {logout, switchAccount, getRegisteredAccounts} = useAuthHook();
 
-  const [accountListOpen, setAccountListOpen] = useState(false);
+  const [showAccountList, setShowAccountList] = useState(false);
   const [extensionInstalled, setExtensionInstalled] = useState(false);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
-
-  useEffect(() => {
-    if (extensionInstalled) {
-      getAvailableAccounts();
-    }
-  }, [extensionInstalled]);
 
   const checkExtensionInstalled = async () => {
     const installed = await enablePolkadotExtension();
 
-    setAccountListOpen(true);
+    setShowAccountList(true);
     setExtensionInstalled(installed);
+
+    getAvailableAccounts();
   };
 
   const getAvailableAccounts = async () => {
     const accounts = await getRegisteredAccounts();
 
-    setAccounts(accounts);
+    setAccounts(accounts.filter(account => toHexPublicKey(account) !== user?.id));
   };
 
   const handleViewProfile = () => {
@@ -85,7 +82,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({toggleNotification}) =>
   };
 
   const closeAccountList = () => {
-    setAccountListOpen(false);
+    setShowAccountList(false);
   };
 
   const handleShowNotificationList = () => {
@@ -105,16 +102,16 @@ export const ProfileHeaderContainer: React.FC<Props> = ({toggleNotification}) =>
       />
 
       <PolkadotAccountList
-        isOpen={accountListOpen && extensionInstalled}
+        isOpen={showAccountList && extensionInstalled}
         accounts={accounts}
-        onSelect={signInWithAccount}
+        onSelect={switchAccount}
         onClose={closeAccountList}
       />
 
       <Prompt
         title="Account Not Found"
         icon="warning"
-        open={accountListOpen && !extensionInstalled}
+        open={showAccountList && !extensionInstalled}
         onCancel={closeAccountList}
         subtitle={
           <Typography>

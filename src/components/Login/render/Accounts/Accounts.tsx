@@ -17,19 +17,19 @@ type AccountListProps = {
 
 export const Accounts: React.FC<AccountListProps> = props => {
   const styles = useStyles();
+  const navigate = useNavigate();
 
   const {accounts, onSelect, onNext, signature} = props;
 
+  const [selectedAccount, setSelectedAccount] = useState<InjectedAccountWithMeta | null>(null);
+
   const [submitted, setSubmitted] = useState(false);
+
   useEffect(() => {
     if (signature) {
       setSubmitted(false);
     }
   }, [signature]);
-
-  const navigate = useNavigate();
-
-  const [selectedAccount, setSelectedAccount] = useState<InjectedAccountWithMeta | null>(null);
 
   const handleSelectAccount = (account: InjectedAccountWithMeta) => () => {
     onSelect(account);
