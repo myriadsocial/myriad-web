@@ -75,7 +75,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     } else {
       setIsUpdateProfile(false);
     }
-  }, [newUser, imageProfile]);
+  }, [newUser, imageProfile, imageBanner]);
 
   const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewUser(prevUser => ({
