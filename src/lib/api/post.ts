@@ -30,7 +30,9 @@ export const getPost = async (
   asFriend = false,
   sortOrder?: TimelineSortOrder,
 ): Promise<PostList> => {
-  const where: LoopbackWhere<PostProps> = {};
+  const where: LoopbackWhere<PostProps> = {
+    deletedAt: {exists: false},
+  };
 
   let sortField = 'latest';
   let orderField = 'DESC';
