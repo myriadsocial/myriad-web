@@ -11,6 +11,7 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {ExperienceType} from 'src/components/Timeline/default';
+import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 
 /**
  * Action Types
@@ -28,9 +29,21 @@ export interface LoadDetailExperience extends Action {
   type: constants.FETCH_DETAIL_EXPERIENCE;
   experience: Experience;
 }
-export interface SearchAllRelatedExperiences extends PaginationAction {
+
+export interface LoadSearchedExperiences extends Action {
+  type: constants.LOAD_SEARCHED_EXPERIENCES;
+  payload: {
+    experiences: Experience[];
+    meta: ListMeta;
+  };
+}
+
+export interface SearchAllRelatedExperiences extends Action {
   type: constants.SEARCH_ALL_RELATED_EXPERIENCES;
-  experiences: Experience[];
+  payload: {
+    experiences: Experience[];
+    meta: ListMeta;
+  };
 }
 export interface SearchExperience extends PaginationAction {
   type: constants.SEARCH_EXPERIENCE;
@@ -53,6 +66,7 @@ export type Actions =
   | LoadExperience
   | LoadDetailExperience
   | SearchExperience
+  | LoadSearchedExperiences
   | SearchAllRelatedExperiences
   | SearchPeople
   | SearchTags
@@ -180,29 +194,64 @@ export const cloneExperience: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const searchAllRelatedExperiences: ThunkActionCreator<Actions, RootState> =
-  (query: string) => async (dispatch, getState) => {
+export const loadSearchedExperiences: ThunkActionCreator<Actions, RootState> =
+  (page = 1) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
+    const {
+      userState: {user},
+    } = getState();
+
     try {
-      const {
-        userState: {user},
-      } = getState();
+      const userId = user?.id as string;
 
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      const {meta, data: experiences} = await ExperienceAPI.searchExperiencesByQuery(
-        query,
-        user.id,
-      );
+      const {data: experiences, meta} = await ExperienceAPI.getSearchedExperiences(page, userId);
 
       dispatch({
-        type: constants.SEARCH_ALL_RELATED_EXPERIENCES,
-        experiences,
-        meta,
+        type: constants.LOAD_SEARCHED_EXPERIENCES,
+        payload: {
+          experiences,
+          meta,
+        },
       });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const searchAllRelatedExperiences: ThunkActionCreator<Actions, RootState> =
+  (query: string, page = 1) =>
+  async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    const {
+      userState: {user},
+    } = getState();
+    const userId = user?.id as string;
+
+    try {
+      if (user) {
+        const {data: experiences, meta} = await ExperienceAPI.searchExperiencesByQuery(
+          query,
+          userId,
+          page,
+        );
+
+        dispatch({
+          type: constants.LOAD_SEARCHED_EXPERIENCES,
+          payload: {
+            experiences,
+            meta,
+          },
+        });
+      }
     } catch (error) {
       dispatch(
         setError({
