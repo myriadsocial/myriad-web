@@ -66,7 +66,7 @@ export const getUserByAddress = async (address: string[]): Promise<UserList> => 
     url: '/users',
     method: 'GET',
     params: {
-      pageLimit: 1,
+      pageLimit: address.length,
       filter: {
         where: {
           id: {
