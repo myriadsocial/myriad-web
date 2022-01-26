@@ -47,6 +47,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       headers,
     });
   } catch (error) {
-    console.log({error});
+    console.error('[api-proxy][error]', {error});
+    res.status(500).send(null);
   }
 };
