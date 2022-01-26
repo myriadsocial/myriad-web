@@ -23,7 +23,7 @@ export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
     method: 'GET',
   });
 
-  return data;
+  return data ? data : {nonce: 0};
 };
 
 export const getUserDetail = async (id: string, userId?: string): Promise<User & BlockedProps> => {
@@ -66,7 +66,7 @@ export const getUserByAddress = async (address: string[]): Promise<UserList> => 
     url: '/users',
     method: 'GET',
     params: {
-      pageLimit: address.length,
+      pageLimit: 1,
       filter: {
         where: {
           id: {

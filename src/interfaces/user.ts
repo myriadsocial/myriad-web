@@ -50,6 +50,7 @@ export type UserMetric = {
 export interface Importer extends UserProps, BaseModel {}
 
 export interface User extends UserProps, BaseModel {
+  nonce?: number;
   currencies: Currency[];
   people?: People[];
   metric?: UserMetric;

@@ -27,7 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         secret,
         session.user.initVec as string,
       );
-
+      console.log('userToken', userToken);
       headers = {
         Authorization: `Bearer ${userToken}`,
       };
