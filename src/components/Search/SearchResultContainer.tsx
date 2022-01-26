@@ -40,32 +40,28 @@ export const SearchResultContainer: React.FC = () => {
 
   useEffect(() => {
     if (searchKeyword.length) {
-      searchPosts(searchKeyword);
-    }
-  }, [searchKeyword]);
+      switch (selectedTab) {
+        case 'posts-tab': {
+          searchPosts(searchKeyword);
+          break;
+        }
 
-  useEffect(() => {
-    switch (selectedTab) {
-      case 'posts-tab': {
-        searchPosts(searchKeyword);
-        break;
-      }
+        case 'users-tab': {
+          searchUsers(searchKeyword);
+          break;
+        }
 
-      case 'users-tab': {
-        searchUsers(searchKeyword);
-        break;
-      }
+        case 'experience-tab': {
+          searchExperience(searchKeyword);
+          break;
+        }
 
-      case 'experience-tab': {
-        searchExperience(searchKeyword);
-        break;
-      }
-
-      default: {
-        break;
+        default: {
+          break;
+        }
       }
     }
-  }, [selectedTab]);
+  }, [searchKeyword, selectedTab]);
 
   const [searchResultTabTexts] = useState<TabItems<string>[]>([
     {
@@ -81,7 +77,7 @@ export const SearchResultContainer: React.FC = () => {
     {
       id: 'experience-tab',
       title: 'Experience',
-      component: <SearchedExperienceListContainer />,
+      component: <SearchedExperienceListContainer query={searchKeyword} />,
     },
   ]);
 
