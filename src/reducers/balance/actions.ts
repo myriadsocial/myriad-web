@@ -107,7 +107,7 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
       dispatch(
         setError({
           title: 'something is wrong',
-          message: 'ooopps!',
+          message: 'There are some issues when connecting to RPC',
         }),
       );
     } finally {
