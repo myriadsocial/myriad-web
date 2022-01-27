@@ -57,13 +57,25 @@ export const ProfileEditComponent: React.FC<Props> = props => {
   const [open, setOpen] = useState(false);
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isUpdateProfile, setIsUpdateProfile] = useState(false);
 
   const style = useStyles();
 
   useEffect(() => {
     handleChanges();
     nameValidation();
-  }, [newUser]);
+    if (
+      user?.bio !== newUser.bio ||
+      user?.name !== newUser.name ||
+      user?.websiteURL !== newUser?.websiteURL ||
+      imageProfile instanceof File ||
+      imageBanner instanceof File
+    ) {
+      setIsUpdateProfile(true);
+    } else {
+      setIsUpdateProfile(false);
+    }
+  }, [newUser, imageProfile, imageBanner]);
 
   const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewUser(prevUser => ({
@@ -271,7 +283,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
             color="primary"
             disableElevation
             onClick={saveConfirmation}
-            disabled={isError || handleError() || updatingProfile}
+            disabled={isError || handleError() || updatingProfile || !isUpdateProfile}
             classes={{root: style.width}}>
             Save changes
           </Button>

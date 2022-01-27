@@ -137,7 +137,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                 <b>Step 2:</b>{' '}
                 {social == SocialsEnum.REDDIT
                   ? 'Copy the text below and post it on your Reddit profile. Do not post the text on a Subreddit.'
-                  : 'Copy Text below and post it on your timeline'}
+                  : 'Copy text below and post it on your timeline. Make sure your account is not protected.'}
               </Typography>
 
               <TextField
