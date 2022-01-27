@@ -3,8 +3,17 @@ import React from 'react';
 import {useSearchHook} from '../../hooks/use-search.hooks';
 import {UsersList} from './UsersList';
 
-export const UsersListContainer: React.FC = () => {
-  const {users, hasMore, nextPage} = useSearchHook();
+type UsersListContainerProps = {
+  query: string;
+};
 
-  return <UsersList loadNextPage={nextPage} users={users} hasMore={hasMore} />;
+export const UsersListContainer: React.FC<UsersListContainerProps> = props => {
+  const {query} = props;
+  const {users, hasMore, page, searchUsers} = useSearchHook();
+
+  const handleLoadNextPage = () => {
+    searchUsers(query, page + 1);
+  };
+
+  return <UsersList loadNextPage={handleLoadNextPage} users={users} hasMore={hasMore} />;
 };

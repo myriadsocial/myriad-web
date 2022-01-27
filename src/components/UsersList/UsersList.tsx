@@ -1,14 +1,13 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import {List} from '@material-ui/core';
+import {List, Paper} from '@material-ui/core';
 import {createStyles, makeStyles, alpha} from '@material-ui/core/styles';
 
 import {User} from '../../interfaces/user';
 import {EmptyResult} from '../Search/EmptyResult';
 import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
 import {Loading} from '../atoms/Loading';
-import ShowIf from '../common/show-if.component';
 import {UsersListItem} from './UsersListItem';
 
 export const useStyles = makeStyles(() =>
@@ -37,24 +36,24 @@ export const UsersList: React.FC<UsersListProps> = ({users, hasMore, loadNextPag
       hasMore={hasMore}
       next={loadNextPage}
       loader={<Loading />}>
-      <ShowIf condition={users.length === 0}>
-        <EmptyResult emptyContent={EmptyContentEnum.USER} />
-      </ShowIf>
-
-      <ShowIf condition={users.length > 0}>
+      <Paper style={{maxHeight: 360, overflow: 'auto'}} id="scrollable-users-list">
         <List className={classes.root}>
-          {users.map(user => (
-            <UsersListItem
-              title={user.name}
-              subtitle={user.username ? `@${user.username}` : '@anonymous'}
-              key={user.id}
-              size={'medium'}
-              avatar={user.profilePictureURL}
-              url={`/profile/${user.id}`}
-            />
-          ))}
+          {users.length === 0 ? (
+            <EmptyResult emptyContent={EmptyContentEnum.USER} />
+          ) : (
+            users.map(user => (
+              <UsersListItem
+                title={user.name}
+                subtitle={user.username ? `@${user.username}` : '@anonymous'}
+                key={user.id}
+                size={'medium'}
+                avatar={user.profilePictureURL}
+                url={`/profile/${user.id}`}
+              />
+            ))
+          )}
         </List>
-      </ShowIf>
+      </Paper>
     </InfiniteScroll>
   );
 };

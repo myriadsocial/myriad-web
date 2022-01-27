@@ -25,11 +25,10 @@ export default NextAuth({
         name: {label: 'Name', type: 'text'},
         address: {label: 'Address', type: 'text'},
       },
-      //@ts-expect-error
       async authorize(credentials: Record<string, string>) {
-        if (!credentials?.signature) throw Error('no signature!');
+        if (credentials.anonymous === 'false') {
+          if (!credentials?.signature) throw Error('no signature!');
 
-        if (credentials.signature) {
           const data = await AuthAPI.login({
             nonce: Number(credentials.nonce),
             signature: credentials.signature,
@@ -45,13 +44,19 @@ export default NextAuth({
 
           return {
             name: credentials.name,
-            anonymous: credentials.anonymous === 'true',
+            anonymous: false,
             address: credentials.address,
             token: encryptedMessage,
             nonce: credentials.nonce,
             initVec,
           };
         }
+
+        return {
+          name: credentials.name,
+          address: credentials.address,
+          anonymous: true,
+        };
       },
     }),
   ],

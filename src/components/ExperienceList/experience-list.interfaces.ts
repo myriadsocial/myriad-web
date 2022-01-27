@@ -34,6 +34,8 @@ type NonSelectableExperienceListProps = Omit<
 >;
 
 interface SearchedExperienceList {
+  loadNextPage: () => void;
+  hasMore: boolean;
   experiences: Experience[];
   userExperience: UserExperience[];
   isOnHomePage?: boolean;

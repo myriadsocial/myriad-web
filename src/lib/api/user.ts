@@ -27,35 +27,40 @@ export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
 };
 
 export const getUserDetail = async (id: string, userId?: string): Promise<User & BlockedProps> => {
-  const {data} = await MyriadAPI.request<User & BlockedProps>({
-    url: `users/${id}`,
-    method: 'GET',
-    params: {
-      userId,
-      filter: {
-        include: [
-          {
-            relation: 'currencies',
-            scope: {
-              order: 'priority ASC',
-            },
+  const params: Record<string, any> = {
+    filter: {
+      include: [
+        {
+          relation: 'currencies',
+          scope: {
+            order: 'priority ASC',
           },
-          {
-            relation: 'people',
-          },
-          {
-            relation: 'activityLogs',
-            scope: {
-              where: {
-                type: {
-                  inq: [ActivityLogType.SKIP, ActivityLogType.USERNAME],
-                },
+        },
+        {
+          relation: 'people',
+        },
+        {
+          relation: 'activityLogs',
+          scope: {
+            where: {
+              type: {
+                inq: [ActivityLogType.SKIP, ActivityLogType.USERNAME],
               },
             },
           },
-        ],
-      },
+        },
+      ],
     },
+  };
+
+  if (userId) {
+    params.userId = userId;
+  }
+
+  const {data} = await MyriadAPI.request<User & BlockedProps>({
+    url: `users/${id}`,
+    method: 'GET',
+    params,
   });
 
   return data;
@@ -100,7 +105,21 @@ export const updateUser = async (userId: string, values: Partial<User>): Promise
   return data;
 };
 
-export const searchUsers = async (query: string, userId?: string, page = 1): Promise<UserList> => {
+export const getSearchedUsers = async (page: number, userId: string): Promise<UserList> => {
+  const {data} = await MyriadAPI.request<UserList>({
+    url: `/users`,
+    method: 'GET',
+    params: {
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
+      userId,
+    },
+  });
+
+  return data;
+};
+
+export const searchUsers = async (query: string, userId: string, page = 1): Promise<UserList> => {
   const {data} = await MyriadAPI.request<UserList>({
     url: '/users',
     method: 'GET',
