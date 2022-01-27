@@ -40,32 +40,28 @@ export const SearchResultContainer: React.FC = () => {
 
   useEffect(() => {
     if (searchKeyword.length) {
-      searchPosts(searchKeyword);
-    }
-  }, [searchKeyword]);
+      switch (selectedTab) {
+        case 'posts-tab': {
+          searchPosts(searchKeyword);
+          break;
+        }
 
-  useEffect(() => {
-    switch (selectedTab) {
-      case 'posts-tab': {
-        searchPosts(searchKeyword);
-        break;
-      }
+        case 'users-tab': {
+          searchUsers(searchKeyword);
+          break;
+        }
 
-      case 'users-tab': {
-        searchUsers(searchKeyword);
-        break;
-      }
+        case 'experience-tab': {
+          searchExperience(searchKeyword);
+          break;
+        }
 
-      case 'experience-tab': {
-        searchExperience(searchKeyword);
-        break;
-      }
-
-      default: {
-        break;
+        default: {
+          break;
+        }
       }
     }
-  }, [selectedTab]);
+  }, [searchKeyword, selectedTab]);
 
   const [searchResultTabTexts] = useState<TabItems<string>[]>([
     {
@@ -76,12 +72,12 @@ export const SearchResultContainer: React.FC = () => {
     {
       id: 'users-tab',
       title: 'Users',
-      component: <UsersListContainer />,
+      component: <UsersListContainer query={searchKeyword} />,
     },
     {
       id: 'experience-tab',
       title: 'Experience',
-      component: <SearchedExperienceListContainer />,
+      component: <SearchedExperienceListContainer query={searchKeyword} />,
     },
   ]);
 
@@ -113,6 +109,7 @@ export const SearchResultContainer: React.FC = () => {
         &quot; :
       </Typography>
       <TabsComponent
+        id="scrollable-users-list"
         active={searchResultTabTexts[0].id}
         tabs={searchResultTabTexts}
         mark="underline"

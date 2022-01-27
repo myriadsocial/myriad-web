@@ -3,6 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {Experience} from '../interfaces/experience';
 import {RootState} from '../reducers';
 import {
+  loadSearchedExperiences,
   searchAllRelatedExperiences,
   searchPeople,
   searchTags,
@@ -30,6 +31,8 @@ export const useExperienceHook = () => {
     searchPeople: people,
     searchExperience: searchedExperiences,
     detail: experience,
+    hasMore,
+    meta,
   } = useSelector<RootState, ExperienceState>(state => state.experienceState);
 
   const loadExperience = () => {
@@ -41,8 +44,18 @@ export const useExperienceHook = () => {
     dispatch(fetchDetailExperience(id));
   };
 
-  const findExperience = (query: string) => {
-    dispatch(searchAllRelatedExperiences(query));
+  const initSearchExperiences = async (page = 1) => {
+    dispatch(loadSearchedExperiences(page));
+  };
+
+  const findExperience = async (query: string, page = 1) => {
+    dispatch(searchAllRelatedExperiences(query, page));
+  };
+
+  const nextPageSearchedExperiences = async () => {
+    const page = meta.currentPage + 1;
+
+    dispatch(loadSearchedExperiences(page));
   };
 
   const findPeople = (query: string) => {
@@ -113,9 +126,13 @@ export const useExperienceHook = () => {
   };
 
   return {
-    searchPeople: findPeople,
-    searchExperience: findExperience,
+    initSearchExperiences,
+    nextPageSearchedExperiences,
     searchedExperiences,
+    page: meta.currentPage,
+    hasMore,
+    searchExperience: findExperience,
+    searchPeople: findPeople,
     searchTags: findTags,
     cloneExperience: followExperience,
     loadExperience,

@@ -58,15 +58,37 @@ export const searchExperience = async (query: string): Promise<UserExperienceLis
   return data;
 };
 
-export const searchExperiencesByQuery = async (
-  query: string,
+export const getSearchedExperiences = async (
+  page: number,
   userId: string,
 ): Promise<ExperienceList> => {
-  //const pattern = new RegExp('.*' + query + '.*', 'i');
   const {data} = await MyriadAPI.request<ExperienceList>({
     url: `/experiences`,
     method: 'GET',
     params: {
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
+      userId,
+      filter: {
+        include: ['user'],
+      },
+    },
+  });
+
+  return data;
+};
+
+export const searchExperiencesByQuery = async (
+  query: string,
+  userId: string,
+  page = 1,
+): Promise<ExperienceList> => {
+  const {data} = await MyriadAPI.request<ExperienceList>({
+    url: `/experiences`,
+    method: 'GET',
+    params: {
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
       q: query,
       userId: userId,
       filter: {
