@@ -197,27 +197,55 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   };
 
   return (
-    <div className={style.flex} ref={ref}>
-      <div className={style.tree}>
-        <Avatar
-          className={style.avatar}
-          src={comment.user?.profilePictureURL || ''}
-          onClick={handleViewProfile}>
-          {acronym(comment.user?.name)}
-        </Avatar>
-        {(deep === 0 || replies.length > 0) && <div className={style.verticalTree} />}
-        {deep > 0 && <div className={style.horizontalTree} />}
-      </div>
-      <div className={style.fullWidth}>
-        <Card className={style.comment}>
-          <ShowIf condition={isBlocked}>
-            <CardHeader
-              title={
-                <div className={style.flexSpaceBetween}>
-                  <div>
+    <>
+      <div className={style.flex} ref={ref}>
+        <div className={style.tree}>
+          <Avatar
+            className={style.avatar}
+            src={comment.user?.profilePictureURL || ''}
+            onClick={handleViewProfile}>
+            {acronym(comment.user?.name)}
+          </Avatar>
+          {(deep === 0 || replies.length > 0) && <div className={style.verticalTree} />}
+          {deep > 0 && <div className={style.horizontalTree} />}
+        </div>
+        <div className={style.fullWidth}>
+          <Card className={style.comment}>
+            <ShowIf condition={isBlocked}>
+              <CardHeader
+                title={
+                  <div className={style.flexSpaceBetween}>
+                    <div>
+                      <Link href={'/profile/[id]'} as={`/profile/${comment.user.id}`} shallow>
+                        <Typography variant="body1" className={style.link} component="a">
+                          Blocked user
+                        </Typography>
+                      </Link>
+
+                      <Typography variant="caption" color="textSecondary">
+                        <span className={style.dot}>•</span>
+                        {getDate(comment.createdAt)}
+                      </Typography>
+                    </div>
+
+                    <Typography
+                      variant="body1"
+                      className={style.cursor}
+                      color="primary"
+                      onClick={handleOpenComment}>
+                      show comment
+                    </Typography>
+                  </div>
+                }
+              />
+            </ShowIf>
+            <ShowIf condition={!isBlocked}>
+              <CardHeader
+                title={
+                  <>
                     <Link href={'/profile/[id]'} as={`/profile/${comment.user.id}`} shallow>
                       <Typography variant="body1" className={style.link} component="a">
-                        Blocked user
+                        {comment.user.name}
                       </Typography>
                     </Link>
 
@@ -225,54 +253,27 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                       <span className={style.dot}>•</span>
                       {getDate(comment.createdAt)}
                     </Typography>
-                  </div>
-
-                  <Typography
-                    variant="body1"
-                    className={style.cursor}
-                    color="primary"
-                    onClick={handleOpenComment}>
-                    show comment
-                  </Typography>
-                </div>
-              }
-            />
-          </ShowIf>
-          <ShowIf condition={!isBlocked}>
-            <CardHeader
-              title={
-                <>
-                  <Link href={'/profile/[id]'} as={`/profile/${comment.user.id}`} shallow>
-                    <Typography variant="body1" className={style.link} component="a">
-                      {comment.user.name}
-                    </Typography>
-                  </Link>
-
-                  <Typography variant="caption" color="textSecondary">
-                    <span className={style.dot}>•</span>
-                    {getDate(comment.createdAt)}
-                  </Typography>
-                </>
-              }
-            />
-            <CardContent className={style.content}>
-              <CommentRender
-                comment={comment}
-                max={maxLength}
-                onShowAll={() => setMaxLength(undefined)}
+                  </>
+                }
               />
-            </CardContent>
-            <CardActions disableSpacing>
-              <VotingComponent
-                isUpVote={Boolean(comment.isUpvoted)}
-                isDownVote={Boolean(comment.isDownVoted)}
-                variant="row"
-                vote={totalVote}
-                size="small"
-                onDownVote={handleDownVote}
-                onUpvote={handleUpvote}
-              />
-              {deep < 2 && (
+              <CardContent className={style.content}>
+                <CommentRender
+                  comment={comment}
+                  max={maxLength}
+                  onShowAll={() => setMaxLength(undefined)}
+                />
+              </CardContent>
+              <CardActions disableSpacing>
+                <VotingComponent
+                  isUpVote={Boolean(comment.isUpvoted)}
+                  isDownVote={Boolean(comment.isDownVoted)}
+                  variant="row"
+                  vote={totalVote}
+                  size="small"
+                  onDownVote={handleDownVote}
+                  onUpvote={handleUpvote}
+                />
+
                 <Button
                   disabled={!user}
                   onClick={handleOpenReply}
@@ -281,77 +282,116 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                   variant="text">
                   Reply
                 </Button>
-              )}
 
-              <ShowIf condition={!isOwnComment}>
+                <ShowIf condition={!isOwnComment}>
+                  <Button
+                    disabled={balanceDetails.length === 0}
+                    classes={{root: style.button}}
+                    size="small"
+                    variant="text"
+                    onClick={handleSendTip}>
+                    Send tip
+                  </Button>
+                </ShowIf>
+
                 <Button
-                  disabled={balanceDetails.length === 0}
                   classes={{root: style.button}}
                   size="small"
                   variant="text"
-                  onClick={handleSendTip}>
-                  Send tip
+                  onClick={handleOpenTipHistory}>
+                  Tip history
                 </Button>
-              </ShowIf>
+                <Button
+                  disabled={!user}
+                  classes={{root: style.button}}
+                  size="small"
+                  variant="text"
+                  onClick={handleReport}>
+                  Report
+                </Button>
+              </CardActions>
+            </ShowIf>
+          </Card>
 
-              <Button
-                classes={{root: style.button}}
-                size="small"
-                variant="text"
-                onClick={handleOpenTipHistory}>
-                Tip history
-              </Button>
-              <Button
-                disabled={!user}
-                classes={{root: style.button}}
-                size="small"
-                variant="text"
-                onClick={handleReport}>
-                Report
-              </Button>
-            </CardActions>
-          </ShowIf>
-        </Card>
+          {user && isReplying && deep < 2 && (
+            <CommentEditor
+              ref={editorRef}
+              referenceId={comment.id}
+              type={ReferenceType.COMMENT}
+              user={user}
+              mentionables={mentionables.map(item => ({
+                value: item.id,
+                name: item.name,
+                avatar: item.avatar,
+              }))}
+              onSearchMention={onSearchPeople}
+              onSubmit={handleSubmitComment}
+            />
+          )}
 
-        {user && isReplying && (
-          <CommentEditor
-            ref={editorRef}
-            referenceId={comment.id}
-            type={ReferenceType.COMMENT}
-            user={user}
-            mentionables={mentionables.map(item => ({
-              value: item.id,
-              name: item.name,
-              avatar: item.avatar,
-            }))}
-            onSearchMention={onSearchPeople}
-            onSubmit={handleSubmitComment}
-          />
-        )}
-
-        {comment && (
-          <CommentList
-            section={section}
-            user={user}
-            deep={deep + 1}
-            comments={replies || []}
-            blockedUserIds={blockedUserIds}
-            onUpvote={handleRepliesUpvote}
-            onRemoveVote={handleRepliesRemoveVote}
-            onUpdateDownvote={updateReplyDownvote}
-            onOpenTipHistory={onOpenTipHistory}
-            onReport={onReport}
-            onReportReplies={handleReport}
-            onSendTip={onSendTip}
-            onSendTipReplies={handleSendTip}
-            mentionables={mentionables}
-            onSearchPeople={onSearchPeople}
-            onBeforeDownvote={handleOpenReply}
-            hasMoreComment={hasMoreReplies}
-            onLoadMoreReplies={loadMoreReplies}
-          />
-        )}
+          {comment && deep < 2 && (
+            <CommentList
+              section={section}
+              user={user}
+              deep={deep + 1}
+              comments={replies || []}
+              blockedUserIds={blockedUserIds}
+              onUpvote={handleRepliesUpvote}
+              onRemoveVote={handleRepliesRemoveVote}
+              onUpdateDownvote={updateReplyDownvote}
+              onOpenTipHistory={onOpenTipHistory}
+              onReport={onReport}
+              onReportReplies={handleReport}
+              onSendTip={onSendTip}
+              onSendTipReplies={handleSendTip}
+              mentionables={mentionables}
+              onSearchPeople={onSearchPeople}
+              onBeforeDownvote={handleOpenReply}
+              hasMoreComment={hasMoreReplies}
+              onLoadMoreReplies={loadMoreReplies}
+            />
+          )}
+        </div>
       </div>
-    </div>
+
+      {user && isReplying && deep >= 2 && (
+        <CommentEditor
+          ref={editorRef}
+          referenceId={comment.id}
+          type={ReferenceType.COMMENT}
+          user={user}
+          mentionables={mentionables.map(item => ({
+            value: item.id,
+            name: item.name,
+            avatar: item.avatar,
+          }))}
+          onSearchMention={onSearchPeople}
+          onSubmit={handleSubmitComment}
+        />
+      )}
+
+      {comment && deep >= 2 && (
+        <CommentList
+          section={section}
+          user={user}
+          deep={deep + 1}
+          comments={replies || []}
+          blockedUserIds={blockedUserIds}
+          onUpvote={handleRepliesUpvote}
+          onRemoveVote={handleRepliesRemoveVote}
+          onUpdateDownvote={updateReplyDownvote}
+          onOpenTipHistory={onOpenTipHistory}
+          onReport={onReport}
+          onReportReplies={handleReport}
+          onSendTip={onSendTip}
+          onSendTipReplies={handleSendTip}
+          mentionables={mentionables}
+          onSearchPeople={onSearchPeople}
+          onBeforeDownvote={handleOpenReply}
+          hasMoreComment={hasMoreReplies}
+          onLoadMoreReplies={loadMoreReplies}
+        />
+      )}
+    </>
   );
 });
