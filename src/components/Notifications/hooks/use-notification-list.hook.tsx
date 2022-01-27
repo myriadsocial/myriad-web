@@ -359,7 +359,9 @@ export const useNotificationList = (
             read: notification.read,
             user: 'Post removed',
             avatar: notification.fromUserId.profilePictureURL,
-            description: 'Your post has been removed due to breaking our community guideline',
+            description: notification.message.includes('approved')
+              ? 'Report has been approved'
+              : 'Post has been removed',
             badge: (
               <div className={style.circleError}>
                 <SvgIcon
@@ -370,7 +372,9 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `support@myriad.social`,
+            href: notification.message.includes('approved')
+              ? ''
+              : `support@myriad.social?subject=Complain post take down!`,
           };
 
         case NotificationType.COMMENT_REMOVED:
