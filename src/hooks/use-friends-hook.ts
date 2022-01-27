@@ -15,10 +15,9 @@ import {
 import {FriendRequestState} from 'src/reducers/friend-request/reducer';
 import {fetchFriend, searchFriend} from 'src/reducers/friend/actions';
 import {FriendState} from 'src/reducers/friend/reducer';
-import {UserState} from 'src/reducers/user/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useFriendsHook = () => {
+export const useFriendsHook = (user?: User) => {
   const dispatch = useDispatch();
 
   const {
@@ -27,7 +26,6 @@ export const useFriendsHook = () => {
   const {
     meta: {currentPage: currentFriendRequestPage},
   } = useSelector<RootState, FriendRequestState>(state => state.friendRequestState);
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
 
   const [friended, setFriended] = useState<Friend[]>([]);
   const [loading, setLoading] = useState(false);
@@ -47,11 +45,11 @@ export const useFriendsHook = () => {
   const loadFriends = () => {
     if (!user) return;
 
-    dispatch(fetchFriend());
+    dispatch(fetchFriend(user));
   };
 
   const loadMoreFriends = () => {
-    dispatch(fetchFriend(currentFriendPage + 1));
+    dispatch(fetchFriend(user, currentFriendPage + 1));
   };
 
   const searchFriends = (query: string) => {
