@@ -146,16 +146,19 @@ export const getPost = async (
       {
         relation: 'people',
       },
-      {
-        relation: 'votes',
-        scope: {
-          where: {
-            userId: {eq: userId},
-          },
-        },
-      },
     ],
   };
+
+  if (userId) {
+    filterParams.include.push({
+      relation: 'votes',
+      scope: {
+        where: {
+          userId: {eq: userId},
+        },
+      },
+    });
+  }
 
   const params: Record<string, any> = {
     sortBy: sortField,
@@ -212,31 +215,58 @@ export const getPost = async (
   return data;
 };
 
-export const findPosts = async (user: User, query: string, page = 1): Promise<PostList> => {
+export const findPosts = async (user: User | null, query: string, page = 1): Promise<PostList> => {
   const search = query.replace('#', '');
   const path = `/posts?q=${encodeURIComponent(search)}`;
 
-  const availabilityFilter: Record<string, any> = {
-    or: [
-      {
-        visibility: {
-          inq: ['public'],
+  let where: Record<string, any> = {};
+  const include: Array<any> = [
+    {
+      relation: 'user',
+    },
+    {
+      relation: 'people',
+    },
+  ];
+
+  if (user) {
+    where = {
+      or: [
+        {
+          visibility: {
+            inq: ['public'],
+          },
+        },
+        {
+          or: [
+            {createdBy: user.id},
+            {
+              importers: {
+                inq: [user.id],
+              },
+            },
+          ],
+        },
+      ],
+    };
+  } else {
+    where = {
+      visibility: {
+        inq: ['public'],
+      },
+    };
+  }
+
+  if (user) {
+    include.push({
+      relation: 'votes',
+      scope: {
+        where: {
+          userId: {eq: user.id},
         },
       },
-      {
-        or: [
-          {createdBy: user.id},
-          {
-            importers: {
-              inq: [user.id],
-            },
-          },
-        ],
-      },
-    ],
-  };
-
-  const where = availabilityFilter;
+    });
+  }
 
   const {data} = await MyriadAPI.request<PostList>({
     url: path,
@@ -247,22 +277,7 @@ export const findPosts = async (user: User, query: string, page = 1): Promise<Po
       importers: true,
       filter: {
         order: 'DESC',
-        include: [
-          {
-            relation: 'user',
-          },
-          {
-            relation: 'people',
-          },
-          {
-            relation: 'votes',
-            scope: {
-              where: {
-                userId: {eq: user.id},
-              },
-            },
-          },
-        ],
+        include,
         where,
       },
     },

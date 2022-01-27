@@ -37,45 +37,47 @@ export const Settings: React.FC<SettingsProps> = props => {
             Settings
           </Typography>
           <List>
-            {settings.map(item => {
-              return (
-                <ListItem
-                  key={item.id}
-                  button
-                  onClick={selectSettings(item)}
-                  disabled={item.id == 'version'}
-                  className={styles.option}
-                  alignItems="center">
-                  <ListItemText>
-                    <Typography variant="h5" color="textPrimary">
-                      {item.title}
-                    </Typography>
-                    <Typography variant="body1" color="textSecondary">
-                      {item.subtitle}
-                    </Typography>
-                  </ListItemText>
-                  {item.id === 'version' && (
-                    <div
-                      style={{
-                        display: 'flex',
-                        paddingRight: 31,
-                        fontWeight: 300,
-                        fontStyle: 'italic',
-                        fontSize: 14,
-                        color: '#988E8E',
-                      }}>
-                      <Typography>{value.version}</Typography>
-                    </div>
-                  )}
+            {settings
+              .filter(setting => setting.id !== 'language')
+              .map(item => {
+                return (
+                  <ListItem
+                    key={item.id}
+                    button
+                    onClick={selectSettings(item)}
+                    disabled={item.id == 'version'}
+                    className={styles.option}
+                    alignItems="center">
+                    <ListItemText>
+                      <Typography variant="h5" color="textPrimary">
+                        {item.title}
+                      </Typography>
+                      <Typography variant="body1" color="textSecondary">
+                        {item.subtitle}
+                      </Typography>
+                    </ListItemText>
+                    {item.id === 'version' && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          paddingRight: 31,
+                          fontWeight: 300,
+                          fontStyle: 'italic',
+                          fontSize: 14,
+                          color: '#988E8E',
+                        }}>
+                        <Typography>{value.version}</Typography>
+                      </div>
+                    )}
 
-                  {item.id !== 'version' && (
-                    <div className="hidden-button">
-                      <SvgIcon component={ChevronRightIcon} />
-                    </div>
-                  )}
-                </ListItem>
-              );
-            })}
+                    {item.id !== 'version' && (
+                      <div className="hidden-button">
+                        <SvgIcon component={ChevronRightIcon} />
+                      </div>
+                    )}
+                  </ListItem>
+                );
+              })}
           </List>
         </>
       )}

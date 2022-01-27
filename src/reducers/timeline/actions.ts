@@ -770,28 +770,27 @@ export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
     const {
       userState: {user},
     } = getState();
+
     const userId = user?.id as string;
 
     try {
-      if (user) {
-        const {data: posts, meta} = await PostAPI.findPosts(user, query, page);
+      const {data: posts, meta} = await PostAPI.findPosts(user ?? null, query, page);
 
-        dispatch({
-          type: constants.LOAD_TIMELINE,
-          payload: {
-            posts: posts.map(post => {
-              const upvoted = post.votes?.filter(vote => vote.userId === userId && vote.state);
-              const downvoted = post.votes?.filter(vote => vote.userId === userId && !vote.state);
+      dispatch({
+        type: constants.LOAD_TIMELINE,
+        payload: {
+          posts: posts.map(post => {
+            const upvoted = post.votes?.filter(vote => vote.userId === userId && vote.state);
+            const downvoted = post.votes?.filter(vote => vote.userId === userId && !vote.state);
 
-              post.isUpvoted = upvoted && upvoted.length > 0;
-              post.isDownVoted = downvoted && downvoted.length > 0;
+            post.isUpvoted = upvoted && upvoted.length > 0;
+            post.isDownVoted = downvoted && downvoted.length > 0;
 
-              return post;
-            }),
-            meta,
-          },
-        });
-      }
+            return post;
+          }),
+          meta,
+        },
+      });
     } catch (error) {
       dispatch(
         setError({

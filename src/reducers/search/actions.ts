@@ -152,17 +152,15 @@ export const searchUsers: ThunkActionCreator<Actions, RootState> =
     const userId = user?.id as string;
 
     try {
-      if (user) {
-        const {meta, data: users} = await UserAPI.searchUsers(query, userId, page);
+      const {meta, data: users} = await UserAPI.searchUsers(query, userId ?? null, page);
 
-        dispatch({
-          type: constants.LOAD_SEARCHED_USERS,
-          payload: {
-            users,
-            meta,
-          },
-        });
-      }
+      dispatch({
+        type: constants.LOAD_SEARCHED_USERS,
+        payload: {
+          users,
+          meta,
+        },
+      });
     } catch (error) {
       dispatch(
         setError({

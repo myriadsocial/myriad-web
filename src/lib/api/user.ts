@@ -119,7 +119,38 @@ export const getSearchedUsers = async (page: number, userId: string): Promise<Us
   return data;
 };
 
-export const searchUsers = async (query: string, userId: string, page = 1): Promise<UserList> => {
+export const searchUsers = async (
+  query: string,
+  userId: string | null,
+  page = 1,
+): Promise<UserList> => {
+  const params: Record<string, any> = {
+    pageNumber: page,
+    pageLimit: PAGINATION_LIMIT,
+    filter: {
+      where: {
+        or: [
+          {
+            username: {
+              like: `.*${query}`,
+              options: 'i',
+            },
+          },
+          {
+            name: {
+              like: `.*${query}`,
+              options: 'i',
+            },
+          },
+        ],
+      },
+    },
+  };
+
+  if (userId) {
+    params.userId = userId;
+  }
+
   const {data} = await MyriadAPI.request<UserList>({
     url: '/users',
     method: 'GET',

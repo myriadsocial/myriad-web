@@ -57,6 +57,7 @@ export const SearchResultContainer: React.FC = () => {
         }
 
         default: {
+          searchPosts(searchKeyword);
           break;
         }
       }
