@@ -79,10 +79,17 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
       };
     }
 
-    case constants.SEARCH_ALL_RELATED_EXPERIENCES: {
+    case constants.LOAD_SEARCHED_EXPERIENCES: {
+      const {meta} = action.payload;
+
       return {
         ...state,
-        searchExperience: action.experiences,
+        searchExperience:
+          !meta.currentPage || meta.currentPage === 1
+            ? action.payload.experiences
+            : [...state.searchExperience, ...action.payload.experiences],
+        hasMore: meta.currentPage < meta.totalPageCount,
+        meta,
       };
     }
 

@@ -1,14 +1,16 @@
 import React from 'react';
-
-import {List} from '@material-ui/core';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import {SearchedExperienceListProps, useStyles} from '.';
-import {EmptyResult} from '../Search/EmptyResult';
-import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
-import {NonSelectableSimpleCard} from '../atoms/SimpleCard';
-import ShowIf from '../common/show-if.component';
+
+import {EmptyResult} from 'src/components/Search/EmptyResult';
+import {EmptyContentEnum} from 'src/components/Search/EmptyResult.interfaces';
+import {Loading} from 'src/components/atoms/Loading';
+import {NonSelectableSimpleCard} from 'src/components/atoms/SimpleCard';
 
 const SearchedExperienceList: React.FC<SearchedExperienceListProps> = ({
+  loadNextPage,
+  hasMore,
   experiences,
   userExperience,
   onPreview,
@@ -20,13 +22,16 @@ const SearchedExperienceList: React.FC<SearchedExperienceListProps> = ({
 
   return (
     <div className={classes.root}>
-      <ShowIf condition={experiences.length === 0}>
-        <EmptyResult emptyContent={EmptyContentEnum.EXPERIENCE} />
-      </ShowIf>
-
-      <ShowIf condition={experiences.length > 0}>
-        <List className={classes.root}>
-          {experiences.map(experience => (
+      <InfiniteScroll
+        scrollableTarget="scrollable-searched-experiences"
+        dataLength={experiences.length}
+        hasMore={hasMore}
+        next={loadNextPage}
+        loader={<Loading />}>
+        {experiences.length === 0 ? (
+          <EmptyResult emptyContent={EmptyContentEnum.EXPERIENCE} />
+        ) : (
+          experiences.map(experience => (
             <div key={experience.id}>
               <NonSelectableSimpleCard
                 ownerId={experience.user.id}
@@ -44,9 +49,9 @@ const SearchedExperienceList: React.FC<SearchedExperienceListProps> = ({
                 onPreview={onPreview}
               />
             </div>
-          ))}
-        </List>
-      </ShowIf>
+          ))
+        )}
+      </InfiniteScroll>
     </div>
   );
 };
