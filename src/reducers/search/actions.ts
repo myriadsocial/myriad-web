@@ -24,6 +24,22 @@ export interface LoadUsers extends Action {
   };
 }
 
+export interface LoadSearchedUsers extends Action {
+  type: constants.LOAD_SEARCHED_USERS;
+  payload: {
+    users: User[];
+    meta: ListMeta;
+  };
+}
+
+export interface SearchUsers extends Action {
+  type: constants.SEARCH_USERS;
+  payload: {
+    users: User[];
+    meta: ListMeta;
+  };
+}
+
 export interface SetSearchedUsers extends PaginationAction {
   type: constants.SET_SEARCHED_USERS;
   users: User[];
@@ -36,7 +52,14 @@ export interface AbortSearch extends Action {
 /**
  * Union Action Types
  */
-export type Actions = ResetState | LoadUsers | SetSearchedUsers | AbortSearch | BaseAction;
+export type Actions =
+  | ResetState
+  | LoadUsers
+  | LoadSearchedUsers
+  | SearchUsers
+  | SetSearchedUsers
+  | AbortSearch
+  | BaseAction;
 
 /**
  *
@@ -79,18 +102,61 @@ export const loadUsers: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const searchUsers: ThunkActionCreator<Actions, RootState> =
-  (query: string, userId: string) => async dispatch => {
+export const loadSearchedUsers: ThunkActionCreator<Actions, RootState> =
+  (page = 1) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
+    const {
+      userState: {user},
+    } = getState();
+
     try {
-      const {meta, data: users} = await UserAPI.searchUsers(query, userId);
+      const userId = user?.id as string;
+
+      const {data: users, meta} = await UserAPI.getSearchedUsers(page, userId);
 
       dispatch({
-        type: constants.SET_SEARCHED_USERS,
-        users,
-        meta,
+        type: constants.LOAD_SEARCHED_USERS,
+        payload: {
+          users,
+          meta,
+        },
       });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const searchUsers: ThunkActionCreator<Actions, RootState> =
+  (query: string, page = 1) =>
+  async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    const {
+      userState: {user},
+    } = getState();
+
+    const userId = user?.id as string;
+
+    try {
+      if (user) {
+        const {meta, data: users} = await UserAPI.searchUsers(query, userId, page);
+
+        dispatch({
+          type: constants.LOAD_SEARCHED_USERS,
+          payload: {
+            users,
+            meta,
+          },
+        });
+      }
     } catch (error) {
       dispatch(
         setError({

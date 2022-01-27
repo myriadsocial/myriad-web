@@ -72,7 +72,7 @@ export const SearchResultContainer: React.FC = () => {
     {
       id: 'users-tab',
       title: 'Users',
-      component: <UsersListContainer />,
+      component: <UsersListContainer query={searchKeyword} />,
     },
     {
       id: 'experience-tab',
@@ -109,6 +109,7 @@ export const SearchResultContainer: React.FC = () => {
         &quot; :
       </Typography>
       <TabsComponent
+        id="scrollable-users-list"
         active={searchResultTabTexts[0].id}
         tabs={searchResultTabTexts}
         mark="underline"
