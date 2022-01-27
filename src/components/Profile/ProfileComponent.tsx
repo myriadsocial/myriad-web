@@ -14,6 +14,7 @@ import {ProfileEditContainer} from 'src/components/Profile/edit/ProfileEditConta
 import {UserMenuContainer} from 'src/components/UserMenu';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import ShowIf from 'src/components/common/show-if.component';
+import {Friend} from 'src/interfaces/friend';
 import {FriendStatus} from 'src/interfaces/friend';
 import {BlockedProps, User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
@@ -24,9 +25,10 @@ import {UserState} from 'src/reducers/user/reducer';
 type Props = {
   profile?: User & BlockedProps;
   loading: boolean;
+  friendStatus?: Friend;
 };
 
-export const ProfileTimeline: React.FC<Props> = ({profile}) => {
+export const ProfileTimeline: React.FC<Props> = ({profile, friendStatus}) => {
   const style = useStyles();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -82,12 +84,10 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
 
         <ShowIf condition={!isEdit}>
           <ProfileHeaderContainer edit={handleOpenEdit} />
-
-          <ShowIf condition={profile.status !== FriendStatus.BLOCKED}>
+          <ShowIf condition={friendStatus?.status !== FriendStatus.BLOCKED}>
             <UserMenuContainer isMyriad={profile.username === 'myriad_official'} />
           </ShowIf>
-
-          <ShowIf condition={profile.status === FriendStatus.BLOCKED}>
+          <ShowIf condition={friendStatus?.status === FriendStatus.BLOCKED}>
             <Grid
               container
               direction="column"

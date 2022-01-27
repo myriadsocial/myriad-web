@@ -43,7 +43,9 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
 
   const router = useRouter();
 
-  const {detail: profileDetail} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const {detail: profileDetail, friendStatus} = useSelector<RootState, ProfileState>(
+    state => state.profileState,
+  );
 
   return (
     <DefaultLayout isOnProfilePage={true}>
@@ -62,7 +64,7 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
         <meta name="twitter:card" content="summary" />
       </Head>
 
-      <ProfileTimeline profile={profileDetail} loading={false} />
+      <ProfileTimeline profile={profileDetail} friendStatus={friendStatus} loading={false} />
     </DefaultLayout>
   );
 };
