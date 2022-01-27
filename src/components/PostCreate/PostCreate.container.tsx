@@ -34,8 +34,10 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const mentionable = useFriendList(friends, user);
-  const [openFailedImport, setOpenFailedImport] = useState(false);
-  const [failedMessage, setFailedMessage] = useState('');
+  const [dialogFailedImport, setDialogFailedImport] = useState({
+    open: false,
+    message: '',
+  });
 
   useEffect(() => {
     if (user && friends.length === 0) {
@@ -79,17 +81,23 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
       dispatch(
         importPost(post, attributes, (errorCode: number) => {
           if (errorCode === 404) {
-            setFailedMessage(
-              'You are trying to import a post formerly deleted \n by a Myriad administrator',
-            );
+            setDialogFailedImport({
+              open: true,
+              message:
+                'You are trying to import a post formerly deleted \n by a Myriad administrator',
+            });
           } else if (errorCode === 422) {
-            setFailedMessage('You can not import this post, \n because the account is private');
+            setDialogFailedImport({
+              open: true,
+              message: 'You can not import this post, \n because the account is private',
+            });
           } else if (errorCode === 409) {
-            setFailedMessage(
-              'Sorry, you can not import this post, \n because this post has been imported',
-            );
+            setDialogFailedImport({
+              open: true,
+              message:
+                'Sorry, you can not import this post, \n because this post has been imported',
+            });
           }
-          setOpenFailedImport(true);
         }),
       );
     } else {
@@ -112,10 +120,10 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
       />
       <PromptComponent
         title={'Import Failed!'}
-        subtitle={failedMessage}
-        open={openFailedImport}
+        subtitle={dialogFailedImport.message}
+        open={dialogFailedImport.open}
         icon="warning"
-        onCancel={() => setOpenFailedImport(false)}>
+        onCancel={() => setDialogFailedImport({...dialogFailedImport, open: false})}>
         <div
           style={{
             display: 'flex',
@@ -125,7 +133,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
             size="small"
             variant="contained"
             color="primary"
-            onClick={() => setOpenFailedImport(false)}>
+            onClick={() => setDialogFailedImport({...dialogFailedImport, open: false})}>
             Okay
           </Button>
         </div>
