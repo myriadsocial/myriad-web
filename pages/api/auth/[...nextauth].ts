@@ -40,7 +40,7 @@ export default NextAuth({
 
           const {encryptedMessage, initVec} = encryptMessage(
             data.accessToken,
-            serverRuntimeConfig.secret,
+            serverRuntimeConfig.appSecret,
           );
 
           return {
@@ -66,7 +66,7 @@ export default NextAuth({
   // The secret should be set to a reasonably long random string.
   // It is used to sign cookies and to sign and encrypt JSON Web Tokens, unless
   // a separate secret is defined explicitly for encrypting the JWT.
-  secret: serverRuntimeConfig.secret,
+  secret: serverRuntimeConfig.appSecret,
   useJwtSession: true,
   session: {
     // Use JSON Web Tokens for session instead of database sessions.
