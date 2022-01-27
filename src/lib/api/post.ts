@@ -246,6 +246,7 @@ export const findPosts = async (user: User, query: string, page = 1): Promise<Po
       pageLimit: PAGINATION_LIMIT,
       importers: true,
       filter: {
+        order: 'DESC',
         include: [
           {
             relation: 'user',

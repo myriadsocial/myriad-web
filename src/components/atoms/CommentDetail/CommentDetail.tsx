@@ -85,9 +85,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   const isOwnComment = comment.userId === user?.id;
 
   useEffect(() => {
-    if (comment.metric.comments > 0) {
-      loadReplies();
-    }
+    loadReplies();
   }, []);
 
   const handleOpenReply = () => {
