@@ -78,7 +78,11 @@ export const Notifications: React.FC<NotificationsProps> = props => {
 
   const handleReadNotification = (notification: NotificationList) => () => {
     onMarkItemAsRead(notification.id, () => {
-      router.push(notification.href);
+      if (notification.href.includes('@')) {
+        window.open(`mailto:${notification.href}`, '_blank');
+      } else if (notification.href.length !== 0) {
+        router.push(notification.href);
+      }
     });
   };
 
