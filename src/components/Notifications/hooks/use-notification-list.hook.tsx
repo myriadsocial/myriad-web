@@ -374,7 +374,7 @@ export const useNotificationList = (
             createdAt: notification.createdAt,
             href: notification.message.includes('approved')
               ? ''
-              : `support@myriad.social?subject=Complain post take down!`,
+              : `${process.env.NEXT_PUBLIC_MYRIAD_SUPPORT_MAIL}?subject=Complain post take down!`,
           };
 
         case NotificationType.COMMENT_REMOVED:
