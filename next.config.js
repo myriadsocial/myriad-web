@@ -7,10 +7,10 @@ const {version} = require('./package.json');
  */
 const moduleExports = {
   generateBuildId: async () => {
-    if (process.env.BUILD_ID) {
-      return process.env.BUILD_ID;
+    if (process.env.NEXT_PUBLIC_APP_VERSION) {
+      return process.env.NEXT_PUBLIC_APP_VERSION;
     } else {
-      return `${new Date().getTime()}`;
+      return version;
     }
   },
   future: {
@@ -21,21 +21,19 @@ const moduleExports = {
   },
   serverRuntimeConfig: {
     // Will only be available on the server side
-    secret: process.env.SECRET,
-    // API
-    myriadAPIURL: process.env.MYRIAD_API_URL,
-    myriadAPIKey: process.env.MYRIAD_API_KEY,
+    appSecret: process.env.SECRET ?? 'd98b4af078b46a9984829a72030976e0',
+    myriadAPIURL: process.env.MYRIAD_API_URL ?? 'http://localhost:3001',
   },
   publicRuntimeConfig: {
     // Will be available on both server and client
-    appName: process.env.NEXT_PUBLIC_APP_NAME,
-    appStatus: process.env.NEXT_PUBLIC_APP_STATUS ?? 'development',
+    appEnvironment: process.env.NEXT_PUBLIC_APP_ENVIRONMENT ?? 'local',
+    appName: process.env.NEXT_PUBLIC_APP_NAME ?? `Myriad Local`,
     appVersion: `v${process.env.NEXT_PUBLIC_APP_VERSION ?? version}`,
-    nextAuthURL: process.env.NEXTAUTH_URL,
+    appAuthURL: process.env.NEXTAUTH_URL ?? 'http://localhost:3000',
     myriadWebsiteURL: process.env.NEXT_PUBLIC_MYRIAD_WEBSITE_URL ?? 'https://www.myriad.social',
     myriadSupportMail: process.env.NEXT_PUBLIC_MYRIAD_SUPPORT_MAIL ?? 'support@myriad.social',
-    firebaseAPIKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     firebaseProjectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    firebaseAPIKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     firebaseMessagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     firebaseAppId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     firebaseMeasurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,

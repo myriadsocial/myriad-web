@@ -55,8 +55,8 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
 
   const {publicRuntimeConfig} = getConfig();
 
-  const APP_URL = publicRuntimeConfig.nextAuthURL ?? '';
-  const message = `I'm part of the @myriad_social ${publicKey}\n\nhttps://www.myriad.social`;
+  const APP_URL = publicRuntimeConfig.appAuthURL ?? '';
+  const message = `I'm part of the @myriad_social ${publicKey}\n\n${publicRuntimeConfig.myriadWebsiteURL}`;
 
   useEffect(() => {
     return clear();

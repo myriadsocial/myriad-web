@@ -42,7 +42,7 @@ const PostEmbed: React.FC<PostEmbedProps> = props => {
         <title>{title}</title>
         <meta name="description" content={description} />
 
-        <meta name="og:url" content={publicRuntimeConfig.nextAuthURL + router.asPath} />
+        <meta name="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
         <meta name="og:title" content={title} />
         <meta name="og:description" content={description} />
         {image && <meta name="og:image" content={image} />}

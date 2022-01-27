@@ -1,4 +1,4 @@
-name: Test
+name: Tester
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - main
 
 concurrency:
-  group: test-${{ github.event.pull_request.number }}
+  group: tester-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
           node-version: '14'
           cache: 'yarn'
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
       - name: Test code
         run: yarn test
 

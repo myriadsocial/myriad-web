@@ -24,9 +24,9 @@ const BannerStatusComponent: React.FC<Props> = props => {
   const [open, setOpen] = React.useState(false);
   const {publicRuntimeConfig} = getConfig();
   const appName = publicRuntimeConfig.appName;
-  const appStatus = publicRuntimeConfig.appStatus;
+  const appEnvironment = publicRuntimeConfig.appEnvironment;
   const {
-    text = `${appName} Development ${publicRuntimeConfig.appVersion} is not fully audited, please use at your own risk.`,
+    text = `${appName} ${publicRuntimeConfig.appVersion} is not fully audited, please use at your own risk.`,
   } = props;
 
   React.useEffect(() => {
@@ -48,7 +48,7 @@ const BannerStatusComponent: React.FC<Props> = props => {
 
   return (
     <>
-      <ShowIf condition={open && appStatus !== 'production'}>
+      <ShowIf condition={open && appEnvironment !== 'mainnet'}>
         <div className={style.root}>
           <Typography variant="body1" className={style.text}>
             <SvgIcon

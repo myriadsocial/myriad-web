@@ -81,7 +81,7 @@ function Adapter() {
       try {
         const session = jwt.decode({
           token: sessionToken,
-          secret: serverRuntimeConfig.secret,
+          secret: serverRuntimeConfig.appSecret,
         });
 
         _debug('decoded session', session);
