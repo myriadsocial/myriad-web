@@ -39,6 +39,10 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
 
   const reply = async (user: User, comment: CommentProps, callback?: () => void) => {
     const data = await CommentAPI.reply(comment);
+    data.isUpvoted = false;
+    data.isDownVoted = false;
+    data.votes = [];
+
     const postId = data.postId;
 
     setReplies(prevReplies => [...prevReplies, {...data, user}]);
