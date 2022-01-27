@@ -15,7 +15,7 @@ export const config = {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const {secret} = serverRuntimeConfig;
+    const {appSecret} = serverRuntimeConfig;
     const session = await getSession({req});
 
     let headers = {};
@@ -24,7 +24,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       userToken = decryptMessage(
         session.user.token as string,
-        secret,
+        appSecret,
         session.user.initVec as string,
       );
 
