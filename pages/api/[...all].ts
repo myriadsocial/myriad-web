@@ -19,7 +19,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const session = await getSession({req});
 
     let headers = {};
-    if (session && session.user) {
+    if (session && session.user && session.user.token) {
       let userToken = '';
 
       userToken = decryptMessage(
