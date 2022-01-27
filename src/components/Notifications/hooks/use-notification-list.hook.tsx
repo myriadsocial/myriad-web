@@ -9,6 +9,8 @@ import {
 
 import React from 'react';
 
+import getConfig from 'next/config';
+
 import {SvgIcon} from '@material-ui/core';
 
 import {useStyles} from '../Notifications.styles';
@@ -16,6 +18,8 @@ import {useStyles} from '../Notifications.styles';
 import {Notification, NotificationType} from 'src/interfaces/notification';
 import {PostOrigin} from 'src/interfaces/timeline';
 import {PAGINATION_LIMIT} from 'src/lib/api/constants/pagination';
+
+const {publicRuntimeConfig} = getConfig();
 
 export type NotificationList = {
   id: string;
@@ -374,7 +378,7 @@ export const useNotificationList = (
             createdAt: notification.createdAt,
             href: notification.message.includes('approved')
               ? ''
-              : `${process.env.NEXT_PUBLIC_MYRIAD_SUPPORT_MAIL}?subject=Complain post take down!`,
+              : `${publicRuntimeConfig.myriadSupportMail}?subject=Complain post take down!`,
           };
 
         case NotificationType.COMMENT_REMOVED:
@@ -395,7 +399,7 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `support@myriad.social`,
+            href: `${publicRuntimeConfig.myriadSupportMail}`,
           };
 
         case NotificationType.USER_BANNED:
@@ -417,7 +421,7 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `support@myriad.social`,
+            href: `${publicRuntimeConfig.myriadSupportMail}`,
           };
 
         case NotificationType.CONNECTED_SOCIAL_MEDIA:

@@ -81,7 +81,7 @@ export const Notifications: React.FC<NotificationsProps> = props => {
       if (!notification.href && notification.href.trim().length === 0) return;
       if (notification.href.includes('@')) {
         window.open(`mailto:${notification.href}`, '_blank');
-      } else if (notification.href.length !== 0) {
+      } else {
         router.push(notification.href);
       }
     });
