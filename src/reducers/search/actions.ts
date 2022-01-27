@@ -78,11 +78,17 @@ export const setSearchedUsers = (users: User[], meta: ListMeta): SetSearchedUser
 
 export const loadUsers: ThunkActionCreator<Actions, RootState> =
   (page = 1) =>
-  async dispatch => {
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
+    const {
+      userState: {user},
+    } = getState();
+
     try {
-      const {data: users, meta} = await UserAPI.searchUsers(page);
+      const userId = user?.id as string;
+
+      const {data: users, meta} = await UserAPI.searchUsers(page, userId);
 
       dispatch({
         type: constants.LOAD_USERS,
