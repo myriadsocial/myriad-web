@@ -35,6 +35,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const mentionable = useFriendList(friends, user);
   const [openFailedImport, setOpenFailedImport] = useState(false);
+  const [failedMessage, setFailedMessage] = useState('');
 
   useEffect(() => {
     if (user && friends.length === 0) {
@@ -76,7 +77,18 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   ) => {
     if (typeof post === 'string') {
       dispatch(
-        importPost(post, attributes, () => {
+        importPost(post, attributes, (errorCode: number) => {
+          if (errorCode === 404) {
+            setFailedMessage(
+              'You are trying to import a post formerly deleted \n by a Myriad administrator',
+            );
+          } else if (errorCode === 422) {
+            setFailedMessage('You can not import this post, \n because the account is private');
+          } else if (errorCode === 409) {
+            setFailedMessage(
+              'Sorry, you can not import this post, \n because this post has been imported',
+            );
+          }
           setOpenFailedImport(true);
         }),
       );
@@ -100,7 +112,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
       />
       <PromptComponent
         title={'Import Failed!'}
-        subtitle={`You are trying to import a post formerly deleted \n by a Myriad administrator`}
+        subtitle={failedMessage}
         open={openFailedImport}
         icon="warning"
         onCancel={() => setOpenFailedImport(false)}>

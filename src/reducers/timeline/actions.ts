@@ -344,7 +344,11 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
   };
 
 export const importPost: ThunkActionCreator<Actions, RootState> =
-  (postUrl: string, attributes: Pick<PostProps, 'NSFWTag' | 'visibility'>, callback?: () => void) =>
+  (
+    postUrl: string,
+    attributes: Pick<PostProps, 'NSFWTag' | 'visibility'>,
+    callback?: (errorCode: number) => void,
+  ) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
 
@@ -379,13 +383,17 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
       );
     } catch (error) {
       let message = error.message;
-
-      if (axios.isAxiosError(error) && error.response?.status === 422) {
+      if (
+        axios.isAxiosError(error) &&
+        (error.response?.status === 422 ||
+          error.response?.status === 404 ||
+          error.response?.status === 409)
+      ) {
         message = error.response.data.error.message;
       }
 
       if (callback) {
-        callback();
+        callback(error.response?.status);
       } else {
         dispatch(
           setError({
