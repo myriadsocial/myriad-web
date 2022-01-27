@@ -25,9 +25,9 @@ type SearchProps = {
 };
 
 const Search: React.FC<SearchProps> = () => {
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
-  if (!user) return null;
+  if (!user && !anonymous) return null;
 
   return (
     <DefaultLayout isOnProfilePage={false}>
@@ -90,7 +90,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
     await dispatch(setAnonymous(username));
   } else {
-    await dispatch(fetchUser(userId));
+    await dispatch(fetchUser());
 
     await Promise.all([
       dispatch(fetchConnectedSocials()),

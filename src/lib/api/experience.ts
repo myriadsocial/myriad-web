@@ -62,17 +62,22 @@ export const getSearchedExperiences = async (
   page: number,
   userId: string,
 ): Promise<ExperienceList> => {
+  const params: Record<string, any> = {
+    pageNumber: page,
+    pageLimit: PAGINATION_LIMIT,
+    filter: {
+      include: ['user'],
+    },
+  };
+
+  if (userId) {
+    params.userId = userId;
+  }
+
   const {data} = await MyriadAPI.request<ExperienceList>({
     url: `/experiences`,
     method: 'GET',
-    params: {
-      pageNumber: page,
-      pageLimit: PAGINATION_LIMIT,
-      userId,
-      filter: {
-        include: ['user'],
-      },
-    },
+    params,
   });
 
   return data;
