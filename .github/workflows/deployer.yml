@@ -1,21 +1,24 @@
-name: Deploy automation
+name: Deployer
 
 on:
   release:
-    types: [published]
+    types:
+      - published
   workflow_run:
-    workflows: ['Builder']
-    branches: [main]
+    branches:
+      - main
+    workflows:
+      - 'Builder'
     types:
       - completed
 
 concurrency:
-  group: deploy-automation
+  group: deployer
 
 jobs:
   compute-build-info:
     if: ${{ github.event.workflow_run.conclusion == 'success' }} || startsWith(github.ref, 'refs/tags/')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     outputs:
       sha_short: ${{ steps.build-info.outputs.sha_short }}
       date: ${{ steps.build-info.outputs.date }}
@@ -43,8 +46,9 @@ jobs:
 
   deploy-dev:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    runs-on: ubuntu-latest
-    needs: [compute-build-info]
+    runs-on: ubuntu-20.04
+    needs:
+      - compute-build-info
     env:
       DEPLOY: ${{ secrets.DEV_DEPLOY }}
     steps:
@@ -66,13 +70,16 @@ jobs:
         uses: google-github-actions/get-secretmanager-secrets@main
         with:
           secrets: |-
+            SSH_HOST:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_HOST
+            SSH_PORT:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_PORT
+            SSH_USERNAME:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_USERNAME
+            SSH_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_KEY
+            WEB_APP_ENVIRONMENT:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_APP_ENVIRONMENT
             WEB_APP_NAME:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_APP_NAME
-            WEB_APP_STATUS:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_APP_STATUS
             WEB_APP_SECRET:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_APP_SECRET
-            API_URL:${{ secrets.DEV_GCP_PROJECT_ID }}/API_URL
-            API_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.DEV_GCP_PROJECT_ID }}/WEBSITE_URL
             SUPPORT_MAIL:${{ secrets.DEV_GCP_PROJECT_ID }}/SUPPORT_MAIL
+            API_URL:${{ secrets.DEV_GCP_PROJECT_ID }}/API_URL
             FIREBASE_PROJECT_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
             FIREBASE_API_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
@@ -81,33 +88,28 @@ jobs:
             WEB_SENTRY_DSN:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             WEB_FACEBOOK_APP_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
             WEB_DNS:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_DNS
-            SSH_HOST:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_HOST
-            SSH_USERNAME:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_USERNAME
-            SSH_KEY:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_KEY
-            SSH_PORT:${{ secrets.DEV_GCP_PROJECT_ID }}/SSH_PORT
       - name: Deploy
         if: "${{ env.DEPLOY == 'true' }}"
         uses: appleboy/ssh-action@master
         with:
           host: ${{ steps.secrets.outputs.SSH_HOST }}
+          port: ${{ steps.secrets.outputs.SSH_PORT }}
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
-          port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
             helm repo add myriadsocial https://charts.myriad.social
             helm repo update
             helm upgrade myriad-web myriadsocial/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.sha_short }} \
+              --set-string config.appEnvironment=${{ steps.secrets.outputs.WEB_APP_ENVIRONMENT }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
-              --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.appVersion=${{ needs.compute-build-info.outputs.package_version }}-${{ needs.compute-build-info.outputs.sha_short }} \
-              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string config.nextSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
-              --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
-              --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
+              --set-string config.appAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
+              --set-string config.appSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
               --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
+              --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
@@ -137,9 +139,10 @@ jobs:
             kubectl rollout status deployment/myriad-web
 
   deploy-alpha-release:
-    if: "github.event.release.prerelease && contains(needs.compute-build-info.outputs.latest_tag, 'alpha')"
-    runs-on: ubuntu-latest
-    needs: [compute-build-info]
+    if: "startsWith(github.ref, 'refs/tags/') && github.event.release.prerelease && contains(needs.compute-build-info.outputs.latest_tag, 'alpha')"
+    runs-on: ubuntu-20.04
+    needs:
+      - compute-build-info
     env:
       DEPLOY: ${{ secrets.STG_DEPLOY }}
     steps:
@@ -161,13 +164,16 @@ jobs:
         uses: google-github-actions/get-secretmanager-secrets@main
         with:
           secrets: |-
+            SSH_HOST:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_HOST
+            SSH_PORT:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_PORT
+            SSH_USERNAME:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_USERNAME
+            SSH_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_KEY
+            WEB_APP_ENVIRONMENT:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_APP_ENVIRONMENT
             WEB_APP_NAME:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_APP_NAME
-            WEB_APP_STATUS:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_APP_STATUS
             WEB_APP_SECRET:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_APP_SECRET
-            API_URL:${{ secrets.STG_GCP_PROJECT_ID }}/API_URL
-            API_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.STG_GCP_PROJECT_ID }}/WEBSITE_URL
             SUPPORT_MAIL:${{ secrets.STG_GCP_PROJECT_ID }}/SUPPORT_MAIL
+            API_URL:${{ secrets.STG_GCP_PROJECT_ID }}/API_URL
             FIREBASE_PROJECT_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
             FIREBASE_API_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.STG_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
@@ -176,33 +182,28 @@ jobs:
             WEB_SENTRY_DSN:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             WEB_FACEBOOK_APP_ID:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
             WEB_DNS:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_DNS
-            SSH_HOST:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_HOST
-            SSH_USERNAME:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_USERNAME
-            SSH_KEY:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_KEY
-            SSH_PORT:${{ secrets.STG_GCP_PROJECT_ID }}/SSH_PORT
       - name: Deploy
         if: "${{ env.DEPLOY == 'true' }}"
         uses: appleboy/ssh-action@master
         with:
           host: ${{ steps.secrets.outputs.SSH_HOST }}
+          port: ${{ steps.secrets.outputs.SSH_PORT }}
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
-          port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
             helm repo add myriadsocial https://charts.myriad.social
             helm repo update
             helm upgrade myriad-web myriadsocial/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
+              --set-string config.appEnvironment=${{ steps.secrets.outputs.WEB_APP_ENVIRONMENT }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
-              --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.appVersion=${{ needs.compute-build-info.outputs.latest_tag }} \
-              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string config.nextSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
-              --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
-              --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
+              --set-string config.appAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
+              --set-string config.appSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
               --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
+              --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
@@ -232,9 +233,10 @@ jobs:
             kubectl rollout status deployment/myriad-web
 
   deploy-beta-release:
-    if: "github.event.release.prerelease && contains(needs.compute-build-info.outputs.latest_tag, 'beta')"
-    runs-on: ubuntu-latest
-    needs: [compute-build-info]
+    if: "startsWith(github.ref, 'refs/tags/') && github.event.release.prerelease && contains(needs.compute-build-info.outputs.latest_tag, 'beta')"
+    runs-on: ubuntu-20.04
+    needs:
+      - compute-build-info
     env:
       DEPLOY: ${{ secrets.TESTNET_DEPLOY }}
     steps:
@@ -256,13 +258,16 @@ jobs:
         uses: google-github-actions/get-secretmanager-secrets@main
         with:
           secrets: |-
+            SSH_HOST:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_HOST
+            SSH_PORT:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_PORT
+            SSH_USERNAME:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_USERNAME
+            SSH_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_KEY
+            WEB_APP_ENVIRONMENT:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_APP_ENVIRONMENT
             WEB_APP_NAME:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_APP_NAME
-            WEB_APP_STATUS:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_APP_STATUS
             WEB_APP_SECRET:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_APP_SECRET
-            API_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/API_URL
-            API_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEBSITE_URL
             SUPPORT_MAIL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SUPPORT_MAIL
+            API_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/API_URL
             FIREBASE_PROJECT_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
             FIREBASE_API_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
@@ -271,33 +276,28 @@ jobs:
             WEB_SENTRY_DSN:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             WEB_FACEBOOK_APP_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
             WEB_DNS:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_DNS
-            SSH_HOST:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_HOST
-            SSH_USERNAME:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_USERNAME
-            SSH_KEY:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_KEY
-            SSH_PORT:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SSH_PORT
       - name: Deploy
         if: "${{ env.DEPLOY == 'true' }}"
         uses: appleboy/ssh-action@master
         with:
           host: ${{ steps.secrets.outputs.SSH_HOST }}
+          port: ${{ steps.secrets.outputs.SSH_PORT }}
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
-          port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
             helm repo add myriadsocial https://charts.myriad.social
             helm repo update
             helm upgrade myriad-web myriadsocial/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
+              --set-string config.appEnvironment=${{ steps.secrets.outputs.WEB_APP_ENVIRONMENT }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
-              --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.appVersion=${{ needs.compute-build-info.outputs.latest_tag }} \
-              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string config.nextSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
-              --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
-              --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
+              --set-string config.appAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
+              --set-string config.appSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
               --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
+              --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
@@ -327,9 +327,10 @@ jobs:
             kubectl rollout status deployment/myriad-web
 
   deploy-pre-release:
-    if: "github.event.release.prerelease && contains(needs.compute-build-info.outputs.latest_tag, 'rc')"
-    runs-on: ubuntu-latest
-    needs: [compute-build-info]
+    if: "startsWith(github.ref, 'refs/tags/') && github.event.release.prerelease && contains(needs.compute-build-info.outputs.latest_tag, 'rc')"
+    runs-on: ubuntu-20.04
+    needs:
+      - compute-build-info
     env:
       DEPLOY: ${{ secrets.MAINNET_DEPLOY }}
     steps:
@@ -351,13 +352,16 @@ jobs:
         uses: google-github-actions/get-secretmanager-secrets@main
         with:
           secrets: |-
+            SSH_HOST:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_HOST
+            SSH_PORT:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_PORT
+            SSH_USERNAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_USERNAME
+            SSH_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_KEY
+            WEB_APP_ENVIRONMENT:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_ENVIRONMENT
             WEB_APP_NAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_NAME
-            WEB_APP_STATUS:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_STATUS
             WEB_APP_SECRET:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_SECRET
-            API_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_URL
-            API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEBSITE_URL
             SUPPORT_MAIL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SUPPORT_MAIL
+            API_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_URL
             FIREBASE_PROJECT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
             FIREBASE_API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
@@ -366,33 +370,28 @@ jobs:
             WEB_SENTRY_DSN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             WEB_FACEBOOK_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
             WEB_DNS:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_DNS
-            SSH_HOST:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_HOST
-            SSH_USERNAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_USERNAME
-            SSH_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_KEY
-            SSH_PORT:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_PORT
       - name: Deploy
         if: "${{ env.DEPLOY == 'true' }}"
         uses: appleboy/ssh-action@master
         with:
           host: ${{ steps.secrets.outputs.SSH_HOST }}
+          port: ${{ steps.secrets.outputs.SSH_PORT }}
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
-          port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
             helm repo add myriadsocial https://charts.myriad.social
             helm repo update
             helm upgrade myriad-web myriadsocial/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
+              --set-string config.appEnvironment=${{ steps.secrets.outputs.WEB_APP_ENVIRONMENT }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
-              --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.appVersion=${{ needs.compute-build-info.outputs.latest_tag }} \
-              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string config.nextSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
-              --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
-              --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
+              --set-string config.appAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
+              --set-string config.appSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
               --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
+              --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
@@ -423,8 +422,9 @@ jobs:
 
   deploy-release:
     if: "startsWith(github.ref, 'refs/tags/') && !github.event.release.prerelease"
-    runs-on: ubuntu-latest
-    needs: [compute-build-info]
+    runs-on: ubuntu-20.04
+    needs:
+      - compute-build-info
     env:
       DEPLOY: ${{ secrets.MAINNET_DEPLOY }}
     steps:
@@ -446,13 +446,16 @@ jobs:
         uses: google-github-actions/get-secretmanager-secrets@main
         with:
           secrets: |-
+            SSH_HOST:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_HOST
+            SSH_PORT:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_PORT
+            SSH_USERNAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_USERNAME
+            SSH_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_KEY
+            WEB_APP_ENVIRONMENT:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_ENVIRONMENT
             WEB_APP_NAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_NAME
-            WEB_APP_STATUS:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_STATUS
             WEB_APP_SECRET:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_SECRET
-            API_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_URL
-            API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_KEY
             WEBSITE_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEBSITE_URL
             SUPPORT_MAIL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SUPPORT_MAIL
+            API_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_URL
             FIREBASE_PROJECT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
             FIREBASE_API_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_API_KEY
             FIREBASE_MESSAGING_SENDER_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_MESSAGING_SENDER_ID
@@ -461,33 +464,28 @@ jobs:
             WEB_SENTRY_DSN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             WEB_FACEBOOK_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
             WEB_DNS:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_DNS
-            SSH_HOST:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_HOST
-            SSH_USERNAME:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_USERNAME
-            SSH_KEY:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_KEY
-            SSH_PORT:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SSH_PORT
       - name: Deploy
         if: "${{ env.DEPLOY == 'true' }}"
         uses: appleboy/ssh-action@master
         with:
           host: ${{ steps.secrets.outputs.SSH_HOST }}
+          port: ${{ steps.secrets.outputs.SSH_PORT }}
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
-          port: ${{ steps.secrets.outputs.SSH_PORT }}
           script: |
             helm repo add myriadsocial https://charts.myriad.social
             helm repo update
             helm upgrade myriad-web myriadsocial/myriad-web \
               --install \
               --set-string image.tag=${{ needs.compute-build-info.outputs.latest_tag }} \
+              --set-string config.appEnvironment=${{ steps.secrets.outputs.WEB_APP_ENVIRONMENT }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
-              --set-string config.appStatus=${{ steps.secrets.outputs.WEB_APP_STATUS }} \
               --set-string config.appVersion=${{ needs.compute-build-info.outputs.latest_tag }} \
-              --set-string config.nextAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string config.nextSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
-              --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
-              --set-string config.apiKey=${{ steps.secrets.outputs.API_KEY }} \
+              --set-string config.appAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
+              --set-string config.appSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
               --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
+              --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
               --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
               --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \

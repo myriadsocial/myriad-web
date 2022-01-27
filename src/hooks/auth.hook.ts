@@ -79,7 +79,7 @@ export const useAuthHook = () => {
       name: account.meta.name,
       address: toHexPublicKey(account),
       anonymous: false,
-      callbackUrl: publicRuntimeConfig.nextAuthURL,
+      callbackUrl: publicRuntimeConfig.appAuthURL,
       signature,
       nonce,
     });
@@ -115,7 +115,7 @@ export const useAuthHook = () => {
       address: null,
       name: name,
       anonymous: true,
-      callbackUrl: publicRuntimeConfig.nextAuthURL,
+      callbackUrl: publicRuntimeConfig.appAuthURL,
     });
   };
 
@@ -128,7 +128,7 @@ export const useAuthHook = () => {
     } else {
       await firebaseCloudMessaging.removeToken();
       await signOut({
-        callbackUrl: `${publicRuntimeConfig.nextAuthURL}?address=${address}`,
+        callbackUrl: `${publicRuntimeConfig.appAuthURL}?address=${address}`,
         redirect: true,
       });
     }
@@ -137,7 +137,7 @@ export const useAuthHook = () => {
   const logout = async () => {
     await firebaseCloudMessaging.removeToken();
     await signOut({
-      callbackUrl: publicRuntimeConfig.nextAuthURL,
+      callbackUrl: publicRuntimeConfig.appAuthURL,
       redirect: true,
     });
   };

@@ -50,7 +50,7 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
       <Head>
         <title>{title}</title>
         <meta property="og:type" content="profile" />
-        <meta property="og:url" content={publicRuntimeConfig.nextAuthURL + router.asPath} />
+        <meta property="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         {image && <meta property="og:image" content={image} />}

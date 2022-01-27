@@ -55,7 +55,7 @@ const PostPage: React.FC<PostPageProps> = props => {
       <Head>
         <title>{title}</title>
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={publicRuntimeConfig.nextAuthURL + router.asPath} />
+        <meta property="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
         <meta property="og:description" content={description} />
         <meta property="og:title" content={title} />
         {image && <meta property="og:image" content={image} />}
