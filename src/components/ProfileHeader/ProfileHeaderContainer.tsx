@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
 
-import {signOut, useSession} from 'next-auth/client';
+import {useSession} from 'next-auth/client';
 import {useRouter} from 'next/router';
 
 import {Button, Link, Typography} from '@material-ui/core';
@@ -62,18 +62,11 @@ export const ProfileHeaderContainer: React.FC<Props> = ({toggleNotification}) =>
   };
 
   const handleSignOut = async () => {
-    if (anonymous === false) {
+    if (session) {
       logout();
     } else {
-      if (session) {
-        await signOut({
-          callbackUrl: process.env.NEXT_PUBLIC_APP_URL,
-          redirect: true,
-        });
-      } else {
-        dispatch(clearUser());
-        router.push(`/`);
-      }
+      dispatch(clearUser());
+      await router.push(`/`);
     }
   };
 

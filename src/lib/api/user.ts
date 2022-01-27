@@ -27,35 +27,40 @@ export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
 };
 
 export const getUserDetail = async (id: string, userId?: string): Promise<User & BlockedProps> => {
-  const {data} = await MyriadAPI.request<User & BlockedProps>({
-    url: `users/${id}`,
-    method: 'GET',
-    params: {
-      userId,
-      filter: {
-        include: [
-          {
-            relation: 'currencies',
-            scope: {
-              order: 'priority ASC',
-            },
+  const params: Record<string, any> = {
+    filter: {
+      include: [
+        {
+          relation: 'currencies',
+          scope: {
+            order: 'priority ASC',
           },
-          {
-            relation: 'people',
-          },
-          {
-            relation: 'activityLogs',
-            scope: {
-              where: {
-                type: {
-                  inq: [ActivityLogType.SKIP, ActivityLogType.USERNAME],
-                },
+        },
+        {
+          relation: 'people',
+        },
+        {
+          relation: 'activityLogs',
+          scope: {
+            where: {
+              type: {
+                inq: [ActivityLogType.SKIP, ActivityLogType.USERNAME],
               },
             },
           },
-        ],
-      },
+        },
+      ],
     },
+  };
+
+  if (userId) {
+    params.userId = userId;
+  }
+
+  const {data} = await MyriadAPI.request<User & BlockedProps>({
+    url: `users/${id}`,
+    method: 'GET',
+    params,
   });
 
   return data;
