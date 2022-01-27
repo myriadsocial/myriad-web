@@ -49,7 +49,6 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
 
   useEffect(() => {
     const section = router.query.edit as string | undefined;
-
     setIsEdit(!!section);
   }, [router.query]);
 
@@ -97,11 +96,12 @@ export const ProfileTimeline: React.FC<Props> = ({profile}) => {
               className={style.blocked}>
               <Typography variant="h4" className={style.blockedTitle}>
                 {user?.id === profile.blocker
-                  ? 'Sorry, you has blocked this user'
+                  ? 'Sorry, you have blocked this user'
                   : 'Sorry, you have been blocked by this user'}
               </Typography>
               <Typography variant="body1" component="div">
-                You can’t see their posts or send them a friend request.
+                You can’t see their posts or send them a friend request. Go to setting to manage
+                your block list.
               </Typography>
             </Grid>
           </ShowIf>

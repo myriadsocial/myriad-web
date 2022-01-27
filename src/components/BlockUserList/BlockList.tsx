@@ -58,7 +58,7 @@ export const BlockListComponent: React.FC<Props> = ({blockList, user, onUnblock}
 
       <List style={{marginTop: 12}}>
         <ShowIf condition={list.length === 0}>
-          <Empty title="You have no blocked user" />
+          <Empty title="You haven't blocked anyone yet." />
         </ShowIf>
 
         {list.map(user => (
