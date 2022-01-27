@@ -9,6 +9,8 @@ import {
 
 import React from 'react';
 
+import getConfig from 'next/config';
+
 import {SvgIcon} from '@material-ui/core';
 
 import {useStyles} from '../Notifications.styles';
@@ -16,6 +18,8 @@ import {useStyles} from '../Notifications.styles';
 import {Notification, NotificationType} from 'src/interfaces/notification';
 import {PostOrigin} from 'src/interfaces/timeline';
 import {PAGINATION_LIMIT} from 'src/lib/api/constants/pagination';
+
+const {publicRuntimeConfig} = getConfig();
 
 export type NotificationList = {
   id: string;
@@ -359,7 +363,9 @@ export const useNotificationList = (
             read: notification.read,
             user: 'Post removed',
             avatar: notification.fromUserId.profilePictureURL,
-            description: 'Your post has been removed due to breaking our community guideline',
+            description: notification.message.includes('approved')
+              ? 'Report has been approved'
+              : 'Post has been removed',
             badge: (
               <div className={style.circleError}>
                 <SvgIcon
@@ -370,7 +376,9 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `support@myriad.social`,
+            href: notification.message.includes('approved')
+              ? ''
+              : `${publicRuntimeConfig.myriadSupportMail}?subject=Complain post take down!`,
           };
 
         case NotificationType.COMMENT_REMOVED:
@@ -391,7 +399,7 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `support@myriad.social`,
+            href: `${publicRuntimeConfig.myriadSupportMail}`,
           };
 
         case NotificationType.USER_BANNED:
@@ -413,7 +421,7 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `support@myriad.social`,
+            href: `${publicRuntimeConfig.myriadSupportMail}`,
           };
 
         case NotificationType.CONNECTED_SOCIAL_MEDIA:
