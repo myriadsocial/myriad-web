@@ -151,7 +151,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     }
   };
 
-  if (!user || !profile) return null;
+  if (!profile) return null;
 
   return (
     <>

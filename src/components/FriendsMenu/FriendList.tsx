@@ -270,7 +270,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                   className={style.option}
                   alignItems="center">
                   <ListItemAvatar>
-                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} passHref shallow>
+                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} passHref>
                       <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
                         {acronym(friend.name)}
                       </Avatar>
