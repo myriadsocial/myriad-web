@@ -164,6 +164,17 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     return timeAgoInString;
   };
 
+  const parseScientificNotatedNumber = (input: number) => {
+    let result: string | null = null;
+    const parsedInput = input.toString().split('-')[1];
+
+    if (parsedInput) result = input.toFixed(Number(parsedInput));
+
+    if (parsedInput === undefined) result = input.toString();
+
+    return result;
+  };
+
   const namePlaceholder = 'Unknown Myrian';
 
   return (
@@ -244,12 +255,12 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                         <div>
                           {tx.toUser?.id === userId && (
                             <Typography variant="h5" className={classes.textAmountGreen}>
-                              +{tx.amount} {tx.currency.id}
+                              +{parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
                             </Typography>
                           )}
                           {tx.fromUser?.id === userId && (
                             <Typography variant="h5" className={classes.textAmountRed}>
-                              -{tx.amount} {tx.currency.id}
+                              -{parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
                             </Typography>
                           )}
                           <Typography variant="caption" color="textSecondary">
