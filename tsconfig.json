@@ -28,8 +28,8 @@
     }
   },
   "typeRoots": ["./node_modules/@polkadot/ts", "./node_modules/@types", "./src/types"],
-  "exclude": ["node_modules", "./src/helpers/polkadotApi.js"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/_error.js"],
+  "exclude": ["node_modules"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "paths": {
     "@interfaces/*": ["src/interfaces/*"],
     "@components/*": ["src/components/*"]

@@ -1,8 +1,13 @@
-.maintain/kubernetes
+.github
 .next/
+.storybook/
 dist/
+docs/
 node_modules/
 storybook-static/
-docs/
+src/lottie/
+src/lib/firebase.ts
+public/sw-env.js
 .eslintrc.js
 *.tsbuildinfo
+*.json
