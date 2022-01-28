@@ -216,8 +216,7 @@ export const getPost = async (
 };
 
 export const findPosts = async (user: User | null, query: string, page = 1): Promise<PostList> => {
-  const search = query.replace('#', '');
-  const path = `/posts?q=${encodeURIComponent(search)}`;
+  const path = `/posts?q=${encodeURIComponent(query)}`;
 
   let where: Record<string, any> = {};
   const include: Array<any> = [
