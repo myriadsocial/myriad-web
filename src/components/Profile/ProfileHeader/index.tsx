@@ -198,8 +198,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               </Typography>
             </div>
           </Grid>
-
-          <ShowIf condition={!self}>
+          <ShowIf condition={!self && !!user}>
             <IconButton
               onClick={handleClickUserOption}
               classes={{root: style.action}}
@@ -245,7 +244,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           <Metric data={person.metric} official={person.username === 'myriad_official'} />
 
           <div>
-            <ShowIf condition={self}>
+            <ShowIf condition={self && !!user}>
               <Button
                 onClick={handleOpenEdit}
                 classes={{root: style.button}}
@@ -256,7 +255,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               </Button>
             </ShowIf>
 
-            <ShowIf condition={!self}>
+            <ShowIf condition={!self && !!user}>
               <ShowIf condition={canAddFriend && person.username !== 'myriad_official'}>
                 <Button
                   onClick={handleSendRequest}
@@ -277,7 +276,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               </ShowIf>
 
               <ShowIf
-                condition={!isBlocked && !canAddFriend && person.username !== 'myriad_official'}>
+                condition={
+                  !isBlocked && !canAddFriend && person.username !== 'myriad_official' && !!user
+                }>
                 <Button
                   onClick={handleClickFriendOption}
                   startIcon={

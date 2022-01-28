@@ -38,23 +38,10 @@
     "docker:run": "./.maintain/docker/start-docker-compose.sh",
     "docker:down": "./.maintain/docker/stop-docker-compose.sh",
     "prestart": "yarn run rebuild",
-    "start": "node .",
-    "start:docker": "yarn export-env && node .",
+    "start": "next start",
+    "start:docker": "yarn export-env && next start",
     "start:storybook": "start-storybook -p 6006"
   },
-  "lint-staged": {
-    "./src/**/*.{js,ts,tsx,scss}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "./pages/**/*.{js,ts,tsx,scss}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
-  },
-  "cacheDirectories": [
-    ".next/cache"
-  ],
   "dependencies": {
     "@acala-network/api": "^3.0.2",
     "@acala-network/type-definitions": "^0.7.3",
