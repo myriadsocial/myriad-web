@@ -133,7 +133,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
                   <TableCell align="right">
                     <div>
                       <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                        {balanceDetail.freeBalance}
+                        {parseFloat(balanceDetail.freeBalance.toFixed(4))}
                       </Typography>
                       <Typography variant="caption" color="textSecondary">
                         {`~${formatUsd(
