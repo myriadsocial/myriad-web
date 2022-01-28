@@ -59,7 +59,7 @@ export const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props =
           <div className={classes.rightJustifiedWrapper}>
             <div style={{textAlign: 'right'}}>
               <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                {balanceDetail.freeBalance}
+                {parseFloat(balanceDetail.freeBalance.toFixed(4))}
               </Typography>
               <Typography variant="caption" color="textSecondary">
                 {`~${formatUsd(balanceDetail.freeBalance, getConversion(balanceDetail.id))} USD`}

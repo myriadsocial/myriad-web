@@ -48,7 +48,9 @@ export const WalletBalances: React.FC<WalletProps> = ({balances}) => {
           key={balance.id}
           title={balance.id}
           avatar={balance.image}
-          action={<Typography variant="h5">{balance.freeBalance}</Typography>}
+          action={
+            <Typography variant="h5">{parseFloat(balance.freeBalance.toFixed(4))}</Typography>
+          }
         />
       ))}
     </BoxComponent>

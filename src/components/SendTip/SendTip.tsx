@@ -201,7 +201,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
             <ListItemComponent
               avatar={selectedCurrency.image}
               title={selectedCurrency.id}
-              subtitle={selectedCurrency.freeBalance}
+              subtitle={parseFloat(selectedCurrency.freeBalance.toFixed(4))}
               action={
                 <CurrencyOptionComponent
                   onSelect={setSelectedCurrency}

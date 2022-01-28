@@ -112,7 +112,7 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
                   </Avatar>
                   <Typography color="textSecondary">{item.id}</Typography>
                 </div>
-                <Typography component="span">{item.freeBalance}</Typography>
+                <Typography component="span">{parseFloat(item.freeBalance.toFixed(4))}</Typography>
               </div>
             </MenuItem>
           ))}
