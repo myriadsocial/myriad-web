@@ -66,7 +66,6 @@ typings/
 
 # dotenv environment variables file
 .env
-.env.local
 
 # Transpiled JavaScript files from Typescript
 /dist
@@ -90,6 +89,8 @@ prisma
 
 # storybook
 /storybook-static
+
+# Docs
 /docs/*
 # exception to the rule
 !docs/.gitkeep
