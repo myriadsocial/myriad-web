@@ -236,7 +236,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           </ShowIf>
         </Grid>
 
-        <Typography variant="body1">{person.bio}</Typography>
+        <Typography style={{wordWrap: 'break-word'}} variant="body1">
+          {person.bio}
+        </Typography>
 
         <Website url={person.websiteURL} joinDate={person.createdAt} />
 

@@ -51,6 +51,9 @@ const useStyles = makeStyles((theme: Theme) =>
         paddingBottom: 0,
       },
     },
+    title: {
+      wordBreak: 'break-word',
+    },
     actionArea: {
       '&:hover': {
         backgroundColor: alpha('#FFC857', 0.15),

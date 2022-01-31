@@ -131,7 +131,9 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
               title={`${parseImageFilename(imgUrl)} Experience image`}
             />
             <CardContent classes={{root: classes.cardContent}}>
-              <Typography variant="body1">{title}</Typography>
+              <Typography className={classes.title} variant="body1">
+                {title}
+              </Typography>
               <Typography variant="caption" color="primary">
                 {creator}
               </Typography>

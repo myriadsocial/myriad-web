@@ -13,7 +13,7 @@ export const ShowMore = (props: ShowMoreProps) => {
 
   return (
     <Typography onClick={onClick} component="span" color="textPrimary">
-      ...&nbsp; <span style={{color: '#7342CC', cursor: 'hand'}}>See More</span>
+      ...&nbsp; <span style={{color: '#7342CC', cursor: 'pointer'}}>See More</span>
     </Typography>
   );
 };
