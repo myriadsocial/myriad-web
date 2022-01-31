@@ -122,7 +122,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     debounceSubmit();
   };
 
-  const clearSearchPeople = () => {
+  const clearSearchedPeople = () => {
     const debounceSubmit = debounce(() => {
       onSearchPeople('');
     }, 300);
@@ -194,8 +194,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         ...prevExperience,
         people: [...people, ...value.filter(option => people.indexOf(option) === -1)],
       }));
+      clearSearchedPeople();
     }
-    clearSearchPeople();
   };
 
   const removeSelectedPeople = (selected: People) => () => {
