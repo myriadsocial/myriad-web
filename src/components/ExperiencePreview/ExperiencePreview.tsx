@@ -1,10 +1,14 @@
 import React from 'react';
 
+import {useRouter} from 'next/router';
+
 import {Typography} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 
 import {Experience, UserExperience} from '../../interfaces/experience';
+import {People} from '../../interfaces/people';
+import {SocialsEnum} from '../../interfaces/social';
 import {useStyles} from './experience.style';
 
 import {ListItemPeopleComponent} from 'src/components/atoms/ListItem/ListItemPeople';
@@ -24,6 +28,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const {experience, userExperiences, userId, onSubscribe, onUnsubscribe, onFollow, onUpdate} =
     props;
   const style = useStyles();
+  const router = useRouter();
 
   const parsingTags = () => {
     const list = experience.tags.map(tag => {
@@ -64,6 +69,19 @@ export const ExperiencePreview: React.FC<Props> = props => {
     onFollow(experience.id);
   };
 
+  const handleOpenProfile = (people: People) => {
+    switch (people.platform) {
+      case SocialsEnum.TWITTER:
+        window.open(`https://www.twitter.com/${people.username}`);
+        break;
+      case SocialsEnum.REDDIT:
+        window.open(`https://reddit.com/user/${people.username}`);
+        break;
+      default:
+        router.push(`/profile/${people.id}`);
+    }
+  };
+
   return (
     <div className={style.root}>
       <div className={style.mb30}>
@@ -100,6 +118,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
             <></>
           ) : (
             <ListItemPeopleComponent
+              onClick={() => handleOpenProfile(person)}
               id="selectable-experience-list-item"
               title={person.name}
               subtitle={<Typography variant="caption">@{person.username}</Typography>}

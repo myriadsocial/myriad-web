@@ -13,6 +13,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       padding: theme.spacing(0.5, 2.5),
+      wordWrap: 'break-word',
     },
     tags: {
       marginBottom: theme.spacing(1.5),

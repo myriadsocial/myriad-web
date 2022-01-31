@@ -299,14 +299,16 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                   onClick={handleOpenTipHistory}>
                   Tip history
                 </Button>
-                <Button
-                  disabled={!user}
-                  classes={{root: style.button}}
-                  size="small"
-                  variant="text"
-                  onClick={handleReport}>
-                  Report
-                </Button>
+                <ShowIf condition={!isOwnComment}>
+                  <Button
+                    disabled={!user}
+                    classes={{root: style.button}}
+                    size="small"
+                    variant="text"
+                    onClick={handleReport}>
+                    Report
+                  </Button>
+                </ShowIf>
               </CardActions>
             </ShowIf>
           </Card>

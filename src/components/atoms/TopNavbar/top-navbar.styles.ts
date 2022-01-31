@@ -5,9 +5,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       background: '#FFFFFF',
       borderRadius: `0px 0px 10px 10px`,
-      paddingLeft: theme.spacing(3.75),
-      paddingTop: theme.spacing(4.125),
-      paddingBottom: theme.spacing(1.75),
+      padding: theme.spacing(4.125, 3.75, 1.75, 3.75),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'flex-start',
@@ -24,10 +22,14 @@ export const useStyles = makeStyles((theme: Theme) =>
     textWrapper: {
       display: 'flex',
       flexDirection: 'column',
+      overflow: 'hidden',
     },
     sectionTitle: {
       fontWeight: theme.typography.fontWeightBold,
       fontSize: 20,
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
     },
   }),
 );
