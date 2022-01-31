@@ -7,8 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import {PostSubHeaderProps} from './post-sub-header.interface';
 import {useStyles} from './post-sub-header.style';
 
-import {format} from 'date-fns';
 import ShowIf from 'src/components/common/show-if.component';
+import {timeAgo} from 'src/helpers/date';
 
 export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
   postId,
@@ -21,10 +21,6 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
 }) => {
   const style = useStyles();
 
-  const getDate = (datePost: Date): string => {
-    return format(new Date(datePost), 'd MMM y');
-  };
-
   const handleImporterList = () => {
     onImporters();
   };
@@ -32,10 +28,10 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
   return (
     <>
       <Typography component="div" className={style.root}>
-        <ShowIf condition={platform !== 'myriad'}>Imported on&nbsp;</ShowIf>
+        <ShowIf condition={platform !== 'myriad'}>Imported </ShowIf>
 
         <Link href={`/post/[id]`} as={`/post/${postId}`} shallow>
-          <a className={style.linkGrey}>{getDate(date)}&nbsp;</a>
+          <a className={style.linkGrey}>{timeAgo(date)}&nbsp;</a>
         </Link>
 
         <ShowIf condition={platform !== 'myriad'}>
