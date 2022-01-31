@@ -21,10 +21,10 @@ import {MenuOptions} from '../atoms/DropdownMenu';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {useStyles} from './history-detail-list.styles';
 
-import {formatDistanceStrict} from 'date-fns';
 import _ from 'lodash';
 import {Loading} from 'src/components/atoms/Loading';
 import {formatUsd} from 'src/helpers/balance';
+import {timeAgo} from 'src/helpers/date';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
 import {CurrencyId} from 'src/interfaces/currency';
 
@@ -158,12 +158,6 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
 
   const classes = useStyles();
 
-  const formatTimeAgo = (ISODate: Date) => {
-    const timeAgoInString = formatDistanceStrict(new Date(ISODate), new Date(), {addSuffix: true});
-    //=> "3 days ago"
-    return timeAgoInString;
-  };
-
   const parseScientificNotatedNumber = (input: number) => {
     let result: string | null = null;
     const parsedInput = input.toString().split('-')[1];
@@ -234,7 +228,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                             : tx.toUser?.name ?? namePlaceholder}
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
-                          {formatTimeAgo(tx.createdAt)}
+                          {timeAgo(tx.createdAt)}
                         </Typography>
                       </div>
                     </TableCell>
