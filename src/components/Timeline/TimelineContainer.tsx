@@ -29,6 +29,7 @@ import {TimelineFilter, TimelineType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {removeImporter} from 'src/reducers/importers/actions';
+import {setTippedContent} from 'src/reducers/timeline/actions';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
 import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
@@ -88,6 +89,9 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     if (reference && 'platform' in reference) {
       setTippedPost(reference);
       getTippedUserId(reference.id);
+
+      const contentType = 'post';
+      dispatch(setTippedContent(contentType, reference.id));
     }
   };
 
