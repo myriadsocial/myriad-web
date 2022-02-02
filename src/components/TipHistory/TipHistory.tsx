@@ -25,11 +25,11 @@ import {Modal, ModalProps} from '../atoms/Modal';
 import {useStyles} from './TipHistory.styles';
 import {sortOptions} from './default';
 
-import {formatDistanceStrict} from 'date-fns';
 import {debounce} from 'lodash';
 import {Empty} from 'src/components/atoms/Empty';
 import {Loading} from 'src/components/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
+import {timeAgo} from 'src/helpers/date';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
 
 type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
@@ -95,12 +95,6 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
 
   const handleSortChange = (sort: string) => {
     onSort(sort as TransactionSort);
-  };
-
-  const formatTimeAgo = (ISODate: Date) => {
-    const timeAgoInString = formatDistanceStrict(new Date(ISODate), new Date(), {addSuffix: true});
-    //=> "3 days ago"
-    return timeAgoInString;
   };
 
   return (
@@ -179,7 +173,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                   key={tip.id}
                   avatar={tip.fromUser.profilePictureURL || tip.fromUser.name}
                   title={tip.fromUser.name}
-                  subtitle={formatTimeAgo(tip.createdAt)}
+                  subtitle={timeAgo(tip.createdAt)}
                   size="medium"
                   action={
                     <div className={styles.tip}>
