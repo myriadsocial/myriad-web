@@ -79,8 +79,8 @@ const Home: React.FC = () => {
     window.open(
       `mailto:${publicRuntimeConfig.myriadSupportMail}?subject=Complain user banned!`,
       '_blank',
-    )
-  }
+    );
+  };
 
   return (
     <DefaultLayout isOnProfilePage={false}>
@@ -97,7 +97,12 @@ const Home: React.FC = () => {
         subtitle={
           <Typography component="span">
             <Typography component="span">{`This account has been banned due to break our community rule. \n Please `}</Typography>
-            <Typography component="span" style={{cursor: 'pointer'}} color="primary" onClick={openContactUs}>{`contact us `}</Typography>
+            <Typography 
+              component="span" 
+              style={{cursor: 'pointer'}} 
+              color="primary" 
+              onClick={openContactUs}
+            >{`contact us `}</Typography>
             <Typography component="span">{`if you think this was a mistake`}</Typography>
           </Typography>
         }
