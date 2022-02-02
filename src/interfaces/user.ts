@@ -32,6 +32,7 @@ export type UserProps = BaseUser & {
   skipWelcome?: boolean;
   websiteURL?: string;
   username?: string;
+  deletedAt?: string;
 };
 
 export type BlockedProps = {

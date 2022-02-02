@@ -13,6 +13,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         paddingLeft: 0,
         paddingRight: 0,
       },
+      wordBreak: 'break-all',
     },
     item: {
       '& .MuiListItemText-primary': {

@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     title: {
-      wordBreak: 'break-word',
+      wordBreak: 'break-all',
     },
     actionArea: {
       '&:hover': {

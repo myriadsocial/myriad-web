@@ -35,7 +35,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     description: {
       fontSize: '14px',
       color: theme.palette.text.secondary,
-      wordWrap: 'break-word',
+      wordBreak: 'break-all',
     },
     tag: {
       fontSize: '14px',
@@ -43,7 +43,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginRight: '12px',
       color: theme.palette.primary.main,
       display: 'inline-block',
-      wordBreak: 'break-word',
+      wordBreak: 'break-all',
     },
     user: {
       fontSize: '16px',

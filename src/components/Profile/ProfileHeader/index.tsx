@@ -236,7 +236,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           </ShowIf>
         </Grid>
 
-        <Typography style={{wordWrap: 'break-word'}} variant="body1">
+        <Typography style={{wordBreak: 'break-all'}} variant="body1">
           {person.bio}
         </Typography>
 
