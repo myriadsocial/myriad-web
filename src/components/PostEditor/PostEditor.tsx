@@ -83,6 +83,7 @@ const resetBlockTypesCommonRule = {
 };
 
 const MAX_CHARACTER_LIMIT = 5000;
+const MAX_HASHTAG_CHAR_LENGTH = 160;
 
 export const PostEditor: React.FC<PostEditorProps> = props => {
   const styles = useStyles();
@@ -228,7 +229,9 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         ],
       }),
 
-      createHashtagPlugin(),
+      createHashtagPlugin({
+        max: MAX_HASHTAG_CHAR_LENGTH,
+      }),
       createCharLimitPlugin({
         max: MAX_CHARACTER_LIMIT,
       }),
