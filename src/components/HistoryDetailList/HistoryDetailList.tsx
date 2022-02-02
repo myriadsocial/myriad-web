@@ -25,6 +25,7 @@ import _ from 'lodash';
 import {Loading} from 'src/components/atoms/Loading';
 import {formatUsd} from 'src/helpers/balance';
 import {timeAgo} from 'src/helpers/date';
+import {parseScientificNotatedNumber} from 'src/helpers/number';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
 import {CurrencyId} from 'src/interfaces/currency';
 
@@ -158,15 +159,6 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
 
   const classes = useStyles();
 
-  const parseScientificNotatedNumber = (input: number) => {
-    let result: string | null = null;
-    const parsedInput = input.toString().split('-')[1];
-
-    if (parsedInput) result = input.toFixed(Number(parsedInput));
-
-    if (parsedInput === undefined) result = input.toString();
-
-    return result;
   };
 
   const namePlaceholder = 'Unknown Myrian';
