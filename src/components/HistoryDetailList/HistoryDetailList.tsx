@@ -159,8 +159,6 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
 
   const classes = useStyles();
 
-  };
-
   const namePlaceholder = 'Unknown Myrian';
 
   return (
