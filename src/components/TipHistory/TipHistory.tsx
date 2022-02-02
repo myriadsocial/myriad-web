@@ -97,6 +97,19 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
     onSort(sort as TransactionSort);
   };
 
+<<<<<<< HEAD
+=======
+  const formatTimeAgo = (ISODate: Date) => {
+    const timeAgoInString = formatDistanceStrict(new Date(ISODate), new Date(), {addSuffix: true});
+    //=> "3 days ago"
+    return timeAgoInString;
+  };
+
+  const limitChar = (string = '', limit = 0): string => {
+    return string.substring(0, limit);
+  };
+
+>>>>>>> f79c1395 (MYR-1630: limited name into 16 chars max)
   return (
     <Modal title="Tip History" open={open} onClose={onClose}>
       <div className={styles.root}>
@@ -172,8 +185,8 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                 <ListItemComponent
                   key={tip.id}
                   avatar={tip.fromUser.profilePictureURL || tip.fromUser.name}
-                  title={tip.fromUser.name}
-                  subtitle={timeAgo(tip.createdAt)}
+                  title={limitChar(tip.fromUser.name, 16)}
+                  subtitle={formatTimeAgo(tip.createdAt)}
                   size="medium"
                   action={
                     <div className={styles.tip}>
