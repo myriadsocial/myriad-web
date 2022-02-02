@@ -13,7 +13,7 @@ export const parseScientificNotatedNumber = (input: number): string | null => {
 
   if (parsedInput) result = input.toFixed(Number(parsedInput));
 
-  if (parsedInput === undefined) result = input.toString();
+  if (parsedInput === undefined) result = input.toFixed(4);
 
   return result;
 };
