@@ -97,6 +97,10 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
     onSort(sort as TransactionSort);
   };
 
+  const limitChar = (string = '', limit = 0): string => {
+    return string.substring(0, limit);
+  };
+
   return (
     <Modal title="Tip History" open={open} onClose={onClose}>
       <div className={styles.root}>
@@ -172,14 +176,14 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                 <ListItemComponent
                   key={tip.id}
                   avatar={tip.fromUser.profilePictureURL || tip.fromUser.name}
-                  title={tip.fromUser.name}
+                  title={limitChar(tip.fromUser.name, 16)}
                   subtitle={timeAgo(tip.createdAt)}
                   size="medium"
                   action={
                     <div className={styles.tip}>
                       <div>
                         <Typography variant="h5">
-                          {tip.amount} {tip.currencyId}
+                          {tip.amount.toFixed(4)} {tip.currencyId}
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
                           {`~${formatUsd(tip.amount, getConversion(tip.currencyId))} USD`}
