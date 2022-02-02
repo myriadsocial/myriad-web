@@ -96,8 +96,6 @@ export const usePolkadotApi = () => {
           await storeTransaction({
             hash: txHash,
             amount: correctedValue,
-            //type: ContentType.POST,
-            //referenceId,
             from,
             to,
             currencyId: currencyId,
@@ -114,7 +112,6 @@ export const usePolkadotApi = () => {
           });
           openTipSummaryForComment();
         }
-
         // TODO: change to toaster
         showTipAlert({
           severity: 'success',
