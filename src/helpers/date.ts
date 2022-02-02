@@ -1,4 +1,4 @@
-import {formatDistance, format} from 'date-fns';
+import {formatDistanceStrict, format} from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 
 const formatDistanceLocale: Record<any, string> = {
@@ -23,12 +23,14 @@ const formatDistanceLocale: Record<any, string> = {
 const customFormatDistance = (token: any, count: any, options: any) => {
   options = options || {};
 
-  const result = formatDistanceLocale[token].replace('{{count}}', count);
+  let result = formatDistanceLocale[token].replace('{{count}}', count);
 
   if (options.addSuffix) {
     if (options.comparison > 0) {
       return 'in ' + result;
     } else {
+      if (count < 45 && token === 'xSeconds') return (result = 'just now');
+      if (count === 1 && token === 'xDays') return (result = 'yesterday');
       return result + ' ago';
     }
   }
@@ -37,7 +39,7 @@ const customFormatDistance = (token: any, count: any, options: any) => {
 };
 
 export const timeAgo = (value: string | Date): string => {
-  return formatDistance(new Date(value), new Date(), {
+  return formatDistanceStrict(new Date(value), new Date(), {
     addSuffix: true,
     locale: {
       ...locale,
