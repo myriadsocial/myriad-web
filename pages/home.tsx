@@ -6,7 +6,7 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
-import {Button} from '@material-ui/core';
+import {Button, Typography} from '@material-ui/core';
 
 import {RichTextContainer} from '../src/components/Richtext/RichTextContainer';
 import {TimelineContainer} from '../src/components/Timeline/TimelineContainer';
@@ -75,6 +75,13 @@ const Home: React.FC = () => {
     }
   };
 
+  const openContactUs = () => {
+    window.open(
+      `mailto:${publicRuntimeConfig.myriadSupportMail}?subject=Complain user banned!`,
+      '_blank',
+    )
+  }
+
   return (
     <DefaultLayout isOnProfilePage={false}>
       <Head>
@@ -88,13 +95,18 @@ const Home: React.FC = () => {
       <PromptComponent
         title={'You have been banned'}
         subtitle={
-          'This account has been banned due to break our community rule. \n Please contact us if you think this was a mistake'
+          <Typography component="span">
+            <Typography component="span">{`This account has been banned due to break our community rule. \n Please `}</Typography>
+            <Typography component="span" style={{cursor: 'pointer'}} color="primary" onClick={openContactUs}>{`contact us `}</Typography>
+            <Typography component="span">{`if you think this was a mistake`}</Typography>
+          </Typography>
         }
         open={dialogBanned.open}
         icon="warning"
         onCancel={() => {
           setDialogBanned({...dialogBanned, open: false});
           handleSignOut();
+          openContactUs();
         }}>
         <div
           style={{
@@ -108,10 +120,7 @@ const Home: React.FC = () => {
             onClick={() => {
               setDialogBanned({...dialogBanned, open: false});
               handleSignOut();
-              window.open(
-                `mailto:${publicRuntimeConfig.myriadSupportMail}?subject=Complain user banned!`,
-                '_blank',
-              );
+              openContactUs();
             }}>
             OK
           </Button>
