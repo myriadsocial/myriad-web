@@ -22,6 +22,7 @@ export const WalletBalances = Template.bind({});
 WalletBalances.args = {
   balances: [
     {
+      originBalance: 0,
       freeBalance: 58.4,
       id: CurrencyId.AUSD,
       decimal: 12,
@@ -31,6 +32,7 @@ WalletBalances.args = {
       previousNonce: 0,
     },
     {
+      originBalance: 0,
       freeBalance: 0,
       id: CurrencyId.MYRIA,
       decimal: 18,

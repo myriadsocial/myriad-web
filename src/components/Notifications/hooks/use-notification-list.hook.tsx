@@ -15,6 +15,7 @@ import {SvgIcon} from '@material-ui/core';
 
 import {useStyles} from '../Notifications.styles';
 
+import {parseScientificNotatedNumber} from 'src/helpers/number';
 import {Notification, NotificationType} from 'src/interfaces/notification';
 import {PostOrigin} from 'src/interfaces/timeline';
 import {PAGINATION_LIMIT} from 'src/lib/api/constants/pagination';
@@ -39,6 +40,26 @@ const getPlatform = (message: string) => {
   const result = message.split(' ');
 
   return result[2];
+};
+
+const parseTipAmountContainingENumber = (message: string) => {
+  const result = message.split(' ');
+
+  let resultInString = '';
+
+  let amount = '';
+
+  if (result.length === 2 && result[0] === '1e-8') {
+    amount = parseScientificNotatedNumber(Number(result[0])) ?? '';
+
+    result[0] = amount;
+
+    resultInString = result.join(' ');
+  } else {
+    resultInString = message;
+  }
+
+  return resultInString;
 };
 
 export const useNotificationList = (
@@ -224,7 +245,9 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: 'Tips received',
             avatar: notification.fromUserId.profilePictureURL,
-            description: `You received tip from ${notification.fromUserId.name} (${notification.message})}`,
+            description: `You received tip from ${
+              notification.fromUserId.name
+            } (${parseTipAmountContainingENumber(notification.message)})}`,
             badge: (
               <div className={style.circleSuccess}>
                 <SvgIcon
@@ -246,7 +269,9 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: 'Tips received',
             avatar: notification.fromUserId.profilePictureURL,
-            description: `Your post received tip from ${notification.fromUserId.name} (${notification.message})`,
+            description: `Your post received tip from ${
+              notification.fromUserId.name
+            } (${parseTipAmountContainingENumber(notification.message)})`,
             badge: (
               <div className={style.circleSuccess}>
                 <SvgIcon
@@ -272,7 +297,9 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: 'Tips received',
             avatar: notification.fromUserId.profilePictureURL,
-            description: `Your reply received tip from ${notification.fromUserId.name} (${notification.message})`,
+            description: `Your reply received tip from ${
+              notification.fromUserId.name
+            } (${parseTipAmountContainingENumber(notification.message)})`,
             badge: (
               <div className={style.circleSuccess}>
                 <SvgIcon

@@ -94,6 +94,7 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
 
         tokenBalances.push({
           ...currency,
+          originBalance: formatNumber(+free.toString(), currency.decimal),
           freeBalance: formatNumber(+free.toString(), currency.decimal),
           previousNonce: nonce ? +nonce.toString() : 0,
         });
