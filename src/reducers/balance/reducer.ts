@@ -48,7 +48,7 @@ export const BalanceReducer: Redux.Reducer<BalanceState, Actions> = (
         ...state,
         balanceDetails: state.balanceDetails.map(balance => {
           if (balance.id === action.currencyId) {
-            balance.freeBalance += action.change;
+            balance.freeBalance = balance.originBalance + action.change;
           }
 
           return balance;
@@ -61,7 +61,7 @@ export const BalanceReducer: Redux.Reducer<BalanceState, Actions> = (
         ...state,
         balanceDetails: state.balanceDetails.map(balance => {
           if (balance.id === action.currencyId) {
-            balance.freeBalance -= action.change;
+            balance.freeBalance = balance.originBalance - action.change;
           }
 
           return balance;

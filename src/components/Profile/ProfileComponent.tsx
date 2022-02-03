@@ -96,7 +96,7 @@ export const ProfileTimeline: React.FC<Props> = ({profile, friendStatus}) => {
               className={style.blocked}>
               <Typography variant="h4" className={style.blockedTitle}>
                 {user?.id === profile.blocker
-                  ? 'Sorry, you have blocked this user'
+                  ? 'You have blocked this user'
                   : 'Sorry, you have been blocked by this user'}
               </Typography>
               <Typography variant="body1" component="div">
