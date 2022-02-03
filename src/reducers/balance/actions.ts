@@ -88,7 +88,6 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
           if (amount > 0) {
             dispatch(increaseBalance(currency.id, amount));
           } else {
-            console.log({amount});
             dispatch(decreaseBalance(currency.id, Math.abs(amount)));
           }
         });
