@@ -60,7 +60,7 @@ const NotFound: React.FC = () => {
   const router = useRouter();
 
   const handleAction = () => {
-    router.push('/', undefined, {shallow: true});
+    router.push('/', undefined, {shallow: false});
   };
 
   return (

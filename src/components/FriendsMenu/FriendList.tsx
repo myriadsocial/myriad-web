@@ -270,7 +270,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                   className={style.option}
                   alignItems="center">
                   <ListItemAvatar>
-                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} passHref>
+                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} passHref shallow>
                       <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
                         {acronym(friend.name)}
                       </Avatar>
@@ -329,14 +329,14 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                   className={style.option}
                   alignItems="center">
                   <ListItemAvatar>
-                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} shallow>
+                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} passHref>
                       <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
                         {acronym(friend.name)}
                       </Avatar>
                     </Link>
                   </ListItemAvatar>
                   <ListItemText>
-                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} shallow>
+                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`}>
                       <Typography className={style.name} component="span" color="textPrimary">
                         {friend.name}
                       </Typography>
