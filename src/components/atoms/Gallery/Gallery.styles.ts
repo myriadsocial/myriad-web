@@ -11,7 +11,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexWrap: 'wrap',
       justifyContent: 'space-around',
       overflow: 'hidden',
-      minWidth: 600,
+      maxWidth: 600,
       marginTop: 12,
       backgroundColor: theme.palette.background.paper,
     },
