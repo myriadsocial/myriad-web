@@ -88,12 +88,14 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
           if (amount > 0) {
             dispatch(increaseBalance(currency.id, amount));
           } else {
+            console.log({amount});
             dispatch(decreaseBalance(currency.id, Math.abs(amount)));
           }
         });
 
         tokenBalances.push({
           ...currency,
+          originBalance: formatNumber(+free.toString(), currency.decimal),
           freeBalance: formatNumber(+free.toString(), currency.decimal),
           previousNonce: nonce ? +nonce.toString() : 0,
         });
