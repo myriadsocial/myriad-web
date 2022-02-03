@@ -31,6 +31,7 @@ import {RootState} from 'src/reducers';
 import {removeImporter} from 'src/reducers/importers/actions';
 import {setTippedContent} from 'src/reducers/timeline/actions';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
+import {setTippedUser, setTippedUserId} from 'src/reducers/wallet/actions';
 import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
@@ -57,6 +58,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
   const anonymous = useSelector<RootState, boolean>(state => state.userState.anonymous);
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
+  const [tippedComment, setTippedComment] = useState<Comment | null>(null);
   const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | null>(null);
   const [reported, setReported] = useState<Post | null>(null);
   const [importedPost, setImportedPost] = useState<Post | null>(null);
@@ -64,7 +66,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const [removing, setRemoving] = useState(false);
   const [postToRemove, setPostToRemove] = useState<Post | null>(null);
   const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
-  const sendTipOpened = Boolean(tippedPost);
+  const sendTipOpened = Boolean(tippedPost) || Boolean(tippedComment);
 
   useEffect(() => {
     filterTimeline(query);
@@ -93,6 +95,16 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
       const contentType = 'post';
       dispatch(setTippedContent(contentType, reference.id));
     }
+
+    if (reference && 'section' in reference) {
+      setTippedComment(reference);
+
+      dispatch(setTippedUserId(reference.userId));
+      dispatch(setTippedUser(reference.user.name, reference.user.profilePictureURL ?? ''));
+
+      const contentType = 'comment';
+      dispatch(setTippedContent(contentType, reference.id));
+    }
   };
 
   const closeSendTip = () => {
@@ -100,12 +112,13 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
       setOpenSuccessPrompt(true);
       setTippedContentForHistory(tippedPost);
     } else {
-      console.log('no post tipped');
+      console.log('no content tipped');
     }
 
     dispatch(setIsTipSent(false));
 
     setTippedPost(null);
+    setTippedComment(null);
   };
 
   const handleReportPost = (post: Post) => {
