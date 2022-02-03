@@ -3,6 +3,7 @@ import {SearchIcon} from '@heroicons/react/solid';
 
 import React, {useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import {useSelector} from 'react-redux';
 
 import {
   Avatar,
@@ -14,6 +15,7 @@ import {
   SvgIcon,
   Typography,
 } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Menu from '@material-ui/core/Menu';
 
 import {formatUsd} from '../../helpers/balance';
@@ -30,7 +32,10 @@ import {Empty} from 'src/components/atoms/Empty';
 import {Loading} from 'src/components/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
 import {timeAgo} from 'src/helpers/date';
+import {parseScientificNotatedNumber} from 'src/helpers/number';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
+import {RootState} from 'src/reducers';
+import {BalanceState} from 'src/reducers/balance/reducer';
 
 type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
   hasMore: boolean;
@@ -45,6 +50,8 @@ type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
 export const TipHistory: React.FC<TipHistoryProps> = props => {
   const {tips, hasMore, currencies, open, onClose, sendTip, onSort, onFilter, nextPage} = props;
   const {loading, exchangeRates} = useExchangeRate();
+
+  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
 
   const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -183,7 +190,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                     <div className={styles.tip}>
                       <div>
                         <Typography variant="h5">
-                          {tip.amount.toFixed(4)} {tip.currencyId}
+                          {parseScientificNotatedNumber(tip.amount)} {tip.currencyId}
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
                           {`~${formatUsd(tip.amount, getConversion(tip.currencyId))} USD`}
@@ -200,8 +207,18 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
       </div>
 
       <div className={styles.action}>
-        <Button variant="contained" color="primary" disableElevation fullWidth onClick={sendTip}>
-          I want to send tip too
+        <Button
+          disabled={balanceDetails.length === 0}
+          variant="contained"
+          color="primary"
+          disableElevation
+          fullWidth
+          onClick={sendTip}>
+          {balanceDetails.length === 0 ? (
+            <CircularProgress size={14} color="primary" />
+          ) : (
+            'I want to send tip too'
+          )}
         </Button>
       </div>
     </Modal>
