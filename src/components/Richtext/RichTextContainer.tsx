@@ -12,7 +12,7 @@ import {UserState} from 'src/reducers/user/reducer';
 export const RichTextContainer: React.FC = () => {
   const router = useRouter();
 
-  const {user, alias} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, alias, anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
   const [createPostOpened, setCreatePostOpened] = useState(false);
 
@@ -25,6 +25,8 @@ export const RichTextContainer: React.FC = () => {
 
     router.push('/home', undefined, {shallow: true});
   };
+
+  if (anonymous) return null;
 
   return (
     <>
