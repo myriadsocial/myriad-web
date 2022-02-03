@@ -1,16 +1,16 @@
 import {getPlatePluginTypes, getRenderElement, PlatePlugin} from '@udecode/plate-core';
 
 import {ELEMENT_HASHTAG} from './default';
-import {withHashtag} from './withHashtag';
+import {HashtagOptions, withHashtag} from './withHashtag';
 
 const getHashtagRenderElement = () => {
   return getRenderElement(ELEMENT_HASHTAG);
 };
 
-export const createHashtagPlugin = (): PlatePlugin => ({
+export const createHashtagPlugin = (options: HashtagOptions): PlatePlugin => ({
   pluginKeys: ELEMENT_HASHTAG,
   renderElement: getHashtagRenderElement(),
   voidTypes: getPlatePluginTypes(ELEMENT_HASHTAG),
   inlineTypes: getPlatePluginTypes(ELEMENT_HASHTAG),
-  withOverrides: withHashtag(),
+  withOverrides: withHashtag(options),
 });
