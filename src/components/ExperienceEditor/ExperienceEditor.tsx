@@ -163,22 +163,31 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     }
   };
 
+  const checkDuplicateData = (data: string[]) => {
+    return new Set(data).size !== data.length;
+  };
+
   const handleTagsChange = (
     // eslint-disable-next-line @typescript-eslint/ban-types
     event: React.ChangeEvent<{}>,
     value: string[],
     reason: AutocompleteChangeReason,
   ) => {
+    const data = [...value];
+    if (checkDuplicateData(data.map(item => item.replace('#', '')))) {
+      data.pop();
+    }
+
     if (reason === 'remove-option') {
-      setTags(value);
+      setTags(data);
     }
 
     if (reason === 'create-option') {
-      setTags(value.map(item => item.replace('#', '')));
+      setTags(data.map(item => item.replace('#', '')));
     }
 
     if (reason === 'select-option') {
-      setTags(value);
+      setTags(data);
     }
   };
 
