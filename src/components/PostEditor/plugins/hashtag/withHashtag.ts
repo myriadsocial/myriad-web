@@ -7,6 +7,7 @@ import {
   getText,
   wrapNodes,
   isSelectionAtBlockEnd,
+  isSelectionAtBlockStart,
   getQueryOptions,
 } from '@udecode/plate-common';
 import {
@@ -142,6 +143,39 @@ export const withHashtag =
           if (text === '#') {
             if (isSelectionAtBlockEnd(editor)) {
               insertText(text);
+            } else if (isSelectionAtBlockStart(editor)) {
+              const block = getBlockAbove(editor)?.[0];
+              const path = getBlockAbove(editor)?.[1];
+
+              const newChildren: TDescendant = [];
+              const hashtagConverted = false;
+
+              if (block?.type === ELEMENT_PARAGRAPH) {
+                block.children.forEach((children: TDescendant) => {
+                  if (children.text && !hashtagConverted) {
+                    const [first, ...second] = children.text.split(' ');
+
+                    newChildren.push({
+                      type: getPlatePluginType(editor, ELEMENT_HASHTAG),
+                      children: [{text: ''}],
+                      hashtag: first,
+                    });
+                    newChildren.push({
+                      text: ` ${second.join(' ')}`,
+                    });
+                  } else {
+                    newChildren.push(children);
+                  }
+                });
+              }
+
+              const newElement = {
+                type: getPlatePluginType(editor, ELEMENT_PARAGRAPH),
+                children: newChildren,
+              };
+
+              Transforms.removeNodes(editor, {at: path});
+              Transforms.insertNodes(editor, newElement, {at: path, select: true});
             } else {
               const block = getBlockAbove(editor)?.[0];
               const path = getBlockAbove(editor)?.[1];
