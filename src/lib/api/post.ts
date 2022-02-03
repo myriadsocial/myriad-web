@@ -275,7 +275,7 @@ export const findPosts = async (user: User | null, query: string, page = 1): Pro
       pageLimit: PAGINATION_LIMIT,
       importers: true,
       filter: {
-        order: 'DESC',
+        order: `createdAt DESC`,
         include,
         where,
       },
