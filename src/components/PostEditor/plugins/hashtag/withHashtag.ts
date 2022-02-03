@@ -148,7 +148,7 @@ export const withHashtag =
               const path = getBlockAbove(editor)?.[1];
 
               const newChildren: TDescendant = [];
-              const hashtagConverted = false;
+              let hashtagConverted = false;
 
               if (block?.type === ELEMENT_PARAGRAPH) {
                 block.children.forEach((children: TDescendant) => {
@@ -163,6 +163,8 @@ export const withHashtag =
                     newChildren.push({
                       text: ` ${second.join(' ')}`,
                     });
+
+                    hashtagConverted = true;
                   } else {
                     newChildren.push(children);
                   }
