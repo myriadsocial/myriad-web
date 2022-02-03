@@ -125,7 +125,8 @@ export const withHashtag =
                 };
 
                 Transforms.removeNodes(editor, {at: path});
-                Transforms.insertNodes(editor, hashtag, {at: path, select: true});
+                Transforms.insertNodes(editor, hashtag, {at: path});
+                Transforms.select(editor, selection);
               } else {
                 insertText(` ${text}`);
               }
@@ -145,37 +146,46 @@ export const withHashtag =
               const block = getBlockAbove(editor)?.[0];
               const path = getBlockAbove(editor)?.[1];
               const before = getRangeFromBlockStart(editor, {at: selection});
-              const beforeText = getText(editor, before);
+              let beforeText = getText(editor, before);
 
               if (block?.type === ELEMENT_PARAGRAPH) {
                 const newChildren: TDescendant = [];
 
                 block.children.forEach((children: TDescendant) => {
-                  if (children.text.includes(beforeText)) {
-                    const chunk = children.text.split(beforeText);
+                  if (children.text) {
+                    if (children.text.includes(beforeText)) {
+                      const chunk = children.text
+                        .split(beforeText)
+                        .map((text: string) => text.trim());
 
-                    for (const item of chunk) {
-                      if (item.length > 0) {
-                        const [first, ...second] = item.split(' ');
+                      for (const item of chunk) {
+                        if (item.length > 0) {
+                          const [first, ...second] = item.split(' ');
 
-                        newChildren.push({
-                          type: getPlatePluginType(editor, ELEMENT_HASHTAG),
-                          children: [{text: ''}],
-                          hashtag: first,
-                        });
-                        newChildren.push({
-                          text: ` ${second.join(' ')}`,
-                        });
-                      } else {
-                        newChildren.push({
-                          text: beforeText,
-                        });
+                          newChildren.push({
+                            type: getPlatePluginType(editor, ELEMENT_HASHTAG),
+                            children: [{text: ''}],
+                            hashtag: first,
+                          });
+                          newChildren.push({
+                            text: ` ${second.join(' ')}`,
+                          });
+                        } else {
+                          newChildren.push({
+                            text: ` ${beforeText} `,
+                          });
+                        }
                       }
+                    } else {
+                      beforeText = beforeText.replace(children.text.trim(), '').trim();
+                      newChildren.push(children);
                     }
                   } else {
+                    beforeText = beforeText.trim();
                     newChildren.push(children);
                   }
                 });
+
                 const newElement = {
                   type: getPlatePluginType(editor, ELEMENT_PARAGRAPH),
                   children: newChildren,
