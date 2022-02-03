@@ -19,6 +19,7 @@ import {SocialsEnum} from 'src/interfaces/social';
 
 export const HeaderComponent: React.FC<PostHeaderProps> = props => {
   const {
+    user,
     post,
     owner,
     disableAction = false,
@@ -204,7 +205,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
           <MenuItem onClick={openUserProfile}>Visit Profile</MenuItem>
         </ShowIf>
 
-        <ShowIf condition={!owner}>
+        <ShowIf condition={!owner && !!user}>
           <MenuItem onClick={handleReport} className={style.danger}>
             Report
           </MenuItem>
