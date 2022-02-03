@@ -236,7 +236,10 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           )}
         </ShowIf>
 
-        {post.embeddedURL && !post.deletedAt && <LinkPreview embed={post.embeddedURL} />}
+        {post.asset?.images.length === 0 &&
+          post.asset.videos.length === 0 &&
+          post.embeddedURL &&
+          !post.deletedAt && <LinkPreview embed={post.embeddedURL} />}
       </div>
 
       <div className={styles.action}>

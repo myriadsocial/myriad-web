@@ -35,7 +35,6 @@ import {ThunkDispatchAction} from 'src/types/thunk';
 const {publicRuntimeConfig} = getConfig();
 
 type PostPageProps = {
-  imported: boolean;
   removed: boolean;
   title: string;
   description: string;
@@ -47,35 +46,26 @@ type PostPageParams = {
 };
 
 const PostPage: React.FC<PostPageProps> = props => {
-  const {removed, title, description, image, imported} = props;
+  const {removed, title, description, image} = props;
 
   const router = useRouter();
 
   return (
     <DefaultLayout isOnProfilePage={false}>
-      <ShowIf condition={!imported}>
-        <Head>
-          <title>{title}</title>
-          <meta property="og:type" content="article" />
-          <meta property="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
-          <meta property="og:description" content={description} />
-          <meta property="og:title" content={title} />
-          {image && <meta property="og:image" content={image} />}
-          <meta property="fb:app_id" content={publicRuntimeConfig.facebookAppId} />
-          {/* Twitter Card tags */}
-          <meta name="twitter:title" content={title} />
-          <meta name="twitter:description" content={description} />
-          {image && <meta name="twitter:image" content={image} />}
-          <meta name="twitter:card" content="summary" />
-        </Head>
-      </ShowIf>
-
-      <ShowIf condition={imported}>
-        <Head>
-          <title>{publicRuntimeConfig.appName}</title>
-          <meta property="og:title" content={publicRuntimeConfig.appName} key="ogtitle" />
-        </Head>
-      </ShowIf>
+      <Head>
+        <title>{title}</title>
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
+        <meta property="og:description" content={description} />
+        <meta property="og:title" content={title} />
+        {image && <meta property="og:image" content={image} />}
+        <meta property="fb:app_id" content={publicRuntimeConfig.facebookAppId} />
+        {/* Twitter Card tags */}
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        {image && <meta name="twitter:image" content={image} />}
+        <meta name="twitter:card" content="summary" />
+      </Head>
 
       <TopNavbarComponent description={'Post Detail'} sectionTitle={SectionTitle.TIMELINE} />
 
@@ -221,14 +211,11 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       ? post.asset.images[0]
       : null
     : null;
-  let imported = false;
 
   if (post && post.platform === 'myriad') {
     const nodes = deserialize(post);
 
     description = nodes.map(formatToString).join('');
-  } else {
-    imported = true;
   }
 
   if (post?.deletedAt || post?.isNSFW || post?.NSFWTag) {
@@ -239,7 +226,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   return {
     props: {
-      imported,
       title,
       description,
       image,
