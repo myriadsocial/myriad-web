@@ -52,9 +52,6 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     updateUpvote,
     updateRemoveUpvote,
   } = useCommentHook(referenceId);
-  const {openTipHistory} = useTipHistory();
-
-  const {blocklistId, loadBlockListId} = useFriendsHook();
 
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
@@ -62,6 +59,10 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     state => state.timelineState.interaction.downvoting,
   );
   const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
+
+  const {blocklistId, loadBlockListId} = useFriendsHook(user);
+  const {openTipHistory} = useTipHistory();
+
   const [reported, setReported] = useState<Comment | null>(null);
   const [tippedComment, setTippedComment] = useState<Comment | null>(null);
   const [tippedContentForHistory, setTippedContentForHistory] = useState<Comment | null>(null);

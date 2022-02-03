@@ -173,6 +173,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   return (
     <Paper square className={styles.root}>
       <HeaderComponent
+        user={user}
         owner={owner}
         post={post}
         onOpenTipHistory={handleOpenTipHistory}
