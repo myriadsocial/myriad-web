@@ -65,9 +65,13 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     handleChanges();
     nameValidation();
     if (
-      user?.bio !== newUser.bio ||
+      (user?.bio === undefined && newUser?.bio !== '' && newUser?.bio !== undefined) ||
+      (user?.bio !== undefined && user?.bio !== newUser?.bio) ||
       user?.name !== newUser.name ||
-      user?.websiteURL !== newUser?.websiteURL ||
+      (user?.websiteURL === undefined &&
+        newUser?.websiteURL !== '' &&
+        newUser?.websiteURL !== undefined) ||
+      (user?.websiteURL !== undefined && user?.websiteURL !== newUser?.websiteURL) ||
       imageProfile instanceof File ||
       imageBanner instanceof File
     ) {
