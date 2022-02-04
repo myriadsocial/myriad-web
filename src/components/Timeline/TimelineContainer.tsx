@@ -59,7 +59,9 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const anonymous = useSelector<RootState, boolean>(state => state.userState.anonymous);
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
   const [tippedComment, setTippedComment] = useState<Comment | null>(null);
-  const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | null>(null);
+  const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | Comment | null>(
+    null,
+  );
   const [reported, setReported] = useState<Post | null>(null);
   const [importedPost, setImportedPost] = useState<Post | null>(null);
   const [visibility, setVisibility] = useState<Post | null>(null);
@@ -111,8 +113,11 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     if (isTipSent && tippedPost) {
       setOpenSuccessPrompt(true);
       setTippedContentForHistory(tippedPost);
+    } else if (isTipSent && tippedComment) {
+      setOpenSuccessPrompt(true);
+      setTippedContentForHistory(tippedComment);
     } else {
-      console.log('no content tipped');
+      console.log('no comment tipped');
     }
 
     dispatch(setIsTipSent(false));
@@ -232,11 +237,18 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
         subtitle={
           <Typography component="div">
             Tip to{' '}
-            <Box fontWeight={400} display="inline">
-              {tippedContentForHistory?.platform === 'myriad'
-                ? tippedContentForHistory?.user.name
-                : tippedContentForHistory?.people?.name ?? 'Unknown Myrian'}
-            </Box>{' '}
+            {tippedContentForHistory &&
+              ('platform' in tippedContentForHistory ? (
+                <Box fontWeight={400} display="inline">
+                  {tippedContentForHistory?.platform === 'myriad'
+                    ? tippedContentForHistory?.user.name
+                    : tippedContentForHistory?.people?.name ?? 'Unknown Myrian'}
+                </Box>
+              ) : (
+                <Box fontWeight={400} display="inline">
+                  {tippedContentForHistory.user.name ?? 'Unknown Myrian'}
+                </Box>
+              ))}{' '}
             sent successfully
           </Typography>
         }>
