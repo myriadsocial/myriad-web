@@ -23,5 +23,6 @@ export const useSearchHook = () => {
     users: searchState.searchedUsers,
     hasMore: searchState.hasMore,
     page: searchState.meta.currentPage,
+    loading: searchState.loading,
   };
 };

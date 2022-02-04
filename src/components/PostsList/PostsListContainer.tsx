@@ -3,8 +3,10 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
+import {Skeleton as PostSkeleton} from '../PostDetail';
 import {PostImporterContainer} from '../PostImporterList';
 import {ReportContainer} from '../Report';
 import {SendTipContainer} from '../SendTip';
@@ -36,7 +38,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
   const dispatch = useDispatch();
 
-  const {page, posts, hasMore, searchPosts, getTippedUserId} = useTimelineHook();
+  const {loading, page, posts, hasMore, searchPosts, getTippedUserId} = useTimelineHook();
   const {openTipHistory} = useTipHistory();
   const {openToasterSnack} = useToasterSnackHook();
 
@@ -139,6 +141,14 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
   const handleRemoveVote = (reference: Post | Comment) => {
     dispatch(removeVote(reference));
   };
+
+  if (loading && posts.length === 0)
+    return (
+      <Grid container justify="center">
+        <PostSkeleton />
+        <PostSkeleton />
+      </Grid>
+    );
 
   return (
     <>

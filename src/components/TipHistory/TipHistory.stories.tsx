@@ -64,6 +64,7 @@ TipHistory.args = {
       },
       currency: {
         id: CurrencyId.MYRIA,
+        explorerURL: '',
         image: 'https://res.cloudinary.com/dsget80gs/coins/myriad.jpg',
         decimal: 18,
         rpcURL: 'wss://rpc.dev.myriad.systems',
@@ -123,12 +124,14 @@ TipHistory.args = {
         native: false,
         createdAt: new Date('2021-08-23T07:14:06.000Z'),
         updatedAt: new Date('2021-08-23T07:14:06.000Z'),
+        explorerURL: '',
       },
     },
   ],
   currencies: [
     {
       id: CurrencyId.ACA,
+      explorerURL: '',
       image: 'https://res.cloudinary.com/dsget80gs/coins/aca.svg',
       decimal: 13,
       rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
@@ -144,6 +147,7 @@ TipHistory.args = {
       native: false,
       createdAt: new Date('2021-08-23T07:14:06.000Z'),
       updatedAt: new Date('2021-08-23T07:14:06.000Z'),
+      explorerURL: '',
     },
     {
       id: CurrencyId.DOT,
@@ -153,6 +157,7 @@ TipHistory.args = {
       native: false,
       createdAt: new Date('2021-08-24T03:43:08.000Z'),
       updatedAt: new Date('2021-08-24T03:43:08.000Z'),
+      explorerURL: '',
     },
     {
       id: CurrencyId.MYRIA,
@@ -162,6 +167,7 @@ TipHistory.args = {
       native: true,
       createdAt: new Date('2021-08-23T07:14:57.000Z'),
       updatedAt: new Date('2021-08-23T07:14:57.000Z'),
+      explorerURL: '',
     },
   ],
   onClose: console.log,

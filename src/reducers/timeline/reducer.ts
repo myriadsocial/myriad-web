@@ -1,6 +1,5 @@
 import {HYDRATE} from 'next-redux-wrapper';
 
-import * as BaseConstants from '../base/constants';
 import {PaginationState as BasePaginationState} from '../base/state';
 import {Actions} from './actions';
 import * as constants from './constants';
@@ -444,7 +443,7 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       };
     }
 
-    case BaseConstants.ACTION_LOADING: {
+    case constants.TIMELINE_LOADING: {
       return update(state, {
         loading: {$set: action.loading},
       });

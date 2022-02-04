@@ -146,6 +146,11 @@ export interface UpdatePostVisibility extends Action {
   payload: PostVisibility;
 }
 
+export interface TimelineLoading extends Action {
+  type: constants.TIMELINE_LOADING;
+  loading: boolean;
+}
+
 /**
  * Union Action Types
  */
@@ -173,6 +178,7 @@ export type Actions =
   | ShowToasterSnack
   | UpdatePostVisibility
   | ResetDownvoting
+  | TimelineLoading
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -226,6 +232,11 @@ export const decreaseCommentCount = (
   section,
 });
 
+export const setTimelineLoading = (loading: boolean): TimelineLoading => ({
+  type: constants.TIMELINE_LOADING,
+  loading,
+});
+
 /**
  * Action Creator
  */
@@ -238,7 +249,7 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
     order?: TimelineSortOrder,
   ) =>
   async (dispatch, getState) => {
-    dispatch(setLoading(true));
+    dispatch(setTimelineLoading(true));
     let asFriend = false;
 
     const {
@@ -294,7 +305,7 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setTimelineLoading(false));
     }
   };
 
@@ -765,7 +776,7 @@ export const removeVote: ThunkActionCreator<Actions, RootState> =
 export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
   (query: string, page = 1) =>
   async (dispatch, getState) => {
-    dispatch(setLoading(true));
+    dispatch(setTimelineLoading(true));
 
     const {
       userState: {user},
@@ -798,6 +809,6 @@ export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setTimelineLoading(false));
     }
   };

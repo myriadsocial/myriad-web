@@ -45,6 +45,10 @@ export interface SetFee extends Action {
   type: constants.SET_FEE;
   fee: string | null;
 }
+export interface SetExplorerURL extends Action {
+  type: constants.SET_EXPLORER_URL;
+  explorerURL: null | string;
+}
 
 /**
  * Union Action Types
@@ -57,6 +61,7 @@ export type Actions =
   | SetTippedUser
   | SetIsTipSent
   | SetFee
+  | SetExplorerURL
   | BaseAction;
 
 /**
@@ -90,6 +95,10 @@ export const setIsTipSent = (isTipSent: boolean): SetIsTipSent => ({
 export const setFee = (fee: string | null): SetFee => ({
   type: constants.SET_FEE,
   fee,
+});
+export const setExplorerURL = (explorerURL: null | string): SetExplorerURL => ({
+  type: constants.SET_EXPLORER_URL,
+  explorerURL,
 });
 
 /**

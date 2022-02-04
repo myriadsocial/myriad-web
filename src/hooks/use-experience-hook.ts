@@ -33,6 +33,7 @@ export const useExperienceHook = () => {
     detail: experience,
     hasMore,
     meta,
+    loading,
   } = useSelector<RootState, ExperienceState>(state => state.experienceState);
 
   const loadExperience = () => {
@@ -126,6 +127,7 @@ export const useExperienceHook = () => {
   };
 
   return {
+    loading,
     initSearchExperiences,
     nextPageSearchedExperiences,
     searchedExperiences,
