@@ -229,7 +229,6 @@ export const signAndSendExtrinsic = async (
     });
 
     await new Promise((resolve, reject) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       txInfo.send(result => {
         if (result.status.isInBlock) {
           console.log(`\tBlock hash    : ${txHash}`);
