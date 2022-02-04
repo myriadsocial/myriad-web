@@ -146,6 +146,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
 
   const confirmRemoveFriend = () => {
     setOpenRemoveFriend(true);
+    handleClose();
   };
 
   const closeConfirmRemoveFriend = () => {

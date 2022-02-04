@@ -118,6 +118,12 @@ export const ProfileReducer: Redux.Reducer<ProfileState, Actions> = (
       };
     }
 
+    case constants.CLEAR_FRIENDED_STATUS: {
+      const tmpState = {...state};
+      delete tmpState.friendStatus;
+      return tmpState;
+    }
+
     default: {
       return state;
     }
