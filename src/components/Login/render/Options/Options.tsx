@@ -124,7 +124,6 @@ export const Options: React.FC<OptionProps> = props => {
       navigate('/account');
     } else {
       setWallet(null);
-      setExtensionChecked(false);
     }
   };
 
@@ -240,7 +239,7 @@ export const Options: React.FC<OptionProps> = props => {
           variant="contained"
           fullWidth
           color="primary"
-          disabled={!termApproved || !extensionChecked}
+          disabled={!termApproved || !extensionChecked || wallet === null}
           onClick={handleConnect}>
           Connect
         </Button>
