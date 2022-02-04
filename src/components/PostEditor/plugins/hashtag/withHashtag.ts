@@ -20,7 +20,7 @@ import {
 
 import {ELEMENT_HASHTAG} from './default';
 
-import {Range, Transforms, Editor, BaseRange} from 'slate';
+import {Range, Transforms, Editor, BaseRange, Path} from 'slate';
 import {ReactEditor} from 'slate-react';
 
 export type HashtagOptions = {
@@ -90,6 +90,12 @@ export const withHashtag =
             insertHashtag(editor, currentText.replace('#', ''), hashtagCharRange);
           }
         } else {
+          if (isSelectionAtBlockStart(editor)) {
+            insertText(text);
+
+            return;
+          }
+
           // check if white space is exist on current node
           // hashtag is separated by white space
           const whiteSpace = getRangeBefore(editor, selection, {
@@ -116,9 +122,11 @@ export const withHashtag =
               const [child, path] = prevNode;
               const current = child.hashtag + text;
 
+              const isSibling = Path.isSibling(selection.anchor.path, path);
+
               // current hashtag text plus new inserted text is in hashtag char limit update the hashtag text
               // otherwise treat as new text node
-              if (current.length <= options.max) {
+              if (current.length <= options.max && isSibling) {
                 const hashtag = {
                   type: getPlatePluginType(editor, ELEMENT_HASHTAG),
                   children: [{text: ''}],
@@ -129,7 +137,7 @@ export const withHashtag =
                 Transforms.insertNodes(editor, hashtag, {at: path});
                 Transforms.select(editor, selection);
               } else {
-                insertText(` ${text}`);
+                insertText(text);
               }
             } else {
               insertText(text);
@@ -177,17 +185,19 @@ export const withHashtag =
               };
 
               Transforms.removeNodes(editor, {at: path});
-              Transforms.insertNodes(editor, newElement, {at: path, select: true});
+              Transforms.insertNodes(editor, newElement, {at: path});
+              Transforms.select(editor, selection);
             } else {
               const block = getBlockAbove(editor)?.[0];
               const path = getBlockAbove(editor)?.[1];
+
               const before = getRangeFromBlockStart(editor, {at: selection});
               let beforeText = getText(editor, before);
 
               if (block?.type === ELEMENT_PARAGRAPH) {
                 const newChildren: TDescendant = [];
 
-                block.children.forEach((children: TDescendant) => {
+                block.children.forEach((children: TDescendant, i: number) => {
                   if (children.text) {
                     if (children.text.includes(beforeText)) {
                       const chunk = children.text
@@ -208,7 +218,7 @@ export const withHashtag =
                           });
                         } else {
                           newChildren.push({
-                            text: ` ${beforeText} `,
+                            text: i > 0 ? ` ${beforeText} ` : `${beforeText} `,
                           });
                         }
                       }
@@ -228,7 +238,11 @@ export const withHashtag =
                 };
 
                 Transforms.removeNodes(editor, {at: path});
-                Transforms.insertNodes(editor, newElement, {at: path, select: true});
+                Transforms.insertNodes(editor, newElement, {
+                  at: path,
+                  select: true,
+                  mode: 'highest',
+                });
               } else {
                 insertText(text);
               }
@@ -272,7 +286,8 @@ export const withHashtag =
             };
 
             Transforms.removeNodes(editor, {at: path});
-            Transforms.insertNodes(editor, newElement, {at: path, select: true});
+            Transforms.insertNodes(editor, newElement, {at: path});
+            Transforms.select(editor, selection);
           } else {
             const path = selection as BaseRange;
 
@@ -281,7 +296,8 @@ export const withHashtag =
               children,
             };
 
-            Transforms.insertNodes(editor, element, {at: path, select: true});
+            Transforms.insertNodes(editor, element, {at: path});
+            Transforms.select(editor, selection);
           }
         }
       }
