@@ -14,3 +14,8 @@ export type UserSettings = {
   notification: NotificationSettingItems;
   language: LanguageSettingType;
 };
+
+export enum Privacy {
+  PUBLIC = 'public',
+  PRIVATE = 'private',
+}

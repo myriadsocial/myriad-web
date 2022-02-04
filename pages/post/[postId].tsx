@@ -17,10 +17,12 @@ import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
 import {FriendStatus} from 'src/interfaces/friend';
 import {Post, PostVisibility} from 'src/interfaces/post';
+import {Privacy} from 'src/interfaces/setting';
 import {setHeaders} from 'src/lib/api/base';
 import * as FriendAPI from 'src/lib/api/friends';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as PostAPI from 'src/lib/api/post';
+import * as SettingAPI from 'src/lib/api/setting';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
@@ -124,6 +126,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   try {
     post = await PostAPI.getPostDetail(params.postId, userId);
+    const setting = await SettingAPI.getAccountSettings(post.createdBy);
 
     // TODO: remove this later when friend only post API changed
     if (!post.id) {
@@ -143,7 +146,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     if (post.platform === 'reddit') {
       post.text = post.text.replace(new RegExp('&amp;#x200B;', 'g'), '&nbsp;');
     }
-
     // TODO: remove this later when friend only post API changed
     const importerIds = post.importers ? post.importers.map(importer => importer.id) : [];
     // show deleted post if the current user is the post creator or importer
@@ -156,6 +158,19 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
       if (
         post.visibility === PostVisibility.FRIEND &&
+        ((importerIds.length > 0 && !importerIds.includes(userId)) || post.createdBy !== userId)
+      ) {
+        const {data: requests} = await FriendAPI.checkFriendStatus(userId, [
+          ...importerIds,
+          post.createdBy,
+        ]);
+
+        showAsDeleted =
+          requests.filter(request => request.status === FriendStatus.APPROVED).length === 0;
+      }
+
+      if (
+        setting.accountPrivacy === Privacy.PRIVATE &&
         ((importerIds.length > 0 && !importerIds.includes(userId)) || post.createdBy !== userId)
       ) {
         const {data: requests} = await FriendAPI.checkFriendStatus(userId, [
