@@ -217,6 +217,8 @@ export const signAndSendExtrinsic = async (
       ? api.tx.balances.transfer(to, new BN(value.toString()))
       : api.tx.currencies.transfer(to, {TOKEN: currencyId}, value);
 
+    let txHash: string | null = null;
+
     // passing the injected account address as the first argument of signAndSend
     // will allow the api to retrieve the signer and the user will see the extension
     // popup asking to sign the balance transfer transaction
@@ -226,20 +228,24 @@ export const signAndSendExtrinsic = async (
       nonce: -1,
     });
 
-    const unsub = await txInfo.send(result => {
-      console.log(`Current status is ${result.status}`);
-
-      if (result.status.isInBlock) {
-        console.log(`Transaction included at blockHash ${result.status.asInBlock}`);
-      } else if (result.status.isFinalized) {
-        console.log(`Transaction finalized at blockHash ${result.status.asFinalized}`);
-        unsub();
-
-        api.disconnect();
-      }
+    await new Promise((resolve, reject) => {
+      txInfo.send(result => {
+        if (result.status.isInBlock) {
+          console.log(`\tBlock hash    : ${txHash}`);
+        } else if (result.status.isFinalized) {
+          txHash = result.status.asFinalized.toHex();
+          console.log(`\tFinalized     : ${txHash}`);
+          api.disconnect();
+          resolve(txHash);
+        } else if (result.isError) {
+          console.log(`\tFinalized     : null`);
+          api.disconnect();
+          reject();
+        }
+      });
     });
 
-    return txInfo.toHex();
+    return txHash;
   } catch (error) {
     if (!(error instanceof NoAccountException)) {
       Sentry.captureException(error);

@@ -15,3 +15,5 @@ export type SET_IS_TIP_SENT = typeof SET_IS_TIP_SENT;
 
 export const SET_FEE = 'SET_FEE';
 export type SET_FEE = typeof SET_FEE;
+export const SET_EXPLORER_URL = 'SET_EXPLORER_URL';
+export type SET_EXPLORER_URL = typeof SET_EXPLORER_URL;

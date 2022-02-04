@@ -5,6 +5,7 @@ export type CurrencyProps = {
   decimal: number;
   rpcURL: string;
   native: boolean;
+  explorerURL: null | string;
 };
 
 export enum CurrencyId {

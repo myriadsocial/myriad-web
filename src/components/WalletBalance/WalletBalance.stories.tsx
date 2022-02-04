@@ -30,10 +30,12 @@ WalletBalances.args = {
       image: 'https://res.cloudinary.com/dsget80gs/coins/ausd.png',
       native: false,
       previousNonce: 0,
+      explorerURL: '',
     },
     {
       originBalance: 0,
       freeBalance: 0,
+      explorerURL: '',
       id: CurrencyId.MYRIA,
       decimal: 18,
       rpcURL: 'wss://rpc.dev.myriad.systems',
