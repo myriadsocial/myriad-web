@@ -2,8 +2,11 @@ import React from 'react';
 
 import {useRouter} from 'next/router';
 
+import {Grid} from '@material-ui/core';
+
 import {SearchedExperienceList} from '.';
 import {useExperienceHook} from '../../hooks/use-experience-hook';
+import {Skeleton} from '../atoms/SimpleCard/NonSelectableSimpleCard.skeleton';
 
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 
@@ -20,6 +23,7 @@ export const SearchedExperienceListContainer: React.FC<SearchedExperienceListCon
       searchedExperiences,
       experiences: userExperience,
       hasMore,
+      loading,
       searchExperience,
       subscribeExperience,
       unsubscribeExperience,
@@ -60,6 +64,16 @@ export const SearchedExperienceListContainer: React.FC<SearchedExperienceListCon
     const handlePreviewExperience = (experienceId: string) => {
       router.push(`/experience/${experienceId}/preview`);
     };
+
+    if (loading && searchedExperiences.length === 0)
+      return (
+        <Grid container justify="center">
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+        </Grid>
+      );
 
     return (
       <SearchedExperienceList

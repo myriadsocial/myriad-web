@@ -2,6 +2,7 @@ import {PaginationState as BasePaginationState} from '../base/state';
 import {Actions} from './actions';
 import * as constants from './constants';
 
+import update from 'immutability-helper';
 import * as Redux from 'redux';
 import {Experience, UserExperience, Tag} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
@@ -105,6 +106,12 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
         ...state,
         searchTags: action.tags,
       };
+    }
+
+    case constants.EXPERIENCE_LOADING: {
+      return update(state, {
+        loading: {$set: action.loading},
+      });
     }
 
     default: {
