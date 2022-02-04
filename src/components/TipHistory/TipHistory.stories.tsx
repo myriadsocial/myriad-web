@@ -64,6 +64,7 @@ TipHistory.args = {
       },
       currency: {
         id: CurrencyId.MYRIA,
+        explorerURL: '',
         image: 'https://res.cloudinary.com/dsget80gs/coins/myriad.jpg',
         decimal: 18,
         rpcURL: 'wss://rpc.dev.myriad.systems',
@@ -123,6 +124,7 @@ TipHistory.args = {
         native: false,
         createdAt: new Date('2021-08-23T07:14:06.000Z'),
         updatedAt: new Date('2021-08-23T07:14:06.000Z'),
+        explorerURL: '',
       },
     },
   ],
