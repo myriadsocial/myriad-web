@@ -49,6 +49,10 @@ export interface SetProfileFriendedStatus extends Action {
   status: Friend;
 }
 
+export interface ClearProfileFriendedStatus extends Action {
+  type: constants.CLEAR_FRIENDED_STATUS;
+}
+
 /**
  * Union Action Types
  */
@@ -60,6 +64,7 @@ export type Actions =
   | FetchConnectedSocials
   | FetchProfileExperience
   | SetProfileFriendedStatus
+  | ClearProfileFriendedStatus
   | BaseAction;
 
 /**
@@ -223,6 +228,10 @@ export const checkFriendedStatus: ThunkActionCreator<Actions, RootState> =
         dispatch({
           type: constants.SET_FRIENDED_STATUS,
           status: data[0],
+        });
+      } else {
+        dispatch({
+          type: constants.CLEAR_FRIENDED_STATUS,
         });
       }
     } catch (error) {
