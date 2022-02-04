@@ -12,6 +12,7 @@ import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {useTipSummaryHook} from 'src/hooks/use-tip-summary.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
+import {CurrencyId} from 'src/interfaces/currency';
 import {SendTipProps} from 'src/interfaces/send-tips/send-tips';
 import {ContentType} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
@@ -20,6 +21,7 @@ import {RootState} from 'src/reducers';
 import {fetchBalances} from 'src/reducers/balance/actions';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
+import {setExplorerURL} from 'src/reducers/wallet/actions';
 
 export const usePolkadotApi = () => {
   const dispatch = useDispatch();
@@ -166,8 +168,6 @@ export const usePolkadotApi = () => {
     }
 
     try {
-      setSignerLoading(true);
-
       const correctedAmount = amount * 10 ** currency.decimal;
 
       const txHash = await signAndSendExtrinsic(
@@ -181,7 +181,7 @@ export const usePolkadotApi = () => {
         },
         params => {
           if (params.signerOpened) {
-            setSignerLoading(false);
+            setSignerLoading(true);
           }
         },
       );
@@ -195,6 +195,7 @@ export const usePolkadotApi = () => {
       if (txHash) {
         // Record the transaction
         await storeTransaction({
+          // TODO: should add the extrinsicURL: explorerURL + txHash
           hash: txHash,
           amount,
           from,
@@ -206,6 +207,13 @@ export const usePolkadotApi = () => {
         });
 
         dispatch(setIsTipSent(true));
+
+        if (currency.id === CurrencyId.AUSD) {
+          const {explorerURL} = currency;
+          dispatch(setExplorerURL(`${explorerURL}extrinsic/${txHash}`));
+        } else {
+          dispatch(setExplorerURL(`${currency.explorerURL}/${txHash}`));
+        }
 
         callback && callback();
       }
