@@ -41,6 +41,7 @@ export const TabList: React.FC<TabListProps> = props => {
     setActiveTab(defaultActive);
   }, [defaultActive]);
 
+  // eslint-disable-next-line @typescript-eslint/ban-types
   const handleTabChange = (event: React.ChangeEvent<{}>, tab: string) => {
     setActiveTab(tab);
     onChangeTab(tab);
