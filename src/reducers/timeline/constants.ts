@@ -1,10 +1,8 @@
-import type {ACTION_LOADING} from '../base/constants';
-
 export const LOAD_TIMELINE = 'LOAD_TIMELINE';
 export type LOAD_TIMELINE = typeof LOAD_TIMELINE;
 
 export const TIMELINE_LOADING = 'TIMELINE_LOADING';
-export type TIMELINE_LOADING = ACTION_LOADING;
+export type TIMELINE_LOADING = typeof TIMELINE_LOADING;
 
 export const ADD_POST_TO_TIMELINE = 'ADD_POST_TO_TIMELINE';
 export type ADD_POST_TO_TIMELINE = typeof ADD_POST_TO_TIMELINE;

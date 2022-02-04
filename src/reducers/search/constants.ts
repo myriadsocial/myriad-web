@@ -15,3 +15,6 @@ export type SET_SEARCHED_USERS = typeof SET_SEARCHED_USERS;
 
 export const ABORT_SEARCH = 'ABORT_SEARCH';
 export type ABORT_SEARCH = typeof ABORT_SEARCH;
+
+export const USERS_LOADING = 'USERS_LOADING';
+export type USERS_LOADING = typeof USERS_LOADING;

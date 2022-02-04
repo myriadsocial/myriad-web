@@ -1,7 +1,7 @@
 import {User} from '../../interfaces/user';
 import * as UserAPI from '../../lib/api/user';
 import {ThunkActionCreator} from '../../types/thunk';
-import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
+import {Actions as BaseAction, PaginationAction, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 
@@ -49,6 +49,11 @@ export interface AbortSearch extends Action {
   type: constants.ABORT_SEARCH;
 }
 
+export interface UsersLoading extends Action {
+  type: constants.USERS_LOADING;
+  loading: boolean;
+}
+
 /**
  * Union Action Types
  */
@@ -59,6 +64,7 @@ export type Actions =
   | SearchUsers
   | SetSearchedUsers
   | AbortSearch
+  | UsersLoading
   | BaseAction;
 
 /**
@@ -72,6 +78,11 @@ export const setSearchedUsers = (users: User[], meta: ListMeta): SetSearchedUser
   meta,
 });
 
+export const setUsersLoading = (loading: boolean): UsersLoading => ({
+  type: constants.USERS_LOADING,
+  loading,
+});
+
 /**
  * Action Creator
  */
@@ -79,7 +90,7 @@ export const setSearchedUsers = (users: User[], meta: ListMeta): SetSearchedUser
 export const loadUsers: ThunkActionCreator<Actions, RootState> =
   (page = 1) =>
   async (dispatch, getState) => {
-    dispatch(setLoading(true));
+    dispatch(setUsersLoading(true));
 
     const {
       userState: {user},
@@ -104,14 +115,14 @@ export const loadUsers: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setUsersLoading(false));
     }
   };
 
 export const loadSearchedUsers: ThunkActionCreator<Actions, RootState> =
   (page = 1) =>
   async (dispatch, getState) => {
-    dispatch(setLoading(true));
+    dispatch(setUsersLoading(true));
 
     const {
       userState: {user},
@@ -136,14 +147,14 @@ export const loadSearchedUsers: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setUsersLoading(false));
     }
   };
 
 export const searchUsers: ThunkActionCreator<Actions, RootState> =
   (query: string, page = 1) =>
   async (dispatch, getState) => {
-    dispatch(setLoading(true));
+    dispatch(setUsersLoading(true));
 
     const {
       userState: {user},
@@ -168,6 +179,6 @@ export const searchUsers: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setUsersLoading(false));
     }
   };

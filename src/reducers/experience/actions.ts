@@ -57,6 +57,12 @@ export interface SearchTags extends Action {
   type: constants.SEARCH_TAGS;
   tags: Tag[];
 }
+
+export interface ExperienceLoading extends Action {
+  type: constants.EXPERIENCE_LOADING;
+  loading: boolean;
+}
+
 /**
  * Union Action Types
  */
@@ -71,6 +77,7 @@ export type Actions =
   | SearchPeople
   | SearchTags
   | ShowToasterSnack
+  | ExperienceLoading
   | BaseAction;
 
 /**
@@ -78,13 +85,18 @@ export type Actions =
  * Actions
  */
 
+export const setExperienceLoading = (loading: boolean): ExperienceLoading => ({
+  type: constants.EXPERIENCE_LOADING,
+  loading,
+});
+
 /**
  * Action Creator
  */
 
 export const fetchAllExperiences: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {
-    dispatch(setLoading(true));
+    dispatch(setExperienceLoading(true));
     try {
       const {
         userState: {user},
@@ -108,7 +120,7 @@ export const fetchAllExperiences: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setExperienceLoading(false));
     }
   };
 
@@ -197,7 +209,7 @@ export const cloneExperience: ThunkActionCreator<Actions, RootState> =
 export const loadSearchedExperiences: ThunkActionCreator<Actions, RootState> =
   (page = 1) =>
   async (dispatch, getState) => {
-    dispatch(setLoading(true));
+    dispatch(setExperienceLoading(true));
 
     const {
       userState: {user},
@@ -222,14 +234,14 @@ export const loadSearchedExperiences: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setExperienceLoading(false));
     }
   };
 
 export const searchAllRelatedExperiences: ThunkActionCreator<Actions, RootState> =
   (query: string, page = 1) =>
   async (dispatch, getState) => {
-    dispatch(setLoading(true));
+    dispatch(setExperienceLoading(true));
 
     const {
       userState: {user},
@@ -259,13 +271,13 @@ export const searchAllRelatedExperiences: ThunkActionCreator<Actions, RootState>
         }),
       );
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setExperienceLoading(false));
     }
   };
 
 export const searchExperience: ThunkActionCreator<Actions, RootState> =
   (query: string) => async (dispatch, getState) => {
-    dispatch(setLoading(true));
+    dispatch(setExperienceLoading(true));
 
     try {
       const {
@@ -290,7 +302,7 @@ export const searchExperience: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setExperienceLoading(false));
     }
   };
 

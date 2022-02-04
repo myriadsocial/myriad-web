@@ -5,6 +5,7 @@ import {PaginationState as BasePaginationState} from '../base/state';
 import {Actions} from './actions';
 import * as constants from './constants';
 
+import update from 'immutability-helper';
 import * as Redux from 'redux';
 
 export interface SearchState extends BasePaginationState {
@@ -81,6 +82,12 @@ export const SearchReducer: Redux.Reducer<SearchState, Actions> = (
         ...state,
         isSearching: false,
       };
+    }
+
+    case constants.USERS_LOADING: {
+      return update(state, {
+        loading: {$set: action.loading},
+      });
     }
 
     default: {
