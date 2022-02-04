@@ -44,6 +44,7 @@ ExperienceList.args = {
               decimal: 13,
               rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
               native: true,
+              explorerURL: '',
               createdAt: new Date(),
               updatedAt: new Date(),
             },
