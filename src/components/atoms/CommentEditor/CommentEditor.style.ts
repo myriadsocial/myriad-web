@@ -35,5 +35,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.primary.main,
       transform: 'rotate(45deg)',
     },
+    disabled: {
+      color: theme.palette.text.secondary,
+      transform: 'rotate(45deg)',
+    },
   }),
 );

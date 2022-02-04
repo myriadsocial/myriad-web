@@ -179,6 +179,12 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
     setComment(value);
   };
 
+  const isEmpty = () => {
+    if (comment && comment[0].children.length > 1) return false;
+    else if (comment && comment[0].children[0].text) return false;
+    else return true;
+  };
+
   const submitComment = () => {
     if (comment) {
       const attributes = serialize(comment);
@@ -226,9 +232,9 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
                   </IconButton>
                 </Tooltip>
               </ButtonGroup>
-              <IconButton aria-label="reply" onClick={submitComment}>
+              <IconButton aria-label="reply" onClick={submitComment} disabled={isEmpty()}>
                 <SvgIcon
-                  className={styles.replyIcon}
+                  className={isEmpty() ? styles.disabled : styles.replyIcon}
                   component={PaperAirplaneIcon}
                   viewBox="0 0 24 24"
                 />

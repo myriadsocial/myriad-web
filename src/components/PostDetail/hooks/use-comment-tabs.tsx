@@ -26,8 +26,6 @@ export const useCommentTabs = (post: Post, comments?: Comment[], debates?: Comme
         placeholder={'Your downvote will be submitted after you post a comment'}
         referenceId={post.id}
         section={SectionType.DEBATE}
-        focus={true}
-        expand={true}
       />
     );
   }, [post]);
