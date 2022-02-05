@@ -3,6 +3,7 @@ import {fetchFriend} from '../friend/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 
+import axios from 'axios';
 import {Action} from 'redux';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
@@ -60,11 +61,11 @@ export const createFriendRequest: ThunkActionCreator<Actions, RootState> =
   (profile: User) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
-    try {
-      const {
-        userState: {user},
-      } = getState();
+    const {
+      userState: {user},
+    } = getState();
 
+    try {
       if (!user) {
         throw new Error('User not found');
       }
@@ -73,7 +74,12 @@ export const createFriendRequest: ThunkActionCreator<Actions, RootState> =
 
       dispatch(fetchFriendRequest(user));
     } catch (error) {
-      dispatch(setError(error.message));
+      // 422 means the other user already send friend request
+      if (user && axios.isAxiosError(error) && error.response?.status === 422) {
+        dispatch(fetchFriend(user));
+      } else {
+        dispatch(setError(error.message));
+      }
     } finally {
       dispatch(setLoading(false));
     }
@@ -83,11 +89,11 @@ export const deleteFriendRequest: ThunkActionCreator<Actions, RootState> =
   (request: Friend) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
-    try {
-      const {
-        userState: {user},
-      } = getState();
+    const {
+      userState: {user},
+    } = getState();
 
+    try {
       if (!user) {
         throw new Error('User not found');
       }
@@ -96,7 +102,12 @@ export const deleteFriendRequest: ThunkActionCreator<Actions, RootState> =
 
       dispatch(fetchFriendRequest(user));
     } catch (error) {
-      dispatch(setError(error.message));
+      // 404 means the other user has already unfriended
+      if (user && axios.isAxiosError(error) && error.response?.status === 404) {
+        dispatch(fetchFriend(user));
+      } else {
+        dispatch(setError(error.message));
+      }
     } finally {
       dispatch(setLoading(false));
     }

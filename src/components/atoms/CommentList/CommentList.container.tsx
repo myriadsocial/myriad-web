@@ -69,7 +69,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
 
   const sendTipOpened = Boolean(tippedComment);
-  const mentionables = useFriendList(friends, user);
+  const {friendList: mentionables} = useFriendList(friends, user);
 
   useEffect(() => {
     loadBlockListId();

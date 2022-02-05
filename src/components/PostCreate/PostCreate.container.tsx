@@ -33,7 +33,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const {progress, uploadImage, uploadVideo} = useUpload();
   const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const mentionable = useFriendList(friends, user);
+  const {friendList: mentionable} = useFriendList(friends, user);
   const [dialogFailedImport, setDialogFailedImport] = useState({
     open: false,
     message: '',

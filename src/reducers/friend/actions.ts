@@ -2,6 +2,7 @@ import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../
 import {RootState} from '../index';
 import * as constants from './constants';
 
+import axios from 'axios';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
@@ -94,37 +95,44 @@ export const searchFriend: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const removedFriendList: ThunkActionCreator<Actions, RootState> =
+export const removeFromFriend: ThunkActionCreator<Actions, RootState> =
   (request: Friend) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
-    try {
-      const {
-        userState: {user},
-      } = getState();
+    const {
+      userState: {user},
+    } = getState();
 
+    try {
       if (!user) {
         throw new Error('User not found');
       }
+
       await FriendAPI.deleteRequest(request.id);
 
       dispatch(fetchFriend(user));
     } catch (error) {
-      dispatch(setError(error.message));
+      console.log('error', error);
+
+      if (user && axios.isAxiosError(error) && error.response?.status === 401) {
+        dispatch(fetchFriend(user));
+      } else {
+        dispatch(setError(error.message));
+      }
     } finally {
       dispatch(setLoading(false));
     }
   };
 
-export const blockedFriendList: ThunkActionCreator<Actions, RootState> =
+export const blockFromFriend: ThunkActionCreator<Actions, RootState> =
   (requesteeId: string) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
-    try {
-      const {
-        userState: {user},
-      } = getState();
+    const {
+      userState: {user},
+    } = getState();
 
+    try {
       if (!user) {
         throw new Error('User not found');
       }
@@ -132,7 +140,11 @@ export const blockedFriendList: ThunkActionCreator<Actions, RootState> =
 
       dispatch(fetchFriend(user));
     } catch (error) {
-      dispatch(setError(error.message));
+      if (user && axios.isAxiosError(error) && error.response?.status === 401) {
+        dispatch(fetchFriend(user));
+      } else {
+        dispatch(setError(error.message));
+      }
     } finally {
       dispatch(setLoading(false));
     }
