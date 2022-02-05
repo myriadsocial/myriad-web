@@ -11,6 +11,7 @@ import AlertComponent from 'src/components/atoms/Alert/Alert.component';
 import {LoginLayout} from 'src/components/template/Login';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import i18n from 'src/locale';
 
 const Login = dynamic(() => import('src/components/Login/Login'), {
   ssr: false,
@@ -18,8 +19,7 @@ const Login = dynamic(() => import('src/components/Login/Login'), {
 
 const {publicRuntimeConfig} = getConfig();
 
-const description =
-  'A social platform that’s entirely under your control. Remain anonymous, look for your own topics, choose your interface and control what you see.';
+const description = i18n.t('Login.Description');
 
 export default function Index() {
   const {query} = useRouter();
@@ -29,9 +29,9 @@ export default function Index() {
   useEffect(() => {
     if (query.error) {
       showAlert({
-        message: 'Something wrong when try to loggedin.',
+        message: i18n.t('Login.Alert.Message'),
         severity: 'error',
-        title: 'Login failed',
+        title: i18n.t('Login.Alert.Title'),
       });
     }
   }, [query.error]);

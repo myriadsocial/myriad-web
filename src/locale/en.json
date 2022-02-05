@@ -1,4 +1,71 @@
 {
+  "General": {
+    "Close": "Close",
+    "OK": "OK",
+    "Back": "Back",
+    "Next": "Next"
+  },
+  "Login": {
+    "Description": "A social platform that’s entirely under your control. Remain anonymous, look for your own topics, choose your interface and control what you see.",
+    "Alert": {
+      "Title": "Login failed",
+      "Message": "Something wrong when try to loggedin."
+    },
+    "Layout": {
+      "Title_left": "Social Media with",
+      "Title_right": "no boundaries",
+      "Carousel_Title_1_left": "Limitless",
+      "Carousel_Title_1_right": "Conversation",
+      "Carousel_Subtitle_1a": "No limitations on what you say in Myriad",
+      "Carousel_Subtitle_1b": "Freedom of speech is our vision",
+      "Carousel_Title_2_left": "Monetize",
+      "Carousel_Title_2_right": "your Idea",
+      "Carousel_Subtitle_2": "Speak what's inside your mind and get a chance to earn coins",
+      "Text_Try_1": "Or try our",
+      "Text_Try_2": "first",
+      "Footer_Text_1": "To access Myriad, you need to use",
+      "Footer_Text_2": ", on your browser",
+      "Btn_Signin": "Sign in",
+      "Btn_Demo": "demo"
+    },
+    "Options": {
+      "Network": "Select Network",
+      "Wallet": "Select Wallet",
+      "Text_Terms_1": "I have already read, and I accept Myriad",
+      "Text_Terms_2": "Terms of Service",
+      "Text_Terms_3": "and",
+      "Text_Terms_4": "Privacy Policy",
+      "Connect": "Connect",
+      "Prompt_Extension": {
+        "Title": "Extension Not Found",
+        "Subtitle_1": "Kindly check if you have",
+        "Subtitle_2": "installed on your browser"
+      },
+      "Prompt_Account": {
+        "Title": "Account Not Found",
+        "Subtitle": "There is no account in the wallet you selected."
+      }
+    },
+    "Profile": {
+      "Helper_Text_Name": "You can use {{min_length}} or more characters.",
+      "Helper_Text_Username": "You can use {{min_length}} or more characters.",
+      "Helper_Validate_Name_Min": "Display name must be provided and contain at least {{min_length}} character",
+      "Helper_Validate_Name_Char": "Display name cannot contain disallowed character.",
+      "Helper_Validate_Username_Min": "Username must be provided and contain at least {{min_length}} character",
+      "Helper_Validate_Username_Char": "Display name cannot contain disallowed character.",
+      "Helper_Validate_Username_Taken": "Username already taken",
+      "Placeholder_Display_Name": "Insert display name",
+      "Placeholder_Username": "Username",
+      "Btn_Change_Wallet": "Change Wallet",
+      "Btn_Register": "Register",
+      "Prompt": {
+        "Title": "Are you sure?",
+        "Subtitle": "You can only set your username once.",
+        "Btn_No": "No, let me rethink",
+        "Btn_Yes": "Yes, Let’s go"
+      }
+    }
+  },
   "Setting": {
     "List_Menu": {
       "Account_Title": "Privacy",
