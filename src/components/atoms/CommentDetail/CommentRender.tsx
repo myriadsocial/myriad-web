@@ -48,7 +48,11 @@ export const CommentRender: React.FC<CommentRenderProps> = props => {
           const splitNewLine = node.text.split('\n');
 
           return splitNewLine.map((item: string, key: number) => (
-            <Typography variant="body1" component="span" key={key}>
+            <Typography
+              variant="body1"
+              component="span"
+              key={key}
+              style={{wordBreak: 'break-word'}}>
               {item}
               {key !== splitNewLine.length - 1 && <br />}
             </Typography>
@@ -62,6 +66,7 @@ export const CommentRender: React.FC<CommentRenderProps> = props => {
             style={{
               fontWeight: node.bold ? 600 : 400,
               fontStyle: node.italic ? 'italic' : 'none',
+              wordBreak: 'break-word',
               textDecoration: node.underline
                 ? 'underline'
                 : node.strikethrough
@@ -86,7 +91,9 @@ export const CommentRender: React.FC<CommentRenderProps> = props => {
           if (showMore) {
             return <span>{children}</span>;
           } else {
-            return <p style={{marginTop: 0, marginBottom: 4}}>{children}</p>;
+            return (
+              <p style={{marginTop: 0, marginBottom: 4, wordBreak: 'break-word'}}>{children}</p>
+            );
           }
         case ELEMENT_MENTION:
           return (
