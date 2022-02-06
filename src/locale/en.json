@@ -66,6 +66,27 @@
       }
     }
   },
+  "Home": {
+    "Title": "{{appname}} - Home",
+    "Prompt_Banned": {
+      "Title": "You have been banned",
+      "Subtitle_1": "This account has been banned due to break our community rule. \n Please ",
+      "Subtitle_2": "contact us ",
+      "Subtitle_3": "if you think this was a mistake"
+    },
+    "Search": {
+      "Placeholder": "Search for people, topics, or experiences in Myriad"
+    },
+    "RichText": {
+      "Placeholder": "What's on your mind?",
+      "Prompt_Import": {
+        "Title": "Import Failed!",
+        "Subtitle_Deleted": "You are trying to import a post formerly deleted \n by a Myriad administrator",
+        "Subtitle_Private": "You can not import this post, \n because the account is private",
+        "Subtitle_Duplicate": "Sorry, you can not import this post, \n because this post has been imported"
+      }
+    }
+  },
   "Setting": {
     "List_Menu": {
       "Account_Title": "Privacy",
