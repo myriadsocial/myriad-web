@@ -32,7 +32,8 @@ const isHashTag = (string: string): boolean => {
     return false;
   }
 
-  const match = string.match(/(?:\s|^)#[A-Za-z0-9\-._]+(?:\s|$)/);
+  // eslint-disable-next-line no-control-regex
+  const match = string.match(/(?:\s|^)#([^\u0000-\u007F]|\w)+(?:\s|$)/g);
   if (!match) {
     return false;
   }
@@ -67,8 +68,10 @@ export const withHashtag =
       if (!isCollapsed(selection)) {
         return insertText(text);
       }
+
       // allowed character on hashtag
-      const match = text.match(/^[a-zA-Z0-9_]+$/);
+      // eslint-disable-next-line no-control-regex
+      const match = text.match(/^([^\u0000-\u007F]|\w)+$/g);
 
       if (match) {
         // check if hashtag character exist on previous node
@@ -251,7 +254,8 @@ export const withHashtag =
             insertText(text);
           }
         } else {
-          const hashtagRule = /([#|＃][^\s]+)/g;
+          // eslint-disable-next-line no-control-regex
+          const hashtagRule = /([#|＃]([^\u0000-\u007F]|\w)+)/g;
 
           const prevNode = Editor.previous<any>(
             editor,
