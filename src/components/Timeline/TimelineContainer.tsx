@@ -252,6 +252,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
           }}>
           <a
             target="_blank"
+            style={{textDecoration: 'none'}}
             href={explorerURL ?? 'https://myriad.social'}
             rel="noopener noreferrer">
             <Button style={{marginRight: '12px'}} size="small" variant="outlined" color="secondary">
