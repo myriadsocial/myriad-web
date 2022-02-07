@@ -222,6 +222,12 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     }
   };
 
+  const renderLabelButton = () => {
+    if (type === 'Edit') return 'Save changes';
+    else if (type === 'Clone') return 'Clone Experience';
+    else return 'Create Experience';
+  };
+
   return (
     <div className={styles.root}>
       <Typography className={styles.title}>{type ? type : 'Create new'} Experience</Typography>
@@ -375,7 +381,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           disableElevation
           fullWidth
           onClick={saveExperience}>
-          {type ? type : 'Create'} Experience
+          {renderLabelButton()}
         </Button>
       </FormControl>
     </div>
