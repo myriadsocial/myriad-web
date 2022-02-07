@@ -32,7 +32,9 @@ import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
 import {removeImporter} from 'src/reducers/importers/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
+import {setTippedContent} from 'src/reducers/timeline/actions';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
+import {setTippedUser, setTippedUserId} from 'src/reducers/wallet/actions';
 import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
@@ -65,12 +67,15 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
-  const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | null>(null);
+  const [tippedComment, setTippedComment] = useState<Comment | null>(null);
+  const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | Comment | null>(
+    null,
+  );
   const [reported, setReported] = useState<Post | null>(null);
   const [importedPost, setImportedPost] = useState<Post | null>(null);
   const [removing, setRemoving] = useState(false);
   const [postToRemove, setPostToRemove] = useState<Post | null>(null);
-  const sendTipOpened = Boolean(tippedPost);
+  const sendTipOpened = Boolean(tippedPost) || Boolean(tippedComment);
   const [visibility, setVisibility] = useState<Post | null>(null);
 
   const [postsList, setPostsList] = useState<Post[]>([]);
@@ -102,12 +107,25 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
       setTippedPost(reference);
       getTippedUserId(reference.id);
     }
+
+    if (reference && 'section' in reference) {
+      setTippedComment(reference);
+
+      dispatch(setTippedUserId(reference.userId));
+      dispatch(setTippedUser(reference.user.name, reference.user.profilePictureURL ?? ''));
+
+      const contentType = 'comment';
+      dispatch(setTippedContent(contentType, reference.id));
+    }
   };
 
   const closeSendTip = () => {
     if (isTipSent && tippedPost) {
       setOpenSuccessPrompt(true);
       setTippedContentForHistory(tippedPost);
+    } else if (isTipSent && tippedComment) {
+      setOpenSuccessPrompt(true);
+      setTippedContentForHistory(tippedComment);
     } else {
       console.log('no post tipped');
     }
@@ -115,6 +133,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
     dispatch(setIsTipSent(false));
 
     setTippedPost(null);
+    setTippedComment(null);
   };
 
   const handleCloseSuccessPrompt = (): void => {
@@ -259,11 +278,18 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
         subtitle={
           <Typography component="div">
             Tip to{' '}
-            <Box fontWeight={400} display="inline">
-              {tippedContentForHistory?.platform === 'myriad'
-                ? tippedContentForHistory?.user.name
-                : tippedContentForHistory?.people?.name ?? 'Unknown Myrian'}
-            </Box>{' '}
+            {tippedContentForHistory &&
+              ('platform' in tippedContentForHistory ? (
+                <Box fontWeight={400} display="inline">
+                  {tippedContentForHistory?.platform === 'myriad'
+                    ? tippedContentForHistory?.user.name
+                    : tippedContentForHistory?.people?.name ?? 'Unknown Myrian'}
+                </Box>
+              ) : (
+                <Box fontWeight={400} display="inline">
+                  {tippedContentForHistory.user.name ?? 'Unknown Myrian'}
+                </Box>
+              ))}{' '}
             sent successfully
           </Typography>
         }>
