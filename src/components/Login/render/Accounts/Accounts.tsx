@@ -8,6 +8,8 @@ import Identicon from '@polkadot/react-identicon';
 
 import {useStyles} from './Accounts.style';
 
+import i18n from 'src/locale';
+
 type AccountListProps = {
   onSelect: (account: InjectedAccountWithMeta) => void;
   onNext: (callback: () => void) => void;
@@ -81,7 +83,7 @@ export const Accounts: React.FC<AccountListProps> = props => {
           color="secondary"
           size="small"
           onClick={handleBack}>
-          Back
+          {i18n.t('General.Back')}
         </Button>
         <Button
           disabled={selectedAccount === null || submitted}
@@ -89,7 +91,7 @@ export const Accounts: React.FC<AccountListProps> = props => {
           color="primary"
           size="small"
           onClick={handleNext}>
-          Next
+          {i18n.t('General.Next')}
         </Button>
       </Grid>
     </div>

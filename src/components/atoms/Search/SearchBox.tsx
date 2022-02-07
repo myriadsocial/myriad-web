@@ -9,11 +9,12 @@ import {SearchBoxProps, SearchBoxColor, useStyles} from '.';
 import SearchIcon from '../../../images/Icons/magnifierIcon.svg';
 
 import {debounce} from 'lodash';
+import i18n from 'src/locale';
 
 const SearchBox: React.FC<SearchBoxProps> = ({
   color = SearchBoxColor.PRIMARY,
   ariaLabel = 'search-box',
-  placeholder = 'Search for people, topics, or experiences in Myriad',
+  placeholder = i18n.t('Home.Search.Placeholder'),
   isDisabled = false,
   onSubmit,
   ...props

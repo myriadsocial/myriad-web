@@ -26,6 +26,7 @@ import PolygonIcon from 'src/images/network/polygon-disabled.svg';
 import CoinbaseIcon from 'src/images/wallet/coinbase-disabled.svg';
 import MetamaskIcon from 'src/images/wallet/metamask-disabled.svg';
 import TrustIcon from 'src/images/wallet/trust-disabled.svg';
+import i18n from 'src/locale';
 
 type OptionProps = {
   network?: string;
@@ -131,7 +132,7 @@ export const Options: React.FC<OptionProps> = props => {
     <div className={styles.root}>
       <div className={styles.wrapper}>
         <div className={styles.title}>
-          <Typography variant="h5">Select Network</Typography>
+          <Typography variant="h5">{i18n.t('Login.Options.Network')}</Typography>
         </div>
         <List disablePadding classes={{root: styles.list}}>
           <ListItem
@@ -166,7 +167,7 @@ export const Options: React.FC<OptionProps> = props => {
 
       <div className={styles.wrapper}>
         <div className={styles.title}>
-          <Typography variant="h5">Select Wallet</Typography>
+          <Typography variant="h5">{i18n.t('Login.Options.Wallet')}</Typography>
         </div>
 
         <List disablePadding classes={{root: styles.list}}>
@@ -221,13 +222,13 @@ export const Options: React.FC<OptionProps> = props => {
           control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
           label={
             <Typography style={{color: '#0A0A0A'}}>
-              I have already read, and I accept Myriad&nbsp;
+              {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
               <a href="/term-of-use" className={styles.term}>
-                Terms of Service
+                {i18n.t('Login.Options.Text_Terms_2')}
               </a>
-              &nbsp;and&nbsp;
+              &nbsp;{i18n.t('Login.Options.Text_Terms_3')}&nbsp;
               <a href="/privacy-policy" className={styles.term}>
-                Privacy Policy
+                {i18n.t('Login.Options.Text_Terms_4')}
               </a>
             </Typography>
           }
@@ -241,25 +242,25 @@ export const Options: React.FC<OptionProps> = props => {
           color="primary"
           disabled={!termApproved || !extensionChecked || wallet === null}
           onClick={handleConnect}>
-          Connect
+          {i18n.t('Login.Options.Connect')}
         </Button>
       </div>
 
       <Prompt
-        title="Extension Not Found"
+        title={i18n.t('Login.Options.Prompt_Extension.Title')}
         icon="warning"
         open={connectAttempted && extensionChecked && !extensionEnabled}
         onCancel={closeExtensionDisableModal}
         subtitle={
           <Typography>
-            Kindly check if you have&nbsp;
+            {i18n.t('Login.Options.Prompt_Extension.Subtitle_1')}&nbsp;
             <Link
               href="https://polkadot.js.org/extension"
               target="_blank"
               className={styles.polkadotLink}>
               Polkadot.js
             </Link>
-            &nbsp;installed on your browser
+            &nbsp;{i18n.t('Login.Options.Prompt_Extension.Subtitle_2')}
           </Typography>
         }>
         <Button
@@ -267,22 +268,22 @@ export const Options: React.FC<OptionProps> = props => {
           variant="contained"
           color="primary"
           onClick={closeExtensionDisableModal}>
-          Close
+          {i18n.t('General.Close')}
         </Button>
       </Prompt>
 
       <Prompt
-        title="Account Not Found"
+        title={i18n.t('Login.Options.Prompt_Account.Title')}
         icon="warning"
         open={connectAttempted && extensionChecked && extensionEnabled && accounts.length === 0}
         onCancel={closeExtensionDisableModal}
-        subtitle={<Typography>There is no account in the wallet you selected.</Typography>}>
+        subtitle={<Typography>{i18n.t('Login.Options.Prompt_Account.Subtitle')}</Typography>}>
         <Button
           size="small"
           variant="contained"
           color="primary"
           onClick={closeExtensionDisableModal}>
-          Close
+          {i18n.t('General.Close')}
         </Button>
       </Prompt>
     </div>
