@@ -20,7 +20,7 @@ import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {ReportProps} from 'src/interfaces/report';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
-import {blockedFriendList} from 'src/reducers/friend/actions';
+import {blockFromFriend} from 'src/reducers/friend/actions';
 import {fetchProfileExperience} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
@@ -116,7 +116,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const handleBlockUser = async () => {
     if (!profile) return;
 
-    await dispatch(blockedFriendList(profile.id));
+    await dispatch(blockFromFriend(profile.id));
     await reloadFriendStatus();
 
     openToasterSnack({

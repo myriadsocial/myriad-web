@@ -6,8 +6,8 @@ import Typography from '@material-ui/core/Typography';
 
 import {TabsComponent} from '../atoms/Tabs/Tabs';
 import {FriendListContainer} from './FriendList.container';
+import {useStyles} from './FriendMenu.style';
 import {FriendRequestListContainer} from './FriendRequest.container';
-import {useStyles} from './friend.style';
 
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {RootState} from 'src/reducers';
