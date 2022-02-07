@@ -14,6 +14,7 @@ import {FriendState} from 'src/reducers/friend/reducer';
 import {ProfileState} from 'src/reducers/profile/reducer';
 
 type FriendListContainerProps = {
+  type?: 'contained' | 'basic';
   user?: User;
   disableFilter?: boolean;
   disableSort?: boolean;
@@ -21,7 +22,7 @@ type FriendListContainerProps = {
 };
 
 export const FriendListContainer: React.FC<FriendListContainerProps> = props => {
-  const {user, disableFilter = false, disableSort = false, isProfile = false} = props;
+  const {user, type, disableFilter = false, disableSort = false, isProfile = false} = props;
   const {loadFriends, searchFriend, loadMoreFriends} = useFriendsHook(user);
 
   const [toggle, setToggle] = useState<string>('');
@@ -90,18 +91,17 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
   }
 
   return (
-    <>
-      <FriendListComponent
-        disableFilter={disableFilter}
-        disableSort={disableSort}
-        friends={friendList}
-        user={user}
-        hasMore={hasMore}
-        onSearch={searchFriend}
-        onFilter={handleFilterFriend}
-        onSort={handleSortFriend}
-        onLoadNextPage={loadMoreFriends}
-      />
-    </>
+    <FriendListComponent
+      type={type}
+      disableFilter={disableFilter}
+      disableSort={disableSort}
+      friends={friendList}
+      user={user}
+      hasMore={hasMore}
+      onSearch={searchFriend}
+      onFilter={handleFilterFriend}
+      onSort={handleSortFriend}
+      onLoadNextPage={loadMoreFriends}
+    />
   );
 };

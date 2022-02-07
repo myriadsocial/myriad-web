@@ -22,7 +22,6 @@ import {FilterDropdownMenu} from '../atoms/FilterDropdownMenu';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import SearchComponent from '../atoms/Search/SearchBox';
 import {friendFilterOptions, FriendType, sortOptions} from './default';
-import {FriendListProps} from './default';
 import {useStyles} from './friend.style';
 import {FriendDetail, useFriendList} from './hooks/use-friend-list.hook';
 
@@ -33,16 +32,33 @@ import {Modal} from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import {Friend} from 'src/interfaces/friend';
+import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
-import {blockedFriendList, removedFriendList} from 'src/reducers/friend/actions';
+import {blockFromFriend, removeFromFriend} from 'src/reducers/friend/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
+export type FriendListProps = {
+  type?: 'contained' | 'basic';
+  user?: User;
+  background?: boolean;
+  disableFilter?: boolean;
+  disableSort?: boolean;
+  friends: Friend[];
+  hasMore: boolean;
+  onSearch: (query: string) => void;
+  onFilter: (type: FriendType) => void;
+  onSort: (type: string) => void;
+  onLoadNextPage: () => void;
+};
+
 export const FriendListComponent: React.FC<FriendListProps> = props => {
   const {
+    type,
     friends,
     user,
     hasMore,
@@ -54,8 +70,12 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     onSort,
     onLoadNextPage,
   } = props;
-  const style = useStyles();
+  const style = useStyles({type});
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const {openToasterSnack} = useToasterSnackHook();
+  const {friendList, removeFromFriendList} = useFriendList(friends, user);
 
   const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
@@ -64,20 +84,10 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentFriend, setCurrentFriend] = useState<null | FriendDetail>(null);
   const [tippedFriendForHistory, setTippedFriendForHistory] = useState<FriendDetail | null>(null);
-  const [sendTipOpened, setSendTipOpened] = useState(false);
-  const [friendList, setFriendList] = useState<FriendDetail[]>([]);
-  const [openRemoveFriend, setOpenRemoveFriend] = useState(false);
-  const [openBlockUser, setOpenBlockUser] = useState(false);
-  const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
-
-  const {openToasterSnack} = useToasterSnackHook();
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const list = useFriendList(friends, user);
-    setFriendList(list);
-  }, [friends, friends[0], user]);
+  const [isSendTipOpened, setSendTipOpened] = useState(false);
+  const [isRemoveFriendDialogOpen, setRemoveFriendDialogOpen] = useState(false);
+  const [isConfirmBlockUserDialogOpen, setConfirmBlockUserDialogOpen] = useState(false);
+  const [isTipSuccessDialogOpen, setTipSuccessDialogOpen] = useState(false);
 
   useEffect(() => {
     if (isTipSent) {
@@ -93,6 +103,18 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
 
   const handleCloseFriendSetting = () => {
     setAnchorEl(null);
+  };
+
+  const closeConfirmBlockUserDialog = () => {
+    setConfirmBlockUserDialogOpen(false);
+  };
+
+  const closeConfirmRemoveFriendDialog = () => {
+    setRemoveFriendDialogOpen(false);
+  };
+
+  const closeTipSuccessDialog = (): void => {
+    setTipSuccessDialogOpen(false);
   };
 
   const handleVisitProfile = () => {
@@ -119,7 +141,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     if (isTipSent && currentFriend) {
       setSendTipOpened(false);
       setTippedFriendForHistory(currentFriend);
-      setOpenSuccessPrompt(true);
+      setTipSuccessDialogOpen(true);
     } else {
       console.log('no user tipped');
     }
@@ -130,16 +152,13 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     setCurrentFriend(null);
   };
 
-  const handleCloseSuccessPrompt = (): void => {
-    setOpenSuccessPrompt(false);
-  };
-
   const handleUnfriend = () => {
     if (!currentFriend) {
       router.push('/404');
     } else {
-      setOpenRemoveFriend(true);
+      setRemoveFriendDialogOpen(true);
     }
+
     handleCloseFriendSetting();
   };
 
@@ -147,8 +166,9 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     if (!currentFriend) {
       router.push('/404');
     } else {
-      setOpenBlockUser(true);
+      setConfirmBlockUserDialogOpen(true);
     }
+
     handleCloseFriendSetting();
   };
 
@@ -156,33 +176,20 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     onFilter(selected as FriendType);
   };
 
-  const handleSearch = (query: string) => {
-    onSearch(query);
-  };
-
-  const closeConfirmRemoveFriend = () => {
-    setOpenRemoveFriend(false);
-  };
-
   const handleRemoveFriend = () => {
     if (!currentFriend) {
       router.push('/404');
     } else {
       const removedFriend = friends.find(friend => {
-        if (friend.requesteeId === currentFriend.id || friend.requestorId === currentFriend.id)
-          return true;
-        return false;
+        return friend.requesteeId === currentFriend.id || friend.requestorId === currentFriend.id;
       });
 
       if (!removedFriend) return;
 
-      dispatch(removedFriendList(removedFriend));
+      dispatch(removeFromFriend(removedFriend));
 
-      const newFriendList = friendList.filter(friend => friend.id !== currentFriend.id);
-
-      setFriendList(newFriendList);
-      closeConfirmRemoveFriend();
-
+      removeFromFriendList(currentFriend.id);
+      closeConfirmRemoveFriendDialog();
       openToasterSnack({
         message: `${currentFriend?.name} has been removed from your friend lists`,
         variant: 'success',
@@ -192,21 +199,14 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     }
   };
 
-  const closeConfirmBlockUser = () => {
-    setOpenBlockUser(false);
-  };
-
   const handleBlockUser = () => {
     if (!currentFriend) {
       router.push('/404');
     } else {
-      const newFriendList = friendList.filter(friend => friend.id !== currentFriend.id);
+      dispatch(blockFromFriend(currentFriend.id));
 
-      dispatch(blockedFriendList(currentFriend.id));
-
-      setFriendList(newFriendList);
-      closeConfirmBlockUser();
-
+      removeFromFriendList(currentFriend.id);
+      closeConfirmBlockUserDialog();
       openToasterSnack({
         message: 'User successfully blocked',
         variant: 'success',
@@ -214,10 +214,6 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
 
       setCurrentFriend(null);
     }
-  };
-
-  const handleSortChanged = (sort: string) => {
-    onSort(sort);
   };
 
   if (friends.length === 0) {
@@ -241,192 +237,114 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
             />
           </ShowIf>
           <ShowIf condition={!disableSort}>
-            <DropdownMenu title={'Sort by'} options={sortOptions} onChange={handleSortChanged} />
+            <DropdownMenu title={'Sort by'} options={sortOptions} onChange={onSort} />
           </ShowIf>
         </Grid>
       </ShowIf>
 
-      {router.pathname === '/profile/[id]' ? (
-        <div
-          style={{
-            background: 'white',
-            borderRadius: `20px 20px 0px 0px`,
-            padding: `24px 0px`,
-          }}>
-          <div className={style.p3}>
-            <SearchComponent onSubmit={handleSearch} placeholder={'Search friend'} />
-          </div>
-          <List>
-            <InfiniteScroll
-              scrollableTarget="scrollable-timeline"
-              dataLength={friendList.length}
-              hasMore={hasMore}
-              next={onLoadNextPage}
-              loader={<Loading />}>
-              {friendList.map(friend => (
-                <ListItem
-                  key={friend.id}
-                  classes={{root: background ? style.backgroundEven : ''}}
-                  className={style.option}
-                  alignItems="center">
-                  <ListItemAvatar>
-                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} passHref shallow>
-                      <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
-                        {acronym(friend.name)}
-                      </Avatar>
-                    </Link>
-                  </ListItemAvatar>
-                  <ListItemText>
-                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} shallow>
-                      <Typography className={style.name} component="span" color="textPrimary">
-                        {friend.name}
-                      </Typography>
-                    </Link>
-                    <ShowIf condition={!!friend.totalMutual}>
-                      <Typography className={style.friend} component="p" color="textSecondary">
-                        {friend.totalMutual} mutual friends
-                      </Typography>
-                    </ShowIf>
-                  </ListItemText>
-
-                  <div className="hidden-button">
-                    <IconButton
-                      aria-label="friend-setting"
-                      classes={{root: style.iconbutton}}
-                      color="primary"
-                      onClick={handleOpenFriendSetting(friend)}
-                      disableRipple={true}
-                      disableFocusRipple={true}
-                      disableTouchRipple>
-                      <SvgIcon
-                        component={DotsHorizontalIcon}
-                        classes={{root: style.icon}}
-                        fontSize="small"
-                      />
-                    </IconButton>
-                  </div>
-                </ListItem>
-              ))}
-            </InfiniteScroll>
-          </List>
+      <div className={style.root}>
+        <div className={style.search}>
+          <SearchComponent onSubmit={onSearch} placeholder={'Search friend'} />
         </div>
-      ) : (
-        <>
-          <div className={style.p3}>
-            <SearchComponent onSubmit={handleSearch} placeholder={'Search friend'} />
-          </div>
-          <List>
-            <InfiniteScroll
-              scrollableTarget="scrollable-timeline"
-              dataLength={friendList.length}
-              hasMore={hasMore}
-              next={onLoadNextPage}
-              loader={<Loading />}>
-              {friendList.map(friend => (
-                <ListItem
-                  key={friend.id}
-                  classes={{root: background ? style.backgroundEven : ''}}
-                  className={style.option}
-                  alignItems="center">
-                  <ListItemAvatar>
-                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} passHref>
-                      <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
-                        {acronym(friend.name)}
-                      </Avatar>
-                    </Link>
-                  </ListItemAvatar>
-                  <ListItemText>
-                    <Link href={'/profile/[id]'} as={`/profile/${friend.id}`}>
-                      <Typography className={style.name} component="span" color="textPrimary">
-                        {friend.name}
-                      </Typography>
-                    </Link>
-                    <ShowIf condition={!!friend.totalMutual}>
-                      <Typography className={style.friend} component="p" color="textSecondary">
-                        {friend.totalMutual} mutual friends
-                      </Typography>
-                    </ShowIf>
-                  </ListItemText>
+        <List>
+          <InfiniteScroll
+            scrollableTarget="scrollable-timeline"
+            dataLength={friendList.length}
+            hasMore={hasMore}
+            next={onLoadNextPage}
+            loader={<Loading />}>
+            {friendList.map(friend => (
+              <ListItem
+                key={friend.id}
+                classes={{root: background ? style.backgroundEven : ''}}
+                className={style.option}
+                alignItems="center">
+                <ListItemAvatar>
+                  <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} passHref>
+                    <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
+                      {acronym(friend.name)}
+                    </Avatar>
+                  </Link>
+                </ListItemAvatar>
+                <ListItemText>
+                  <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} passHref>
+                    <Typography className={style.name} component="span" color="textPrimary">
+                      {friend.name}
+                    </Typography>
+                  </Link>
+                  <ShowIf condition={!!friend.totalMutual}>
+                    <Typography className={style.friend} component="p" color="textSecondary">
+                      {friend.totalMutual} mutual friends
+                    </Typography>
+                  </ShowIf>
+                </ListItemText>
 
-                  <div className="hidden-button">
-                    <IconButton
-                      aria-label="friend-setting"
-                      classes={{root: style.iconbutton}}
-                      color="primary"
-                      onClick={handleOpenFriendSetting(friend)}
-                      disableRipple={true}
-                      disableFocusRipple={true}
-                      disableTouchRipple>
-                      <SvgIcon
-                        component={DotsHorizontalIcon}
-                        classes={{root: style.icon}}
-                        fontSize="small"
-                      />
-                    </IconButton>
-                  </div>
-                </ListItem>
-              ))}
-            </InfiniteScroll>
-          </List>
-        </>
-      )}
+                <div className="hidden-button">
+                  <IconButton
+                    aria-label="friend-setting"
+                    classes={{root: style.iconbutton}}
+                    color="primary"
+                    onClick={handleOpenFriendSetting(friend)}
+                    disableRipple={true}
+                    disableFocusRipple={true}
+                    disableTouchRipple>
+                    <SvgIcon
+                      component={DotsHorizontalIcon}
+                      classes={{root: style.icon}}
+                      fontSize="small"
+                    />
+                  </IconButton>
+                </div>
+              </ListItem>
+            ))}
+          </InfiniteScroll>
+        </List>
+      </div>
 
       <Modal
         gutter="none"
-        open={sendTipOpened}
+        open={isSendTipOpened}
         onClose={closeSendTip}
         title="Send Tip"
         subtitle="Find this user insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
 
-      {currentFriend && currentFriend.username === 'myriad_official' ? (
-        <Menu
-          id={currentFriend.id}
-          anchorEl={anchorEl}
-          style={{width: 170}}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleCloseFriendSetting}>
-          <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
-          <MenuItem disabled={balanceDetails.length === 0} onClick={handleSendTip}>
-            Send direct tip
+      <Menu
+        id={currentFriend?.id ?? 'friend-id'}
+        anchorEl={anchorEl}
+        style={{width: 170}}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleCloseFriendSetting}>
+        <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
+        <MenuItem disabled={balanceDetails.length === 0} onClick={handleSendTip}>
+          Send direct tip
+        </MenuItem>
+        <ShowIf
+          condition={
+            currentUser?.id === user?.id &&
+            (!currentFriend || currentFriend.username !== 'myriad_official')
+          }>
+          <MenuItem className={style.danger} onClick={handleUnfriend}>
+            Unfriend
           </MenuItem>
-        </Menu>
-      ) : (
-        <Menu
-          id={currentFriend?.id ?? 'friend-id'}
-          anchorEl={anchorEl}
-          style={{width: 170}}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleCloseFriendSetting}>
-          <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
-          <MenuItem disabled={balanceDetails.length === 0} onClick={handleSendTip}>
-            Send direct tip
-          </MenuItem>
-          <ShowIf condition={currentUser?.id === user?.id}>
-            <MenuItem className={style.danger} onClick={handleUnfriend}>
-              Unfriend
-            </MenuItem>
 
-            <MenuItem className={style.danger} onClick={handleBlock}>
-              Block this person
-            </MenuItem>
-          </ShowIf>
-        </Menu>
-      )}
+          <MenuItem className={style.danger} onClick={handleBlock}>
+            Block this person
+          </MenuItem>
+        </ShowIf>
+      </Menu>
 
       <PromptComponent
-        onCancel={closeConfirmRemoveFriend}
-        open={openRemoveFriend}
+        onCancel={closeConfirmRemoveFriendDialog}
+        open={isRemoveFriendDialogOpen}
         icon="danger"
         title={`Unfriend ${currentFriend ? currentFriend.name : 'Unknown'}?`}
         subtitle="You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?">
-        <div className={`${style.flexCenter}`}>
+        <Grid container justifyContent="space-evenly">
           <Button
-            onClick={closeConfirmRemoveFriend}
-            className={style.m1}
+            onClick={closeConfirmRemoveFriendDialog}
             size="small"
             variant="outlined"
             color="secondary">
@@ -439,19 +357,18 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
             variant="contained">
             Unfriend Now
           </Button>
-        </div>
+        </Grid>
       </PromptComponent>
 
       <PromptComponent
-        onCancel={closeConfirmBlockUser}
-        open={openBlockUser}
+        onCancel={closeConfirmBlockUserDialog}
+        open={isConfirmBlockUserDialogOpen}
         icon="danger"
         title="Block User?"
         subtitle="You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?">
-        <div className={`${style.flexCenter}`}>
+        <Grid justifyContent="space-evenly">
           <Button
-            onClick={closeConfirmBlockUser}
-            className={style.m1}
+            onClick={closeConfirmBlockUserDialog}
             size="small"
             variant="outlined"
             color="secondary">
@@ -464,13 +381,13 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
             variant="contained">
             Block Now
           </Button>
-        </div>
+        </Grid>
       </PromptComponent>
 
       <PromptComponent
         icon={'success'}
-        open={openSuccessPrompt}
-        onCancel={handleCloseSuccessPrompt}
+        open={isTipSuccessDialogOpen}
+        onCancel={closeTipSuccessDialog}
         title={'Success'}
         subtitle={
           <Typography component="div">
@@ -486,11 +403,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
             display: 'flex',
             justifyContent: 'center',
           }}>
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            onClick={handleCloseSuccessPrompt}>
+          <Button size="small" variant="contained" color="primary" onClick={closeTipSuccessDialog}>
             Return
           </Button>
         </div>

@@ -1,27 +1,18 @@
 import {alpha, createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+type FriendStyleProps = {
+  type?: 'contained' | 'basic';
+};
+
+export const useStyles = makeStyles<Theme, FriendStyleProps>(theme =>
   createStyles({
     root: {
-      width: 644,
-      borderRadius: 20,
-      padding: 0,
-
-      [theme.breakpoints.down('md')]: {
-        minWidth: 590,
-      },
+      background: 'white',
+      padding: props => (props.type === 'contained' ? theme.spacing(3, 0) : theme.spacing(0)),
+      borderRadius: props => (props.type === 'contained' ? '20px 20px 0px 0px' : 'unset'),
     },
-    flex: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    title: {
-      padding: '24px',
-      fontSize: '18px',
-      fontWeight: 700,
-      lineHeight: '23px',
-      letterSpacing: '0em',
+    search: {
+      padding: '0px 24px',
     },
     list: {
       padding: '20px',
@@ -107,16 +98,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     danger: {
       color: theme.palette.error.main,
-    },
-    flexCenter: {
-      display: 'flex',
-      justifyContent: 'center',
-    },
-    m1: {
-      marginRight: theme.spacing(1.5),
-    },
-    p3: {
-      padding: '0px 24px',
     },
   }),
 );

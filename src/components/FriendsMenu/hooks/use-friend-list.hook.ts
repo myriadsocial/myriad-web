@@ -1,3 +1,5 @@
+import {useEffect, useState} from 'react';
+
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 
@@ -9,19 +11,41 @@ export type FriendDetail = {
   totalMutual?: number;
 };
 
-export const useFriendList = (friends: Friend[], user?: User): FriendDetail[] => {
-  if (!user) return [];
+type FriendListHook = {
+  friendList: FriendDetail[];
+  removeFromFriendList: (userId: string) => void;
+};
 
-  return friends.reduce(function (list: FriendDetail[], friend) {
-    if (friend.requestorId === user.id && friend.requestee) {
-      list.push({
-        id: friend.requesteeId,
-        avatar: friend.requestee.profilePictureURL,
-        name: friend.requestee.name,
-        username: friend.requestee.username ?? friend.requestee.name.toLowerCase(),
-        totalMutual: friend.totalMutual ?? 0,
-      });
-    }
-    return list;
-  }, []);
+export const useFriendList = (friends: Friend[], user?: User): FriendListHook => {
+  const [friendList, setFriendList] = useState<FriendDetail[]>([]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const list = friends.reduce(function (list: FriendDetail[], friend) {
+      if (friend.requestorId === user.id && friend.requestee) {
+        list.push({
+          id: friend.requesteeId,
+          avatar: friend.requestee.profilePictureURL,
+          name: friend.requestee.name,
+          username: friend.requestee.username ?? friend.requestee.name.toLowerCase(),
+          totalMutual: friend.totalMutual ?? 0,
+        });
+      }
+      return list;
+    }, []);
+
+    setFriendList(list);
+  }, [friends, user]);
+
+  const removeFromFriendList = (userId: string) => {
+    const newFriendList = friendList.filter(friend => friend.id !== userId);
+
+    setFriendList(newFriendList);
+  };
+
+  return {
+    friendList,
+    removeFromFriendList,
+  };
 };

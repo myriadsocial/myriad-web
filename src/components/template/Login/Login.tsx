@@ -9,6 +9,7 @@ import {useStyles} from './Login.styles';
 import Purple from 'src/images/Bank_note_Isometric_1.svg';
 import Yellow from 'src/images/Conversation__Isometric_1.svg';
 import LogoImage from 'src/images/myriad-logo-black.svg';
+import i18n from 'src/locale';
 
 type LoginProps = {
   children: React.ReactNode;
@@ -27,7 +28,8 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
             </div>
 
             <Typography variant="h5" component="h1" className={style.title}>
-              Social Media with <span className={style.titlePrimary}>no boundaries</span>
+              {i18n.t('Login.Layout.Title_left')}{' '}
+              <span className={style.titlePrimary}>{i18n.t('Login.Layout.Title_right')}</span>
             </Typography>
 
             {children}
@@ -53,9 +55,9 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
                         className={style.caption}
                         component="span"
                         color="primary">
-                        Limitless
+                        {i18n.t('Login.Layout.Carousel_Title_1_left')}
                       </Typography>{' '}
-                      Conversation
+                      {i18n.t('Login.Layout.Carousel_Title_1_right')}
                     </Typography>
                   </div>
                   <Typography
@@ -63,14 +65,14 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
                     className={style.subtitle}
                     component="p"
                     color="textPrimary">
-                    No limitations on what you say in Myriad
+                    {i18n.t('Login.Layout.Carousel_Subtitle_1a')}
                   </Typography>
                   <Typography
                     variant="h4"
                     className={style.subtitle}
                     component="p"
                     color="textPrimary">
-                    Freedom of speech is our vision
+                    {i18n.t('Login.Layout.Carousel_Subtitle_1b')}
                   </Typography>
                 </div>
                 <div>
@@ -85,9 +87,9 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
                         className={style.caption}
                         component="span"
                         color="primary">
-                        Monetize
+                        {i18n.t('Login.Layout.Carousel_Title_1_left')}
                       </Typography>{' '}
-                      your Idea
+                      {i18n.t('Login.Layout.Carousel_Title_1_right')}
                     </Typography>
                   </div>
                   <Typography
@@ -95,7 +97,7 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
                     className={style.subtitle}
                     component="p"
                     color="textPrimary">
-                    Speak what's inside your mind and get a chance to earn coins
+                    {i18n.t('Login.Layout.Carousel_Subtitle_2')}
                   </Typography>
                 </div>
               </Carousel>

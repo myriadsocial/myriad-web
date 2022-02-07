@@ -33,7 +33,7 @@ type FriendRequestProps = {
 
 export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
   const {user, requests, onAcceptRequest, onDeclineRequest} = props;
-  const style = useStyles();
+  const style = useStyles({});
 
   const list = useFriendRequestList(requests, user);
 
@@ -80,7 +80,7 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
               </Button>
               <Button
                 onClick={() => onDeclineRequest(request.friend)}
-                className={`${style.button}`}
+                className={style.button}
                 color="secondary"
                 variant="text"
                 startIcon={

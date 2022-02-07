@@ -18,6 +18,7 @@ import Banner from 'src/components/atoms/BannerStatus/BannerStatus';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -85,7 +86,7 @@ const Home: React.FC = () => {
   return (
     <DefaultLayout isOnProfilePage={false}>
       <Head>
-        <title>{publicRuntimeConfig.appName} - Home</title>
+        <title>{i18n.t('Home.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
 
       <Banner />
@@ -93,16 +94,18 @@ const Home: React.FC = () => {
       <RichTextContainer />
       <TimelineContainer />
       <PromptComponent
-        title={'You have been banned'}
+        title={i18n.t('Home.Prompt_Banned.Title')}
         subtitle={
           <Typography component="span">
-            <Typography component="span">{`This account has been banned due to break our community rule. \n Please `}</Typography>
+            <Typography component="span">{i18n.t('Home.Prompt_Banned.Subtitle_1')}</Typography>
             <Typography
               component="span"
               style={{cursor: 'pointer'}}
               color="primary"
-              onClick={openContactUs}>{`contact us `}</Typography>
-            <Typography component="span">{`if you think this was a mistake`}</Typography>
+              onClick={openContactUs}>
+              {i18n.t('Home.Prompt_Banned.Subtitle_2')}
+            </Typography>
+            <Typography component="span">{i18n.t('Home.Prompt_Banned.Subtitle_3')}</Typography>
           </Typography>
         }
         open={dialogBanned.open}
@@ -126,7 +129,7 @@ const Home: React.FC = () => {
               handleSignOut();
               openContactUs();
             }}>
-            OK
+            {i18n.t('General.OK')}
           </Button>
         </div>
       </PromptComponent>

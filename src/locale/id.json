@@ -1,4 +1,92 @@
 {
+  "General": {
+    "Close": "Tutup",
+    "OK": "OK",
+    "Back": "Kembali",
+    "Next": "Selanjutnya"
+  },
+  "Login": {
+    "Description": "Platform sosial yang sepenuhnya berada di bawah kendali Anda. Tetap anonim, cari topik Anda sendiri, pilih antarmuka Anda dan kendalikan apa yang Anda lihat.",
+    "Alert": {
+      "Title": "Login gagal",
+      "Message": "Terjadi kesalahan ketika melakukan login."
+    },
+    "Layout": {
+      "Title_left": "Media Sosial dengan",
+      "Title_right": "tanpa batasan",
+      "Carousel_Title_1_left": "Percakapan",
+      "Carousel_Title_1_right": "yang tak terbatas",
+      "Carousel_Subtitle_1a": "Tidak ada batasan apa yang kamu ucapkan di Myriad",
+      "Carousel_Subtitle_1b": "Kebebasan berpendapat adalah visi kami",
+      "Carousel_Title_2_left": "Dapatkan Uang",
+      "Carousel_Title_2_right": "dari idemu",
+      "Carousel_Subtitle_2": "Bicarakan apa yang ada dalam pikiranmu dan dapatkan kesempatan untuk mendapatkan koin",
+      "Text_Try_1": "Atau coba gunakan ",
+      "Text_Try_2": "dahulu",
+      "Footer_Text_1": "Untuk menggunakan Myriad, kamu harus menggunakan To access Myriad, you need to use",
+      "Footer_Text_2": ", pada aplikasi peramban kamu",
+      "Btn_Signin": "Sign in",
+      "Btn_Demo": "demo"
+    },
+    "Options": {
+      "Network": "Pilih Jaringan",
+      "Wallet": "Pilih Wallet",
+      "Text_Terms_1": "Saya sudah membaca, dan menyetujui",
+      "Text_Terms_2": "Persyaratan Pelayanan",
+      "Text_Terms_3": "dan",
+      "Text_Terms_4": "Kebijakan Privasi",
+      "Connect": "Hubungkan",
+      "Prompt_Extension": {
+        "Title": "Extensi tidak ditemukan",
+        "Subtitle_1": "Harap pastikan bahwa kamu telah memasang",
+        "Subtitle_2": "pada aplikasi perambanmu"
+      },
+      "Prompt_Account": {
+        "Title": "Akun Tidak Ditemukan",
+        "Subtitle": "Tidak ada akun di wallet yang anda pilih."
+      }
+    },
+    "Profile": {
+      "Helper_Text_Name": "Kamu bisa menggunakan {{min_length}} karakter atau lebih.",
+      "Helper_Text_Username": "Kamu bisa menggunakan {{min_length}} karakter atau lebih.",
+      "Helper_Validate_Name_Min": "Nama tampilan harus disediakan dan mengandung setidaknya {{min_length}} karakter",
+      "Helper_Validate_Name_Char": "Nama tampilan tidak boleh berisi karakter yang dilarang.",
+      "Helper_Validate_Username_Min": "Nama pengguna harus disediakan dan mengandung setidaknya {{min_length}} karakter",
+      "Helper_Validate_Username_Char": "Nama pengguna tidak boleh berisi karakter yang dilarang.",
+      "Helper_Validate_Username_Taken": "Nama pengguna sudah terpakai",
+      "Placeholder_Display_Name": "Masukkan nama tampilan",
+      "Placeholder_Username": "Masukkan nama pengguna",
+      "Btn_Change_Wallet": "Ubah Wallet",
+      "Btn_Register": "Daftar",
+      "Prompt": {
+        "Title": "Apa kamu yakin?",
+        "Subtitle": "Kamu hanya dapat mengatur nama pengguna sekali saja",
+        "Btn_No": "Tidak, biarkan saya pikir lagi",
+        "Btn_Yes": "Ya, Lanjutkan"
+      }
+    }
+  },
+  "Home": {
+    "Title": "{{appname}} - Beranda",
+    "Prompt_Banned": {
+      "Title": "Anda telah diblokir",
+      "Subtitle_1": "Akun ini telah diblokir karena telah menyalahi aturan komunitas. \n Silahkan ",
+      "Subtitle_2": "hubungi kami ",
+      "Subtitle_3": "jika kamu merasa ini adalah kesalahan"
+    },
+    "Search": {
+      "Placeholder": "Cari orang, topik, atau pengalaman di Myriad"
+    },
+    "RichText": {
+      "Placeholder": "Apa yang ada dalam pikiranmu?",
+      "Prompt_Import": {
+        "Title": "Impor Gagal!",
+        "Subtitle_Deleted": "Kamu berusaha mengimpor postingan yang telah dihapus sebelumnya \n oleh admin Myriad",
+        "Subtitle_Private": "Kamu tidak bisa mengimpor postingan ini, \n karena akun ini adalah private",
+        "Subtitle_Duplicate": "Maaf, kamu tidak bisa mengimpot postingan ini, \n karena postingan ini telah diimpor sebelumnya"
+      }
+    }
+  },
   "Setting": {
     "List_Menu": {
       "Account_Title": "Akun",

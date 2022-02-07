@@ -11,6 +11,7 @@ import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {debounce} from 'lodash';
 import {useUpload} from 'src/hooks/use-upload.hook';
 import {Post} from 'src/interfaces/post';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchFriend, searchFriend} from 'src/reducers/friend/actions';
 import {FriendState} from 'src/reducers/friend/reducer';
@@ -33,7 +34,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const {progress, uploadImage, uploadVideo} = useUpload();
   const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const mentionable = useFriendList(friends, user);
+  const {friendList: mentionable} = useFriendList(friends, user);
   const [dialogFailedImport, setDialogFailedImport] = useState({
     open: false,
     message: '',
@@ -83,19 +84,17 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
           if (errorCode === 404) {
             setDialogFailedImport({
               open: true,
-              message:
-                'You are trying to import a post formerly deleted \n by a Myriad administrator',
+              message: i18n.t('Home.RichText.Prompt_Import.Subtitle_Deleted'),
             });
           } else if (errorCode === 422) {
             setDialogFailedImport({
               open: true,
-              message: 'You can not import this post, \n because the account is private',
+              message: i18n.t('Home.RichText.Prompt_Import.Subtitle_Private'),
             });
           } else if (errorCode === 409) {
             setDialogFailedImport({
               open: true,
-              message:
-                'Sorry, you can not import this post, \n because this post has been imported',
+              message: i18n.t('Home.RichText.Prompt_Import.Subtitle_Duplicate'),
             });
           }
         }),
@@ -119,7 +118,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
         onUploadFile={handleFileUpload}
       />
       <PromptComponent
-        title={'Import Failed!'}
+        title={i18n.t('Home.RichText.Prompt_Import.Title')}
         subtitle={dialogFailedImport.message}
         open={dialogFailedImport.open}
         icon="warning"
@@ -134,7 +133,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
             variant="contained"
             color="primary"
             onClick={() => setDialogFailedImport({...dialogFailedImport, open: false})}>
-            Okay
+            {i18n.t('General.OK')}
           </Button>
         </div>
       </PromptComponent>

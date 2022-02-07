@@ -45,7 +45,12 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
         id: 'friend',
         title: `Friends`,
         component: (
-          <FriendListContainer user={profileUser} disableFilter={isOwnProfile} isProfile />
+          <FriendListContainer
+            type="contained"
+            user={profileUser}
+            disableFilter={isOwnProfile}
+            isProfile
+          />
         ),
       },
       {
