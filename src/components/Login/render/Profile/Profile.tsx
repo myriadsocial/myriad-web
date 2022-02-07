@@ -10,6 +10,7 @@ import {useStyles} from './Profile.style';
 
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {toHexPublicKey} from 'src/lib/crypto';
+import i18n from 'src/locale';
 
 type ProfileProps = {
   account: InjectedAccountWithMeta | null;
@@ -20,8 +21,12 @@ const USERNAME_MAX_LENGTH = 16;
 const USERNAME_MIN_LENGTH = 3;
 const DISPLAY_NAME_MAX_LENGTH = 22;
 const DISPLAY_NAME_MIN_LENGTH = 2;
-const NAME_HELPER_TEXT = `You can use ${DISPLAY_NAME_MIN_LENGTH} or more characters.`;
-const USERNAME_HELPER_TEXT = `You can use ${USERNAME_MIN_LENGTH} or more characters.`;
+const NAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Name', {
+  min_length: DISPLAY_NAME_MIN_LENGTH,
+});
+const USERNAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Username', {
+  min_length: USERNAME_MIN_LENGTH,
+});
 
 export const Profile: React.FC<ProfileProps> = props => {
   const styles = useStyles();
@@ -87,7 +92,9 @@ export const Profile: React.FC<ProfileProps> = props => {
         name: {
           ...prevSetting.name,
           error: true,
-          helper: `Display name must be provided and contain at least ${DISPLAY_NAME_MIN_LENGTH} character`,
+          helper: i18n.t('Login.Profile.Helper_Validate_Name_Min', {
+            min_length: DISPLAY_NAME_MIN_LENGTH,
+          }),
         },
       }));
     } else {
@@ -101,7 +108,7 @@ export const Profile: React.FC<ProfileProps> = props => {
           name: {
             ...prevSetting.name,
             error: true,
-            helper: 'Display name cannot contain disallowed character.',
+            helper: i18n.t('Login.Profile.Helper_Validate_Name_Char'),
           },
         }));
       } else {
@@ -132,7 +139,9 @@ export const Profile: React.FC<ProfileProps> = props => {
         username: {
           ...prevSetting.username,
           error,
-          helper: `Username must be provided and contain at least ${USERNAME_MIN_LENGTH} character`,
+          helper: i18n.t('Login.Profile.Helper_Validate_Username_Char', {
+            min_length: USERNAME_MIN_LENGTH,
+          }),
         },
       }));
     } else {
@@ -147,7 +156,9 @@ export const Profile: React.FC<ProfileProps> = props => {
           username: {
             ...prevSetting.username,
             error: true,
-            helper: 'Display name cannot contain disallowed character.',
+            helper: i18n.t('Login.Profile.Helper_Validate_Username_Char', {
+              min_length: USERNAME_MIN_LENGTH,
+            }),
           },
         }));
       } else {
@@ -190,7 +201,7 @@ export const Profile: React.FC<ProfileProps> = props => {
             username: {
               ...prevProfile.username,
               error: true,
-              helper: 'Username already taken',
+              helper: i18n.t('Login.Profile.Helper_Validate_Username_Taken'),
             },
           }));
         }
@@ -218,7 +229,7 @@ export const Profile: React.FC<ProfileProps> = props => {
       <div className={styles.box}>
         <TextField
           id="name"
-          placeholder="Insert display name"
+          placeholder={i18n.t('Login.Profile.Placeholder_Display_Name')}
           helperText={profile.name.helper}
           error={profile.name.error}
           fullWidth
@@ -237,7 +248,7 @@ export const Profile: React.FC<ProfileProps> = props => {
       <div className={styles.box}>
         <TextField
           id="username"
-          placeholder="username"
+          placeholder={i18n.t('Login.Profile.Placeholder_Username')}
           helperText={profile.username.helper}
           error={profile.username.error}
           fullWidth
@@ -255,7 +266,7 @@ export const Profile: React.FC<ProfileProps> = props => {
 
       <Grid container className={styles.action} justifyContent="space-between">
         <Button onClick={handleChangeWallet} variant="outlined" color="secondary" size="small">
-          Change Wallet
+          {i18n.t('Login.Profile.Btn_Change_Wallet')}
         </Button>
 
         <Button
@@ -264,13 +275,13 @@ export const Profile: React.FC<ProfileProps> = props => {
           variant="contained"
           color="primary"
           size="small">
-          Register
+          {i18n.t('Login.Profile.Btn_Register')}
         </Button>
       </Grid>
 
       <PromptComponent
-        title={'Are you sure?'}
-        subtitle={<Typography>You can only set your username once.</Typography>}
+        title={i18n.t('Login.Profile.Prompt.Title')}
+        subtitle={<Typography>{i18n.t('Login.Profile.Prompt.Subtitle')}.</Typography>}
         open={confirmation}
         icon="warning"
         onCancel={toggleConfirmation}>
@@ -285,10 +296,10 @@ export const Profile: React.FC<ProfileProps> = props => {
             variant="outlined"
             color="secondary"
             onClick={toggleConfirmation}>
-            No, let me rethink
+            {i18n.t('Login.Profile.Prompt.Btn_No')}
           </Button>
           <Button size="small" variant="contained" color="primary" onClick={handleSubmit}>
-            Yes, Let’s go
+            {i18n.t('Login.Profile.Prompt.Btn_Yes')}
           </Button>
         </div>
       </PromptComponent>

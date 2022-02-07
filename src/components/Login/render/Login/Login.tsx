@@ -10,6 +10,7 @@ import {useStyles} from './Login.style';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {toHexPublicKey} from 'src/lib/crypto';
+import i18n from 'src/locale';
 
 type LoginProps = {
   anonymousLogin: () => void;
@@ -54,21 +55,21 @@ export const Login: React.FC<LoginProps> = props => {
   return (
     <div className={styles.root}>
       <Button className={styles.button} color="default" variant="contained" onClick={chooseWallet}>
-        Sign in
+        {i18n.t('Login.Layout.Btn_Signin')}
       </Button>
       <Typography className={styles.span} component="span" variant="h4" color="textPrimary">
-        Or try our&nbsp;
+        {i18n.t('Login.Layout.Text_Try_1')}&nbsp;
         <Button className={styles.link} onClick={anonymousLogin} component="span">
-          demo
+          {i18n.t('Login.Layout.Btn_Demo')}
         </Button>
-        &nbsp;first&nbsp;
+        &nbsp;{i18n.t('Login.Layout.Text_Try_2')}&nbsp;
         <span role="img" aria-label="emoticon-peace">
           ✌️
         </span>
       </Typography>
 
       <Typography component="span" variant="h5">
-        To access Myriad, you need to use{' '}
+        {i18n.t('Login.Layout.Footer_Text_1')}{' '}
         <a
           href={'https://polkadot.js.org/extension/'}
           className={styles.polkadotLink}
@@ -76,7 +77,7 @@ export const Login: React.FC<LoginProps> = props => {
           rel="noreferrer">
           Polkadot.js
         </a>
-        , on your browser{' '}
+        {i18n.t('Login.Layout.Footer_Text_2')}{' '}
         <span role="img" aria-label="emoticon-computer">
           💻
         </span>
