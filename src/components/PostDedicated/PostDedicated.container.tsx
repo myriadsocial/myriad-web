@@ -22,8 +22,10 @@ import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
 import {removeImporter} from 'src/reducers/importers/actions';
+import {setTippedContent} from 'src/reducers/timeline/actions';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
+import {setTippedUser, setTippedUserId} from 'src/reducers/wallet/actions';
 import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
@@ -48,12 +50,15 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
   const {openToasterSnack} = useToasterSnackHook();
 
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
-  const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | null>(null);
+  const [tippedComment, setTippedComment] = useState<Comment | null>(null);
+  const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | Comment | null>(
+    null,
+  );
   const [removing, setRemoving] = useState(false);
   const [postToRemove, setPostToRemove] = useState<Post | null>(null);
   const [reported, setReported] = useState<Post | null>(null);
   const [importedPost, setImportedPost] = useState<Post | null>(null);
-  const sendTipOpened = Boolean(tippedPost);
+  const sendTipOpened = Boolean(tippedPost) || Boolean(tippedComment);
 
   useEffect(() => {
     if (isTipSent) {
@@ -70,6 +75,16 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
     if (reference && 'platform' in reference) {
       setTippedPost(reference);
       getTippedUserId(reference.id);
+    }
+
+    if (reference && 'section' in reference) {
+      setTippedComment(reference);
+
+      dispatch(setTippedUserId(reference.userId));
+      dispatch(setTippedUser(reference.user.name, reference.user.profilePictureURL ?? ''));
+
+      const contentType = 'comment';
+      dispatch(setTippedContent(contentType, reference.id));
     }
   };
 
@@ -112,6 +127,9 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
     if (isTipSent && tippedPost) {
       setOpenSuccessPrompt(true);
       setTippedContentForHistory(tippedPost);
+    } else if (isTipSent && tippedComment) {
+      setOpenSuccessPrompt(true);
+      setTippedContentForHistory(tippedComment);
     } else {
       console.log('no post tipped');
     }
@@ -119,6 +137,7 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
     dispatch(setIsTipSent(false));
 
     setTippedPost(null);
+    setTippedComment(null);
   };
 
   const closeReportPost = () => {
@@ -201,11 +220,18 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
         subtitle={
           <Typography component="div">
             Tip to{' '}
-            <Box fontWeight={400} display="inline">
-              {tippedContentForHistory?.platform === 'myriad'
-                ? tippedContentForHistory?.user.name
-                : tippedContentForHistory?.people?.name ?? 'Unknown Myrian'}
-            </Box>{' '}
+            {tippedContentForHistory &&
+              ('platform' in tippedContentForHistory ? (
+                <Box fontWeight={400} display="inline">
+                  {tippedContentForHistory?.platform === 'myriad'
+                    ? tippedContentForHistory?.user.name
+                    : tippedContentForHistory?.people?.name ?? 'Unknown Myrian'}
+                </Box>
+              ) : (
+                <Box fontWeight={400} display="inline">
+                  {tippedContentForHistory.user.name ?? 'Unknown Myrian'}
+                </Box>
+              ))}{' '}
             sent successfully
           </Typography>
         }>
