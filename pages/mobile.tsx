@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import Logo from 'src/images/Myriad_Full_Logo_Color_1-01_1.svg';
+import i18n from 'src/locale';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,21 +24,26 @@ const useStyles = makeStyles((theme: Theme) =>
       borderBottom: '40px solid #FFC857',
     },
     logo: {
-      marginBottom: 86,
+      marginBottom: theme.spacing(6),
     },
     title: {
       lineHeight: '22.5px',
-      marginBottom: 12,
+      marginBottom: theme.spacing(1),
       fontWeight: 700,
       fontSize: 18,
     },
     subtitle: {
       lineHeight: '20px',
       fontSize: 12,
-      marginBottom: 60,
+    },
+    mb4: {
+      marginBottom: theme.spacing(4),
+    },
+    mb2: {
+      marginBottom: theme.spacing(2),
     },
     polkadot: {
-      color: 'rgb(255, 140, 0)',
+      color: theme.palette.primary.main,
     },
     button: {},
   }),
@@ -53,24 +59,20 @@ const Mobile: React.FC = () => {
           <Logo />
         </Grid>
         <Grid item xs={12}>
-          <Typography className={style.title}>We are truly sorry</Typography>
-          <Typography className={style.subtitle}>
-            Signing in mobile is currently not available
+          <Typography className={style.title}>{i18n.t('Mobile.title')}</Typography>
+          <Typography className={`${style.subtitle} ${style.mb4}`}>
+            {i18n.t('Mobile.subtitle')}
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <Typography className={style.subtitle}>
-            To access Myriad, you need to use desktop browser and install&nbsp;
+          <Typography className={`${style.subtitle} ${style.mb2}`}>
+            {i18n.t('Mobile.subtitle_2')}&nbsp;
             <Link
               href="https://polkadot.js.org/extension"
               target="_blank"
               className={style.polkadot}>
               Polkadot.js
             </Link>
-            &nbsp;
-            <span role="img" aria-label="desktop">
-              💻
-            </span>
           </Typography>
         </Grid>
 
@@ -80,7 +82,7 @@ const Mobile: React.FC = () => {
             className={style.button}
             variant="contained"
             color="primary">
-            Visit Myriad Social
+            {i18n.t('Mobile.button_label')}
           </Button>
         </Grid>
       </Grid>

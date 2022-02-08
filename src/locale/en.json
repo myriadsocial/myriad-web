@@ -5,6 +5,12 @@
     "Back": "Back",
     "Next": "Next"
   },
+  "Mobile": {
+    "title": "We are trully sorry",
+    "subtitle": "Sign in on mobile is not available yet",
+    "subtitle_2": "To access Myriad, you need to view in dekstop mode and install",
+    "button_label": "Visit Myriad Social"
+  },
   "Login": {
     "Description": "A social platform that’s entirely under your control. Remain anonymous, look for your own topics, choose your interface and control what you see.",
     "Alert": {
@@ -25,6 +31,7 @@
       "Text_Try_2": "first",
       "Footer_Text_1": "To access Myriad, you need to use",
       "Footer_Text_2": ", on your browser",
+      "Footer_Text_3": "Sign in on mobile is not available",
       "Btn_Signin": "Sign in",
       "Btn_Demo": "demo"
     },

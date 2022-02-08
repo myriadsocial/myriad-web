@@ -82,6 +82,9 @@ export const Login: React.FC<LoginProps> = props => {
           💻
         </span>
       </Typography>
+      <Typography component="span" variant="h5">
+        {i18n.t('Login.Layout.Footer_Text_3')}
+      </Typography>
     </div>
   );
 };
