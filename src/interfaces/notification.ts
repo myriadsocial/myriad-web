@@ -9,6 +9,7 @@ export enum NotificationType {
   POST_VOTE = 'post_vote',
   COMMENT_VOTE = 'comment_vote',
   POST_MENTION = 'post_mention',
+  COMMENT_MENTION = 'comment_mention',
   USER_TIPS = 'user_tips',
   POST_TIPS = 'post_tips',
   COMMENT_TIPS = 'comment_tips',
