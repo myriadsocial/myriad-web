@@ -47,7 +47,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     owner: profile?.id,
   });
 
-  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
+  const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
   const [tippedUser, setTippedUser] = useState<User | null>(null);
   const [tippedUserForHistory, setTippedUserForHistory] = useState<User | null>(null);
   const [openSuccessPrompt, setOpenSuccessPrompt] = React.useState(false);
@@ -198,6 +198,15 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
             display: 'flex',
             justifyContent: 'center',
           }}>
+          <a
+            target="_blank"
+            style={{textDecoration: 'none'}}
+            href={explorerURL ?? 'https://myriad.social'}
+            rel="noopener noreferrer">
+            <Button style={{marginRight: '12px'}} size="small" variant="outlined" color="secondary">
+              Transaction details
+            </Button>
+          </a>
           <Button
             size="small"
             variant="contained"

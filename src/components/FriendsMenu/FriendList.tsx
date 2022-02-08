@@ -77,7 +77,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   const {openToasterSnack} = useToasterSnackHook();
   const {friendList, removeFromFriendList} = useFriendList(friends, user);
 
-  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
+  const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
   const {user: currentUser} = useSelector<RootState, UserState>(state => state.userState);
 
@@ -403,6 +403,15 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
             display: 'flex',
             justifyContent: 'center',
           }}>
+          <a
+            target="_blank"
+            style={{textDecoration: 'none'}}
+            href={explorerURL ?? 'https://myriad.social'}
+            rel="noopener noreferrer">
+            <Button style={{marginRight: '12px'}} size="small" variant="outlined" color="secondary">
+              Transaction details
+            </Button>
+          </a>
           <Button size="small" variant="contained" color="primary" onClick={closeTipSuccessDialog}>
             Return
           </Button>

@@ -58,7 +58,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const downvoting = useSelector<RootState, Post | Comment | null>(
     state => state.timelineState.interaction.downvoting,
   );
-  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
+  const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
 
   const {blocklistId, loadBlockListId} = useFriendsHook(user);
   const {openTipHistory} = useTipHistory();
@@ -156,13 +156,6 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     setOpenSuccessPrompt(false);
   };
 
-  const handleOpenTipHistory = (): void => {
-    if (tippedContentForHistory) {
-      openTipHistory(tippedContentForHistory);
-      setOpenSuccessPrompt(false);
-    }
-  };
-
   const handleReport = (comment: Comment) => {
     setReported(comment);
   };
@@ -253,14 +246,15 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
             display: 'flex',
             justifyContent: 'center',
           }}>
-          <Button
-            style={{marginRight: '12px'}}
-            size="small"
-            variant="outlined"
-            color="secondary"
-            onClick={handleOpenTipHistory}>
-            See tip history
-          </Button>
+          <a
+            target="_blank"
+            style={{textDecoration: 'none'}}
+            href={explorerURL ?? 'https://myriad.social'}
+            rel="noopener noreferrer">
+            <Button style={{marginRight: '12px'}} size="small" variant="outlined" color="secondary">
+              Transaction details
+            </Button>
+          </a>
           <Button
             size="small"
             variant="contained"
