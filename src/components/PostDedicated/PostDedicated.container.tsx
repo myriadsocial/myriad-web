@@ -44,7 +44,7 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
 
   const {post, getTippedUserId} = useTimelineHook();
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
+  const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
   const {openTipHistory} = useTipHistory();
 
   const {openToasterSnack} = useToasterSnackHook();
@@ -173,13 +173,6 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
     setVisibility(null);
   };
 
-  const handleOpenTipHistory = (): void => {
-    if (tippedContentForHistory) {
-      openTipHistory(tippedContentForHistory);
-      setOpenSuccessPrompt(false);
-    }
-  };
-
   if (!post) return null;
 
   return (
@@ -240,14 +233,15 @@ export const PostContainer: React.FC<PostContainerProps> = props => {
             display: 'flex',
             justifyContent: 'center',
           }}>
-          <Button
-            style={{marginRight: '12px'}}
-            size="small"
-            variant="outlined"
-            color="secondary"
-            onClick={handleOpenTipHistory}>
-            See tip history
-          </Button>
+          <a
+            target="_blank"
+            style={{textDecoration: 'none'}}
+            href={explorerURL ?? 'https://myriad.social'}
+            rel="noopener noreferrer">
+            <Button style={{marginRight: '12px'}} size="small" variant="outlined" color="secondary">
+              Transaction details
+            </Button>
+          </a>
           <Button
             size="small"
             variant="contained"
