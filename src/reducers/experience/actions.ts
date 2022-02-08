@@ -243,27 +243,16 @@ export const searchAllRelatedExperiences: ThunkActionCreator<Actions, RootState>
   async (dispatch, getState) => {
     dispatch(setExperienceLoading(true));
 
-    const {
-      userState: {user},
-    } = getState();
-    const userId = user?.id as string;
-
     try {
-      if (user) {
-        const {data: experiences, meta} = await ExperienceAPI.searchExperiencesByQuery(
-          query,
-          userId,
-          page,
-        );
+      const {data: experiences, meta} = await ExperienceAPI.searchExperiencesByQuery(query, page);
 
-        dispatch({
-          type: constants.LOAD_SEARCHED_EXPERIENCES,
-          payload: {
-            experiences,
-            meta,
-          },
-        });
-      }
+      dispatch({
+        type: constants.LOAD_SEARCHED_EXPERIENCES,
+        payload: {
+          experiences,
+          meta,
+        },
+      });
     } catch (error) {
       dispatch(
         setError({
