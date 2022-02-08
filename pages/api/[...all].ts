@@ -31,14 +31,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       headers = {
         Authorization: `Bearer ${userToken}`,
       };
-
-      if (req.url?.match(/^\/api\/posts.*$/)) {
-        console.log('[api-proxy][request]', {
-          path: req.url,
-          headers,
-        });
-      }
     }
+
+    console.log('[api-proxy][request]', {
+      path: req.url,
+      headers,
+    });
 
     return httpProxyMiddleware(req, res, {
       // You can use the `http-proxy` option
