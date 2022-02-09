@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import {useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
@@ -9,11 +8,8 @@ import {useStyles} from './experience.style';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
 
 export const ExperiencePreviewContainer: React.FC = () => {
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {
     experience,
     experiences: userExperience,
@@ -62,7 +58,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
 
   return (
     <>
-      {experience && user && (
+      {experience && (
         <>
           <div className={style.mb}>
             <TopNavbarComponent
@@ -73,7 +69,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
           <ExperiencePreview
             experience={experience}
             userExperiences={userExperience}
-            userId={user.id}
+            userId={experience.id}
             onSubscribe={handleSubscribeExperience}
             onUnsubscribe={handleUnsubscribeExperience}
             onFollow={handleCloneExperience}

@@ -1,4 +1,5 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
@@ -9,10 +10,13 @@ import Button from '@material-ui/core/Button';
 import {Experience, UserExperience} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
 import {SocialsEnum} from '../../interfaces/social';
+import ShowIf from '../common/show-if.component';
 import {useStyles} from './experience.style';
 
 import {ListItemPeopleComponent} from 'src/components/atoms/ListItem/ListItemPeople';
 import {acronym} from 'src/helpers/string';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 type Props = {
   experience: Experience;
@@ -25,10 +29,13 @@ type Props = {
 };
 
 export const ExperiencePreview: React.FC<Props> = props => {
+  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {experience, userExperiences, userId, onSubscribe, onUnsubscribe, onFollow, onUpdate} =
     props;
   const style = useStyles();
   const router = useRouter();
+
+  console.log(anonymous);
 
   const parsingTags = () => {
     const list = experience.tags.map(tag => {
@@ -128,19 +135,22 @@ export const ExperiencePreview: React.FC<Props> = props => {
           ),
         )}
       </div>
-      {experience.createdBy !== userId && (
-        <div className={style.button}>
-          <Button variant="outlined" color="secondary" onClick={handleCloneExperience}>
-            Clone
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={isSubscribed() ? handleUnsubscribeExperience : handleSubscribeExperience}>
-            {isSubscribed() ? 'Unsubscribe' : 'Subscribe'}
-          </Button>
-        </div>
-      )}
+      <ShowIf condition={!anonymous}>
+        {experience.createdBy !== userId && (
+          <div className={style.button}>
+            <Button variant="outlined" color="secondary" onClick={handleCloneExperience}>
+              Clone
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={isSubscribed() ? handleUnsubscribeExperience : handleSubscribeExperience}>
+              {isSubscribed() ? 'Unsubscribe' : 'Subscribe'}
+            </Button>
+          </div>
+        )}
+      </ShowIf>
+
       {experience.createdBy === userId && (
         <Button
           fullWidth

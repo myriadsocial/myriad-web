@@ -146,6 +146,21 @@ export const getUserExperience = async (
   return data;
 };
 
+export const getAnonymousExperience = async (): Promise<ExperienceList> => {
+  const {data} = await MyriadAPI.request<ExperienceList>({
+    url: `/experiences`,
+    method: 'GET',
+    params: {
+      pageLimit: 3,
+      filter: {
+        order: `createdAt DESC`,
+        include: ['user'],
+      },
+    },
+  });
+  return data;
+};
+
 export const cloneExperience = async (
   userId: string,
   experienceId: string,
