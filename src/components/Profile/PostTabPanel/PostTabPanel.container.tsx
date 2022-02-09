@@ -49,20 +49,13 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   const {anonymous = false, filters} = props;
 
   const dispatch = useDispatch();
-  const {posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
+  const {posts, hasMore, loading, nextPage, getTippedUserId} = useTimelineHook();
   const {filterTimeline, sortByOrder} = useTimelineFilter(filters);
   const {query} = useQueryParams();
   const {openTipHistory} = useTipHistory();
   const {openToasterSnack} = useToasterSnackHook();
 
   const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
-
-  useEffect(() => {
-    if (isTipSent) {
-      closeSendTip();
-    }
-  }, [isTipSent]);
-
   const {detail, friendStatus} = useSelector<RootState, ProfileState>(state => state.profileState);
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
@@ -92,6 +85,12 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
   useEffect(() => {
     setPostsList(posts);
   }, [posts]);
+
+  useEffect(() => {
+    if (isTipSent) {
+      closeSendTip();
+    }
+  }, [isTipSent]);
 
   const handleUpvote = (reference: Post | Comment) => {
     dispatch(upvote(reference));
@@ -230,6 +229,7 @@ export const PostTabPanel: React.FC<TimelineContainerProps> = props => {
       <ShowIf condition={!!posts.length}>
         <TimelineComponent
           user={user}
+          loading={loading}
           posts={postsList}
           anonymous={anonymous}
           loadNextPage={nextPage}
