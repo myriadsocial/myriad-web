@@ -2,6 +2,8 @@ import {ChevronRightIcon} from '@heroicons/react/outline';
 
 import React from 'react';
 
+import getConfig from 'next/config';
+
 import {List, ListItem, ListItemText, Paper, SvgIcon, Typography} from '@material-ui/core';
 
 import ShowIf from '../common/show-if.component';
@@ -20,6 +22,8 @@ type SettingsProps = {
 export const Settings: React.FC<SettingsProps> = props => {
   const {selectedType, value, onChange} = props;
 
+  const {publicRuntimeConfig} = getConfig();
+  const appEnvironment = publicRuntimeConfig.appEnvironment;
   const styles = useStyles();
   const settings = useSettingList();
 
@@ -38,7 +42,13 @@ export const Settings: React.FC<SettingsProps> = props => {
           </Typography>
           <List>
             {settings
-              .filter(setting => setting.id !== 'language')
+              .filter(
+                setting =>
+                  setting.id !==
+                  (appEnvironment === 'development' || appEnvironment === 'local'
+                    ? ''
+                    : 'language'),
+              )
               .map(item => {
                 return (
                   <ListItem
