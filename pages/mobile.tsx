@@ -1,6 +1,8 @@
 import React from 'react';
 
 import {GetServerSideProps} from 'next';
+import getConfig from 'next/config';
+import Head from 'next/head';
 
 import {Grid} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -10,6 +12,8 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import Logo from 'src/images/Myriad_Full_Logo_Color_1-01_1.svg';
 import i18n from 'src/locale';
+
+const {publicRuntimeConfig} = getConfig();
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,6 +58,9 @@ const Mobile: React.FC = () => {
 
   return (
     <div className={style.root}>
+      <Head>
+        <title>{publicRuntimeConfig.appName}</title>
+      </Head>
       <Grid container direction="column" justifyContent="center" alignContent="center">
         <Grid item xs={12} className={style.logo}>
           <Logo />

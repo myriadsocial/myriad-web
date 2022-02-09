@@ -1,6 +1,8 @@
 import React from 'react';
 
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
+import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import {SettingsContainer, SettingsType, useSettingList} from 'src/components/Settings';
@@ -8,6 +10,7 @@ import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import i18n from 'src/locale';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
@@ -16,6 +19,8 @@ import {countNewNotification} from 'src/reducers/notification/actions';
 import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
+
+const {publicRuntimeConfig} = getConfig();
 
 const Settings: React.FC = () => {
   const {query} = useRouter();
@@ -31,6 +36,9 @@ const Settings: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
+      <Head>
+        <title>{i18n.t('Setting.Title', {appname: publicRuntimeConfig.appName})}</title>
+      </Head>
       <TopNavbarComponent
         description={
           selected ? `${selected.title} Settings` : 'Set Privacy and Notification settings'

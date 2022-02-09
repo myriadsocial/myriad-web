@@ -2,12 +2,15 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -18,6 +21,8 @@ import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/
 import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
+
+const {publicRuntimeConfig} = getConfig();
 
 const MyWalletContainerWithoutSSR = dynamic(
   () => import('../src/components/MyWallet/MyWalletContainer'),
@@ -38,6 +43,9 @@ const Home: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
+      <Head>
+        <title>{i18n.t('Wallet.Title', {appname: publicRuntimeConfig.appName})}</title>
+      </Head>
       <TopNavbarComponent
         sectionTitle={SectionTitle.WALLET}
         description={`${countNumberOfCryptoAssets()} Crypto Assets`}

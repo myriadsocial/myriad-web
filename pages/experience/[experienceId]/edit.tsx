@@ -1,11 +1,14 @@
 import React from 'react';
 
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
+import Head from 'next/head';
 
 import {ExperienceEditContainer} from 'src/components/ExperiencePreview/ExperienceEdit.container';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import i18n from 'src/locale';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
@@ -15,9 +18,14 @@ import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
+const {publicRuntimeConfig} = getConfig();
+
 const EditExperience: React.FC = () => {
   return (
     <DefaultLayout isOnProfilePage={false}>
+      <Head>
+        <title>{i18n.t('Experience.Edit.Title', {appname: publicRuntimeConfig.appName})}</title>
+      </Head>
       <ExperienceEditContainer />
     </DefaultLayout>
   );

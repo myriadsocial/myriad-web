@@ -1,6 +1,8 @@
 import React from 'react';
 
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
+import Head from 'next/head';
 
 import NFTContainer from 'src/components/NFT/NFT.container';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
@@ -12,9 +14,14 @@ import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
+const {publicRuntimeConfig} = getConfig();
+
 const NFTComponent: React.FC = () => {
   return (
     <DefaultLayout isOnProfilePage={false}>
+      <Head>
+        <title>{publicRuntimeConfig.appName} - NFT</title>
+      </Head>
       <NFTContainer />
     </DefaultLayout>
   );

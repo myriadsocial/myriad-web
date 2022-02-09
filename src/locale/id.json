@@ -1,4 +1,18 @@
 {
+  "Experience": {
+    "Clone": {
+      "Title": "Klon Eperience"
+    },
+    "Edit": {
+      "Title": "Ubah Experience"
+    },
+    "Preview": {
+      "Title": "Pratinjau Experience"
+    },
+    "Create": {
+      "Title": "Buat Experience"
+    }
+  },
   "General": {
     "Close": "Tutup",
     "OK": "OK",
@@ -94,7 +108,23 @@
       }
     }
   },
+  "Friends": {
+    "Title": "{{appname}} - Teman"
+  },
+  "Maintenance": {
+    "Title": "{{appname}} - Perbaikan"
+  },
+  "Notification": {
+    "Title": "{{appname}} - Notifikasi"
+  },
+  "PrivacyPolicy": {
+    "Title": "{{appname}} - Kebijakan Privasi"
+  },
+  "Search": {
+    "Title": "{{appname}} - Hasil Pencarian"
+  },
   "Setting": {
+    "Title": "{{appname}} - Pengaturan",
     "List_Menu": {
       "Account_Title": "Akun",
       "Account_Subtitle": "Privasi akun, privasi sosial media",
@@ -112,5 +142,20 @@
       "Feedback_Subtitle": "Silahkan berikan pengalaman kamu melalui email",
       "Version_Title": "Myriad versi"
     }
+  },
+  "SocialMedia": {
+    "Title": "{{appname}} - Media Sosial"
+  },
+  "SocialToken": {
+    "Title": "{{appname}} - Token Sosial"
+  },
+  "TermOfUse": {
+    "Title": "{{appname}} - Aturan Penggunaan"
+  },
+  "Topics": {
+    "Title": "{{appname}} - Topik"
+  },
+  "Wallet": {
+    "Title": "{{appname}} - Dompet"
   }
 }

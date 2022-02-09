@@ -2,12 +2,15 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
+import Head from 'next/head';
 
 import {NotificationsContainer} from 'src/components/Notifications';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExperience} from 'src/reducers/experience/actions';
@@ -17,6 +20,8 @@ import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
+const {publicRuntimeConfig} = getConfig();
+
 const Notification: React.FC = () => {
   const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
 
@@ -25,6 +30,9 @@ const Notification: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
+      <Head>
+        <title>{i18n.t('Notification.Title', {appname: publicRuntimeConfig.appName})}</title>
+      </Head>
       <TopNavbarComponent
         description={`${total} new notifications`}
         sectionTitle={SectionTitle.NOTIFICATION}

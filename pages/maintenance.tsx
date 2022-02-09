@@ -1,6 +1,8 @@
 import React from 'react';
 
 import {GetServerSideProps} from 'next';
+import getConfig from 'next/config';
+import Head from 'next/head';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -9,6 +11,9 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Logo from 'src/images/Myriad_Full_Logo_Color_1-01_1.svg';
 import Illustration from 'src/images/undraw_Fall_is_coming_yl0x_1.svg';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import i18n from 'src/locale';
+
+const {publicRuntimeConfig} = getConfig();
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -65,6 +70,9 @@ const Maintenance: React.FC = () => {
 
   return (
     <div className={style.root}>
+      <Head>
+        <title>{i18n.t('Maintenance.Title', {appname: publicRuntimeConfig.appName})}</title>
+      </Head>
       <div>
         <div className={style.bar} />
         <div className={style.logo}>
