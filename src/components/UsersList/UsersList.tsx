@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {List, Paper} from '@material-ui/core';
-import {Button} from '@material-ui/core';
+import {Button, Typography} from '@material-ui/core';
 import {createStyles, makeStyles, alpha, Theme} from '@material-ui/core/styles';
 
 import {User} from '../../interfaces/user';
@@ -16,12 +16,22 @@ export const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: alpha('#FFC857', 0.15),
       },
     },
+    paperRoot: {
+      borderRadius: 10,
+    },
     list: {
-      overflow: 'auto',
-
       '& > *': {
         marginBottom: theme.spacing(1.5),
       },
+    },
+    footer: {
+      textAlign: 'center',
+      paddingBottom: 20,
+    },
+    link: {
+      color: theme.palette.primary.main,
+      textDecoration: 'none',
+      fontWeight: 600,
     },
   }),
 );
@@ -37,7 +47,7 @@ export const UsersList: React.FC<UsersListProps> = ({users, hasMore, loadNextPag
 
   return (
     <div className={classes.list}>
-      <Paper>
+      <Paper className={classes.paperRoot}>
         <List className={classes.root}>
           {users.length === 0 ? (
             <EmptyResult emptyContent={EmptyContentEnum.USER} />
@@ -55,7 +65,15 @@ export const UsersList: React.FC<UsersListProps> = ({users, hasMore, loadNextPag
                   />
                 ))}
               </div>
-              {hasMore && <Button onClick={loadNextPage}> Load More </Button>}
+              {hasMore ? (
+                <div className={classes.footer}>
+                  <Button className={classes.link} onClick={loadNextPage}>
+                    <Typography style={{fontWeight: 'bold'}}>Load more</Typography>
+                  </Button>
+                </div>
+              ) : (
+                <></>
+              )}
             </>
           )}
         </List>
