@@ -1,7 +1,7 @@
 import {useSelector, useDispatch} from 'react-redux';
 
 import {RootState} from '../reducers';
-import {searchUsers} from '../reducers/search/actions';
+import {searchUsers, clearUsers} from '../reducers/search/actions';
 import {SearchState} from '../reducers/search/reducer';
 
 export const useSearchHook = () => {
@@ -17,9 +17,14 @@ export const useSearchHook = () => {
     dispatch(searchUsers(query, page));
   };
 
+  const clear = () => {
+    dispatch(clearUsers());
+  };
+
   return {
     initSearchUsers,
     searchUsers: findUsers,
+    clearUsers: clear,
     users: searchState.searchedUsers,
     hasMore: searchState.hasMore,
     page: searchState.meta.currentPage,

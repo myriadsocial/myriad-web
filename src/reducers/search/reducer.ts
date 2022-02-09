@@ -36,7 +36,7 @@ export const SearchReducer: Redux.Reducer<SearchState, Actions> = (
       return action.payload.searchState;
     }
 
-    case constants.RESET_SEARCH_STATE: {
+    case constants.CLEAR_USERS: {
       return {
         ...initialState,
       };

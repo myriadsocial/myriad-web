@@ -41,6 +41,10 @@ export interface UsersLoading extends Action {
   loading: boolean;
 }
 
+export interface ClearUsers extends Action {
+  type: constants.CLEAR_USERS;
+}
+
 /**
  * Union Action Types
  */
@@ -50,6 +54,7 @@ export type Actions =
   | SearchUsers
   | AbortSearch
   | UsersLoading
+  | ClearUsers
   | BaseAction;
 
 /**
@@ -59,6 +64,10 @@ export type Actions =
 export const setUsersLoading = (loading: boolean): UsersLoading => ({
   type: constants.USERS_LOADING,
   loading,
+});
+
+export const clearUsers = (): ClearUsers => ({
+  type: constants.CLEAR_USERS,
 });
 
 /**
