@@ -82,6 +82,12 @@ export const SearchReducer: Redux.Reducer<SearchState, Actions> = (
       });
     }
 
+    case constants.SET_IS_SEARCHING: {
+      return update(state, {
+        isSearching: {$set: action.isSearching},
+      });
+    }
+
     default: {
       return state;
     }

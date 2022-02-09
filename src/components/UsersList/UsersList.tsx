@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {List, Paper} from '@material-ui/core';
-import {Button, Typography} from '@material-ui/core';
+import Link from '@material-ui/core/Link';
 import {createStyles, makeStyles, alpha, Theme} from '@material-ui/core/styles';
 
 import {User} from '../../interfaces/user';
@@ -40,9 +40,15 @@ type UsersListProps = {
   users: User[];
   hasMore: boolean;
   loadNextPage: () => void;
+  isSearching: boolean;
 };
 
-export const UsersList: React.FC<UsersListProps> = ({users, hasMore, loadNextPage}) => {
+export const UsersList: React.FC<UsersListProps> = ({
+  users,
+  hasMore,
+  loadNextPage,
+  isSearching,
+}) => {
   const classes = useStyles();
 
   return (
@@ -66,11 +72,19 @@ export const UsersList: React.FC<UsersListProps> = ({users, hasMore, loadNextPag
                 ))}
               </div>
               {hasMore ? (
-                <div className={classes.footer}>
-                  <Button className={classes.link} onClick={loadNextPage}>
-                    <Typography style={{fontWeight: 'bold'}}>Load more</Typography>
-                  </Button>
-                </div>
+                isSearching ? (
+                  <div className={classes.footer}>
+                    <Link component="button" className={classes.link}>
+                      Loading more
+                    </Link>
+                  </div>
+                ) : (
+                  <div className={classes.footer}>
+                    <Link component="button" className={classes.link} onClick={loadNextPage}>
+                      Load more
+                    </Link>
+                  </div>
+                )
               ) : (
                 <></>
               )}
