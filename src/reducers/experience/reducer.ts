@@ -42,6 +42,10 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
   action,
 ) => {
   switch (action.type) {
+    case constants.CLEAR_EXPERIENCES: {
+      return initialState;
+    }
+
     case constants.FETCH_ALL_EXPERIENCES: {
       return {
         ...state,

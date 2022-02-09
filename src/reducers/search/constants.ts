@@ -12,3 +12,6 @@ export type ABORT_SEARCH = typeof ABORT_SEARCH;
 
 export const USERS_LOADING = 'USERS_LOADING';
 export type USERS_LOADING = typeof USERS_LOADING;
+
+export const CLEAR_USERS = 'CLEAR_USERS';
+export type CLEAR_USERS = typeof CLEAR_USERS;

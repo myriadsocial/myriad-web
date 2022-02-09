@@ -31,9 +31,9 @@ export const SearchResultContainer: React.FC = () => {
 
   const router = useRouter();
 
-  const {searchExperience} = useExperienceHook();
-  const {searchUsers} = useSearchHook();
-  const {searchPosts} = useTimelineHook();
+  const {searchExperience, clearExperiences} = useExperienceHook();
+  const {searchUsers, clearUsers} = useSearchHook();
+  const {searchPosts, clearPosts} = useTimelineHook();
 
   const [selectedTab, setSelectedTab] = useState('');
   const searchKeyword = router.query.q as string;
@@ -87,6 +87,10 @@ export const SearchResultContainer: React.FC = () => {
   };
 
   const onSubmitSearch = (query: string) => {
+    clearPosts();
+    clearUsers();
+    clearExperiences();
+
     router.push(
       {
         pathname: 'search',

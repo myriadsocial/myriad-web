@@ -4,7 +4,12 @@ import {useRouter} from 'next/router';
 
 import {TimelineFilter, TimelineSortMethod} from 'src/interfaces/timeline';
 import {RootState} from 'src/reducers';
-import {loadTimeline, getDedicatedPost, fetchSearchedPosts} from 'src/reducers/timeline/actions';
+import {
+  loadTimeline,
+  getDedicatedPost,
+  fetchSearchedPosts,
+  clearTimeline,
+} from 'src/reducers/timeline/actions';
 import {TimelineState} from 'src/reducers/timeline/reducer';
 import {fetchTippedUserId} from 'src/reducers/wallet/actions';
 
@@ -41,6 +46,10 @@ export const useTimelineHook = () => {
     dispatch(fetchSearchedPosts(query, page));
   };
 
+  const clear = () => {
+    dispatch(clearTimeline());
+  };
+
   return {
     error: timelineState.error,
     loading: timelineState.loading,
@@ -54,6 +63,7 @@ export const useTimelineHook = () => {
     sortTimeline,
     getTippedUserId,
     getPostDetail,
+    clearPosts: clear,
     post: timelineState.post,
     page: timelineState.meta.currentPage,
   };
