@@ -13,11 +13,17 @@ export const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.background.paper,
       borderRadius: theme.spacing(1),
       marginBottom: theme.spacing(1),
-      border: '1px solid',
-      borderColor: '#E5E5E5',
-      flexGrow: 1,
+      border: '1px solid #E5E5E5',
       display: 'flex',
       flexDirection: 'column-reverse',
+
+      '& .slate-p': {
+        wordBreak: 'break-word',
+
+        [theme.breakpoints.down('lg')]: {
+          fontSize: 12,
+        },
+      },
     },
     action: {
       paddingTop: 0,
