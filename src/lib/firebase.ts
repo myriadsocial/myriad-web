@@ -1,5 +1,5 @@
 import getConfig from 'next/config';
-
+import * as Sentry from '@sentry/nextjs';
 import firebase from 'firebase/app';
 import 'firebase/analytics';
 import 'firebase/messaging';
@@ -26,7 +26,7 @@ const firebaseAnalytics = {
     try {
       firebase.analytics();
     } catch (error) {
-      console.error(error);
+      Sentry.captureException(error);
     }
   },
 
@@ -36,7 +36,7 @@ const firebaseAnalytics = {
       analytics.setCurrentScreen(screenName);
       analytics.logEvent('screen_view');
     } catch (error) {
-      console.error(error);
+      Sentry.captureException(error);
     }
   },
 };
@@ -64,7 +64,7 @@ const firebaseCloudMessaging = {
 
       localforage.setItem('fcm_token', token);
     } catch (error) {
-      console.error(error);
+      Sentry.captureException(error);
     }
   },
 

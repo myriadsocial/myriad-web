@@ -21,7 +21,7 @@ import {ReportProps} from 'src/interfaces/report';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {blockFromFriend} from 'src/reducers/friend/actions';
-import {fetchProfileExperience} from 'src/reducers/profile/actions';
+import {fetchProfileDetail, fetchProfileExperience} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
@@ -117,6 +117,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     if (!profile) return;
 
     await dispatch(blockFromFriend(profile.id));
+    await dispatch(fetchProfileDetail(profile.id));
     await reloadFriendStatus();
 
     openToasterSnack({

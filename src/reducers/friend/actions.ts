@@ -112,8 +112,6 @@ export const removeFromFriend: ThunkActionCreator<Actions, RootState> =
 
       dispatch(fetchFriend(user));
     } catch (error) {
-      console.log('error', error);
-
       if (user && axios.isAxiosError(error) && error.response?.status === 401) {
         dispatch(fetchFriend(user));
       } else {
@@ -136,7 +134,8 @@ export const blockFromFriend: ThunkActionCreator<Actions, RootState> =
       if (!user) {
         throw new Error('User not found');
       }
-      await FriendAPI.blockedUser(requesteeId, user.id);
+
+      await FriendAPI.blockUser(requesteeId, user.id);
 
       dispatch(fetchFriend(user));
     } catch (error) {

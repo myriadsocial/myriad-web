@@ -15,8 +15,9 @@ import {withError, WithErrorProps} from 'src/components/Error';
 import {NotificationsContainer} from 'src/components/Notifications/Notifications.container';
 import ShowIf from 'src/components/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
+import {NotificationProps} from 'src/interfaces/notification';
 import {firebaseApp, firebaseAnalytics, firebaseCloudMessaging} from 'src/lib/firebase';
-import {countNewNotification} from 'src/reducers/notification/actions';
+import {countNewNotification, processNotification} from 'src/reducers/notification/actions';
 
 const WalletBalancesContainer = dynamic(
   () => import('../../WalletBalance/WalletBalanceContainer'),
@@ -56,12 +57,30 @@ const Default: React.FC<DefaultLayoutProps> = props => {
     await updateUserFcmToken();
 
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('message', () => {
+      navigator.serviceWorker.addEventListener('message', payload => {
+        if (payload?.data?.body) {
+          try {
+            const notification: NotificationProps = JSON.parse(payload.data.body);
+
+            dispatch(processNotification(notification));
+            // eslint-disable-next-line no-empty
+          } catch (error) {}
+        }
+
         dispatch(countNewNotification());
       });
     }
 
     firebaseCloudMessaging.onMessageListener(payload => {
+      if (payload?.data?.body) {
+        try {
+          const notification: NotificationProps = JSON.parse(payload.data.body);
+
+          dispatch(processNotification(notification));
+          // eslint-disable-next-line no-empty
+        } catch (error) {}
+      }
+
       dispatch(countNewNotification());
     });
   };

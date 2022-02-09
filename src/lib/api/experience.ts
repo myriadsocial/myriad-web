@@ -85,7 +85,6 @@ export const getSearchedExperiences = async (
 
 export const searchExperiencesByQuery = async (
   query: string,
-  userId: string,
   page = 1,
 ): Promise<ExperienceList> => {
   const {data} = await MyriadAPI.request<ExperienceList>({
@@ -95,7 +94,6 @@ export const searchExperiencesByQuery = async (
       pageNumber: page,
       pageLimit: PAGINATION_LIMIT,
       q: query,
-      userId: userId,
       filter: {
         include: ['user'],
       },

@@ -55,7 +55,7 @@ export const SearchReducer: Redux.Reducer<SearchState, Actions> = (
       };
     }
 
-    case constants.LOAD_SEARCHED_USERS: {
+    case constants.SEARCH_USERS: {
       const {meta} = action.payload;
 
       return {
@@ -66,14 +66,6 @@ export const SearchReducer: Redux.Reducer<SearchState, Actions> = (
             : [...state.searchedUsers, ...action.payload.users],
         hasMore: meta.currentPage < meta.totalPageCount,
         meta,
-      };
-    }
-
-    case constants.SET_SEARCHED_USERS: {
-      return {
-        ...state,
-        searchedUsers: action.users,
-        meta: action.meta,
       };
     }
 

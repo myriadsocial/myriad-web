@@ -1,9 +1,10 @@
 import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
+import {fetchFriend} from '../friend/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
-import {Notification} from 'src/interfaces/notification';
+import {Notification, NotificationProps, NotificationType} from 'src/interfaces/notification';
 import * as NotificationAPI from 'src/lib/api/notification';
 import {ThunkActionCreator} from 'src/types/thunk';
 
@@ -167,6 +168,21 @@ export const countNewNotification: ThunkActionCreator<Actions, RootState> =
       dispatch(setError(error.message));
     } finally {
       dispatch(setLoading(false));
+    }
+  };
+
+export const processNotification: ThunkActionCreator<Actions, RootState> =
+  (notification: NotificationProps) => async (dispatch, getState) => {
+    const {
+      userState: {user},
+    } = getState();
+
+    if (!user) return;
+
+    if (
+      [NotificationType.FRIEND_REQUEST, NotificationType.FRIEND_ACCEPT].includes(notification.type)
+    ) {
+      dispatch(fetchFriend(user));
     }
   };
 

@@ -105,29 +105,14 @@ export const updateUser = async (userId: string, values: Partial<User>): Promise
   return data;
 };
 
-export const getSearchedUsers = async (page: number, userId: string): Promise<UserList> => {
-  const {data} = await MyriadAPI.request<UserList>({
-    url: `/users`,
-    method: 'GET',
-    params: {
-      pageNumber: page,
-      pageLimit: PAGINATION_LIMIT,
-      userId,
-    },
-  });
-
-  return data;
-};
-
-export const searchUsers = async (
-  query: string,
-  userId: string | null,
-  page = 1,
-): Promise<UserList> => {
+export const searchUsers = async (page = 1, query?: string): Promise<UserList> => {
   const params: Record<string, any> = {
     pageNumber: page,
     pageLimit: PAGINATION_LIMIT,
-    filter: {
+  };
+
+  if (query) {
+    params.filter = {
       where: {
         or: [
           {
@@ -144,39 +129,13 @@ export const searchUsers = async (
           },
         ],
       },
-    },
-  };
-
-  if (userId) {
-    params.userId = userId;
+    };
   }
 
   const {data} = await MyriadAPI.request<UserList>({
     url: '/users',
     method: 'GET',
-    params: {
-      userId,
-      pageNumber: page,
-      pageLimit: PAGINATION_LIMIT,
-      filter: {
-        where: {
-          or: [
-            {
-              username: {
-                like: `.*${query}`,
-                options: 'i',
-              },
-            },
-            {
-              name: {
-                like: `.*${query}`,
-                options: 'i',
-              },
-            },
-          ],
-        },
-      },
-    },
+    params,
   });
 
   return data;

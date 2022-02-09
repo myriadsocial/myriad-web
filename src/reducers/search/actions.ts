@@ -1,12 +1,12 @@
-import {User} from '../../interfaces/user';
-import * as UserAPI from '../../lib/api/user';
-import {ThunkActionCreator} from '../../types/thunk';
-import {Actions as BaseAction, PaginationAction, setError} from '../base/actions';
+import {Actions as BaseAction, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
+import {User} from 'src/interfaces/user';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
+import * as UserAPI from 'src/lib/api/user';
+import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
  * Action Types
@@ -24,25 +24,12 @@ export interface LoadUsers extends Action {
   };
 }
 
-export interface LoadSearchedUsers extends Action {
-  type: constants.LOAD_SEARCHED_USERS;
-  payload: {
-    users: User[];
-    meta: ListMeta;
-  };
-}
-
 export interface SearchUsers extends Action {
   type: constants.SEARCH_USERS;
   payload: {
     users: User[];
     meta: ListMeta;
   };
-}
-
-export interface SetSearchedUsers extends PaginationAction {
-  type: constants.SET_SEARCHED_USERS;
-  users: User[];
 }
 
 export interface AbortSearch extends Action {
@@ -60,9 +47,7 @@ export interface UsersLoading extends Action {
 export type Actions =
   | ResetState
   | LoadUsers
-  | LoadSearchedUsers
   | SearchUsers
-  | SetSearchedUsers
   | AbortSearch
   | UsersLoading
   | BaseAction;
@@ -71,13 +56,6 @@ export type Actions =
  *
  * Actions
  */
-
-export const setSearchedUsers = (users: User[], meta: ListMeta): SetSearchedUsers => ({
-  type: constants.SET_SEARCHED_USERS,
-  users,
-  meta,
-});
-
 export const setUsersLoading = (loading: boolean): UsersLoading => ({
   type: constants.USERS_LOADING,
   loading,
@@ -89,52 +67,14 @@ export const setUsersLoading = (loading: boolean): UsersLoading => ({
 
 export const loadUsers: ThunkActionCreator<Actions, RootState> =
   (page = 1) =>
-  async (dispatch, getState) => {
+  async dispatch => {
     dispatch(setUsersLoading(true));
 
-    const {
-      userState: {user},
-    } = getState();
-
     try {
-      const userId = user?.id as string;
-
-      const {data: users, meta} = await UserAPI.searchUsers(page, userId);
+      const {data: users, meta} = await UserAPI.searchUsers(page);
 
       dispatch({
         type: constants.LOAD_USERS,
-        payload: {
-          users,
-          meta,
-        },
-      });
-    } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
-    } finally {
-      dispatch(setUsersLoading(false));
-    }
-  };
-
-export const loadSearchedUsers: ThunkActionCreator<Actions, RootState> =
-  (page = 1) =>
-  async (dispatch, getState) => {
-    dispatch(setUsersLoading(true));
-
-    const {
-      userState: {user},
-    } = getState();
-
-    try {
-      const userId = user?.id as string;
-
-      const {data: users, meta} = await UserAPI.getSearchedUsers(page, userId);
-
-      dispatch({
-        type: constants.LOAD_SEARCHED_USERS,
         payload: {
           users,
           meta,
@@ -156,17 +96,11 @@ export const searchUsers: ThunkActionCreator<Actions, RootState> =
   async (dispatch, getState) => {
     dispatch(setUsersLoading(true));
 
-    const {
-      userState: {user},
-    } = getState();
-
-    const userId = user?.id as string;
-
     try {
-      const {meta, data: users} = await UserAPI.searchUsers(query, userId ?? null, page);
+      const {meta, data: users} = await UserAPI.searchUsers(page, query);
 
       dispatch({
-        type: constants.LOAD_SEARCHED_USERS,
+        type: constants.SEARCH_USERS,
         payload: {
           users,
           meta,
