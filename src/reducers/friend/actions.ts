@@ -135,7 +135,7 @@ export const blockFromFriend: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      await FriendAPI.blockedUser(requesteeId, user.id);
+      await FriendAPI.blockUser(requesteeId, user.id);
 
       dispatch(fetchFriend(user));
     } catch (error) {
