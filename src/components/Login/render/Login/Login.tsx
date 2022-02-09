@@ -68,7 +68,7 @@ export const Login: React.FC<LoginProps> = props => {
         </span>
       </Typography>
 
-      <Typography component="span" variant="h5">
+      <Typography component="span" variant="h5" style={{textAlign: 'center'}}>
         {i18n.t('Login.Layout.Footer_Text_1')}{' '}
         <a
           href={'https://polkadot.js.org/extension/'}

@@ -87,9 +87,9 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
                         className={style.caption}
                         component="span"
                         color="primary">
-                        {i18n.t('Login.Layout.Carousel_Title_1_left')}
+                        {i18n.t('Login.Layout.Carousel_Title_2_left')}
                       </Typography>{' '}
-                      {i18n.t('Login.Layout.Carousel_Title_1_right')}
+                      {i18n.t('Login.Layout.Carousel_Title_2_right')}
                     </Typography>
                   </div>
                   <Typography
