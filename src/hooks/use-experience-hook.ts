@@ -15,6 +15,7 @@ import {
   updateExperience,
   deleteExperience,
   unsubscribeExperience,
+  clearExperiences,
 } from '../reducers/experience/actions';
 import {ExperienceState} from '../reducers/experience/reducer';
 
@@ -126,6 +127,10 @@ export const useExperienceHook = () => {
     );
   };
 
+  const clear = () => {
+    dispatch(clearExperiences());
+  };
+
   return {
     loading,
     initSearchExperiences,
@@ -150,5 +155,6 @@ export const useExperienceHook = () => {
     updateExperience: editExperience,
     removeExperience,
     unsubscribeExperience: beUnsubscribeExperience,
+    clearExperiences: clear,
   };
 };

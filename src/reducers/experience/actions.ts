@@ -63,6 +63,10 @@ export interface ExperienceLoading extends Action {
   loading: boolean;
 }
 
+export interface ClearExperiences extends Action {
+  type: constants.CLEAR_EXPERIENCES;
+}
+
 /**
  * Union Action Types
  */
@@ -78,6 +82,7 @@ export type Actions =
   | SearchTags
   | ShowToasterSnack
   | ExperienceLoading
+  | ClearExperiences
   | BaseAction;
 
 /**
@@ -88,6 +93,10 @@ export type Actions =
 export const setExperienceLoading = (loading: boolean): ExperienceLoading => ({
   type: constants.EXPERIENCE_LOADING,
   loading,
+});
+
+export const clearExperiences = (): ClearExperiences => ({
+  type: constants.CLEAR_EXPERIENCES,
 });
 
 /**
