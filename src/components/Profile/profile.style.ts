@@ -53,6 +53,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     blocked: {
       height: 'calc(100vh - 360px)',
+      minHeight: 300,
     },
     blockedTitle: {
       fontWeight: 700,

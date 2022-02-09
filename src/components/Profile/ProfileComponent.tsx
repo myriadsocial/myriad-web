@@ -14,27 +14,26 @@ import {ProfileEditContainer} from 'src/components/Profile/edit/ProfileEditConta
 import {UserMenuContainer} from 'src/components/UserMenu';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import ShowIf from 'src/components/common/show-if.component';
-import {Friend} from 'src/interfaces/friend';
 import {FriendStatus} from 'src/interfaces/friend';
-import {BlockedProps, User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';
 import {checkFriendedStatus} from 'src/reducers/profile/actions';
+import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 type Props = {
-  profile?: User & BlockedProps;
   loading: boolean;
-  friendStatus?: Friend;
 };
 
-export const ProfileTimeline: React.FC<Props> = ({profile, friendStatus}) => {
+export const ProfileTimeline: React.FC<Props> = ({loading}) => {
   const style = useStyles();
   const dispatch = useDispatch();
   const router = useRouter();
 
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-
+  const {detail: profile, friendStatus} = useSelector<RootState, ProfileState>(
+    state => state.profileState,
+  );
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   useEffect(() => {
@@ -70,6 +69,10 @@ export const ProfileTimeline: React.FC<Props> = ({profile, friendStatus}) => {
   };
 
   if (!profile?.id) return <ProfileNotFound />;
+
+  console.log('user?.id', user?.id);
+  console.log('profile.blocker', profile.blocker);
+  console.log('equal', user?.id === profile.blocker);
 
   return (
     <div className={style.root}>
