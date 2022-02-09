@@ -1,6 +1,8 @@
 import React from 'react';
 
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
+import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import {capitalize} from '@material-ui/core';
@@ -13,6 +15,7 @@ import {People} from 'src/interfaces/people';
 import {setHeaders} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import i18n from 'src/locale';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
@@ -24,6 +27,8 @@ import {updateFilter} from 'src/reducers/timeline/actions';
 import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
+
+const {publicRuntimeConfig} = getConfig();
 
 type TopicPageProps = {
   experience: Experience | null;
@@ -41,6 +46,9 @@ const Topic: React.FC<TopicPageProps> = ({experience}) => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
+      <Head>
+        <title>{i18n.t('Topics.Title', {appname: publicRuntimeConfig.appName})}</title>
+      </Head>
       <TopNavbarComponent
         description={type === 'hashtag' ? 'Topics' : 'Experience'}
         sectionTitle={

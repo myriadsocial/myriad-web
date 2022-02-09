@@ -3,11 +3,14 @@ import {useSelector} from 'react-redux';
 
 import {Session} from 'next-auth';
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
+import Head from 'next/head';
 
 import {SearchResultContainer} from 'src/components/Search/SearchResultContainer';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -20,6 +23,8 @@ import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
+const {publicRuntimeConfig} = getConfig();
+
 type SearchProps = {
   session: Session;
 };
@@ -31,6 +36,9 @@ const Search: React.FC<SearchProps> = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
+      <Head>
+        <title>{i18n.t('Search.Title', {appname: publicRuntimeConfig.appName})}</title>
+      </Head>
       <SearchResultContainer />
     </DefaultLayout>
   );

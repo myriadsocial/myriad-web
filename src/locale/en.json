@@ -1,4 +1,18 @@
 {
+  "Experience": {
+    "Clone": {
+      "Title": "Clone Eperience"
+    },
+    "Edit": {
+      "Title": "Edit Experience"
+    },
+    "Preview": {
+      "Title": "Preview Experience"
+    },
+    "Create": {
+      "Title": "Create Experience"
+    }
+  },
   "General": {
     "Close": "Close",
     "OK": "OK",
@@ -94,7 +108,23 @@
       }
     }
   },
+  "Friends": {
+    "Title": "{{appname}} - Friends"
+  },
+  "Maintenance": {
+    "Title": "{{appname}} - Maintenance"
+  },
+  "Notification": {
+    "Title": "{{appname}} - Notification"
+  },
+  "PrivacyPolicy": {
+    "Title": "{{appname}} - Privacy Policy"
+  },
+  "Search": {
+    "Title": "{{appname}} - Search Result"
+  },
   "Setting": {
+    "Title": "{{appname}} - Settings",
     "List_Menu": {
       "Account_Title": "Privacy",
       "Account_Subtitle": "Account privacy, social media privacy",
@@ -112,5 +142,20 @@
       "Feedback_Subtitle": "Please feel free to provide feedback by sending us an email.",
       "Version_Title": "Myriad version"
     }
+  },
+  "SocialMedia": {
+    "Title": "{{appname}} - Social Media"
+  },
+  "SocialToken": {
+    "Title": "{{appname}} - Social Token"
+  },
+  "TermOfUse": {
+    "Title": "{{appname}} - Terms of Use"
+  },
+  "Topics": {
+    "Title": "{{appname}} - Topics"
+  },
+  "Wallet": {
+    "Title": "{{appname}} - Wallet"
   }
 }

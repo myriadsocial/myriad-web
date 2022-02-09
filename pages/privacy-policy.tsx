@@ -1,12 +1,14 @@
 import React from 'react';
 
 import getConfig from 'next/config';
+import Head from 'next/head';
 import Link from 'next/link';
 
 import {Paper} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import MyriadIcon from 'src/images/web/myriad.svg';
+import i18n from 'src/locale';
 
 const {publicRuntimeConfig} = getConfig();
 
@@ -33,6 +35,9 @@ const PrivacyPolicy: React.FC = () => {
 
   return (
     <Paper className={style.root}>
+      <Head>
+        <title>{i18n.t('PrivacyPolicy.Title', {appname: publicRuntimeConfig.appName})}</title>
+      </Head>
       <MyriadIcon />
       <div className={style.content}>
         <h1 className={`${style.center} ${style.title}`}>Privacy Policy</h1>

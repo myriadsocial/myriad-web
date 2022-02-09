@@ -2,12 +2,15 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {getSession} from 'next-auth/client';
+import getConfig from 'next/config';
+import Head from 'next/head';
 
 import {FriendMenuComponent} from 'src/components/FriendsMenu/FriendMenu';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -20,6 +23,8 @@ import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
+const {publicRuntimeConfig} = getConfig();
+
 const Friends: React.FC = () => {
   const {meta} = useSelector<RootState, FriendState>(state => state.friendState);
 
@@ -28,6 +33,9 @@ const Friends: React.FC = () => {
 
   return (
     <DefaultLayout isOnProfilePage={false}>
+      <Head>
+        <title>{i18n.t('Friends.Title', {appname: publicRuntimeConfig.appName})}</title>
+      </Head>
       <TopNavbarComponent
         description={`${meta.totalItemCount} Friends`}
         sectionTitle={SectionTitle.FRIENDS}
