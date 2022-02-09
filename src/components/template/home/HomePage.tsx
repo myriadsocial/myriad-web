@@ -72,6 +72,7 @@ const HomePage = (): JSX.Element => {
           </div>
           <div style={{width: '100%'}}>
             <TimelineComponent
+              loading={false}
               posts={Timeline.args?.posts ?? []}
               anonymous={Timeline.args?.anonymous ?? false}
               hasMore={false}

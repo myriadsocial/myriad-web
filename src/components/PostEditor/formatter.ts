@@ -1,5 +1,6 @@
 import {
   ELEMENT_IMAGE,
+  ELEMENT_LINK,
   ELEMENT_MEDIA_EMBED,
   ELEMENT_MENTION,
   ELEMENT_PARAGRAPH,
@@ -49,11 +50,24 @@ export const hasMedia = (nodes: TNode[]): boolean => {
 };
 
 export const formatToString = (node: TNode): string => {
+  if ([ELEMENT_HASHTAG, ELEMENT_MENTION, ELEMENT_LINK].includes(node.type)) {
+    switch (node.type) {
+      case ELEMENT_HASHTAG:
+        return '#' + node.hashtag.trim();
+      case ELEMENT_MENTION:
+        return '@' + node.name.trim();
+      case ELEMENT_LINK:
+        return node.url.trim();
+    }
+  }
+
   if (node.text) {
     return node.text.trim();
   }
 
-  return node.children ? node.children.map((element: TNode) => formatToString(element)) : '';
+  return node.children
+    ? node.children.map((element: TNode) => formatToString(element)).join(' ')
+    : '';
 };
 
 export const deserialize = (post: Post, maxLength?: number): TNode[] => {
@@ -107,21 +121,41 @@ export const deserialize = (post: Post, maxLength?: number): TNode[] => {
 export const serialize = (nodes: TNode[]): Partial<Post> => {
   const post: Partial<Post> = {
     text: JSON.stringify(nodes),
+    rawText: nodes.map(formatToString).join(' ').trim(),
     tags: [],
     mentions: [],
   };
 
-  const checkAttributes = (children: any) => {
+  const checkAttributes = (children: TNode) => {
     switch (children.type) {
       case ELEMENT_MENTION:
-        post.mentions?.push({
-          id: children.value,
-          name: children.name,
-          username: children.name,
-        });
+        if (!post.mentions) {
+          post.mentions = [
+            {
+              id: children.value,
+              name: children.name,
+              username: children.name,
+            },
+          ];
+        }
+
+        if (post.mentions.map(mention => mention.id).includes(children.value)) {
+          post.mentions.push({
+            id: children.value,
+            name: children.name,
+            username: children.name,
+          });
+        }
         break;
       case ELEMENT_HASHTAG:
-        post.tags?.push(children.hashtag);
+        if (!post.tags) {
+          post.tags = [children.hashtag];
+        }
+
+        if (!post.tags.includes(children.hashtag)) {
+          post.tags.push(children.hashtag);
+        }
+
         break;
       default:
         if (children.children) {

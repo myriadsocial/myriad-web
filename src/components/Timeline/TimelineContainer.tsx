@@ -48,7 +48,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const router = useRouter();
 
   const dispatch = useDispatch();
-  const {posts, hasMore, nextPage, getTippedUserId} = useTimelineHook();
+  const {posts, hasMore, loading, nextPage, getTippedUserId} = useTimelineHook();
   const {filterTimeline} = useTimelineFilter(filters);
   const {query} = useQueryParams();
   const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
@@ -195,6 +195,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
       <div style={{marginTop: router.pathname === '/home' ? 30 : 0}}>
         <TimelineComponent
           timelineType={query.type as TimelineType}
+          loading={loading}
           user={user}
           posts={posts}
           anonymous={anonymous}

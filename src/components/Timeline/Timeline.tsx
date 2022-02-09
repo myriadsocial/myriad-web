@@ -3,7 +3,9 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import {useRouter} from 'next/router';
 
-import {PostDetail} from '../PostDetail';
+import {Grid} from '@material-ui/core';
+
+import {PostDetail, Skeleton as PostSkeleton} from '../PostDetail';
 import {Button, ButtonSize, ButtonVariant} from '../atoms/Button';
 import {useStyles} from './Timeline.styles';
 import {TimelineEmpty as TimelineEmptyComponent} from './TimelineEmpty';
@@ -16,6 +18,7 @@ import {User} from 'src/interfaces/user';
 
 type TimelineProps = {
   user?: User;
+  loading: boolean;
   timelineType?: TimelineType;
   posts: Post[];
   anonymous: boolean;
@@ -36,6 +39,7 @@ type TimelineProps = {
 export const Timeline: React.FC<TimelineProps> = props => {
   const {
     user,
+    loading,
     timelineType,
     posts,
     anonymous,
@@ -53,13 +57,20 @@ export const Timeline: React.FC<TimelineProps> = props => {
     onImporters,
   } = props;
 
+  const styles = useStyles();
   const router = useRouter();
 
   const handleCreateExperience = () => {
     router.push('/experience/create');
   };
 
-  const styles = useStyles();
+  if (loading && posts.length === 0)
+    return (
+      <Grid container justify="center">
+        <PostSkeleton />
+        <PostSkeleton />
+      </Grid>
+    );
 
   return (
     <div className={styles.root}>
