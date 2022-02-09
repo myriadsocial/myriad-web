@@ -1,7 +1,6 @@
 import * as Sentry from '@sentry/nextjs';
 
 import React from 'react';
-import {useSelector} from 'react-redux';
 
 import {Session} from 'next-auth';
 import {getSession} from 'next-auth/client';
@@ -15,7 +14,6 @@ import {generateAnonymousUser} from 'src/helpers/auth';
 import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
-import {RootState} from 'src/reducers';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchAccountPrivacySetting} from 'src/reducers/config/actions';
@@ -24,7 +22,6 @@ import {fetchExperience} from 'src/reducers/experience/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {checkFriendedStatus, setProfile} from 'src/reducers/profile/actions';
-import {ProfileState} from 'src/reducers/profile/reducer';
 import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
@@ -43,10 +40,6 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
 
   const router = useRouter();
 
-  const {detail: profileDetail, friendStatus} = useSelector<RootState, ProfileState>(
-    state => state.profileState,
-  );
-
   return (
     <DefaultLayout isOnProfilePage={true}>
       <Head>
@@ -64,7 +57,7 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
         <meta name="twitter:card" content="summary" />
       </Head>
 
-      <ProfileTimeline profile={profileDetail} friendStatus={friendStatus} loading={false} />
+      <ProfileTimeline loading={false} />
     </DefaultLayout>
   );
 };
