@@ -53,6 +53,7 @@ export type PostProps = {
   platform: PostOrigin;
   tags: string[];
   text: string;
+  rawText?: string;
   title?: string;
   url: string;
   embeddedURL?: PostEmbedProps;
