@@ -12,7 +12,7 @@ type UsersListContainerProps = {
 
 export const UsersListContainer: React.FC<UsersListContainerProps> = props => {
   const {query} = props;
-  const {users, hasMore, page, loading, searchUsers} = useSearchHook();
+  const {users, hasMore, page, loading, searchUsers, isSearching} = useSearchHook();
 
   const handleLoadNextPage = () => {
     searchUsers(query, page + 1);
@@ -29,5 +29,12 @@ export const UsersListContainer: React.FC<UsersListContainerProps> = props => {
       </Grid>
     );
 
-  return <UsersList loadNextPage={handleLoadNextPage} users={users} hasMore={hasMore} />;
+  return (
+    <UsersList
+      loadNextPage={handleLoadNextPage}
+      users={users}
+      hasMore={hasMore}
+      isSearching={isSearching}
+    />
+  );
 };

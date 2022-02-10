@@ -29,5 +29,6 @@ export const useSearchHook = () => {
     hasMore: searchState.hasMore,
     page: searchState.meta.currentPage,
     loading: searchState.loading,
+    isSearching: searchState.isSearching,
   };
 };
