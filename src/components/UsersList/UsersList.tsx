@@ -1,13 +1,14 @@
 import React from 'react';
 
-import {List, Paper} from '@material-ui/core';
-import Link from '@material-ui/core/Link';
+import {List, Paper, CircularProgress, Link} from '@material-ui/core';
 import {createStyles, makeStyles, alpha, Theme} from '@material-ui/core/styles';
 
 import {User} from '../../interfaces/user';
 import {EmptyResult} from '../Search/EmptyResult';
 import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
 import {UsersListItem} from './UsersListItem';
+
+import {LoadingDots} from 'src/components/atoms/Loading/LoadingDots';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,9 +25,15 @@ export const useStyles = makeStyles((theme: Theme) =>
         marginBottom: theme.spacing(1.5),
       },
     },
-    footer: {
+    loadMore: {
+      display: 'flex',
       textAlign: 'center',
       paddingBottom: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    footer: {
+      textAlign: 'center',
     },
     link: {
       color: theme.palette.primary.main,
@@ -73,16 +80,22 @@ export const UsersList: React.FC<UsersListProps> = ({
               </div>
               {hasMore ? (
                 isSearching ? (
-                  <div className={classes.footer}>
-                    <Link component="button" className={classes.link}>
-                      Loading more
-                    </Link>
+                  <div className={classes.loadMore}>
+                    <CircularProgress size={16} style={{marginRight: 8}} thickness={4} />
+                    <div className={classes.footer}>
+                      <Link component="button" className={classes.link}>
+                        Loading more
+                      </Link>
+                    </div>
+                    <LoadingDots />
                   </div>
                 ) : (
-                  <div className={classes.footer}>
-                    <Link component="button" className={classes.link} onClick={loadNextPage}>
-                      Load more
-                    </Link>
+                  <div style={{paddingBottom: 20}}>
+                    <div className={classes.footer}>
+                      <Link component="button" className={classes.link} onClick={loadNextPage}>
+                        Load more
+                      </Link>
+                    </div>
                   </div>
                 )
               ) : (
