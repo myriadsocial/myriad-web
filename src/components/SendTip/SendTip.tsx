@@ -27,7 +27,6 @@ import {CurrencyOptionComponent} from '../atoms/CurrencyOption';
 import {ListItemComponent} from '../atoms/ListItem';
 
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
-import {CurrencyId} from 'src/interfaces/currency';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
 type SendTipProps = {
