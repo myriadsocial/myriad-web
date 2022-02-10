@@ -10,11 +10,12 @@ import Button from '@material-ui/core/Button';
 import {Experience, UserExperience} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
 import {SocialsEnum} from '../../interfaces/social';
-import ShowIf from '../common/show-if.component';
+import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {useStyles} from './experience.style';
 
 import {ListItemPeopleComponent} from 'src/components/atoms/ListItem/ListItemPeople';
 import {acronym} from 'src/helpers/string';
+import {useAuthHook} from 'src/hooks/auth.hook';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -32,10 +33,10 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {experience, userExperiences, userId, onSubscribe, onUnsubscribe, onFollow, onUpdate} =
     props;
+  const {logout} = useAuthHook();
   const style = useStyles();
   const router = useRouter();
-
-  console.log(anonymous);
+  const [promptSignin, setPromptSignin] = React.useState(false);
 
   const parsingTags = () => {
     const list = experience.tags.map(tag => {
@@ -55,7 +56,11 @@ export const ExperiencePreview: React.FC<Props> = props => {
   };
 
   const handleSubscribeExperience = () => {
-    onSubscribe(experience.id);
+    if (anonymous) {
+      setPromptSignin(true);
+    } else {
+      onSubscribe(experience.id);
+    }
   };
 
   const handleUnsubscribeExperience = () => {
@@ -73,7 +78,11 @@ export const ExperiencePreview: React.FC<Props> = props => {
   };
 
   const handleCloneExperience = () => {
-    onFollow(experience.id);
+    if (anonymous) {
+      setPromptSignin(true);
+    } else {
+      onFollow(experience.id);
+    }
   };
 
   const handleOpenProfile = (people: People) => {
@@ -135,21 +144,23 @@ export const ExperiencePreview: React.FC<Props> = props => {
           ),
         )}
       </div>
-      <ShowIf condition={!anonymous}>
-        {experience.createdBy !== userId && (
-          <div className={style.button}>
-            <Button variant="outlined" color="secondary" onClick={handleCloneExperience}>
-              Clone
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={isSubscribed() ? handleUnsubscribeExperience : handleSubscribeExperience}>
-              {isSubscribed() ? 'Unsubscribe' : 'Subscribe'}
-            </Button>
-          </div>
-        )}
-      </ShowIf>
+      {experience.createdBy !== userId && (
+        <div className={style.button}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            style={{marginRight: '12px'}}
+            onClick={handleCloneExperience}>
+            Clone
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={isSubscribed() ? handleUnsubscribeExperience : handleSubscribeExperience}>
+            {isSubscribed() ? 'Unsubscribe' : 'Subscribe'}
+          </Button>
+        </div>
+      )}
 
       {experience.createdBy === userId && (
         <Button
@@ -161,6 +172,42 @@ export const ExperiencePreview: React.FC<Props> = props => {
           Edit experience
         </Button>
       )}
+
+      <PromptComponent
+        title={'Start your Experience!'}
+        subtitle={'When you join Myriad, you can create, subscribe, or clone \n an experience.'}
+        open={promptSignin}
+        icon="warning"
+        onCancel={() => {
+          setPromptSignin(false);
+        }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            size="small"
+            variant="outlined"
+            color="secondary"
+            style={{marginRight: '12px'}}
+            onClick={() => {
+              setPromptSignin(false);
+            }}>
+            Back
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setPromptSignin(false);
+              logout();
+            }}>
+            Sign in
+          </Button>
+        </div>
+      </PromptComponent>
     </div>
   );
 };
