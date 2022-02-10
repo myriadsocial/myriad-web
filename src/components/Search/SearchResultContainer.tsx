@@ -121,7 +121,7 @@ export const SearchResultContainer: React.FC = () => {
         background={selectedTab === 'users-tab' ? 'white' : 'transparent'}
         position="left"
         size="medium"
-        padding={selectedTab === 'experience-tab' ? 0 : 3.75}
+        padding={selectedTab === 'experience-tab' || selectedTab === 'users-tab' ? 0 : 3.75}
         borderRadius={10}
         paddingLeft={selectedTab === 'users-tab' || selectedTab === 'experience-tab' ? 0 : 30}
         paddingRight={selectedTab === 'users-tab' || selectedTab === 'experience-tab' ? 0 : 30}

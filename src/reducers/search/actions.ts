@@ -32,6 +32,11 @@ export interface SearchUsers extends Action {
   };
 }
 
+export interface SetIsSearching extends Action {
+  type: constants.SET_IS_SEARCHING;
+  isSearching: boolean;
+}
+
 export interface AbortSearch extends Action {
   type: constants.ABORT_SEARCH;
 }
@@ -52,6 +57,7 @@ export type Actions =
   | ResetState
   | LoadUsers
   | SearchUsers
+  | SetIsSearching
   | AbortSearch
   | UsersLoading
   | ClearUsers
@@ -61,6 +67,12 @@ export type Actions =
  *
  * Actions
  */
+
+export const setIsSearching = (isSearching: boolean): SetIsSearching => ({
+  type: constants.SET_IS_SEARCHING,
+  isSearching,
+});
+
 export const setUsersLoading = (loading: boolean): UsersLoading => ({
   type: constants.USERS_LOADING,
   loading,
@@ -104,6 +116,7 @@ export const searchUsers: ThunkActionCreator<Actions, RootState> =
   (query: string, page = 1) =>
   async (dispatch, getState) => {
     dispatch(setUsersLoading(true));
+    dispatch(setIsSearching(true));
 
     try {
       const {meta, data: users} = await UserAPI.searchUsers(page, query);
@@ -123,5 +136,6 @@ export const searchUsers: ThunkActionCreator<Actions, RootState> =
       );
     } finally {
       dispatch(setUsersLoading(false));
+      dispatch(setIsSearching(false));
     }
   };
