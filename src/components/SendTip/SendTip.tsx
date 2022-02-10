@@ -101,12 +101,9 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
 
   const parseEstimatedFee = (estimatedFee: string | null, selectedCurrency: BalanceDetail) => {
     let amount: number | null = null;
-    if (estimatedFee && selectedCurrency.id === CurrencyId.MYRIA) {
-      const {decimal} = selectedCurrency;
-      amount = Number(estimatedFee) / 10 ** decimal;
-    } else {
-      amount = Number(estimatedFee);
-    }
+
+    const {decimal} = selectedCurrency;
+    amount = Number(estimatedFee) / 10 ** decimal;
     return amount;
   };
 
