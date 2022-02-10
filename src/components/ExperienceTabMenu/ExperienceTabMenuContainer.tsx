@@ -3,9 +3,6 @@ import {useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
-import {Typography} from '@material-ui/core';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
-
 import {ExperienceTabMenu} from './ExperienceTabMenu';
 
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
@@ -15,21 +12,8 @@ import {TimelineType} from 'src/interfaces/timeline';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      background: theme.palette.background.paper,
-      padding: theme.spacing(3),
-      borderRadius: '20px',
-      marginTop: '12px',
-      height: '500px',
-    },
-  }),
-);
-
 export const ExperienceTabMenuContainer: React.FC = () => {
-  const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
-  const style = useStyles();
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
 
   const router = useRouter();
 
@@ -84,16 +68,6 @@ export const ExperienceTabMenuContainer: React.FC = () => {
       router.push('/experience/create');
     }
   };
-
-  if (anonymous)
-    return (
-      <>
-        <Typography variant={'h4'}>Experience</Typography>
-        <div className={style.root}>
-          <Typography>Please Login with polkadot account to access this feature</Typography>
-        </div>
-      </>
-    );
 
   return (
     <ExperienceTabMenu

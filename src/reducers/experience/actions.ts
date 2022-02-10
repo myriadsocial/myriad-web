@@ -139,20 +139,35 @@ export const fetchExperience: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        userState: {user},
+        userState: {user, anonymous},
       } = getState();
 
-      if (!user) {
-        throw new Error('User not found');
+      if (anonymous) {
+        const {data: experiences, meta} = await ExperienceAPI.getAnonymousExperience();
+        const _newExperience: UserExperience[] = experiences.map(exp => {
+          return {
+            id: exp.id,
+            createdAt: exp.createdAt,
+            updatedAt: exp.updatedAt,
+            experienceId: exp.id,
+            subscribed: false,
+            experience: exp,
+          };
+        });
+        dispatch({
+          type: constants.FETCH_EXPERIENCE,
+          experiences: _newExperience,
+          meta,
+        });
+      } else {
+        if (!user) return;
+        const {meta, data: experiences} = await ExperienceAPI.getUserExperience(user.id, type);
+        dispatch({
+          type: constants.FETCH_EXPERIENCE,
+          experiences,
+          meta,
+        });
       }
-
-      const {meta, data: experiences} = await ExperienceAPI.getUserExperience(user.id, type);
-
-      dispatch({
-        type: constants.FETCH_EXPERIENCE,
-        experiences,
-        meta,
-      });
     } catch (error) {
       dispatch(
         setError({

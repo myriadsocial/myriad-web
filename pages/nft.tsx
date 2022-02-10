@@ -85,9 +85,10 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchConnectedSocials()),
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
-      dispatch(fetchExperience()),
     ]);
   }
+
+  await dispatch(fetchExperience());
 
   return {
     props: {

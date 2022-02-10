@@ -61,8 +61,12 @@ export const ExperienceTabMenu: React.FC<ExperienceTabMenuProps> = props => {
 
   return (
     <>
-      <Typography variant={'h4'}>Experience</Typography>
-      <HeaderWithAction actionText={'+ Create experience'} onClick={onCreateExperience} />
+      <Typography variant={'h4'} style={{marginBottom: '12px'}}>
+        Experience
+      </Typography>
+      <ShowIf condition={Boolean(user)}>
+        <HeaderWithAction actionText={'+ Create experience'} onClick={onCreateExperience} />
+      </ShowIf>
       <ExperienceList
         onDelete={onDelete}
         onUnsubscribe={onUnsubscribe}
