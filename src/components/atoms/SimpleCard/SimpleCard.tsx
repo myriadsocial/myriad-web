@@ -161,12 +161,12 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
           href={`/experience/[experienceId]/preview`}
           as={`/experience/${experienceId}/preview`}
           passHref>
-          <MenuItem>See details</MenuItem>
+          <MenuItem onClick={handleClose}>See details</MenuItem>
         </Link>
-        <ShowIf condition={subscribed}>
+        <ShowIf condition={subscribed && Boolean(user)}>
           <MenuItem onClick={handleClone}>Clone</MenuItem>
         </ShowIf>
-        <ShowIf condition={!subscribed}>
+        <ShowIf condition={!subscribed && Boolean(user)}>
           <Link
             href={`/experience/[experienceId]/edit`}
             as={`/experience/${experienceId}/edit`}
@@ -174,12 +174,12 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
             <MenuItem>Edit experience</MenuItem>
           </Link>
         </ShowIf>
-        <ShowIf condition={subscribed}>
+        <ShowIf condition={subscribed && Boolean(user)}>
           <MenuItem onClick={handleUnsubscribe} className={classes.delete}>
             Unsubscribe
           </MenuItem>
         </ShowIf>
-        <ShowIf condition={!subscribed}>
+        <ShowIf condition={!subscribed && Boolean(user)}>
           <MenuItem onClick={handleOpen} className={classes.delete}>
             Delete
           </MenuItem>

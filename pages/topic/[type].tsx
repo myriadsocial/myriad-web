@@ -126,7 +126,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchConnectedSocials()),
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
-      dispatch(fetchExperience()),
       dispatch(fetchPopularTopic()),
       dispatch(getUserCurrencies()),
       dispatch(fetchFriend()),
@@ -134,6 +133,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   await dispatch(fetchExchangeRates());
+  await dispatch(fetchExperience());
 
   let experience: any | null = null;
 

@@ -114,7 +114,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchConnectedSocials(userId === profileId)),
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
-      dispatch(fetchExperience()),
       dispatch(fetchAccountPrivacySetting(profileId)),
       dispatch(getUserCurrencies()),
       dispatch(fetchFriend()),
@@ -122,6 +121,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   await dispatch(fetchExchangeRates());
+  await dispatch(fetchExperience());
 
   try {
     const detail = await UserAPI.getUserDetail(profileId, userId);

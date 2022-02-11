@@ -207,13 +207,13 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchConnectedSocials()),
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
-      dispatch(fetchExperience()),
       dispatch(getUserCurrencies()),
       dispatch(fetchFriend()),
     ]);
   }
 
   await dispatch(fetchExchangeRates());
+  await dispatch(fetchExperience());
 
   let description =
     post?.text ??
