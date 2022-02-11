@@ -8,8 +8,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import Logo from 'src/images/Myriad_Full_Logo_Color_1-01_1.svg';
-import Illustration from 'src/images/undraw_Fall_is_coming_yl0x_1.svg';
+import {MyriadFullIcon} from 'src/components/atoms/Icons';
+import Illustration from 'src/images/illustration/undraw_Fall_is_coming_yl0x_1.svg';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 
@@ -76,7 +76,7 @@ const Maintenance: React.FC = () => {
       <div>
         <div className={style.bar} />
         <div className={style.logo}>
-          <Logo />
+          <MyriadFullIcon />
         </div>
         <div className={style.illustration}>
           <Illustration />

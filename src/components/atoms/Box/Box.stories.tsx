@@ -5,7 +5,9 @@ import React from 'react';
 import {Button} from '@material-ui/core';
 
 import {BoxComponent} from '.';
-import FacebookIcon from '../../../images/socials/facebook.svg';
+
+import {socials} from 'src/components/atoms/Icons';
+import {SocialsEnum} from 'src/interfaces/social';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Box',
@@ -32,9 +34,7 @@ ComponentBox.args = {
         marginRight: 8,
         flexDirection: 'row',
       }}>
-      <Button variant="contained">
-        <FacebookIcon />
-      </Button>
+      <Button variant="contained">{socials[SocialsEnum.FACEBOOK]}</Button>
       <Button variant="contained" color="primary">
         Primary
       </Button>

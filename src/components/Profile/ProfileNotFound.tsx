@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import {useStyles} from './profile.style';
 
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
-import Illustration from 'src/images/UserStatusIsometric.svg';
+import Illustration from 'src/images/illustration/UserStatusIsometric.svg';
 
 export const ProfileNotFound: React.FC = () => {
   const style = useStyles();

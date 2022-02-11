@@ -3,10 +3,9 @@ import React, {useState} from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import Paper from '@material-ui/core/Paper';
-import SvgIcon from '@material-ui/core/SvgIcon';
 
 import {SearchBoxProps, SearchBoxColor, useStyles} from '.';
-import SearchIcon from '../../../images/Icons/magnifierIcon.svg';
+import {SearchIcon} from '../Icons';
 
 import {debounce} from 'lodash';
 import i18n from 'src/locale';
@@ -52,7 +51,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   return (
     <Paper className={classes.root}>
       <IconButton className={classes.iconButton} aria-label="search" onClick={submitClickSearch}>
-        <SvgIcon component={SearchIcon} viewBox="0 0 24 24" />
+        <SearchIcon />
       </IconButton>
       <InputBase
         onKeyUp={submitSearch}

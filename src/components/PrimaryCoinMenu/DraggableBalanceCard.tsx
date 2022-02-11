@@ -2,14 +2,12 @@ import React from 'react';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '.';
-import FullVectorIcon from '../../images/Icons/FullVectorIcon.svg';
-import TripleDoubleDotsIcon from '../../images/Icons/TripleDoubleDotsIcon.svg';
 import {BalanceDetail} from '../MyWallet';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
+import {DragIndicatorIcon, ArrowUpIcon} from '../atoms/Icons';
 
 import {formatUsd} from 'src/helpers/balance';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
@@ -66,15 +64,14 @@ export const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props =
               </Typography>
             </div>
 
-            <SvgIcon
+            <ArrowUpIcon
               style={index === 0 ? {transform: 'rotate(180deg)'} : {transform: 'rotate(0deg)'}}
-              component={FullVectorIcon}
               className={classes.cursor}
               onClick={handleOnClick}
               viewBox="0 0 20 20"
             />
 
-            <SvgIcon component={TripleDoubleDotsIcon} viewBox="0 0 18 20" />
+            <DragIndicatorIcon viewBox="0 0 18 20" />
           </div>
         </div>
       </CardContent>

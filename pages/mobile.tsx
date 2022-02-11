@@ -10,7 +10,7 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import Logo from 'src/images/Myriad_Full_Logo_Color_1-01_1.svg';
+import {MyriadFullIcon} from 'src/components/atoms/Icons';
 import i18n from 'src/locale';
 
 const {publicRuntimeConfig} = getConfig();
@@ -63,7 +63,7 @@ const Mobile: React.FC = () => {
       </Head>
       <Grid container direction="column" justifyContent="center" alignContent="center">
         <Grid item xs={12} className={style.logo}>
-          <Logo />
+          <MyriadFullIcon />
         </Grid>
         <Grid item xs={12}>
           <Typography className={style.title}>{i18n.t('Mobile.title')}</Typography>

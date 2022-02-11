@@ -3,7 +3,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 import React from 'react';
 
 import {ListItemComponent} from '.';
-import FacebookIcon from '../../../images/socials/facebook.svg';
+import {FacebookIcon} from '../Icons';
 
 export default {
   title: 'UI Revamp v2.0/atoms/ListItem',

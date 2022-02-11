@@ -1,14 +1,11 @@
 import React from 'react';
 
-import {SvgIcon} from '@material-ui/core';
 // TODO change Avatar to tumbnail size
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 
-import FacebookIcon from '../../../../images/Icons/facebook.svg';
-import RedditIcon from '../../../../images/Icons/reddit.svg';
-import TwitterIcon from '../../../../images/Icons/twitter.svg';
 import {MyriadIcon} from '../../../common/MyriadIcon';
+import {FacebookIcon, RedditIcon, TwitterIcon} from '../../Icons';
 import StyledBadge from '../Badge.component';
 import {Props} from './post-avatar.interface';
 import {useStyles} from './post-avatar.style';
@@ -21,21 +18,9 @@ export default function PostAvatar({origin, avatar, name, onClick}: Props) {
 
   const socials = React.useMemo(
     () => ({
-      facebook: (
-        <SvgIcon viewBox="0 0 20 20">
-          <FacebookIcon />
-        </SvgIcon>
-      ),
-      twitter: (
-        <SvgIcon viewBox="0 0 20 20">
-          <TwitterIcon />
-        </SvgIcon>
-      ),
-      reddit: (
-        <SvgIcon viewBox="0 0 20 20">
-          <RedditIcon />
-        </SvgIcon>
-      ),
+      facebook: FacebookIcon,
+      twitter: TwitterIcon,
+      reddit: RedditIcon,
       myriad: <MyriadIcon />,
     }),
     [],

@@ -2,8 +2,8 @@ import React from 'react';
 
 import {useRouter} from 'next/router';
 
-import MyriadIcon from '../../images/web/myriad.svg';
 import {BoxComponent} from '../atoms/Box';
+import {MyriadFullBlackIcon} from '../atoms/Icons';
 import {ListItemComponent} from '../atoms/ListItem';
 import {useStyles} from './Menu.styles';
 import {useMenuList, MenuDetail, MenuId} from './use-menu-list';
@@ -33,7 +33,7 @@ export const Menu: React.FC<MenuProps> = props => {
     <div className={styles.root}>
       <BoxComponent paddingLeft={0} paddingRight={0}>
         <div className={styles.head} onClick={gotoHome}>
-          <MyriadIcon />
+          <MyriadFullBlackIcon />
         </div>
 
         {menu.map(item => (

@@ -1,8 +1,7 @@
 import React, {useMemo} from 'react';
 
-import RedditIcon from '../../images/socials/reddit.svg';
-import TwitterIcon from '../../images/socials/twitter.svg';
-import {SocialsEnum, SocialMedia} from '../../interfaces/social';
+import {socials as socialsIcons} from 'src/components/atoms/Icons';
+import {SocialsEnum, SocialMedia} from 'src/interfaces/social';
 
 export type SocialDetail = {
   id: SocialsEnum;
@@ -21,8 +20,8 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
 
   const icons: Partial<Record<SocialsEnum, JSX.Element>> = useMemo(
     () => ({
-      [SocialsEnum.REDDIT]: <RedditIcon />,
-      [SocialsEnum.TWITTER]: <TwitterIcon />,
+      [SocialsEnum.REDDIT]: socialsIcons[SocialsEnum.REDDIT],
+      [SocialsEnum.TWITTER]: socialsIcons[SocialsEnum.TWITTER],
     }),
     [],
   );
