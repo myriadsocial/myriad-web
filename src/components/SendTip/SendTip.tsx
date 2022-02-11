@@ -27,7 +27,6 @@ import {CurrencyOptionComponent} from '../atoms/CurrencyOption';
 import {ListItemComponent} from '../atoms/ListItem';
 
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
-import {CurrencyId} from 'src/interfaces/currency';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
 type SendTipProps = {
@@ -101,12 +100,9 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
 
   const parseEstimatedFee = (estimatedFee: string | null, selectedCurrency: BalanceDetail) => {
     let amount: number | null = null;
-    if (estimatedFee && selectedCurrency.id === CurrencyId.MYRIA) {
-      const {decimal} = selectedCurrency;
-      amount = Number(estimatedFee) / 10 ** decimal;
-    } else {
-      amount = Number(estimatedFee);
-    }
+
+    const {decimal} = selectedCurrency;
+    amount = Number(estimatedFee) / 10 ** decimal;
     return amount;
   };
 
