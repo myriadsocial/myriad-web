@@ -17,13 +17,12 @@ import {
   InputAdornment,
 } from '@material-ui/core';
 
-import FacebookIcon from '../../images/socials/facebook.svg';
-import RedditIcon from '../../images/socials/reddit.svg';
-import TwitterIcon from '../../images/socials/twitter.svg';
-import {SocialsEnum} from '../../interfaces/social';
+import {socials} from '../atoms/Icons';
 import {Modal, ModalProps} from '../atoms/Modal';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './AddSocialMedia.styles';
+
+import {SocialsEnum} from 'src/interfaces/social';
 
 type AddSocialMediaProps = Pick<ModalProps, 'onClose' | 'open'> & {
   social: SocialsEnum;
@@ -168,7 +167,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                       variant="outlined"
                       color="secondary"
                       fullWidth
-                      startIcon={<FacebookIcon />}
+                      startIcon={socials[SocialsEnum.FACEBOOK]}
                       className={styles.facebook}>
                       Share
                     </Button>
@@ -186,7 +185,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                       variant="outlined"
                       color="secondary"
                       fullWidth
-                      startIcon={<TwitterIcon />}
+                      startIcon={socials[SocialsEnum.TWITTER]}
                       className={styles.twitter}>
                       Tweet Now
                     </Button>
@@ -204,7 +203,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                       variant="outlined"
                       color="secondary"
                       fullWidth
-                      startIcon={<RedditIcon />}
+                      startIcon={socials[SocialsEnum.REDDIT]}
                       className={styles.reddit}>
                       Share
                     </Button>

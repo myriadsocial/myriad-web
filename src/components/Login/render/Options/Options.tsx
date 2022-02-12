@@ -9,7 +9,6 @@ import {
   Link,
   List,
   ListItem,
-  SvgIcon,
   Typography,
 } from '@material-ui/core';
 
@@ -17,15 +16,18 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {useStyles} from './Options.style';
 
+import {
+  EthereumNetworkIcon,
+  PolkadotNetworkIcon,
+  NearNetworkIcon,
+  PolygonNetworkDisabledIcon,
+  PolkadotWalletIcon,
+  CoinbaseWalletisabledIcon,
+  MetamaskWalletDisabledIcon,
+  TrustWalletDisabledIcon,
+} from 'src/components/atoms/Icons';
 import {PromptComponent as Prompt} from 'src/components/atoms/Prompt/prompt.component';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import EthereumIcon from 'src/images/network/ethereum-disabled.svg';
-import NearIcon from 'src/images/network/near.svg';
-import PolkadotIcon from 'src/images/network/polkadot.svg';
-import PolygonIcon from 'src/images/network/polygon-disabled.svg';
-import CoinbaseIcon from 'src/images/wallet/coinbase-disabled.svg';
-import MetamaskIcon from 'src/images/wallet/metamask-disabled.svg';
-import TrustIcon from 'src/images/wallet/trust-disabled.svg';
 import i18n from 'src/locale';
 
 type OptionProps = {
@@ -140,25 +142,25 @@ export const Options: React.FC<OptionProps> = props => {
             selected={network === NetworkTypeEnum.POLKADOT}
             onClick={setSelectedNetwork(NetworkTypeEnum.POLKADOT)}>
             <div className={styles.card}>
-              <SvgIcon component={PolkadotIcon} className={styles.icon} viewBox="0 0 32 32" />
+              <PolkadotNetworkIcon className={styles.icon} />
               <Typography>Polkadot</Typography>
             </div>
           </ListItem>
           <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.ETHEREUM)}>
             <div className={styles.card}>
-              <SvgIcon component={EthereumIcon} className={styles.icon} viewBox="0 0 32 32" />
+              <EthereumNetworkIcon className={styles.icon} />
               <Typography>Ethereum</Typography>
             </div>
           </ListItem>
           <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.NEAR)}>
             <div className={styles.card}>
-              <SvgIcon component={NearIcon} className={styles.icon} viewBox="0 0 32 32" />
+              <NearNetworkIcon className={styles.icon} />
               <Typography>Near</Typography>
             </div>
           </ListItem>
           <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.POLYGON)}>
             <div className={styles.card}>
-              <SvgIcon component={PolygonIcon} className={styles.icon} viewBox="0 0 32 32" />
+              <PolygonNetworkDisabledIcon className={styles.icon} />
               <Typography>Polygon</Typography>
             </div>
           </ListItem>
@@ -177,7 +179,7 @@ export const Options: React.FC<OptionProps> = props => {
             selected={wallet === WalletTypeEnum.POLKADOT}
             onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}>
             <div className={styles.card}>
-              <SvgIcon component={PolkadotIcon} className={styles.icon} viewBox="0 0 32 32" />
+              <PolkadotWalletIcon className={styles.icon} />
               <Typography>Polkadot.js</Typography>
             </div>
           </ListItem>
@@ -188,7 +190,7 @@ export const Options: React.FC<OptionProps> = props => {
             disabled
             onClick={setSelectedWallet(WalletTypeEnum.COINBASE)}>
             <div className={styles.card}>
-              <SvgIcon component={CoinbaseIcon} className={styles.icon} viewBox="0 0 32 32" />
+              <CoinbaseWalletisabledIcon className={styles.icon} />
               <Typography>Coinbase</Typography>
             </div>
           </ListItem>
@@ -198,7 +200,7 @@ export const Options: React.FC<OptionProps> = props => {
             disabled
             onClick={setSelectedWallet(WalletTypeEnum.METAMASK)}>
             <div className={styles.card}>
-              <SvgIcon component={MetamaskIcon} className={styles.icon} viewBox="0 0 32 32" />
+              <MetamaskWalletDisabledIcon className={styles.icon} />
               <Typography>Metamask</Typography>
             </div>
           </ListItem>
@@ -208,7 +210,7 @@ export const Options: React.FC<OptionProps> = props => {
             disabled
             onClick={setSelectedWallet(WalletTypeEnum.TRUST)}>
             <div className={styles.card}>
-              <SvgIcon component={TrustIcon} className={styles.icon} viewBox="0 0 32 32" />
+              <TrustWalletDisabledIcon className={styles.icon} />
               <Typography>Trust Wallet</Typography>
             </div>
           </ListItem>

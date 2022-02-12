@@ -9,12 +9,12 @@ import ImageListItem from '@material-ui/core/ImageListItem';
 import ImageListItemBar from '@material-ui/core/ImageListItemBar';
 import {Skeleton} from '@material-ui/lab';
 
+import {MyriadGreyIcon} from '../Icons';
 import {useStyles} from './Gallery.styles';
 import {GalleryType, ImageListProps, ImageListItemProps} from './Gallery.types';
 import {buildList} from './util';
 
 import ShowIf from 'src/components/common/show-if.component';
-import ImagePlaceholder from 'src/images/Icons/myriad-grey.svg';
 import theme from 'src/themes/light-theme';
 
 type GalleryProps = {
@@ -95,11 +95,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
                       : 635 / image.cols
                   }
                   height={list.cellHeight * image.rows}>
-                  <SvgIcon
-                    component={ImagePlaceholder}
-                    viewBox="0 0 50 50"
-                    style={{width: 50, height: 50, visibility: 'visible'}}
-                  />
+                  <MyriadGreyIcon width={50} height={50} />
                 </Skeleton>
               )}
 

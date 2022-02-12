@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './ResourceDeleted.styles';
 
-import Illustration from 'src/images/resource-deleted.svg';
+import Illustration from 'src/images/illustration/resource-deleted.svg';
 
 export const ResourceDeleted: React.FC = () => {
   const style = useStyles();

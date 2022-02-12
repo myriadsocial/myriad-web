@@ -12,16 +12,15 @@ import {
   SvgIcon,
   Typography,
 } from '@material-ui/core';
-import {Skeleton} from '@material-ui/lab';
 
+import {UploadIcon} from '../Icons';
 import {useStyles} from './Dropzone.styles';
+import {Skeleton as FileSkeleton} from './File.skeleton';
 
 import {detect} from 'detect-browser';
 import muxjs from 'mux.js';
 import ShowIf from 'src/components/common/show-if.component';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
-import UploadIcon from 'src/images/Icons/Upload.svg';
-import ImagePlaceholder from 'src/images/Icons/myriad-grey.svg';
 
 type DropzoneProps = {
   value?: string;
@@ -316,22 +315,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
                         rows={getRows()}
                         classes={{item: styles.item}}>
                         {item.loading && (
-                          <Skeleton
-                            variant="rect"
-                            animation={false}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}
-                            width={115 * getCols()}
-                            height={128 * getRows()}>
-                            <SvgIcon
-                              component={ImagePlaceholder}
-                              viewBox="0 0 50 50"
-                              style={{width: 50, height: 50, visibility: 'visible'}}
-                            />
-                          </Skeleton>
+                          <FileSkeleton width={115 * getCols()} height={128 * getRows()} />
                         )}
                         <img
                           style={{visibility: item.loading ? 'hidden' : 'visible'}}

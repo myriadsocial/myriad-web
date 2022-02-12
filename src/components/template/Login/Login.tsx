@@ -6,9 +6,9 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './Login.styles';
 
-import Purple from 'src/images/Bank_note_Isometric_1.svg';
-import Yellow from 'src/images/Conversation__Isometric_1.svg';
-import LogoImage from 'src/images/myriad-logo-black.svg';
+import {MyriadFullIcon} from 'src/components/atoms/Icons';
+import Purple from 'src/images/illustration/Bank_note_Isometric_1.svg';
+import Yellow from 'src/images/illustration/Conversation__Isometric_1.svg';
 import i18n from 'src/locale';
 
 type LoginProps = {
@@ -24,7 +24,7 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
         <Grid item xs={7}>
           <div className={`${style.paper} ${style.flex}`}>
             <div className={style.logo}>
-              <LogoImage />
+              <MyriadFullIcon />
             </div>
 
             <Typography variant="h5" component="h1" className={style.title}>

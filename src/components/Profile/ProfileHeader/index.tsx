@@ -21,12 +21,12 @@ import {useStyles} from './profile-header.style';
 import {Metric} from './render/Metric';
 import {Website} from './render/Website';
 
+import {OfficialBadgeIcon} from 'src/components/atoms/Icons';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {ReportComponent} from 'src/components/atoms/Report/Report.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
-import OfficialBadge from 'src/images/official-badge.svg';
 import {Friend} from 'src/interfaces/friend';
 import {ReportProps} from 'src/interfaces/report';
 import {User} from 'src/interfaces/user';
@@ -189,7 +189,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                     <IconButton
                       aria-label="official-badge"
                       style={{backgroundColor: 'transparent', paddingLeft: 4}}>
-                      <SvgIcon component={OfficialBadge} viewBox="0 0 24 24" color="primary" />
+                      <OfficialBadgeIcon viewBox="0 0 24 24" color="primary" />
                     </IconButton>
                   </Tooltip>
                 </ShowIf>

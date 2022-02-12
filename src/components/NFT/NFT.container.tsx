@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import {useStyles} from './nft.style';
 
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
-import Illustration from 'src/images/NFT_Isometric_1.svg';
+import Illustration from 'src/images/illustration/NFT_Isometric_1.svg';
 
 const NFTContainer: React.FC = () => {
   const style = useStyles();

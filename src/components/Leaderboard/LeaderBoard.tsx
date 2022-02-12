@@ -20,13 +20,13 @@ import {
   TableRow,
 } from '@material-ui/core';
 
+import {MyriadFullBlackIcon} from '../atoms/Icons';
 import {useStyles} from './leaderboard.styles';
 import {useLeaderboard} from './use-leaderboard-hook';
 
 import {LoadMore} from 'src/components/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
-import MyriadIcon from 'src/images/web/myriad.svg';
 
 export const LeaderBoardComponent: React.FC = () => {
   const {leaderboard, fetchLeaderboard, loading, meta, limit} = useLeaderboard();
@@ -65,7 +65,7 @@ export const LeaderBoardComponent: React.FC = () => {
         <div className={style.header}>
           <div className={style.header}>
             <a href={publicRuntimeConfig.myriadWebsiteURL} rel="noreferrer">
-              <MyriadIcon />
+              <MyriadFullBlackIcon />
             </a>
             <div className={style.divider} />
             <Typography className={style.text} color="primary">

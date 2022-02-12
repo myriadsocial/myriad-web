@@ -70,10 +70,6 @@ export const ProfileTimeline: React.FC<Props> = ({loading}) => {
 
   if (!profile?.id) return <ProfileNotFound />;
 
-  console.log('user?.id', user?.id);
-  console.log('profile.blocker', profile.blocker);
-  console.log('equal', user?.id === profile.blocker);
-
   return (
     <div className={style.root}>
       <div className={style.scroll}>

@@ -10,8 +10,8 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles, ProfileHeaderProps} from '.';
-import BellIconDefault from '../../images/Icons/notif-default.svg';
 import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
+import {NotificationIcon} from '../atoms/Icons';
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const {
@@ -53,7 +53,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
           <div className={classes.notification}>
             <IconButton aria-label="avatar" disabled={!!alias} onClick={onShowNotificationList}>
               <Badge variant="dot" invisible={notificationCount === 0}>
-                <SvgIcon component={BellIconDefault} />
+                <NotificationIcon />
               </Badge>
             </IconButton>
           </div>

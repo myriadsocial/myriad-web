@@ -6,8 +6,9 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import Logo from 'src/images/Myriad_Full_Logo_Color_1-01_1.svg';
-import Illustration from 'src/images/unexpected-error.svg';
+import {MyriadFullIcon} from '../atoms/Icons';
+
+import Illustration from 'src/images/illustration/unexpected-error.svg';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,7 +74,7 @@ export const Error: React.FC<ErrorProps> = () => {
       <div>
         <div className={style.bar} />
         <div className={style.logo}>
-          <Logo />
+          <MyriadFullIcon />
         </div>
         <div className={style.illustration}>
           <Illustration />

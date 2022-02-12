@@ -7,7 +7,7 @@ import Link from 'next/link';
 import {Paper} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import MyriadIcon from 'src/images/web/myriad.svg';
+import {MyriadFullBlackIcon} from 'src/components/atoms/Icons';
 import i18n from 'src/locale';
 
 const {publicRuntimeConfig} = getConfig();
@@ -38,7 +38,7 @@ const TermOfUse: React.FC = () => {
       <Head>
         <title>{i18n.t('TermOfUse.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
-      <MyriadIcon />
+      <MyriadFullBlackIcon />
       <div className={style.content}>
         <h1 className={`${style.center} ${style.title}`}>TERMS OF USE</h1>
         <p className={`${style.paragraph}`}>
