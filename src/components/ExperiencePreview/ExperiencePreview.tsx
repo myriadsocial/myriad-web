@@ -30,9 +30,8 @@ type Props = {
 };
 
 export const ExperiencePreview: React.FC<Props> = props => {
-  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const {experience, userExperiences, userId, onSubscribe, onUnsubscribe, onFollow, onUpdate} =
-    props;
+  const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
+  const {experience, userExperiences, onSubscribe, onUnsubscribe, onFollow, onUpdate} = props;
   const {logout} = useAuthHook();
   const style = useStyles();
   const router = useRouter();
@@ -144,7 +143,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
           ),
         )}
       </div>
-      {experience.createdBy !== userId && (
+      {(experience?.createdBy !== user?.id || anonymous) && (
         <div className={style.button}>
           <Button
             variant="outlined"
@@ -162,7 +161,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
         </div>
       )}
 
-      {experience.createdBy === userId && (
+      {experience?.createdBy === user?.id && (
         <Button
           fullWidth
           className={style.center}
