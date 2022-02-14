@@ -30,7 +30,7 @@ export const Website: React.FC<WebsiteProps> = props => {
           viewBox="0 0 24 24"
         />
         <Link className={style.link} href={forceHttps(url ?? '')} rel="noreferrer" target="_blank">
-          <Typography variant="body1">{url}</Typography>
+          <Typography variant="body1">{url?.slice(0, 40)}</Typography>
         </Link>
       </ShowIf>
 
