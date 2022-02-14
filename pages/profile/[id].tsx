@@ -9,6 +9,9 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import {ProfileTimeline} from 'src/components/Profile/ProfileComponent';
+import {ResourceDeleted} from 'src/components/ResourceDeleted';
+import {SectionTitle, TopNavbarComponent} from 'src/components/atoms/TopNavbar';
+import ShowIf from 'src/components/common/show-if.component';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
 import {setHeaders} from 'src/lib/api/base';
@@ -31,19 +34,20 @@ type ProfilePageProps = {
   title: string;
   description: string;
   image: string | null;
+  isBanned: boolean;
 };
 
 const {publicRuntimeConfig} = getConfig();
 
 const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
-  const {title, description, image} = props;
+  const {title, description, image, isBanned} = props;
 
   const router = useRouter();
 
   return (
     <DefaultLayout isOnProfilePage={true}>
       <Head>
-        <title>{title}</title>
+        <title>{isBanned ? 'Profile Not Found' : title}</title>
         <meta property="og:type" content="profile" />
         <meta property="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
         <meta property="og:title" content={title} />
@@ -57,7 +61,14 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
         <meta name="twitter:card" content="summary" />
       </Head>
 
-      <ProfileTimeline loading={false} />
+      <ProfileTimeline loading={false} isBanned={isBanned} />
+
+      <ShowIf condition={isBanned}>
+        <>
+          <TopNavbarComponent description={'Profile Detail'} sectionTitle={SectionTitle.PROFILE} />
+          <ResourceDeleted />
+        </>
+      </ShowIf>
     </DefaultLayout>
   );
 };
@@ -139,6 +150,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
           title: detail?.name ?? null,
           description: detail?.bio ?? null,
           image: detail?.profilePictureURL ?? null,
+          isBanned: Boolean(detail?.deletedAt),
         },
       };
     } else {

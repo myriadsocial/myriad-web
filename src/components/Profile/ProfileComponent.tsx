@@ -23,9 +23,10 @@ import {UserState} from 'src/reducers/user/reducer';
 
 type Props = {
   loading: boolean;
+  isBanned?: boolean;
 };
 
-export const ProfileTimeline: React.FC<Props> = ({loading}) => {
+export const ProfileTimeline: React.FC<Props> = ({loading, isBanned = false}) => {
   const style = useStyles();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -71,7 +72,7 @@ export const ProfileTimeline: React.FC<Props> = ({loading}) => {
   if (!profile?.id) return <ProfileNotFound />;
 
   return (
-    <div className={style.root}>
+    <div className={style.root} style={{display: isBanned ? 'none' : 'block'}}>
       <div className={style.scroll}>
         <div className={style.mb}>
           <TopNavbarComponent description={profile.name} sectionTitle={SectionTitle.PROFILE} />
