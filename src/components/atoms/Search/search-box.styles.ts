@@ -9,6 +9,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: 52,
       borderRadius: 10,
     },
+    outline: {
+      border: '1px solid #EDEDED',
+    },
     input: {
       marginLeft: theme.spacing(1),
       flex: 1,

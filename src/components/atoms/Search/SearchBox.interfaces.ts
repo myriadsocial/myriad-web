@@ -29,6 +29,7 @@ type SearchBoxProps = {
   isDisabled?: boolean;
 
   onSubmit?: (value: string) => void;
+  reverse?: boolean;
 };
 
 export {SearchBoxColor, searchBoxColors};

@@ -8,6 +8,7 @@ import {SearchBoxProps, SearchBoxColor, useStyles} from '.';
 import {SearchIcon} from '../Icons';
 
 import {debounce} from 'lodash';
+import ShowIf from 'src/components/common/show-if.component';
 import i18n from 'src/locale';
 
 const SearchBox: React.FC<SearchBoxProps> = ({
@@ -16,6 +17,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   placeholder = i18n.t('Home.Search.Placeholder'),
   isDisabled = false,
   onSubmit,
+  reverse = false,
   ...props
 }) => {
   const classes = useStyles();
@@ -49,10 +51,12 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   };
 
   return (
-    <Paper className={classes.root}>
-      <IconButton className={classes.iconButton} aria-label="search" onClick={submitClickSearch}>
-        <SearchIcon />
-      </IconButton>
+    <Paper className={`${reverse && classes.outline} ${classes.root}`} elevation={reverse ? 0 : 1}>
+      <ShowIf condition={!reverse}>
+        <IconButton className={classes.iconButton} aria-label="search" onClick={submitClickSearch}>
+          <SearchIcon />
+        </IconButton>
+      </ShowIf>
       <InputBase
         onKeyUp={submitSearch}
         className={classes.input}
@@ -62,6 +66,11 @@ const SearchBox: React.FC<SearchBoxProps> = ({
         inputProps={{'aria-label': ariaLabel}}
         {...props}
       />
+      <ShowIf condition={reverse}>
+        <IconButton className={classes.iconButton} aria-label="search" onClick={submitClickSearch}>
+          <SearchIcon />
+        </IconButton>
+      </ShowIf>
     </Paper>
   );
 };
