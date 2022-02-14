@@ -27,6 +27,9 @@ export interface AdditionalReferenceIdItem {
   postId: string;
   firstCommentId: string;
   secondCommentId: string;
+  id: string;
+  username: string;
+  displayName: string;
   peopleId: string;
   peopleName: string;
   peoplePlatftorm: string;
