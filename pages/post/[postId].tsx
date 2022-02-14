@@ -60,6 +60,10 @@ const PostPage: React.FC<PostPageProps> = props => {
 
   const router = useRouter();
 
+  const backToHome = () => {
+    router.push('/home');
+  };
+
   return (
     <DefaultLayout isOnProfilePage={false}>
       <Head>
@@ -80,7 +84,7 @@ const PostPage: React.FC<PostPageProps> = props => {
       <TopNavbarComponent description={'Post Detail'} sectionTitle={SectionTitle.TIMELINE} />
 
       <ShowIf condition={removed}>
-        <ResourceDeleted />
+        <ResourceDeleted onBackClicked={backToHome} />
       </ShowIf>
 
       <ShowIf condition={!removed}>
