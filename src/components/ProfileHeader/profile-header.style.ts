@@ -1,116 +1,99 @@
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme: Theme) =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      position: 'relative',
-      width: 312,
-
-      [theme.breakpoints.down('md')]: {
-        maxWidth: 290,
-      },
-
-      '& .MuiSvgIcon-root': {
-        fill: 'none',
-      },
-      '&::before': {
-        content: '""',
-        position: 'absolute',
-        top: 35,
-        left: 0,
-        width: 8,
-        height: 40,
-        borderRadius: theme.spacing(0, 1.25, 1.25, 0),
-        background: theme.palette.primary.main,
-      },
+    media: {
+      height: '100%',
+      width: '100%',
+      objectFit: 'cover',
+      borderTopLeftRadius: '10px',
+      borderTopRightRadius: '10px',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      zIndex: -999,
     },
-    box: {
-      background: '#FFF',
-      paddingBottom: 4,
-      padding: '30px 28px',
-      boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
+    screen: {
+      zIndex: -99,
+      height: '100%',
+      width: '100%',
+      borderTopLeftRadius: '10px',
+      borderTopRightRadius: '10px',
+      top: 0,
+      left: 0,
+      position: 'absolute',
+      background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%)',
+    },
+    root: {
+      zIndex: 0,
+      boxSizing: 'border-box',
+      padding: '30px',
+      paddingBottom: '20px',
+      minHeight: '260px',
+      position: 'relative',
+      width: '100%',
+      borderTopLeftRadius: '10px',
+      borderTopRightRadius: '10px',
+      color: '#FFFFFF',
     },
     avatar: {
-      width: 48,
-      marginRight: 4,
-
-      '&:hover': {
-        cursor: 'pointer',
-      },
+      boxSizing: 'border-box',
+      border: '2px solid #E5E5E5',
+      width: theme.spacing(10),
+      height: theme.spacing(10),
+      marginRight: '20px',
+      fontSize: '30px',
     },
     name: {
-      maxWidth: 162,
-
-      [theme.breakpoints.down('md')]: {
-        maxWidth: 142,
-      },
-
-      '& .MuiTypography-h5': {
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        wordWrap: 'break-word',
-      },
+      fontSize: '24px',
+      fontWeight: 700,
+      lineHeight: '30px',
+      letterSpacing: '0em',
+      marginBottom: '4px',
     },
-    notification: {
-      width: 40,
-
-      '& .MuiIconButton-root': {
-        padding: 8,
-      },
-      '& .MuiBadge-dot': {
-        backgroundColor: theme.status.danger.main,
-      },
+    solid: {
+      fill: 'currentColor',
     },
-    text: {
-      fontSize: '12px',
+    action: {
+      background: 'rgba(115, 66, 204, 0.2)',
+      padding: '8px',
+    },
+    mt22: {
+      marginTop: '22px',
+    },
+    mt15: {
+      marginTop: '15px',
+    },
+    mr12: {
+      marginRight: '12px',
+    },
+    button: {
+      width: 'auto',
+      minWidth: '120px',
+    },
+    fill: {
+      fill: 'none',
+    },
+    menu: {
+      borderRadius: '10px',
+      marginTop: '8px',
+    },
+    delete: {
+      color: '#FE3636',
+    },
+    m1: {
+      marginRight: theme.spacing(1.5),
+    },
+    error: {
+      background: '#FE3636',
+      color: '#FFF',
       '&:hover': {
-        fontWeight: 600,
-        cursor: 'pointer',
+        color: theme.palette.text.primary,
       },
     },
-    textAlign: {
-      textAlign: 'left',
-    },
-    downIconButton: {
-      width: '100%',
-      background: '#FFF',
-      textAlign: 'center',
-      borderBottomLeftRadius: theme.spacing(2.5),
-      borderBottomRightRadius: theme.spacing(2.5),
-      '&:hover': {
-        cursor: 'pointer',
-        background: 'rgba(255, 200, 87, 0.2)',
-      },
-    },
-    gutters: {
-      paddingLeft: '30px',
-      paddingRight: '30px',
-    },
-    hover: {
-      '&:hover': {
-        background: 'rgba(255, 200, 87, 0.2)',
-      },
-    },
-    content: {
-      width: '100%',
-      background: '#FFF',
-    },
-    open: {
-      height: 'auto',
-      maxHeight: '9999px',
-      transition: 'all 0.5s cubic-bezier(1,0,1,0)',
-    },
-    close: {
-      maxHeight: 0,
-      overflow: 'hidden',
-      transition: 'all 0.5s cubic-bezier(0,1,0,1)',
-    },
-    flex: {
+    'flex-center': {
       display: 'flex',
-      alignItems: 'center',
+      justifyContent: 'center',
     },
   }),
 );
-
-export default useStyles;

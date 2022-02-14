@@ -8,10 +8,10 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import axios from 'axios';
-import {PostContainer} from 'src/components/PostDedicated/PostDedicated.container';
+import {PostDetailContainer} from 'src/components/PostDetail';
 import {deserialize, formatToString} from 'src/components/PostEditor';
-import {ResourceDeleted} from 'src/components/ResourceDeleted';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {ResourceDeleted} from 'src/components/common/ResourceDeleted';
 import ShowIf from 'src/components/common/show-if.component';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
@@ -26,11 +26,15 @@ import * as SettingAPI from 'src/lib/api/setting';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
-import {fetchExperience} from 'src/reducers/experience/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {setPost} from 'src/reducers/timeline/actions';
-import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
+import {
+  setAnonymous,
+  fetchConnectedSocials,
+  fetchUser,
+  fetchUserExperience,
+} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
@@ -52,6 +56,10 @@ const PostPage: React.FC<PostPageProps> = props => {
 
   const router = useRouter();
 
+  const backToHome = () => {
+    router.push('/home');
+  };
+
   return (
     <DefaultLayout isOnProfilePage={false}>
       <Head>
@@ -72,11 +80,11 @@ const PostPage: React.FC<PostPageProps> = props => {
       <TopNavbarComponent description={'Post Detail'} sectionTitle={SectionTitle.TIMELINE} />
 
       <ShowIf condition={removed}>
-        <ResourceDeleted />
+        <ResourceDeleted onBackClicked={backToHome} />
       </ShowIf>
 
       <ShowIf condition={!removed}>
-        <PostContainer />
+        <PostDetailContainer />
       </ShowIf>
     </DefaultLayout>
   );
@@ -213,7 +221,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   await dispatch(fetchExchangeRates());
-  await dispatch(fetchExperience());
+  await dispatch(fetchUserExperience());
 
   let description =
     post?.text ??

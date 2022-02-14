@@ -7,7 +7,7 @@ import {Typography} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 
-import {Experience, UserExperience} from '../../interfaces/experience';
+import {Experience, WrappedExperience} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
 import {SocialsEnum} from '../../interfaces/social';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
@@ -21,7 +21,7 @@ import {UserState} from 'src/reducers/user/reducer';
 
 type Props = {
   experience: Experience;
-  userExperiences: UserExperience[];
+  userExperiences: WrappedExperience[];
   userId: string;
   onSubscribe: (experienceId: string) => void;
   onUnsubscribe: (userExperienceId: string) => void;
@@ -63,15 +63,18 @@ export const ExperiencePreview: React.FC<Props> = props => {
   };
 
   const handleUnsubscribeExperience = () => {
-    onUnsubscribe(
-      userExperiences.filter(ar => ar.experienceId === experience.id && ar.subscribed === true)[0]
-        .id,
+    const subscribedExperience = userExperiences.find(
+      ar => ar.experience.id === experience.id && ar.subscribed === true,
     );
+
+    if (subscribedExperience && subscribedExperience.id && onUnsubscribe) {
+      onUnsubscribe(subscribedExperience.id);
+    }
   };
 
   const isSubscribed = () => {
     return (
-      userExperiences.filter(ar => ar.experienceId === experience.id && ar.subscribed === true)
+      userExperiences.filter(ar => ar.experience.id === experience.id && ar.subscribed === true)
         .length > 0
     );
   };

@@ -12,7 +12,7 @@ import {useUpload} from 'src/hooks/use-upload.hook';
 import {Experience} from 'src/interfaces/experience';
 
 export const ExperienceCloneContainer: React.FC = () => {
-  const {searchTags, tags, searchPeople, people, experience, getDetail, cloneExperience} =
+  const {searchTags, tags, searchPeople, people, experience, getExperienceDetail, cloneExperience} =
     useExperienceHook();
   const {uploadImage} = useUpload();
   const router = useRouter();
@@ -20,7 +20,7 @@ export const ExperienceCloneContainer: React.FC = () => {
   const style = useStyles();
 
   useEffect(() => {
-    if (experienceId) getDetail(experienceId);
+    if (experienceId) getExperienceDetail(experienceId);
   }, []);
 
   const onImageUpload = async (files: File[]) => {

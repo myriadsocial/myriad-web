@@ -1,18 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import {Comment} from '../../interfaces/comment';
-import {Post} from '../../interfaces/post';
-import {User} from '../../interfaces/user';
+import {Grid} from '@material-ui/core';
+
 import {PostDetail} from '../PostDetail';
 import {EmptyResult} from '../Search/EmptyResult';
 import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
-import {sortOptions} from '../Timeline/default';
+import {timelineSortOptions} from '../Timeline/default';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {Loading} from '../atoms/Loading';
-import {useStyles} from './PostsList.styles';
 
 import _ from 'lodash';
+import {Comment} from 'src/interfaces/comment';
+import {Post} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
 
 type PostsListProps = {
   user?: User;
@@ -48,8 +49,6 @@ export const PostsList: React.FC<PostsListProps> = props => {
     onRemoveVote,
     onImporters,
   } = props;
-
-  const classes = useStyles();
 
   useEffect(() => {
     setDefaultPosts(searchedPosts);
@@ -89,14 +88,15 @@ export const PostsList: React.FC<PostsListProps> = props => {
 
   return (
     <>
-      <div className={classes.dropdownMenu}>
+      <Grid container alignItems="center" justifyContent="flex-end">
         <DropdownMenu
           title="Sort by"
-          selected={sortOptions[0].id}
-          options={sortOptions}
+          selected={timelineSortOptions[0].id}
+          options={timelineSortOptions}
           onChange={handleSort}
         />
-      </div>
+      </Grid>
+
       <InfiniteScroll
         scrollableTarget="scrollable-searched-posts"
         dataLength={searchedPosts.length}

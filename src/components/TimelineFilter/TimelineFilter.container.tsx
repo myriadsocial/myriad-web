@@ -1,29 +1,34 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {useQueryParams} from '../../hooks/use-query-params.hooks';
 import {parseQueryToFilter} from '../Timeline/helper';
 import {useTimelineFilter} from '../Timeline/hooks/use-timeline-filter.hook';
 import {TimelineFilter as TimelineFilterComponent} from './TimelineFilter';
 
 import {ParsedUrlQuery} from 'querystring';
-import {TimelineFilter, TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
+import {useQueryParams} from 'src/hooks/use-query-params.hooks';
+import {
+  TimelineFilter,
+  TimelineSortMethod,
+  TimelineSortOrder,
+  TimelineType,
+} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {clearTimeline} from 'src/reducers/timeline/actions';
 
 type TimelineFilterContainerProps = {
   filters?: TimelineFilter;
-  enableFilter?: boolean;
-  sortType?: 'metric' | 'filter';
+  filterType?: 'origin' | 'type';
+  sortType?: 'metric' | 'created';
   anonymous?: boolean;
 };
 
 export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = props => {
-  const {enableFilter, sortType, filters} = props;
+  const {filterType, sortType, filters} = props;
 
   const dispatch = useDispatch();
-  const {filterByOrigin} = useTimelineFilter(filters);
+  const {filterByOrigin, sortByOrder} = useTimelineFilter(filters);
   const {query, push} = useQueryParams();
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
@@ -45,6 +50,10 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
     push('sort', sort);
   };
 
+  const handleOrderTimeline = (sort: TimelineSortOrder) => {
+    sortByOrder(sort);
+  };
+
   const handleFilterTimeline = (type: TimelineType) => {
     dispatch(clearTimeline());
 
@@ -58,8 +67,9 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
         type={timelineType}
         sort={timelineSort}
         sortType={sortType}
-        enableFilter={enableFilter}
+        filterType={filterType}
         sortTimeline={handleSortTimeline}
+        orderTimeline={handleOrderTimeline}
         filterTimeline={handleFilterTimeline}
         filterOrigin={filterByOrigin}
       />

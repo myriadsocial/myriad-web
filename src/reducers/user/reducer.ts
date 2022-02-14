@@ -6,6 +6,7 @@ import * as constants from './constants';
 
 import * as Redux from 'redux';
 import {Currency} from 'src/interfaces/currency';
+import {WrappedExperience} from 'src/interfaces/experience';
 import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail} from 'src/interfaces/user';
 
@@ -13,6 +14,7 @@ export interface UserState extends BaseState {
   user?: User;
   socials: SocialMedia[];
   currencies: Currency[];
+  experiences: WrappedExperience[];
   transactionDetail: UserTransactionDetail;
   anonymous: boolean;
   alias: string;
@@ -24,6 +26,7 @@ const initalState: UserState = {
   anonymous: false,
   currencies: [],
   socials: [],
+  experiences: [],
   transactionDetail: {
     sent: [],
     received: [],
@@ -87,6 +90,13 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       return {
         ...state,
         socials: action.payload,
+      };
+    }
+
+    case constants.FETCH_USER_EXPERIENCE: {
+      return {
+        ...state,
+        experiences: action.experiences,
       };
     }
 

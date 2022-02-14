@@ -12,8 +12,8 @@ import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 export const ExperiencePreviewContainer: React.FC = () => {
   const {
     experience,
-    experiences: userExperience,
-    getDetail,
+    userExperiences,
+    getExperienceDetail,
     subscribeExperience,
     unsubscribeExperience,
   } = useExperienceHook();
@@ -23,11 +23,11 @@ export const ExperiencePreviewContainer: React.FC = () => {
   const {experienceId} = router.query;
 
   useEffect(() => {
-    if (experienceId) getDetail(experienceId);
+    if (experienceId) getExperienceDetail(experienceId);
   }, [experienceId]);
 
   const handleSubscribeExperience = (experienceId: string) => {
-    if (userExperience.length === 10) {
+    if (userExperiences.length === 10) {
       openToasterSnack({
         message: 'You can only add up to 10 experiences max',
         variant: 'warning',
@@ -42,7 +42,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
   };
 
   const handleCloneExperience = (experienceId: string) => {
-    if (userExperience.length === 10) {
+    if (userExperiences.length === 10) {
       openToasterSnack({
         message: 'You can only add up to 10 experiences max',
         variant: 'warning',
@@ -68,7 +68,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
           </div>
           <ExperiencePreview
             experience={experience}
-            userExperiences={userExperience}
+            userExperiences={userExperiences}
             userId={experience.id}
             onSubscribe={handleSubscribeExperience}
             onUnsubscribe={handleUnsubscribeExperience}

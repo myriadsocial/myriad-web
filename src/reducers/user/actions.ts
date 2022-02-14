@@ -1,4 +1,4 @@
-import {Actions as BaseAction, setLoading, setError} from '../base/actions';
+import {Actions as BaseAction, setLoading, setError, PaginationAction} from '../base/actions';
 import {RootState} from '../index';
 import {ShowToasterSnack, showToasterSnack} from '../toaster-snack/actions';
 import * as constants from './constants';
@@ -6,9 +6,11 @@ import * as constants from './constants';
 import axios, {AxiosError} from 'axios';
 import {Action} from 'redux';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
+import {WrappedExperience} from 'src/interfaces/experience';
 import {SocialsEnum} from 'src/interfaces/index';
 import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail} from 'src/interfaces/user';
+import * as ExperienceAPI from 'src/lib/api/experience';
 import {BaseErrorResponse} from 'src/lib/api/interfaces/error-response.interface';
 import * as SocialAPI from 'src/lib/api/social';
 import * as TokenAPI from 'src/lib/api/token';
@@ -48,6 +50,11 @@ export interface FetchConnectedSocials extends Action {
   payload: SocialMedia[];
 }
 
+export interface FetchUserExperience extends PaginationAction {
+  type: constants.FETCH_USER_EXPERIENCE;
+  experiences: WrappedExperience[];
+}
+
 export interface FetchUserTransactionDetail extends Action {
   type: constants.FETCH_USER_TRANSACTION_DETAIL;
   payload: UserTransactionDetail;
@@ -73,6 +80,7 @@ export interface ResetVerifyingSocial extends Action {
 export type Actions =
   | FetchUser
   | FetchConnectedSocials
+  | FetchUserExperience
   | AddUserToken
   | SetDefaultCurrency
   | SetUserAsAnonymous
@@ -153,6 +161,47 @@ export const fetchConnectedSocials: ThunkActionCreator<Actions, RootState> =
       });
     } catch (error) {
       dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const fetchUserExperience: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    const {
+      userState: {user, anonymous},
+    } = getState();
+
+    try {
+      if (anonymous) {
+        const {data: experiences, meta} = await ExperienceAPI.getAnonymousExperience();
+        dispatch({
+          type: constants.FETCH_USER_EXPERIENCE,
+          experiences: experiences.map(item => ({
+            subscribed: false,
+            experience: item,
+          })),
+          meta,
+        });
+      }
+
+      if (user) {
+        const {meta, data: experiences} = await ExperienceAPI.getUserExperience(user.id);
+        console.log('fetchUserExperience', experiences);
+        dispatch({
+          type: constants.FETCH_USER_EXPERIENCE,
+          experiences: experiences,
+          meta,
+        });
+      }
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     } finally {
       dispatch(setLoading(false));
     }

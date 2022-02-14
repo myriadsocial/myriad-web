@@ -4,14 +4,12 @@ import * as constants from './constants';
 
 import update from 'immutability-helper';
 import * as Redux from 'redux';
-import {Experience, UserExperience, Tag} from 'src/interfaces/experience';
+import {Experience, Tag} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
 
 export interface ExperienceState extends BasePaginationState {
-  experiences: UserExperience[];
-  allExperiences: Experience[];
+  experiences: Experience[];
   selectedExperience: Experience | null;
-  searchExperience: Experience[];
   searchPeople: People[];
   searchTags: Tag[];
   hasMore: boolean;
@@ -22,9 +20,7 @@ export interface ExperienceState extends BasePaginationState {
 const initialState: ExperienceState = {
   loading: false,
   experiences: [],
-  allExperiences: [],
   selectedExperience: null,
-  searchExperience: [],
   searchPeople: [],
   searchTags: [],
   detail: null,
@@ -46,26 +42,20 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
       return initialState;
     }
 
-    case constants.FETCH_ALL_EXPERIENCES: {
-      return {
-        ...state,
-        allExperiences: action.allExperiences,
-        meta: action.meta,
-      };
-    }
-
     case constants.FETCH_EXPERIENCE: {
       if (!action.meta.currentPage || action.meta.currentPage === 1) {
         return {
           ...state,
           experiences: action.experiences,
           meta: action.meta,
+          hasMore: action.meta.currentPage < action.meta.totalPageCount,
         };
       } else {
         return {
           ...state,
           friends: [...state.experiences, ...action.experiences],
           meta: action.meta,
+          hasMore: action.meta.currentPage < action.meta.totalPageCount,
         };
       }
     }
@@ -80,21 +70,9 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
     case constants.SEARCH_EXPERIENCE: {
       return {
         ...state,
-        experiences: action.experiences,
-      };
-    }
-
-    case constants.LOAD_SEARCHED_EXPERIENCES: {
-      const {meta} = action.payload;
-
-      return {
-        ...state,
-        searchExperience:
-          !meta.currentPage || meta.currentPage === 1
-            ? action.payload.experiences
-            : [...state.searchExperience, ...action.payload.experiences],
-        hasMore: meta.currentPage < meta.totalPageCount,
-        meta,
+        experiences: [...state.experiences, ...action.experiences],
+        meta: action.meta,
+        hasMore: action.meta.currentPage < action.meta.totalPageCount,
       };
     }
 

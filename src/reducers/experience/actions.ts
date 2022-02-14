@@ -1,54 +1,35 @@
-import {Experience, Tag, UserExperience} from '../../interfaces/experience';
-import {People} from '../../interfaces/people';
-import * as ExperienceAPI from '../../lib/api/experience';
-import * as PeopleAPI from '../../lib/api/people';
-import * as TagAPI from '../../lib/api/tag';
-import {ThunkActionCreator} from '../../types/thunk';
 import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import {ShowToasterSnack, showToasterSnack} from '../toaster-snack/actions';
+import {fetchUserExperience} from '../user/actions';
 import * as constants from './constants';
 
 import {Action} from 'redux';
-import {ExperienceType} from 'src/components/Timeline/default';
-import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
+import {Experience, Tag} from 'src/interfaces/experience';
+import {People} from 'src/interfaces/people';
+import * as ExperienceAPI from 'src/lib/api/experience';
+import * as PeopleAPI from 'src/lib/api/people';
+import * as TagAPI from 'src/lib/api/tag';
+import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
  * Action Types
  */
-
-export interface LoadAllExperiences extends PaginationAction {
-  type: constants.FETCH_ALL_EXPERIENCES;
-  allExperiences: Experience[];
-}
 export interface LoadExperience extends PaginationAction {
   type: constants.FETCH_EXPERIENCE;
-  experiences: UserExperience[];
+  experiences: Experience[];
 }
+
 export interface LoadDetailExperience extends Action {
   type: constants.FETCH_DETAIL_EXPERIENCE;
   experience: Experience;
 }
 
-export interface LoadSearchedExperiences extends Action {
-  type: constants.LOAD_SEARCHED_EXPERIENCES;
-  payload: {
-    experiences: Experience[];
-    meta: ListMeta;
-  };
-}
-
-export interface SearchAllRelatedExperiences extends Action {
-  type: constants.SEARCH_ALL_RELATED_EXPERIENCES;
-  payload: {
-    experiences: Experience[];
-    meta: ListMeta;
-  };
-}
 export interface SearchExperience extends PaginationAction {
   type: constants.SEARCH_EXPERIENCE;
-  experiences: UserExperience[];
+  experiences: Experience[];
 }
+
 export interface SearchPeople extends Action {
   type: constants.SEARCH_PEOPLE;
   people: People[];
@@ -72,12 +53,9 @@ export interface ClearExperiences extends Action {
  */
 
 export type Actions =
-  | LoadAllExperiences
   | LoadExperience
   | LoadDetailExperience
   | SearchExperience
-  | LoadSearchedExperiences
-  | SearchAllRelatedExperiences
   | SearchPeople
   | SearchTags
   | ShowToasterSnack
@@ -102,24 +80,23 @@ export const clearExperiences = (): ClearExperiences => ({
 /**
  * Action Creator
  */
-
-export const fetchAllExperiences: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
+export const loadExperiences: ThunkActionCreator<Actions, RootState> =
+  (page = 1) =>
+  async (dispatch, getState) => {
     dispatch(setExperienceLoading(true));
+
+    const {
+      userState: {user},
+    } = getState();
+
     try {
-      const {
-        userState: {user},
-      } = getState();
+      const userId = user?.id as string;
 
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      const {meta, data: allExperiences} = await ExperienceAPI.getAllExperiences();
+      const {data: experiences, meta} = await ExperienceAPI.getSearchedExperiences(page, userId);
 
       dispatch({
-        type: constants.FETCH_ALL_EXPERIENCES,
-        allExperiences,
+        type: constants.FETCH_EXPERIENCE,
+        experiences,
         meta,
       });
     } catch (error) {
@@ -133,41 +110,19 @@ export const fetchAllExperiences: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const fetchExperience: ThunkActionCreator<Actions, RootState> =
-  (type?: ExperienceType) => async (dispatch, getState) => {
-    dispatch(setLoading(true));
+export const searchExperiences: ThunkActionCreator<Actions, RootState> =
+  (query: string, page = 1) =>
+  async (dispatch, getState) => {
+    dispatch(setExperienceLoading(true));
 
     try {
-      const {
-        userState: {user, anonymous},
-      } = getState();
+      const {data: experiences, meta} = await ExperienceAPI.searchExperiencesByQuery(query, page);
 
-      if (anonymous) {
-        const {data: experiences, meta} = await ExperienceAPI.getAnonymousExperience();
-        const _newExperience: UserExperience[] = experiences.map(exp => {
-          return {
-            id: exp.id,
-            createdAt: exp.createdAt,
-            updatedAt: exp.updatedAt,
-            experienceId: exp.id,
-            subscribed: false,
-            experience: exp,
-          };
-        });
-        dispatch({
-          type: constants.FETCH_EXPERIENCE,
-          experiences: _newExperience,
-          meta,
-        });
-      } else {
-        if (!user) return;
-        const {meta, data: experiences} = await ExperienceAPI.getUserExperience(user.id, type);
-        dispatch({
-          type: constants.FETCH_EXPERIENCE,
-          experiences,
-          meta,
-        });
-      }
+      dispatch({
+        type: constants.SEARCH_EXPERIENCE,
+        experiences,
+        meta,
+      });
     } catch (error) {
       dispatch(
         setError({
@@ -175,7 +130,7 @@ export const fetchExperience: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setExperienceLoading(false));
     }
   };
 
@@ -229,96 +184,7 @@ export const cloneExperience: ThunkActionCreator<Actions, RootState> =
       dispatch(setLoading(false));
     }
   };
-
-export const loadSearchedExperiences: ThunkActionCreator<Actions, RootState> =
-  (page = 1) =>
-  async (dispatch, getState) => {
-    dispatch(setExperienceLoading(true));
-
-    const {
-      userState: {user},
-    } = getState();
-
-    try {
-      const userId = user?.id as string;
-
-      const {data: experiences, meta} = await ExperienceAPI.getSearchedExperiences(page, userId);
-
-      dispatch({
-        type: constants.LOAD_SEARCHED_EXPERIENCES,
-        payload: {
-          experiences,
-          meta,
-        },
-      });
-    } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
-    } finally {
-      dispatch(setExperienceLoading(false));
-    }
-  };
-
-export const searchAllRelatedExperiences: ThunkActionCreator<Actions, RootState> =
-  (query: string, page = 1) =>
-  async (dispatch, getState) => {
-    dispatch(setExperienceLoading(true));
-
-    try {
-      const {data: experiences, meta} = await ExperienceAPI.searchExperiencesByQuery(query, page);
-
-      dispatch({
-        type: constants.LOAD_SEARCHED_EXPERIENCES,
-        payload: {
-          experiences,
-          meta,
-        },
-      });
-    } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
-    } finally {
-      dispatch(setExperienceLoading(false));
-    }
-  };
-
-export const searchExperience: ThunkActionCreator<Actions, RootState> =
-  (query: string) => async (dispatch, getState) => {
-    dispatch(setExperienceLoading(true));
-
-    try {
-      const {
-        userState: {user},
-      } = getState();
-
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      const {meta, data: experiences} = await ExperienceAPI.searchExperience(query);
-
-      dispatch({
-        type: constants.SEARCH_EXPERIENCE,
-        experiences,
-        meta,
-      });
-    } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
-    } finally {
-      dispatch(setExperienceLoading(false));
-    }
-  };
-
+// TODO: move this to people reducer
 export const searchPeople: ThunkActionCreator<Actions, RootState> =
   (query: string) => async dispatch => {
     dispatch(setLoading(true));
@@ -346,7 +212,7 @@ export const searchPeople: ThunkActionCreator<Actions, RootState> =
       dispatch(setLoading(false));
     }
   };
-
+// TODO: move this to tag reducer
 export const searchTags: ThunkActionCreator<Actions, RootState> =
   (query: string) => async dispatch => {
     dispatch(setLoading(true));
@@ -457,7 +323,7 @@ export const updateExperience: ThunkActionCreator<Actions, RootState> =
       }
 
       await ExperienceAPI.updateExperience(user.id, experienceId, experience);
-      await fetchExperience();
+      await fetchUserExperience();
 
       callback && callback(experienceId);
 

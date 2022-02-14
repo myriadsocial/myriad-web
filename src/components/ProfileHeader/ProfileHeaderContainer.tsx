@@ -1,127 +1,222 @@
-import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
-import {useSession} from 'next-auth/client';
-import {useRouter} from 'next/router';
+import {Typography} from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 
-import {Button, Link, Typography} from '@material-ui/core';
+import {ProfileHeaderComponent} from '.';
+import {PromptComponent} from '../atoms/Prompt/prompt.component';
 
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
-
-import {ProfileHeader as ProfileHeaderComponent} from '.';
-import {PolkadotAccountList} from '../PolkadotAccountList';
-
-import {useAuthHook} from 'src/hooks/auth.hook';
-import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {toHexPublicKey} from 'src/lib/crypto';
+import {debounce} from 'lodash';
+import {SendTipContainer} from 'src/components/SendTip';
+import {useTimelineFilter} from 'src/components/Timeline/hooks/use-timeline-filter.hook';
+import {Modal} from 'src/components/atoms/Modal';
+import {useFriendHook} from 'src/hooks/use-profile-friend.hook';
+import {useQueryParams} from 'src/hooks/use-query-params.hooks';
+import {useReport} from 'src/hooks/use-report.hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import {Friend, FriendStatus} from 'src/interfaces/friend';
+import {ReportProps} from 'src/interfaces/report';
+import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
-import {NotificationState} from 'src/reducers/notification/reducer';
-import {clearUser} from 'src/reducers/user/actions';
+import {blockFromFriend} from 'src/reducers/friend/actions';
+import {fetchProfileDetail, fetchProfileExperience} from 'src/reducers/profile/actions';
+import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
-import {Prompt} from 'src/stories/Prompt.stories';
+import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
+import {WalletState} from 'src/reducers/wallet/reducer';
 
 type Props = {
-  toggleNotification: () => void;
+  edit?: () => void;
 };
 
-export const ProfileHeaderContainer: React.FC<Props> = ({toggleNotification}) => {
-  const {user, alias, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
+export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
+  const {detail: profile, friendStatus} = useSelector<RootState, ProfileState>(
+    state => state.profileState,
+  );
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
 
-  const router = useRouter();
   const dispatch = useDispatch();
-  const [session] = useSession();
 
-  const {enablePolkadotExtension} = usePolkadotExtension();
-  const {logout, switchAccount, getRegisteredAccounts} = useAuthHook();
+  const {makeFriend, removeFriendRequest, toggleRequest, reloadFriendStatus} = useFriendHook();
+  const {sendReportWithAttributes} = useReport();
+  const {openToasterSnack} = useToasterSnackHook();
+  const {query} = useQueryParams();
+  const {filterTimeline} = useTimelineFilter({
+    owner: profile?.id,
+  });
 
-  const [showAccountList, setShowAccountList] = useState(false);
-  const [extensionInstalled, setExtensionInstalled] = useState(false);
-  const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
+  const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
+  const [tippedUser, setTippedUser] = useState<User | null>(null);
+  const [tippedUserForHistory, setTippedUserForHistory] = useState<User | null>(null);
+  const [openSuccessPrompt, setOpenSuccessPrompt] = React.useState(false);
+  const sendTipOpened = Boolean(tippedUser);
 
-  const checkExtensionInstalled = async () => {
-    const installed = await enablePolkadotExtension();
-
-    setShowAccountList(true);
-    setExtensionInstalled(installed);
-
-    getAvailableAccounts();
+  const urlLink = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.origin;
+    }
+    return '';
   };
 
-  const getAvailableAccounts = async () => {
-    const accounts = await getRegisteredAccounts();
+  useEffect(() => {
+    if (profile) {
+      dispatch(fetchProfileExperience());
+      filterTimeline(query);
+    }
+  }, [profile]);
 
-    setAccounts(accounts.filter(account => toHexPublicKey(account) !== user?.id));
-  };
+  useEffect(() => {
+    if (isTipSent) {
+      closeSendTip();
+    }
+  }, [isTipSent]);
 
-  const handleViewProfile = () => {
-    if (user && !anonymous) {
-      router.push(`/profile/${user.id}`);
+  const sendFriendReqest = debounce(() => {
+    if (!profile) return;
+
+    makeFriend(profile);
+  }, 300);
+
+  const declineFriendRequest = debounce(() => {
+    if (!friendStatus) return;
+
+    removeFriendRequest(friendStatus);
+  }, 300);
+
+  const handleSendTip = () => {
+    if (profile) {
+      setTippedUser(profile);
+
+      dispatch(setDetailTippedUser(profile.name, profile.profilePictureURL ?? ''));
+      dispatch(setTippedUserId(profile.id));
     }
   };
 
-  const handleSignOut = async () => {
-    if (session) {
-      logout();
+  const closeSendTip = () => {
+    if (isTipSent && tippedUser) {
+      //for the future, open tip history here
+      setOpenSuccessPrompt(true);
+      setTippedUserForHistory(tippedUser);
     } else {
-      dispatch(clearUser());
-      await router.push(`/`);
+      console.log('no user tipped');
+    }
+    setTippedUser(null);
+  };
+
+  const handleCloseSuccessPrompt = (): void => {
+    setOpenSuccessPrompt(false);
+  };
+
+  const handleSubmitReport = (payload: ReportProps) => {
+    sendReportWithAttributes(payload);
+  };
+
+  const handleBlockUser = async () => {
+    if (!profile) return;
+
+    await dispatch(blockFromFriend(profile.id));
+    await dispatch(fetchProfileDetail(profile.id));
+    await reloadFriendStatus();
+
+    openToasterSnack({
+      message: 'User successfully blocked',
+      variant: 'success',
+    });
+  };
+
+  const handleUnblockUser = (friend: Friend) => {
+    toggleRequest(friend, FriendStatus.PENDING);
+  };
+
+  const handleAcceptFriend = debounce(() => {
+    if (friendStatus) {
+      toggleRequest(friendStatus, FriendStatus.APPROVED);
+
+      openToasterSnack({
+        message: 'Friend request confirmed',
+        variant: 'success',
+      });
+    }
+  }, 300);
+
+  const handleRemoveFriend = () => {
+    if (friendStatus) {
+      removeFriendRequest(friendStatus);
+
+      openToasterSnack({
+        message: `${profile?.name} has been removed from your friend lists`,
+        variant: 'success',
+      });
     }
   };
 
-  const handleSwitchAccount = () => {
-    checkExtensionInstalled();
-  };
-
-  const closeAccountList = () => {
-    setShowAccountList(false);
-  };
-
-  const handleShowNotificationList = () => {
-    toggleNotification();
-  };
+  if (!profile) return null;
 
   return (
     <>
       <ProfileHeaderComponent
+        person={profile}
         user={user}
-        alias={alias}
-        notificationCount={total}
-        onViewProfile={handleViewProfile}
-        onSwitchAccount={handleSwitchAccount}
-        handleSignOut={handleSignOut}
-        onShowNotificationList={handleShowNotificationList}
+        status={friendStatus}
+        onSendRequest={sendFriendReqest}
+        onDeclineRequest={declineFriendRequest}
+        onSendTip={handleSendTip}
+        onBlock={handleBlockUser}
+        onUnblockFriend={handleUnblockUser}
+        onEdit={edit}
+        linkUrl={`${urlLink()}/profile/${profile.id}`}
+        onSubmitReport={handleSubmitReport}
+        onRemoveFriend={handleRemoveFriend}
+        onAcceptFriend={handleAcceptFriend}
       />
+      <Modal
+        gutter="none"
+        open={sendTipOpened}
+        onClose={closeSendTip}
+        title="Send Tip"
+        subtitle="Find this user insightful? Send a tip!">
+        <SendTipContainer />
+      </Modal>
 
-      <PolkadotAccountList
-        isOpen={showAccountList && extensionInstalled}
-        accounts={accounts}
-        onSelect={switchAccount}
-        onClose={closeAccountList}
-      />
-
-      <Prompt
-        title="Account Not Found"
-        icon="warning"
-        open={showAccountList && !extensionInstalled}
-        onCancel={closeAccountList}
+      <PromptComponent
+        icon={'success'}
+        open={openSuccessPrompt}
+        onCancel={handleCloseSuccessPrompt}
+        title={'Success'}
         subtitle={
-          <Typography>
-            Kindly check if you have{' '}
-            <Link
-              href="https://polkadot.js.org/extension"
-              target="_blank"
-              style={{color: 'rgb(255, 140, 0)'}}>
-              Polkadot.js
-            </Link>{' '}
-            installed on your browser
+          <Typography component="div">
+            Tip to{' '}
+            <Box fontWeight={400} display="inline">
+              {tippedUserForHistory?.name ?? 'Unknown Myrian'}
+            </Box>{' '}
+            sent successfully
           </Typography>
         }>
-        <Button size="small" variant="contained" color="primary" onClick={closeAccountList}>
-          Close
-        </Button>
-      </Prompt>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <a
+            target="_blank"
+            style={{textDecoration: 'none'}}
+            href={explorerURL ?? 'https://myriad.social'}
+            rel="noopener noreferrer">
+            <Button style={{marginRight: '12px'}} size="small" variant="outlined" color="secondary">
+              Transaction details
+            </Button>
+          </a>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={handleCloseSuccessPrompt}>
+            Return
+          </Button>
+        </div>
+      </PromptComponent>
     </>
   );
 };

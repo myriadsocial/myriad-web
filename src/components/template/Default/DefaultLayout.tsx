@@ -5,14 +5,14 @@ import dynamic from 'next/dynamic';
 
 import {Container} from '@material-ui/core';
 
-import {MenuContainer} from '../../Menu/MenuContainer';
-import {ProfileHeaderContainer} from '../../ProfileHeader/ProfileHeaderContainer';
-import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
-import {SocialMediaListContainer} from '../../SocialMediaList/SocialMediaListContainer';
 import useStyles from './DefaultLayout.styles';
 
 import {withError, WithErrorProps} from 'src/components/Error';
-import {NotificationsContainer} from 'src/components/Notifications/Notifications.container';
+import {MenuContainer} from 'src/components/Menu';
+import {NotificationsContainer} from 'src/components/Notifications';
+import {ProfileCardContainer} from 'src/components/ProfileCard';
+import {RightMenuBar} from 'src/components/RightMenuBar/RightMenuBar';
+import {SocialMediaListContainer} from 'src/components/SocialMediaList';
 import ShowIf from 'src/components/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {NotificationProps} from 'src/interfaces/notification';
@@ -113,7 +113,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
         <div className={classes.thirdCol}>
           <div className={classes.innerThirdColWrapper}>
             <div>
-              <ProfileHeaderContainer toggleNotification={handleToggleNotification} />
+              <ProfileCardContainer toggleNotification={handleToggleNotification} />
             </div>
             <div>
               <ShowIf condition={!showNotification}>

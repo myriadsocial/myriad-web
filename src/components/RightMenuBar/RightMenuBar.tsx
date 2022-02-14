@@ -1,30 +1,30 @@
 import {ChatAlt2Icon, HashtagIcon, VariableIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React from 'react';
 
-import {useStyles} from '.';
-import {ExperienceTabMenuContainer} from '../ExperienceTabMenu/ExperienceTabMenuContainer';
-import {TrendingTabPanelContainer} from '../Trending/TrendingTabPanelContainer';
 import {TabsComponent} from '../atoms/Tabs';
+import {useStyles} from './RightMenuBar.styles';
+import {ExperienceTab} from './tabs/ExperienceTab';
+import {TrendingTab} from './tabs/TrendingTab';
 
 export const RightMenuBar: React.FC = () => {
-  const [iconTabs] = useState([
+  const iconTabs = [
     {
       id: 'experienceTabMenu',
       icon: <VariableIcon />,
-      component: <ExperienceTabMenuContainer />,
+      component: <ExperienceTab />,
     },
     {
       id: 'trendingTabPanel',
       icon: <HashtagIcon />,
-      component: <TrendingTabPanelContainer />,
+      component: <TrendingTab />,
     },
     {
       id: 'chatTabPanel',
       icon: <ChatAlt2Icon />,
       component: 'Chat Tab Content',
     },
-  ]);
+  ];
 
   const classes = useStyles();
 

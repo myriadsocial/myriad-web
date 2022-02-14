@@ -193,7 +193,7 @@ export const getPost = async (
       params.filter = filterParams;
       break;
   }
-
+  console.log('GET POSTS', params);
   const {data} = await MyriadAPI.request<PostList>({
     url: '/posts',
     method: 'GET',
@@ -266,6 +266,8 @@ export const findPosts = async (user: User | null, query: string, page = 1): Pro
       },
     });
   }
+
+  console.log('FIND POSTS', where);
 
   const {data} = await MyriadAPI.request<PostList>({
     url: path,

@@ -2,19 +2,17 @@ import {useSelector} from 'react-redux';
 
 import {MenuOptions} from 'src/components/atoms/DropdownMenu';
 import {TabListItem} from 'src/components/atoms/TabList';
-import {TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
+import {TimelineSortMethod, TimelineType, TimelineSortOrder} from 'src/interfaces/timeline';
 import {RootState} from 'src/reducers';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
-
-export type ExperienceType = 'all' | 'personal' | 'other';
 
 export const useFilterOption = () => {
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {detail: people} = useSelector<RootState, ProfileState>(state => state.profileState);
 
   // Filter options
-  const postFilterOptions: MenuOptions<string>[] = [
+  const originFilterOptions: MenuOptions<string>[] = [
     {
       id: 'all',
       title: 'All Posts',
@@ -30,7 +28,7 @@ export const useFilterOption = () => {
   ];
 
   // Sort options
-  const sortOptions: MenuOptions<TimelineSortMethod>[] = [
+  const metricSortOptions: MenuOptions<TimelineSortMethod>[] = [
     {
       id: 'created',
       title: 'Latest',
@@ -49,7 +47,7 @@ export const useFilterOption = () => {
     },
   ];
 
-  const filterOptions: TabListItem<TimelineType>[] = [
+  const typeFilterOptions: TabListItem<TimelineType>[] = [
     {
       id: TimelineType.ALL,
       title: 'All',
@@ -68,9 +66,15 @@ export const useFilterOption = () => {
     },
   ];
 
+  const orderOptions: MenuOptions<TimelineSortOrder>[] = [
+    {id: 'latest', title: 'Latest'},
+    {id: 'oldest', title: 'Oldest'},
+  ];
+
   return {
-    postFilterOptions,
-    sortOptions,
-    filterOptions,
+    originFilterOptions,
+    metricSortOptions,
+    typeFilterOptions,
+    orderOptions,
   };
 };

@@ -1,6 +1,6 @@
 import React, {useMemo, useState} from 'react';
 
-import {CommentListContainer} from 'src/components/atoms/CommentList';
+import {CommentListContainer} from 'src/components/CommentList';
 import {Comment} from 'src/interfaces/comment';
 import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';

@@ -8,9 +8,13 @@ import NFTContainer from 'src/components/NFT/NFT.container';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
-import {fetchExperience} from 'src/reducers/experience/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
-import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
+import {
+  setAnonymous,
+  fetchConnectedSocials,
+  fetchUser,
+  fetchUserExperience,
+} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
@@ -88,7 +92,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     ]);
   }
 
-  await dispatch(fetchExperience());
+  await dispatch(fetchUserExperience());
 
   return {
     props: {
