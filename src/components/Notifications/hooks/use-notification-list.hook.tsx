@@ -438,7 +438,9 @@ export const useNotificationList = (
             user: 'User reported',
             avatar: notification.fromUserId.profilePictureURL,
             description: notification.message.includes('approved')
-              ? `${notification.referenceId} account has been banned by admin based on your report`
+              ? (notification.additionalReferenceId &&
+                  notification.additionalReferenceId[0]?.displayName) +
+                ' account has been banned by admin based on your report'
               : 'You have been banned due to breaking our community rule',
             badge: (
               <div className={style.circleError}>
@@ -450,7 +452,7 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `${publicRuntimeConfig.myriadSupportMail}`,
+            href: '',
           };
 
         case NotificationType.CONNECTED_SOCIAL_MEDIA:

@@ -27,7 +27,7 @@ export const ResourceDeleted: React.FC = () => {
       </Typography>
       <Typography className={style.subtitle}>
         The owner might be changed their privacy settings, shared it for certain group of people or
-        it’s been deleted
+        it’s been deleted / banned
       </Typography>
 
       <Button className={style.button} onClick={handleAction} variant="contained" color="primary">

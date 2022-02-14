@@ -128,6 +128,9 @@ export const searchUsers = async (page = 1, query?: string): Promise<UserList> =
             },
           },
         ],
+        deletedAt: {
+          $exists: false,
+        },
       },
     };
   }
