@@ -77,9 +77,10 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   const {openToasterSnack} = useToasterSnackHook();
   const {friendList, removeFromFriendList} = useFriendList(friends, user);
 
+  const {user: currentUser} = useSelector<RootState, UserState>(state => state.userState);
+
   const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
-  const {user: currentUser} = useSelector<RootState, UserState>(state => state.userState);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentFriend, setCurrentFriend] = useState<null | FriendDetail>(null);
@@ -318,7 +319,9 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         open={Boolean(anchorEl)}
         onClose={handleCloseFriendSetting}>
         <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
-        <MenuItem disabled={balanceDetails.length === 0} onClick={handleSendTip}>
+        <MenuItem
+          disabled={balanceDetails.length === 0 || currentFriend?.id === currentUser?.id}
+          onClick={handleSendTip}>
           Send direct tip
         </MenuItem>
         <ShowIf

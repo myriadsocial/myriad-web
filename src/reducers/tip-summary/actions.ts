@@ -22,6 +22,11 @@ export interface SetTippedReference extends Action {
   payload: Post | Comment;
 }
 
+export interface SetDisableTipping extends Action {
+  type: constants.SET_DISABLE_TIPPING;
+  payload: boolean;
+}
+
 export interface ClearTippedContent extends Action {
   type: constants.CLEAR_TIPPED_CONTENT;
 }
@@ -62,6 +67,7 @@ export interface SetTransactionSort extends Action {
 
 export type Actions =
   | SetTippedReference
+  | SetDisableTipping
   | LoadTransactionHistory
   | LoadTransactionSummary
   | LoadTransactionHistoryForComment
@@ -78,6 +84,11 @@ export type Actions =
 export const setTippedReference = (reference: Post | Comment): SetTippedReference => ({
   type: constants.SET_TIPPED_REFERENCE,
   payload: reference,
+});
+
+export const setDisableTipping = (isDisabled: boolean): SetDisableTipping => ({
+  type: constants.SET_DISABLE_TIPPING,
+  payload: isDisabled,
 });
 
 export const clearTippedContent = (): ClearTippedContent => ({
