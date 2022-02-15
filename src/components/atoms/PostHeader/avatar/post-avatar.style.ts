@@ -18,17 +18,21 @@ export const useStyles = makeStyles(() =>
     },
     reddit: {
       '& .MuiBadge-badge': {
-        backgroundColor: '#FF5700',
+        backgroundColor: '#FF4500',
       },
     },
     myriad: {
       '& .MuiBadge-badge': {
         backgroundColor: '#8629E9',
-        overflow: 'hidden',
       },
     },
     action: {
       padding: 0,
+
+      '& .MuiBadge-badge': {
+        overflow: 'hidden',
+        border: 'none',
+      },
     },
   }),
 );

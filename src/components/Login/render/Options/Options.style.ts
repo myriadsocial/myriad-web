@@ -67,9 +67,5 @@ export const useStyles = makeStyles((theme: Theme) =>
         fill: 'currentColor',
       },
     },
-    polkadotLink: {
-      textDecoration: 'none',
-      color: theme.palette.primary.main,
-    },
   }),
 );

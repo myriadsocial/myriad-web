@@ -12,6 +12,7 @@ import {useUpload} from 'src/hooks/use-upload.hook';
 import {Experience} from 'src/interfaces/experience';
 
 export const ExperienceEditContainer: React.FC = () => {
+  // TODO: separate hook for tag, people and experience
   const {
     experience,
     people,

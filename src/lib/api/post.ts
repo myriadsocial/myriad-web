@@ -193,7 +193,7 @@ export const getPost = async (
       params.filter = filterParams;
       break;
   }
-  console.log('GET POSTS', params);
+
   const {data} = await MyriadAPI.request<PostList>({
     url: '/posts',
     method: 'GET',

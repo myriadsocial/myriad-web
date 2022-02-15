@@ -18,7 +18,6 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {DropdownMenu} from '../atoms/DropdownMenu';
-import {FilterDropdownMenu} from '../atoms/FilterDropdownMenu';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import SearchComponent from '../atoms/Search/SearchBox';
 import {friendFilterOptions, FriendType, sortOptions} from './default';
@@ -231,7 +230,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
           justifyContent={disableFilter ? 'flex-end' : 'space-between'}
           alignItems="center">
           <ShowIf condition={!disableFilter}>
-            <FilterDropdownMenu
+            <DropdownMenu
               title="Filter by"
               options={friendFilterOptions}
               onChange={handleFilterSelected}

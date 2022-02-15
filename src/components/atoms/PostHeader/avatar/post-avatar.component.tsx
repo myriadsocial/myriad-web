@@ -4,8 +4,7 @@ import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 
-import {MyriadIcon} from '../../../common/MyriadIcon';
-import {FacebookIcon, RedditIcon, TwitterIcon} from '../../Icons';
+import {FacebookIcon, MyriadCircleIcon, RedditIcon, TwitterIcon} from '../../Icons';
 import StyledBadge from '../Badge.component';
 import {Props} from './post-avatar.interface';
 import {useStyles} from './post-avatar.style';
@@ -21,7 +20,7 @@ export default function PostAvatar({origin, avatar, name, onClick}: Props) {
       facebook: FacebookIcon,
       twitter: TwitterIcon,
       reddit: RedditIcon,
-      myriad: <MyriadIcon />,
+      myriad: <MyriadCircleIcon />,
     }),
     [],
   );

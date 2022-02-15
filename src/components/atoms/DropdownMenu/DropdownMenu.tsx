@@ -55,23 +55,22 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
   return (
     <div className={styles.root}>
       <Grid container justifyContent="space-between">
-        <Typography component="span" color="textSecondary">
-          <ShowIf condition={title.length > 0}>{title}:&nbsp;</ShowIf>
-        </Typography>
-
         <div>
+          <Typography component="span" color="textSecondary">
+            <ShowIf condition={title.length > 0}>{title}:&nbsp;</ShowIf>
+          </Typography>
+
           <Typography component="span" color="textPrimary" className={styles.selected}>
             {getSelectedText()}
           </Typography>
-
-          <IconButton
-            onClick={handleClick}
-            color="primary"
-            aria-label="expand"
-            className={styles.expand}>
-            <SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />
-          </IconButton>
         </div>
+        <IconButton
+          onClick={handleClick}
+          color="primary"
+          aria-label="expand"
+          className={styles.expand}>
+          <SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />
+        </IconButton>
       </Grid>
 
       <Menu
