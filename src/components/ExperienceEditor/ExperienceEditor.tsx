@@ -257,7 +257,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         />
       </FormControl>
 
-      <FormControl fullWidth variant="outlined" style={{position: 'relative'}}>
+      <FormControl fullWidth variant="outlined" style={{position: 'relative', zIndex: 100}}>
         <InputLabel htmlFor="experience-picture" shrink={true} className={styles.label}>
           Picture
         </InputLabel>
