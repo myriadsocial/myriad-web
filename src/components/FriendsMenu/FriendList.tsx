@@ -244,7 +244,12 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
 
       <div className={style.root}>
         <div className={style.search}>
-          <SearchComponent onSubmit={onSearch} placeholder={'Search friend'} reverse />
+          <SearchComponent
+            onSubmit={onSearch}
+            placeholder={'Search friend'}
+            iconPosition={'end'}
+            outlined={true}
+          />
         </div>
         <List>
           <InfiniteScroll

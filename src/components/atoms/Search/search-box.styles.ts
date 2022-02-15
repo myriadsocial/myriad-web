@@ -1,16 +1,14 @@
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+import {SearchBoxProps} from '.';
+
+export const useStyles = makeStyles<Theme, SearchBoxProps>(theme =>
   createStyles({
     root: {
       padding: '2px 4px',
-      display: 'flex',
-      alignItems: 'center',
       height: 52,
       borderRadius: 10,
-    },
-    outline: {
-      border: '1px solid #EDEDED',
+      border: props => (props.outlined ? '1px solid #EDEDED' : 'none'),
     },
     input: {
       marginLeft: theme.spacing(1),

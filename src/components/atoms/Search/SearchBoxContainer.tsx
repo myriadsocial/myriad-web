@@ -4,12 +4,16 @@ import {SearchBox as SearchBoxComponent} from '.';
 
 type SearchBoxContainerProps = {
   onSubmitSearch?: (args: string) => void;
-  reverse?: boolean;
+  iconPosition?: 'start' | 'end';
+  outlined?: boolean;
 };
 
 export const SearchBoxContainer: React.FC<SearchBoxContainerProps> = ({
   onSubmitSearch,
-  reverse,
+  iconPosition,
+  outlined,
 }) => {
-  return <SearchBoxComponent onSubmit={onSubmitSearch} reverse={reverse} />;
+  return (
+    <SearchBoxComponent onSubmit={onSubmitSearch} iconPosition={iconPosition} outlined={outlined} />
+  );
 };

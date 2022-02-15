@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import Paper from '@material-ui/core/Paper';
@@ -8,19 +9,18 @@ import {SearchBoxProps, SearchBoxColor, useStyles} from '.';
 import {SearchIcon} from '../Icons';
 
 import {debounce} from 'lodash';
-import ShowIf from 'src/components/common/show-if.component';
 import i18n from 'src/locale';
 
 const SearchBox: React.FC<SearchBoxProps> = ({
   color = SearchBoxColor.PRIMARY,
   ariaLabel = 'search-box',
   placeholder = i18n.t('Home.Search.Placeholder'),
-  isDisabled = false,
+  outlined = false,
   onSubmit,
-  reverse = false,
+  iconPosition = 'start',
   ...props
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({outlined});
 
   const [input, setInput] = useState('');
 
@@ -51,12 +51,15 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   };
 
   return (
-    <Paper className={`${reverse && classes.outline} ${classes.root}`} elevation={reverse ? 0 : 1}>
-      <ShowIf condition={!reverse}>
-        <IconButton className={classes.iconButton} aria-label="search" onClick={submitClickSearch}>
-          <SearchIcon />
-        </IconButton>
-      </ShowIf>
+    <Grid
+      container
+      direction={iconPosition === 'end' ? 'row-reverse' : 'row'}
+      className={classes.root}
+      component={Paper}
+      elevation={iconPosition === 'end' ? 0 : 1}>
+      <IconButton className={classes.iconButton} aria-label="search" onClick={submitClickSearch}>
+        <SearchIcon />
+      </IconButton>
       <InputBase
         onKeyUp={submitSearch}
         className={classes.input}
@@ -66,12 +69,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
         inputProps={{'aria-label': ariaLabel}}
         {...props}
       />
-      <ShowIf condition={reverse}>
-        <IconButton className={classes.iconButton} aria-label="search" onClick={submitClickSearch}>
-          <SearchIcon />
-        </IconButton>
-      </ShowIf>
-    </Paper>
+    </Grid>
   );
 };
 
