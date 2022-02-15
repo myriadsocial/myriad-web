@@ -10,14 +10,12 @@
     "type": "git",
     "url": "https://github.com/myriadsocial/myriad-web.git"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "scripts": {
     "prepare": "husky install",
     "dev": "nodemon",
     "export-env": "node ./plugins/export-env.js",
     "clean": "rm -rf .next dist plugins/sv-env.js",
-    "build": "next build && tsc --project tsconfig.server.json",
+    "build": "next build",
     "build:storybook": "build-storybook -o docs",
     "postbuild": "yarn run export-env",
     "rebuild": "yarn run clean && yarn run build",

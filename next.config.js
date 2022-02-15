@@ -7,8 +7,8 @@ const {version} = require('./package.json');
  */
 const moduleExports = {
   generateBuildId: async () => {
-    if (process.env.NEXT_PUBLIC_APP_VERSION) {
-      return process.env.NEXT_PUBLIC_APP_VERSION;
+    if (process.env.BUILD_ID) {
+      return process.env.BUILD_ID;
     } else {
       return version;
     }
