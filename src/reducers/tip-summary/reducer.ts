@@ -12,6 +12,7 @@ import {Transaction, TransactionDetail, TransactionSort} from 'src/interfaces/tr
 
 export interface TipSummaryState extends BasePaginationState {
   reference: Post | Comment | null;
+  tippingDisabled: boolean;
   show: boolean;
   hasMore: boolean;
   transactions: Transaction[];
@@ -24,6 +25,7 @@ const initialState: TipSummaryState = {
   reference: null,
   loading: false,
   show: false,
+  tippingDisabled: false,
   hasMore: false,
   transactions: [],
   summary: [],
@@ -50,6 +52,13 @@ export const TipSummaryReducer: Redux.Reducer<TipSummaryState, Actions> = (
         ...state,
         reference: action.payload,
         show: true,
+      };
+    }
+
+    case constants.SET_DISABLE_TIPPING: {
+      return {
+        ...state,
+        tippingDisabled: action.payload,
       };
     }
 

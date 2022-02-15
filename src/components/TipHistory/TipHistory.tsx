@@ -41,6 +41,7 @@ type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
   hasMore: boolean;
   tips: Transaction[];
   currencies: Currency[];
+  tippingDisabled: boolean;
   sendTip: () => void;
   onSort: (sort: TransactionSort) => void;
   onFilter: (currency: CurrencyId) => void;
@@ -48,7 +49,18 @@ type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
 };
 
 export const TipHistory: React.FC<TipHistoryProps> = props => {
-  const {tips, hasMore, currencies, open, onClose, sendTip, onSort, onFilter, nextPage} = props;
+  const {
+    tips,
+    hasMore,
+    currencies,
+    tippingDisabled,
+    open,
+    onClose,
+    sendTip,
+    onSort,
+    onFilter,
+    nextPage,
+  } = props;
   const {loading, exchangeRates} = useExchangeRate();
 
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
@@ -207,19 +219,23 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
       </div>
 
       <div className={styles.action}>
-        <Button
-          disabled={balanceDetails.length === 0}
-          variant="contained"
-          color="primary"
-          disableElevation
-          fullWidth
-          onClick={sendTip}>
-          {balanceDetails.length === 0 ? (
-            <CircularProgress size={14} color="primary" />
-          ) : (
-            'I want to send tip too'
-          )}
-        </Button>
+        {tippingDisabled ? (
+          <></>
+        ) : (
+          <Button
+            disabled={balanceDetails.length === 0 || tippingDisabled}
+            variant="contained"
+            color="primary"
+            disableElevation
+            fullWidth
+            onClick={sendTip}>
+            {balanceDetails.length === 0 ? (
+              <CircularProgress size={14} color="primary" />
+            ) : (
+              'I want to send tip too'
+            )}
+          </Button>
+        )}
       </div>
     </Modal>
   );
