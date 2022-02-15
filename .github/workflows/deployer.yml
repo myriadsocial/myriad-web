@@ -21,7 +21,6 @@ jobs:
     runs-on: ubuntu-20.04
     outputs:
       sha_short: ${{ steps.build-info.outputs.sha_short }}
-      date: ${{ steps.build-info.outputs.date }}
       latest_tag: ${{ steps.build-info.outputs.latest_tag }}
       package_version: ${{ steps.build-info.outputs.package_version }}
     steps:
@@ -34,7 +33,6 @@ jobs:
         shell: bash
         run: |
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-          echo "::set-output name=date::$(date +'%Y%m%d')"
 
           version=${GITHUB_REF#refs/*/}
           echo $version
