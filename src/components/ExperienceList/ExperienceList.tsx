@@ -2,72 +2,81 @@ import React, {useState, useEffect} from 'react';
 
 import {useRouter} from 'next/router';
 
-import {ExperienceListProps, useStyles} from '.';
-import {SimpleCard} from '../atoms/SimpleCard';
+import {Experience as ExperienceCard} from '../Expericence';
+import {useStyles} from './ExperienceList.style';
 
-import {Experience} from 'src/interfaces/experience';
+import {useQueryParams} from 'src/hooks/use-query-params.hooks';
+import {Experience, WrappedExperience} from 'src/interfaces/experience';
 import {TimelineType} from 'src/interfaces/timeline';
+import {User} from 'src/interfaces/user';
 
-const ExperienceList: React.FC<ExperienceListProps> = ({
-  experiences,
-  user,
-  viewPostList,
-  onDelete,
-  onUnsubscribe,
-  onFollow,
-}) => {
+type ExperienceListProps = {
+  experiences: WrappedExperience[];
+  isOnHomePage?: boolean;
+  user?: User;
+  selectable: boolean;
+  viewPostList: (type: TimelineType, experience: Experience) => void;
+  onSubscribe?: (experienceId: string) => void;
+  onClone?: (experienceId: string) => void;
+  onPreview?: (experienceId: string) => void;
+  onDelete?: (experienceId: string) => void;
+  onUnsubscribe?: (experienceId: string) => void;
+};
+
+export const ExperienceList: React.FC<ExperienceListProps> = props => {
+  const {
+    experiences,
+    user,
+    selectable,
+    viewPostList,
+    onDelete,
+    onUnsubscribe,
+    onSubscribe,
+    onClone,
+  } = props;
+
   const classes = useStyles();
-
   const router = useRouter();
 
-  const [selected, setSelected] = useState<undefined | string>(undefined);
-
-  //TODO: still unable to only select one experience card
-  const handleClick = (id?: string) => {
-    if (id) setSelected(id);
-    if (id === selected) setSelected(undefined);
-  };
-
-  const handleViewExperience = (experience: Experience) => (type: TimelineType) => {
-    viewPostList(type, experience);
-  };
+  const {getIdByType} = useQueryParams();
+  const [selected, setSelected] = useState<null | string>(null);
 
   useEffect(() => {
-    // TODO: make experience as global constant for helper query instead hardcoded
-    if (router.query?.type === 'experience') {
-      let idSelected = undefined;
-      if (router.query.id) {
-        idSelected = router.query?.id?.toString();
-      } else {
-        if (experiences.length > 0) {
-          router.push(`/home?type=experience&id=${experiences[0].experienceId}`);
-        }
-      }
-      setSelected(idSelected);
-    } else {
-      setSelected(undefined);
+    const experienceId = getIdByType('experience');
+    const exists = experiences.find(item => item.experience.id === experienceId);
+
+    if (experienceId && exists) {
+      setSelected(experienceId);
+    }
+
+    // TODO: move redirect to server side
+    if (router.query?.type === 'experience' && !experienceId && experiences.length > 0) {
+      router.push(`/home?type=experience&id=${experiences[0].experience.id}`);
     }
   }, [router]);
+
+  //TODO: still unable to only select one experience card
+  const handleSelectExperience = (experience: Experience) => (id?: string) => {
+    if (id) setSelected(id);
+    if (id === selected) setSelected(null);
+
+    viewPostList(TimelineType.EXPERIENCE, experience);
+  };
 
   return (
     <div className={classes.root}>
       {experiences.map(item => (
         <div key={item.experience.id}>
-          <SimpleCard
-            filterTimeline={handleViewExperience(item.experience)}
+          <ExperienceCard
             user={user}
-            onSelect={handleClick}
-            title={item.experience.name}
-            creator={item.experience.user.name}
-            subscribed={item.subscribed}
-            imgUrl={item.experience.experienceImageURL || ''}
-            experienceId={item.experienceId}
-            userExperienceId={item.id}
-            isSelectable={true}
+            userExperience={item}
+            selected={selected === item.experience.id}
+            selectable={selectable}
+            onSelect={handleSelectExperience(item.experience)}
             onDelete={onDelete}
             onUnsubscribe={onUnsubscribe}
-            onFollow={onFollow}
-            selected={selected}
+            onSubscribe={onSubscribe}
+            onClone={onClone}
           />
         </div>
       ))}

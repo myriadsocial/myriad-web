@@ -12,15 +12,22 @@ import {useUpload} from 'src/hooks/use-upload.hook';
 import {Experience} from 'src/interfaces/experience';
 
 export const ExperienceEditContainer: React.FC = () => {
-  const {searchTags, tags, searchPeople, people, experience, getDetail, updateExperience} =
-    useExperienceHook();
+  const {
+    experience,
+    people,
+    tags,
+    searchTags,
+    searchPeople,
+    getExperienceDetail,
+    updateExperience,
+  } = useExperienceHook();
   const {uploadImage} = useUpload();
   const router = useRouter();
   const {experienceId} = router.query;
   const style = useStyles();
 
   useEffect(() => {
-    if (experienceId) getDetail(experienceId);
+    if (experienceId) getExperienceDetail(experienceId);
   }, []);
 
   const onImageUpload = async (files: File[]) => {

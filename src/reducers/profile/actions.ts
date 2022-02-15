@@ -4,8 +4,7 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
-import {ExperienceType} from 'src/components/TimelineFilter/hooks/use-filter-option.hook';
-import {UserExperience} from 'src/interfaces/experience';
+import {UserExperience, ExperienceType} from 'src/interfaces/experience';
 import {Friend} from 'src/interfaces/friend';
 import {SocialMedia} from 'src/interfaces/social';
 import {BlockedProps, User} from 'src/interfaces/user';

@@ -5,15 +5,16 @@ import {useRouter} from 'next/router';
 import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import {useExperienceHook} from '../../hooks/use-experience-hook';
-import {useSearchHook} from '../../hooks/use-search.hooks';
-import {SearchedExperienceListContainer} from '../ExperienceList/SearchedExperienceListContainer';
+import {SearchExperienceListContainer} from '../ExperienceList';
 import {PostsListContainer} from '../PostsList/PostsListContainer';
 import {useTimelineHook} from '../Timeline/hooks/use-timeline.hook';
 import {UsersListContainer} from '../UsersList/UsersListContainer';
 import {SearchBoxContainer} from '../atoms/Search/SearchBoxContainer';
 import {TabItems} from '../atoms/Tabs';
 import {TabsComponent} from '../atoms/Tabs';
+
+import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import {useSearchHook} from 'src/hooks/use-search.hooks';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -78,7 +79,7 @@ export const SearchResultContainer: React.FC = () => {
     {
       id: 'experience-tab',
       title: 'Experience',
-      component: <SearchedExperienceListContainer query={searchKeyword} />,
+      component: <SearchExperienceListContainer query={searchKeyword} />,
     },
   ]);
 

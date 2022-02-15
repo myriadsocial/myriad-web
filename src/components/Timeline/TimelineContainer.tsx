@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {useRouter} from 'next/router';
-
-import {Button} from '@material-ui/core';
+import {Button, Grid} from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
@@ -19,7 +17,6 @@ import {useTimelineFilter} from './hooks/use-timeline-filter.hook';
 import {useTimelineHook} from './hooks/use-timeline.hook';
 
 import {PostImporterContainer} from 'src/components/PostImporterList';
-import ShowIf from 'src/components/common/show-if.component';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
@@ -37,24 +34,23 @@ import {WalletState} from 'src/reducers/wallet/reducer';
 
 type TimelineContainerProps = {
   filters?: TimelineFilter;
-  enableFilter?: boolean;
-  sortType?: 'metric' | 'filter';
+  fetchInitial?: boolean;
+  filterType?: 'origin' | 'type';
+  sortType?: 'metric' | 'created';
   anonymous?: boolean;
 };
 
 export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
-  const {filters, enableFilter = true} = props;
-
-  const router = useRouter();
+  const {filters, fetchInitial = true} = props;
 
   const dispatch = useDispatch();
   const {posts, hasMore, loading, nextPage, getTippedUserId} = useTimelineHook();
   const {filterTimeline} = useTimelineFilter(filters);
   const {query} = useQueryParams();
-  const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
   const {openTipHistory} = useTipHistory();
   const {openToasterSnack} = useToasterSnackHook();
 
+  const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
   const anonymous = useSelector<RootState, boolean>(state => state.userState.anonymous);
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
@@ -71,8 +67,9 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const sendTipOpened = Boolean(tippedPost) || Boolean(tippedComment);
 
   useEffect(() => {
-    filterTimeline(query);
-  }, [query]);
+    console.log('useEffect filterTimeline', query);
+    fetchInitial && filterTimeline(query);
+  }, [query, fetchInitial]);
 
   useEffect(() => {
     if (isTipSent) {
@@ -188,31 +185,29 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
   return (
     <>
-      <ShowIf condition={enableFilter}>
+      <Grid container justifyContent="space-between" alignItems="center">
         <TimelineFilterContainer {...props} />
-      </ShowIf>
+      </Grid>
 
-      <div style={{marginTop: router.pathname === '/home' ? 30 : 0}}>
-        <TimelineComponent
-          timelineType={query.type as TimelineType}
-          loading={loading}
-          user={user}
-          posts={posts}
-          anonymous={anonymous}
-          loadNextPage={nextPage}
-          hasMore={hasMore}
-          upvote={handleUpvote}
-          onSendTip={handleSendTip}
-          onOpenTipHistory={openTipHistory}
-          onDelete={handleDeletePost}
-          onReport={handleReportPost}
-          onVisibility={handlePostVisibility}
-          toggleDownvoting={handleToggleDownvoting}
-          onShared={handleSharePost}
-          onRemoveVote={handleRemoveVote}
-          onImporters={handleImporters}
-        />
-      </div>
+      <TimelineComponent
+        timelineType={query.type as TimelineType}
+        loading={loading}
+        user={user}
+        posts={posts}
+        anonymous={anonymous}
+        loadNextPage={nextPage}
+        hasMore={hasMore}
+        upvote={handleUpvote}
+        onSendTip={handleSendTip}
+        onOpenTipHistory={openTipHistory}
+        onDelete={handleDeletePost}
+        onReport={handleReportPost}
+        onVisibility={handlePostVisibility}
+        toggleDownvoting={handleToggleDownvoting}
+        onShared={handleSharePost}
+        onRemoveVote={handleRemoveVote}
+        onImporters={handleImporters}
+      />
 
       <Modal
         gutter="none"

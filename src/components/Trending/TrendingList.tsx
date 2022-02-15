@@ -9,16 +9,16 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from './trending-list.styles';
+import {useStyles} from './TrendingList.styles';
 
 import {Tag} from 'src/interfaces/experience';
 import {v4 as uuid} from 'uuid';
 
-interface TrendingListProps {
+type TrendingListProps = {
   trendings: Tag[];
   add?: boolean;
   onAdd?: (tag: string) => void;
-}
+};
 
 export const TrendingList: React.FC<TrendingListProps> = props => {
   const {trendings, add = false} = props;

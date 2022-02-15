@@ -14,11 +14,11 @@ import {Experience} from 'src/interfaces/experience';
 export const ExperienceContainer: React.FC = () => {
   const {
     selectedExperience,
+    tags,
+    people,
     saveExperience,
     searchTags,
-    tags,
     searchPeople,
-    people,
     loadExperience,
   } = useExperienceHook();
   const style = useStyles();

@@ -8,9 +8,9 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
-import {ProfileTimeline} from 'src/components/Profile/ProfileComponent';
-import {ResourceDeleted} from 'src/components/ResourceDeleted';
+import {ProfileTimeline} from 'src/components/Profile/Profile';
 import {SectionTitle, TopNavbarComponent} from 'src/components/atoms/TopNavbar';
+import {ResourceDeleted} from 'src/components/common/ResourceDeleted';
 import ShowIf from 'src/components/common/show-if.component';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
@@ -21,11 +21,15 @@ import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchAccountPrivacySetting} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
-import {fetchExperience} from 'src/reducers/experience/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {checkFriendedStatus, setProfile} from 'src/reducers/profile/actions';
-import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
+import {
+  setAnonymous,
+  fetchConnectedSocials,
+  fetchUser,
+  fetchUserExperience,
+} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
@@ -132,7 +136,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   await dispatch(fetchExchangeRates());
-  await dispatch(fetchExperience());
+  await dispatch(fetchUserExperience());
 
   try {
     const detail = await UserAPI.getUserDetail(profileId, userId);

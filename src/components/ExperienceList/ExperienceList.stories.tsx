@@ -17,10 +17,7 @@ export const ExperienceList = Template.bind({});
 ExperienceList.args = {
   experiences: [
     {
-      id: '61274967e2f91547504ee93e',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      experienceId: '61274967e2f91569384ee93d',
+      subscribed: false,
       experience: {
         id: '61274967e2f91569384ee93d',
         name: 'to the moon crypto',
@@ -50,14 +47,7 @@ ExperienceList.args = {
             },
           ],
         },
-        tags: [
-          {
-            id: '#cool',
-            count: 1,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          },
-        ],
+        tags: ['#cool'],
         people: [
           {
             id: '60efac8c565ab8004ed28ba7',

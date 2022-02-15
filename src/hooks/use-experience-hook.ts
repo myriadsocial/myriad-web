@@ -1,14 +1,14 @@
 import {useSelector, useDispatch} from 'react-redux';
 
-import {Experience} from '../interfaces/experience';
+import {Experience, WrappedExperience} from '../interfaces/experience';
 import {RootState} from '../reducers';
+
 import {
-  loadSearchedExperiences,
-  searchAllRelatedExperiences,
+  searchExperiences,
   searchPeople,
   searchTags,
   cloneExperience,
-  fetchExperience,
+  loadExperiences,
   createExperience,
   fetchDetailExperience,
   subscribeExperience,
@@ -16,8 +16,15 @@ import {
   deleteExperience,
   unsubscribeExperience,
   clearExperiences,
-} from '../reducers/experience/actions';
-import {ExperienceState} from '../reducers/experience/reducer';
+} from 'src/reducers/experience/actions';
+import {ExperienceState} from 'src/reducers/experience/reducer';
+import {fetchUserExperience} from 'src/reducers/user/actions';
+
+export enum ExperienceOwner {
+  ALL = 'all',
+  CURRENT_USER = 'current_user',
+  PROFILE = 'profile',
+}
 
 //TODO: isn't it better to rename this to something more general like, useSearchHook?
 // it's not obvious if we want to searchPeople we can use this hook
@@ -26,38 +33,38 @@ export const useExperienceHook = () => {
 
   const {
     experiences,
-    allExperiences,
     selectedExperience,
     searchTags: tags,
     searchPeople: people,
-    searchExperience: searchedExperiences,
     detail: experience,
     hasMore,
     meta,
     loading,
   } = useSelector<RootState, ExperienceState>(state => state.experienceState);
+  const profileExperiences = useSelector<RootState, WrappedExperience[]>(
+    state => state.profileState.experience.data,
+  );
+  const userExperiences = useSelector<RootState, WrappedExperience[]>(
+    state => state.userState.experiences,
+  );
 
   const loadExperience = () => {
-    dispatch(fetchExperience());
+    dispatch(loadExperiences());
   };
 
-  const getDetail = (experienceId: string | string[]) => {
+  const nextPage = async () => {
+    const page = meta.currentPage + 1;
+
+    dispatch(loadExperiences(page));
+  };
+
+  const getExperienceDetail = (experienceId: string | string[]) => {
     const id = experienceId as string;
     dispatch(fetchDetailExperience(id));
   };
 
-  const initSearchExperiences = async (page = 1) => {
-    dispatch(loadSearchedExperiences(page));
-  };
-
   const findExperience = async (query: string, page = 1) => {
-    dispatch(searchAllRelatedExperiences(query, page));
-  };
-
-  const nextPageSearchedExperiences = async () => {
-    const page = meta.currentPage + 1;
-
-    dispatch(loadSearchedExperiences(page));
+    dispatch(searchExperiences(query, page));
   };
 
   const findPeople = (query: string) => {
@@ -73,13 +80,14 @@ export const useExperienceHook = () => {
     newTags: string[],
     callback?: (id: string) => void,
   ) => {
-    const experience = {
+    const experience: Partial<Experience> = {
       name: newExperience.name,
       tags: newTags,
       people: newExperience.people,
       description: newExperience.description,
       experienceImageURL: newExperience.experienceImageURL,
     };
+
     dispatch(cloneExperience(experience, callback));
   };
 
@@ -88,13 +96,14 @@ export const useExperienceHook = () => {
     newTags: string[],
     callback?: (id: string) => void,
   ) => {
-    const experience = {
+    const experience: Partial<Experience> = {
       name: newExperience.name,
       tags: newTags,
       people: newExperience.people,
       description: newExperience.description,
       experienceImageURL: newExperience.experienceImageURL,
     };
+
     dispatch(updateExperience(newExperience.id, experience, callback));
   };
 
@@ -110,7 +119,7 @@ export const useExperienceHook = () => {
   const beSubscribeExperience = (experienceId: string) => {
     dispatch(
       subscribeExperience(experienceId, () => {
-        loadExperience();
+        dispatch(fetchUserExperience());
       }),
     );
   };
@@ -120,9 +129,10 @@ export const useExperienceHook = () => {
   };
 
   const beUnsubscribeExperience = (experienceId: string, callback?: () => void) => {
+    console.log('beUnsubscribeExperience', experienceId);
     dispatch(
       unsubscribeExperience(experienceId, () => {
-        loadExperience();
+        dispatch(fetchUserExperience());
       }),
     );
   };
@@ -133,24 +143,23 @@ export const useExperienceHook = () => {
 
   return {
     loading,
-    initSearchExperiences,
-    nextPageSearchedExperiences,
-    searchedExperiences,
     page: meta.currentPage,
     hasMore,
+    experiences,
+    userExperiences,
+    profileExperiences,
+    experience,
+    selectedExperience,
+    tags,
+    people,
+    loadExperience,
+    nextPage,
     searchExperience: findExperience,
     searchPeople: findPeople,
     searchTags: findTags,
     cloneExperience: followExperience,
-    loadExperience,
-    experiences,
-    selectedExperience,
-    allExperiences,
     saveExperience,
-    tags,
-    people,
-    getDetail,
-    experience,
+    getExperienceDetail,
     subscribeExperience: beSubscribeExperience,
     updateExperience: editExperience,
     removeExperience,

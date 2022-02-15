@@ -23,11 +23,15 @@ import {RootState} from 'src/reducers';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
-import {fetchExperience} from 'src/reducers/experience/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {clearUser} from 'src/reducers/user/actions';
-import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
+import {
+  setAnonymous,
+  fetchConnectedSocials,
+  fetchUser,
+  fetchUserExperience,
+} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
@@ -92,7 +96,8 @@ const Home: React.FC = () => {
       <Banner />
       <SearchBoxContainer onSubmitSearch={performSearch} />
       <RichTextContainer />
-      <TimelineContainer />
+      <TimelineContainer filterType="type" sortType="metric" />
+
       <PromptComponent
         title={i18n.t('Home.Prompt_Banned.Title')}
         subtitle={
@@ -203,7 +208,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   await dispatch(fetchExchangeRates());
-  await dispatch(fetchExperience());
+  await dispatch(fetchUserExperience());
 
   return {
     props: {

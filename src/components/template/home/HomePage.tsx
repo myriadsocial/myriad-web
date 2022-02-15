@@ -5,8 +5,8 @@ import {useTheme} from '@material-ui/core/styles';
 
 import {Menu as MenuComponent} from '../../Menu';
 import {SidebarMenu} from '../../Menu/Menu.stories';
-import {user as userData} from '../../Profile/ProfileHeader/profile-header.stories';
-import {ProfileHeader as ProfileHeaderComponent} from '../../ProfileHeader';
+import {ProfileCard} from '../../ProfileCard';
+import {user as userData} from '../../ProfileHeader/profile-header.stories';
 import {RichTextComponent} from '../../Richtext';
 import {DefaultRichText} from '../../Richtext/RichText.stories';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
@@ -101,7 +101,7 @@ const HomePage = (): JSX.Element => {
             rowGap: 12,
           }}>
           <div>
-            <ProfileHeaderComponent
+            <ProfileCard
               user={userData}
               notificationCount={1}
               handleSignOut={console.log}

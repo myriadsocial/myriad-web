@@ -2,8 +2,9 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {SocialMediaList as SocialMediaListComponent} from '.';
-import {SocialsEnum} from '../../interfaces/social';
+import {SocialMediaList as SocialMediaListComponent} from './SocialMediaList';
+
+import {SocialsEnum} from 'src/interfaces/social';
 
 export default {
   title: 'UI Revamp v2.0/components/Social Media List',

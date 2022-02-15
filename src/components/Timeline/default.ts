@@ -1,8 +1,10 @@
-import {TimelineSortMethod, TimelineType} from '../../interfaces/timeline';
 import {MenuOptions} from '../atoms/DropdownMenu';
 import {TabListItem} from '../atoms/TabList';
 
-export type ExperienceType = 'all' | 'personal' | 'other';
+import {ExperienceType} from 'src/interfaces/experience';
+import {TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
+
+export type SortType = 'oldest' | 'latest';
 
 // Filter options
 export const postFilterOptions: MenuOptions<string>[] = [
@@ -27,7 +29,7 @@ export const experienceFilterOptions: MenuOptions<ExperienceType>[] = [
 ];
 
 // Sort options
-export const sortOptions: MenuOptions<TimelineSortMethod>[] = [
+export const timelineSortOptions: MenuOptions<TimelineSortMethod>[] = [
   {
     id: 'created',
     title: 'Latest',
@@ -44,6 +46,11 @@ export const sortOptions: MenuOptions<TimelineSortMethod>[] = [
     id: 'comment',
     title: 'Most commented',
   },
+];
+
+export const postCreatedSortOptions: MenuOptions<SortType>[] = [
+  {id: 'latest', title: 'Latest'},
+  {id: 'oldest', title: 'Oldest'},
 ];
 
 export const balanceSortOptions: MenuOptions<string>[] = [

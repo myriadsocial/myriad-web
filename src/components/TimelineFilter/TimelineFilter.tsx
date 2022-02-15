@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {Grid} from '@material-ui/core';
+
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {FilterDropdownMenu} from '../atoms/FilterDropdownMenu';
 import {TabList} from '../atoms/TabList';
@@ -7,16 +9,17 @@ import ShowIf from '../common/show-if.component';
 import {useStyles} from './TimelineFilter.styles';
 import {useFilterOption} from './hooks/use-filter-option.hook';
 
-import {TimelineSortMethod, TimelineType} from 'src/interfaces/timeline';
+import {TimelineSortMethod, TimelineType, TimelineSortOrder} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 
 type TimelineFilterProps = {
   user?: User;
-  enableFilter?: boolean;
-  sortType?: 'metric' | 'filter';
+  filterType?: 'origin' | 'type';
+  sortType?: 'metric' | 'created';
   type: TimelineType;
   sort: TimelineSortMethod;
   sortTimeline: (sort: TimelineSortMethod) => void;
+  orderTimeline: (order: TimelineSortOrder) => void;
   filterTimeline?: (type: TimelineType) => void;
   filterOrigin?: (origin: string) => void;
 };
@@ -25,18 +28,24 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
   const {
     type,
     sort,
-    enableFilter = true,
-    sortType = 'metric',
+    filterType,
+    sortType,
     sortTimeline,
+    orderTimeline,
     filterTimeline,
     filterOrigin,
   } = props;
   const styles = useStyles();
 
-  const {filterOptions, sortOptions, postFilterOptions} = useFilterOption();
+  const {orderOptions, metricSortOptions, originFilterOptions, typeFilterOptions} =
+    useFilterOption();
 
   const handleSort = (sort: string) => {
     sortTimeline(sort as TimelineSortMethod);
+  };
+
+  const handleOrder = (order: string) => {
+    orderTimeline(order as TimelineSortOrder);
   };
 
   const handleFilter = (variant: string) => {
@@ -48,10 +57,10 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
   };
 
   return (
-    <div className={styles.root}>
-      {enableFilter && (
+    <Grid container alignItems="center" justifyContent="space-between">
+      <ShowIf condition={filterType === 'type'}>
         <TabList
-          tabs={filterOptions}
+          tabs={typeFilterOptions}
           active={type}
           mark="underline"
           size="small"
@@ -59,20 +68,29 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
           onChangeTab={handleFilter}
           className={styles.filter}
         />
-      )}
-
-      <ShowIf condition={sortType == 'metric'}>
-        <DropdownMenu title="Sort by" selected={sort} options={sortOptions} onChange={handleSort} />
       </ShowIf>
 
-      <ShowIf condition={sortType == 'filter'}>
+      <ShowIf condition={filterType === 'origin'}>
         <FilterDropdownMenu
           title="Filter by"
           selected={type}
-          options={postFilterOptions}
+          options={originFilterOptions}
           onChange={handleFilterOrigin}
         />
       </ShowIf>
-    </div>
+
+      <ShowIf condition={sortType === 'metric'}>
+        <DropdownMenu
+          title="Sort by"
+          selected={sort}
+          options={metricSortOptions}
+          onChange={handleSort}
+        />
+      </ShowIf>
+
+      <ShowIf condition={sortType === 'created'}>
+        <DropdownMenu title="Sort by" options={orderOptions} onChange={handleOrder} />
+      </ShowIf>
+    </Grid>
   );
 };

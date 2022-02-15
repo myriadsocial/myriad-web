@@ -1,12 +1,16 @@
 import React from 'react';
 
+import getConfig from 'next/config';
+
 import {BlockListContainer} from '../../BlockUserList/BlockList.container';
-import {HelpComponent} from '../../Help/Help';
+import {HelpComponent} from '../../common/Help/Help';
 import {AccountSettingsContainer} from '../AccountSettingsContainer';
 import {LanguageSettingsContainer} from '../LanguageSettingsContainer';
 import {NotificationSettingsContainer} from '../NotificationSettings.container';
 
 import i18n from 'src/locale';
+
+const {publicRuntimeConfig} = getConfig();
 
 export type SettingsType =
   | 'account'
@@ -54,7 +58,7 @@ export const useSettingList = (): SettingsOption<SettingsType>[] => {
       id: 'help',
       title: i18n.t('Setting.List_Menu.Help_Title'),
       subtitle: i18n.t('Setting.List_Menu.Help_Subtitle'),
-      component: <HelpComponent />,
+      component: <HelpComponent support={publicRuntimeConfig.myriadSupportMail} />,
     },
     {
       id: 'about',

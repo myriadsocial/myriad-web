@@ -12,9 +12,13 @@ import i18n from 'src/locale';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
-import {fetchExperience} from 'src/reducers/experience/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
-import {setAnonymous, fetchConnectedSocials, fetchUser} from 'src/reducers/user/actions';
+import {
+  setAnonymous,
+  fetchConnectedSocials,
+  fetchUser,
+  fetchUserExperience,
+} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
@@ -90,7 +94,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchConnectedSocials()),
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
-      dispatch(fetchExperience()),
+      dispatch(fetchUserExperience()),
       dispatch(getUserCurrencies()),
     ]);
   }

@@ -4,10 +4,10 @@ import {useTheme} from '@material-ui/core/styles';
 
 import {Menu as MenuComponent} from '../../Menu';
 import {SidebarMenu} from '../../Menu/Menu.stories';
-import {ProfileHeaderComponent} from '../../Profile/ProfileHeader';
-import {Header, user} from '../../Profile/ProfileHeader/profile-header.stories';
-import {user as userData} from '../../Profile/ProfileHeader/profile-header.stories';
-import {ProfileHeader as ProfileHeaderHomeComponent} from '../../ProfileHeader';
+import {ProfileCard} from '../../ProfileCard';
+import {ProfileHeaderComponent} from '../../ProfileHeader';
+import {Header, user} from '../../ProfileHeader/profile-header.stories';
+import {user as userData} from '../../ProfileHeader/profile-header.stories';
 import {RightMenuBar} from '../../RightMenuBar/RightMenuBar';
 import {SocialMediaList} from '../../SocialMediaList/SocialMedia.stories';
 import {UserMenu} from '../../UserMenu';
@@ -98,7 +98,7 @@ const ProfilePage = (): JSX.Element => {
             rowGap: 12,
           }}>
           <div>
-            <ProfileHeaderHomeComponent
+            <ProfileCard
               notificationCount={0}
               user={userData}
               handleSignOut={console.log}
