@@ -11,6 +11,7 @@ import {
   setTransactionCurrency,
   setTransactionSort,
   setTippedReference,
+  setDisableTipping,
 } from 'src/reducers/tip-summary/actions';
 import {TipSummaryState} from 'src/reducers/tip-summary/reducer';
 import {UserState} from 'src/reducers/user/reducer';
@@ -18,10 +19,11 @@ import {UserState} from 'src/reducers/user/reducer';
 export const useTipHistory = () => {
   const dispatch = useDispatch();
 
-  const {currencies} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, currencies} = useSelector<RootState, UserState>(state => state.userState);
   const {
     transactions,
     reference,
+    tippingDisabled,
     hasMore,
     meta: {currentPage},
   } = useSelector<RootState, TipSummaryState>(state => state.tipSummaryState);
@@ -30,6 +32,8 @@ export const useTipHistory = () => {
   const openTipHistory = (reference: Comment | Post) => {
     // type guarding, post always has platform field
     const type = 'platform' in reference ? 'post' : 'comment';
+
+    if ((user && user.id === reference.user.id) || !user) dispatch(setDisableTipping(true));
 
     dispatch(setTippedReference(reference));
     dispatch(fetchTransactionHistory(reference, type));
@@ -71,6 +75,7 @@ export const useTipHistory = () => {
     isTipHistoryOpen,
     hasMore,
     reference,
+    tippingDisabled,
     currencies,
     transactions,
     openTipHistory,
