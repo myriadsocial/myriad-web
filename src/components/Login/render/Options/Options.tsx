@@ -6,7 +6,6 @@ import {
   Checkbox,
   FormControlLabel,
   Grid,
-  Link,
   List,
   ListItem,
   Typography,
@@ -27,6 +26,7 @@ import {
   TrustWalletDisabledIcon,
 } from 'src/components/atoms/Icons';
 import {PromptComponent as Prompt} from 'src/components/atoms/Prompt/prompt.component';
+import {PolkadotLink} from 'src/components/common/PolkadotLink.component';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import i18n from 'src/locale';
 
@@ -256,12 +256,7 @@ export const Options: React.FC<OptionProps> = props => {
         subtitle={
           <Typography>
             {i18n.t('Login.Options.Prompt_Extension.Subtitle_1')}&nbsp;
-            <Link
-              href="https://polkadot.js.org/extension"
-              target="_blank"
-              className={styles.polkadotLink}>
-              Polkadot.js
-            </Link>
+            <PolkadotLink />
             &nbsp;{i18n.t('Login.Options.Prompt_Extension.Subtitle_2')}
           </Typography>
         }>

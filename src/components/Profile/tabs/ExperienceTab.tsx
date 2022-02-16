@@ -7,8 +7,8 @@ import {PrivateProfile} from '../PrivateProfile';
 
 import {EmptyExperience, ExperienceListContainer} from 'src/components/ExperienceList';
 import {experienceFilterOptions} from 'src/components/Timeline/default';
+import {DropdownMenu} from 'src/components/atoms/DropdownMenu';
 import {Empty} from 'src/components/atoms/Empty';
-import {FilterDropdownMenu} from 'src/components/atoms/FilterDropdownMenu';
 import {ExperienceOwner} from 'src/hooks/use-experience-hook';
 import {UserExperience, ExperienceType} from 'src/interfaces/experience';
 import {FriendStatus} from 'src/interfaces/friend';
@@ -71,7 +71,7 @@ export const ProfileExperienceTab: React.FC<ProfileExperienceTabProps> = props =
   return (
     <>
       <Grid container alignItems="center" justifyContent="space-between">
-        <FilterDropdownMenu
+        <DropdownMenu
           title="Filter by"
           options={experienceFilterOptions}
           onChange={handleFilterSelected}

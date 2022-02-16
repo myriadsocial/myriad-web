@@ -6,6 +6,7 @@ import ArrowUp from 'src/images/Icons/ArrowUp.svg';
 import DragIndicator from 'src/images/Icons/DragIndicator.svg';
 import Upload from 'src/images/Icons/Upload.svg';
 import Magnifier from 'src/images/Icons/magnifierIcon.svg';
+import MyriadCircle from 'src/images/Icons/myriad-circle.svg';
 import MyriadFullBlack from 'src/images/Icons/myriad-full-black.svg';
 import MyriadGrey from 'src/images/Icons/myriad-grey.svg';
 import MyriadFull from 'src/images/Icons/myriad-logo-full.svg';
@@ -13,6 +14,10 @@ import Notification from 'src/images/Icons/notif-default.svg';
 import OfficialBadge from 'src/images/Icons/official-badge.svg';
 
 type IconProps = Omit<SvgIconProps, 'component'>;
+
+export const MyriadCircleIcon: React.FC<IconProps> = props => (
+  <SvgIcon component={MyriadCircle} viewBox="0 0 30 30" style={{fill: 'none'}} {...props} />
+);
 
 export const MyriadFullIcon: React.FC<IconProps> = props => (
   <SvgIcon

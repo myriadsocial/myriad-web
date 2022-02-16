@@ -5,11 +5,12 @@ import {useDispatch} from 'react-redux';
 import {useSession} from 'next-auth/client';
 import {useRouter} from 'next/router';
 
-import {Button, Link, Typography} from '@material-ui/core';
+import {Button, Typography} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {PolkadotAccountList} from '../PolkadotAccountList';
+import {PolkadotLink} from '../common/PolkadotLink.component';
 import {ProfileCard} from './ProfileCard';
 
 import {useAuthHook} from 'src/hooks/auth.hook';
@@ -108,14 +109,9 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
         onCancel={closeAccountList}
         subtitle={
           <Typography>
-            Kindly check if you have{' '}
-            <Link
-              href="https://polkadot.js.org/extension"
-              target="_blank"
-              style={{color: 'rgb(255, 140, 0)'}}>
-              Polkadot.js
-            </Link>{' '}
-            installed on your browser
+            Kindly check if you have&nbsp;
+            <PolkadotLink />
+            &nbsp;installed on your browser
           </Typography>
         }>
         <Button size="small" variant="contained" color="primary" onClick={closeAccountList}>

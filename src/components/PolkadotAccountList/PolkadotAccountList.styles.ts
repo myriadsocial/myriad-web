@@ -46,9 +46,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontStyle: 'normal',
       lineHeight: '24px',
     },
-    polkadot: {
-      color: 'rgb(255, 140, 0)',
-    },
     actions: {
       display: 'flex',
       flexWrap: 'wrap',

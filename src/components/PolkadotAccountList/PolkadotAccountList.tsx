@@ -12,6 +12,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import Identicon from '@polkadot/react-identicon';
 
 import {Modal} from '../atoms/Modal';
+import {PolkadotLink} from '../common/PolkadotLink.component';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './PolkadotAccountList.styles';
 
@@ -35,15 +36,9 @@ export const PolkadotAccountList: React.FC<PolkadotAccountListProps> = ({
       <div className={styles.wrapper}>
         <ShowIf condition={accounts.length == 0}>
           <Typography className={styles.help}>
-            Please open your
-            <a
-              href="https://polkadot.js.org/extension"
-              target="_blank"
-              className={styles.polkadot}
-              rel="noreferrer">
-              Polkadot.js
-            </a>{' '}
-            extension and create new account or import existing.Then reload this page.
+            Please open your&nbsp;
+            <PolkadotLink />
+            &nbsp;extension and create new account or import existing.Then reload this page.
           </Typography>
 
           <div className={styles.buttonGroup}>

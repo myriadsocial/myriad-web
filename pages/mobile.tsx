@@ -6,11 +6,11 @@ import Head from 'next/head';
 
 import {Grid} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {MyriadFullIcon} from 'src/components/atoms/Icons';
+import {PolkadotLink} from 'src/components/common/PolkadotLink.component';
 import i18n from 'src/locale';
 
 const {publicRuntimeConfig} = getConfig();
@@ -46,9 +46,6 @@ const useStyles = makeStyles((theme: Theme) =>
     mb2: {
       marginBottom: theme.spacing(2),
     },
-    polkadot: {
-      color: theme.palette.primary.main,
-    },
     button: {},
   }),
 );
@@ -74,12 +71,7 @@ const Mobile: React.FC = () => {
         <Grid item xs={12}>
           <Typography className={`${style.subtitle} ${style.mb2}`}>
             {i18n.t('Mobile.subtitle_2')}&nbsp;
-            <Link
-              href="https://polkadot.js.org/extension"
-              target="_blank"
-              className={style.polkadot}>
-              Polkadot.js
-            </Link>
+            <PolkadotLink />
           </Typography>
         </Grid>
 

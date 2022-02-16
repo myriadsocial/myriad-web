@@ -12,6 +12,7 @@ import {useUpload} from 'src/hooks/use-upload.hook';
 import {Experience} from 'src/interfaces/experience';
 
 export const ExperienceCloneContainer: React.FC = () => {
+  // TODO: separate hook for tag, people and experience
   const {searchTags, tags, searchPeople, people, experience, getExperienceDetail, cloneExperience} =
     useExperienceHook();
   const {uploadImage} = useUpload();
