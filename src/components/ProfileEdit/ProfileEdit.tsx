@@ -266,6 +266,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           placeholder="mysite.url"
           value={newUser?.websiteURL}
           onChange={handleChange('websiteURL')}
+          inputProps={{maxLength: 40}}
           labelWidth={58}
         />
       </FormControl>

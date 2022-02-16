@@ -15,6 +15,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     link: {
       color: '#FFF',
       marginRight: 20,
+      wordBreak: 'break-word',
     },
   }),
 );
