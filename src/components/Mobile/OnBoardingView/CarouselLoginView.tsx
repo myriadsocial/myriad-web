@@ -155,7 +155,7 @@ export const CarouselLoginView: React.FC<CarouselLoginViewProps> = props => {
                 </div>
                 <div className={`${style.mb1}`}>
                   <Typography variant="h2" className={style.title} component="span" color="primary">
-                    Keep secure
+                    {i18n.t('Login.Layout.Carousel_Title_3')}
                   </Typography>
                 </div>
                 <Typography
@@ -163,7 +163,7 @@ export const CarouselLoginView: React.FC<CarouselLoginViewProps> = props => {
                   className={style.subtitle}
                   component="p"
                   color="textPrimary">
-                  Decentralization provide safety and no personal data collected.
+                  {i18n.t('Login.Layout.Carousel_Subtitle_3')}
                 </Typography>
               </div>
             </Carousel>
@@ -172,7 +172,7 @@ export const CarouselLoginView: React.FC<CarouselLoginViewProps> = props => {
       </Grid>
       <div className={style.button}>
         <Button variant="contained" color="primary" onClick={onSignIn}>
-          Sign in
+          {i18n.t('Login.Layout.Btn_Signin')}
         </Button>
       </div>
     </div>

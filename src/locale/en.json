@@ -23,7 +23,9 @@
     "title": "We are trully sorry",
     "subtitle": "Sign in on mobile is not available yet",
     "subtitle_2": "To access Myriad, you need to view in dekstop mode and install",
-    "button_label": "Visit Myriad Social"
+    "subtitle_3": "Sign in on mobile is not available yet. To access Myriad, you need to use desktop browser and install Polakdot.js",
+    "button_label": "Visit Myriad Social",
+    "button_label_sign_in": "Sign in as anonymous"
   },
   "Login": {
     "Description": "A social platform that’s entirely under your control. Remain anonymous, look for your own topics, choose your interface and control what you see.",
@@ -41,6 +43,8 @@
       "Carousel_Title_2_left": "Monetize",
       "Carousel_Title_2_right": "your Idea",
       "Carousel_Subtitle_2": "Speak what's inside your mind and get a chance to earn coins",
+      "Carousel_Title_3": "Keep secure",
+      "Carousel_Subtitle_3": "Decentralization provide safety and no personal data collected.",
       "Text_Try_1": "Or try our",
       "Text_Try_2": "first",
       "Footer_Text_1": "To access Myriad, you need to use",

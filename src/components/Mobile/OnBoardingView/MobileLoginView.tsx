@@ -70,14 +70,13 @@ export const MobileLogin: React.FC<MobileLoginViewProps> = props => {
         </Grid>
         <Grid item xs={12}>
           <Typography className={`${style.subtitle} ${style.mb2}`}>
-            Sign in on mobile is not available yet. To access Myriad, you need to use desktop
-            browser and install Polakdot.js
+            {i18n.t('Mobile.subtitle_3')}
           </Typography>
         </Grid>
       </Grid>
       <div className={style.button}>
         <Button onClick={anonymousLogin} variant="contained" color="primary" className={style.mb1}>
-          Sign in as anonymus
+          {i18n.t('Mobile.button_label_sign_in')}
         </Button>
         <Button href="https://www.myriad.social/" variant="outlined" color="secondary">
           {i18n.t('Mobile.button_label')}
