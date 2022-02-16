@@ -10,16 +10,15 @@ import i18n from 'src/locale';
 
 type MobileLoginViewProps = {
   anonymousLogin: () => void;
-  height: number;
 };
 
 const useStyles = makeStyles<Theme, MobileLoginViewProps>(theme =>
   createStyles({
     root: {
-      position: 'relative',
       background: '#FFF',
       height: '100vh',
       paddingTop: 200,
+      paddingBottom: 28,
       textAlign: 'center',
     },
     logo: {
@@ -41,13 +40,11 @@ const useStyles = makeStyles<Theme, MobileLoginViewProps>(theme =>
       marginBottom: theme.spacing(2),
     },
     button: {
-      position: 'absolute',
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      bottom: props => (props.height < 700 ? '20px' : '80px'),
     },
     mb1: {
       marginBottom: theme.spacing(1.5),
@@ -60,28 +57,39 @@ export const MobileLogin: React.FC<MobileLoginViewProps> = props => {
   const style = useStyles({...props});
 
   return (
-    <div className={style.root}>
-      <Grid container direction="column" justifyContent="center" alignContent="center">
-        <Grid item xs={12} className={style.logo}>
+    <Grid
+      container
+      direction="column"
+      justifyContent="space-between"
+      alignContent="center"
+      className={style.root}>
+      <Grid item>
+        <Grid item className={style.logo}>
           <MyriadFullIcon />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item>
           <Typography className={style.title}>{i18n.t('Mobile.title')}</Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item>
           <Typography className={`${style.subtitle} ${style.mb2}`}>
             {i18n.t('Mobile.subtitle_3')}
           </Typography>
         </Grid>
       </Grid>
-      <div className={style.button}>
-        <Button onClick={anonymousLogin} variant="contained" color="primary" className={style.mb1}>
-          {i18n.t('Mobile.button_label_sign_in')}
-        </Button>
-        <Button href="https://www.myriad.social/" variant="outlined" color="secondary">
-          {i18n.t('Mobile.button_label')}
-        </Button>
-      </div>
-    </div>
+      <Grid item>
+        <div className={style.button}>
+          <Button
+            onClick={anonymousLogin}
+            variant="contained"
+            color="primary"
+            className={style.mb1}>
+            {i18n.t('Mobile.button_label_sign_in')}
+          </Button>
+          <Button href="https://www.myriad.social/" variant="outlined" color="secondary">
+            {i18n.t('Mobile.button_label')}
+          </Button>
+        </div>
+      </Grid>
+    </Grid>
   );
 };

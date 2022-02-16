@@ -12,21 +12,17 @@ import Illustration2 from 'src/images/illustration/money_income_-_amico.svg';
 import i18n from 'src/locale';
 
 type CarouselLoginViewProps = {
-  height: number;
   onSignIn: () => void;
 };
 
 const useStyles = makeStyles<Theme, CarouselLoginViewProps>(theme =>
   createStyles({
     root: {
-      position: 'relative',
       background: '#FFF',
       height: '100vh',
       paddingTop: 60,
+      paddingBottom: 28,
       textAlign: 'center',
-    },
-    mb1: {
-      marginBottom: theme.spacing(1),
     },
     mb6: {
       marginBottom: theme.spacing(6),
@@ -70,11 +66,6 @@ const useStyles = makeStyles<Theme, CarouselLoginViewProps>(theme =>
       lineHeight: '19.6px',
       fontSize: '14px',
     },
-    button: {
-      position: 'absolute',
-      width: '100%',
-      bottom: props => (props.height < 700 ? '20px' : '80px'),
-    },
   }),
 );
 
@@ -83,98 +74,82 @@ export const CarouselLoginView: React.FC<CarouselLoginViewProps> = props => {
   const style = useStyles({...props});
 
   return (
-    <div className={style.root}>
-      <Grid container direction="column" justifyContent="center" alignContent="center">
-        <Grid item xs={12} className={style.mb6}>
-          <div className={style.carousel}>
-            <Carousel isRTL={false} itemsToShow={1}>
-              <div>
-                <div className={style.mb8}>
-                  <Illustration />
-                </div>
-                <div className={`${style.mb1}`}>
-                  <Typography
-                    variant="h2"
-                    className={`${style.title}`}
-                    component="span"
-                    color="primary">
-                    <Typography
-                      variant="h2"
-                      className={style.title}
-                      component="span"
-                      color="primary">
-                      {i18n.t('Login.Layout.Carousel_Title_1_left')}
-                    </Typography>{' '}
-                    {i18n.t('Login.Layout.Carousel_Title_1_right')}
-                  </Typography>
-                </div>
-                <Typography
-                  variant="h4"
-                  className={style.subtitle}
-                  component="p"
-                  color="textPrimary">
-                  {i18n.t('Login.Layout.Carousel_Subtitle_1a')}
-                </Typography>
-                <Typography
-                  variant="h4"
-                  className={style.subtitle}
-                  component="p"
-                  color="textPrimary">
-                  {i18n.t('Login.Layout.Carousel_Subtitle_1b')}
-                </Typography>
+    <Grid
+      container
+      direction="column"
+      justifyContent="space-between"
+      alignContent="center"
+      className={style.root}>
+      <Grid item>
+        <div className={style.carousel}>
+          <Carousel isRTL={false} itemsToShow={1}>
+            <div>
+              <div className={style.mb8}>
+                <Illustration />
               </div>
+              <Typography
+                variant="h2"
+                className={`${style.title}`}
+                component="span"
+                gutterBottom={true}
+                color="primary">
+                <Typography variant="h2" className={style.title} component="span" color="primary">
+                  {i18n.t('Login.Layout.Carousel_Title_1_left')}
+                </Typography>{' '}
+                {i18n.t('Login.Layout.Carousel_Title_1_right')}
+              </Typography>
+              <Typography variant="h4" className={style.subtitle} component="p" color="textPrimary">
+                {i18n.t('Login.Layout.Carousel_Subtitle_1a')}
+              </Typography>
+              <Typography variant="h4" className={style.subtitle} component="p" color="textPrimary">
+                {i18n.t('Login.Layout.Carousel_Subtitle_1b')}
+              </Typography>
+            </div>
 
-              <div>
-                <div className={style.mb8}>
-                  <Illustration2 />
-                </div>
-                <div className={`${style.mb1}`}>
-                  <Typography variant="h2" className={style.title} component="span" color="primary">
-                    <Typography
-                      variant="h2"
-                      className={style.title}
-                      component="span"
-                      color="primary">
-                      {i18n.t('Login.Layout.Carousel_Title_2_left')}
-                    </Typography>{' '}
-                    {i18n.t('Login.Layout.Carousel_Title_2_right')}
-                  </Typography>
-                </div>
-                <Typography
-                  variant="h4"
-                  className={style.subtitle}
-                  component="p"
-                  color="textPrimary">
-                  {i18n.t('Login.Layout.Carousel_Subtitle_2')}
-                </Typography>
+            <div>
+              <div className={style.mb8}>
+                <Illustration2 />
               </div>
+              <Typography
+                variant="h2"
+                className={style.title}
+                component="span"
+                color="primary"
+                gutterBottom={true}>
+                <Typography variant="h2" className={style.title} component="span" color="primary">
+                  {i18n.t('Login.Layout.Carousel_Title_2_left')}
+                </Typography>{' '}
+                {i18n.t('Login.Layout.Carousel_Title_2_right')}
+              </Typography>
+              <Typography variant="h4" className={style.subtitle} component="p" color="textPrimary">
+                {i18n.t('Login.Layout.Carousel_Subtitle_2')}
+              </Typography>
+            </div>
 
-              <div>
-                <div className={style.mb8}>
-                  <Illustration3 />
-                </div>
-                <div className={`${style.mb1}`}>
-                  <Typography variant="h2" className={style.title} component="span" color="primary">
-                    {i18n.t('Login.Layout.Carousel_Title_3')}
-                  </Typography>
-                </div>
-                <Typography
-                  variant="h4"
-                  className={style.subtitle}
-                  component="p"
-                  color="textPrimary">
-                  {i18n.t('Login.Layout.Carousel_Subtitle_3')}
-                </Typography>
+            <div>
+              <div className={style.mb8}>
+                <Illustration3 />
               </div>
-            </Carousel>
-          </div>
-        </Grid>
+              <Typography
+                variant="h2"
+                className={style.title}
+                component="span"
+                color="primary"
+                gutterBottom={true}>
+                {i18n.t('Login.Layout.Carousel_Title_3')}
+              </Typography>
+              <Typography variant="h4" className={style.subtitle} component="p" color="textPrimary">
+                {i18n.t('Login.Layout.Carousel_Subtitle_3')}
+              </Typography>
+            </div>
+          </Carousel>
+        </div>
       </Grid>
-      <div className={style.button}>
+      <Grid item>
         <Button variant="contained" color="primary" onClick={onSignIn}>
           {i18n.t('Login.Layout.Btn_Signin')}
         </Button>
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 };
