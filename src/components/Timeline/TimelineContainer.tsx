@@ -67,7 +67,6 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const sendTipOpened = Boolean(tippedPost) || Boolean(tippedComment);
 
   useEffect(() => {
-    console.log('useEffect filterTimeline', query);
     fetchInitial && filterTimeline(query);
   }, [query, fetchInitial]);
 

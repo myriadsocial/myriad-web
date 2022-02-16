@@ -3,7 +3,6 @@ import React from 'react';
 import {Grid} from '@material-ui/core';
 
 import {DropdownMenu} from '../atoms/DropdownMenu';
-import {FilterDropdownMenu} from '../atoms/FilterDropdownMenu';
 import {TabList} from '../atoms/TabList';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './TimelineFilter.styles';
@@ -71,7 +70,7 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
       </ShowIf>
 
       <ShowIf condition={filterType === 'origin'}>
-        <FilterDropdownMenu
+        <DropdownMenu
           title="Filter by"
           selected={type}
           options={originFilterOptions}

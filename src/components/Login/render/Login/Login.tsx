@@ -7,6 +7,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {useStyles} from './Login.style';
 
+import {PolkadotLink} from 'src/components/common/PolkadotLink.component';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {toHexPublicKey} from 'src/lib/crypto';
@@ -69,15 +70,9 @@ export const Login: React.FC<LoginProps> = props => {
       </Typography>
 
       <Typography component="span" variant="h5" style={{textAlign: 'center'}}>
-        {i18n.t('Login.Layout.Footer_Text_1')}{' '}
-        <a
-          href={'https://polkadot.js.org/extension/'}
-          className={styles.polkadotLink}
-          target="_blank"
-          rel="noreferrer">
-          Polkadot.js
-        </a>
-        {i18n.t('Login.Layout.Footer_Text_2')}{' '}
+        {i18n.t('Login.Layout.Footer_Text_1')}&nbsp;
+        <PolkadotLink />
+        {i18n.t('Login.Layout.Footer_Text_2')}&nbsp;
         <span role="img" aria-label="emoticon-computer">
           💻
         </span>

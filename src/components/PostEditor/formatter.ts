@@ -139,7 +139,7 @@ export const serialize = (nodes: TNode[]): Partial<Post> => {
           ];
         }
 
-        if (post.mentions.map(mention => mention.id).includes(children.value)) {
+        if (!post.mentions.map(mention => mention.id).includes(children.value)) {
           post.mentions.push({
             id: children.value,
             name: children.name,

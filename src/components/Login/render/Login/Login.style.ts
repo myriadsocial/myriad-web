@@ -29,9 +29,6 @@ export const useStyles = makeStyles((theme: Theme) =>
         fontWeight: 600,
       },
     },
-    polkadot: {
-      color: 'rgb(255, 140, 0)',
-    },
     link: {
       padding: 0,
       fontSize: 18,
@@ -47,10 +44,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       fontWeight: 400,
-    },
-    polkadotLink: {
-      textDecoration: 'none',
-      color: theme.palette.primary.main,
     },
   }),
 );
