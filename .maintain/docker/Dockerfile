@@ -26,7 +26,6 @@ COPY --from=builder /app/next.config.js ./next.config.js
 COPY --from=builder /app/plugins ./plugins
 COPY --from=builder --chown=myriad /app/public ./public
 COPY --from=builder --chown=myriad /app/.next ./.next
-COPY --from=builder --chown=myriad /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 # Set to a non-root built-in user
