@@ -20,6 +20,7 @@ import {
 } from '@material-ui/core';
 
 import {Modal} from '../atoms/Modal';
+import ShowIf from '../common/show-if.component';
 import {useStyles} from './Report.styles';
 import {usePostReportList} from './use-post-report-list.hook';
 
@@ -40,6 +41,7 @@ export const Report: React.FC<ReportProps> = props => {
   const list = usePostReportList();
   const [type, setType] = useState<string | null>(null);
   const [description, setDescription] = useState('');
+  const [isErrorValidation, setIsErrorValidation] = useState(false);
   const CHARACTER_LIMIT = 200;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,9 +56,21 @@ export const Report: React.FC<ReportProps> = props => {
     }
   };
 
+  React.useEffect(() => {
+    if (isErrorValidation) {
+      if (description.length > 3) {
+        setIsErrorValidation(false);
+      }
+    }
+  }, [isErrorValidation, description]);
+
   const submitReport = () => {
     if (type) {
-      onConfirm(type, description);
+      if (description.length <= 3) {
+        setIsErrorValidation(true);
+      } else {
+        onConfirm(type, description);
+      }
     }
   };
 
@@ -88,6 +102,7 @@ export const Report: React.FC<ReportProps> = props => {
       </List>
 
       <TextField
+        error={isErrorValidation}
         id="report-description"
         label="Description"
         variant="outlined"
@@ -103,6 +118,11 @@ export const Report: React.FC<ReportProps> = props => {
         helperText={`${description.length}/${CHARACTER_LIMIT}`}
         onChange={handleChange}
       />
+      <ShowIf condition={isErrorValidation}>
+        <Typography gutterBottom variant="caption" component="h2" color="error">
+          Must be between 3 to 200 characters
+        </Typography>
+      </ShowIf>
 
       <Card className={styles.info}>
         <CardMedia>
