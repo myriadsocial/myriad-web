@@ -11,7 +11,12 @@ import Illustration3 from 'src/images/illustration/gdpr_-_amico.svg';
 import Illustration2 from 'src/images/illustration/money_income_-_amico.svg';
 import i18n from 'src/locale';
 
-const useStyles = makeStyles((theme: Theme) =>
+type CarouselLoginViewProps = {
+  height: number;
+  onSignIn: () => void;
+};
+
+const useStyles = makeStyles<Theme, CarouselLoginViewProps>(theme =>
   createStyles({
     root: {
       position: 'relative',
@@ -68,23 +73,14 @@ const useStyles = makeStyles((theme: Theme) =>
     button: {
       position: 'absolute',
       width: '100%',
-    },
-    bt20: {
-      bottom: '20px',
-    },
-    bt80: {
-      bottom: '80px',
+      bottom: props => (props.height < 700 ? '20px' : '80px'),
     },
   }),
 );
 
-type Props = {
-  onSignIn: () => void;
-  height: number;
-};
-
-export const CarouselLoginView: React.FC<Props> = ({onSignIn, height}) => {
-  const style = useStyles();
+export const CarouselLoginView: React.FC<CarouselLoginViewProps> = props => {
+  const {onSignIn} = props;
+  const style = useStyles({...props});
 
   return (
     <div className={style.root}>
@@ -174,7 +170,7 @@ export const CarouselLoginView: React.FC<Props> = ({onSignIn, height}) => {
           </div>
         </Grid>
       </Grid>
-      <div className={`${style.button} ${height < 700 ? style.bt20 : style.bt80}`}>
+      <div className={style.button}>
         <Button variant="contained" color="primary" onClick={onSignIn}>
           Sign in
         </Button>

@@ -8,7 +8,12 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {MyriadFullIcon} from 'src/components/atoms/Icons';
 import i18n from 'src/locale';
 
-const useStyles = makeStyles((theme: Theme) =>
+type MobileLoginViewProps = {
+  anonymousLogin: () => void;
+  height: number;
+};
+
+const useStyles = makeStyles<Theme, MobileLoginViewProps>(theme =>
   createStyles({
     root: {
       position: 'relative',
@@ -32,14 +37,8 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingRight: 20,
       paddingLeft: 20,
     },
-    mb4: {
-      marginBottom: theme.spacing(4),
-    },
     mb2: {
       marginBottom: theme.spacing(2),
-    },
-    polkadot: {
-      color: theme.palette.primary.main,
     },
     button: {
       position: 'absolute',
@@ -48,12 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-    },
-    bt20: {
-      bottom: '20px',
-    },
-    bt80: {
-      bottom: '80px',
+      bottom: props => (props.height < 700 ? '20px' : '80px'),
     },
     mb1: {
       marginBottom: theme.spacing(1.5),
@@ -61,13 +55,9 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-type Props = {
-  anonymousLogin: () => void;
-  height: number;
-};
-
-export const MobileLogin: React.FC<Props> = ({height, anonymousLogin}) => {
-  const style = useStyles();
+export const MobileLogin: React.FC<MobileLoginViewProps> = props => {
+  const {anonymousLogin} = props;
+  const style = useStyles({...props});
 
   return (
     <div className={style.root}>
@@ -85,7 +75,7 @@ export const MobileLogin: React.FC<Props> = ({height, anonymousLogin}) => {
           </Typography>
         </Grid>
       </Grid>
-      <div className={`${style.button} ${height < 700 ? style.bt20 : style.bt80}`}>
+      <div className={style.button}>
         <Button onClick={anonymousLogin} variant="contained" color="primary" className={style.mb1}>
           Sign in as anonymus
         </Button>
