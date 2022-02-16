@@ -26,9 +26,10 @@ type SearchBoxProps = {
   /**
    * SearchBox disabled?
    */
-  isDisabled?: boolean;
+  outlined?: boolean;
 
   onSubmit?: (value: string) => void;
+  iconPosition?: 'start' | 'end';
 };
 
 export {SearchBoxColor, searchBoxColors};

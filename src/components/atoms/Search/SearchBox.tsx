@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import Paper from '@material-ui/core/Paper';
@@ -14,11 +15,12 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   color = SearchBoxColor.PRIMARY,
   ariaLabel = 'search-box',
   placeholder = i18n.t('Home.Search.Placeholder'),
-  isDisabled = false,
+  outlined = false,
   onSubmit,
+  iconPosition = 'start',
   ...props
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({outlined});
 
   const [input, setInput] = useState('');
 
@@ -49,7 +51,12 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   };
 
   return (
-    <Paper className={classes.root}>
+    <Grid
+      container
+      direction={iconPosition === 'end' ? 'row-reverse' : 'row'}
+      className={classes.root}
+      component={Paper}
+      elevation={iconPosition === 'end' ? 0 : 1}>
       <IconButton className={classes.iconButton} aria-label="search" onClick={submitClickSearch}>
         <SearchIcon />
       </IconButton>
@@ -62,7 +69,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
         inputProps={{'aria-label': ariaLabel}}
         {...props}
       />
-    </Paper>
+    </Grid>
   );
 };
 
