@@ -32,12 +32,13 @@ export const Menu: React.FC<MenuProps> = props => {
   return (
     <div className={styles.root}>
       <BoxComponent paddingLeft={0} paddingRight={0}>
-        <div className={styles.head} onClick={gotoHome}>
+        <div className={styles.head} onClick={gotoHome} aria-hidden="true">
           <MyriadFullBlackIcon />
         </div>
 
         {menu.map(item => (
           <ListItemComponent
+            id={item.id}
             key={item.id}
             title={item.title}
             icon={item.icon}
