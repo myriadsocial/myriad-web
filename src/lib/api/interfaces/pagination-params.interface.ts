@@ -3,4 +3,5 @@ export interface PaginationParams {
   offset?: number;
   limit?: number;
   orderField?: string;
+  sort?: 'ASC' | 'DESC';
 }

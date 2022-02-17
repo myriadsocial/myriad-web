@@ -8,7 +8,6 @@ import Link from 'next/link';
 import {useRouter} from 'next/router';
 
 import {IconButton, Menu, MenuItem, Button, Grid} from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -17,6 +16,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
+import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import SearchComponent from '../atoms/Search/SearchBox';
@@ -29,7 +29,6 @@ import {Empty} from 'src/components/atoms/Empty';
 import {Loading} from 'src/components/atoms/Loading';
 import {Modal} from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
-import {acronym} from 'src/helpers/string';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
@@ -266,9 +265,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                 alignItems="center">
                 <ListItemAvatar>
                   <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} passHref>
-                    <Avatar className={style.avatar} alt={'name'} src={friend.avatar}>
-                      {acronym(friend.name)}
-                    </Avatar>
+                    <Avatar name={friend.name} src={friend.avatar} size={AvatarSize.MEDIUM} />
                   </Link>
                 </ListItemAvatar>
                 <ListItemText>

@@ -3,7 +3,6 @@ import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 import {LoopbackWhere} from './interfaces/loopback-query.interface';
 
-import {Dislike, Like} from 'src/interfaces/interaction';
 import {Post, PostProps, ImportPostProps, PostVisibility, PostStatus} from 'src/interfaces/post';
 import {
   TimelineOrderType,
@@ -336,48 +335,6 @@ export const editPost = async (id: string, payload: Partial<PostProps>): Promise
     url: `/posts/${id}`,
     method: 'PATCH',
     data: payload,
-  });
-};
-
-export const like = async (userId: string, postId: string): Promise<void> => {
-  await MyriadAPI.request({
-    url: `/posts/${postId}/likes`,
-    method: 'POST',
-    data: {
-      status: true,
-      userId,
-      postId,
-    },
-  });
-};
-
-export const getLikes = async (postId: string): Promise<Like[]> => {
-  const {data} = await MyriadAPI.request({
-    url: `/posts/${postId}/likes`,
-    method: 'GET',
-  });
-
-  return data;
-};
-
-export const getDislikes = async (postId: string): Promise<Dislike[]> => {
-  const {data} = await MyriadAPI.request({
-    url: `/posts/${postId}/dislikes`,
-    method: 'GET',
-  });
-
-  return data;
-};
-
-export const dislike = async (userId: string, postId: string): Promise<void> => {
-  await MyriadAPI.request({
-    url: `/posts/${postId}/dislikes`,
-    method: 'POST',
-    data: {
-      status: true,
-      userId,
-      postId,
-    },
   });
 };
 

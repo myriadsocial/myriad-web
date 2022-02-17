@@ -7,7 +7,7 @@ import axios from 'axios';
 import {Action} from 'redux';
 import {Comment} from 'src/interfaces/comment';
 import {FriendStatus} from 'src/interfaces/friend';
-import {Like, ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
+import {ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
 import {Post, PostProps, PostVisibility} from 'src/interfaces/post';
 import {
   TimelineFilter,
@@ -41,28 +41,6 @@ export interface LoadTimeline extends Action {
 export interface AddPostToTimeline extends Action {
   type: constants.ADD_POST_TO_TIMELINE;
   post: Post;
-}
-
-export interface LikePost extends Action {
-  type: constants.LIKE_POST;
-  postId: string;
-  like: Like;
-}
-
-export interface RemoveLikePost extends Action {
-  type: constants.REMOVE_LIKE_POST;
-  postId: string;
-}
-
-export interface DislikePost extends Action {
-  type: constants.DISLIKE_POST;
-  postId: string;
-  like: Like;
-}
-
-export interface RemoveDisikePost extends Action {
-  type: constants.REMOVE_DISLIKE_POST;
-  postId: string;
 }
 
 export interface RemovePost extends Action {
@@ -159,10 +137,6 @@ export type Actions =
   | LoadTimeline
   | AddPostToTimeline
   | UpdateTimelineFilter
-  | LikePost
-  | RemoveLikePost
-  | DislikePost
-  | RemoveDisikePost
   | FetchWalletDetails
   | RemovePost
   | ClearTimeline
@@ -433,112 +407,6 @@ export const updatePostPlatformUser: ThunkActionCreator<Actions, RootState> =
         userId: user.id,
         user: updatedProps,
       });
-    }
-  };
-
-export const toggleLikePost: ThunkActionCreator<Actions, RootState> =
-  (post: Post) => async (dispatch, getState) => {
-    let liked: Like | undefined;
-    let disliked: Like | undefined;
-
-    dispatch(setLoading(true));
-
-    try {
-      const {
-        userState: {user},
-      } = getState();
-
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      if (post.likes) {
-        liked = post.likes.find(like => {
-          return like.userId === user.id && like.state;
-        });
-
-        disliked = post.likes.find(like => {
-          return like.userId === user.id && !like.state;
-        });
-      }
-
-      if (liked) {
-        await InteractionAPI.removeLike(liked.id);
-
-        dispatch({
-          type: constants.REMOVE_LIKE_POST,
-          postId: post.id,
-        });
-      } else {
-        const like = await InteractionAPI.like(user.id, post);
-
-        if (disliked) {
-          await InteractionAPI.removeLike(disliked.id);
-        }
-
-        dispatch({
-          type: constants.LIKE_POST,
-          postId: post.id,
-          like,
-        });
-      }
-    } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-export const toggleDislikePost: ThunkActionCreator<Actions, RootState> =
-  (post: Post) => async (dispatch, getState) => {
-    let disliked: Like | undefined;
-    let liked: Like | undefined;
-
-    dispatch(setLoading(true));
-
-    try {
-      const {
-        userState: {user},
-      } = getState();
-
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      if (post.likes) {
-        disliked = post.likes.find(like => {
-          return like.userId === user.id && !like.state;
-        });
-      }
-
-      if (disliked) {
-        await InteractionAPI.removeLike(disliked.id);
-
-        dispatch({
-          type: constants.REMOVE_DISLIKE_POST,
-          postId: post.id,
-        });
-      } else {
-        const like = await InteractionAPI.dislike(user.id, post);
-
-        if (liked) {
-          await InteractionAPI.removeLike(liked.id);
-        }
-
-        dispatch({
-          type: constants.DISLIKE_POST,
-          postId: post.id,
-          like,
-        });
-      }
-    } catch (error) {
-      dispatch(setError(error.message));
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 

@@ -2,7 +2,6 @@ import {RefreshIcon} from '@heroicons/react/outline';
 
 import React, {useState, useEffect} from 'react';
 
-import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
@@ -17,6 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import {useStyles} from '.';
 import {PrimaryCoinMenuContainer} from '../PrimaryCoinMenu/PrimaryCoinMenuContainer';
 import {balanceSortOptions} from '../Timeline/default';
+import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 
@@ -125,7 +125,11 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
               defaultBalanceDetails.map(balanceDetail => (
                 <TableRow key={balanceDetail.id} className={classes.tableRow}>
                   <TableCell component="th" scope="row" className={classes.tableCell}>
-                    <Avatar alt={balanceDetail.id} src={balanceDetail.image} />
+                    <Avatar
+                      name={balanceDetail.id}
+                      src={balanceDetail.image}
+                      size={AvatarSize.MEDIUM}
+                    />
                     <Typography variant="h5" color="textPrimary">
                       {balanceDetail.id}
                     </Typography>

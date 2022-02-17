@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import {Theme, withStyles, createStyles} from '@material-ui/core/styles';
 
+import {Avatar, AvatarSize} from '../atoms/Avatar';
 import PostAvatar from '../atoms/PostHeader/avatar/post-avatar.component';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './Notifications.styles';
@@ -20,7 +21,6 @@ import {useNotificationList, NotificationList} from './hooks/use-notification-li
 
 import clsx from 'clsx';
 import {Loading} from 'src/components/atoms/Loading';
-import {AvatarComponent} from 'src/components/common/Avatar.component';
 import {timeAgo} from 'src/helpers/date';
 import {acronym} from 'src/helpers/string';
 import {Notification, NotificationType} from 'src/interfaces/notification';
@@ -132,11 +132,15 @@ export const Notifications: React.FC<NotificationsProps> = props => {
                     />
                   ) : (
                     <StyledBadge badgeContent={notification.badge}>
-                      <AvatarComponent className={style.avatar} src={notification.avatar}>
-                        {notification.avatar
-                          ? acronym(notification.avatar)
-                          : acronym(notification.user)}
-                      </AvatarComponent>
+                      <Avatar
+                        name={
+                          notification.avatar
+                            ? acronym(notification.avatar)
+                            : acronym(notification.user)
+                        }
+                        src={notification.avatar}
+                        size={AvatarSize.MEDIUM}
+                      />
                     </StyledBadge>
                   )}
                 </ListItemAvatar>

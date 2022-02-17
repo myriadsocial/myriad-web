@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '.';
 import {BalanceDetail} from '../MyWallet';
-import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
+import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {DragIndicatorIcon, ArrowUpIcon} from '../atoms/Icons';
 
 import {formatUsd} from 'src/helpers/balance';
@@ -44,10 +44,10 @@ export const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props =
       <CardContent>
         <div className={classes.cardContentWrapper}>
           <div className={classes.leftJustifiedWrapper}>
-            <CustomAvatar
-              size={CustomAvatarSize.MEDIUM}
+            <Avatar
+              size={AvatarSize.MEDIUM}
               alt={balanceDetail.id ?? 'Coin'}
-              avatar={balanceDetail.image}
+              src={balanceDetail.image}
             />
             <Typography variant="body1" style={{fontWeight: 'bold'}}>
               {balanceDetail.id}

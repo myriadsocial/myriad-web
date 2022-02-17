@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {Typography} from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
 import ListItem, {ListItemProps} from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -9,7 +8,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Radio from '@material-ui/core/Radio';
 import {createStyles, makeStyles, Theme, alpha} from '@material-ui/core/styles';
 
-import {acronym} from 'src/helpers/string';
+import {Avatar, AvatarSize} from '../Avatar';
+
 import {SocialMedia} from 'src/interfaces/social';
 
 type ListItemSocialComponentProps = ListItemProps & {
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     avatar: {
-      minWidth: theme.spacing(3.75),
+      minWidth: 36,
       marginRight: 20,
     },
     itemIcon: {
@@ -121,9 +121,7 @@ export const ListItemSocialComponent: React.FC<ListItemSocialComponentProps> = p
       </ListItemIcon>
 
       <ListItemAvatar className={styles.avatar}>
-        <Avatar alt={title} src={avatar} variant="circular" className={styles['medium']}>
-          {acronym(title)}
-        </Avatar>
+        <Avatar name={title} src={avatar} size={AvatarSize.LARGE} />
       </ListItemAvatar>
 
       <ListItemText

@@ -5,12 +5,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: 460,
     },
-    avatar: {
-      width: 40,
-      height: 40,
-      marginRight: 16,
-      background: '#424242',
-    },
     name: {
       fontSize: '16px',
       lineHeight: '20.08px',

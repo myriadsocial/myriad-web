@@ -1,15 +1,12 @@
 import React from 'react';
 
-// TODO change Avatar to tumbnail size
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 
+import {Avatar} from '../../Avatar';
 import {FacebookIcon, MyriadCircleIcon, RedditIcon, TwitterIcon} from '../../Icons';
 import StyledBadge from '../Badge.component';
 import {Props} from './post-avatar.interface';
 import {useStyles} from './post-avatar.style';
-
-import {acronym} from 'src/helpers/string';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function PostAvatar({origin, avatar, name, onClick}: Props) {
@@ -28,9 +25,7 @@ export default function PostAvatar({origin, avatar, name, onClick}: Props) {
   return (
     <IconButton className={style.action} aria-label="avatar-icon" onClick={onClick}>
       <StyledBadge badgeContent={socials[origin]} className={style[origin]} color="default">
-        <Avatar className={style.avatar} aria-label="avatar" src={avatar}>
-          {acronym(name)}
-        </Avatar>
+        <Avatar className={style.avatar} aria-label="avatar" src={avatar} name={name} />
       </StyledBadge>
     </IconButton>
   );

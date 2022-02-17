@@ -3,14 +3,14 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 import React from 'react';
 
 import {ProfileCard as ProfileCardComponent} from '.';
-import {CustomAvatarSize} from '../atoms/Avatar';
+import {AvatarSize} from '../atoms/Avatar';
 
 export default {
   title: 'UI Revamp v2.0/components/Profile Card',
   component: ProfileCardComponent,
   argTypes: {
     size: {
-      options: [CustomAvatarSize.SMALL, CustomAvatarSize.MEDIUM, CustomAvatarSize.LARGE],
+      options: [AvatarSize.SMALL, AvatarSize.MEDIUM, AvatarSize.LARGE],
       control: {type: 'radio'},
     },
   },
