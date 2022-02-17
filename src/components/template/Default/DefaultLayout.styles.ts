@@ -6,12 +6,20 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'space-between',
       padding: '0 30px',
+
+      [theme.breakpoints.down('xs')]: {
+        padding: '0px',
+      },
     },
     firstCol: {
       width: 312,
 
       [theme.breakpoints.down('md')]: {
         width: 290,
+      },
+
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
       },
     },
 
@@ -34,6 +42,11 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('md')]: {
         maxWidth: 590,
       },
+
+      [theme.breakpoints.down('xs')]: {
+        maxWidth: '100%',
+        margin: `0px`,
+      },
     },
 
     innerSecondColWrapper: {
@@ -52,6 +65,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
       [theme.breakpoints.down('md')]: {
         width: 290,
+      },
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
       },
     },
 
