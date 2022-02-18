@@ -19,7 +19,7 @@ const useStyles = makeStyles<Theme, CarouselLoginViewProps>(theme =>
   createStyles({
     root: {
       background: '#FFF',
-      height: '100vh',
+      minHeight: '100vh',
       paddingTop: 60,
       paddingBottom: 28,
       textAlign: 'center',
@@ -31,6 +31,7 @@ const useStyles = makeStyles<Theme, CarouselLoginViewProps>(theme =>
       marginBottom: theme.spacing(8),
     },
     carousel: {
+      marginBottom: theme.spacing(3),
       width: '100vw',
       '& .rec.rec-arrow': {
         visibility: 'hidden',
@@ -80,7 +81,7 @@ export const CarouselLoginView: React.FC<CarouselLoginViewProps> = props => {
       justifyContent="space-between"
       alignContent="center"
       className={style.root}>
-      <Grid item>
+      <Grid item xs>
         <div className={style.carousel}>
           <Carousel isRTL={false} itemsToShow={1}>
             <div>
@@ -145,7 +146,7 @@ export const CarouselLoginView: React.FC<CarouselLoginViewProps> = props => {
           </Carousel>
         </div>
       </Grid>
-      <Grid item>
+      <Grid item xs>
         <Button variant="contained" color="primary" onClick={onSignIn}>
           {i18n.t('Login.Layout.Btn_Signin')}
         </Button>

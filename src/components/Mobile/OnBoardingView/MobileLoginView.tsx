@@ -16,8 +16,9 @@ const useStyles = makeStyles<Theme, MobileLoginViewProps>(theme =>
   createStyles({
     root: {
       background: '#FFF',
-      height: '100vh',
-      paddingTop: 200,
+      minHeight: '100vh',
+      width: '100vw',
+      paddingTop: 160,
       paddingBottom: 28,
       textAlign: 'center',
     },
@@ -36,8 +37,8 @@ const useStyles = makeStyles<Theme, MobileLoginViewProps>(theme =>
       paddingRight: 20,
       paddingLeft: 20,
     },
-    mb2: {
-      marginBottom: theme.spacing(2),
+    mb10: {
+      marginBottom: theme.spacing(10),
     },
     button: {
       width: '100%',
@@ -71,7 +72,7 @@ export const MobileLogin: React.FC<MobileLoginViewProps> = props => {
           <Typography className={style.title}>{i18n.t('Mobile.title')}</Typography>
         </Grid>
         <Grid item>
-          <Typography className={`${style.subtitle} ${style.mb2}`}>
+          <Typography className={`${style.subtitle} ${style.mb10}`}>
             {i18n.t('Mobile.subtitle_3')}
           </Typography>
         </Grid>
