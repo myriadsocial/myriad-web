@@ -6,8 +6,8 @@ import {SvgIcon} from '@material-ui/core';
 import {Grid} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import {MenuDrawerComponent} from 'src/components/Mobile/MenuDrawer';
-import MyriadFull from 'src/images/Icons/myriad-logo-full.svg';
+import {MenuDrawerComponent} from 'src/components/Mobile/MenuDrawer/MenuDrawer';
+import {MyriadFullIcon} from 'src/components/atoms/Icons';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,11 +33,7 @@ export const NavbarComponent: React.FC = () => {
   return (
     <Grid container alignItems="center" justifyContent="space-between" className={style.root}>
       <MenuDrawerComponent />
-      <SvgIcon
-        component={MyriadFull}
-        viewBox="0 14 221 58"
-        style={{width: 105, height: 25, fill: 'none'}}
-      />
+      <MyriadFullIcon width={105} height={25} />
       <SvgIcon
         classes={{root: style.fill}}
         component={SearchIcon}

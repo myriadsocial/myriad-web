@@ -2,17 +2,14 @@ import {ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/outline';
 
 import React, {useState} from 'react';
 
-import {Badge, Grid} from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
-import {NotificationIcon} from '../atoms/Icons';
 import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './ProfileCard.style';
+import {ProfileContent} from './index';
 
 export const ProfileCard: React.FC<ProfileCardProps> = props => {
   const {
@@ -34,31 +31,13 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
   return (
     <div className={classes.root}>
       <div className={classes.box}>
-        <Grid container justifyContent="space-between" alignItems="center">
-          <div className={classes.flex}>
-            <div className={classes.avatar}>
-              <CustomAvatar
-                avatar={user?.profilePictureURL || ''}
-                size={CustomAvatarSize.MEDIUM}
-                name={user?.name || alias || ''}
-                onClick={onViewProfile}
-              />
-            </div>
-            <div className={classes.name}>
-              <Typography variant="h5">{user?.name || alias || ''}</Typography>
-              <Typography variant="caption" color="textSecondary">
-                @{user?.username || 'anonymous'}
-              </Typography>
-            </div>
-          </div>
-          <div className={classes.notification}>
-            <IconButton aria-label="avatar" disabled={!!alias} onClick={onShowNotificationList}>
-              <Badge variant="dot" invisible={notificationCount === 0}>
-                <NotificationIcon />
-              </Badge>
-            </IconButton>
-          </div>
-        </Grid>
+        <ProfileContent
+          user={user}
+          alias={alias}
+          notificationCount={notificationCount}
+          onShowNotificationList={onShowNotificationList}
+          onViewProfile={onViewProfile}
+        />
       </div>
 
       <div className={`${classes.content} ${expanding ? classes.open : classes.close}`}>
@@ -89,7 +68,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
         <ListItem
           classes={{gutters: classes.gutters}}
           className={classes.hover}
-          onClick={() => handleSignOut()}>
+          onClick={handleSignOut}>
           <ListItemText className={classes.textAlign}>
             <Typography className={classes.text} component="span">
               Log out
