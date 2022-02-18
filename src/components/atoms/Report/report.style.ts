@@ -19,12 +19,22 @@ export const useStyles = makeStyles((theme: Theme) =>
     box: {
       position: 'relative',
       paddingTop: 30,
+      marginBottom: 30,
     },
     count: {
       color: theme.palette.text.secondary,
       position: 'absolute',
       right: 10,
       bottom: 40,
+    },
+    description: {
+      marginBottom: 0,
+
+      '& .MuiFormHelperText-root': {
+        position: 'absolute',
+        bottom: 4,
+        right: 0,
+      },
     },
   }),
 );
