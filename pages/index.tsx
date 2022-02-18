@@ -7,7 +7,9 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
+import {OnBoardingContainer} from 'src/components/Mobile/OnBoardingView/OnBoardingView.container';
 import AlertComponent from 'src/components/atoms/Alert/Alert.component';
+import ShowIf from 'src/components/common/show-if.component';
 import {LoginLayout} from 'src/components/template/Login';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -21,7 +23,12 @@ const {publicRuntimeConfig} = getConfig();
 
 const description = i18n.t('Login.Description');
 
-export default function Index() {
+type OnBoardingProps = {
+  mobile: boolean;
+};
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export default function Index({mobile}: OnBoardingProps) {
   const {query} = useRouter();
 
   const {showAlert} = useAlertHook();
@@ -45,10 +52,16 @@ export default function Index() {
         <title>{publicRuntimeConfig.appName}</title>
       </Head>
 
-      <LoginLayout>
-        <Login />
-        <AlertComponent />
-      </LoginLayout>
+      <ShowIf condition={!mobile}>
+        <LoginLayout>
+          <Login />
+          <AlertComponent />
+        </LoginLayout>
+      </ShowIf>
+
+      <ShowIf condition={mobile}>
+        <OnBoardingContainer />
+      </ShowIf>
     </>
   );
 }
@@ -56,6 +69,7 @@ export default function Index() {
 export const getServerSideProps: GetServerSideProps = async context => {
   const {req} = context;
   const {headers} = req;
+  let mobile = false;
 
   if (typeof window === 'undefined' && headers['user-agent']) {
     const UAParser = eval('require("ua-parser-js")');
@@ -63,13 +77,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     const device = parser.setUA(headers['user-agent']).getDevice();
 
     if (device.type === 'mobile') {
-      return {
-        redirect: {
-          destination: '/mobile',
-          permanent: false,
-          headers,
-        },
-      };
+      mobile = true;
     }
   }
 
@@ -96,6 +104,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
   }
 
   return {
-    props: {},
+    props: {
+      mobile,
+    },
   };
 };
