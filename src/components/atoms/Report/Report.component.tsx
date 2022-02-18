@@ -2,14 +2,13 @@ import React, {useState} from 'react';
 
 import {Grid} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {Modal} from '../Modal';
 import {useStyles} from './report.style';
 
+import ShowIf from 'src/components/common/show-if.component';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {ReportProps} from 'src/interfaces/report';
 import {User} from 'src/interfaces/user';
@@ -25,6 +24,15 @@ export const ReportComponent: React.FC<Props> = props => {
   const {open, onClose, user, onSubmit} = props;
   const style = useStyles();
   const [description, setDescription] = useState<string>('');
+  const [isErrorValidation, setIsErrorValidation] = useState(false);
+
+  React.useEffect(() => {
+    if (isErrorValidation) {
+      if (description.length > 3) {
+        setIsErrorValidation(false);
+      }
+    }
+  }, [isErrorValidation, description]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDescription(event.target.value);
@@ -37,8 +45,12 @@ export const ReportComponent: React.FC<Props> = props => {
       description: description,
     };
 
-    onSubmit(payload);
-    onClose();
+    if (description.length <= 3) {
+      setIsErrorValidation(true);
+    } else {
+      onSubmit(payload);
+      onClose();
+    }
   };
 
   return (
@@ -57,22 +69,28 @@ export const ReportComponent: React.FC<Props> = props => {
         </Typography>
 
         <div className={style.box}>
-          <FormControl fullWidth variant="outlined">
-            <InputLabel htmlFor="description">Description</InputLabel>
-            <OutlinedInput
-              id="description"
-              placeholder="this person post something bad about our president "
-              onChange={handleChange}
-              value={description}
-              labelWidth={80}
-              inputProps={{maxLength: 200}}
-              multiline
-              rows={4}
-            />
-          </FormControl>
-          <Typography variant="caption" className={style.count} component="span">
-            ({description.length}/200)
-          </Typography>
+          <TextField
+            error={isErrorValidation}
+            id="description"
+            label="Description"
+            variant="outlined"
+            fullWidth
+            multiline
+            rows={4}
+            value={description}
+            margin="none"
+            inputProps={{
+              maxlength: 200,
+            }}
+            className={style.description}
+            helperText={`${description.length}/200`}
+            onChange={handleChange}
+          />
+          <ShowIf condition={isErrorValidation}>
+            <Typography gutterBottom variant="caption" component="h2" color="error">
+              Must be between 3 to 200 characters
+            </Typography>
+          </ShowIf>
         </div>
         <Grid container justifyContent="space-between">
           <Button onClick={onClose} size="small" variant="outlined" color="secondary">
