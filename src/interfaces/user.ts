@@ -56,6 +56,7 @@ export interface User extends UserProps, BaseModel {
   people?: People[];
   metric?: UserMetric;
   activityLogs?: ActivityLog[];
+  deletedAt?: Date;
 }
 
 export interface UserTransactionDetail {
