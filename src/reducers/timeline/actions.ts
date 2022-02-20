@@ -11,8 +11,8 @@ import {Like, ReferenceType, SectionType, Vote} from 'src/interfaces/interaction
 import {Post, PostProps, PostVisibility} from 'src/interfaces/post';
 import {
   TimelineFilter,
-  TimelineSortMethod,
-  TimelineSortOrder,
+  TimelineOrderType,
+  TimelineSortType,
   TimelineType,
 } from 'src/interfaces/timeline';
 import {UserProps} from 'src/interfaces/user';
@@ -30,10 +30,10 @@ export interface LoadTimeline extends Action {
   type: constants.LOAD_TIMELINE;
   payload: {
     posts: Post[];
-    sort?: TimelineSortMethod;
+    sort?: TimelineSortType;
     filter?: TimelineFilter;
     type?: TimelineType;
-    order?: TimelineSortOrder;
+    order?: TimelineOrderType;
     meta: ListMeta;
   };
 }
@@ -243,10 +243,10 @@ export const setTimelineLoading = (loading: boolean): TimelineLoading => ({
 export const loadTimeline: ThunkActionCreator<Actions, RootState> =
   (
     page = 1,
-    sort?: TimelineSortMethod,
+    order?: TimelineOrderType,
     filter?: TimelineFilter,
     type?: TimelineType,
-    order?: TimelineSortOrder,
+    sort?: TimelineSortType,
   ) =>
   async (dispatch, getState) => {
     dispatch(setTimelineLoading(true));
@@ -273,10 +273,10 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
         page,
         userId,
         timelineType,
-        timelineSort,
+        timelineOrder,
         timelineFilter,
         asFriend,
-        timelineOrder,
+        timelineSort,
       );
 
       dispatch({

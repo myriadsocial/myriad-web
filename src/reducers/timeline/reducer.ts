@@ -11,16 +11,16 @@ import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {
   TimelineType,
-  TimelineSortMethod,
+  TimelineOrderType,
   TimelineFilter,
-  TimelineSortOrder,
+  TimelineSortType,
 } from 'src/interfaces/timeline';
 import {WalletDetail} from 'src/interfaces/wallet';
 
 export interface TimelineState extends BasePaginationState {
   type: TimelineType;
-  sort: TimelineSortMethod;
-  order: TimelineSortOrder;
+  sort: TimelineSortType;
+  order: TimelineOrderType;
   filter?: TimelineFilter;
   search?: string;
   hasMore: boolean;
@@ -39,8 +39,8 @@ export interface TimelineState extends BasePaginationState {
 const initalState: TimelineState = {
   loading: true,
   type: TimelineType.TRENDING,
-  sort: 'created',
-  order: 'latest',
+  sort: 'DESC',
+  order: TimelineOrderType.LATEST,
   hasMore: false,
   posts: [],
   tippedContent: {

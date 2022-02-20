@@ -9,8 +9,8 @@ import {ParsedUrlQuery} from 'querystring';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {
   TimelineFilter,
-  TimelineSortMethod,
-  TimelineSortOrder,
+  TimelineOrderType,
+  TimelineSortType,
   TimelineType,
 } from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
@@ -20,20 +20,20 @@ import {clearTimeline} from 'src/reducers/timeline/actions';
 type TimelineFilterContainerProps = {
   filters?: TimelineFilter;
   filterType?: 'origin' | 'type';
-  sortType?: 'metric' | 'created';
+  selectionType?: 'order' | 'sort';
   anonymous?: boolean;
 };
 
 export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = props => {
-  const {filterType, sortType, filters} = props;
+  const {filters} = props;
 
   const dispatch = useDispatch();
-  const {filterByOrigin, sortByOrder} = useTimelineFilter(filters);
+  const {filterByOrigin, sortTimeline} = useTimelineFilter(filters);
   const {query, push} = useQueryParams();
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
   const [timelineType, setTimelineType] = useState<TimelineType>(TimelineType.ALL);
-  const [timelineSort, setTimelineSort] = useState<TimelineSortMethod>('created');
+  const [timelineOrder, setTimelineOrder] = useState<TimelineOrderType>(TimelineOrderType.LATEST);
 
   useEffect(() => {
     parseFilter(query);
@@ -43,15 +43,15 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
     const filter = parseQueryToFilter(query);
 
     setTimelineType(filter.type);
-    setTimelineSort(filter.sort);
+    setTimelineOrder(filter.order);
   };
 
-  const handleSortTimeline = (sort: TimelineSortMethod) => {
-    push('sort', sort);
+  const handleOrderTimeline = (order: TimelineOrderType) => {
+    push('order', order);
   };
 
-  const handleOrderTimeline = (sort: TimelineSortOrder) => {
-    sortByOrder(sort);
+  const handleSortimeline = (sort: TimelineSortType) => {
+    sortTimeline(sort);
   };
 
   const handleFilterTimeline = (type: TimelineType) => {
@@ -65,13 +65,12 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
       <TimelineFilterComponent
         user={user}
         type={timelineType}
-        sort={timelineSort}
-        sortType={sortType}
-        filterType={filterType}
-        sortTimeline={handleSortTimeline}
+        order={timelineOrder}
+        sortTimeline={handleSortimeline}
         orderTimeline={handleOrderTimeline}
         filterTimeline={handleFilterTimeline}
         filterOrigin={filterByOrigin}
+        {...props}
       />
     </>
   );

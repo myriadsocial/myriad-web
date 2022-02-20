@@ -36,7 +36,7 @@ type TimelineContainerProps = {
   filters?: TimelineFilter;
   fetchInitial?: boolean;
   filterType?: 'origin' | 'type';
-  sortType?: 'metric' | 'created';
+  selectionType?: 'order' | 'sort';
   anonymous?: boolean;
 };
 

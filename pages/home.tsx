@@ -96,7 +96,7 @@ const Home: React.FC = () => {
       <Banner />
       <SearchBoxContainer onSubmitSearch={performSearch} />
       <RichTextContainer />
-      <TimelineContainer filterType="type" sortType="metric" />
+      <TimelineContainer filterType="type" selectionType="order" />
 
       <PromptComponent
         title={i18n.t('Home.Prompt_Banned.Title')}
