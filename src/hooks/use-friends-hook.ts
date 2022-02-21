@@ -4,6 +4,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
+import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {RootState} from 'src/reducers';
 import {getBlockList} from 'src/reducers/block/actions';
 import {
@@ -12,20 +13,18 @@ import {
   toggleFriendRequest,
   deleteFriendRequest,
 } from 'src/reducers/friend-request/actions';
-import {FriendRequestState} from 'src/reducers/friend-request/reducer';
 import {fetchFriend, searchFriend} from 'src/reducers/friend/actions';
-import {FriendState} from 'src/reducers/friend/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useFriendsHook = (user?: User) => {
   const dispatch = useDispatch();
 
-  const {
-    meta: {currentPage: currentFriendPage},
-  } = useSelector<RootState, FriendState>(state => state.friendState);
-  const {
-    meta: {currentPage: currentFriendRequestPage},
-  } = useSelector<RootState, FriendRequestState>(state => state.friendRequestState);
+  const {currentPage: currentFriendPage} = useSelector<RootState, ListMeta>(
+    state => state.friendState.meta,
+  );
+  const {currentPage: currentFriendRequestPage} = useSelector<RootState, ListMeta>(
+    state => state.friendRequestState.meta,
+  );
 
   const [friended, setFriended] = useState<Friend[]>([]);
   const [loading, setLoading] = useState(false);

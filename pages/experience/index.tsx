@@ -27,11 +27,13 @@ const ExperiencePageComponent: React.FC = () => {
       <Head>
         <title>{publicRuntimeConfig.appName} - Experience</title>
       </Head>
+
       <TopNavbarComponent
         description={`Custom timeline`}
         sectionTitle={SectionTitle.EXPERIENCE}
         type={'menu'}
       />
+
       <ExperienceTab />
     </DefaultLayout>
   );

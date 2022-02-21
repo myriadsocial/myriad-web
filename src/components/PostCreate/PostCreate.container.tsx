@@ -23,9 +23,7 @@ type PostCreateContainerType = {
   onClose: () => void;
 };
 
-const PostCreate = dynamic(() => import('./PostCreate'), {
-  ssr: false,
-});
+const PostCreate = dynamic(() => import('./PostCreate'), {ssr: false});
 
 export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const {open, onClose} = props;

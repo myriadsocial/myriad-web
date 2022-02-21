@@ -1,12 +1,7 @@
 import MyriadAPI from './base';
 import {BaseList} from './interfaces/base-list.interface';
 
-import {Currency, CurrencyProps, UserCurrency} from 'src/interfaces/currency';
-
-type UserCurrencyProps = {
-  userId: string;
-  currencyId: string;
-};
+import {Currency, CurrencyProps, UserCurrency, UserCurrencyProps} from 'src/interfaces/currency';
 
 type CurrencyList = BaseList<Currency>;
 type UserCurrencyList = BaseList<UserCurrency>;

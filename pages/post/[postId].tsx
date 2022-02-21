@@ -4,6 +4,7 @@ import React from 'react';
 
 import {getSession} from 'next-auth/client';
 import getConfig from 'next/config';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
@@ -11,7 +12,6 @@ import axios from 'axios';
 import {PostDetailContainer} from 'src/components/PostDetail';
 import {deserialize, formatToString} from 'src/components/PostEditor';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
-import {ResourceDeleted} from 'src/components/common/ResourceDeleted';
 import ShowIf from 'src/components/common/show-if.component';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
@@ -39,6 +39,10 @@ import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
 const {publicRuntimeConfig} = getConfig();
+
+const ResourceDeleted = dynamic(
+  () => import('src/components/common/ResourceDeleted/ResourceDeleted'),
+);
 
 type PostPageProps = {
   removed: boolean;

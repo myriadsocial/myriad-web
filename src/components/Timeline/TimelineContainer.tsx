@@ -1,23 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import dynamic from 'next/dynamic';
+
 import {Button, Grid} from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
-import {Timeline as TimelineComponent} from '.';
 import {PostVisibilityContainer} from '../PostVisibility';
-import {ReportContainer} from '../Report';
 import {SendTipContainer} from '../SendTip';
 import {TimelineFilterContainer} from '../TimelineFilter';
-import {TipHistoryContainer} from '../TipHistory';
 import {Modal} from '../atoms/Modal';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {useStyles} from './Timeline.styles';
 import {useTimelineFilter} from './hooks/use-timeline-filter.hook';
 import {useTimelineHook} from './hooks/use-timeline.hook';
 
-import {PostImporterContainer} from 'src/components/PostImporterList';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
@@ -40,6 +38,15 @@ type TimelineContainerProps = {
   selectionType?: 'order' | 'sort';
   anonymous?: boolean;
 };
+
+const TimelineComponent = dynamic(() => import('./Timeline'), {ssr: false});
+const ReportContainer = dynamic(() => import('../Report/Report.container'), {ssr: false});
+const TipHistoryContainer = dynamic(() => import('../TipHistory/TipHistory.container'), {
+  ssr: false,
+});
+const PostImporterContainer = dynamic(() => import('../PostImporterList/PostImporter.container'), {
+  ssr: false,
+});
 
 export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const {filters, fetchInitial = true} = props;
