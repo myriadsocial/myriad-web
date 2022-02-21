@@ -96,6 +96,7 @@ jobs:
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           script: |
+            ./connect.sh
             helm repo add myriadsocial https://charts.myriad.social
             helm repo update
             helm upgrade myriad-web myriadsocial/myriad-web \
@@ -192,6 +193,7 @@ jobs:
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           script: |
+            ./connect.sh
             helm repo add myriadsocial https://charts.myriad.social
             helm repo update
             helm upgrade myriad-web myriadsocial/myriad-web \
@@ -288,6 +290,7 @@ jobs:
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           script: |
+            ./connect.sh
             helm repo add myriadsocial https://charts.myriad.social
             helm repo update
             helm upgrade myriad-web myriadsocial/myriad-web \
@@ -384,6 +387,7 @@ jobs:
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           script: |
+            ./connect.sh
             helm repo add myriadsocial https://charts.myriad.social
             helm repo update
             helm upgrade myriad-web myriadsocial/myriad-web \
@@ -480,6 +484,7 @@ jobs:
           username: ${{ steps.secrets.outputs.SSH_USERNAME }}
           key: ${{ steps.secrets.outputs.SSH_KEY }}
           script: |
+            ./connect.sh
             helm repo add myriadsocial https://charts.myriad.social
             helm repo update
             helm upgrade myriad-web myriadsocial/myriad-web \
