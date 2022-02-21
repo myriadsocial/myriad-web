@@ -38,7 +38,7 @@ const moduleExports = {
     firebaseAppId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     firebaseMeasurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
     facebookAppId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
-    storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? 'myriad-social-development',
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? 'myriad-social-development',
   },
   sentry: {
     disableServerWebpackPlugin: true,
