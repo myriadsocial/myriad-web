@@ -5,7 +5,6 @@ import React from 'react';
 
 import Link from 'next/link';
 
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -15,7 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {acronym} from '../../helpers/string';
+import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {Empty} from '../atoms/Empty';
 import {useStyles} from './friend.style';
 import {useFriendRequestList} from './hooks/use-friend-request.hook';
@@ -47,9 +46,7 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
         {list.map(request => (
           <ListItem className={style.item} alignItems="center" key={request.id}>
             <ListItemAvatar>
-              <Avatar className={style.avatar} alt={request.name} src={request.avatar}>
-                {acronym(request.name)}
-              </Avatar>
+              <Avatar name={request.name} src={request.avatar} size={AvatarSize.MEDIUM} />
             </ListItemAvatar>
             <ListItemText>
               <Link href={'/profile/[id]'} as={`/profile/${request.id}`} shallow>

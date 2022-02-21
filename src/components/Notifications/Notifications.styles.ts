@@ -73,11 +73,6 @@ export const useStyles = makeStyles<Theme, NotificationComponentProps>(theme =>
       height: 20,
       textAlign: 'center',
     },
-    avatar: {
-      width: '40px',
-      height: '40px',
-      marginRight: 10,
-    },
     avatarItem: {
       paddingLeft: 14,
     },

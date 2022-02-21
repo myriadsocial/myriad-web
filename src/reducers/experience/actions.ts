@@ -82,17 +82,11 @@ export const clearExperiences = (): ClearExperiences => ({
  */
 export const loadExperiences: ThunkActionCreator<Actions, RootState> =
   (page = 1) =>
-  async (dispatch, getState) => {
+  async dispatch => {
     dispatch(setExperienceLoading(true));
 
-    const {
-      userState: {user},
-    } = getState();
-
     try {
-      const userId = user?.id as string;
-
-      const {data: experiences, meta} = await ExperienceAPI.getSearchedExperiences(page, userId);
+      const {data: experiences, meta} = await ExperienceAPI.getExperiences({page});
 
       dispatch({
         type: constants.FETCH_EXPERIENCE,
@@ -116,7 +110,7 @@ export const searchExperiences: ThunkActionCreator<Actions, RootState> =
     dispatch(setExperienceLoading(true));
 
     try {
-      const {data: experiences, meta} = await ExperienceAPI.searchExperiencesByQuery(query, page);
+      const {data: experiences, meta} = await ExperienceAPI.searchExperiences(query, page);
 
       dispatch({
         type: constants.SEARCH_EXPERIENCE,

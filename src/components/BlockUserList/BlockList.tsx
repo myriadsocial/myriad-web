@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import Avatar from '@material-ui/core/Avatar';
+import {Grid} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -10,12 +10,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
 import {useBlockList, FriendRequestDetail} from '../FriendsMenu/hooks/use-friend-request.hook';
+import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {useStyles} from './blocklist.style';
 
 import {Empty} from 'src/components/atoms/Empty';
 import ShowIf from 'src/components/common/show-if.component';
-import {acronym} from 'src/helpers/string';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 
@@ -64,9 +64,7 @@ export const BlockListComponent: React.FC<Props> = ({blockList, user, onUnblock}
         {list.map(user => (
           <ListItem key={user.id} className={style.item} alignItems="center">
             <ListItemAvatar>
-              <Avatar className={style.avatar} alt={'name'} src={user.avatar}>
-                {acronym(user.name)}
-              </Avatar>
+              <Avatar src={user.avatar} name={user.name} size={AvatarSize.MEDIUM} />
             </ListItemAvatar>
             <ListItemText>
               <Typography className={style.name} component="span" color="textPrimary">
@@ -88,19 +86,14 @@ export const BlockListComponent: React.FC<Props> = ({blockList, user, onUnblock}
         icon="warning"
         title="Unblock User?"
         subtitle="You will be able to search and see post from this user">
-        <div className={style.flex}>
-          <Button
-            className={style.m1}
-            size="small"
-            variant="outlined"
-            color="secondary"
-            onClick={cancelUblockUser}>
+        <Grid container justifyContent="space-around">
+          <Button size="small" variant="outlined" color="secondary" onClick={cancelUblockUser}>
             Cancel
           </Button>
           <Button size="small" variant="contained" color="primary" onClick={confirmUnblockUser}>
             Unblock Now
           </Button>
-        </div>
+        </Grid>
       </PromptComponent>
     </>
   );

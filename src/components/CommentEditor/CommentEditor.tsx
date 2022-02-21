@@ -26,8 +26,8 @@ import {ELEMENT_MENTION, MentionNodeData, useMentionPlugin} from '@udecode/plate
 import React, {useMemo, useEffect, useState} from 'react';
 
 import {ButtonGroup, CardActions, Grid, IconButton, SvgIcon, Tooltip} from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
 
+import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {useStyles} from './CommentEditor.style';
 import {serialize} from './formatter';
 
@@ -38,7 +38,6 @@ import {
   renderMentionLabel,
 } from 'src/components/PostEditor/Render/Mention';
 import {createCharLimitPlugin} from 'src/components/PostEditor/plugins/charLimit';
-import {acronym} from 'src/helpers/string';
 import {CommentProps} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
@@ -202,9 +201,7 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
 
   return (
     <Grid container className={styles.root} direction="row">
-      <Avatar className={styles.avatar} src={user?.profilePictureURL}>
-        {acronym(user?.name || '')}
-      </Avatar>
+      <Avatar src={user?.profilePictureURL} name={user?.name} size={AvatarSize.MEDIUM} />
 
       <div className={styles.editor} ref={ref}>
         <Plate

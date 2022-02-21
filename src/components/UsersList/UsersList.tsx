@@ -6,6 +6,7 @@ import {createStyles, makeStyles, alpha, Theme} from '@material-ui/core/styles';
 import {User} from '../../interfaces/user';
 import {EmptyResult} from '../Search/EmptyResult';
 import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
+import {AvatarSize} from '../atoms/Avatar';
 import {UsersListItem} from './UsersListItem';
 
 import {LoadingDots} from 'src/components/atoms/Loading/LoadingDots';
@@ -69,11 +70,9 @@ export const UsersList: React.FC<UsersListProps> = ({
               <div>
                 {users.map(user => (
                   <UsersListItem
-                    title={user.name}
-                    subtitle={user.username ? `@${user.username}` : '@anonymous'}
+                    user={user}
                     key={user.id}
-                    size={'medium'}
-                    avatar={user.profilePictureURL}
+                    size={AvatarSize.LARGE}
                     url={`/profile/${user.id}`}
                   />
                 ))}

@@ -3,7 +3,6 @@ import {SearchIcon} from '@heroicons/react/solid';
 
 import React, {useState} from 'react';
 
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import Menu from '@material-ui/core/Menu';
@@ -12,6 +11,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {BalanceDetail} from '../../../interfaces/balance';
+import {Avatar} from '../Avatar';
 import {useStyles} from './currencyOption.style';
 
 import {debounce} from 'lodash';
@@ -104,12 +104,7 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
               onClick={() => handleSelect(item)}>
               <div className={style.flex}>
                 <div className={style.tokenColumn}>
-                  <Avatar
-                    className={`${style.avatar} ${style.text}`}
-                    alt={item.id}
-                    src={item.image}>
-                    {item.id}
-                  </Avatar>
+                  <Avatar name={item.id} className={style.text} alt={item.id} src={item.image} />
                   <Typography color="textSecondary">{item.id}</Typography>
                 </div>
                 <Typography component="span">{parseFloat(item.freeBalance.toFixed(4))}</Typography>

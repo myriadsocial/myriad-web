@@ -145,68 +145,6 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       };
     }
 
-    case constants.LIKE_POST: {
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.postId && post.metric) {
-            post.metric.likes += 1;
-            post.metric.dislikes = Math.max(0, post.metric.dislikes - 1);
-            post.likes = [action.like];
-          }
-
-          return post;
-        }),
-      };
-    }
-
-    case constants.REMOVE_LIKE_POST: {
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.postId && post.metric) {
-            post.metric.likes = Math.max(0, post.metric.likes - 1);
-            post.likes = post.likes
-              ? post.likes.filter(like => like.referenceId !== action.postId && like.state)
-              : [];
-          }
-
-          return post;
-        }),
-      };
-    }
-
-    case constants.DISLIKE_POST: {
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.postId && post.metric) {
-            post.metric.dislikes += 1;
-            post.metric.likes = Math.max(0, post.metric.likes - 1);
-            post.likes = [action.like];
-          }
-
-          return post;
-        }),
-      };
-    }
-
-    case constants.REMOVE_DISLIKE_POST: {
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.postId && post.metric) {
-            post.metric.dislikes = Math.max(0, post.metric.likes - 1);
-            post.likes = post.likes
-              ? post.likes.filter(like => like.referenceId !== action.postId && !like.state)
-              : [];
-          }
-
-          return post;
-        }),
-      };
-    }
-
     case constants.REMOVE_POST: {
       return {
         ...state,

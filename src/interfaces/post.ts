@@ -1,6 +1,6 @@
 import {BaseModel} from './base.interface';
 import {Comment} from './comment';
-import {Like, Vote} from './interaction';
+import {Vote} from './interaction';
 import {People} from './people';
 import {PostOrigin} from './timeline';
 import {User} from './user';
@@ -94,7 +94,6 @@ export type PostEmbedProps = {
 export interface Post extends PostProps, BaseModel {
   user: User;
   people?: People;
-  likes?: Like[];
   comments?: Comment[];
   //TODO: change this on migrating new schema of transaction
   transactions?: any[];

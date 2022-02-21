@@ -11,17 +11,6 @@ export enum SectionType {
   DEBATE = 'debate',
 }
 
-export type LikeProps = {
-  state: boolean;
-  type: ReferenceType;
-  referenceId: string;
-  userId: string;
-};
-
-export interface Like extends LikeProps, BaseModel {}
-
-export interface Dislike extends LikeProps, BaseModel {}
-
 export type VoteProps = {
   state: boolean;
   type: ReferenceType;

@@ -1,8 +1,8 @@
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme: Theme) =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    xtraSmall: {
+    tiny: {
       width: theme.spacing(3),
       height: theme.spacing(3),
     },
@@ -20,5 +20,3 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   }),
 );
-
-export default useStyles;

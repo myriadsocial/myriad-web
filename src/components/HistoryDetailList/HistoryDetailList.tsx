@@ -16,7 +16,7 @@ import {
   historyTransactionSortOptions,
   historyCoinSortOptions,
 } from '../Timeline/default';
-import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
+import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {MenuOptions} from '../atoms/DropdownMenu';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {useStyles} from './history-detail-list.styles';
@@ -196,10 +196,10 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                 defaultTxs.map(tx => (
                   <TableRow key={tx.id} className={classes.tableRow}>
                     <TableCell component="th" scope="row" className={classes.tableCell}>
-                      <CustomAvatar
-                        size={CustomAvatarSize.MEDIUM}
+                      <Avatar
+                        size={AvatarSize.MEDIUM}
                         alt={tx.toUser?.id === userId ? tx.fromUser?.id : tx.toUser?.id}
-                        avatar={
+                        src={
                           tx.toUser?.id === userId
                             ? tx.fromUser?.profilePictureURL ?? namePlaceholder
                             : tx.toUser?.profilePictureURL ?? namePlaceholder
@@ -252,11 +252,11 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                           </Typography>
                         </div>
                         <div>
-                          <CustomAvatar
+                          <Avatar
                             name={tx.currency.id}
-                            size={CustomAvatarSize.XSMALL}
+                            size={AvatarSize.TINY}
                             alt={tx.currency.id}
-                            avatar={tx.currency.image}
+                            src={tx.currency.image}
                           />
                         </div>
                       </div>

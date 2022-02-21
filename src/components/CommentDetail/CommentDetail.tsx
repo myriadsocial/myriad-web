@@ -4,7 +4,6 @@ import {useSelector, useDispatch} from 'react-redux';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -14,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {CommentEditor} from '../CommentEditor';
 import {CommentList} from '../CommentList';
+import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {VotingComponent} from '../atoms/Voting';
 import {CommentDetailProps} from './CommentDetail.interface';
 import {useStyles} from './CommentDetail.styles';
@@ -21,7 +21,6 @@ import {CommentRender} from './CommentRender';
 
 import {formatDistance, subDays} from 'date-fns';
 import ShowIf from 'src/components/common/show-if.component';
-import {acronym} from 'src/helpers/string';
 import {useRepliesHook} from 'src/hooks/use-replies.hook';
 import {Comment} from 'src/interfaces/comment';
 import {CommentProps} from 'src/interfaces/comment';
@@ -201,11 +200,11 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
       <div className={style.flex} ref={ref}>
         <div className={style.tree}>
           <Avatar
-            className={style.avatar}
-            src={comment.user?.profilePictureURL || ''}
-            onClick={handleViewProfile}>
-            {acronym(comment.user?.name)}
-          </Avatar>
+            name={comment.user?.name}
+            src={comment.user?.profilePictureURL}
+            size={AvatarSize.MEDIUM}
+            onClick={handleViewProfile}
+          />
           {(deep === 0 || replies.length > 0) && <div className={style.verticalTree} />}
           {deep > 0 && <div className={style.horizontalTree} />}
         </div>

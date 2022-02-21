@@ -4,7 +4,7 @@ import {Badge, Grid} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 
-import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
+import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {NotificationIcon} from '../atoms/Icons';
 import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './ProfileCard.style';
@@ -21,10 +21,10 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
       className={classes.profileContent}>
       <div className={classes.flex}>
         <div className={classes.avatar}>
-          <CustomAvatar
-            avatar={user?.profilePictureURL || ''}
-            size={isMobile ? CustomAvatarSize.LARGE : CustomAvatarSize.MEDIUM}
-            name={user?.name || alias || ''}
+          <Avatar
+            src={user?.profilePictureURL}
+            size={isMobile ? AvatarSize.LARGE : AvatarSize.MEDIUM}
+            name={user?.name || alias}
             onClick={onViewProfile}
           />
         </div>

@@ -176,7 +176,7 @@ export const fetchUserExperience: ThunkActionCreator<Actions, RootState> =
 
     try {
       if (anonymous) {
-        const {data: experiences, meta} = await ExperienceAPI.getAnonymousExperience();
+        const {data: experiences, meta} = await ExperienceAPI.getExperiences({limit: 3});
         dispatch({
           type: constants.FETCH_USER_EXPERIENCE,
           experiences: experiences.map(item => ({
@@ -253,7 +253,6 @@ export const handleVerifyError: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-// TODO: move this to transaction reducer
 export const fetchUserTransactionDetails: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {
     dispatch(setLoading(true));
