@@ -27,12 +27,6 @@ export const useStyles = makeStyles((theme: Theme) =>
         alignSelf: 'center',
       },
     },
-    avatar: {
-      width: 40,
-      height: 40,
-      marginRight: 16,
-      background: '#E0E0E0',
-    },
     header: {
       lineHeight: '20.08px',
       fontWeight: 400,

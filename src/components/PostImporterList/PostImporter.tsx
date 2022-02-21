@@ -5,14 +5,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import Link from 'next/link';
 
 import {List, ListItem, ListItemText, Typography} from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 
+import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {Loading} from '../atoms/Loading';
 import {Modal} from '../atoms/Modal';
 import {useStyles} from './PostImporter.styles';
 
-import {acronym} from 'src/helpers/string';
 import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
 import {fetchImporter} from 'src/reducers/importers/actions';
@@ -98,9 +97,7 @@ export const PostImporter: React.FC<Props> = props => {
                       onMouseEnter={onHover(e.id)}
                       onMouseLeave={onHover(undefined)}>
                       <ListItemAvatar>
-                        <Avatar alt={'name'} className={styles.avatar} src={e.profilePictureURL}>
-                          {acronym(e.name)}
-                        </Avatar>
+                        <Avatar name={e.name} src={e.profilePictureURL} size={AvatarSize.MEDIUM} />
                       </ListItemAvatar>
                       <ListItemText>
                         <Typography className={styles.name} component="span" color="textPrimary">

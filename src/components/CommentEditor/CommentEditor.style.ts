@@ -5,14 +5,12 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       padding: theme.spacing(2),
     },
-    avatar: {
-      marginRight: 12,
-    },
     editor: {
       width: 'calc(100% - 52px)',
       backgroundColor: theme.palette.background.paper,
       borderRadius: theme.spacing(1),
       marginBottom: theme.spacing(1),
+      marginLeft: 12,
       border: '1px solid #E5E5E5',
       display: 'flex',
       flexDirection: 'column-reverse',

@@ -1,9 +1,13 @@
-import {Sizes} from '../interfaces/assets';
+import getConfig from 'next/config';
+
+import {Sizes} from 'src/interfaces/assets';
 
 const STORAGE_BASE_URL = 'https://storage.googleapis.com';
 
 export const generateImageSizes = (url: string, extension = 'jpg'): Sizes => {
-  const external = !url.includes(STORAGE_BASE_URL);
+  const {publicRuntimeConfig} = getConfig();
+
+  const external = !url.includes(`${publicRuntimeConfig}.appspot.com`);
   const filename = url.split(/[\\/]/).pop();
 
   if (!filename || external)
@@ -23,4 +27,10 @@ export const generateImageSizes = (url: string, extension = 'jpg'): Sizes => {
     medium: `${STORAGE_BASE_URL}${pathname}${fileId}_medium.${extension}`,
     large: `${STORAGE_BASE_URL}${pathname}${fileId}.${extension}`,
   };
+};
+
+export const getThumbnailUrl = (url: string): string => {
+  const images = generateImageSizes(url);
+
+  return images.thumbnail;
 };

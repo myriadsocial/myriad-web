@@ -32,12 +32,6 @@ export const useStyles = makeStyles((theme: Theme) =>
         display: 'flex',
       },
     },
-    avatar: {
-      width: 40,
-      height: 40,
-      marginRight: 16,
-      background: '#424242',
-    },
     name: {
       fontSize: '16px',
       lineHeight: '20.08px',
@@ -48,13 +42,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: 'auto',
       color: theme.palette.primary.main,
       padding: '0px',
-    },
-    flex: {
-      display: 'flex',
-      justifyContent: 'center',
-    },
-    m1: {
-      marginRight: theme.spacing(1.5),
     },
   }),
 );

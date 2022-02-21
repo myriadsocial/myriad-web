@@ -8,17 +8,17 @@ import ShowIf from '../common/show-if.component';
 import {useStyles} from './TimelineFilter.styles';
 import {useFilterOption} from './hooks/use-filter-option.hook';
 
-import {TimelineSortMethod, TimelineType, TimelineSortOrder} from 'src/interfaces/timeline';
+import {TimelineType, TimelineSortType, TimelineOrderType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 
 type TimelineFilterProps = {
   user?: User;
   filterType?: 'origin' | 'type';
-  sortType?: 'metric' | 'created';
+  selectionType?: 'order' | 'sort';
   type: TimelineType;
-  sort: TimelineSortMethod;
-  sortTimeline: (sort: TimelineSortMethod) => void;
-  orderTimeline: (order: TimelineSortOrder) => void;
+  order: TimelineOrderType;
+  sortTimeline: (sort: TimelineSortType) => void;
+  orderTimeline: (order: TimelineOrderType) => void;
   filterTimeline?: (type: TimelineType) => void;
   filterOrigin?: (origin: string) => void;
 };
@@ -26,9 +26,9 @@ type TimelineFilterProps = {
 export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
   const {
     type,
-    sort,
+    order,
     filterType,
-    sortType,
+    selectionType,
     sortTimeline,
     orderTimeline,
     filterTimeline,
@@ -36,15 +36,14 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
   } = props;
   const styles = useStyles();
 
-  const {orderOptions, metricSortOptions, originFilterOptions, typeFilterOptions} =
-    useFilterOption();
+  const {sortOptions, orderOptions, originFilterOptions, typeFilterOptions} = useFilterOption();
 
   const handleSort = (sort: string) => {
-    sortTimeline(sort as TimelineSortMethod);
+    sortTimeline(sort as TimelineSortType);
   };
 
   const handleOrder = (order: string) => {
-    orderTimeline(order as TimelineSortOrder);
+    orderTimeline(order as TimelineOrderType);
   };
 
   const handleFilter = (variant: string) => {
@@ -78,17 +77,17 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
         />
       </ShowIf>
 
-      <ShowIf condition={sortType === 'metric'}>
+      <ShowIf condition={selectionType === 'order'}>
         <DropdownMenu
           title="Sort by"
-          selected={sort}
-          options={metricSortOptions}
-          onChange={handleSort}
+          selected={order}
+          options={orderOptions}
+          onChange={handleOrder}
         />
       </ShowIf>
 
-      <ShowIf condition={sortType === 'created'}>
-        <DropdownMenu title="Sort by" options={orderOptions} onChange={handleOrder} />
+      <ShowIf condition={selectionType === 'sort'}>
+        <DropdownMenu title="Sort by" options={sortOptions} onChange={handleSort} />
       </ShowIf>
     </Grid>
   );

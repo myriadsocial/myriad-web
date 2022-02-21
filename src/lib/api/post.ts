@@ -3,11 +3,10 @@ import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 import {LoopbackWhere} from './interfaces/loopback-query.interface';
 
-import {Dislike, Like} from 'src/interfaces/interaction';
 import {Post, PostProps, ImportPostProps, PostVisibility, PostStatus} from 'src/interfaces/post';
 import {
-  TimelineSortMethod,
-  TimelineSortOrder,
+  TimelineOrderType,
+  TimelineSortType,
   TimelineFilter,
   TimelineType,
   PostOrigin,
@@ -24,43 +23,14 @@ export const getPost = async (
   page: number,
   userId: string,
   type: TimelineType = TimelineType.TRENDING,
-  sort?: TimelineSortMethod,
+  order: TimelineOrderType = TimelineOrderType.LATEST,
   filters?: TimelineFilter,
   asFriend = false,
-  sortOrder?: TimelineSortOrder,
+  sort: TimelineSortType = 'DESC',
 ): Promise<PostList> => {
   const where: LoopbackWhere<PostProps> = {
     deletedAt: {exists: false},
   };
-
-  let sortField = 'latest';
-  let orderField = 'DESC';
-
-  switch (sort) {
-    case 'comment':
-      sortField = 'comment';
-      break;
-    case 'like':
-      sortField = 'upvote';
-      break;
-    case 'trending':
-      sortField = 'popular';
-      break;
-    case 'created':
-    default:
-      break;
-  }
-
-  switch (sortOrder) {
-    case 'latest':
-      orderField = 'DESC';
-      break;
-    case 'oldest':
-      orderField = 'ASC';
-      break;
-    default:
-      break;
-  }
 
   if (filters && filters.people && filters.people.length) {
     const condition = {
@@ -161,8 +131,8 @@ export const getPost = async (
   }
 
   const params: Record<string, any> = {
-    sortBy: sortField,
-    order: orderField,
+    sortBy: order,
+    order: sort,
     importers: true,
     pageNumber: page,
     pageLimit: PAGINATION_LIMIT,
@@ -365,48 +335,6 @@ export const editPost = async (id: string, payload: Partial<PostProps>): Promise
     url: `/posts/${id}`,
     method: 'PATCH',
     data: payload,
-  });
-};
-
-export const like = async (userId: string, postId: string): Promise<void> => {
-  await MyriadAPI.request({
-    url: `/posts/${postId}/likes`,
-    method: 'POST',
-    data: {
-      status: true,
-      userId,
-      postId,
-    },
-  });
-};
-
-export const getLikes = async (postId: string): Promise<Like[]> => {
-  const {data} = await MyriadAPI.request({
-    url: `/posts/${postId}/likes`,
-    method: 'GET',
-  });
-
-  return data;
-};
-
-export const getDislikes = async (postId: string): Promise<Dislike[]> => {
-  const {data} = await MyriadAPI.request({
-    url: `/posts/${postId}/dislikes`,
-    method: 'GET',
-  });
-
-  return data;
-};
-
-export const dislike = async (userId: string, postId: string): Promise<void> => {
-  await MyriadAPI.request({
-    url: `/posts/${postId}/dislikes`,
-    method: 'POST',
-    data: {
-      status: true,
-      userId,
-      postId,
-    },
   });
 };
 

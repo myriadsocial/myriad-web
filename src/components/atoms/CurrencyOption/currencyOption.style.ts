@@ -25,11 +25,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       width: '100%',
     },
-    avatar: {
-      width: theme.spacing(2),
-      height: theme.spacing(2),
-      marginRight: theme.spacing(1),
-    },
     text: {
       fontWeight: 400,
       fontSize: '12px',

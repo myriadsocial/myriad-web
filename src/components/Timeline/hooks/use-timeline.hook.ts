@@ -2,7 +2,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
-import {TimelineFilter, TimelineSortMethod} from 'src/interfaces/timeline';
+import {TimelineFilter, TimelineOrderType} from 'src/interfaces/timeline';
 import {RootState} from 'src/reducers';
 import {
   loadTimeline,
@@ -18,7 +18,7 @@ export const useTimelineHook = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const initTimeline = async (page = 1, sort?: TimelineSortMethod, filter?: TimelineFilter) => {
+  const initTimeline = async (page = 1, sort?: TimelineOrderType, filter?: TimelineFilter) => {
     dispatch(loadTimeline(page, sort, filter));
   };
 
@@ -28,9 +28,9 @@ export const useTimelineHook = () => {
     dispatch(loadTimeline(page));
   };
 
-  const sortTimeline = async (sort: TimelineSortMethod) => {
+  const orderTimeline = async (sort: TimelineOrderType) => {
     // shallow push, without rerender page
-    router.push(`?sort=${sort}`, undefined, {shallow: true});
+    router.push(`?order=${sort}`, undefined, {shallow: true});
   };
 
   const getTippedUserId = async (postId: string) => {
@@ -60,7 +60,7 @@ export const useTimelineHook = () => {
     tippedContent: timelineState.tippedContent,
     initTimeline,
     nextPage,
-    sortTimeline,
+    orderTimeline,
     getTippedUserId,
     getPostDetail,
     clearPosts: clear,

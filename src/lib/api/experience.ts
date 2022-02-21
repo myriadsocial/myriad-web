@@ -1,18 +1,23 @@
 import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
+import {PaginationParams} from './interfaces/pagination-params.interface';
 
 import {Experience, UserExperience, ExperienceType} from 'src/interfaces/experience';
 
 type ExperienceList = BaseList<Experience>;
 type UserExperienceList = BaseList<UserExperience>;
 
-export const getAllExperiences = async (): Promise<ExperienceList> => {
+export const getExperiences = async (params: PaginationParams): Promise<ExperienceList> => {
+  const {orderField = 'createdAt', sort = 'DESC'} = params;
+
   const {data} = await MyriadAPI.request<ExperienceList>({
     url: `/experiences`,
     method: 'GET',
     params: {
+      pageLimit: params.limit ?? PAGINATION_LIMIT,
       filter: {
+        order: `${orderField} ${sort}`,
         include: ['user'],
       },
     },
@@ -57,35 +62,7 @@ export const searchUserExperience = async (query: string): Promise<UserExperienc
   return data;
 };
 
-export const getSearchedExperiences = async (
-  page: number,
-  userId: string,
-): Promise<ExperienceList> => {
-  const params: Record<string, any> = {
-    pageNumber: page,
-    pageLimit: PAGINATION_LIMIT,
-    filter: {
-      include: ['user'],
-    },
-  };
-
-  if (userId) {
-    params.userId = userId;
-  }
-
-  const {data} = await MyriadAPI.request<ExperienceList>({
-    url: `/experiences`,
-    method: 'GET',
-    params,
-  });
-
-  return data;
-};
-
-export const searchExperiencesByQuery = async (
-  query: string,
-  page = 1,
-): Promise<ExperienceList> => {
+export const searchExperiences = async (query: string, page = 1): Promise<ExperienceList> => {
   const {data} = await MyriadAPI.request<ExperienceList>({
     url: `/experiences`,
     method: 'GET',
@@ -142,21 +119,6 @@ export const getUserExperience = async (
             },
           },
         ],
-      },
-    },
-  });
-  return data;
-};
-// TODO: change the function name, and add pagelimit params
-export const getAnonymousExperience = async (): Promise<ExperienceList> => {
-  const {data} = await MyriadAPI.request<ExperienceList>({
-    url: `/experiences`,
-    method: 'GET',
-    params: {
-      pageLimit: 3,
-      filter: {
-        order: `createdAt DESC`,
-        include: ['user'],
       },
     },
   });

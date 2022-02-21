@@ -4,7 +4,6 @@ import {SearchIcon} from '@heroicons/react/solid';
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
@@ -17,17 +16,17 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {acronym} from '../../../helpers/string';
-import {RootState} from '../../../reducers';
-import {ConfigState} from '../../../reducers/config/reducer';
-import {addUserCurrency} from '../../../reducers/user/actions';
-import {UserState} from '../../../reducers/user/reducer';
+import {Avatar, AvatarSize} from '../Avatar';
 import {Modal} from '../Modal';
 import {useStyles} from './AddCoin.style';
 import {Props} from './addCoin.interface';
 
 import {debounce} from 'lodash';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
+import {RootState} from 'src/reducers';
+import {ConfigState} from 'src/reducers/config/reducer';
+import {addUserCurrency} from 'src/reducers/user/actions';
+import {UserState} from 'src/reducers/user/reducer';
 
 export const AddCoin: React.FC<Props> = props => {
   const {open, onClose} = props;
@@ -143,9 +142,12 @@ export const AddCoin: React.FC<Props> = props => {
                 )}`}
                 alignItems="center">
                 <ListItemAvatar>
-                  <Avatar className={style.avatar} alt={currency.id} src={currency.image}>
-                    {acronym('A')}
-                  </Avatar>
+                  <Avatar
+                    name="A"
+                    alt={currency.id}
+                    src={currency.image}
+                    size={AvatarSize.MEDIUM}
+                  />
                 </ListItemAvatar>
                 <ListItemText>
                   <Typography

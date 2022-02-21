@@ -37,8 +37,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       '&:hover': {
         cursor: 'pointer',
       },
+
+      [theme.breakpoints.down('xs')]: {
+        marginRight: 8,
+      },
     },
-    name: {
+    identity: {
       maxWidth: 162,
 
       [theme.breakpoints.down('md')]: {
@@ -50,6 +54,17 @@ export const useStyles = makeStyles((theme: Theme) =>
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         wordWrap: 'break-word',
+      },
+    },
+    name: {
+      [theme.breakpoints.down('xs')]: {
+        fontWeight: theme.typography.fontWeightMedium,
+        fontSize: 16,
+      },
+    },
+    username: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 12,
       },
     },
     notification: {
@@ -109,6 +124,11 @@ export const useStyles = makeStyles((theme: Theme) =>
     flex: {
       display: 'flex',
       alignItems: 'center',
+    },
+    profileContent: {
+      [theme.breakpoints.down('xs')]: {
+        marginBottom: theme.spacing(3),
+      },
     },
   }),
 );

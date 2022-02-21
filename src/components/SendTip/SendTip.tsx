@@ -21,7 +21,7 @@ import {BalanceDetail} from '../../interfaces/balance';
 import {RootState} from '../../reducers';
 import {TimelineState} from '../../reducers/timeline/reducer';
 import {UserState} from '../../reducers/user/reducer';
-import {CustomAvatar, CustomAvatarSize} from '../atoms/Avatar';
+import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {Button, ButtonVariant} from '../atoms/Button';
 import {CurrencyOptionComponent} from '../atoms/CurrencyOption';
 import {ListItemComponent} from '../atoms/ListItem';
@@ -228,10 +228,10 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                 }
               />
               <div className={classes.receiverSummary}>
-                <CustomAvatar
-                  avatar={String(tippedUser.profilePictureURL)}
+                <Avatar
+                  src={String(tippedUser.profilePictureURL)}
                   name={tippedUser.name}
-                  size={CustomAvatarSize.XSMALL}
+                  size={AvatarSize.TINY}
                 />
                 <Typography variant="body1">
                   {tippedUser.name ?? `Unnamed Myrian`} will receive{' '}

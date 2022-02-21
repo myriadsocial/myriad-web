@@ -20,7 +20,7 @@ export const Metric: React.FC<MetricProps> = props => {
 
   return (
     <Grid container spacing={2} wrap="nowrap" classes={{root: style.root}}>
-      <Grid item xs={3}>
+      <Grid item xs={3} className={style.post}>
         <Typography variant="body1" className={`${style.username}`} component="p">
           Post
         </Typography>

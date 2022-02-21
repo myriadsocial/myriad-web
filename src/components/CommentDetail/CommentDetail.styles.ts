@@ -39,10 +39,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'space-between',
     },
-    avatar: {
-      marginRight: 12,
-      cursor: 'pointer',
-    },
     fullWidth: {
       width: '100%',
     },

@@ -32,13 +32,6 @@ export const useStyles = makeStyles<Theme, FriendStyleProps>(theme =>
         backgroundColor: '#F2F2F4',
       },
     },
-    avatar: {
-      width: 40,
-      height: 40,
-      marginRight: 16,
-      background: '#424242',
-      cursor: 'pointer',
-    },
     name: {
       fontSize: '16px',
       lineHeight: '20.08px',

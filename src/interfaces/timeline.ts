@@ -9,9 +9,17 @@ export enum TimelineType {
 
 export type PostOrigin = 'facebook' | 'twitter' | 'reddit' | 'myriad';
 
-export type TimelineSortMethod = 'created' | 'like' | 'comment' | 'trending';
+export enum TimelineOrderType {
+  UPVOTE = 'upvote',
+  COMMENT = 'comment',
+  COUNT = 'count',
+  POPULAR = 'popular',
+  LATEST = 'latest',
+  UPDATEDATE = 'updatedAt',
+  TIP = 'tip',
+}
 
-export type TimelineSortOrder = 'latest' | 'oldest';
+export type TimelineSortType = 'ASC' | 'DESC';
 
 export type TimelineFilter = {
   tags?: string[];

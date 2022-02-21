@@ -10,6 +10,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('md')]: {
         minWidth: 590,
       },
+
+      [theme.breakpoints.down('xs')]: {
+        minWidth: 0,
+      },
     },
     content: {
       padding: theme.spacing(0.5, 2.5),

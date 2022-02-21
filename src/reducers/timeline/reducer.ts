@@ -11,16 +11,16 @@ import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {
   TimelineType,
-  TimelineSortMethod,
+  TimelineOrderType,
   TimelineFilter,
-  TimelineSortOrder,
+  TimelineSortType,
 } from 'src/interfaces/timeline';
 import {WalletDetail} from 'src/interfaces/wallet';
 
 export interface TimelineState extends BasePaginationState {
   type: TimelineType;
-  sort: TimelineSortMethod;
-  order: TimelineSortOrder;
+  sort: TimelineSortType;
+  order: TimelineOrderType;
   filter?: TimelineFilter;
   search?: string;
   hasMore: boolean;
@@ -39,8 +39,8 @@ export interface TimelineState extends BasePaginationState {
 const initalState: TimelineState = {
   loading: true,
   type: TimelineType.TRENDING,
-  sort: 'created',
-  order: 'latest',
+  sort: 'DESC',
+  order: TimelineOrderType.LATEST,
   hasMore: false,
   posts: [],
   tippedContent: {
@@ -142,68 +142,6 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
         interaction: {
           downvoting: null,
         },
-      };
-    }
-
-    case constants.LIKE_POST: {
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.postId && post.metric) {
-            post.metric.likes += 1;
-            post.metric.dislikes = Math.max(0, post.metric.dislikes - 1);
-            post.likes = [action.like];
-          }
-
-          return post;
-        }),
-      };
-    }
-
-    case constants.REMOVE_LIKE_POST: {
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.postId && post.metric) {
-            post.metric.likes = Math.max(0, post.metric.likes - 1);
-            post.likes = post.likes
-              ? post.likes.filter(like => like.referenceId !== action.postId && like.state)
-              : [];
-          }
-
-          return post;
-        }),
-      };
-    }
-
-    case constants.DISLIKE_POST: {
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.postId && post.metric) {
-            post.metric.dislikes += 1;
-            post.metric.likes = Math.max(0, post.metric.likes - 1);
-            post.likes = [action.like];
-          }
-
-          return post;
-        }),
-      };
-    }
-
-    case constants.REMOVE_DISLIKE_POST: {
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.postId && post.metric) {
-            post.metric.dislikes = Math.max(0, post.metric.likes - 1);
-            post.likes = post.likes
-              ? post.likes.filter(like => like.referenceId !== action.postId && !like.state)
-              : [];
-          }
-
-          return post;
-        }),
       };
     }
 
