@@ -64,7 +64,7 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
             <Typography className={classes.sectionTitle} color="primary">
               {sectionTitle}
             </Typography>
-            <Typography>{description}</Typography>
+            <Typography className={classes.description}>{description}</Typography>
           </>
         )}
 
@@ -73,7 +73,7 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
             <Typography className={classes.sectionTitle} color="primary">
               {localSectionTitle}
             </Typography>
-            <Typography>{localDescription}</Typography>
+            <Typography className={classes.description}>{localDescription}</Typography>
           </>
         )}
       </div>

@@ -10,13 +10,21 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       justifyContent: 'flex-start',
       columnGap: theme.spacing(2.125),
+      [theme.breakpoints.down('xs')]: {
+        padding: theme.spacing(0, 4),
+        borderRadius: `0px`,
+        height: '56px',
+      },
     },
     icon: {
       width: 20,
       position: 'relative',
-      bottom: 5,
       '& .MuiSvgIcon-root': {
         fill: 'none',
+      },
+      [theme.breakpoints.down('xs')]: {
+        fontWeight: theme.typography.fontWeightMedium,
+        color: '#404040',
       },
     },
     textWrapper: {
@@ -30,6 +38,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 16,
+        fontWeight: theme.typography.fontWeightMedium,
+      },
+    },
+    description: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 12,
+        fontWeight: theme.typography.fontWeightRegular,
+      },
     },
   }),
 );
