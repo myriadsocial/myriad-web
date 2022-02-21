@@ -113,7 +113,7 @@ const DISABLED_PROPS = {
 const {breakpoints} = createTheme();
 
 const breakpointsValue: BreakpointValues = {
-  xs: 600,
+  xs: 500,
   sm: 960,
   md: 1280,
   lg: 1366,

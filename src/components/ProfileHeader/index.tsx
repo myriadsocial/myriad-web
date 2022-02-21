@@ -16,9 +16,9 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
+import {Metric} from '../Metric';
 import {useFriendOptions} from './hooks/use-friend-options.hook';
 import {useStyles} from './profile-header.style';
-import {Metric} from './render/Metric';
 import {Website} from './render/Website';
 
 import {OfficialBadgeIcon} from 'src/components/atoms/Icons';

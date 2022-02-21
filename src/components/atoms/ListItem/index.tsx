@@ -22,12 +22,17 @@ type ListItemComponentProps = ListItemProps & {
   action?: string | React.ReactNode;
   active?: boolean;
   url?: string;
+  id?: string;
 };
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles<Theme, ListItemComponentProps>((theme: Theme) =>
   createStyles({
     root: {
       paddingLeft: 0,
+      [theme.breakpoints.up('xs')]: {
+        display: props =>
+          ['experience', 'wallet', 'topic', 'socials'].includes(props.id as string) && 'none',
+      },
     },
     avatar: {
       minWidth: theme.spacing(3.75),
@@ -78,7 +83,7 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
     active,
     onClick,
   } = props;
-  const styles = useStyles();
+  const styles = useStyles({...props});
 
   const iconSyles = [styles.icon];
   const listProps: any = {};
