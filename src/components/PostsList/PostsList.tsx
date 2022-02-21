@@ -6,7 +6,7 @@ import {Grid} from '@material-ui/core';
 import {PostDetail} from '../PostDetail';
 import {EmptyResult} from '../Search/EmptyResult';
 import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
-import {timelineSortOptions} from '../Timeline/default';
+import {useFilterOption} from '../TimelineFilter/hooks/use-filter-option.hook';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {Loading} from '../atoms/Loading';
 
@@ -50,11 +50,13 @@ export const PostsList: React.FC<PostsListProps> = props => {
     onImporters,
   } = props;
 
+  const {orderOptions} = useFilterOption();
+
+  const [defaultPosts, setDefaultPosts] = useState<Post[]>([]);
+
   useEffect(() => {
     setDefaultPosts(searchedPosts);
   }, [searchedPosts]);
-
-  const [defaultPosts, setDefaultPosts] = useState<Post[]>([]);
 
   const handleSort = (sort: string) => {
     switch (sort) {
@@ -91,8 +93,8 @@ export const PostsList: React.FC<PostsListProps> = props => {
       <Grid container alignItems="center" justifyContent="flex-end">
         <DropdownMenu
           title="Sort by"
-          selected={timelineSortOptions[0].id}
-          options={timelineSortOptions}
+          selected="created"
+          options={orderOptions}
           onChange={handleSort}
         />
       </Grid>

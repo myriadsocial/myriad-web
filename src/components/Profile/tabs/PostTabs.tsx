@@ -54,7 +54,7 @@ export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
 
   return (
     <>
-      <TimelineContainer {...props} fetchInitial={false} />
+      <TimelineContainer {...props} fetchInitial={false} selectionType="sort" />
     </>
   );
 };

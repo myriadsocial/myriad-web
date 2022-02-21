@@ -5,8 +5,8 @@ import {People} from 'src/interfaces/people';
 import {
   TimelineType,
   TimelineFilter,
-  TimelineSortMethod,
-  TimelineSortOrder,
+  TimelineOrderType,
+  TimelineSortType,
 } from 'src/interfaces/timeline';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {RootState} from 'src/reducers';
@@ -25,7 +25,7 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
 
   const filterTimeline = async (query: ParsedUrlQuery) => {
     let timelineType = TimelineType.ALL;
-    let timelineSort: TimelineSortMethod = 'created';
+    let timelineOrder = TimelineOrderType.LATEST;
     let tags: string[] = filter?.tags || [];
 
     if (query.type) {
@@ -49,11 +49,11 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
       tags = Array.isArray(query.tag) ? query.tag : [query.tag];
     }
 
-    if (query.sort) {
-      const sort = Array.isArray(query.sort) ? query.sort[0] : query.sort;
+    if (query.order) {
+      const order = Array.isArray(query.order) ? query.order[0] : query.order;
 
-      if (['created', 'like', 'comment', 'trending'].includes(sort)) {
-        timelineSort = sort as TimelineSortMethod;
+      if (Object.values(TimelineOrderType).includes(order as TimelineOrderType)) {
+        timelineOrder = order as TimelineOrderType;
       }
     }
 
@@ -84,14 +84,14 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
         experienceId: experience.id,
       };
 
-      dispatch(loadTimeline(1, timelineSort, expFilter, timelineType));
+      dispatch(loadTimeline(1, timelineOrder, expFilter, timelineType));
     } else {
-      dispatch(loadTimeline(1, timelineSort, newFilter, timelineType));
+      dispatch(loadTimeline(1, timelineOrder, newFilter, timelineType));
     }
   };
 
   const filterByOrigin = async (origin: string) => {
-    const timelineSort: TimelineSortMethod = 'created';
+    const timelineSort = TimelineOrderType.LATEST;
 
     if (!people || !filters) return;
 
@@ -115,16 +115,16 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
     dispatch(loadTimeline(1, timelineSort, filters, TimelineType.ALL));
   };
 
-  const sortByOrder = async (order: TimelineSortOrder) => {
-    const timelineSort: TimelineSortMethod = 'created';
+  const sortTimeline = async (sort: TimelineSortType) => {
+    const timelineOrder = TimelineOrderType.LATEST;
 
     dispatch(clearTimeline());
-    dispatch(loadTimeline(1, timelineSort, filters, TimelineType.ALL, order));
+    dispatch(loadTimeline(1, timelineOrder, filters, TimelineType.ALL, sort));
   };
 
   return {
     filterTimeline,
     filterByOrigin,
-    sortByOrder,
+    sortTimeline,
   };
 };

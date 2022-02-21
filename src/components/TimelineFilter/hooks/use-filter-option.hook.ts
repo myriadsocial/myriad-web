@@ -2,7 +2,7 @@ import {useSelector} from 'react-redux';
 
 import {MenuOptions} from 'src/components/atoms/DropdownMenu';
 import {TabListItem} from 'src/components/atoms/TabList';
-import {TimelineSortMethod, TimelineType, TimelineSortOrder} from 'src/interfaces/timeline';
+import {TimelineOrderType, TimelineType, TimelineSortType} from 'src/interfaces/timeline';
 import {RootState} from 'src/reducers';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
@@ -27,26 +27,6 @@ export const useFilterOption = () => {
     },
   ];
 
-  // Sort options
-  const metricSortOptions: MenuOptions<TimelineSortMethod>[] = [
-    {
-      id: 'created',
-      title: 'Latest',
-    },
-    {
-      id: 'trending',
-      title: 'Popular',
-    },
-    {
-      id: 'like',
-      title: 'Most like',
-    },
-    {
-      id: 'comment',
-      title: 'Most commented',
-    },
-  ];
-
   const typeFilterOptions: TabListItem<TimelineType>[] = [
     {
       id: TimelineType.ALL,
@@ -66,15 +46,38 @@ export const useFilterOption = () => {
     },
   ];
 
-  const orderOptions: MenuOptions<TimelineSortOrder>[] = [
-    {id: 'latest', title: 'Latest'},
-    {id: 'oldest', title: 'Oldest'},
+  const orderOptions: MenuOptions<TimelineOrderType>[] = [
+    {
+      id: TimelineOrderType.LATEST,
+      title: 'Latest',
+    },
+    {
+      id: TimelineOrderType.POPULAR,
+      title: 'Popularity',
+    },
+    {
+      id: TimelineOrderType.UPVOTE,
+      title: 'Most liked',
+    },
+    {
+      id: TimelineOrderType.COMMENT,
+      title: 'Most commented',
+    },
+    {
+      id: TimelineOrderType.TIP,
+      title: 'Most Tipped',
+    },
+  ];
+
+  const sortOptions: MenuOptions<TimelineSortType>[] = [
+    {id: 'DESC', title: 'Latest'},
+    {id: 'ASC', title: 'Oldest'},
   ];
 
   return {
     originFilterOptions,
-    metricSortOptions,
     typeFilterOptions,
     orderOptions,
+    sortOptions,
   };
 };

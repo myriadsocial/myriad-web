@@ -1,10 +1,10 @@
-import {TimelineSortMethod, TimelineType} from '../../interfaces/timeline';
+import {TimelineOrderType, TimelineType} from '../../interfaces/timeline';
 
 import {ParsedUrlQuery} from 'querystring';
 
 export const parseQueryToFilter = (query: ParsedUrlQuery) => {
   let timelineType = TimelineType.ALL;
-  let timelineSort: TimelineSortMethod = 'created';
+  let timelineOrder = TimelineOrderType.LATEST;
   let tags: string[] = [];
 
   if (query.type) {
@@ -28,11 +28,11 @@ export const parseQueryToFilter = (query: ParsedUrlQuery) => {
     tags = Array.isArray(query.tag) ? query.tag : [query.tag];
   }
 
-  if (query.sort) {
-    const sort = Array.isArray(query.sort) ? query.sort[0] : query.sort;
+  if (query.order) {
+    const order = Array.isArray(query.order) ? query.order[0] : query.order;
 
-    if (['created', 'like', 'comment', 'trending'].includes(sort)) {
-      timelineSort = sort as TimelineSortMethod;
+    if (Object.values(TimelineOrderType).includes(order as TimelineOrderType)) {
+      timelineOrder = order as TimelineOrderType;
     }
   }
 
@@ -42,7 +42,7 @@ export const parseQueryToFilter = (query: ParsedUrlQuery) => {
 
   return {
     type: timelineType,
-    sort: timelineSort,
+    order: timelineOrder,
     tags: tags,
   };
 };

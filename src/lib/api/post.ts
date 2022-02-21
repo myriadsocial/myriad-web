@@ -6,8 +6,8 @@ import {LoopbackWhere} from './interfaces/loopback-query.interface';
 import {Dislike, Like} from 'src/interfaces/interaction';
 import {Post, PostProps, ImportPostProps, PostVisibility, PostStatus} from 'src/interfaces/post';
 import {
-  TimelineSortMethod,
-  TimelineSortOrder,
+  TimelineOrderType,
+  TimelineSortType,
   TimelineFilter,
   TimelineType,
   PostOrigin,
@@ -24,43 +24,14 @@ export const getPost = async (
   page: number,
   userId: string,
   type: TimelineType = TimelineType.TRENDING,
-  sort?: TimelineSortMethod,
+  order: TimelineOrderType = TimelineOrderType.LATEST,
   filters?: TimelineFilter,
   asFriend = false,
-  sortOrder?: TimelineSortOrder,
+  sort: TimelineSortType = 'DESC',
 ): Promise<PostList> => {
   const where: LoopbackWhere<PostProps> = {
     deletedAt: {exists: false},
   };
-
-  let sortField = 'latest';
-  let orderField = 'DESC';
-
-  switch (sort) {
-    case 'comment':
-      sortField = 'comment';
-      break;
-    case 'like':
-      sortField = 'upvote';
-      break;
-    case 'trending':
-      sortField = 'popular';
-      break;
-    case 'created':
-    default:
-      break;
-  }
-
-  switch (sortOrder) {
-    case 'latest':
-      orderField = 'DESC';
-      break;
-    case 'oldest':
-      orderField = 'ASC';
-      break;
-    default:
-      break;
-  }
 
   if (filters && filters.people && filters.people.length) {
     const condition = {
@@ -161,8 +132,8 @@ export const getPost = async (
   }
 
   const params: Record<string, any> = {
-    sortBy: sortField,
-    order: orderField,
+    sortBy: order,
+    order: sort,
     importers: true,
     pageNumber: page,
     pageLimit: PAGINATION_LIMIT,
