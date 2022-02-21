@@ -1,6 +1,8 @@
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+import {TopNavbarProps} from '.';
+
+export const useStyles = makeStyles<Theme, TopNavbarProps>(theme =>
   createStyles({
     root: {
       background: '#FFFFFF',
@@ -23,6 +25,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         fill: 'none',
       },
       [theme.breakpoints.down('xs')]: {
+        display: props => (props.type === 'menu' ? 'none' : ''),
         fontWeight: theme.typography.fontWeightMedium,
         color: '#404040',
       },
@@ -47,6 +50,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('xs')]: {
         fontSize: 12,
         fontWeight: theme.typography.fontWeightRegular,
+      },
+    },
+    drawer: {
+      display: 'none',
+      [theme.breakpoints.down('xs')]: {
+        display: props => (props.type === 'menu' ? 'block' : ''),
       },
     },
   }),

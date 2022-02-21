@@ -43,6 +43,7 @@ const Friends: React.FC = () => {
       <TopNavbarComponent
         description={`${meta.totalItemCount} Friends`}
         sectionTitle={SectionTitle.FRIENDS}
+        type={'menu'}
       />
 
       <FriendMenuComponent />

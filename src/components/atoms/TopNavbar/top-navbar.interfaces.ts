@@ -18,6 +18,7 @@ const sectionTitles: SectionTitleValue[] = Object.values(SectionTitle);
 interface TopNavbarProps {
   sectionTitle: SectionTitle | string;
   description: string;
+  type?: 'menu' | 'back';
 }
 
 export {SectionTitle, sectionTitles};
