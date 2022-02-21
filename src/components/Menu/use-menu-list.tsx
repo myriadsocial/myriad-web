@@ -1,8 +1,27 @@
-import {HomeIcon, CurrencyDollarIcon, CogIcon, UsersIcon, StopIcon} from '@heroicons/react/outline';
+import {
+  HomeIcon,
+  CurrencyDollarIcon,
+  CogIcon,
+  UsersIcon,
+  StopIcon,
+  HashtagIcon,
+  VariableIcon,
+  ViewGridIcon,
+  CreditCardIcon,
+} from '@heroicons/react/outline';
 
 import React, {useMemo} from 'react';
 
-export type MenuId = 'home' | 'friends' | 'token' | 'nft' | 'settings';
+export type MenuId =
+  | 'home'
+  | 'friends'
+  | 'token'
+  | 'nft'
+  | 'settings'
+  | 'experience'
+  | 'wallet'
+  | 'topic'
+  | 'socials';
 
 export type MenuDetail = {
   id: MenuId;
@@ -21,6 +40,20 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         active: selected === 'home',
         icon: HomeIcon,
         url: '/home',
+      },
+      {
+        id: 'experience',
+        title: 'Experience',
+        active: selected === 'experience',
+        icon: VariableIcon,
+        url: '/experience',
+      },
+      {
+        id: 'wallet',
+        title: 'Wallet',
+        active: selected === 'wallet',
+        icon: CreditCardIcon,
+        url: '/wallet',
       },
       {
         id: 'friends',
@@ -42,6 +75,20 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         active: selected === 'nft',
         icon: StopIcon,
         url: '/nft',
+      },
+      {
+        id: 'topic',
+        title: 'Topic',
+        active: selected === 'topic',
+        icon: HashtagIcon,
+        url: '/topic',
+      },
+      {
+        id: 'socials',
+        title: 'Social Media',
+        active: selected === 'socials',
+        icon: ViewGridIcon,
+        url: '/socials',
       },
       {
         id: 'settings',

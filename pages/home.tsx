@@ -14,6 +14,7 @@ import {PromptComponent} from '../src/components/atoms/Prompt/prompt.component';
 import {SearchBoxContainer} from '../src/components/atoms/Search/SearchBoxContainer';
 import {DefaultLayout} from '../src/components/template/Default/DefaultLayout';
 
+import {NavbarComponent} from 'src/components/Mobile/Navbar';
 import Banner from 'src/components/atoms/BannerStatus/BannerStatus';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {setHeaders} from 'src/lib/api/base';
@@ -93,6 +94,8 @@ const Home: React.FC = () => {
         <title>{i18n.t('Home.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
 
+      <NavbarComponent />
+
       <Banner />
       <SearchBoxContainer onSubmitSearch={performSearch} />
       <RichTextContainer />
@@ -144,25 +147,8 @@ const Home: React.FC = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {req} = context;
-  const {headers} = req;
 
   const dispatch = store.dispatch as ThunkDispatchAction;
-
-  if (typeof window === 'undefined' && headers['user-agent']) {
-    const UAParser = eval('require("ua-parser-js")');
-    const parser = new UAParser();
-    const device = parser.setUA(headers['user-agent']).getDevice();
-
-    if (device.type === 'mobile') {
-      return {
-        redirect: {
-          destination: '/mobile',
-          permanent: false,
-          headers,
-        },
-      };
-    }
-  }
 
   const available = await healthcheck();
 

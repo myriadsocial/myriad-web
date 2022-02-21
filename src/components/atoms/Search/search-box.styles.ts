@@ -9,6 +9,10 @@ export const useStyles = makeStyles<Theme, SearchBoxProps>(theme =>
       height: 52,
       borderRadius: 10,
       border: props => (props.outlined ? '1px solid #EDEDED' : 'none'),
+
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
     },
     input: {
       marginLeft: theme.spacing(1),

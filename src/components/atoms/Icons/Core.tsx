@@ -19,14 +19,17 @@ export const MyriadCircleIcon: React.FC<IconProps> = props => (
   <SvgIcon component={MyriadCircle} viewBox="0 0 30 30" style={{fill: 'none'}} {...props} />
 );
 
-export const MyriadFullIcon: React.FC<IconProps> = props => (
-  <SvgIcon
-    component={MyriadFull}
-    viewBox="0 14 221 58"
-    style={{width: 221, height: 48, fill: 'none'}}
-    {...props}
-  />
-);
+export const MyriadFullIcon: React.FC<IconProps> = props => {
+  const {width = 221, height = 48} = props;
+  return (
+    <SvgIcon
+      component={MyriadFull}
+      viewBox="0 14 221 58"
+      style={{width: width, height: height, fill: 'none'}}
+      {...props}
+    />
+  );
+};
 
 export const MyriadFullBlackIcon: React.FC<IconProps> = props => (
   <SvgIcon
