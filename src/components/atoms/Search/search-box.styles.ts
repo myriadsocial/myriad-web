@@ -11,7 +11,8 @@ export const useStyles = makeStyles<Theme, SearchBoxProps>(theme =>
       border: props => (props.outlined ? '1px solid #EDEDED' : 'none'),
 
       [theme.breakpoints.down('xs')]: {
-        display: 'none',
+        display: props => (props.hidden ? 'none' : ''),
+        height: 36,
       },
     },
     input: {
@@ -22,6 +23,9 @@ export const useStyles = makeStyles<Theme, SearchBoxProps>(theme =>
       padding: 10,
       '& .MuiSvgIcon-root': {
         fill: 'none',
+      },
+      [theme.breakpoints.down('xs')]: {
+        padding: 0,
       },
     },
     divider: {

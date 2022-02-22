@@ -140,10 +140,9 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            href:
-              notification.additionalReferenceId && notification.additionalReferenceId.length > 0
-                ? `/post/${notification.additionalReferenceId[0]?.postId}`
-                : `/404`,
+            href: notification.additionalReferenceId
+              ? `/post/${notification.additionalReferenceId?.comment?.postId}`
+              : `/404`,
           };
 
         case NotificationType.COMMENT_COMMENT:
@@ -165,10 +164,9 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            href:
-              notification.additionalReferenceId && notification.additionalReferenceId.length > 0
-                ? `/post/${notification.additionalReferenceId[0].postId}?comment=${notification.additionalReferenceId[1].firstCommentId}`
-                : `/404`,
+            href: notification.additionalReferenceId
+              ? `/post/${notification.additionalReferenceId?.comment?.postId}?comment=${notification.additionalReferenceId?.comment?.id}`
+              : `/404`,
           };
 
         case NotificationType.POST_MENTION:
@@ -283,8 +281,8 @@ export const useNotificationList = (
             ),
             createdAt: notification.createdAt,
             href: `${
-              notification.additionalReferenceId && notification.additionalReferenceId.length > 0
-                ? '/post/' + notification?.additionalReferenceId[0]?.postId
+              notification.additionalReferenceId
+                ? '/post/' + notification?.additionalReferenceId?.post?.id
                 : '/wallet?type=history'
             }`,
           };
@@ -311,8 +309,8 @@ export const useNotificationList = (
             ),
             createdAt: notification.createdAt,
             href: `${
-              notification.additionalReferenceId && notification.additionalReferenceId.length > 0
-                ? '/post/' + notification?.additionalReferenceId[0]?.postId
+              notification.additionalReferenceId
+                ? '/post/' + notification?.additionalReferenceId?.comment?.postId
                 : '/wallet?type=history'
             }`,
           };
@@ -415,7 +413,11 @@ export const useNotificationList = (
             read: notification.read,
             user: 'Comment removed',
             avatar: notification.fromUserId.profilePictureURL,
-            description: 'Your comment has been removed due to breaking our community guideline',
+            description: notification.message.includes('approved')
+              ? (notification.additionalReferenceId &&
+                  notification.additionalReferenceId?.comment?.user?.name) +
+                `'s comment has been removed based on your report`
+              : 'Your comment has been removed due to breaking our community guideline',
             badge: (
               <div className={style.circleError}>
                 <SvgIcon
@@ -426,7 +428,9 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `${publicRuntimeConfig.myriadSupportMail}`,
+            href: notification.additionalReferenceId
+              ? `/post/${notification.additionalReferenceId?.comment?.postId}`
+              : '/404',
           };
 
         case NotificationType.USER_BANNED:
@@ -439,7 +443,7 @@ export const useNotificationList = (
             avatar: notification.fromUserId.profilePictureURL,
             description: notification.message.includes('approved')
               ? (notification.additionalReferenceId &&
-                  notification.additionalReferenceId[0]?.displayName) +
+                  notification.additionalReferenceId?.user?.name) +
                 ' account has been banned by admin based on your report'
               : 'You have been banned due to breaking our community rule',
             badge: (
@@ -468,7 +472,7 @@ export const useNotificationList = (
               getPlatform(notification.message) +
               ' account @' +
               (notification.additionalReferenceId &&
-                notification.additionalReferenceId[0].peopleUsername) +
+                notification.additionalReferenceId?.people?.username) +
               ' successfully connected to Myriad',
             badge: (
               <div className={style.circleError}>
@@ -497,7 +501,7 @@ export const useNotificationList = (
               getPlatform(notification.message) +
               ' account @' +
               (notification.additionalReferenceId &&
-                notification.additionalReferenceId[0].peopleUsername) +
+                notification.additionalReferenceId?.people?.username) +
               ' successfully disconnected from Myriad by @' +
               notification.fromUserId.username,
             badge: (

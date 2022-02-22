@@ -11,10 +11,12 @@ import Typography from '@material-ui/core/Typography';
 
 import {TopNavbarProps, SectionTitle, useStyles} from '.';
 
+import {MenuDrawerComponent} from 'src/components/Mobile/MenuDrawer/MenuDrawer';
+
 export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
-  const {sectionTitle, description} = props;
+  const {sectionTitle, description, type = 'back'} = props;
   const router = useRouter();
-  const classes = useStyles();
+  const classes = useStyles({...props, type});
 
   const [localSectionTitle, setLocalSectionTitle] = useState(sectionTitle as string);
   const [localDescription, setLocalDescription] = useState(description);
@@ -58,13 +60,16 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
         className={classes.icon}>
         <SvgIcon component={ChevronLeftIcon} viewBox="0 0 24 24" />
       </IconButton>
+      <div className={classes.drawer}>
+        <MenuDrawerComponent />
+      </div>
       <div className={classes.textWrapper}>
         {!isInvertedSection(sectionTitle) && (
           <>
             <Typography className={classes.sectionTitle} color="primary">
               {sectionTitle}
             </Typography>
-            <Typography>{description}</Typography>
+            <Typography className={classes.description}>{description}</Typography>
           </>
         )}
 
@@ -73,7 +78,7 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
             <Typography className={classes.sectionTitle} color="primary">
               {localSectionTitle}
             </Typography>
-            <Typography>{localDescription}</Typography>
+            <Typography className={classes.description}>{localDescription}</Typography>
           </>
         )}
       </div>
