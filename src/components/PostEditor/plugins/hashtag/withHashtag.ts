@@ -196,16 +196,21 @@ export const withHashtag =
 
               const before = getRangeFromBlockStart(editor, {at: selection});
               let beforeText = getText(editor, before);
-
               if (block?.type === ELEMENT_PARAGRAPH) {
                 const newChildren: TDescendant = [];
 
                 block.children.forEach((children: TDescendant, i: number) => {
                   if (children.text) {
                     if (children.text.includes(beforeText)) {
-                      const chunk = children.text
-                        .split(beforeText)
-                        .map((text: string) => text.trim());
+                      const chunk = beforeText.length
+                        ? children.text.split(beforeText).map((text: string) => text.trim())
+                        : [children.text.trim()];
+
+                      if (chunk.length === 1) {
+                        newChildren.push({
+                          text: ' ',
+                        });
+                      }
 
                       for (const item of chunk) {
                         if (item.length > 0) {
