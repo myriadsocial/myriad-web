@@ -11,7 +11,7 @@ export const TrendingTab: React.FC = () => {
 
   return (
     <div className={styles.root} id="worldwide">
-      <Typography variant="h4" style={{marginBottom: 12}}>
+      <Typography variant="h4" className={styles.desktop}>
         Trends
       </Typography>
       <div className={styles.content}>
