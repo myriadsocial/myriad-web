@@ -18,9 +18,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   outlined = false,
   onSubmit,
   iconPosition = 'start',
+  hidden = false,
   ...props
 }) => {
-  const classes = useStyles({outlined});
+  const classes = useStyles({outlined, hidden});
 
   const [input, setInput] = useState('');
 

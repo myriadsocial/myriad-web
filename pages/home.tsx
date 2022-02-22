@@ -14,7 +14,7 @@ import {PromptComponent} from '../src/components/atoms/Prompt/prompt.component';
 import {SearchBoxContainer} from '../src/components/atoms/Search/SearchBoxContainer';
 import {DefaultLayout} from '../src/components/template/Default/DefaultLayout';
 
-import {NavbarComponent} from 'src/components/Mobile/Navbar';
+import {NavbarComponent} from 'src/components/Mobile/Navbar/Navbar';
 import Banner from 'src/components/atoms/BannerStatus/BannerStatus';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {setHeaders} from 'src/lib/api/base';
@@ -94,10 +94,10 @@ const Home: React.FC = () => {
         <title>{i18n.t('Home.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
 
-      <NavbarComponent />
+      <NavbarComponent onSubmitSearch={performSearch} />
 
       <Banner />
-      <SearchBoxContainer onSubmitSearch={performSearch} />
+      <SearchBoxContainer onSubmitSearch={performSearch} hidden={true} />
       <RichTextContainer />
       <TimelineContainer filterType="type" selectionType="order" />
 
