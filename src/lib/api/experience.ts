@@ -85,6 +85,9 @@ export const getUserExperience = async (
 ): Promise<UserExperienceList> => {
   const where: Record<string, any> = {
     userId,
+    deletedAt: {
+      $exists: false,
+    },
   };
 
   if (type === 'personal') {

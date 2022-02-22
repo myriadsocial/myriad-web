@@ -244,7 +244,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                   <>
                     <Link href={'/profile/[id]'} as={`/profile/${comment.user.id}`} shallow>
                       <Typography variant="body1" className={style.link} component="a">
-                        {comment.user.name}
+                        {comment?.user?.deletedAt ? '[user banned]' : comment.user.name}
                       </Typography>
                     </Link>
 

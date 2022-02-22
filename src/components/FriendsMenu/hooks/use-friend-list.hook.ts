@@ -23,7 +23,7 @@ export const useFriendList = (friends: Friend[], user?: User): FriendListHook =>
     if (!user) return;
 
     const list = friends.reduce(function (list: FriendDetail[], friend) {
-      if (friend.requestorId === user.id && friend.requestee) {
+      if (friend.requestorId === user.id && friend.requestee && !friend?.requestee?.deletedAt) {
         list.push({
           id: friend.requesteeId,
           avatar: friend.requestee.profilePictureURL,
