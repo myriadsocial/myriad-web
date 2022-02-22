@@ -92,8 +92,10 @@ export const Experience: React.FC<ExperienceProps> = props => {
   };
 
   const handleRemoveExperience = () => {
-    if (onDelete) {
-      onDelete(experienceId);
+    setShowDeleteConfimation(false);
+
+    if (onDelete && userExperienceId) {
+      onDelete(userExperienceId);
     }
   };
 
@@ -107,6 +109,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
   };
 
   const openDeleteConfirmation = () => {
+    handleCloseSettings();
     setShowDeleteConfimation(true);
   };
 
@@ -129,7 +132,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
               <Typography className={styles.title} variant="body1">
                 {userExperience.experience.name}
               </Typography>
-              <Typography variant="caption" color="primary">
+              <Typography variant="caption" color="primary" className={styles.subtitle}>
                 {userExperience.experience.user.name}
               </Typography>
               <Typography variant="caption" color="textSecondary">
@@ -138,7 +141,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
             </CardContent>
 
             <IconButton aria-label="settings" onClick={handleClickSettings}>
-              <SvgIcon component={DotsVerticalIcon} viewBox="0 0 24 24" />
+              <SvgIcon component={DotsVerticalIcon} viewBox="0 0 24 24" className={styles.icon} />
             </IconButton>
           </Grid>
         </CardActionArea>
@@ -196,7 +199,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
         icon="danger"
         title="Delete Experience?"
         subtitle="Their posts won't be shown in your timeline anymore and you may or may not be able to see their complete profile. Are you sure?">
-        <Grid container justifyContent="center">
+        <Grid container justifyContent="space-around">
           <Button onClick={handleCancelDelete} size="small" variant="outlined" color="secondary">
             Not now
           </Button>

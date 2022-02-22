@@ -21,6 +21,7 @@ type ExperienceListContainerProps = {
   enableSubscribe?: boolean;
   hasMore?: boolean;
   loadNextPage?: () => void;
+  refreshExperience?: () => void;
 };
 
 export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = props => {
@@ -30,6 +31,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     enableSubscribe,
     hasMore = false,
     loadNextPage,
+    refreshExperience,
   } = props;
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
@@ -47,10 +49,12 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   } = useExperienceHook();
   const {openToasterSnack} = useToasterSnackHook();
 
+  const subscribedExperiencesIds = userExperiences.map(item => item.experience.id);
   const usedExperiences: WrappedExperience[] =
     owner === ExperienceOwner.ALL
       ? experiences.map(experience => ({
-          subscribed: false,
+          id: userExperiences.find(item => item.experience.id === experience.id)?.id ?? undefined,
+          subscribed: subscribedExperiencesIds.includes(experience.id),
           experience,
         }))
       : owner === ExperienceOwner.CURRENT_USER
@@ -100,7 +104,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
 
   const handleUnsubscribeExperience = (userExperienceId: string) => {
     unsubscribeExperience(userExperienceId, () => {
-      loadExperience();
+      refreshExperience && refreshExperience();
     });
   };
 

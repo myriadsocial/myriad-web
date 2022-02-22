@@ -27,15 +27,22 @@ export const TrendingList: React.FC<TrendingListProps> = props => {
   return (
     <div className={style.root}>
       <List className={style.list}>
+        <Typography variant="h4" className={style.mobile}>
+          Trends
+        </Typography>
         {trendings.map((trending, i) => (
           <ListItem className={style.item} key={uuid()}>
             <ListItemText disableTypography className={style.text}>
               <Link href={`/topic/hashtag?tag=${trending.id}`} shallow>
                 <a href={`/topic/hashtag?tag=${trending.id}`}>
-                  <Typography variant="body1" color="textPrimary">{`#${trending.id}`}</Typography>
+                  <Typography
+                    variant="body1"
+                    color="textPrimary"
+                    className={style.title}>{`#${trending.id}`}</Typography>
                   <Typography
                     variant="caption"
-                    color="textSecondary">{`${trending.count} Posts`}</Typography>
+                    color="textSecondary"
+                    className={style.subtitle}>{`${trending.count} Posts`}</Typography>
                 </a>
               </Link>
             </ListItemText>
