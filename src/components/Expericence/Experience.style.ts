@@ -58,6 +58,20 @@ export const useStyles = makeStyles<Theme, ExperienceStyleProps>(theme =>
     },
     title: {
       wordBreak: 'break-all',
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '14px',
+      },
+    },
+    subtitle: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '12px',
+        fontWeight: theme.typography.fontWeightMedium,
+      },
+    },
+    icon: {
+      [theme.breakpoints.down('xs')]: {
+        color: '#404040',
+      },
     },
     menu: {
       borderRadius: 10,
