@@ -25,11 +25,28 @@ export const useStyles = makeStyles((theme: Theme) =>
         fontWeight: 'bold',
       },
     },
+    headerRoot: {
+      [theme.breakpoints.down('xs')]: {
+        padding: '10px 20px',
+      },
+    },
     danger: {
       color: theme.palette.error.main,
     },
     menu: {
       maxWidth: 'max-content',
+    },
+    title: {
+      cursor: 'pointer',
+      [theme.breakpoints.down('xs')]: {
+        fontWeight: theme.typography.fontWeightMedium,
+      },
+    },
+    icon: {
+      [theme.breakpoints.down('xs')]: {
+        height: '20px',
+        color: '#404040',
+      },
     },
   }),
 );

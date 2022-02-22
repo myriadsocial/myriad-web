@@ -56,6 +56,9 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       padding: theme.spacing(0.5),
       color: props =>
         props.mark === 'underline' ? theme.palette.text.secondary : theme.palette.text.primary,
+      [theme.breakpoints.down('xs')]: {
+        marginRight: theme.spacing(1.5),
+      },
     },
     indicator: {
       marginLeft: 4,

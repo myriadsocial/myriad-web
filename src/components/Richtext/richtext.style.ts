@@ -9,6 +9,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: '90px',
       borderRadius: '10px',
       background: theme.palette.background.paper,
+      [theme.breakpoints.down('xs')]: {
+        padding: '10px',
+        height: 'auto',
+      },
     },
     flex: {
       display: 'flex',
@@ -28,6 +32,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       border: 0,
       '&:focus-visible': {
         outline: 'none',
+      },
+      [theme.breakpoints.down('xs')]: {
+        marginLeft: theme.spacing(2),
       },
     },
     action: {
@@ -49,6 +56,19 @@ export const useStyles = makeStyles((theme: Theme) =>
     fill: {
       fill: 'none',
       fontSize: '35px',
+    },
+    box: {
+      [theme.breakpoints.down('xs')]: {
+        padding: '0px 20px',
+      },
+    },
+    avatar: {
+      height: '50px',
+      width: '50px',
+      [theme.breakpoints.down('xs')]: {
+        height: '48px',
+        width: '48px',
+      },
     },
   }),
 );

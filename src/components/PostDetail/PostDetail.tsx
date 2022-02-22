@@ -1,3 +1,5 @@
+import {CurrencyDollarIcon} from '@heroicons/react/outline';
+
 import React, {useState} from 'react';
 import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import ReactMarkdown from 'react-markdown';
@@ -5,8 +7,10 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
+import {IconButton, Grid} from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 import {PostRender} from '../PostEditor/PostRender';
 import {ShowMore} from '../PostEditor/Render/ShowMore';
@@ -242,36 +246,53 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           !post.deletedAt && <LinkPreview embed={post.embeddedURL} />}
       </div>
 
-      <div className={styles.action}>
-        <PostActionComponent
-          metrics={post.metric}
-          upvoted={post.isUpvoted}
-          downvoted={post.isDownVoted}
-          onUpvote={handleUpvote}
-          onDownVote={handleDownVote}
-          onShowComments={toggleShowComments}
-          embedUrl={`${urlLink()}/embed?id=${post.id}&type=post`}
-          postUrl={`${urlLink()}/post/${post.id}`}
-          onShared={handleShareLink}
-          disableAction={type === 'share'}
-        />
+      <Grid
+        container
+        wrap="nowrap"
+        justifyContent="space-between"
+        alignItems="center"
+        className={styles.action}>
+        <Grid item xs={9}>
+          <PostActionComponent
+            metrics={post.metric}
+            upvoted={post.isUpvoted}
+            downvoted={post.isDownVoted}
+            onUpvote={handleUpvote}
+            onDownVote={handleDownVote}
+            onShowComments={toggleShowComments}
+            embedUrl={`${urlLink()}/embed?id=${post.id}&type=post`}
+            postUrl={`${urlLink()}/post/${post.id}`}
+            onShared={handleShareLink}
+            disableAction={type === 'share'}
+          />
+        </Grid>
 
         <ShowIf condition={!anonymous && isImportedPost && !isOwnSocialPost && type !== 'share'}>
-          <Button
-            isDisabled={balanceDetails.length === 0}
-            onClick={handleSendTip}
-            variant={ButtonVariant.OUTLINED}
-            color={ButtonColor.SECONDARY}
-            size={ButtonSize.SMALL}
-            className={styles.sendTips}>
-            {balanceDetails.length === 0 ? (
-              <CircularProgress size={14} color="primary" />
-            ) : (
-              'Send tip'
-            )}
-          </Button>
+          <Grid item xs={3}>
+            <Button
+              isDisabled={balanceDetails.length === 0}
+              onClick={handleSendTip}
+              variant={ButtonVariant.OUTLINED}
+              color={ButtonColor.SECONDARY}
+              size={ButtonSize.SMALL}
+              className={styles.sendTips}>
+              {balanceDetails.length === 0 ? (
+                <CircularProgress size={14} color="primary" />
+              ) : (
+                'Send tip'
+              )}
+            </Button>
+            <IconButton onClick={handleSendTip} className={styles.icon} color="primary">
+              <SvgIcon
+                classes={{root: styles.fill}}
+                color="inherit"
+                component={CurrencyDollarIcon}
+                viewBox="0 0 24 24"
+              />
+            </IconButton>
+          </Grid>
         </ShowIf>
-      </div>
+      </Grid>
 
       <ShowIf condition={shoWcomment}>
         <TabsComponent tabs={tabs} active={activeTab} onChangeTab={handleChangeTab} />

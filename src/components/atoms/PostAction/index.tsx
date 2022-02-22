@@ -85,7 +85,14 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
           <SvgIcon classes={{root: style.fill}} component={ChatAltIcon} viewBox="0 0 24 24" />
         </IconButton>
         <Typography component="span" color="textPrimary" variant="caption">
-          {discussions + debates} Comments
+          {discussions + debates}{' '}
+          <Typography
+            component="span"
+            color="textPrimary"
+            variant="caption"
+            className={style.wording}>
+            Comments
+          </Typography>
         </Typography>
       </div>
 
@@ -98,7 +105,11 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
               component={ShareIcon}
               viewBox="0 0 24 24"
             />
-            <Typography component="span" color="textPrimary" variant="caption">
+            <Typography
+              component="span"
+              color="textPrimary"
+              variant="caption"
+              className={style.wording}>
               Share
             </Typography>
           </IconButton>

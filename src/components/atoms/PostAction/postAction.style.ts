@@ -5,15 +5,20 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       alignItems: 'center',
-
+      justifyContent: 'flex-start',
       '& > div': {
         marginRight: theme.spacing(2),
+      },
+
+      [theme.breakpoints.down('xs')]: {
+        justifyContent: 'space-between',
+        '& > div': {
+          marginRight: 0,
+        },
       },
     },
     section: {
       display: 'inline-block',
-      marginLeft: '5px',
-      marginRight: '5px',
     },
     action: {
       marginRight: theme.spacing(1),
@@ -59,6 +64,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#E0E0E0',
       marginTop: 32,
       marginBottom: 32,
+    },
+    wording: {
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
     },
   }),
 );

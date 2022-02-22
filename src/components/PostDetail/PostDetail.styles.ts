@@ -24,9 +24,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     action: {
       padding: theme.spacing(1.25, 2.5),
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
     },
     tabs: {
       borderBottom: '1px solid #E5E5E5',
@@ -44,6 +41,24 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     sendTips: {
       width: 120,
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
+    },
+    icon: {
+      display: 'none',
+      border: '2px solid #FFDE81',
+      '&, .MuiIconButton-root': {
+        padding: '1px',
+        marginLeft: 'auto',
+      },
+      [theme.breakpoints.down('xs')]: {
+        display: 'block',
+      },
+    },
+    fill: {
+      fill: 'none',
+      color: '#404040',
     },
   }),
 );
