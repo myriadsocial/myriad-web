@@ -9,6 +9,7 @@ enum SectionTitle {
   TIMELINE = 'Timeline',
   NFT = 'NFT',
   SOCIAL_TOKEN = 'Social Token',
+  TRENDS = 'Trends',
 }
 
 type SectionTitleKey = keyof typeof SectionTitle;

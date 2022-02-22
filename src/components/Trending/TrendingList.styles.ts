@@ -34,5 +34,26 @@ export const useStyles = makeStyles((theme: Theme) =>
         textDecoration: 'none',
       },
     },
+    mobile: {
+      display: 'none',
+      marginBottom: 12,
+      fontSize: '16px',
+      fontWeight: theme.typography.fontWeightMedium,
+      [theme.breakpoints.down('xs')]: {
+        display: 'block',
+      },
+    },
+    title: {
+      [theme.breakpoints.down('xs')]: {
+        color: theme.palette.primary.main,
+        fontSize: '16px',
+      },
+    },
+    subtitle: {
+      [theme.breakpoints.down('xs')]: {
+        color: theme.palette.text.secondary,
+        fontSize: '10px',
+      },
+    },
   }),
 );
