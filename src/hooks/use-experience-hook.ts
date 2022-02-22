@@ -125,14 +125,20 @@ export const useExperienceHook = () => {
   };
 
   const removeExperience = (experienceId: string, callback?: () => void) => {
-    dispatch(deleteExperience(experienceId, callback));
+    dispatch(
+      deleteExperience(experienceId, () => {
+        dispatch(fetchUserExperience());
+
+        callback && callback();
+      }),
+    );
   };
 
   const beUnsubscribeExperience = (experienceId: string, callback?: () => void) => {
-    console.log('beUnsubscribeExperience', experienceId);
     dispatch(
       unsubscribeExperience(experienceId, () => {
         dispatch(fetchUserExperience());
+        callback && callback();
       }),
     );
   };
