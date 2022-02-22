@@ -23,21 +23,38 @@ export enum NotificationType {
   USER_BANNED = 'user_banned',
 }
 
-export interface AdditionalReferenceIdItem {
-  postId: string;
-  firstCommentId: string;
-  secondCommentId: string;
+export type UserReference = {
   id: string;
+  name: string;
   username: string;
-  displayName: string;
-  peopleId: string;
-  peopleName: string;
-  peoplePlatftorm: string;
-  peopleUsername: string;
+};
+
+export type CommentReference = {
+  id: string;
+  postId: string;
+  user: UserReference;
+};
+
+export type PostReference = {
+  id: string;
+  user: UserReference;
+};
+
+export type SocialMediaReference = {
+  name: string;
+  platform: string;
+  username: string;
+};
+
+export interface AdditionalReferenceIdItem {
+  comment?: CommentReference;
+  user?: UserReference;
+  post?: PostReference;
+  people?: SocialMediaReference;
 }
 
 export type NotificationProps = {
-  additionalReferenceId?: AdditionalReferenceIdItem[];
+  additionalReferenceId?: AdditionalReferenceIdItem;
   referenceId?: string;
   type: NotificationType;
   read: boolean;
