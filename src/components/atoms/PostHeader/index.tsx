@@ -136,6 +136,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
   return (
     <>
       <CardHeader
+        classes={{root: style.headerRoot}}
         className={style.header}
         disableTypography
         avatar={
@@ -151,7 +152,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
           />
         }
         title={
-          <Typography variant="h5" onClick={openContentProfileUrl} style={{cursor: 'pointer'}}>
+          <Typography variant="h5" onClick={openContentProfileUrl} className={style.title}>
             {post.platform === 'myriad' ? post.user?.name : (post.people?.name as string)}
           </Typography>
         }
@@ -175,7 +176,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
               disableRipple={true}
               disableFocusRipple={true}
               disableTouchRipple>
-              <SvgIcon component={DotsVerticalIcon} viewBox="0 0 20 20" />
+              <SvgIcon component={DotsVerticalIcon} viewBox="0 0 20 20" className={style.icon} />
             </IconButton>
           ) : null
         }

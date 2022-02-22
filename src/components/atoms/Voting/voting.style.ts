@@ -28,6 +28,9 @@ export const useStyles = makeStyles<Theme, VotingStyleProp>(theme =>
     },
     fill: {
       fill: 'none',
+      [theme.breakpoints.down('xs')]: {
+        color: '#404040',
+      },
     },
     red: {
       color: 'red',
