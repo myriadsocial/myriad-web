@@ -17,11 +17,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import {withStyles} from '@material-ui/core/styles';
 
-import {useStyles, TableCell} from '.';
+import {useStyles, TableCell, StyledTooltip} from '.';
 import {BalanceDetail} from '../../interfaces/balance';
 import {RootState} from '../../reducers';
 import {TimelineState} from '../../reducers/timeline/reducer';
@@ -43,12 +41,6 @@ type SendTipProps = {
     profilePictureURL: string;
   };
 };
-
-const StyledTooltip = withStyles({
-  tooltipPlacementRight: {
-    margin: '50px 0px 0px -1.5px',
-  },
-})(Tooltip);
 
 //TODO: split this component into sub-components
 export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tippedUserId}) => {
