@@ -5,12 +5,14 @@ import {useRouter} from 'next/router';
 
 import {RichTextComponent} from '.';
 import {PostCreateContainer} from '../PostCreate';
+import {useStyles} from './richtext.style';
 
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const RichTextContainer: React.FC = () => {
   const router = useRouter();
+  const style = useStyles();
 
   const {user, alias, anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
@@ -29,7 +31,7 @@ export const RichTextContainer: React.FC = () => {
   if (anonymous) return null;
 
   return (
-    <>
+    <div className={style.box}>
       <RichTextComponent
         userProfilePict={user?.profilePictureURL || ''}
         onOpenCreatePost={handleOpenCreatePost}
@@ -38,6 +40,6 @@ export const RichTextContainer: React.FC = () => {
       />
 
       <PostCreateContainer open={createPostOpened} onClose={handleCloseCreatePost} />
-    </>
+    </div>
   );
 };

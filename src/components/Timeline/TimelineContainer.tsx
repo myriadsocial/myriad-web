@@ -13,6 +13,7 @@ import {TimelineFilterContainer} from '../TimelineFilter';
 import {TipHistoryContainer} from '../TipHistory';
 import {Modal} from '../atoms/Modal';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
+import {useStyles} from './Timeline.styles';
 import {useTimelineFilter} from './hooks/use-timeline-filter.hook';
 import {useTimelineHook} from './hooks/use-timeline.hook';
 
@@ -42,7 +43,7 @@ type TimelineContainerProps = {
 
 export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const {filters, fetchInitial = true} = props;
-
+  const style = useStyles();
   const dispatch = useDispatch();
   const {posts, hasMore, loading, nextPage, getTippedUserId} = useTimelineHook();
   const {filterTimeline} = useTimelineFilter(filters);
@@ -183,7 +184,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   };
 
   return (
-    <>
+    <div className={style.box}>
       <Grid container justifyContent="space-between" alignItems="center">
         <TimelineFilterContainer {...props} />
       </Grid>
@@ -294,6 +295,6 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
           </Button>
         </div>
       </PromptComponent>
-    </>
+    </div>
   );
 };

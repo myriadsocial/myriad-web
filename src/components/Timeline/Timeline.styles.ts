@@ -7,5 +7,10 @@ export const useStyles = makeStyles((theme: Theme) =>
         marginBottom: theme.spacing(1.5),
       },
     },
+    box: {
+      [theme.breakpoints.down('xs')]: {
+        padding: '0px 20px',
+      },
+    },
   }),
 );

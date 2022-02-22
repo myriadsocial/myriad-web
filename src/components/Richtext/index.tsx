@@ -30,7 +30,7 @@ export const RichTextComponent: React.FC<Props> = props => {
             src={userProfilePict}
             variant="circular"
             sizes="lg"
-            style={{width: 50, height: 50}}>
+            className={style.avatar}>
             {acronym(name || alias || '')}
           </Avatar>
           <TextareaAutosize

@@ -12,6 +12,8 @@ import ShowIf from '../../common/show-if.component';
 import {useStyles} from './DropdownMenu.styles';
 import {MenuOptions} from './DropdownMenu.types';
 
+import {SortIcon} from 'src/components/atoms/Icons';
+
 type DropdownMenuProps = {
   title: string;
   options: MenuOptions<string>[];
@@ -54,7 +56,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
 
   return (
     <div className={styles.root}>
-      <Grid container justifyContent="space-between">
+      <Grid container justifyContent="space-between" className={styles.content}>
         <div>
           <Typography component="span" color="textSecondary">
             <ShowIf condition={title.length > 0}>{title}:&nbsp;</ShowIf>
@@ -72,6 +74,9 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
           <SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />
         </IconButton>
       </Grid>
+      <IconButton onClick={handleClick} color="primary" aria-label="expand" className={styles.sort}>
+        <SortIcon />
+      </IconButton>
 
       <Menu
         anchorEl={anchorEl}

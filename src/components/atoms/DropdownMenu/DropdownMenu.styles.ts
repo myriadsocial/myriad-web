@@ -7,12 +7,24 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2.5),
       marginTop: theme.spacing(2.5),
     },
+    content: {
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
+    },
     selected: {
       fontWeight: 600,
     },
     expand: {
       marginLeft: theme.spacing(1),
       padding: 0,
+    },
+    sort: {
+      display: 'none',
+      padding: '0px 8px',
+      [theme.breakpoints.down('xs')]: {
+        display: 'block',
+      },
     },
   }),
 );
