@@ -30,6 +30,7 @@ type SearchBoxProps = {
 
   onSubmit?: (value: string) => void;
   iconPosition?: 'start' | 'end';
+  hidden?: boolean;
 };
 
 export {SearchBoxColor, searchBoxColors};
