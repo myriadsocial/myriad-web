@@ -36,6 +36,7 @@ export const ProfileExperienceTab: React.FC<ProfileExperienceTabProps> = props =
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
 
   const [isExperienceFiltered, setExperienceFiltered] = useState(false);
+  const [selectedExperienceType, setSelectedExperienceType] = useState<ExperienceType>();
   const isFriend = friendStatus?.status === FriendStatus.APPROVED;
   const isProfileOwner = profile?.id == user?.id;
   const isPrivateProfile = privacy.accountPrivacy == 'private';
@@ -47,7 +48,12 @@ export const ProfileExperienceTab: React.FC<ProfileExperienceTabProps> = props =
   const handleFilterSelected = (selected: string) => {
     dispatch(fetchProfileExperience(selected as ExperienceType));
 
+    setSelectedExperienceType(selected as ExperienceType);
     setExperienceFiltered(true);
+  };
+
+  const refreshSelectedExperience = () => {
+    dispatch(fetchProfileExperience(selectedExperienceType));
   };
 
   if (isPrivateProfile && !isFriend && !isProfileOwner) {
@@ -79,6 +85,7 @@ export const ProfileExperienceTab: React.FC<ProfileExperienceTabProps> = props =
       </Grid>
 
       <ExperienceListContainer
+        refreshExperience={refreshSelectedExperience}
         selectable={false}
         enableClone
         enableSubscribe

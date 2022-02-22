@@ -92,8 +92,10 @@ export const Experience: React.FC<ExperienceProps> = props => {
   };
 
   const handleRemoveExperience = () => {
-    if (onDelete) {
-      onDelete(experienceId);
+    setShowDeleteConfimation(false);
+
+    if (onDelete && userExperienceId) {
+      onDelete(userExperienceId);
     }
   };
 
@@ -107,6 +109,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
   };
 
   const openDeleteConfirmation = () => {
+    handleCloseSettings();
     setShowDeleteConfimation(true);
   };
 
@@ -196,7 +199,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
         icon="danger"
         title="Delete Experience?"
         subtitle="Their posts won't be shown in your timeline anymore and you may or may not be able to see their complete profile. Are you sure?">
-        <Grid container justifyContent="center">
+        <Grid container justifyContent="space-around">
           <Button onClick={handleCancelDelete} size="small" variant="outlined" color="secondary">
             Not now
           </Button>
