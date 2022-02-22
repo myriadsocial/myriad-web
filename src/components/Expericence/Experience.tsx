@@ -129,7 +129,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
               <Typography className={styles.title} variant="body1">
                 {userExperience.experience.name}
               </Typography>
-              <Typography variant="caption" color="primary">
+              <Typography variant="caption" color="primary" className={styles.subtitle}>
                 {userExperience.experience.user.name}
               </Typography>
               <Typography variant="caption" color="textSecondary">
@@ -138,7 +138,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
             </CardContent>
 
             <IconButton aria-label="settings" onClick={handleClickSettings}>
-              <SvgIcon component={DotsVerticalIcon} viewBox="0 0 24 24" />
+              <SvgIcon component={DotsVerticalIcon} viewBox="0 0 24 24" className={styles.icon} />
             </IconButton>
           </Grid>
         </CardActionArea>

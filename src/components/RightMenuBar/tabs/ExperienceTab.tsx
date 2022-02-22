@@ -34,8 +34,8 @@ export const ExperienceTab: React.FC = () => {
   };
 
   return (
-    <div>
-      <Typography variant={'h4'} style={{marginBottom: 12}}>
+    <div className={styles.box}>
+      <Typography variant={'h4'} className={styles.title}>
         Experience
       </Typography>
 
