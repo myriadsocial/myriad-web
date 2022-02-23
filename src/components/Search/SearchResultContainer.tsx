@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 
 import {useRouter} from 'next/router';
 
@@ -10,7 +10,6 @@ import {PostsListContainer} from '../PostsList/PostsListContainer';
 import {useTimelineHook} from '../Timeline/hooks/use-timeline.hook';
 import {UsersListContainer} from '../UsersList/UsersListContainer';
 import {SearchBoxContainer} from '../atoms/Search/SearchBoxContainer';
-import {TabItems} from '../atoms/Tabs';
 import {TabsComponent} from '../atoms/Tabs';
 
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
@@ -65,23 +64,25 @@ export const SearchResultContainer: React.FC = () => {
     }
   }, [searchKeyword, selectedTab]);
 
-  const [searchResultTabTexts] = useState<TabItems<string>[]>([
-    {
-      id: 'posts-tab',
-      title: 'Post',
-      component: <PostsListContainer query={searchKeyword} />,
-    },
-    {
-      id: 'users-tab',
-      title: 'Users',
-      component: <UsersListContainer query={searchKeyword} />,
-    },
-    {
-      id: 'experience-tab',
-      title: 'Experience',
-      component: <SearchExperienceListContainer query={searchKeyword} />,
-    },
-  ]);
+  const searchResultTabTexts = useMemo(() => {
+    return [
+      {
+        id: 'posts-tab',
+        title: 'Post',
+        component: <PostsListContainer query={searchKeyword} />,
+      },
+      {
+        id: 'users-tab',
+        title: 'Users',
+        component: <UsersListContainer query={searchKeyword} />,
+      },
+      {
+        id: 'experience-tab',
+        title: 'Experience',
+        component: <SearchExperienceListContainer query={searchKeyword} />,
+      },
+    ];
+  }, [searchKeyword]);
 
   const handleChangeTab = (currentTab: string) => {
     setSelectedTab(currentTab);
