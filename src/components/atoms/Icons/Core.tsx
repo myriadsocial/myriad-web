@@ -4,6 +4,7 @@ import {SvgIcon, SvgIconProps} from '@material-ui/core';
 
 import ArrowUp from 'src/images/Icons/ArrowUp.svg';
 import DragIndicator from 'src/images/Icons/DragIndicator.svg';
+import Info from 'src/images/Icons/InfoIcon.svg';
 import Sort from 'src/images/Icons/Sort.svg';
 import Upload from 'src/images/Icons/Upload.svg';
 import Magnifier from 'src/images/Icons/magnifierIcon.svg';
@@ -85,4 +86,8 @@ export const SearchIcon: React.FC<IconProps> = props => (
 
 export const SortIcon: React.FC<IconProps> = props => (
   <SvgIcon component={Sort} viewBox="0 0 24 24" {...props} />
+);
+
+export const InfoIcon: React.FC<IconProps> = props => (
+  <SvgIcon component={Info} viewBox="0 0 24 24" style={{width: 15, height: 15}} {...props} />
 );
