@@ -57,7 +57,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 340,
       height: 24,
       left: 0,
-      top: 118,
+      top: 134,
 
       background: theme.palette.secondary.main,
     },

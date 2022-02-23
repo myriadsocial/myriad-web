@@ -7,6 +7,9 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import MaterialUILink from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,7 +19,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles, TableCell} from '.';
+import {useStyles, TableCell, StyledTooltip} from '.';
 import {BalanceDetail} from '../../interfaces/balance';
 import {RootState} from '../../reducers';
 import {TimelineState} from '../../reducers/timeline/reducer';
@@ -26,6 +29,7 @@ import {Button, ButtonVariant} from '../atoms/Button';
 import {CurrencyOptionComponent} from '../atoms/CurrencyOption';
 import {ListItemComponent} from '../atoms/ListItem';
 
+import {InfoIcon} from 'src/components/atoms/Icons';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
@@ -193,7 +197,39 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
       {tippedUser && (
         <>
           <div className={classes.subHeaderSection}>
-            <Typography className={classes.subHeader}>Balance</Typography>
+            <Grid container spacing={1} style={{alignItems: 'center'}}>
+              <Grid item>
+                <Typography className={classes.subHeader}>Balance</Typography>
+              </Grid>
+              <Grid item>
+                <StyledTooltip
+                  PopperProps={{keepMounted: true}}
+                  interactive
+                  placement="right"
+                  disableFocusListener
+                  disableTouchListener
+                  enterDelay={500}
+                  leaveDelay={1500}
+                  title={
+                    <Typography>
+                      If the receiver's balance is below the existential deposit after the tipping
+                      was done, the account will be reaped.{' '}
+                      <MaterialUILink
+                        color="secondary"
+                        variant="inherit"
+                        target="_blank"
+                        href="https://support.polkadot.network/support/solutions/articles/65000168651-what-is-the-existential-deposit-"
+                        rel="noopener noreferrer">
+                        Read more
+                      </MaterialUILink>
+                    </Typography>
+                  }>
+                  <IconButton style={{backgroundColor: 'transparent'}}>
+                    <InfoIcon />
+                  </IconButton>
+                </StyledTooltip>
+              </Grid>
+            </Grid>
             <ListItemComponent
               avatar={selectedCurrency.image}
               title={selectedCurrency.id}
