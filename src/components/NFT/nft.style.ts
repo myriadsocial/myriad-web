@@ -2,6 +2,11 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    root: {
+      [theme.breakpoints.down('xs')]: {
+        padding: '0px 20px',
+      },
+    },
     mb: {
       marginBottom: 10,
     },
@@ -14,6 +19,11 @@ export const useStyles = makeStyles((theme: Theme) =>
 
       [theme.breakpoints.down('md')]: {
         minWidth: 590,
+      },
+
+      [theme.breakpoints.down('xs')]: {
+        minWidth: 0,
+        borderRadius: 10,
       },
     },
     text: {

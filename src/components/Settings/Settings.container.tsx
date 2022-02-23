@@ -5,6 +5,7 @@ import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
 import {Settings as SettingsComponent} from './Settings';
+import {useStyles} from './Settings.styles';
 import {SettingsType} from './hooks/use-setting-list.hook';
 
 import {RootState} from 'src/reducers';
@@ -13,6 +14,7 @@ import {ConfigState} from 'src/reducers/config/reducer';
 const {publicRuntimeConfig} = getConfig();
 
 export const SettingsContainer: React.FC = () => {
+  const style = useStyles();
   const router = useRouter();
 
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
@@ -47,11 +49,13 @@ export const SettingsContainer: React.FC = () => {
   };
 
   return (
-    <SettingsComponent
-      value={settings}
-      selectedType={currentSection}
-      onChange={handleChangeSection}
-      onSaveSetting={console.log}
-    />
+    <div className={style.mobile}>
+      <SettingsComponent
+        value={settings}
+        selectedType={currentSection}
+        onChange={handleChangeSection}
+        onSaveSetting={console.log}
+      />
+    </div>
   );
 };
