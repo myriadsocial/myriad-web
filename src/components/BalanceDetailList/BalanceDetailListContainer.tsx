@@ -64,3 +64,5 @@ export const BalanceDetailListContainer: React.FC = () => {
     </NoSsr>
   );
 };
+
+export default BalanceDetailListContainer;

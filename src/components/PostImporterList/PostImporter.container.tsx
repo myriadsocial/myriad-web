@@ -15,3 +15,5 @@ export const PostImporterContainer: React.FC<Props> = props => {
 
   return <PostImporter open={isOpen} post={post} onClose={onClose} />;
 };
+
+export default PostImporterContainer;

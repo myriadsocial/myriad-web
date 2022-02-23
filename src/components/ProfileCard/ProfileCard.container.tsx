@@ -121,3 +121,5 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
     </>
   );
 };
+
+export default ProfileCardContainer;

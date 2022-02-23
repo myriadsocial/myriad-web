@@ -7,7 +7,6 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
-import {OnBoardingContainer} from 'src/components/Mobile/OnBoardingView/OnBoardingView.container';
 import AlertComponent from 'src/components/atoms/Alert/Alert.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {LoginLayout} from 'src/components/template/Login';
@@ -18,6 +17,12 @@ import i18n from 'src/locale';
 const Login = dynamic(() => import('src/components/Login/Login'), {
   ssr: false,
 });
+const OnBoardingContainer = dynamic(
+  () => import('src/components/Mobile/OnBoardingView/OnBoardingView.container'),
+  {
+    ssr: false,
+  },
+);
 
 const {publicRuntimeConfig} = getConfig();
 

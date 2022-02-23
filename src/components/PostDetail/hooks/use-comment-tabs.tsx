@@ -1,9 +1,15 @@
 import React, {useMemo, useState} from 'react';
 
-import {CommentListContainer} from 'src/components/CommentList';
+import dynamic from 'next/dynamic';
+
 import {Comment} from 'src/interfaces/comment';
 import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
+
+const CommentListContainer = dynamic(
+  () => import('src/components/CommentList/CommentList.container'),
+  {ssr: false},
+);
 
 export type CommentTabs = 'discussion' | 'debate';
 

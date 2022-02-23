@@ -1,31 +1,17 @@
 import React from 'react';
-import ReactPlayer from 'react-player';
 
-import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
+import {Grid, Paper} from '@material-ui/core';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      overflow: 'hidden',
-      backgroundColor: theme.palette.background.paper,
-    },
-    gridList: {},
-  }),
-);
+import ReactPlayer from 'react-player/lazy';
 
 type VideoProps = {
   url: string;
 };
 
 export const Video: React.FC<VideoProps> = ({url}) => {
-  const style = useStyles();
-
   return (
-    <div className={style.root}>
+    <Grid container wrap="wrap" justifyContent="space-around" component={Paper}>
       <ReactPlayer url={url} controls={true} playing={false} stopOnUnmount={true} />
-    </div>
+    </Grid>
   );
 };

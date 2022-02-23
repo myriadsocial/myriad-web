@@ -24,3 +24,5 @@ export const OnBoardingContainer: React.FC = () => {
     </>
   );
 };
+
+export default OnBoardingContainer;

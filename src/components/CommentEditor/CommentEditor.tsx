@@ -243,3 +243,5 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
     </Grid>
   );
 };
+
+export default CommentEditor;

@@ -54,3 +54,5 @@ export const TipHistoryContainer: React.FC<TipHistoryContainerProps> = props => 
     />
   );
 };
+
+export default TipHistoryContainer;
