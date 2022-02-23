@@ -36,6 +36,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingLeft: props => (props.paddingLeft === 0 ? theme.spacing(0) : theme.spacing(3.75)),
     // @ts-ignore
     paddingRight: props => props.paddingRight ?? theme.spacing(3.75),
+
+    [theme.breakpoints.down('xs')]: {
+      borderRadius: () => 10,
+    },
   },
   header: {
     marginBottom: 14,

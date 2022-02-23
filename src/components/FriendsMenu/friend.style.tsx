@@ -13,6 +13,9 @@ export const useStyles = makeStyles<Theme, FriendStyleProps>(theme =>
     },
     search: {
       padding: '0px 24px',
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
     },
     list: {
       padding: '20px',
