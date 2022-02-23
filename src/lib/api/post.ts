@@ -28,9 +28,7 @@ export const getPost = async (
   asFriend = false,
   sort: TimelineSortType = 'DESC',
 ): Promise<PostList> => {
-  const where: LoopbackWhere<PostProps> = {
-    deletedAt: {exists: false},
-  };
+  const where: LoopbackWhere<PostProps> = {};
 
   if (filters && filters.people && filters.people.length) {
     const condition = {
@@ -70,9 +68,7 @@ export const getPost = async (
       },
     ];
 
-    if (userId === filters.owner) {
-      delete where.deletedAt;
-    } else {
+    if (userId !== filters.owner) {
       // filter only public post if no friend status provided
       if (asFriend) {
         where.visibility = {
@@ -92,9 +88,7 @@ export const getPost = async (
       inq: [filters.importer],
     };
 
-    if (userId === filters.importer) {
-      delete where.deletedAt;
-    } else {
+    if (userId !== filters.importer) {
       // filter only public post if no friend status provided
       if (asFriend) {
         where.visibility = {
@@ -150,6 +144,8 @@ export const getPost = async (
       params.experienceId = filters?.experienceId;
       break;
     default:
+      filterParams.where = where;
+
       if (!filters?.importer && !filters?.owner && (!filters?.tags || filters.tags?.length === 0)) {
         params.timelineType = TimelineType.ALL;
       }
