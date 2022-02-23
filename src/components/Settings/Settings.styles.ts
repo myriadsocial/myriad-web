@@ -37,5 +37,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       left: 0,
       padding: '0px 30px',
     },
+    mobile: {
+      [theme.breakpoints.down('xs')]: {
+        padding: '0px 20px',
+      },
+    },
   }),
 );
