@@ -20,3 +20,5 @@ export const TrendingTab: React.FC = () => {
     </div>
   );
 };
+
+export default TrendingTab;

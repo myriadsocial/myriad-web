@@ -1,23 +1,24 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
+import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
 import {Typography} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 
-import {Experience, WrappedExperience} from '../../interfaces/experience';
-import {People} from '../../interfaces/people';
-import {SocialsEnum} from '../../interfaces/social';
-import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {useStyles} from './experience.style';
 
 import {ListItemPeopleComponent} from 'src/components/atoms/ListItem/ListItemPeople';
 import {acronym} from 'src/helpers/string';
-import {useAuthHook} from 'src/hooks/auth.hook';
+import {Experience, WrappedExperience} from 'src/interfaces/experience';
+import {People} from 'src/interfaces/people';
+import {SocialsEnum} from 'src/interfaces/social';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
+
+const ExperienceSignInDialog = dynamic(() => import('./ExperienceSignIn'), {ssr: false});
 
 type Props = {
   experience: Experience;
@@ -32,7 +33,6 @@ type Props = {
 export const ExperiencePreview: React.FC<Props> = props => {
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
   const {experience, userExperiences, onSubscribe, onUnsubscribe, onFollow, onUpdate} = props;
-  const {logout} = useAuthHook();
   const style = useStyles();
   const router = useRouter();
   const [promptSignin, setPromptSignin] = React.useState(false);
@@ -175,41 +175,9 @@ export const ExperiencePreview: React.FC<Props> = props => {
         </Button>
       )}
 
-      <PromptComponent
-        title={'Start your Experience!'}
-        subtitle={'When you join Myriad, you can create, subscribe, or clone \n an experience.'}
-        open={promptSignin}
-        icon="warning"
-        onCancel={() => {
-          setPromptSignin(false);
-        }}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}>
-          <Button
-            size="small"
-            variant="outlined"
-            color="secondary"
-            style={{marginRight: '12px'}}
-            onClick={() => {
-              setPromptSignin(false);
-            }}>
-            Back
-          </Button>
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              setPromptSignin(false);
-              logout();
-            }}>
-            Sign in
-          </Button>
-        </div>
-      </PromptComponent>
+      <ExperienceSignInDialog open={promptSignin} onClose={() => setPromptSignin(false)} />
     </div>
   );
 };
+
+export default ExperiencePreview;

@@ -391,3 +391,5 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
     </Paper>
   );
 };
+
+export default SendTip;

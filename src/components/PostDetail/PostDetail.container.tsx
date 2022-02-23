@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
 import {Button} from '@material-ui/core';
@@ -9,12 +10,9 @@ import Typography from '@material-ui/core/Typography';
 
 import {PostDetail} from './PostDetail';
 
-import {PostImporterContainer} from 'src/components/PostImporterList';
 import {PostVisibilityContainer} from 'src/components/PostVisibility';
-import {ReportContainer} from 'src/components/Report';
 import {SendTipContainer} from 'src/components/SendTip';
 import {useTimelineHook} from 'src/components/Timeline/hooks/use-timeline.hook';
-import {TipHistoryContainer} from 'src/components/TipHistory';
 import {Modal} from 'src/components/atoms/Modal';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
@@ -35,21 +33,29 @@ type PostDetailContainerProps = {
   expanded?: boolean;
 };
 
+const ReportContainer = dynamic(() => import('../Report/Report.container'), {ssr: false});
+const TipHistoryContainer = dynamic(() => import('../TipHistory/TipHistory.container'), {
+  ssr: false,
+});
+const PostImporterContainer = dynamic(() => import('../PostImporterList/PostImporter.container'), {
+  ssr: false,
+});
+
 export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => {
   const {type = 'default', expanded = true} = props;
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const [visibility, setVisibility] = useState<Post | null>(null);
-  const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
 
   const {post, getTippedUserId} = useTimelineHook();
-  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
   const {openTipHistory} = useTipHistory();
-
   const {openToasterSnack} = useToasterSnackHook();
 
+  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
+
+  const [visibility, setVisibility] = useState<Post | null>(null);
+  const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
   const [tippedPost, setTippedPost] = useState<Post | null>(null);
   const [tippedComment, setTippedComment] = useState<Comment | null>(null);
   const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | Comment | null>(
@@ -177,7 +183,7 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
   if (!post) return null;
 
   return (
-    <div>
+    <>
       <PostDetail
         user={user}
         key={`post-${post.id}`}
@@ -205,6 +211,11 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
         subtitle="Find this user insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
+
+      <TipHistoryContainer onSendTip={handleSendTip} />
+      <ReportContainer reference={reported} onClose={closeReportPost} />
+      <PostImporterContainer post={importedPost} onClose={closeImportedPost} />
+      <PostVisibilityContainer reference={visibility} onClose={closePostVisibility} />
 
       <PromptComponent
         icon={'success'}
@@ -253,12 +264,6 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
         </div>
       </PromptComponent>
 
-      <TipHistoryContainer onSendTip={handleSendTip} />
-
-      <ReportContainer reference={reported} onClose={closeReportPost} />
-      <PostImporterContainer post={importedPost} onClose={closeImportedPost} />
-      <PostVisibilityContainer reference={visibility} onClose={closePostVisibility} />
-
       <PromptComponent
         title={'Remove Post'}
         subtitle={`Are you sure to remove this post?`}
@@ -283,6 +288,6 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
           </Button>
         </div>
       </PromptComponent>
-    </div>
+    </>
   );
 };

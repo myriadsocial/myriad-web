@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+import dynamic from 'next/dynamic';
+
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import {CommentEditor} from '../CommentEditor/CommentEditor';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {CommentList} from './CommentList';
 
@@ -29,6 +30,8 @@ import {downvote, removeVote, upvote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {setTippedUser, setTippedUserId} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
+
+const CommentEditor = dynamic(() => import('../CommentEditor/CommentEditor'), {ssr: false});
 
 type CommentListContainerProps = {
   referenceId: string;

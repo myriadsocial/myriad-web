@@ -31,3 +31,5 @@ export const ReportContainer: React.FC<ReportContainerProps> = props => {
     <Report open={isOpen} reference={reference} onClose={onClose} onConfirm={handleConfirmReport} />
   );
 };
+
+export default ReportContainer;

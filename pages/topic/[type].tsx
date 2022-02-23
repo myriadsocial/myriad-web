@@ -53,6 +53,7 @@ const Topic: React.FC<TopicPageProps> = ({experience}) => {
       <Head>
         <title>{i18n.t('Topics.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
+
       <TopNavbarComponent
         description={type === 'hashtag' ? 'Topics' : 'Experience'}
         sectionTitle={

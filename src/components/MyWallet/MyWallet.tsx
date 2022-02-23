@@ -1,13 +1,26 @@
 import React, {useState, useEffect} from 'react';
 
+import dynamic from 'next/dynamic';
+
 import {MyWalletProps} from '.';
-import {BalanceDetailListContainer} from '../BalanceDetailList/BalanceDetailListContainer';
-import {HistoryDetailListContainer} from '../HistoryDetailList/HistoryDetailListContainer';
 import {BoxComponent} from '../atoms/Box';
 import {TabsComponent} from '../atoms/Tabs';
 import {useStyles} from './myWallet.style';
 
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
+
+const BalanceDetailListContainer = dynamic(
+  () => import('../BalanceDetailList/BalanceDetailListContainer'),
+  {
+    ssr: false,
+  },
+);
+const HistoryDetailListContainer = dynamic(
+  () => import('../HistoryDetailList/HistoryDetailListContainer'),
+  {
+    ssr: false,
+  },
+);
 
 export const MyWallet: React.FC<MyWalletProps> = props => {
   const {headerTitle} = props;

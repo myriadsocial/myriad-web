@@ -1,8 +1,9 @@
 import * as React from 'react';
-import ReactPlayer from 'react-player';
 
 import {useStyles} from './MediaEmbedElement.styles';
 import {MediaEmbedElementProps} from './MediaEmbedElement.types';
+
+import ReactPlayer from 'react-player/lazy';
 
 export const MediaEmbedElement = (props: MediaEmbedElementProps) => {
   const {attributes, children, element} = props;
@@ -12,7 +13,7 @@ export const MediaEmbedElement = (props: MediaEmbedElementProps) => {
 
   return (
     <div {...attributes} className={styles.root}>
-      <ReactPlayer url={url} controls={true} height="315px" />
+      <ReactPlayer url={url} controls={true} playing={false} stopOnUnmount={true} height="315px" />
       {children}
     </div>
   );

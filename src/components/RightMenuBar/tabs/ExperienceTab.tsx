@@ -58,3 +58,5 @@ export const ExperienceTab: React.FC = () => {
     </div>
   );
 };
+
+export default ExperienceTab;
