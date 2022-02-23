@@ -4,17 +4,13 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '../NFT/nft.style';
 
-import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import SocialTokenIllustration from 'src/images/illustration/Social_Token_Isometric_1.svg';
 
 const SocialTokenContainer: React.FC = () => {
   const style = useStyles();
 
   return (
-    <div>
-      <div className={style.mb}>
-        <TopNavbarComponent description={'Underway'} sectionTitle={SectionTitle.SOCIAL_TOKEN} />
-      </div>
+    <div className={style.root}>
       <div className={style.emptyUser}>
         <div className={style.illustration}>
           <SocialTokenIllustration />
