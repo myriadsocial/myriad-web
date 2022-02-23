@@ -2,6 +2,7 @@ import {ChevronLeftIcon} from '@heroicons/react/outline';
 
 import React, {useState, useEffect} from 'react';
 
+import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
 import {IconButton} from '@material-ui/core';
@@ -11,7 +12,9 @@ import Typography from '@material-ui/core/Typography';
 
 import {TopNavbarProps, SectionTitle, useStyles} from '.';
 
-import {MenuDrawerComponent} from 'src/components/Mobile/MenuDrawer/MenuDrawer';
+const MenuDrawerComponent = dynamic(() => import('src/components/Mobile/MenuDrawer/MenuDrawer'), {
+  ssr: false,
+});
 
 export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
   const {sectionTitle, description, type = 'back'} = props;

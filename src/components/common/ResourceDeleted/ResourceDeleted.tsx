@@ -36,3 +36,5 @@ export const ResourceDeleted: React.FC = () => {
     </div>
   );
 };
+
+export default ResourceDeleted;

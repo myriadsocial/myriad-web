@@ -1,16 +1,30 @@
 import React, {useState, useEffect} from 'react';
 
+import dynamic from 'next/dynamic';
+
 import {MyWalletProps} from '.';
-import {BalanceDetailListContainer} from '../BalanceDetailList/BalanceDetailListContainer';
-import {HistoryDetailListContainer} from '../HistoryDetailList/HistoryDetailListContainer';
 import {BoxComponent} from '../atoms/Box';
 import {TabsComponent} from '../atoms/Tabs';
+import {useStyles} from './myWallet.style';
 
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 
+const BalanceDetailListContainer = dynamic(
+  () => import('../BalanceDetailList/BalanceDetailListContainer'),
+  {
+    ssr: false,
+  },
+);
+const HistoryDetailListContainer = dynamic(
+  () => import('../HistoryDetailList/HistoryDetailListContainer'),
+  {
+    ssr: false,
+  },
+);
+
 export const MyWallet: React.FC<MyWalletProps> = props => {
   const {headerTitle} = props;
-
+  const style = useStyles();
   const {query} = useQueryParams();
 
   const [tabTexts] = useState([
@@ -41,21 +55,21 @@ export const MyWallet: React.FC<MyWalletProps> = props => {
   };
 
   return (
-    <BoxComponent
-      isWithChevronRightIcon={false}
-      title={headerTitle}
-      isFitContent={true}
-      minWidth={583}
-      onClick={handleClick}>
-      <TabsComponent
-        active={activeTabId}
-        tabs={tabTexts}
-        position={'space-around'}
-        mark="underline"
-        size="small"
-        onChangeTab={handleChangeTab}
-        padding={0}
-      />
+    <BoxComponent isWithChevronRightIcon={false} title={headerTitle} onClick={handleClick}>
+      <div className={style.tabsComponent}>
+        <TabsComponent
+          active={activeTabId}
+          tabs={tabTexts}
+          position={'space-around'}
+          mark="underline"
+          size="small"
+          onChangeTab={handleChangeTab}
+          padding={0}
+        />
+      </div>
+      <div className={style.mobile}>
+        <BalanceDetailListContainer />
+      </div>
     </BoxComponent>
   );
 };
