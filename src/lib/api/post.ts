@@ -150,8 +150,6 @@ export const getPost = async (
       params.experienceId = filters?.experienceId;
       break;
     default:
-      filterParams.where = where;
-
       if (!filters?.importer && !filters?.owner && (!filters?.tags || filters.tags?.length === 0)) {
         params.timelineType = TimelineType.ALL;
       }
