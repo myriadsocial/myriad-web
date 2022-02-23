@@ -88,26 +88,9 @@ const PostPage: React.FC<PostPageProps> = props => {
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {req} = context;
-  const {headers} = req;
   const dispatch = store.dispatch as ThunkDispatchAction;
   const params = context.params as PostPageParams;
   let showAsDeleted = false;
-
-  if (typeof window === 'undefined' && headers['user-agent']) {
-    const UAParser = eval('require("ua-parser-js")');
-    const parser = new UAParser();
-    const device = parser.setUA(headers['user-agent']).getDevice();
-
-    if (device.type === 'mobile') {
-      return {
-        redirect: {
-          destination: '/mobile',
-          permanent: false,
-          headers,
-        },
-      };
-    }
-  }
 
   const available = await healthcheck();
 
