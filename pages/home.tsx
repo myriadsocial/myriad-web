@@ -1,22 +1,18 @@
-import React from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
 
-import {getSession, useSession} from 'next-auth/client';
+import {getSession} from 'next-auth/client';
 import getConfig from 'next/config';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
-import {Button, Typography} from '@material-ui/core';
-
-import {RichTextContainer} from '../src/components/Richtext/RichTextContainer';
-import {TimelineContainer} from '../src/components/Timeline/TimelineContainer';
-import {PromptComponent} from '../src/components/atoms/Prompt/prompt.component';
-import {SearchBoxContainer} from '../src/components/atoms/Search/SearchBoxContainer';
-import {DefaultLayout} from '../src/components/template/Default/DefaultLayout';
-
 import {NavbarComponent} from 'src/components/Mobile/Navbar/Navbar';
+import {RichTextContainer} from 'src/components/Richtext/RichTextContainer';
+import {TimelineContainer} from 'src/components/Timeline/TimelineContainer';
 import Banner from 'src/components/atoms/BannerStatus/BannerStatus';
-import {useAuthHook} from 'src/hooks/auth.hook';
+import {SearchBoxContainer} from 'src/components/atoms/Search/SearchBoxContainer';
+import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
@@ -26,7 +22,6 @@ import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
-import {clearUser} from 'src/reducers/user/actions';
 import {
   setAnonymous,
   fetchConnectedSocials,
@@ -39,15 +34,22 @@ import {ThunkDispatchAction} from 'src/types/thunk';
 
 const {publicRuntimeConfig} = getConfig();
 
+const BannedDialog = dynamic(() => import('src/components/BannedDialog/BannedDialog'), {
+  ssr: false,
+});
+
 const Home: React.FC = () => {
-  const dispatch = useDispatch();
   const router = useRouter();
-  const [session] = useSession();
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {logout} = useAuthHook();
-  const [dialogBanned, setDialogBanned] = React.useState({
+  const [dialogBanned, setDialogBanned] = useState({
     open: false,
   });
+
+  useEffect(() => {
+    if (user?.deletedAt) {
+      setDialogBanned({...dialogBanned, open: true});
+    }
+  }, [user]);
 
   const performSearch = (query: string) => {
     const DELAY = 100;
@@ -66,28 +68,6 @@ const Home: React.FC = () => {
     }, DELAY);
   };
 
-  React.useEffect(() => {
-    if (user?.deletedAt) {
-      setDialogBanned({...dialogBanned, open: true});
-    }
-  }, [user]);
-
-  const handleSignOut = async () => {
-    if (session) {
-      logout();
-    } else {
-      dispatch(clearUser());
-      await router.push(`/`);
-    }
-  };
-
-  const openContactUs = () => {
-    window.open(
-      `mailto:${publicRuntimeConfig.myriadSupportMail}?subject=Complain user banned!`,
-      '_blank',
-    );
-  };
-
   return (
     <DefaultLayout isOnProfilePage={false}>
       <Head>
@@ -101,46 +81,10 @@ const Home: React.FC = () => {
       <RichTextContainer />
       <TimelineContainer filterType="type" selectionType="order" />
 
-      <PromptComponent
-        title={i18n.t('Home.Prompt_Banned.Title')}
-        subtitle={
-          <Typography component="span">
-            <Typography component="span">{i18n.t('Home.Prompt_Banned.Subtitle_1')}</Typography>
-            <Typography
-              component="span"
-              style={{cursor: 'pointer'}}
-              color="primary"
-              onClick={openContactUs}>
-              {i18n.t('Home.Prompt_Banned.Subtitle_2')}
-            </Typography>
-            <Typography component="span">{i18n.t('Home.Prompt_Banned.Subtitle_3')}</Typography>
-          </Typography>
-        }
+      <BannedDialog
         open={dialogBanned.open}
-        icon="warning"
-        onCancel={() => {
-          setDialogBanned({...dialogBanned, open: false});
-          handleSignOut();
-          openContactUs();
-        }}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}>
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              setDialogBanned({...dialogBanned, open: false});
-              handleSignOut();
-              openContactUs();
-            }}>
-            {i18n.t('General.OK')}
-          </Button>
-        </div>
-      </PromptComponent>
+        onClose={() => setDialogBanned({...dialogBanned, open: false})}
+      />
     </DefaultLayout>
   );
 };
@@ -179,7 +123,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   if (anonymous || !userId) {
     const username = session?.user.name as string;
-
     await dispatch(setAnonymous(username));
   } else {
     await dispatch(fetchUser(userId));

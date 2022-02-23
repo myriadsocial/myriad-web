@@ -149,3 +149,5 @@ export const MenuDrawerComponent: React.FC = () => {
     </>
   );
 };
+
+export default MenuDrawerComponent;

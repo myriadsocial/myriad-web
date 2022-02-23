@@ -53,6 +53,7 @@ const Home: React.FC = () => {
       <TopNavbarComponent
         sectionTitle={SectionTitle.WALLET}
         description={`${countNumberOfCryptoAssets()} Crypto Assets`}
+        type={'menu'}
       />
       <MyWalletContainerWithoutSSR />
     </DefaultLayout>
@@ -61,25 +62,8 @@ const Home: React.FC = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {req} = context;
-  const {headers} = req;
 
   const dispatch = store.dispatch as ThunkDispatchAction;
-
-  if (typeof window === 'undefined' && headers['user-agent']) {
-    const UAParser = eval('require("ua-parser-js")');
-    const parser = new UAParser();
-    const device = parser.setUA(headers['user-agent']).getDevice();
-
-    if (device.type === 'mobile') {
-      return {
-        redirect: {
-          destination: '/mobile',
-          permanent: false,
-          headers,
-        },
-      };
-    }
-  }
 
   const available = await healthcheck();
 

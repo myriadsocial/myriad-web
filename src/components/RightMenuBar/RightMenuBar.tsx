@@ -2,10 +2,13 @@ import {ChatAlt2Icon, HashtagIcon, VariableIcon} from '@heroicons/react/outline'
 
 import React from 'react';
 
+import dynamic from 'next/dynamic';
+
 import {TabsComponent} from '../atoms/Tabs';
 import {useStyles} from './RightMenuBar.styles';
-import {ExperienceTab} from './tabs/ExperienceTab';
-import {TrendingTab} from './tabs/TrendingTab';
+
+const ExperienceTab = dynamic(() => import('./tabs/ExperienceTab'));
+const TrendingTab = dynamic(() => import('./tabs/TrendingTab'));
 
 export const RightMenuBar: React.FC = () => {
   const iconTabs = [

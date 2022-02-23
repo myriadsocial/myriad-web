@@ -10,7 +10,6 @@ import useStyles from './DefaultLayout.styles';
 import {withError, WithErrorProps} from 'src/components/Error';
 import {MenuContainer} from 'src/components/Menu';
 import {NotificationsContainer} from 'src/components/Notifications';
-import {ProfileCardContainer} from 'src/components/ProfileCard';
 import {RightMenuBar} from 'src/components/RightMenuBar/RightMenuBar';
 import {SocialMediaListContainer} from 'src/components/SocialMediaList';
 import ShowIf from 'src/components/common/show-if.component';
@@ -21,6 +20,13 @@ import {countNewNotification, processNotification} from 'src/reducers/notificati
 
 const WalletBalancesContainer = dynamic(
   () => import('../../WalletBalance/WalletBalanceContainer'),
+  {
+    ssr: false,
+  },
+);
+
+const ProfileCardContainer = dynamic(
+  () => import('src/components/ProfileCard/ProfileCard.container'),
   {
     ssr: false,
   },

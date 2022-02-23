@@ -34,3 +34,5 @@ export const HistoryDetailListContainer: React.FC = () => {
     />
   );
 };
+
+export default HistoryDetailListContainer;

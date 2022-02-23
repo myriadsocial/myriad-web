@@ -42,11 +42,23 @@ export const FriendMenuComponent: React.FC = () => {
   };
 
   return (
-    <Paper className={style.root}>
-      <Typography className={style.title} color="textPrimary">
-        Friends
-      </Typography>
-      <TabsComponent tabs={tabs} active={activeTab} size={'small'} onChangeTab={handleChangeTab} />
-    </Paper>
+    <div className={style.padding}>
+      <Paper className={style.root}>
+        <Typography className={style.title} color="textPrimary">
+          Friends
+        </Typography>
+        <div className={style.tabs}>
+          <TabsComponent
+            tabs={tabs}
+            active={activeTab}
+            size={'small'}
+            onChangeTab={handleChangeTab}
+          />
+        </div>
+        <div className={style.mobile}>
+          <FriendListContainer user={user} disableFilter disableSort />
+        </div>
+      </Paper>
+    </div>
   );
 };
