@@ -5,6 +5,7 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 
 import SocialTokenContainer from 'src/components/SocialToken/SocialToken.container';
+import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
@@ -29,32 +30,19 @@ const SocialToken: React.FC = () => {
       <Head>
         <title>{i18n.t('SocialToken.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
+      <TopNavbarComponent
+        description={'Underway'}
+        sectionTitle={SectionTitle.SOCIAL_TOKEN}
+        type={'menu'}
+      />
+
       <SocialTokenContainer />
     </DefaultLayout>
   );
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const {req} = context;
-  const {headers} = req;
-
   const dispatch = store.dispatch as ThunkDispatchAction;
-
-  if (typeof window === 'undefined' && headers['user-agent']) {
-    const UAParser = eval('require("ua-parser-js")');
-    const parser = new UAParser();
-    const device = parser.setUA(headers['user-agent']).getDevice();
-
-    if (device.type === 'mobile') {
-      return {
-        redirect: {
-          destination: '/mobile',
-          permanent: false,
-          headers,
-        },
-      };
-    }
-  }
 
   const available = await healthcheck();
 
