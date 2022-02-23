@@ -29,6 +29,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'flex-start',
       alignItems: 'center',
       marginTop: theme.spacing(1),
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
     },
     refreshIcon: {
       paddingRight: 0,
@@ -46,6 +49,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'space-between',
       columnGap: theme.spacing(2.875),
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
     },
     loading: {
       display: 'flex',
