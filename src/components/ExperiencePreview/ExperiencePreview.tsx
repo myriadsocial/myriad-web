@@ -151,7 +151,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
           <Button
             variant="outlined"
             color="secondary"
-            style={{marginRight: '12px'}}
+            className={style.clone}
             onClick={handleCloneExperience}>
             Clone
           </Button>
