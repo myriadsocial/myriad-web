@@ -22,6 +22,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderRadius: 10,
     },
     list: {
+      marginTop: 12,
+
       '& > *': {
         marginBottom: theme.spacing(1.5),
       },

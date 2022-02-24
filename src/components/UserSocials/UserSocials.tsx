@@ -67,7 +67,7 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
 
   if (socials.length === 0) {
     return (
-      <div style={{marginTop: '27px'}}>
+      <div style={{marginTop: 30}}>
         <Empty
           title="Nothing to see here!"
           subtitle="This user hasn't connected to any social media yet."

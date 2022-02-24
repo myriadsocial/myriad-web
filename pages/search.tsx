@@ -43,6 +43,7 @@ const Search: React.FC<SearchProps> = () => {
       <Head>
         <title>{i18n.t('Search.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
+
       <SearchResultContainer />
     </DefaultLayout>
   );
