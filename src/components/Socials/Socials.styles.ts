@@ -7,6 +7,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: 30,
       borderTopLeftRadius: 10,
       borderTopRightRadius: 10,
+      [theme.breakpoints.down('xs')]: {
+        borderRadius: 10,
+      },
     },
     header: {
       display: 'flex',
@@ -123,6 +126,11 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     m1: {
       marginRight: theme.spacing(1.5),
+    },
+    box: {
+      [theme.breakpoints.down('xs')]: {
+        padding: '0px 20px',
+      },
     },
   }),
 );

@@ -39,6 +39,7 @@ const Socials: React.FC = () => {
       <TopNavbarComponent
         description={`${socials.length} account connected`}
         sectionTitle={SectionTitle.SOCIAL_MEDIA}
+        type={'menu'}
       />
 
       <SocialsContainer />
