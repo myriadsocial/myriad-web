@@ -116,10 +116,11 @@ export const useExperienceHook = () => {
     dispatch(createExperience(experience, newTags, callback));
   };
 
-  const beSubscribeExperience = (experienceId: string) => {
+  const beSubscribeExperience = (experienceId: string, callback?: () => void) => {
     dispatch(
       subscribeExperience(experienceId, () => {
         dispatch(fetchUserExperience());
+        callback && callback();
       }),
     );
   };

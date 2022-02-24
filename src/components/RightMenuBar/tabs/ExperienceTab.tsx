@@ -50,7 +50,7 @@ export const ExperienceTab: React.FC = () => {
         </Typography>
       </ShowIf>
 
-      <ExperienceListContainer selectable owner={ExperienceOwner.CURRENT_USER} />
+      <ExperienceListContainer selectable owner={ExperienceOwner.CURRENT_USER} filterTimeline />
 
       <ShowIf condition={experiences.length === 0}>
         <EmptyExperience />
