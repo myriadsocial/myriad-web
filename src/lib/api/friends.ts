@@ -53,8 +53,11 @@ export const getFriends = async (userId: string, page = 1): Promise<FriendList> 
       pageLimit: PAGINATION_LIMIT,
       filter: {
         where: {
-          or: [{requestorId: userId}],
+          requestorId: userId,
           status: FriendStatus.APPROVED,
+          deletedAt: {
+            $exists: false,
+          },
         },
         include: ['requestee', 'requestor'],
         order: `createdAt DESC`,
