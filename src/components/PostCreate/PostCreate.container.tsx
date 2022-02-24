@@ -5,16 +5,15 @@ import dynamic from 'next/dynamic';
 
 import {Button} from '@material-ui/core';
 
-import {useFriendList} from '../FriendsMenu/hooks/use-friend-list.hook';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 
 import {debounce} from 'lodash';
 import {useUpload} from 'src/hooks/use-upload.hook';
 import {Post} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
-import {fetchFriend, searchFriend} from 'src/reducers/friend/actions';
-import {FriendState} from 'src/reducers/friend/reducer';
+import {loadUsers, searchUsers} from 'src/reducers/search/actions';
 import {createPost, importPost} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -30,23 +29,23 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
 
   const dispatch = useDispatch();
   const {progress, uploadImage, uploadVideo} = useUpload();
-  const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
+
+  const people = useSelector<RootState, User[]>(state => state.searchState.searchedUsers);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {friendList: mentionable} = useFriendList(friends, user);
   const [dialogFailedImport, setDialogFailedImport] = useState({
     open: false,
     message: '',
   });
 
   useEffect(() => {
-    if (user && friends.length === 0) {
-      dispatch(fetchFriend());
+    if (user && people.length === 0) {
+      dispatch(loadUsers());
     }
   }, [dispatch, user]);
 
   const handleSearchPeople = debounce((query: string) => {
     if (user) {
-      dispatch(searchFriend(user, query));
+      dispatch(searchUsers(query));
     }
   }, 300);
 
@@ -108,7 +107,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     <>
       <PostCreate
         open={open}
-        people={mentionable}
+        people={people}
         uploadProgress={progress}
         onClose={onClose}
         onSubmit={submitPost}
