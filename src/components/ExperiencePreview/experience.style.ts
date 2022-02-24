@@ -20,6 +20,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     experienceName: {
       fontSize: '18px',
       fontWeight: 700,
+      wordBreak: 'break-all',
     },
     subtitle: {
       fontSize: '16px',
@@ -27,7 +28,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: '12px',
     },
     mb: {
-      marginBottom: '10px',
+      marginBottom: theme.spacing(1),
     },
     mb30: {
       marginBottom: '30px',
@@ -64,9 +65,26 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'space-between',
       marginTop: '60px',
+      [theme.breakpoints.down('xs')]: {
+        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItem: 'center',
+      },
+    },
+    clone: {
+      marginRight: theme.spacing(1.5),
+      [theme.breakpoints.down('xs')]: {
+        marginRight: 0,
+        marginBottom: theme.spacing(1.5),
+      },
     },
     center: {
       marginTop: '60px',
+    },
+    box: {
+      [theme.breakpoints.down('xs')]: {
+        padding: '0px 20px',
+      },
     },
   }),
 );
