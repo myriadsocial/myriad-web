@@ -8,13 +8,9 @@ import {setIsTipSent, setFee} from '../reducers/wallet/actions';
 import {WalletState} from '../reducers/wallet/reducer';
 
 import _ from 'lodash';
-import {useAlertHook} from 'src/hooks/use-alert.hook';
-import {useTipSummaryHook} from 'src/hooks/use-tip-summary.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
-import {SendTipProps} from 'src/interfaces/send-tips/send-tips';
-import {ContentType} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
 import {estimateFee, signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
@@ -32,8 +28,6 @@ export const usePolkadotApi = () => {
   );
   const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
 
-  const {showAlert, showTipAlert} = useAlertHook();
-  const {openTipSummaryForComment} = useTipSummaryHook();
   const {openToasterSnack} = useToasterSnackHook();
 
   const [loading, setLoading] = useState(false);
@@ -46,98 +40,6 @@ export const usePolkadotApi = () => {
       dispatch(fetchBalances());
     }
   }, [anonymous, currencies, balanceDetails]);
-
-  // TODO: remove only if simplerSendTip works!
-  const sendTip = async (
-    {
-      from,
-      to,
-      value,
-      decimals,
-      currencyId,
-      referenceId,
-      contentType,
-      wsAddress,
-      native,
-    }: SendTipProps,
-    callback?: () => void,
-  ) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      setSignerLoading(true);
-
-      const txHash = await signAndSendExtrinsic(
-        {
-          from,
-          to,
-          value,
-          currencyId,
-          wsAddress,
-          native,
-        },
-        params => {
-          if (params.signerOpened) {
-            setSignerLoading(false);
-          }
-        },
-      );
-
-      if (_.isEmpty(txHash)) {
-        throw {
-          message: 'Cancelled',
-        };
-      }
-
-      if (txHash) {
-        const correctedValue = value / 10 ** decimals;
-
-        if (contentType === ContentType.POST) {
-          // Record the transaction
-          await storeTransaction({
-            hash: txHash,
-            amount: correctedValue,
-            from,
-            to,
-            currencyId: currencyId,
-          });
-        } else if (contentType === ContentType.COMMENT) {
-          await storeTransaction({
-            hash: txHash,
-            amount: correctedValue,
-            type: ContentType.COMMENT,
-            referenceId,
-            from,
-            to,
-            currencyId: currencyId,
-          });
-          openTipSummaryForComment();
-        }
-        // TODO: change to toaster
-        showTipAlert({
-          severity: 'success',
-          title: 'Tip sent!',
-          message: `${txHash}`,
-        });
-
-        callback && callback();
-      }
-    } catch (error) {
-      if (error.message === 'Cancelled') {
-        setError(error.message);
-        // TODO: change to toaster
-        showAlert({
-          severity: 'warning',
-          title: 'Aborted!',
-          message: 'Transaction signing cancelled',
-        });
-      }
-    } finally {
-      setLoading(false);
-      setSignerLoading(false);
-    }
-  };
 
   const getEstimatedFee = async (from: string, to: string, selectedCurrency: BalanceDetail) => {
     try {
@@ -255,7 +157,6 @@ export const usePolkadotApi = () => {
     isSignerLoading,
     isFetchingFee,
     error,
-    sendTip,
     simplerSendTip,
     getEstimatedFee,
   };
