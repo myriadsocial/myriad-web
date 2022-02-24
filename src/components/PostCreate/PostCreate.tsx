@@ -6,7 +6,6 @@ import {Button} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
-import {FriendDetail} from '../FriendsMenu/hooks/use-friend-list.hook';
 import {NSFWTags} from '../NSFWTags';
 import {PostEditor, serialize, formatToString, hasMedia, deserialize} from '../PostEditor';
 import {PostImport} from '../PostImport';
@@ -18,11 +17,12 @@ import {menuOptions} from './default';
 
 import ShowIf from 'src/components/common/show-if.component';
 import {Post, PostVisibility} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
 
 type PostCreateProps = {
   url?: string;
   open: boolean;
-  people: FriendDetail[];
+  people: User[];
   uploadProgress: number;
   onClose: () => void;
   onSubmit: (
@@ -149,7 +149,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           mentionable={people.map(item => ({
             value: item.id,
             name: item.name,
-            avatar: item.avatar,
+            avatar: item.profilePictureURL,
           }))}
           uploadProgress={uploadProgress}
           onChange={handlePostTextChange}

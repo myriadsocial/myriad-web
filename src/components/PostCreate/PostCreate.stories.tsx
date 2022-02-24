@@ -4,6 +4,8 @@ import React from 'react';
 
 import {PostCreate as PostCreateComponent} from './PostCreate';
 
+import {CurrencyId} from 'src/interfaces/currency';
+
 export default {
   title: 'UI Revamp v2.0/components/Post Create',
   component: PostCreateComponent,
@@ -21,10 +23,16 @@ PostCreate.args = {
   onSubmit: console.log,
   people: [
     {
-      id: '60efac8c565ab8004ed28ba6',
-      name: 'Elon Musk',
-      avatar: 'https://pbs.twimg.com/profile_images/1383184766959120385/MM9DHPWC_400x400.jpg',
-      username: 'elonmusk',
+      defaultCurrency: CurrencyId.AUSD,
+      id: '0x76e85125c8a6997e5e40e5e1f0a64a8154b5c69308e54b426ad3a34af1545b1d',
+      name: 'Test user',
+      profilePictureURL:
+        'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
+      bio: 'Test User',
+      fcmTokens: [],
+      createdAt: new Date('2021-07-15T03:40:23.000Z'),
+      updatedAt: new Date('2021-09-03T06:46:39.000Z'),
+      currencies: [],
     },
   ],
 };
