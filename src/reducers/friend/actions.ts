@@ -3,9 +3,11 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import axios from 'axios';
+import {Action} from 'redux';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
+import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interface';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -23,16 +25,38 @@ export interface FilterFriend extends PaginationAction {
   filter: string;
 }
 
+export interface ClearFriend extends Action {
+  type: constants.CLEAR_FRIEND;
+}
+
+export interface UpdateFriendsPagination extends Action {
+  type: constants.SET_FRIENDS_FILTER;
+  params: PaginationParams;
+}
+
 /**
  * Union Action Types
  */
 
-export type Actions = LoadFriends | FilterFriend | BaseAction;
+export type Actions =
+  | LoadFriends
+  | FilterFriend
+  | UpdateFriendsPagination
+  | ClearFriend
+  | BaseAction;
 
 /**
  *
  * Actions
  */
+export const updateFriendParams = (params: PaginationParams): UpdateFriendsPagination => ({
+  type: constants.SET_FRIENDS_FILTER,
+  params,
+});
+
+export const clearFriend = (): ClearFriend => ({
+  type: constants.CLEAR_FRIEND,
+});
 
 /**
  * Action Creator
@@ -53,7 +77,7 @@ export const fetchFriend: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const {meta, data: friends} = await FriendAPI.getFriends(currentUser.id, page);
+      const {meta, data: friends} = await FriendAPI.getFriends(currentUser.id, {page});
 
       dispatch({
         type: constants.FETCH_FRIEND,
@@ -72,15 +96,18 @@ export const fetchFriend: ThunkActionCreator<Actions, RootState> =
   };
 
 export const searchFriend: ThunkActionCreator<Actions, RootState> =
-  (user: User, query: string) => async (dispatch, getState) => {
+  (query: string, page?: number) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
-      const {meta, data: friends} = await FriendAPI.searchFriend(user.id, query);
+      const {meta, data: friends} = await FriendAPI.searchFriend({query}, {page});
 
       dispatch({
         type: constants.FILTER_FRIEND,
-        friends,
+        friends: friends.map(friend => ({
+          ...friend,
+          totalMutual: friend.mutual,
+        })),
         meta,
         filter: query,
       });

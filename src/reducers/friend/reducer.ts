@@ -4,17 +4,20 @@ import * as constants from './constants';
 
 import * as Redux from 'redux';
 import {Friend} from 'src/interfaces/friend';
+import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interface';
 
 export interface FriendState extends BasePaginationState {
   friends: Friend[];
   hasMore: boolean;
   filter?: string;
+  params?: PaginationParams;
 }
 
 const initalState: FriendState = {
   loading: false,
   friends: [],
   hasMore: false,
+
   meta: {
     currentPage: 1,
     itemsPerPage: 10,
@@ -45,7 +48,20 @@ export const FriendReducer: Redux.Reducer<FriendState, Actions> = (state = inita
       return {
         ...state,
         friends: action.friends,
+        meta: action.meta,
+        filter: action.filter,
       };
+    }
+
+    case constants.SET_FRIENDS_FILTER: {
+      return {
+        ...state,
+        params: action.params,
+      };
+    }
+
+    case constants.CLEAR_FRIEND: {
+      return initalState;
     }
 
     default: {

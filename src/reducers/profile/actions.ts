@@ -9,6 +9,7 @@ import {Friend} from 'src/interfaces/friend';
 import {SocialMedia} from 'src/interfaces/social';
 import {BlockedProps, User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
+import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interface';
 import * as SocialAPI from 'src/lib/api/social';
 import * as UserAPI from 'src/lib/api/user';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -52,6 +53,11 @@ export interface ClearProfileFriendedStatus extends Action {
   type: constants.CLEAR_FRIENDED_STATUS;
 }
 
+export interface UpdateProfileFriendsPagination extends Action {
+  type: constants.SET_PROFILE_FRIENDS_FILTER;
+  params: PaginationParams;
+}
+
 /**
  * Union Action Types
  */
@@ -63,6 +69,7 @@ export type Actions =
   | FetchConnectedSocials
   | FetchProfileExperience
   | SetProfileFriendedStatus
+  | UpdateProfileFriendsPagination
   | ClearProfileFriendedStatus
   | BaseAction;
 
@@ -73,6 +80,13 @@ export type Actions =
 export const setProfile = (profile: User & BlockedProps): FetchProfileDetail => ({
   type: constants.FETCH_PROFILE_DETAIL,
   detail: profile,
+});
+
+export const updateProfileFriendParams = (
+  params: PaginationParams,
+): UpdateProfileFriendsPagination => ({
+  type: constants.SET_PROFILE_FRIENDS_FILTER,
+  params,
 });
 
 /**
@@ -98,19 +112,21 @@ export const fetchProfileDetail: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchProfileFriend: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
+  (page = 1) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
+    const {
+      profileState: {
+        detail,
+        friends: {params},
+      },
+    } = getState();
+
+    if (!detail) return;
+
     try {
-      const {
-        profileState: {detail},
-      } = getState();
-
-      if (!detail) {
-        throw new Error('User not found');
-      }
-
-      const {data: friends, meta} = await FriendAPI.getFriends(detail.id);
+      const {data: friends, meta} = await FriendAPI.getFriends(detail.id, {...params, page});
 
       dispatch({
         type: constants.FETCH_PROFILE_FRIEND,
@@ -129,11 +145,27 @@ export const fetchProfileFriend: ThunkActionCreator<Actions, RootState> =
   };
 
 export const searchProfileFriend: ThunkActionCreator<Actions, RootState> =
-  (userId: string, query: string) => async dispatch => {
+  (query: string, page = 1) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
+    const {
+      profileState: {
+        detail,
+        friends: {params},
+      },
+    } = getState();
+
+    if (!detail) return;
+
     try {
-      const {data: friends, meta} = await FriendAPI.searchFriend(userId, query);
+      const filter = {
+        query,
+        userId: detail.id,
+      };
+
+      const {data: friends, meta} = await FriendAPI.searchFriend(filter, {...params, page});
+
       dispatch({
         type: constants.FILTER_PROFILE_FRIEND,
         friends,

@@ -15,6 +15,7 @@ export type FriendProps = {
 };
 
 export interface Friend extends FriendProps, BaseModel {
+  mutual?: number;
   requestee: User;
   requestor: User;
 }
