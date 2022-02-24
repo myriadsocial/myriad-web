@@ -9,6 +9,7 @@ import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
 import {useFilterOption} from '../TimelineFilter/hooks/use-filter-option.hook';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {Loading} from '../atoms/Loading';
+import {useStyles} from './PostsList.styles';
 
 import _ from 'lodash';
 import {Comment} from 'src/interfaces/comment';
@@ -49,7 +50,7 @@ export const PostsList: React.FC<PostsListProps> = props => {
     onRemoveVote,
     onImporters,
   } = props;
-
+  const style = useStyles();
   const {orderOptions} = useFilterOption();
 
   const [defaultPosts, setDefaultPosts] = useState<Post[]>([]);
@@ -90,13 +91,16 @@ export const PostsList: React.FC<PostsListProps> = props => {
 
   return (
     <>
-      <Grid container alignItems="center" justifyContent="flex-end">
-        <DropdownMenu
-          title="Sort by"
-          selected="created"
-          options={orderOptions}
-          onChange={handleSort}
-        />
+      <Grid container alignItems="center" justifyContent="flex-end" className={style.root}>
+        <div className={style.sort}>
+          <DropdownMenu
+            title="Sort by"
+            selected="created"
+            options={orderOptions}
+            onChange={handleSort}
+          />
+        </div>
+        <div className={style.box} />
       </Grid>
 
       <InfiniteScroll

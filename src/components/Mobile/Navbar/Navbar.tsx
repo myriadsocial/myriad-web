@@ -3,6 +3,8 @@ import {SearchIcon} from '@heroicons/react/solid';
 
 import React from 'react';
 
+import {useRouter} from 'next/router';
+
 import {SvgIcon, Grid} from '@material-ui/core';
 
 import {MenuDrawerComponent} from 'src/components/Mobile/MenuDrawer/MenuDrawer';
@@ -15,13 +17,22 @@ type SearchBoxContainerProps = {
   onSubmitSearch?: (args: string) => void;
   iconPosition?: 'start' | 'end';
   outlined?: boolean;
+  searched?: boolean;
 };
 
-export const NavbarComponent: React.FC<SearchBoxContainerProps> = ({onSubmitSearch}) => {
-  const [isSearch, setIsSearch] = React.useState(false);
+export const NavbarComponent: React.FC<SearchBoxContainerProps> = ({
+  onSubmitSearch,
+  searched = false,
+}) => {
+  const router = useRouter();
+  const [isSearch, setIsSearch] = React.useState(searched);
 
   const toggleOpenSearch = () => {
-    setIsSearch(!isSearch);
+    if (router.pathname === '/search') {
+      router.push('/home', undefined, {shallow: true});
+    } else {
+      setIsSearch(!isSearch);
+    }
   };
   const style = useStyles();
   return (

@@ -12,6 +12,7 @@ import {UsersListContainer} from '../UsersList/UsersListContainer';
 import {SearchBoxContainer} from '../atoms/Search/SearchBoxContainer';
 import {TabsComponent} from '../atoms/Tabs';
 
+import {NavbarComponent} from 'src/components/Mobile/Navbar/Navbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {useSearchHook} from 'src/hooks/use-search.hooks';
 
@@ -22,6 +23,9 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '14px',
       color: theme.palette.text.secondary,
       alignSelf: 'start',
+    },
+    box: {
+      padding: '0px 20px',
     },
   }),
 );
@@ -107,28 +111,31 @@ export const SearchResultContainer: React.FC = () => {
 
   return (
     <>
-      <SearchBoxContainer onSubmitSearch={onSubmitSearch} />
-      <Typography className={style.text}>
-        Search results for &quot;
-        <Typography variant="inherit" color="primary">
-          {searchKeyword}
+      <NavbarComponent onSubmitSearch={onSubmitSearch} searched={true} />
+      <SearchBoxContainer onSubmitSearch={onSubmitSearch} hidden={true} />
+      <div className={style.box}>
+        <Typography className={style.text}>
+          Search results for &quot;
+          <Typography variant="inherit" color="primary">
+            {searchKeyword}
+          </Typography>
+          &quot; :
         </Typography>
-        &quot; :
-      </Typography>
-      <TabsComponent
-        id="scrollable-users-list"
-        active={searchResultTabTexts[0].id}
-        tabs={searchResultTabTexts}
-        mark="underline"
-        background={selectedTab === 'users-tab' ? 'white' : 'transparent'}
-        position="left"
-        size="medium"
-        padding={selectedTab === 'experience-tab' || selectedTab === 'users-tab' ? 0 : 3.75}
-        borderRadius={10}
-        paddingLeft={selectedTab === 'users-tab' || selectedTab === 'experience-tab' ? 0 : 30}
-        paddingRight={selectedTab === 'users-tab' || selectedTab === 'experience-tab' ? 0 : 30}
-        onChangeTab={handleChangeTab}
-      />
+        <TabsComponent
+          id="scrollable-users-list"
+          active={searchResultTabTexts[0].id}
+          tabs={searchResultTabTexts}
+          mark="underline"
+          background={selectedTab === 'users-tab' ? 'white' : 'transparent'}
+          position="left"
+          size="medium"
+          padding={selectedTab === 'experience-tab' || selectedTab === 'users-tab' ? 0 : 3.75}
+          borderRadius={10}
+          paddingLeft={selectedTab === 'users-tab' || selectedTab === 'experience-tab' ? 0 : 30}
+          paddingRight={selectedTab === 'users-tab' || selectedTab === 'experience-tab' ? 0 : 30}
+          onChangeTab={handleChangeTab}
+        />
+      </div>
     </>
   );
 };
