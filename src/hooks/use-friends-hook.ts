@@ -27,7 +27,7 @@ export const useFriendsHook = (user?: User) => {
   const {load: loadBlockedUsers} = useBlockList(user);
 
   const filter = useSelector<RootState, string | undefined>(state => state.friendState.filter);
-  const {currentPage: currentFriendPage} = useSelector<RootState, ListMeta>(
+  const {currentPage: currentFriendPage, totalPageCount} = useSelector<RootState, ListMeta>(
     state => state.friendState.meta,
   );
   const {currentPage: currentFriendRequestPage} = useSelector<RootState, ListMeta>(
@@ -131,6 +131,7 @@ export const useFriendsHook = (user?: User) => {
     error,
     loading,
     friended,
+    hasMore: currentFriendPage < totalPageCount,
     loadFriends,
     loadMoreFriends,
     searchFriend: searchFriends,
