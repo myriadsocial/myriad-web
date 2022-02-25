@@ -3,7 +3,6 @@ import React, {useEffect} from 'react';
 import {useRouter} from 'next/router';
 
 import {ExperienceEditor} from '../ExperienceEditor/ExperienceEditor';
-import {useStyles} from './experience.style';
 
 import {debounce} from 'lodash';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
@@ -25,7 +24,6 @@ export const ExperienceEditContainer: React.FC = () => {
   const {uploadImage} = useUpload();
   const router = useRouter();
   const {experienceId} = router.query;
-  const style = useStyles();
 
   useEffect(() => {
     if (experienceId) getExperienceDetail(experienceId);
@@ -53,12 +51,7 @@ export const ExperienceEditContainer: React.FC = () => {
 
   return (
     <>
-      <div className={style.mb}>
-        <TopNavbarComponent
-          description={'Edit Experience'}
-          sectionTitle={SectionTitle.EXPERIENCE}
-        />
-      </div>
+      <TopNavbarComponent description={'Edit Experience'} sectionTitle={SectionTitle.EXPERIENCE} />
       <ExperienceEditor
         type={'Edit'}
         experience={experience}
