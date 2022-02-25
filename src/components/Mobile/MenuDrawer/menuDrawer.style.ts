@@ -6,7 +6,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#F6F7FC',
       position: 'fixed',
       overflow: 'auto',
-      height: '100vh',
+      height: 'calc(var(--vh, 1vh) * 100)',
       width: '284px',
       zIndex: 99999,
       left: 0,

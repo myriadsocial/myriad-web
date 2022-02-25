@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {Grid} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -16,7 +16,7 @@ const useStyles = makeStyles<Theme, MobileLoginViewProps>(theme =>
   createStyles({
     root: {
       background: '#FFF',
-      minHeight: '100vh',
+      minHeight: 'calc(var(--vh, 1vh) * 100)',
       width: '100vw',
       paddingTop: 160,
       paddingBottom: 28,
@@ -56,6 +56,11 @@ const useStyles = makeStyles<Theme, MobileLoginViewProps>(theme =>
 export const MobileLogin: React.FC<MobileLoginViewProps> = props => {
   const {anonymousLogin} = props;
   const style = useStyles({...props});
+
+  useEffect(() => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }, []);
 
   return (
     <Grid
