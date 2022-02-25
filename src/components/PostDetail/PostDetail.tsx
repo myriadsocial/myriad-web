@@ -143,7 +143,12 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
       onSendTip(post);
       const contentType = 'post';
       const referenceId = post.id;
-      dispatch(setTippedContent(contentType, referenceId));
+
+      let isOtherTippingCurrencyDisabled = false;
+
+      if (!('userSocialMedia' in post)) isOtherTippingCurrencyDisabled = true;
+
+      dispatch(setTippedContent(contentType, referenceId, isOtherTippingCurrencyDisabled));
     }
   };
 

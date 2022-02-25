@@ -177,7 +177,10 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     onSendTip(comment);
     const contentType = 'comment';
     const referenceId = comment.id;
-    dispatch(setTippedContent(contentType, referenceId));
+
+    const isOtherTippingCurrencyDisabled = false;
+
+    dispatch(setTippedContent(contentType, referenceId, isOtherTippingCurrencyDisabled));
   };
 
   const handleViewProfile = () => {

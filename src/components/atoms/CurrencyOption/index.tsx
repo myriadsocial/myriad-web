@@ -15,14 +15,16 @@ import {Avatar} from '../Avatar';
 import {useStyles} from './currencyOption.style';
 
 import {debounce} from 'lodash';
+import {CurrencyId} from 'src/interfaces/currency';
 
 type Props = {
   balanceDetails: BalanceDetail[];
   onSelect: (selected: BalanceDetail) => void;
+  isOtherTippingCurrencyDisabled: boolean;
 };
 
 export const CurrencyOptionComponent: React.FC<Props> = props => {
-  const {balanceDetails, onSelect} = props;
+  const {balanceDetails, onSelect, isOtherTippingCurrencyDisabled} = props;
   const [search, setSearch] = useState('');
   const style = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -101,6 +103,7 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
             <MenuItem
               classes={{root: style.hover}}
               key={item.id}
+              disabled={isOtherTippingCurrencyDisabled && item.id !== CurrencyId.MYRIA}
               onClick={() => handleSelect(item)}>
               <div className={style.flex}>
                 <div className={style.tokenColumn}>

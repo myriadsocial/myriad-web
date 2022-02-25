@@ -28,6 +28,7 @@ export interface TimelineState extends BasePaginationState {
   tippedContent: {
     contentType: string;
     referenceId: string;
+    disableOtherTippingCurrencies: boolean;
   };
   walletDetails: WalletDetail[];
   post?: Post;
@@ -46,6 +47,7 @@ const initalState: TimelineState = {
   tippedContent: {
     contentType: '',
     referenceId: '',
+    disableOtherTippingCurrencies: false,
   },
   walletDetails: [],
   meta: {
@@ -336,6 +338,7 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
         tippedContent: {
           contentType: action.contentType,
           referenceId: action.referenceId,
+          disableOtherTippingCurrencies: action.disableOtherTippingCurrencies,
         },
       };
     }

@@ -91,7 +91,12 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
       dispatch(setTippedUser(reference.user.name, reference.user.profilePictureURL ?? ''));
 
       const contentType = 'comment';
-      dispatch(setTippedContent(contentType, reference.id));
+
+      let isOtherTippingCurrencyDisabled = false;
+
+      if (!('userSocialMedia' in reference)) isOtherTippingCurrencyDisabled = true;
+
+      dispatch(setTippedContent(contentType, reference.id, isOtherTippingCurrencyDisabled));
     }
   };
 

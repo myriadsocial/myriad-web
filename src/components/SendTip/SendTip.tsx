@@ -238,6 +238,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                 <CurrencyOptionComponent
                   onSelect={setSelectedCurrency}
                   balanceDetails={balanceDetails}
+                  isOtherTippingCurrencyDisabled={tippedContent.disableOtherTippingCurrencies}
                 />
               }
             />

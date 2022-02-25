@@ -99,7 +99,12 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
       getTippedUserId(reference.id);
 
       const contentType = 'post';
-      dispatch(setTippedContent(contentType, reference.id));
+
+      let isOtherTippingCurrencyDisabled = false;
+
+      if (!('userSocialMedia' in reference)) isOtherTippingCurrencyDisabled = true;
+
+      dispatch(setTippedContent(contentType, reference.id, isOtherTippingCurrencyDisabled));
     }
 
     if (reference && 'section' in reference) {
@@ -109,7 +114,10 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
       dispatch(setTippedUser(reference.user.name, reference.user.profilePictureURL ?? ''));
 
       const contentType = 'comment';
-      dispatch(setTippedContent(contentType, reference.id));
+
+      const isOtherTippingCurrencyDisabled = false;
+
+      dispatch(setTippedContent(contentType, reference.id, isOtherTippingCurrencyDisabled));
     }
   };
 
