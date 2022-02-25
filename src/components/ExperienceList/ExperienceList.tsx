@@ -14,6 +14,7 @@ type ExperienceListProps = {
   experiences: WrappedExperience[];
   isOnHomePage?: boolean;
   user?: User;
+  anonymous?: boolean;
   selectable: boolean;
   viewPostList: (type: TimelineType, experience: Experience) => void;
   onSubscribe?: (experienceId: string) => void;
@@ -27,6 +28,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = props => {
   const {
     experiences,
     user,
+    anonymous = false,
     selectable,
     viewPostList,
     onDelete,
@@ -69,6 +71,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = props => {
         <div key={item.experience.id}>
           <ExperienceCard
             user={user}
+            anonymous={anonymous}
             userExperience={item}
             selected={selected === item.experience.id}
             selectable={selectable}

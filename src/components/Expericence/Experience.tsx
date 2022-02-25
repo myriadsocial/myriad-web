@@ -25,6 +25,7 @@ import {User} from 'src/interfaces/user';
 
 type ExperienceProps = {
   user?: User;
+  anonymous?: boolean;
   userExperience: WrappedExperience;
   selected: boolean;
   selectable: boolean;
@@ -42,6 +43,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
   const {
     userExperience,
     user,
+    anonymous = false,
     selectable,
     onSelect,
     onClone,
@@ -174,11 +176,15 @@ export const Experience: React.FC<ExperienceProps> = props => {
         </ShowIf>
 
         <ShowIf condition={!isOwnExperience}>
-          <MenuItem onClick={handleCloneExperience}>Clone</MenuItem>
+          <MenuItem onClick={handleCloneExperience} disabled={anonymous}>
+            Clone
+          </MenuItem>
         </ShowIf>
 
         <ShowIf condition={!userExperience.subscribed && !isOwnExperience}>
-          <MenuItem onClick={handleSubscribeExperience}>Subscribe</MenuItem>
+          <MenuItem onClick={handleSubscribeExperience} disabled={anonymous}>
+            Subscribe
+          </MenuItem>
         </ShowIf>
 
         <ShowIf condition={Boolean(userExperience.subscribed) && !isOwnExperience}>
