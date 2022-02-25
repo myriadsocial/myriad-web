@@ -30,7 +30,9 @@ export const Website: React.FC<WebsiteProps> = props => {
           viewBox="0 0 24 24"
         />
         <Link className={style.link} href={forceHttps(url ?? '')} rel="noreferrer" target="_blank">
-          <Typography variant="body1">{url?.slice(0, 40)}</Typography>
+          <Typography variant="body1" className={style.website}>
+            {url?.slice(0, 40)}
+          </Typography>
         </Link>
       </ShowIf>
 
@@ -40,7 +42,9 @@ export const Website: React.FC<WebsiteProps> = props => {
         component={CalendarIcon}
         viewBox="0 0 24 24"
       />
-      <Typography variant="body1">{formatDate(joinDate)}</Typography>
+      <Typography variant="body1" className={style.website}>
+        {formatDate(joinDate)}
+      </Typography>
     </Grid>
   );
 };

@@ -194,7 +194,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                   </Tooltip>
                 </ShowIf>
               </Typography>
-              <Typography variant="body1" component="p">
+              <Typography variant="body1" component="p" className={style.username}>
                 @{person.username || 'username'}
               </Typography>
             </div>
@@ -237,14 +237,14 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           </ShowIf>
         </Grid>
 
-        <Typography style={{wordBreak: 'break-all'}} variant="body1">
+        <Typography variant="body1" className={style.bio}>
           {person.bio}
         </Typography>
 
         <Website url={person.websiteURL} joinDate={person.createdAt} />
 
         <Grid container alignItems="flex-end" justifyContent="space-between" className={style.mt15}>
-          <Metric data={person.metric} official={person.username === 'myriad_official'} />
+          <Metric data={person.metric} official={person.username === 'myriad_official'} profile />
 
           <div>
             <ShowIf condition={self && !!user}>

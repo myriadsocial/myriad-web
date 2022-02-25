@@ -12,6 +12,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       top: 0,
       left: 0,
       zIndex: -999,
+      [theme.breakpoints.down('xs')]: {
+        borderRadius: 0,
+      },
     },
     screen: {
       zIndex: -99,
@@ -35,6 +38,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderTopLeftRadius: '10px',
       borderTopRightRadius: '10px',
       color: '#FFFFFF',
+      [theme.breakpoints.down('xs')]: {
+        padding: '20px',
+        minHeight: '229px',
+      },
     },
     avatar: {
       boxSizing: 'border-box',
@@ -43,13 +50,34 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: theme.spacing(10),
       marginRight: '20px',
       fontSize: '30px',
+      [theme.breakpoints.down('xs')]: {
+        marginRight: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+      },
     },
     name: {
       fontSize: '24px',
-      fontWeight: 700,
-      lineHeight: '30px',
+      fontWeight: theme.typography.fontWeightBold,
       letterSpacing: '0em',
       marginBottom: '4px',
+      [theme.breakpoints.down('xs')]: {
+        fontWeight: theme.typography.fontWeightMedium,
+        fontSize: '14px',
+        marginBottom: 0,
+      },
+    },
+    username: {
+      fontSize: '14px',
+      fontWeight: theme.typography.fontWeightLight,
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '12px',
+      },
+    },
+    bio: {
+      wordBreak: 'break-all',
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '14px',
+      },
     },
     solid: {
       fill: 'currentColor',

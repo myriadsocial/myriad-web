@@ -1,6 +1,8 @@
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+import {MetricProps} from './Metric';
+
+export const useStyles = makeStyles<Theme, MetricProps>(theme =>
   createStyles({
     root: {
       width: 240,
@@ -10,7 +12,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '17.57px',
       [theme.breakpoints.down('xs')]: {
         fontWeight: theme.typography.fontWeightRegular,
-        color: '#616161',
+        // color: '#616161',
+        color: props => (props.profile ? '#FFFFFF' : '#616161'),
         fontSize: 12,
       },
     },

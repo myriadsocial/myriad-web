@@ -190,6 +190,9 @@ const theme = createTheme({
       [breakpoints.down(breakpointsValue.lg)]: {
         fontSize: textSm,
       },
+      [breakpoints.down(breakpointsValue.xs)]: {
+        fontSize: textBs,
+      },
     },
     h6: {
       fontSize: textBs,
