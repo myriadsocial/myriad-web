@@ -50,8 +50,10 @@ const PostImporterContainer = dynamic(() => import('../PostImporterList/PostImpo
 
 export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const {filters, fetchInitial = true} = props;
+
   const style = useStyles();
   const dispatch = useDispatch();
+
   const {posts, hasMore, loading, nextPage, getTippedUserId} = useTimelineHook();
   const {filterTimeline} = useTimelineFilter(filters);
   const {query} = useQueryParams();

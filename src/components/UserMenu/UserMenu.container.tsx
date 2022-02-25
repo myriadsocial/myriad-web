@@ -16,5 +16,12 @@ export const UserMenuContainer: React.FC<UserMenuContainerProps> = props => {
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
 
-  return <UserMenu selected="post" anonymous={anonymous} user={user} isMyriad={isMyriad} />;
+  return (
+    <UserMenu
+      selected="post"
+      anonymous={anonymous}
+      user={user}
+      excludes={isMyriad ? ['friend'] : []}
+    />
+  );
 };

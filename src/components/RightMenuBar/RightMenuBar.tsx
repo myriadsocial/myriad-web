@@ -1,6 +1,6 @@
 import {ChatAlt2Icon, HashtagIcon, VariableIcon} from '@heroicons/react/outline';
 
-import React from 'react';
+import React, {useState} from 'react';
 
 import dynamic from 'next/dynamic';
 
@@ -25,20 +25,24 @@ export const RightMenuBar: React.FC = () => {
     {
       id: 'chatTabPanel',
       icon: <ChatAlt2Icon />,
-      component: 'Chat Tab Content',
+      component: null,
+      tooltip: 'Chat feature, coming soon',
+      disabled: true,
     },
   ];
 
   const classes = useStyles();
 
-  const handleChangeTab = () => {
-    console.log('changed tab!');
+  const [activeTab, setActiveTab] = useState('experienceTabMenu');
+
+  const handleChangeTab = (tab: string) => {
+    setActiveTab(tab);
   };
 
   return (
     <div className={classes.root}>
       <TabsComponent
-        active={iconTabs[0].id}
+        active={activeTab}
         tabs={iconTabs}
         position={'left'}
         mark="cover"

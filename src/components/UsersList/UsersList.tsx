@@ -14,18 +14,14 @@ import {LoadingDots} from 'src/components/atoms/Loading/LoadingDots';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      '& .MuiListItem-button:hover': {
-        backgroundColor: alpha('#FFC857', 0.15),
-      },
-    },
-    paperRoot: {
       borderRadius: 10,
-    },
-    list: {
-      marginTop: 12,
-
       '& > *': {
         marginBottom: theme.spacing(1.5),
+      },
+    },
+    list: {
+      '& .MuiListItem-button:hover': {
+        backgroundColor: alpha('#FFC857', 0.15),
       },
     },
     loadMore: {
@@ -62,50 +58,48 @@ export const UsersList: React.FC<UsersListProps> = ({
   const classes = useStyles();
 
   return (
-    <div className={classes.list}>
-      <Paper className={classes.paperRoot}>
-        <List className={classes.root}>
-          {users.length === 0 ? (
-            <EmptyResult emptyContent={EmptyContentEnum.USER} />
-          ) : (
-            <>
-              <div>
-                {users.map(user => (
-                  <UsersListItem
-                    user={user}
-                    key={user.id}
-                    size={AvatarSize.LARGE}
-                    url={`/profile/${user.id}`}
-                  />
-                ))}
-              </div>
-              {hasMore ? (
-                isSearching ? (
-                  <div className={classes.loadMore}>
-                    <CircularProgress size={16} style={{marginRight: 8}} thickness={4} />
-                    <div className={classes.footer}>
-                      <Link component="button" className={classes.link}>
-                        Loading more
-                      </Link>
-                    </div>
-                    <LoadingDots />
+    <Paper className={classes.root}>
+      <List className={classes.list}>
+        {users.length === 0 ? (
+          <EmptyResult emptyContent={EmptyContentEnum.USER} />
+        ) : (
+          <>
+            <div>
+              {users.map(user => (
+                <UsersListItem
+                  user={user}
+                  key={user.id}
+                  size={AvatarSize.LARGE}
+                  url={`/profile/${user.id}`}
+                />
+              ))}
+            </div>
+            {hasMore ? (
+              isSearching ? (
+                <div className={classes.loadMore}>
+                  <CircularProgress size={16} style={{marginRight: 8}} thickness={4} />
+                  <div className={classes.footer}>
+                    <Link component="button" className={classes.link}>
+                      Loading more
+                    </Link>
                   </div>
-                ) : (
-                  <div style={{paddingBottom: 20}}>
-                    <div className={classes.footer}>
-                      <Link component="button" className={classes.link} onClick={loadNextPage}>
-                        Load more
-                      </Link>
-                    </div>
-                  </div>
-                )
+                  <LoadingDots />
+                </div>
               ) : (
-                <></>
-              )}
-            </>
-          )}
-        </List>
-      </Paper>
-    </div>
+                <div style={{paddingBottom: 20}}>
+                  <div className={classes.footer}>
+                    <Link component="button" className={classes.link} onClick={loadNextPage}>
+                      Load more
+                    </Link>
+                  </div>
+                </div>
+              )
+            ) : (
+              <></>
+            )}
+          </>
+        )}
+      </List>
+    </Paper>
   );
 };
