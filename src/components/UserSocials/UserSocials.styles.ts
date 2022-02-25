@@ -2,11 +2,18 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    box: {
+      [theme.breakpoints.down('xs')]: {
+        padding: '0px 20px',
+      },
+    },
     root: {
       marginTop: 12,
       '& .MuiListItem-root:nth-child(even)': {
         background: 'inherit',
       },
+      background: theme.palette.background.paper,
+      borderRadius: '10px',
     },
     list: {
       display: 'flex',
@@ -25,6 +32,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     avatar: {
       height: 56,
       width: 56,
+    },
+    mt30: {
+      marginTop: '30px',
     },
   }),
 );

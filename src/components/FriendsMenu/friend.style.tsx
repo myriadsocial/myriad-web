@@ -1,10 +1,8 @@
 import {alpha, createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-type FriendStyleProps = {
-  type?: 'contained' | 'basic';
-};
+import {FriendListProps} from './FriendList';
 
-export const useStyles = makeStyles<Theme, FriendStyleProps>(theme =>
+export const useStyles = makeStyles<Theme, FriendListProps>(theme =>
   createStyles({
     root: {
       background: 'white',
@@ -94,6 +92,22 @@ export const useStyles = makeStyles<Theme, FriendStyleProps>(theme =>
     },
     danger: {
       color: theme.palette.error.main,
+    },
+    box: {
+      [theme.breakpoints.down('xs')]: {
+        padding: '0px 20px',
+      },
+    },
+    filter: {
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
+    },
+    filterBox: {
+      justifyContent: props => (props.disableFilter ? 'flex-end' : 'space-between'),
+      [theme.breakpoints.down('xs')]: {
+        justifyContent: () => 'flex-end',
+      },
     },
   }),
 );

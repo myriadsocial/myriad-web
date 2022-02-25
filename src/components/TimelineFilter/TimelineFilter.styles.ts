@@ -1,12 +1,19 @@
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+import {TimelineFilterProps} from './TimelineFilter';
+
+export const useStyles = makeStyles<Theme, TimelineFilterProps>(theme =>
   createStyles({
     root: {
-      display: 'flex',
-      alignItems: 'center',
       justifyContent: 'space-between',
+      [theme.breakpoints.down('xs')]: {
+        justifyContent: props => (props.filterType === 'origin' ? 'flex-end' : 'space-between'),
+      },
     },
-    filter: {},
+    mobile: {
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
+    },
   }),
 );

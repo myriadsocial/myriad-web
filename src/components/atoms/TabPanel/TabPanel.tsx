@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Box from '@material-ui/core/Box';
-import {createStyles, makeStyles} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 type TabPanelProps = {
   value: string | number;
@@ -14,14 +14,21 @@ type TabPanelProps = {
   paddingRight?: number;
 };
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles<Theme, TabPanelProps>(theme =>
   createStyles({
-    root: {},
+    root: {
+      background: props => props.background,
+      borderRadius: props => props.borderRadius,
+      paddingLeft: props => props.paddingLeft,
+      paddingRight: props => props.paddingRight,
+      [theme.breakpoints.down('xs')]: {
+        background: () => 'none',
+      },
+    },
   }),
 );
 
 export const TabPanel: React.FC<TabPanelProps> = props => {
-  const styles = useStyles();
   const {
     children,
     value,
@@ -32,6 +39,7 @@ export const TabPanel: React.FC<TabPanelProps> = props => {
     paddingLeft = 0,
     paddingRight = 0,
   } = props;
+  const styles = useStyles({...props, background, borderRadius, paddingLeft, paddingRight});
 
   return (
     <div className={styles.root} hidden={value !== index} role="tabpanel">
@@ -39,7 +47,7 @@ export const TabPanel: React.FC<TabPanelProps> = props => {
         <>{children}</>
       ) : (
         <>
-          <Box p={padding} style={{background, borderRadius, paddingLeft, paddingRight}}>
+          <Box p={padding} className={styles.root}>
             {children}
           </Box>
         </>

@@ -18,6 +18,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('md')]: {
         minWidth: 590,
       },
+      [theme.breakpoints.down('xs')]: {
+        minWidth: 0,
+        width: '100%',
+      },
     },
   }),
 );

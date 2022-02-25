@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {Grid} from '@material-ui/core';
+import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 
 import {PrivateProfile} from '../PrivateProfile';
 
@@ -18,6 +19,22 @@ import {RootState} from 'src/reducers';
 import {fetchProfileExperience} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      justifyContent: 'space-beetween',
+      [theme.breakpoints.down('xs')]: {
+        justifyContent: 'flex-end',
+      },
+    },
+    mobile: {
+      [theme.breakpoints.down('xs')]: {
+        padding: '0px 20px',
+      },
+    },
+  }),
+);
+
 type ProfileExperienceTabProps = {
   type?: ExperienceType;
   user?: User;
@@ -25,7 +42,7 @@ type ProfileExperienceTabProps = {
 
 export const ProfileExperienceTab: React.FC<ProfileExperienceTabProps> = props => {
   const dispatch = useDispatch();
-
+  const style = useStyles();
   const experiences = useSelector<RootState, UserExperience[]>(
     state => state.profileState.experience.data,
   );
@@ -80,15 +97,14 @@ export const ProfileExperienceTab: React.FC<ProfileExperienceTabProps> = props =
   }
 
   return (
-    <>
-      <Grid container alignItems="center" justifyContent="space-between">
+    <div className={style.mobile}>
+      <Grid container alignItems="center" className={style.root}>
         <DropdownMenu
           title="Filter by"
           options={experienceFilterOptions}
           onChange={handleFilterSelected}
         />
       </Grid>
-
       <ExperienceListContainer
         refreshExperience={refreshSelectedExperience}
         selectable={false}
@@ -96,6 +112,6 @@ export const ProfileExperienceTab: React.FC<ProfileExperienceTabProps> = props =
         enableSubscribe
         owner={ExperienceOwner.PROFILE}
       />
-    </>
+    </div>
   );
 };
