@@ -5,11 +5,12 @@ import {useSelector} from 'react-redux';
 import {useRouter} from 'next/router';
 
 import {ExperienceList} from './ExperienceList';
+import {useExperienceList} from './hooks/use-experience-list.hook';
 
 import {Skeleton} from 'src/components/Expericence';
 import {ExperienceOwner, useExperienceHook} from 'src/hooks/use-experience-hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
-import {Experience, WrappedExperience} from 'src/interfaces/experience';
+import {Experience} from 'src/interfaces/experience';
 import {TimelineType} from 'src/interfaces/timeline';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -20,6 +21,7 @@ type ExperienceListContainerProps = {
   enableClone?: boolean;
   enableSubscribe?: boolean;
   hasMore?: boolean;
+  filterTimeline?: boolean;
   loadNextPage?: () => void;
   refreshExperience?: () => void;
 };
@@ -30,6 +32,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     enableClone,
     enableSubscribe,
     hasMore = false,
+    filterTimeline = false,
     loadNextPage,
     refreshExperience,
   } = props;
@@ -38,32 +41,13 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
 
   const router = useRouter();
 
-  const {
-    experiences,
-    userExperiences,
-    profileExperiences,
-    loadExperience,
-    removeExperience,
-    unsubscribeExperience,
-    subscribeExperience,
-  } = useExperienceHook();
+  const {loadExperience, removeExperience, unsubscribeExperience, subscribeExperience} =
+    useExperienceHook();
+  const {list: experiences, limitExceeded} = useExperienceList(owner);
   const {openToasterSnack} = useToasterSnackHook();
 
-  const subscribedExperiencesIds = userExperiences.map(item => item.experience.id);
-  const usedExperiences: WrappedExperience[] =
-    owner === ExperienceOwner.ALL
-      ? experiences.map(experience => ({
-          id: userExperiences.find(item => item.experience.id === experience.id)?.id ?? undefined,
-          subscribed: subscribedExperiencesIds.includes(experience.id),
-          experience,
-        }))
-      : owner === ExperienceOwner.CURRENT_USER
-      ? userExperiences
-      : profileExperiences;
-
   const handleViewPostList = (type: TimelineType, experience: Experience) => {
-    //TODO: don't check route, change to params
-    if (['/home'].includes(router.route)) {
+    if (filterTimeline) {
       router.push(`/home?type=experience&id=${experience.id}`);
     } else {
       router.push(`/topic/experience?id=${experience.id}`);
@@ -79,7 +63,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   const handleCloneExperience = (experienceId: string) => {
     if (!enableClone) return;
 
-    if (userExperiences.length >= 10) {
+    if (limitExceeded) {
       openToasterSnack({
         message: 'You can only add up to 10 experiences max',
         variant: 'warning',
@@ -92,13 +76,15 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   const handleSubscribeExperience = (experienceId: string) => {
     if (!enableSubscribe) return;
 
-    if (userExperiences.length >= 10) {
+    if (limitExceeded) {
       openToasterSnack({
         message: 'You can only add up to 10 experiences max',
         variant: 'warning',
       });
     } else {
-      subscribeExperience(experienceId);
+      subscribeExperience(experienceId, () => {
+        refreshExperience && refreshExperience();
+      });
     }
   };
 
@@ -125,7 +111,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
         onSubscribe={handleSubscribeExperience}
         onClone={handleCloneExperience}
         viewPostList={handleViewPostList}
-        experiences={usedExperiences}
+        experiences={experiences}
         user={user}
         {...props}
       />
