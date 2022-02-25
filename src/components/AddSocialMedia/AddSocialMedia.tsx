@@ -26,7 +26,7 @@ import {SocialsEnum} from 'src/interfaces/social';
 
 type AddSocialMediaProps = Pick<ModalProps, 'onClose' | 'open'> & {
   social: SocialsEnum;
-  publicKey: string;
+  publicKey?: string;
   verifying?: boolean;
   verify: (social: SocialsEnum, profileUrl: string) => void;
 };

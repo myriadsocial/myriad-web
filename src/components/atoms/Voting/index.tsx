@@ -2,6 +2,7 @@ import {ArrowCircleDownIcon} from '@heroicons/react/outline';
 import {ArrowCircleUpIcon} from '@heroicons/react/outline';
 
 import React from 'react';
+import {useSelector} from 'react-redux';
 
 import {Typography} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
@@ -12,6 +13,8 @@ import {useStyles} from './voting.style';
 
 import {debounce} from 'lodash';
 import millify from 'millify';
+import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
+import {RootState} from 'src/reducers';
 
 export const VotingComponent: React.FC<VoteProps> = props => {
   const {
@@ -24,14 +27,25 @@ export const VotingComponent: React.FC<VoteProps> = props => {
     isUpVote,
     disabled = false,
   } = props;
+  const anonymous = useSelector<RootState, boolean>(state => state.userState.anonymous);
+  const [openPromptDrawer, setOpenPromptDrawer] = React.useState(false);
+
   const style = useStyles({variant, size});
 
   const handleUpVote = debounce(() => {
-    onUpvote();
+    if (anonymous) {
+      setOpenPromptDrawer(true);
+    } else {
+      onUpvote();
+    }
   }, 300);
 
   const handleDownVote = debounce(() => {
-    onDownVote();
+    if (anonymous) {
+      setOpenPromptDrawer(true);
+    } else {
+      onDownVote();
+    }
   }, 300);
 
   const formatNumber = (num: number) => {
@@ -40,6 +54,10 @@ export const VotingComponent: React.FC<VoteProps> = props => {
       lowercase: true,
     });
     return vote;
+  };
+
+  const handleCancel = () => {
+    setOpenPromptDrawer(false);
   };
 
   return (
@@ -66,6 +84,12 @@ export const VotingComponent: React.FC<VoteProps> = props => {
           />
         </IconButton>
       </div>
+      <PromptComponent
+        title={'Vote'}
+        subtitle={'You can upvote or downvote on posts and comment.'}
+        open={openPromptDrawer}
+        onCancel={handleCancel}
+      />
     </div>
   );
 };

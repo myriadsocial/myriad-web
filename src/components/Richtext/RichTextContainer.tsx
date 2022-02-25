@@ -7,6 +7,7 @@ import {RichTextComponent} from '.';
 import {PostCreateContainer} from '../PostCreate';
 import {useStyles} from './richtext.style';
 
+import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -17,9 +18,14 @@ export const RichTextContainer: React.FC = () => {
   const {user, alias, anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
   const [createPostOpened, setCreatePostOpened] = useState(false);
+  const [openPromptDrawer, setOpenPromptDrawer] = useState(false);
 
   const handleOpenCreatePost = () => {
-    setCreatePostOpened(true);
+    if (anonymous) {
+      setOpenPromptDrawer(true);
+    } else {
+      setCreatePostOpened(true);
+    }
   };
 
   const handleCloseCreatePost = () => {
@@ -28,7 +34,9 @@ export const RichTextContainer: React.FC = () => {
     router.push('/home', undefined, {shallow: true});
   };
 
-  if (anonymous) return null;
+  const handleCancel = () => {
+    setOpenPromptDrawer(false);
+  };
 
   return (
     <div className={style.box}>
@@ -38,7 +46,14 @@ export const RichTextContainer: React.FC = () => {
         alias={alias}
         name={user?.name}
       />
-
+      <PromptComponent
+        title={'Create or Import Posts'}
+        subtitle={
+          'You can post directly from Myriad or imported post in myriad from other social media platforms'
+        }
+        open={openPromptDrawer}
+        onCancel={handleCancel}
+      />
       <PostCreateContainer open={createPostOpened} onClose={handleCloseCreatePost} />
     </div>
   );

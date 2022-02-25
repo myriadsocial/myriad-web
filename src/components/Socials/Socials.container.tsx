@@ -36,8 +36,6 @@ export const SocialsContainer: React.FC = () => {
     dispatch(setAsPrimary(people.id));
   };
 
-  if (!user) return null;
-
   return (
     <SocialsComponent
       user={user}

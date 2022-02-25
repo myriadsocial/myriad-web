@@ -2,6 +2,7 @@ import React from 'react';
 
 import {Button} from '@material-ui/core';
 
+import {PromptComponent as PromptMobile} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
 
@@ -20,30 +21,38 @@ export const ExperienceSignIn: React.FC<ExperienceSignInProps> = props => {
     logout();
   };
   return (
-    <PromptComponent
-      title={'Start your Experience!'}
-      subtitle={'When you join Myriad, you can create, subscribe, or clone \n an experience.'}
-      open={open}
-      icon="warning"
-      onCancel={onClose}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-        }}>
-        <Button
-          size="small"
-          variant="outlined"
-          color="secondary"
-          style={{marginRight: '12px'}}
-          onClick={onClose}>
-          Back
-        </Button>
-        <Button size="small" variant="contained" color="primary" onClick={handleSignIn}>
-          Sign in
-        </Button>
-      </div>
-    </PromptComponent>
+    <>
+      <PromptMobile
+        title={'Start your Experience!'}
+        subtitle={'When you join Myriad, you can create, subscribe or clone an experience.'}
+        open={open}
+        onCancel={onClose}
+      />
+      <PromptComponent
+        title={'Start your Experience!'}
+        subtitle={'When you join Myriad, you can create, subscribe, or clone \n an experience.'}
+        open={open}
+        icon="warning"
+        onCancel={onClose}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            size="small"
+            variant="outlined"
+            color="secondary"
+            style={{marginRight: '12px'}}
+            onClick={onClose}>
+            Back
+          </Button>
+          <Button size="small" variant="contained" color="primary" onClick={handleSignIn}>
+            Sign in
+          </Button>
+        </div>
+      </PromptComponent>
+    </>
   );
 };
 

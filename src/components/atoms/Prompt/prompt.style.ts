@@ -26,6 +26,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiPaper-rounded': {
         borderRadius: '20px',
       },
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
     },
     content: {
       padding: 0,

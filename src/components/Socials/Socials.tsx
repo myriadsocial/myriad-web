@@ -22,10 +22,11 @@ import {useSocialMediaList} from '../SocialMediaList/use-social-media-list.hook'
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {useStyles} from './Socials.styles';
 
+import {PromptComponent as PromtMobile} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {ListItemSocialComponent} from 'src/components/atoms/ListItem/ListItemSocial';
 
 type SocialsProps = {
-  user: User;
+  user?: User;
   socials: SocialMedia[];
   anonymous?: boolean;
   verifying?: boolean;
@@ -53,6 +54,7 @@ export const Socials: React.FC<SocialsProps> = props => {
   const [removing, setRemoving] = useState(false);
   const [peopleToRemove, setPeopleToRemove] = useState<SocialMedia | null>(null);
   const [addSocial, setAddSocial] = useState(false);
+  const [openPromptDrawer, setOpenPromptDrawer] = useState(false);
   const enabledSocial = [SocialsEnum.TWITTER, SocialsEnum.REDDIT];
 
   useEffect(() => {
@@ -101,7 +103,12 @@ export const Socials: React.FC<SocialsProps> = props => {
   };
 
   const toggleAddSocialMedia = () => {
-    setAddSocial(prevStatus => !prevStatus);
+    if (!user) {
+      setOpenPromptDrawer(true);
+    } else {
+      setOpenPromptDrawer(true);
+      setAddSocial(prevStatus => !prevStatus);
+    }
   };
 
   const verifySocialMedia = (social: SocialsEnum, profileUrl: string) => {
@@ -120,6 +127,10 @@ export const Socials: React.FC<SocialsProps> = props => {
     }
 
     handleClosePrompt();
+  };
+
+  const handleCancel = () => {
+    setOpenPromptDrawer(false);
   };
 
   return (
@@ -184,11 +195,18 @@ export const Socials: React.FC<SocialsProps> = props => {
           </List>
         </div>
 
+        <PromtMobile
+          title={'Connect your Social Media!'}
+          subtitle={'Get rewards by connecting your Twitter or Reddit account.'}
+          open={openPromptDrawer}
+          onCancel={handleCancel}
+        />
+
         <NoSsr>
           <AddSocialMedia
             open={addSocial}
             social={selectedSocial}
-            publicKey={user.id}
+            publicKey={user?.id}
             onClose={toggleAddSocialMedia}
             verifying={verifying}
             verify={verifySocialMedia}
