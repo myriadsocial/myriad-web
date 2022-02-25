@@ -11,21 +11,20 @@ import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import {CommentList} from './CommentList';
 
 import {debounce} from 'lodash';
-import {useFriendList} from 'src/components/FriendsMenu/hooks/use-friend-list.hook';
 import {ReportContainer} from 'src/components/Report';
 import {SendTipContainer} from 'src/components/SendTip';
 import {TipHistoryContainer} from 'src/components/TipHistory';
 import {Modal} from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
+import {useBlockList} from 'src/hooks/use-blocked-list.hook';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
-import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {Comment, CommentProps} from 'src/interfaces/comment';
 import {SectionType, ReferenceType, Vote} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
-import {searchFriend} from 'src/reducers/friend/actions';
-import {FriendState} from 'src/reducers/friend/reducer';
+import {loadUsers, searchUsers} from 'src/reducers/search/actions';
 import {downvote, removeVote, upvote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {setTippedUser, setTippedUserId} from 'src/reducers/wallet/actions';
@@ -57,13 +56,13 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   } = useCommentHook(referenceId);
 
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
+  const people = useSelector<RootState, User[]>(state => state.searchState.searchedUsers);
   const downvoting = useSelector<RootState, Post | Comment | null>(
     state => state.timelineState.interaction.downvoting,
   );
   const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
 
-  const {blocklistId, loadBlockListId} = useFriendsHook(user);
+  const {blockedUserIds, loadAll: loadAllBlockedUsers} = useBlockList(user);
   const {openTipHistory} = useTipHistory();
 
   const [reported, setReported] = useState<Comment | null>(null);
@@ -72,10 +71,10 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
 
   const sendTipOpened = Boolean(tippedComment);
-  const {friendList: mentionables} = useFriendList(friends, user);
 
   useEffect(() => {
-    loadBlockListId();
+    loadAllBlockedUsers();
+    loadUsers();
   }, []);
 
   useEffect(() => {
@@ -169,7 +168,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
 
   const handleSearchPeople = debounce((query: string) => {
     if (user) {
-      dispatch(searchFriend(user, query));
+      dispatch(searchUsers(query));
     }
   }, 300);
 
@@ -185,10 +184,10 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
           placeholder={placeholder}
           user={user}
           expand={expand}
-          mentionables={mentionables.map(item => ({
+          mentionables={people.map(item => ({
             value: item.id,
             name: item.name,
-            avatar: item.avatar,
+            avatar: item.profilePictureURL,
           }))}
           onSearchMention={handleSearchPeople}
           onSubmit={handleSubmitComment}
@@ -199,8 +198,8 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         section={section}
         user={user}
         comments={comments || []}
-        mentionables={mentionables}
-        blockedUserIds={blocklistId}
+        mentionables={people}
+        blockedUserIds={blockedUserIds}
         placeholder={placeholder}
         focus={focus}
         expand={expand}

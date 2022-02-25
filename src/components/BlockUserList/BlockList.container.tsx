@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {BlockListComponent} from './BlockList';
 
-import {useFriendsHook} from 'src/hooks/use-friends-hook';
+import {useBlockList} from 'src/hooks/use-blocked-list.hook';
 import {Friend} from 'src/interfaces/friend';
 import {RootState} from 'src/reducers';
 import {unblockUser} from 'src/reducers/block/actions';
@@ -16,10 +16,10 @@ export const BlockListContainer: React.FC = () => {
   const {users} = useSelector<RootState, BlockState>(state => state.blockState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
 
-  const {loadBlockList} = useFriendsHook(user);
+  const {load} = useBlockList(user);
 
   useEffect(() => {
-    loadBlockList();
+    load();
   }, []);
 
   const handleUnblockUser = (friend: Friend) => {

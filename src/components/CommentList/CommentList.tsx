@@ -5,7 +5,6 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {CommentDetail} from '../CommentDetail';
 
-import {FriendDetail} from 'src/components/FriendsMenu/hooks/use-friend-list.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {Comment} from 'src/interfaces/comment';
 import {SectionType, Vote} from 'src/interfaces/interaction';
@@ -15,7 +14,7 @@ type CommentListProps = {
   section: SectionType;
   user?: User;
   comments: Comment[];
-  mentionables: FriendDetail[];
+  mentionables: User[];
   blockedUserIds: string[];
   deep?: number;
   placeholder?: string;

@@ -1,4 +1,3 @@
-import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useFriendsHook} from 'src/hooks/use-friends-hook';
@@ -11,62 +10,18 @@ import {
   deleteFriendRequest,
   toggleFriendRequest,
 } from 'src/reducers/friend-request/actions';
-import {
-  searchProfileFriend,
-  fetchProfileFriend,
-  updateProfileFriendParams,
-} from 'src/reducers/profile/actions';
+import {fetchProfileFriend} from 'src/reducers/profile/actions';
 import {checkFriendedStatus} from 'src/reducers/profile/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
-export const useProfileFriend = () => {
+export const useFriendRequest = () => {
   const dispatch = useDispatch();
   const {loadNotifications} = useNotifHook();
   const {loadFriends: loadUsersFriends} = useFriendsHook();
 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const filter = useSelector<RootState, string | undefined>(
-    state => state.profileState.friends.filter,
-  );
-  const currentFriendPage = useSelector<RootState, number>(
-    state => state.profileState.friends.meta.currentPage,
-  );
 
-  const [loading, setLoading] = useState(false);
-
-  const load = (page = 1) => {
-    dispatch(fetchProfileFriend(page));
-  };
-
-  const search = (query: string, page = 1) => {
-    if (query.length === 0) {
-      load();
-
-      return;
-    }
-
-    dispatch(searchProfileFriend(query, page));
-  };
-
-  const sort = (sort: 'ASC' | 'DESC') => {
-    dispatch(updateProfileFriendParams({sort}));
-
-    if (filter) {
-      search(filter);
-    } else {
-      load();
-    }
-  };
-
-  const loadMore = () => {
-    if (filter) {
-      search(filter, currentFriendPage + 1);
-    } else {
-      load(currentFriendPage + 1);
-    }
-  };
-
-  const makeFriend = async (profile: User) => {
+  const requestFriend = async (profile: User) => {
     await dispatch(createFriendRequest(profile));
 
     await dispatch(checkFriendedStatus());
@@ -83,8 +38,6 @@ export const useProfileFriend = () => {
   };
 
   const toggleRequest = async (request: Friend, status: FriendStatus) => {
-    setLoading(true);
-
     await dispatch(toggleFriendRequest(request, status));
     await dispatch(fetchProfileFriend());
 
@@ -99,12 +52,7 @@ export const useProfileFriend = () => {
   };
 
   return {
-    loading,
-    load,
-    loadMore,
-    search,
-    sort,
-    makeFriend,
+    requestFriend,
     removeFriendRequest,
     toggleRequest,
     reloadFriendStatus,
