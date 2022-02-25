@@ -99,7 +99,12 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
       getTippedUserId(reference.id);
 
       const contentType = 'post';
-      dispatch(setTippedContent(contentType, reference.id));
+
+      let isTippingForDotSamaTokensDisabled = false;
+
+      if (!('userSocialMedia' in reference)) isTippingForDotSamaTokensDisabled = true;
+
+      dispatch(setTippedContent(contentType, reference.id, isTippingForDotSamaTokensDisabled));
     }
 
     if (reference && 'section' in reference) {

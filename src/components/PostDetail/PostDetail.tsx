@@ -143,7 +143,12 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
       onSendTip(post);
       const contentType = 'post';
       const referenceId = post.id;
-      dispatch(setTippedContent(contentType, referenceId));
+
+      let isTippingForDotSamaTokensDisabled = false;
+
+      if (!('userSocialMedia' in post)) isTippingForDotSamaTokensDisabled = true;
+
+      dispatch(setTippedContent(contentType, referenceId, isTippingForDotSamaTokensDisabled));
     }
   };
 
