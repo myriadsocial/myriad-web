@@ -35,10 +35,11 @@ const moduleExports = {
     firebaseProjectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
     firebaseAPIKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     firebaseMessagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    firebaseStorageBucket:
+      process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? 'myriad-social-development.appspot.com',
     firebaseAppId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     firebaseMeasurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
     facebookAppId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
-    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? 'myriad-social-development',
   },
   sentry: {
     disableServerWebpackPlugin: true,

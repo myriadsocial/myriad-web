@@ -7,7 +7,7 @@ const STORAGE_BASE_URL = 'https://storage.googleapis.com';
 export const generateImageSizes = (url: string, extension = 'jpg'): Sizes => {
   const {publicRuntimeConfig} = getConfig();
 
-  const external = !url.includes(`${publicRuntimeConfig}.appspot.com`);
+  const external = !url.includes(publicRuntimeConfig.firebaseStorageBucket);
   const filename = url.split(/[\\/]/).pop();
 
   if (!filename || external)

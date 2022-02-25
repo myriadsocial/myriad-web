@@ -62,7 +62,7 @@ export const getFriends = async (
       pageLimit: limit,
       filter: {
         where: {
-          or: [{requesteeId: userId}, {requestorId: userId}],
+          requestorId: userId,
           status: FriendStatus.APPROVED,
           deletedAt: {
             $exists: false,
