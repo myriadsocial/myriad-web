@@ -10,7 +10,12 @@ type VideoProps = {
 
 export const Video: React.FC<VideoProps> = ({url}) => {
   return (
-    <Grid container wrap="wrap" justifyContent="space-around" component={Paper} spacing={2}>
+    <Grid
+      container
+      wrap="wrap"
+      justifyContent="space-around"
+      component={Paper}
+      style={{marginTop: 12}}>
       <ReactPlayer url={url} controls={true} playing={false} stopOnUnmount={true} />
     </Grid>
   );

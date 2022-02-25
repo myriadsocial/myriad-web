@@ -15,16 +15,16 @@ type UserMenuProps = {
   selected: UserMenuTabs;
   anonymous?: boolean;
   user?: User;
-  isMyriad?: boolean;
+  excludes?: UserMenuTabs[];
 };
 
 export const UserMenu: React.FC<UserMenuProps> = props => {
-  const {selected, isMyriad} = props;
+  const {selected, excludes = []} = props;
   const {detail: profileDetail} = useSelector<RootState, ProfileState>(state => state.profileState);
 
   const styles = useStyles();
+  const tabs = useUserTabs(excludes);
 
-  const tabs = isMyriad ? useUserTabs().filter(tab => tab.id !== 'friend') : useUserTabs();
   const [activeTab, setActiveTab] = useState<UserMenuTabs>(selected);
 
   const handleTabChange = (tab: string) => {
@@ -41,9 +41,8 @@ export const UserMenu: React.FC<UserMenuProps> = props => {
         tabs={tabs}
         active={activeTab}
         onChangeTab={handleTabChange}
-        borderRadius={10}
-        background={tabs.filter(tab => tab.id === activeTab)[0]?.background}
         size="small"
+        background={'#FFFFFF'}
       />
     </Paper>
   );

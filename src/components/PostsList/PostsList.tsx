@@ -1,7 +1,7 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import {Grid} from '@material-ui/core';
+import {Paper} from '@material-ui/core';
 
 import {PostDetail} from '../PostDetail';
 import {EmptyResult} from '../Search/EmptyResult';
@@ -62,18 +62,15 @@ export const PostsList: React.FC<PostsListProps> = props => {
   };
 
   return (
-    <>
-      <Grid container alignItems="center" justifyContent="flex-end" className={style.root}>
-        <div className={style.sort}>
-          <DropdownMenu
-            title="Sort by"
-            selected={order}
-            options={orderOptions}
-            onChange={handleSort}
-          />
-        </div>
-        <div className={style.box} />
-      </Grid>
+    <Paper className={style.root}>
+      <div className={style.sort}>
+        <DropdownMenu
+          title="Sort by"
+          selected={order}
+          options={orderOptions}
+          onChange={handleSort}
+        />
+      </div>
 
       <InfiniteScroll
         scrollableTarget="scrollable-searched-posts"
@@ -103,6 +100,6 @@ export const PostsList: React.FC<PostsListProps> = props => {
           ))
         )}
       </InfiniteScroll>
-    </>
+    </Paper>
   );
 };

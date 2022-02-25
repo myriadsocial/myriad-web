@@ -17,7 +17,7 @@ import {UserState} from 'src/reducers/user/reducer';
 
 export type UserMenuTabs = 'post' | 'experience' | 'social' | 'friend' | 'setting';
 
-export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
+export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] => {
   const {detail: profileUser} = useSelector<RootState, ProfileState>(state => state.profileState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {experiences} = useSelector<RootState, ExperienceState>(state => state.experienceState);
@@ -71,7 +71,7 @@ export const useUserTabs = (): TabItems<UserMenuTabs>[] => {
       });
     }
 
-    return items;
+    return items.filter(item => !excludes.includes(item.id));
   }, [profileUser, user, experiences, friends, posts]);
 
   return tabs;

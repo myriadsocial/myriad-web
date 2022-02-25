@@ -32,14 +32,12 @@ export const SearchExperienceListContainer: React.FC<SearchExperienceListContain
       );
 
     return (
-      <div style={{marginTop: 12}}>
-        <ExperienceListContainer
-          loadNextPage={handleLoadNextPage}
-          hasMore={hasMore}
-          selectable={false}
-          enableClone
-          enableSubscribe
-        />
-      </div>
+      <ExperienceListContainer
+        loadNextPage={handleLoadNextPage}
+        hasMore={hasMore}
+        selectable={false}
+        enableClone
+        enableSubscribe
+      />
     );
   };

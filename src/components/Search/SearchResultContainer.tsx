@@ -25,7 +25,9 @@ const useStyles = makeStyles((theme: Theme) =>
       alignSelf: 'start',
     },
     box: {
-      padding: '0px 20px',
+      [theme.breakpoints.down('xs')]: {
+        padding: '0px 20px',
+      },
     },
   }),
 );
@@ -39,7 +41,7 @@ export const SearchResultContainer: React.FC = () => {
   const {searchUsers, clearUsers} = useSearchHook();
   const {searchPosts, clearPosts} = useTimelineHook();
 
-  const [selectedTab, setSelectedTab] = useState('');
+  const [selectedTab, setSelectedTab] = useState('posts-tab');
   const searchKeyword = router.query.q as string;
 
   useEffect(() => {
@@ -121,18 +123,14 @@ export const SearchResultContainer: React.FC = () => {
           </Typography>
           &quot; :
         </Typography>
+
         <TabsComponent
           id="scrollable-users-list"
-          active={searchResultTabTexts[0].id}
+          active={selectedTab}
           tabs={searchResultTabTexts}
           mark="underline"
-          background={selectedTab === 'users-tab' ? 'white' : 'transparent'}
           position="left"
           size="medium"
-          padding={selectedTab === 'experience-tab' || selectedTab === 'users-tab' ? 0 : 3.75}
-          borderRadius={10}
-          paddingLeft={selectedTab === 'users-tab' || selectedTab === 'experience-tab' ? 0 : 30}
-          paddingRight={selectedTab === 'users-tab' || selectedTab === 'experience-tab' ? 0 : 30}
           onChangeTab={handleChangeTab}
         />
       </div>
