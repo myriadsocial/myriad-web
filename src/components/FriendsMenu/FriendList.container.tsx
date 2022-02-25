@@ -76,17 +76,19 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
   };
 
   const handleSearchFriend = (query: string) => {
-    setFiltered(query.length > 0);
+    const sanitizedQuery = query.trim();
+
+    setFiltered(sanitizedQuery.length > 0);
 
     if (isProfile) {
-      searchProfileFriends(query);
+      searchProfileFriends(sanitizedQuery);
     } else {
-      searchUserFriends(query);
+      searchUserFriends(sanitizedQuery);
     }
   };
 
   const handleFilterFriend = (type: FriendType) => {
-    console.log('handleFilterFriend', type);
+    // code
   };
 
   const handleSortFriend = (sortType: string) => {
