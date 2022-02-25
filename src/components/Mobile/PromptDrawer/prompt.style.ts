@@ -3,8 +3,12 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     drawer: {
+      display: 'none',
       '& .MuiDrawer-paper': {
         background: 'none',
+      },
+      [theme.breakpoints.down('xs')]: {
+        display: 'block',
       },
     },
     root: {

@@ -26,6 +26,7 @@ import {useCommentTabs, CommentTabs} from './hooks/use-comment-tabs';
 
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
+import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {LinkPreview} from 'src/components/atoms/LinkPreview';
 import LinkifyComponent from 'src/components/common/Linkify.component';
 import ShowIf from 'src/components/common/show-if.component';
@@ -79,6 +80,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const {activeTab, setActiveTab, tabs} = useCommentTabs(post);
 
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
+  const [openPromptDrawer, setOpenPromptDrawer] = useState(false);
   const [shoWcomment, setShowComment] = useState(expanded);
   const [maxLength, setMaxLength] = useState<number | undefined>(250);
   const [viewContent, setViewContent] = useState(!post.isNSFW);
@@ -135,10 +137,14 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   };
 
   const handleSendTip = () => {
-    onSendTip(post);
-    const contentType = 'post';
-    const referenceId = post.id;
-    dispatch(setTippedContent(contentType, referenceId));
+    if (anonymous) {
+      setOpenPromptDrawer(true);
+    } else {
+      onSendTip(post);
+      const contentType = 'post';
+      const referenceId = post.id;
+      dispatch(setTippedContent(contentType, referenceId));
+    }
   };
 
   const handleDeletePost = () => {
@@ -172,6 +178,10 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
       return window.location.origin;
     }
     return '';
+  };
+
+  const handleCancel = () => {
+    setOpenPromptDrawer(false);
   };
 
   return (
@@ -267,7 +277,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           />
         </Grid>
 
-        <ShowIf condition={!anonymous && isImportedPost && !isOwnSocialPost && type !== 'share'}>
+        <ShowIf condition={isImportedPost && !isOwnSocialPost && type !== 'share'}>
           <Grid item xs={3}>
             <Button
               isDisabled={balanceDetails.length === 0}
@@ -291,6 +301,12 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
               />
             </IconButton>
           </Grid>
+          <PromptComponent
+            title={'Send Tips'}
+            subtitle={'Appreciate others posts by sending tips with stable cryptocurrency'}
+            open={openPromptDrawer}
+            onCancel={handleCancel}
+          />
         </ShowIf>
       </Grid>
 
