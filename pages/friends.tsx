@@ -8,6 +8,7 @@ import Head from 'next/head';
 import {FriendMenuComponent} from 'src/components/FriendsMenu/FriendMenu';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
+import {UserMetric} from 'src/interfaces/user';
 import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
@@ -16,7 +17,6 @@ import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
-import {FriendState} from 'src/reducers/friend/reducer';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {
   setAnonymous,
@@ -30,7 +30,9 @@ import {ThunkDispatchAction} from 'src/types/thunk';
 const {publicRuntimeConfig} = getConfig();
 
 const Friends: React.FC = () => {
-  const {meta} = useSelector<RootState, FriendState>(state => state.friendState);
+  const metric = useSelector<RootState, UserMetric | undefined>(
+    state => state.userState.user?.metric,
+  );
 
   //TODO: any logic + components which replace
   // the middle column of home page should go here
@@ -41,7 +43,7 @@ const Friends: React.FC = () => {
         <title>{i18n.t('Friends.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
       <TopNavbarComponent
-        description={`${meta.totalItemCount} Friends`}
+        description={`${metric?.totalFriends ?? 0} Friends`}
         sectionTitle={SectionTitle.FRIENDS}
         type={'menu'}
       />

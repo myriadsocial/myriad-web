@@ -290,7 +290,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             {...params}
             label="Tags"
             variant="outlined"
-            placeholder="topic you want to follow"
+            placeholder={newTags.length === 0 ? 'topic you want to follow' : undefined}
             onChange={handleSearchTags}
             InputProps={{
               ...params.InputProps,

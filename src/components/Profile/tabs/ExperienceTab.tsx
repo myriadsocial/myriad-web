@@ -70,7 +70,12 @@ export const ProfileExperienceTab: React.FC<ProfileExperienceTabProps> = props =
 
   if (experiences.length === 0 && !isProfileOwner) {
     return (
-      <Empty title="Nothing to see here!" subtitle="This user hasn't created any Experience yet." />
+      <div style={{marginTop: 30}}>
+        <Empty
+          title="Nothing to see here!"
+          subtitle="This user hasn't created any Experience yet."
+        />
+      </div>
     );
   }
 

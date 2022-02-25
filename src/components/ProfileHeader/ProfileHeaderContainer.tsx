@@ -12,7 +12,7 @@ import {debounce} from 'lodash';
 import {SendTipContainer} from 'src/components/SendTip';
 import {useTimelineFilter} from 'src/components/Timeline/hooks/use-timeline-filter.hook';
 import {Modal} from 'src/components/atoms/Modal';
-import {useFriendHook} from 'src/hooks/use-profile-friend.hook';
+import {useFriendRequest} from 'src/hooks/use-friend-request.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useReport} from 'src/hooks/use-report.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
@@ -39,7 +39,8 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
 
   const dispatch = useDispatch();
 
-  const {makeFriend, removeFriendRequest, toggleRequest, reloadFriendStatus} = useFriendHook();
+  const {requestFriend, removeFriendRequest, toggleRequest, reloadFriendStatus} =
+    useFriendRequest();
   const {sendReportWithAttributes} = useReport();
   const {openToasterSnack} = useToasterSnackHook();
   const {query} = useQueryParams();
@@ -76,7 +77,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const sendFriendReqest = debounce(() => {
     if (!profile) return;
 
-    makeFriend(profile);
+    requestFriend(profile);
   }, 300);
 
   const declineFriendRequest = debounce(() => {

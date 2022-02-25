@@ -8,7 +8,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'start',
+      justifyContent: 'center',
       textAlign: 'center',
       height: '335px',
     },

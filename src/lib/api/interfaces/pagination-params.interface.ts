@@ -5,3 +5,7 @@ export interface PaginationParams {
   orderField?: string;
   sort?: 'ASC' | 'DESC';
 }
+
+export interface FilterParams {
+  query: string;
+}
