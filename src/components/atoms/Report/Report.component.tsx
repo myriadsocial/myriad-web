@@ -88,7 +88,7 @@ export const ReportComponent: React.FC<Props> = props => {
           />
           <ShowIf condition={isErrorValidation}>
             <Typography gutterBottom variant="caption" component="h2" color="error">
-              Must be between 3 to 200 characters
+              Must be between 4 to 200 characters
             </Typography>
           </ShowIf>
         </div>
