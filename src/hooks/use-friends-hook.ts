@@ -1,24 +1,32 @@
 import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {useBlockList} from './use-blocked-list.hook';
+
 import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {RootState} from 'src/reducers';
-import {getBlockList} from 'src/reducers/block/actions';
 import {
   fetchFriendRequest,
   createFriendRequest,
   toggleFriendRequest,
   deleteFriendRequest,
 } from 'src/reducers/friend-request/actions';
-import {fetchFriend, searchFriend} from 'src/reducers/friend/actions';
+import {
+  clearFriend,
+  fetchFriend,
+  searchFriend,
+  updateFriendParams,
+} from 'src/reducers/friend/actions';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useFriendsHook = (user?: User) => {
   const dispatch = useDispatch();
+  const {load: loadBlockedUsers} = useBlockList(user);
 
+  const filter = useSelector<RootState, string | undefined>(state => state.friendState.filter);
   const {currentPage: currentFriendPage} = useSelector<RootState, ListMeta>(
     state => state.friendState.meta,
   );
@@ -29,7 +37,6 @@ export const useFriendsHook = (user?: User) => {
   const [friended, setFriended] = useState<Friend[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [blocklistId, setBlockListId] = useState<string[]>([]);
 
   const loadRequests = () => {
     if (!user) return;
@@ -48,13 +55,33 @@ export const useFriendsHook = (user?: User) => {
   };
 
   const loadMoreFriends = () => {
-    dispatch(fetchFriend(user, currentFriendPage + 1));
+    if (filter) {
+      dispatch(searchFriend(filter, currentFriendPage + 1));
+    } else {
+      dispatch(fetchFriend(user, currentFriendPage + 1));
+    }
   };
 
   const searchFriends = (query: string) => {
     if (!user) return;
 
-    dispatch(searchFriend(user, query));
+    if (query.length === 0) {
+      loadFriends();
+
+      return;
+    }
+
+    dispatch(searchFriend(query));
+  };
+
+  const sort = (sort: 'ASC' | 'DESC') => {
+    dispatch(updateFriendParams({sort}));
+
+    if (filter) {
+      searchFriends(filter);
+    } else {
+      loadFriends();
+    }
   };
 
   const sendRequest = async (destination: User) => {
@@ -83,7 +110,7 @@ export const useFriendsHook = (user?: User) => {
   const toggleRequest = async (request: Friend, status: FriendStatus) => {
     dispatch(
       toggleFriendRequest(request, status, () => {
-        loadBlockList();
+        loadBlockedUsers();
 
         if (user) {
           checkFriendStatus([user]);
@@ -96,30 +123,8 @@ export const useFriendsHook = (user?: User) => {
     dispatch(deleteFriendRequest(request));
   };
 
-  const loadBlockList = () => {
-    if (!user) return;
-    dispatch(getBlockList(user));
-  };
-
-  const loadBlockListId = async () => {
-    if (!user) return;
-
-    setLoading(true);
-
-    try {
-      const {data} = await FriendAPI.getBlockList(user.id, 0);
-
-      setBlockListId(
-        data.map(_data => {
-          if (user.id !== _data.requesteeId) return _data.requesteeId;
-          else return _data.requestorId;
-        }),
-      );
-    } catch (error) {
-      setError(error);
-    } finally {
-      setLoading(false);
-    }
+  const clear = () => {
+    dispatch(clearFriend());
   };
 
   return {
@@ -129,14 +134,13 @@ export const useFriendsHook = (user?: User) => {
     loadFriends,
     loadMoreFriends,
     searchFriend: searchFriends,
+    sort,
     loadRequests,
     loadMoreRequests,
     sendRequest,
     toggleRequest,
     removeFriendRequest,
     checkFriendStatus,
-    loadBlockList,
-    loadBlockListId,
-    blocklistId,
+    clear,
   };
 };

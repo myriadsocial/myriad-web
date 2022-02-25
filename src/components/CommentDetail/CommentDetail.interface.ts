@@ -1,4 +1,3 @@
-import {FriendDetail} from 'src/components/FriendsMenu/hooks/use-friend-list.hook';
 import {Comment} from 'src/interfaces/comment';
 import {SectionType, Vote} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
@@ -8,7 +7,7 @@ export interface CommentDetailProps {
   user?: User;
   comment: Comment;
   deep: number;
-  mentionables: FriendDetail[];
+  mentionables: User[];
   blockedUserIds: string[];
   onUpvote: (comment: Comment) => void;
   onRemoveVote: (comment: Comment) => void;

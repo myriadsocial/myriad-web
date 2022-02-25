@@ -42,7 +42,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
 
       <div className={`${classes.content} ${expanding ? classes.open : classes.close}`}>
         {user && (
-          <>
+          <div style={{paddingTop: 12}}>
             <ListItem
               classes={{gutters: classes.gutters}}
               className={classes.hover}
@@ -63,7 +63,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
                 </Typography>
               </ListItemText>
             </ListItem>
-          </>
+          </div>
         )}
         <ListItem
           classes={{gutters: classes.gutters}}

@@ -50,7 +50,7 @@ export type FriendListProps = {
   hasMore: boolean;
   onSearch: (query: string) => void;
   onFilter: (type: FriendType) => void;
-  onSort: (type: string) => void;
+  onSort: (sort: string) => void;
   onLoadNextPage: () => void;
 };
 

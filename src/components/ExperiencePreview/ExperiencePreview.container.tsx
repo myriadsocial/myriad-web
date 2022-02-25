@@ -60,21 +60,21 @@ export const ExperiencePreviewContainer: React.FC = () => {
     <>
       {experience && (
         <>
-          <div className={style.mb}>
-            <TopNavbarComponent
-              description={experience.name || 'Experience'}
-              sectionTitle={SectionTitle.EXPERIENCE}
+          <TopNavbarComponent
+            description={experience.name || 'Experience'}
+            sectionTitle={SectionTitle.EXPERIENCE}
+          />
+          <div className={style.box}>
+            <ExperiencePreview
+              experience={experience}
+              userExperiences={userExperiences}
+              userId={experience.id}
+              onSubscribe={handleSubscribeExperience}
+              onUnsubscribe={handleUnsubscribeExperience}
+              onFollow={handleCloneExperience}
+              onUpdate={handleEditExperience}
             />
           </div>
-          <ExperiencePreview
-            experience={experience}
-            userExperiences={userExperiences}
-            userId={experience.id}
-            onSubscribe={handleSubscribeExperience}
-            onUnsubscribe={handleUnsubscribeExperience}
-            onFollow={handleCloneExperience}
-            onUpdate={handleEditExperience}
-          />
         </>
       )}
     </>

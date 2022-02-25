@@ -44,14 +44,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     title: {
+      color: theme.palette.primary.main,
+
       [theme.breakpoints.down('xs')]: {
-        color: theme.palette.primary.main,
         fontSize: '16px',
       },
     },
     subtitle: {
+      color: theme.palette.text.secondary,
+
       [theme.breakpoints.down('xs')]: {
-        color: theme.palette.text.secondary,
         fontSize: '10px',
       },
     },

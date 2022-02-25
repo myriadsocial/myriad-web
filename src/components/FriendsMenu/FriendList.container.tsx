@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
 import {FriendListComponent} from './FriendList';
@@ -6,11 +6,11 @@ import {FriendType} from './default';
 
 import {Empty} from 'src/components/atoms/Empty';
 import {useFriendsHook} from 'src/hooks/use-friends-hook';
+import {useProfileFriend} from 'src/hooks/use-profile-friend.hook';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
-import {FriendState} from 'src/reducers/friend/reducer';
 import {ProfileState} from 'src/reducers/profile/reducer';
 
 type FriendListContainerProps = {
@@ -23,59 +23,76 @@ type FriendListContainerProps = {
 
 export const FriendListContainer: React.FC<FriendListContainerProps> = props => {
   const {user, type, disableFilter = false, disableSort = false, isProfile = false} = props;
-  const {loadFriends, searchFriend, loadMoreFriends} = useFriendsHook(user);
-
-  const [toggle, setToggle] = useState<string>('');
-  const [friendList, setFriendList] = useState<Friend[]>([]);
+  const {
+    loadFriends: loadUserFriends,
+    searchFriend: searchUserFriends,
+    loadMoreFriends: loadMoreUserFriends,
+    clear,
+  } = useFriendsHook(user);
+  const {
+    loadMore: loadMoreProfileFriends,
+    search: searchProfileFriends,
+    sort: sortProfileFriend,
+  } = useProfileFriend();
 
   const {detail, friendStatus} = useSelector<RootState, ProfileState>(state => state.profileState);
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
   const userLogin = useSelector<RootState, User | undefined>(state => state.userState.user);
+  const userFriends = useSelector<RootState, Friend[]>(state => state.friendState.friends);
+  const totalUserFriends = useSelector<RootState, number>(
+    state => state.friendState.meta.totalItemCount,
+  );
+  const profileFriends = useSelector<RootState, Friend[]>(state => state.profileState.friends.data);
+  const totalProfileFriends = useSelector<RootState, number>(
+    state => state.profileState.friends.meta.totalItemCount,
+  );
 
   const isFriend = friendStatus?.status == 'approved';
   const isOwner = detail?.id == userLogin?.id;
   const isPrivate = settings.privacy.accountPrivacy == 'private';
 
-  const {
-    friends,
-    meta: {totalItemCount: totalFriends},
-  } = useSelector<RootState, FriendState>(state => state.friendState);
-  const hasMore = friends.length < totalFriends;
+  const friends = isProfile ? profileFriends : userFriends;
+  const hasMore = isProfile
+    ? profileFriends.length < totalProfileFriends
+    : userFriends.length < totalUserFriends;
 
   useEffect(() => {
-    loadFriends();
-  }, []);
+    if (!isProfile) {
+      loadUserFriends();
+    }
 
-  useEffect(() => {
-    setFriendList(friends);
-  }, [friends, toggle]);
+    return () => {
+      clear();
+    };
+  }, [isProfile]);
 
-  const handleFilterFriend = (type: FriendType) => {
-    // code
+  const handleLoadMore = () => {
+    if (isProfile) {
+      loadMoreProfileFriends();
+    } else {
+      loadMoreUserFriends();
+    }
   };
 
-  const handleSortFriend = (sort: string) => {
-    let sortFriends;
-    setToggle(sort);
-    switch (sort) {
-      case 'latest':
-        sortFriends = friendList.sort((a, b) => {
-          if (new Date(a.createdAt) < new Date(b.createdAt)) return 1;
-          if (new Date(a.createdAt) > new Date(b.createdAt)) return -1;
-          return 0;
-        });
-        setFriendList(sortFriends);
-        break;
-      case 'oldest':
-        sortFriends = friendList.sort((a, b) => {
-          if (new Date(a.createdAt) < new Date(b.createdAt)) return -1;
-          if (new Date(a.createdAt) > new Date(b.createdAt)) return 1;
-          return 0;
-        });
-        setFriendList(sortFriends);
-        break;
-      default:
-        break;
+  const handleSearchFriend = (query: string) => {
+    if (isProfile) {
+      searchProfileFriends(query);
+    } else {
+      searchUserFriends(query);
+    }
+  };
+
+  const handleFilterFriend = (type: FriendType) => {
+    console.log('handleFilterFriend', type);
+  };
+
+  const handleSortFriend = (sortType: string) => {
+    const sort = sortType === 'latest' ? 'DESC' : 'ASC';
+
+    if (isProfile) {
+      sortProfileFriend(sort);
+    } else {
+      //
     }
   };
 
@@ -95,13 +112,13 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
       type={type}
       disableFilter={disableFilter}
       disableSort={disableSort}
-      friends={friendList}
+      friends={friends}
       user={user}
       hasMore={hasMore}
-      onSearch={searchFriend}
+      onSearch={handleSearchFriend}
       onFilter={handleFilterFriend}
       onSort={handleSortFriend}
-      onLoadNextPage={loadMoreFriends}
+      onLoadNextPage={handleLoadMore}
     />
   );
 };

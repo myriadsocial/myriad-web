@@ -5,6 +5,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       position: 'relative',
       width: 312,
+      marginBottom: 12,
 
       [theme.breakpoints.down('md')]: {
         maxWidth: 290,

@@ -1,9 +1,13 @@
 import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
+import {PaginationParams, FilterParams} from './interfaces/pagination-params.interface';
 
 import {Friend, FriendStatus} from 'src/interfaces/friend';
 
+type FriendsFilterParams = FilterParams & {
+  userId?: string;
+};
 type FriendList = BaseList<Friend>;
 type FriendRequestList = BaseList<Friend>;
 
@@ -43,21 +47,29 @@ export const getFriendRequests = async (userId: string, page = 1): Promise<Frien
   return data;
 };
 
-export const getFriends = async (userId: string, page = 1): Promise<FriendList> => {
+export const getFriends = async (
+  userId: string,
+  pagination: PaginationParams,
+): Promise<FriendList> => {
+  const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
+
   const {data} = await MyriadAPI.request<FriendList>({
     url: `/friends`,
     method: 'GET',
     params: {
       mutual: 'true',
       pageNumber: page,
-      pageLimit: PAGINATION_LIMIT,
+      pageLimit: limit,
       filter: {
         where: {
-          or: [{requestorId: userId}],
+          or: [{requesteeId: userId}, {requestorId: userId}],
           status: FriendStatus.APPROVED,
+          deletedAt: {
+            $exists: false,
+          },
         },
         include: ['requestee', 'requestor'],
-        order: `createdAt DESC`,
+        order: `${orderField} ${sort}`,
       },
     },
   });
@@ -90,50 +102,24 @@ export const getBlockList = async (userId: string, page = 1): Promise<FriendList
   return data;
 };
 
-export const searchFriend = async (userId: string, query: string): Promise<FriendList> => {
+export const searchFriend = async (
+  filter: FriendsFilterParams,
+  pagination: PaginationParams,
+): Promise<FriendList> => {
+  const {query, userId} = filter;
+  const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
+
   const {data} = await MyriadAPI.request<FriendList>({
-    url: `/friends`,
+    url: `/users`,
     method: 'GET',
     params: {
+      userId,
+      friendsName: query,
+      mutual: 'true',
+      pageLimit: limit,
+      pageNumber: page,
       filter: {
-        where: {
-          status: FriendStatus.APPROVED,
-          or: [{requestorId: userId}, {requesteeId: userId}],
-        },
-        include: [
-          {
-            relation: 'requestor',
-            scope: {
-              where: {
-                or: [
-                  {
-                    name: {
-                      like: `${query}.*`,
-                      options: 'i',
-                    },
-                  },
-                  {id: userId},
-                ],
-              },
-            },
-          },
-          {
-            relation: 'requestee',
-            scope: {
-              where: {
-                or: [
-                  {
-                    name: {
-                      like: `${query}.*`,
-                      options: 'i',
-                    },
-                  },
-                  {id: userId},
-                ],
-              },
-            },
-          },
-        ],
+        order: `${orderField} ${sort}`,
       },
     },
   });
