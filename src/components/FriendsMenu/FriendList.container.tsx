@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import {FriendListComponent} from './FriendList';
 import {FriendType} from './default';
 
+import {uniqBy} from 'lodash';
 import {Empty} from 'src/components/atoms/Empty';
 import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {useProfileFriend} from 'src/hooks/use-profile-friend.hook';
@@ -24,12 +25,14 @@ type FriendListContainerProps = {
 export const FriendListContainer: React.FC<FriendListContainerProps> = props => {
   const {user, type, disableFilter = false, disableSort = false, isProfile = false} = props;
   const {
+    hasMore: userHasMoreFriends,
     loadFriends: loadUserFriends,
     searchFriend: searchUserFriends,
     loadMoreFriends: loadMoreUserFriends,
     clear,
   } = useFriendsHook(user);
   const {
+    hasMore: profileHasMoreFriends,
     loadMore: loadMoreProfileFriends,
     search: searchProfileFriends,
     sort: sortProfileFriend,
@@ -39,33 +42,24 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
   const userLogin = useSelector<RootState, User | undefined>(state => state.userState.user);
   const userFriends = useSelector<RootState, Friend[]>(state => state.friendState.friends);
-  const totalUserFriends = useSelector<RootState, number>(
-    state => state.friendState.meta.totalItemCount,
-  );
   const profileFriends = useSelector<RootState, Friend[]>(state => state.profileState.friends.data);
-  const totalProfileFriends = useSelector<RootState, number>(
-    state => state.profileState.friends.meta.totalItemCount,
-  );
 
   const [isFiltered, setFiltered] = useState(false);
+
   const isFriend = friendStatus?.status == 'approved';
   const isOwner = detail?.id == userLogin?.id;
   const isPrivate = settings.privacy.accountPrivacy == 'private';
 
-  const friends = isProfile ? profileFriends : userFriends;
-  const hasMore = isProfile
-    ? profileFriends.length < totalProfileFriends
-    : userFriends.length < totalUserFriends;
+  // TODO: replace uniqBy, make sure infinite scroll work properly
+  const friends = isProfile ? profileFriends : uniqBy(userFriends, 'id');
+  const hasMore = isProfile ? profileHasMoreFriends : userHasMoreFriends;
 
   useEffect(() => {
-    if (!isProfile) {
-      loadUserFriends();
-    }
-
     return () => {
       clear();
+      loadUserFriends();
     };
-  }, [isProfile]);
+  }, []);
 
   const handleLoadMore = () => {
     if (isProfile) {
@@ -103,7 +97,7 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
 
   if (isPrivate && !isFriend && !isOwner && isProfile) {
     return (
-      <div style={{marginTop: '27px'}}>
+      <div style={{marginTop: 30}}>
         <Empty
           title="Nothing to see here!"
           subtitle="This account is private. Send them a friend request to see their full profile."

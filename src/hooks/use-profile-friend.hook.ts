@@ -31,6 +31,9 @@ export const useProfileFriend = () => {
   const currentFriendPage = useSelector<RootState, number>(
     state => state.profileState.friends.meta.currentPage,
   );
+  const totalPageCount = useSelector<RootState, number>(
+    state => state.profileState.friends.meta.totalPageCount,
+  );
 
   const [loading, setLoading] = useState(false);
 
@@ -100,6 +103,7 @@ export const useProfileFriend = () => {
 
   return {
     loading,
+    hasMore: currentFriendPage < totalPageCount,
     load,
     loadMore,
     search,
