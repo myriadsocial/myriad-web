@@ -37,7 +37,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     refreshExperience,
   } = props;
 
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
   const router = useRouter();
 
@@ -113,6 +113,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
         viewPostList={handleViewPostList}
         experiences={experiences}
         user={user}
+        anonymous={anonymous}
         {...props}
       />
     </InfiniteScroll>

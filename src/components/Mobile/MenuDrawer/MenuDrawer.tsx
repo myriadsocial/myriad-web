@@ -18,6 +18,7 @@ import Typography from '@material-ui/core/Typography';
 import {useMenuList, MenuId, MenuDetail} from 'src/components/Menu/use-menu-list';
 import {Metric} from 'src/components/Metric';
 import {useStyles} from 'src/components/Mobile/MenuDrawer/menuDrawer.style';
+import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {ProfileContent} from 'src/components/ProfileCard';
 import {ListItemComponent} from 'src/components/atoms/ListItem';
 import {useAuthHook} from 'src/hooks/auth.hook';
@@ -26,9 +27,10 @@ import {clearUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const MenuDrawerComponent: React.FC = () => {
-  const {user, alias} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, alias, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const [selected, setSelected] = React.useState<MenuId>('home');
   const [openDrawer, setOpenDrawer] = React.useState(false);
+  const [openPromptDrawer, setOpenPromptDrawer] = React.useState(false);
 
   const {logout} = useAuthHook();
   const router = useRouter();
@@ -43,8 +45,23 @@ export const MenuDrawerComponent: React.FC = () => {
     parseSelected(router.pathname);
   }, [router]);
 
+  React.useEffect(() => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }, []);
+
+  const handleCancel = () => {
+    setOpenPromptDrawer(false);
+  };
+
   const parseSelected = (path: string) => {
     switch (path) {
+      case '/experience':
+        setSelected('experience');
+        break;
+      case '/wallet':
+        setSelected('wallet');
+        break;
       case '/friends':
         setSelected('friends');
         break;
@@ -53,6 +70,12 @@ export const MenuDrawerComponent: React.FC = () => {
         break;
       case '/nft':
         setSelected('nft');
+        break;
+      case '/topic':
+        setSelected('topic');
+        break;
+      case '/socials':
+        setSelected('socials');
         break;
       case '/settings':
         setSelected('settings');
@@ -76,7 +99,11 @@ export const MenuDrawerComponent: React.FC = () => {
   };
 
   const openMenu = (item: MenuDetail) => () => {
-    router.push(item.url);
+    if (item.url === '/wallet') {
+      setOpenPromptDrawer(true);
+    } else {
+      router.push(item.url);
+    }
   };
 
   return (
@@ -108,7 +135,7 @@ export const MenuDrawerComponent: React.FC = () => {
                 isMobile={true}
               />
               {/* metric */}
-              <Metric official={false} data={user?.metric} />
+              <Metric official={false} data={user?.metric} anonymous={anonymous} />
             </div>
             {/* Menu list */}
             <div className={style.menu}>
@@ -145,6 +172,14 @@ export const MenuDrawerComponent: React.FC = () => {
             </ListItem>
           </div>
         </Grid>
+        <PromptComponent
+          title={'Wallet'}
+          subtitle={
+            'When you join Myriad, you can connect your wallet and start send tips on some post!'
+          }
+          open={openPromptDrawer}
+          onCancel={handleCancel}
+        />
       </Drawer>
     </>
   );

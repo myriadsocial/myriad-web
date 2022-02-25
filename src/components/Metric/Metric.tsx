@@ -12,10 +12,11 @@ export type MetricProps = {
   data?: UserMetric;
   official: boolean;
   profile?: boolean;
+  anonymous?: boolean;
 };
 
 export const Metric: React.FC<MetricProps> = props => {
-  const {data, official, profile = false} = props;
+  const {data, official, profile = false, anonymous = false} = props;
   const style = useStyles({...props, profile});
 
   return (
@@ -51,7 +52,7 @@ export const Metric: React.FC<MetricProps> = props => {
           Experience
         </Typography>
         <Typography variant="h5" className={style.total} component="p">
-          {formatCount(data?.totalExperiences ?? 0)}
+          {anonymous ? 3 : formatCount(data?.totalExperiences ?? 0)}
         </Typography>
       </Grid>
     </Grid>
