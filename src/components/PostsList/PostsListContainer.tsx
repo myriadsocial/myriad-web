@@ -88,7 +88,12 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
       dispatch(setTippedUser(reference.user.name, reference.user.profilePictureURL ?? ''));
 
       const contentType = 'comment';
-      dispatch(setTippedContent(contentType, reference.id));
+
+      let isTippingForDotSamaTokensDisabled = false;
+
+      if (!('userSocialMedia' in reference)) isTippingForDotSamaTokensDisabled = true;
+
+      dispatch(setTippedContent(contentType, reference.id, isTippingForDotSamaTokensDisabled));
     }
   };
 

@@ -114,7 +114,10 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
       dispatch(setTippedUser(reference.user.name, reference.user.profilePictureURL ?? ''));
 
       const contentType = 'comment';
-      dispatch(setTippedContent(contentType, reference.id));
+
+      const isTippingForDotSamaTokensDisabled = false;
+
+      dispatch(setTippedContent(contentType, reference.id, isTippingForDotSamaTokensDisabled));
     }
   };
 
