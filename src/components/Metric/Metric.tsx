@@ -8,15 +8,15 @@ import ShowIf from 'src/components/common/show-if.component';
 import {formatCount} from 'src/helpers/number';
 import {UserMetric} from 'src/interfaces/user';
 
-type MetricProps = {
+export type MetricProps = {
   data?: UserMetric;
   official: boolean;
+  profile?: boolean;
 };
 
 export const Metric: React.FC<MetricProps> = props => {
-  const style = useStyles();
-
-  const {data, official} = props;
+  const {data, official, profile = false} = props;
+  const style = useStyles({...props, profile});
 
   return (
     <Grid container spacing={2} wrap="nowrap" classes={{root: style.root}}>

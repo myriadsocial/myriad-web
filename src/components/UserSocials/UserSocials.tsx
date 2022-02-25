@@ -56,7 +56,7 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
   const styles = useStyles();
   if (isPrivate && !isFriend && !isOwner) {
     return (
-      <div style={{marginTop: '27px'}}>
+      <div className={`${styles.mt30}`}>
         <Empty
           title="Nothing to see here!"
           subtitle="This account is private. Send them a friend request to see their full profile."
@@ -67,7 +67,7 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
 
   if (socials.length === 0) {
     return (
-      <div style={{marginTop: 30}}>
+      <div className={`${styles.mt30}`}>
         <Empty
           title="Nothing to see here!"
           subtitle="This user hasn't connected to any social media yet."
@@ -77,28 +77,30 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
   }
 
   return (
-    <div className={styles.root}>
-      <List component="div" className={styles.list}>
-        {socials.map(social => {
-          return (
-            <ListItem
-              key={social.id}
-              className={styles.item}
-              onClick={() => openSourceAccount(social)}>
-              <ListItemAvatar>
-                <StyledBadge badgeContent={socialsIcon[social.platform]}>
-                  <Avatar
-                    alt={social.people?.name}
-                    src={social.people?.profilePictureURL}
-                    className={styles.avatar}
-                  />
-                </StyledBadge>
-              </ListItemAvatar>
-              <ListItemText primary={`@${social.people?.username}`} />
-            </ListItem>
-          );
-        })}
-      </List>
+    <div className={styles.box}>
+      <div className={styles.root}>
+        <List component="div" className={styles.list}>
+          {socials.map(social => {
+            return (
+              <ListItem
+                key={social.id}
+                className={styles.item}
+                onClick={() => openSourceAccount(social)}>
+                <ListItemAvatar>
+                  <StyledBadge badgeContent={socialsIcon[social.platform]}>
+                    <Avatar
+                      alt={social.people?.name}
+                      src={social.people?.profilePictureURL}
+                      className={styles.avatar}
+                    />
+                  </StyledBadge>
+                </ListItemAvatar>
+                <ListItemText primary={`@${social.people?.username}`} />
+              </ListItem>
+            );
+          })}
+        </List>
+      </div>
     </div>
   );
 };

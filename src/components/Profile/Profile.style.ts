@@ -16,6 +16,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     mb: {
       marginBottom: '10px',
+      [theme.breakpoints.down('xs')]: {
+        marginBottom: 0,
+      },
     },
     scroll: {
       height: '100%',

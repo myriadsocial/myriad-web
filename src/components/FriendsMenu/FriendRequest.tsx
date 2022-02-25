@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {Empty} from '../atoms/Empty';
-import {useStyles} from './friend.style';
+import {useStyles} from './friendRequest.style';
 import {useFriendRequestList} from './hooks/use-friend-request.hook';
 
 import ShowIf from 'src/components/common/show-if.component';

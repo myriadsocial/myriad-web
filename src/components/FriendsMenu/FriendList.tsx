@@ -70,7 +70,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     onSort,
     onLoadNextPage,
   } = props;
-  const style = useStyles({type});
+  const style = useStyles({...props, type, disableFilter});
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -224,18 +224,17 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   }
 
   return (
-    <div>
+    <div className={style.box}>
       <ShowIf condition={!disableFilter || !disableSort}>
-        <Grid
-          container
-          justifyContent={disableFilter ? 'flex-end' : 'space-between'}
-          alignItems="center">
+        <Grid container alignItems="center" className={style.filterBox}>
           <ShowIf condition={!disableFilter}>
-            <DropdownMenu
-              title="Filter by"
-              options={friendFilterOptions}
-              onChange={handleFilterSelected}
-            />
+            <div className={style.filter}>
+              <DropdownMenu
+                title="Filter by"
+                options={friendFilterOptions}
+                onChange={handleFilterSelected}
+              />
+            </div>
           </ShowIf>
           <ShowIf condition={!disableSort}>
             <DropdownMenu title={'Sort by'} options={sortOptions} onChange={onSort} />

@@ -11,7 +11,7 @@ import {useFilterOption} from './hooks/use-filter-option.hook';
 import {TimelineType, TimelineSortType, TimelineOrderType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 
-type TimelineFilterProps = {
+export type TimelineFilterProps = {
   user?: User;
   filterType?: 'origin' | 'type';
   selectionType?: 'order' | 'sort';
@@ -34,7 +34,7 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
     filterTimeline,
     filterOrigin,
   } = props;
-  const styles = useStyles();
+  const styles = useStyles({...props, filterType});
 
   const {sortOptions, orderOptions, originFilterOptions, typeFilterOptions} = useFilterOption();
 
@@ -55,7 +55,7 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
   };
 
   return (
-    <Grid container alignItems="center" justifyContent="space-between">
+    <Grid container alignItems="center" className={styles.root}>
       <ShowIf condition={filterType === 'type'}>
         <TabList
           tabs={typeFilterOptions}
@@ -64,17 +64,18 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
           size="small"
           position="left"
           onChangeTab={handleFilter}
-          className={styles.filter}
         />
       </ShowIf>
 
       <ShowIf condition={filterType === 'origin'}>
-        <DropdownMenu
-          title="Filter by"
-          selected={type}
-          options={originFilterOptions}
-          onChange={handleFilterOrigin}
-        />
+        <div className={styles.mobile}>
+          <DropdownMenu
+            title="Filter by"
+            selected={type}
+            options={originFilterOptions}
+            onChange={handleFilterOrigin}
+          />
+        </div>
       </ShowIf>
 
       <ShowIf condition={selectionType === 'order'}>

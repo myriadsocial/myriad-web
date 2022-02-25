@@ -19,18 +19,20 @@ export const UserSettings: React.FC<UserSettingsProps> = props => {
   const styles = useStyles();
 
   return (
-    <div className={styles.root}>
-      <Typography variant="h5" gutterBottom className={styles.title}>
-        Public Key
-      </Typography>
+    <div className={styles.box}>
+      <div className={styles.root}>
+        <Typography variant="h5" gutterBottom className={styles.title}>
+          Public Key
+        </Typography>
 
-      <div className={styles.account}>
-        <Typography variant="body1">{user?.id}</Typography>
-        <CopyToClipboard text={user ? user.id : ''} onCopy={onPublicKeyCopied}>
-          <IconButton aria-label="copy-public-key" style={{padding: 0}}>
-            <SvgIcon component={DuplicateIcon} color="primary" />
-          </IconButton>
-        </CopyToClipboard>
+        <div className={styles.account}>
+          <Typography variant="body1">{user?.id}</Typography>
+          <CopyToClipboard text={user ? user.id : ''} onCopy={onPublicKeyCopied}>
+            <IconButton aria-label="copy-public-key" style={{padding: 0}}>
+              <SvgIcon component={DuplicateIcon} color="primary" />
+            </IconButton>
+          </CopyToClipboard>
+        </div>
       </div>
     </div>
   );
