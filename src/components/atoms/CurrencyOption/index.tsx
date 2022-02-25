@@ -45,7 +45,7 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
     // TODO FILTER WHEN TYPING
     setSearch(event.target.value);
     const debounceSubmit = debounce(() => {
-      console.log(search);
+      // code
     }, 300);
 
     debounceSubmit();
@@ -54,7 +54,7 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
   const submitSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     // TODO FILTER WHEN ENTER
     if (event.key === 'Enter') {
-      console.log(search);
+      // code
     }
   };
 

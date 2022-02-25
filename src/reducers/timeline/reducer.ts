@@ -384,6 +384,13 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       };
     }
 
+    case constants.SET_TIMELINE_SORT: {
+      return update(state, {
+        order: {$set: action.order},
+        sort: {$set: action.sort ?? 'DESC'},
+      });
+    }
+
     case constants.TIMELINE_LOADING: {
       return update(state, {
         loading: {$set: action.loading},

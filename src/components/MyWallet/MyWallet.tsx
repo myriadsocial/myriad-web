@@ -47,11 +47,11 @@ export const MyWallet: React.FC<MyWalletProps> = props => {
   }, [query]);
 
   const handleChangeTab = () => {
-    console.log('changed tab!');
+    // code
   };
 
   const handleClick = () => {
-    console.log('open wallet setting!');
+    // code
   };
 
   return (

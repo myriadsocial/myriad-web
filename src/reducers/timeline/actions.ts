@@ -130,6 +130,12 @@ export interface TimelineLoading extends Action {
   loading: boolean;
 }
 
+export interface SetTimelineSort extends Action {
+  type: constants.SET_TIMELINE_SORT;
+  order: TimelineOrderType;
+  sort?: TimelineSortType;
+}
+
 /**
  * Union Action Types
  */
@@ -154,6 +160,7 @@ export type Actions =
   | UpdatePostVisibility
   | ResetDownvoting
   | TimelineLoading
+  | SetTimelineSort
   | BaseAction;
 
 export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
@@ -210,6 +217,15 @@ export const decreaseCommentCount = (
   type: constants.DECREASE_COMMENT_COUNT,
   postId,
   section,
+});
+
+export const setTimelineSort = (
+  order: TimelineOrderType,
+  sort?: TimelineSortType,
+): SetTimelineSort => ({
+  type: constants.SET_TIMELINE_SORT,
+  order,
+  sort,
 });
 
 export const setTimelineLoading = (loading: boolean): TimelineLoading => ({
@@ -654,12 +670,14 @@ export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
 
     const {
       userState: {user},
+      timelineState: {order, sort},
     } = getState();
 
     const userId = user?.id as string;
 
     try {
-      const {data: posts, meta} = await PostAPI.findPosts(user ?? null, query, page);
+      const filter = {userId: user?.id, query};
+      const {data: posts, meta} = await PostAPI.findPosts(filter, {page, orderField: order, sort});
 
       dispatch({
         type: constants.LOAD_TIMELINE,

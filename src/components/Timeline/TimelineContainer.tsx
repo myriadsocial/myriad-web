@@ -75,14 +75,20 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const sendTipOpened = Boolean(tippedPost) || Boolean(tippedComment);
 
   useEffect(() => {
-    fetchInitial && filterTimeline(query);
-  }, [query, fetchInitial]);
+    fetchInitialTimeline();
+  }, [query]);
 
   useEffect(() => {
     if (isTipSent) {
       closeSendTip();
     }
   }, [isTipSent]);
+
+  const fetchInitialTimeline = () => {
+    if (fetchInitial && posts.length === 0) {
+      filterTimeline(query);
+    }
+  };
 
   const handleUpvote = (reference: Post | Comment) => {
     dispatch(upvote(reference));

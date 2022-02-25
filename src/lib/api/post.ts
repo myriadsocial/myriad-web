@@ -2,6 +2,7 @@ import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 import {LoopbackWhere} from './interfaces/loopback-query.interface';
+import {PaginationParams, FilterParams} from './interfaces/pagination-params.interface';
 
 import {Post, PostProps, ImportPostProps, PostVisibility, PostStatus} from 'src/interfaces/post';
 import {
@@ -17,6 +18,12 @@ type PostList = BaseList<Post>;
 type ImporterList = BaseList<User>;
 type WalletAddress = {
   walletAddress: string;
+};
+type PostsFilterParams = FilterParams & {
+  userId?: string;
+};
+type PostsPaginationParams = PaginationParams & {
+  orderField?: TimelineOrderType;
 };
 
 export const getPost = async (
@@ -150,8 +157,17 @@ export const getPost = async (
   return data;
 };
 
-export const findPosts = async (user: User | null, query: string, page = 1): Promise<PostList> => {
-  const path = `/posts?q=${encodeURIComponent(query)}`;
+export const findPosts = async (
+  filter: PostsFilterParams,
+  pagination: PostsPaginationParams,
+): Promise<PostList> => {
+  const {
+    page = 1,
+    limit = PAGINATION_LIMIT,
+    orderField = TimelineOrderType.LATEST,
+    sort = 'DESC',
+  } = pagination;
+  const path = `/posts?q=${encodeURIComponent(filter.query)}`;
 
   const include: Array<any> = [
     {
@@ -162,12 +178,12 @@ export const findPosts = async (user: User | null, query: string, page = 1): Pro
     },
   ];
 
-  if (user) {
+  if (filter.userId) {
     include.push({
       relation: 'votes',
       scope: {
         where: {
-          userId: {eq: user.id},
+          userId: {eq: filter.userId},
         },
       },
     });
@@ -178,10 +194,11 @@ export const findPosts = async (user: User | null, query: string, page = 1): Pro
     method: 'GET',
     params: {
       pageNumber: page,
-      pageLimit: PAGINATION_LIMIT,
+      pageLimit: limit,
       importers: true,
+      sortBy: orderField,
+      order: sort,
       filter: {
-        order: `createdAt DESC`,
         include,
       },
     },

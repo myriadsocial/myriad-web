@@ -56,6 +56,7 @@ export const useTimelineHook = () => {
     hasMore: timelineState.hasMore,
     sort: timelineState.sort,
     posts: timelineState.posts,
+    order: timelineState.order,
     searchPosts,
     tippedContent: timelineState.tippedContent,
     initTimeline,

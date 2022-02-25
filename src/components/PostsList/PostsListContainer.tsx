@@ -21,10 +21,11 @@ import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
+import {TimelineOrderType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {removeImporter} from 'src/reducers/importers/actions';
-import {setTippedContent} from 'src/reducers/timeline/actions';
+import {setTimelineSort, setTippedContent} from 'src/reducers/timeline/actions';
 import {upvote, setDownvoting, removeVote} from 'src/reducers/timeline/actions';
 import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {setTippedUser, setTippedUserId} from 'src/reducers/wallet/actions';
@@ -40,7 +41,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
   const dispatch = useDispatch();
 
-  const {loading, page, posts, hasMore, searchPosts, getTippedUserId} = useTimelineHook();
+  const {loading, page, posts, hasMore, order, searchPosts, getTippedUserId} = useTimelineHook();
   const {openTipHistory} = useTipHistory();
   const {openToasterSnack} = useToasterSnackHook();
 
@@ -68,6 +69,12 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
   const handleLoadNextPage = () => {
     searchPosts(query, page + 1);
+  };
+
+  const handleSort = (sort: TimelineOrderType) => {
+    dispatch(setTimelineSort(sort));
+
+    searchPosts(query);
   };
 
   const handleUpvote = (reference: Post | Comment) => {
@@ -171,6 +178,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
     <>
       <PostsList
         user={user}
+        order={order}
         anonymous={anonymous}
         loadNextPage={handleLoadNextPage}
         hasMore={hasMore}
@@ -184,6 +192,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
         searchedPosts={posts}
         onRemoveVote={handleRemoveVote}
         onImporters={handleImportedPost}
+        onSort={handleSort}
       />
 
       <Modal
