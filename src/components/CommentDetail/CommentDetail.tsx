@@ -323,7 +323,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
               mentionables={mentionables.map(item => ({
                 value: item.id,
                 name: item.name,
-                avatar: item.avatar,
+                avatar: item.profilePictureURL,
               }))}
               onSearchMention={onSearchPeople}
               onSubmit={handleSubmitComment}
@@ -364,7 +364,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
           mentionables={mentionables.map(item => ({
             value: item.id,
             name: item.name,
-            avatar: item.avatar,
+            avatar: item.profilePictureURL,
           }))}
           onSearchMention={onSearchPeople}
           onSubmit={handleSubmitComment}

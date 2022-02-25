@@ -9,12 +9,15 @@ import {UserExperience} from 'src/interfaces/experience';
 import {Friend} from 'src/interfaces/friend';
 import {SocialMedia} from 'src/interfaces/social';
 import {BlockedProps, User} from 'src/interfaces/user';
+import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interface';
 
 export interface ProfileState extends BaseState {
   userId?: string;
   detail?: User & BlockedProps;
   socials: SocialMedia[];
   friends: {
+    filter?: string;
+    params?: PaginationParams;
     data: Friend[];
     meta: {
       currentPage: number;
@@ -75,11 +78,23 @@ export const ProfileReducer: Redux.Reducer<ProfileState, Actions> = (
     }
 
     case constants.FETCH_PROFILE_FRIEND: {
+      if (!action.meta.currentPage || action.meta.currentPage === 1) {
+        return {
+          ...state,
+          friends: {
+            data: action.friends,
+            meta: action.meta,
+            filter: undefined,
+          },
+        };
+      }
+
       return {
         ...state,
         friends: {
-          data: action.friends,
+          data: [...state.friends.data, ...action.friends],
           meta: action.meta,
+          filter: undefined,
         },
       };
     }
@@ -90,6 +105,7 @@ export const ProfileReducer: Redux.Reducer<ProfileState, Actions> = (
         friends: {
           data: action.friends,
           meta: action.meta,
+          filter: action.query,
         },
       };
     }
@@ -115,6 +131,16 @@ export const ProfileReducer: Redux.Reducer<ProfileState, Actions> = (
       return {
         ...state,
         friendStatus: action.status,
+      };
+    }
+
+    case constants.SET_PROFILE_FRIENDS_FILTER: {
+      return {
+        ...state,
+        friends: {
+          ...state.friends,
+          params: action.params,
+        },
       };
     }
 

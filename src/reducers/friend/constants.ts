@@ -15,3 +15,9 @@ export type REJECT_FRIEND_REQUEST = typeof REJECT_FRIEND_REQUEST;
 
 export const FILTER_FRIEND = 'FILTER_FRIEND';
 export type FILTER_FRIEND = typeof FILTER_FRIEND;
+
+export const SET_FRIENDS_FILTER = 'SET_FRIENDS_FILTER';
+export type SET_FRIENDS_FILTER = typeof SET_FRIENDS_FILTER;
+
+export const CLEAR_FRIEND = 'CLEAR_FRIEND';
+export type CLEAR_FRIEND = typeof CLEAR_FRIEND;
