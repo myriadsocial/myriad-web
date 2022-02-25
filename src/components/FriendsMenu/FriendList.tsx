@@ -43,6 +43,7 @@ import {WalletState} from 'src/reducers/wallet/reducer';
 export type FriendListProps = {
   type?: 'contained' | 'basic';
   user?: User;
+  isFiltered: boolean;
   background?: boolean;
   disableFilter?: boolean;
   disableSort?: boolean;
@@ -60,6 +61,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     friends,
     user,
     hasMore,
+    isFiltered,
     background = false,
     disableFilter = false,
     disableSort = false,
@@ -215,7 +217,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     }
   };
 
-  if (friends.length === 0) {
+  if (friends.length === 0 && !isFiltered) {
     return (
       <Empty title="Friend list is empty" subtitle="Find or invite your friends to Myriad 😉" />
     );

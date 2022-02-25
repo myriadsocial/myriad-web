@@ -99,8 +99,14 @@ export const searchFriend: ThunkActionCreator<Actions, RootState> =
   (query: string, page?: number) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
+    const {
+      userState: {user},
+    } = getState();
+
+    if (!user) return;
+
     try {
-      const {meta, data: friends} = await FriendAPI.searchFriend({query}, {page});
+      const {meta, data: friends} = await FriendAPI.searchFriend({query, userId: user.id}, {page});
 
       dispatch({
         type: constants.FILTER_FRIEND,

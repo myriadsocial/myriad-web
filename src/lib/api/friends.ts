@@ -6,7 +6,7 @@ import {PaginationParams, FilterParams} from './interfaces/pagination-params.int
 import {Friend, FriendStatus} from 'src/interfaces/friend';
 
 type FriendsFilterParams = FilterParams & {
-  userId?: string;
+  userId: string;
 };
 type FriendList = BaseList<Friend>;
 type FriendRequestList = BaseList<Friend>;
