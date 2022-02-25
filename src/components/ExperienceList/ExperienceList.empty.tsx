@@ -8,8 +8,9 @@ import {createStyles, makeStyles} from '@material-ui/core/styles';
 const useStyles = makeStyles(() =>
   createStyles({
     empty: {
+      marginTop: 30,
       background: '#FFF',
-      height: '491px',
+      height: 335,
       width: '100%',
       borderRadius: 10,
       display: 'flex',

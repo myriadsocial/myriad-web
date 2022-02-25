@@ -55,40 +55,11 @@ export const getPost = async (
   }
 
   if (filters && filters.owner) {
-    where.or = [
-      {
-        createdBy: {
-          eq: filters.owner,
-        },
-      },
-      {
-        importers: {
-          inq: [filters.owner],
-        },
-      },
-    ];
-
-    if (userId !== filters.owner) {
-      // filter only public post if no friend status provided
-      if (asFriend) {
-        where.visibility = {
-          inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
-        };
-      } else {
-        where.visibility = {
-          eq: PostVisibility.PUBLIC,
-        };
-      }
-    }
-  }
-
-  if (filters && filters.importer) {
-    // @ts-expect-error
-    where.importers = {
-      inq: [filters.importer],
+    where.createdBy = {
+      eq: filters.owner,
     };
 
-    if (userId !== filters.importer) {
+    if (userId !== filters.owner) {
       // filter only public post if no friend status provided
       if (asFriend) {
         where.visibility = {
@@ -182,7 +153,6 @@ export const getPost = async (
 export const findPosts = async (user: User | null, query: string, page = 1): Promise<PostList> => {
   const path = `/posts?q=${encodeURIComponent(query)}`;
 
-  let where: Record<string, any> = {};
   const include: Array<any> = [
     {
       relation: 'user',
@@ -191,34 +161,6 @@ export const findPosts = async (user: User | null, query: string, page = 1): Pro
       relation: 'people',
     },
   ];
-
-  if (user) {
-    where = {
-      or: [
-        {
-          visibility: {
-            inq: ['public'],
-          },
-        },
-        {
-          or: [
-            {createdBy: user.id},
-            {
-              importers: {
-                inq: [user.id],
-              },
-            },
-          ],
-        },
-      ],
-    };
-  } else {
-    where = {
-      visibility: {
-        inq: ['public'],
-      },
-    };
-  }
 
   if (user) {
     include.push({
@@ -231,8 +173,6 @@ export const findPosts = async (user: User | null, query: string, page = 1): Pro
     });
   }
 
-  console.log('FIND POSTS', where);
-
   const {data} = await MyriadAPI.request<PostList>({
     url: path,
     method: 'GET',
@@ -243,7 +183,6 @@ export const findPosts = async (user: User | null, query: string, page = 1): Pro
       filter: {
         order: `createdAt DESC`,
         include,
-        where,
       },
     },
   });

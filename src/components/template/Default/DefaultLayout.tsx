@@ -118,17 +118,15 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
         <div className={classes.thirdCol}>
           <div className={classes.innerThirdColWrapper}>
-            <div>
-              <ProfileCardContainer toggleNotification={handleToggleNotification} />
-            </div>
-            <div>
-              <ShowIf condition={!showNotification}>
-                <RightMenuBar />
-              </ShowIf>
-              <ShowIf condition={showNotification}>
-                <NotificationsContainer infinite={false} size="small" />
-              </ShowIf>
-            </div>
+            <ProfileCardContainer toggleNotification={handleToggleNotification} />
+
+            <ShowIf condition={!showNotification}>
+              <RightMenuBar />
+            </ShowIf>
+
+            <ShowIf condition={showNotification}>
+              <NotificationsContainer infinite={false} size="small" />
+            </ShowIf>
           </div>
         </div>
       </div>

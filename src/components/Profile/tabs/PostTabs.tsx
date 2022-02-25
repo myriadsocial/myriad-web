@@ -48,7 +48,7 @@ export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
     return <PrivateProfile />;
   }
 
-  if (isProfileOwner && totalPost === 0) {
+  if (totalPost === 0) {
     return <EmptyProfilePost owner={isProfileOwner} />;
   }
 
