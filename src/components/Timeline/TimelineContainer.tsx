@@ -100,11 +100,11 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
       const contentType = 'post';
 
-      let isTippingForDotSamaTokensDisabled = false;
+      let isOtherTippingCurrencyDisabled = false;
 
-      if (!('userSocialMedia' in reference)) isTippingForDotSamaTokensDisabled = true;
+      if (!('userSocialMedia' in reference)) isOtherTippingCurrencyDisabled = true;
 
-      dispatch(setTippedContent(contentType, reference.id, isTippingForDotSamaTokensDisabled));
+      dispatch(setTippedContent(contentType, reference.id, isOtherTippingCurrencyDisabled));
     }
 
     if (reference && 'section' in reference) {
@@ -115,9 +115,9 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
       const contentType = 'comment';
 
-      const isTippingForDotSamaTokensDisabled = false;
+      const isOtherTippingCurrencyDisabled = false;
 
-      dispatch(setTippedContent(contentType, reference.id, isTippingForDotSamaTokensDisabled));
+      dispatch(setTippedContent(contentType, reference.id, isOtherTippingCurrencyDisabled));
     }
   };
 

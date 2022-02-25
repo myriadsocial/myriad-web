@@ -20,11 +20,11 @@ import {CurrencyId} from 'src/interfaces/currency';
 type Props = {
   balanceDetails: BalanceDetail[];
   onSelect: (selected: BalanceDetail) => void;
-  isTippingForDotSamaTokensDisabled: boolean;
+  isOtherTippingCurrencyDisabled: boolean;
 };
 
 export const CurrencyOptionComponent: React.FC<Props> = props => {
-  const {balanceDetails, onSelect, isTippingForDotSamaTokensDisabled} = props;
+  const {balanceDetails, onSelect, isOtherTippingCurrencyDisabled} = props;
   const [search, setSearch] = useState('');
   const style = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -103,7 +103,7 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
             <MenuItem
               classes={{root: style.hover}}
               key={item.id}
-              disabled={isTippingForDotSamaTokensDisabled && item.id !== CurrencyId.MYRIA}
+              disabled={isOtherTippingCurrencyDisabled && item.id !== CurrencyId.MYRIA}
               onClick={() => handleSelect(item)}>
               <div className={style.flex}>
                 <div className={style.tokenColumn}>

@@ -178,9 +178,9 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     const contentType = 'comment';
     const referenceId = comment.id;
 
-    const isTippingForDotSamaTokensDisabled = false;
+    const isOtherTippingCurrencyDisabled = false;
 
-    dispatch(setTippedContent(contentType, referenceId, isTippingForDotSamaTokensDisabled));
+    dispatch(setTippedContent(contentType, referenceId, isOtherTippingCurrencyDisabled));
   };
 
   const handleViewProfile = () => {

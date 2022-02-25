@@ -144,11 +144,11 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
       const contentType = 'post';
       const referenceId = post.id;
 
-      let isTippingForDotSamaTokensDisabled = false;
+      let isOtherTippingCurrencyDisabled = false;
 
-      if (!('userSocialMedia' in post)) isTippingForDotSamaTokensDisabled = true;
+      if (!('userSocialMedia' in post)) isOtherTippingCurrencyDisabled = true;
 
-      dispatch(setTippedContent(contentType, referenceId, isTippingForDotSamaTokensDisabled));
+      dispatch(setTippedContent(contentType, referenceId, isOtherTippingCurrencyDisabled));
     }
   };
 

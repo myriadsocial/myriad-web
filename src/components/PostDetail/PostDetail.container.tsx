@@ -92,11 +92,11 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
 
       const contentType = 'comment';
 
-      let isTippingForDotSamaTokensDisabled = false;
+      let isOtherTippingCurrencyDisabled = false;
 
-      if (!('userSocialMedia' in reference)) isTippingForDotSamaTokensDisabled = true;
+      if (!('userSocialMedia' in reference)) isOtherTippingCurrencyDisabled = true;
 
-      dispatch(setTippedContent(contentType, reference.id, isTippingForDotSamaTokensDisabled));
+      dispatch(setTippedContent(contentType, reference.id, isOtherTippingCurrencyDisabled));
     }
   };
 

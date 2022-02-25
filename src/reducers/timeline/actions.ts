@@ -104,7 +104,7 @@ export interface SetTippedContent extends Action {
   type: constants.SET_TIPPED_CONTENT;
   contentType: string;
   referenceId: string;
-  disableTippingDotSamaTokens: boolean;
+  disableOtherTippingCurrencies: boolean;
 }
 
 export interface IncreaseCommentCount extends Action {
@@ -168,12 +168,12 @@ export const clearTimeline = (): ClearTimeline => ({
 export const setTippedContent = (
   contentType: string,
   referenceId: string,
-  disableTippingDotSamaTokens: boolean,
+  disableOtherTippingCurrencies: boolean,
 ): SetTippedContent => ({
   type: constants.SET_TIPPED_CONTENT,
   contentType,
   referenceId,
-  disableTippingDotSamaTokens,
+  disableOtherTippingCurrencies,
 });
 
 /**
