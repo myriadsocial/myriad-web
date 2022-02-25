@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import {FriendListComponent} from './FriendList';
@@ -47,6 +47,7 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
     state => state.profileState.friends.meta.totalItemCount,
   );
 
+  const [isFiltered, setFiltered] = useState(false);
   const isFriend = friendStatus?.status == 'approved';
   const isOwner = detail?.id == userLogin?.id;
   const isPrivate = settings.privacy.accountPrivacy == 'private';
@@ -75,6 +76,8 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
   };
 
   const handleSearchFriend = (query: string) => {
+    setFiltered(query.length > 0);
+
     if (isProfile) {
       searchProfileFriends(query);
     } else {
@@ -109,6 +112,7 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
 
   return (
     <FriendListComponent
+      isFiltered={isFiltered}
       type={type}
       disableFilter={disableFilter}
       disableSort={disableSort}

@@ -10,7 +10,7 @@ type VideoProps = {
 
 export const Video: React.FC<VideoProps> = ({url}) => {
   return (
-    <Grid container wrap="wrap" justifyContent="space-around" component={Paper}>
+    <Grid container wrap="wrap" justifyContent="space-around" component={Paper} spacing={2}>
       <ReactPlayer url={url} controls={true} playing={false} stopOnUnmount={true} />
     </Grid>
   );
