@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import {Grid} from '@material-ui/core';
@@ -11,9 +11,9 @@ import {DropdownMenu} from '../atoms/DropdownMenu';
 import {Loading} from '../atoms/Loading';
 import {useStyles} from './PostsList.styles';
 
-import _ from 'lodash';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
+import {TimelineOrderType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 
 type PostsListProps = {
@@ -21,6 +21,7 @@ type PostsListProps = {
   searchedPosts: Post[];
   anonymous: boolean;
   hasMore: boolean;
+  order: TimelineOrderType;
   upvote: (reference: Post | Comment) => void;
   loadNextPage: () => void;
   onSendTip: (post: Post) => void;
@@ -31,6 +32,7 @@ type PostsListProps = {
   onShared: (post: Post, type: 'link' | 'post') => void;
   onRemoveVote: (reference: Post | Comment) => void;
   onImporters: (post: Post) => void;
+  onSort: (sort: TimelineOrderType) => void;
 };
 
 export const PostsList: React.FC<PostsListProps> = props => {
@@ -39,6 +41,7 @@ export const PostsList: React.FC<PostsListProps> = props => {
     searchedPosts,
     anonymous,
     hasMore,
+    order,
     loadNextPage,
     upvote,
     onSendTip,
@@ -49,44 +52,13 @@ export const PostsList: React.FC<PostsListProps> = props => {
     toggleDownvoting,
     onRemoveVote,
     onImporters,
+    onSort,
   } = props;
   const style = useStyles();
   const {orderOptions} = useFilterOption();
 
-  const [defaultPosts, setDefaultPosts] = useState<Post[]>([]);
-
-  useEffect(() => {
-    setDefaultPosts(searchedPosts);
-  }, [searchedPosts]);
-
   const handleSort = (sort: string) => {
-    switch (sort) {
-      case 'created': {
-        const sortedByLatest = _.orderBy(defaultPosts, 'createdAt', 'desc');
-        setDefaultPosts(sortedByLatest);
-        break;
-      }
-
-      case 'trending': {
-        break;
-      }
-
-      case 'like': {
-        const sortedByMostLiked = _.orderBy(defaultPosts, 'metric.upvotes', 'desc');
-        setDefaultPosts(sortedByMostLiked);
-        break;
-      }
-
-      case 'comment': {
-        const sortedByMostCommented = _.orderBy(defaultPosts, 'metric.comments', 'desc');
-        setDefaultPosts(sortedByMostCommented);
-        break;
-      }
-
-      default: {
-        break;
-      }
-    }
+    onSort(sort as TimelineOrderType);
   };
 
   return (
@@ -95,7 +67,7 @@ export const PostsList: React.FC<PostsListProps> = props => {
         <div className={style.sort}>
           <DropdownMenu
             title="Sort by"
-            selected="created"
+            selected={order}
             options={orderOptions}
             onChange={handleSort}
           />
@@ -109,10 +81,10 @@ export const PostsList: React.FC<PostsListProps> = props => {
         hasMore={hasMore}
         next={loadNextPage}
         loader={<Loading />}>
-        {defaultPosts.length === 0 ? (
+        {searchedPosts.length === 0 ? (
           <EmptyResult emptyContent={EmptyContentEnum.POST} />
         ) : (
-          defaultPosts.map(post => (
+          searchedPosts.map(post => (
             <PostDetail
               user={user}
               key={`post-${post.id}`}
