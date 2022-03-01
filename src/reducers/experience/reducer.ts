@@ -4,7 +4,7 @@ import * as constants from './constants';
 
 import update from 'immutability-helper';
 import * as Redux from 'redux';
-import {Experience, Tag} from 'src/interfaces/experience';
+import {Experience, Tag, UserExperience} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
 
 export interface ExperienceState extends BasePaginationState {
@@ -14,7 +14,7 @@ export interface ExperienceState extends BasePaginationState {
   searchTags: Tag[];
   hasMore: boolean;
   filter?: string;
-  detail: Experience | null;
+  detail: UserExperience | null;
 }
 
 const initialState: ExperienceState = {

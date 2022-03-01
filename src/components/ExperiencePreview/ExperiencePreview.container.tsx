@@ -61,7 +61,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
       {experience && (
         <>
           <TopNavbarComponent
-            description={experience.name || 'Experience'}
+            description={experience.experience.name || 'Experience'}
             sectionTitle={SectionTitle.EXPERIENCE}
           />
           <div className={style.box}>

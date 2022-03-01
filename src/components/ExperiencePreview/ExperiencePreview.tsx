@@ -12,7 +12,7 @@ import {useStyles} from './experience.style';
 
 import {ListItemPeopleComponent} from 'src/components/atoms/ListItem/ListItemPeople';
 import {acronym} from 'src/helpers/string';
-import {Experience, WrappedExperience} from 'src/interfaces/experience';
+import {WrappedExperience} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
 import {SocialsEnum} from 'src/interfaces/social';
 import {RootState} from 'src/reducers';
@@ -21,7 +21,7 @@ import {UserState} from 'src/reducers/user/reducer';
 const ExperienceSignInDialog = dynamic(() => import('./ExperienceSignIn'), {ssr: false});
 
 type Props = {
-  experience: Experience;
+  experience: WrappedExperience;
   userExperiences: WrappedExperience[];
   userId: string;
   onSubscribe: (experienceId: string) => void;
@@ -38,7 +38,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const [promptSignin, setPromptSignin] = React.useState(false);
 
   const parsingTags = () => {
-    const list = experience.tags.map(tag => {
+    const list = experience.experience.tags.map(tag => {
       return `#${tag}`;
     });
     return list.map(tag => {
@@ -51,14 +51,14 @@ export const ExperiencePreview: React.FC<Props> = props => {
   };
 
   const handleEditExperience = () => {
-    onUpdate(experience.id);
+    experience.id && onUpdate(experience.id);
   };
 
   const handleSubscribeExperience = () => {
     if (anonymous) {
       setPromptSignin(true);
     } else {
-      onSubscribe(experience.id);
+      onSubscribe(experience.experience.id);
     }
   };
 
@@ -74,8 +74,9 @@ export const ExperiencePreview: React.FC<Props> = props => {
 
   const isSubscribed = () => {
     return (
-      userExperiences.filter(ar => ar.experience.id === experience.id && ar.subscribed === true)
-        .length > 0
+      userExperiences.filter(
+        ar => ar.experience.id === experience.experience.id && ar.subscribed === true,
+      ).length > 0
     );
   };
 
@@ -83,7 +84,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
     if (anonymous) {
       setPromptSignin(true);
     } else {
-      onFollow(experience.id);
+      experience.id && onFollow(experience.id);
     }
   };
 
@@ -100,29 +101,36 @@ export const ExperiencePreview: React.FC<Props> = props => {
     }
   };
 
+  const isDisable = () => {
+    if (isSubscribed()) return false;
+    if (experience.private && !experience.friend) return true;
+    if (experience.private && experience.friend) return false;
+    return false;
+  };
+
   return (
     <div className={style.root}>
       <div className={style.mb30}>
         <Avatar
-          alt={experience.name}
-          src={experience.experienceImageURL}
+          alt={experience.experience.name}
+          src={experience.experience.experienceImageURL}
           variant="rounded"
           className={style.avatar}
         />
-        <Typography className={style.experienceName}>{experience.name}</Typography>
-        <Typography className={style.description}>{experience.description}</Typography>
+        <Typography className={style.experienceName}>{experience.experience.name}</Typography>
+        <Typography className={style.description}>{experience.experience.description}</Typography>
       </div>
       <div className={style.mb30}>
         <Typography className={style.subtitle}>{'Author'}</Typography>
         <div className={style.flex}>
           <Avatar
-            alt={experience.user.name}
-            src={experience.user.profilePictureURL}
+            alt={experience.experience.user.name}
+            src={experience.experience.user.profilePictureURL}
             variant="circular"
             className={style.photo}>
-            {acronym(experience.user.name)}
+            {acronym(experience.experience.user.name)}
           </Avatar>
-          <Typography className={style.user}>{experience.user.name}</Typography>
+          <Typography className={style.user}>{experience.experience.user.name}</Typography>
         </div>
       </div>
       <div className={style.mb30}>
@@ -131,7 +139,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
       </div>
       <div>
         <Typography className={style.subtitle}>{'People'}</Typography>
-        {experience.people.map(person =>
+        {experience.experience.people.map(person =>
           person.id === '' ? (
             <></>
           ) : (
@@ -146,9 +154,10 @@ export const ExperiencePreview: React.FC<Props> = props => {
           ),
         )}
       </div>
-      {(experience?.createdBy !== user?.id || anonymous) && (
+      {(experience.experience?.createdBy !== user?.id || anonymous) && (
         <div className={style.button}>
           <Button
+            disabled={isDisable()}
             variant="outlined"
             color="secondary"
             className={style.clone}
@@ -156,6 +165,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
             Clone
           </Button>
           <Button
+            disabled={isDisable()}
             variant="contained"
             color="primary"
             onClick={isSubscribed() ? handleUnsubscribeExperience : handleSubscribeExperience}>
@@ -164,7 +174,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
         </div>
       )}
 
-      {experience?.createdBy === user?.id && (
+      {experience.experience?.createdBy === user?.id && (
         <Button
           fullWidth
           className={style.center}
