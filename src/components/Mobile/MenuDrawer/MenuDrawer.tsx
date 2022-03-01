@@ -99,7 +99,7 @@ export const MenuDrawerComponent: React.FC = () => {
   };
 
   const openMenu = (item: MenuDetail) => () => {
-    if (item.url === '/wallet') {
+    if (item.url === '/wallet' && !user) {
       setOpenPromptDrawer(true);
     } else {
       router.push(item.url);

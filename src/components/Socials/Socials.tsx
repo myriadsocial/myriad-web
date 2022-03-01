@@ -106,7 +106,6 @@ export const Socials: React.FC<SocialsProps> = props => {
     if (!user) {
       setOpenPromptDrawer(true);
     } else {
-      setOpenPromptDrawer(true);
       setAddSocial(prevStatus => !prevStatus);
     }
   };
