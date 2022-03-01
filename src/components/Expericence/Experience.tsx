@@ -73,7 +73,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
     handleCloseSettings();
 
     if (onClone) {
-      onClone(experienceId);
+      userExperienceId && onClone(userExperienceId);
     }
   };
 
@@ -119,6 +119,12 @@ export const Experience: React.FC<ExperienceProps> = props => {
     setShowDeleteConfimation(false);
   };
 
+  const isHidden = () => {
+    if (userExperience.private && !userExperience.friend) return true;
+    if (userExperience.private && userExperience.friend) return false;
+    return false;
+  };
+
   return (
     <>
       <Card className={styles.root}>
@@ -161,7 +167,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
         onClose={handleCloseSettings}>
         <Link
           href={`/experience/[experienceId]/preview`}
-          as={`/experience/${experienceId}/preview`}
+          as={`/experience/${userExperienceId}/preview`}
           passHref>
           <MenuItem onClick={handleCloseSettings}>View details</MenuItem>
         </Link>
@@ -169,19 +175,19 @@ export const Experience: React.FC<ExperienceProps> = props => {
         <ShowIf condition={isOwnExperience}>
           <Link
             href={`/experience/[experienceId]/edit`}
-            as={`/experience/${experienceId}/edit`}
+            as={`/experience/${userExperienceId}/edit`}
             passHref>
             <MenuItem>Edit experience</MenuItem>
           </Link>
         </ShowIf>
 
-        <ShowIf condition={!isOwnExperience}>
+        <ShowIf condition={!isOwnExperience && !isHidden()}>
           <MenuItem onClick={handleCloneExperience} disabled={anonymous}>
             Clone
           </MenuItem>
         </ShowIf>
 
-        <ShowIf condition={!userExperience.subscribed && !isOwnExperience}>
+        <ShowIf condition={!userExperience.subscribed && !isOwnExperience && !isHidden()}>
           <MenuItem onClick={handleSubscribeExperience} disabled={anonymous}>
             Subscribe
           </MenuItem>

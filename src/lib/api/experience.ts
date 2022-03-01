@@ -114,6 +114,9 @@ export const getUserExperience = async (
               include: [
                 {
                   relation: 'user',
+                  scope: {
+                    include: [{relation: 'accountSetting'}],
+                  },
                 },
               ],
             },
@@ -177,13 +180,28 @@ export const createExperience = async (
   return data;
 };
 
-export const getExperience = async (experienceId: string): Promise<Experience> => {
-  const {data} = await MyriadAPI.request<Experience>({
-    url: `/experiences/${experienceId}`,
+export const getExperience = async (userExperienceId: string): Promise<UserExperience> => {
+  const {data} = await MyriadAPI.request<UserExperience>({
+    url: `/user-experiences/${userExperienceId}`,
     method: 'GET',
     params: {
       filter: {
-        include: ['user', 'users'],
+        include: [
+          'user',
+          {
+            relation: 'experience',
+            scope: {
+              include: [
+                {
+                  relation: 'user',
+                  scope: {
+                    include: [{relation: 'accountSetting'}],
+                  },
+                },
+              ],
+            },
+          },
+        ],
       },
     },
   });

@@ -47,7 +47,7 @@ export const ExperienceCloneContainer: React.FC = () => {
       <TopNavbarComponent description={'Clone Experience'} sectionTitle={SectionTitle.EXPERIENCE} />
       <ExperienceEditor
         type={'Clone'}
-        experience={experience}
+        experience={experience?.experience}
         tags={tags}
         people={people}
         onSearchTags={handleSearchTags}

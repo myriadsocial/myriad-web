@@ -47,10 +47,14 @@ export interface UserExperience extends BaseModel {
   experienceId: string;
   subscribed?: boolean;
   experience: Experience;
+  friend?: boolean;
+  private?: boolean;
 }
 
 export interface WrappedExperience {
   id?: string;
   subscribed?: boolean;
   experience: Experience;
+  friend?: boolean;
+  private?: boolean;
 }
