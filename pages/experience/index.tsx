@@ -29,8 +29,8 @@ const ExperiencePageComponent: React.FC = () => {
       </Head>
 
       <TopNavbarComponent
-        description={`Custom timeline`}
-        sectionTitle={SectionTitle.EXPERIENCE}
+        description={SectionTitle.EXPERIENCE}
+        sectionTitle={'Custom timeline'}
         type={'menu'}
       />
 
