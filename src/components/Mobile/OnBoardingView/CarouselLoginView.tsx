@@ -33,6 +33,9 @@ const useStyles = makeStyles<Theme, CarouselLoginViewProps>(theme =>
     carousel: {
       marginBottom: theme.spacing(3),
       width: '100vw',
+      '& .rec-slider-container': {
+        margin: 0,
+      },
       '& .rec.rec-arrow': {
         visibility: 'hidden',
         display: 'none',
