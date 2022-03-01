@@ -1,6 +1,8 @@
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+import {CommentDetailProps} from './CommentDetail.interface';
+
+export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
   createStyles({
     comment: {
       marginBottom: theme.spacing(1),
@@ -33,7 +35,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     flex: {
       display: 'flex',
-      padding: theme.spacing(0, 2),
+      padding: props => (props.deep > 0 ? theme.spacing(0, 0, 0, 2) : theme.spacing(0, 2)),
     },
     flexSpaceBetween: {
       display: 'flex',
@@ -45,6 +47,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     tree: {
       display: 'flex',
       flexDirection: 'column',
+      marginRight: theme.spacing(1),
       position: 'relative',
     },
     verticalTree: {
@@ -57,7 +60,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     horizontalTree: {
       position: 'absolute',
       top: 0,
-      left: '-37px',
+      left: '-45px',
       width: '33px',
       height: '22px',
       borderBottom: '1px solid #E5E5E5',
@@ -72,6 +75,11 @@ export const useStyles = makeStyles((theme: Theme) =>
     cursor: {
       cursor: 'pointer',
       textDecoration: 'underline',
+    },
+    hidden: {
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
     },
   }),
 );

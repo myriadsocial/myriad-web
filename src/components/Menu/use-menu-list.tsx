@@ -3,7 +3,7 @@ import {
   CurrencyDollarIcon,
   CogIcon,
   UsersIcon,
-  StopIcon,
+  PhotographIcon,
   HashtagIcon,
   VariableIcon,
   ViewGridIcon,
@@ -73,7 +73,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         id: 'nft',
         title: 'NFT',
         active: selected === 'nft',
-        icon: StopIcon,
+        icon: PhotographIcon,
         url: '/nft',
       },
       {

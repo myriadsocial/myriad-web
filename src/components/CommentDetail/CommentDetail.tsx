@@ -66,7 +66,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   } = useRepliesHook(comment.id, deep);
 
   const dispatch = useDispatch();
-  const style = useStyles();
+  const style = useStyles({...props, deep});
   const router = useRouter();
 
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
@@ -277,6 +277,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                 />
 
                 <Button
+                  className={style.hidden}
                   disabled={!user}
                   onClick={handleOpenReply}
                   classes={{root: style.button}}
@@ -287,6 +288,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
 
                 <ShowIf condition={!isOwnComment}>
                   <Button
+                    className={style.hidden}
                     disabled={balanceDetails.length === 0}
                     classes={{root: style.button}}
                     size="small"
@@ -305,6 +307,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                 </Button>
                 <ShowIf condition={!isOwnComment}>
                   <Button
+                    className={style.hidden}
                     disabled={!user}
                     classes={{root: style.button}}
                     size="small"
