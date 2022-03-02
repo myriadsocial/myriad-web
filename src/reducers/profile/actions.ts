@@ -221,7 +221,7 @@ export const fetchProfileExperience: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const {meta, data: experiences} = await ExperienceAPI.getUserExperience(detail.id, type);
+      const {meta, data: experiences} = await ExperienceAPI.getUserExperiences(detail.id, type);
 
       dispatch({
         type: constants.FETCH_PROFILE_EXPERIENCE,

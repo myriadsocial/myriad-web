@@ -188,7 +188,7 @@ export const fetchUserExperience: ThunkActionCreator<Actions, RootState> =
       }
 
       if (user) {
-        const {meta, data: experiences} = await ExperienceAPI.getUserExperience(user.id);
+        const {meta, data: experiences} = await ExperienceAPI.getUserExperiences(user.id);
 
         dispatch({
           type: constants.FETCH_USER_EXPERIENCE,
