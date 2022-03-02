@@ -180,9 +180,8 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
             </Avatar>
             <div>
               <Typography variant="body1" className={style.name} component="p">
-                <ShowIf condition={person.username !== 'myriad_official'}>{person.name}</ShowIf>
-                <ShowIf condition={person.username === 'myriad_official'}>
-                  {person.name}
+                {person.name}
+                <ShowIf condition={Boolean(person.verified)}>
                   <Tooltip
                     title={<Typography>Official Account</Typography>}
                     aria-label="official-account">

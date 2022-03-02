@@ -12,6 +12,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 700,
       paddingLeft: theme.spacing(3.75),
       paddingBottom: theme.spacing(5),
+      [theme.breakpoints.down('xs')]: {
+        paddingLeft: 20,
+        paddingBottom: theme.spacing(3),
+      },
     },
     subtitle: {
       fontSize: theme.typography.h4.fontSize,
@@ -28,6 +32,23 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
       '& .hidden-button': {
         display: 'none',
+      },
+      [theme.breakpoints.down('xs')]: {
+        paddingLeft: 20,
+        paddingBottom: theme.spacing(1),
+        paddingTop: theme.spacing(1),
+      },
+    },
+    primary: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '14px',
+        fontWeight: theme.typography.fontWeightRegular,
+      },
+    },
+    secondary: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '12px',
+        fontWeight: theme.typography.fontWeightRegular,
       },
     },
     action: {
