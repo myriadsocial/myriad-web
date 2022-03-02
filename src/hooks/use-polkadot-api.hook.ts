@@ -68,18 +68,16 @@ export const usePolkadotApi = () => {
     if (isTipSent) {
       dispatch(setIsTipSent(false));
     }
-
     try {
-      const correctedAmount = amount * 10 ** currency.decimal;
-
       const txHash = await signAndSendExtrinsic(
         {
           from,
           to,
-          value: correctedAmount,
+          value: amount,
           currencyId: currency.id,
           wsAddress: currency.rpcURL,
           native: currency.native,
+          decimal: currency.decimal,
         },
         params => {
           if (params.signerOpened) {
