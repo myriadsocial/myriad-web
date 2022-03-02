@@ -65,7 +65,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
     handleCloseSettings();
 
     if (selectable && onSelect) {
-      onSelect(experienceId);
+      userExperienceId && onSelect(userExperienceId);
     }
   };
 
