@@ -21,6 +21,7 @@ interface signAndSendExtrinsicProps {
   currencyId: string;
   wsAddress: string;
   native: boolean;
+  decimal: number;
 }
 
 interface SignTransactionCallbackProps {
@@ -168,7 +169,7 @@ export const signWithExtension = async (
 };
 
 export const signAndSendExtrinsic = async (
-  {from, to, value, currencyId, wsAddress, native}: signAndSendExtrinsicProps,
+  {from, to, value, currencyId, wsAddress, native, decimal}: signAndSendExtrinsicProps,
   callback?: (param: SignTransactionCallbackProps) => void,
 ): Promise<string | null> => {
   try {
@@ -212,10 +213,16 @@ export const signAndSendExtrinsic = async (
         signerOpened: true,
       });
 
+    const countDecimal = value.toString().split('.')[1]?.length ?? 0;
+    const currentDecimal = decimal - countDecimal;
+    const updatedValue = value * 10 ** countDecimal;
+    const updatedDecimal = 1 * 10 ** currentDecimal;
+    const amount = new BN(updatedValue.toString()).mul(new BN(updatedDecimal.toString()));
+
     // here we use the api to create a balance transfer to some account of a value of 12345678
     const transferExtrinsic = native
-      ? api.tx.balances.transfer(to, new BN(value.toString()))
-      : api.tx.currencies.transfer(to, {TOKEN: currencyId}, value);
+      ? api.tx.balances.transfer(to, amount)
+      : api.tx.currencies.transfer(to, {TOKEN: currencyId}, amount);
 
     let txHash: string | null = null;
 
