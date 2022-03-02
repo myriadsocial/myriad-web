@@ -59,10 +59,13 @@ export const Settings: React.FC<SettingsProps> = props => {
                     className={styles.option}
                     alignItems="center">
                     <ListItemText>
-                      <Typography variant="h5" color="textPrimary">
+                      <Typography variant="h5" color="textPrimary" className={styles.primary}>
                         {item.title}
                       </Typography>
-                      <Typography variant="body1" color="textSecondary">
+                      <Typography
+                        variant="body1"
+                        color="textSecondary"
+                        className={styles.secondary}>
                         {item.subtitle}
                       </Typography>
                     </ListItemText>
