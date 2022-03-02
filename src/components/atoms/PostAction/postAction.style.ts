@@ -35,6 +35,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     copy: {
       width: 520,
+      [theme.breakpoints.down('xs')]: {
+        width: 'auto',
+      },
     },
     subtitle: {
       fontWeight: theme.typography.fontWeightMedium,
