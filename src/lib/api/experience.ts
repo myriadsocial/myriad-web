@@ -202,7 +202,22 @@ export const getUserExperienceDetail = async (
     method: 'GET',
     params: {
       filter: {
-        include: ['user', 'users'],
+        include: [
+          'user',
+          {
+            relation: 'experience',
+            scope: {
+              include: [
+                {
+                  relation: 'user',
+                  scope: {
+                    include: [{relation: 'accountSetting'}],
+                  },
+                },
+              ],
+            },
+          },
+        ],
       },
     },
   });
