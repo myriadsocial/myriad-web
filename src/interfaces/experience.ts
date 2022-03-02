@@ -41,6 +41,8 @@ export interface ExperienceProps extends Searchable {
 
 export interface Experience extends ExperienceProps, BaseModel {
   user: User;
+  friend?: boolean;
+  private?: boolean;
 }
 
 export interface UserExperience extends BaseModel {

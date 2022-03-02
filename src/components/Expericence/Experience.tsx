@@ -65,7 +65,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
     handleCloseSettings();
 
     if (selectable && onSelect) {
-      userExperienceId && onSelect(userExperienceId);
+      onSelect(experienceId);
     }
   };
 
@@ -73,7 +73,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
     handleCloseSettings();
 
     if (onClone) {
-      userExperienceId && onClone(userExperienceId);
+      onClone(experienceId);
     }
   };
 
@@ -167,7 +167,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
         onClose={handleCloseSettings}>
         <Link
           href={`/experience/[experienceId]/preview`}
-          as={`/experience/${userExperienceId}/preview`}
+          as={`/experience/${experienceId}/preview`}
           passHref>
           <MenuItem onClick={handleCloseSettings}>View details</MenuItem>
         </Link>
@@ -175,7 +175,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
         <ShowIf condition={isOwnExperience}>
           <Link
             href={`/experience/[experienceId]/edit`}
-            as={`/experience/${userExperienceId}/edit`}
+            as={`/experience/${experienceId}/edit`}
             passHref>
             <MenuItem>Edit experience</MenuItem>
           </Link>

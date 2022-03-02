@@ -54,7 +54,7 @@ export const ExperienceEditContainer: React.FC = () => {
       <TopNavbarComponent description={'Edit Experience'} sectionTitle={SectionTitle.EXPERIENCE} />
       <ExperienceEditor
         type={'Edit'}
-        experience={experience?.experience}
+        experience={experience}
         tags={tags}
         people={people}
         onSearchTags={handleSearchTags}

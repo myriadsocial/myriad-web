@@ -5,7 +5,7 @@ import {fetchUserExperience} from '../user/actions';
 import * as constants from './constants';
 
 import {Action} from 'redux';
-import {Experience, Tag, UserExperience} from 'src/interfaces/experience';
+import {Experience, Tag} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import * as PeopleAPI from 'src/lib/api/people';
@@ -22,7 +22,7 @@ export interface LoadExperience extends PaginationAction {
 
 export interface LoadDetailExperience extends Action {
   type: constants.FETCH_DETAIL_EXPERIENCE;
-  experience: UserExperience;
+  experience: Experience;
 }
 
 export interface SearchExperience extends PaginationAction {
@@ -129,10 +129,10 @@ export const searchExperiences: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchDetailExperience: ThunkActionCreator<Actions, RootState> =
-  (userExperienceId: string) => async (dispatch, getState) => {
+  (experienceId: string) => async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
-      const experience = await ExperienceAPI.getExperience(userExperienceId);
+      const experience = await ExperienceAPI.getExperience(experienceId);
       dispatch({
         type: constants.FETCH_DETAIL_EXPERIENCE,
         experience: experience,
