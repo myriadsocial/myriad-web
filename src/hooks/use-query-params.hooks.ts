@@ -1,9 +1,14 @@
 import {useRouter} from 'next/router';
 
 import {isArray} from 'lodash';
+import {Url} from 'url';
 
 export const useQueryParams = () => {
   const router = useRouter();
+
+  const replace = (url: Partial<Url>): void => {
+    router.push(url, undefined, {shallow: true});
+  };
 
   const push = (key: string, value: string | string[], force = false): void => {
     if (!force) {
@@ -34,6 +39,7 @@ export const useQueryParams = () => {
   return {
     query: router.query,
     push,
+    replace,
     getIdByType,
   };
 };
