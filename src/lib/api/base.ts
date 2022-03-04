@@ -24,7 +24,9 @@ export const initialize = (params?: AuthorizationParams): AxiosInstance => {
         return response;
       },
       error => {
-        console.error('[myriad-api][error]', error.response.data);
+        if (error.response) {
+          console.error('[myriad-api][error]', error.response?.data);
+        }
 
         Sentry.captureException(error);
 
