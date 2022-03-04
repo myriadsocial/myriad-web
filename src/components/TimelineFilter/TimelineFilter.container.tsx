@@ -7,6 +7,7 @@ import {TimelineFilter as TimelineFilterComponent} from './TimelineFilter';
 
 import {ParsedUrlQuery} from 'querystring';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
+import {WrappedExperience} from 'src/interfaces/experience';
 import {
   TimelineFilter,
   TimelineOrderType,
@@ -29,9 +30,12 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
 
   const dispatch = useDispatch();
   const {filterByOrigin, sortTimeline} = useTimelineFilter(filters);
-  const {query, push} = useQueryParams();
+  const {query, push, replace} = useQueryParams();
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
+  const experiences = useSelector<RootState, WrappedExperience[]>(
+    state => state.userState.experiences,
+  );
   const [timelineType, setTimelineType] = useState<TimelineType>(TimelineType.ALL);
   const [timelineOrder, setTimelineOrder] = useState<TimelineOrderType>(TimelineOrderType.LATEST);
 
@@ -57,7 +61,18 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
   const handleFilterTimeline = (type: TimelineType) => {
     dispatch(clearTimeline());
 
-    push('type', type, true);
+    // automatically select first experience as timeline filter
+    if (type === TimelineType.EXPERIENCE && experiences.length > 0) {
+      replace({
+        path: 'home',
+        query: {
+          type,
+          id: experiences[0].id,
+        },
+      });
+    } else {
+      push('type', type, true);
+    }
   };
 
   return (

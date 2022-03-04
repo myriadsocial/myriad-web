@@ -49,11 +49,8 @@ export const ExperienceList: React.FC<ExperienceListProps> = props => {
 
     if (userExperienceId && exists) {
       setSelectedUserExperienceId(userExperienceId);
-    }
-
-    // TODO: move redirect to server side
-    if (router.query?.type === 'experience' && !userExperienceId && experiences.length > 0) {
-      router.push(`/home?type=experience&id=${experiences[0].id}`);
+    } else {
+      setSelectedUserExperienceId(undefined);
     }
   }, [router, experiences]);
 
