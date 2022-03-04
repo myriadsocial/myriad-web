@@ -79,7 +79,7 @@ export const searchExperiences = async (query: string, page = 1): Promise<Experi
   return data;
 };
 
-export const getUserExperience = async (
+export const getUserExperiences = async (
   userId: string,
   type?: ExperienceType,
 ): Promise<UserExperienceList> => {
@@ -180,13 +180,44 @@ export const createExperience = async (
   return data;
 };
 
-export const getExperience = async (experienceId: string): Promise<Experience> => {
+export const getExperienceDetail = async (experienceId: string): Promise<Experience> => {
   const {data} = await MyriadAPI.request<Experience>({
     url: `/experiences/${experienceId}`,
     method: 'GET',
     params: {
       filter: {
         include: ['user', 'users'],
+      },
+    },
+  });
+
+  return data;
+};
+
+export const getUserExperienceDetail = async (
+  userExperienceId: string,
+): Promise<UserExperience> => {
+  const {data} = await MyriadAPI.request<UserExperience>({
+    url: `/user-experiences/${userExperienceId}`,
+    method: 'GET',
+    params: {
+      filter: {
+        include: [
+          'user',
+          {
+            relation: 'experience',
+            scope: {
+              include: [
+                {
+                  relation: 'user',
+                  scope: {
+                    include: [{relation: 'accountSetting'}],
+                  },
+                },
+              ],
+            },
+          },
+        ],
       },
     },
   });

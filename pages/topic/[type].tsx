@@ -123,7 +123,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   await dispatch(fetchExchangeRates());
   await dispatch(fetchUserExperience());
 
-  let experience: any | null = null;
+  let experience: Experience | null = null;
 
   if (query.type === 'experience') {
     if (!query.id) {
@@ -133,7 +133,9 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     }
 
     try {
-      experience = await ExperienceAPI.getExperience(query.id as string);
+      const userExperience = await ExperienceAPI.getUserExperienceDetail(query.id as string);
+
+      experience = userExperience.experience;
 
       await dispatch(
         updateFilter({

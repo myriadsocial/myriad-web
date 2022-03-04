@@ -10,7 +10,7 @@ import {useExperienceList} from './hooks/use-experience-list.hook';
 import {Skeleton} from 'src/components/Expericence';
 import {ExperienceOwner, useExperienceHook} from 'src/hooks/use-experience-hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
-import {Experience} from 'src/interfaces/experience';
+import {WrappedExperience} from 'src/interfaces/experience';
 import {TimelineType} from 'src/interfaces/timeline';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -46,11 +46,11 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   const {list: experiences, limitExceeded} = useExperienceList(owner);
   const {openToasterSnack} = useToasterSnackHook();
 
-  const handleViewPostList = (type: TimelineType, experience: Experience) => {
+  const handleViewPostList = (type: TimelineType, userExperience: WrappedExperience) => {
     if (filterTimeline) {
-      router.push(`/home?type=experience&id=${experience.id}`);
+      router.push(`/home?type=experience&id=${userExperience.id}`);
     } else {
-      router.push(`/topic/experience?id=${experience.id}`);
+      router.push(`/topic/experience?id=${userExperience.id}`);
     }
   };
 

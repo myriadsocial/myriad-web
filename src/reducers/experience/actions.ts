@@ -132,10 +132,10 @@ export const fetchDetailExperience: ThunkActionCreator<Actions, RootState> =
   (experienceId: string) => async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
-      const experience = await ExperienceAPI.getExperience(experienceId);
+      const experience = await ExperienceAPI.getExperienceDetail(experienceId);
       dispatch({
         type: constants.FETCH_DETAIL_EXPERIENCE,
-        experience: experience,
+        experience,
       });
     } catch (error) {
       dispatch(
