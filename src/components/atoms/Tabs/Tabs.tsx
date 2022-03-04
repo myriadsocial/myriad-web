@@ -50,17 +50,19 @@ export const TabsComponent: React.FC<TabsComponentProps> = props => {
     <>
       <TabList {...props} onChangeTab={handleTabChange} className={styles.tabs} />
 
-      {tabs.map(tab => (
-        <TabPanel
-          key={`tab-panel-${tab.id}`}
-          value={activeTab}
-          index={tab.id}
-          padding={padding}
-          paddingLeft={paddingLeft}
-          paddingRight={paddingRight}>
-          {tab.component}
-        </TabPanel>
-      ))}
+      {tabs.map(tab => {
+        return tab.id === activeTab ? (
+          <TabPanel
+            key={`tab-panel-${tab.id}`}
+            value={activeTab}
+            index={tab.id}
+            padding={padding}
+            paddingLeft={paddingLeft}
+            paddingRight={paddingRight}>
+            {tab.component}
+          </TabPanel>
+        ) : null;
+      })}
     </>
   );
 };
