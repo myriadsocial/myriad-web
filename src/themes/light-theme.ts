@@ -364,7 +364,7 @@ const theme = createTheme({
       label: {
         fontSize: 14,
         fontWeight: 600,
-        lineHeight: 18,
+        lineHeight: '18px',
       },
       deleteIcon: {
         color: '#FE3636',
