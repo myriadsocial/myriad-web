@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useSelector, useDispatch} from 'react-redux';
 
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
@@ -24,7 +25,6 @@ import {friendFilterOptions, FriendType, sortOptions} from './default';
 import {useStyles} from './friend.style';
 import {FriendDetail, useFriendList} from './hooks/use-friend-list.hook';
 
-import {SendTipContainer} from 'src/components/SendTip';
 import {Empty} from 'src/components/atoms/Empty';
 import {Loading} from 'src/components/atoms/Loading';
 import {Modal} from 'src/components/atoms/Modal';
@@ -39,6 +39,10 @@ import {UserState} from 'src/reducers/user/reducer';
 import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
+
+const SendTipContainer = dynamic(() => import('src/components/SendTip/SendTipContainer'), {
+  ssr: false,
+});
 
 export type FriendListProps = {
   type?: 'contained' | 'basic';

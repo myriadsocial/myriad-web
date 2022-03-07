@@ -54,6 +54,7 @@ export const ExperienceContainer: React.FC = () => {
         <TopNavbarComponent
           description={'Create Experience'}
           sectionTitle={SectionTitle.EXPERIENCE}
+          reverse
         />
       </div>
       <ExperienceEditor

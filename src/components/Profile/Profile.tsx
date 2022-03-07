@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
 import {Grid} from '@material-ui/core';
@@ -9,7 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import {ProfileNotFound} from '../ProfileNotFound/ProfileNotFound';
 import {useStyles} from './Profile.style';
 
-import {ProfileEditContainer} from 'src/components/ProfileEdit/ProfileEditContainer';
 import {ProfileHeaderContainer} from 'src/components/ProfileHeader/ProfileHeaderContainer';
 import {UserMenuContainer} from 'src/components/UserMenu';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
@@ -20,6 +20,11 @@ import {fetchProfileFriend} from 'src/reducers/profile/actions';
 import {checkFriendedStatus} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
+
+const ProfileEditContainer = dynamic(
+  () => import('src/components/ProfileEdit/ProfileEditContainer'),
+  {ssr: false},
+);
 
 type Props = {
   loading: boolean;
@@ -75,7 +80,11 @@ export const ProfileTimeline: React.FC<Props> = ({loading, isBanned = false}) =>
     <div className={style.root} style={{display: isBanned ? 'none' : 'block'}}>
       <div className={style.scroll}>
         <div className={style.mb}>
-          <TopNavbarComponent description={profile.name} sectionTitle={SectionTitle.PROFILE} />
+          <TopNavbarComponent
+            description={profile.name}
+            sectionTitle={SectionTitle.PROFILE}
+            reverse
+          />
         </div>
 
         <ShowIf condition={isEdit}>

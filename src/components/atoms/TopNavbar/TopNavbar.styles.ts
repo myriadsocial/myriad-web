@@ -30,11 +30,6 @@ export const useStyles = makeStyles<Theme, TopNavbarProps>(theme =>
         color: '#404040',
       },
     },
-    textWrapper: {
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'hidden',
-    },
     sectionTitle: {
       fontWeight: theme.typography.fontWeightBold,
       fontSize: 20,

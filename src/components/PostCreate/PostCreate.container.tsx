@@ -137,3 +137,5 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     </>
   );
 };
+
+export default PostCreateContainer;

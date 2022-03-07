@@ -1,6 +1,2 @@
-import {TopNavbarComponent} from './TopNavbar';
-import {SectionTitle, sectionTitles, TopNavbarProps} from './top-navbar.interfaces';
-import {useStyles} from './top-navbar.styles';
-
-export {useStyles, SectionTitle, sectionTitles, TopNavbarComponent};
-export type {TopNavbarProps};
+export * from './TopNavbar';
+export * from './TopNavbar.interfaces';

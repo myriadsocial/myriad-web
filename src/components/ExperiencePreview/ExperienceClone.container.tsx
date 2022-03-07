@@ -44,7 +44,12 @@ export const ExperienceCloneContainer: React.FC = () => {
 
   return (
     <>
-      <TopNavbarComponent description={'Clone Experience'} sectionTitle={SectionTitle.EXPERIENCE} />
+      <TopNavbarComponent
+        description={'Clone Experience'}
+        sectionTitle={SectionTitle.EXPERIENCE}
+        reverse
+      />
+
       <ExperienceEditor
         type={'Clone'}
         experience={experience}

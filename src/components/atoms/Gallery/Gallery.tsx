@@ -7,15 +7,13 @@ import {Dialog, IconButton, SvgIcon, Paper, Grid} from '@material-ui/core';
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
 import ImageListItemBar from '@material-ui/core/ImageListItemBar';
-import {Skeleton} from '@material-ui/lab';
 
-import {MyriadGreyIcon} from '../Icons';
 import {useStyles} from './Gallery.styles';
 import {GalleryType, ImageListProps, ImageListItemProps} from './Gallery.types';
+import {Skeleton} from './Image.skeleton';
 import {buildList} from './util';
 
 import ShowIf from 'src/components/common/show-if.component';
-import theme from 'src/themes/light-theme';
 
 type GalleryProps = {
   images: string[];
@@ -82,21 +80,13 @@ export const Gallery: React.FC<GalleryProps> = props => {
               onClick={handleImageClick(i)}>
               {image.loading && (
                 <Skeleton
-                  variant="rect"
-                  animation={false}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
                   width={
                     image.cols === 1 || (image.cols === 2 && images.length === 2)
                       ? 635
                       : 635 / image.cols
                   }
-                  height={list.cellHeight * image.rows}>
-                  <MyriadGreyIcon width={50} height={50} />
-                </Skeleton>
+                  height={list.cellHeight * image.rows}
+                />
               )}
 
               <img
@@ -187,12 +177,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
           PrevIcon={
             <SvgIcon component={ChevronLeftIcon} viewBox="0 0 20 20" className={style.icon} />
           }
-          navButtonsProps={{
-            style: {
-              backgroundColor: theme.palette.primary.main,
-              color: '#FFF',
-            },
-          }}>
+          navButtonsProps={{className: style.navButton}}>
           {list.images.map((image, i) => (
             <Paper key={i} className={style.preview}>
               <img src={image.sizes.large} alt="" style={{height: '100%'}} />
@@ -203,3 +188,5 @@ export const Gallery: React.FC<GalleryProps> = props => {
     </div>
   );
 };
+
+export default Gallery;

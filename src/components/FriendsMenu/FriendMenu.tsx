@@ -1,17 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
+import dynamic from 'next/dynamic';
+
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 import {TabsComponent} from '../atoms/Tabs/Tabs';
-import {FriendListContainer} from './FriendList.container';
 import {useStyles} from './FriendMenu.style';
-import {FriendRequestListContainer} from './FriendRequest.container';
 
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
+
+const FriendListContainer = dynamic(() => import('./FriendList.container'), {ssr: true});
+const FriendRequestListContainer = dynamic(() => import('./FriendRequest.container'), {ssr: true});
 
 export const FriendMenuComponent: React.FC = () => {
   const style = useStyles();

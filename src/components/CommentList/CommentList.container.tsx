@@ -12,7 +12,6 @@ import {CommentList} from './CommentList';
 
 import {debounce} from 'lodash';
 import {ReportContainer} from 'src/components/Report';
-import {SendTipContainer} from 'src/components/SendTip';
 import {TipHistoryContainer} from 'src/components/TipHistory';
 import {Modal} from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
@@ -31,6 +30,9 @@ import {setTippedUser, setTippedUserId} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
 
 const CommentEditor = dynamic(() => import('../CommentEditor/CommentEditor'), {ssr: false});
+const SendTipContainer = dynamic(() => import('src/components/SendTip/SendTipContainer'), {
+  ssr: false,
+});
 
 type CommentListContainerProps = {
   referenceId: string;

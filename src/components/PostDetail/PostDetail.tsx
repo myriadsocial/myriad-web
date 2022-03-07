@@ -1,10 +1,9 @@
 import {CurrencyDollarIcon} from '@heroicons/react/outline';
 
 import React, {useState} from 'react';
-import {FacebookProvider, EmbeddedPost} from 'react-facebook';
-import ReactMarkdown from 'react-markdown';
 import {useSelector, useDispatch} from 'react-redux';
 
+import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
 import {IconButton, Grid} from '@material-ui/core';
@@ -13,29 +12,29 @@ import Paper from '@material-ui/core/Paper';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import {PostRender} from '../PostEditor/PostRender';
-import {ShowMore} from '../PostEditor/Render/ShowMore';
 import {Button, ButtonVariant, ButtonColor, ButtonSize} from '../atoms/Button';
-import {Gallery} from '../atoms/Gallery';
 import {NSFW} from '../atoms/NSFW/NSFW.component';
 import {PostActionComponent} from '../atoms/PostAction';
 import {HeaderComponent} from '../atoms/PostHeader';
 import {TabsComponent} from '../atoms/Tabs';
 import {Video} from '../atoms/Video';
 import {useStyles} from './PostDetail.styles';
-import {useCommentTabs, CommentTabs} from './hooks/use-comment-tabs';
+import {useCommentTabs} from './hooks/use-comment-tabs';
 
-import remarkGFM from 'remark-gfm';
-import remarkHTML from 'remark-html';
 import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {LinkPreview} from 'src/components/atoms/LinkPreview';
-import LinkifyComponent from 'src/components/common/Linkify.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {Comment} from 'src/interfaces/comment';
+import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {setTippedContent} from 'src/reducers/timeline/actions';
+
+const Gallery = dynamic(() => import('../atoms/Gallery/Gallery'), {ssr: false});
+const Reddit = dynamic(() => import('./render/Reddit'), {ssr: false});
+const Twitter = dynamic(() => import('./render/Twitter'), {ssr: false});
 
 type PostDetailProps = {
   user?: User;
@@ -77,16 +76,20 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const styles = useStyles();
   const router = useRouter();
   const dispatch = useDispatch();
-  const {activeTab, setActiveTab, tabs} = useCommentTabs(post);
+  const {
+    selected: selectedCommentTab,
+    setSelected: setSelectedCommentTab,
+    tabs,
+  } = useCommentTabs(post);
 
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
   const [openPromptDrawer, setOpenPromptDrawer] = useState(false);
   const [shoWcomment, setShowComment] = useState(expanded);
   const [maxLength, setMaxLength] = useState<number | undefined>(250);
   const [viewContent, setViewContent] = useState(!post.isNSFW);
-  const owner = post.createdBy === user?.id;
-  const isOwnSocialPost = user?.people?.find(person => person.id === post.peopleId) ? true : false;
 
+  const isPostOwner = post.createdBy === user?.id;
+  const isOwnSocialPost = user?.people?.find(person => person.id === post.peopleId) ? true : false;
   const isImportedPost = post.platform !== 'myriad' || post.createdBy !== user?.id ? true : false;
 
   const onHashtagClicked = async (hashtag: string) => {
@@ -112,14 +115,14 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
       toggleDownvoting(post);
 
       setShowComment(true);
-      setActiveTab('debate');
+      setSelectedCommentTab(SectionType.DEBATE);
     } else {
       onRemoveVote(post);
     }
   };
 
   const handleChangeTab = (tab: string) => {
-    setActiveTab(tab as CommentTabs);
+    setSelectedCommentTab(tab as SectionType);
 
     toggleDownvoting(null);
   };
@@ -193,7 +196,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     <Paper square className={styles.root}>
       <HeaderComponent
         user={user}
-        owner={owner}
+        owner={isPostOwner}
         post={post}
         onOpenTipHistory={handleOpenTipHistory}
         onDelete={handleDeletePost}
@@ -214,36 +217,17 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           </ShowIf>
 
           <ShowIf condition={['twitter'].includes(post.platform)}>
-            <LinkifyComponent
-              text={post.text}
-              handleClick={onHashtagClicked}
-              variant="body1"
-              color="textPrimary"
-            />
+            <Twitter text={post.text} onHashtagClicked={onHashtagClicked} />
           </ShowIf>
 
           <ShowIf condition={['reddit'].includes(post.platform)}>
-            {post.title && (
-              <LinkifyComponent
-                text={post.title}
-                handleClick={onHashtagClicked}
-                variant="h4"
-                color="textPrimary"
-              />
-            )}
-            <ReactMarkdown skipHtml remarkPlugins={[remarkGFM, remarkHTML]}>
-              {post.text.slice(0, maxLength)}
-            </ReactMarkdown>
-
-            <ShowIf condition={!!maxLength && post.text.length > maxLength}>
-              <ShowMore onClick={() => setMaxLength(undefined)} />
-            </ShowIf>
-          </ShowIf>
-
-          <ShowIf condition={post.platform === 'facebook'}>
-            <FacebookProvider appId={'1349208398779551'}>
-              <EmbeddedPost href={post.url} width="700" />
-            </FacebookProvider>
+            <Reddit
+              title={post.title}
+              text={post.text}
+              maxLength={maxLength}
+              onHashtagClicked={onHashtagClicked}
+              onShowMore={() => setMaxLength(undefined)}
+            />
           </ShowIf>
 
           {post.asset?.images && post.asset?.images.length > 0 && (
@@ -316,7 +300,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
       </Grid>
 
       <ShowIf condition={shoWcomment}>
-        <TabsComponent tabs={tabs} active={activeTab} onChangeTab={handleChangeTab} />
+        <TabsComponent tabs={tabs} active={selectedCommentTab} onChangeTab={handleChangeTab} />
       </ShowIf>
     </Paper>
   );

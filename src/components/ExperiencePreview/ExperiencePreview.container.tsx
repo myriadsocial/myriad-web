@@ -56,27 +56,26 @@ export const ExperiencePreviewContainer: React.FC = () => {
     router.push(`/experience/${experienceId}/edit`);
   };
 
+  if (!experience) return null;
+
   return (
     <>
-      {experience && (
-        <>
-          <TopNavbarComponent
-            description={experience.name || 'Experience'}
-            sectionTitle={SectionTitle.EXPERIENCE}
-          />
-          <div className={style.box}>
-            <ExperiencePreview
-              experience={experience}
-              userExperiences={userExperiences}
-              userId={experience.id}
-              onSubscribe={handleSubscribeExperience}
-              onUnsubscribe={handleUnsubscribeExperience}
-              onFollow={handleCloneExperience}
-              onUpdate={handleEditExperience}
-            />
-          </div>
-        </>
-      )}
+      <TopNavbarComponent
+        description={experience.name || 'Experience'}
+        sectionTitle={SectionTitle.EXPERIENCE}
+        reverse
+      />
+      <div className={style.box}>
+        <ExperiencePreview
+          experience={experience}
+          userExperiences={userExperiences}
+          userId={experience.id}
+          onSubscribe={handleSubscribeExperience}
+          onUnsubscribe={handleUnsubscribeExperience}
+          onFollow={handleCloneExperience}
+          onUpdate={handleEditExperience}
+        />
+      </div>
     </>
   );
 };

@@ -122,3 +122,5 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
     />
   );
 };
+
+export default FriendListContainer;

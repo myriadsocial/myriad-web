@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 
+import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
 import {RichTextComponent} from '.';
-import {PostCreateContainer} from '../PostCreate';
 import {useStyles} from './richtext.style';
 
 import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
@@ -12,6 +12,10 @@ import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {TimelineType} from 'src/interfaces/timeline';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
+
+const PostCreateContainer = dynamic(() => import('../PostCreate/PostCreate.container'), {
+  ssr: false,
+});
 
 export const RichTextContainer: React.FC = () => {
   const router = useRouter();
