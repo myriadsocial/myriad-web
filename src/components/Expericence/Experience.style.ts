@@ -57,7 +57,7 @@ export const useStyles = makeStyles<Theme, ExperienceStyleProps>(theme =>
       },
     },
     title: {
-      wordBreak: 'break-all',
+      wordBreak: 'break-word',
       [theme.breakpoints.down('xs')]: {
         fontSize: '14px',
       },
