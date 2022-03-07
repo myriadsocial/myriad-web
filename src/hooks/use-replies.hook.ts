@@ -45,7 +45,7 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
 
     const postId = data.postId;
 
-    setReplies(prevReplies => [...prevReplies, {...data, user}]);
+    setReplies(prevReplies => [{...data, user}, ...prevReplies]);
 
     distpatch(increaseCommentCount(postId, comment.section));
 
@@ -134,8 +134,13 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
 
   const loadReplies = async () => {
     setLoading(true);
+
+    const filters = {
+      referenceId,
+    };
+
     try {
-      const {data, meta} = await CommentAPI.loadComments(1, referenceId);
+      const {data, meta} = await CommentAPI.loadComments(filters, {page: 1});
       const repliesData = data.map(comment => {
         const upvoted = comment.votes?.filter(vote => vote.userId === user?.id && vote.state);
         const downvoted = comment.votes?.filter(vote => vote.userId === user?.id && !vote.state);
@@ -157,8 +162,13 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
 
   const loadMoreReplies = async () => {
     setLoading(true);
+
+    const filters = {
+      referenceId,
+    };
+
     try {
-      const {data, meta} = await CommentAPI.loadComments(dataMeta.nextPage ?? 1, referenceId);
+      const {data, meta} = await CommentAPI.loadComments(filters, {page: dataMeta.nextPage ?? 1});
       const repliesData = data.map(comment => {
         const upvoted = comment.votes?.filter(vote => vote.userId === user?.id && vote.state);
         const downvoted = comment.votes?.filter(vote => vote.userId === user?.id && !vote.state);

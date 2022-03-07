@@ -41,8 +41,13 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
   const load = async (section?: SectionType) => {
     setLoading(true);
 
+    const filters = {
+      referenceId,
+      section,
+    };
+
     try {
-      const {data: comments, meta} = await CommentAPI.loadComments(1, referenceId, section);
+      const {data: comments, meta} = await CommentAPI.loadComments(filters, {page: 1});
       setDataMeta(meta);
       setComments(
         comments.map(comment => {
@@ -63,8 +68,12 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
   };
 
   const loadMore = async () => {
+    const filters = {
+      referenceId,
+    };
+
     try {
-      const {data, meta} = await CommentAPI.loadComments(dataMeta.nextPage ?? 1, referenceId);
+      const {data, meta} = await CommentAPI.loadComments(filters, {page: dataMeta.nextPage ?? 1});
       setDataMeta(meta);
       setComments([
         ...comments,
@@ -91,17 +100,17 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
 
     // if replying post
     if (comment.referenceId === referenceId) {
-      setComments(prevComments => [...prevComments, {...data, user}]);
+      setComments(prevComments => [{...data, user}, ...prevComments]);
     } else {
       const newComment = comments.map(item => {
-        if (item.id === data.referenceId) {
-          item.replies?.push({...data, user});
+        if (item.id === data.referenceId && item.replies) {
+          item.replies.unshift({...data, user});
         }
 
         if (item.replies) {
           item.replies.map(reply => {
-            if (reply.id === data.referenceId) {
-              reply.replies?.push({...data, user});
+            if (reply.id === data.referenceId && reply.replies) {
+              reply.replies.unshift({...data, user});
             }
             return reply;
           });
@@ -248,8 +257,12 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
   };
 
   const loadReplies = async (referenceId: string, deep: number) => {
+    const filters = {
+      referenceId,
+    };
+
     try {
-      const {data} = await CommentAPI.loadComments(1, referenceId);
+      const {data} = await CommentAPI.loadComments(filters, {page: 1});
 
       const comments = data.map(comment => {
         const upvoted = comment.votes?.filter(vote => vote.userId === user?.id && vote.state);

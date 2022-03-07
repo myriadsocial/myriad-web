@@ -1,36 +1,43 @@
 import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
+import {FilterParams, PaginationParams} from './interfaces/pagination-params.interface';
 
 import {Comment, CommentProps} from 'src/interfaces/comment';
 import {SectionType} from 'src/interfaces/interaction';
 
 type CommentList = BaseList<Comment>;
 
+type CommentListFilterParams = Omit<FilterParams, 'query'> & {
+  referenceId: string;
+  section?: SectionType;
+  excludeUser?: string;
+};
+
 export const loadComments = async (
-  pageNumber: number,
-  referenceId: string,
-  section?: SectionType,
-  excludeUser?: string,
+  params: CommentListFilterParams,
+  pagination: PaginationParams,
 ): Promise<CommentList> => {
+  const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
+
   let where: Record<string, any> = {
-    referenceId,
+    referenceId: params.referenceId,
   };
 
-  if (section) {
+  if (params.section) {
     where = {
       ...where,
       section: {
-        eq: section,
+        eq: params.section,
       },
     };
   }
 
-  if (excludeUser) {
+  if (params.excludeUser) {
     where = {
       ...where,
       userId: {
-        neq: excludeUser,
+        neq: params.excludeUser,
       },
     };
   }
@@ -42,9 +49,10 @@ export const loadComments = async (
       filter: {
         where,
         include: ['user', 'votes'],
+        order: [`${orderField} ${sort}`],
       },
-      pageNumber: pageNumber,
-      pageLimit: PAGINATION_LIMIT,
+      pageNumber: page,
+      pageLimit: limit,
     },
   });
 
