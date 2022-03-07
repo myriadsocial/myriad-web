@@ -15,6 +15,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
     },
     box: {
+      background: theme.palette.background.paper,
+
       [theme.breakpoints.down('xs')]: {
         padding: '0px 20px',
       },
