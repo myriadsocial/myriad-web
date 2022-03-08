@@ -9,6 +9,7 @@ import {
   List,
   ListItem,
   Typography,
+  Tooltip,
 } from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
@@ -146,24 +147,31 @@ export const Options: React.FC<OptionProps> = props => {
               <Typography>Polkadot</Typography>
             </div>
           </ListItem>
-          <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.ETHEREUM)}>
-            <div className={styles.card}>
-              <EthereumNetworkIcon className={styles.icon} />
-              <Typography>Ethereum</Typography>
-            </div>
-          </ListItem>
+          <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
+            <ListItem
+              disableGutters
+              disabled
+              onClick={setSelectedNetwork(NetworkTypeEnum.ETHEREUM)}>
+              <div className={styles.card}>
+                <EthereumNetworkIcon className={styles.icon} />
+                <Typography>Ethereum</Typography>
+              </div>
+            </ListItem>
+          </Tooltip>
           <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.NEAR)}>
             <div className={styles.card}>
               <NearNetworkIcon className={styles.icon} />
               <Typography>Near</Typography>
             </div>
           </ListItem>
-          <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.POLYGON)}>
-            <div className={styles.card}>
-              <PolygonNetworkDisabledIcon className={styles.icon} />
-              <Typography>Polygon</Typography>
-            </div>
-          </ListItem>
+          <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
+            <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.POLYGON)}>
+              <div className={styles.card}>
+                <PolygonNetworkDisabledIcon className={styles.icon} />
+                <Typography>Polygon</Typography>
+              </div>
+            </ListItem>
+          </Tooltip>
         </List>
       </div>
 
