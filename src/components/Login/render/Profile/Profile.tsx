@@ -229,16 +229,13 @@ export const Profile: React.FC<ProfileProps> = props => {
       <div className={styles.box}>
         <TextField
           id="name"
-          placeholder={i18n.t('Login.Profile.Placeholder_Display_Name')}
+          label={i18n.t('Login.Profile.Placeholder_Display_Name')}
           helperText={profile.name.helper}
           error={profile.name.error}
           fullWidth
           variant="outlined"
           onChange={handleChangeName}
           inputProps={{maxLength: DISPLAY_NAME_MAX_LENGTH}}
-          InputLabelProps={{
-            shrink: true,
-          }}
         />
         <Typography className={`${styles.count}`} component="span">
           ({profile.name.value.length}/{DISPLAY_NAME_MAX_LENGTH})
@@ -248,15 +245,12 @@ export const Profile: React.FC<ProfileProps> = props => {
       <div className={styles.box}>
         <TextField
           id="username"
-          placeholder={i18n.t('Login.Profile.Placeholder_Username')}
+          label={i18n.t('Login.Profile.Placeholder_Username')}
           helperText={profile.username.helper}
           error={profile.username.error}
           fullWidth
           variant="outlined"
           onChange={handleChangeUsername}
-          InputLabelProps={{
-            shrink: true,
-          }}
           inputProps={{maxLength: USERNAME_MAX_LENGTH, style: {textTransform: 'lowercase'}}}
         />
         <Typography className={`${styles.count}`} component="span">
