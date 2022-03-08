@@ -75,8 +75,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     bio: {
       wordBreak: 'break-all',
+      marginTop: '20px',
       [theme.breakpoints.down('xs')]: {
         fontSize: '14px',
+        marginTop: '0px',
       },
     },
     solid: {

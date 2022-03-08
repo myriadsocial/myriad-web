@@ -1,5 +1,5 @@
 import React from 'react';
-import Carousel from 'react-elastic-carousel';
+import Carousel from 'react-material-ui-carousel';
 
 import {Grid} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -33,32 +33,6 @@ const useStyles = makeStyles<Theme, CarouselLoginViewProps>(theme =>
     carousel: {
       marginBottom: theme.spacing(3),
       width: '100vw',
-      '& .rec-slider-container': {
-        margin: 0,
-      },
-      '& .rec.rec-arrow': {
-        visibility: 'hidden',
-        display: 'none',
-      },
-      '& .rec.rec-dot': {
-        background: '#DECCFF',
-        boxShadow: 'none',
-        width: '12px',
-        height: '12px',
-      },
-      '& .rec.rec-dot.jJKuoL': {
-        width: '28px',
-        background: theme.palette.primary.main,
-        borderRadius: 20,
-      },
-      '& .rec.rec-dot:focus': {
-        background: theme.palette.primary.main,
-        width: '28px',
-        borderRadius: 20,
-      },
-      '& .rec-carousel-wrapper': {
-        alignItems: 'center',
-      },
     },
     title: {
       lineHeight: '33.6px',
@@ -69,6 +43,7 @@ const useStyles = makeStyles<Theme, CarouselLoginViewProps>(theme =>
       fontWeight: theme.typography.fontWeightRegular,
       lineHeight: '19.6px',
       fontSize: '14px',
+      padding: '0px 20px',
     },
   }),
 );
@@ -84,9 +59,33 @@ export const CarouselLoginView: React.FC<CarouselLoginViewProps> = props => {
       justifyContent="space-between"
       alignContent="center"
       className={style.root}>
-      <Grid item xs>
+      <Grid item>
         <div className={style.carousel}>
-          <Carousel isRTL={false} itemsToShow={1}>
+          <Carousel
+            animation="slide"
+            navButtonsAlwaysInvisible={true}
+            IndicatorIcon={
+              <div
+                style={{
+                  height: '8px',
+                  width: '8px',
+                  borderRadius: '4px',
+                }}
+              />
+            }
+            indicatorIconButtonProps={{
+              style: {
+                backgroundColor: '#DECCFF',
+                margin: '3px',
+              },
+            }}
+            activeIndicatorIconButtonProps={{
+              style: {
+                backgroundColor: '#7342CC',
+                width: '20px',
+                borderRadius: '20px',
+              },
+            }}>
             <div>
               <div className={style.mb8}>
                 <Illustration />
@@ -149,7 +148,7 @@ export const CarouselLoginView: React.FC<CarouselLoginViewProps> = props => {
           </Carousel>
         </div>
       </Grid>
-      <Grid item xs>
+      <Grid item>
         <Button variant="contained" color="primary" onClick={onSignIn}>
           {i18n.t('Login.Layout.Btn_Signin')}
         </Button>
