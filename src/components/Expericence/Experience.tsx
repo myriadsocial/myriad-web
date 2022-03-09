@@ -56,6 +56,8 @@ export const Experience: React.FC<ExperienceProps> = props => {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [isShowDeleteConfirmation, setShowDeleteConfimation] = React.useState<boolean>(false);
+  const [isShowUnsubscribeConfirmation, setShowUnsubscribeConfirmation] =
+    React.useState<boolean>(false);
 
   const isOwnExperience = userExperience.experience.user.id === user?.id;
   const experienceId = userExperience.experience.id;
@@ -86,7 +88,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
   };
 
   const handleUnsubscribeExperience = () => {
-    handleCloseSettings();
+    setShowUnsubscribeConfirmation(false);
 
     if (onUnsubscribe && userExperienceId) {
       onUnsubscribe(userExperienceId);
@@ -117,6 +119,15 @@ export const Experience: React.FC<ExperienceProps> = props => {
 
   const handleCancelDelete = () => {
     setShowDeleteConfimation(false);
+  };
+
+  const openUnsubscribeConfirmation = () => {
+    handleCloseSettings();
+    setShowUnsubscribeConfirmation(true);
+  };
+
+  const handleCancelUnsubscribe = () => {
+    setShowUnsubscribeConfirmation(false);
   };
 
   const isHidden = () => {
@@ -194,7 +205,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
         </ShowIf>
 
         <ShowIf condition={Boolean(userExperience.subscribed) && !isOwnExperience}>
-          <MenuItem onClick={handleUnsubscribeExperience} className={styles.delete}>
+          <MenuItem onClick={openUnsubscribeConfirmation} className={styles.delete}>
             Unsubscribe
           </MenuItem>
         </ShowIf>
@@ -221,6 +232,29 @@ export const Experience: React.FC<ExperienceProps> = props => {
             size="small"
             variant="contained">
             Delete
+          </Button>
+        </Grid>
+      </PromptComponent>
+      <PromptComponent
+        onCancel={handleCancelUnsubscribe}
+        open={isShowUnsubscribeConfirmation}
+        icon="warning"
+        title="Unsubscribe?"
+        subtitle={`Do you want to unsubscribe?\n You won't see more post from this experience`}>
+        <Grid container justifyContent="space-around">
+          <Button
+            onClick={handleCancelUnsubscribe}
+            size="small"
+            variant="outlined"
+            color="secondary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleUnsubscribeExperience}
+            color="primary"
+            size="small"
+            variant="contained">
+            Unsubscribe
           </Button>
         </Grid>
       </PromptComponent>
