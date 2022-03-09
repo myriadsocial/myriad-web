@@ -31,6 +31,8 @@ export interface ExperienceSetting {
 export interface ExperienceProps extends Searchable {
   name: string;
   tags: string[];
+  allowedTags: string[];
+  prohibitedTags?: string[];
   people: People[];
   description?: string;
   layout?: LayoutType;

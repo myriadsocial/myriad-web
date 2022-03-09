@@ -48,6 +48,7 @@ ExperienceList.args = {
           ],
         },
         tags: ['#cool'],
+        allowedTags: ['crypto'],
         people: [
           {
             id: '60efac8c565ab8004ed28ba7',
