@@ -221,7 +221,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
         open={isShowDeleteConfirmation}
         icon="danger"
         title="Delete Experience?"
-        subtitle="Their posts won't be shown in your timeline anymore and you may or may not be able to see their complete profile. Are you sure?">
+        subtitle="Are you sure you want to delete this experience? You can’t undo this in the future.">
         <Grid container justifyContent="space-around">
           <Button onClick={handleCancelDelete} size="small" variant="outlined" color="secondary">
             Not now
