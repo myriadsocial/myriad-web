@@ -68,3 +68,10 @@ export const reply = async (comment: CommentProps): Promise<Comment> => {
 
   return data;
 };
+
+export const remove = async (commentId: string): Promise<void> => {
+  await MyriadAPI.request({
+    url: `/comments/${commentId}`,
+    method: 'DELETE',
+  });
+};
