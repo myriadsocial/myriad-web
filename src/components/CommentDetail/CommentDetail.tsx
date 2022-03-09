@@ -4,6 +4,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
+import {Grid} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -20,6 +21,7 @@ import {useStyles} from './CommentDetail.styles';
 import {CommentRender} from './CommentRender';
 
 import {formatDistance, subDays} from 'date-fns';
+import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {useRepliesHook} from 'src/hooks/use-replies.hook';
 import {Comment} from 'src/interfaces/comment';
@@ -52,6 +54,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     onSendTip,
     onSearchPeople,
     onBeforeDownvote,
+    onDelete,
   } = props;
 
   const {
@@ -63,6 +66,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     updateReplyUpvote,
     updateReplyDownvote,
     removeReplyVote,
+    removeReply,
   } = useRepliesHook(comment.id, deep);
 
   const dispatch = useDispatch();
@@ -79,6 +83,8 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   const [isReplying, setIsReplying] = React.useState(false);
   const [isBlocked, setIsBlocked] = React.useState(blockedUserIds.includes(comment.userId));
   const [maxLength, setMaxLength] = React.useState<number | undefined>(180);
+  const [deleteReplyDialogOpened, setOpenDeleteReplyDialog] = React.useState(false);
+  const [commentToDelete, setCommentToDelete] = React.useState<Comment>();
 
   const totalVote = comment.metric.upvotes - comment.metric.downvotes;
   const isOwnComment = comment.userId === user?.id;
@@ -189,6 +195,28 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
 
   const handleOpenComment = () => {
     setIsBlocked(false);
+  };
+
+  const showConfirmDeleteDialog = (reply: Comment) => {
+    setOpenDeleteReplyDialog(true);
+    setCommentToDelete(reply);
+  };
+
+  const closeConfirmDeleteDialog = () => {
+    setOpenDeleteReplyDialog(false);
+    setCommentToDelete(undefined);
+  };
+
+  const confirmDeleteReply = () => {
+    if (!commentToDelete) return;
+
+    if (commentToDelete.id === comment.id) {
+      onDelete(comment);
+    } else {
+      removeReply(commentToDelete);
+    }
+
+    closeConfirmDeleteDialog();
   };
 
   const getDate = (commentDate: Date) => {
@@ -316,6 +344,15 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                     Report
                   </Button>
                 </ShowIf>
+                <ShowIf condition={isOwnComment}>
+                  <Button
+                    classes={{root: style.button}}
+                    size="small"
+                    variant="text"
+                    onClick={() => onDelete(comment)}>
+                    Delete
+                  </Button>
+                </ShowIf>
               </CardActions>
             </ShowIf>
           </Card>
@@ -356,6 +393,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
               onBeforeDownvote={handleOpenReply}
               hasMoreComment={hasMoreReplies}
               onLoadMoreReplies={loadMoreReplies}
+              onDelete={showConfirmDeleteDialog}
             />
           )}
         </div>
@@ -383,7 +421,9 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
           user={user}
           deep={deep + 1}
           comments={replies || []}
+          mentionables={mentionables}
           blockedUserIds={blockedUserIds}
+          hasMoreComment={hasMoreReplies}
           onUpvote={handleRepliesUpvote}
           onRemoveVote={handleRepliesRemoveVote}
           onUpdateDownvote={updateReplyDownvote}
@@ -392,13 +432,33 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
           onReportReplies={handleReport}
           onSendTip={onSendTip}
           onSendTipReplies={handleSendTip}
-          mentionables={mentionables}
           onSearchPeople={onSearchPeople}
           onBeforeDownvote={handleOpenReply}
-          hasMoreComment={hasMoreReplies}
           onLoadMoreReplies={loadMoreReplies}
+          onDelete={showConfirmDeleteDialog}
         />
       )}
+
+      <PromptComponent
+        title={'Delete Comment'}
+        subtitle={`Are you sure to remove this comment?`}
+        open={deleteReplyDialogOpened}
+        icon="danger"
+        onCancel={closeConfirmDeleteDialog}>
+        <Grid justifyContent="space-between">
+          <Button
+            style={{marginRight: '12px'}}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={closeConfirmDeleteDialog}>
+            No, let me rethink
+          </Button>
+          <Button size="small" variant="contained" color="primary" onClick={confirmDeleteReply}>
+            Yes, proceed to delete
+          </Button>
+        </Grid>
+      </PromptComponent>
     </>
   );
 });

@@ -371,6 +371,34 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       };
     }
 
+    case constants.DECREASE_COMMENT_COUNT: {
+      const post: Post | undefined = state.post;
+
+      if (post && post.id === action.postId) {
+        if (action.section === SectionType.DEBATE) {
+          post.metric.debates -= 1;
+        } else {
+          post.metric.discussions -= 1;
+        }
+      }
+
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post.id === action.postId) {
+            if (action.section === SectionType.DEBATE) {
+              post.metric.debates -= 1;
+            } else {
+              post.metric.discussions -= 1;
+            }
+          }
+
+          return post;
+        }),
+        post,
+      };
+    }
+
     case constants.UPDATE_POST_VISIBILITY: {
       return {
         ...state,

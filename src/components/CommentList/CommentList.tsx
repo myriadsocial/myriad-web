@@ -32,6 +32,7 @@ type CommentListProps = {
   onBeforeDownvote?: () => void;
   onReportReplies?: (replies: Comment) => void;
   onSendTipReplies?: (replies: Comment) => void;
+  onDelete: (comment: Comment) => void;
 };
 
 type refComment = Record<any, React.RefObject<HTMLDivElement>>;
@@ -60,6 +61,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
     onSearchPeople,
     onBeforeDownvote,
     onLoadMoreReplies,
+    onDelete,
   } = props;
   const {query} = useQueryParams();
 
@@ -107,6 +109,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
           onSendTip={onSendTip}
           onSearchPeople={onSearchPeople}
           onBeforeDownvote={onBeforeDownvote}
+          onDelete={onDelete}
         />
       ))}
 
