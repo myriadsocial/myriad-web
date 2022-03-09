@@ -1,5 +1,3 @@
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
-
 export interface SignInCredential {
   token: string;
   initVec: string;
@@ -8,7 +6,6 @@ export interface SignInCredential {
   name: string;
   anonymous: boolean;
   address: string;
-  walletType: WalletTypeEnum;
 }
 export interface UserSession {
   token?: string;
@@ -20,5 +17,4 @@ export interface UserSession {
   anonymous: boolean;
   welcome: boolean;
   address: string;
-  walletType: WalletTypeEnum;
 }
