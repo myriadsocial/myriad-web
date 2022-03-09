@@ -1,5 +1,4 @@
 import React from 'react';
-import {FacebookProvider, EmbeddedPost} from 'react-facebook';
 import {Tweet} from 'react-twitter-widgets';
 
 import {useStyles} from './Embed.styles';
@@ -12,16 +11,13 @@ type EmbedProps = {
   social: SocialsEnum;
   url: string;
   postId: string;
-  options: {
-    facebookAppId: string;
-  };
   showError?: boolean;
   onError?: (message: string) => void;
   onClick?: () => void;
 };
 
 export const Embed: React.FC<EmbedProps> = props => {
-  const {social, url, postId, options, onClick} = props;
+  const {social, url, postId, onClick} = props;
   const styles = useStyles();
 
   const handleClick = (): void => {
@@ -34,12 +30,6 @@ export const Embed: React.FC<EmbedProps> = props => {
         <div style={{margin: '0 auto', width: 560}}>
           <Tweet tweetId={postId} options={{height: 560}} />
         </div>
-      </ShowIf>
-
-      <ShowIf condition={social === SocialsEnum.FACEBOOK}>
-        <FacebookProvider appId={options?.facebookAppId}>
-          <EmbeddedPost href={url} width="780" />
-        </FacebookProvider>
       </ShowIf>
 
       <ShowIf condition={social === SocialsEnum.REDDIT}>

@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import dynamic from 'next/dynamic';
+
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -9,7 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import {Skeleton as PostSkeleton} from '../PostDetail';
 import {PostImporterContainer} from '../PostImporterList';
 import {ReportContainer} from '../Report';
-import {SendTipContainer} from '../SendTip';
 import {useTimelineHook} from '../Timeline/hooks/use-timeline.hook';
 import {TipHistoryContainer} from '../TipHistory';
 import {Modal} from '../atoms/Modal';
@@ -30,6 +31,10 @@ import {upvote, setDownvoting, removeVote} from 'src/reducers/timeline/actions';
 import {setIsTipSent} from 'src/reducers/wallet/actions';
 import {setTippedUser, setTippedUserId} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
+
+const SendTipContainer = dynamic(() => import('src/components/SendTip/SendTipContainer'), {
+  ssr: false,
+});
 
 type PostsListContainerProps = {
   anonymous?: boolean;

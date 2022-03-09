@@ -41,3 +41,5 @@ export const SendTipContainer: React.FC = () => {
     />
   );
 };
+
+export default SendTipContainer;

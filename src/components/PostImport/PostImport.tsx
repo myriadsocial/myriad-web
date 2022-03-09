@@ -105,14 +105,7 @@ export const PostImport: React.FC<PostImportProps> = props => {
           </Typography>
 
           <div className={styles.preview}>
-            {social && postId && (
-              <Embed
-                social={social}
-                postId={postId}
-                url={previewUrl}
-                options={{facebookAppId: '1349208398779551'}}
-              />
-            )}
+            {social && postId && <Embed social={social} postId={postId} url={previewUrl} />}
           </div>
         </div>
       )}

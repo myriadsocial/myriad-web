@@ -1,8 +1,4 @@
-import {CarouselStyles} from 'react-images';
-
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
-
-import theme from 'src/themes/light-theme';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -63,14 +59,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: '100vh',
       textAlign: 'center',
     },
+    navButton: {
+      backgroundColor: theme.palette.primary.main,
+      color: '#FFF',
+    },
   }),
 );
-
-export const carouselStyle: CarouselStyles = {
-  navigationNext: base => {
-    return {...base, background: theme.palette.primary.main};
-  },
-  navigationPrev: base => {
-    return {...base, background: theme.palette.primary.main};
-  },
-};

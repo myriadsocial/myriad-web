@@ -55,3 +55,5 @@ export const FriendRequestListContainer: React.FC<FriendRequestContainerProps> =
     />
   );
 };
+
+export default FriendRequestListContainer;

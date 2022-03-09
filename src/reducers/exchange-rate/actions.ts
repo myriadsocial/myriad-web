@@ -3,7 +3,7 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {ExchangeRate} from 'src/interfaces/exchange';
-import * as ExchangeRateApi from 'src/lib/api/exchange';
+// import * as ExchangeRateApi from 'src/lib/api/exchange';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 export interface FetchExchangeRates {
@@ -17,7 +17,7 @@ export const fetchExchangeRates: ThunkActionCreator<Actions, RootState> = () => 
   dispatch(setLoading(true));
 
   try {
-    const exchangeRates = await ExchangeRateApi.getExchangeRate();
+    const exchangeRates: ExchangeRate[] = []; //await ExchangeRateApi.getExchangeRate();
 
     dispatch({
       type: constants.FETCH_EXCHANGE_RATES,

@@ -136,3 +136,5 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
     </>
   );
 };
+
+export default ProfileEditContainer;

@@ -1,49 +1,27 @@
 import {ChevronLeftIcon} from '@heroicons/react/outline';
 
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
-import {IconButton} from '@material-ui/core';
+import {Grid, IconButton} from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {TopNavbarProps, SectionTitle, useStyles} from '.';
+import {TopNavbarProps} from './TopNavbar.interfaces';
+import {useStyles} from './TopNavbar.styles';
 
 const MenuDrawerComponent = dynamic(() => import('src/components/Mobile/MenuDrawer/MenuDrawer'), {
   ssr: false,
 });
 
 export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
-  const {sectionTitle, description, type = 'back'} = props;
+  const {sectionTitle, description, reverse = false, type = 'back'} = props;
+
   const router = useRouter();
   const classes = useStyles({...props, type});
-
-  const [localSectionTitle, setLocalSectionTitle] = useState(sectionTitle as string);
-  const [localDescription, setLocalDescription] = useState(description);
-
-  useEffect(() => {
-    switchText(sectionTitle);
-  }, [sectionTitle, description]);
-
-  const switchText = (sectionTitle: SectionTitle | string) => {
-    let newSectionTitle = '';
-    let newDescription = '';
-
-    newSectionTitle = description;
-    newDescription = sectionTitle;
-    setLocalSectionTitle(newSectionTitle);
-    setLocalDescription(newDescription);
-  };
-
-  const isInvertedSection = (sectionTitle: string): boolean => {
-    if (sectionTitle === SectionTitle.EXPERIENCE || sectionTitle === SectionTitle.PROFILE) {
-      return true;
-    }
-    return false;
-  };
 
   const handleClick = (): void => {
     if (router.query) {
@@ -63,28 +41,17 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
         className={classes.icon}>
         <SvgIcon component={ChevronLeftIcon} viewBox="0 0 24 24" />
       </IconButton>
+
       <div className={classes.drawer}>
         <MenuDrawerComponent />
       </div>
-      <div className={classes.textWrapper}>
-        {!isInvertedSection(sectionTitle) && (
-          <>
-            <Typography className={classes.sectionTitle} color="primary">
-              {sectionTitle}
-            </Typography>
-            <Typography className={classes.description}>{description}</Typography>
-          </>
-        )}
 
-        {isInvertedSection(sectionTitle) && (
-          <>
-            <Typography className={classes.sectionTitle} color="primary">
-              {localSectionTitle}
-            </Typography>
-            <Typography className={classes.description}>{localDescription}</Typography>
-          </>
-        )}
-      </div>
+      <Grid container direction={reverse ? 'column-reverse' : 'column'}>
+        <Typography className={classes.sectionTitle} color="primary">
+          {sectionTitle}
+        </Typography>
+        <Typography className={classes.description}>{description}</Typography>
+      </Grid>
     </Paper>
   );
 };

@@ -1,4 +1,4 @@
-enum SectionTitle {
+export enum SectionTitle {
   FRIENDS = 'Friends',
   SOCIAL_MEDIA = 'Social Media',
   WALLET = 'Wallet',
@@ -12,15 +12,9 @@ enum SectionTitle {
   TRENDS = 'Trends',
 }
 
-type SectionTitleKey = keyof typeof SectionTitle;
-type SectionTitleValue = typeof SectionTitle[SectionTitleKey];
-const sectionTitles: SectionTitleValue[] = Object.values(SectionTitle);
-
-interface TopNavbarProps {
+export type TopNavbarProps = {
   sectionTitle: SectionTitle | string;
   description: string;
   type?: 'menu' | 'back';
-}
-
-export {SectionTitle, sectionTitles};
-export type {TopNavbarProps};
+  reverse?: boolean;
+};

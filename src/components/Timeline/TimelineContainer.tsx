@@ -8,7 +8,6 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
 import {PostVisibilityContainer} from '../PostVisibility';
-import {SendTipContainer} from '../SendTip';
 import {TimelineFilterContainer} from '../TimelineFilter';
 import {Modal} from '../atoms/Modal';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
@@ -39,6 +38,9 @@ type TimelineContainerProps = {
   anonymous?: boolean;
 };
 
+const SendTipContainer = dynamic(() => import('src/components/SendTip/SendTipContainer'), {
+  ssr: false,
+});
 const TimelineComponent = dynamic(() => import('./Timeline'), {ssr: false});
 const ReportContainer = dynamic(() => import('../Report/Report.container'), {ssr: false});
 const TipHistoryContainer = dynamic(() => import('../TipHistory/TipHistory.container'), {

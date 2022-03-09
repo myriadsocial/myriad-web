@@ -2,16 +2,16 @@ import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
 
-import {Button} from '@material-ui/core';
+import {Button, Grid} from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
 import {PostDetail} from './PostDetail';
+import {usePostDelete} from './hooks/use-post-delete.hook';
+import {usePostInteraction} from './hooks/use-post-interaction.hook';
 
 import {PostVisibilityContainer} from 'src/components/PostVisibility';
-import {SendTipContainer} from 'src/components/SendTip';
 import {useTimelineHook} from 'src/components/Timeline/hooks/use-timeline.hook';
 import {Modal} from 'src/components/atoms/Modal';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
@@ -22,7 +22,6 @@ import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
 import {removeImporter} from 'src/reducers/importers/actions';
 import {setTippedContent} from 'src/reducers/timeline/actions';
-import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {setTippedUser, setTippedUserId} from 'src/reducers/wallet/actions';
 import {setIsTipSent} from 'src/reducers/wallet/actions';
@@ -33,6 +32,9 @@ type PostDetailContainerProps = {
   expanded?: boolean;
 };
 
+const SendTipContainer = dynamic(() => import('src/components/SendTip/SendTipContainer'), {
+  ssr: false,
+});
 const ReportContainer = dynamic(() => import('../Report/Report.container'), {ssr: false});
 const TipHistoryContainer = dynamic(() => import('../TipHistory/TipHistory.container'), {
   ssr: false,
@@ -45,11 +47,13 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
   const {type = 'default', expanded = true} = props;
 
   const dispatch = useDispatch();
-  const router = useRouter();
 
   const {post, getTippedUserId} = useTimelineHook();
   const {openTipHistory} = useTipHistory();
   const {openToasterSnack} = useToasterSnackHook();
+  const {removing, openDeletePostConfirmation, closeDeletePostConfirmation, confirmDeletePost} =
+    usePostDelete();
+  const {upVotePost, setDownVotingPost, removePostVote} = usePostInteraction();
 
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
@@ -61,8 +65,6 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
   const [tippedContentForHistory, setTippedContentForHistory] = useState<Post | Comment | null>(
     null,
   );
-  const [removing, setRemoving] = useState(false);
-  const [postToRemove, setPostToRemove] = useState<Post | null>(null);
   const [reported, setReported] = useState<Post | null>(null);
   const [importedPost, setImportedPost] = useState<Post | null>(null);
   const sendTipOpened = Boolean(tippedPost) || Boolean(tippedComment);
@@ -72,10 +74,6 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
       closeSendTip();
     }
   }, [isTipSent]);
-
-  const handleUpvote = (reference: Post | Comment) => {
-    dispatch(upvote(reference));
-  };
 
   const handleSendTip = (reference?: Post | Comment) => {
     // type guard to check if reference is a Post object
@@ -100,30 +98,8 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
     }
   };
 
-  const handleToggleDownvoting = (reference: Post | Comment | null) => {
-    dispatch(setDownvoting(reference));
-  };
-
-  const handleCloseSuccessPrompt = (): void => {
+  const closeSendTipSuccessPrompt = (): void => {
     setOpenSuccessPrompt(false);
-  };
-
-  const handleDeletePost = (post: Post) => {
-    setRemoving(true);
-    setPostToRemove(post);
-  };
-
-  const handleReportPost = (post: Post) => {
-    setReported(post);
-  };
-
-  const handleImporters = (post: Post) => {
-    dispatch(removeImporter());
-    setImportedPost(post);
-  };
-
-  const closeImportedPost = () => {
-    setImportedPost(null);
   };
 
   const handleSharePost = (post: Post, type: 'link' | 'post') => {
@@ -152,29 +128,21 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
     setTippedComment(null);
   };
 
+  const handleReportPost = (post: Post) => {
+    setReported(post);
+  };
+
   const closeReportPost = () => {
     setReported(null);
   };
 
-  const handleClosePrompt = (): void => {
-    setRemoving(false);
-    setPostToRemove(null);
+  const handleImporters = (post: Post) => {
+    dispatch(removeImporter());
+    setImportedPost(post);
   };
 
-  const confirmDeletePost = (): void => {
-    handleClosePrompt();
-
-    if (postToRemove) {
-      dispatch(
-        deletePost(postToRemove.id, () => {
-          router.push('/home');
-        }),
-      );
-    }
-  };
-
-  const handleRemoveVote = (reference: Post | Comment) => {
-    dispatch(removeVote(reference));
+  const closeImportedPost = () => {
+    setImportedPost(null);
   };
 
   const handlePostVisibility = (post: Post) => {
@@ -194,15 +162,15 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
         key={`post-${post.id}`}
         post={post}
         anonymous={anonymous}
-        onUpvote={handleUpvote}
+        onUpvote={upVotePost}
         onSendTip={handleSendTip}
-        toggleDownvoting={handleToggleDownvoting}
+        toggleDownvoting={setDownVotingPost}
         onOpenTipHistory={openTipHistory}
-        onDelete={handleDeletePost}
+        onDelete={openDeletePostConfirmation}
         onReport={handleReportPost}
         onImporters={handleImporters}
         onShared={handleSharePost}
-        onRemoveVote={handleRemoveVote}
+        onRemoveVote={removePostVote}
         onVisibility={handlePostVisibility}
         expanded={expanded}
         type={type}
@@ -225,7 +193,7 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
       <PromptComponent
         icon={'success'}
         open={openSuccessPrompt}
-        onCancel={handleCloseSuccessPrompt}
+        onCancel={closeSendTipSuccessPrompt}
         title={'Success'}
         subtitle={
           <Typography component="div">
@@ -245,11 +213,7 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
             sent successfully
           </Typography>
         }>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}>
+        <Grid container justifyContent="center">
           <a
             target="_blank"
             style={{textDecoration: 'none'}}
@@ -263,10 +227,10 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
             size="small"
             variant="contained"
             color="primary"
-            onClick={handleCloseSuccessPrompt}>
+            onClick={closeSendTipSuccessPrompt}>
             Return
           </Button>
-        </div>
+        </Grid>
       </PromptComponent>
 
       <PromptComponent
@@ -274,24 +238,20 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
         subtitle={`Are you sure to remove this post?`}
         open={removing}
         icon="danger"
-        onCancel={handleClosePrompt}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}>
+        onCancel={closeDeletePostConfirmation}>
+        <Grid container justifyContent="center">
           <Button
             style={{marginRight: '12px'}}
             size="small"
             variant="outlined"
             color="secondary"
-            onClick={handleClosePrompt}>
+            onClick={closeDeletePostConfirmation}>
             No, let me rethink
           </Button>
           <Button size="small" variant="contained" color="primary" onClick={confirmDeletePost}>
             Yes, proceed to delete
           </Button>
-        </div>
+        </Grid>
       </PromptComponent>
     </>
   );

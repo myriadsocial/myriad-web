@@ -1,8 +1,8 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 
 import dynamic from 'next/dynamic';
 
-import {Comment} from 'src/interfaces/comment';
+import {TabItems, TabHookProps} from 'src/components/atoms/Tabs';
 import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 
@@ -11,47 +11,47 @@ const CommentListContainer = dynamic(
   {ssr: false},
 );
 
-export type CommentTabs = 'discussion' | 'debate';
+export const useCommentTabs = (post?: Post): TabHookProps<SectionType> => {
+  const [selected, setSelected] = useState<SectionType>(SectionType.DISCUSSION);
 
-export const useCommentTabs = (post: Post, comments?: Comment[], debates?: Comment[]) => {
-  const [activeTab, setActiveTab] = useState<CommentTabs>('discussion');
+  const tabs: TabItems<SectionType>[] = useMemo(() => {
+    if (!post) return [];
 
-  const discussionComponent = useMemo(() => {
-    return (
-      <CommentListContainer
-        placeholder={'Write a Discussion...'}
-        referenceId={post.id}
-        section={SectionType.DISCUSSION}
-      />
-    );
-  }, [post]);
-
-  const debatesComponent = useMemo(() => {
-    return (
-      <CommentListContainer
-        placeholder={'Your downvote will be submitted after you post a comment'}
-        referenceId={post.id}
-        section={SectionType.DEBATE}
-      />
-    );
-  }, [post]);
-
-  return {
-    activeTab,
-    setActiveTab,
-    tabs: [
+    return [
       {
-        id: 'discussion',
+        id: SectionType.DISCUSSION,
         title: `Discussion (${post.metric.discussions || 0})`,
         icon: '🤔 ',
-        component: discussionComponent,
+        component: (
+          <CommentListContainer
+            placeholder={'Write a Discussion...'}
+            referenceId={post.id}
+            section={SectionType.DISCUSSION}
+          />
+        ),
       },
       {
-        id: 'debate',
+        id: SectionType.DEBATE,
         title: `Debate (${post.metric.debates || 0})`,
         icon: '😡 ',
-        component: debatesComponent,
+        component: (
+          <CommentListContainer
+            placeholder={'Your downvote will be submitted after you post a comment'}
+            referenceId={post.id}
+            section={SectionType.DEBATE}
+          />
+        ),
       },
-    ],
+    ];
+  }, [post]);
+
+  useEffect(() => {
+    console.log('selected', selected);
+  }, [selected]);
+
+  return {
+    selected,
+    setSelected,
+    tabs,
   };
 };

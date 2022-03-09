@@ -68,10 +68,8 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
       <ProfileTimeline loading={false} isBanned={isBanned} />
 
       <ShowIf condition={isBanned}>
-        <>
-          <TopNavbarComponent description={'Profile Detail'} sectionTitle={SectionTitle.PROFILE} />
-          <ResourceDeleted />
-        </>
+        <TopNavbarComponent description={'Profile Detail'} sectionTitle={SectionTitle.PROFILE} />
+        <ResourceDeleted />
       </ShowIf>
     </DefaultLayout>
   );

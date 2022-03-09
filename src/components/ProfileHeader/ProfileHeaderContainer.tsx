@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+import dynamic from 'next/dynamic';
+
 import {Typography} from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -9,7 +11,6 @@ import {ProfileHeaderComponent} from '.';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 
 import {debounce} from 'lodash';
-import {SendTipContainer} from 'src/components/SendTip';
 import {useTimelineFilter} from 'src/components/Timeline/hooks/use-timeline-filter.hook';
 import {Modal} from 'src/components/atoms/Modal';
 import {useFriendRequest} from 'src/hooks/use-friend-request.hook';
@@ -26,6 +27,10 @@ import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
 import {WalletState} from 'src/reducers/wallet/reducer';
+
+const SendTipContainer = dynamic(() => import('src/components/SendTip/SendTipContainer'), {
+  ssr: false,
+});
 
 type Props = {
   edit?: () => void;

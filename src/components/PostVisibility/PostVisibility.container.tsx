@@ -10,12 +10,12 @@ import {PostVisibility as Visibility} from 'src/interfaces/post';
 import {Post} from 'src/interfaces/post';
 import {editPost} from 'src/reducers/timeline/actions';
 
-type ReportContainerProps = {
+type PostVisibilityContainerProps = {
   reference: Post | null;
   onClose: () => void;
 };
 
-export const PostVisibilityContainer: React.FC<ReportContainerProps> = props => {
+export const PostVisibilityContainer: React.FC<PostVisibilityContainerProps> = props => {
   const {reference, onClose} = props;
   const isOpen = Boolean(reference);
   const [open, setOpen] = React.useState(false);
