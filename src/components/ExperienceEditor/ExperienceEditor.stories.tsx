@@ -69,6 +69,7 @@ EditExperience.args = {
     id: '123',
     people: [],
     tags: ['developer'],
+    allowedTags: ['crypto', 'near'],
     user: {
       defaultCurrency: CurrencyId.AUSD,
       id: '0x76e85125c8a6997e5e40e5e1f0a64a8154b5c69308e54b426ad3a34af1545b1d',
