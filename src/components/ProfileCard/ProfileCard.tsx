@@ -1,15 +1,16 @@
-import {ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/outline';
+import {ChevronDownIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React from 'react';
 
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import Button from '@material-ui/core/Button';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './ProfileCard.style';
 import {ProfileContent} from './index';
+
+import {NearNetworkIcon24} from 'src/components/atoms/Icons';
 
 export const ProfileCard: React.FC<ProfileCardProps> = props => {
   const {
@@ -22,10 +23,14 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
     onShowNotificationList,
   } = props;
   const classes = useStyles();
-  const [expanding, setExpanding] = useState(false);
 
-  const handleMenuProfileHeader = () => {
-    setExpanding(!expanding);
+  const formatAddress = (address: string) => {
+    if (address.length > 14) {
+      return (
+        address.substring(0, 4) + '...' + address.substring(address.length - 4, address.length)
+      );
+    }
+    return address;
   };
 
   return (
@@ -37,57 +42,28 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
           notificationCount={notificationCount}
           onShowNotificationList={onShowNotificationList}
           onViewProfile={onViewProfile}
+          handleSignOut={handleSignOut}
+          onSwitchAccount={onSwitchAccount}
         />
-      </div>
-
-      <div className={`${classes.content} ${expanding ? classes.open : classes.close}`}>
-        {user && (
-          <div style={{paddingTop: 12}}>
-            <ListItem
-              classes={{gutters: classes.gutters}}
-              className={classes.hover}
-              onClick={onViewProfile}>
-              <ListItemText className={classes.textAlign}>
-                <Typography className={classes.text} component="span">
-                  View profile
-                </Typography>
-              </ListItemText>
-            </ListItem>
-            <ListItem
-              classes={{gutters: classes.gutters}}
-              className={classes.hover}
-              onClick={onSwitchAccount}>
-              <ListItemText className={classes.textAlign}>
-                <Typography className={classes.text} component="span">
-                  Switch account
-                </Typography>
-              </ListItemText>
-            </ListItem>
-          </div>
-        )}
-        <ListItem
-          classes={{gutters: classes.gutters}}
-          className={classes.hover}
-          onClick={handleSignOut}>
-          <ListItemText className={classes.textAlign}>
-            <Typography className={classes.text} component="span">
-              Log out
-            </Typography>
-          </ListItemText>
-        </ListItem>
-      </div>
-
-      <div
-        className={classes.downIconButton}
-        onClick={handleMenuProfileHeader}
-        role="button"
-        tabIndex={0}
-        aria-hidden="true">
-        <SvgIcon
-          color="primary"
-          component={expanding ? ChevronUpIcon : ChevronDownIcon}
-          viewBox="0 0 24 24"
-        />
+        {/* TODO WIRING WALLET ADDRESS */}
+        <div className={classes.wallet}>
+          <Button
+            className={classes.walletButton}
+            startIcon={<NearNetworkIcon24 />}
+            endIcon={<SvgIcon color="primary" component={ChevronDownIcon} viewBox="0 0 24 24" />}
+            size="small"
+            variant="contained"
+            color="inherit">
+            <Typography component="span">NEAR</Typography>
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="default"
+            className={classes.addressButton}>
+            <Typography component="span">{formatAddress('aaronting.near')}</Typography>
+          </Button>
+        </div>
       </div>
     </div>
   );
