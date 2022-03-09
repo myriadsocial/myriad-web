@@ -27,109 +27,30 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     box: {
       background: '#FFF',
-      paddingBottom: 4,
+      paddingBottom: theme.spacing(3),
       padding: '30px 28px',
       boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
+      borderRadius: '0px 0px 20px 20px',
     },
-    avatar: {
-      width: 48,
-      marginRight: 4,
-
-      '&:hover': {
-        cursor: 'pointer',
-      },
-
-      [theme.breakpoints.down('xs')]: {
-        marginRight: 8,
-      },
+    wallet: {
+      marginTop: theme.spacing(1.5),
     },
-    identity: {
-      maxWidth: 162,
-
-      [theme.breakpoints.down('md')]: {
-        maxWidth: 142,
-      },
-
-      '& .MuiTypography-h5': {
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        wordWrap: 'break-word',
-      },
+    walletButton: {
+      width: 'auto',
+      background: '#F6F7FC',
+      fontSize: '14px',
+      fontWeight: theme.typography.fontWeightRegular,
+      marginRight: theme.spacing(1),
     },
-    name: {
-      [theme.breakpoints.down('xs')]: {
-        fontWeight: theme.typography.fontWeightMedium,
-        fontSize: 16,
-      },
-    },
-    username: {
-      [theme.breakpoints.down('xs')]: {
-        fontSize: 12,
-      },
-    },
-    notification: {
-      width: 40,
-
-      '& .MuiIconButton-root': {
-        padding: 8,
-      },
-      '& .MuiBadge-dot': {
-        backgroundColor: theme.status.danger.main,
-      },
-    },
-    text: {
-      fontSize: '12px',
-      '&:hover': {
-        fontWeight: 600,
-        cursor: 'pointer',
-      },
-    },
-    textAlign: {
-      textAlign: 'left',
-    },
-    downIconButton: {
-      width: '100%',
-      background: '#FFF',
-      textAlign: 'center',
-      borderBottomLeftRadius: theme.spacing(2.5),
-      borderBottomRightRadius: theme.spacing(2.5),
-      '&:hover': {
-        cursor: 'pointer',
-        background: 'rgba(255, 200, 87, 0.2)',
-      },
-    },
-    gutters: {
-      paddingLeft: '30px',
-      paddingRight: '30px',
-    },
-    hover: {
-      '&:hover': {
-        background: 'rgba(255, 200, 87, 0.2)',
-      },
-    },
-    content: {
-      width: '100%',
-      background: '#FFF',
-    },
-    open: {
-      height: 'auto',
-      maxHeight: '9999px',
-      transition: 'all 0.5s cubic-bezier(1,0,1,0)',
-    },
-    close: {
-      maxHeight: 0,
+    addressButton: {
+      width: '122px',
+      background: '#F6F7FC',
+      fontSize: '14px',
+      fontWeight: theme.typography.fontWeightRegular,
+      whiteSpace: 'nowrap',
       overflow: 'hidden',
-      transition: 'all 0.5s cubic-bezier(0,1,0,1)',
-    },
-    flex: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    profileContent: {
-      [theme.breakpoints.down('xs')]: {
-        marginBottom: theme.spacing(3),
-      },
+      textOverflow: 'ellipsis',
+      wordWrap: 'break-word',
     },
   }),
 );
