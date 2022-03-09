@@ -4,13 +4,14 @@ import {useSelector} from 'react-redux';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
-import {Typography} from '@material-ui/core';
+import {Grid, Typography} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 
 import {useStyles} from './experience.style';
 
 import {ListItemPeopleComponent} from 'src/components/atoms/ListItem/ListItemPeople';
+import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {acronym} from 'src/helpers/string';
 import {Experience, WrappedExperience} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
@@ -36,9 +37,11 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const style = useStyles();
   const router = useRouter();
   const [promptSignin, setPromptSignin] = React.useState(false);
+  const [isShowUnsubscribeConfirmation, setShowUnsubscribeConfirmation] =
+    React.useState<boolean>(false);
 
   const parsingTags = () => {
-    const list = experience.tags.map(tag => {
+    const list = experience.allowedTags.map(tag => {
       return `#${tag}`;
     });
     return list.map(tag => {
@@ -63,6 +66,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
   };
 
   const handleUnsubscribeExperience = () => {
+    setShowUnsubscribeConfirmation(false);
     const subscribedExperience = userExperiences.find(
       ar => ar.experience.id === experience.id && ar.subscribed === true,
     );
@@ -98,6 +102,14 @@ export const ExperiencePreview: React.FC<Props> = props => {
       default:
         router.push(`/profile/${people.id}`);
     }
+  };
+
+  const openUnsubscribeConfirmation = () => {
+    setShowUnsubscribeConfirmation(true);
+  };
+
+  const handleCancelUnsubscribe = () => {
+    setShowUnsubscribeConfirmation(false);
   };
 
   const isDisable = () => {
@@ -167,7 +179,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
             disabled={isDisable()}
             variant="contained"
             color="primary"
-            onClick={isSubscribed() ? handleUnsubscribeExperience : handleSubscribeExperience}>
+            onClick={isSubscribed() ? openUnsubscribeConfirmation : handleSubscribeExperience}>
             {isSubscribed() ? 'Unsubscribe' : 'Subscribe'}
           </Button>
         </div>
@@ -183,6 +195,30 @@ export const ExperiencePreview: React.FC<Props> = props => {
           Edit experience
         </Button>
       )}
+
+      <PromptComponent
+        onCancel={handleCancelUnsubscribe}
+        open={isShowUnsubscribeConfirmation}
+        icon="warning"
+        title="Unsubscribe?"
+        subtitle={`Do you want to unsubscribe?\n You won't see more post from this experience`}>
+        <Grid container justifyContent="space-around">
+          <Button
+            onClick={handleCancelUnsubscribe}
+            size="small"
+            variant="outlined"
+            color="secondary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleUnsubscribeExperience}
+            color="primary"
+            size="small"
+            variant="contained">
+            Unsubscribe
+          </Button>
+        </Grid>
+      </PromptComponent>
 
       <ExperienceSignInDialog open={promptSignin} onClose={() => setPromptSignin(false)} />
     </div>
