@@ -91,7 +91,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   useEffect(() => {
     const name = newExperience?.name;
     const experienceImageURL = newExperience?.experienceImageURL;
-    const people = newExperience?.people?.length;
+    const people = newExperience?.people && newExperience?.people?.length > 1;
     const tags = newTags.length;
 
     setDisable(!name || !experienceImageURL || !people || !tags);
