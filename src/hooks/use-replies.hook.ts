@@ -7,7 +7,7 @@ import {User} from 'src/interfaces/user';
 import * as CommentAPI from 'src/lib/api/comment';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {RootState} from 'src/reducers';
-import {increaseCommentCount} from 'src/reducers/timeline/actions';
+import {increaseCommentCount, decreaseCommentCount} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 type useCommentHookProps = {
@@ -21,10 +21,11 @@ type useCommentHookProps = {
   removeReplyVote: (commentId: string) => void;
   loadReplies: () => void;
   loadMoreReplies: () => void;
+  removeReply: (comment: Comment) => void;
 };
 
 export const useRepliesHook = (referenceId: string, deep: number): useCommentHookProps => {
-  const distpatch = useDispatch();
+  const dispatch = useDispatch();
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [replies, setReplies] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,7 +48,7 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
 
     setReplies(prevReplies => [{...data, user}, ...prevReplies]);
 
-    distpatch(increaseCommentCount(postId, comment.section));
+    dispatch(increaseCommentCount(postId, comment.section));
 
     callback && callback();
   };
@@ -188,6 +189,14 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
     }
   };
 
+  const removeReply = async (comment: Comment) => {
+    await CommentAPI.remove(comment.id);
+
+    setReplies(prevReplies => prevReplies.filter(item => item.id !== comment.id));
+
+    dispatch(decreaseCommentCount(comment.postId, comment.section));
+  };
+
   return {
     error,
     loading,
@@ -199,5 +208,6 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
     removeReplyVote: updateRemoveVote,
     loadMoreReplies,
     loadReplies,
+    removeReply,
   };
 };

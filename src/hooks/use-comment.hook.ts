@@ -7,7 +7,7 @@ import {User} from 'src/interfaces/user';
 import * as CommentAPI from 'src/lib/api/comment';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {RootState} from 'src/reducers';
-import {increaseCommentCount} from 'src/reducers/timeline/actions';
+import {increaseCommentCount, decreaseCommentCount} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 type useCommentHookProps = {
@@ -22,10 +22,11 @@ type useCommentHookProps = {
   updateDownvote: (commentId: string, total: number, vote: Vote) => void;
   updateRemoveUpvote: (commentId: string) => void;
   loadReplies: (referenceId: string, deep: number) => void;
+  remove: (comment: Comment) => void;
 };
 
 export const useCommentHook = (referenceId: string): useCommentHookProps => {
-  const distpatch = useDispatch();
+  const dispatch = useDispatch();
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -121,7 +122,7 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
       setComments(newComment);
     }
 
-    distpatch(increaseCommentCount(postId, comment.section));
+    dispatch(increaseCommentCount(postId, comment.section));
 
     callback && callback();
   };
@@ -302,6 +303,14 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
     }
   };
 
+  const remove = async (comment: Comment) => {
+    await CommentAPI.remove(comment.id);
+
+    setComments(prevComments => prevComments.filter(item => item.id !== comment.id));
+
+    dispatch(decreaseCommentCount(comment.postId, comment.section));
+  };
+
   return {
     error,
     loading,
@@ -314,5 +323,6 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
     updateDownvote,
     updateRemoveUpvote,
     loadReplies,
+    remove,
   };
 };

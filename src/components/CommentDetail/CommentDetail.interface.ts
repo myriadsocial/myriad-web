@@ -17,4 +17,5 @@ export interface CommentDetailProps {
   onReport: (comment: Comment) => void;
   onSearchPeople: (query: string) => void;
   onBeforeDownvote?: () => void;
+  onDelete: (comment: Comment) => void;
 }

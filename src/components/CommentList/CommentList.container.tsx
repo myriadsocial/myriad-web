@@ -3,6 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
+import {Grid} from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -55,6 +56,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     loadMoreComment,
     updateUpvote,
     updateRemoveUpvote,
+    remove,
   } = useCommentHook(referenceId);
 
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
@@ -71,6 +73,8 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const [tippedComment, setTippedComment] = useState<Comment | null>(null);
   const [tippedContentForHistory, setTippedContentForHistory] = useState<Comment | null>(null);
   const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
+  const [deleteCommentDialogOpened, setOpenDeleteCommentDialog] = React.useState(false);
+  const [commentToDelete, setCommentToDelete] = React.useState<Comment>();
 
   const sendTipOpened = Boolean(tippedComment);
 
@@ -146,6 +150,24 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     }
   };
 
+  const showConfirmDeleteDialog = (comment: Comment): void => {
+    setOpenDeleteCommentDialog(true);
+    setCommentToDelete(comment);
+  };
+
+  const closeConfirmDeleteDialog = (): void => {
+    setOpenDeleteCommentDialog(false);
+    setCommentToDelete(undefined);
+  };
+
+  const confirmDeleteComment = (): void => {
+    if (!commentToDelete) return;
+
+    remove(commentToDelete);
+
+    closeConfirmDeleteDialog();
+  };
+
   const closeSendTip = () => {
     if (isTipSent && tippedComment) {
       setOpenSuccessPrompt(true);
@@ -214,6 +236,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         onOpenTipHistory={openTipHistory}
         onLoadMoreReplies={console.log}
         onSearchPeople={handleSearchPeople}
+        onDelete={showConfirmDeleteDialog}
       />
 
       <ShowIf condition={hasMoreComment}>
@@ -267,6 +290,27 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
             Return
           </Button>
         </div>
+      </PromptComponent>
+
+      <PromptComponent
+        title={'Delete Comment'}
+        subtitle={`Are you sure to remove this comment?`}
+        open={deleteCommentDialogOpened}
+        icon="danger"
+        onCancel={closeConfirmDeleteDialog}>
+        <Grid justifyContent="space-between">
+          <Button
+            style={{marginRight: '12px'}}
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={closeConfirmDeleteDialog}>
+            No, let me rethink
+          </Button>
+          <Button size="small" variant="contained" color="primary" onClick={confirmDeleteComment}>
+            Yes, proceed to delete
+          </Button>
+        </Grid>
       </PromptComponent>
 
       <TipHistoryContainer onSendTip={handleSendTip} />
