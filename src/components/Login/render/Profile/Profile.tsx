@@ -9,12 +9,15 @@ import {useStyles} from './Profile.style';
 
 import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import {useAuthHook} from 'src/hooks/auth.hook';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {toHexPublicKey} from 'src/lib/crypto';
 import i18n from 'src/locale';
 
 type ProfileProps = {
-  account: InjectedAccountWithMeta | null;
   checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
+  walletType: WalletTypeEnum | null;
+  account?: InjectedAccountWithMeta | null;
+  publicAddress?: string;
 };
 
 const USERNAME_MAX_LENGTH = 16;
@@ -29,7 +32,7 @@ const USERNAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Username', {
 });
 
 export const Profile: React.FC<ProfileProps> = props => {
-  const {account, checkUsernameAvailability} = props;
+  const {walletType, checkUsernameAvailability, account, publicAddress} = props;
 
   const styles = useStyles();
   const confirm = useConfirm();
@@ -186,7 +189,7 @@ export const Profile: React.FC<ProfileProps> = props => {
   const handleConfirmation = useCallback(() => {
     const valid = validate();
 
-    if (valid && account) {
+    if (valid && (account || publicAddress)) {
       checkUsernameAvailability(profile.username.value, available => {
         if (available) {
           confirmRegisterProfile();
@@ -205,16 +208,36 @@ export const Profile: React.FC<ProfileProps> = props => {
   }, [account, profile]);
 
   const handleSubmit = async () => {
-    if (account) {
-      const registered = await signUpWithExternalAuth(
-        toHexPublicKey(account),
-        profile.name.value,
-        profile.username.value,
-        account,
-      );
+    switch (walletType) {
+      case WalletTypeEnum.POLKADOT: {
+        if (account) {
+          const registered = await signUpWithExternalAuth(
+            toHexPublicKey(account),
+            profile.name.value,
+            profile.username.value,
+            walletType,
+          );
 
-      if (!registered) {
-        navigate('/wallet');
+          if (!registered) {
+            navigate('/wallet');
+          }
+        }
+        break;
+      }
+
+      case WalletTypeEnum.NEAR: {
+        if (publicAddress) {
+          const registered = await signUpWithExternalAuth(
+            publicAddress,
+            profile.name.value,
+            profile.username.value,
+            walletType,
+          );
+
+          if (!registered) {
+            navigate('/wallet');
+          }
+        }
       }
     }
   };

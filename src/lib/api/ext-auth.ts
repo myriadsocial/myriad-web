@@ -1,9 +1,18 @@
 import MyriadAPI from './base';
 
+export enum WalletTypeEnum {
+  POLKADOT = 'polkadot',
+  TRUST = 'trust',
+  METAMASK = 'metamask',
+  COINBASE = 'coinbase',
+  NEAR = 'near',
+}
+
 type LoginProps = {
   nonce: number;
   signature: string;
   publicAddress: string;
+  walletType: WalletTypeEnum;
 };
 
 type SignUpProps = {
@@ -22,6 +31,7 @@ type LoginResponseProps = {
 
 export const login = async (values: LoginProps): Promise<LoginResponseProps | null> => {
   try {
+    console.log({values});
     const {data} = await MyriadAPI.request({
       url: '/login',
       method: 'POST',

@@ -6,9 +6,11 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {User} from 'src/interfaces/user';
 import * as AuthAPI from 'src/lib/api/ext-auth';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import * as UserAPI from 'src/lib/api/user';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
+import {createNearSignature} from 'src/lib/services/near-api-js';
 import {signWithExtension} from 'src/lib/services/polkadot-js';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
@@ -31,6 +33,17 @@ export const useAuthHook = () => {
     } catch (error) {
       console.log({error});
       return null;
+    }
+  };
+
+  const fetchNearUserNonce = async (nearId: string): Promise<UserNonceProps> => {
+    try {
+      const data = await UserAPI.getUserNonce(nearId);
+
+      return data;
+    } catch (error) {
+      console.log('[useAuthHook][getUserNonce][error]', {error});
+      return {nonce: 0};
     }
   };
 
@@ -70,38 +83,85 @@ export const useAuthHook = () => {
     return accounts;
   };
 
-  const signInWithExternalAuth = async (account: InjectedAccountWithMeta, nonce: number) => {
-    const signature = await createSignaturePolkadotExt(account, nonce);
+  const signInWithExternalAuth = async (
+    nonce: number,
+    account?: InjectedAccountWithMeta,
+    nearAddress?: string,
+  ) => {
+    if (account) {
+      const signature = await createSignaturePolkadotExt(account, nonce);
 
-    if (!signature) return null;
+      if (!signature) return null;
 
-    signIn('credentials', {
-      name: account.meta.name,
-      address: toHexPublicKey(account),
-      anonymous: false,
-      callbackUrl: publicRuntimeConfig.appAuthURL,
-      signature,
-      nonce,
-    });
+      signIn('credentials', {
+        name: account.meta.name,
+        address: toHexPublicKey(account),
+        anonymous: false,
+        callbackUrl: publicRuntimeConfig.appAuthURL,
+        signature,
+        nonce,
+      });
 
-    return true;
+      return true;
+    }
+
+    if (nearAddress) {
+      const data = await createNearSignature(nearAddress, nonce);
+
+      console.log({data});
+
+      if (data && data.signature) return null;
+
+      if (data) {
+        console.log('signing in');
+        signIn('credentials', {
+          address: data.publicAddress,
+          signature: data.signature,
+          nonce,
+          walletType: WalletTypeEnum.NEAR,
+          anonymous: false,
+          callbackUrl: publicRuntimeConfig.appAuthURL,
+        });
+
+        return true;
+      }
+    }
+
+    return null;
   };
 
   const signUpWithExternalAuth = async (
     id: string,
     name: string,
     username: string,
-    account: InjectedAccountWithMeta,
+    walletType: WalletTypeEnum,
+    account?: InjectedAccountWithMeta,
+    publicAddress?: string,
   ): Promise<true | null> => {
     let nonce = null;
     const data = await AuthAPI.signUp({id, name, username});
 
     if (data) nonce = data.nonce;
 
-    if (nonce && nonce > 0) {
-      return signInWithExternalAuth(account, nonce);
-    } else {
-      return null;
+    switch (walletType) {
+      case WalletTypeEnum.POLKADOT: {
+        if (nonce && nonce > 0 && account) {
+          return signInWithExternalAuth(nonce, account);
+        } else {
+          return null;
+        }
+      }
+
+      case WalletTypeEnum.NEAR: {
+        if (nonce && nonce > 0 && publicAddress) {
+          return signInWithExternalAuth(nonce, undefined, publicAddress);
+        } else {
+          return null;
+        }
+      }
+
+      default:
+        return null;
     }
   };
 
@@ -124,7 +184,7 @@ export const useAuthHook = () => {
     const {nonce} = await UserAPI.getUserNonce(address);
 
     if (nonce > 0) {
-      await signInWithExternalAuth(account, nonce);
+      await signInWithExternalAuth(nonce, account);
     } else {
       await firebaseCloudMessaging.removeToken();
       await signOut({
@@ -148,6 +208,7 @@ export const useAuthHook = () => {
     getUserByAccounts,
     getRegisteredAccounts,
     fetchUserNonce,
+    fetchNearUserNonce,
     signInWithExternalAuth,
     signUpWithExternalAuth,
     switchAccount,
