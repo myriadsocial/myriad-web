@@ -169,14 +169,14 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
           options={historyAmountSortOptions}
           onChange={handleSortChange}
         />
-        <div className={classes.leftJustifiedWrapper}>
+        <div className={classes.sortCoin}>
           <DropdownMenu title={'Coin'} options={sortOptions} onChange={handleCurrencyChange} />
-          <DropdownMenu
-            title={'Transaction'}
-            options={historyTransactionSortOptions}
-            onChange={handleTransactionChange}
-          />
         </div>
+        <DropdownMenu
+          title={'Transaction'}
+          options={historyTransactionSortOptions}
+          onChange={handleTransactionChange}
+        />
       </div>
       <TableContainer component={List}>
         <Table className={classes.root} aria-label="history details table">
@@ -212,7 +212,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                       />
 
                       <div>
-                        <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                        <Typography variant="body1">
                           {tx.toUser?.id === userId
                             ? tx.fromUser?.name ?? namePlaceholder
                             : tx.toUser?.name ?? namePlaceholder}
@@ -224,13 +224,13 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                     </TableCell>
                     <TableCell align="center">
                       {tx.toUser?.id === userId && (
-                        <div className={classes.tipStatusGreen}>
-                          <Typography variant="caption">Tipped</Typography>
+                        <div className={classes.received}>
+                          <Typography variant="caption">Received</Typography>
                         </div>
                       )}
                       {tx.fromUser?.id === userId && (
-                        <div className={classes.tipStatusRed}>
-                          <Typography variant="caption">Received</Typography>
+                        <div className={classes.sent}>
+                          <Typography variant="caption">Sent</Typography>
                         </div>
                       )}
                     </TableCell>
@@ -238,13 +238,13 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                       <div className={classes.currencyDetailWrapper}>
                         <div>
                           {tx.toUser?.id === userId && (
-                            <Typography variant="h5" className={classes.textAmountGreen}>
-                              +{parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
+                            <Typography variant="h5" className={classes.textAmountReceived}>
+                              {parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
                             </Typography>
                           )}
                           {tx.fromUser?.id === userId && (
-                            <Typography variant="h5" className={classes.textAmountRed}>
-                              -{parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
+                            <Typography variant="h5" className={classes.textAmountSent}>
+                              {parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
                             </Typography>
                           )}
                           <Typography variant="caption" color="textSecondary">

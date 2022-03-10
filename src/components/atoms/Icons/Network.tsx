@@ -25,9 +25,16 @@ export const PolygonNetworkDisabledIcon: React.FC<SvgIconProps> = props => (
   <SvgIcon component={PolygonDisabled} viewBox="0 0 32 32" {...props} />
 );
 
-export const NearNetworkIcon24: React.FC<SvgIconProps> = props => (
-  <SvgIcon component={Near24} viewBox="0 0 24 24" {...props} />
-);
+export const NearNetworkIcon24: React.FC<SvgIconProps> = props => {
+  return (
+    <SvgIcon
+      component={Near24}
+      viewBox="0 0 24 24"
+      {...props}
+      style={{width: props.width, height: props.height}}
+    />
+  );
+};
 
 export const NewPolkadotNetworkIcon24: React.FC<SvgIconProps> = props => (
   <SvgIcon component={Polkadot24} viewBox="0 0 24 24" {...props} />

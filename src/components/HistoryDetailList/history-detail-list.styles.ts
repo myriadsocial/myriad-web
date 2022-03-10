@@ -35,10 +35,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     headerActionWrapper: {
       display: 'flex',
-      justifyContent: 'flex-start',
+      justifyContent: 'space-between',
       alignItems: 'center',
-      columnGap: theme.spacing(3.875),
-      marginTop: theme.spacing(2.5),
     },
     currencyDetailWrapper: {
       display: 'flex',
@@ -46,40 +44,38 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       columnGap: theme.spacing(1.5),
     },
-    leftJustifiedWrapper: {
-      marginLeft: 'auto',
-      display: 'flex',
-      columnGap: theme.spacing(4.375),
+    sortCoin: {
+      marginRight: theme.spacing(4),
     },
-    tipStatusGreen: {
+    sent: {
       width: 80,
       height: 24,
-      borderRadius: 2,
+      borderRadius: 10,
       marginLeft: theme.spacing(6),
-      background: theme.status.success.surface,
+      background: theme.status.primary.surface,
       '& .MuiTypography-root': {
-        color: theme.status.success.pressed,
+        color: theme.palette.primary.main,
         fontWeight: 'bold',
       },
     },
-    tipStatusRed: {
+    received: {
       width: 80,
       height: 24,
-      borderRadius: 2,
+      borderRadius: 10,
       marginLeft: theme.spacing(6),
-      background: theme.status.danger.surface,
+      background: theme.status.warning.surface,
       '& .MuiTypography-root': {
-        color: theme.status.danger.pressed,
+        color: theme.status.warning.pressed,
         fontWeight: 'bold',
       },
     },
-    textAmountGreen: {
+    textAmountReceived: {
       fontWeight: 'bold',
-      color: theme.status.success.main,
+      color: theme.status.warning.main,
     },
-    textAmountRed: {
+    textAmountSent: {
       fontWeight: 'bold',
-      color: theme.status.danger.main,
+      color: theme.palette.primary.main,
     },
     loading: {
       display: 'flex',
