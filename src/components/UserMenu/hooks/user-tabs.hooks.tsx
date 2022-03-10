@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
 import {useSelector} from 'react-redux';
 
+import {CommentHistoryListContainer} from 'src/components/CommentHistoryList';
 import {FriendListContainer} from 'src/components/FriendsMenu/FriendList.container';
 import {ProfileExperienceTab} from 'src/components/Profile/tabs/ExperienceTab';
 import {ProfilePostsTab} from 'src/components/Profile/tabs/PostTabs';
@@ -15,7 +16,7 @@ import {FriendState} from 'src/reducers/friend/reducer';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
-export type UserMenuTabs = 'post' | 'experience' | 'social' | 'friend' | 'setting';
+export type UserMenuTabs = 'post' | 'comments' | 'experience' | 'social' | 'friend' | 'setting';
 
 export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] => {
   const {detail: profileUser} = useSelector<RootState, ProfileState>(state => state.profileState);
@@ -36,6 +37,11 @@ export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] 
         id: 'post',
         title: `Post`,
         component: <ProfilePostsTab filterType="origin" sortType="created" filters={filters} />,
+      },
+      {
+        id: 'comments',
+        title: `Comments`,
+        component: <CommentHistoryListContainer profile={profileUser} />,
       },
       {
         id: 'experience',

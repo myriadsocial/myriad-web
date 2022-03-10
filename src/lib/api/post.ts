@@ -2,16 +2,10 @@ import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 import {LoopbackWhere} from './interfaces/loopback-query.interface';
-import {PaginationParams, FilterParams} from './interfaces/pagination-params.interface';
+import {PaginationParams, FilterParams, SortType} from './interfaces/pagination-params.interface';
 
 import {Post, PostProps, ImportPostProps, PostVisibility, PostStatus} from 'src/interfaces/post';
-import {
-  TimelineOrderType,
-  TimelineSortType,
-  TimelineFilter,
-  TimelineType,
-  PostOrigin,
-} from 'src/interfaces/timeline';
+import {TimelineOrderType, TimelineFilter, TimelineType, PostOrigin} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 
 type PostList = BaseList<Post>;
@@ -33,7 +27,7 @@ export const getPost = async (
   order: TimelineOrderType = TimelineOrderType.LATEST,
   filters?: TimelineFilter,
   asFriend = false,
-  sort: TimelineSortType = 'DESC',
+  sort: SortType = 'DESC',
 ): Promise<PostList> => {
   const where: LoopbackWhere<PostProps> = {};
 

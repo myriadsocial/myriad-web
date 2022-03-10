@@ -30,7 +30,7 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
       <Typography component="div" className={style.root}>
         <ShowIf condition={platform !== 'myriad'}>Imported </ShowIf>
 
-        <Link href={`/post/[id]`} as={`/post/${postId}`} shallow>
+        <Link href={`/post/[postId]`} as={`/post/${postId}`} shallow>
           <a className={style.linkGrey}>{timeAgo(date)}&nbsp;</a>
         </Link>
 

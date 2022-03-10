@@ -32,6 +32,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
+import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {blockFromFriend, removeFromFriend} from 'src/reducers/friend/actions';
@@ -55,7 +56,7 @@ export type FriendListProps = {
   hasMore: boolean;
   onSearch: (query: string) => void;
   onFilter: (type: FriendType) => void;
-  onSort: (sort: string) => void;
+  onSort: (sort: SortType) => void;
   onLoadNextPage: () => void;
 };
 
@@ -221,6 +222,10 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     }
   };
 
+  const handleSort = (sort: string) => {
+    onSort(sort as SortType);
+  };
+
   if (friends.length === 0 && !isFiltered) {
     return (
       <Empty title="Friend list is empty" subtitle="Find or invite your friends to Myriad 😉" />
@@ -241,7 +246,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
             </div>
           </ShowIf>
           <ShowIf condition={!disableSort}>
-            <DropdownMenu title={'Sort by'} options={sortOptions} onChange={onSort} />
+            <DropdownMenu title={'Sort by'} options={sortOptions} onChange={handleSort} />
           </ShowIf>
         </Grid>
       </ShowIf>

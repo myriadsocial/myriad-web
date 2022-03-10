@@ -1,7 +1,8 @@
 import {MenuOptions} from '../atoms/DropdownMenu';
 
+import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
+
 export type FriendType = 'all' | 'mutual';
-export type SortType = 'oldest' | 'latest';
 
 // Filter options
 export const friendFilterOptions: MenuOptions<FriendType>[] = [
@@ -16,6 +17,6 @@ export const friendFilterOptions: MenuOptions<FriendType>[] = [
 ];
 
 export const sortOptions: MenuOptions<SortType>[] = [
-  {id: 'latest', title: 'Latest'},
-  {id: 'oldest', title: 'Oldest'},
+  {id: 'DESC', title: 'Latest'},
+  {id: 'ASC', title: 'Oldest'},
 ];

@@ -2,13 +2,9 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {ParsedUrlQuery} from 'querystring';
 import {People} from 'src/interfaces/people';
-import {
-  TimelineType,
-  TimelineFilter,
-  TimelineOrderType,
-  TimelineSortType,
-} from 'src/interfaces/timeline';
+import {TimelineType, TimelineFilter, TimelineOrderType} from 'src/interfaces/timeline';
 import * as ExperienceAPI from 'src/lib/api/experience';
+import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import {RootState} from 'src/reducers';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {loadTimeline, clearTimeline} from 'src/reducers/timeline/actions';
@@ -114,7 +110,7 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
     dispatch(loadTimeline(1, timelineSort, filters, TimelineType.ALL));
   };
 
-  const sortTimeline = async (sort: TimelineSortType) => {
+  const sortTimeline = async (sort: SortType) => {
     const timelineOrder = TimelineOrderType.LATEST;
 
     dispatch(clearTimeline());

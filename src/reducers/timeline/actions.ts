@@ -9,16 +9,12 @@ import {Comment} from 'src/interfaces/comment';
 import {FriendStatus} from 'src/interfaces/friend';
 import {ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
 import {Post, PostProps, PostVisibility} from 'src/interfaces/post';
-import {
-  TimelineFilter,
-  TimelineOrderType,
-  TimelineSortType,
-  TimelineType,
-} from 'src/interfaces/timeline';
+import {TimelineFilter, TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
 import {UserProps} from 'src/interfaces/user';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
 import * as InteractionAPI from 'src/lib/api/interaction';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
+import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import * as PostAPI from 'src/lib/api/post';
 import {ThunkActionCreator} from 'src/types/thunk';
 
@@ -30,7 +26,7 @@ export interface LoadTimeline extends Action {
   type: constants.LOAD_TIMELINE;
   payload: {
     posts: Post[];
-    sort?: TimelineSortType;
+    sort?: SortType;
     filter?: TimelineFilter;
     type?: TimelineType;
     order?: TimelineOrderType;
@@ -133,7 +129,7 @@ export interface TimelineLoading extends Action {
 export interface SetTimelineSort extends Action {
   type: constants.SET_TIMELINE_SORT;
   order: TimelineOrderType;
-  sort?: TimelineSortType;
+  sort?: SortType;
 }
 
 /**
@@ -219,10 +215,7 @@ export const decreaseCommentCount = (
   section,
 });
 
-export const setTimelineSort = (
-  order: TimelineOrderType,
-  sort?: TimelineSortType,
-): SetTimelineSort => ({
+export const setTimelineSort = (order: TimelineOrderType, sort?: SortType): SetTimelineSort => ({
   type: constants.SET_TIMELINE_SORT,
   order,
   sort,
@@ -242,7 +235,7 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
     order?: TimelineOrderType,
     filter?: TimelineFilter,
     type?: TimelineType,
-    sort?: TimelineSortType,
+    sort?: SortType,
   ) =>
   async (dispatch, getState) => {
     dispatch(setTimelineLoading(true));

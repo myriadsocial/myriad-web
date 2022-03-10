@@ -10,6 +10,7 @@ import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {useProfileFriend} from 'src/hooks/use-profile-friend.hook';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
+import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
 import {ProfileState} from 'src/reducers/profile/reducer';
@@ -85,9 +86,7 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
     // code
   };
 
-  const handleSortFriend = (sortType: string) => {
-    const sort = sortType === 'latest' ? 'DESC' : 'ASC';
-
+  const handleSortFriend = (sort: SortType) => {
     if (isProfile) {
       sortProfileFriend(sort);
     } else {

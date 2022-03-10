@@ -5,6 +5,7 @@ import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {useNotifHook} from 'src/hooks/use-notif.hook';
 import {FriendStatus, Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
+import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import {RootState} from 'src/reducers';
 import {
   createFriendRequest,
@@ -51,7 +52,7 @@ export const useProfileFriend = () => {
     dispatch(searchProfileFriend(query, page));
   };
 
-  const sort = (sort: 'ASC' | 'DESC') => {
+  const sort = (sort: SortType) => {
     dispatch(updateProfileFriendParams({sort}));
 
     if (filter) {

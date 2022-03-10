@@ -2,7 +2,8 @@ import {useSelector} from 'react-redux';
 
 import {MenuOptions} from 'src/components/atoms/DropdownMenu';
 import {TabListItem} from 'src/components/atoms/TabList';
-import {TimelineOrderType, TimelineType, TimelineSortType} from 'src/interfaces/timeline';
+import {TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
+import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import {RootState} from 'src/reducers';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
@@ -69,7 +70,7 @@ export const useFilterOption = () => {
     },
   ];
 
-  const sortOptions: MenuOptions<TimelineSortType>[] = [
+  const sortOptions: MenuOptions<SortType>[] = [
     {id: 'DESC', title: 'Latest'},
     {id: 'ASC', title: 'Oldest'},
   ];

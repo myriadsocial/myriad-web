@@ -9,17 +9,13 @@ import * as Redux from 'redux';
 import {Comment} from 'src/interfaces/comment';
 import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
-import {
-  TimelineType,
-  TimelineOrderType,
-  TimelineFilter,
-  TimelineSortType,
-} from 'src/interfaces/timeline';
+import {TimelineType, TimelineOrderType, TimelineFilter} from 'src/interfaces/timeline';
 import {WalletDetail} from 'src/interfaces/wallet';
+import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 
 export interface TimelineState extends BasePaginationState {
   type: TimelineType;
-  sort: TimelineSortType;
+  sort: SortType;
   order: TimelineOrderType;
   filter?: TimelineFilter;
   search?: string;

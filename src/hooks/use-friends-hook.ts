@@ -7,6 +7,7 @@ import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
+import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import {RootState} from 'src/reducers';
 import {
   fetchFriendRequest,
@@ -74,7 +75,7 @@ export const useFriendsHook = (user?: User) => {
     dispatch(searchFriend(query));
   };
 
-  const sort = (sort: 'ASC' | 'DESC') => {
+  const sort = (sort: SortType) => {
     dispatch(updateFriendParams({sort}));
 
     if (filter) {

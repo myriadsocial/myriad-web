@@ -1,6 +1,6 @@
 import {BaseModel} from './base.interface';
 import {ReferenceType, SectionType, Vote} from './interaction';
-import {MentionUserProps, PostMetric} from './post';
+import {MentionUserProps, Post, PostMetric} from './post';
 import {User} from './user';
 
 export interface CommentProps {
@@ -15,6 +15,7 @@ export interface CommentProps {
 
 export interface Comment extends CommentProps, BaseModel {
   user: User;
+  post?: Post;
   metric: PostMetric;
   votes?: Vote[];
   replies?: Comment[];
