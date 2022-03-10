@@ -3,6 +3,7 @@ import {connectToNearWallet, NearConnectResponseProps} from 'src/lib/services/ne
 export const useNearApi = () => {
   const connectToNear = async (): Promise<NearConnectResponseProps> => {
     const data = connectToNearWallet();
+
     return data;
   };
 

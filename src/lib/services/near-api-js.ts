@@ -41,12 +41,9 @@ export const connectToNearWallet = async (): Promise<NearConnectResponseProps> =
     const near = await connect(assign({deps: {keyStore}}, config));
     const wallet = new WalletConnection(near, 'myriad-social');
 
-    //const successUrl = 'http://localhost:3000/home';
-    //const failureUrl = 'http://localhost:3000/';
-
-    if (!wallet.isSignedIn())
-      await wallet.requestSignIn({successUrl: 'http://localhost:3000/?status=success'});
-
+    if (!wallet.isSignedIn()) {
+      await wallet.requestSignIn({successUrl: 'http://localhost:3000/'});
+    }
     const address = wallet.getAccountId();
 
     const {publicRuntimeConfig} = getConfig();
@@ -80,7 +77,8 @@ export const connectToNearWallet = async (): Promise<NearConnectResponseProps> =
     if (nonce > 0) {
       signIn('credentials', {
         name: address,
-        address: payload.publicAddress,
+        address: address,
+        publicAddress: payload.publicAddress,
         anonymous: false,
         callbackUrl: publicRuntimeConfig.appAuthURL,
         signature: payload.signature,
@@ -88,7 +86,6 @@ export const connectToNearWallet = async (): Promise<NearConnectResponseProps> =
         walletType: payload.walletType,
       });
     }
-
     return {nonce, publicAddress: payload.publicAddress};
   } catch (error) {
     console.log({error});
@@ -112,12 +109,12 @@ export const createNearSignature = async (
 
     const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
 
-    //const publicKey = u8aToHex(userSignature.publicKey.data);
+    const publicKey = u8aToHex(userSignature.publicKey.data);
     const userSignatureHex = u8aToHex(userSignature.signature);
 
-    //const publicAddress = `${publicKey}/${nearAddress}`;
+    const publicAddress = `${publicKey}/${nearAddress}`;
 
-    return {signature: userSignatureHex, publicAddress: nearAddress};
+    return {signature: userSignatureHex, publicAddress};
   } catch (error) {
     console.log({error});
     return null;

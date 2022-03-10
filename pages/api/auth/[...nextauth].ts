@@ -33,7 +33,7 @@ export default NextAuth({
           const data = await AuthAPI.login({
             nonce: Number(credentials.nonce),
             signature: credentials.signature,
-            publicAddress: credentials.address,
+            publicAddress: credentials.publicAddress,
             walletType: credentials.walletType as WalletTypeEnum,
           });
 

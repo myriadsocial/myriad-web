@@ -6,6 +6,7 @@ export const userToSession = (user: User): UserSession => {
     anonymous: false,
     name: user.name,
     address: user.id,
+    publicAddress: user.publicAddress ?? '',
     profilePictureURL: user.profilePictureURL || '',
     welcome: user.activityLogs
       ? user.activityLogs.filter(log =>
@@ -23,6 +24,7 @@ export const credentialToSession = (credential: SignInCredential): UserSession =
     nonce: credential.nonce,
     signature: credential.signature,
     address: credential.address,
+    publicAddress: credential.publicAddress,
     anonymous: credential.anonymous,
     name: credential.name,
     profilePictureURL: '',

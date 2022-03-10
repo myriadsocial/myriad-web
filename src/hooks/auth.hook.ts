@@ -111,9 +111,9 @@ export const useAuthHook = () => {
       if (data && data.signature) return null;
 
       if (data) {
-        console.log('signing in');
         signIn('credentials', {
-          address: data.publicAddress,
+          address: nearAddress,
+          publicAddress: data.publicAddress,
           signature: data.signature,
           nonce,
           walletType: WalletTypeEnum.NEAR,

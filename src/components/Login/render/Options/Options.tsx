@@ -62,7 +62,6 @@ export const Options: React.FC<OptionProps> = props => {
   const [wallet, setWallet] = useState<WalletTypeEnum | null>(null);
   const [termApproved, setTermApproved] = useState(false);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
-  const [nearId, setNearId] = useState('');
   const [extensionChecked, setExtensionChecked] = useState(false);
   const [extensionEnabled, setExtensionEnabled] = useState(false);
   const [connectAttempted, setConnectAttempted] = useState(false);
@@ -119,6 +118,8 @@ export const Options: React.FC<OptionProps> = props => {
 
     let tempId = '';
 
+    let tempNearWallet = '';
+
     switch (wallet) {
       case WalletTypeEnum.POLKADOT:
         // eslint-disable-next-line no-case-declarations
@@ -130,7 +131,9 @@ export const Options: React.FC<OptionProps> = props => {
       case WalletTypeEnum.NEAR: {
         const {nonce, publicAddress} = await connectToNear();
         tempId = publicAddress;
-        setNearId(publicAddress);
+
+        if (publicAddress.includes('/')) tempNearWallet = publicAddress.split('/')[1];
+
         tempNonce = nonce;
         break;
       }
@@ -149,15 +152,9 @@ export const Options: React.FC<OptionProps> = props => {
     } else if (!tempNonce) {
       if (tempId.length > 0) {
         onConnectNear &&
-          onConnectNear(nearId, () => {
+          onConnectNear(tempNearWallet, () => {
             navigate('/profile');
           });
-      } else if (!tempId.length && !tempNonce) {
-        onConnectNear &&
-          onConnectNear(nearId, () => {
-            navigate('/profile');
-          });
-        //near login here
       }
     } else {
       setWallet(null);

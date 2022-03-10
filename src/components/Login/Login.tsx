@@ -25,7 +25,7 @@ export const Login: React.FC = () => {
   const [walletType, setWalletType] = useState<WalletTypeEnum | null>(null);
 
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
-  const [publicAddress, setPublicAddress] = useState('');
+  const [nearWallet, setNearWallet] = useState('');
   const [selectedAccount, setSelectedAccount] = useState<InjectedAccountWithMeta | null>(null);
   const [signatureCancelled, setSignatureCancelled] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,7 @@ export const Login: React.FC = () => {
   };
 
   const handleOnConnectNear = (nearId: string, callback: () => void) => {
-    setPublicAddress(nearId);
+    setNearWallet(nearId);
     setWalletType(WalletTypeEnum.NEAR);
 
     checkAccountRegistered(callback, WalletTypeEnum.NEAR, undefined, nearId);
@@ -111,7 +111,7 @@ export const Login: React.FC = () => {
           break;
       }
     },
-    [selectedAccount, walletType, publicAddress],
+    [selectedAccount, walletType],
   );
 
   return (
@@ -142,7 +142,7 @@ export const Login: React.FC = () => {
             element={
               <Profile
                 walletType={walletType}
-                publicAddress={publicAddress}
+                publicAddress={nearWallet}
                 account={selectedAccount}
                 checkUsernameAvailability={checkUsernameAvailable}
               />
