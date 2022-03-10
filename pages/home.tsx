@@ -119,7 +119,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const anonymous = Boolean(session?.user.anonymous);
-  const userId = session?.user.address as string;
+  let userId = session?.user.address as string;
+
+  if (userId.includes('/')) {
+    const modifiedUserId = userId.split('/')[1];
+    userId = modifiedUserId;
+  }
 
   if (anonymous || !userId) {
     const username = session?.user.name as string;

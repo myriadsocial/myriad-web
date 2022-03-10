@@ -108,8 +108,6 @@ export const useAuthHook = () => {
     if (nearAddress) {
       const data = await createNearSignature(nearAddress, nonce);
 
-      console.log({data});
-
       if (data && data.signature) return null;
 
       if (data) {
@@ -139,12 +137,13 @@ export const useAuthHook = () => {
     publicAddress?: string,
   ): Promise<true | null> => {
     let nonce = null;
-    const data = await AuthAPI.signUp({id, name, username});
-
-    if (data) nonce = data.nonce;
 
     switch (walletType) {
       case WalletTypeEnum.POLKADOT: {
+        const data = await AuthAPI.signUp({id, name, username});
+
+        if (data) nonce = data.nonce;
+
         if (nonce && nonce > 0 && account) {
           return signInWithExternalAuth(nonce, account);
         } else {
@@ -153,6 +152,11 @@ export const useAuthHook = () => {
       }
 
       case WalletTypeEnum.NEAR: {
+        const nearAddress = id.includes('/') ? id.split('/')[1] : id;
+        const data = await AuthAPI.signUp({id: nearAddress, name, username});
+
+        if (data) nonce = data.nonce;
+
         if (nonce && nonce > 0 && publicAddress) {
           return signInWithExternalAuth(nonce, undefined, publicAddress);
         } else {

@@ -30,16 +30,12 @@ export default NextAuth({
         if (credentials.anonymous === 'false') {
           if (!credentials?.signature) throw Error('no signature!');
 
-          console.log({credentials});
-
           const data = await AuthAPI.login({
             nonce: Number(credentials.nonce),
             signature: credentials.signature,
             publicAddress: credentials.address,
             walletType: credentials.walletType as WalletTypeEnum,
           });
-
-          console.log({data});
 
           if (!data?.accessToken) throw Error('authorization problem!');
 

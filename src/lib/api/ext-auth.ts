@@ -31,7 +31,6 @@ type LoginResponseProps = {
 
 export const login = async (values: LoginProps): Promise<LoginResponseProps | null> => {
   try {
-    console.log({values});
     const {data} = await MyriadAPI.request({
       url: '/login',
       method: 'POST',

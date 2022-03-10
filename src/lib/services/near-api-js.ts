@@ -112,12 +112,12 @@ export const createNearSignature = async (
 
     const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
 
-    const publicKey = u8aToHex(userSignature.publicKey.data);
+    //const publicKey = u8aToHex(userSignature.publicKey.data);
     const userSignatureHex = u8aToHex(userSignature.signature);
 
-    const publicAddress = `${publicKey}/${nearAddress}`;
+    //const publicAddress = `${publicKey}/${nearAddress}`;
 
-    return {signature: userSignatureHex, publicAddress};
+    return {signature: userSignatureHex, publicAddress: nearAddress};
   } catch (error) {
     console.log({error});
     return null;
