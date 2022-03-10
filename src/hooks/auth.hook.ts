@@ -105,10 +105,10 @@ export const useAuthHook = () => {
       return true;
     }
 
-    if (nearAddress) {
+    if (nearAddress && nearAddress.length > 0) {
       const data = await createNearSignature(nearAddress, nonce);
 
-      if (data && data.signature) return null;
+      if (data && !data.signature) return null;
 
       if (data) {
         signIn('credentials', {
@@ -134,7 +134,6 @@ export const useAuthHook = () => {
     username: string,
     walletType: WalletTypeEnum,
     account?: InjectedAccountWithMeta,
-    publicAddress?: string,
   ): Promise<true | null> => {
     let nonce = null;
 
@@ -157,8 +156,8 @@ export const useAuthHook = () => {
 
         if (data) nonce = data.nonce;
 
-        if (nonce && nonce > 0 && publicAddress) {
-          return signInWithExternalAuth(nonce, undefined, publicAddress);
+        if (nonce && nonce > 0 && id) {
+          return signInWithExternalAuth(nonce, undefined, id);
         } else {
           return null;
         }
