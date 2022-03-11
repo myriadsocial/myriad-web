@@ -26,9 +26,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     headerActionWrapper: {
       display: 'flex',
-      justifyContent: 'flex-start',
+      justifyContent: 'space-between',
       alignItems: 'center',
-      marginTop: theme.spacing(1),
       [theme.breakpoints.down('xs')]: {
         display: 'none',
       },
@@ -45,19 +44,28 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: 13,
       marginLeft: 'auto',
     },
-    balanceTabActions: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      columnGap: theme.spacing(2.875),
-      [theme.breakpoints.down('xs')]: {
-        display: 'none',
-      },
-    },
     loading: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       height: 360,
+    },
+    search: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: theme.spacing(1),
+    },
+    fill: {
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
+    },
+    formControl: {
+      marginRight: '0px',
+    },
+    menu: {
+      maxWidth: 'max-content',
     },
   }),
 );
