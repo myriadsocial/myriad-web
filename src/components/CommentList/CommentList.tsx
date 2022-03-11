@@ -3,6 +3,7 @@ import React, {createRef, useEffect} from 'react';
 import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
+import {CommentDeleted} from '../CommentDeleted';
 import {CommentDetail} from '../CommentDetail';
 
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
@@ -91,27 +92,38 @@ export const CommentList: React.FC<CommentListProps> = props => {
 
   return (
     <div className={styles.root}>
-      {comments.map(comment => (
-        <CommentDetail
-          ref={refs[comment.id]}
-          section={section}
-          user={user}
-          key={comment.id}
-          comment={comment}
-          mentionables={mentionables}
-          blockedUserIds={blockedUserIds}
-          deep={deep}
-          onUpvote={onUpvote}
-          onRemoveVote={onRemoveVote}
-          onUpdateDownvote={onUpdateDownvote}
-          onOpenTipHistory={onOpenTipHistory}
-          onReport={onReport}
-          onSendTip={onSendTip}
-          onSearchPeople={onSearchPeople}
-          onBeforeDownvote={onBeforeDownvote}
-          onDelete={onDelete}
-        />
-      ))}
+      {comments.map(comment => {
+        return comment.deleteByUser ? (
+          <CommentDeleted
+            ref={refs[comment.id]}
+            user={user}
+            key={comment.id}
+            comment={comment}
+            deep={deep}
+            onOpenTipHistory={onOpenTipHistory}
+          />
+        ) : (
+          <CommentDetail
+            ref={refs[comment.id]}
+            section={section}
+            user={user}
+            key={comment.id}
+            comment={comment}
+            mentionables={mentionables}
+            blockedUserIds={blockedUserIds}
+            deep={deep}
+            onUpvote={onUpvote}
+            onRemoveVote={onRemoveVote}
+            onUpdateDownvote={onUpdateDownvote}
+            onOpenTipHistory={onOpenTipHistory}
+            onReport={onReport}
+            onSendTip={onSendTip}
+            onSearchPeople={onSearchPeople}
+            onBeforeDownvote={onBeforeDownvote}
+            onDelete={onDelete}
+          />
+        );
+      })}
 
       {comments.length > 0 && deep > 0 && hasMoreComment && (
         <div style={{marginLeft: '69px', cursor: 'pointer'}} onClick={onLoadMoreReplies}>

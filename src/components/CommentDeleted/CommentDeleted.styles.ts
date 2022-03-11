@@ -1,9 +1,13 @@
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 
-import {CommentDetailProps} from './CommentDetail.interface';
+import {CommentDeletedProps} from './CommentDeleted.interface';
 
-export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
+export const useStyles = makeStyles<Theme, CommentDeletedProps>(theme =>
   createStyles({
+    root: {
+      display: 'flex',
+      padding: props => (props.deep > 0 ? theme.spacing(0, 0, 0, 2) : theme.spacing(0, 2)),
+    },
     comment: {
       marginBottom: theme.spacing(1),
       boxShadow: 'none',
@@ -26,10 +30,15 @@ export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
       },
     },
     content: {
-      padding: theme.spacing(0, 0.5),
-    },
-    text: {
-      fontWeight: 700,
+      display: 'flex',
+      flexWrap: 'nowrap',
+      alignItems: 'center',
+      padding: theme.spacing(1, 0),
+
+      '& .MuiSvgIcon-root': {
+        fill: '#FFF',
+        marginRight: 10,
+      },
     },
     dot: {
       color: '#C4C4C4',
@@ -40,14 +49,6 @@ export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
       width: 'auto',
       height: 'auto',
       color: theme.palette.text.secondary,
-    },
-    flex: {
-      display: 'flex',
-      padding: props => (props.deep > 0 ? theme.spacing(0, 0, 0, 2) : theme.spacing(0, 2)),
-    },
-    flexSpaceBetween: {
-      display: 'flex',
-      justifyContent: 'space-between',
     },
     fullWidth: {
       width: '100%',
@@ -76,13 +77,9 @@ export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
       borderBottomLeftRadius: '11px',
     },
     link: {
-      fontWeight: 600,
-      color: theme.palette.text.primary,
+      color: theme.palette.text.secondary,
       textDecoration: 'none',
-    },
-    cursor: {
-      cursor: 'pointer',
-      textDecoration: 'underline',
+      fontStyle: 'italic',
     },
     hidden: {
       [theme.breakpoints.down('xs')]: {
