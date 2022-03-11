@@ -8,8 +8,9 @@ import ShowIf from '../common/show-if.component';
 import {useStyles} from './TimelineFilter.styles';
 import {useFilterOption} from './hooks/use-filter-option.hook';
 
-import {TimelineType, TimelineSortType, TimelineOrderType} from 'src/interfaces/timeline';
+import {TimelineType, TimelineOrderType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
+import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 
 export type TimelineFilterProps = {
   user?: User;
@@ -17,7 +18,7 @@ export type TimelineFilterProps = {
   selectionType?: 'order' | 'sort';
   type: TimelineType;
   order: TimelineOrderType;
-  sortTimeline: (sort: TimelineSortType) => void;
+  sortTimeline: (sort: SortType) => void;
   orderTimeline: (order: TimelineOrderType) => void;
   filterTimeline?: (type: TimelineType) => void;
   filterOrigin?: (origin: string) => void;
@@ -39,7 +40,7 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
   const {sortOptions, orderOptions, originFilterOptions, typeFilterOptions} = useFilterOption();
 
   const handleSort = (sort: string) => {
-    sortTimeline(sort as TimelineSortType);
+    sortTimeline(sort as SortType);
   };
 
   const handleOrder = (order: string) => {

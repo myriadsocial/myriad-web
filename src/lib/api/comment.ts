@@ -75,3 +75,42 @@ export const remove = async (commentId: string): Promise<void> => {
     method: 'DELETE',
   });
 };
+
+export const loadUserComments = async (
+  userId: string,
+  pagination: PaginationParams,
+): Promise<CommentList> => {
+  const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
+
+  const where: Record<string, any> = {
+    userId,
+  };
+
+  const {data} = await MyriadAPI.request<CommentList>({
+    url: `/comments`,
+    method: 'GET',
+    params: {
+      filter: {
+        where,
+        include: [
+          'user',
+          {
+            relation: 'post',
+            scope: {
+              include: [
+                {
+                  relation: 'user',
+                },
+              ],
+            },
+          },
+        ],
+        order: [`${orderField} ${sort}`],
+      },
+      pageNumber: page,
+      pageLimit: limit,
+    },
+  });
+
+  return data;
+};

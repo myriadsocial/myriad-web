@@ -8,13 +8,9 @@ import {TimelineFilter as TimelineFilterComponent} from './TimelineFilter';
 import {ParsedUrlQuery} from 'querystring';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {WrappedExperience} from 'src/interfaces/experience';
-import {
-  TimelineFilter,
-  TimelineOrderType,
-  TimelineSortType,
-  TimelineType,
-} from 'src/interfaces/timeline';
+import {TimelineFilter, TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
+import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import {RootState} from 'src/reducers';
 import {clearTimeline} from 'src/reducers/timeline/actions';
 
@@ -54,7 +50,7 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
     push('order', order);
   };
 
-  const handleSortimeline = (sort: TimelineSortType) => {
+  const handleSortimeline = (sort: SortType) => {
     sortTimeline(sort);
   };
 

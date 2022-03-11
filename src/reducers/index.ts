@@ -1,6 +1,7 @@
 import {BalanceReducer} from './balance/reducer';
 import {BaseReducer} from './base/reducer';
 import {BlockReducer} from './block/reducer';
+import {CommentReducer} from './comment/reducer';
 import {ConfigReducer} from './config/reducer';
 import {ExchangeRateReducer} from './exchange-rate/reducer';
 import {ExperienceReducer} from './experience/reducer';
@@ -23,6 +24,7 @@ import {combineReducers} from 'redux';
 
 const reducers = {
   baseState: BaseReducer,
+  commentState: CommentReducer,
   configState: ConfigReducer,
   friendState: FriendReducer,
   friendRequestState: FriendRequestReducer,

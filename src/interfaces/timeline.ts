@@ -19,8 +19,6 @@ export enum TimelineOrderType {
   TIP = 'tip',
 }
 
-export type TimelineSortType = 'ASC' | 'DESC';
-
 export type TimelineFilter = {
   tags?: string[];
   people?: string[];

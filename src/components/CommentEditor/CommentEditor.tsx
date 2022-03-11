@@ -61,7 +61,7 @@ const resetBlockTypesCommonRule = {
   defaultType: ELEMENT_PARAGRAPH,
 };
 
-const MAX_CHARACTER_LIMIT = 180;
+const MAX_CHARACTER_LIMIT = 5000;
 
 export const CommentEditor: React.FC<PostEditorProps> = props => {
   const styles = useStyles();
