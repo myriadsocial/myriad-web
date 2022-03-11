@@ -14,6 +14,7 @@ import {Profile} from './render/Profile';
 
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
+import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 
 export const Login: React.FC = () => {
@@ -21,6 +22,10 @@ export const Login: React.FC = () => {
 
   const {anonymous, fetchUserNonce, fetchNearUserNonce, signInWithExternalAuth} = useAuthHook();
   const {checkUsernameAvailable} = useProfileHook();
+
+  const {query} = useQueryParams();
+
+  const isRedirectedFromNear = query.auth === 'near' ? true : false;
 
   const [walletType, setWalletType] = useState<WalletTypeEnum | null>(null);
 
@@ -116,7 +121,9 @@ export const Login: React.FC = () => {
 
   return (
     <div className={styles.root}>
-      <Router>
+      <Router
+        initialEntries={['/', '/wallet', '/account', '/profile']}
+        initialIndex={isRedirectedFromNear ? 3 : 0}>
         <Routes>
           <Route
             path="/"

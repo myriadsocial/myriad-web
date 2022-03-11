@@ -42,7 +42,7 @@ export const connectToNearWallet = async (): Promise<NearConnectResponseProps> =
     const wallet = new WalletConnection(near, 'myriad-social');
 
     if (!wallet.isSignedIn()) {
-      await wallet.requestSignIn({successUrl: 'http://localhost:3000/'});
+      await wallet.requestSignIn({successUrl: 'http://localhost:3000/?auth=near'});
     }
     const address = wallet.getAccountId();
 
