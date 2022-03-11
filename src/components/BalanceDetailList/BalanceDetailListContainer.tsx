@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import NoSsr from '@material-ui/core/NoSsr';
 
 import {BalanceDetailList} from '.';
+import {BoxComponent} from '../atoms/Box';
 
 import {AddCoin} from 'src/components/atoms/AddCoin/AddCoin.component';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
@@ -53,14 +54,16 @@ export const BalanceDetailListContainer: React.FC = () => {
 
   return (
     <NoSsr>
-      <BalanceDetailList
-        balanceDetails={filteredBalances}
-        isLoading={loading}
-        onClickRefresh={handleRefresh}
-        onClickAddCoin={toggleAddCoinModal}
-      />
+      <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
+        <BalanceDetailList
+          balanceDetails={filteredBalances}
+          isLoading={loading}
+          onClickRefresh={handleRefresh}
+          onClickAddCoin={toggleAddCoinModal}
+        />
 
-      <AddCoin open={showAddCoin} onClose={toggleAddCoinModal} />
+        <AddCoin open={showAddCoin} onClose={toggleAddCoinModal} />
+      </BoxComponent>
     </NoSsr>
   );
 };

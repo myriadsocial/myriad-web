@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
+import {BoxComponent} from '../atoms/Box';
 import {HistoryDetailList} from './HistoryDetailList';
 
 import {useTransaction} from 'src/hooks/use-transaction.hooks';
@@ -23,15 +24,17 @@ export const HistoryDetailListContainer: React.FC = () => {
   };
 
   return (
-    <HistoryDetailList
-      userId={user.id}
-      isLoading={loading}
-      allTxs={transactions}
-      meta={meta}
-      inboundTxs={inboundTxs}
-      outboundTxs={outboundTxs}
-      nextPage={handleNextPage}
-    />
+    <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
+      <HistoryDetailList
+        userId={user.id}
+        isLoading={loading}
+        allTxs={transactions}
+        meta={meta}
+        inboundTxs={inboundTxs}
+        outboundTxs={outboundTxs}
+        nextPage={handleNextPage}
+      />
+    </BoxComponent>
   );
 };
 
