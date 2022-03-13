@@ -2,7 +2,7 @@ import {CheckCircleIcon} from '@heroicons/react/solid';
 import {ExclamationCircleIcon} from '@heroicons/react/solid';
 import {ExclamationIcon} from '@heroicons/react/solid';
 
-import React from 'react';
+import React, {useMemo} from 'react';
 
 import {SvgIcon} from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
@@ -17,7 +17,7 @@ export const PromptComponent: React.FC<Prompt> = props => {
 
   const style = useStyles();
 
-  const pickIcon = () => {
+  const promptIcon = useMemo(() => {
     switch (icon) {
       case 'danger': {
         return ExclamationCircleIcon;
@@ -29,7 +29,7 @@ export const PromptComponent: React.FC<Prompt> = props => {
         return CheckCircleIcon;
       }
     }
-  };
+  }, [icon]);
 
   return (
     <Dialog
@@ -42,7 +42,7 @@ export const PromptComponent: React.FC<Prompt> = props => {
           <SvgIcon
             className={`${style.icon} ${style[icon]}`}
             classes={{root: style.fill}}
-            component={pickIcon()}
+            component={promptIcon}
             viewBox="0 0 20 20"
           />
           <Typography variant="h4" className={style.title}>

@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
 
-import {Grid} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -11,10 +10,10 @@ import Typography from '@material-ui/core/Typography';
 
 import {useBlockList, FriendRequestDetail} from '../FriendsMenu/hooks/use-friend-request.hook';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {PromptComponent} from '../atoms/Prompt/prompt.component';
-import {useStyles} from './blocklist.style';
+import {useStyles} from './BlockList.style';
 
 import {Empty} from 'src/components/atoms/Empty';
+import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
@@ -27,32 +26,28 @@ type Props = {
 
 export const BlockListComponent: React.FC<Props> = ({blockList, user, onUnblock}) => {
   const style = useStyles();
+
+  const confirm = useConfirm();
   const list = useBlockList(blockList, user);
 
-  const [unblockedUser, setUnblockUser] = useState<Friend | undefined>();
-
-  const handleUnblock = (user: FriendRequestDetail) => () => {
-    setUnblockUser(user.friend);
-  };
-
-  const cancelUblockUser = () => {
-    setUnblockUser(undefined);
-  };
-
-  const confirmUnblockUser = () => {
-    if (unblockedUser) {
-      onUnblock(unblockedUser);
-    }
-
-    setUnblockUser(undefined);
+  const confirmUnblock = (user: FriendRequestDetail) => () => {
+    confirm({
+      title: 'Unblock User?',
+      description: 'You will be able to search and see post from this user.',
+      confirmationText: 'Unblock Now',
+      onConfirm: () => {
+        onUnblock(user.friend);
+      },
+    });
   };
 
   return (
     <>
       <div className={style.root}>
         <Typography className={style.text}>
-          When you blocked someone, that person won’t be able to view your profile and post, add you
-          as a friend, tag you or message you and you won’t see post or notification from them.
+          When you blocked someone, that person won&apos;t be able to view your profile and post,
+          add you as a friend, tag you or message you and you won&apos;t see post or notification
+          from them.
         </Typography>
       </div>
 
@@ -71,7 +66,7 @@ export const BlockListComponent: React.FC<Props> = ({blockList, user, onUnblock}
                 {user.name}
               </Typography>
               <ListItemSecondaryAction className="hidden-button">
-                <Button onClick={handleUnblock(user)} className={style.button}>
+                <Button onClick={confirmUnblock(user)} className={style.button}>
                   Unblock
                 </Button>
               </ListItemSecondaryAction>
@@ -79,22 +74,6 @@ export const BlockListComponent: React.FC<Props> = ({blockList, user, onUnblock}
           </ListItem>
         ))}
       </List>
-
-      <PromptComponent
-        onCancel={cancelUblockUser}
-        open={Boolean(unblockedUser)}
-        icon="warning"
-        title="Unblock User?"
-        subtitle="You will be able to search and see post from this user">
-        <Grid container justifyContent="space-around">
-          <Button size="small" variant="outlined" color="secondary" onClick={cancelUblockUser}>
-            Cancel
-          </Button>
-          <Button size="small" variant="contained" color="primary" onClick={confirmUnblockUser}>
-            Unblock Now
-          </Button>
-        </Grid>
-      </PromptComponent>
     </>
   );
 };
