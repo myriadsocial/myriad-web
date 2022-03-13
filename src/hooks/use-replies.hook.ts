@@ -192,7 +192,15 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
   const removeReply = async (comment: Comment) => {
     await CommentAPI.remove(comment.id);
 
-    setReplies(prevReplies => prevReplies.filter(item => item.id !== comment.id));
+    setReplies(prevReplies =>
+      prevReplies.map(item => {
+        if (item.id === comment.id) {
+          item.deleteByUser = true;
+        }
+
+        return item;
+      }),
+    );
 
     dispatch(decreaseCommentCount(comment.postId, comment.section));
   };

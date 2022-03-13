@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {useRouter} from 'next/router';
+import Link from 'next/link';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -57,11 +57,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const NotFound: React.FC = () => {
   const style = useStyles();
-  const router = useRouter();
-
-  const handleAction = () => {
-    router.push('/', undefined, {shallow: false});
-  };
 
   return (
     <div className={style.root}>
@@ -82,9 +77,11 @@ const NotFound: React.FC = () => {
             😢
           </span>
         </Typography>
-        <Button onClick={handleAction} className={style.button} variant="contained" color="primary">
-          Back to home
-        </Button>
+        <Link href={'/home'} passHref>
+          <Button className={style.button} variant="contained" color="primary">
+            Back to home
+          </Button>
+        </Link>
       </div>
     </div>
   );

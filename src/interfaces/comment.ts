@@ -14,6 +14,7 @@ export interface CommentProps {
 }
 
 export interface Comment extends CommentProps, BaseModel {
+  deleteByUser?: boolean;
   user: User;
   post?: Post;
   metric: PostMetric;

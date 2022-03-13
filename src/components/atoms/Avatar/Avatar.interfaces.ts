@@ -11,4 +11,5 @@ export type AvatarProps = BaseAvatarProps & {
   url?: string;
   size?: AvatarSize;
   name?: string;
+  deleted?: boolean;
 };

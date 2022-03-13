@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {useRouter} from 'next/router';
+import Link from 'next/link';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -63,11 +63,6 @@ type ErrorProps = {
 
 export const Error: React.FC<ErrorProps> = () => {
   const style = useStyles();
-  const router = useRouter();
-
-  const handleAction = () => {
-    router.push('/home');
-  };
 
   return (
     <div className={style.root}>
@@ -83,9 +78,12 @@ export const Error: React.FC<ErrorProps> = () => {
           Whoops! You&rsquo;ve moved so fast and you got lost
         </Typography>
         <Typography className={style.subtitle}>An unexpected error has occured</Typography>
-        <Button onClick={handleAction} className={style.button} variant="contained" color="primary">
-          Back to home
-        </Button>
+
+        <Link href={'/home'} passHref>
+          <Button className={style.button} variant="contained" color="primary">
+            Back to home
+          </Button>
+        </Link>
       </div>
     </div>
   );

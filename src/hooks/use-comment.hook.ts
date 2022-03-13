@@ -306,7 +306,15 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
   const remove = async (comment: Comment) => {
     await CommentAPI.remove(comment.id);
 
-    setComments(prevComments => prevComments.filter(item => item.id !== comment.id));
+    setComments(prevComments =>
+      prevComments.map(item => {
+        if (item.id === comment.id) {
+          item.deleteByUser = true;
+        }
+
+        return item;
+      }),
+    );
 
     dispatch(decreaseCommentCount(comment.postId, comment.section));
   };

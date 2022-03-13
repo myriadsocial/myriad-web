@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {useRouter} from 'next/router';
+import Link from 'next/link';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -11,11 +11,6 @@ import Illustration from 'src/images/illustration/resource-deleted.svg';
 
 export const ResourceDeleted: React.FC = () => {
   const style = useStyles();
-  const router = useRouter();
-
-  const handleAction = () => {
-    router.push('/home');
-  };
 
   return (
     <div className={style.root}>
@@ -30,9 +25,11 @@ export const ResourceDeleted: React.FC = () => {
         it’s been deleted / banned
       </Typography>
 
-      <Button className={style.button} onClick={handleAction} variant="contained" color="primary">
-        Back to home
-      </Button>
+      <Link href={'/home'} passHref>
+        <Button className={style.button} variant="contained" color="primary">
+          Back to home
+        </Button>
+      </Link>
     </div>
   );
 };
