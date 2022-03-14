@@ -251,7 +251,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         justifyContent="space-between"
         alignItems="center"
         className={styles.action}>
-        <Grid item xs={9}>
+        <Grid item>
           <PostActionComponent
             metrics={post.metric}
             upvoted={post.isUpvoted}
@@ -267,7 +267,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         </Grid>
 
         <ShowIf condition={isImportedPost && !isOwnSocialPost && type !== 'share'}>
-          <Grid item xs={3}>
+          <Grid item>
             <Button
               isDisabled={balanceDetails.length === 0}
               onClick={handleSendTip}
