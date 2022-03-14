@@ -10,15 +10,18 @@ const {serverRuntimeConfig} = getConfig();
 export const config = {
   api: {
     bodyParser: false,
+    externalResolver: true,
   },
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const {appSecret} = serverRuntimeConfig;
+
+  let headers = {};
+
   try {
-    const {appSecret} = serverRuntimeConfig;
     const session = await getSession({req});
 
-    let headers = {};
     if (session && session.user && session.user.token) {
       let userToken = '';
 
@@ -40,7 +43,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       pathRewrite: [
         {
           patternStr: '/api',
-          replaceStr: '/',
+          replaceStr: '',
         },
       ],
       changeOrigin: true,
@@ -48,6 +51,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
   } catch (error) {
     console.error('[api-proxy][error]', {error});
-    res.status(500).send(null);
+    res.status(500).send({error: error.message});
   }
 };
