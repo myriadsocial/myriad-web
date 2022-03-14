@@ -111,8 +111,9 @@ export const useAuthHook = () => {
       if (data && !data.signature) return null;
 
       if (data) {
+        const parsedNearAddress = nearAddress.split('/')[1];
         signIn('credentials', {
-          address: nearAddress,
+          address: parsedNearAddress,
           publicAddress: data.publicAddress,
           signature: data.signature,
           nonce,

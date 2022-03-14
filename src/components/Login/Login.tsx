@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {MemoryRouter as Router, Routes, Route} from 'react-router-dom';
 
 import {CircularProgress} from '@material-ui/core';
@@ -13,6 +13,7 @@ import {Options} from './render/Options';
 import {Profile} from './render/Profile';
 
 import {useAuthHook} from 'src/hooks/auth.hook';
+import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
@@ -22,6 +23,8 @@ export const Login: React.FC = () => {
 
   const {anonymous, fetchUserNonce, fetchNearUserNonce, signInWithExternalAuth} = useAuthHook();
   const {checkUsernameAvailable} = useProfileHook();
+
+  const {connectToNear} = useNearApi();
 
   const {query} = useQueryParams();
 
@@ -34,6 +37,20 @@ export const Login: React.FC = () => {
   const [selectedAccount, setSelectedAccount] = useState<InjectedAccountWithMeta | null>(null);
   const [signatureCancelled, setSignatureCancelled] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const getNearWallet = async () => {
+    const {publicAddress} = await connectToNear();
+
+    setNearWallet(publicAddress);
+  };
+
+  useEffect(() => {
+    if (query.auth === 'near') {
+      setWalletType(WalletTypeEnum.NEAR);
+
+      getNearWallet();
+    }
+  }, [query]);
 
   const handleOnconnect = (accounts: InjectedAccountWithMeta[]) => {
     setAccounts(accounts);
@@ -74,8 +91,6 @@ export const Login: React.FC = () => {
               setSignatureCancelled(false);
 
               const {nonce} = await fetchUserNonce(currentAccount);
-
-              console.log({nonce});
 
               if (nonce > 0) {
                 const success = await signInWithExternalAuth(nonce, currentAccount);
