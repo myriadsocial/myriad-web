@@ -78,6 +78,7 @@
     "lodash": "^4.17.21",
     "millify": "^4.0.0",
     "mux.js": "^5.14.1",
+    "near-api-js": "^0.44.2",
     "next": "^10.2.*",
     "next-auth": "~3.13.1",
     "next-connect": "^0.10.1",
