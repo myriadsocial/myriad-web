@@ -89,5 +89,5 @@ export const SortIcon: React.FC<IconProps> = props => (
 );
 
 export const InfoIcon: React.FC<IconProps> = props => (
-  <SvgIcon component={Info} viewBox="0 0 24 24" style={{width: 15, height: 15}} {...props} />
+  <SvgIcon component={Info} viewBox="0 0 24 24" style={{width: 24, height: 24}} {...props} />
 );

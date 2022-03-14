@@ -182,7 +182,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
         open={sendTipOpened}
         onClose={closeSendTip}
         title="Send Tip"
-        subtitle="Find this user insightful? Send a tip!">
+        subtitle="Finding this post is insightful? Send a tip!">
         <SendTipContainer />
       </Modal>
 
