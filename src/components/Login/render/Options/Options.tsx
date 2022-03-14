@@ -186,18 +186,25 @@ export const Options: React.FC<OptionProps> = props => {
               <Typography>Near</Typography>
             </div>
           </ListItem>
-          <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.ETHEREUM)}>
-            <div className={styles.card}>
-              <EthereumNetworkIcon className={styles.icon} />
-              <Typography>Ethereum</Typography>
-            </div>
-          </ListItem>
-          <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.POLYGON)}>
-            <div className={styles.card}>
-              <PolygonNetworkDisabledIcon className={styles.icon} />
-              <Typography>Polygon</Typography>
-            </div>
-          </ListItem>
+          <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
+            <ListItem
+              disableGutters
+              disabled
+              onClick={setSelectedNetwork(NetworkTypeEnum.ETHEREUM)}>
+              <div className={styles.card}>
+                <EthereumNetworkIcon className={styles.icon} />
+                <Typography>Ethereum</Typography>
+              </div>
+            </ListItem>
+          </Tooltip>
+          <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
+            <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.POLYGON)}>
+              <div className={styles.card}>
+                <PolygonNetworkDisabledIcon className={styles.icon} />
+                <Typography>Polygon</Typography>
+              </div>
+            </ListItem>
+          </Tooltip>
         </List>
       </div>
 
