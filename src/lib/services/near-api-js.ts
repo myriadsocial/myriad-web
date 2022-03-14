@@ -22,19 +22,21 @@ export type NearSignatureProps = {
 
 export const connectToNearWallet = async (): Promise<NearConnectResponseProps> => {
   try {
+    const {publicRuntimeConfig} = getConfig();
+
     const {keyStores, connect, WalletConnection} = nearAPI;
     // creates keyStore using private key in local storage
     // *** REQUIRES SignIn using walletConnection.requestSignIn() ***
 
     const keyStore = new keyStores.BrowserLocalStorageKeyStore();
 
-    // set config for near testnet
+    // set config for near network
     const config: ConnectConfig = {
-      networkId: 'testnet',
+      networkId: publicRuntimeConfig.nearNetworkId,
       keyStore,
-      nodeUrl: 'https://rpc.testnet.near.org',
-      walletUrl: 'https://wallet.testnet.near.org',
-      helperUrl: 'https://helper.testnet.near.org',
+      nodeUrl: publicRuntimeConfig.nearNodeUrl,
+      walletUrl: publicRuntimeConfig.nearWalletUrl,
+      helperUrl: publicRuntimeConfig.nearHelperUrl,
       headers: {},
     };
 
@@ -42,17 +44,15 @@ export const connectToNearWallet = async (): Promise<NearConnectResponseProps> =
     const wallet = new WalletConnection(near, 'myriad-social');
 
     if (!wallet.isSignedIn()) {
-      await wallet.requestSignIn({successUrl: 'http://localhost:3000/?auth=near'});
+      await wallet.requestSignIn({successUrl: `${publicRuntimeConfig.appAuthURL}/?auth=near`});
     }
     const address = wallet.getAccountId();
 
-    const {publicRuntimeConfig} = getConfig();
-
     const signer = new nearAPI.InMemorySigner(wallet._keyStore);
-    const hasPublicKey = await signer.getPublicKey(address, 'testnet');
+    const hasPublicKey = await signer.getPublicKey(address, publicRuntimeConfig.nearNetworkId);
 
-    if (!hasPublicKey) await signer.createKey(address, 'testnet');
-    const keyPair = await keyStore.getKey('testnet', address);
+    if (!hasPublicKey) await signer.createKey(address, publicRuntimeConfig.nearNetworkId);
+    const keyPair = await keyStore.getKey(publicRuntimeConfig.nearNetworkId, address);
 
     const {nonce} = await UserAPI.getUserNonce(address);
 
@@ -99,6 +99,8 @@ export const createNearSignature = async (
   nonce: number,
 ): Promise<NearSignatureProps | null> => {
   try {
+    const {publicRuntimeConfig} = getConfig();
+
     const {keyStores} = nearAPI;
     // creates keyStore using private key in local storage
     // *** REQUIRES SignIn using walletConnection.requestSignIn() ***
@@ -108,7 +110,7 @@ export const createNearSignature = async (
     // parse to wallet.near format
     const parsedNearAddress = nearAddress.split('/')[1];
 
-    const keyPair = await keyStore.getKey('testnet', parsedNearAddress);
+    const keyPair = await keyStore.getKey(publicRuntimeConfig.nearNetworkId, parsedNearAddress);
 
     const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
 

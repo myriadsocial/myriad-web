@@ -177,12 +177,6 @@ export const Options: React.FC<OptionProps> = props => {
               <Typography>Polkadot</Typography>
             </div>
           </ListItem>
-          <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.ETHEREUM)}>
-            <div className={styles.card}>
-              <EthereumNetworkIcon className={styles.icon} />
-              <Typography>Ethereum</Typography>
-            </div>
-          </ListItem>
           <ListItem
             disableGutters
             selected={network === NetworkTypeEnum.NEAR}
@@ -192,14 +186,18 @@ export const Options: React.FC<OptionProps> = props => {
               <Typography>Near</Typography>
             </div>
           </ListItem>
-          <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
-            <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.POLYGON)}>
-              <div className={styles.card}>
-                <PolygonNetworkDisabledIcon className={styles.icon} />
-                <Typography>Polygon</Typography>
-              </div>
-            </ListItem>
-          </Tooltip>
+          <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.ETHEREUM)}>
+            <div className={styles.card}>
+              <EthereumNetworkIcon className={styles.icon} />
+              <Typography>Ethereum</Typography>
+            </div>
+          </ListItem>
+          <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.POLYGON)}>
+            <div className={styles.card}>
+              <PolygonNetworkDisabledIcon className={styles.icon} />
+              <Typography>Polygon</Typography>
+            </div>
+          </ListItem>
         </List>
       </div>
 
@@ -222,15 +220,17 @@ export const Options: React.FC<OptionProps> = props => {
             </ListItem>
           </ShowIf>
 
-          <ListItem
-            disableGutters
-            selected={wallet === WalletTypeEnum.NEAR}
-            onClick={setSelectedWallet(WalletTypeEnum.NEAR)}>
-            <div className={styles.card}>
-              <NearNetworkIcon className={styles.icon} />
-              <Typography>NEAR</Typography>
-            </div>
-          </ListItem>
+          <ShowIf condition={network === NetworkTypeEnum.NEAR}>
+            <ListItem
+              disableGutters
+              selected={wallet === WalletTypeEnum.NEAR}
+              onClick={setSelectedWallet(WalletTypeEnum.NEAR)}>
+              <div className={styles.card}>
+                <NearNetworkIcon className={styles.icon} />
+                <Typography>NEAR</Typography>
+              </div>
+            </ListItem>
+          </ShowIf>
 
           <ListItem
             style={{visibility: 'hidden'}}
