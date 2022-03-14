@@ -43,7 +43,11 @@ export const Modal: React.FC<ModalProps> = props => {
     <Dialog onClose={handleClose} {...otherProps} className={styles.root} disableEnforceFocus>
       <DialogTitle disableTypography className={[styles.title, className].join(' ')}>
         <Typography variant={titleSize === 'small' ? 'h5' : 'h4'}>{title}</Typography>
-        {subtitle && <Typography variant="subtitle1">{subtitle}</Typography>}
+        {subtitle && (
+          <Typography variant="subtitle1" className={styles.subtitle}>
+            {subtitle}
+          </Typography>
+        )}
         <IconButton
           color="secondary"
           aria-label="close"

@@ -10,7 +10,11 @@ type StylesProps = {
 
 export const useStyles = makeStyles<Theme, StylesProps>(theme =>
   createStyles({
-    root: {},
+    root: {
+      '& .MuiPaper-rounded': {
+        borderRadius: '10px',
+      },
+    },
     title: {
       textAlign: props => props.align,
       padding: 30,
@@ -21,6 +25,9 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
         color: '#000000',
         marginBottom: theme.spacing(1),
       },
+    },
+    subtitle: {
+      fontSize: '14px',
     },
     close: {
       position: 'absolute',

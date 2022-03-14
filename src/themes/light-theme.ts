@@ -204,13 +204,6 @@ const theme = createTheme({
     },
     body1: {
       fontSize: textBs,
-
-      [breakpoints.down(breakpointsValue.lg)]: {
-        fontSize: textSm,
-      },
-      [breakpoints.down(breakpointsValue.xs)]: {
-        fontSize: textBs,
-      },
     },
     h6: {
       fontSize: textBs,
@@ -218,6 +211,7 @@ const theme = createTheme({
     },
     h5: {
       fontSize: textMd,
+      fontWeight: 600,
 
       [breakpoints.down(breakpointsValue.lg)]: {
         fontSize: textBs,
