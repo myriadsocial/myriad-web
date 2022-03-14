@@ -72,7 +72,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = props => {
             user={user}
             anonymous={anonymous}
             userExperience={item}
-            selected={selectedUserExperienceId === item.id}
+            selected={Boolean(selectedUserExperienceId) && selectedUserExperienceId === item.id}
             selectable={selectable}
             onSelect={handleSelectExperience(item)}
             onDelete={onDelete}
