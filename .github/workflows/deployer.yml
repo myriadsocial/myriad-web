@@ -128,14 +128,14 @@ jobs:
               --set-string ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
               --set-string ingress.tls[0].secretName=myriad-app-tls \
               --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string resources.requests.cpu=500m \
-              --set-string resources.requests.memory=1024Mi \
-              --set-string resources.limits.cpu=500m \
-              --set-string resources.limits.memory=1024Mi \
+              --set-string resources.requests.cpu=100m \
+              --set-string resources.requests.memory=256Mi \
+              --set-string resources.limits.cpu=300m \
+              --set-string resources.limits.memory=512Mi \
               --set replicaCount=1 \
               --set autoscaling.enabled=true \
               --set autoscaling.minReplicas=1 \
-              --set autoscaling.maxReplicas=100 \
+              --set autoscaling.maxReplicas=1 \
               --set-string nodeSelector.pool=general
             kubectl rollout status deployment/myriad-web
 
@@ -225,14 +225,14 @@ jobs:
               --set-string ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
               --set-string ingress.tls[0].secretName=myriad-app-tls \
               --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string resources.requests.cpu=500m \
-              --set-string resources.requests.memory=1024Mi \
-              --set-string resources.limits.cpu=500m \
-              --set-string resources.limits.memory=1024Mi \
+              --set-string resources.requests.cpu=100m \
+              --set-string resources.requests.memory=256Mi \
+              --set-string resources.limits.cpu=300m \
+              --set-string resources.limits.memory=512Mi \
               --set replicaCount=1 \
               --set autoscaling.enabled=true \
               --set autoscaling.minReplicas=1 \
-              --set autoscaling.maxReplicas=100 \
+              --set autoscaling.maxReplicas=1 \
               --set-string nodeSelector.pool=general
             kubectl rollout status deployment/myriad-web
 
@@ -322,13 +322,13 @@ jobs:
               --set-string ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
               --set-string ingress.tls[0].secretName=myriad-app-tls \
               --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string resources.requests.cpu=500m \
-              --set-string resources.requests.memory=1024Mi \
+              --set-string resources.requests.cpu=300m \
+              --set-string resources.requests.memory=512Mi \
               --set-string resources.limits.cpu=500m \
               --set-string resources.limits.memory=1024Mi \
-              --set replicaCount=3 \
+              --set replicaCount=1 \
               --set autoscaling.enabled=true \
-              --set autoscaling.minReplicas=3 \
+              --set autoscaling.minReplicas=1 \
               --set autoscaling.maxReplicas=100 \
               --set-string nodeSelector.pool=general
             kubectl rollout status deployment/myriad-web
@@ -419,13 +419,13 @@ jobs:
               --set-string ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
               --set-string ingress.tls[0].secretName=myriad-app-tls \
               --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string resources.requests.cpu=500m \
-              --set-string resources.requests.memory=1024Mi \
+              --set-string resources.requests.cpu=300m \
+              --set-string resources.requests.memory=512Mi \
               --set-string resources.limits.cpu=500m \
               --set-string resources.limits.memory=1024Mi \
-              --set replicaCount=3 \
+              --set replicaCount=1 \
               --set autoscaling.enabled=true \
-              --set autoscaling.minReplicas=3 \
+              --set autoscaling.minReplicas=1 \
               --set autoscaling.maxReplicas=100 \
               --set-string nodeSelector.pool=general
             kubectl rollout status deployment/myriad-web
@@ -516,13 +516,13 @@ jobs:
               --set-string ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
               --set-string ingress.tls[0].secretName=myriad-app-tls \
               --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.WEB_DNS }} \
-              --set-string resources.requests.cpu=500m \
-              --set-string resources.requests.memory=1024Mi \
+              --set-string resources.requests.cpu=300m \
+              --set-string resources.requests.memory=512Mi \
               --set-string resources.limits.cpu=500m \
               --set-string resources.limits.memory=1024Mi \
-              --set replicaCount=3 \
+              --set replicaCount=1 \
               --set autoscaling.enabled=true \
-              --set autoscaling.minReplicas=3 \
+              --set autoscaling.minReplicas=1 \
               --set autoscaling.maxReplicas=100 \
               --set-string nodeSelector.pool=general
             kubectl rollout status deployment/myriad-web
