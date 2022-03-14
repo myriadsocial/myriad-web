@@ -9,4 +9,3 @@ export interface SignInOptions {
   // NEAR wallet will redirect to this URL on sign in failure
   failureUrl?: string;
 }
-
