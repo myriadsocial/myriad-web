@@ -141,7 +141,7 @@ export const useNotificationList = (
             ),
             createdAt: notification.createdAt,
             href: notification.additionalReferenceId
-              ? `/post/${notification.additionalReferenceId?.comment?.postId}`
+              ? `/post/${notification.additionalReferenceId?.comment?.postId}?comment=${notification.additionalReferenceId?.comment?.id}`
               : `/404`,
           };
 
@@ -530,16 +530,18 @@ export const useNotificationList = (
                 ? 'mentioned you in a comment'
                 : notification.message,
             badge: (
-              <div className={style.circleSuccess}>
+              <div className={style.circle}>
                 <SvgIcon
-                  component={ArrowCircleLeftIcon}
-                  viewBox="2 2 20 20"
-                  style={{fill: '#47B881', color: '#FFF'}}
+                  component={AtSymbolIcon}
+                  viewBox="-4 -4 34 34"
+                  style={{fill: 'currentColor', color: '#FFF'}}
                 />
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/home`,
+            href: notification.additionalReferenceId
+              ? `/post/${notification.additionalReferenceId?.comment?.postId}?comment=${notification.additionalReferenceId?.comment?.id}`
+              : `/404`,
           };
       }
     });
