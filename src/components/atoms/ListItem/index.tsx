@@ -123,7 +123,7 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
         }
         secondary={
           subtitle ? (
-            <Typography component="span" variant="subtitle1" color="textPrimary">
+            <Typography component="span" variant="subtitle2" color="textPrimary">
               {subtitle}
             </Typography>
           ) : undefined

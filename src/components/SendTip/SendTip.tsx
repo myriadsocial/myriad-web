@@ -224,7 +224,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                       </MaterialUILink>
                     </Typography>
                   }>
-                  <IconButton style={{backgroundColor: 'transparent'}}>
+                  <IconButton style={{backgroundColor: 'transparent', padding: 1}}>
                     <InfoIcon />
                   </IconButton>
                 </StyledTooltip>
@@ -270,7 +270,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                   name={tippedUser.name}
                   size={AvatarSize.TINY}
                 />
-                <Typography variant="body1">
+                <Typography variant="subtitle2" className={classes.text}>
                   {tippedUser.name ?? `Unnamed Myrian`} will receive{' '}
                   <span className={classes.clickableText}>
                     {tipAmount} {selectedCurrency.id}
@@ -289,25 +289,25 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                     </TableHead>
                     <TableBody>
                       <TableRow>
-                        <TableCell component="th" scope="row">
-                          <Typography variant="body1" color="textSecondary">
+                        <TableCell component="th" scope="row" classes={{root: classes.table}}>
+                          <Typography variant="subtitle2" color="textSecondary">
                             Tip
                           </Typography>
                         </TableCell>
-                        <TableCell align="right">
-                          <Typography variant="body1" color="textPrimary">
+                        <TableCell align="right" classes={{root: classes.table}}>
+                          <Typography variant="subtitle2" color="textPrimary">
                             {tipAmount.length === 0 ? '-' : tipAmount} {selectedCurrency.id}
                           </Typography>
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell component="th" scope="row">
-                          <Typography variant="body1" color="textSecondary">
+                        <TableCell component="th" scope="row" classes={{root: classes.table}}>
+                          <Typography variant="subtitle2" color="textSecondary">
                             Estimated gas fee
                           </Typography>
                         </TableCell>
-                        <TableCell align="right">
-                          <Typography variant="body1" color="textSecondary">
+                        <TableCell align="right" classes={{root: classes.table}}>
+                          <Typography variant="subtitle2" color="textSecondary">
                             {isFetchingFee ? (
                               <Typography>Loading</Typography>
                             ) : fee ? (
@@ -320,13 +320,13 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell component="th" scope="row">
-                          <Typography variant="body1" color="textSecondary">
+                        <TableCell component="th" scope="row" classes={{root: classes.table}}>
+                          <Typography variant="subtitle2" color="textSecondary">
                             Total
                           </Typography>
                         </TableCell>
-                        <TableCell align="right">
-                          <Typography className={classes.subHeader}>
+                        <TableCell align="right" classes={{root: classes.table}}>
+                          <Typography className={classes.subHeader} variant="subtitle2">
                             <span className={classes.clickableText}>
                               {isFetchingFee ? (
                                 <Typography>Loading</Typography>
@@ -359,7 +359,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                     />
                   }
                   label={
-                    <Typography>
+                    <Typography variant="subtitle2">
                       I agree to the Myriad{' '}
                       <Link href="/term-of-use">
                         <a
@@ -375,6 +375,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                   }
                 />
                 <Button
+                  className={classes.button}
                   isDisabled={verifiedTipAmount.length === 0 || !checked || lengthError}
                   variant={ButtonVariant.CONTAINED}
                   onClick={triggerSignTransactionWithExtension}>
@@ -382,7 +383,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                 </Button>
               </div>
             </form>
-            <div className={classes.formStreak}></div>
+            <div className={classes.formStreak} />
           </div>
           <Backdrop className={classes.backdrop} open={isSignerLoading}>
             <CircularProgress color="primary" />

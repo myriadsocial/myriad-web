@@ -50,6 +50,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     formInput: {
       zIndex: 10,
       backgroundColor: '#FFF',
+      '& .MuiFormHelperText-root': {
+        color: theme.palette.text.primary,
+        fontSize: '12px',
+      },
     },
     formStreak: {
       content: '""',
@@ -57,7 +61,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 340,
       height: 24,
       left: 0,
-      top: 134,
+      top: 125,
 
       background: theme.palette.secondary.main,
     },
@@ -80,8 +84,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     receiverSummary: {
       display: 'flex',
-      marginTop: 12,
       alignItems: 'center',
+      gap: theme.spacing(1),
       justifyContent: 'center',
       '& > p': {
         marginLeft: theme.spacing(1.5),
@@ -90,11 +94,28 @@ export const useStyles = makeStyles((theme: Theme) =>
     clickableText: {
       color: theme.palette.primary.main,
       textDecoration: 'none',
+      fontWeight: theme.typography.fontWeightBold,
     },
     backdrop: {
       zIndex: theme.zIndex.drawer + 1,
       color: '#fff',
     },
     noBackdrop: {},
+    text: {
+      fontWeight: theme.typography.fontWeightMedium,
+    },
+    table: {
+      padding: '6px 0px',
+
+      '& .MuiTableCell-sizeSmall': {
+        padding: '6px 0px 6px 16px',
+      },
+      '&:last-child': {
+        paddingRight: 0,
+      },
+    },
+    button: {
+      marginTop: theme.spacing(2),
+    },
   }),
 );
