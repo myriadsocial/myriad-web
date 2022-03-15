@@ -72,6 +72,8 @@
       }
     },
     "Profile": {
+      "Title": "Create new account",
+      "Subtitle": "You can only set your username once.",
       "Helper_Text_Name": "You can use {{min_length}} or more characters.",
       "Helper_Text_Username": "You can use {{min_length}} or more characters.",
       "Helper_Validate_Name_Min": "Display name must be provided and contain at least {{min_length}} character",
@@ -79,15 +81,16 @@
       "Helper_Validate_Username_Min": "Username must be provided and contain at least {{min_length}} character",
       "Helper_Validate_Username_Char": "Display name cannot contain disallowed character.",
       "Helper_Validate_Username_Taken": "Username already taken",
-      "Placeholder_Display_Name": "Insert display name",
+      "Placeholder_Display_Name": "Display name",
       "Placeholder_Username": "Username",
       "Btn_Change_Wallet": "Change Wallet",
       "Btn_Register": "Register",
       "Prompt": {
-        "Title": "Are you sure?",
-        "Subtitle": "You can only set your username once.",
-        "Btn_No": "No, let me rethink",
-        "Btn_Yes": "Yes, Let’s go"
+        "Title": "Create a new account",
+        "Subtitle": 
+        "You will create a new account. Please make sure you don't have a Myriad account before. You can connect other wallet in the manage tab.",
+        "Btn_No": "Cancel",
+        "Btn_Yes": "Confirm"
       }
     }
   },

@@ -61,7 +61,7 @@ export const Login: React.FC = () => {
     setNearWallet(nearId);
     setWalletType(WalletTypeEnum.NEAR);
 
-    checkAccountRegistered(callback, WalletTypeEnum.NEAR, undefined, nearId);
+    checkAccountRegistered(callback, undefined, nearId);
   };
 
   const handleSelectedAccount = (account: InjectedAccountWithMeta) => {
@@ -71,16 +71,11 @@ export const Login: React.FC = () => {
   const switchAccount = async (account: InjectedAccountWithMeta, callback: () => void) => {
     handleSelectedAccount(account);
 
-    checkAccountRegistered(callback, WalletTypeEnum.POLKADOT, account);
+    checkAccountRegistered(callback, account);
   };
 
   const checkAccountRegistered = useCallback(
-    async (
-      callback: () => void,
-      walletType?: WalletTypeEnum,
-      account?: InjectedAccountWithMeta,
-      nearId?: string,
-    ) => {
+    async (callback: () => void, account?: InjectedAccountWithMeta, nearId?: string) => {
       switch (walletType) {
         case WalletTypeEnum.POLKADOT:
           {

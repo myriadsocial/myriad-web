@@ -216,6 +216,7 @@ export const Profile: React.FC<ProfileProps> = props => {
             profile.name.value,
             profile.username.value,
             walletType,
+            account,
           );
 
           if (!registered) {
@@ -238,6 +239,11 @@ export const Profile: React.FC<ProfileProps> = props => {
             navigate('/wallet');
           }
         }
+        break;
+      }
+
+      default: {
+        break;
       }
     }
   };
@@ -254,6 +260,14 @@ export const Profile: React.FC<ProfileProps> = props => {
 
   return (
     <div className={styles.root}>
+      <div style={{marginBottom: 33}}>
+        <Typography variant="h5" style={{fontWeight: 600}}>
+          {i18n.t('Login.Profile.Title')}
+        </Typography>
+        <Typography variant="caption" color="textSecondary">
+          {i18n.t('Login.Profile.Subtitle')}
+        </Typography>
+      </div>
       <div className={styles.box}>
         <TextField
           id="name"

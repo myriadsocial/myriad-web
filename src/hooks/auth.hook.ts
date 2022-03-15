@@ -96,10 +96,12 @@ export const useAuthHook = () => {
       signIn('credentials', {
         name: account.meta.name,
         address: toHexPublicKey(account),
+        publicAddress: toHexPublicKey(account),
+        signature,
+        walletType: WalletTypeEnum.POLKADOT,
+        nonce,
         anonymous: false,
         callbackUrl: publicRuntimeConfig.appAuthURL,
-        signature,
-        nonce,
       });
 
       return true;
@@ -116,8 +118,8 @@ export const useAuthHook = () => {
           address: parsedNearAddress,
           publicAddress: data.publicAddress,
           signature: data.signature,
-          nonce,
           walletType: WalletTypeEnum.NEAR,
+          nonce,
           anonymous: false,
           callbackUrl: publicRuntimeConfig.appAuthURL,
         });
