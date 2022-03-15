@@ -18,7 +18,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from '.';
+import {useStyles, ShimerComponent} from '.';
 import {PrimaryCoinMenuContainer} from '../PrimaryCoinMenu/PrimaryCoinMenuContainer';
 import {balanceSortOptions} from '../Timeline/default';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
@@ -51,10 +51,6 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   useEffect(() => {
     handleHideZeroBalances();
   }, [checked]);
-
-  useEffect(() => {
-    console.log(isLoading);
-  }, [isLoading]);
 
   const [isOnPrimaryCoinMenu, setIsOnPrimaryCoinMenu] = useState(false);
   const [defaultBalanceDetails, setDefaultBalanceDetails] = useState<BalanceDetail[]>([]);
@@ -175,14 +171,17 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
           />
         </FormGroup>
       </div>
-      <ShowIf condition={!defaultBalanceDetails.length}>
+      <ShowIf condition={isLoading}>
+        <ShimerComponent />
+      </ShowIf>
+      <ShowIf condition={!defaultBalanceDetails.length && !isLoading}>
         <Empty
           title="No results found"
           subtitle="Please make sure your keywords match with current network you were in."
         />
       </ShowIf>
 
-      <ShowIf condition={!!defaultBalanceDetails.length}>
+      <ShowIf condition={!!defaultBalanceDetails.length && !isLoading}>
         <TableContainer component={List}>
           <Table className={classes.root} aria-label="Balance Detail Table">
             <TableBody>
