@@ -24,8 +24,20 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
   const classes = useStyles({...props, type});
 
   const handleClick = (): void => {
-    if (router.query) {
-      router.back();
+    const section = router.query.section as string | undefined;
+    const settings = [
+      'account',
+      'notification',
+      'block',
+      'language',
+      'about',
+      'feedback',
+      'help',
+      'version',
+    ];
+
+    if (router.pathname === '/settings' && section && settings.includes(section)) {
+      router.push('/settings', undefined, {shallow: true});
     } else {
       router.push('/home', undefined, {shallow: true});
     }
