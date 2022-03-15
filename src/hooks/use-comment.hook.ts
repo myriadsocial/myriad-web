@@ -51,15 +51,19 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
       const {data: comments, meta} = await CommentAPI.loadComments(filters, {page: 1});
       setDataMeta(meta);
       setComments(
-        comments.map(comment => {
-          const upvoted = comment.votes?.filter(vote => vote.userId === user?.id && vote.state);
-          const downvoted = comment.votes?.filter(vote => vote.userId === user?.id && !vote.state);
+        comments
+          .filter(com => !com.user?.deletedAt)
+          .map(comment => {
+            const upvoted = comment.votes?.filter(vote => vote.userId === user?.id && vote.state);
+            const downvoted = comment.votes?.filter(
+              vote => vote.userId === user?.id && !vote.state,
+            );
 
-          comment.isUpvoted = upvoted && upvoted.length > 0;
-          comment.isDownVoted = downvoted && downvoted.length > 0;
+            comment.isUpvoted = upvoted && upvoted.length > 0;
+            comment.isDownVoted = downvoted && downvoted.length > 0;
 
-          return comment;
-        }),
+            return comment;
+          }),
       );
     } catch (error) {
       setError(error);

@@ -21,6 +21,7 @@ import Menu from '@material-ui/core/Menu';
 import {formatUsd} from '../../helpers/balance';
 import {Currency, CurrencyId} from '../../interfaces/currency';
 import {Transaction, TransactionSort} from '../../interfaces/transaction';
+import {AvatarSize} from '../atoms/Avatar';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {ListItemComponent} from '../atoms/ListItem';
 import {Modal, ModalProps} from '../atoms/Modal';
@@ -170,7 +171,11 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                     key={currency.id}
                     onClick={handleFilter(currency)}
                     className={styles.item}>
-                    <ListItemComponent size="tiny" title={currency.id} avatar={currency.image} />
+                    <ListItemComponent
+                      size={AvatarSize.TINY}
+                      title={currency.id}
+                      avatar={currency.image}
+                    />
                   </MenuItem>
                 ))}
               </div>
@@ -196,10 +201,11 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                   key={tip.id}
                   avatar={tip.fromUser.profilePictureURL || tip.fromUser.name}
                   title={
-                    tip?.fromUser?.deletedAt ? '[user banned]' : limitChar(tip.fromUser.name, 16)
+                    tip?.fromUser?.deletedAt ? 'User Banned' : limitChar(tip.fromUser.name, 16)
                   }
+                  isBanned={!!tip?.fromUser?.deletedAt}
                   subtitle={timeAgo(tip.createdAt)}
-                  size="medium"
+                  size={AvatarSize.MEDIUM}
                   action={
                     <div className={styles.tip}>
                       <div>

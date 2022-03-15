@@ -8,6 +8,7 @@ export interface PeopleProps {
   platform: SocialsEnum;
   profilePictureURL: string;
   username: string;
+  deletedAt?: string;
 }
 
 export interface SearchablePeople extends PeopleProps {

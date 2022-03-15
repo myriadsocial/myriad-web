@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 
 import dynamic from 'next/dynamic';
 
@@ -44,10 +44,6 @@ export const useCommentTabs = (post?: Post): TabHookProps<SectionType> => {
       },
     ];
   }, [post]);
-
-  useEffect(() => {
-    console.log('selected', selected);
-  }, [selected]);
 
   return {
     selected,
