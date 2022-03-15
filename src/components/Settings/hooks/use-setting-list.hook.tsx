@@ -24,6 +24,7 @@ export type SettingsType =
   | 'feedback'
   | 'help'
   | 'version';
+
 export type SettingsOption<T> = {
   id: T;
   title: string;
