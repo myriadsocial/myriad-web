@@ -1,6 +1,6 @@
 import {CurrencyDollarIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import dynamic from 'next/dynamic';
@@ -76,11 +76,13 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const styles = useStyles();
   const router = useRouter();
   const dispatch = useDispatch();
+  const ref = useRef<HTMLDivElement>(null);
+
   const {
     selected: selectedCommentTab,
     setSelected: setSelectedCommentTab,
     tabs,
-  } = useCommentTabs(post);
+  } = useCommentTabs(post, ref);
 
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
   const [openPromptDrawer, setOpenPromptDrawer] = useState(false);
@@ -193,7 +195,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   };
 
   return (
-    <Paper square className={styles.root}>
+    <Paper square className={styles.root} ref={ref}>
       <HeaderComponent
         user={user}
         owner={isPostOwner}
