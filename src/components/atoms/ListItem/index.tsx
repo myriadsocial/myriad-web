@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {Typography} from '@material-ui/core';
-import Avatar, {AvatarProps} from '@material-ui/core/Avatar';
+import {AvatarProps} from '@material-ui/core/Avatar';
 import ListItem, {ListItemProps} from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -10,19 +10,20 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import {acronym} from 'src/helpers/string';
+import {Avatar, AvatarSize} from '../Avatar';
 
 type ListItemComponentProps = ListItemProps & {
   icon?: any;
   avatar?: string;
   variant?: AvatarProps['variant'];
-  size?: 'tiny' | 'small' | 'medium' | 'large';
+  size?: AvatarSize;
   title: string;
   subtitle?: string | React.ReactNode;
   action?: string | React.ReactNode;
   active?: boolean;
   url?: string;
   id?: string;
+  isBanned?: boolean;
 };
 
 const useStyles = makeStyles<Theme, ListItemComponentProps>((theme: Theme) =>
@@ -75,13 +76,14 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
     icon,
     avatar,
     variant = 'circular',
-    size = 'small',
+    size = AvatarSize.SMALL,
     url,
     title,
     subtitle,
     action,
     active,
     onClick,
+    isBanned = false,
   } = props;
   const styles = useStyles({...props});
 
@@ -109,21 +111,29 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
         </ListItemIcon>
       ) : (
         <ListItemAvatar className={styles.avatar}>
-          <Avatar alt={title} src={avatar} variant={variant} className={styles[size]}>
-            {acronym(title)}
-          </Avatar>
+          <Avatar
+            title={isBanned ? undefined : title}
+            alt={title}
+            src={avatar}
+            size={size}
+            variant={variant}
+            deleted={isBanned}
+          />
         </ListItemAvatar>
       )}
 
       <ListItemText
         primary={
-          <Typography component="div" variant="h5" color="textPrimary">
+          <Typography
+            component="div"
+            variant="h5"
+            color={isBanned ? 'textSecondary' : 'textPrimary'}>
             {title}
           </Typography>
         }
         secondary={
           subtitle ? (
-            <Typography component="span" variant="subtitle2" color="textPrimary">
+            <Typography component="span" variant="subtitle1" color="textPrimary">
               {subtitle}
             </Typography>
           ) : undefined

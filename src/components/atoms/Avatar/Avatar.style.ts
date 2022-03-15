@@ -5,7 +5,7 @@ import {AvatarProps, AvatarSize} from './Avatar.interfaces';
 export const useStyles = makeStyles<Theme, AvatarProps>(theme =>
   createStyles({
     root: {
-      background: props => (props.deleted ? theme.palette.primary.main : '#BDBDBD'),
+      background: props => (props.deleted ? theme.palette.secondary.main : '#BDBDBD'),
       width: props => {
         let size: number = theme.spacing(4.5);
 
