@@ -84,31 +84,37 @@ export const PostImporter: React.FC<Props> = props => {
             hasMore={hasMore}
             next={onLoadNextPage}
             loader={<Loading />}>
-            {importers.map(e => {
-              return (
-                <Link key={e.id} href={'/profile/[id]'} as={`/profile/${e.id}`} passHref>
-                  <a style={{cursor: 'pointer', textDecoration: 'none'}}>
-                    <ListItem
-                      style={{
-                        background: importer === e.id ? 'rgba(255, 200, 87, 0.2)' : '#FFF',
-                        padding: '8px 30px',
-                      }}
-                      onClick={onClose}
-                      onMouseEnter={onHover(e.id)}
-                      onMouseLeave={onHover(undefined)}>
-                      <ListItemAvatar>
-                        <Avatar name={e.name} src={e.profilePictureURL} size={AvatarSize.MEDIUM} />
-                      </ListItemAvatar>
-                      <ListItemText>
-                        <Typography className={styles.name} component="span" color="textPrimary">
-                          {e.name}
-                        </Typography>
-                      </ListItemText>
-                    </ListItem>
-                  </a>
-                </Link>
-              );
-            })}
+            {importers
+              .filter(ar => Boolean(ar.deletedAt) === false)
+              .map(e => {
+                return (
+                  <Link key={e.id} href={'/profile/[id]'} as={`/profile/${e.id}`} passHref>
+                    <a style={{cursor: 'pointer', textDecoration: 'none'}}>
+                      <ListItem
+                        style={{
+                          background: importer === e.id ? 'rgba(255, 200, 87, 0.2)' : '#FFF',
+                          padding: '8px 30px',
+                        }}
+                        onClick={onClose}
+                        onMouseEnter={onHover(e.id)}
+                        onMouseLeave={onHover(undefined)}>
+                        <ListItemAvatar>
+                          <Avatar
+                            name={e.name}
+                            src={e.profilePictureURL}
+                            size={AvatarSize.MEDIUM}
+                          />
+                        </ListItemAvatar>
+                        <ListItemText>
+                          <Typography className={styles.name} component="span" color="textPrimary">
+                            {e.name}
+                          </Typography>
+                        </ListItemText>
+                      </ListItem>
+                    </a>
+                  </Link>
+                );
+              })}
           </InfiniteScroll>
         </List>
       )}
