@@ -35,6 +35,7 @@ export const CommentDeleted = forwardRef<HTMLDivElement, CommentDeletedProps>((p
     <div className={style.root} ref={ref}>
       <div className={style.tree}>
         <Avatar size={AvatarSize.MEDIUM} deleted />
+        {deep === 0 && <div className={style.verticalTree} />}
         {deep > 0 && <div className={style.horizontalTree} />}
       </div>
       <div className={style.fullWidth}>

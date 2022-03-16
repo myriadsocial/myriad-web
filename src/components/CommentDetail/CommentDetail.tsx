@@ -323,7 +323,11 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                   </Button>
                 </ShowIf>
 
-                <Button size="small" variant="text" onClick={handleOpenTipHistory}>
+                <Button
+                  classes={{root: style.button}}
+                  size="small"
+                  variant="text"
+                  onClick={handleOpenTipHistory}>
                   Tip history
                 </Button>
                 <ShowIf condition={!isOwnComment}>
