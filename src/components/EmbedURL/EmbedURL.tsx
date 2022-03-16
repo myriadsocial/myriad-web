@@ -36,7 +36,7 @@ export const EmbedURL: React.FC<EmbedURLProps> = props => {
   return (
     <div className={styles.root}>
       <FormControl fullWidth className={styles.input}>
-        <InputLabel htmlFor="link-to-file">{prefix} Link</InputLabel>
+        <InputLabel htmlFor="link-to-file">{prefix} Link URL</InputLabel>
         <Input id="link-to-file" onChange={handleUrlChanged} error={error} />
       </FormControl>
       <Button

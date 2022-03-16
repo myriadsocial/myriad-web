@@ -497,6 +497,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
 
       <Modal
         title="Embed Link"
+        subtitle="Highlight text as an embedded link"
         align="left"
         titleSize="small"
         maxWidth="xl"
