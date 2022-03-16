@@ -18,4 +18,5 @@ export interface CommentDetailProps {
   onSearchPeople: (query: string) => void;
   onBeforeDownvote?: () => void;
   onDelete: (comment: Comment) => void;
+  scrollToPost: () => void;
 }

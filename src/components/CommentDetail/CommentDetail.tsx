@@ -55,6 +55,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     onSearchPeople,
     onBeforeDownvote,
     onDelete,
+    scrollToPost,
   } = props;
 
   const {
@@ -123,6 +124,8 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
             }),
           );
         }
+
+        scrollToPost();
       });
     }
   };
@@ -394,6 +397,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
               hasMoreComment={hasMoreReplies}
               onLoadMoreReplies={loadMoreReplies}
               onDelete={showConfirmDeleteDialog}
+              scrollToPost={scrollToPost}
             />
           )}
         </div>
@@ -436,6 +440,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
           onBeforeDownvote={handleOpenReply}
           onLoadMoreReplies={loadMoreReplies}
           onDelete={showConfirmDeleteDialog}
+          scrollToPost={scrollToPost}
         />
       )}
 

@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 
 import dynamic from 'next/dynamic';
 
@@ -11,12 +11,20 @@ const CommentListContainer = dynamic(
   {ssr: false},
 );
 
-export const useCommentTabs = (post?: Post): TabHookProps<SectionType> => {
+export const useCommentTabs = (
+  post: Post,
+  ref: React.RefObject<HTMLDivElement>,
+): TabHookProps<SectionType> => {
   const [selected, setSelected] = useState<SectionType>(SectionType.DISCUSSION);
 
-  const tabs: TabItems<SectionType>[] = useMemo(() => {
-    if (!post) return [];
+  const scrollToPost = useCallback(() => {
+    ref.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }, [ref]);
 
+  const tabs: TabItems<SectionType>[] = useMemo(() => {
     return [
       {
         id: SectionType.DISCUSSION,
@@ -27,6 +35,7 @@ export const useCommentTabs = (post?: Post): TabHookProps<SectionType> => {
             placeholder={'Write a Discussion...'}
             referenceId={post.id}
             section={SectionType.DISCUSSION}
+            scrollToPost={scrollToPost}
           />
         ),
       },
@@ -39,11 +48,12 @@ export const useCommentTabs = (post?: Post): TabHookProps<SectionType> => {
             placeholder={'Your downvote will be submitted after you post a comment'}
             referenceId={post.id}
             section={SectionType.DEBATE}
+            scrollToPost={scrollToPost}
           />
         ),
       },
     ];
-  }, [post]);
+  }, [post, scrollToPost]);
 
   return {
     selected,

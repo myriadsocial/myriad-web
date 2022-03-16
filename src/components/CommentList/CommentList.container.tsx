@@ -41,10 +41,11 @@ type CommentListContainerProps = {
   section: SectionType;
   focus?: boolean;
   expand?: boolean;
+  scrollToPost: () => void;
 };
 
 export const CommentListContainer: React.FC<CommentListContainerProps> = props => {
-  const {placeholder, referenceId, section, focus, expand} = props;
+  const {placeholder, referenceId, section, focus, expand, scrollToPost} = props;
 
   const dispatch = useDispatch();
   const {
@@ -116,6 +117,8 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
               }),
             );
           }
+
+          scrollToPost();
         },
       );
     }
@@ -237,6 +240,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         onLoadMoreReplies={console.log}
         onSearchPeople={handleSearchPeople}
         onDelete={showConfirmDeleteDialog}
+        scrollToPost={scrollToPost}
       />
 
       <ShowIf condition={hasMoreComment}>
