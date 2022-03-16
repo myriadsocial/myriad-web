@@ -24,13 +24,13 @@ export const useStyles = makeStyles<Theme, VotingStyleProp>(theme =>
       },
     },
     mr1: {
-      marginRight: props => (props.variant === 'row' ? theme.spacing(0.5) : ''),
+      marginRight: props => (props.variant === 'row' ? 6 : 0),
     },
     fill: {
       fill: 'none',
-      [theme.breakpoints.down('xs')]: {
-        color: '#404040',
-      },
+      width: 18,
+      height: 18,
+      color: '#404040',
     },
     red: {
       color: 'red',

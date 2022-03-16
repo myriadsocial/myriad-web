@@ -16,14 +16,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     content: {
-      padding: theme.spacing(0.5, 2.5),
+      padding: '0 20px',
       wordBreak: 'break-word',
     },
     tags: {
       marginBottom: theme.spacing(1.5),
     },
     action: {
-      padding: theme.spacing(1.25, 2.5),
+      marginTop: 10,
+      padding: '0 20px 20px',
     },
     tabs: {
       borderBottom: '1px solid #E5E5E5',
