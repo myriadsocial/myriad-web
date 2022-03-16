@@ -47,9 +47,8 @@ export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
       position: 'relative',
     },
     verticalTree: {
-      marginTop: '8px',
-      marginBottom: '8px',
-      width: '20px',
+      marginTop: 8,
+      width: 20,
       height: '100%',
       borderRight: '1px solid #E5E5E5',
     },
