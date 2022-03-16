@@ -150,20 +150,22 @@ export const ExperiencePreview: React.FC<Props> = props => {
       </div>
       <div>
         <Typography className={style.subtitle}>{'People'}</Typography>
-        {experience.people.map(person =>
-          person.id === '' ? (
-            <></>
-          ) : (
-            <ListItemPeopleComponent
-              onClick={() => handleOpenProfile(person)}
-              id="selectable-experience-list-item"
-              title={person.name}
-              subtitle={<Typography variant="caption">@{person.username}</Typography>}
-              avatar={person.profilePictureURL}
-              platform={person.platform}
-            />
-          ),
-        )}
+        {experience.people
+          .filter(ar => Boolean(ar.deletedAt) === false)
+          .map(person =>
+            person.id === '' ? (
+              <></>
+            ) : (
+              <ListItemPeopleComponent
+                onClick={() => handleOpenProfile(person)}
+                id="selectable-experience-list-item"
+                title={person.name}
+                subtitle={<Typography variant="caption">@{person.username}</Typography>}
+                avatar={person.profilePictureURL}
+                platform={person.platform}
+              />
+            ),
+          )}
       </div>
       {(experience?.createdBy !== user?.id || anonymous) && (
         <div className={style.button}>

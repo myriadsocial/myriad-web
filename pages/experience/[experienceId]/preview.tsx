@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/nextjs';
+
 import React from 'react';
 
 import {getSession} from 'next-auth/client';
@@ -7,6 +9,7 @@ import Head from 'next/head';
 import {ExperiencePreviewContainer} from 'src/components/ExperiencePreview/ExperiencePreview.container';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {setHeaders} from 'src/lib/api/base';
+import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
@@ -36,7 +39,8 @@ const PreviewExperience: React.FC = () => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const {req} = context;
+  const {params, req} = context;
+  const experienceId = params?.experienceId as string;
 
   const dispatch = store.dispatch as ThunkDispatchAction;
 
@@ -85,11 +89,19 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   await dispatch(fetchExchangeRates());
   await dispatch(fetchUserExperience());
 
-  return {
-    props: {
-      session,
-    },
-  };
+  try {
+    await ExperienceAPI.getExperienceDetail(experienceId);
+    return {
+      props: {
+        session,
+      },
+    };
+  } catch (error) {
+    Sentry.captureException(error);
+    return {
+      notFound: true,
+    };
+  }
 });
 
 export default PreviewExperience;
