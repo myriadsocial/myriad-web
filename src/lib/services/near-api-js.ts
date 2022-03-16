@@ -8,7 +8,7 @@ import * as nearAPI from 'near-api-js';
 import {ConnectConfig} from 'near-api-js';
 import {Signature} from 'near-api-js/lib/utils/key_pair';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
-import * as UserAPI from 'src/lib/api/user';
+import * as WalletAPI from 'src/lib/api/wallet';
 
 export type NearConnectResponseProps = {
   nonce: number;
@@ -54,7 +54,7 @@ export const connectToNearWallet = async (): Promise<NearConnectResponseProps> =
     if (!hasPublicKey) await signer.createKey(address, publicRuntimeConfig.nearNetworkId);
     const keyPair = await keyStore.getKey(publicRuntimeConfig.nearNetworkId, address);
 
-    const {nonce} = await UserAPI.getUserNonce(address);
+    const {nonce} = await WalletAPI.getUserNonce(address);
 
     let payload = {
       publicAddress: '',

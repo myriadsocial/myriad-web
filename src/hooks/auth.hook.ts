@@ -8,6 +8,7 @@ import {User} from 'src/interfaces/user';
 import * as AuthAPI from 'src/lib/api/ext-auth';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import * as UserAPI from 'src/lib/api/user';
+import * as WalletAPI from 'src/lib/api/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
 import {createNearSignature} from 'src/lib/services/near-api-js';
@@ -38,7 +39,7 @@ export const useAuthHook = () => {
 
   const fetchNearUserNonce = async (nearId: string): Promise<UserNonceProps> => {
     try {
-      const data = await UserAPI.getUserNonce(nearId);
+      const data = await WalletAPI.getUserNonce(nearId);
 
       return data;
     } catch (error) {
@@ -49,7 +50,7 @@ export const useAuthHook = () => {
 
   const fetchUserNonce = async (account: InjectedAccountWithMeta): Promise<UserNonceProps> => {
     try {
-      const data = await UserAPI.getUserNonce(toHexPublicKey(account));
+      const data = await WalletAPI.getUserNonce(toHexPublicKey(account));
 
       return data;
     } catch (error) {
@@ -187,7 +188,7 @@ export const useAuthHook = () => {
 
   const switchAccount = async (account: InjectedAccountWithMeta) => {
     const address = toHexPublicKey(account);
-    const {nonce} = await UserAPI.getUserNonce(address);
+    const {nonce} = await WalletAPI.getUserNonce(address);
 
     if (nonce > 0) {
       await signInWithExternalAuth(nonce, account);
