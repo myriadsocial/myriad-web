@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React, {createRef, useEffect} from 'react';
 
 import Typography from '@material-ui/core/Typography';
 
@@ -40,7 +40,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
   const {query} = useQueryParams();
 
   const refs: RefComment = comments.reduce((acc: RefComment, value: Comment) => {
-    acc[value.id] = useRef<HTMLDivElement>(null);
+    acc[value.id] = createRef<HTMLDivElement>();
     return acc;
   }, {});
 
