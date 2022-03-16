@@ -15,8 +15,9 @@ export const RenderTwitter: React.FC<RenderTwitterProps> = props => {
       <LinkifyComponent
         text={text}
         handleClick={onHashtagClicked}
-        variant="h4"
+        variant="body1"
         color="textPrimary"
+        gutterBottom
       />
     </>
   );
