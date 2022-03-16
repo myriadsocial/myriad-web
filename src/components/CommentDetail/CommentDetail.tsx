@@ -4,7 +4,6 @@ import {useSelector, useDispatch} from 'react-redux';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
-import {Grid} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -16,12 +15,12 @@ import {CommentEditor} from '../CommentEditor';
 import {CommentList} from '../CommentList';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {VotingComponent} from '../atoms/Voting';
+import useConfirm from '../common/Confirm/use-confirm.hook';
+import {TimeAgo} from '../common/TimeAgo.component';
 import {CommentDetailProps} from './CommentDetail.interface';
 import {useStyles} from './CommentDetail.styles';
 import {CommentRender} from './CommentRender';
 
-import {formatDistance, subDays} from 'date-fns';
-import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {useRepliesHook} from 'src/hooks/use-replies.hook';
 import {Comment} from 'src/interfaces/comment';
@@ -73,6 +72,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   const dispatch = useDispatch();
   const style = useStyles({...props, deep});
   const router = useRouter();
+  const confirm = useConfirm();
 
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
   const downvoting = useSelector<RootState, Post | Comment | null>(
@@ -84,8 +84,6 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   const [isReplying, setIsReplying] = React.useState(false);
   const [isBlocked, setIsBlocked] = React.useState(blockedUserIds.includes(comment.userId));
   const [maxLength, setMaxLength] = React.useState<number | undefined>(180);
-  const [deleteReplyDialogOpened, setOpenDeleteReplyDialog] = React.useState(false);
-  const [commentToDelete, setCommentToDelete] = React.useState<Comment>();
 
   const totalVote = comment.metric.upvotes - comment.metric.downvotes;
   const isOwnComment = comment.userId === user?.id;
@@ -201,32 +199,20 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   };
 
   const showConfirmDeleteDialog = (reply: Comment) => {
-    setOpenDeleteReplyDialog(true);
-    setCommentToDelete(reply);
-  };
-
-  const closeConfirmDeleteDialog = () => {
-    setOpenDeleteReplyDialog(false);
-    setCommentToDelete(undefined);
-  };
-
-  const confirmDeleteReply = () => {
-    if (!commentToDelete) return;
-
-    if (commentToDelete.id === comment.id) {
-      onDelete(comment);
-    } else {
-      removeReply(commentToDelete);
-    }
-
-    closeConfirmDeleteDialog();
-  };
-
-  const getDate = (commentDate: Date) => {
-    const newFormat = formatDistance(subDays(new Date(commentDate), 0), new Date(), {
-      addSuffix: true,
+    confirm({
+      title: 'Delete Comment',
+      description: 'Are you sure to remove this comment?',
+      icon: 'danger',
+      confirmationText: 'Yes, proceed to delete',
+      cancellationText: 'No, let me rethink',
+      onConfirm: () => {
+        if (reply.id === comment.id) {
+          onDelete(comment);
+        } else {
+          removeReply(reply);
+        }
+      },
     });
-    return newFormat;
   };
 
   return (
@@ -249,7 +235,11 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                 title={
                   <div className={style.flexSpaceBetween}>
                     <div>
-                      <Link href={'/profile/[id]'} as={`/profile/${comment.user.id}`} shallow>
+                      <Link
+                        href={'/profile/[id]'}
+                        as={`/profile/${comment.user.id}`}
+                        shallow
+                        passHref>
                         <Typography variant="body1" className={style.link} component="a">
                           Blocked user
                         </Typography>
@@ -257,7 +247,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
 
                       <Typography variant="caption" color="textSecondary">
                         <span className={style.dot}>•</span>
-                        {getDate(comment.createdAt)}
+                        <TimeAgo date={comment.createdAt} />
                       </Typography>
                     </div>
 
@@ -276,7 +266,11 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
               <CardHeader
                 title={
                   <>
-                    <Link href={'/profile/[id]'} as={`/profile/${comment.user.id}`} shallow>
+                    <Link
+                      href={'/profile/[id]'}
+                      as={`/profile/${comment.user.id}`}
+                      shallow
+                      passHref>
                       <Typography variant="body1" className={style.link} component="a">
                         {comment?.user?.deletedAt ? '[user banned]' : comment.user.name}
                       </Typography>
@@ -284,7 +278,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
 
                     <Typography variant="caption" color="textSecondary">
                       <span className={style.dot}>•</span>
-                      {getDate(comment.createdAt)}
+                      <TimeAgo date={comment.createdAt} />
                     </Typography>
                   </>
                 }
@@ -309,9 +303,9 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
 
                 <Button
                   className={style.hidden}
+                  classes={{root: style.button}}
                   disabled={!user}
                   onClick={handleOpenReply}
-                  classes={{root: style.button}}
                   size="small"
                   variant="text">
                   Reply
@@ -320,8 +314,8 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                 <ShowIf condition={!isOwnComment}>
                   <Button
                     className={style.hidden}
-                    disabled={balanceDetails.length === 0}
                     classes={{root: style.button}}
+                    disabled={balanceDetails.length === 0}
                     size="small"
                     variant="text"
                     onClick={handleSendTip}>
@@ -329,18 +323,14 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                   </Button>
                 </ShowIf>
 
-                <Button
-                  classes={{root: style.button}}
-                  size="small"
-                  variant="text"
-                  onClick={handleOpenTipHistory}>
+                <Button size="small" variant="text" onClick={handleOpenTipHistory}>
                   Tip history
                 </Button>
                 <ShowIf condition={!isOwnComment}>
                   <Button
                     className={style.hidden}
-                    disabled={!user}
                     classes={{root: style.button}}
+                    disabled={!user}
                     size="small"
                     variant="text"
                     onClick={handleReport}>
@@ -443,27 +433,6 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
           scrollToPost={scrollToPost}
         />
       )}
-
-      <PromptComponent
-        title={'Delete Comment'}
-        subtitle={`Are you sure to remove this comment?`}
-        open={deleteReplyDialogOpened}
-        icon="danger"
-        onCancel={closeConfirmDeleteDialog}>
-        <Grid justifyContent="space-between">
-          <Button
-            style={{marginRight: '12px'}}
-            size="small"
-            variant="outlined"
-            color="secondary"
-            onClick={closeConfirmDeleteDialog}>
-            No, let me rethink
-          </Button>
-          <Button size="small" variant="contained" color="primary" onClick={confirmDeleteReply}>
-            Yes, proceed to delete
-          </Button>
-        </Grid>
-      </PromptComponent>
     </>
   );
 });

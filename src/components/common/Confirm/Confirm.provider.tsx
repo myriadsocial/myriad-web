@@ -5,7 +5,9 @@ import {Button, Grid} from '@material-ui/core';
 import ShowIf from '../show-if.component';
 import ConfirmContext, {HandleConfirm} from './Confirm.context';
 import {ConfirmProviderProps, ConfirmOptions} from './Confirm.interface';
+import {useStyles} from './Confirm.style';
 
+import clsx from 'clsx';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 
 const DEFAULT_OPTIONS: ConfirmOptions = {
@@ -18,6 +20,8 @@ const DEFAULT_OPTIONS: ConfirmOptions = {
 };
 
 export const ConfirmProvider: React.ComponentType<ConfirmProviderProps> = ({children}) => {
+  const styles = useStyles();
+
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<ConfirmOptions>(DEFAULT_OPTIONS);
 
@@ -64,7 +68,14 @@ export const ConfirmProvider: React.ComponentType<ConfirmProviderProps> = ({chil
               {options?.cancellationText}
             </Button>
           </ShowIf>
-          <Button size="small" variant="contained" color="primary" onClick={handleConfirm}>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            className={clsx({
+              [styles.error]: options.icon === 'danger',
+            })}
+            onClick={handleConfirm}>
             {options?.confirmationText}
           </Button>
         </Grid>

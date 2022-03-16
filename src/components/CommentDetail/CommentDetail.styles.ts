@@ -17,19 +17,8 @@ export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
         padding: theme.spacing(1, 0),
       },
     },
-    circle: {
-      margin: theme.spacing(0, 0.5),
-      color: 'red',
-      fontSize: 10,
-      '& .MuiSvgIcon-root': {
-        fill: 'red',
-      },
-    },
     content: {
       padding: theme.spacing(0, 0.5),
-    },
-    text: {
-      fontWeight: 700,
     },
     dot: {
       color: '#C4C4C4',
@@ -39,7 +28,6 @@ export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
     button: {
       width: 'auto',
       height: 'auto',
-      color: theme.palette.text.secondary,
     },
     flex: {
       display: 'flex',

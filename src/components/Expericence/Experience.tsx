@@ -5,7 +5,6 @@ import React from 'react';
 import Link from 'next/link';
 
 import {Grid} from '@material-ui/core';
-import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -16,9 +15,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
+import useConfirm from '../common/Confirm/use-confirm.hook';
 import {useStyles} from './Experience.style';
 
-import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
@@ -53,11 +52,9 @@ export const Experience: React.FC<ExperienceProps> = props => {
   } = props;
 
   const styles = useStyles(props);
+  const confirm = useConfirm();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [isShowDeleteConfirmation, setShowDeleteConfimation] = React.useState<boolean>(false);
-  const [isShowUnsubscribeConfirmation, setShowUnsubscribeConfirmation] =
-    React.useState<boolean>(false);
 
   const isOwnExperience = userExperience.experience.user.id === user?.id;
   const experienceId = userExperience.experience.id;
@@ -87,22 +84,6 @@ export const Experience: React.FC<ExperienceProps> = props => {
     }
   };
 
-  const handleUnsubscribeExperience = () => {
-    setShowUnsubscribeConfirmation(false);
-
-    if (onUnsubscribe && userExperienceId) {
-      onUnsubscribe(userExperienceId);
-    }
-  };
-
-  const handleRemoveExperience = () => {
-    setShowDeleteConfimation(false);
-
-    if (onDelete && userExperienceId) {
-      onDelete(userExperienceId);
-    }
-  };
-
   const handleClickSettings = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setAnchorEl(e.currentTarget);
@@ -112,22 +93,38 @@ export const Experience: React.FC<ExperienceProps> = props => {
     setAnchorEl(null);
   };
 
-  const openDeleteConfirmation = () => {
+  const confirmDeleteExperience = () => {
     handleCloseSettings();
-    setShowDeleteConfimation(true);
+
+    confirm({
+      title: 'Delete Experience?',
+      description:
+        "Are you sure you want to delete this experience? You can't undo this in the future.",
+      icon: 'danger',
+      confirmationText: 'Yes, proceed to delete',
+      cancellationText: 'Delete',
+      onConfirm: () => {
+        if (onDelete && userExperienceId) {
+          onDelete(userExperienceId);
+        }
+      },
+    });
   };
 
-  const handleCancelDelete = () => {
-    setShowDeleteConfimation(false);
-  };
-
-  const openUnsubscribeConfirmation = () => {
+  const confirmUnsubscribe = () => {
     handleCloseSettings();
-    setShowUnsubscribeConfirmation(true);
-  };
 
-  const handleCancelUnsubscribe = () => {
-    setShowUnsubscribeConfirmation(false);
+    confirm({
+      title: 'Unsubscribe?',
+      description: "Do you want to unsubscribe?\n You won't see more post from this experience",
+      icon: 'warning',
+      confirmationText: 'Unsubscribe',
+      onConfirm: () => {
+        if (onUnsubscribe && userExperienceId) {
+          onUnsubscribe(userExperienceId);
+        }
+      },
+    });
   };
 
   const isHidden = () => {
@@ -205,59 +202,16 @@ export const Experience: React.FC<ExperienceProps> = props => {
         </ShowIf>
 
         <ShowIf condition={Boolean(userExperience.subscribed) && !isOwnExperience}>
-          <MenuItem onClick={openUnsubscribeConfirmation} className={styles.delete}>
+          <MenuItem onClick={confirmUnsubscribe} className={styles.delete}>
             Unsubscribe
           </MenuItem>
         </ShowIf>
         <ShowIf condition={isOwnExperience}>
-          <MenuItem onClick={openDeleteConfirmation} className={styles.delete}>
+          <MenuItem onClick={confirmDeleteExperience} className={styles.delete}>
             Delete
           </MenuItem>
         </ShowIf>
       </Menu>
-
-      <PromptComponent
-        onCancel={handleCancelDelete}
-        open={isShowDeleteConfirmation}
-        icon="danger"
-        title="Delete Experience?"
-        subtitle="Are you sure you want to delete this experience? You can’t undo this in the future.">
-        <Grid container justifyContent="space-around">
-          <Button onClick={handleCancelDelete} size="small" variant="outlined" color="secondary">
-            Not now
-          </Button>
-          <Button
-            onClick={handleRemoveExperience}
-            className={styles.error}
-            size="small"
-            variant="contained">
-            Delete
-          </Button>
-        </Grid>
-      </PromptComponent>
-      <PromptComponent
-        onCancel={handleCancelUnsubscribe}
-        open={isShowUnsubscribeConfirmation}
-        icon="warning"
-        title="Unsubscribe?"
-        subtitle={`Do you want to unsubscribe?\n You won't see more post from this experience`}>
-        <Grid container justifyContent="space-around">
-          <Button
-            onClick={handleCancelUnsubscribe}
-            size="small"
-            variant="outlined"
-            color="secondary">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleUnsubscribeExperience}
-            color="primary"
-            size="small"
-            variant="contained">
-            Unsubscribe
-          </Button>
-        </Grid>
-      </PromptComponent>
     </>
   );
 };

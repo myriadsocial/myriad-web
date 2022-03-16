@@ -13,10 +13,10 @@ import Typography from '@material-ui/core/Typography';
 
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {VotingComponent} from '../atoms/Voting';
+import {TimeAgo} from '../common/TimeAgo.component';
 import {CommentDeletedProps} from './CommentDeleted.interface';
 import {useStyles} from './CommentDeleted.styles';
 
-import {formatDistance, subDays} from 'date-fns';
 import ShowIf from 'src/components/common/show-if.component';
 
 export const CommentDeleted = forwardRef<HTMLDivElement, CommentDeletedProps>((props, ref) => {
@@ -29,13 +29,6 @@ export const CommentDeleted = forwardRef<HTMLDivElement, CommentDeletedProps>((p
 
   const handleOpenTipHistory = () => {
     onOpenTipHistory(comment);
-  };
-
-  const getDate = (commentDate: Date) => {
-    const newFormat = formatDistance(subDays(new Date(commentDate), 0), new Date(), {
-      addSuffix: true,
-    });
-    return newFormat;
   };
 
   return (
@@ -57,7 +50,7 @@ export const CommentDeleted = forwardRef<HTMLDivElement, CommentDeletedProps>((p
 
                 <Typography variant="caption" color="textSecondary">
                   <span className={style.dot}>•</span>
-                  {getDate(comment.createdAt)}
+                  <TimeAgo date={comment.createdAt} />
                 </Typography>
               </>
             }

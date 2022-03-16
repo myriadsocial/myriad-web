@@ -7,6 +7,7 @@ import {Button, Grid} from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
+import useConfirm from '../common/Confirm/use-confirm.hook';
 import {PostDetail} from './PostDetail';
 import {usePostDelete} from './hooks/use-post-delete.hook';
 import {usePostInteraction} from './hooks/use-post-interaction.hook';
@@ -47,12 +48,12 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
   const {type = 'default', expanded = true} = props;
 
   const dispatch = useDispatch();
+  const confirm = useConfirm();
 
   const {post, getTippedUserId} = useTimelineHook();
   const {openTipHistory} = useTipHistory();
   const {openToasterSnack} = useToasterSnackHook();
-  const {removing, openDeletePostConfirmation, closeDeletePostConfirmation, confirmDeletePost} =
-    usePostDelete();
+  const {confirmDeletePost} = usePostDelete();
   const {upVotePost, setDownVotingPost, removePostVote} = usePostInteraction();
 
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
@@ -153,6 +154,19 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
     setVisibility(null);
   };
 
+  const confirmRemovePost = () => {
+    confirm({
+      title: 'Remove Post',
+      description: 'Are you sure to remove this post',
+      icon: 'danger',
+      confirmationText: 'Yes, proceed to delete',
+      cancellationText: 'No, let me rethink',
+      onConfirm: () => {
+        confirmDeletePost();
+      },
+    });
+  };
+
   if (!post) return null;
 
   return (
@@ -166,7 +180,7 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
         onSendTip={handleSendTip}
         toggleDownvoting={setDownVotingPost}
         onOpenTipHistory={openTipHistory}
-        onDelete={openDeletePostConfirmation}
+        onDelete={confirmRemovePost}
         onReport={handleReportPost}
         onImporters={handleImporters}
         onShared={handleSharePost}
@@ -229,27 +243,6 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
             color="primary"
             onClick={closeSendTipSuccessPrompt}>
             Return
-          </Button>
-        </Grid>
-      </PromptComponent>
-
-      <PromptComponent
-        title={'Remove Post'}
-        subtitle={`Are you sure to remove this post?`}
-        open={removing}
-        icon="danger"
-        onCancel={closeDeletePostConfirmation}>
-        <Grid container justifyContent="center">
-          <Button
-            style={{marginRight: '12px'}}
-            size="small"
-            variant="outlined"
-            color="secondary"
-            onClick={closeDeletePostConfirmation}>
-            No, let me rethink
-          </Button>
-          <Button size="small" variant="contained" color="primary" onClick={confirmDeletePost}>
-            Yes, proceed to delete
           </Button>
         </Grid>
       </PromptComponent>

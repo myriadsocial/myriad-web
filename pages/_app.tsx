@@ -20,6 +20,7 @@ import themeV2 from '../src/themes/light-theme';
 import {SnackbarProvider} from 'notistack';
 import {I18nextProvider} from 'react-i18next';
 import {ToasterSnack} from 'src/components/atoms/ToasterSnack';
+import {ConfirmProvider} from 'src/components/common/Confirm/Confirm.provider';
 import {AlertProvider} from 'src/context/alert.context';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 
@@ -124,7 +125,9 @@ const App = ({classes, ...props}: MyAppProps & WithStyles<typeof snackbarStyles>
               session={pageProps.session}>
               <CookiesProvider>
                 <AlertProvider>
-                  <Component {...pageProps} />
+                  <ConfirmProvider>
+                    <Component {...pageProps} />
+                  </ConfirmProvider>
                 </AlertProvider>
               </CookiesProvider>
             </AuthProvider>
@@ -136,7 +139,9 @@ const App = ({classes, ...props}: MyAppProps & WithStyles<typeof snackbarStyles>
 };
 
 export function reportWebVitals(metric: NextWebVitalsMetric) {
-  console.log('report:', metric);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('report:', metric);
+  }
 }
 
 export default wrapper.withRedux(withStyles(snackbarStyles)(App));

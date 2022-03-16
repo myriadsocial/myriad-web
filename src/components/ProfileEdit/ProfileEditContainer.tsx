@@ -1,11 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
-import {Button, Typography} from '@material-ui/core';
-
-import {PromptComponent} from '../atoms/Prompt/prompt.component';
+import useConfirm from '../common/Confirm/use-confirm.hook';
 import {ProfileEditComponent} from './ProfileEdit';
 
 import {useProfileHook} from 'src/hooks/use-profile.hook';
@@ -20,8 +18,9 @@ type Props = {
 
 export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
   const router = useRouter();
+  const confirm = useConfirm();
+
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const [open, setOpen] = React.useState(false);
   const [profilePic, setProfilePic] = React.useState<File | undefined | string>(
     user?.profilePictureURL,
   );
@@ -57,6 +56,8 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
   };
 
   const onSave = async (newUser: Partial<User>) => {
+    newUser.profilePictureURL = '';
+
     try {
       if (profilePic instanceof File) {
         const newUrlProfilePic = await updateProfilePicture(profilePic);
@@ -64,20 +65,17 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
           newUser.profilePictureURL = newUrlProfilePic;
           setProfilePic(newUrlProfilePic);
         }
-      } else if (profilePic === undefined) {
-        newUser.profilePictureURL = '';
       }
+
       if (bannerPic instanceof File) {
         const newUrlBannerPic = await updateProfileBanner(bannerPic);
         if (typeof newUrlBannerPic === 'string') {
           newUser.bannerImageUrl = newUrlBannerPic;
         }
       }
-      updateProfile(newUser, () => {
-        openPrompt();
-      });
+
+      updateProfile(newUser, openSuccesPrompt);
     } catch (err) {
-      console.log(err);
       openToasterSnack({
         message: 'something went wrong!',
         variant: 'error',
@@ -85,12 +83,7 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
     }
   };
 
-  const finishedEditProfile = () => {
-    onClose();
-    handleCloseEdit();
-  };
-
-  const handleCloseEdit = () => {
+  const redirectToProfile = () => {
     router.push(
       {
         pathname: `/profile/${user?.id}`,
@@ -100,39 +93,38 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
     );
   };
 
-  const openPrompt = () => {
-    setOpen(!open);
-  };
+  const openSuccesPrompt = useCallback(() => {
+    confirm({
+      title: 'Profile saved!',
+      description: 'You have saved your changes.',
+      icon: 'success',
+      confirmationText: 'See Profile',
+      hideCancel: true,
+      onConfirm: () => {
+        redirectToProfile();
+      },
+    });
+  }, [redirectToProfile, user]);
+
+  if (!user) return null;
 
   return (
     <>
-      {user && (
-        <ProfileEditComponent
-          user={user}
-          imageProfile={profilePic}
-          imageBanner={bannerPic}
-          onSave={onSave}
-          updatingProfile={loadingUpdate}
-          uploadingAvatar={uploadingAvatar}
-          uploadingBanner={uploadingBanner}
-          updateProfileBanner={hanleUpdateBannerImage}
-          updateProfilePicture={handleUpdateProfilePicture}
-          isChanged={usernameStatus}
-          checkAvailable={handleUsernameAvailable}
-          isAvailable={usernameAvailable}
-          onCancel={finishedEditProfile}
-        />
-      )}
-      <PromptComponent
-        title="Profile saved!"
-        subtitle={<Typography>You have saved your changes.</Typography>}
-        icon="success"
-        open={open}
-        onCancel={openPrompt}>
-        <Button size="small" variant="contained" color="primary" onClick={finishedEditProfile}>
-          See Profile
-        </Button>
-      </PromptComponent>
+      <ProfileEditComponent
+        user={user}
+        imageProfile={profilePic}
+        imageBanner={bannerPic}
+        onSave={onSave}
+        updatingProfile={loadingUpdate}
+        uploadingAvatar={uploadingAvatar}
+        uploadingBanner={uploadingBanner}
+        updateProfileBanner={hanleUpdateBannerImage}
+        updateProfilePicture={handleUpdateProfilePicture}
+        isChanged={usernameStatus}
+        checkAvailable={handleUsernameAvailable}
+        isAvailable={usernameAvailable}
+        onCancel={redirectToProfile}
+      />
     </>
   );
 };

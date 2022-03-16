@@ -12,7 +12,6 @@ import {MenuContainer} from 'src/components/Menu';
 import {NotificationsContainer} from 'src/components/Notifications';
 import {RightMenuBar} from 'src/components/RightMenuBar/RightMenuBar';
 import {SocialMediaListContainer} from 'src/components/SocialMediaList';
-import {ConfirmProvider} from 'src/components/common/Confirm/Confirm.provider';
 import ShowIf from 'src/components/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {NotificationProps} from 'src/interfaces/notification';
@@ -97,43 +96,41 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   };
 
   return (
-    <ConfirmProvider>
-      <Container maxWidth="lg" disableGutters>
-        <div className={classes.root}>
-          <div className={classes.firstCol}>
-            <div className={classes.innerFirstColWrapper}>
-              <div>
-                <MenuContainer />
-              </div>
-              <div>
-                <SocialMediaListContainer />
-              </div>
-              <div>
-                <WalletBalancesContainer />
-              </div>
+    <Container maxWidth="lg" disableGutters>
+      <div className={classes.root}>
+        <div className={classes.firstCol}>
+          <div className={classes.innerFirstColWrapper}>
+            <div>
+              <MenuContainer />
             </div>
-          </div>
-
-          <div className={classes.secondCol}>
-            <div className={classes.innerSecondColWrapper}>{children}</div>
-          </div>
-
-          <div className={classes.thirdCol}>
-            <div className={classes.innerThirdColWrapper}>
-              <ProfileCardContainer toggleNotification={handleToggleNotification} />
-
-              <ShowIf condition={!showNotification}>
-                <RightMenuBar />
-              </ShowIf>
-
-              <ShowIf condition={showNotification}>
-                <NotificationsContainer infinite={false} size="small" />
-              </ShowIf>
+            <div>
+              <SocialMediaListContainer />
+            </div>
+            <div>
+              <WalletBalancesContainer />
             </div>
           </div>
         </div>
-      </Container>
-    </ConfirmProvider>
+
+        <div className={classes.secondCol}>
+          <div className={classes.innerSecondColWrapper}>{children}</div>
+        </div>
+
+        <div className={classes.thirdCol}>
+          <div className={classes.innerThirdColWrapper}>
+            <ProfileCardContainer toggleNotification={handleToggleNotification} />
+
+            <ShowIf condition={!showNotification}>
+              <RightMenuBar />
+            </ShowIf>
+
+            <ShowIf condition={showNotification}>
+              <NotificationsContainer infinite={false} size="small" />
+            </ShowIf>
+          </div>
+        </div>
+      </div>
+    </Container>
   );
 };
 

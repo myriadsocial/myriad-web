@@ -269,6 +269,9 @@ const theme = createTheme({
         width: 583,
         height: 40,
       },
+      text: {
+        color: textSecondary,
+      },
       containedPrimary: {
         backgroundColor: primaryPurple,
         color: '#FFF',
