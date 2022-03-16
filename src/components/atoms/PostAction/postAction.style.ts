@@ -7,7 +7,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       justifyContent: 'flex-start',
       '& > div': {
-        marginRight: theme.spacing(2),
+        marginRight: 20,
       },
 
       [theme.breakpoints.down('xs')]: {
@@ -25,10 +25,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: 0,
     },
     mr1: {
-      marginRight: theme.spacing(1),
+      marginRight: theme.spacing(0.5),
     },
     fill: {
       fill: 'none',
+      width: 18,
+      height: 18,
+      color: '#404040',
     },
     modal: {
       paddingBottom: 10,
@@ -69,6 +72,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 32,
     },
     wording: {
+      fontSize: 14,
+      fontWeight: 600,
+
       [theme.breakpoints.down('xs')]: {
         display: 'none',
       },

@@ -12,6 +12,7 @@ import {Modal} from '../Modal';
 import {VotingComponent} from '../Voting';
 import {useStyles} from './postAction.style';
 
+import millify from 'millify';
 import ShowIf from 'src/components/common/show-if.component';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 
@@ -32,7 +33,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
   const style = useStyles();
 
   const {
-    metrics: {discussions = 0, debates = 0, upvotes = 0, downvotes},
+    metrics: {discussions = 0, debates = 0, upvotes = 0, downvotes = 0, shares = 0},
     downvoted = false,
     upvoted = false,
     postUrl,
@@ -65,6 +66,14 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
     setLinkAnchorEl(null);
   };
 
+  const formatNumber = (num: number) => {
+    const vote = millify(num, {
+      precision: 1,
+      lowercase: true,
+    });
+    return vote;
+  };
+
   return (
     <div className={style.root}>
       <VotingComponent
@@ -84,15 +93,8 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
           color="primary">
           <SvgIcon classes={{root: style.fill}} component={ChatAltIcon} viewBox="0 0 24 24" />
         </IconButton>
-        <Typography component="span" color="textPrimary" variant="caption">
-          {discussions + debates}{' '}
-          <Typography
-            component="span"
-            color="textPrimary"
-            variant="caption"
-            className={style.wording}>
-            Comments
-          </Typography>
+        <Typography component="span" color="primary" variant="body1" className={style.wording}>
+          {formatNumber(discussions + debates)}&nbsp;Comments
         </Typography>
       </div>
 
@@ -105,12 +107,8 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
               component={ShareIcon}
               viewBox="0 0 24 24"
             />
-            <Typography
-              component="span"
-              color="textPrimary"
-              variant="caption"
-              className={style.wording}>
-              Share
+            <Typography component="span" color="primary" variant="body1" className={style.wording}>
+              {formatNumber(shares)}&nbsp;Shares
             </Typography>
           </IconButton>
         </div>

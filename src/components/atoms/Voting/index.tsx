@@ -70,7 +70,7 @@ export const VotingComponent: React.FC<VoteProps> = props => {
           className={`${style.action} ${style.mr1}`}>
           <SvgIcon classes={{root: style.fill}} component={ArrowCircleUpIcon} viewBox="0 0 24 24" />
         </IconButton>
-        <Typography variant="caption" component="span" className={style.mr1}>
+        <Typography variant="body1" component="span" className={style.mr1}>
           {formatNumber(vote)}
         </Typography>
         <IconButton

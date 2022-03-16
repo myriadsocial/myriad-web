@@ -248,6 +248,11 @@ const theme = createTheme({
   },
 
   overrides: {
+    MuiTypography: {
+      gutterBottom: {
+        marginBottom: 10,
+      },
+    },
     MuiListItem: {
       container: {
         width: '100%',
@@ -407,6 +412,12 @@ const theme = createTheme({
     MuiPaper: {
       elevation1: {
         boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
+      },
+    },
+
+    MuiCardHeader: {
+      root: {
+        padding: '20px 20px 10px',
       },
     },
   },
