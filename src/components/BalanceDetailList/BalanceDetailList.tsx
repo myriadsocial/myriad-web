@@ -18,7 +18,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from '.';
+import {useStyles, ShimerComponent} from '.';
 import {PrimaryCoinMenuContainer} from '../PrimaryCoinMenu/PrimaryCoinMenuContainer';
 import {balanceSortOptions} from '../Timeline/default';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
@@ -26,6 +26,8 @@ import {DropdownMenu} from '../atoms/DropdownMenu';
 import SearchComponent from '../atoms/Search/SearchBox';
 
 import _ from 'lodash';
+import {Empty} from 'src/components/atoms/Empty';
+import ShowIf from 'src/components/common/show-if.component';
 import {formatUsd} from 'src/helpers/balance';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
@@ -39,11 +41,16 @@ type BalanceDetailListProps = {
 
 export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   const {balanceDetails, isLoading} = props;
+  const [checked, setChecked] = React.useState(true);
 
   // Make sure balance is showing, does not return empty JSX
   useEffect(() => {
     setDefaultBalanceDetails(balanceDetails);
   }, [balanceDetails]);
+
+  useEffect(() => {
+    handleHideZeroBalances();
+  }, [checked]);
 
   const [isOnPrimaryCoinMenu, setIsOnPrimaryCoinMenu] = useState(false);
   const [defaultBalanceDetails, setDefaultBalanceDetails] = useState<BalanceDetail[]>([]);
@@ -62,12 +69,22 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
     return 0;
   };
 
-  const handleChange = () => {
-    // PUT CODE HERE
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
+
+  const handleHideZeroBalances = () => {
+    if (checked)
+      setDefaultBalanceDetails(balanceDetails.filter(balance => balance.freeBalance > 0));
+    else setDefaultBalanceDetails(balanceDetails);
   };
 
   const handleSearch = (query: string) => {
-    // PUT CODE HERE
+    const regex = new RegExp(`^${query.toLowerCase()}`, 'i');
+    const result = balanceDetails.filter(balance => balance.id.toLowerCase().match(regex));
+
+    if (!query) setDefaultBalanceDetails(balanceDetails);
+    else setDefaultBalanceDetails(result);
   };
 
   const handleOpenManageAssets = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -143,6 +160,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
             control={
               <Checkbox
                 defaultChecked
+                checked={checked}
                 color="primary"
                 onChange={handleChange}
                 inputProps={{'aria-label': 'controlled'}}
@@ -153,46 +171,59 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
           />
         </FormGroup>
       </div>
-      <TableContainer component={List}>
-        <Table className={classes.root} aria-label="Balance Detail Table">
-          <TableBody>
-            {isLoading && defaultBalanceDetails.length === 0 && (
-              <TableRow className={classes.loading}>
-                <CircularProgress />
-              </TableRow>
-            )}
-            {!isLoading &&
-              defaultBalanceDetails.length > 0 &&
-              defaultBalanceDetails.map(balanceDetail => (
-                <TableRow key={balanceDetail.id} className={classes.tableRow}>
-                  <TableCell component="th" scope="row" className={classes.tableCell}>
-                    <Avatar
-                      name={balanceDetail.id}
-                      src={balanceDetail.image}
-                      size={AvatarSize.MEDIUM}
-                    />
-                    <Typography variant="h5" color="textPrimary">
-                      {balanceDetail.id}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <div>
-                      <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                        {parseFloat(balanceDetail.freeBalance.toFixed(4))}
-                      </Typography>
-                      <Typography variant="caption" color="textSecondary">
-                        {`~${formatUsd(
-                          balanceDetail.freeBalance,
-                          getConversion(balanceDetail.id),
-                        )} USD`}
-                      </Typography>
-                    </div>
-                  </TableCell>
+      <ShowIf condition={isLoading}>
+        <ShimerComponent />
+      </ShowIf>
+      <ShowIf condition={!defaultBalanceDetails.length && !isLoading}>
+        <Empty
+          title="No results found"
+          subtitle="Please make sure your keywords match with current network you were in."
+        />
+      </ShowIf>
+
+      <ShowIf condition={!!defaultBalanceDetails.length && !isLoading}>
+        <TableContainer component={List}>
+          <Table className={classes.root} aria-label="Balance Detail Table">
+            <TableBody>
+              {isLoading && defaultBalanceDetails.length === 0 && (
+                <TableRow className={classes.loading}>
+                  <CircularProgress />
                 </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              )}
+              {!isLoading &&
+                defaultBalanceDetails.length > 0 &&
+                defaultBalanceDetails.map(balanceDetail => (
+                  <TableRow key={balanceDetail.id} className={classes.tableRow}>
+                    <TableCell component="th" scope="row" className={classes.tableCell}>
+                      <Avatar
+                        name={balanceDetail.id}
+                        src={balanceDetail.image}
+                        size={AvatarSize.MEDIUM}
+                      />
+                      <Typography variant="h5" color="textPrimary">
+                        {balanceDetail.id}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <div>
+                        <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                          {parseFloat(balanceDetail.freeBalance.toFixed(4))}
+                        </Typography>
+                        <Typography variant="caption" color="textSecondary">
+                          {`~${formatUsd(
+                            balanceDetail.freeBalance,
+                            getConversion(balanceDetail.id),
+                          )} USD`}
+                        </Typography>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </ShowIf>
+
       <Menu
         id="manage-assets"
         anchorEl={anchorEl}
