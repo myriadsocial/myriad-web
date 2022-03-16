@@ -18,7 +18,7 @@ type CommentListProps = Omit<CommentDetailProps, 'comment' | 'deep'> & {
   focus?: boolean;
   expand?: boolean;
   hasMoreComment: boolean;
-  onLoadMoreReplies: () => void;
+  onLoadMoreComments: () => void;
   onReportReplies?: (replies: Comment) => void;
   onSendTipReplies?: (replies: Comment) => void;
 };
@@ -32,7 +32,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
     deep = 0,
     hasMoreComment = false,
     onOpenTipHistory,
-    onLoadMoreReplies,
+    onLoadMoreComments,
     ...restProps
   } = props;
 
@@ -58,7 +58,9 @@ export const CommentList: React.FC<CommentListProps> = props => {
   }, [refs, query]);
 
   return (
-    <div>
+    <div className={styles.root} id={`comment-list-${deep}`}>
+      {deep > 0 && <div className={styles.horizontalTree} />}
+
       {comments.map(comment => {
         return comment.deleteByUser ? (
           <CommentDeleted
@@ -82,12 +84,12 @@ export const CommentList: React.FC<CommentListProps> = props => {
         );
       })}
 
-      {comments.length > 0 && deep > 0 && hasMoreComment && (
+      {comments.length > 0 && hasMoreComment && (
         <Typography
           color="primary"
           component="button"
           className={styles.more}
-          onClick={onLoadMoreReplies}>
+          onClick={onLoadMoreComments}>
           View more replies
         </Typography>
       )}

@@ -35,6 +35,7 @@ import {
   downvote,
   removeVote,
   setDownvoting,
+  resetDownvoting,
 } from 'src/reducers/timeline/actions';
 
 export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((props, ref) => {
@@ -52,7 +53,6 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     onReport,
     onSendTip,
     onSearchPeople,
-    onBeforeDownvote,
     onDelete,
     scrollToPost,
   } = props;
@@ -137,18 +137,18 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   const handleDownVote = () => {
     if (!user) return;
 
-    if (!comment.isDownVoted) {
-      dispatch(setDownvoting(comment));
+    if (comment.id === downvoting?.id) {
+      dispatch(resetDownvoting());
 
-      if (deep < 2) {
-        handleOpenReply();
-      }
-
-      if (deep >= 2) {
-        onBeforeDownvote && onBeforeDownvote();
-      }
+      handleOpenReply();
     } else {
-      onRemoveVote(comment);
+      if (!comment.isDownVoted) {
+        dispatch(setDownvoting(comment));
+
+        handleOpenReply();
+      } else {
+        onRemoveVote(comment);
+      }
     }
   };
 
@@ -217,7 +217,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
 
   return (
     <>
-      <div className={style.flex} ref={ref}>
+      <div className={style.flex} ref={ref} id={`comment-${comment.id}-deep-${deep}`}>
         <div className={style.tree}>
           <Avatar
             name={comment.user?.name}
@@ -225,8 +225,8 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
             size={AvatarSize.MEDIUM}
             onClick={handleViewProfile}
           />
-          {(deep === 0 || replies.length > 0) && <div className={style.verticalTree} />}
-          {deep > 0 && <div className={style.horizontalTree} />}
+          {(deep === 0 || deep > 2 || replies.length > 0) && <div className={style.verticalTree} />}
+          {deep > 0 && deep <= 2 && <div className={style.horizontalTree} />}
         </div>
         <div className={style.fullWidth}>
           <Card className={style.comment}>
@@ -353,90 +353,48 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
               </CardActions>
             </ShowIf>
           </Card>
-
-          {user && isReplying && deep < 2 && (
-            <CommentEditor
-              ref={editorRef}
-              referenceId={comment.id}
-              type={ReferenceType.COMMENT}
-              user={user}
-              mentionables={mentionables.map(item => ({
-                value: item.id,
-                name: item.name,
-                avatar: item.profilePictureURL,
-              }))}
-              onSearchMention={onSearchPeople}
-              onSubmit={handleSubmitComment}
-            />
-          )}
-
-          {comment && deep < 2 && (
-            <CommentList
-              section={section}
-              user={user}
-              deep={deep + 1}
-              comments={replies || []}
-              blockedUserIds={blockedUserIds}
-              onUpvote={handleRepliesUpvote}
-              onRemoveVote={handleRepliesRemoveVote}
-              onUpdateDownvote={updateReplyDownvote}
-              onOpenTipHistory={onOpenTipHistory}
-              onReport={onReport}
-              onReportReplies={handleReport}
-              onSendTip={onSendTip}
-              onSendTipReplies={handleSendTip}
-              mentionables={mentionables}
-              onSearchPeople={onSearchPeople}
-              onBeforeDownvote={handleOpenReply}
-              hasMoreComment={hasMoreReplies}
-              onLoadMoreReplies={loadMoreReplies}
-              onDelete={showConfirmDeleteDialog}
-              scrollToPost={scrollToPost}
-            />
-          )}
         </div>
       </div>
 
-      {user && isReplying && deep >= 2 && (
-        <CommentEditor
-          ref={editorRef}
-          referenceId={comment.id}
-          type={ReferenceType.COMMENT}
-          user={user}
-          mentionables={mentionables.map(item => ({
-            value: item.id,
-            name: item.name,
-            avatar: item.profilePictureURL,
-          }))}
-          onSearchMention={onSearchPeople}
-          onSubmit={handleSubmitComment}
-        />
-      )}
+      <div id={`replies-${deep}`} style={{marginLeft: deep < 2 ? 64 : 0}}>
+        {user && isReplying && (
+          <CommentEditor
+            ref={editorRef}
+            referenceId={comment.id}
+            type={ReferenceType.COMMENT}
+            user={user}
+            mentionables={mentionables.map(item => ({
+              value: item.id,
+              name: item.name,
+              avatar: item.profilePictureURL,
+            }))}
+            onSearchMention={onSearchPeople}
+            onSubmit={handleSubmitComment}
+          />
+        )}
 
-      {comment && deep >= 2 && (
         <CommentList
           section={section}
           user={user}
-          deep={deep + 1}
-          comments={replies || []}
           mentionables={mentionables}
           blockedUserIds={blockedUserIds}
+          deep={deep + 1}
+          comments={replies || []}
           hasMoreComment={hasMoreReplies}
+          onLoadMoreComments={loadMoreReplies}
           onUpvote={handleRepliesUpvote}
           onRemoveVote={handleRepliesRemoveVote}
           onUpdateDownvote={updateReplyDownvote}
-          onOpenTipHistory={onOpenTipHistory}
-          onReport={onReport}
           onReportReplies={handleReport}
-          onSendTip={onSendTip}
           onSendTipReplies={handleSendTip}
+          onOpenTipHistory={onOpenTipHistory}
+          onSendTip={onSendTip}
+          onReport={onReport}
           onSearchPeople={onSearchPeople}
-          onBeforeDownvote={handleOpenReply}
-          onLoadMoreReplies={loadMoreReplies}
           onDelete={showConfirmDeleteDialog}
           scrollToPost={scrollToPost}
         />
-      )}
+      </div>
     </>
   );
 });

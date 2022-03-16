@@ -218,30 +218,24 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
       <CommentList
         section={section}
         user={user}
-        comments={comments || []}
         mentionables={people}
         blockedUserIds={blockedUserIds}
         placeholder={placeholder}
         focus={focus}
         expand={expand}
+        comments={comments || []}
         hasMoreComment={hasMoreComment}
+        onLoadMoreComments={handleLoadMoreComment}
         onUpvote={handleUpvote}
         onRemoveVote={handleRemoveVote}
         onUpdateDownvote={updateDownvote}
         onReport={handleReport}
         onSendTip={handleSendTip}
         onOpenTipHistory={openTipHistory}
-        onLoadMoreReplies={console.log}
         onSearchPeople={handleSearchPeople}
         onDelete={showConfirmDeleteDialog}
         scrollToPost={scrollToPost}
       />
-
-      <ShowIf condition={hasMoreComment}>
-        <div style={{marginLeft: '69px', cursor: 'pointer'}} onClick={handleLoadMoreComment}>
-          <Typography color="primary">View more comments</Typography>
-        </div>
-      </ShowIf>
 
       <Modal
         gutter="none"

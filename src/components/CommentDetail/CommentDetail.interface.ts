@@ -16,7 +16,6 @@ export interface CommentDetailProps {
   onSendTip: (comment: Comment) => void;
   onReport: (comment: Comment) => void;
   onSearchPeople: (query: string) => void;
-  onBeforeDownvote?: () => void;
   onDelete: (comment: Comment) => void;
   scrollToPost: () => void;
 }
