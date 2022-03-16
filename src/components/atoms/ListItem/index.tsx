@@ -117,7 +117,7 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
             src={avatar}
             size={size}
             variant={variant}
-            deleted={isBanned}
+            banned={isBanned}
           />
         </ListItemAvatar>
       )}

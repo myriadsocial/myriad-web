@@ -12,4 +12,5 @@ export type AvatarProps = BaseAvatarProps & {
   size?: AvatarSize;
   name?: string;
   deleted?: boolean;
+  banned?: boolean;
 };
