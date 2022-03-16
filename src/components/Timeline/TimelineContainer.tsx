@@ -11,6 +11,7 @@ import {PostVisibilityContainer} from '../PostVisibility';
 import {TimelineFilterContainer} from '../TimelineFilter';
 import {Modal} from '../atoms/Modal';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
+import useConfirm from '../common/Confirm/use-confirm.hook';
 import {useStyles} from './Timeline.styles';
 import {useTimelineFilter} from './hooks/use-timeline-filter.hook';
 import {useTimelineHook} from './hooks/use-timeline.hook';
@@ -55,6 +56,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
   const style = useStyles();
   const dispatch = useDispatch();
+  const confirm = useConfirm();
 
   const {posts, hasMore, loading, nextPage, getTippedUserId} = useTimelineHook();
   const {filterTimeline} = useTimelineFilter(filters);
@@ -73,8 +75,6 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const [reported, setReported] = useState<Post | null>(null);
   const [importedPost, setImportedPost] = useState<Post | null>(null);
   const [visibility, setVisibility] = useState<Post | null>(null);
-  const [removing, setRemoving] = useState(false);
-  const [postToRemove, setPostToRemove] = useState<Post | null>(null);
   const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
   const sendTipOpened = Boolean(tippedPost) || Boolean(tippedComment);
 
@@ -168,8 +168,16 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   };
 
   const handleDeletePost = (post: Post) => {
-    setRemoving(true);
-    setPostToRemove(post);
+    confirm({
+      title: 'Remove Post',
+      description: 'Are you sure to remove this post?',
+      icon: 'danger',
+      confirmationText: 'Yes, proceed to delete',
+      cancellationText: 'No, let me rethink',
+      onConfirm: () => {
+        dispatch(deletePost(post.id));
+      },
+    });
   };
 
   const handleSharePost = (post: Post, type: 'link' | 'post') => {
@@ -181,21 +189,8 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     }
   };
 
-  const handleClosePrompt = (): void => {
-    setRemoving(false);
-    setPostToRemove(null);
-  };
-
   const handleCloseSuccessPrompt = (): void => {
     setOpenSuccessPrompt(false);
-  };
-
-  const confirmDeletePost = (): void => {
-    if (postToRemove) {
-      dispatch(deletePost(postToRemove.id));
-    }
-
-    handleClosePrompt();
   };
 
   const handleRemoveVote = (reference: Post | Comment) => {
@@ -289,31 +284,6 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
       <ReportContainer reference={reported} onClose={closeReportPost} />
       <PostImporterContainer post={importedPost} onClose={closeImportedPost} />
       <PostVisibilityContainer reference={visibility} onClose={closePostVisibility} />
-
-      <PromptComponent
-        title={'Remove Post'}
-        subtitle={`Are you sure to remove this post?`}
-        open={removing}
-        icon="danger"
-        onCancel={handleClosePrompt}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}>
-          <Button
-            style={{marginRight: '12px'}}
-            size="small"
-            variant="outlined"
-            color="secondary"
-            onClick={handleClosePrompt}>
-            No, let me rethink
-          </Button>
-          <Button size="small" variant="contained" color="primary" onClick={confirmDeletePost}>
-            Yes, proceed to delete
-          </Button>
-        </div>
-      </PromptComponent>
     </div>
   );
 };

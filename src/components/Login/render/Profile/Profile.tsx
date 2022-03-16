@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {useNavigate} from 'react-router';
 
 import {Button, Grid, TextField, Typography} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
-import {PromptComponent} from '../../../atoms/Prompt/prompt.component';
 import {useStyles} from './Profile.style';
 
+import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {toHexPublicKey} from 'src/lib/crypto';
 import i18n from 'src/locale';
@@ -29,13 +29,13 @@ const USERNAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Username', {
 });
 
 export const Profile: React.FC<ProfileProps> = props => {
-  const styles = useStyles();
-
   const {account, checkUsernameAvailability} = props;
 
-  const {signUpWithExternalAuth} = useAuthHook();
-
+  const styles = useStyles();
+  const confirm = useConfirm();
   const navigate = useNavigate();
+
+  const {signUpWithExternalAuth} = useAuthHook();
 
   const [profile, setProfile] = useState({
     name: {
@@ -49,11 +49,6 @@ export const Profile: React.FC<ProfileProps> = props => {
       helper: USERNAME_HELPER_TEXT,
     },
   });
-  const [confirmation, setConfirmation] = useState(false);
-
-  const toggleConfirmation = () => {
-    setConfirmation(!confirmation);
-  };
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value;
@@ -188,13 +183,13 @@ export const Profile: React.FC<ProfileProps> = props => {
     return validName && validUsername;
   };
 
-  const handleConfirmation = async () => {
+  const handleConfirmation = useCallback(() => {
     const valid = validate();
 
     if (valid && account) {
       checkUsernameAvailability(profile.username.value, available => {
         if (available) {
-          toggleConfirmation();
+          confirmRegisterProfile();
         } else {
           setProfile(prevProfile => ({
             ...prevProfile,
@@ -207,7 +202,7 @@ export const Profile: React.FC<ProfileProps> = props => {
         }
       });
     }
-  };
+  }, [account, profile]);
 
   const handleSubmit = async () => {
     if (account) {
@@ -223,6 +218,16 @@ export const Profile: React.FC<ProfileProps> = props => {
       }
     }
   };
+
+  const confirmRegisterProfile = useCallback(() => {
+    confirm({
+      title: i18n.t('Login.Profile.Prompt.Title'),
+      description: i18n.t('Login.Profile.Prompt.Subtitle'),
+      confirmationText: i18n.t('Login.Profile.Prompt.Btn_Yes'),
+      cancellationText: i18n.t('Login.Profile.Prompt.Btn_No'),
+      onConfirm: handleSubmit,
+    });
+  }, [handleSubmit]);
 
   return (
     <div className={styles.root}>
@@ -272,31 +277,6 @@ export const Profile: React.FC<ProfileProps> = props => {
           {i18n.t('Login.Profile.Btn_Register')}
         </Button>
       </Grid>
-
-      <PromptComponent
-        title={i18n.t('Login.Profile.Prompt.Title')}
-        subtitle={<Typography>{i18n.t('Login.Profile.Prompt.Subtitle')}.</Typography>}
-        open={confirmation}
-        icon="warning"
-        onCancel={toggleConfirmation}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}>
-          <Button
-            style={{marginRight: '12px'}}
-            size="small"
-            variant="outlined"
-            color="secondary"
-            onClick={toggleConfirmation}>
-            {i18n.t('Login.Profile.Prompt.Btn_No')}
-          </Button>
-          <Button size="small" variant="contained" color="primary" onClick={handleSubmit}>
-            {i18n.t('Login.Profile.Prompt.Btn_Yes')}
-          </Button>
-        </div>
-      </PromptComponent>
     </div>
   );
 };

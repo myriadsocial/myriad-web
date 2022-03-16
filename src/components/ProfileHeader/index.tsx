@@ -17,12 +17,12 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
 import {Metric} from '../Metric';
+import useConfirm from '../common/Confirm/use-confirm.hook';
 import {useFriendOptions} from './hooks/use-friend-options.hook';
 import {useStyles} from './profile-header.style';
 import {Website} from './render/Website';
 
 import {OfficialBadgeIcon} from 'src/components/atoms/Icons';
-import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {ReportComponent} from 'src/components/atoms/Report/Report.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
@@ -68,7 +68,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     onBlock,
   } = props;
   const style = useStyles();
-
+  const confirm = useConfirm();
   const {self, canAddFriend, isBlocked, isFriend, isRequested, isRequesting} = useFriendOptions(
     person,
     user,
@@ -80,11 +80,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorElFriend, setAnchorElFriend] = React.useState<null | HTMLElement>(null);
-  const [open, setOpen] = React.useState(false);
-  const [openPrompt, setOpenPrompt] = React.useState(false);
-  const [openRemoveFriend, setOpenRemoveFriend] = React.useState(false);
+  const [modalReportOpened, setModalReportOpened] = React.useState(false);
 
-  const handleClose = () => {
+  const handleCloseMenu = () => {
     setAnchorEl(null);
     setAnchorElFriend(null);
   };
@@ -106,34 +104,34 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   };
 
   const handleLinkCopied = () => {
-    handleClose();
+    handleCloseMenu();
     openToasterSnack({
       message: 'Profile link copied!',
       variant: 'success',
     });
   };
 
-  const handleOpenModal = () => {
-    setOpen(true);
-    handleClose();
+  const handleOpenReportModal = () => {
+    setModalReportOpened(true);
   };
 
-  const handleCloseModal = () => {
-    setOpen(false);
+  const handleCloseReportModal = () => {
+    setModalReportOpened(false);
   };
 
-  const handleOpenPrompt = () => {
-    setOpenPrompt(true);
-    handleClose();
-  };
+  const confirmBlockPerson = () => {
+    handleCloseMenu();
 
-  const handleClosePrompt = () => {
-    setOpenPrompt(false);
-  };
-
-  const handleBlockUser = () => {
-    onBlock();
-    setOpenPrompt(false);
+    confirm({
+      title: 'Block User?',
+      description:
+        "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+      icon: 'danger',
+      confirmationText: 'Block Now',
+      onConfirm: () => {
+        onBlock();
+      },
+    });
   };
 
   const handleSendRequest = () => {
@@ -145,18 +143,18 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   };
 
   const confirmRemoveFriend = () => {
-    setOpenRemoveFriend(true);
-    handleClose();
-  };
+    handleCloseMenu();
 
-  const closeConfirmRemoveFriend = () => {
-    setOpenRemoveFriend(false);
-  };
-
-  const handleRemoveFriend = () => {
-    onRemoveFriend();
-
-    closeConfirmRemoveFriend();
+    confirm({
+      title: `Unfriend ${person.name}?`,
+      description:
+        "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+      icon: 'danger',
+      confirmationText: 'Unfriend Now',
+      onConfirm: () => {
+        onRemoveFriend();
+      },
+    });
   };
 
   return (
@@ -218,17 +216,20 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
               transformOrigin={{vertical: 'top', horizontal: 'right'}}
               open={Boolean(anchorEl)}
-              onClose={handleClose}>
+              onClose={handleCloseMenu}>
               <CopyToClipboard text={linkUrl} onCopy={handleLinkCopied}>
                 <MenuItem>Copy link profile</MenuItem>
               </CopyToClipboard>
               <ShowIf condition={person.username !== 'myriad_official'}>
-                <MenuItem onClick={handleOpenModal} className={style.delete}>
+                <MenuItem onClick={handleOpenReportModal} className={style.delete}>
                   Report account
                 </MenuItem>
               </ShowIf>
               <ShowIf condition={!isBlocked}>
-                <MenuItem disabled={isBlocked} onClick={handleOpenPrompt} className={style.delete}>
+                <MenuItem
+                  disabled={isBlocked}
+                  onClick={confirmBlockPerson}
+                  className={style.delete}>
                   Block this person
                 </MenuItem>
               </ShowIf>
@@ -307,12 +308,12 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                   anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
                   transformOrigin={{vertical: 'top', horizontal: 'right'}}
                   open={Boolean(anchorElFriend)}
-                  onClose={handleClose}>
+                  onClose={handleCloseMenu}>
                   <ShowIf condition={isFriend}>
                     <MenuItem onClick={() => confirmRemoveFriend()}>Unfriend</MenuItem>
                   </ShowIf>
                   <ShowIf condition={isFriend}>
-                    <MenuItem onClick={handleOpenPrompt} className={style.delete}>
+                    <MenuItem onClick={confirmBlockPerson} className={style.delete}>
                       Block this person
                     </MenuItem>
                   </ShowIf>
@@ -348,61 +349,11 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         </Grid>
       </div>
 
-      <PromptComponent
-        onCancel={handleClosePrompt}
-        open={openPrompt}
-        icon="danger"
-        title="Block User?"
-        subtitle="You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?">
-        <div className={`${style['flex-center']}`}>
-          <Button
-            onClick={handleClosePrompt}
-            className={style.m1}
-            size="small"
-            variant="outlined"
-            color="secondary">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleBlockUser}
-            className={style.error}
-            size="small"
-            variant="contained">
-            Block Now
-          </Button>
-        </div>
-      </PromptComponent>
-
-      <PromptComponent
-        onCancel={closeConfirmRemoveFriend}
-        open={openRemoveFriend}
-        icon="danger"
-        title={`Unfriend ${person.name}?`}
-        subtitle="You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?">
-        <div className={`${style['flex-center']}`}>
-          <Button
-            onClick={closeConfirmRemoveFriend}
-            className={style.m1}
-            size="small"
-            variant="outlined"
-            color="secondary">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleRemoveFriend}
-            className={style.error}
-            size="small"
-            variant="contained">
-            Unfriend Now
-          </Button>
-        </div>
-      </PromptComponent>
-
       <ReportComponent
         onSubmit={onSubmitReport}
         user={person}
-        open={open}
-        onClose={handleCloseModal}
+        open={modalReportOpened}
+        onClose={handleCloseReportModal}
       />
     </div>
   );

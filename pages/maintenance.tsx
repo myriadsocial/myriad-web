@@ -13,8 +13,6 @@ import Illustration from 'src/images/illustration/undraw_Fall_is_coming_yl0x_1.s
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 
-const {publicRuntimeConfig} = getConfig();
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -63,6 +61,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Maintenance: React.FC = () => {
   const style = useStyles();
+  const {publicRuntimeConfig} = getConfig();
 
   const handleAction = () => {
     window.open('https://www.myriad.social/', '_ blank');

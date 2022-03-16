@@ -21,6 +21,7 @@ import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import SearchComponent from '../atoms/Search/SearchBox';
+import useConfirm from '../common/Confirm/use-confirm.hook';
 import {friendFilterOptions, FriendType, sortOptions} from './default';
 import {useStyles} from './friend.style';
 import {FriendDetail, useFriendList} from './hooks/use-friend-list.hook';
@@ -78,6 +79,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   const style = useStyles({...props, type, disableFilter});
   const router = useRouter();
   const dispatch = useDispatch();
+  const confirm = useConfirm();
 
   const {openToasterSnack} = useToasterSnackHook();
   const {friendList, removeFromFriendList} = useFriendList(friends, user);
@@ -91,8 +93,6 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   const [currentFriend, setCurrentFriend] = useState<null | FriendDetail>(null);
   const [tippedFriendForHistory, setTippedFriendForHistory] = useState<FriendDetail | null>(null);
   const [isSendTipOpened, setSendTipOpened] = useState(false);
-  const [isRemoveFriendDialogOpen, setRemoveFriendDialogOpen] = useState(false);
-  const [isConfirmBlockUserDialogOpen, setConfirmBlockUserDialogOpen] = useState(false);
   const [isTipSuccessDialogOpen, setTipSuccessDialogOpen] = useState(false);
 
   useEffect(() => {
@@ -109,14 +109,6 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
 
   const handleCloseFriendSetting = () => {
     setAnchorEl(null);
-  };
-
-  const closeConfirmBlockUserDialog = () => {
-    setConfirmBlockUserDialogOpen(false);
-  };
-
-  const closeConfirmRemoveFriendDialog = () => {
-    setRemoveFriendDialogOpen(false);
   };
 
   const closeTipSuccessDialog = (): void => {
@@ -159,23 +151,39 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   };
 
   const handleUnfriend = () => {
+    handleCloseFriendSetting();
+
     if (!currentFriend) {
       router.push('/404');
     } else {
-      setRemoveFriendDialogOpen(true);
+      confirm({
+        title: `Unfriend ${currentFriend ? currentFriend.name : 'User'}?`,
+        description:
+          "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+        icon: 'danger',
+        confirmationText: 'Unfriend Now',
+        onConfirm: () => {
+          handleRemoveFriend();
+        },
+      });
     }
-
-    handleCloseFriendSetting();
   };
 
   const handleBlock = () => {
     if (!currentFriend) {
       router.push('/404');
     } else {
-      setConfirmBlockUserDialogOpen(true);
+      confirm({
+        title: `Block ${currentFriend ? currentFriend.name : 'User'}?`,
+        description:
+          "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+        icon: 'danger',
+        confirmationText: 'Block Now',
+        onConfirm: () => {
+          handleBlockUser();
+        },
+      });
     }
-
-    handleCloseFriendSetting();
   };
 
   const handleFilterSelected = (selected: string) => {
@@ -193,9 +201,8 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       if (!removedFriend) return;
 
       dispatch(removeFromFriend(removedFriend));
-
       removeFromFriendList(currentFriend.id);
-      closeConfirmRemoveFriendDialog();
+
       openToasterSnack({
         message: `${currentFriend?.name} has been removed from your friend lists`,
         variant: 'success',
@@ -212,7 +219,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       dispatch(blockFromFriend(currentFriend.id));
 
       removeFromFriendList(currentFriend.id);
-      closeConfirmBlockUserDialog();
+
       openToasterSnack({
         message: 'User successfully blocked',
         variant: 'success',
@@ -349,54 +356,6 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
           </MenuItem>
         </ShowIf>
       </Menu>
-
-      <PromptComponent
-        onCancel={closeConfirmRemoveFriendDialog}
-        open={isRemoveFriendDialogOpen}
-        icon="danger"
-        title={`Unfriend ${currentFriend ? currentFriend.name : 'Unknown'}?`}
-        subtitle="You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?">
-        <Grid container justifyContent="space-evenly">
-          <Button
-            onClick={closeConfirmRemoveFriendDialog}
-            size="small"
-            variant="outlined"
-            color="secondary">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleRemoveFriend}
-            className={style.error}
-            size="small"
-            variant="contained">
-            Unfriend Now
-          </Button>
-        </Grid>
-      </PromptComponent>
-
-      <PromptComponent
-        onCancel={closeConfirmBlockUserDialog}
-        open={isConfirmBlockUserDialogOpen}
-        icon="danger"
-        title="Block User?"
-        subtitle="You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?">
-        <Grid justifyContent="space-evenly">
-          <Button
-            onClick={closeConfirmBlockUserDialog}
-            size="small"
-            variant="outlined"
-            color="secondary">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleBlockUser}
-            className={style.error}
-            size="small"
-            variant="contained">
-            Block Now
-          </Button>
-        </Grid>
-      </PromptComponent>
 
       <PromptComponent
         icon={'success'}

@@ -14,16 +14,16 @@ import {
   NoSsr,
 } from '@material-ui/core';
 
-import {capitalize} from '../../helpers/string';
-import {SocialMedia, SocialsEnum} from '../../interfaces/social';
-import {User} from '../../interfaces/user';
 import {AddSocialMedia} from '../AddSocialMedia';
 import {useSocialMediaList} from '../SocialMediaList/use-social-media-list.hook';
-import {PromptComponent} from '../atoms/Prompt/prompt.component';
+import useConfirm from '../common/Confirm/use-confirm.hook';
 import {useStyles} from './Socials.styles';
 
 import {PromptComponent as PromtMobile} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {ListItemSocialComponent} from 'src/components/atoms/ListItem/ListItemSocial';
+import {capitalize} from 'src/helpers/string';
+import {SocialMedia, SocialsEnum} from 'src/interfaces/social';
+import {User} from 'src/interfaces/user';
 
 type SocialsProps = {
   user?: User;
@@ -44,15 +44,14 @@ export const Socials: React.FC<SocialsProps> = props => {
     onVerifySocialMedia,
     onSetAsPrimary,
   } = props;
-  const styles = useStyles();
 
+  const styles = useStyles();
+  const confirm = useConfirm();
   const socialList = useSocialMediaList(socials);
 
   const [selectedSocial, setSelectedSocial] = useState<SocialsEnum>(SocialsEnum.TWITTER);
   const [people, setPeople] = useState<SocialMedia[]>([]);
   const [selectedPeople, setSelectedPeople] = useState<string | null>(null);
-  const [removing, setRemoving] = useState(false);
-  const [peopleToRemove, setPeopleToRemove] = useState<SocialMedia | null>(null);
   const [addSocial, setAddSocial] = useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = useState(false);
   const enabledSocial = [SocialsEnum.TWITTER, SocialsEnum.REDDIT];
@@ -97,11 +96,6 @@ export const Socials: React.FC<SocialsProps> = props => {
     onSetAsPrimary(account);
   };
 
-  const handleDisconnectSocial = (social: SocialMedia) => {
-    setRemoving(true);
-    setPeopleToRemove(social);
-  };
-
   const toggleAddSocialMedia = () => {
     if (!user) {
       setOpenPromptDrawer(true);
@@ -115,17 +109,17 @@ export const Socials: React.FC<SocialsProps> = props => {
     toggleAddSocialMedia();
   };
 
-  const handleClosePrompt = (): void => {
-    setRemoving(false);
-    setPeopleToRemove(null);
-  };
-
-  const confirmDisconnectSocial = (): void => {
-    if (peopleToRemove) {
-      onDisconnectSocial(peopleToRemove);
-    }
-
-    handleClosePrompt();
+  const confirmDisconnectSocial = (social: SocialMedia): void => {
+    confirm({
+      title: 'Disconnect social account',
+      description: `Are you sure to remove ${social.people?.name}?`,
+      icon: 'danger',
+      confirmationText: 'Yes, proceed to delete',
+      cancellationText: 'No, let me rethink',
+      onConfirm: () => {
+        onDisconnectSocial(social);
+      },
+    });
   };
 
   const handleCancel = () => {
@@ -177,7 +171,7 @@ export const Socials: React.FC<SocialsProps> = props => {
                   <IconButton
                     className={styles.remove}
                     aria-label="remove-social"
-                    onClick={() => handleDisconnectSocial(account)}>
+                    onClick={() => confirmDisconnectSocial(account)}>
                     <SvgIcon component={XCircleIcon} color="error" viewBox="0 0 20 20" />
                   </IconButton>
                 }
@@ -211,31 +205,6 @@ export const Socials: React.FC<SocialsProps> = props => {
             verify={verifySocialMedia}
           />
         </NoSsr>
-
-        <PromptComponent
-          title={'Disconnect social account'}
-          subtitle={`Are you sure to remove ${peopleToRemove?.people?.name}?`}
-          open={removing}
-          icon="danger"
-          onCancel={handleClosePrompt}>
-          <div className={`${styles['flex-center']}`}>
-            <Button
-              className={styles.m1}
-              size="small"
-              variant="outlined"
-              color="secondary"
-              onClick={handleClosePrompt}>
-              No, let me rethink
-            </Button>
-            <Button
-              size="small"
-              variant="contained"
-              color="primary"
-              onClick={confirmDisconnectSocial}>
-              Yes, proceed to delete
-            </Button>
-          </div>
-        </PromptComponent>
       </Box>
     </div>
   );
