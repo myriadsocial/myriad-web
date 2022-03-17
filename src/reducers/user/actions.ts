@@ -15,6 +15,7 @@ import {BaseErrorResponse} from 'src/lib/api/interfaces/error-response.interface
 import * as SocialAPI from 'src/lib/api/social';
 import * as TokenAPI from 'src/lib/api/token';
 import * as UserAPI from 'src/lib/api/user';
+import * as WalletAPI from 'src/lib/api/wallet';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -122,11 +123,11 @@ export const resetVerifyingSocial = (): ResetVerifyingSocial => ({
  * Action Creator
  */
 export const fetchUser: ThunkActionCreator<Actions, RootState> =
-  (userId: string) => async dispatch => {
+  (address: string) => async dispatch => {
     dispatch(setLoading(true));
 
     try {
-      const user: User = await UserAPI.getUserDetail(userId);
+      const user: User = await WalletAPI.geUserByWalletAddress(address);
 
       dispatch(setUser(user));
     } catch (error) {

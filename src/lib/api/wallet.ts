@@ -1,5 +1,7 @@
 import MyriadAPI from './base';
 
+import {ActivityLogType, BlockedProps, User} from 'src/interfaces/user';
+
 type UserNonceProps = {
   nonce: number;
 };
@@ -20,4 +22,40 @@ export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
   });
 
   return data ? data : {nonce: 0};
+};
+
+export const geUserByWalletAddress = async (address: string): Promise<User & BlockedProps> => {
+  const params: Record<string, any> = {
+    filter: {
+      include: [
+        {
+          relation: 'currencies',
+          scope: {
+            order: 'priority ASC',
+          },
+        },
+        {
+          relation: 'people',
+        },
+        {
+          relation: 'activityLogs',
+          scope: {
+            where: {
+              type: {
+                inq: [ActivityLogType.SKIP, ActivityLogType.USERNAME],
+              },
+            },
+          },
+        },
+      ],
+    },
+  };
+
+  const {data} = await MyriadAPI.request<User & BlockedProps>({
+    url: `wallets/${address}/user`,
+    method: 'GET',
+    params,
+  });
+
+  return data;
 };

@@ -8,7 +8,7 @@ import {Action} from 'redux';
 import {Comment} from 'src/interfaces/comment';
 import {FriendStatus} from 'src/interfaces/friend';
 import {ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
-import {Post, PostProps, PostVisibility} from 'src/interfaces/post';
+import {Post, PostMetric, PostProps, PostVisibility} from 'src/interfaces/post';
 import {TimelineFilter, TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
 import {UserProps} from 'src/interfaces/user';
 import {WalletDetail, ContentType} from 'src/interfaces/wallet';
@@ -115,6 +115,12 @@ export interface DecreaseCommentCount extends Action {
   section: SectionType;
 }
 
+export interface UpdatePostMetric extends Action {
+  type: constants.UPDATE_POST_METRIC;
+  postId: string;
+  metric: PostMetric;
+}
+
 export interface UpdatePostVisibility extends Action {
   type: constants.UPDATE_POST_VISIBILITY;
   postId: string;
@@ -152,6 +158,7 @@ export type Actions =
   | SetTippedContent
   | IncreaseCommentCount
   | DecreaseCommentCount
+  | UpdatePostMetric
   | ShowToasterSnack
   | UpdatePostVisibility
   | ResetDownvoting
@@ -213,6 +220,12 @@ export const decreaseCommentCount = (
   type: constants.DECREASE_COMMENT_COUNT,
   postId,
   section,
+});
+
+export const updatePostMetric = (postId: string, metric: PostMetric): UpdatePostMetric => ({
+  type: constants.UPDATE_POST_METRIC,
+  postId,
+  metric,
 });
 
 export const setTimelineSort = (order: TimelineOrderType, sort?: SortType): SetTimelineSort => ({

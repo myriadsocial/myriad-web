@@ -33,7 +33,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
   const style = useStyles();
 
   const {
-    metrics: {discussions = 0, debates = 0, upvotes = 0, downvotes = 0, shares = 0},
+    metrics: {discussions = 0, debates = 0, upvotes = 0, downvotes = 0},
     downvoted = false,
     upvoted = false,
     postUrl,
@@ -108,7 +108,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
               viewBox="0 0 24 24"
             />
             <Typography component="span" color="primary" variant="body1" className={style.wording}>
-              {formatNumber(shares)}&nbsp;Shares
+              Share
             </Typography>
           </IconButton>
         </div>

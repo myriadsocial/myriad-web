@@ -7,7 +7,7 @@ import {User} from 'src/interfaces/user';
 import * as CommentAPI from 'src/lib/api/comment';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {RootState} from 'src/reducers';
-import {increaseCommentCount, decreaseCommentCount} from 'src/reducers/timeline/actions';
+import {increaseCommentCount, updatePostMetric} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 type useCommentHookProps = {
@@ -190,7 +190,7 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
   };
 
   const removeReply = async (comment: Comment) => {
-    await CommentAPI.remove(comment.id);
+    const deletedComment = await CommentAPI.remove(comment.id);
 
     setReplies(prevReplies =>
       prevReplies.map(item => {
@@ -202,7 +202,9 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
       }),
     );
 
-    dispatch(decreaseCommentCount(comment.postId, comment.section));
+    if (deletedComment.post) {
+      dispatch(updatePostMetric(deletedComment.postId, deletedComment.post.metric));
+    }
   };
 
   return {
