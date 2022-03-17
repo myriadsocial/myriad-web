@@ -31,6 +31,6 @@ export const NearNetworkIcon24: React.FC<SvgIconProps> = props => {
   );
 };
 
-export const NewPolkadotNetworkIcon24: React.FC<SvgIconProps> = props => (
+export const PolkadotNetworkIcon: React.FC<SvgIconProps> = props => (
   <SvgIcon component={Polkadot24} viewBox="0 0 24 24" {...props} />
 );

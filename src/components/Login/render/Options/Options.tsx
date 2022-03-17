@@ -18,7 +18,7 @@ import {useStyles} from './Options.style';
 
 import {
   EthereumNetworkIcon,
-  NewPolkadotNetworkIcon24,
+  PolkadotNetworkIcon,
   NearNetworkIcon,
   PolygonNetworkDisabledIcon,
   PolkadotWalletIcon,
@@ -173,7 +173,7 @@ export const Options: React.FC<OptionProps> = props => {
             selected={network === NetworkTypeEnum.POLKADOT}
             onClick={setSelectedNetwork(NetworkTypeEnum.POLKADOT)}>
             <div className={styles.card}>
-              <NewPolkadotNetworkIcon24 className={styles.icon} />
+              <PolkadotNetworkIcon className={styles.icon} />
               <Typography>Polkadot</Typography>
             </div>
           </ListItem>
