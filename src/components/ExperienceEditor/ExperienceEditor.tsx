@@ -37,7 +37,7 @@ type ExperienceEditorProps = {
   people: People[];
   onSearchTags: (query: string) => void;
   onSearchPeople: (query: string) => void;
-  onSave: (experience: Partial<Experience>, tags: string[]) => void;
+  onSave: (experience: Partial<Experience>, allowedTags: string[], prohibitedTags: string[]) => void;
   onImageUpload: (files: File[]) => Promise<string>;
 };
 
@@ -67,7 +67,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       },
     ],
   });
-  const [newTags, setTags] = useState<string[]>([]);
+  const [newAllowedTags, setNewAllowedTags] = useState<string[]>([]);
+  const [newProhibitedTags, setNewProhibitedTags] = useState<string[]>([]);
   const [image, setImage] = useState<string>();
   const [disable, setDisable] = useState<boolean>(true);
   const [isLoading, setIsloading] = useState<boolean>(false);
@@ -76,10 +77,16 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     if (experience) {
       setNewExperience(experience);
 
-      if (experience.tags) {
-        const formatTag = experience.tags as unknown;
-        const tagExperience = formatTag as string[];
-        setTags(tagExperience);
+      if (experience?.allowedTags) {
+        const formatAllowedTags = experience?.allowedTags as unknown;
+        const allowedTagsExperience = formatAllowedTags as string[];
+        setNewAllowedTags(allowedTagsExperience);
+      }
+
+      if(experience?.prohibitedTags){
+        const formatProhibitedTags = experience?.prohibitedTags as unknown;
+        const prohibitedTagsExperience = formatProhibitedTags as string[];
+        setNewProhibitedTags(prohibitedTagsExperience);
       }
 
       if (experience.experienceImageURL) {
@@ -92,19 +99,19 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     const name = newExperience?.name;
     const experienceImageURL = newExperience?.experienceImageURL;
     const people = newExperience?.people && newExperience?.people?.length > 1;
-    const tags = newTags.length;
+    const tags = newAllowedTags.length;
 
     setDisable(!name || !experienceImageURL || !people || !tags);
-  }, [newExperience, newTags]);
+  }, [newExperience, newAllowedTags]);
 
   useEffect(() => {
     if (type?.toLowerCase() == 'clone') {
       const people = JSON.stringify(newExperience?.people) == JSON.stringify(experience?.people);
-      const tags = JSON.stringify(newTags) == JSON.stringify(experience?.tags);
+      const tags = JSON.stringify(newAllowedTags) == JSON.stringify(experience?.allowedTags);
 
       setDisable(people && tags);
     }
-  }, [newExperience, newTags]);
+  }, [newExperience, newAllowedTags]);
 
   const handleSearchTags = (event: React.ChangeEvent<HTMLInputElement>) => {
     const debounceSubmit = debounce(() => {
@@ -150,16 +157,23 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     }));
   };
 
-  const handleTagsInputChange = (event: React.ChangeEvent<{}>, newValue: string) => {
+  const handleTagsInputChange = (event: React.ChangeEvent<{}>, newValue: string, type: 'allowed' | 'prohibited') => {
     const options = newValue.split(/[ ,]+/);
 
-    const fieldValue = newTags
+    let tmpTags: string[] = [];
+    if(type === 'allowed'){
+      tmpTags = [...newAllowedTags];
+    } else if(type === 'prohibited'){
+      tmpTags = [...newProhibitedTags];
+    }
+
+    const fieldValue = tmpTags
       .concat(options)
       .map(x => x.trim())
       .filter(x => x);
 
     if (options.length > 1) {
-      handleTagsChange(event, fieldValue, 'create-option');
+      handleTagsChange(event, fieldValue, 'create-option', type);
     }
   };
 
@@ -172,6 +186,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     event: React.ChangeEvent<{}>,
     value: string[],
     reason: AutocompleteChangeReason,
+    type: 'allowed' | 'prohibited'
   ) => {
     const data = [...value];
     if (checkDuplicateData(data.map(item => item.replace('#', '')))) {
@@ -179,15 +194,27 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     }
 
     if (reason === 'remove-option') {
-      setTags(data);
+      if(type === 'allowed'){
+        setNewAllowedTags(data);
+      } else if(type === 'prohibited'){
+        setNewProhibitedTags(data);
+      }
     }
 
     if (reason === 'create-option') {
-      setTags(data.map(item => item.replace('#', '')));
+      if(type === 'allowed'){
+        setNewAllowedTags(data.map(item => item.replace('#', '')));
+      } else if(type === 'prohibited'){
+        setNewProhibitedTags(data.map(item => item.replace('#', '')));
+      }
     }
 
     if (reason === 'select-option') {
-      setTags(data);
+      if(type === 'allowed'){
+        setNewAllowedTags(data);
+      } else if(type === 'prohibited'){
+        setNewProhibitedTags(data);
+      }
     }
   };
 
@@ -218,7 +245,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
   const saveExperience = () => {
     if (newExperience) {
-      onSave(newExperience, newTags);
+      onSave(newExperience, newAllowedTags, newProhibitedTags);
     }
   };
 
@@ -276,21 +303,54 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       </FormControl>
 
       <Autocomplete
-        id="experience-tags"
+        id="experience-tags-include"
         freeSolo
         multiple
-        value={newTags || ''}
+        value={newAllowedTags || ''}
         options={tags.map(tag => tag.id)}
         disableClearable
-        onChange={handleTagsChange}
-        onInputChange={handleTagsInputChange}
+        onChange={(event, value, reason) => {
+          handleTagsChange(event, value, reason, 'allowed');
+        }}
+        onInputChange={(event, value) => {
+          handleTagsInputChange(event, value, 'allowed');
+        }}
         getOptionLabel={option => `#${option}`}
         renderInput={params => (
           <TextField
             {...params}
-            label="Tags"
+            label="Included tags"
             variant="outlined"
-            placeholder={newTags.length === 0 ? 'topic you want to follow' : undefined}
+            placeholder={newAllowedTags.length === 0 ? 'topic you want to follow' : undefined}
+            onChange={handleSearchTags}
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
+            }}
+          />
+        )}
+      />
+
+      <Autocomplete
+        id="experience-tags-exclude"
+        freeSolo
+        multiple
+        value={newProhibitedTags || ''}
+        options={tags.map(tag => tag.id)}
+        disableClearable
+        onChange={(event, value, reason) => {
+          handleTagsChange(event, value, reason, 'prohibited');
+        }}
+        onInputChange={(event, value) => {
+          handleTagsInputChange(event, value, 'prohibited');
+        }}
+        getOptionLabel={option => `#${option}`}
+        renderInput={params => (
+          <TextField
+            {...params}
+            label="Excluded tags"
+            variant="outlined"
+            placeholder={newProhibitedTags.length === 0 ? 'topic you want to exclude' : undefined}
             onChange={handleSearchTags}
             InputProps={{
               ...params.InputProps,
