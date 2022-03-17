@@ -4,7 +4,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       position: 'relative',
-      maxHeight: 400,
+      maxHeight: 'fit-content',
       width: 508,
       background: '#FFFFFF',
       borderRadius: 10,

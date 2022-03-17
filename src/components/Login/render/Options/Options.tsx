@@ -28,12 +28,16 @@ import {
 } from 'src/components/atoms/Icons';
 import {PromptComponent as Prompt} from 'src/components/atoms/Prompt/prompt.component';
 import {PolkadotLink} from 'src/components/common/PolkadotLink.component';
+import ShowIf from 'src/components/common/show-if.component';
+import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import i18n from 'src/locale';
 
 type OptionProps = {
   network?: string;
-  onConnect: (accounts: InjectedAccountWithMeta[]) => void;
+  onConnect?: (accounts: InjectedAccountWithMeta[]) => void;
+  onConnectNear?: (nearId: string, callback: () => void) => void;
 };
 
 enum NetworkTypeEnum {
@@ -44,20 +48,15 @@ enum NetworkTypeEnum {
   NEAR = 'near',
 }
 
-enum WalletTypeEnum {
-  POLKADOT = 'polkadot',
-  TRUST = 'trust',
-  METAMASK = 'metamask',
-  COINBASE = 'coinbase',
-}
-
 export const Options: React.FC<OptionProps> = props => {
   const styles = useStyles();
 
-  const {onConnect} = props;
+  const {onConnect, onConnectNear} = props;
 
   const navigate = useNavigate();
   const {enablePolkadotExtension, getPolkadotAccounts} = usePolkadotExtension();
+
+  const {connectToNear} = useNearApi();
 
   const [network, setNetwork] = useState<NetworkTypeEnum | null>(null);
   const [wallet, setWallet] = useState<WalletTypeEnum | null>(null);
@@ -72,6 +71,8 @@ export const Options: React.FC<OptionProps> = props => {
 
     if (value === NetworkTypeEnum.POLKADOT) {
       setSelectedWallet(WalletTypeEnum.POLKADOT)();
+    } else if (value === NetworkTypeEnum.NEAR) {
+      setSelectedWallet(WalletTypeEnum.NEAR)();
     } else {
       setWallet(null);
     }
@@ -82,6 +83,12 @@ export const Options: React.FC<OptionProps> = props => {
       case WalletTypeEnum.POLKADOT:
         setWallet(value);
         checkPolkdostExtensionInstalled();
+        break;
+
+      case WalletTypeEnum.NEAR:
+        setWallet(value);
+        setExtensionChecked(true);
+        setExtensionEnabled(true);
         break;
 
       default:
@@ -107,6 +114,12 @@ export const Options: React.FC<OptionProps> = props => {
   const handleConnect = async () => {
     const accounts: InjectedAccountWithMeta[] = [];
 
+    let tempNonce = 0;
+
+    let tempId = '';
+
+    let tempNearWallet = '';
+
     switch (wallet) {
       case WalletTypeEnum.POLKADOT:
         // eslint-disable-next-line no-case-declarations
@@ -114,6 +127,16 @@ export const Options: React.FC<OptionProps> = props => {
 
         accounts.push(...polkadotAccounts);
         break;
+
+      case WalletTypeEnum.NEAR: {
+        const {nonce, publicAddress} = await connectToNear();
+        tempId = publicAddress;
+
+        if (publicAddress.includes('/')) tempNearWallet = publicAddress.split('/')[1];
+
+        tempNonce = nonce;
+        break;
+      }
 
       default:
         break;
@@ -123,9 +146,16 @@ export const Options: React.FC<OptionProps> = props => {
 
     if (accounts.length > 0) {
       setAccounts(accounts);
-      onConnect(accounts);
+      onConnect && onConnect(accounts);
 
       navigate('/account');
+    } else if (!tempNonce) {
+      if (tempId.length > 0) {
+        onConnectNear &&
+          onConnectNear(tempNearWallet, () => {
+            navigate('/profile');
+          });
+      }
     } else {
       setWallet(null);
     }
@@ -147,6 +177,15 @@ export const Options: React.FC<OptionProps> = props => {
               <Typography>Polkadot</Typography>
             </div>
           </ListItem>
+          <ListItem
+            disableGutters
+            selected={network === NetworkTypeEnum.NEAR}
+            onClick={setSelectedNetwork(NetworkTypeEnum.NEAR)}>
+            <div className={styles.card}>
+              <NearNetworkIcon className={styles.icon} />
+              <Typography>Near</Typography>
+            </div>
+          </ListItem>
           <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
             <ListItem
               disableGutters
@@ -158,12 +197,6 @@ export const Options: React.FC<OptionProps> = props => {
               </div>
             </ListItem>
           </Tooltip>
-          <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.NEAR)}>
-            <div className={styles.card}>
-              <NearNetworkIcon className={styles.icon} />
-              <Typography>Near</Typography>
-            </div>
-          </ListItem>
           <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
             <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.POLYGON)}>
               <div className={styles.card}>
@@ -181,16 +214,30 @@ export const Options: React.FC<OptionProps> = props => {
         </div>
 
         <List disablePadding classes={{root: styles.list}}>
-          <ListItem
-            disableGutters
-            disabled={network === null}
-            selected={wallet === WalletTypeEnum.POLKADOT}
-            onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}>
-            <div className={styles.card}>
-              <PolkadotWalletIcon className={styles.icon} />
-              <Typography>Polkadot.js</Typography>
-            </div>
-          </ListItem>
+          <ShowIf condition={network === NetworkTypeEnum.POLKADOT}>
+            <ListItem
+              disableGutters
+              disabled={network === null}
+              selected={wallet === WalletTypeEnum.POLKADOT}
+              onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}>
+              <div className={styles.card}>
+                <PolkadotWalletIcon className={styles.icon} />
+                <Typography>Polkadot.js</Typography>
+              </div>
+            </ListItem>
+          </ShowIf>
+
+          <ShowIf condition={network === NetworkTypeEnum.NEAR}>
+            <ListItem
+              disableGutters
+              selected={wallet === WalletTypeEnum.NEAR}
+              onClick={setSelectedWallet(WalletTypeEnum.NEAR)}>
+              <div className={styles.card}>
+                <NearNetworkIcon className={styles.icon} />
+                <Typography>NEAR</Typography>
+              </div>
+            </ListItem>
+          </ShowIf>
 
           <ListItem
             style={{visibility: 'hidden'}}
@@ -280,7 +327,13 @@ export const Options: React.FC<OptionProps> = props => {
       <Prompt
         title={i18n.t('Login.Options.Prompt_Account.Title')}
         icon="warning"
-        open={connectAttempted && extensionChecked && extensionEnabled && accounts.length === 0}
+        open={
+          connectAttempted &&
+          extensionChecked &&
+          extensionEnabled &&
+          accounts.length === 0 &&
+          network === NetworkTypeEnum.POLKADOT
+        }
         onCancel={closeExtensionDisableModal}
         subtitle={<Typography>{i18n.t('Login.Options.Prompt_Account.Subtitle')}</Typography>}>
         <Button

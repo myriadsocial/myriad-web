@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {MemoryRouter as Router, Routes, Route} from 'react-router-dom';
 
 import {CircularProgress} from '@material-ui/core';
@@ -13,21 +13,55 @@ import {Options} from './render/Options';
 import {Profile} from './render/Profile';
 
 import {useAuthHook} from 'src/hooks/auth.hook';
+import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
+import {useQueryParams} from 'src/hooks/use-query-params.hooks';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 
 export const Login: React.FC = () => {
   const styles = useStyles();
 
-  const {anonymous, fetchUserNonce, signInWithExternalAuth} = useAuthHook();
+  const {anonymous, fetchUserNonce, fetchNearUserNonce, signInWithExternalAuth} = useAuthHook();
   const {checkUsernameAvailable} = useProfileHook();
 
+  const {connectToNear} = useNearApi();
+
+  const {query} = useQueryParams();
+
+  const isRedirectedFromNear = query.auth === 'near' ? true : false;
+
+  const [walletType, setWalletType] = useState<WalletTypeEnum | null>(null);
+
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
+  const [nearWallet, setNearWallet] = useState('');
   const [selectedAccount, setSelectedAccount] = useState<InjectedAccountWithMeta | null>(null);
   const [signatureCancelled, setSignatureCancelled] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const getNearWallet = async () => {
+    const {publicAddress} = await connectToNear();
+
+    setNearWallet(publicAddress);
+  };
+
+  useEffect(() => {
+    if (query.auth === 'near') {
+      setWalletType(WalletTypeEnum.NEAR);
+
+      getNearWallet();
+    }
+  }, [query]);
+
   const handleOnconnect = (accounts: InjectedAccountWithMeta[]) => {
     setAccounts(accounts);
+    setWalletType(WalletTypeEnum.POLKADOT);
+  };
+
+  const handleOnConnectNear = (nearId: string, callback: () => void) => {
+    setNearWallet(nearId);
+    setWalletType(WalletTypeEnum.NEAR);
+
+    checkAccountRegistered(callback, undefined, nearId);
   };
 
   const handleSelectedAccount = (account: InjectedAccountWithMeta) => {
@@ -41,41 +75,74 @@ export const Login: React.FC = () => {
   };
 
   const checkAccountRegistered = useCallback(
-    async (callback: () => void, account?: InjectedAccountWithMeta) => {
-      const currentAccount = account ?? selectedAccount;
+    async (callback: () => void, account?: InjectedAccountWithMeta, nearId?: string) => {
+      switch (walletType) {
+        case WalletTypeEnum.POLKADOT:
+          {
+            const currentAccount = account ?? selectedAccount;
 
-      if (currentAccount) {
-        setLoading(true);
-        setSignatureCancelled(false);
+            if (currentAccount) {
+              setLoading(true);
+              setSignatureCancelled(false);
 
-        const {nonce} = await fetchUserNonce(currentAccount);
+              const {nonce} = await fetchUserNonce(currentAccount);
 
-        if (nonce > 0) {
-          const success = await signInWithExternalAuth(currentAccount, nonce);
+              if (nonce > 0) {
+                const success = await signInWithExternalAuth(nonce, currentAccount);
 
-          if (!success) {
-            setSignatureCancelled(true);
-            setLoading(false);
+                if (!success) {
+                  setSignatureCancelled(true);
+                  setLoading(false);
+                }
+              } else {
+                // register
+                setLoading(false);
+                callback();
+              }
+            }
           }
-        } else {
-          // register
-          setLoading(false);
-          callback();
+          break;
+
+        case WalletTypeEnum.NEAR: {
+          if (nearId) {
+            const {nonce} = await fetchNearUserNonce(nearId);
+            if (nonce > 0) {
+              const success = await signInWithExternalAuth(nonce, undefined, nearId);
+
+              if (!success) {
+                setSignatureCancelled(true);
+                setLoading(false);
+              }
+            } else {
+              // register
+              setLoading(false);
+              callback();
+            }
+          }
+          break;
         }
+
+        default:
+          break;
       }
     },
-    [selectedAccount],
+    [selectedAccount, walletType],
   );
 
   return (
     <div className={styles.root}>
-      <Router>
+      <Router
+        initialEntries={['/', '/wallet', '/account', '/profile']}
+        initialIndex={isRedirectedFromNear ? 3 : 0}>
         <Routes>
           <Route
             path="/"
             element={<LoginComponent anonymousLogin={anonymous} switchAccount={switchAccount} />}
           />
-          <Route path="/wallet" element={<Options onConnect={handleOnconnect} />} />
+          <Route
+            path="/wallet"
+            element={<Options onConnect={handleOnconnect} onConnectNear={handleOnConnectNear} />}
+          />
           <Route
             path="/account"
             element={
@@ -91,6 +158,8 @@ export const Login: React.FC = () => {
             path="/profile"
             element={
               <Profile
+                walletType={walletType}
+                publicAddress={nearWallet}
                 account={selectedAccount}
                 checkUsernameAvailability={checkUsernameAvailable}
               />

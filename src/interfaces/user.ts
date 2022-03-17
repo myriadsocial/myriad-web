@@ -33,6 +33,7 @@ export type UserProps = BaseUser & {
   websiteURL?: string;
   username?: string;
   verified?: boolean;
+  publicAddress?: string;
   deletedAt?: string;
 };
 

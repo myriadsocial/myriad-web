@@ -4,6 +4,7 @@ import getConfig from 'next/config';
 
 import APIAdapter from '../../../adapters/api';
 
+import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import * as AuthAPI from 'src/lib/api/ext-auth';
 import {encryptMessage} from 'src/lib/crypto';
 
@@ -31,8 +32,10 @@ export default NextAuth({
 
           const data = await AuthAPI.login({
             nonce: Number(credentials.nonce),
+            publicAddress: credentials.publicAddress,
             signature: credentials.signature,
-            publicAddress: credentials.address,
+            walletType: credentials.walletType as WalletTypeEnum,
+            networkType: credentials.networkType as NetworkTypeEnum,
           });
 
           if (!data?.accessToken) throw Error('authorization problem!');

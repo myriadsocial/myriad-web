@@ -43,6 +43,10 @@ const moduleExports = {
     firebaseAppId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     firebaseMeasurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
     facebookAppId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
+    nearNetworkId: process.env.NEAR_NETWORK_ID ?? 'testnet',
+    nearNodeUrl: process.env.NEAR_NODE_URL ?? 'https://rpc.testnet.near.org',
+    nearWalletUrl: process.env.NEAR_WALLET_URL ?? 'https://wallet.testnet.near.org',
+    nearHelperUrl: process.env.NEAR_HELPER_URL ?? 'https://helper.testnet.near.org',
   },
   sentry: {
     disableServerWebpackPlugin: true,

@@ -6,9 +6,12 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {User} from 'src/interfaces/user';
 import * as AuthAPI from 'src/lib/api/ext-auth';
+import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import * as UserAPI from 'src/lib/api/user';
+import * as WalletAPI from 'src/lib/api/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
+import {createNearSignature} from 'src/lib/services/near-api-js';
 import {signWithExtension} from 'src/lib/services/polkadot-js';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
@@ -34,9 +37,20 @@ export const useAuthHook = () => {
     }
   };
 
+  const fetchNearUserNonce = async (nearId: string): Promise<UserNonceProps> => {
+    try {
+      const data = await WalletAPI.getUserNonce(nearId);
+
+      return data;
+    } catch (error) {
+      console.log('[useAuthHook][getUserNonce][error]', {error});
+      return {nonce: 0};
+    }
+  };
+
   const fetchUserNonce = async (account: InjectedAccountWithMeta): Promise<UserNonceProps> => {
     try {
-      const data = await UserAPI.getUserNonce(toHexPublicKey(account));
+      const data = await WalletAPI.getUserNonce(toHexPublicKey(account));
 
       return data;
     } catch (error) {
@@ -70,38 +84,105 @@ export const useAuthHook = () => {
     return accounts;
   };
 
-  const signInWithExternalAuth = async (account: InjectedAccountWithMeta, nonce: number) => {
-    const signature = await createSignaturePolkadotExt(account, nonce);
+  const signInWithExternalAuth = async (
+    nonce: number,
+    account?: InjectedAccountWithMeta,
+    nearAddress?: string,
+  ) => {
+    if (account) {
+      const signature = await createSignaturePolkadotExt(account, nonce);
 
-    if (!signature) return null;
+      if (!signature) return null;
 
-    signIn('credentials', {
-      name: account.meta.name,
-      address: toHexPublicKey(account),
-      anonymous: false,
-      callbackUrl: publicRuntimeConfig.appAuthURL,
-      signature,
-      nonce,
-    });
+      signIn('credentials', {
+        name: account.meta.name,
+        address: toHexPublicKey(account),
+        publicAddress: toHexPublicKey(account),
+        signature,
+        walletType: WalletTypeEnum.POLKADOT,
+        networkType: NetworkTypeEnum.POLKADOT,
+        nonce,
+        anonymous: false,
+        callbackUrl: publicRuntimeConfig.appAuthURL,
+      });
 
-    return true;
+      return true;
+    }
+
+    if (nearAddress && nearAddress.length > 0) {
+      const data = await createNearSignature(nearAddress, nonce);
+
+      if (data && !data.signature) return null;
+
+      if (data) {
+        const parsedNearAddress = nearAddress.split('/')[1];
+        signIn('credentials', {
+          address: parsedNearAddress,
+          publicAddress: data.publicAddress,
+          signature: data.signature,
+          walletType: WalletTypeEnum.NEAR,
+          networkType: NetworkTypeEnum.NEAR,
+          nonce,
+          anonymous: false,
+          callbackUrl: publicRuntimeConfig.appAuthURL,
+        });
+
+        return true;
+      }
+    }
+
+    return null;
   };
 
   const signUpWithExternalAuth = async (
     id: string,
     name: string,
     username: string,
-    account: InjectedAccountWithMeta,
+    walletType: WalletTypeEnum,
+    account?: InjectedAccountWithMeta,
   ): Promise<true | null> => {
     let nonce = null;
-    const data = await AuthAPI.signUp({id, name, username});
 
-    if (data) nonce = data.nonce;
+    switch (walletType) {
+      case WalletTypeEnum.POLKADOT: {
+        const data = await AuthAPI.signUp({
+          address: id,
+          name,
+          username,
+          type: WalletTypeEnum.POLKADOT,
+          network: NetworkTypeEnum.POLKADOT,
+        });
 
-    if (nonce && nonce > 0) {
-      return signInWithExternalAuth(account, nonce);
-    } else {
-      return null;
+        if (data) nonce = data.nonce;
+
+        if (nonce && nonce > 0 && account) {
+          return signInWithExternalAuth(nonce, account);
+        } else {
+          return null;
+        }
+      }
+
+      case WalletTypeEnum.NEAR: {
+        const nearAddress = id.includes('/') ? id.split('/')[1] : id;
+        const data = await AuthAPI.signUp({
+          address: nearAddress,
+          name,
+          username,
+          type: WalletTypeEnum.NEAR,
+          network: NetworkTypeEnum.NEAR,
+        });
+
+        if (data) nonce = data.nonce;
+
+        if (nonce && nonce > 0 && id) {
+          return signInWithExternalAuth(nonce, undefined, id);
+        } else {
+          return null;
+        }
+      }
+
+      default:
+        return null;
     }
   };
 
@@ -121,10 +202,10 @@ export const useAuthHook = () => {
 
   const switchAccount = async (account: InjectedAccountWithMeta) => {
     const address = toHexPublicKey(account);
-    const {nonce} = await UserAPI.getUserNonce(address);
+    const {nonce} = await WalletAPI.getUserNonce(address);
 
     if (nonce > 0) {
-      await signInWithExternalAuth(account, nonce);
+      await signInWithExternalAuth(nonce, account);
     } else {
       await firebaseCloudMessaging.removeToken();
       await signOut({
@@ -148,6 +229,7 @@ export const useAuthHook = () => {
     getUserByAccounts,
     getRegisteredAccounts,
     fetchUserNonce,
+    fetchNearUserNonce,
     signInWithExternalAuth,
     signUpWithExternalAuth,
     switchAccount,

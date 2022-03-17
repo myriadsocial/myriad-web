@@ -1,15 +1,35 @@
 import MyriadAPI from './base';
 
+export enum WalletTypeEnum {
+  POLKADOT = 'polkadot',
+  TRUST = 'trust',
+  METAMASK = 'metamask',
+  COINBASE = 'coinbase',
+  NEAR = 'near',
+}
+
+export enum NetworkTypeEnum {
+  ETHEREUM = 'ethereum',
+  POLKADOT = 'polkadot',
+  BINANCE = 'binance',
+  POLYGON = 'polygon',
+  NEAR = 'near',
+}
+
 type LoginProps = {
   nonce: number;
-  signature: string;
   publicAddress: string;
+  signature: string;
+  walletType: WalletTypeEnum;
+  networkType: NetworkTypeEnum;
 };
 
 type SignUpProps = {
-  id: string;
   name: string;
   username: string;
+  address: string;
+  type: WalletTypeEnum;
+  network: NetworkTypeEnum;
 };
 
 type SignUpResponseProps = {
