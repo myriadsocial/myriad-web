@@ -86,6 +86,10 @@ jobs:
             WEB_FIREBASE_MEASUREMENT_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             WEB_FACEBOOK_APP_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
+            NEAR_NETWORK_ID:${{ secrets.DEV_GCP_PROJECT_ID }}/NEAR_NETWORK_ID
+            NEAR_NODE_URL:${{ secrets.DEV_GCP_PROJECT_ID }}/NEAR_NODE_URL
+            NEAR_WALLET_URL:${{ secrets.DEV_GCP_PROJECT_ID }}/NEAR_WALLET_URL
+            NEAR_HELPER_URL:${{ secrets.DEV_GCP_PROJECT_ID }}/NEAR_HELPER_URL
             WEB_DNS:${{ secrets.DEV_GCP_PROJECT_ID }}/WEB_DNS
       - name: Deploy
         if: "${{ env.DEPLOY == 'true' }}"
@@ -118,6 +122,10 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.WEB_FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.WEB_FACEBOOK_APP_ID }} \
+              --set-string config.near.networkId=${{ steps.secrets.outputs.NEAR_NETWORK_ID }} \
+              --set-string config.near.nodeUrl=${{ steps.secrets.outputs.NEAR_NODE_URL }} \
+              --set-string config.near.walletUrl=${{ steps.secrets.outputs.NEAR_WALLET_URL }} \
+              --set-string config.near.helperUrl=${{ steps.secrets.outputs.NEAR_HELPER_URL }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -183,6 +191,10 @@ jobs:
             WEB_FIREBASE_MEASUREMENT_ID:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             WEB_FACEBOOK_APP_ID:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
+            NEAR_NETWORK_ID:${{ secrets.STG_GCP_PROJECT_ID }}/NEAR_NETWORK_ID
+            NEAR_NODE_URL:${{ secrets.STG_GCP_PROJECT_ID }}/NEAR_NODE_URL
+            NEAR_WALLET_URL:${{ secrets.STG_GCP_PROJECT_ID }}/NEAR_WALLET_URL
+            NEAR_HELPER_URL:${{ secrets.STG_GCP_PROJECT_ID }}/NEAR_HELPER_URL
             WEB_DNS:${{ secrets.STG_GCP_PROJECT_ID }}/WEB_DNS
       - name: Deploy
         if: "${{ env.DEPLOY == 'true' }}"
@@ -215,6 +227,10 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.WEB_FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.WEB_FACEBOOK_APP_ID }} \
+              --set-string config.near.networkId=${{ steps.secrets.outputs.NEAR_NETWORK_ID }} \
+              --set-string config.near.nodeUrl=${{ steps.secrets.outputs.NEAR_NODE_URL }} \
+              --set-string config.near.walletUrl=${{ steps.secrets.outputs.NEAR_WALLET_URL }} \
+              --set-string config.near.helperUrl=${{ steps.secrets.outputs.NEAR_HELPER_URL }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -280,6 +296,10 @@ jobs:
             WEB_FIREBASE_MEASUREMENT_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             WEB_FACEBOOK_APP_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
+            NEAR_NETWORK_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/NEAR_NETWORK_ID
+            NEAR_NODE_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/NEAR_NODE_URL
+            NEAR_WALLET_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/NEAR_WALLET_URL
+            NEAR_HELPER_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/NEAR_HELPER_URL
             WEB_DNS:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_DNS
       - name: Deploy
         if: "${{ env.DEPLOY == 'true' }}"
@@ -312,6 +332,10 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.WEB_FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.WEB_FACEBOOK_APP_ID }} \
+              --set-string config.near.networkId=${{ steps.secrets.outputs.NEAR_NETWORK_ID }} \
+              --set-string config.near.nodeUrl=${{ steps.secrets.outputs.NEAR_NODE_URL }} \
+              --set-string config.near.walletUrl=${{ steps.secrets.outputs.NEAR_WALLET_URL }} \
+              --set-string config.near.helperUrl=${{ steps.secrets.outputs.NEAR_HELPER_URL }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -377,6 +401,10 @@ jobs:
             WEB_FIREBASE_MEASUREMENT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             WEB_FACEBOOK_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
+            NEAR_NETWORK_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/NEAR_NETWORK_ID
+            NEAR_NODE_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/NEAR_NODE_URL
+            NEAR_WALLET_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/NEAR_WALLET_URL
+            NEAR_HELPER_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/NEAR_HELPER_URL
             WEB_DNS:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_DNS
       - name: Deploy
         if: "${{ env.DEPLOY == 'true' }}"
@@ -409,6 +437,10 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.WEB_FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.WEB_FACEBOOK_APP_ID }} \
+              --set-string config.near.networkId=${{ steps.secrets.outputs.NEAR_NETWORK_ID }} \
+              --set-string config.near.nodeUrl=${{ steps.secrets.outputs.NEAR_NODE_URL }} \
+              --set-string config.near.walletUrl=${{ steps.secrets.outputs.NEAR_WALLET_URL }} \
+              --set-string config.near.helperUrl=${{ steps.secrets.outputs.NEAR_HELPER_URL }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
@@ -474,6 +506,10 @@ jobs:
             WEB_FIREBASE_MEASUREMENT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_FIREBASE_MEASUREMENT_ID
             WEB_SENTRY_DSN:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_SENTRY_DSN
             WEB_FACEBOOK_APP_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_FACEBOOK_APP_ID
+            NEAR_NETWORK_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/NEAR_NETWORK_ID
+            NEAR_NODE_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/NEAR_NODE_URL
+            NEAR_WALLET_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/NEAR_WALLET_URL
+            NEAR_HELPER_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/NEAR_HELPER_URL
             WEB_DNS:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_DNS
       - name: Deploy
         if: "${{ env.DEPLOY == 'true' }}"
@@ -506,6 +542,10 @@ jobs:
               --set-string config.firebase.measurementId=${{ steps.secrets.outputs.WEB_FIREBASE_MEASUREMENT_ID }} \
               --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
               --set-string config.facebook.appId=${{ steps.secrets.outputs.WEB_FACEBOOK_APP_ID }} \
+              --set-string config.near.networkId=${{ steps.secrets.outputs.NEAR_NETWORK_ID }} \
+              --set-string config.near.nodeUrl=${{ steps.secrets.outputs.NEAR_NODE_URL }} \
+              --set-string config.near.walletUrl=${{ steps.secrets.outputs.NEAR_WALLET_URL }} \
+              --set-string config.near.helperUrl=${{ steps.secrets.outputs.NEAR_HELPER_URL }} \
               --set ingress.enabled=true \
               --set-string ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
               --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
