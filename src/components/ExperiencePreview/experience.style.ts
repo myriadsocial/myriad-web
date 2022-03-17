@@ -31,24 +31,24 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 700,
       wordBreak: 'break-all',
       lineHeight: '25.2px',
-      marginBottom: '8px'
+      marginBottom: '8px',
     },
     experienceCounterMetric: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'flex-start'
+      justifyContent: 'flex-start',
     },
-    wrapperCounter:{
+    wrapperCounter: {
       display: 'flex',
-      marginRight: '8px'
+      marginRight: '8px',
     },
     counterNumberMetric: {
       fontWeight: 600,
     },
     counterTextMetric: {
       fontWeight: 400,
-      color: '#757575'
+      color: '#757575',
     },
     subtitle: {
       fontSize: '16px',
@@ -58,7 +58,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     tagSection: {
       fontSize: '14px',
       fontWeight: 400,
-      marginTop: '4px'
+      marginTop: '4px',
     },
     mb30: {
       marginBottom: '30px',
@@ -68,7 +68,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.secondary,
       wordBreak: 'break-all',
       marginTop: '24px',
-      marginBottom: '24px'
+      marginBottom: '24px',
     },
     allowedTag: {
       fontSize: '14px',
@@ -78,7 +78,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'inline-block',
       wordBreak: 'break-all',
       marginBottom: '16px',
-      lineHeight: '19.6px'
+      lineHeight: '19.6px',
     },
     prohibitedTag: {
       fontSize: '14px',
@@ -88,7 +88,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'inline-block',
       wordBreak: 'break-all',
       marginBottom: '16px',
-      lineHeight: '19.6px'
+      lineHeight: '19.6px',
     },
     user: {
       fontSize: '16px',
@@ -120,7 +120,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('xs')]: {
         marginRight: 0,
         marginBottom: theme.spacing(1.5),
-        width: '160px'
+        width: '160px',
       },
     },
     clone: {
@@ -129,12 +129,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('xs')]: {
         marginRight: 0,
         marginBottom: theme.spacing(1.5),
-        width: '160px'
+        width: '160px',
       },
     },
     center: {
       marginTop: '8px',
-      width: '240px'
+      width: '240px',
     },
     box: {
       [theme.breakpoints.down('xs')]: {

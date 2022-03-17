@@ -37,9 +37,18 @@ type ExperienceEditorProps = {
   people: People[];
   onSearchTags: (query: string) => void;
   onSearchPeople: (query: string) => void;
-  onSave: (experience: Partial<Experience>, allowedTags: string[], prohibitedTags: string[]) => void;
+  onSave: (
+    experience: Partial<Experience>,
+    allowedTags: string[],
+    prohibitedTags: string[],
+  ) => void;
   onImageUpload: (files: File[]) => Promise<string>;
 };
+
+enum TagsProps {
+  ALLOWED = 'allowed',
+  PROHIBITED = 'prohibited',
+}
 
 export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const {
@@ -83,7 +92,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         setNewAllowedTags(allowedTagsExperience);
       }
 
-      if(experience?.prohibitedTags){
+      if (experience?.prohibitedTags) {
         const formatProhibitedTags = experience?.prohibitedTags as unknown;
         const prohibitedTagsExperience = formatProhibitedTags as string[];
         setNewProhibitedTags(prohibitedTagsExperience);
@@ -157,13 +166,17 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     }));
   };
 
-  const handleTagsInputChange = (event: React.ChangeEvent<{}>, newValue: string, type: 'allowed' | 'prohibited') => {
+  const handleTagsInputChange = (
+    event: React.ChangeEvent<{}>,
+    newValue: string,
+    type: TagsProps,
+  ) => {
     const options = newValue.split(/[ ,]+/);
 
     let tmpTags: string[] = [];
-    if(type === 'allowed'){
+    if (type === TagsProps.ALLOWED) {
       tmpTags = [...newAllowedTags];
-    } else if(type === 'prohibited'){
+    } else if (type === TagsProps.PROHIBITED) {
       tmpTags = [...newProhibitedTags];
     }
 
@@ -186,7 +199,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     event: React.ChangeEvent<{}>,
     value: string[],
     reason: AutocompleteChangeReason,
-    type: 'allowed' | 'prohibited'
+    type: TagsProps,
   ) => {
     const data = [...value];
     if (checkDuplicateData(data.map(item => item.replace('#', '')))) {
@@ -194,25 +207,25 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     }
 
     if (reason === 'remove-option') {
-      if(type === 'allowed'){
+      if (type === TagsProps.ALLOWED) {
         setNewAllowedTags(data);
-      } else if(type === 'prohibited'){
+      } else if (type === TagsProps.PROHIBITED) {
         setNewProhibitedTags(data);
       }
     }
 
     if (reason === 'create-option') {
-      if(type === 'allowed'){
+      if (type === TagsProps.ALLOWED) {
         setNewAllowedTags(data.map(item => item.replace('#', '')));
-      } else if(type === 'prohibited'){
+      } else if (type === TagsProps.PROHIBITED) {
         setNewProhibitedTags(data.map(item => item.replace('#', '')));
       }
     }
 
     if (reason === 'select-option') {
-      if(type === 'allowed'){
+      if (type === TagsProps.ALLOWED) {
         setNewAllowedTags(data);
-      } else if(type === 'prohibited'){
+      } else if (type === TagsProps.PROHIBITED) {
         setNewProhibitedTags(data);
       }
     }
@@ -310,10 +323,10 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         options={tags.map(tag => tag.id)}
         disableClearable
         onChange={(event, value, reason) => {
-          handleTagsChange(event, value, reason, 'allowed');
+          handleTagsChange(event, value, reason, TagsProps.ALLOWED);
         }}
         onInputChange={(event, value) => {
-          handleTagsInputChange(event, value, 'allowed');
+          handleTagsInputChange(event, value, TagsProps.ALLOWED);
         }}
         getOptionLabel={option => `#${option}`}
         renderInput={params => (
@@ -339,10 +352,10 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         options={tags.map(tag => tag.id)}
         disableClearable
         onChange={(event, value, reason) => {
-          handleTagsChange(event, value, reason, 'prohibited');
+          handleTagsChange(event, value, reason, TagsProps.PROHIBITED);
         }}
         onInputChange={(event, value) => {
-          handleTagsInputChange(event, value, 'prohibited');
+          handleTagsInputChange(event, value, TagsProps.PROHIBITED);
         }}
         getOptionLabel={option => `#${option}`}
         renderInput={params => (

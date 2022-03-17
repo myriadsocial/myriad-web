@@ -31,6 +31,11 @@ type Props = {
   onUpdate: (experienceId: string) => void;
 };
 
+enum TagsProps {
+  ALLOWED = 'allowed',
+  PROHIBITED = 'prohibited',
+}
+
 export const ExperiencePreview: React.FC<Props> = props => {
   const {experience, userExperiences, onSubscribe, onUnsubscribe, onFollow, onUpdate} = props;
 
@@ -41,21 +46,24 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
   const [promptSignin, setPromptSignin] = React.useState(false);
 
-  const parsingTags = (type: 'allowed' | 'prohibited') => {
+  const parsingTags = (type: TagsProps) => {
     let listTags: string[] = [];
-    if(type === 'allowed'){
+    if (type === TagsProps.ALLOWED) {
       listTags = experience.allowedTags.map(tag => {
         return `#${tag}`;
       });
-    } else if(type === 'prohibited' && experience?.prohibitedTags){
+    } else if (type === TagsProps.PROHIBITED && experience?.prohibitedTags) {
       listTags = experience.prohibitedTags.map(tag => {
         return `#${tag}`;
       });
     }
-    
+
     return listTags.map(tag => {
       return (
-        <Typography key={tag} component="span" className={type === 'allowed' ? style.allowedTag : style.prohibitedTag}>
+        <Typography
+          key={tag}
+          component="span"
+          className={type === TagsProps.ALLOWED ? style.allowedTag : style.prohibitedTag}>
           {tag}
         </Typography>
       );
@@ -139,11 +147,15 @@ export const ExperiencePreview: React.FC<Props> = props => {
           <Typography className={style.experienceName}>{experience.name}</Typography>
           <div className={style.experienceCounterMetric}>
             <Typography component={'span'} className={style.wrapperCounter}>
-              <Typography className={style.counterNumberMetric}>{experience.subscribedCount}</Typography>
+              <Typography className={style.counterNumberMetric}>
+                {experience.subscribedCount}
+              </Typography>
               <Typography className={style.counterTextMetric}>&nbsp;subscribers</Typography>
             </Typography>
             <Typography component={'span'} className={style.wrapperCounter}>
-              <Typography className={style.counterNumberMetric}>{experience.clonedCount}</Typography>
+              <Typography className={style.counterNumberMetric}>
+                {experience.clonedCount}
+              </Typography>
               <Typography className={style.counterTextMetric}>&nbsp;cloners</Typography>
             </Typography>
           </div>
@@ -197,27 +209,26 @@ export const ExperiencePreview: React.FC<Props> = props => {
       <div className={style.mb30}>
         <Typography className={style.subtitle}>{'Tags'}</Typography>
         <Typography className={style.tagSection}>{'Included tag'}</Typography>
-        <Typography>{parsingTags('allowed')}</Typography>
+        <Typography>{parsingTags(TagsProps.ALLOWED)}</Typography>
         <Typography className={style.tagSection}>{'Excluded tag'}</Typography>
-        <Typography>{parsingTags('prohibited')}</Typography>
+        <Typography>{parsingTags(TagsProps.PROHIBITED)}</Typography>
       </div>
       <div>
         <Typography className={style.subtitle}>{'People'}</Typography>
         {experience.people
           .filter(ar => Boolean(ar.deletedAt) === false)
           .filter(ar => ar.id !== null && ar.id !== '')
-          .map(person =>
-            (
-              <ListItemPeopleComponent
-                onClick={() => handleOpenProfile(person)}
-                id="selectable-experience-list-item"
-                title={person.name}
-                subtitle={<Typography variant="caption">@{person.username}</Typography>}
-                avatar={person.profilePictureURL}
-                platform={person.platform}
-              />
-            ),
-          )}
+          .map(person => (
+            <ListItemPeopleComponent
+              key={person.id}
+              onClick={() => handleOpenProfile(person)}
+              id="selectable-experience-list-item"
+              title={person.name}
+              subtitle={<Typography variant="caption">@{person.username}</Typography>}
+              avatar={person.profilePictureURL}
+              platform={person.platform}
+            />
+          ))}
       </div>
 
       <ExperienceSignInDialog open={promptSignin} onClose={() => setPromptSignin(false)} />

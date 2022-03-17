@@ -112,9 +112,10 @@ export const useExperienceHook = () => {
   const saveExperience = (
     newExperience: Partial<Experience>,
     newTags: string[],
+    newProhibitedTags: string[],
     callback?: (id: string) => void,
   ) => {
-    const experience = {...newExperience, allowedTags: newTags};
+    const experience = {...newExperience, allowedTags: newTags, prohibitedTags: newProhibitedTags};
     dispatch(createExperience(experience, newTags, callback));
   };
 

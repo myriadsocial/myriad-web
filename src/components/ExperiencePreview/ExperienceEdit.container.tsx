@@ -35,7 +35,11 @@ export const ExperienceEditContainer: React.FC = () => {
     return '';
   };
 
-  const onSave = (newExperience: Partial<Experience>, newAllowedTags: string[], newProhibitedTags: string[]) => {
+  const onSave = (
+    newExperience: Partial<Experience>,
+    newAllowedTags: string[],
+    newProhibitedTags: string[],
+  ) => {
     updateExperience(newExperience, newAllowedTags, newProhibitedTags, (experienceId: string) => {
       router.push(`/experience/${experienceId}/preview`);
     });
