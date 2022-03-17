@@ -45,7 +45,7 @@ export const getUserDetail = async (id: string, userId?: string): Promise<User &
   }
 
   const {data} = await MyriadAPI.request<User & BlockedProps>({
-    url: `users/${id}`,
+    url: `wallets/${id}/user`,
     method: 'GET',
     params,
   });

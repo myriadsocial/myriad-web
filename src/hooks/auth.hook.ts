@@ -6,7 +6,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {User} from 'src/interfaces/user';
 import * as AuthAPI from 'src/lib/api/ext-auth';
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
+import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import * as UserAPI from 'src/lib/api/user';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
@@ -100,6 +100,7 @@ export const useAuthHook = () => {
         publicAddress: toHexPublicKey(account),
         signature,
         walletType: WalletTypeEnum.POLKADOT,
+        networkType: NetworkTypeEnum.POLKADOT,
         nonce,
         anonymous: false,
         callbackUrl: publicRuntimeConfig.appAuthURL,
@@ -120,6 +121,7 @@ export const useAuthHook = () => {
           publicAddress: data.publicAddress,
           signature: data.signature,
           walletType: WalletTypeEnum.NEAR,
+          networkType: NetworkTypeEnum.NEAR,
           nonce,
           anonymous: false,
           callbackUrl: publicRuntimeConfig.appAuthURL,
@@ -143,7 +145,13 @@ export const useAuthHook = () => {
 
     switch (walletType) {
       case WalletTypeEnum.POLKADOT: {
-        const data = await AuthAPI.signUp({id, name, username});
+        const data = await AuthAPI.signUp({
+          address: id,
+          name,
+          username,
+          type: WalletTypeEnum.POLKADOT,
+          network: NetworkTypeEnum.POLKADOT,
+        });
 
         if (data) nonce = data.nonce;
 
@@ -156,7 +164,13 @@ export const useAuthHook = () => {
 
       case WalletTypeEnum.NEAR: {
         const nearAddress = id.includes('/') ? id.split('/')[1] : id;
-        const data = await AuthAPI.signUp({id: nearAddress, name, username});
+        const data = await AuthAPI.signUp({
+          address: nearAddress,
+          name,
+          username,
+          type: WalletTypeEnum.NEAR,
+          network: NetworkTypeEnum.NEAR,
+        });
 
         if (data) nonce = data.nonce;
 
