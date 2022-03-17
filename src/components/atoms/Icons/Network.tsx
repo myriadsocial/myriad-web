@@ -2,6 +2,7 @@ import React from 'react';
 
 import {SvgIcon, SvgIconProps} from '@material-ui/core';
 
+import Kusama from 'src/images/network/Kusama.svg';
 import Near24 from 'src/images/network/Near24.svg';
 import Polkadot24 from 'src/images/network/Polkadot24.svg';
 import Ethereum from 'src/images/network/ethereum-disabled.svg';
@@ -33,4 +34,8 @@ export const NearNetworkIcon24: React.FC<SvgIconProps> = props => {
 
 export const PolkadotNetworkIcon: React.FC<SvgIconProps> = props => (
   <SvgIcon component={Polkadot24} viewBox="0 0 24 24" {...props} />
+);
+
+export const KusamaNetworkIcon: React.FC<SvgIconProps> = props => (
+  <SvgIcon component={Kusama} viewBox="0 0 24 24" {...props} />
 );

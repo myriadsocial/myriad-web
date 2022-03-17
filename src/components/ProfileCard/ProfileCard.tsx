@@ -1,16 +1,12 @@
-import {ChevronDownIcon} from '@heroicons/react/outline';
-
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
-import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
+import {NetworkOption} from './NetworkOption/NetworkOption';
 import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './ProfileCard.style';
 import {ProfileContent} from './index';
-
-import {NearNetworkIcon24} from 'src/components/atoms/Icons';
 
 export const ProfileCard: React.FC<ProfileCardProps> = props => {
   const {
@@ -24,8 +20,8 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
   } = props;
   const classes = useStyles();
 
-  const formatAddress = (address: string) => {
-    if (address.length > 14) {
+  const formatAddress = (address?: string) => {
+    if (address && address.length > 14) {
       return (
         address.substring(0, 4) + '...' + address.substring(address.length - 4, address.length)
       );
@@ -47,21 +43,13 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
         />
         {/* TODO WIRING WALLET ADDRESS */}
         <div className={classes.wallet}>
-          <Button
-            className={classes.walletButton}
-            startIcon={<NearNetworkIcon24 />}
-            endIcon={<SvgIcon color="primary" component={ChevronDownIcon} viewBox="0 0 24 24" />}
-            size="small"
-            variant="contained"
-            color="inherit">
-            <Typography component="span">NEAR</Typography>
-          </Button>
+          <NetworkOption />
           <Button
             size="small"
             variant="contained"
             color="default"
             className={classes.addressButton}>
-            <Typography component="span">{formatAddress('aaronting.near')}</Typography>
+            <Typography component="span">{formatAddress(user?.id)}</Typography>
           </Button>
         </div>
       </div>
