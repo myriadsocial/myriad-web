@@ -33,8 +33,12 @@ export const ExperienceContainer: React.FC = () => {
     return '';
   };
 
-  const onSave = (newExperience: Partial<Experience>, newTags: string[]) => {
-    saveExperience(newExperience, newTags, (experienceId: string) => {
+  const onSave = (
+    newExperience: Partial<Experience>,
+    newAllowedTags: string[],
+    newProhibitedTags: string[],
+  ) => {
+    saveExperience(newExperience, newAllowedTags, newProhibitedTags, (experienceId: string) => {
       router.push(`/experience/${experienceId}/preview`);
       loadExperience();
     });

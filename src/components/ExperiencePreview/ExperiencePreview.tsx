@@ -31,6 +31,11 @@ type Props = {
   onUpdate: (experienceId: string) => void;
 };
 
+enum TagsProps {
+  ALLOWED = 'allowed',
+  PROHIBITED = 'prohibited',
+}
+
 export const ExperiencePreview: React.FC<Props> = props => {
   const {experience, userExperiences, onSubscribe, onUnsubscribe, onFollow, onUpdate} = props;
 
@@ -41,13 +46,24 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
   const [promptSignin, setPromptSignin] = React.useState(false);
 
-  const parsingTags = () => {
-    const list = experience.allowedTags.map(tag => {
-      return `#${tag}`;
-    });
-    return list.map(tag => {
+  const parsingTags = (type: TagsProps) => {
+    let listTags: string[] = [];
+    if (type === TagsProps.ALLOWED) {
+      listTags = experience.allowedTags.map(tag => {
+        return `#${tag}`;
+      });
+    } else if (type === TagsProps.PROHIBITED && experience?.prohibitedTags) {
+      listTags = experience.prohibitedTags.map(tag => {
+        return `#${tag}`;
+      });
+    }
+
+    return listTags.map(tag => {
       return (
-        <Typography key={tag} component="span" className={style.tag}>
+        <Typography
+          key={tag}
+          component="span"
+          className={type === TagsProps.ALLOWED ? style.allowedTag : style.prohibitedTag}>
           {tag}
         </Typography>
       );
@@ -120,16 +136,63 @@ export const ExperiencePreview: React.FC<Props> = props => {
 
   return (
     <div className={style.root}>
-      <div className={style.mb30}>
+      <div className={style.experienceTopSummary}>
         <Avatar
           alt={experience.name}
           src={experience.experienceImageURL}
           variant="rounded"
           className={style.avatar}
         />
-        <Typography className={style.experienceName}>{experience.name}</Typography>
-        <Typography className={style.description}>{experience.description}</Typography>
+        <div className={style.experienceSummary}>
+          <Typography className={style.experienceName}>{experience.name}</Typography>
+          <div className={style.experienceCounterMetric}>
+            <Typography component={'span'} className={style.wrapperCounter}>
+              <Typography className={style.counterNumberMetric}>
+                {experience.subscribedCount}
+              </Typography>
+              <Typography className={style.counterTextMetric}>&nbsp;subscribers</Typography>
+            </Typography>
+            <Typography component={'span'} className={style.wrapperCounter}>
+              <Typography className={style.counterNumberMetric}>
+                {experience.clonedCount}
+              </Typography>
+              <Typography className={style.counterTextMetric}>&nbsp;cloners</Typography>
+            </Typography>
+          </div>
+          {(experience?.createdBy !== user?.id || anonymous) && (
+            <div className={style.button}>
+              <Button
+                disabled={isDisable()}
+                variant="outlined"
+                color="secondary"
+                className={style.clone}
+                onClick={handleCloneExperience}>
+                Clone
+              </Button>
+              <Button
+                disabled={isDisable()}
+                variant="contained"
+                color="primary"
+                className={style.subscribe}
+                onClick={isSubscribed() ? openUnsubscribeConfirmation : handleSubscribeExperience}>
+                {isSubscribed() ? 'Unsubscribe' : 'Subscribe'}
+              </Button>
+            </div>
+          )}
+
+          {experience?.createdBy === user?.id && (
+            <Button
+              fullWidth
+              className={style.center}
+              variant="contained"
+              color="primary"
+              onClick={handleEditExperience}>
+              Edit experience
+            </Button>
+          )}
+        </div>
       </div>
+      <Typography className={style.description}>{experience.description}</Typography>
       <div className={style.mb30}>
         <Typography className={style.subtitle}>{'Author'}</Typography>
         <div className={style.flex}>
@@ -145,57 +208,28 @@ export const ExperiencePreview: React.FC<Props> = props => {
       </div>
       <div className={style.mb30}>
         <Typography className={style.subtitle}>{'Tags'}</Typography>
-        <Typography>{parsingTags()}</Typography>
+        <Typography className={style.tagSection}>{'Included tag'}</Typography>
+        <Typography>{parsingTags(TagsProps.ALLOWED)}</Typography>
+        <Typography className={style.tagSection}>{'Excluded tag'}</Typography>
+        <Typography>{parsingTags(TagsProps.PROHIBITED)}</Typography>
       </div>
       <div>
         <Typography className={style.subtitle}>{'People'}</Typography>
         {experience.people
           .filter(ar => Boolean(ar.deletedAt) === false)
-          .map(person =>
-            person.id === '' ? (
-              <></>
-            ) : (
-              <ListItemPeopleComponent
-                onClick={() => handleOpenProfile(person)}
-                id="selectable-experience-list-item"
-                title={person.name}
-                subtitle={<Typography variant="caption">@{person.username}</Typography>}
-                avatar={person.profilePictureURL}
-                platform={person.platform}
-              />
-            ),
-          )}
+          .filter(ar => ar.id !== null && ar.id !== '')
+          .map(person => (
+            <ListItemPeopleComponent
+              key={person.id}
+              onClick={() => handleOpenProfile(person)}
+              id="selectable-experience-list-item"
+              title={person.name}
+              subtitle={<Typography variant="caption">@{person.username}</Typography>}
+              avatar={person.profilePictureURL}
+              platform={person.platform}
+            />
+          ))}
       </div>
-      {(experience?.createdBy !== user?.id || anonymous) && (
-        <div className={style.button}>
-          <Button
-            disabled={isDisable()}
-            variant="outlined"
-            color="secondary"
-            className={style.clone}
-            onClick={handleCloneExperience}>
-            Clone
-          </Button>
-          <Button
-            disabled={isDisable()}
-            variant="contained"
-            color="primary"
-            onClick={isSubscribed() ? openUnsubscribeConfirmation : handleSubscribeExperience}>
-            {isSubscribed() ? 'Unsubscribe' : 'Subscribe'}
-          </Button>
-        </div>
-      )}
-
-      {experience?.createdBy === user?.id && (
-        <Button
-          fullWidth
-          className={style.center}
-          variant="outlined"
-          color="secondary"
-          onClick={handleEditExperience}>
-          Edit experience
-        </Button>
-      )}
 
       <ExperienceSignInDialog open={promptSignin} onClose={() => setPromptSignin(false)} />
     </div>
