@@ -122,25 +122,20 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   try {
     const detail = await UserAPI.getUserDetail(profileId, userId);
 
-    if (detail) {
-      await dispatch(setProfile(detail));
+    await dispatch(setProfile(detail));
 
-      if (!anonymous) {
-        await dispatch(checkFriendedStatus());
-      }
-
-      return {
-        props: {
-          session,
-          title: detail?.name ?? null,
-          description: detail?.bio ?? null,
-          image: detail?.profilePictureURL ?? null,
-          isBanned: Boolean(detail?.deletedAt),
-        },
-      };
-    } else {
-      throw new Error('Profile not found');
+    if (!anonymous && userId) {
+      await dispatch(checkFriendedStatus());
     }
+    return {
+      props: {
+        session,
+        title: detail?.name ?? null,
+        description: detail?.bio ?? null,
+        image: detail?.profilePictureURL ?? null,
+        isBanned: Boolean(detail?.deletedAt),
+      },
+    };
   } catch (error) {
     Sentry.captureException(error);
 

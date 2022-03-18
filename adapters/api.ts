@@ -5,7 +5,7 @@ import getConfig from 'next/config';
 
 import {SocialsEnum} from 'src/interfaces/social';
 import * as PeopleAPI from 'src/lib/api/people';
-import * as UserAPI from 'src/lib/api/user';
+import * as WalletAPI from 'src/lib/api/wallet';
 import {userToSession} from 'src/lib/serializers/session';
 
 const {serverRuntimeConfig} = getConfig();
@@ -27,7 +27,7 @@ function Adapter() {
 
     async function getUser(id: string) {
       try {
-        const user = await UserAPI.getUserDetail(id);
+        const user = await WalletAPI.geUserByWalletAddress(id);
 
         _debug('getUser', id, user);
 

@@ -395,6 +395,26 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       };
     }
 
+    case constants.UPDATE_POST_METRIC: {
+      const post: Post | undefined = state.post;
+
+      if (post && post.id === action.postId) {
+        post.metric = action.metric;
+      }
+
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post.id === action.postId) {
+            post.metric = action.metric;
+          }
+
+          return post;
+        }),
+        post,
+      };
+    }
+
     case constants.UPDATE_POST_VISIBILITY: {
       return {
         ...state,
