@@ -38,6 +38,7 @@ export interface ExperienceProps extends Searchable {
   layout?: LayoutType;
   createdBy: string;
   subscribedCount?: number;
+  clonedCount?: number;
   experienceImageURL?: string;
 }
 

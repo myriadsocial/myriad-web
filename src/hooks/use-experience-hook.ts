@@ -93,12 +93,14 @@ export const useExperienceHook = () => {
 
   const editExperience = (
     newExperience: Partial<Experience>,
-    newTags: string[],
+    newAllowedTags: string[],
+    newProhibitedTags: string[],
     callback?: (id: string) => void,
   ) => {
     const experience: Partial<Experience> = {
       name: newExperience.name,
-      allowedTags: newTags,
+      allowedTags: newAllowedTags,
+      prohibitedTags: newProhibitedTags,
       people: newExperience.people,
       description: newExperience.description,
       experienceImageURL: newExperience.experienceImageURL,
@@ -110,9 +112,10 @@ export const useExperienceHook = () => {
   const saveExperience = (
     newExperience: Partial<Experience>,
     newTags: string[],
+    newProhibitedTags: string[],
     callback?: (id: string) => void,
   ) => {
-    const experience = {...newExperience, allowedTags: newTags};
+    const experience = {...newExperience, allowedTags: newTags, prohibitedTags: newProhibitedTags};
     dispatch(createExperience(experience, newTags, callback));
   };
 
