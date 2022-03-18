@@ -11,6 +11,7 @@ import {ProfileContent} from './index';
 export const ProfileCard: React.FC<ProfileCardProps> = props => {
   const {
     user,
+    currentWallet,
     alias,
     notificationCount,
     handleSignOut,
@@ -34,6 +35,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
       <div className={classes.box}>
         <ProfileContent
           user={user}
+          currentWallet={currentWallet}
           alias={alias}
           notificationCount={notificationCount}
           onShowNotificationList={onShowNotificationList}
@@ -43,13 +45,13 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
         />
         {/* TODO WIRING WALLET ADDRESS */}
         <div className={classes.wallet}>
-          <NetworkOption />
+          <NetworkOption currentWallet={currentWallet} />
           <Button
             size="small"
             variant="contained"
             color="default"
             className={classes.addressButton}>
-            <Typography component="span">{formatAddress(user?.id)}</Typography>
+            <Typography component="span">{formatAddress(currentWallet?.id)}</Typography>
           </Button>
         </div>
       </div>

@@ -20,6 +20,7 @@ import {
   fetchConnectedSocials,
   fetchUser,
   fetchUserExperience,
+  fetchCurrentUserWallets,
 } from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
@@ -90,6 +91,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
       dispatch(fetchUserExperience()),
+      dispatch(fetchCurrentUserWallets()),
     ]);
   }
 

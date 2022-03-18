@@ -1,6 +1,6 @@
 import MyriadAPI from './base';
 
-import {ActivityLogType, BlockedProps, User} from 'src/interfaces/user';
+import {ActivityLogType, BlockedProps, User, CurrentUserWallet} from 'src/interfaces/user';
 
 type UserNonceProps = {
   nonce: number;
@@ -55,6 +55,15 @@ export const geUserByWalletAddress = async (address: string): Promise<User & Blo
     url: `wallets/${address}/user`,
     method: 'GET',
     params,
+  });
+
+  return data;
+};
+
+export const getCurrentUserWallet = async (): Promise<CurrentUserWallet> => {
+  const {data} = await MyriadAPI.request({
+    url: `/wallet`,
+    method: 'GET',
   });
 
   return data;

@@ -53,6 +53,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     flex: {
       display: 'flex',
       alignItems: 'center',
+      gap: theme.spacing(0.5),
     },
     profileContent: {
       [theme.breakpoints.down('xs')]: {
@@ -81,9 +82,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     column: {
       display: 'flex',
       flexDirection: 'column',
-    },
-    m1: {
-      marginRight: theme.spacing(0.5),
     },
     mt2: {
       marginTop: theme.spacing(2),

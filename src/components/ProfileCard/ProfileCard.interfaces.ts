@@ -1,7 +1,8 @@
-import {User} from '../../interfaces/user';
+import {User, CurrentUserWallet} from '../../interfaces/user';
 
 export type ProfileCardProps = {
   user?: User;
+  currentWallet?: CurrentUserWallet;
   alias?: string;
   isMobile?: boolean;
   notificationCount: number;

@@ -19,6 +19,11 @@ import {
   PolkadotNetworkIcon,
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
+import {CurrentUserWallet} from 'src/interfaces/user';
+
+export type NetworkOptionProps = {
+  currentWallet?: CurrentUserWallet;
+};
 
 const networkOptions: MenuOptions<string>[] = [
   {
@@ -39,9 +44,11 @@ const networkOptions: MenuOptions<string>[] = [
   },
 ];
 
-export const NetworkOption: React.FC = () => {
+export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet}) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [current, setCurrent] = React.useState<string>(networkOptions[0].id);
+  const [current, setCurrent] = React.useState<string>(
+    currentWallet?.network ? currentWallet?.network : networkOptions[0].id,
+  );
   const styles = useStyles();
 
   const icons = React.useMemo(
