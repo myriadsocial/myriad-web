@@ -116,8 +116,6 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
               }),
             );
           }
-
-          scrollToPost();
         },
       );
     }

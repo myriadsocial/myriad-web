@@ -73,11 +73,6 @@ export const remove = async (commentId: string): Promise<Comment> => {
   const {data} = await MyriadAPI.request<Comment>({
     url: `/comments/${commentId}`,
     method: 'DELETE',
-    params: {
-      filter: {
-        include: ['post'],
-      },
-    },
   });
 
   return data;

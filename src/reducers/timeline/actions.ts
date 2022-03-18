@@ -222,12 +222,6 @@ export const decreaseCommentCount = (
   section,
 });
 
-export const updatePostMetric = (postId: string, metric: PostMetric): UpdatePostMetric => ({
-  type: constants.UPDATE_POST_METRIC,
-  postId,
-  metric,
-});
-
 export const setTimelineSort = (order: TimelineOrderType, sort?: SortType): SetTimelineSort => ({
   type: constants.SET_TIMELINE_SORT,
   order,
@@ -708,5 +702,28 @@ export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
       );
     } finally {
       dispatch(setTimelineLoading(false));
+    }
+  };
+
+export const updatePostMetric: ThunkActionCreator<Actions, RootState> =
+  (postId: string) => async (dispatch, getState) => {
+    try {
+      const {
+        userState: {user},
+      } = getState();
+
+      const post = await PostAPI.getPostDetail(postId, user?.id);
+
+      dispatch({
+        type: constants.UPDATE_POST_METRIC,
+        postId,
+        metric: post.metric,
+      });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
     }
   };

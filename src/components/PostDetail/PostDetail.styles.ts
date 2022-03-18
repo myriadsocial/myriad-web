@@ -26,6 +26,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: 10,
       padding: '0 20px 20px',
     },
+    metric: {
+      [theme.breakpoints.down('xs')]: {
+        flexGrow: 1,
+      },
+    },
+    tipbutton: {
+      [theme.breakpoints.down('xs')]: {
+        marginLeft: '20%',
+      },
+    },
     tabs: {
       borderBottom: '1px solid #E5E5E5',
 

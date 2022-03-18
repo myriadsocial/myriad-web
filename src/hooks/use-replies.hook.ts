@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {delay} from 'lodash';
 import {Comment, CommentProps} from 'src/interfaces/comment';
 import {Vote} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
@@ -203,7 +204,13 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
     );
 
     if (deletedComment.post) {
-      dispatch(updatePostMetric(deletedComment.postId, deletedComment.post.metric));
+      delay(
+        deletedComment => {
+          dispatch(updatePostMetric(deletedComment.postId, deletedComment.post.metric));
+        },
+        1000,
+        deletedComment,
+      );
     }
   };
 
