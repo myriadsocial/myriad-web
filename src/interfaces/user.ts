@@ -34,7 +34,7 @@ export type Wallet = {
 };
 
 export type UserProps = BaseUser & {
-  wallets: Wallet[];
+  wallets?: Wallet[];
   bio?: string;
   bannerImageUrl?: string;
   fcmTokens?: string[];
