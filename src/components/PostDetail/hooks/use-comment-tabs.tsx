@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import dynamic from 'next/dynamic';
 
@@ -24,36 +24,34 @@ export const useCommentTabs = (
     });
   }, [ref]);
 
-  const tabs: TabItems<SectionType>[] = useMemo(() => {
-    return [
-      {
-        id: SectionType.DISCUSSION,
-        title: `Discussion (${post.metric.discussions || 0})`,
-        icon: '🤔 ',
-        component: (
-          <CommentListContainer
-            placeholder={'Write a Discussion...'}
-            referenceId={post.id}
-            section={SectionType.DISCUSSION}
-            scrollToPost={scrollToPost}
-          />
-        ),
-      },
-      {
-        id: SectionType.DEBATE,
-        title: `Debate (${post.metric.debates || 0})`,
-        icon: '😡 ',
-        component: (
-          <CommentListContainer
-            placeholder={'Your downvote will be submitted after you post a comment'}
-            referenceId={post.id}
-            section={SectionType.DEBATE}
-            scrollToPost={scrollToPost}
-          />
-        ),
-      },
-    ];
-  }, [post, scrollToPost]);
+  const tabs: TabItems<SectionType>[] = [
+    {
+      id: SectionType.DISCUSSION,
+      title: `Discussion (${post.metric.discussions || 0})`,
+      icon: '🤔 ',
+      component: (
+        <CommentListContainer
+          placeholder={'Write a Discussion...'}
+          referenceId={post.id}
+          section={SectionType.DISCUSSION}
+          scrollToPost={scrollToPost}
+        />
+      ),
+    },
+    {
+      id: SectionType.DEBATE,
+      title: `Debate (${post.metric.debates || 0})`,
+      icon: '😡 ',
+      component: (
+        <CommentListContainer
+          placeholder={'Your downvote will be submitted after you post a comment'}
+          referenceId={post.id}
+          section={SectionType.DEBATE}
+          scrollToPost={scrollToPost}
+        />
+      ),
+    },
+  ];
 
   return {
     selected,

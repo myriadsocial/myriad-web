@@ -122,8 +122,6 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
             }),
           );
         }
-
-        scrollToPost();
       });
     }
   };
