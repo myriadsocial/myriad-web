@@ -73,9 +73,17 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
       userState: {currencies, user, anonymous},
     } = getState();
 
+    let address = '';
+
     if (anonymous || !user) return;
 
-    const address: string = user.wallets[0].id;
+    // Only parse address to fetch balance when wallets are successfully fetched
+    if ('wallets' in user && user?.wallets?.length) {
+      address = user.wallets[0].id;
+    } else {
+      return;
+    }
+
     const tokenBalances: BalanceDetail[] = [];
 
     dispatch(setLoading(true));
