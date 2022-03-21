@@ -23,7 +23,26 @@ export type UserOnTransaction = BaseUser & {
   id: string;
 };
 
+export enum WalletType {
+  NEAR = 'near',
+  POLKADOT = 'polkadot',
+}
+
+export enum NetworkType {
+  NEAR = 'near',
+  POLKADOT = 'polkadot',
+}
+
+export type Wallet = {
+  id: string;
+  type: WalletType;
+  network: NetworkType;
+  primary: boolean;
+  userId: string;
+};
+
 export type UserProps = BaseUser & {
+  wallets: Wallet[];
   bio?: string;
   bannerImageUrl?: string;
   fcmTokens?: string[];

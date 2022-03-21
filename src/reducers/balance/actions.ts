@@ -75,7 +75,7 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
 
     if (anonymous || !user) return;
 
-    const address: string = user.id;
+    const address: string = user.wallets[0].id;
     const tokenBalances: BalanceDetail[] = [];
 
     dispatch(setLoading(true));
