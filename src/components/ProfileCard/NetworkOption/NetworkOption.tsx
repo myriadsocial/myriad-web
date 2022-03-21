@@ -2,6 +2,8 @@ import {ChevronDownIcon} from '@heroicons/react/outline';
 
 import React from 'react';
 
+import {useRouter} from 'next/router';
+
 import Button from '@material-ui/core/Button';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -19,6 +21,7 @@ import {
   PolkadotNetworkIcon,
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
+import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import {CurrentUserWallet} from 'src/interfaces/user';
 
 export type NetworkOptionProps = {
@@ -45,11 +48,14 @@ const networkOptions: MenuOptions<string>[] = [
 ];
 
 export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet}) => {
+  const styles = useStyles();
+  const router = useRouter();
+  const confirm = useConfirm();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [current, setCurrent] = React.useState<string>(
     currentWallet?.network ? currentWallet?.network : networkOptions[0].id,
   );
-  const styles = useStyles();
+  const [selected, setSelected] = React.useState<string>('');
 
   const icons = React.useMemo(
     () => ({
@@ -69,8 +75,19 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet}) => 
     setAnchorEl(null);
   };
 
+  const handleOpenPrompt = (select: string) => {
+    setSelected(select);
+    showConfirmDialog();
+  };
+
+  const handleConnectWallet = () => {
+    router.push(`/wallet?type=manage`);
+  };
+
   const handleSelected = (option: string) => {
-    setCurrent(option);
+    if (option === current) handleClose();
+    else if (currentWallet?.networks.find(network => network === option)) setCurrent(option);
+    else handleOpenPrompt(option);
     handleClose();
   };
 
@@ -84,6 +101,19 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet}) => 
     const match = networkOptions.find(option => option.id === current);
 
     return match?.id && icons[match.id as keyof typeof icons];
+  };
+
+  const showConfirmDialog = () => {
+    confirm({
+      title: `You did’nt connect your ${selected}!`,
+      description: `This account is not connected with ${selected}. Please connect to ${selected} in wallet manage tab. Do you want to connect your account?`,
+      icon: 'warning',
+      confirmationText: 'Yes',
+      cancellationText: 'Cancel',
+      onConfirm: () => {
+        handleConnectWallet();
+      },
+    });
   };
 
   return (
@@ -106,7 +136,10 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet}) => 
         open={Boolean(anchorEl)}
         onClose={handleClose}>
         {networkOptions.map(option => (
-          <MenuItem key={option.id} onClick={() => handleSelected(option.id)}>
+          <MenuItem
+            key={option.id}
+            onClick={() => handleSelected(option.id)}
+            className={option.id === current ? styles.menu : ''}>
             <ListItemIcon>{icons[option.id as keyof typeof icons]}</ListItemIcon>
             <ListItemText>{option.title}</ListItemText>
           </MenuItem>
