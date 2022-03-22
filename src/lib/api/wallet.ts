@@ -24,7 +24,7 @@ export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
   return data ? data : {nonce: 0};
 };
 
-export const geUserByWalletAddress = async (address: string): Promise<User & BlockedProps> => {
+export const getUserByWalletAddress = async (address: string): Promise<User & BlockedProps> => {
   const params: Record<string, any> = {
     filter: {
       include: [
