@@ -198,24 +198,28 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                     <TableCell component="th" scope="row" className={classes.tableCell}>
                       <Avatar
                         size={AvatarSize.MEDIUM}
-                        alt={tx.toUser?.id === userId ? tx.fromUser?.id : tx.toUser?.id}
+                        alt={
+                          tx.toWallet.user?.id === userId
+                            ? tx.fromWallet.user?.id
+                            : tx.toWallet.user?.id
+                        }
                         src={
-                          tx.toUser?.id === userId
-                            ? tx.fromUser?.profilePictureURL ?? namePlaceholder
-                            : tx.toUser?.profilePictureURL ?? namePlaceholder
+                          tx.toWallet.user?.id === userId
+                            ? tx.fromWallet.user?.profilePictureURL ?? namePlaceholder
+                            : tx.toWallet.user?.profilePictureURL ?? namePlaceholder
                         }
                         name={
-                          tx.toUser?.id === userId
-                            ? tx.fromUser?.name ?? namePlaceholder
-                            : tx.toUser?.name ?? namePlaceholder
+                          tx.toWallet.user?.id === userId
+                            ? tx.fromWallet.user?.name ?? namePlaceholder
+                            : tx.toWallet.user?.name ?? namePlaceholder
                         }
                       />
 
                       <div>
                         <Typography variant="body1">
-                          {tx.toUser?.id === userId
-                            ? tx.fromUser?.name ?? namePlaceholder
-                            : tx.toUser?.name ?? namePlaceholder}
+                          {tx.toWallet.user?.id === userId
+                            ? tx.fromWallet.user?.name ?? namePlaceholder
+                            : tx.toWallet.user?.name ?? namePlaceholder}
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
                           {timeAgo(tx.createdAt)}
@@ -223,12 +227,12 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                       </div>
                     </TableCell>
                     <TableCell align="center">
-                      {tx.toUser?.id === userId && (
+                      {tx.toWallet.user?.id === userId && (
                         <div className={classes.received}>
                           <Typography variant="caption">Received</Typography>
                         </div>
                       )}
-                      {tx.fromUser?.id === userId && (
+                      {tx.fromWallet.user?.id === userId && (
                         <div className={classes.sent}>
                           <Typography variant="caption">Sent</Typography>
                         </div>
@@ -237,12 +241,12 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                     <TableCell align="right">
                       <div className={classes.currencyDetailWrapper}>
                         <div>
-                          {tx.toUser?.id === userId && (
+                          {tx.toWallet.user?.id === userId && (
                             <Typography variant="h5" className={classes.textAmountReceived}>
                               {parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
                             </Typography>
                           )}
-                          {tx.fromUser?.id === userId && (
+                          {tx.fromWallet.user?.id === userId && (
                             <Typography variant="h5" className={classes.textAmountSent}>
                               {parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
                             </Typography>

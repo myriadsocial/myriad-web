@@ -25,6 +25,7 @@ export const user = {
   createdAt: new Date('2021-07-19T04:59:26.000Z'),
   updatedAt: new Date('2021-07-27T03:43:25.000Z'),
   currencies: [],
+  wallets: [],
 };
 
 export const Header = Template.bind({});

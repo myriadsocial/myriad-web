@@ -27,6 +27,9 @@ export const getUserDetail = async (id: string, userId?: string): Promise<User &
           relation: 'people',
         },
         {
+          relation: 'wallets',
+        },
+        {
           relation: 'activityLogs',
           scope: {
             where: {

@@ -31,6 +31,7 @@ Socials.args = {
     createdAt: new Date('2021-07-29T14:47:06.000Z'),
     updatedAt: new Date('2021-09-02T03:11:28.000Z'),
     currencies: [],
+    wallets: [],
   },
   socials: [
     {

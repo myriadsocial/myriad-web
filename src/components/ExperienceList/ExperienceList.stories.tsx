@@ -34,6 +34,7 @@ ExperienceList.args = {
           defaultCurrency: CurrencyId.DOT,
           createdAt: new Date(),
           updatedAt: new Date(),
+          wallets: [],
           currencies: [
             {
               id: CurrencyId.ACA,

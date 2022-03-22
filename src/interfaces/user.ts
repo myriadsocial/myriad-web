@@ -33,8 +33,12 @@ export type Wallet = {
   userId: string;
 };
 
+export type WalletWithUser = Wallet & {
+  user: User;
+};
+
 export type UserProps = BaseUser & {
-  wallets?: Wallet[];
+  wallets: Wallet[];
   bio?: string;
   bannerImageUrl?: string;
   fcmTokens?: string[];

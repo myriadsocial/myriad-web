@@ -84,6 +84,7 @@ EditExperience.args = {
       createdAt: new Date('2021-07-15T03:40:23.000Z'),
       updatedAt: new Date('2021-09-03T06:46:39.000Z'),
       currencies: [],
+      wallets: [],
     },
   },
   tags: [

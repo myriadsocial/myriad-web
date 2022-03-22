@@ -8,10 +8,8 @@ import {CurrencyId} from 'src/interfaces/currency';
 import {Post} from 'src/interfaces/post';
 import {Transaction, TransactionDetail, TransactionSort} from 'src/interfaces/transaction';
 import MyriadAPI from 'src/lib/api/base';
-import {BaseList} from 'src/lib/api/interfaces/base-list.interface';
+import * as TransactionAPI from 'src/lib/api/transaction';
 import {ThunkActionCreator} from 'src/types/thunk';
-
-type TransactionList = BaseList<Transaction>;
 
 /**
  * Action Types
@@ -120,27 +118,22 @@ export const fetchTransactionHistory: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const {data} = await MyriadAPI.request<TransactionList>({
-        url: '/transactions',
-        method: 'GET',
-        params: {
-          filter: {
-            order: sort === 'highest' ? 'amount DESC' : 'createdAt DESC',
-            where: {
-              type,
-              referenceId: reference.id,
-              currencyId: currency ? {eq: currency} : undefined,
-            },
-            include: ['fromUser', 'toUser', 'currency'],
-          },
-          pageNumber: page,
-        },
+      const filter = {
+        type,
+        referenceId: reference.id,
+        currencyId: currency,
+      };
+      const orderField = sort === 'highest' ? 'amount' : 'createdAt';
+
+      const {data, meta} = await TransactionAPI.getTransactionsIncludingCurrency(filter, {
+        page,
+        orderField,
       });
 
       dispatch({
         type: constants.FETCH_TRANSACTION_HISTORY,
-        transactions: data.data,
-        meta: data.meta,
+        transactions: data,
+        meta,
       });
     } catch (error) {
       dispatch(setError(error.message));
@@ -200,26 +193,18 @@ export const fetchTransactionHistoryForComment: ThunkActionCreator<Actions, Root
         throw new Error('Comment not found');
       }
 
-      const {data} = await MyriadAPI.request<TransactionList>({
-        url: '/transactions',
-        method: 'GET',
-        params: {
-          filter: {
-            order: 'createdAt DESC',
-            where: {
-              type: 'comment',
-              referenceId: comment.id,
-            },
-            include: ['fromUser', 'toUser'],
-          },
-          pageNumber: page,
+      const {data, meta} = await TransactionAPI.getTransactionsIncludingCurrency(
+        {
+          type: 'comment',
+          referenceId: comment.id,
         },
-      });
+        {page},
+      );
 
       dispatch({
         type: constants.FETCH_TRANSACTION_HISTORY_FOR_COMMENT,
-        transactions: data.data,
-        meta: data.meta,
+        transactions: data,
+        meta,
       });
     } catch (error) {
       dispatch(setError(error.message));

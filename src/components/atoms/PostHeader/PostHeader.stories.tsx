@@ -63,6 +63,7 @@ MyriadPost.args = {
       createdAt: new Date('2021-07-15T03:40:23.000Z'),
       updatedAt: new Date('2021-09-03T06:46:39.000Z'),
       currencies: [],
+      wallets: [],
     },
   },
 };
@@ -109,6 +110,7 @@ OtherPost.args = {
       createdAt: new Date('2021-08-23T04:35:04.000Z'),
       updatedAt: new Date('2021-08-23T04:35:04.000Z'),
       currencies: [],
+      wallets: [],
     },
     people: {
       id: '60efac8c565ab8004ed28ba6',

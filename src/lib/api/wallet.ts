@@ -6,8 +6,10 @@ type UserNonceProps = {
   nonce: number;
 };
 
-export const getWalletAddress = async (postId: string) => {
-  const {data} = await MyriadAPI({
+type WalletAddressDetail = {walletAddress: string};
+
+export const getWalletAddress = async (postId: string): Promise<WalletAddressDetail> => {
+  const {data} = await MyriadAPI.request<WalletAddressDetail>({
     url: `/posts/${postId}/walletaddress`,
     method: 'GET',
   });

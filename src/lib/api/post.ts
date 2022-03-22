@@ -78,6 +78,13 @@ export const getPost = async (
     include: [
       {
         relation: 'user',
+        scope: {
+          include: [
+            {
+              relation: 'wallets',
+            },
+          ],
+        },
       },
       {
         relation: 'people',

@@ -49,6 +49,7 @@ const comment: Comment = {
     createdAt: new Date('2021-07-15T03:40:23.000Z'),
     updatedAt: new Date('2021-07-15T03:40:23.000Z'),
     currencies: [],
+    wallets: [],
   },
 
   replies: [
@@ -83,6 +84,7 @@ const comment: Comment = {
         createdAt: new Date('2021-07-15T03:40:23.000Z'),
         updatedAt: new Date('2021-07-15T03:40:23.000Z'),
         currencies: [],
+        wallets: [],
       },
 
       replies: [
@@ -117,6 +119,7 @@ const comment: Comment = {
             createdAt: new Date('2021-07-15T03:40:23.000Z'),
             updatedAt: new Date('2021-07-15T03:40:23.000Z'),
             currencies: [],
+            wallets: [],
           },
         },
       ],
@@ -152,6 +155,7 @@ const comment: Comment = {
         createdAt: new Date('2021-07-15T03:40:23.000Z'),
         updatedAt: new Date('2021-07-15T03:40:23.000Z'),
         currencies: [],
+        wallets: [],
       },
     },
   ],
