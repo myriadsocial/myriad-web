@@ -74,7 +74,9 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
 
   useEffect(() => {
     if (tippedUserId.length > 0) {
-      getEstimatedFee(user.id, tippedUserId, selectedCurrency);
+      if (user && user.wallets && user.wallets.length >= 0) {
+        getEstimatedFee(user.wallets[0].id, tippedUserId, selectedCurrency);
+      }
     }
   }, [selectedCurrency, tippedUserId]);
 
@@ -157,7 +159,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
   const handleSendTip = () => {
     if (tippedContent.contentType.length > 0) {
       const sendTipForContentPayload = {
-        from: user.id,
+        from: user && user.wallets && user.wallets.length >= 0 ? user.wallets[0].id : '',
         to: tippedUserId,
         type: tippedContent.contentType,
         referenceId: tippedContent.referenceId,
@@ -167,7 +169,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
       simplerSendTip(sendTipForContentPayload);
     } else {
       const sendTipDirectToUserPayload = {
-        from: user.id,
+        from: user && user.wallets && user.wallets.length >= 0 ? user.wallets[0].id : '',
         to: tippedUserId,
         amount: Number(verifiedTipAmount),
         currency: selectedCurrency,

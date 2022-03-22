@@ -96,7 +96,9 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
       setTippedUser(profile);
 
       dispatch(setDetailTippedUser(profile.name, profile.profilePictureURL ?? ''));
-      dispatch(setTippedUserId(profile.id));
+      if (profile && profile.wallets && profile.wallets.length >= 0) {
+        dispatch(setTippedUserId(profile.wallets[0].id));
+      }
     }
   };
 
