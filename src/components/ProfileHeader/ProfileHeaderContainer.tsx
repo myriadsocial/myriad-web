@@ -1,23 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
-import dynamic from 'next/dynamic';
-
-import {Typography} from '@material-ui/core';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-
 import {ProfileHeaderComponent} from '.';
-import {PromptComponent} from '../atoms/Prompt/prompt.component';
+import useTipping from '../common/Tipping/use-tipping.hook';
 
 import {debounce} from 'lodash';
 import {useTimelineFilter} from 'src/components/Timeline/hooks/use-timeline-filter.hook';
-import {Modal} from 'src/components/atoms/Modal';
 import {useFriendRequest} from 'src/hooks/use-friend-request.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useReport} from 'src/hooks/use-report.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
+import {ReferenceType} from 'src/interfaces/interaction';
 import {ReportProps} from 'src/interfaces/report';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
@@ -25,12 +19,6 @@ import {blockFromFriend} from 'src/reducers/friend/actions';
 import {fetchProfileDetail, fetchProfileExperience} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
-import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
-import {WalletState} from 'src/reducers/wallet/reducer';
-
-const SendTipContainer = dynamic(() => import('src/components/SendTip/SendTipContainer'), {
-  ssr: false,
-});
 
 type Props = {
   edit?: () => void;
@@ -43,6 +31,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
 
   const dispatch = useDispatch();
+  const tipping = useTipping();
 
   const {requestFriend, removeFriendRequest, toggleRequest, reloadFriendStatus} =
     useFriendRequest();
@@ -52,12 +41,6 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const {filterTimeline} = useTimelineFilter({
     owner: profile?.id,
   });
-
-  const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
-  const [tippedUser, setTippedUser] = useState<User | null>(null);
-  const [tippedUserForHistory, setTippedUserForHistory] = useState<User | null>(null);
-  const [openSuccessPrompt, setOpenSuccessPrompt] = React.useState(false);
-  const sendTipOpened = Boolean(tippedUser);
 
   const urlLink = () => {
     if (typeof window !== 'undefined') {
@@ -73,12 +56,6 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     }
   }, [profile]);
 
-  useEffect(() => {
-    if (isTipSent) {
-      closeSendTip();
-    }
-  }, [isTipSent]);
-
   const sendFriendReqest = debounce(() => {
     if (!profile) return;
 
@@ -92,29 +69,13 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   }, 300);
 
   const handleSendTip = () => {
-    if (profile) {
-      setTippedUser(profile);
+    if (!profile) return;
 
-      dispatch(setDetailTippedUser(profile.name, profile.profilePictureURL ?? ''));
-      if (profile && profile.wallets && profile.wallets.length >= 0) {
-        dispatch(setTippedUserId(profile.wallets[0].id));
-      }
-    }
-  };
-
-  const closeSendTip = () => {
-    if (isTipSent && tippedUser) {
-      //for the future, open tip history here
-      setOpenSuccessPrompt(true);
-      setTippedUserForHistory(tippedUser);
-    } else {
-      console.log('no user tipped');
-    }
-    setTippedUser(null);
-  };
-
-  const handleCloseSuccessPrompt = (): void => {
-    setOpenSuccessPrompt(false);
+    tipping.send({
+      reference: profile as User,
+      receiver: profile as User,
+      referenceType: ReferenceType.USER,
+    });
   };
 
   const handleSubmitReport = (payload: ReportProps) => {
@@ -179,52 +140,6 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
         onRemoveFriend={handleRemoveFriend}
         onAcceptFriend={handleAcceptFriend}
       />
-      <Modal
-        gutter="none"
-        open={sendTipOpened}
-        onClose={closeSendTip}
-        title="Send Tip"
-        subtitle="Finding this post is insightful? Send a tip!">
-        <SendTipContainer />
-      </Modal>
-
-      <PromptComponent
-        icon={'success'}
-        open={openSuccessPrompt}
-        onCancel={handleCloseSuccessPrompt}
-        title={'Success'}
-        subtitle={
-          <Typography component="div">
-            Tip to{' '}
-            <Box fontWeight={400} display="inline">
-              {tippedUserForHistory?.name ?? 'Unknown Myrian'}
-            </Box>{' '}
-            sent successfully
-          </Typography>
-        }>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}>
-          <a
-            target="_blank"
-            style={{textDecoration: 'none'}}
-            href={explorerURL ?? 'https://myriad.social'}
-            rel="noopener noreferrer">
-            <Button style={{marginRight: '12px'}} size="small" variant="outlined" color="secondary">
-              Transaction details
-            </Button>
-          </a>
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            onClick={handleCloseSuccessPrompt}>
-            Return
-          </Button>
-        </div>
-      </PromptComponent>
     </>
   );
 };
