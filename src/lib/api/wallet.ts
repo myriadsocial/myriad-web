@@ -47,6 +47,14 @@ export const geUserByWalletAddress = async (address: string): Promise<User & Blo
             },
           },
         },
+        {
+          relation: 'wallets',
+          scope: {
+            where: {
+              primary: true,
+            },
+          },
+        },
       ],
     },
   };

@@ -4,6 +4,8 @@ import {FriendStatus} from './friend';
 import {People} from './people';
 import {TransactionDetail} from './transaction';
 
+import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
+
 export interface UserSocialMedia {
   id: string;
   verified: boolean;
@@ -23,7 +25,16 @@ export type UserOnTransaction = BaseUser & {
   id: string;
 };
 
+export type Wallet = {
+  id: string;
+  type: WalletTypeEnum;
+  network: NetworkTypeEnum;
+  primary: boolean;
+  userId: string;
+};
+
 export type UserProps = BaseUser & {
+  wallets?: Wallet[];
   bio?: string;
   bannerImageUrl?: string;
   fcmTokens?: string[];
