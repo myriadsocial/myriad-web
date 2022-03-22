@@ -24,7 +24,6 @@ type PostsListProps = {
   order: TimelineOrderType;
   upvote: (reference: Post | Comment) => void;
   loadNextPage: () => void;
-  onSendTip: (post: Post) => void;
   onOpenTipHistory: (post: Post) => void;
   onReport: (post: Post) => void;
   onPostVisibility: (post: Post) => void;
@@ -44,7 +43,6 @@ export const PostsList: React.FC<PostsListProps> = props => {
     order,
     loadNextPage,
     upvote,
-    onSendTip,
     onOpenTipHistory,
     onReport,
     onShared,
@@ -88,7 +86,6 @@ export const PostsList: React.FC<PostsListProps> = props => {
               post={post}
               anonymous={anonymous}
               onUpvote={upvote}
-              onSendTip={onSendTip}
               toggleDownvoting={toggleDownvoting}
               onOpenTipHistory={onOpenTipHistory}
               onReport={onReport}

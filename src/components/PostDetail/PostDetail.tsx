@@ -1,36 +1,27 @@
-import {CurrencyDollarIcon} from '@heroicons/react/outline';
-
 import React, {useState, useRef} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
-import {IconButton, Grid} from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import {Grid} from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import SvgIcon from '@material-ui/core/SvgIcon';
 
 import {PostRender} from '../PostEditor/PostRender';
-import {Button, ButtonVariant, ButtonColor, ButtonSize} from '../atoms/Button';
 import {NSFW} from '../atoms/NSFW/NSFW.component';
 import {PostActionComponent} from '../atoms/PostAction';
 import {HeaderComponent} from '../atoms/PostHeader';
 import {TabsComponent} from '../atoms/Tabs';
 import {Video} from '../atoms/Video';
+import {SendTipButton} from '../common/SendTipButton/SendTipButton';
 import {useStyles} from './PostDetail.styles';
 import {useCommentTabs} from './hooks/use-comment-tabs';
 
-import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {LinkPreview} from 'src/components/atoms/LinkPreview';
 import ShowIf from 'src/components/common/show-if.component';
 import {Comment} from 'src/interfaces/comment';
-import {SectionType} from 'src/interfaces/interaction';
+import {ReferenceType, SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
-import {RootState} from 'src/reducers';
-import {BalanceState} from 'src/reducers/balance/reducer';
-import {setTippedContent} from 'src/reducers/timeline/actions';
 
 const Gallery = dynamic(() => import('../atoms/Gallery/Gallery'), {ssr: false});
 const Reddit = dynamic(() => import('./render/Reddit'), {ssr: false});
@@ -43,7 +34,6 @@ type PostDetailProps = {
   toggleDownvoting: (reference: Post | Comment | null) => void;
   onUpvote: (reference: Post | Comment) => void;
   onRemoveVote: (reference: Post | Comment) => void;
-  onSendTip: (post: Post) => void;
   onOpenTipHistory: (post: Post) => void;
   onDelete?: (post: Post) => void;
   onReport: (post: Post) => void;
@@ -58,10 +48,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const {
     user,
     post,
-    anonymous,
     onUpvote,
     onRemoveVote,
-    onSendTip,
     toggleDownvoting,
     onOpenTipHistory,
     onImporters,
@@ -75,7 +63,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   const styles = useStyles();
   const router = useRouter();
-  const dispatch = useDispatch();
   const ref = useRef<HTMLDivElement>(null);
 
   const {
@@ -84,8 +71,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     tabs,
   } = useCommentTabs(post, ref);
 
-  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
-  const [openPromptDrawer, setOpenPromptDrawer] = useState(false);
   const [shoWcomment, setShowComment] = useState(expanded);
   const [maxLength, setMaxLength] = useState<number | undefined>(250);
   const [viewContent, setViewContent] = useState(!post.isNSFW);
@@ -141,22 +126,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     toggleDownvoting(null);
   };
 
-  const handleSendTip = () => {
-    if (anonymous) {
-      setOpenPromptDrawer(true);
-    } else {
-      onSendTip(post);
-      const contentType = 'post';
-      const referenceId = post.id;
-
-      let isOtherTippingCurrencyDisabled = false;
-
-      if (!('userSocialMedia' in post)) isOtherTippingCurrencyDisabled = true;
-
-      dispatch(setTippedContent(contentType, referenceId, isOtherTippingCurrencyDisabled));
-    }
-  };
-
   const handleDeletePost = () => {
     if (onDelete) {
       onDelete(post);
@@ -190,10 +159,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     return '';
   };
 
-  const handleCancel = () => {
-    setOpenPromptDrawer(false);
-  };
-
   return (
     <Paper square className={styles.root} ref={ref}>
       <HeaderComponent
@@ -214,7 +179,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         </ShowIf>
 
         <ShowIf condition={viewContent}>
-          <ShowIf condition={post.platform === 'myriad'}>
+          <ShowIf condition={['myriad'].includes(post.platform)}>
             <PostRender post={post} max={maxLength} onShowAll={() => setMaxLength(undefined)} />
           </ShowIf>
 
@@ -269,35 +234,9 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         </Grid>
 
         <ShowIf condition={isImportedPost && !isOwnSocialPost && type !== 'share'}>
-          <Grid item className={styles.tipbutton}>
-            <Button
-              isDisabled={balanceDetails.length === 0}
-              onClick={handleSendTip}
-              variant={ButtonVariant.OUTLINED}
-              color={ButtonColor.SECONDARY}
-              size={ButtonSize.SMALL}
-              className={styles.sendTips}>
-              {balanceDetails.length === 0 ? (
-                <CircularProgress size={14} color="primary" />
-              ) : (
-                'Send tip'
-              )}
-            </Button>
-            <IconButton onClick={handleSendTip} className={styles.icon} color="primary">
-              <SvgIcon
-                classes={{root: styles.fill}}
-                color="inherit"
-                component={CurrencyDollarIcon}
-                viewBox="0 0 24 24"
-              />
-            </IconButton>
+          <Grid item>
+            <SendTipButton reference={post} referenceType={ReferenceType.POST} />
           </Grid>
-          <PromptComponent
-            title={'Send Tips'}
-            subtitle={'Appreciate others posts by sending tips with stable cryptocurrency'}
-            open={openPromptDrawer}
-            onCancel={handleCancel}
-          />
         </ShowIf>
       </Grid>
 
