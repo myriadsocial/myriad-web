@@ -133,7 +133,7 @@ export const fetchUser: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const user: User = await WalletAPI.geUserByWalletAddress(address);
+      const user: User = await WalletAPI.getUserByWalletAddress(address);
 
       dispatch(setUser(user));
     } catch (error) {

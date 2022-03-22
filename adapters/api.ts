@@ -27,7 +27,7 @@ function Adapter() {
 
     async function getUser(id: string) {
       try {
-        const user = await WalletAPI.geUserByWalletAddress(id);
+        const user = await WalletAPI.getUserByWalletAddress(id);
 
         _debug('getUser', id, user);
 
