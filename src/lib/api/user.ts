@@ -36,6 +36,14 @@ export const getUserDetail = async (id: string, userId?: string): Promise<User &
             },
           },
         },
+        {
+          relation: 'wallets',
+          scope: {
+            where: {
+              primary: true,
+            },
+          },
+        },
       ],
     },
   };
