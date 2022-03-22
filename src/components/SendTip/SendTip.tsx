@@ -255,11 +255,15 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                 type="number"
                 variant="outlined"
                 inputProps={{min: 0}}
-                error={Number(tipAmount) > setMaxTippable() || lengthError ? true : false}
+                error={
+                  (Number(tipAmount) > setMaxTippable() && !isSignerLoading) || lengthError
+                    ? true
+                    : false
+                }
                 helperText={
                   lengthError
                     ? '10 char maximum'
-                    : Number(tipAmount) > setMaxTippable()
+                    : Number(tipAmount) > setMaxTippable() && !isSignerLoading
                     ? 'Insufficient balance'
                     : checkValidDigits(tipAmount) === ''
                     ? 'Digits only'
