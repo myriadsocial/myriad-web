@@ -10,7 +10,12 @@ import {NotificationIcon} from '../atoms/Icons';
 import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './profileContent.style';
 
-import {NearNetworkIcon24} from 'src/components/atoms/Icons';
+import {
+  NearNetworkIcon24,
+  MyriadCircleIcon,
+  PolkadotNetworkIcon,
+  KusamaNetworkIcon,
+} from 'src/components/atoms/Icons';
 import {Modal} from 'src/components/atoms/Modal';
 
 export const ProfileContent: React.FC<ProfileCardProps> = props => {
@@ -22,13 +27,30 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
     onShowNotificationList,
     isMobile,
     handleSignOut,
+    currentWallet,
   } = props;
   const classes = useStyles();
+
+  const icons = React.useMemo(
+    () => ({
+      polkadot: <PolkadotNetworkIcon />,
+      kusama: <KusamaNetworkIcon />,
+      near: <NearNetworkIcon24 />,
+      myriad: <MyriadCircleIcon />,
+    }),
+    [],
+  );
 
   const [open, setOpen] = React.useState(false);
 
   const handleOpenProfile = () => {
     setOpen(!open);
+  };
+
+  const getSelectedIcon = () => {
+    const match = currentWallet?.network;
+
+    return match && icons[match as keyof typeof icons];
   };
 
   return (
@@ -87,14 +109,14 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
             <div className={classes.column}>
               <Typography component="span">Network</Typography>
               <Typography component="span" className={classes.flex}>
-                <NearNetworkIcon24 className={classes.m1} /> NEAR
+                {getSelectedIcon()} {currentWallet?.network}
               </Typography>
             </div>
             <div className={classes.column}>
               <Typography component="span">Wallet</Typography>
               <Typography component="span" className={classes.flex}>
-                <NearNetworkIcon24 className={classes.m1} />
-                NEAR Wallet
+                {getSelectedIcon()}
+                {currentWallet?.type} Wallet
               </Typography>
             </div>
           </div>

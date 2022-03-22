@@ -8,7 +8,7 @@ import * as Redux from 'redux';
 import {Currency} from 'src/interfaces/currency';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {SocialMedia} from 'src/interfaces/social';
-import {User, UserTransactionDetail} from 'src/interfaces/user';
+import {User, UserTransactionDetail, CurrentUserWallet} from 'src/interfaces/user';
 
 export interface UserState extends BaseState {
   user?: User;
@@ -19,6 +19,7 @@ export interface UserState extends BaseState {
   anonymous: boolean;
   alias: string;
   verifying: boolean;
+  currentWallet?: CurrentUserWallet;
 }
 
 const initalState: UserState = {
@@ -97,6 +98,13 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       return {
         ...state,
         experiences: action.experiences,
+      };
+    }
+
+    case constants.FETCH_CURRENT_USER_WALLETS: {
+      return {
+        ...state,
+        currentWallet: action.payload,
       };
     }
 

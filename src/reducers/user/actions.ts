@@ -9,7 +9,7 @@ import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {SocialsEnum} from 'src/interfaces/index';
 import {SocialMedia} from 'src/interfaces/social';
-import {User, UserTransactionDetail} from 'src/interfaces/user';
+import {User, UserTransactionDetail, CurrentUserWallet} from 'src/interfaces/user';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {BaseErrorResponse} from 'src/lib/api/interfaces/error-response.interface';
 import * as SocialAPI from 'src/lib/api/social';
@@ -56,6 +56,11 @@ export interface FetchUserExperience extends PaginationAction {
   experiences: WrappedExperience[];
 }
 
+export interface FetchCurrentUserWallet extends Action {
+  type: constants.FETCH_CURRENT_USER_WALLETS;
+  payload: CurrentUserWallet;
+}
+
 export interface FetchUserTransactionDetail extends Action {
   type: constants.FETCH_USER_TRANSACTION_DETAIL;
   payload: UserTransactionDetail;
@@ -82,6 +87,7 @@ export type Actions =
   | FetchUser
   | FetchConnectedSocials
   | FetchUserExperience
+  | FetchCurrentUserWallet
   | AddUserToken
   | SetDefaultCurrency
   | SetUserAsAnonymous
@@ -203,6 +209,30 @@ export const fetchUserExperience: ThunkActionCreator<Actions, RootState> =
           message: error.message,
         }),
       );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const fetchCurrentUserWallets: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    const {
+      userState: {user},
+    } = getState();
+
+    if (!user) return;
+
+    try {
+      const data = await WalletAPI.getCurrentUserWallet();
+
+      dispatch({
+        type: constants.FETCH_CURRENT_USER_WALLETS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
     } finally {
       dispatch(setLoading(false));
     }

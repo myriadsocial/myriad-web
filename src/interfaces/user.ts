@@ -89,3 +89,12 @@ export enum ActivityLogType {
   PROFILE = 'profile',
   SKIP = 'skip_new_user_username',
 }
+
+export interface CurrentUserWallet extends BaseModel {
+  type: string;
+  network: string;
+  networks: string[];
+  primary: boolean;
+  userId: string;
+  user?: User;
+}
