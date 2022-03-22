@@ -20,7 +20,6 @@ type CommentListProps = Omit<CommentDetailProps, 'comment' | 'deep'> & {
   hasMoreComment: boolean;
   onLoadMoreComments: () => void;
   onReportReplies?: (replies: Comment) => void;
-  onSendTipReplies?: (replies: Comment) => void;
 };
 
 type RefComment = Record<string, React.RefObject<HTMLDivElement>>;

@@ -13,7 +13,6 @@ export interface CommentDetailProps {
   onRemoveVote: (comment: Comment) => void;
   onUpdateDownvote: (commentId: string, total: number, vote: Vote) => void;
   onOpenTipHistory: (comment: Comment) => void;
-  onSendTip: (comment: Comment) => void;
   onReport: (comment: Comment) => void;
   onSearchPeople: (query: string) => void;
   onDelete: (comment: Comment) => void;

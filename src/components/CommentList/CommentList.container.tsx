@@ -3,18 +3,12 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-
-import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {CommentList} from './CommentList';
 
 import {debounce} from 'lodash';
 import {ReportContainer} from 'src/components/Report';
 import {TipHistoryContainer} from 'src/components/TipHistory';
-import {Modal} from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useBlockList} from 'src/hooks/use-blocked-list.hook';
@@ -27,13 +21,8 @@ import {RootState} from 'src/reducers';
 import {loadUsers, searchUsers} from 'src/reducers/search/actions';
 import {downvote, removeVote, upvote} from 'src/reducers/timeline/actions';
 import {UserState} from 'src/reducers/user/reducer';
-import {setTippedUser, setTippedUserId} from 'src/reducers/wallet/actions';
-import {WalletState} from 'src/reducers/wallet/reducer';
 
 const CommentEditor = dynamic(() => import('../CommentEditor/CommentEditor'), {ssr: false});
-const SendTipContainer = dynamic(() => import('src/components/SendTip/SendTipContainer'), {
-  ssr: false,
-});
 
 type CommentListContainerProps = {
   referenceId: string;
@@ -66,28 +55,16 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const downvoting = useSelector<RootState, Post | Comment | null>(
     state => state.timelineState.interaction.downvoting,
   );
-  const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
 
   const {blockedUserIds, loadAll: loadAllBlockedUsers} = useBlockList(user);
   const {openTipHistory} = useTipHistory();
 
   const [reported, setReported] = useState<Comment | null>(null);
-  const [tippedComment, setTippedComment] = useState<Comment | null>(null);
-  const [tippedContentForHistory, setTippedContentForHistory] = useState<Comment | null>(null);
-  const [openSuccessPrompt, setOpenSuccessPrompt] = useState(false);
-
-  const sendTipOpened = Boolean(tippedComment);
 
   useEffect(() => {
     loadAllBlockedUsers();
     loadUsers();
   }, []);
-
-  useEffect(() => {
-    if (isTipSent) {
-      closeSendTip();
-    }
-  }, [isTipSent]);
 
   useEffect(() => {
     loadInitComment(section);
@@ -141,15 +118,6 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     );
   };
 
-  const handleSendTip = (reference: Post | Comment) => {
-    // type guard to check if reference is a Comment object
-    if ('section' in reference) {
-      setTippedComment(reference);
-      dispatch(setTippedUserId(reference.userId));
-      dispatch(setTippedUser(reference.user.name, reference.user.profilePictureURL ?? ''));
-    }
-  };
-
   const showConfirmDeleteDialog = (comment: Comment): void => {
     confirm({
       title: 'Delete Comment',
@@ -161,20 +129,6 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         remove(comment);
       },
     });
-  };
-
-  const closeSendTip = () => {
-    if (isTipSent && tippedComment) {
-      setOpenSuccessPrompt(true);
-      setTippedContentForHistory(tippedComment);
-    } else {
-      console.log('no comment tipped');
-    }
-    setTippedComment(null);
-  };
-
-  const handleCloseSuccessPrompt = (): void => {
-    setOpenSuccessPrompt(false);
   };
 
   const handleReport = (comment: Comment) => {
@@ -228,61 +182,13 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         onRemoveVote={handleRemoveVote}
         onUpdateDownvote={updateDownvote}
         onReport={handleReport}
-        onSendTip={handleSendTip}
         onOpenTipHistory={openTipHistory}
         onSearchPeople={handleSearchPeople}
         onDelete={showConfirmDeleteDialog}
         scrollToPost={scrollToPost}
       />
 
-      <Modal
-        gutter="none"
-        open={sendTipOpened}
-        onClose={closeSendTip}
-        title="Send Tip"
-        subtitle="Finding this post is insightful? Send a tip!">
-        <SendTipContainer />
-      </Modal>
-
-      <PromptComponent
-        icon={'success'}
-        open={openSuccessPrompt}
-        onCancel={handleCloseSuccessPrompt}
-        title={'Success'}
-        subtitle={
-          <Typography component="div">
-            Tip to{' '}
-            <Box fontWeight={400} display="inline">
-              {tippedContentForHistory?.user.name ?? 'Unknown Myrian'}
-            </Box>{' '}
-            sent successfully
-          </Typography>
-        }>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}>
-          <a
-            target="_blank"
-            style={{textDecoration: 'none'}}
-            href={explorerURL ?? 'https://myriad.social'}
-            rel="noopener noreferrer">
-            <Button style={{marginRight: '12px'}} size="small" variant="outlined" color="secondary">
-              Transaction details
-            </Button>
-          </a>
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            onClick={handleCloseSuccessPrompt}>
-            Return
-          </Button>
-        </div>
-      </PromptComponent>
-
-      <TipHistoryContainer onSendTip={handleSendTip} />
+      <TipHistoryContainer referenceType={ReferenceType.COMMENT} />
 
       <ReportContainer reference={reported} onClose={closeReportPost} />
     </>

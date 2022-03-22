@@ -17,6 +17,7 @@ import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {VotingComponent} from '../atoms/Voting';
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {TimeAgo} from '../common/TimeAgo.component';
+import useTipping from '../common/Tipping/use-tipping.hook';
 import {CommentDetailProps} from './CommentDetail.interface';
 import {useStyles} from './CommentDetail.styles';
 import {CommentRender} from './CommentRender';
@@ -30,7 +31,6 @@ import {Post} from 'src/interfaces/post';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {
-  setTippedContent,
   upvote,
   downvote,
   removeVote,
@@ -51,7 +51,6 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     onUpdateDownvote,
     onOpenTipHistory,
     onReport,
-    onSendTip,
     onSearchPeople,
     onDelete,
     scrollToPost,
@@ -70,6 +69,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   } = useRepliesHook(comment.id, deep);
 
   const dispatch = useDispatch();
+  const tipping = useTipping();
   const style = useStyles({...props, deep});
   const router = useRouter();
   const confirm = useConfirm();
@@ -98,6 +98,14 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     if (!user) return;
 
     setIsReplying(!isReplying);
+  };
+
+  const handleSendTip = () => {
+    tipping.send({
+      receiver: comment.user,
+      reference: comment,
+      referenceType: ReferenceType.COMMENT,
+    });
   };
 
   const handleSubmitComment = (attributes: Partial<CommentProps>) => {
@@ -176,16 +184,6 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
 
   const handleReport = () => {
     onReport(comment);
-  };
-
-  const handleSendTip = () => {
-    onSendTip(comment);
-    const contentType = 'comment';
-    const referenceId = comment.id;
-
-    const isOtherTippingCurrencyDisabled = false;
-
-    dispatch(setTippedContent(contentType, referenceId, isOtherTippingCurrencyDisabled));
   };
 
   const handleViewProfile = () => {
@@ -384,9 +382,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
           onRemoveVote={handleRepliesRemoveVote}
           onUpdateDownvote={updateReplyDownvote}
           onReportReplies={handleReport}
-          onSendTipReplies={handleSendTip}
           onOpenTipHistory={onOpenTipHistory}
-          onSendTip={onSendTip}
           onReport={onReport}
           onSearchPeople={onSearchPeople}
           onDelete={showConfirmDeleteDialog}
