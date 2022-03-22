@@ -11,7 +11,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {BalanceDetail} from '../../../interfaces/balance';
-import {Avatar} from '../Avatar';
+import {Avatar, AvatarSize} from '../Avatar';
 import {useStyles} from './currencyOption.style';
 
 import {debounce} from 'lodash';
@@ -107,7 +107,13 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
               onClick={() => handleSelect(item)}>
               <div className={style.flex}>
                 <div className={style.tokenColumn}>
-                  <Avatar name={item.id} className={style.text} alt={item.id} src={item.image} />
+                  <Avatar
+                    name={item.id}
+                    className={style.text}
+                    alt={item.id}
+                    src={item.image}
+                    size={AvatarSize.TINY}
+                  />
                   <Typography color="textSecondary">{item.id}</Typography>
                 </div>
                 <Typography component="span">{parseFloat(item.freeBalance.toFixed(4))}</Typography>

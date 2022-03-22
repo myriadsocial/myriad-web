@@ -5,12 +5,12 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '.';
-import {BalanceDetail} from '../MyWallet';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {DragIndicatorIcon, ArrowUpIcon} from '../atoms/Icons';
 
 import {formatUsd} from 'src/helpers/balance';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
+import {BalanceDetail} from 'src/interfaces/balance';
 
 type DraggableBalanceCardProps = {
   balanceDetail: BalanceDetail;

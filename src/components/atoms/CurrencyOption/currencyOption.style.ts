@@ -28,6 +28,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     text: {
       fontWeight: 400,
       fontSize: '12px',
+      marginRight: 10,
     },
     input: {
       width: '160px',
