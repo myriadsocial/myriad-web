@@ -4,7 +4,7 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {Action} from 'redux';
-import {WalletDetail, ContentType} from 'src/interfaces/wallet';
+import {WalletDetail} from 'src/interfaces/wallet';
 import * as PostAPI from 'src/lib/api/post';
 import * as UserAPI from 'src/lib/api/user';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -110,15 +110,9 @@ export const fetchRecipientDetail: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const {walletAddress} = await PostAPI.getWalletAddress(postId);
+      const walletDetail = await PostAPI.getWalletAddress(postId);
 
-      const walletDetailPayload = {
-        walletAddress,
-        referenceId: postId,
-        contentType: ContentType.POST,
-      };
-
-      dispatch(setRecipientDetail(walletDetailPayload));
+      dispatch(setRecipientDetail(walletDetail));
     } catch (error) {
       dispatch(
         setError({
@@ -139,7 +133,7 @@ export const fetchTippedUserId: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const {walletAddress} = await PostAPI.getWalletAddress(postId);
+      const walletDetail = await PostAPI.getWalletAddress(postId);
 
       // when tipping on dedicated post page
       if (post) {
@@ -159,12 +153,12 @@ export const fetchTippedUserId: ThunkActionCreator<Actions, RootState> =
         if (people) {
           dispatch(setTippedUser(people.name, people.profilePictureURL));
         } else {
-          const user = await UserAPI.getUserDetail(walletAddress);
+          const user = await UserAPI.getUserDetail(walletDetail.referenceId);
           dispatch(setTippedUser(user.name, user.profilePictureURL ?? acronym(user.name)));
         }
       }
 
-      dispatch(setTippedUserId(walletAddress));
+      dispatch(setTippedUserId(walletDetail.referenceId));
     } catch (error) {
       dispatch(
         setError({

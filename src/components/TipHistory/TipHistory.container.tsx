@@ -7,7 +7,8 @@ import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {People} from 'src/interfaces/people';
 import {User} from 'src/interfaces/user';
-import * as WalletAPI from 'src/lib/api/wallet';
+import {WalletReferenceType} from 'src/interfaces/wallet';
+import * as PostAPI from 'src/lib/api/post';
 
 type TipHistoryContainerProps = {
   referenceType: ReferenceType;
@@ -49,9 +50,11 @@ export const TipHistoryContainer: React.FC<TipHistoryContainerProps> = props => 
     if ('platform' in reference) {
       // if imported
       if (reference.people) {
-        const {walletAddress} = await WalletAPI.getWalletAddress(reference.id);
+        const {referenceId, referenceType} = await PostAPI.getWalletAddress(reference.id);
 
-        receiver = {...reference.people, walletAddress};
+        if (referenceType === WalletReferenceType.WALLET_ADDRESS) {
+          receiver = {...reference.people, walletAddress: referenceId};
+        }
       } else {
         receiver = reference.user;
       }

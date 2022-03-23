@@ -11,7 +11,7 @@ import {ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
 import {Post, PostMetric, PostProps, PostVisibility} from 'src/interfaces/post';
 import {TimelineFilter, TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
 import {UserProps} from 'src/interfaces/user';
-import {WalletDetail, ContentType} from 'src/interfaces/wallet';
+import {WalletDetail} from 'src/interfaces/wallet';
 import * as InteractionAPI from 'src/lib/api/interaction';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
@@ -436,17 +436,11 @@ export const fetchWalletDetails: ThunkActionCreator<Actions, RootState> =
   (postId: string) => async dispatch => {
     dispatch(setLoading(true));
     try {
-      const {walletAddress} = await PostAPI.getWalletAddress(postId);
-
-      const walletDetailPayload = {
-        walletAddress,
-        referenceId: postId,
-        contentType: ContentType.POST,
-      };
+      const walletDetail = await PostAPI.getWalletAddress(postId);
 
       dispatch({
         type: constants.FETCH_WALLET_DETAILS,
-        payload: walletDetailPayload,
+        payload: walletDetail,
       });
     } catch (error) {
       dispatch(

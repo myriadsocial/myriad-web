@@ -3,8 +3,11 @@ export enum ContentType {
   POST = 'post',
 }
 
+export enum WalletReferenceType {
+  WALLET_ADDRESS = 'walletAddress',
+}
+
 export interface WalletDetail {
   referenceId: string;
-  walletAddress: string;
-  contentType: ContentType;
+  referenceType: WalletReferenceType;
 }

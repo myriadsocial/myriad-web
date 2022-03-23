@@ -12,7 +12,8 @@ import {ReferenceType} from 'src/interfaces/interaction';
 import {People} from 'src/interfaces/people';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
-import * as WalletAPI from 'src/lib/api/wallet';
+import {WalletReferenceType} from 'src/interfaces/wallet';
+import * as PostAPI from 'src/lib/api/post';
 
 type SendTipButtonProps = {
   reference: Post | Comment | User;
@@ -41,9 +42,11 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
     if ('platform' in reference) {
       // if imported
       if (reference.people) {
-        const {walletAddress} = await WalletAPI.getWalletAddress(reference.id);
+        const {referenceId, referenceType} = await PostAPI.getWalletAddress(reference.id);
 
-        receiver = {...reference.people, walletAddress};
+        if (referenceType === WalletReferenceType.WALLET_ADDRESS) {
+          receiver = {...reference.people, walletAddress: referenceId};
+        }
       } else {
         receiver = reference.user;
       }
