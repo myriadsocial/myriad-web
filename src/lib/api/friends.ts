@@ -68,8 +68,29 @@ export const getFriends = async (
             $exists: false,
           },
         },
-        include: ['requestee', 'requestor'],
         order: `${orderField} ${sort}`,
+        include: [
+          {
+            relation: 'requestee',
+            scope: {
+              include: [
+                {
+                  relation: 'wallets',
+                },
+              ],
+            },
+          },
+          {
+            relation: 'requestor',
+            scope: {
+              include: [
+                {
+                  relation: 'wallets',
+                },
+              ],
+            },
+          },
+        ],
       },
     },
   });
@@ -121,6 +142,28 @@ export const searchFriend = async (
       filter: {
         order: `${orderField} ${sort}`,
       },
+      include: [
+        {
+          relation: 'requestee',
+          scope: {
+            include: [
+              {
+                relation: 'wallets',
+              },
+            ],
+          },
+        },
+        {
+          relation: 'requestor',
+          scope: {
+            include: [
+              {
+                relation: 'wallets',
+              },
+            ],
+          },
+        },
+      ],
     },
   });
 
@@ -154,7 +197,28 @@ export const checkFriendStatus = async (
             },
           ],
         },
-        include: ['requestee', 'requestor'],
+        include: [
+          {
+            relation: 'requestee',
+            scope: {
+              include: [
+                {
+                  relation: 'wallets',
+                },
+              ],
+            },
+          },
+          {
+            relation: 'requestor',
+            scope: {
+              include: [
+                {
+                  relation: 'wallets',
+                },
+              ],
+            },
+          },
+        ],
       },
     },
   });

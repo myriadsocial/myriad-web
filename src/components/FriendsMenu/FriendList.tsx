@@ -93,6 +93,8 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   };
 
   const handleSendTip = () => {
+    handleCloseFriendSetting();
+
     tipping.send({
       receiver: currentFriend as User,
       reference: currentFriend as User,
@@ -101,13 +103,13 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   };
 
   const handleVisitProfile = () => {
+    handleCloseFriendSetting();
+
     if (!currentFriend) {
       router.push('/404');
     } else {
       router.push(`/profile/${currentFriend.id}`, undefined, {shallow: false});
     }
-
-    handleCloseFriendSetting();
   };
 
   const handleUnfriend = () => {
