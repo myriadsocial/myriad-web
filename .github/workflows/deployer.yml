@@ -49,6 +49,9 @@ jobs:
       - compute-build-info
     env:
       DEPLOY: ${{ secrets.DEV_DEPLOY }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout code
         if: "${{ env.DEPLOY == 'true' }}"
@@ -150,6 +153,9 @@ jobs:
       - compute-build-info
     env:
       DEPLOY: ${{ secrets.STG_DEPLOY }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout code
         if: "${{ env.DEPLOY == 'true' }}"
@@ -251,6 +257,9 @@ jobs:
       - compute-build-info
     env:
       DEPLOY: ${{ secrets.TESTNET_DEPLOY }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout code
         if: "${{ env.DEPLOY == 'true' }}"
@@ -352,6 +361,9 @@ jobs:
       - compute-build-info
     env:
       DEPLOY: ${{ secrets.MAINNET_DEPLOY }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout code
         if: "${{ env.DEPLOY == 'true' }}"
@@ -453,6 +465,9 @@ jobs:
       - compute-build-info
     env:
       DEPLOY: ${{ secrets.MAINNET_DEPLOY }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout code
         if: "${{ env.DEPLOY == 'true' }}"
