@@ -41,9 +41,9 @@ export const CookieConsent: React.FC<CookieConsentProps> = props => {
           root: styles.root,
         }}
         PaperProps={{className: styles.paper, square: false}}
-        ModalProps={{keepMounted: true}}>
-        <Typography variant="body1">
-          This website uses cookies to enhance your online experience.
+        ModalProps={{keepMounted: true, hideBackdrop: true}}>
+        <Typography variant="body1" className={styles.term}>
+          This website uses cookies to enhance your online experience.&nbsp;
           <Typography href="/term-of-use" component="a" color="primary" className={styles.link}>
             Terms and Conditions
           </Typography>

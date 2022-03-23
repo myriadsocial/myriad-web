@@ -14,7 +14,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderRadius: 10,
       left: 'auto',
       marginBottom: 60,
-      marginRight: 30,
+      marginRight: 60,
+    },
+    term: {
+      color: '#0A0A0A',
     },
     link: {
       textDecoration: 'none',
