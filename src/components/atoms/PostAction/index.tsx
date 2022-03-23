@@ -77,8 +77,8 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
   return (
     <div className={style.root}>
       <VotingComponent
-        isDownVote={downvoted}
-        isUpVote={upvoted}
+        isDownVoted={downvoted}
+        isUpVoted={upvoted}
         variant="row"
         vote={upvotes - downvotes}
         onUpvote={onUpvote}

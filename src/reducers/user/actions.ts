@@ -133,8 +133,10 @@ export const fetchUser: ThunkActionCreator<Actions, RootState> =
   (address: string) => async dispatch => {
     dispatch(setLoading(true));
 
+    let user: User | null = null;
+
     try {
-      const user: User = await WalletAPI.getUserByWalletAddress(address);
+      user = await WalletAPI.getUserByWalletAddress(address);
 
       dispatch(setUser(user));
     } catch (error) {
@@ -146,6 +148,8 @@ export const fetchUser: ThunkActionCreator<Actions, RootState> =
     } finally {
       dispatch(setLoading(false));
     }
+
+    return user;
   };
 
 export const fetchConnectedSocials: ThunkActionCreator<Actions, RootState> =

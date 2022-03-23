@@ -23,8 +23,8 @@ Row.args = {
   variant: 'row',
   onUpvote: console.log,
   onDownVote: console.log,
-  isDownVote: true,
-  isUpVote: false,
+  isDownVoted: true,
+  isUpVoted: false,
 };
 
 export const Column = Template.bind({});
@@ -33,6 +33,6 @@ Column.args = {
   variant: 'column',
   onUpvote: console.log,
   onDownVote: console.log,
-  isDownVote: false,
-  isUpVote: false,
+  isDownVoted: false,
+  isUpVoted: false,
 };

@@ -288,8 +288,8 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
               </CardContent>
               <CardActions disableSpacing>
                 <VotingComponent
-                  isUpVote={Boolean(comment.isUpvoted)}
-                  isDownVote={Boolean(comment.isDownVoted)}
+                  isUpVoted={Boolean(comment.isUpvoted)}
+                  isDownVoted={Boolean(comment.isDownVoted)}
                   variant="row"
                   vote={totalVote}
                   size="small"
