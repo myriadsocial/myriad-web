@@ -7,17 +7,17 @@ import {useStyles} from './CookieConsent.style';
 
 type CookieConsentProps = {};
 
-const COOKIE_NAME = 'cookie-consent';
+export const COOKIE_CONSENT_NAME = 'cookie-consent';
 
 export const CookieConsent: React.FC<CookieConsentProps> = props => {
   const styles = useStyles();
 
-  const [cookies, setCookie] = useCookies([COOKIE_NAME]);
+  const [cookies, setCookie] = useCookies([COOKIE_CONSENT_NAME]);
 
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (!cookies[COOKIE_NAME]) {
+    if (!cookies[COOKIE_CONSENT_NAME]) {
       setOpen(true);
     }
   }, [cookies]);
@@ -27,7 +27,7 @@ export const CookieConsent: React.FC<CookieConsentProps> = props => {
   };
 
   const handleAccept = () => {
-    setCookie(COOKIE_NAME, true);
+    setCookie(COOKIE_CONSENT_NAME, true);
     setOpen(false);
   };
 
