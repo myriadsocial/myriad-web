@@ -44,6 +44,12 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     onChange && onChange(amount);
   };
 
+  const handleInputWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLDivElement;
+
+    target.blur();
+  };
+
   const toBigNumber = (value: string) => {
     let result: BN;
 
@@ -91,7 +97,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
         value={value?.toString()}
         error={!valid}
         onChange={handleAmountChange}
-        onWheel={console.log}
+        onWheel={handleInputWheel}
         {...inputProps}
       />
       <FormHelperText style={{alignSelf: 'center'}}>{error}</FormHelperText>

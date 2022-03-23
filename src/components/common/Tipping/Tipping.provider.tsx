@@ -71,6 +71,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
         <Modal
           gutter="none"
           open={tipFormOpened}
+          style={{}}
           onClose={handleCloseTipForm}
           title="Send Tip"
           subtitle="Finding this post is insightful? Send a tip!">
