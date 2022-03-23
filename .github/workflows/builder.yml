@@ -20,7 +20,7 @@ jobs:
       pre_release: ${{ steps.build-info.outputs.pre_release }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Compute build info
@@ -58,7 +58,7 @@ jobs:
       - compute-build-info
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set up QEMU
