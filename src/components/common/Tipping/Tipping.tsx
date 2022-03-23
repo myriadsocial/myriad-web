@@ -19,6 +19,7 @@ import {CurrencyOptionComponent} from 'src/components/atoms/CurrencyOption';
 import {ListItemComponent} from 'src/components/atoms/ListItem';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
+import {CurrencyId} from 'src/interfaces/currency';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 
@@ -43,6 +44,12 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
     // disable other currencies when tipping to imported post owner
     if ('originUserId' in receiver) {
+      const enabledCurrency = balances.find(balance => balance.id === CurrencyId.MYRIA);
+
+      if (enabledCurrency) {
+        setCurrency(enabledCurrency);
+      }
+
       setDisableExternalCurrency(true);
     }
   }, []);
