@@ -49,19 +49,26 @@ jobs:
       - compute-build-info
     env:
       DEPLOY: ${{ secrets.DEV_DEPLOY }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout code
         if: "${{ env.DEPLOY == 'true' }}"
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Authenticate to Google Cloud
+        if: "${{ env.DEPLOY == 'true' }}"
+        id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          workload_identity_provider: ${{ secrets.DEV_GOOGLE_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.DEV_SERVICE_ACCOUNT_EMAIL }}
+          project_id: ${{ secrets.DEV_GCP_PROJECT_ID }}
       - name: Set up Cloud SDK
         if: "${{ env.DEPLOY == 'true' }}"
         uses: google-github-actions/setup-gcloud@v0
-        with:
-          project_id: ${{ secrets.DEV_GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.DEV_GCP_SA_KEY }}
-          export_default_credentials: true
       - name: Get secrets
         if: "${{ env.DEPLOY == 'true' }}"
         id: secrets
@@ -146,19 +153,26 @@ jobs:
       - compute-build-info
     env:
       DEPLOY: ${{ secrets.STG_DEPLOY }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout code
         if: "${{ env.DEPLOY == 'true' }}"
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Authenticate to Google Cloud
+        if: "${{ env.DEPLOY == 'true' }}"
+        id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          workload_identity_provider: ${{ secrets.STG_GOOGLE_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.STG_SERVICE_ACCOUNT_EMAIL }}
+          project_id: ${{ secrets.STG_GCP_PROJECT_ID }}
       - name: Set up Cloud SDK
         if: "${{ env.DEPLOY == 'true' }}"
         uses: google-github-actions/setup-gcloud@v0
-        with:
-          project_id: ${{ secrets.STG_GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.STG_GCP_SA_KEY }}
-          export_default_credentials: true
       - name: Get secrets
         if: "${{ env.DEPLOY == 'true' }}"
         id: secrets
@@ -243,19 +257,26 @@ jobs:
       - compute-build-info
     env:
       DEPLOY: ${{ secrets.TESTNET_DEPLOY }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout code
         if: "${{ env.DEPLOY == 'true' }}"
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Authenticate to Google Cloud
+        if: "${{ env.DEPLOY == 'true' }}"
+        id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          workload_identity_provider: ${{ secrets.TESTNET_GOOGLE_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.TESTNET_SERVICE_ACCOUNT_EMAIL }}
+          project_id: ${{ secrets.TESTNET_GCP_PROJECT_ID }}
       - name: Set up Cloud SDK
         if: "${{ env.DEPLOY == 'true' }}"
         uses: google-github-actions/setup-gcloud@v0
-        with:
-          project_id: ${{ secrets.TESTNET_GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.TESTNET_GCP_SA_KEY }}
-          export_default_credentials: true
       - name: Get secrets
         if: "${{ env.DEPLOY == 'true' }}"
         id: secrets
@@ -340,19 +361,26 @@ jobs:
       - compute-build-info
     env:
       DEPLOY: ${{ secrets.MAINNET_DEPLOY }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout code
         if: "${{ env.DEPLOY == 'true' }}"
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Authenticate to Google Cloud
+        if: "${{ env.DEPLOY == 'true' }}"
+        id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          workload_identity_provider: ${{ secrets.MAINNET_GOOGLE_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.MAINNET_SERVICE_ACCOUNT_EMAIL }}
+          project_id: ${{ secrets.MAINNET_GCP_PROJECT_ID }}
       - name: Set up Cloud SDK
         if: "${{ env.DEPLOY == 'true' }}"
         uses: google-github-actions/setup-gcloud@v0
-        with:
-          project_id: ${{ secrets.MAINNET_GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.MAINNET_GCP_SA_KEY }}
-          export_default_credentials: true
       - name: Get secrets
         if: "${{ env.DEPLOY == 'true' }}"
         id: secrets
@@ -437,19 +465,26 @@ jobs:
       - compute-build-info
     env:
       DEPLOY: ${{ secrets.MAINNET_DEPLOY }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout code
         if: "${{ env.DEPLOY == 'true' }}"
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Authenticate to Google Cloud
+        if: "${{ env.DEPLOY == 'true' }}"
+        id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          workload_identity_provider: ${{ secrets.MAINNET_GOOGLE_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.MAINNET_SERVICE_ACCOUNT_EMAIL }}
+          project_id: ${{ secrets.MAINNET_GCP_PROJECT_ID }}
       - name: Set up Cloud SDK
         if: "${{ env.DEPLOY == 'true' }}"
         uses: google-github-actions/setup-gcloud@v0
-        with:
-          project_id: ${{ secrets.MAINNET_GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.MAINNET_GCP_SA_KEY }}
-          export_default_credentials: true
       - name: Get secrets
         if: "${{ env.DEPLOY == 'true' }}"
         id: secrets
