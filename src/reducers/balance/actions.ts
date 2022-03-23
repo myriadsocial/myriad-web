@@ -108,9 +108,14 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
         });
       }
 
+      const defaultCurrencies = tokenBalances.filter(
+        balance => balance.id === user.defaultCurrency,
+      );
+      const otherCurrencies = tokenBalances.filter(balance => balance.id !== user.defaultCurrency);
+
       dispatch({
         type: constants.FETCH_BALANCES,
-        balanceDetails: tokenBalances,
+        balanceDetails: defaultCurrencies.concat(otherCurrencies),
       });
     } catch (error) {
       dispatch(
@@ -152,4 +157,19 @@ export const getUserCurrencies: ThunkActionCreator<Actions, RootState> =
     } finally {
       dispatch(setLoading(false));
     }
+  };
+
+export const sortBalances: ThunkActionCreator<Actions, RootState> =
+  (selectedCurrency: CurrencyId) => async (dispatch, getState) => {
+    const {
+      balanceState: {balanceDetails},
+    } = getState();
+
+    const defaultCurrencies = balanceDetails.filter(balance => balance.id === selectedCurrency);
+    const otherCurrencies = balanceDetails.filter(balance => balance.id !== selectedCurrency);
+
+    dispatch({
+      type: constants.FETCH_BALANCES,
+      balanceDetails: defaultCurrencies.concat(otherCurrencies),
+    });
   };

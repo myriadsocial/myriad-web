@@ -7,12 +7,10 @@ import {PaginationParams, FilterParams, SortType} from './interfaces/pagination-
 import {Post, PostProps, ImportPostProps, PostVisibility, PostStatus} from 'src/interfaces/post';
 import {TimelineOrderType, TimelineFilter, TimelineType, PostOrigin} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
+import {WalletDetail} from 'src/interfaces/wallet';
 
 type PostList = BaseList<Post>;
 type ImporterList = BaseList<User>;
-type WalletAddress = {
-  walletAddress: string;
-};
 type PostsFilterParams = FilterParams & {
   userId?: string;
 };
@@ -78,6 +76,13 @@ export const getPost = async (
     include: [
       {
         relation: 'user',
+        scope: {
+          include: [
+            {
+              relation: 'wallets',
+            },
+          ],
+        },
       },
       {
         relation: 'people',
@@ -289,8 +294,8 @@ export const removePost = async (postId: string): Promise<void> => {
   });
 };
 
-export const getWalletAddress = async (postId: string): Promise<WalletAddress> => {
-  const {data} = await MyriadAPI.request<WalletAddress>({
+export const getWalletAddress = async (postId: string): Promise<WalletDetail> => {
+  const {data} = await MyriadAPI.request<WalletDetail>({
     url: `/posts/${postId}/walletaddress`,
     method: 'GET',
   });

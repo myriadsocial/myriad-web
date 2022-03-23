@@ -48,7 +48,19 @@ export const loadComments = async (
     params: {
       filter: {
         where,
-        include: ['user', 'votes'],
+        include: [
+          'votes',
+          {
+            relation: 'user',
+            scope: {
+              include: [
+                {
+                  relation: 'wallets',
+                },
+              ],
+            },
+          },
+        ],
         order: [`${orderField} ${sort}`],
       },
       pageNumber: page,

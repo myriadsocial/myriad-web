@@ -20,8 +20,7 @@ import themeV2 from '../src/themes/light-theme';
 import {SnackbarProvider} from 'notistack';
 import {I18nextProvider} from 'react-i18next';
 import {ToasterSnack} from 'src/components/atoms/ToasterSnack';
-import {ConfirmProvider} from 'src/components/common/Confirm/Confirm.provider';
-import {AlertProvider} from 'src/context/alert.context';
+import {AppContextProvider} from 'src/context/AppContextProvider';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 
 const snackbarStyles = {
@@ -124,11 +123,9 @@ const App = ({classes, ...props}: MyAppProps & WithStyles<typeof snackbarStyles>
               }}
               session={pageProps.session}>
               <CookiesProvider>
-                <AlertProvider>
-                  <ConfirmProvider>
-                    <Component {...pageProps} />
-                  </ConfirmProvider>
-                </AlertProvider>
+                <AppContextProvider>
+                  <Component {...pageProps} />
+                </AppContextProvider>
               </CookiesProvider>
             </AuthProvider>
           </SnackbarProvider>

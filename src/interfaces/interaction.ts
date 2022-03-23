@@ -4,6 +4,7 @@ export enum ReferenceType {
   POST = 'post',
   COMMENT = 'comment',
   USER = 'user',
+  PEOPLE = 'people',
 }
 
 export enum SectionType {

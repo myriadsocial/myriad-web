@@ -46,7 +46,6 @@ export const Timeline: React.FC<TimelineProps> = props => {
     hasMore,
     loadNextPage,
     upvote,
-    onSendTip,
     onOpenTipHistory,
     onDelete,
     onReport,
@@ -106,7 +105,6 @@ export const Timeline: React.FC<TimelineProps> = props => {
               post={post}
               anonymous={anonymous}
               onUpvote={upvote}
-              onSendTip={onSendTip}
               toggleDownvoting={toggleDownvoting}
               onOpenTipHistory={onOpenTipHistory}
               onDelete={onDelete}

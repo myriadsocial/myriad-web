@@ -6,6 +6,8 @@ import {TipHistory as TipHistoryComponent} from '.';
 import {CurrencyId} from '../../interfaces/currency';
 import {ContentType} from '../../interfaces/wallet';
 
+import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
+
 export default {
   title: 'UI Revamp v2.0/components/Tip History',
   component: TipHistoryComponent,
@@ -31,36 +33,67 @@ TipHistory.args = {
       createdAt: new Date('2021-08-11T16:28:12.000Z'),
       updatedAt: new Date('2021-09-02T03:11:28.000Z'),
       type: ContentType.POST,
-      fromUser: {
-        defaultCurrency: CurrencyId.AUSD,
-        id: '0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127',
-        name: 'Sergio Aleksei',
-        profilePictureURL: 'https://res.cloudinary.com/dsget80gs/d8x8xb18wnvkbxconr58.jpg',
-        bannerImageUrl:
-          'https://res.cloudinary.com/dsget80gs/image/upload/v1630031967/lfygmfzthrvh5ea8uqef.jpg',
-        bio: 'Hello :D',
-        fcmTokens: [
-          'fkNm2JA4qGSxN0vD3NX-NR:APA91bH0J1xlFEe1FkJdrU_681NBcGRKotFsamek4wLq-pExBf9h8weY6EWPMM-01U-HRA07nZwZUegfrC3PRq6uCQHydXOA9qYB8i9PC1u-XRG-D_i_8iDxW-1wudzyzOkj1JGEcqWW',
-        ],
-        createdAt: new Date('2021-07-29T14:47:06.000Z'),
-        updatedAt: new Date('2021-09-02T03:11:28.000Z'),
-        currencies: [],
+      fromWallet: {
+        id: '0x76709daddc7f97dede94a4ab9bc168fd4f5b5a96bf15adfdb247d6f0d2276d39',
+        type: WalletTypeEnum.POLKADOT,
+        network: NetworkTypeEnum.POLKADOT,
+        primary: true,
+        userId: '6232d3a5dbe01066471dca12',
+        user: {
+          id: '6232d3a5dbe01066471dca12',
+          name: 'NutrisariJerukManisBgt',
+          username: 'nutrisarijeruk',
+          bannerImageUrl: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
+          metric: {
+            totalPosts: 16,
+            totalExperiences: 0,
+            totalFriends: 1,
+            totalKudos: 6,
+            totalActivity: 0,
+          },
+          fcmTokens: [
+            'fM81j8jUKRehhMEMnmywDp:APA91bGNtuY21why3uy9SqANRega5BiPSTI8deQuFN8Bg4l2g8_VZH2gbj-TCyI50n31zUiiK-wOLnQettT4Pbm2qRRj-GY3Hs24YqgjoDMGeCvnK-94_NVJTNsWSNQUrkzDGfPYLRBX',
+          ],
+          verified: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          defaultCurrency: CurrencyId.MYRIA,
+          wallets: [],
+          currencies: [],
+        },
       },
-      toUser: {
-        defaultCurrency: CurrencyId.AUSD,
-        id: '0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127',
-        name: 'Ms. Sara Bellum',
-        profilePictureURL:
-          'https://res.cloudinary.com/dsget80gs/image/upload/v1629910582/dnpyoli9d0jiyqejokqo.png',
-        bannerImageUrl:
-          'https://res.cloudinary.com/dsget80gs/image/upload/v1630031967/lfygmfzthrvh5ea8uqef.jpg',
-        bio: 'Hello :D',
-        fcmTokens: [
-          'fkNm2JA4qGSxN0vD3NX-NR:APA91bH0J1xlFEe1FkJdrU_681NBcGRKotFsamek4wLq-pExBf9h8weY6EWPMM-01U-HRA07nZwZUegfrC3PRq6uCQHydXOA9qYB8i9PC1u-XRG-D_i_8iDxW-1wudzyzOkj1JGEcqWW',
-        ],
-        createdAt: new Date('2021-07-29T14:47:06.000Z'),
-        updatedAt: new Date('2021-09-02T03:11:28.000Z'),
-        currencies: [],
+      toWallet: {
+        id: '0xd6a98971eb249a031daebf0856c693ef73018cc4a77a703061f44794abc1931a',
+        type: WalletTypeEnum.POLKADOT,
+        network: NetworkTypeEnum.POLKADOT,
+        primary: true,
+        userId: '6232d3a5dbe01066471dca12',
+        user: {
+          id: '6232eaa8dbe01066471dd305',
+          name: 'Mojito',
+          username: 'mojito',
+          bannerImageUrl: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
+          bio: 'nospacnoeefbahfjabhfbahbhasbhbahjbhcjaschjbashbahbsabchabshcbshbhcsbhcbshbchsbchsbchbsjcbahbchabhcbashchahcahcbhasasbchbashbchabshbchsbhcbshchshcscabjbshbhacbsh',
+          websiteURL:
+            'asjabhjfbahsbhasbhjfabhbashbhabshbashbhsabhbshbchsbjcnsjcksakocaoidiqwuhqwbdhjwbfhsbnvbsndbvhsdbvdhvbhdbvhsdjknskldvksdnjvnsdjkvsdhvhsbdvhbdshvsdhvjsnjdbjhdjnvjdbhvbdshvbdhsbvhdsbhvbhdsbvhdbvhbdshvbsdivsyighfuehfiusfjhskdfnjkshdfheiufhdjsfkjsdbhfbshdfhsdgfihsgfsdhfhsdbfhsdbfhsgdfhshdfjsjfioahuifgewygygwygyfggyegfyegyfgeyfbsjnjkhdjhdgsygdygysdbhbdsnjshjdfhueguifhiowhejfnjwenfaiohfuagyehbbhsbfhsbdhfgsdufhsudfhsodhfoishoeishjefbshbdfgsufhjskndjfnsjkdbfusgeufhuisheufhsnefjksndjkfhsuhdfuihsuehfseugfushufhushuehfhsbfbhsbehfbshebjhfsbhejbfhsbehfbshefusheuhfusheuofhsoef',
+          metric: {
+            totalPosts: 59,
+            totalExperiences: 5,
+            totalFriends: 21,
+            totalKudos: 1,
+            totalActivity: 0,
+          },
+          fcmTokens: [
+            'fo543qfdG3fefsmIXPMT3w:APA91bGVWpZCzlp2xZ5rIDP_lixznZvz1fZUTu3CrO4S01Rdid3ApX7i1jUUHU6V4muDxDf1qMG_cV314oR1ARr2KjdyeifExXBeMLiLI9jLBNcrxCmvmAdQqMq0JAAO9PNpKXQcCSIP',
+          ],
+          verified: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          defaultCurrency: CurrencyId.MYRIA,
+          wallets: [],
+          currencies: [],
+          onTimeline: '6217442ba12172001c2a36da',
+        },
       },
       currency: {
         id: CurrencyId.MYRIA,
@@ -84,37 +117,67 @@ TipHistory.args = {
       from: '0x1c2ab7c8bda0b1f3980fa5e88c394e663aab7b8e0c39ba1b8b35c112a0bfb62d',
       to: '0x2ec9196df3273291729097c5c9411ba6add6c84c94e4de0327ff351c1fbb8556',
       currencyId: 'AUSD',
-      fromUser: {
-        defaultCurrency: CurrencyId.AUSD,
-        id: '0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127',
-        name: 'Ms. Sara Bellum',
-        profilePictureURL:
-          'https://res.cloudinary.com/dsget80gs/image/upload/v1629910582/dnpyoli9d0jiyqejokqo.png',
-        bannerImageUrl:
-          'https://res.cloudinary.com/dsget80gs/image/upload/v1630031967/lfygmfzthrvh5ea8uqef.jpg',
-        bio: 'Hello :D',
-        fcmTokens: [
-          'fkNm2JA4qGSxN0vD3NX-NR:APA91bH0J1xlFEe1FkJdrU_681NBcGRKotFsamek4wLq-pExBf9h8weY6EWPMM-01U-HRA07nZwZUegfrC3PRq6uCQHydXOA9qYB8i9PC1u-XRG-D_i_8iDxW-1wudzyzOkj1JGEcqWW',
-        ],
-        createdAt: new Date('2021-07-29T14:47:06.000Z'),
-        updatedAt: new Date('2021-09-02T03:11:28.000Z'),
-        currencies: [],
+      fromWallet: {
+        id: '0x76709daddc7f97dede94a4ab9bc168fd4f5b5a96bf15adfdb247d6f0d2276d39',
+        type: WalletTypeEnum.POLKADOT,
+        network: NetworkTypeEnum.POLKADOT,
+        primary: true,
+        userId: '6232d3a5dbe01066471dca12',
+        user: {
+          id: '6232d3a5dbe01066471dca12',
+          name: 'NutrisariJerukManisBgt',
+          username: 'nutrisarijeruk',
+          bannerImageUrl: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
+          metric: {
+            totalPosts: 16,
+            totalExperiences: 0,
+            totalFriends: 1,
+            totalKudos: 6,
+            totalActivity: 0,
+          },
+          fcmTokens: [
+            'fM81j8jUKRehhMEMnmywDp:APA91bGNtuY21why3uy9SqANRega5BiPSTI8deQuFN8Bg4l2g8_VZH2gbj-TCyI50n31zUiiK-wOLnQettT4Pbm2qRRj-GY3Hs24YqgjoDMGeCvnK-94_NVJTNsWSNQUrkzDGfPYLRBX',
+          ],
+          verified: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          defaultCurrency: CurrencyId.MYRIA,
+          wallets: [],
+          currencies: [],
+        },
       },
-      toUser: {
-        defaultCurrency: CurrencyId.AUSD,
-        id: '0xc6fd69a38924f3e0f99e31ae96a142be9b0cdfd5d3afb9e6b0b6a224b5f2f127',
-        name: 'Ms. Sara Bellum',
-        profilePictureURL:
-          'https://res.cloudinary.com/dsget80gs/image/upload/v1629910582/dnpyoli9d0jiyqejokqo.png',
-        bannerImageUrl:
-          'https://res.cloudinary.com/dsget80gs/image/upload/v1630031967/lfygmfzthrvh5ea8uqef.jpg',
-        bio: 'Hello :D',
-        fcmTokens: [
-          'fkNm2JA4qGSxN0vD3NX-NR:APA91bH0J1xlFEe1FkJdrU_681NBcGRKotFsamek4wLq-pExBf9h8weY6EWPMM-01U-HRA07nZwZUegfrC3PRq6uCQHydXOA9qYB8i9PC1u-XRG-D_i_8iDxW-1wudzyzOkj1JGEcqWW',
-        ],
-        createdAt: new Date('2021-07-29T14:47:06.000Z'),
-        updatedAt: new Date('2021-09-02T03:11:28.000Z'),
-        currencies: [],
+      toWallet: {
+        id: '0xd6a98971eb249a031daebf0856c693ef73018cc4a77a703061f44794abc1931a',
+        type: WalletTypeEnum.POLKADOT,
+        network: NetworkTypeEnum.POLKADOT,
+        primary: true,
+        userId: '6232d3a5dbe01066471dca12',
+        user: {
+          id: '6232eaa8dbe01066471dd305',
+          name: 'Mojito',
+          username: 'mojito',
+          bannerImageUrl: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
+          bio: 'nospacnoeefbahfjabhfbahbhasbhbahjbhcjaschjbashbahbsabchabshcbshbhcsbhcbshbchsbchsbchbsjcbahbchabhcbashchahcahcbhasasbchbashbchabshbchsbhcbshchshcscabjbshbhacbsh',
+          websiteURL:
+            'asjabhjfbahsbhasbhjfabhbashbhabshbashbhsabhbshbchsbjcnsjcksakocaoidiqwuhqwbdhjwbfhsbnvbsndbvhsdbvdhvbhdbvhsdjknskldvksdnjvnsdjkvsdhvhsbdvhbdshvsdhvjsnjdbjhdjnvjdbhvbdshvbdhsbvhdsbhvbhdsbvhdbvhbdshvbsdivsyighfuehfiusfjhskdfnjkshdfheiufhdjsfkjsdbhfbshdfhsdgfihsgfsdhfhsdbfhsdbfhsgdfhshdfjsjfioahuifgewygygwygyfggyegfyegyfgeyfbsjnjkhdjhdgsygdygysdbhbdsnjshjdfhueguifhiowhejfnjwenfaiohfuagyehbbhsbfhsbdhfgsdufhsudfhsodhfoishoeishjefbshbdfgsufhjskndjfnsjkdbfusgeufhuisheufhsnefjksndjkfhsuhdfuihsuehfseugfushufhushuehfhsbfbhsbehfbshebjhfsbhejbfhsbehfbshefusheuhfusheuofhsoef',
+          metric: {
+            totalPosts: 59,
+            totalExperiences: 5,
+            totalFriends: 21,
+            totalKudos: 1,
+            totalActivity: 0,
+          },
+          fcmTokens: [
+            'fo543qfdG3fefsmIXPMT3w:APA91bGVWpZCzlp2xZ5rIDP_lixznZvz1fZUTu3CrO4S01Rdid3ApX7i1jUUHU6V4muDxDf1qMG_cV314oR1ARr2KjdyeifExXBeMLiLI9jLBNcrxCmvmAdQqMq0JAAO9PNpKXQcCSIP',
+          ],
+          verified: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          defaultCurrency: CurrencyId.MYRIA,
+          wallets: [],
+          currencies: [],
+          onTimeline: '6217442ba12172001c2a36da',
+        },
       },
       currency: {
         id: CurrencyId.AUSD,

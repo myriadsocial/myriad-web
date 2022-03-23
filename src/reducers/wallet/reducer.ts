@@ -7,7 +7,7 @@ import * as constants from './constants';
 
 import update from 'immutability-helper';
 import * as Redux from 'redux';
-import {WalletDetail, ContentType} from 'src/interfaces/wallet';
+import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 
 export interface WalletState extends BaseState {
   recipientDetail: WalletDetail;
@@ -25,8 +25,7 @@ const initialState: WalletState = {
   loading: false,
   recipientDetail: {
     referenceId: '',
-    walletAddress: '',
-    contentType: ContentType.POST,
+    referenceType: WalletReferenceType.WALLET_ADDRESS,
   },
   tippedUserId: '',
   isTipSent: false,

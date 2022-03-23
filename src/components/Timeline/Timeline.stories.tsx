@@ -66,6 +66,7 @@ Timeline.args = {
         createdAt: new Date('2021-07-15T03:40:23.000Z'),
         updatedAt: new Date('2021-09-03T06:46:39.000Z'),
         currencies: [],
+        wallets: [],
       },
       comments: [
         {
@@ -97,6 +98,7 @@ Timeline.args = {
             createdAt: new Date('2021-07-15T03:40:23.000Z'),
             updatedAt: new Date('2021-07-15T03:40:23.000Z'),
             currencies: [],
+            wallets: [],
           },
         },
       ],
@@ -131,6 +133,7 @@ Timeline.args = {
           createdAt: new Date('2021-07-15T03:40:23.000Z'),
           updatedAt: new Date('2021-09-03T06:46:39.000Z'),
           currencies: [],
+          wallets: [],
         },
       ],
       totalImporter: 1,
@@ -163,6 +166,7 @@ Timeline.args = {
         createdAt: new Date('2021-07-29T14:47:06.000Z'),
         updatedAt: new Date('2021-09-02T03:11:28.000Z'),
         currencies: [],
+        wallets: [],
       },
       people: {
         id: '6128695ae2f915a7f64ee94e',
@@ -202,6 +206,7 @@ Timeline.args = {
           createdAt: new Date('2021-07-15T03:40:23.000Z'),
           updatedAt: new Date('2021-09-03T06:46:39.000Z'),
           currencies: [],
+          wallets: [],
         },
       ],
       totalImporter: 1,
@@ -231,6 +236,7 @@ Timeline.args = {
         createdAt: new Date('2021-07-22T09:00:47.000Z'),
         updatedAt: new Date('2021-08-27T15:29:28.000Z'),
         currencies: [],
+        wallets: [],
       },
       people: {
         id: '612c544caa5264f59d2e36d3',

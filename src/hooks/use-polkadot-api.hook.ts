@@ -3,6 +3,8 @@ import * as Sentry from '@sentry/nextjs';
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {BN, BN_ONE, BN_TWO, BN_TEN, formatBalance} from '@polkadot/util';
+
 import {SimpleSendTipProps} from '../interfaces/transaction';
 import {setIsTipSent, setFee} from '../reducers/wallet/actions';
 import {WalletState} from '../reducers/wallet/reducer';
@@ -41,18 +43,27 @@ export const usePolkadotApi = () => {
     }
   }, [anonymous, currencies, balanceDetails]);
 
-  const getEstimatedFee = async (from: string, to: string, selectedCurrency: BalanceDetail) => {
+  const getEstimatedFee = async (
+    from: string,
+    to: string,
+    currency: BalanceDetail,
+  ): Promise<BN | null> => {
+    setIsFetchingFee(true);
+
     try {
-      setIsFetchingFee(true);
-      const {partialFee: estimatedFee, api} = await estimateFee(from, to, selectedCurrency);
+      let {partialFee: estimatedFee} = await estimateFee(from, to, currency);
 
-      if (api) await api.disconnect();
+      if (estimatedFee) {
+        dispatch(setFee(estimatedFee.toString()));
+      } else {
+        // equal 0.01
+        estimatedFee = BN_ONE.mul(BN_TEN.pow(new BN(currency.decimal))).div(BN_TEN.pow(BN_TWO));
+      }
 
-      if (estimatedFee) dispatch(setFee(estimatedFee));
+      return estimatedFee;
     } catch (error) {
-      console.log({error});
       Sentry.captureException(error);
-      return error;
+      return null;
     } finally {
       setIsFetchingFee(false);
     }
@@ -68,6 +79,7 @@ export const usePolkadotApi = () => {
     if (isTipSent) {
       dispatch(setIsTipSent(false));
     }
+
     try {
       const txHash = await signAndSendExtrinsic(
         {
@@ -93,13 +105,18 @@ export const usePolkadotApi = () => {
       }
 
       if (txHash) {
+        const formattedAmount = formatBalance(amount, {
+          decimals: currency.decimal,
+          forceUnit: '-',
+          withSi: false,
+        });
         // Record the transaction
         if (type) {
           // sending tip from Post/Comment
           await storeTransaction({
             // TODO: should add the extrinsicURL: explorerURL + txHash
             hash: txHash,
-            amount,
+            amount: +formattedAmount,
             from,
             to,
             currencyId: currency.id,
@@ -111,7 +128,7 @@ export const usePolkadotApi = () => {
           // sending direct tip
           await storeTransaction({
             hash: txHash,
-            amount,
+            amount: +formattedAmount,
             from,
             to,
             currencyId: currency.id,
@@ -131,6 +148,7 @@ export const usePolkadotApi = () => {
         callback && callback();
       }
     } catch (error) {
+      console.error(error);
       if (error.message === 'Cancelled') {
         openToasterSnack({
           variant: 'warning',

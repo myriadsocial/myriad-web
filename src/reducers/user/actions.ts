@@ -1,3 +1,4 @@
+import {sortBalances} from '../balance/actions';
 import {Actions as BaseAction, setLoading, setError, PaginationAction} from '../base/actions';
 import {RootState} from '../index';
 import {ShowToasterSnack, showToasterSnack} from '../toaster-snack/actions';
@@ -334,6 +335,7 @@ export const setDefaultCurrency: ThunkActionCreator<Actions, RootState> =
       },
     });
 
+    dispatch(sortBalances(currencyId));
     dispatch(setLoading(false));
   };
 

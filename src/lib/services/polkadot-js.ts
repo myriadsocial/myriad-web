@@ -7,17 +7,17 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {Keyring} from '@polkadot/keyring';
 import {u128, u32, UInt} from '@polkadot/types';
 import {numberToHex} from '@polkadot/util';
+import {BN, BN_TEN} from '@polkadot/util';
 
 import {NoAccountException} from './errors/NoAccountException';
 
-import BN from 'bn.js';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
 
 interface signAndSendExtrinsicProps {
   from: string;
   to: string;
-  value: number;
+  value: BN;
   currencyId: string;
   wsAddress: string;
   native: boolean;
@@ -30,7 +30,7 @@ interface SignTransactionCallbackProps {
 }
 
 interface EstimateFeeResponseProps {
-  partialFee: string | null;
+  partialFee: BN | null;
   api: ApiPromise | null;
 }
 
@@ -84,9 +84,7 @@ export const estimateFee = async (
 
     const baseAddress = keyring.encodeAddress(from);
 
-    let finalPartialFee: string | null = null;
-
-    let acaBasedTxFee: number | null = null;
+    let finalPartialFee = new BN(0);
 
     let api: ApiPromise | null = null;
 
@@ -120,13 +118,15 @@ export const estimateFee = async (
 
           if (selectedCurrency.id === CurrencyId.AUSD) {
             const tokenPerAca = await convertAcaBasedTxFee(api, selectedCurrency);
-            acaBasedTxFee = Number(partialFee.toString()) / 10 ** 13;
+
             if (tokenPerAca) {
-              finalPartialFee = (acaBasedTxFee * tokenPerAca).toString();
+              finalPartialFee = partialFee.div(BN_TEN.pow(new BN(13))).mul(new BN(tokenPerAca));
             }
           } else {
-            finalPartialFee = partialFee.toString();
+            finalPartialFee = partialFee.toBn();
           }
+
+          api.disconnect();
         }
       }
     }
@@ -213,16 +213,10 @@ export const signAndSendExtrinsic = async (
         signerOpened: true,
       });
 
-    const countDecimal = value.toString().split('.')[1]?.length ?? 0;
-    const currentDecimal = decimal - countDecimal;
-    const updatedValue = value * 10 ** countDecimal;
-    const updatedDecimal = 1 * 10 ** currentDecimal;
-    const amount = new BN(updatedValue.toString()).mul(new BN(updatedDecimal.toString()));
-
     // here we use the api to create a balance transfer to some account of a value of 12345678
     const transferExtrinsic = native
-      ? api.tx.balances.transfer(to, amount)
-      : api.tx.currencies.transfer(to, {TOKEN: currencyId}, amount);
+      ? api.tx.balances.transfer(to, value)
+      : api.tx.currencies.transfer(to, {TOKEN: currencyId}, value);
 
     let txHash: string | null = null;
 
@@ -254,6 +248,7 @@ export const signAndSendExtrinsic = async (
 
     return txHash;
   } catch (error) {
+    console.error(error);
     if (!(error instanceof NoAccountException)) {
       Sentry.captureException(error);
     }

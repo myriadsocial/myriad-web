@@ -1,9 +1,11 @@
-import {BalanceDetail} from '../interfaces/balance';
+import {BN} from '@polkadot/util';
+
+import {BalanceDetail} from './balance';
 import {BaseModel} from './base.interface';
 
 import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {Post} from 'src/interfaces/post';
-import {UserOnTransaction, User} from 'src/interfaces/user';
+import {UserOnTransaction, WalletWithUser} from 'src/interfaces/user';
 
 export type TransactionProps = {
   hash: string;
@@ -20,14 +22,14 @@ export type SimpleSendTipProps = {
   to: string;
   type?: string;
   referenceId?: string;
-  amount: number;
+  amount: BN;
   currency: BalanceDetail;
 };
 
 // TODO: to be refactored, changed into TransactionHistoryDetail
 export interface Transaction extends TransactionProps, BaseModel {
-  fromUser: User;
-  toUser: User;
+  fromWallet: WalletWithUser;
+  toWallet: WalletWithUser;
   post?: Post;
   currency: Currency;
 }

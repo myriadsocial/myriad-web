@@ -7,13 +7,13 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '.';
 import {User} from '../../interfaces/user';
-import {BalanceDetail} from '../MyWallet';
 import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 import {DraggableBalanceCard} from './DraggableBalanceCard';
 
 import _ from 'lodash';
 import {useCurrency} from 'src/hooks/use-currency.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
 
 type PrimaryCoinMenuProps = {

@@ -1,15 +1,13 @@
 import {DotsHorizontalIcon} from '@heroicons/react/outline';
 
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useSelector, useDispatch} from 'react-redux';
 
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
-import {IconButton, Menu, MenuItem, Button, Grid} from '@material-ui/core';
-import Box from '@material-ui/core/Box';
+import {IconButton, Menu, MenuItem, Grid} from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -19,32 +17,25 @@ import Typography from '@material-ui/core/Typography';
 
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {DropdownMenu} from '../atoms/DropdownMenu';
-import {PromptComponent} from '../atoms/Prompt/prompt.component';
 import SearchComponent from '../atoms/Search/SearchBox';
 import useConfirm from '../common/Confirm/use-confirm.hook';
+import useTipping from '../common/Tipping/use-tipping.hook';
 import {friendFilterOptions, FriendType, sortOptions} from './default';
 import {useStyles} from './friend.style';
-import {FriendDetail, useFriendList} from './hooks/use-friend-list.hook';
+import {UserWithMutual, useFriendList} from './hooks/use-friend-list.hook';
 
 import {Empty} from 'src/components/atoms/Empty';
 import {Loading} from 'src/components/atoms/Loading';
-import {Modal} from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Friend} from 'src/interfaces/friend';
+import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {blockFromFriend, removeFromFriend} from 'src/reducers/friend/actions';
 import {UserState} from 'src/reducers/user/reducer';
-import {setIsTipSent} from 'src/reducers/wallet/actions';
-import {setTippedUserId, setTippedUser as setDetailTippedUser} from 'src/reducers/wallet/actions';
-import {WalletState} from 'src/reducers/wallet/reducer';
-
-const SendTipContainer = dynamic(() => import('src/components/SendTip/SendTipContainer'), {
-  ssr: false,
-});
 
 export type FriendListProps = {
   type?: 'contained' | 'basic';
@@ -80,29 +71,19 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   const router = useRouter();
   const dispatch = useDispatch();
   const confirm = useConfirm();
+  const tipping = useTipping();
 
   const {openToasterSnack} = useToasterSnackHook();
   const {friendList, removeFromFriendList} = useFriendList(friends, user);
 
   const {user: currentUser} = useSelector<RootState, UserState>(state => state.userState);
-
-  const {isTipSent, explorerURL} = useSelector<RootState, WalletState>(state => state.walletState);
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [currentFriend, setCurrentFriend] = useState<null | FriendDetail>(null);
-  const [tippedFriendForHistory, setTippedFriendForHistory] = useState<FriendDetail | null>(null);
-  const [isSendTipOpened, setSendTipOpened] = useState(false);
-  const [isTipSuccessDialogOpen, setTipSuccessDialogOpen] = useState(false);
-
-  useEffect(() => {
-    if (isTipSent) {
-      closeSendTip();
-    }
-  }, [isTipSent]);
+  const [currentFriend, setCurrentFriend] = useState<null | UserWithMutual>(null);
 
   const handleOpenFriendSetting =
-    (currentFriend: FriendDetail) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    (currentFriend: UserWithMutual) => (event: React.MouseEvent<HTMLButtonElement>) => {
       setCurrentFriend(currentFriend);
       setAnchorEl(event.currentTarget);
     };
@@ -111,8 +92,12 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     setAnchorEl(null);
   };
 
-  const closeTipSuccessDialog = (): void => {
-    setTipSuccessDialogOpen(false);
+  const handleSendTip = () => {
+    tipping.send({
+      receiver: currentFriend as User,
+      reference: currentFriend as User,
+      referenceType: ReferenceType.USER,
+    });
   };
 
   const handleVisitProfile = () => {
@@ -123,31 +108,6 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     }
 
     handleCloseFriendSetting();
-  };
-
-  const handleSendTip = () => {
-    if (currentFriend) {
-      dispatch(setDetailTippedUser(currentFriend.name, currentFriend.avatar ?? ''));
-      dispatch(setTippedUserId(currentFriend.id));
-
-      setSendTipOpened(true);
-      handleCloseFriendSetting();
-    }
-  };
-
-  const closeSendTip = () => {
-    if (isTipSent && currentFriend) {
-      setSendTipOpened(false);
-      setTippedFriendForHistory(currentFriend);
-      setTipSuccessDialogOpen(true);
-    } else {
-      console.log('no user tipped');
-    }
-
-    dispatch(setIsTipSent(false));
-
-    setSendTipOpened(false);
-    setCurrentFriend(null);
   };
 
   const handleUnfriend = () => {
@@ -282,7 +242,11 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                 alignItems="center">
                 <ListItemAvatar>
                   <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} passHref>
-                    <Avatar name={friend.name} src={friend.avatar} size={AvatarSize.MEDIUM} />
+                    <Avatar
+                      name={friend.name}
+                      src={friend.profilePictureURL}
+                      size={AvatarSize.MEDIUM}
+                    />
                   </Link>
                 </ListItemAvatar>
                 <ListItemText>
@@ -320,15 +284,6 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         </List>
       </div>
 
-      <Modal
-        gutter="none"
-        open={isSendTipOpened}
-        onClose={closeSendTip}
-        title="Send Tip"
-        subtitle="Finding this post is insightful? Send a tip!">
-        <SendTipContainer />
-      </Modal>
-
       <Menu
         id={currentFriend?.id ?? 'friend-id'}
         anchorEl={anchorEl}
@@ -338,7 +293,9 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         onClose={handleCloseFriendSetting}>
         <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
         <MenuItem
-          disabled={balanceDetails.length === 0 || currentFriend?.id === currentUser?.id}
+          disabled={
+            balanceDetails.length === 0 || currentFriend?.id === currentUser?.id || !tipping.enabled
+          }
           onClick={handleSendTip}>
           Send direct tip
         </MenuItem>
@@ -356,40 +313,6 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
           </MenuItem>
         </ShowIf>
       </Menu>
-
-      <PromptComponent
-        icon={'success'}
-        open={isTipSuccessDialogOpen}
-        onCancel={closeTipSuccessDialog}
-        title={'Success'}
-        subtitle={
-          <Typography component="div">
-            Tip to{' '}
-            <Box fontWeight={400} display="inline">
-              {tippedFriendForHistory?.name ?? 'Unknown Myrian'}
-            </Box>{' '}
-            sent successfully
-          </Typography>
-        }>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}>
-          <a
-            target="_blank"
-            style={{textDecoration: 'none'}}
-            href={explorerURL ?? 'https://myriad.social'}
-            rel="noopener noreferrer">
-            <Button style={{marginRight: '12px'}} size="small" variant="outlined" color="secondary">
-              Transaction details
-            </Button>
-          </a>
-          <Button size="small" variant="contained" color="primary" onClick={closeTipSuccessDialog}>
-            Return
-          </Button>
-        </div>
-      </PromptComponent>
     </div>
   );
 };

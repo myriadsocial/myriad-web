@@ -2,6 +2,7 @@ import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 import {LoopbackWhere} from './interfaces/loopback-query.interface';
+import {PaginationParams} from './interfaces/pagination-params.interface';
 
 import {Transaction, TransactionProps} from 'src/interfaces/transaction';
 
@@ -22,7 +23,20 @@ export const getTransactions = async (
   page?: number,
 ): Promise<TransactionList> => {
   const where: LoopbackWhere<TransactionProps> = {};
-  const include: Array<string> = ['fromUser', 'toUser'];
+  const include: Array<any> = [
+    {
+      relation: 'fromWallet',
+      scope: {
+        include: [{relation: 'user'}],
+      },
+    },
+    {
+      relation: 'toWallet',
+      scope: {
+        include: [{relation: 'user'}],
+      },
+    },
+  ];
 
   if (options.referenceId) {
     where.referenceId = {eq: options.referenceId};
@@ -63,10 +77,26 @@ export const getTransactions = async (
 
 export const getTransactionsIncludingCurrency = async (
   options: Partial<TransactionProps>,
-  page?: number,
+  pagination: PaginationParams,
 ): Promise<TransactionList> => {
+  const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
+
   const where: LoopbackWhere<TransactionProps> = {};
-  const include: Array<string> = ['fromUser', 'toUser', 'currency'];
+  const include: Array<any> = [
+    'currency',
+    {
+      relation: 'fromWallet',
+      scope: {
+        include: [{relation: 'user'}],
+      },
+    },
+    {
+      relation: 'toWallet',
+      scope: {
+        include: [{relation: 'user'}],
+      },
+    },
+  ];
 
   if (options.referenceId) {
     where.referenceId = {eq: options.referenceId};
@@ -89,9 +119,9 @@ export const getTransactionsIncludingCurrency = async (
     method: 'GET',
     params: {
       pageNumber: page,
-      pageLimit: PAGINATION_LIMIT,
+      pageLimit: limit,
       filter: {
-        order: `createdAt DESC`,
+        order: [`${orderField} ${sort}`],
         where,
         include,
       },

@@ -14,7 +14,6 @@ import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -48,7 +47,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
   const {tippedContent} = useSelector<RootState, TimelineState>(state => state.timelineState);
   const {fee} = useSelector<RootState, WalletState>(state => state.walletState);
 
-  const {simplerSendTip, getEstimatedFee, isFetchingFee, isSignerLoading} = usePolkadotApi();
+  const {getEstimatedFee, isFetchingFee, isSignerLoading} = usePolkadotApi();
 
   const [tipAmount, setTipAmount] = useState('');
   const [verifiedTipAmount, setVerifiedTipAmount] = useState('');
@@ -157,25 +156,25 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
   };
 
   const handleSendTip = () => {
-    if (tippedContent.contentType.length > 0) {
-      const sendTipForContentPayload = {
-        from: user && user.wallets && user.wallets.length >= 0 ? user.wallets[0].id : '',
-        to: tippedUserId,
-        type: tippedContent.contentType,
-        referenceId: tippedContent.referenceId,
-        amount: Number(verifiedTipAmount),
-        currency: selectedCurrency,
-      };
-      simplerSendTip(sendTipForContentPayload);
-    } else {
-      const sendTipDirectToUserPayload = {
-        from: user && user.wallets && user.wallets.length >= 0 ? user.wallets[0].id : '',
-        to: tippedUserId,
-        amount: Number(verifiedTipAmount),
-        currency: selectedCurrency,
-      };
-      simplerSendTip(sendTipDirectToUserPayload);
-    }
+    // if (tippedContent.contentType.length > 0) {
+    //   const sendTipForContentPayload = {
+    //     from: user.id,
+    //     to: tippedUserId,
+    //     type: tippedContent.contentType,
+    //     referenceId: tippedContent.referenceId,
+    //     amount: Number(verifiedTipAmount),
+    //     currency: selectedCurrency,
+    //   };
+    //   simplerSendTip(sendTipForContentPayload);
+    // } else {
+    //   const sendTipDirectToUserPayload = {
+    //     from: user.id,
+    //     to: tippedUserId,
+    //     amount: Number(verifiedTipAmount),
+    //     currency: selectedCurrency,
+    //   };
+    //   simplerSendTip(sendTipDirectToUserPayload);
+    // }
 
     setOpenSigner(false);
   };
@@ -287,12 +286,6 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
                 <Typography className={classes.subHeader}>Tip Summary</Typography>
                 <TableContainer>
                   <Table size="small" aria-label="tip summary table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell align="right"></TableCell>
-                      </TableRow>
-                    </TableHead>
                     <TableBody>
                       <TableRow>
                         <TableCell component="th" scope="row" classes={{root: classes.table}}>
