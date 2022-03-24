@@ -32,6 +32,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     subHeaderSection: {
       padding: '0 30px',
+      overflow: 'hidden',
     },
     formRoot: {
       marginTop: 12,

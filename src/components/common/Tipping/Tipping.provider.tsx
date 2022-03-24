@@ -27,6 +27,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   const [options, setOptions] = useState<TippingOptions>();
   const [enabled, setTippingEnabled] = useState(false);
   const [currencyTipped, setTippingCurrency] = useState<BalanceDetail>();
+  const [transactionUrl, setTransactionUrl] = useState<string>();
 
   useEffect(() => {
     setTippingEnabled(balances.length > 0);
@@ -53,9 +54,12 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
     setTipInfoOpened(false);
   }, [options]);
 
-  const handleSuccessTipping = useCallback((currency: BalanceDetail) => {
-    setTippingCurrency(currency);
+  const handleSuccessTipping = useCallback((currency: BalanceDetail, transactionHash: string) => {
+    if (currency?.explorerURL) {
+      setTransactionUrl(`${currency.explorerURL}/${transactionHash}`);
+    }
 
+    setTippingCurrency(currency);
     handleCloseTipForm();
   }, []);
 
@@ -71,6 +75,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
         <Modal
           gutter="none"
           open={tipFormOpened}
+          style={{}}
           onClose={handleCloseTipForm}
           title="Send Tip"
           subtitle="Finding this post is insightful? Send a tip!">
@@ -104,16 +109,16 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
             &nbsp;sent successfully
           </Typography>
         }>
-        <Grid container justifyContent="center">
-          <a
+        <Grid container justifyContent="space-around">
+          <Button
+            href={transactionUrl ?? 'https://myriad.social'}
             target="_blank"
-            style={{textDecoration: 'none'}}
-            href={currencyTipped?.explorerURL ?? 'https://myriad.social'}
-            rel="noopener noreferrer">
-            <Button style={{marginRight: '12px'}} size="small" variant="outlined" color="secondary">
-              Transaction details
-            </Button>
-          </a>
+            rel="noopener noreferrer"
+            size="small"
+            variant="outlined"
+            color="secondary">
+            Transaction details
+          </Button>
           <Button size="small" variant="contained" color="primary" onClick={resetTippingStatus}>
             Return
           </Button>
