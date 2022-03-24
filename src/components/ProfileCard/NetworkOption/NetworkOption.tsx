@@ -22,10 +22,10 @@ import {
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
 import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
-import {CurrentUserWallet} from 'src/interfaces/user';
+import {UserWallet} from 'src/interfaces/user';
 
 export type NetworkOptionProps = {
-  currentWallet?: CurrentUserWallet;
+  currentWallet?: UserWallet;
 };
 
 const networkOptions: MenuOptions<string>[] = [

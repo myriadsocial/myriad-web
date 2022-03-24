@@ -10,7 +10,7 @@ import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {SocialsEnum} from 'src/interfaces/index';
 import {SocialMedia} from 'src/interfaces/social';
-import {User, UserTransactionDetail, CurrentUserWallet} from 'src/interfaces/user';
+import {User, UserTransactionDetail, UserWallet} from 'src/interfaces/user';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {BaseErrorResponse} from 'src/lib/api/interfaces/error-response.interface';
 import * as SocialAPI from 'src/lib/api/social';
@@ -59,7 +59,12 @@ export interface FetchUserExperience extends PaginationAction {
 
 export interface FetchCurrentUserWallet extends Action {
   type: constants.FETCH_CURRENT_USER_WALLETS;
-  payload: CurrentUserWallet;
+  payload: UserWallet;
+}
+
+export interface FetchUserWallets extends PaginationAction {
+  type: constants.FETCH_USER_WALLETS;
+  payload: UserWallet[];
 }
 
 export interface FetchUserTransactionDetail extends Action {
@@ -89,6 +94,7 @@ export type Actions =
   | FetchConnectedSocials
   | FetchUserExperience
   | FetchCurrentUserWallet
+  | FetchUserWallets
   | AddUserToken
   | SetDefaultCurrency
   | SetUserAsAnonymous
@@ -235,6 +241,31 @@ export const fetchCurrentUserWallets: ThunkActionCreator<Actions, RootState> =
       dispatch({
         type: constants.FETCH_CURRENT_USER_WALLETS,
         payload: data,
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const fetchUserWallets: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    const {
+      userState: {user},
+    } = getState();
+
+    if (!user) return;
+
+    try {
+      const {data: wallets, meta} = await WalletAPI.getUserWallets(user.id);
+
+      dispatch({
+        type: constants.FETCH_USER_WALLETS,
+        payload: wallets,
+        meta,
       });
     } catch (error) {
       dispatch(setError(error.message));
