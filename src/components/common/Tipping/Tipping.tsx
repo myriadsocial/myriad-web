@@ -36,12 +36,9 @@ export const Tipping: React.FC<SendTipProps> = props => {
   const [currency, setCurrency] = useState<BalanceDetail>(balances[0]);
   const [agreementChecked, setAgreementChecked] = useState(false);
   const [disableExternalCurrency, setDisableExternalCurrency] = useState(false);
+  const [feeLoaded, setFeeLoaded] = useState(false);
 
   useEffect(() => {
-    if (balances.length) {
-      handleChangeCurrency(balances[0]);
-    }
-
     // disable other currencies when tipping to unclaimed imported posts
     if (
       referenceType === 'post' &&
@@ -53,9 +50,14 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
       if (enabledCurrency) {
         setCurrency(enabledCurrency);
+        handleChangeCurrency(enabledCurrency);
       }
 
       setDisableExternalCurrency(true);
+    } else {
+      if (balances.length) {
+        handleChangeCurrency(balances[0]);
+      }
     }
   }, []);
 
@@ -83,7 +85,9 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
     if (!receiverAddress || !senderAddress) return;
 
+    setFeeLoaded(false);
     const fee = await getEstimatedFee(senderAddress, receiverAddress, currency);
+    setFeeLoaded(true);
 
     if (fee) {
       setTransactionFee(fee);
@@ -173,7 +177,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
             <TermOfService about="Tipping" onChange={handleChangeAgreement} />
 
             <Button
-              isDisabled={!agreementChecked || amount.lte(BN_ZERO)}
+              isDisabled={!agreementChecked || amount.lte(BN_ZERO) || !feeLoaded}
               variant={ButtonVariant.CONTAINED}
               onClick={signTransaction}>
               Send my tips

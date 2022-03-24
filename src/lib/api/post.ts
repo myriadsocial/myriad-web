@@ -174,6 +174,13 @@ export const findPosts = async (
   const include: Array<any> = [
     {
       relation: 'user',
+      scope: {
+        include: [
+          {
+            relation: 'wallets',
+          },
+        ],
+      },
     },
     {
       relation: 'people',
