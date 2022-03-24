@@ -1,3 +1,5 @@
+import {BN} from '@polkadot/util';
+
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Comment} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
@@ -23,5 +25,5 @@ export type SendTipProps = {
   reference: Post | Comment | User;
   referenceType: ReferenceType;
   balances: BalanceDetail[];
-  onSuccess: (currency: BalanceDetail, transactionHash: string) => Promise<void> | void;
+  onSuccess: (currency: BalanceDetail, transactionHash: string, amount: BN) => Promise<void> | void;
 };
