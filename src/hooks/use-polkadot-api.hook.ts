@@ -71,7 +71,7 @@ export const usePolkadotApi = () => {
 
   const simplerSendTip = async (
     {from, to, amount, currency, type, referenceId}: SimpleSendTipProps,
-    callback?: () => void,
+    callback?: (hash: string) => void,
   ) => {
     setLoading(true);
     setError(null);
@@ -145,7 +145,7 @@ export const usePolkadotApi = () => {
           dispatch(setExplorerURL(`${currency.explorerURL}/${txHash}`));
         }
 
-        callback && callback();
+        callback && callback(txHash);
       }
     } catch (error) {
       console.error(error);
