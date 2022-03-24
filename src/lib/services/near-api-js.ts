@@ -13,6 +13,7 @@ import * as WalletAPI from 'src/lib/api/wallet';
 export type NearConnectResponseProps = {
   nonce: number;
   publicAddress: string;
+  signature: string;
 };
 
 export type NearSignatureProps = {
@@ -87,7 +88,7 @@ export const connectToNearWallet = async (): Promise<NearConnectResponseProps> =
         networkType: NetworkTypeEnum.NEAR,
       });
     }
-    return {nonce, publicAddress: payload.publicAddress};
+    return {nonce, publicAddress: payload.publicAddress, signature: payload.signature};
   } catch (error) {
     console.log({error});
 

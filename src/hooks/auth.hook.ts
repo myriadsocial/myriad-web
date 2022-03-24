@@ -23,6 +23,12 @@ type UserNonceProps = {
   nonce: number;
 };
 
+interface NearPayload {
+  nearAddress: string;
+  pubKey: string;
+  signature: string;
+}
+
 export const useAuthHook = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {getPolkadotAccounts} = usePolkadotExtension();
@@ -220,25 +226,40 @@ export const useAuthHook = () => {
     }
   };
 
-  const switchNetwork = async (account: InjectedAccountWithMeta) => {
+  const connectNetwork = async (account?: InjectedAccountWithMeta, nearAccount?: NearPayload) => {
     if (!user) return;
 
     try {
-      const address = toHexPublicKey(account);
       const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
-      const signature = await createSignaturePolkadotExt(account, nonce);
-      const payload: WalletAPI.ConnectNetwork = {
-        publicAddress: address,
-        nonce,
-        signature,
-        networkType: 'polkadot',
-        walletType: 'polkadot',
-        data: {
-          id: account.address,
-        },
-      };
+      if (account) {
+        const address = toHexPublicKey(account);
+        const signature = await createSignaturePolkadotExt(account, nonce);
+        const payload: WalletAPI.ConnectNetwork = {
+          publicAddress: address,
+          nonce,
+          signature,
+          networkType: 'polkadot',
+          walletType: 'polkadot',
+          data: {
+            id: account.address,
+          },
+        };
 
-      await WalletAPI.connectNetwork(payload, user.id);
+        await WalletAPI.connectNetwork(payload, user.id);
+      } else if (nearAccount) {
+        const payload: WalletAPI.ConnectNetwork = {
+          publicAddress: nearAccount.pubKey,
+          nonce,
+          signature: nearAccount.signature,
+          networkType: 'near',
+          walletType: 'near',
+          data: {
+            id: nearAccount.nearAddress,
+          },
+        };
+
+        await WalletAPI.connectNetwork(payload, user.id);
+      }
 
       await WalletAPI.getUserWallets(user.id);
       await WalletAPI.getCurrentUserWallet();
@@ -265,6 +286,6 @@ export const useAuthHook = () => {
     signInWithExternalAuth,
     signUpWithExternalAuth,
     switchAccount,
-    switchNetwork,
+    connectNetwork,
   };
 };
