@@ -42,8 +42,13 @@ export const Tipping: React.FC<SendTipProps> = props => {
       handleChangeCurrency(balances[0]);
     }
 
-    // disable other currencies when tipping to imported post owner
-    if ('originUserId' in receiver) {
+    // disable other currencies when tipping to unclaimed imported posts
+    if (
+      referenceType === 'post' &&
+      'people' in reference &&
+      reference.people &&
+      !('userSocialMedia' in reference.people)
+    ) {
       const enabledCurrency = balances.find(balance => balance.id === CurrencyId.MYRIA);
 
       if (enabledCurrency) {
