@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import {useStyles} from './Login.styles';
 
 import {MyriadFullIcon} from 'src/components/atoms/Icons';
+import {CookieConsent} from 'src/components/common/CookieConsent';
 import Purple from 'src/images/illustration/Bank_note_Isometric_1.svg';
 import Yellow from 'src/images/illustration/Conversation__Isometric_1.svg';
 import i18n from 'src/locale';
@@ -105,6 +106,8 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
           </div>
         </Grid>
       </Grid>
+
+      <CookieConsent />
     </div>
   );
 };

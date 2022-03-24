@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useCookies} from 'react-cookie';
 import {useDispatch, useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
@@ -12,6 +13,7 @@ import {MenuContainer} from 'src/components/Menu';
 import {NotificationsContainer} from 'src/components/Notifications';
 import {RightMenuBar} from 'src/components/RightMenuBar/RightMenuBar';
 import {SocialMediaListContainer} from 'src/components/SocialMediaList';
+import {COOKIE_CONSENT_NAME} from 'src/components/common/CookieConsent';
 import {TippingProvider} from 'src/components/common/Tipping/Tipping.provider';
 import ShowIf from 'src/components/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
@@ -47,6 +49,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const [cookies] = useCookies([COOKIE_CONSENT_NAME]);
   const {updateUserFcmToken} = useUserHook();
 
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
@@ -60,8 +63,12 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
   const initializeFirebase = async () => {
     await firebaseApp.init();
-    await firebaseAnalytics.init();
+
     await initializeMessaging();
+
+    if (cookies[COOKIE_CONSENT_NAME]) {
+      await firebaseAnalytics.init();
+    }
   };
 
   const initializeMessaging = async () => {
