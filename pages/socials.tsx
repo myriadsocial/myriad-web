@@ -21,7 +21,6 @@ import {
   fetchConnectedSocials,
   fetchUser,
   fetchUserExperience,
-  fetchCurrentUserWallets,
 } from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
@@ -92,7 +91,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
       dispatch(getUserCurrencies()),
-      dispatch(fetchCurrentUserWallets()),
     ]);
   }
 

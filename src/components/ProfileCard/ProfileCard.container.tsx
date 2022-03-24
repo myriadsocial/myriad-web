@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {useSession} from 'next-auth/client';
 import {useRouter} from 'next/router';
@@ -19,6 +18,7 @@ import {toHexPublicKey} from 'src/lib/crypto';
 import {RootState} from 'src/reducers';
 import {NotificationState} from 'src/reducers/notification/reducer';
 import {clearUser} from 'src/reducers/user/actions';
+import {fetchCurrentUserWallets} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {Prompt} from 'src/stories/Prompt.stories';
 
@@ -42,6 +42,10 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
   const [showAccountList, setShowAccountList] = useState(false);
   const [extensionInstalled, setExtensionInstalled] = useState(false);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
+
+  React.useEffect(() => {
+    dispatch(fetchCurrentUserWallets());
+  }, []);
 
   const checkExtensionInstalled = async () => {
     const installed = await enablePolkadotExtension();
