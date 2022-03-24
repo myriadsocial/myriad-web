@@ -86,6 +86,9 @@ export const getPost = async (
       },
       {
         relation: 'people',
+        scope: {
+          include: [{relation: 'userSocialMedia'}],
+        },
       },
     ],
   };
@@ -174,6 +177,9 @@ export const findPosts = async (
     },
     {
       relation: 'people',
+      scope: {
+        include: [{relation: 'userSocialMedia'}],
+      },
     },
   ];
 
@@ -252,6 +258,9 @@ export const getPostDetail = async (id: string, currentUserId?: string): Promise
     },
     {
       relation: 'people',
+      scope: {
+        include: [{relation: 'userSocialMedia'}],
+      },
     },
   ];
 
