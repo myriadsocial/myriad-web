@@ -26,17 +26,23 @@ export const useStyles = makeStyles<Theme, VotingStyleProp>(theme =>
     mr1: {
       marginRight: props => (props.variant === 'row' ? 6 : 0),
     },
-    fill: {
+    default: {
       fill: 'none',
       width: 18,
       height: 18,
       color: '#404040',
     },
-    red: {
-      color: 'red',
+    primary: {
+      fill: 'none',
+      width: 18,
+      height: 18,
+      color: theme.palette.primary.main,
     },
-    default: {
-      color: 'rgba(0, 0, 0, 0.54)',
+    error: {
+      fill: 'none',
+      width: 18,
+      height: 18,
+      color: theme.palette.error.dark,
     },
   }),
 );

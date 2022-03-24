@@ -113,10 +113,17 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   setHeaders({cookie: req.headers.cookie as string});
 
   const anonymous = session?.user.anonymous || !session ? true : false;
-  const userId = session?.user.address as string;
+  const userAddress = session?.user.address as string;
+
+  let userId: string | undefined = undefined;
   let post: Post | undefined = undefined;
 
   try {
+    if (!anonymous) {
+      // TODO: fix ThunkDispatch return type
+      const user = (await dispatch(fetchUser(userAddress))) as any;
+      userId = user?.id;
+    }
     post = await PostAPI.getPostDetail(params.postId, userId);
     const setting = await SettingAPI.getAccountSettings(post.createdBy);
 
@@ -125,15 +132,14 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       throw new Error('Post invalid');
     }
 
-    const upvoted = post.votes
+    const upVotes = post.votes
       ? post.votes.filter(vote => vote.userId === userId && vote.state)
       : [];
-    const downvoted = post.votes
+    const downVotes = post.votes
       ? post.votes.filter(vote => vote.userId === userId && !vote.state)
       : [];
-
-    post.isUpvoted = upvoted.length > 0;
-    post.isDownVoted = downvoted.length > 0;
+    post.isUpvoted = upVotes.length > 0;
+    post.isDownVoted = downVotes.length > 0;
 
     if (post.platform === 'reddit') {
       post.text = post.text.replace(new RegExp('&amp;#x200B;', 'g'), '&nbsp;');
@@ -141,37 +147,39 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     // TODO: remove this later when friend only post API changed
     const importerIds = post.importers ? post.importers.map(importer => importer.id) : [];
     // show deleted post if the current user is the post creator or importer
-    if (post.deletedAt) {
-      showAsDeleted = userId !== post.createdBy && !importerIds.includes(userId);
-    } else {
-      if (post.visibility === PostVisibility.PRIVATE) {
+    if (userId) {
+      if (post.deletedAt) {
         showAsDeleted = userId !== post.createdBy && !importerIds.includes(userId);
-      }
+      } else {
+        if (post.visibility === PostVisibility.PRIVATE) {
+          showAsDeleted = userId !== post.createdBy && !importerIds.includes(userId);
+        }
 
-      if (
-        post.visibility === PostVisibility.FRIEND &&
-        ((importerIds.length > 0 && !importerIds.includes(userId)) || post.createdBy !== userId)
-      ) {
-        const {data: requests} = await FriendAPI.checkFriendStatus(userId, [
-          ...importerIds,
-          post.createdBy,
-        ]);
+        if (
+          post.visibility === PostVisibility.FRIEND &&
+          ((importerIds.length > 0 && !importerIds.includes(userId)) || post.createdBy !== userId)
+        ) {
+          const {data: requests} = await FriendAPI.checkFriendStatus(userId, [
+            ...importerIds,
+            post.createdBy,
+          ]);
 
-        showAsDeleted =
-          requests.filter(request => request.status === FriendStatus.APPROVED).length === 0;
-      }
+          showAsDeleted =
+            requests.filter(request => request.status === FriendStatus.APPROVED).length === 0;
+        }
 
-      if (
-        setting.accountPrivacy === Privacy.PRIVATE &&
-        ((importerIds.length > 0 && !importerIds.includes(userId)) || post.createdBy !== userId)
-      ) {
-        const {data: requests} = await FriendAPI.checkFriendStatus(userId, [
-          ...importerIds,
-          post.createdBy,
-        ]);
+        if (
+          setting.accountPrivacy === Privacy.PRIVATE &&
+          ((importerIds.length > 0 && !importerIds.includes(userId)) || post.createdBy !== userId)
+        ) {
+          const {data: requests} = await FriendAPI.checkFriendStatus(userId, [
+            ...importerIds,
+            post.createdBy,
+          ]);
 
-        showAsDeleted =
-          requests.filter(request => request.status === FriendStatus.APPROVED).length === 0;
+          showAsDeleted =
+            requests.filter(request => request.status === FriendStatus.APPROVED).length === 0;
+        }
       }
     }
 
@@ -188,12 +196,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     }
   }
 
-  if (anonymous || !userId) {
+  if (anonymous) {
     const username = generateAnonymousUser();
 
     await dispatch(setAnonymous(username));
   } else {
-    await dispatch(fetchUser(userId));
+    await dispatch(fetchUser(userAddress));
 
     await Promise.all([
       dispatch(fetchConnectedSocials()),

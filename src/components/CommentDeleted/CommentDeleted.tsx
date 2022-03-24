@@ -66,8 +66,8 @@ export const CommentDeleted = forwardRef<HTMLDivElement, CommentDeletedProps>((p
           <CardActions disableSpacing>
             <VotingComponent
               disabled
-              isUpVote={Boolean(comment.isUpvoted)}
-              isDownVote={Boolean(comment.isDownVoted)}
+              isUpVoted={Boolean(comment.isUpvoted)}
+              isDownVoted={Boolean(comment.isDownVoted)}
               variant="row"
               vote={totalVote}
               size="small"

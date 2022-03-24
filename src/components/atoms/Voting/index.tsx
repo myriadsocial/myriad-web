@@ -23,8 +23,8 @@ export const VotingComponent: React.FC<VoteProps> = props => {
     size = 'medium',
     onDownVote,
     onUpvote,
-    isDownVote,
-    isUpVote,
+    isDownVoted,
+    isUpVoted,
     disabled = false,
   } = props;
   const anonymous = useSelector<RootState, boolean>(state => state.userState.anonymous);
@@ -66,19 +66,19 @@ export const VotingComponent: React.FC<VoteProps> = props => {
         <IconButton
           disabled={disabled}
           onClick={handleUpVote}
-          color={isUpVote ? 'primary' : 'default'}
           className={`${style.action} ${style.mr1}`}>
-          <SvgIcon classes={{root: style.fill}} component={ArrowCircleUpIcon} viewBox="0 0 24 24" />
+          <SvgIcon
+            classes={{root: isUpVoted ? style.primary : style.default}}
+            component={ArrowCircleUpIcon}
+            viewBox="0 0 24 24"
+          />
         </IconButton>
         <Typography variant="body1" component="span" className={style.mr1}>
           {formatNumber(vote)}
         </Typography>
-        <IconButton
-          disabled={disabled}
-          onClick={handleDownVote}
-          className={`${style.action} ${isDownVote ? style.red : style.default}`}>
+        <IconButton disabled={disabled} onClick={handleDownVote} className={style.action}>
           <SvgIcon
-            classes={{root: style.fill}}
+            classes={{root: isDownVoted ? style.error : style.default}}
             component={ArrowCircleDownIcon}
             viewBox="0 0 24 24"
           />

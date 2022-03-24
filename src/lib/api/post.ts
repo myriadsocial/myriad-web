@@ -245,29 +245,34 @@ export const importPost = async (values: ImportPostProps): Promise<Post> => {
   return data;
 };
 
-export const getPostDetail = async (id: string, userId?: string): Promise<Post> => {
+export const getPostDetail = async (id: string, currentUserId?: string): Promise<Post> => {
+  const includes: Array<any> = [
+    {
+      relation: 'user',
+    },
+    {
+      relation: 'people',
+    },
+  ];
+
+  if (currentUserId) {
+    includes.push({
+      relation: 'votes',
+      scope: {
+        where: {
+          userId: {eq: currentUserId},
+        },
+      },
+    });
+  }
+
   const {data} = await MyriadAPI.request<Post>({
     url: `/posts/${id}`,
     method: 'GET',
     params: {
       importers: true,
       filter: {
-        include: [
-          {
-            relation: 'user',
-          },
-          {
-            relation: 'people',
-          },
-          {
-            relation: 'votes',
-            scope: {
-              where: {
-                userId: {eq: userId},
-              },
-            },
-          },
-        ],
+        include: includes,
       },
     },
   });
