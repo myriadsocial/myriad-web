@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import {NetworkOption} from './NetworkOption/NetworkOption';
@@ -46,13 +45,10 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
         {/* TODO WIRING WALLET ADDRESS */}
         <div className={classes.wallet}>
           <NetworkOption currentWallet={currentWallet} />
-          <Button
-            size="small"
-            variant="contained"
-            color="default"
-            className={classes.addressButton}>
-            <Typography component="span">{formatAddress(currentWallet?.id)}</Typography>
-          </Button>
+
+          <Typography component="div" className={classes.address}>
+            {formatAddress(currentWallet?.id)}
+          </Typography>
         </div>
       </div>
     </div>

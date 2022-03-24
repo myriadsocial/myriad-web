@@ -34,6 +34,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     wallet: {
       marginTop: theme.spacing(1.5),
+      display: 'flex',
+      flexWrap: 'nowrap',
+      justifyContent: 'space-between',
     },
     walletButton: {
       width: 'auto',
@@ -42,8 +45,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: theme.typography.fontWeightRegular,
       marginRight: theme.spacing(1),
     },
-    addressButton: {
+    address: {
       width: '122px',
+      padding: 10,
+      textAlign: 'center',
+      borderRadius: 20,
+      height: 40,
       background: '#F6F7FC',
       fontSize: '14px',
       fontWeight: theme.typography.fontWeightRegular,
