@@ -4,8 +4,11 @@ import dynamic from 'next/dynamic';
 
 import {Box, Button, Grid, Typography} from '@material-ui/core';
 
+import {BN} from '@polkadot/util';
+
 import SendTipContext, {HandleSendTip} from './Tipping.context';
 import {TippingProviderProps, TippingOptions} from './Tipping.interface';
+import {ButtonNotify} from './render/ButtonNotify';
 
 import {PromptComponent as MobilePromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {Modal} from 'src/components/atoms/Modal';
@@ -15,6 +18,8 @@ import {BalanceDetail} from 'src/interfaces/balance';
 const Tipping = dynamic(() => import('./Tipping'), {
   ssr: false,
 });
+
+const INITIAL_AMOUNT = new BN(-1);
 
 export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   children,
@@ -28,6 +33,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   const [enabled, setTippingEnabled] = useState(false);
   const [currencyTipped, setTippingCurrency] = useState<BalanceDetail>();
   const [transactionUrl, setTransactionUrl] = useState<string>();
+  const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
 
   useEffect(() => {
     setTippingEnabled(balances.length > 0);
@@ -54,14 +60,17 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
     setTipInfoOpened(false);
   }, [options]);
 
-  const handleSuccessTipping = useCallback((currency: BalanceDetail, transactionHash: string) => {
-    if (currency?.explorerURL) {
-      setTransactionUrl(`${currency.explorerURL}/${transactionHash}`);
-    }
-
-    setTippingCurrency(currency);
-    handleCloseTipForm();
-  }, []);
+  const handleSuccessTipping = useCallback(
+    (currency: BalanceDetail, transactionHash: string, tipAmount: BN) => {
+      if (currency?.explorerURL) {
+        setTransactionUrl(`${currency.explorerURL}/${transactionHash}`);
+      }
+      setAmount(tipAmount);
+      setTippingCurrency(currency);
+      handleCloseTipForm();
+    },
+    [],
+  );
 
   const resetTippingStatus = useCallback(() => {
     setTippingCurrency(undefined);
@@ -99,7 +108,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
         icon="success"
         open={Boolean(currencyTipped)}
         onCancel={resetTippingStatus}
-        title="Success"
+        title="Tip sent!"
         subtitle={
           <Typography component="div">
             Tip to&nbsp;
@@ -119,9 +128,18 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
             color="secondary">
             Transaction details
           </Button>
-          <Button size="small" variant="contained" color="primary" onClick={resetTippingStatus}>
-            Return
-          </Button>
+          {options && 'platform' in options.reference && currencyTipped ? (
+            <ButtonNotify
+              reference={options.reference}
+              currency={currencyTipped}
+              amount={amount}
+              receiver={options.receiver}
+            />
+          ) : (
+            <Button size="small" variant="contained" color="primary" onClick={resetTippingStatus}>
+              Return
+            </Button>
+          )}
         </Grid>
       </PromptComponent>
     </>
