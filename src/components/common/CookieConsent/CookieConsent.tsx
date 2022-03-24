@@ -17,14 +17,11 @@ export const CookieConsent: React.FC<CookieConsentProps> = props => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    console.log('cookies', cookies);
     if (!cookies[COOKIE_CONSENT_NAME]) {
       setOpen(true);
     }
   }, [cookies]);
-
-  const toggleDrawer = () => {
-    setOpen(false);
-  };
 
   const handleAccept = () => {
     setCookie(COOKIE_CONSENT_NAME, true);
@@ -36,12 +33,11 @@ export const CookieConsent: React.FC<CookieConsentProps> = props => {
       <Drawer
         anchor="bottom"
         open={open}
-        onClose={toggleDrawer}
         classes={{
           root: styles.root,
         }}
         PaperProps={{className: styles.paper, square: false}}
-        ModalProps={{keepMounted: true, hideBackdrop: true}}>
+        ModalProps={{keepMounted: true, hideBackdrop: true, disableBackdropClick: true}}>
         <Typography variant="body1" className={styles.term}>
           This website uses cookies to enhance your online experience.&nbsp;
           <Typography href="/term-of-use" component="a" color="primary" className={styles.link}>
@@ -49,7 +45,7 @@ export const CookieConsent: React.FC<CookieConsentProps> = props => {
           </Typography>
         </Typography>
         <Button variant="contained" size="medium" color="primary" onClick={handleAccept}>
-          Accept
+          OK
         </Button>
       </Drawer>
     </>
