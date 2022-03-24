@@ -122,7 +122,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
     }
 
     simplerSendTip(attributes, hash => {
-      onSuccess(currency, hash);
+      onSuccess(currency, hash, attributes.amount);
 
       setAmount(INITIAL_AMOUNT);
       setTransactionFee(INITIAL_AMOUNT);
