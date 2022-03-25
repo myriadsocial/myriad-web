@@ -47,6 +47,14 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: 10,
       cursor: 'pointer',
     },
+    walletCard: {
+      width: 'max-content',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: 10,
+      cursor: 'pointer',
+    },
     icon: {
       width: 80,
       fontSize: 32,

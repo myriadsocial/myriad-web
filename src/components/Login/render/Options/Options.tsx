@@ -22,6 +22,7 @@ import {
   NearNetworkIcon,
   PolygonNetworkDisabledIcon,
   PolkadotWalletIcon,
+  SenderWalletDisabledIcon,
   CoinbaseWalletisabledIcon,
   MetamaskWalletDisabledIcon,
   TrustWalletDisabledIcon,
@@ -238,6 +239,15 @@ export const Options: React.FC<OptionProps> = props => {
               </div>
             </ListItem>
           </ShowIf>
+
+          <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
+            <ListItem disableGutters disabled onClick={setSelectedWallet(WalletTypeEnum.SENDER)}>
+              <div className={styles.walletCard}>
+                <SenderWalletDisabledIcon className={styles.icon} />
+                <Typography style={{display: 'inline-block'}}>Sender Wallet</Typography>
+              </div>
+            </ListItem>
+          </Tooltip>
 
           <ListItem
             style={{visibility: 'hidden'}}
