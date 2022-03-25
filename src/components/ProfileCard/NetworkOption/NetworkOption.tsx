@@ -55,7 +55,6 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet}) => 
   const [current, setCurrent] = React.useState<string>(
     currentWallet?.network ? currentWallet?.network : networkOptions[0].id,
   );
-  const [selected, setSelected] = React.useState<string>('');
 
   const icons = React.useMemo(
     () => ({
@@ -76,8 +75,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet}) => 
   };
 
   const handleOpenPrompt = (select: string) => {
-    setSelected(select);
-    showConfirmDialog();
+    showConfirmDialog(select);
   };
 
   const handleConnectWallet = () => {
@@ -103,7 +101,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet}) => 
     return match?.id && icons[match.id as keyof typeof icons];
   };
 
-  const showConfirmDialog = () => {
+  const showConfirmDialog = (selected: string) => {
     confirm({
       title: `You did’nt connect your ${selected}!`,
       description: `This account is not connected with ${selected}. Please connect to ${selected} in wallet manage tab. Do you want to connect your account?`,
