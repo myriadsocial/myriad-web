@@ -42,6 +42,7 @@ type BalanceDetailListProps = {
 export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   const {balanceDetails, isLoading} = props;
   const [checked, setChecked] = React.useState(true);
+  const [isSearch, setIsSearch] = React.useState(false);
 
   // Make sure balance is showing, does not return empty JSX
   useEffect(() => {
@@ -85,6 +86,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
 
     if (!query) setDefaultBalanceDetails(balanceDetails);
     else setDefaultBalanceDetails(result);
+    setIsSearch(!!query);
   };
 
   const handleOpenManageAssets = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -153,9 +155,15 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
         </IconButton>
       </div>
       <div className={classes.headerActionWrapper}>
-        <DropdownMenu title={'Sort'} options={balanceSortOptions} onChange={handleSortChanged} />
+        <DropdownMenu
+          title={'Sort'}
+          options={balanceSortOptions}
+          onChange={handleSortChanged}
+          disabled={isSearch}
+        />
         <FormGroup>
           <FormControlLabel
+            disabled={isSearch}
             classes={{root: classes.formControl}}
             control={
               <Checkbox
