@@ -15,6 +15,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       left: 'auto',
       marginBottom: 60,
       marginRight: 60,
+      borderTop: 'none',
     },
     term: {
       color: '#0A0A0A',
