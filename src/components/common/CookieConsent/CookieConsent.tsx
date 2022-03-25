@@ -33,11 +33,12 @@ export const CookieConsent: React.FC<CookieConsentProps> = props => {
       <Drawer
         anchor="bottom"
         open={open}
+        variant="persistent"
         classes={{
           root: styles.root,
         }}
         PaperProps={{className: styles.paper, square: false}}
-        ModalProps={{keepMounted: true, hideBackdrop: true, disableBackdropClick: true}}>
+        ModalProps={{hideBackdrop: true}}>
         <Typography variant="body1" className={styles.term}>
           This website uses cookies to enhance your online experience.&nbsp;
           <Typography href="/term-of-use" component="a" color="primary" className={styles.link}>

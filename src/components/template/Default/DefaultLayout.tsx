@@ -13,7 +13,7 @@ import {MenuContainer} from 'src/components/Menu';
 import {NotificationsContainer} from 'src/components/Notifications';
 import {RightMenuBar} from 'src/components/RightMenuBar/RightMenuBar';
 import {SocialMediaListContainer} from 'src/components/SocialMediaList';
-import {COOKIE_CONSENT_NAME} from 'src/components/common/CookieConsent';
+import {CookieConsent, COOKIE_CONSENT_NAME} from 'src/components/common/CookieConsent';
 import {TippingProvider} from 'src/components/common/Tipping/Tipping.provider';
 import ShowIf from 'src/components/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
@@ -146,6 +146,8 @@ const Default: React.FC<DefaultLayoutProps> = props => {
           </div>
         </div>
       </Container>
+
+      <CookieConsent />
     </TippingProvider>
   );
 };
