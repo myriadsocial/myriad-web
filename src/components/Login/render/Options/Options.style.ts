@@ -55,13 +55,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: 10,
       cursor: 'pointer',
     },
-<<<<<<< HEAD
     walletCardDisabled: {
       backgroundColor: 'rgba(0, 0, 0, 0)',
       borderColor: 'rgba(0, 0, 0, 0)',
     },
-=======
->>>>>>> 738a930d (MYR-1858: added Sender Wallet)
     icon: {
       width: 80,
       fontSize: 32,
