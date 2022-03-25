@@ -55,6 +55,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: 10,
       cursor: 'pointer',
     },
+    walletCardDisabled: {
+      backgroundColor: 'rgba(0, 0, 0, 0)',
+      borderColor: 'rgba(0, 0, 0, 0)',
+    },
     icon: {
       width: 80,
       fontSize: 32,

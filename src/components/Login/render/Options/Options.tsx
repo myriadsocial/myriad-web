@@ -184,7 +184,7 @@ export const Options: React.FC<OptionProps> = props => {
             onClick={setSelectedNetwork(NetworkTypeEnum.NEAR)}>
             <div className={styles.card}>
               <NearNetworkIcon className={styles.icon} />
-              <Typography>Near</Typography>
+              <Typography>NEAR</Typography>
             </div>
           </ListItem>
           <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
@@ -215,30 +215,28 @@ export const Options: React.FC<OptionProps> = props => {
         </div>
 
         <List disablePadding classes={{root: styles.list}}>
-          <ShowIf condition={network === NetworkTypeEnum.POLKADOT}>
-            <ListItem
-              disableGutters
-              disabled={network === null}
-              selected={wallet === WalletTypeEnum.POLKADOT}
-              onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}>
-              <div className={styles.card}>
-                <PolkadotWalletIcon className={styles.icon} />
-                <Typography>Polkadot.js</Typography>
-              </div>
-            </ListItem>
-          </ShowIf>
+          <ListItem
+            component={'button'}
+            disableGutters
+            disabled={network === null || network !== NetworkTypeEnum.POLKADOT}
+            selected={wallet === WalletTypeEnum.POLKADOT}
+            onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}
+            className={network !== NetworkTypeEnum.POLKADOT ? styles.walletCardDisabled : ''}>
+            <div className={styles.walletCard}>
+              <PolkadotWalletIcon className={styles.icon} />
+              <Typography>Polkadot.js</Typography>
+            </div>
+          </ListItem>
 
-          <ShowIf condition={network === NetworkTypeEnum.NEAR}>
-            <ListItem
-              disableGutters
-              selected={wallet === WalletTypeEnum.NEAR}
-              onClick={setSelectedWallet(WalletTypeEnum.NEAR)}>
-              <div className={styles.card}>
-                <NearNetworkIcon className={styles.icon} />
-                <Typography>NEAR</Typography>
-              </div>
-            </ListItem>
-          </ShowIf>
+          <ListItem
+            disableGutters
+            selected={wallet === WalletTypeEnum.NEAR}
+            onClick={setSelectedWallet(WalletTypeEnum.NEAR)}>
+            <div className={styles.card}>
+              <NearNetworkIcon className={styles.icon} />
+              <Typography>NEAR</Typography>
+            </div>
+          </ListItem>
 
           <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
             <ListItem disableGutters disabled onClick={setSelectedWallet(WalletTypeEnum.SENDER)}>
