@@ -229,9 +229,12 @@ export const Options: React.FC<OptionProps> = props => {
           </ListItem>
 
           <ListItem
+            component={'button'}
             disableGutters
+            disabled={network === null || network !== NetworkTypeEnum.NEAR}
             selected={wallet === WalletTypeEnum.NEAR}
-            onClick={setSelectedWallet(WalletTypeEnum.NEAR)}>
+            onClick={setSelectedWallet(WalletTypeEnum.NEAR)}
+            className={network !== NetworkTypeEnum.NEAR ? styles.walletCardDisabled : ''}>
             <div className={styles.card}>
               <NearNetworkIcon className={styles.icon} />
               <Typography>NEAR</Typography>
