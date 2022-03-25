@@ -18,11 +18,12 @@ type DropdownMenuProps = {
   title: string;
   options: MenuOptions<string>[];
   selected?: string;
+  disabled?: boolean;
   onChange: (selected: string) => void;
 };
 
 export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
-  const {title, options, selected, onChange} = props;
+  const {title, options, selected, onChange, disabled = false} = props;
   const styles = useStyles();
 
   const [current, setCurrent] = useState<string>(options[0].id);
@@ -62,7 +63,10 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
             <ShowIf condition={title.length > 0}>{title}:&nbsp;</ShowIf>
           </Typography>
 
-          <Typography component="span" color="textPrimary" className={styles.selected}>
+          <Typography
+            component="span"
+            color={disabled ? 'textSecondary' : 'textPrimary'}
+            className={styles.selected}>
             {getSelectedText()}
           </Typography>
         </div>
@@ -70,8 +74,13 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
           onClick={handleClick}
           color="primary"
           aria-label="expand"
-          className={styles.expand}>
-          <SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />
+          className={styles.expand}
+          disabled={disabled}>
+          <SvgIcon
+            component={ChevronDownIcon}
+            fontSize="small"
+            color={disabled ? 'inherit' : 'primary'}
+          />
         </IconButton>
       </Grid>
       <IconButton onClick={handleClick} color="primary" aria-label="expand" className={styles.sort}>
