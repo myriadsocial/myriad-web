@@ -42,13 +42,13 @@ export const useStyles = makeStyles((theme: Theme) =>
     primary: {
       [theme.breakpoints.down('xs')]: {
         fontSize: '14px',
-        fontWeight: theme.typography.fontWeightRegular,
+        fontWeight: 400,
       },
     },
     secondary: {
       [theme.breakpoints.down('xs')]: {
         fontSize: '12px',
-        fontWeight: theme.typography.fontWeightRegular,
+        fontWeight: 400,
       },
     },
     action: {

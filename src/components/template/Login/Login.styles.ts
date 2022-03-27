@@ -86,11 +86,38 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(1),
     },
     subtitle: {
-      fontWeight: theme.typography.fontWeightRegular,
+      fontWeight: 400,
       lineHeight: '26px',
     },
     border: {
       border: 0,
+    },
+    carouselIndicatior: {
+      color: '#FFF',
+
+      '&:active, :hover': {
+        color: '#FFF',
+      },
+
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
+    },
+    carouselActiveIndicatior: {
+      color: '#7342CC',
+      width: 28,
+      background: '#7342CC',
+      borderRadius: 20,
+
+      '&:active, :hover': {
+        color: '#7342CC',
+        background: '#7342CC',
+        borderRadius: 20,
+      },
+
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
     },
   }),
 );

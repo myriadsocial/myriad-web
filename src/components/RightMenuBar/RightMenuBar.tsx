@@ -44,7 +44,7 @@ export const RightMenuBar: React.FC = () => {
       <TabsComponent
         selected={activeTab}
         tabs={iconTabs}
-        position={'left'}
+        position="left"
         mark="cover"
         size="small"
         onChangeTab={handleChangeTab}

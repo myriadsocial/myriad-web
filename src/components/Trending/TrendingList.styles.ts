@@ -38,7 +38,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'none',
       marginBottom: 12,
       fontSize: '16px',
-      fontWeight: theme.typography.fontWeightMedium,
+      fontWeight: 500,
       [theme.breakpoints.down('xs')]: {
         display: 'block',
       },

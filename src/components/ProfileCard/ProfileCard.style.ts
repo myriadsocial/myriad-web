@@ -42,7 +42,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 'auto',
       background: '#F6F7FC',
       fontSize: '14px',
-      fontWeight: theme.typography.fontWeightRegular,
+      fontWeight: 400,
       marginRight: theme.spacing(1),
     },
     address: {
@@ -53,7 +53,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: 40,
       background: '#F6F7FC',
       fontSize: '14px',
-      fontWeight: theme.typography.fontWeightRegular,
+      fontWeight: 400,
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',

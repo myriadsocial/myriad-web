@@ -36,7 +36,7 @@ export const useStyles = makeStyles<Theme, ProfileCardProps>(theme =>
     },
     name: {
       [theme.breakpoints.down('xs')]: {
-        fontWeight: theme.typography.fontWeightMedium,
+        fontWeight: 500,
         fontSize: 16,
       },
     },

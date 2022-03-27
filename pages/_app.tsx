@@ -1,6 +1,3 @@
-import createCache from '@emotion/cache';
-import {CacheProvider, EmotionCache} from '@emotion/react';
-
 import React from 'react';
 import {CookiesProvider} from 'react-cookie';
 
@@ -44,21 +41,11 @@ const snackbarStyles = {
   },
 };
 
-function createEmotionCache() {
-  // TODO remove prepend: true once JSS is out
-  return createCache({key: 'css', prepend: true});
-}
-
-// Client-side cache, shared for the whole session of the user in the browser.
-const clientSideEmotionCache = createEmotionCache();
 const {publicRuntimeConfig} = getConfig();
 
-interface MyAppProps extends AppProps {
-  emotionCache?: EmotionCache;
-}
+const App = ({classes, ...props}: AppProps & WithStyles<typeof snackbarStyles>) => {
+  const {Component, pageProps} = props;
 
-const App = ({classes, ...props}: MyAppProps & WithStyles<typeof snackbarStyles>) => {
-  const {Component, emotionCache = clientSideEmotionCache, pageProps} = props;
   const {
     notifications,
     displayed,
@@ -87,50 +74,48 @@ const App = ({classes, ...props}: MyAppProps & WithStyles<typeof snackbarStyles>
 
   return (
     <I18nextProvider i18n={i18n}>
-      <CacheProvider value={emotionCache}>
-        <Head>
-          <link rel="shortcut icon" href="/images/favicon.svg" />
-          <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
-          <meta property="og:site_name" content={publicRuntimeConfig.appName} />
-        </Head>
-        <ThemeProvider theme={themeV2}>
-          <SnackbarProvider
-            ref={notistackRef}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+      <Head>
+        <link rel="shortcut icon" href="/images/favicon.svg" />
+        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+        <meta property="og:site_name" content={publicRuntimeConfig.appName} />
+      </Head>
+      <ThemeProvider theme={themeV2}>
+        <SnackbarProvider
+          ref={notistackRef}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          maxSnack={5}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <AuthProvider
+            // Provider options are not required but can be useful in situations where
+            // you have a short session maxAge time. Shown here with default values.
+            options={{
+              // Client Max Age controls how often the useSession in the client should
+              // contact the server to sync the session state. Value in seconds.
+              // e.g.
+              // * 0  - Disabled (always use cache value)
+              // * 60 - Sync session state with server if it's older than 60 seconds
+              clientMaxAge: 0,
+              // Keep Alive tells windows / tabs that are signed in to keep sending
+              // a keep alive request (which extends the current session expiry) to
+              // prevent sessions in open windows from expiring. Value in seconds.
+              //
+              // Note: If a session has expired when keep alive is triggered, all open
+              // windows / tabs will be updated to reflect the user is signed out.
+              keepAlive: 0,
             }}
-            maxSnack={5}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            <AuthProvider
-              // Provider options are not required but can be useful in situations where
-              // you have a short session maxAge time. Shown here with default values.
-              options={{
-                // Client Max Age controls how often the useSession in the client should
-                // contact the server to sync the session state. Value in seconds.
-                // e.g.
-                // * 0  - Disabled (always use cache value)
-                // * 60 - Sync session state with server if it's older than 60 seconds
-                clientMaxAge: 0,
-                // Keep Alive tells windows / tabs that are signed in to keep sending
-                // a keep alive request (which extends the current session expiry) to
-                // prevent sessions in open windows from expiring. Value in seconds.
-                //
-                // Note: If a session has expired when keep alive is triggered, all open
-                // windows / tabs will be updated to reflect the user is signed out.
-                keepAlive: 0,
-              }}
-              session={pageProps.session}>
-              <CookiesProvider>
-                <AppContextProvider>
-                  <Component {...pageProps} />
-                </AppContextProvider>
-              </CookiesProvider>
-            </AuthProvider>
-          </SnackbarProvider>
-        </ThemeProvider>
-      </CacheProvider>
+            session={pageProps.session}>
+            <CookiesProvider>
+              <AppContextProvider>
+                <Component {...pageProps} />
+              </AppContextProvider>
+            </CookiesProvider>
+          </AuthProvider>
+        </SnackbarProvider>
+      </ThemeProvider>
     </I18nextProvider>
   );
 };

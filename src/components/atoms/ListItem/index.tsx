@@ -106,7 +106,7 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
       onClick={onClick}
       {...listProps}>
       {icon ? (
-        <ListItemIcon className={iconSyles.join(' ')}>
+        <ListItemIcon classes={{root: iconSyles.join(' ')}}>
           <SvgIcon component={icon} />
         </ListItemIcon>
       ) : (

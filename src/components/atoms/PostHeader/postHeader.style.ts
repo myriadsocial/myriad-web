@@ -39,7 +39,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     title: {
       cursor: 'pointer',
       [theme.breakpoints.down('xs')]: {
-        fontWeight: theme.typography.fontWeightMedium,
+        fontWeight: 500,
       },
     },
     icon: {

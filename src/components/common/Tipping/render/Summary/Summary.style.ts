@@ -25,7 +25,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     bold: {
-      fontWeight: theme.typography.fontWeightBold,
+      fontWeight: 700,
+      height: 34,
     },
     table: {
       padding: '6px 0px',
