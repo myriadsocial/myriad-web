@@ -167,6 +167,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   };
 
   const handleTagsInputChange = (
+    // eslint-disable-next-line @typescript-eslint/ban-types
     event: React.ChangeEvent<{}>,
     newValue: string,
     type: TagsProps,
@@ -197,11 +198,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const handleTagsChange = (
     // eslint-disable-next-line @typescript-eslint/ban-types
     event: React.ChangeEvent<{}>,
-    value: string[],
+    value: string | string[],
     reason: AutocompleteChangeReason,
     type: TagsProps,
   ) => {
-    const data = [...value];
+    const data = Array.isArray(value) ? value : [value];
     if (checkDuplicateData(data.map(item => item.replace('#', '')))) {
       data.pop();
     }
@@ -315,11 +316,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         </ShowIf>
       </FormControl>
 
-      <Autocomplete
+      <Autocomplete<string, true, true, true>
         id="experience-tags-include"
         freeSolo
         multiple
-        value={newAllowedTags || ''}
+        value={newAllowedTags || ['']}
         options={tags.map(tag => tag.id)}
         disableClearable
         onChange={(event, value, reason) => {
@@ -344,11 +345,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         )}
       />
 
-      <Autocomplete
+      <Autocomplete<string, true, true, true>
         id="experience-tags-exclude"
         freeSolo
         multiple
-        value={newProhibitedTags || ''}
+        value={newProhibitedTags || ['']}
         options={tags.map(tag => tag.id)}
         disableClearable
         onChange={(event, value, reason) => {

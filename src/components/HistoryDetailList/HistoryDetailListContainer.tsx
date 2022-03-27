@@ -29,6 +29,8 @@ export const HistoryDetailListContainer: React.FC = () => {
     loadTransactions(meta.currentPage + 1);
   };
 
+  if (!user) return null;
+
   return (
     <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
       <HistoryDetailList

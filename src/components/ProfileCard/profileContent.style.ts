@@ -31,7 +31,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     name: {
       [theme.breakpoints.down('xs')]: {
-        fontWeight: theme.typography.fontWeightMedium,
+        fontWeight: 500,
         fontSize: 16,
       },
     },

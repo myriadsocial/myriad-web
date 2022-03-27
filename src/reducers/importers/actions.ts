@@ -40,11 +40,7 @@ export const fetchImporter: ThunkActionCreator<Actions, RootState> =
         meta,
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -65,11 +61,7 @@ export const removeImporter: ThunkActionCreator<Actions, RootState> = () => asyn
       },
     });
   } catch (error) {
-    dispatch(
-      setError({
-        message: error.message,
-      }),
-    );
+    dispatch(setError(error));
   } finally {
     dispatch(setLoading(false));
   }

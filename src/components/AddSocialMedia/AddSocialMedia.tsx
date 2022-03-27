@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {FacebookShareButton, RedditShareButton, TwitterShareButton} from 'react-share';
 
 import getConfig from 'next/config';
+import Link from 'next/link';
 
 import {
   Button,
@@ -228,10 +229,12 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                 control={<Checkbox name="term" color="primary" className={styles.icon} />}
                 label={
                   <Typography>
-                    I agree to the Myriad{' '}
-                    <a href="/term-of-use" className={styles.term}>
-                      Terms of Service
-                    </a>
+                    I agree to the Myriad&nbsp;
+                    <Link href="/term-of-use" passHref>
+                      <Typography component="a" className={styles.term}>
+                        Terms of Service
+                      </Typography>
+                    </Link>
                   </Typography>
                 }
               />

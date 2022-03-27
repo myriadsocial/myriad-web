@@ -4,6 +4,7 @@ import {useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import axios from 'axios';
+import {isErrorWithMessage} from 'src/helpers/error';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import * as UploadAPI from 'src/lib/api/upload';
 import {RootState} from 'src/reducers';
@@ -51,8 +52,8 @@ export const useUpload = () => {
       return data.files[0].url;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setError(error.response?.data.eror);
-      } else {
+        setError(error.response?.data.error);
+      } else if (isErrorWithMessage(error)) {
         setError(error.message);
       }
 
@@ -95,8 +96,8 @@ export const useUpload = () => {
       return data.files[0].url;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setError(error.response?.data.eror);
-      } else {
+        setError(error.response?.data.error);
+      } else if (isErrorWithMessage(error)) {
         setError(error.message);
       }
 

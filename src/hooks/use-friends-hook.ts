@@ -3,6 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {useBlockList} from './use-blocked-list.hook';
 
+import {isErrorWithMessage, ErrorWithMessage} from 'src/helpers/error';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
@@ -37,7 +38,7 @@ export const useFriendsHook = (user?: User) => {
 
   const [friended, setFriended] = useState<Friend[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<ErrorWithMessage | null>(null);
 
   const loadRequests = () => {
     if (!user) return;
@@ -102,7 +103,11 @@ export const useFriendsHook = (user?: User) => {
 
       setFriended(requests);
     } catch (error) {
-      setError(error);
+      if (isErrorWithMessage(error)) {
+        setError(error);
+      } else {
+        setError(new Error('Unknown error'));
+      }
     } finally {
       setLoading(false);
     }

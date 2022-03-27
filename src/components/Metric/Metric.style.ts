@@ -11,7 +11,7 @@ export const useStyles = makeStyles<Theme, MetricProps>(theme =>
       fontWeight: 700,
       lineHeight: '17.57px',
       [theme.breakpoints.down('xs')]: {
-        fontWeight: theme.typography.fontWeightRegular,
+        fontWeight: 400,
         // color: '#616161',
         color: props => (props.profile ? '#FFFFFF' : '#616161'),
         fontSize: 12,
@@ -22,7 +22,7 @@ export const useStyles = makeStyles<Theme, MetricProps>(theme =>
       lineHeight: '20.08px',
 
       [theme.breakpoints.down('xs')]: {
-        fontWeight: theme.typography.fontWeightMedium,
+        fontWeight: 500,
         fontSize: 16,
       },
     },

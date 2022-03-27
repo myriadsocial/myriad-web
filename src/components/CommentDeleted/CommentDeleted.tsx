@@ -43,7 +43,7 @@ export const CommentDeleted = forwardRef<HTMLDivElement, CommentDeletedProps>((p
           <CardHeader
             title={
               <>
-                <Link href={'/profile/[id]'} as={`/profile/${comment.user.id}`} shallow>
+                <Link href={'/profile/[id]'} as={`/profile/${comment.user.id}`} shallow passHref>
                   <Typography variant="body1" className={style.link} component="a">
                     Myrians
                   </Typography>
@@ -115,3 +115,5 @@ export const CommentDeleted = forwardRef<HTMLDivElement, CommentDeletedProps>((p
     </div>
   );
 });
+
+CommentDeleted.displayName = 'CommentDeleted';

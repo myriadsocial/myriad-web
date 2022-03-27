@@ -57,11 +57,7 @@ export const fetchPeople: ThunkActionCreator<Actions, RootState> =
         meta,
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -88,11 +84,7 @@ export const searchPeople: ThunkActionCreator<Actions, RootState> =
         filter: query,
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }

@@ -77,11 +77,7 @@ export const fetchNotification: ThunkActionCreator<Actions, RootState> =
         meta,
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -109,7 +105,7 @@ export const readNotification: ThunkActionCreator<Actions, RootState> =
 
       callback && callback();
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -139,7 +135,7 @@ export const readAllNotifications: ThunkActionCreator<Actions, RootState> =
         type: constants.CLEAR_NOTIFIACTION_COUNT,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -165,7 +161,7 @@ export const countNewNotification: ThunkActionCreator<Actions, RootState> =
         total,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }

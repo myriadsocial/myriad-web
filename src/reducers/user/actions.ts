@@ -159,11 +159,7 @@ export const fetchUser: ThunkActionCreator<Actions, RootState> =
 
       dispatch(setUser(user));
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -191,7 +187,7 @@ export const fetchConnectedSocials: ThunkActionCreator<Actions, RootState> =
         payload: data,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -228,11 +224,7 @@ export const fetchUserExperience: ThunkActionCreator<Actions, RootState> =
         });
       }
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -256,7 +248,7 @@ export const fetchCurrentUserWallets: ThunkActionCreator<Actions, RootState> =
         payload: data,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -315,15 +307,7 @@ export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> 
 
       callback && callback();
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        dispatch(handleVerifyError(error));
-      } else {
-        dispatch(
-          setError({
-            message: error.message,
-          }),
-        );
-      }
+      dispatch(setError(error));
 
       dispatch(resetVerifyingSocial());
     }
@@ -359,11 +343,7 @@ export const fetchUserTransactionDetails: ThunkActionCreator<Actions, RootState>
         payload: transactionDetail,
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -418,11 +398,7 @@ export const updateUser: ThunkActionCreator<Actions, RootState> =
 
       callback && callback();
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -443,11 +419,7 @@ export const deleteSocial: ThunkActionCreator<Actions, RootState> =
 
       dispatch(fetchConnectedSocials());
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -468,11 +440,7 @@ export const setAsPrimary: ThunkActionCreator<Actions, RootState> =
 
       dispatch(fetchConnectedSocials());
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -515,7 +483,7 @@ export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
           }),
         );
       } else {
-        dispatch(setError(error.message));
+        dispatch(setError(error));
       }
     } finally {
       dispatch(setLoading(false));
