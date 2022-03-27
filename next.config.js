@@ -8,9 +8,6 @@ const {version} = require('./package.json');
 /** @type {import('next').NextConfig} */
 const moduleExports = {
   reactStrictMode: false,
-  experimental: {
-    styledComponent: true,
-  },
   generateBuildId: async () => {
     if (process.env.BUILD_ID) {
       return process.env.BUILD_ID;

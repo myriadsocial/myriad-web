@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {acronym} from '../../helpers/string';
 import {Actions as BaseAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
@@ -161,3 +162,6 @@ export const fetchTippedUserId: ThunkActionCreator<Actions, RootState> =
       dispatch(setLoading(false));
     }
   };
+=======
+
+>>>>>>> b52e0796 (MYR-000: upgrade to next-11)
