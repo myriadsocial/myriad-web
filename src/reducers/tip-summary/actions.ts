@@ -136,7 +136,7 @@ export const fetchTransactionHistory: ThunkActionCreator<Actions, RootState> =
         meta,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -165,7 +165,7 @@ export const fetchTransactionSummary: ThunkActionCreator<Actions, RootState> =
         summary: data,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -207,7 +207,7 @@ export const fetchTransactionHistoryForComment: ThunkActionCreator<Actions, Root
         meta,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -243,7 +243,7 @@ export const fetchTransactionSummaryForComment: ThunkActionCreator<Actions, Root
         summary: data,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }

@@ -24,11 +24,7 @@ export const fetchExchangeRates: ThunkActionCreator<Actions, RootState> = () => 
       exchangeRates,
     });
   } catch (error) {
-    dispatch(
-      setError({
-        message: error.message,
-      }),
-    );
+    dispatch(setError(error));
   } finally {
     dispatch(setLoading(false));
   }

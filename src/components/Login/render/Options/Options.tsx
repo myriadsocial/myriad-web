@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 
+import Link from 'next/link';
+
 import {
   Button,
   Checkbox,
@@ -370,13 +372,17 @@ export const Options: React.FC<OptionProps> = props => {
           label={
             <Typography style={{color: '#0A0A0A'}}>
               {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
-              <a href="/term-of-use" className={styles.term}>
-                {i18n.t('Login.Options.Text_Terms_2')}
-              </a>
+              <Link href="/term-of-use" passHref>
+                <Typography component={'a'} className={styles.term}>
+                  {i18n.t('Login.Options.Text_Terms_2')}
+                </Typography>
+              </Link>
               &nbsp;{i18n.t('Login.Options.Text_Terms_3')}&nbsp;
-              <a href="/privacy-policy" className={styles.term}>
-                {i18n.t('Login.Options.Text_Terms_4')}
-              </a>
+              <Link href="/privacy-policy" passHref>
+                <Typography component={'a'} className={styles.term}>
+                  {i18n.t('Login.Options.Text_Terms_4')}
+                </Typography>
+              </Link>
             </Typography>
           }
         />

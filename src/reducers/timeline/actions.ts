@@ -12,6 +12,7 @@ import {Post, PostMetric, PostProps, PostVisibility} from 'src/interfaces/post';
 import {TimelineFilter, TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
 import {UserProps} from 'src/interfaces/user';
 import {WalletDetail} from 'src/interfaces/wallet';
+import {PostImportError} from 'src/lib/api/errors/post-import.error';
 import * as InteractionAPI from 'src/lib/api/interaction';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
@@ -282,11 +283,7 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
         },
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setTimelineLoading(false));
     }
@@ -376,24 +373,19 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } catch (error) {
-      let message = error.message;
       if (
         axios.isAxiosError(error) &&
         (error.response?.status === 422 ||
           error.response?.status === 404 ||
           error.response?.status === 409)
       ) {
-        message = error.response.data.error.message;
-      }
-
-      if (callback) {
-        callback(error.response?.status);
+        if (callback) {
+          callback(error.response.status);
+        } else {
+          dispatch(setError(new PostImportError(error.response.data.error.message)));
+        }
       } else {
-        dispatch(
-          setError({
-            message: message,
-          }),
-        );
+        setError(error);
       }
     } finally {
       dispatch(setLoading(false));
@@ -430,11 +422,7 @@ export const fetchWalletDetails: ThunkActionCreator<Actions, RootState> =
         payload: walletDetail,
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       setLoading(false);
     }
@@ -462,11 +450,7 @@ export const deletePost: ThunkActionCreator<Actions, RootState> =
 
       callback && callback();
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -496,11 +480,7 @@ export const editPost: ThunkActionCreator<Actions, RootState> =
 
       callback && callback();
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -519,11 +499,7 @@ export const getDedicatedPost: ThunkActionCreator<Actions, RootState> =
 
       dispatch(setPost(post));
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -555,11 +531,7 @@ export const upvote: ThunkActionCreator<Actions, RootState> =
 
       callback && callback(vote);
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -593,11 +565,7 @@ export const downvote: ThunkActionCreator<Actions, RootState> =
 
       callback && callback(vote);
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -634,11 +602,7 @@ export const removeVote: ThunkActionCreator<Actions, RootState> =
 
       callback && callback();
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -676,11 +640,7 @@ export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
         },
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setTimelineLoading(false));
     }
@@ -697,10 +657,6 @@ export const updatePostMetric: ThunkActionCreator<Actions, RootState> =
 
       dispatch(updateMetric(postId, post.metric));
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     }
   };

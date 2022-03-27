@@ -57,18 +57,18 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     name: {
       fontSize: '24px',
-      fontWeight: theme.typography.fontWeightBold,
+      fontWeight: 700,
       letterSpacing: '0em',
       marginBottom: '4px',
       [theme.breakpoints.down('xs')]: {
-        fontWeight: theme.typography.fontWeightMedium,
+        fontWeight: 500,
         fontSize: '14px',
         marginBottom: 0,
       },
     },
     username: {
       fontSize: '14px',
-      fontWeight: theme.typography.fontWeightLight,
+      fontWeight: 300,
       [theme.breakpoints.down('xs')]: {
         fontSize: '12px',
       },

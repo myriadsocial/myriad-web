@@ -1,24 +1,21 @@
 import React from 'react';
-import Lottie from 'react-lottie';
 
-import LoadingAnimation from 'src/lottie/loading.json';
+import {Grid} from '@material-ui/core';
+
+import BounceLoader from 'react-spinners/BounceLoader';
 
 type LoadingProps = {
   width?: number;
   height?: number;
 };
+const color = '#7342CC';
 
 export const Loading: React.FC<LoadingProps> = props => {
-  const {width = 50, height = 50} = props;
+  const {width = 40} = props;
 
-  const lottieLoading = {
-    loop: true,
-    autoplay: true,
-    animationData: LoadingAnimation,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
-  };
-
-  return <Lottie options={lottieLoading} width={width} height={height} />;
+  return (
+    <Grid container justifyContent="center">
+      <BounceLoader color={color} loading={true} size={width} />
+    </Grid>
+  );
 };

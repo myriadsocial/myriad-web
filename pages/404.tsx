@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import {MyriadFullIcon} from 'src/components/atoms/Icons';
+import {MyriadFullIcon} from 'components/atoms/Icons';
 import Illustration from 'src/images/illustration/404_Page_Not_Found__Isometric_2_1.svg';
 
 const useStyles = makeStyles((theme: Theme) =>

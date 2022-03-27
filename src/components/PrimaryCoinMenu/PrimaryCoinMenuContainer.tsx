@@ -14,13 +14,13 @@ type PrimaryCoinMenuContainer = {
 export const PrimaryCoinMenuContainer: React.FC<PrimaryCoinMenuContainer> = props => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
 
-  if (!user) return null;
-
   const {togglePrimaryCoinMenu} = props;
 
   const {balanceDetails, currenciesId} = useSelector<RootState, BalanceState>(
     state => state.balanceState,
   );
+
+  if (!user) return null;
 
   return (
     <PrimaryCoinMenu
