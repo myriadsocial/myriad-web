@@ -101,7 +101,7 @@ export const ListItemPeopleComponent: React.FC<ListItemComponentProps> = props =
         <ListItemAvatar className={styles.avatar}>
           <PostAvatar
             name={title}
-            origin={(platform as PostOrigin) ?? ''}
+            origin={platform as PostOrigin}
             avatar={avatar}
             onClick={console.log}
           />

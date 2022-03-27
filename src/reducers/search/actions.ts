@@ -102,11 +102,7 @@ export const loadUsers: ThunkActionCreator<Actions, RootState> =
         },
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setUsersLoading(false));
     }
@@ -129,11 +125,7 @@ export const searchUsers: ThunkActionCreator<Actions, RootState> =
         },
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setUsersLoading(false));
       dispatch(setIsSearching(false));

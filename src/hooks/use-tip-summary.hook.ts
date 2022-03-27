@@ -80,7 +80,7 @@ export const useTipSummaryHook = (): TipSummaryHookProps => {
     meta,
     show,
     post: reference && 'platform' in reference ? reference : null,
-    comment: reference && 'platform' in reference ? null : reference,
+    comment: reference && !('platform' in reference) ? reference : null,
     summary,
     transactions,
     loadTransaction,

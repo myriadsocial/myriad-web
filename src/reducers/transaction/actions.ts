@@ -76,11 +76,7 @@ export const fetchTransactions: ThunkActionCreator<Actions, RootState> =
         });
       }
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -133,11 +129,7 @@ export const fetchTransactionsIncludingCurrency: ThunkActionCreator<Actions, Roo
         });
       }
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }

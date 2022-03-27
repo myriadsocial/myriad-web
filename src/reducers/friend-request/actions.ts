@@ -51,7 +51,7 @@ export const fetchFriendRequest: ThunkActionCreator<Actions, RootState> =
         meta,
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -78,7 +78,7 @@ export const createFriendRequest: ThunkActionCreator<Actions, RootState> =
       if (user && axios.isAxiosError(error) && error.response?.status === 422) {
         dispatch(fetchFriend(user));
       } else {
-        dispatch(setError(error.message));
+        dispatch(setError(error));
       }
     } finally {
       dispatch(setLoading(false));
@@ -106,7 +106,7 @@ export const deleteFriendRequest: ThunkActionCreator<Actions, RootState> =
       if (user && axios.isAxiosError(error) && error.response?.status === 404) {
         dispatch(fetchFriend(user));
       } else {
-        dispatch(setError(error.message));
+        dispatch(setError(error));
       }
     } finally {
       dispatch(setLoading(false));
@@ -136,7 +136,7 @@ export const toggleFriendRequest: ThunkActionCreator<Actions, RootState> =
 
       callback && callback();
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }

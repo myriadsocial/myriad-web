@@ -99,7 +99,7 @@ export const useAuthHook = () => {
     nonce: number,
     account?: InjectedAccountWithMeta,
     nearAddress?: string,
-  ) => {
+  ): Promise<boolean | null> => {
     if (account) {
       const signature = await createSignaturePolkadotExt(account, nonce);
 
@@ -151,7 +151,7 @@ export const useAuthHook = () => {
     username: string,
     walletType: WalletTypeEnum,
     account?: InjectedAccountWithMeta,
-  ): Promise<true | null> => {
+  ): Promise<boolean | null> => {
     let nonce = null;
 
     switch (walletType) {

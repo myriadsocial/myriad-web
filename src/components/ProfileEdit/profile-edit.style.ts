@@ -10,7 +10,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     title: {
       marginBottom: 30,
       fontSize: theme.typography.h5.fontSize,
-      fontWeight: theme.typography.fontWeightRegular,
+      fontWeight: 400,
     },
     action: {
       background: theme.palette.primary.main,

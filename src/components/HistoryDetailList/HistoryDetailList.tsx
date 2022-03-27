@@ -71,7 +71,9 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const getUniqueListBy = (arr: Array<any>, key: string) => {
-    return [...new Map(arr.map(item => [item[key], item])).values()];
+    const newArr = new Map(arr.map(item => [item[key], item]));
+
+    return Array.from(newArr).values();
   };
 
   const getConversion = (currencyId: string) => {

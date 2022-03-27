@@ -22,7 +22,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     action: {
-      fontWeight: theme.typography.fontWeightMedium,
+      fontWeight: 500,
       margin: '20px 0',
       cursor: 'pointer',
       '&:hover': {

@@ -12,8 +12,6 @@ export const HistoryDetailListContainer: React.FC = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {loading, meta, transactions, inboundTxs, outboundTxs, loadTransactions} = useTransaction();
 
-  if (!user) return null;
-
   useEffect(() => {
     loadTransactions();
   }, []);
@@ -22,6 +20,8 @@ export const HistoryDetailListContainer: React.FC = () => {
     const page = meta.currentPage + 1;
     loadTransactions(page);
   };
+
+  if (!user) return null;
 
   return (
     <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>

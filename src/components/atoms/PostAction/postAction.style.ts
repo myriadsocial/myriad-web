@@ -43,7 +43,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     subtitle: {
-      fontWeight: theme.typography.fontWeightMedium,
+      fontWeight: 500,
       marginBottom: 26,
       lineHeight: 1,
     },

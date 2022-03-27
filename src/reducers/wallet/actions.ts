@@ -114,11 +114,7 @@ export const fetchRecipientDetail: ThunkActionCreator<Actions, RootState> =
 
       dispatch(setRecipientDetail(walletDetail));
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -160,11 +156,7 @@ export const fetchTippedUserId: ThunkActionCreator<Actions, RootState> =
 
       dispatch(setTippedUserId(walletDetail.referenceId));
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }

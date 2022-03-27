@@ -14,6 +14,7 @@ import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
 import {storeTransaction} from 'src/lib/api/transaction';
+import {TransactionCanceledException} from 'src/lib/services/errors/TransactionCanceledException';
 import {estimateFee, signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {fetchBalances} from 'src/reducers/balance/actions';
@@ -49,12 +50,14 @@ export const usePolkadotApi = () => {
     currency: BalanceDetail,
   ): Promise<BN | null> => {
     setIsFetchingFee(true);
+    let estimatedFee: BN;
 
     try {
-      let {partialFee: estimatedFee} = await estimateFee(from, to, currency);
+      const result = await estimateFee(from, to, currency);
 
-      if (estimatedFee) {
-        dispatch(setFee(estimatedFee.toString()));
+      if (result?.partialFee) {
+        estimatedFee = result.partialFee;
+        dispatch(setFee(result.partialFee.toString()));
       } else {
         // equal 0.01
         estimatedFee = BN_ONE.mul(BN_TEN.pow(new BN(currency.decimal))).div(BN_TEN.pow(BN_TWO));
@@ -99,9 +102,7 @@ export const usePolkadotApi = () => {
       );
 
       if (_.isEmpty(txHash)) {
-        throw {
-          message: 'Cancelled',
-        };
+        throw TransactionCanceledException;
       }
 
       if (txHash) {
@@ -148,13 +149,14 @@ export const usePolkadotApi = () => {
         callback && callback(txHash);
       }
     } catch (error) {
-      console.error(error);
-      if (error.message === 'Cancelled') {
+      if (error instanceof TransactionCanceledException) {
         openToasterSnack({
           variant: 'warning',
           message: 'Transaction signing cancelled',
         });
-      } else {
+      }
+
+      if (error instanceof Error) {
         openToasterSnack({
           variant: 'warning',
           message: error.message,

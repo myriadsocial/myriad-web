@@ -40,7 +40,7 @@ const useStyles = makeStyles<Theme, CarouselLoginViewProps>(theme =>
       fontSize: '28px',
     },
     subtitle: {
-      fontWeight: theme.typography.fontWeightRegular,
+      fontWeight: 400,
       lineHeight: '19.6px',
       fontSize: '14px',
       padding: '0px 20px',

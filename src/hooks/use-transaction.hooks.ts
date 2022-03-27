@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {RootState} from 'src/reducers';
+import {setError} from 'src/reducers/base/actions';
 import {fetchTransactions} from 'src/reducers/transaction/actions';
 import {fetchTransactionsIncludingCurrency} from 'src/reducers/transaction/actions';
 import {TransactionState} from 'src/reducers/transaction/reducer';
@@ -14,7 +15,6 @@ export const useTransaction = () => {
     state => state.transactionState,
   );
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const load = async () => {
     if (!user) return;
@@ -44,7 +44,6 @@ export const useTransaction = () => {
   };
 
   return {
-    error,
     loading,
     meta,
     transactions: transactions,

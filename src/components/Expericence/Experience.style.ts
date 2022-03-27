@@ -65,7 +65,7 @@ export const useStyles = makeStyles<Theme, ExperienceStyleProps>(theme =>
     subtitle: {
       [theme.breakpoints.down('xs')]: {
         fontSize: '12px',
-        fontWeight: theme.typography.fontWeightMedium,
+        fontWeight: 500,
       },
     },
     icon: {

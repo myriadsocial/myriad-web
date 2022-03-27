@@ -1,5 +1,5 @@
 import React from 'react';
-import Carousel from 'react-elastic-carousel';
+import Carousel, {CarouselProps} from 'react-material-ui-carousel';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -18,6 +18,21 @@ type LoginProps = {
 
 export const LoginLayout: React.FC<LoginProps> = ({children}) => {
   const style = useStyles();
+
+  const settings: CarouselProps = {
+    autoPlay: true,
+    animation: 'slide',
+    indicators: true,
+    timeout: 500,
+    navButtonsAlwaysVisible: false,
+    navButtonsAlwaysInvisible: true,
+    indicatorContainerProps: {style: {textAlign: 'left'}},
+    indicatorIconButtonProps: {className: style.carouselIndicatior},
+    activeIndicatorIconButtonProps: {className: style.carouselActiveIndicatior},
+    cycleNavigation: true,
+    fullHeightHover: true,
+    swipe: true,
+  };
 
   return (
     <div className={style.root}>
@@ -43,7 +58,7 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
               <Purple className={style.imagePurple} />
             </div>
             <div className={style.carousel}>
-              <Carousel isRTL={false} itemsToShow={1}>
+              <Carousel {...settings}>
                 <div>
                   <div className={`${style.mb1}`}>
                     <Typography

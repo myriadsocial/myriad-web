@@ -1,4 +1,4 @@
-import {PostOrigin} from '../../../../interfaces/timeline';
+import {PostOrigin} from 'src/interfaces/timeline';
 
 export type Props = {
   origin: PostOrigin;
