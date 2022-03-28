@@ -3,6 +3,28 @@ import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
+    listItem: {
+      '&.MuiListItem-root': {
+        '&.MuiListItem-gutters': {
+          paddingRight: '0px',
+          paddingLeft: '0px',
+        },
+      },
+    },
+    content: {
+      background: '#F6F7FC',
+      borderRadius: '20px',
+      height: '159px',
+      padding: '20px',
+    },
+    flex: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    buttonClaim: {
+      width: '128.75px',
+    },
     refreshIcon: {
       '&:hover': {
         background: 'none',
@@ -23,7 +45,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: 'auto',
     },
     text: {
-      textAlign: 'right',
+      marginTop: theme.spacing(2),
+      textAlign: 'left',
     },
   }),
 );
