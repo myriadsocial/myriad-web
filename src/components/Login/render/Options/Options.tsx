@@ -22,6 +22,7 @@ import {
   NearNetworkIcon,
   PolygonNetworkDisabledIcon,
   PolkadotWalletIcon,
+  SenderWalletDisabledIcon,
   CoinbaseWalletisabledIcon,
   MetamaskWalletDisabledIcon,
   TrustWalletDisabledIcon,
@@ -183,7 +184,7 @@ export const Options: React.FC<OptionProps> = props => {
             onClick={setSelectedNetwork(NetworkTypeEnum.NEAR)}>
             <div className={styles.card}>
               <NearNetworkIcon className={styles.icon} />
-              <Typography>Near</Typography>
+              <Typography>NEAR</Typography>
             </div>
           </ListItem>
           <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
@@ -214,30 +215,44 @@ export const Options: React.FC<OptionProps> = props => {
         </div>
 
         <List disablePadding classes={{root: styles.list}}>
-          <ShowIf condition={network === NetworkTypeEnum.POLKADOT}>
+          <ShowIf condition={network === null || network === NetworkTypeEnum.POLKADOT}>
             <ListItem
+              component={'button'}
               disableGutters
-              disabled={network === null}
+              disabled={network === null || network !== NetworkTypeEnum.POLKADOT}
               selected={wallet === WalletTypeEnum.POLKADOT}
-              onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}>
-              <div className={styles.card}>
+              onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}
+              className={network !== NetworkTypeEnum.POLKADOT ? styles.walletCardDisabled : ''}>
+              <div className={styles.walletCard}>
                 <PolkadotWalletIcon className={styles.icon} />
                 <Typography>Polkadot.js</Typography>
               </div>
             </ListItem>
           </ShowIf>
 
-          <ShowIf condition={network === NetworkTypeEnum.NEAR}>
+          <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
             <ListItem
+              component={'button'}
               disableGutters
+              disabled={network === null || network !== NetworkTypeEnum.NEAR}
               selected={wallet === WalletTypeEnum.NEAR}
-              onClick={setSelectedWallet(WalletTypeEnum.NEAR)}>
+              onClick={setSelectedWallet(WalletTypeEnum.NEAR)}
+              className={network !== NetworkTypeEnum.NEAR ? styles.walletCardDisabled : ''}>
               <div className={styles.card}>
                 <NearNetworkIcon className={styles.icon} />
                 <Typography>NEAR</Typography>
               </div>
             </ListItem>
           </ShowIf>
+
+          <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
+            <ListItem disableGutters disabled onClick={setSelectedWallet(WalletTypeEnum.SENDER)}>
+              <div className={styles.walletCard}>
+                <SenderWalletDisabledIcon className={styles.icon} />
+                <Typography style={{display: 'inline-block'}}>Sender Wallet</Typography>
+              </div>
+            </ListItem>
+          </Tooltip>
 
           <ListItem
             style={{visibility: 'hidden'}}
