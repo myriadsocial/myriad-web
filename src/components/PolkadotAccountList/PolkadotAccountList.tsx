@@ -12,6 +12,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import Identicon from '@polkadot/react-identicon';
 
 import {Modal} from '../atoms/Modal';
+import {AllignTitle} from '../atoms/Modal/Modal.types';
 import {PolkadotLink} from '../common/PolkadotLink.component';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './PolkadotAccountList.styles';
@@ -21,6 +22,8 @@ type PolkadotAccountListProps = {
   onClose: () => void;
   onSelect: (account: InjectedAccountWithMeta) => void;
   accounts: InjectedAccountWithMeta[];
+  title?: string;
+  align?: AllignTitle;
 };
 
 export const PolkadotAccountList: React.FC<PolkadotAccountListProps> = ({
@@ -28,11 +31,17 @@ export const PolkadotAccountList: React.FC<PolkadotAccountListProps> = ({
   accounts,
   onSelect,
   onClose,
+  title,
+  align,
 }) => {
   const styles = useStyles();
 
   return (
-    <Modal title=" Account List" open={isOpen} onClose={onClose}>
+    <Modal
+      title={title ?? 'Account List'}
+      open={isOpen}
+      onClose={onClose}
+      align={align ?? 'center'}>
       <div className={styles.wrapper}>
         <ShowIf condition={accounts.length == 0}>
           <Typography className={styles.help}>

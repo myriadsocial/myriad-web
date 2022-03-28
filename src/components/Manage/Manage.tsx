@@ -13,68 +13,80 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './manage.style';
+import {useWalletList} from './use-wallet-list.hook';
 
-import {NearNetworkIcon24} from 'src/components/atoms/Icons';
 import ShowIf from 'src/components/common/show-if.component';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import {UserWallet} from 'src/interfaces/user';
 
-export const Manage: React.FC = () => {
+export type ManageProps = {
+  currentWallet?: UserWallet;
+  wallets: UserWallet[];
+  onConnect: (type: string) => void;
+};
+
+export const Manage: React.FC<ManageProps> = ({wallets, onConnect}) => {
   const style = useStyles();
   const {openToasterSnack} = useToasterSnackHook();
-
-  // TODO FIXED LOGIC WHEN WIRING
-  const [connect] = React.useState(true);
+  const {walletList} = useWalletList(wallets);
 
   const handleLinkCopied = () => {
     openToasterSnack({
-      message: 'Link copied!',
+      message: 'Wallet address copied to clipboard!',
       variant: 'success',
     });
+  };
+
+  const handleConnectWallet = (selectedWallet: string) => {
+    onConnect(selectedWallet);
   };
 
   return (
     <>
       <div>
-        {/* MAPING ARRAY OF DATA NETWORK */}
-        <ListItem alignItems={connect ? 'flex-start' : 'center'}>
-          <ListItemAvatar>
-            <NearNetworkIcon24 width={'40px'} height={'40px'} />
-          </ListItemAvatar>
-          <ListItemText>
-            <Typography variant="h5" component="span" color="textPrimary">
-              NEAR Wallet
-            </Typography>
-            <ShowIf condition={connect}>
-              <TextField
-                id="copy-wallet-address"
-                value={'aaronting.near'}
-                variant="outlined"
-                disabled
-                fullWidth
-                margin="none"
-                className={style.input}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <CopyToClipboard text={'aaronting.near'} onCopy={handleLinkCopied}>
-                        <IconButton aria-label="copy-post-link" style={{padding: 0}}>
-                          <SvgIcon component={DuplicateIcon} color="primary" />
-                        </IconButton>
-                      </CopyToClipboard>
-                    </InputAdornment>
-                  ),
-                }}
-              />
+        {walletList.map(option => (
+          <ListItem alignItems={option.isConnect ? 'flex-start' : 'center'} key={option.id}>
+            <ListItemAvatar>{option.icons}</ListItemAvatar>
+            <ListItemText>
+              <Typography variant="h5" component="span" color="textPrimary">
+                {option.title} Wallet
+              </Typography>
+              <ShowIf condition={option.isConnect}>
+                <TextField
+                  id="copy-wallet-address"
+                  value={option.walletId}
+                  variant="outlined"
+                  disabled
+                  fullWidth
+                  margin="none"
+                  className={style.input}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <CopyToClipboard text={option.walletId} onCopy={handleLinkCopied}>
+                          <IconButton aria-label="copy-post-link" style={{padding: 0}}>
+                            <SvgIcon component={DuplicateIcon} color="primary" />
+                          </IconButton>
+                        </CopyToClipboard>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </ShowIf>
+            </ListItemText>
+            <ShowIf condition={!option.isConnect}>
+              <div className={style.secondaryAction}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  color="secondary"
+                  onClick={() => handleConnectWallet(option.id)}>
+                  Connect
+                </Button>
+              </div>
             </ShowIf>
-          </ListItemText>
-          <ShowIf condition={!connect}>
-            <div className={style.secondaryAction}>
-              <Button variant="outlined" size="small" color="secondary">
-                Connect
-              </Button>
-            </div>
-          </ShowIf>
-        </ListItem>
+          </ListItem>
+        ))}
       </div>
     </>
   );

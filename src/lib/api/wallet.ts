@@ -1,9 +1,23 @@
 import MyriadAPI from './base';
+import {BaseList} from './interfaces/base-list.interface';
 
-import {ActivityLogType, BlockedProps, User, CurrentUserWallet} from 'src/interfaces/user';
+import {ActivityLogType, BlockedProps, User, UserWallet} from 'src/interfaces/user';
+
+type WalletList = BaseList<UserWallet>;
 
 type UserNonceProps = {
   nonce: number;
+};
+
+export type ConnectNetwork = {
+  publicAddress: string;
+  nonce: number;
+  signature: string | null;
+  networkType: string;
+  walletType: string;
+  data: {
+    id: string;
+  };
 };
 
 export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
@@ -59,11 +73,37 @@ export const getUserByWalletAddress = async (address: string): Promise<User & Bl
   return data;
 };
 
-export const getCurrentUserWallet = async (): Promise<CurrentUserWallet> => {
+export const getCurrentUserWallet = async (): Promise<UserWallet> => {
   const {data} = await MyriadAPI.request({
     url: `/wallet`,
     method: 'GET',
   });
 
   return data;
+};
+
+export const getUserWallets = async (userId: string): Promise<WalletList> => {
+  const {data} = await MyriadAPI.request({
+    url: `/users/${userId}/wallets`,
+    method: 'GET',
+  });
+
+  return data;
+};
+
+export const getUserNonceByUserId = async (id: string): Promise<UserNonceProps> => {
+  const {data} = await MyriadAPI.request({
+    url: `users/${id}/nonce`,
+    method: 'GET',
+  });
+
+  return data ? data : {nonce: 0};
+};
+
+export const connectNetwork = async (payload: ConnectNetwork, id: string): Promise<void> => {
+  await MyriadAPI.request({
+    url: `users/${id}/wallets`,
+    method: 'POST',
+    data: payload,
+  });
 };

@@ -33,7 +33,12 @@ export const NearNetworkIcon24: React.FC<SvgIconProps> = props => {
 };
 
 export const PolkadotNetworkIcon: React.FC<SvgIconProps> = props => (
-  <SvgIcon component={Polkadot24} viewBox="0 0 24 24" {...props} />
+  <SvgIcon
+    component={Polkadot24}
+    viewBox="0 0 24 24"
+    {...props}
+    style={{width: props.width, height: props.height}}
+  />
 );
 
 export const KusamaNetworkIcon: React.FC<SvgIconProps> = props => (

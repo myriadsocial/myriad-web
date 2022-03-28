@@ -1,3 +1,5 @@
+import {useSelector} from 'react-redux';
+
 import {signIn, signOut} from 'next-auth/client';
 import getConfig from 'next/config';
 
@@ -13,13 +15,22 @@ import {toHexPublicKey} from 'src/lib/crypto';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
 import {createNearSignature} from 'src/lib/services/near-api-js';
 import {signWithExtension} from 'src/lib/services/polkadot-js';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
 type UserNonceProps = {
   nonce: number;
 };
 
+interface NearPayload {
+  nearAddress: string;
+  pubKey: string;
+  signature: string;
+}
+
 export const useAuthHook = () => {
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
 
@@ -215,6 +226,48 @@ export const useAuthHook = () => {
     }
   };
 
+  const connectNetwork = async (account?: InjectedAccountWithMeta, nearAccount?: NearPayload) => {
+    if (!user) return;
+
+    try {
+      const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
+      if (account) {
+        const address = toHexPublicKey(account);
+        const signature = await createSignaturePolkadotExt(account, nonce);
+        const payload: WalletAPI.ConnectNetwork = {
+          publicAddress: address,
+          nonce,
+          signature,
+          networkType: 'polkadot',
+          walletType: 'polkadot',
+          data: {
+            id: account.address,
+          },
+        };
+
+        await WalletAPI.connectNetwork(payload, user.id);
+      } else if (nearAccount) {
+        const payload: WalletAPI.ConnectNetwork = {
+          publicAddress: nearAccount.pubKey,
+          nonce,
+          signature: nearAccount.signature,
+          networkType: 'near',
+          walletType: 'near',
+          data: {
+            id: nearAccount.nearAddress,
+          },
+        };
+
+        await WalletAPI.connectNetwork(payload, user.id);
+      }
+
+      await WalletAPI.getUserWallets(user.id);
+      await WalletAPI.getCurrentUserWallet();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const logout = async () => {
     await firebaseCloudMessaging.removeToken();
     await signOut({
@@ -233,5 +286,6 @@ export const useAuthHook = () => {
     signInWithExternalAuth,
     signUpWithExternalAuth,
     switchAccount,
+    connectNetwork,
   };
 };
