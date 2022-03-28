@@ -29,6 +29,7 @@ import {
 } from 'src/components/atoms/Icons';
 import {PromptComponent as Prompt} from 'src/components/atoms/Prompt/prompt.component';
 import {PolkadotLink} from 'src/components/common/PolkadotLink.component';
+import ShowIf from 'src/components/common/show-if.component';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
