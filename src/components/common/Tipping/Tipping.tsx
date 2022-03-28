@@ -148,7 +148,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
         <ListItemComponent
           avatar={currency.image}
           title={currency.id}
-          subtitle={parseFloat(currency.freeBalance.toFixed(4))}
+          subtitle={currency.freeBalance === 0 ? '0' : parseFloat(currency.freeBalance.toFixed(4))}
           action={
             <CurrencyOptionComponent
               onSelect={handleChangeCurrency}
