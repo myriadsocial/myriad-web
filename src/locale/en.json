@@ -47,9 +47,10 @@
       "Carousel_Subtitle_3": "Decentralization provide safety and no personal data collected.",
       "Text_Try_1": "Or try our",
       "Text_Try_2": "first",
-      "Footer_Text_1": "To access Myriad, you need to use",
-      "Footer_Text_2": ", on your browser",
-      "Footer_Text_3": "Sign in on mobile is not available",
+      "Footer_Text_1": "To access Myriad, you need to have",
+      "Footer_Text_2": " installed in your browser or",
+      "Footer_Text_3": "you can also use a",
+      "Footer_Text_4": " account.",
       "Btn_Signin": "Sign in",
       "Btn_Demo": "demo"
     },
