@@ -7,6 +7,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {useStyles} from './Login.style';
 
+import {NearLink} from 'src/components/common/NearLink.component';
 import {PolkadotLink} from 'src/components/common/PolkadotLink.component';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
@@ -69,16 +70,18 @@ export const Login: React.FC<LoginProps> = props => {
         </span>
       </Typography>
 
-      <Typography component="span" variant="h5" style={{textAlign: 'center'}}>
+      <Typography
+        component="span"
+        variant="h5"
+        style={{display: 'inline-block', textAlign: 'center'}}>
         {i18n.t('Login.Layout.Footer_Text_1')}&nbsp;
         <PolkadotLink />
         {i18n.t('Login.Layout.Footer_Text_2')}&nbsp;
-        <span role="img" aria-label="emoticon-computer">
-          💻
-        </span>
       </Typography>
       <Typography component="span" variant="h5">
-        {i18n.t('Login.Layout.Footer_Text_3')}
+        {i18n.t('Login.Layout.Footer_Text_3')}&nbsp;
+        <NearLink />
+        {i18n.t('Login.Layout.Footer_Text_4')}&nbsp;
       </Typography>
     </div>
   );

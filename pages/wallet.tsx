@@ -41,11 +41,6 @@ const Home: React.FC = () => {
 
   if (!user) return null;
 
-  const countNumberOfCryptoAssets = () => {
-    const TOTALCRYPTOASSETS = user.currencies.length;
-    return TOTALCRYPTOASSETS;
-  };
-
   return (
     <DefaultLayout isOnProfilePage={false}>
       <Head>
@@ -53,7 +48,7 @@ const Home: React.FC = () => {
       </Head>
       <TopNavbarComponent
         sectionTitle={SectionTitle.WALLET}
-        description={`${countNumberOfCryptoAssets()} Crypto Assets`}
+        description={`View your balance or manage your wallet`}
         type={'menu'}
       />
       <MyWalletContainerWithoutSSR />
