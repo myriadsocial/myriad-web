@@ -10,6 +10,11 @@ import {Signature} from 'near-api-js/lib/utils/key_pair';
 import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import * as WalletAPI from 'src/lib/api/wallet';
 
+export type NearInitializeProps = {
+  near: nearAPI.Near;
+  wallet: nearAPI.WalletConnection;
+};
+
 export type NearConnectResponseProps = {
   nonce: number;
   publicAddress: string;
@@ -21,10 +26,13 @@ export type NearSignatureProps = {
   publicAddress: string;
 };
 
-export const connectToNearWallet = async (): Promise<NearConnectResponseProps> => {
+export type NearBalanceProps = {
+  balance: string;
+};
+
+export const nearInitialize = async (): Promise<NearInitializeProps> => {
   try {
     const {publicRuntimeConfig} = getConfig();
-
     const {keyStores, connect, WalletConnection} = nearAPI;
     // creates keyStore using private key in local storage
     // *** REQUIRES SignIn using walletConnection.requestSignIn() ***
@@ -43,6 +51,26 @@ export const connectToNearWallet = async (): Promise<NearConnectResponseProps> =
 
     const near = await connect(assign({deps: {keyStore}}, config));
     const wallet = new WalletConnection(near, 'myriad-social');
+
+    return {near, wallet};
+  } catch (error) {
+    console.log({error});
+    throw error;
+  }
+};
+
+export const connectToNearWallet = async (
+  near: nearAPI.Near,
+  wallet: nearAPI.WalletConnection,
+): Promise<NearConnectResponseProps> => {
+  try {
+    const {publicRuntimeConfig} = getConfig();
+
+    const {keyStores} = nearAPI;
+    // creates keyStore using private key in local storage
+    // *** REQUIRES SignIn using walletConnection.requestSignIn() ***
+
+    const keyStore = new keyStores.BrowserLocalStorageKeyStore();
 
     if (!wallet.isSignedIn()) {
       await wallet.requestSignIn({successUrl: `${publicRuntimeConfig.appAuthURL}/?auth=near`});
@@ -125,5 +153,19 @@ export const createNearSignature = async (
   } catch (error) {
     console.log({error});
     return null;
+  }
+};
+
+export const getNearBalance = async (
+  near: nearAPI.Near,
+  nearAddress: string,
+): Promise<NearBalanceProps> => {
+  try {
+    const account = await near.account(nearAddress);
+    const balance = await account.getAccountBalance();
+    return {balance: balance.available};
+  } catch (error) {
+    console.log({error});
+    throw error;
   }
 };
