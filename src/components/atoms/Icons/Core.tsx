@@ -18,7 +18,12 @@ import OfficialBadge from 'src/images/Icons/official-badge.svg';
 type IconProps = Omit<SvgIconProps, 'component'>;
 
 export const MyriadCircleIcon: React.FC<IconProps> = props => (
-  <SvgIcon component={MyriadCircle} viewBox="0 0 30 30" style={{fill: 'none'}} {...props} />
+  <SvgIcon
+    component={MyriadCircle}
+    viewBox="0 0 30 30"
+    style={{width: props.width, height: props.height, fill: 'none'}}
+    {...props}
+  />
 );
 
 export const MyriadFullIcon: React.FC<IconProps> = props => {
