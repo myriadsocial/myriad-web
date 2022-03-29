@@ -87,14 +87,20 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
 
   const handleSortChange = (sort: string) => {
     switch (sort) {
-      case 'highestAmount': {
+      case 'highest': {
         const sortedHighest = _.orderBy(defaultTxs, 'amount', 'desc');
         setDefaultTxs(sortedHighest);
         break;
       }
 
-      case 'latestTransaction': {
+      case 'latest': {
         const sortedLatest = _.orderBy(defaultTxs, 'createdAt', 'desc');
+        setDefaultTxs(sortedLatest);
+        break;
+      }
+
+      case 'lowest': {
+        const sortedLatest = _.orderBy(defaultTxs, 'amount', 'asc');
         setDefaultTxs(sortedLatest);
         break;
       }
@@ -113,6 +119,11 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
       }
 
       case 'sent': {
+        setDefaultTxs(outboundTxs);
+        break;
+      }
+
+      case 'failed': {
         setDefaultTxs(outboundTxs);
         break;
       }
