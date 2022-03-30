@@ -13,6 +13,7 @@ export enum CurrencyId {
   ACA = 'ACA',
   DOT = 'DOT',
   MYRIA = 'MYRIA',
+  NEAR = 'NEAR',
 }
 
 export type Currency = CurrencyProps &
