@@ -11,7 +11,7 @@ type InputAmountProps = Omit<InputProps, 'onChange'> & {
   defaultValue?: string | BN;
   maxValue: BN | number;
   decimal: number;
-  onChange?: (value?: BN) => void;
+  onChange?: (value: BN, valid: boolean) => void;
 };
 
 export const InputAmount: React.FC<InputAmountProps> = props => {
@@ -57,7 +57,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     setValid(valid);
     setError(errorMessage);
 
-    onChange && onChange(amount);
+    onChange && onChange(amount, valid);
   };
 
   const handleInputWheel = (event: React.WheelEvent<HTMLDivElement>) => {
