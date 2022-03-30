@@ -31,12 +31,17 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   const [tipInfoOpened, setTipInfoOpened] = useState(false);
   const [options, setOptions] = useState<TippingOptions>();
   const [enabled, setTippingEnabled] = useState(false);
+  const [defaultCurrency, setDefaultCurrency] = useState<BalanceDetail>();
   const [currencyTipped, setTippingCurrency] = useState<BalanceDetail>();
   const [transactionUrl, setTransactionUrl] = useState<string>();
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
 
   useEffect(() => {
     setTippingEnabled(balances.length > 0);
+
+    if (balances.length > 0) {
+      setDefaultCurrency(balances[0]);
+    }
   }, [balances]);
 
   const tipping = useCallback<HandleSendTip>(
@@ -80,7 +85,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
     <>
       <SendTipContext.Provider value={{enabled, send: tipping}}>{children}</SendTipContext.Provider>
 
-      {options && sender && (
+      {!!options && !!sender && !!defaultCurrency && (
         <Modal
           gutter="none"
           open={tipFormOpened}
@@ -89,6 +94,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
           title="Send Tip"
           subtitle="Finding this post is insightful? Send a tip!">
           <Tipping
+            defaultCurrency={defaultCurrency}
             balances={balances}
             sender={sender}
             onSuccess={handleSuccessTipping}

@@ -31,7 +31,7 @@ export const Summary: React.FC<SummaryProps> = props => {
 
   const styles = useStyles();
 
-  const total = amount.gt(BN_ZERO) ? amount.add(transactionFee) : amount;
+  const total = amount.gt(BN_ZERO) ? amount.add(transactionFee) : transactionFee;
 
   return (
     <>
@@ -85,11 +85,16 @@ export const Summary: React.FC<SummaryProps> = props => {
                       currency={currency}
                     />
                   </ShowIf>
+                  <ShowIf condition={loadingFee}>
+                    <Typography variant="subtitle2" color="textSecondary">
+                      Loading
+                    </Typography>
+                  </ShowIf>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row" classes={{root: styles.table}}>
-                  <Typography variant="subtitle2" color="textSecondary">
+                  <Typography component="span" variant="subtitle2" color="textSecondary">
                     Total
                   </Typography>
                 </TableCell>
@@ -102,6 +107,11 @@ export const Summary: React.FC<SummaryProps> = props => {
                       value={total}
                       currency={currency}
                     />
+                  </ShowIf>
+                  <ShowIf condition={loadingFee}>
+                    <Typography component="span" variant="subtitle2" color="textSecondary">
+                      Loading
+                    </Typography>
                   </ShowIf>
                 </TableCell>
               </TableRow>

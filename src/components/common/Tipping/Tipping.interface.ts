@@ -24,6 +24,7 @@ export type SendTipProps = {
   receiver: User | People;
   reference: Post | Comment | User;
   referenceType: ReferenceType;
+  defaultCurrency: BalanceDetail;
   balances: BalanceDetail[];
   onSuccess: (currency: BalanceDetail, transactionHash: string, amount: BN) => Promise<void> | void;
 };
