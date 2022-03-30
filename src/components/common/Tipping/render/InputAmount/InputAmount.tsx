@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {OutlinedInput, FormHelperText} from '@material-ui/core';
 import type {InputProps} from '@material-ui/core';
 
-import {BN, BN_TEN, BN_ZERO, isBn} from '@polkadot/util';
+import {BN, BN_TEN, BN_ZERO, isBn, formatBalance} from '@polkadot/util';
 
 import {useStyles} from './InputAmount.style';
 
@@ -15,18 +15,34 @@ type InputAmountProps = Omit<InputProps, 'onChange'> & {
 };
 
 export const InputAmount: React.FC<InputAmountProps> = props => {
-  const {maxValue, decimal, onChange, ...inputProps} = props;
+  const {defaultValue, maxValue, decimal, onChange, ...inputProps} = props;
 
   const styles = useStyles();
 
-  const [value, setValue] = useState<string>();
+  const [value, setValue] = useState<string>('');
   const [valid, setValid] = useState(true);
   const [error, setError] = useState<string>();
 
   useEffect(() => {
-    setValue(undefined);
-    setValid(true);
-  }, [decimal]);
+    if (!defaultValue) return;
+
+    if (typeof defaultValue === 'string') {
+      setValue(defaultValue);
+    }
+
+    if (isBn(defaultValue) && defaultValue.gt(BN_ZERO)) {
+      const amount = parseFloat(
+        formatBalance(defaultValue, {decimals: decimal, forceUnit: '-', withSi: false}),
+      );
+      setValue(amount.toString());
+    } else {
+      setValue('');
+    }
+
+    return () => {
+      setValue('');
+    };
+  }, [defaultValue]);
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -94,7 +110,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
         id="input-amount"
         classes={{root: styles.input}}
         type="number"
-        value={value?.toString()}
+        value={value}
         error={!valid}
         onChange={handleAmountChange}
         onWheel={handleInputWheel}
