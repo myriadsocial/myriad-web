@@ -95,7 +95,7 @@ export enum ActivityLogType {
 }
 
 export interface UserWallet extends BaseModel {
-  type: string;
+  type: NetworkTypeEnum;
   network: string;
   networks: string[];
   primary: boolean;
