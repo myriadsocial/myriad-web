@@ -47,11 +47,8 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   // Make sure balance is showing, does not return empty JSX
   useEffect(() => {
     setDefaultBalanceDetails(balanceDetails);
-  }, [balanceDetails]);
-
-  useEffect(() => {
     handleHideZeroBalances();
-  }, [checked]);
+  }, [balanceDetails, checked]);
 
   const [isOnPrimaryCoinMenu, setIsOnPrimaryCoinMenu] = useState(false);
   const [defaultBalanceDetails, setDefaultBalanceDetails] = useState<BalanceDetail[]>([]);
@@ -75,9 +72,9 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   };
 
   const handleHideZeroBalances = () => {
-    if (checked)
+    if (checked) {
       setDefaultBalanceDetails(balanceDetails.filter(balance => balance.freeBalance > 0));
-    else setDefaultBalanceDetails(balanceDetails);
+    } else setDefaultBalanceDetails(balanceDetails);
   };
 
   const handleSearch = (query: string) => {
@@ -182,10 +179,17 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
       <ShowIf condition={isLoading}>
         <ShimerComponent />
       </ShowIf>
-      <ShowIf condition={!defaultBalanceDetails.length && !isLoading}>
+      <ShowIf condition={!defaultBalanceDetails.length && !isLoading && isSearch}>
         <Empty
           title="No results found"
           subtitle="Please make sure your keywords match with current network you were in."
+        />
+      </ShowIf>
+
+      <ShowIf condition={!defaultBalanceDetails.length && !isLoading && !isSearch}>
+        <Empty
+          title="You don’t have any crypto assets "
+          subtitle="You can add crypto assets by depositing money in your wallet."
         />
       </ShowIf>
 

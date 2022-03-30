@@ -42,7 +42,6 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
           handleSignOut={handleSignOut}
           onSwitchAccount={onSwitchAccount}
         />
-        {/* TODO WIRING WALLET ADDRESS */}
         <div className={classes.wallet}>
           <NetworkOption currentWallet={currentWallet} />
 
