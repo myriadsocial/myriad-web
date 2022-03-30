@@ -32,20 +32,37 @@ export const balanceSortOptions: MenuOptions<string>[] = [
 // TODO move this to history detail list
 export const historyAmountSortOptions: MenuOptions<string>[] = [
   {
-    id: 'latestTransaction',
-    title: 'Latest Transaction',
+    id: 'latest',
+    title: 'Latest',
   },
   {
-    id: 'highestAmount',
-    title: 'Highest Amount',
+    id: 'highest',
+    title: 'Highest',
+  },
+  {
+    id: 'lowest',
+    title: 'Lowest',
   },
 ];
 
 // TODO move this to history detail list
+// TODO set available coin by wallet/network
 export const historyCoinSortOptions: MenuOptions<string>[] = [
   {
-    id: 'allCoin',
-    title: 'All Coins',
+    id: 'all',
+    title: 'All',
+  },
+  {
+    id: 'MYRIA',
+    title: 'Myria',
+  },
+  {
+    id: 'ACA',
+    title: 'Acala',
+  },
+  {
+    id: 'AUSD',
+    title: 'aUSD',
   },
 ];
 
@@ -62,5 +79,9 @@ export const historyTransactionSortOptions: MenuOptions<string>[] = [
   {
     id: 'sent',
     title: 'Sent',
+  },
+  {
+    id: 'failed',
+    title: 'Failed',
   },
 ];
