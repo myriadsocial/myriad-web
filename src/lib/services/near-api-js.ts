@@ -163,7 +163,7 @@ export const getNearBalance = async (
   try {
     const account = await near.account(nearAddress);
     const balance = await account.getAccountBalance();
-    return {balance: balance.available};
+    return {balance: nearAPI.utils.format.formatNearAmount(balance.available)};
   } catch (error) {
     console.log({error});
     throw error;
