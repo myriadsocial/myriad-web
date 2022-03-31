@@ -13,6 +13,7 @@ import _ from 'lodash';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
+import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import {storeTransaction} from 'src/lib/api/transaction';
 import {estimateFee, signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
@@ -24,7 +25,9 @@ import {setExplorerURL} from 'src/reducers/wallet/actions';
 export const usePolkadotApi = () => {
   const dispatch = useDispatch();
 
-  const {anonymous, currencies} = useSelector<RootState, UserState>(state => state.userState);
+  const {anonymous, currencies, currentWallet} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const {balanceDetails, loading: loadingBalance} = useSelector<RootState, BalanceState>(
     state => state.balanceState,
   );
@@ -38,10 +41,15 @@ export const usePolkadotApi = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!anonymous && currencies.length > 0 && balanceDetails.length === 0) {
+    if (
+      !anonymous &&
+      currencies.length > 0 &&
+      balanceDetails.length === 0 &&
+      currentWallet?.type === NetworkTypeEnum.POLKADOT
+    ) {
       dispatch(fetchBalances());
     }
-  }, [anonymous, currencies, balanceDetails]);
+  }, [anonymous, currencies, balanceDetails, currentWallet]);
 
   const getEstimatedFee = async (
     from: string,

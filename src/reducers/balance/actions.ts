@@ -1,3 +1,5 @@
+import getConfig from 'next/config';
+
 import {Actions as BaseAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
@@ -5,8 +7,10 @@ import * as constants from './constants';
 import {Action} from 'redux';
 import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {CurrencyId} from 'src/interfaces/currency';
+import {Currency, CurrencyId} from 'src/interfaces/currency';
+import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import * as TokenAPI from 'src/lib/api/token';
+import {nearInitialize, getNearBalance} from 'src/lib/services/near-api-js';
 import {checkAccountBalance} from 'src/lib/services/polkadot-js';
 import {ThunkActionCreator} from 'src/types/thunk';
 
@@ -67,10 +71,16 @@ export const decreaseBalance = (currencyId: CurrencyId, change: number): Decreas
  * Action Creator
  */
 
+export type RetrieveBalanceProps = {
+  originBalance: number;
+  freeBalance: number;
+  previousNonce: number;
+};
+
 export const fetchBalances: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {
     const {
-      userState: {currencies, user, anonymous},
+      userState: {currencies, user, anonymous, currentWallet},
     } = getState();
 
     let address = '';
@@ -89,22 +99,55 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      for (const currency of currencies) {
-        const {free, nonce} = await checkAccountBalance(address, currency, change => {
-          const amount = formatNumber(+change.toString(), currency.decimal);
+      const retrieveBalance = async (currency: Currency): Promise<RetrieveBalanceProps> => {
+        let originBalance = 0;
+        let freeBalance = 0;
+        let previousNonce = 0;
+        //TODO: make a separated switch case for each network type
+        if (currentWallet?.type === NetworkTypeEnum.POLKADOT) {
+          const {free, nonce} = await checkAccountBalance(address, currency, change => {
+            const amount = formatNumber(+change.toString(), currency.decimal);
+            if (amount > 0) {
+              dispatch(increaseBalance(currency.id, amount));
+            } else {
+              dispatch(decreaseBalance(currency.id, Math.abs(amount)));
+            }
+          });
 
-          if (amount > 0) {
-            dispatch(increaseBalance(currency.id, amount));
-          } else {
-            dispatch(decreaseBalance(currency.id, Math.abs(amount)));
-          }
-        });
+          originBalance = formatNumber(+free.toString(), currency.decimal);
+          freeBalance = formatNumber(+free.toString(), currency.decimal);
+          previousNonce = nonce ? +nonce.toString() : 0;
+        } else if (currentWallet?.type === NetworkTypeEnum.NEAR) {
+          const {near, wallet} = await nearInitialize();
+          const {balance} = await getNearBalance(near, wallet.getAccountId());
+          freeBalance = parseFloat(balance);
+        }
+
+        return {originBalance, freeBalance, previousNonce};
+      };
+
+      for (const currency of currencies) {
+        const {publicRuntimeConfig} = getConfig();
+        const {originBalance, freeBalance, previousNonce} = await retrieveBalance(currency);
+
+        const currencyWallet = {
+          ...currency,
+          originBalance: originBalance,
+          freeBalance: freeBalance,
+          previousNonce: previousNonce,
+        };
+
+        //TODO: make all of this property fetch from backend
+        if (currentWallet?.type === NetworkTypeEnum.NEAR) {
+          CurrencyId.NEAR;
+          currencyWallet.explorerURL = publicRuntimeConfig.nearExplorerUrl;
+          currencyWallet.rpcURL = publicRuntimeConfig.nearNodeUrl;
+          currencyWallet.image =
+            'https://pbs.twimg.com/profile_images/1441304555841597440/YPwdd6cd_400x400.jpg';
+        }
 
         tokenBalances.push({
-          ...currency,
-          originBalance: formatNumber(+free.toString(), currency.decimal),
-          freeBalance: formatNumber(+free.toString(), currency.decimal),
-          previousNonce: nonce ? +nonce.toString() : 0,
+          ...currencyWallet,
         });
       }
 
