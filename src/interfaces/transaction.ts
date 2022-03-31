@@ -28,8 +28,8 @@ export type SimpleSendTipProps = {
 
 // TODO: to be refactored, changed into TransactionHistoryDetail
 export interface Transaction extends TransactionProps, BaseModel {
-  fromWallet: WalletWithUser;
-  toWallet: WalletWithUser;
+  fromWallet?: WalletWithUser;
+  toWallet?: WalletWithUser;
   post?: Post;
   currency: Currency;
 }
