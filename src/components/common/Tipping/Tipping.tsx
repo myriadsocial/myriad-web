@@ -26,17 +26,18 @@ import {User} from 'src/interfaces/user';
 const INITIAL_AMOUNT = new BN(-1);
 
 export const Tipping: React.FC<SendTipProps> = props => {
-  const {sender, receiver, reference, referenceType, balances, onSuccess} = props;
+  const {sender, receiver, reference, referenceType, balances, defaultCurrency, onSuccess} = props;
 
   const classes = useStyles();
   const {isSignerLoading, simplerSendTip, getEstimatedFee} = usePolkadotApi();
 
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
   const [transactionFee, setTransactionFee] = useState<BN>(INITIAL_AMOUNT);
-  const [currency, setCurrency] = useState<BalanceDetail>(balances[0]);
+  const [currency, setCurrency] = useState<BalanceDetail>(defaultCurrency);
   const [agreementChecked, setAgreementChecked] = useState(false);
   const [disableExternalCurrency, setDisableExternalCurrency] = useState(false);
-  const [feeLoaded, setFeeLoaded] = useState(false);
+  const [loadingFee, setLoadingFee] = useState(true);
+  const [tippingAmountValid, setTippingAmountValid] = useState(false);
 
   useEffect(() => {
     // disable other currencies when tipping to unclaimed imported posts
@@ -50,14 +51,12 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
       if (enabledCurrency) {
         setCurrency(enabledCurrency);
-        handleChangeCurrency(enabledCurrency);
+        calculateTransactionFee(enabledCurrency);
       }
 
       setDisableExternalCurrency(true);
     } else {
-      if (balances.length) {
-        handleChangeCurrency(balances[0]);
-      }
+      calculateTransactionFee(defaultCurrency);
     }
   }, []);
 
@@ -77,29 +76,38 @@ export const Tipping: React.FC<SendTipProps> = props => {
     setAgreementChecked(accepted);
   };
 
-  const handleChangeCurrency = async (currency: BalanceDetail) => {
-    setCurrency(currency);
-
+  const calculateTransactionFee = async (selected: BalanceDetail) => {
     const receiverAddress = getReceiverAddress();
     const senderAddress = getAddressByUser(sender);
 
     if (!receiverAddress || !senderAddress) return;
 
-    setFeeLoaded(false);
-    const fee = await getEstimatedFee(senderAddress, receiverAddress, currency);
-    setFeeLoaded(true);
+    setLoadingFee(true);
+    const fee = await getEstimatedFee(senderAddress, receiverAddress, selected);
+    setLoadingFee(false);
 
     if (fee) {
       setTransactionFee(fee);
     }
-
-    setAmount(INITIAL_AMOUNT);
   };
 
-  const handleAmountChange = (amount?: BN) => {
-    if (amount) {
+  const handleChangeCurrency = async (selected: BalanceDetail) => {
+    if (selected.id === currency.id) return;
+
+    // reset tipping data
+    setCurrency(selected);
+    setAmount(INITIAL_AMOUNT);
+    setTransactionFee(INITIAL_AMOUNT);
+
+    calculateTransactionFee(selected);
+  };
+
+  const handleAmountChange = (amount: BN, valid: boolean) => {
+    if (amount.gt(BN_ZERO)) {
       setAmount(amount);
     }
+
+    setTippingAmountValid(valid);
   };
 
   const signTransaction = () => {
@@ -159,6 +167,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
         />
         <form className={classes.formRoot} autoComplete="off">
           <InputAmount
+            defaultValue={amount}
             placeholder="Tip Amount"
             decimal={currency.decimal}
             maxValue={currency.freeBalance}
@@ -170,14 +179,16 @@ export const Tipping: React.FC<SendTipProps> = props => {
             transactionFee={transactionFee}
             receiver={receiver}
             currency={currency}
-            loadingFee={false}
+            loadingFee={loadingFee}
           />
 
           <div className={classes.formControls}>
             <TermOfService about="Tipping" onChange={handleChangeAgreement} />
 
             <Button
-              isDisabled={!agreementChecked || amount.lte(BN_ZERO) || !feeLoaded}
+              isDisabled={
+                !agreementChecked || amount.lte(BN_ZERO) || loadingFee || !tippingAmountValid
+              }
               variant={ButtonVariant.CONTAINED}
               onClick={signTransaction}>
               Send my tips

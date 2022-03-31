@@ -29,8 +29,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     table: {
       padding: '6px 0px',
+      height: 32,
       '& .MuiTableCell-sizeSmall': {
         padding: '6px 0px 6px 16px',
+        lineHeight: 12,
       },
       '&:last-child': {
         paddingRight: 0,

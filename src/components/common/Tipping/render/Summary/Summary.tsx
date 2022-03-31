@@ -31,14 +31,14 @@ export const Summary: React.FC<SummaryProps> = props => {
 
   const styles = useStyles();
 
-  const total = amount.gt(BN_ZERO) ? amount.add(transactionFee) : amount;
+  const total = amount.gt(BN_ZERO) ? amount.add(transactionFee) : transactionFee;
 
   return (
     <>
       <div className={styles.summary}>
         <Avatar src={receiver.profilePictureURL} name={receiver.name} size={AvatarSize.TINY} />
         <Typography variant="subtitle2" color="textPrimary" className={styles.description}>
-          {receiver.name ?? `Unnamed Myrian`} will receive&nbsp;
+          {`${receiver.name ?? 'Unnamed Myrian'} will receive `}
           <FormatCurrency
             variant="subtitle2"
             color="primary"
@@ -85,11 +85,16 @@ export const Summary: React.FC<SummaryProps> = props => {
                       currency={currency}
                     />
                   </ShowIf>
+                  <ShowIf condition={loadingFee}>
+                    <Typography variant="subtitle2" color="textSecondary">
+                      Loading
+                    </Typography>
+                  </ShowIf>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row" classes={{root: styles.table}}>
-                  <Typography variant="subtitle2" color="textSecondary">
+                  <Typography component="span" variant="subtitle2" color="textPrimary">
                     Total
                   </Typography>
                 </TableCell>
@@ -98,10 +103,15 @@ export const Summary: React.FC<SummaryProps> = props => {
                     <FormatCurrency
                       className={styles.bold}
                       variant="subtitle2"
-                      color="textSecondary"
+                      color="textPrimary"
                       value={total}
                       currency={currency}
                     />
+                  </ShowIf>
+                  <ShowIf condition={loadingFee}>
+                    <Typography component="span" variant="subtitle2" color="textSecondary">
+                      Loading
+                    </Typography>
                   </ShowIf>
                 </TableCell>
               </TableRow>
