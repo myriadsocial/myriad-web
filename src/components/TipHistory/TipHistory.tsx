@@ -199,13 +199,13 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
               {tips.map(tip => (
                 <ListItemComponent
                   key={tip.id}
-                  avatar={tip.fromWallet.user.profilePictureURL || tip.fromWallet.user.name}
+                  avatar={tip.fromWallet?.user.profilePictureURL || tip.fromWallet?.user.name}
                   title={
-                    tip?.fromWallet.user?.deletedAt
+                    tip?.fromWallet?.user?.deletedAt
                       ? 'User Banned'
-                      : limitChar(tip.fromWallet.user.name, 16)
+                      : limitChar(tip.fromWallet?.user.name, 16)
                   }
-                  isBanned={!!tip?.fromWallet.user?.deletedAt}
+                  isBanned={!!tip?.fromWallet?.user?.deletedAt}
                   subtitle={timeAgo(tip.createdAt)}
                   size={AvatarSize.MEDIUM}
                   action={

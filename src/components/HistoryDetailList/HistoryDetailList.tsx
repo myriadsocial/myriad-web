@@ -47,7 +47,7 @@ type HistoryDetailListProps = {
 };
 
 export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
-  const {allTxs, meta, isLoading, inboundTxs, outboundTxs, userId, nextPage} = props;
+  const {allTxs, meta, inboundTxs, outboundTxs, userId, nextPage} = props;
   const {loading, exchangeRates} = useExchangeRate();
 
   useEffect(() => {
