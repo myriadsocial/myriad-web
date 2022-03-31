@@ -47,7 +47,7 @@ type HistoryDetailListProps = {
 };
 
 export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
-  const {allTxs, meta, isLoading, inboundTxs, outboundTxs, userId, nextPage} = props;
+  const {allTxs, meta, inboundTxs, outboundTxs, userId, nextPage} = props;
   const {loading, exchangeRates} = useExchangeRate();
 
   useEffect(() => {
@@ -192,93 +192,94 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
       <TableContainer component={List}>
         <Table className={classes.root} aria-label="history details table">
           <TableBody>
-            {isLoading && defaultTxs.length === 0 && (
+            {defaultTxs.length === 0 ? (
               <TableRow className={classes.loading}>
                 <CircularProgress />
               </TableRow>
-            )}
-            <InfiniteScroll
-              dataLength={allTxs.length}
-              hasMore={meta.currentPage < meta.totalPageCount}
-              next={nextPage}
-              loader={<Loading />}
-              className={classes.infiniteScroll}>
-              {defaultTxs.length > 0 &&
-                defaultTxs.map(tx => (
-                  <TableRow key={tx.id} className={classes.tableRow}>
-                    <TableCell component="th" scope="row" className={classes.tableCell}>
-                      <Avatar
-                        size={AvatarSize.MEDIUM}
-                        alt={
-                          tx.toWallet.user?.id === userId
-                            ? tx.fromWallet.user?.id
-                            : tx.toWallet.user?.id
-                        }
-                        src={
-                          tx.toWallet.user?.id === userId
-                            ? tx.fromWallet.user?.profilePictureURL ?? namePlaceholder
-                            : tx.toWallet.user?.profilePictureURL ?? namePlaceholder
-                        }
-                        name={
-                          tx.toWallet.user?.id === userId
-                            ? tx.fromWallet.user?.name ?? namePlaceholder
-                            : tx.toWallet.user?.name ?? namePlaceholder
-                        }
-                      />
+            ) : (
+              <InfiniteScroll
+                dataLength={allTxs.length}
+                hasMore={meta.currentPage < meta.totalPageCount}
+                next={nextPage}
+                loader={<Loading />}
+                className={classes.infiniteScroll}>
+                {defaultTxs.length > 0 &&
+                  defaultTxs.map(tx => (
+                    <TableRow key={tx.id} className={classes.tableRow}>
+                      <TableCell component="th" scope="row" className={classes.tableCell}>
+                        <Avatar
+                          size={AvatarSize.MEDIUM}
+                          alt={
+                            tx.toWallet?.userId === userId
+                              ? tx.fromWallet?.userId
+                              : tx.toWallet?.userId
+                          }
+                          src={
+                            tx.toWallet?.userId === userId
+                              ? tx.fromWallet?.user.profilePictureURL ?? namePlaceholder
+                              : tx.toWallet?.user.profilePictureURL ?? namePlaceholder
+                          }
+                          name={
+                            tx.toWallet?.userId === userId
+                              ? tx.fromWallet?.user.name ?? namePlaceholder
+                              : tx.toWallet?.user.name ?? namePlaceholder
+                          }
+                        />
 
-                      <div>
-                        <Typography variant="body1">
-                          {tx.toWallet.user?.id === userId
-                            ? tx.fromWallet.user?.name ?? namePlaceholder
-                            : tx.toWallet.user?.name ?? namePlaceholder}
-                        </Typography>
-                        <Typography variant="caption" color="textSecondary">
-                          {timeAgo(tx.createdAt)}
-                        </Typography>
-                      </div>
-                    </TableCell>
-                    <TableCell align="center">
-                      {tx.toWallet.user?.id === userId && (
-                        <div className={classes.received}>
-                          <Typography variant="caption">Received</Typography>
-                        </div>
-                      )}
-                      {tx.fromWallet.user?.id === userId && (
-                        <div className={classes.sent}>
-                          <Typography variant="caption">Sent</Typography>
-                        </div>
-                      )}
-                    </TableCell>
-                    <TableCell align="right">
-                      <div className={classes.currencyDetailWrapper}>
                         <div>
-                          {tx.toWallet.user?.id === userId && (
-                            <Typography variant="h5" className={classes.textAmountReceived}>
-                              {parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
-                            </Typography>
-                          )}
-                          {tx.fromWallet.user?.id === userId && (
-                            <Typography variant="h5" className={classes.textAmountSent}>
-                              {parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
-                            </Typography>
-                          )}
+                          <Typography variant="body1">
+                            {tx.toWallet?.userId === userId
+                              ? tx.fromWallet?.user.name ?? namePlaceholder
+                              : tx.toWallet?.user.name ?? namePlaceholder}
+                          </Typography>
                           <Typography variant="caption" color="textSecondary">
-                            {`~${formatUsd(tx.amount, getConversion(tx.currencyId))} USD`}
+                            {timeAgo(tx.createdAt)}
                           </Typography>
                         </div>
-                        <div>
-                          <Avatar
-                            name={tx.currency.id}
-                            size={AvatarSize.TINY}
-                            alt={tx.currency.id}
-                            src={tx.currency.image}
-                          />
+                      </TableCell>
+                      <TableCell align="center">
+                        {tx.toWallet?.userId === userId && (
+                          <div className={classes.received}>
+                            <Typography variant="caption">Received</Typography>
+                          </div>
+                        )}
+                        {tx.fromWallet?.userId === userId && (
+                          <div className={classes.sent}>
+                            <Typography variant="caption">Sent</Typography>
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell align="right">
+                        <div className={classes.currencyDetailWrapper}>
+                          <div>
+                            {tx.toWallet?.userId === userId && (
+                              <Typography variant="h5" className={classes.textAmountReceived}>
+                                {parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
+                              </Typography>
+                            )}
+                            {tx.fromWallet?.userId === userId && (
+                              <Typography variant="h5" className={classes.textAmountSent}>
+                                {parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
+                              </Typography>
+                            )}
+                            <Typography variant="caption" color="textSecondary">
+                              {`~${formatUsd(tx.amount, getConversion(tx.currencyId))} USD`}
+                            </Typography>
+                          </div>
+                          <div>
+                            <Avatar
+                              name={tx.currency.id}
+                              size={AvatarSize.TINY}
+                              alt={tx.currency.id}
+                              src={tx.currency.image}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </InfiniteScroll>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </InfiniteScroll>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
