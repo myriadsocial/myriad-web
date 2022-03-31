@@ -130,15 +130,24 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
         const {publicRuntimeConfig} = getConfig();
         const {originBalance, freeBalance, previousNonce} = await retrieveBalance(currency);
 
-        tokenBalances.push({
+        const currencyWallet = {
           ...currency,
-          id: CurrencyId.NEAR,
-          explorerURL: publicRuntimeConfig.nearExplorerUrl,
-          rpcURL: publicRuntimeConfig.nearNodeUrl,
-          image: 'https://pbs.twimg.com/profile_images/1441304555841597440/YPwdd6cd_400x400.jpg',
           originBalance: originBalance,
           freeBalance: freeBalance,
           previousNonce: previousNonce,
+        };
+
+        //TODO: make all of this property fetch from backend
+        if (currentWallet?.type === NetworkTypeEnum.NEAR) {
+          CurrencyId.NEAR;
+          currencyWallet.explorerURL = publicRuntimeConfig.nearExplorerUrl;
+          currencyWallet.rpcURL = publicRuntimeConfig.nearNodeUrl;
+          currencyWallet.image =
+            'https://pbs.twimg.com/profile_images/1441304555841597440/YPwdd6cd_400x400.jpg';
+        }
+
+        tokenBalances.push({
+          ...currencyWallet,
         });
       }
 
