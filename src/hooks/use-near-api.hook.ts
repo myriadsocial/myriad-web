@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import {
   nearInitialize,
   connectToNearWallet,
@@ -16,14 +17,21 @@ import {UserState} from 'src/reducers/user/reducer';
 export const useNearApi = () => {
   const dispatch = useDispatch();
 
-  const {anonymous, currencies} = useSelector<RootState, UserState>(state => state.userState);
+  const {anonymous, currencies, currentWallet} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
 
   useEffect(() => {
-    if (!anonymous && currencies.length > 0 && balanceDetails.length === 0) {
+    if (
+      !anonymous &&
+      currencies.length > 0 &&
+      balanceDetails.length === 0 &&
+      currentWallet?.type === NetworkTypeEnum.NEAR
+    ) {
       dispatch(fetchBalances());
     }
-  }, [anonymous, currencies, balanceDetails]);
+  }, [anonymous, currencies, balanceDetails, currentWallet]);
 
   const connectToNear = async (): Promise<NearConnectResponseProps> => {
     const {near, wallet} = await nearInitialize();
