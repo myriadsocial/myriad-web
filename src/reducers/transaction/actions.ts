@@ -37,16 +37,20 @@ export const fetchTransactions: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        userState: {user},
+        userState: {user, currentWallet},
       } = getState();
 
       if (!user) {
         throw new Error('User not found');
       }
 
+      if (!currentWallet) {
+        throw new Error('Current wallet not found');
+      }
+
       const options = {
-        to: user.id,
-        from: user.id,
+        to: currentWallet.id,
+        from: currentWallet.id,
       };
 
       const {data: transactions, meta} = await TransactionAPI.getTransactions(options);
@@ -64,8 +68,6 @@ export const fetchTransactions: ThunkActionCreator<Actions, RootState> =
         const outboundTxs = sortedTempData.filter(transaction => {
           return transaction.from === user.id;
         });
-
-        console.log({transactions, inboundTxs, outboundTxs});
 
         dispatch({
           type: constants.FETCH_TRANSACTIONS,
@@ -93,16 +95,20 @@ export const fetchTransactionsIncludingCurrency: ThunkActionCreator<Actions, Roo
 
     try {
       const {
-        userState: {user},
+        userState: {user, currentWallet},
       } = getState();
 
       if (!user) {
         throw new Error('User not found');
       }
 
+      if (!currentWallet) {
+        throw new Error('current wallet not found');
+      }
+
       const options = {
-        to: user.id,
-        from: user.id,
+        to: currentWallet.id,
+        from: currentWallet.id,
       };
 
       const {data: transactions, meta} = await TransactionAPI.getTransactionsIncludingCurrency(
