@@ -7,7 +7,7 @@ import * as constants from './constants';
 import {Action} from 'redux';
 import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {CurrencyId} from 'src/interfaces/currency';
+import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import * as TokenAPI from 'src/lib/api/token';
 import {nearInitialize, getNearBalance} from 'src/lib/services/near-api-js';
@@ -71,6 +71,12 @@ export const decreaseBalance = (currencyId: CurrencyId, change: number): Decreas
  * Action Creator
  */
 
+export type RetrieveBalanceProps = {
+  originBalance: number;
+  freeBalance: number;
+  previousNonce: number;
+};
+
 export const fetchBalances: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {
     const {
@@ -93,11 +99,10 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      for (const currency of currencies) {
+      const retrieveBalance = async (currency: Currency): Promise<RetrieveBalanceProps> => {
         let originBalance = 0;
         let freeBalance = 0;
         let previousNonce = 0;
-
         //TODO: make a separated switch case for each network type
         if (currentWallet?.type === NetworkTypeEnum.POLKADOT) {
           const {free, nonce} = await checkAccountBalance(address, currency, change => {
@@ -118,7 +123,12 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
           freeBalance = parseFloat(balance);
         }
 
+        return {originBalance, freeBalance, previousNonce};
+      };
+
+      for (const currency of currencies) {
         const {publicRuntimeConfig} = getConfig();
+        const {originBalance, freeBalance, previousNonce} = await retrieveBalance(currency);
 
         tokenBalances.push({
           ...currency,
