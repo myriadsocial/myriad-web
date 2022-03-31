@@ -139,7 +139,7 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
 
         //TODO: make all of this property fetch from backend
         if (currentWallet?.type === NetworkTypeEnum.NEAR) {
-          CurrencyId.NEAR;
+          currencyWallet.id = CurrencyId.NEAR;
           currencyWallet.explorerURL = publicRuntimeConfig.nearExplorerUrl;
           currencyWallet.rpcURL = publicRuntimeConfig.nearNodeUrl;
           currencyWallet.image =
