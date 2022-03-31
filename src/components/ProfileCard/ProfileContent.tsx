@@ -41,6 +41,18 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
     [],
   );
 
+  const formatWallet = (network?: string) => {
+    switch (network) {
+      case 'polkadot':
+        return 'Polkadot';
+      case 'near':
+        return 'NEAR';
+      default:
+        break;
+    }
+    return '';
+  };
+
   const [open, setOpen] = React.useState(false);
 
   const handleOpenProfile = () => {
@@ -109,14 +121,14 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
             <div className={classes.column}>
               <Typography component="span">Network</Typography>
               <Typography component="span" className={classes.flex}>
-                {getSelectedIcon()} {currentWallet?.network}
+                {getSelectedIcon()} {formatWallet(currentWallet?.network)}
               </Typography>
             </div>
             <div className={classes.column}>
               <Typography component="span">Wallet</Typography>
               <Typography component="span" className={classes.flex}>
                 {getSelectedIcon()}
-                {currentWallet?.type} Wallet
+                {formatWallet(currentWallet?.type)} Wallet
               </Typography>
             </div>
           </div>
