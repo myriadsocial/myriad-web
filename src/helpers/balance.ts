@@ -1,3 +1,5 @@
+import {BN} from '@polkadot/util';
+
 import {BalanceDetail} from '../interfaces/balance';
 import {CurrencyId} from '../interfaces/currency';
 
@@ -24,4 +26,11 @@ export const removeMyriad = (balanceDetails: BalanceDetail[]): BalanceDetail[] =
   });
 
   return myriadlessCoins;
+};
+
+export const formatBalance = (value: BN, decimal: number, precision = 10) => {
+  const number = +value.toString() / 10 ** decimal;
+  const amount = parseFloat(number.toFixed(precision));
+
+  return amount;
 };

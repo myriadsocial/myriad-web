@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {OutlinedInput, FormHelperText} from '@material-ui/core';
 import type {InputProps} from '@material-ui/core';
 
-import {BN, BN_TEN, BN_ZERO, isBn, formatBalance} from '@polkadot/util';
+import {BN, BN_TEN, BN_ZERO, isBn} from '@polkadot/util';
 
 import {useStyles} from './InputAmount.style';
 
@@ -32,10 +32,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     }
 
     if (isBn(defaultValue) && defaultValue.gt(BN_ZERO)) {
-      const amount = parseFloat(
-        formatBalance(defaultValue, {decimals: decimal, forceUnit: '-', withSi: false}),
-      );
-      setValue(amount.toString());
+      setValue(value.toString());
     } else {
       setValue('');
     }
@@ -43,7 +40,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     return () => {
       setValue('');
     };
-  }, []);
+  }, [defaultValue]);
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
