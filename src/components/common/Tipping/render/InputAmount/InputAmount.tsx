@@ -89,12 +89,9 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     const target = event.target as HTMLInputElement;
 
     if (target.value && length) {
-      const isDecimalValue = target.value.match(/^(\d+)\.(\d+)$/);
-      const maxChar = isDecimalValue ? length + 1 : length;
-
       const trimmedValue = Math.max(0, +target.value)
         .toString()
-        .slice(0, maxChar);
+        .slice(0, length);
 
       target.value = parseFloat(trimmedValue).toString();
     }
