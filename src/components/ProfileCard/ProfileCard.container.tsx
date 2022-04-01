@@ -69,8 +69,8 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
   };
 
   const handleSignOut = async () => {
-    if (session) {
-      logout();
+    if (session && currentWallet) {
+      logout(currentWallet);
     } else {
       dispatch(clearUser());
       await router.push(`/`);

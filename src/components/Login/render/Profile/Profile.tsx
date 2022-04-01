@@ -11,6 +11,7 @@ import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {toHexPublicKey} from 'src/lib/crypto';
+import {nearInitialize} from 'src/lib/services/near-api-js';
 import i18n from 'src/locale';
 
 type ProfileProps = {
@@ -175,7 +176,16 @@ export const Profile: React.FC<ProfileProps> = props => {
     return !error;
   };
 
-  const handleChangeWallet = () => {
+  const handleChangeWallet = async () => {
+    if (walletType === WalletTypeEnum.NEAR) {
+      const {wallet} = await nearInitialize();
+
+      if (wallet.isSignedIn()) {
+        wallet.signOut();
+      } else {
+        console.log('no signed in NEAR wallet found!');
+      }
+    }
     navigate('/wallet');
   };
 
