@@ -27,7 +27,7 @@ type Props = {
 };
 
 export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
-  const {user, alias, anonymous, currentWallet} = useSelector<RootState, UserState>(
+  const {user, alias, anonymous, currentWallet, wallets} = useSelector<RootState, UserState>(
     state => state.userState,
   );
   const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
@@ -94,6 +94,7 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
       <ProfileCard
         user={user}
         currentWallet={currentWallet}
+        wallets={wallets}
         alias={alias}
         notificationCount={total}
         onViewProfile={handleViewProfile}

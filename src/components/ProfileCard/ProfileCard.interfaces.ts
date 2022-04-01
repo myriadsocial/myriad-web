@@ -3,6 +3,7 @@ import {User, UserWallet} from '../../interfaces/user';
 export type ProfileCardProps = {
   user?: User;
   currentWallet?: UserWallet;
+  wallets?: UserWallet[];
   alias?: string;
   isMobile?: boolean;
   notificationCount: number;
