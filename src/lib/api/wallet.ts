@@ -15,7 +15,7 @@ export type ConnectNetwork = {
   signature: string | null;
   networkType: string;
   walletType: string;
-  data: {
+  data?: {
     id: string;
   };
 };
@@ -104,6 +104,14 @@ export const connectNetwork = async (payload: ConnectNetwork, id: string): Promi
   await MyriadAPI.request({
     url: `users/${id}/wallets`,
     method: 'POST',
+    data: payload,
+  });
+};
+
+export const switchNetwork = async (payload: ConnectNetwork, id: string): Promise<void> => {
+  await MyriadAPI.request({
+    url: `users/${id}/networks`,
+    method: 'PATCH',
     data: payload,
   });
 };

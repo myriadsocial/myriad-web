@@ -10,13 +10,14 @@ import {ProfileContent} from './index';
 export const ProfileCard: React.FC<ProfileCardProps> = props => {
   const {
     user,
-    currentWallet,
+    wallets,
     alias,
     notificationCount,
     handleSignOut,
     onViewProfile,
     onSwitchAccount,
     onShowNotificationList,
+    currentWallet,
   } = props;
   const classes = useStyles();
 
@@ -43,7 +44,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
           onSwitchAccount={onSwitchAccount}
         />
         <div className={classes.wallet}>
-          <NetworkOption currentWallet={currentWallet} />
+          <NetworkOption currentWallet={currentWallet} wallets={wallets} />
 
           <Typography component="div" className={classes.address}>
             {formatAddress(currentWallet?.id)}

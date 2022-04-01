@@ -48,6 +48,7 @@ export const ManageCointainer: React.FC = () => {
     else {
       const {publicAddress, signature} = await connectToNear();
       const payload = {
+        publicAddress,
         nearAddress: publicAddress.split('/')[1],
         pubKey: publicAddress.split('/')[0],
         signature,
