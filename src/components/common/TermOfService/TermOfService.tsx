@@ -25,6 +25,7 @@ export const TermOfService: React.FC<TermOfServiceProps> = props => {
 
   return (
     <FormControlLabel
+      className={styles.root}
       control={
         <Checkbox
           className={styles.checkBox}
@@ -35,13 +36,17 @@ export const TermOfService: React.FC<TermOfServiceProps> = props => {
         />
       }
       label={
-        <Typography variant="subtitle2">
+        <Typography variant="subtitle2" className={styles.text}>
           I agree to the Myriad&nbsp;
-          <Link href="/term-of-use" target="_blank" rel="noreferrer" className={styles.link}>
+          <Link
+            component="span"
+            href="/term-of-use"
+            target="_blank"
+            rel="noreferrer"
+            className={styles.link}>
             Terms of Service
           </Link>
-          &nbsp;
-          <ShowIf condition={Boolean(about)}>about {about}</ShowIf>
+          <ShowIf condition={Boolean(about)}>{` about ${about}`}</ShowIf>
         </Typography>
       }
     />

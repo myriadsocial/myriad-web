@@ -43,7 +43,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     return () => {
       setValue('');
     };
-  }, [defaultValue]);
+  }, []);
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
