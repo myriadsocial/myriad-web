@@ -103,8 +103,10 @@ export const Tipping: React.FC<SendTipProps> = props => {
   };
 
   const handleAmountChange = (amount: BN, valid: boolean) => {
-    if (amount.gt(BN_ZERO)) {
+    if (amount.gt(BN_ZERO) && valid) {
       setAmount(amount);
+    } else {
+      setAmount(INITIAL_AMOUNT);
     }
 
     setTippingAmountValid(valid);
@@ -172,6 +174,8 @@ export const Tipping: React.FC<SendTipProps> = props => {
             decimal={currency.decimal}
             fee={transactionFee}
             maxValue={currency.freeBalance}
+            length={10}
+            currencyId={currency.id}
             onChange={handleAmountChange}
           />
 

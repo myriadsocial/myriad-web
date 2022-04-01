@@ -31,7 +31,7 @@ export const Summary: React.FC<SummaryProps> = props => {
 
   const styles = useStyles();
 
-  const total = amount.gt(BN_ZERO) ? amount.add(transactionFee) : transactionFee;
+  const total = amount.gt(BN_ZERO) ? amount.add(transactionFee) : BN_ZERO;
 
   return (
     <>
