@@ -262,6 +262,13 @@ export const getPostDetail = async (id: string, currentUserId?: string): Promise
   const includes: Array<any> = [
     {
       relation: 'user',
+      scope: {
+        include: [
+          {
+            relation: 'wallets',
+          },
+        ],
+      },
     },
     {
       relation: 'people',

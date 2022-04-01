@@ -6,6 +6,7 @@ import getConfig from 'next/config';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
+import {UserWallet} from 'src/interfaces/user';
 import {User} from 'src/interfaces/user';
 import * as AuthAPI from 'src/lib/api/ext-auth';
 import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
@@ -13,6 +14,7 @@ import * as UserAPI from 'src/lib/api/user';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
+import {nearInitialize} from 'src/lib/services/near-api-js';
 import {createNearSignature} from 'src/lib/services/near-api-js';
 import {signWithExtension} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
@@ -313,7 +315,17 @@ export const useAuthHook = () => {
     }
   };
 
-  const logout = async () => {
+  const logout = async (currentWallet?: UserWallet) => {
+    if (currentWallet?.network === NetworkTypeEnum.NEAR) {
+      const {wallet} = await nearInitialize();
+
+      if (wallet.isSignedIn()) {
+        wallet.signOut();
+      } else {
+        console.log('no signed in NEAR wallet found!');
+      }
+    }
+
     await firebaseCloudMessaging.removeToken();
     await signOut({
       callbackUrl: publicRuntimeConfig.appAuthURL,

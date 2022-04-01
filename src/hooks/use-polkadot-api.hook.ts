@@ -3,13 +3,14 @@ import * as Sentry from '@sentry/nextjs';
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {BN, BN_ONE, BN_TWO, BN_TEN, formatBalance} from '@polkadot/util';
+import {BN, BN_ONE, BN_TWO, BN_TEN} from '@polkadot/util';
 
 import {SimpleSendTipProps} from '../interfaces/transaction';
 import {setIsTipSent, setFee} from '../reducers/wallet/actions';
 import {WalletState} from '../reducers/wallet/reducer';
 
 import _ from 'lodash';
+import {formatBalance} from 'src/helpers/balance';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
@@ -113,18 +114,15 @@ export const usePolkadotApi = () => {
       }
 
       if (txHash) {
-        const formattedAmount = formatBalance(amount, {
-          decimals: currency.decimal,
-          forceUnit: '-',
-          withSi: false,
-        });
+        const finalAmount = formatBalance(amount, currency.decimal);
+
         // Record the transaction
         if (type) {
           // sending tip from Post/Comment
           await storeTransaction({
             // TODO: should add the extrinsicURL: explorerURL + txHash
             hash: txHash,
-            amount: +formattedAmount,
+            amount: finalAmount,
             from,
             to,
             currencyId: currency.id,
@@ -136,7 +134,7 @@ export const usePolkadotApi = () => {
           // sending direct tip
           await storeTransaction({
             hash: txHash,
-            amount: +formattedAmount,
+            amount: finalAmount,
             from,
             to,
             currencyId: currency.id,

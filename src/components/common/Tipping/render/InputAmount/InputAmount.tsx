@@ -3,19 +3,34 @@ import React, {useEffect, useState} from 'react';
 import {OutlinedInput, FormHelperText} from '@material-ui/core';
 import type {InputProps} from '@material-ui/core';
 
-import {BN, BN_TEN, BN_ZERO, isBn, formatBalance} from '@polkadot/util';
+import {BN, BN_TEN, BN_ZERO, isBn} from '@polkadot/util';
 
 import {useStyles} from './InputAmount.style';
+
+import {formatBalance} from 'src/helpers/balance';
+import {CurrencyId} from 'src/interfaces/currency';
 
 type InputAmountProps = Omit<InputProps, 'onChange'> & {
   defaultValue?: string | BN;
   maxValue: BN | number;
+  length?: number;
+  fee?: BN;
   decimal: number;
+  currencyId: CurrencyId;
   onChange?: (value: BN, valid: boolean) => void;
 };
 
 export const InputAmount: React.FC<InputAmountProps> = props => {
-  const {defaultValue, maxValue, decimal, onChange, ...inputProps} = props;
+  const {
+    defaultValue,
+    maxValue,
+    fee = BN_ZERO,
+    decimal,
+    length,
+    currencyId,
+    onChange,
+    ...inputProps
+  } = props;
 
   const styles = useStyles();
 
@@ -24,25 +39,29 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
   const [error, setError] = useState<string>();
 
   useEffect(() => {
+    return () => {
+      setValid(true);
+      setValue('');
+      setError(undefined);
+    };
+  }, []);
+
+  // reset the input amount when changing currency
+  useEffect(() => {
+    setValid(true);
+
     if (!defaultValue) return;
 
-    if (typeof defaultValue === 'string') {
-      setValue(defaultValue);
-    }
+    if (typeof defaultValue === 'string' && parseInt(defaultValue) > 0) {
+      setValue(defaultValue.toString());
+    } else if (isBn(defaultValue) && defaultValue.gt(BN_ZERO)) {
+      const formatted = formatBalance(defaultValue, decimal);
 
-    if (isBn(defaultValue) && defaultValue.gt(BN_ZERO)) {
-      const amount = parseFloat(
-        formatBalance(defaultValue, {decimals: decimal, forceUnit: '-', withSi: false}),
-      );
-      setValue(amount.toString());
+      setValue(formatted.toString());
     } else {
       setValue('');
     }
-
-    return () => {
-      setValue('');
-    };
-  }, [defaultValue]);
+  }, [currencyId]);
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -66,6 +85,21 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     target.blur();
   };
 
+  const handleOnInput = (event: React.FormEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLInputElement;
+
+    if (target.value && length) {
+      const isDecimalValue = target.value.match(/^(\d+)\.(\d+)$/);
+      const maxChar = isDecimalValue ? length + 1 : length;
+
+      const trimmedValue = Math.max(0, +target.value)
+        .toString()
+        .slice(0, maxChar);
+
+      target.value = parseFloat(trimmedValue).toString();
+    }
+  };
+
   const toBigNumber = (value: string) => {
     let result: BN;
 
@@ -87,7 +121,8 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
   };
 
   const isValidNumber = (value: BN): [boolean, string?] => {
-    const maxTip = isBn(maxValue) ? maxValue : toBigNumber(maxValue.toString());
+    const balance = isBn(maxValue) ? maxValue : toBigNumber(maxValue.toString());
+    const maxTip = balance.sub(fee);
 
     if (value.lte(BN_ZERO)) {
       return [false, 'Digit only'];
@@ -114,6 +149,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
         error={!valid}
         onChange={handleAmountChange}
         onWheel={handleInputWheel}
+        onInput={handleOnInput}
         {...inputProps}
       />
       <FormHelperText style={{alignSelf: 'center'}}>{error}</FormHelperText>

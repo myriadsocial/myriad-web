@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {useSession} from 'next-auth/client';
 import getConfig from 'next/config';
@@ -10,7 +10,9 @@ import {Button, Typography} from '@material-ui/core';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
 import {clearUser} from 'src/reducers/user/actions';
+import {UserState} from 'src/reducers/user/reducer';
 
 export type BannedDialogProps = {
   open: boolean;
@@ -22,6 +24,8 @@ const {publicRuntimeConfig} = getConfig();
 export const BannedDialog: React.FC<BannedDialogProps> = props => {
   const {open, onClose} = props;
 
+  const {currentWallet} = useSelector<RootState, UserState>(state => state.userState);
+
   const dispatch = useDispatch();
   const [session] = useSession();
   const router = useRouter();
@@ -29,8 +33,8 @@ export const BannedDialog: React.FC<BannedDialogProps> = props => {
   const {logout} = useAuthHook();
 
   const handleSignOut = async () => {
-    if (session) {
-      logout();
+    if (session && currentWallet) {
+      logout(currentWallet);
     } else {
       dispatch(clearUser());
       await router.push(`/`);

@@ -2,21 +2,21 @@ import React from 'react';
 
 import {Typography, TypographyProps} from '@material-ui/core';
 
-import {BN, BN_ZERO, formatBalance} from '@polkadot/util';
+import {BN} from '@polkadot/util';
 
+import {formatBalance} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
 
 type FormatCurrencyProps = TypographyProps & {
   value: BN;
+  length?: number;
   currency: BalanceDetail;
 };
 
 export const FormatCurrency: React.FC<FormatCurrencyProps> = props => {
-  const {value, currency, ...restProps} = props;
+  const {value, length = 10, currency, ...restProps} = props;
 
-  const amount = value.gt(BN_ZERO)
-    ? parseFloat(formatBalance(value, {decimals: currency.decimal, forceUnit: '-', withSi: false}))
-    : '-';
+  const amount = formatBalance(value, currency.decimal, length);
 
   return (
     <Typography component="span" {...restProps}>

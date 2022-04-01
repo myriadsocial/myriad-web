@@ -1,3 +1,5 @@
+import {BN} from '@polkadot/util';
+
 import {BalanceDetail} from '../interfaces/balance';
 import {CurrencyId} from '../interfaces/currency';
 
@@ -24,4 +26,25 @@ export const removeMyriad = (balanceDetails: BalanceDetail[]): BalanceDetail[] =
   });
 
   return myriadlessCoins;
+};
+
+export const formatBalance = (value: BN, decimal: number, length = 10): number => {
+  if (value.lten(0)) return 0;
+
+  const balance = (+value.toString() / 10 ** decimal).toString();
+
+  const isDecimalValue = balance.match(/^(\d+)\.(\d+)$/);
+
+  if (isDecimalValue) {
+    const div = balance.replace(/\.\d*$/, '');
+    const mod = balance.replace(/^\d+\./, '').substr(0, length - div.length);
+
+    if (parseInt(div) === 0) {
+      return parseFloat(`0.${mod}`);
+    } else {
+      return parseFloat(`${div}.${mod}`);
+    }
+  }
+
+  return +balance.slice(0, length);
 };
