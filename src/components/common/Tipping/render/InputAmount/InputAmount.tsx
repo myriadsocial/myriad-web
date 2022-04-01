@@ -10,12 +10,13 @@ import {useStyles} from './InputAmount.style';
 type InputAmountProps = Omit<InputProps, 'onChange'> & {
   defaultValue?: string | BN;
   maxValue: BN | number;
+  fee?: BN;
   decimal: number;
   onChange?: (value: BN, valid: boolean) => void;
 };
 
 export const InputAmount: React.FC<InputAmountProps> = props => {
-  const {defaultValue, maxValue, decimal, onChange, ...inputProps} = props;
+  const {defaultValue, maxValue, fee = BN_ZERO, decimal, onChange, ...inputProps} = props;
 
   const styles = useStyles();
 
@@ -87,7 +88,8 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
   };
 
   const isValidNumber = (value: BN): [boolean, string?] => {
-    const maxTip = isBn(maxValue) ? maxValue : toBigNumber(maxValue.toString());
+    const balance = isBn(maxValue) ? maxValue : toBigNumber(maxValue.toString());
+    const maxTip = balance.sub(fee);
 
     if (value.lte(BN_ZERO)) {
       return [false, 'Digit only'];

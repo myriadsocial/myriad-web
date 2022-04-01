@@ -170,6 +170,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
             defaultValue={amount}
             placeholder="Tip Amount"
             decimal={currency.decimal}
+            fee={transactionFee}
             maxValue={currency.freeBalance}
             onChange={handleAmountChange}
           />
