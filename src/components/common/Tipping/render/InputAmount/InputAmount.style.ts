@@ -5,11 +5,18 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
     input: {
+      marginBottom: 0,
+
+      '& .MuiFormHelperText-root': {
+        textAlign: 'center',
+      },
+
       '&::before,&::after': {
         content: '""',
         position: 'absolute',
         height: 24,
         width: 85,
+        top: 14,
 
         backgroundColor: '#FFD24D',
       },
