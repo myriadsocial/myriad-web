@@ -9,14 +9,14 @@ import {BalanceDetail} from 'src/interfaces/balance';
 
 type FormatCurrencyProps = TypographyProps & {
   value: BN;
-  precision?: number;
+  length?: number;
   currency: BalanceDetail;
 };
 
 export const FormatCurrency: React.FC<FormatCurrencyProps> = props => {
-  const {value, precision = 10, currency, ...restProps} = props;
+  const {value, length = 10, currency, ...restProps} = props;
 
-  const amount = formatBalance(value, currency.decimal, precision);
+  const amount = formatBalance(value, currency.decimal, length);
 
   return (
     <Typography component="span" {...restProps}>

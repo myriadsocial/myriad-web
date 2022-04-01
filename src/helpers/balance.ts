@@ -28,9 +28,23 @@ export const removeMyriad = (balanceDetails: BalanceDetail[]): BalanceDetail[] =
   return myriadlessCoins;
 };
 
-export const formatBalance = (value: BN, decimal: number, precision = 10) => {
-  const number = +value.toString() / 10 ** decimal;
-  const amount = parseFloat(number.toFixed(precision));
+export const formatBalance = (value: BN, decimal: number, length = 10): number => {
+  if (value.lten(0)) return 0;
 
-  return amount;
+  const balance = (+value.toString() / 10 ** decimal).toString();
+
+  const isDecimalValue = balance.match(/^(\d+)\.(\d+)$/);
+
+  if (isDecimalValue) {
+    const div = balance.replace(/\.\d*$/, '');
+    const mod = balance.replace(/^\d+\./, '').substr(0, length - div.length);
+
+    if (parseInt(div) === 0) {
+      return parseFloat(`0.${mod}`);
+    } else {
+      return parseFloat(`${div}.${mod}`);
+    }
+  }
+
+  return +balance.slice(0, length);
 };
