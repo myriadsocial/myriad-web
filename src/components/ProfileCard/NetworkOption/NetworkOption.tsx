@@ -180,10 +180,18 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
     setShowAccountList(false);
   };
 
+  const formatWallet = (selected: string) => {
+    return networkOptions.filter(option => option.id == selected).map(network => network.title)[0];
+  };
+
   const showConfirmDialog = (selected: string) => {
     confirm({
-      title: `You did’nt connect your ${selected}!`,
-      description: `This account is not connected with ${selected}. Please connect to ${selected} in wallet manage tab. Do you want to connect your account?`,
+      title: `You did’nt connect your ${formatWallet(selected)}!`,
+      description: `This account is not connected with ${formatWallet(
+        selected,
+      )}. Please connect to ${formatWallet(
+        selected,
+      )} in wallet manage tab. Do you want to connect your account?`,
       icon: 'warning',
       confirmationText: 'Yes',
       cancellationText: 'Cancel',
