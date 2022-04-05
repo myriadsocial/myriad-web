@@ -65,7 +65,7 @@ export const Timeline: React.FC<TimelineProps> = props => {
 
   if (loading && posts.length === 0)
     return (
-      <Grid container justify="center">
+      <Grid container justifyContent="center">
         <PostSkeleton />
         <PostSkeleton />
       </Grid>

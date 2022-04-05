@@ -33,7 +33,6 @@ ExperienceList.args = {
             'https://res.cloudinary.com/dsget80gs/image/upload/v1633668278/au2ajqyk1uc6lrgple8o.png',
           bio: 'Hello, my name is Myriad enthusiast!',
           onTimeline: '61274967e2f91569384ee93d',
-          defaultCurrency: CurrencyId.DOT,
           createdAt: new Date(),
           updatedAt: new Date(),
           wallets: [],

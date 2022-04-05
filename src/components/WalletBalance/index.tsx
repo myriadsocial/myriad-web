@@ -2,7 +2,7 @@ import React from 'react';
 
 import {useRouter} from 'next/router';
 
-import {Typography} from '@material-ui/core';
+import {capitalize, Typography} from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
@@ -46,7 +46,7 @@ export const WalletBalances: React.FC<WalletProps> = ({balances}) => {
       {balances.map(balance => (
         <ListItemComponent
           key={balance.id}
-          title={balance.id}
+          title={capitalize(balance.name)}
           avatar={balance.image}
           action={
             <Typography variant="h5">{parseFloat(balance.freeBalance.toFixed(4))}</Typography>
