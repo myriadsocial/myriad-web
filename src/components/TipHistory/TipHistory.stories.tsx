@@ -4,7 +4,7 @@ import React from 'react';
 
 import {TipHistory as TipHistoryComponent} from '.';
 import {CurrencyId} from '../../interfaces/currency';
-import {ContentType} from '../../interfaces/wallet';
+import {ContentType, WalletType} from '../../interfaces/wallet';
 
 import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
 
@@ -96,14 +96,27 @@ TipHistory.args = {
         },
       },
       currency: {
-        id: CurrencyId.MYRIA,
-        explorerURL: '',
-        image: 'https://res.cloudinary.com/dsget80gs/coins/myriad.jpg',
-        decimal: 18,
-        rpcURL: 'wss://rpc.dev.myriad.systems',
+        id: 'rawahkjwhakwhawa',
+        name: 'dot',
+        image: 'https://res.cloudinary.com/dsget80gs/coins/aca.svg',
+        decimal: 13,
         native: true,
-        createdAt: new Date('2021-08-23T07:14:57.000Z'),
-        updatedAt: new Date('2021-08-23T07:14:57.000Z'),
+        symbol: CurrencyId.DOT,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        networkId: 'polkadot',
+        network: {
+          id: 'polkadot',
+          image:
+            'https://polkadot.network/assets/img/brand/Polkadot_Token_PolkadotToken_Pink.svg?v=3997aaa2a4',
+          rpcURL: 'wss://rpc.polkadot.io',
+          explorerURL:
+            'https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.polkadot.io#/explorer/query',
+          walletType: WalletType.POLKADOT,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          currencies: [],
+        },
       },
     },
     {
@@ -180,57 +193,53 @@ TipHistory.args = {
         },
       },
       currency: {
-        id: CurrencyId.AUSD,
-        image: 'https://res.cloudinary.com/dsget80gs/coins/ausd.png',
-        decimal: 12,
-        rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
-        native: false,
-        createdAt: new Date('2021-08-23T07:14:06.000Z'),
-        updatedAt: new Date('2021-08-23T07:14:06.000Z'),
-        explorerURL: '',
+        id: 'rawahkjwhakwhawa',
+        name: 'dot',
+        image: 'https://res.cloudinary.com/dsget80gs/coins/aca.svg',
+        decimal: 13,
+        native: true,
+        symbol: CurrencyId.DOT,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        networkId: 'polkadot',
+        network: {
+          id: 'polkadot',
+          image:
+            'https://polkadot.network/assets/img/brand/Polkadot_Token_PolkadotToken_Pink.svg?v=3997aaa2a4',
+          rpcURL: 'wss://rpc.polkadot.io',
+          explorerURL:
+            'https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.polkadot.io#/explorer/query',
+          walletType: WalletType.POLKADOT,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          currencies: [],
+        },
       },
     },
   ],
   currencies: [
     {
-      id: CurrencyId.ACA,
-      explorerURL: '',
+      id: 'rawahkjwhakwhawa',
+      name: 'dot',
       image: 'https://res.cloudinary.com/dsget80gs/coins/aca.svg',
       decimal: 13,
-      rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
       native: true,
-      createdAt: new Date('2021-08-24T03:42:16.000Z'),
-      updatedAt: new Date('2021-08-24T03:42:16.000Z'),
-    },
-    {
-      id: CurrencyId.AUSD,
-      image: 'https://res.cloudinary.com/dsget80gs/coins/ausd.png',
-      decimal: 12,
-      rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
-      native: false,
-      createdAt: new Date('2021-08-23T07:14:06.000Z'),
-      updatedAt: new Date('2021-08-23T07:14:06.000Z'),
-      explorerURL: '',
-    },
-    {
-      id: CurrencyId.DOT,
-      image: 'https://res.cloudinary.com/dsget80gs/coins/dot.svg',
-      decimal: 10,
-      rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
-      native: false,
-      createdAt: new Date('2021-08-24T03:43:08.000Z'),
-      updatedAt: new Date('2021-08-24T03:43:08.000Z'),
-      explorerURL: '',
-    },
-    {
-      id: CurrencyId.MYRIA,
-      image: 'https://res.cloudinary.com/dsget80gs/coins/myriad.jpg',
-      decimal: 18,
-      rpcURL: 'wss://rpc.dev.myriad.systems',
-      native: true,
-      createdAt: new Date('2021-08-23T07:14:57.000Z'),
-      updatedAt: new Date('2021-08-23T07:14:57.000Z'),
-      explorerURL: '',
+      symbol: CurrencyId.DOT,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      networkId: 'polkadot',
+      network: {
+        id: 'polkadot',
+        image:
+          'https://polkadot.network/assets/img/brand/Polkadot_Token_PolkadotToken_Pink.svg?v=3997aaa2a4',
+        rpcURL: 'wss://rpc.polkadot.io',
+        explorerURL:
+          'https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.polkadot.io#/explorer/query',
+        walletType: WalletType.POLKADOT,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        currencies: [],
+      },
     },
   ],
   onClose: console.log,

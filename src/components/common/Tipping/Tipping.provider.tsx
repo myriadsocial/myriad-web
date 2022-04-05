@@ -67,8 +67,8 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
 
   const handleSuccessTipping = useCallback(
     (currency: BalanceDetail, transactionHash: string, tipAmount: BN) => {
-      if (currency?.explorerURL) {
-        setTransactionUrl(`${currency.explorerURL}/${transactionHash}`);
+      if (currency?.network.explorerURL) {
+        setTransactionUrl(`${currency.network.explorerURL}/${transactionHash}`);
       }
       setAmount(tipAmount);
       setTippingCurrency(currency);

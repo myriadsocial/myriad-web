@@ -6,7 +6,5 @@ export type BalanceDetail = Omit<Currency, 'createdAt' | 'updatedAt'> & {
   previousNonce: number;
   decimal: number;
   image: string;
-  rpcURL: string;
   native: boolean;
-  explorerURL: null | string;
 };

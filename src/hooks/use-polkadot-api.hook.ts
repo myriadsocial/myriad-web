@@ -96,7 +96,7 @@ export const usePolkadotApi = () => {
           to,
           value: amount,
           currencyId: currency.id,
-          wsAddress: currency.rpcURL,
+          wsAddress: currency.network.rpcURL,
           native: currency.native,
           decimal: currency.decimal,
         },
@@ -145,10 +145,10 @@ export const usePolkadotApi = () => {
         dispatch(setIsTipSent(true));
 
         if (currency.id === CurrencyId.AUSD) {
-          const {explorerURL} = currency;
-          dispatch(setExplorerURL(`${explorerURL}extrinsic/${txHash}`));
+          const {network} = currency;
+          dispatch(setExplorerURL(`${network.explorerURL}extrinsic/${txHash}`));
         } else {
-          dispatch(setExplorerURL(`${currency.explorerURL}/${txHash}`));
+          dispatch(setExplorerURL(`${currency.network.explorerURL}/${txHash}`));
         }
 
         callback && callback(txHash);

@@ -175,7 +175,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
             fee={transactionFee}
             maxValue={currency.freeBalance}
             length={10}
-            currencyId={currency.id}
+            currencyId={currency.symbol}
             onChange={handleAmountChange}
           />
 

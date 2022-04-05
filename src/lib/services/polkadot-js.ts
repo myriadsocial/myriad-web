@@ -105,7 +105,7 @@ export const estimateFee = async (
 
       // otherwise if account found
       if (account) {
-        api = await connectToBlockchain(selectedCurrency.rpcURL);
+        api = await connectToBlockchain(selectedCurrency.network.rpcURL);
 
         if (api) {
           const RAND_AMOUNT = 123;
@@ -264,7 +264,7 @@ export const checkAccountBalance = async (
 ): Promise<CheckBalanceResult> => {
   let free: u128 | UInt;
   let nonce: u32 | undefined;
-  const api = await connectToBlockchain(currency.rpcURL);
+  const api = await connectToBlockchain(currency.network.rpcURL);
 
   if (currency.native) {
     const result = await api.query.system.account(account);
@@ -295,7 +295,7 @@ const listenToSystemBalanceChange = async (
   previousFree: u128,
   callback: (change: BN) => void,
 ) => {
-  const api = await connectToBlockchain(currency.rpcURL);
+  const api = await connectToBlockchain(currency.network.rpcURL);
 
   api.query.system.account(account, ({data: {free}, nonce}) => {
     // Calculate the delta
@@ -317,7 +317,7 @@ const listenToTokenBalanceChange = async (
   previousFree: Balance,
   callback: (change: BN) => void,
 ) => {
-  const api = await connectToBlockchain(currency.rpcURL);
+  const api = await connectToBlockchain(currency.network.rpcURL);
 
   api.query.tokens.accounts(
     account,

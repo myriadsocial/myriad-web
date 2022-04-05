@@ -58,7 +58,7 @@ export const AddCoin: React.FC<Props> = props => {
   };
 
   const assetId = () => {
-    return currencies.map(currency => currency.id);
+    return currencies.map(currency => currency.symbol);
   };
 
   const submitSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -134,17 +134,17 @@ export const AddCoin: React.FC<Props> = props => {
           {!loading &&
             searchedCurrencies.map(currency => (
               <ListItem
-                disabled={isAdded(currency.id)}
+                disabled={isAdded(currency.symbol)}
                 key={currency.id}
-                onClick={() => handleSelectAsset(currency.id)}
-                className={`${!isAdded(currency.id) && style.hover} ${style.item} ${isSelected(
+                onClick={() => handleSelectAsset(currency.symbol)}
+                className={`${!isAdded(currency.symbol) && style.hover} ${style.item} ${isSelected(
                   'ACA',
                 )}`}
                 alignItems="center">
                 <ListItemAvatar>
                   <Avatar
                     name="A"
-                    alt={currency.id}
+                    alt={currency.symbol}
                     src={currency.image}
                     size={AvatarSize.MEDIUM}
                   />
@@ -155,17 +155,17 @@ export const AddCoin: React.FC<Props> = props => {
                     className={style.header}
                     component="span"
                     color="textPrimary">
-                    {currency.id}
+                    {currency.symbol}
                   </Typography>
                   <Typography
                     variant="caption"
                     className={style.subHeader}
                     component="p"
                     color="textSecondary">
-                    {currency.id} Token
+                    {currency.symbol} Token
                   </Typography>
                 </ListItemText>
-                {selectedAsset === currency.id && (
+                {selectedAsset === currency.symbol && (
                   <ListItemSecondaryAction>
                     <SvgIcon
                       color="primary"

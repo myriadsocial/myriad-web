@@ -87,8 +87,8 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
   };
 
   const handleFilter = (currency: Currency) => () => {
-    setSelected(currency.id);
-    onFilter(currency.id);
+    setSelected(currency.symbol);
+    onFilter(currency.symbol);
     handleClose();
   };
 
