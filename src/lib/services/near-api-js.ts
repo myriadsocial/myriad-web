@@ -169,3 +169,30 @@ export const getNearBalance = async (
     throw error;
   }
 };
+
+export const sendTipsNear = async (
+  near: nearAPI.Near,
+  senderNearAddress: string,
+  receiverNearAddress: string,
+  amount: string,
+): Promise<void> => {
+  try {
+    console.log(amount);
+    // const account = await near.account(senderNearAddress);
+    const test = nearAPI.utils.format.parseNearAmount(amount);
+    console.log(test);
+    // const balance = await account.getAccountBalance();
+    // await account.sendMoney(
+    //   receiverNearAddress,
+    //   balance.available
+    // )
+    // let sendAmount = new BN(nearAPI.utils.format.parseNearAmount(amount));
+    // await account.sendMoney(
+    //   receiverNearAddress,
+    //   sendAmount // amount in yoctoNEAR
+    // );
+  } catch (error) {
+    console.log({error});
+    throw error;
+  }
+};

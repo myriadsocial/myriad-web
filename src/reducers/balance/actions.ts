@@ -108,9 +108,9 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
           const {free, nonce} = await checkAccountBalance(address, currency, change => {
             const amount = formatNumber(+change.toString(), currency.decimal);
             if (amount > 0) {
-              dispatch(increaseBalance(currency.id, amount));
+              dispatch(increaseBalance(currency.symbol, amount));
             } else {
-              dispatch(decreaseBalance(currency.id, Math.abs(amount)));
+              dispatch(decreaseBalance(currency.symbol, Math.abs(amount)));
             }
           });
 
@@ -140,8 +140,8 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
         //TODO: make all of this property fetch from backend
         if (currentWallet?.type === NetworkTypeEnum.NEAR) {
           currencyWallet.id = CurrencyId.NEAR;
-          currencyWallet.explorerURL = publicRuntimeConfig.nearExplorerUrl;
-          currencyWallet.rpcURL = publicRuntimeConfig.nearNodeUrl;
+          currencyWallet.network.explorerURL = publicRuntimeConfig.nearExplorerUrl;
+          currencyWallet.network.rpcURL = publicRuntimeConfig.nearNodeUrl;
           currencyWallet.image =
             'https://pbs.twimg.com/profile_images/1441304555841597440/YPwdd6cd_400x400.jpg';
         }

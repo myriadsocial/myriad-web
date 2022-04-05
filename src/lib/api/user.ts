@@ -18,12 +18,6 @@ export const getUserDetail = async (id: string, userId?: string): Promise<User &
     filter: {
       include: [
         {
-          relation: 'currencies',
-          scope: {
-            order: 'priority ASC',
-          },
-        },
-        {
           relation: 'people',
         },
         {
