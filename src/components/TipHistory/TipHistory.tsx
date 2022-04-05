@@ -173,7 +173,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                     className={styles.item}>
                     <ListItemComponent
                       size={AvatarSize.TINY}
-                      title={currency.id}
+                      title={currency.symbol}
                       avatar={currency.image}
                     />
                   </MenuItem>
@@ -212,7 +212,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                     <div className={styles.tip}>
                       <div>
                         <Typography variant="h5">
-                          {parseScientificNotatedNumber(tip.amount)} {tip.currencyId}
+                          {parseScientificNotatedNumber(tip.amount)} {tip.currency.symbol}
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
                           {`~${formatUsd(tip.amount, getConversion(tip.currencyId))} USD`}
