@@ -1,6 +1,8 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {useSession} from 'next-auth/client';
+
 import {Socials as SocialsComponent} from '.';
 
 import {useShareSocial} from 'src/hooks/use-share-social';
@@ -11,18 +13,21 @@ import {deleteSocial, setAsPrimary} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const SocialsContainer: React.FC = () => {
-  const {isVerifying, resetVerification, verifyPublicKeyShared} = useShareSocial();
+  const [session] = useSession();
   const dispatch = useDispatch();
+
+  const {isVerifying, resetVerification, verifyPublicKeyShared} = useShareSocial();
   const {openToasterSnack} = useToasterSnackHook();
 
   const {user, socials, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const publicKey = session?.user.address as string;
 
   const handleDisconnectSocial = (people: SocialMedia) => {
     dispatch(deleteSocial(people.id));
   };
 
   const handleVerifySocial = (social: SocialsEnum, profileUrl: string) => {
-    verifyPublicKeyShared(social, profileUrl, () => {
+    verifyPublicKeyShared(social, profileUrl, publicKey, () => {
       resetVerification();
 
       openToasterSnack({
@@ -40,6 +45,7 @@ export const SocialsContainer: React.FC = () => {
     <SocialsComponent
       user={user}
       socials={socials}
+      publicKey={publicKey}
       anonymous={anonymous}
       verifying={isVerifying}
       onVerifySocialMedia={handleVerifySocial}

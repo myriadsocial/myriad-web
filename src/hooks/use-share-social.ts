@@ -44,6 +44,7 @@ export const useShareSocial = () => {
   const verifyPublicKeyShared = async (
     platform: SocialsEnum,
     profileUrl: string,
+    publicKey: string,
     callback?: () => void,
   ): Promise<void> => {
     setPlatform(platform);
@@ -55,7 +56,7 @@ export const useShareSocial = () => {
       username = profileUrl.substring(profileUrl.lastIndexOf('/') + 1);
     }
 
-    dispatch(verifySocialMediaConnected(platform, username, callback));
+    dispatch(verifySocialMediaConnected(platform, username, publicKey, callback));
   };
 
   return {

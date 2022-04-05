@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 
+import {useSession} from 'next-auth/client';
 import {useRouter} from 'next/router';
 
 import {NoSsr} from '@material-ui/core';
@@ -17,11 +18,14 @@ import {UserState} from 'src/reducers/user/reducer';
 
 export const SocialMediaListContainer: React.FC = () => {
   const router = useRouter();
+  const [session] = useSession();
+
   const {isVerifying, verifyPublicKeyShared} = useShareSocial();
   const {user, socials} = useSelector<RootState, UserState>(state => state.userState);
   const {openToasterSnack} = useToasterSnackHook();
 
   const [selectedSocial, setSelectedSocial] = useState<SocialsEnum | null>(null);
+  const publicKey = session?.user.address as string;
 
   const handleOpenSocialPage = () => {
     router.push(`/socials`);
@@ -36,7 +40,7 @@ export const SocialMediaListContainer: React.FC = () => {
   };
 
   const verifySocialMedia = (social: SocialsEnum, profileUrl: string) => {
-    verifyPublicKeyShared(social, profileUrl, () => {
+    verifyPublicKeyShared(social, profileUrl, publicKey, () => {
       setSelectedSocial(null);
 
       openToasterSnack({
@@ -90,7 +94,7 @@ export const SocialMediaListContainer: React.FC = () => {
           <AddSocialMedia
             open={Boolean(selectedSocial)}
             social={selectedSocial}
-            publicKey={user.id}
+            publicKey={publicKey}
             onClose={closeAddSocialMedia}
             verifying={isVerifying}
             verify={verifySocialMedia}
