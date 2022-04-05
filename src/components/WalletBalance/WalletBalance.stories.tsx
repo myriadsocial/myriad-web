@@ -5,6 +5,7 @@ import React from 'react';
 import {WalletBalances as WalletBalancesComponent} from '.';
 
 import {CurrencyId} from 'src/interfaces/currency';
+import {WalletType} from 'src/interfaces/wallet';
 
 export default {
   title: 'UI Revamp v2.0/components/Wallet Balances',
@@ -22,26 +23,28 @@ export const WalletBalances = Template.bind({});
 WalletBalances.args = {
   balances: [
     {
-      originBalance: 0,
-      freeBalance: 58.4,
-      id: CurrencyId.AUSD,
-      decimal: 12,
-      rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
-      image: 'https://res.cloudinary.com/dsget80gs/coins/ausd.png',
-      native: false,
-      previousNonce: 0,
-      explorerURL: '',
-    },
-    {
+      id: 'rawahkjwhakwhawa',
       originBalance: 0,
       freeBalance: 0,
-      explorerURL: '',
-      id: CurrencyId.MYRIA,
-      decimal: 18,
-      rpcURL: 'wss://rpc.dev.myriad.systems',
-      image: 'https://res.cloudinary.com/dsget80gs/coins/myriad.jpg',
+      name: 'dot',
+      image: 'https://res.cloudinary.com/dsget80gs/coins/aca.svg',
+      decimal: 13,
       native: true,
-      previousNonce: 0,
+      symbol: CurrencyId.DOT,
+      previousNonce: 1,
+      networkId: 'polkadot',
+      network: {
+        id: 'polkadot',
+        image:
+          'https://polkadot.network/assets/img/brand/Polkadot_Token_PolkadotToken_Pink.svg?v=3997aaa2a4',
+        rpcURL: 'wss://rpc.polkadot.io',
+        explorerURL:
+          'https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.polkadot.io#/explorer/query',
+        walletType: WalletType.POLKADOT,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        currencies: [],
+      },
     },
   ],
 };

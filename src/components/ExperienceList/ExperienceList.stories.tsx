@@ -6,6 +6,8 @@ import {CurrencyId} from '../../interfaces/currency';
 import {SocialsEnum} from '../../interfaces/social';
 import SimpleList from './ExperienceList';
 
+import {WalletType} from 'src/interfaces/wallet';
+
 export default {
   title: 'UI Revamp v2.0/components/ExperienceList',
   component: SimpleList,
@@ -37,14 +39,27 @@ ExperienceList.args = {
           wallets: [],
           currencies: [
             {
-              id: CurrencyId.ACA,
+              id: 'rawahkjwhakwhawa',
+              name: 'dot',
               image: 'https://res.cloudinary.com/dsget80gs/coins/aca.svg',
               decimal: 13,
-              rpcURL: 'wss://acala-mandala.api.onfinality.io/public-ws',
               native: true,
-              explorerURL: '',
+              symbol: CurrencyId.DOT,
               createdAt: new Date(),
               updatedAt: new Date(),
+              networkId: 'polkadot',
+              network: {
+                id: 'polkadot',
+                image:
+                  'https://polkadot.network/assets/img/brand/Polkadot_Token_PolkadotToken_Pink.svg?v=3997aaa2a4',
+                rpcURL: 'wss://rpc.polkadot.io',
+                explorerURL:
+                  'https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.polkadot.io#/explorer/query',
+                walletType: WalletType.POLKADOT,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                currencies: [],
+              },
             },
           ],
         },
