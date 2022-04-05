@@ -101,7 +101,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
   if (loading && posts.length === 0)
     return (
-      <Grid container justify="center">
+      <Grid container justifyContent="center">
         <PostSkeleton />
         <PostSkeleton />
       </Grid>

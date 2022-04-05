@@ -63,7 +63,7 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
 
   return (
     <>
-      <Hidden smDown>
+      <Hidden xsDown>
         <Button
           disabled={!tipping.enabled}
           onClick={handleSendTip}

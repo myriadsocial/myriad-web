@@ -2,7 +2,6 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {CurrencyId} from '../../interfaces/currency';
 import {ProfileEditComponent} from './ProfileEdit';
 
 export default {
@@ -17,7 +16,6 @@ const Template: ComponentStory<typeof ProfileEditComponent> = args => (
 const user = {
   id: '0x0a567a34a834112d1685cf6b27bbf743417d8d23615f28aee9a9c62629de8308',
   name: 'Aaron Ting',
-  defaultCurrency: CurrencyId.AUSD,
   profilePictureURL: 'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg',
   bannerImageUrl:
     'https://res.cloudinary.com/dsget80gs/image/upload/v1626794533/ht7kamz2sh3cypkoo1ji.jpg',

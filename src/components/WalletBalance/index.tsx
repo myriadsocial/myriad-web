@@ -46,7 +46,7 @@ export const WalletBalances: React.FC<WalletProps> = ({balances}) => {
       {balances.map(balance => (
         <ListItemComponent
           key={balance.id}
-          title={balance.id}
+          title={balance.symbol}
           avatar={balance.image}
           action={
             <Typography variant="h5">{parseFloat(balance.freeBalance.toFixed(4))}</Typography>

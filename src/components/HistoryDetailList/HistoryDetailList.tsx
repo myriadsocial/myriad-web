@@ -10,12 +10,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
-import {Transaction} from '../../interfaces/transaction';
-import {
-  historyAmountSortOptions,
-  historyTransactionSortOptions,
-  historyCoinSortOptions,
-} from '../Timeline/default';
+import {historyAmountSortOptions, historyTransactionSortOptions} from '../Timeline/default';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {MenuOptions} from '../atoms/DropdownMenu';
 import {DropdownMenu} from '../atoms/DropdownMenu';
@@ -28,6 +23,7 @@ import {timeAgo} from 'src/helpers/date';
 import {parseScientificNotatedNumber} from 'src/helpers/number';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
 import {CurrencyId} from 'src/interfaces/currency';
+import {Transaction} from 'src/interfaces/transaction';
 
 type metaTrxProps = {
   currentPage: number;
@@ -50,24 +46,20 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const {allTxs, meta, inboundTxs, outboundTxs, userId, nextPage} = props;
   const {loading, exchangeRates} = useExchangeRate();
 
+  const [sortOptions, setSortOptions] = useState<MenuOptions<string>[]>([]);
+  const [defaultTxs, setDefaultTxs] = useState<Transaction[]>([]);
+
   useEffect(() => {
-    const newArray = allTxs.map(tx => ({
+    const transactionCurrency = allTxs.map(tx => ({
       id: tx.currency.id,
-      title: tx.currency.id,
+      title: tx.currency.symbol,
     }));
-    const updatedSortOptions = getUniqueListBy(newArray, 'id');
 
-    //@ts-ignore
-    setSortOptions((oldSortOptions: MenuOptions[]) => [...oldSortOptions, ...updatedSortOptions]);
-  }, []);
+    const filterOptions = getUniqueListBy(transactionCurrency, 'id');
 
-  useEffect(() => {
+    setSortOptions(filterOptions);
     setDefaultTxs(allTxs);
   }, [allTxs]);
-
-  const [sortOptions, setSortOptions] = useState(historyCoinSortOptions);
-
-  const [defaultTxs, setDefaultTxs] = useState<Transaction[]>([]);
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const getUniqueListBy = (arr: Array<any>, key: string) => {
@@ -138,25 +130,25 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const handleCurrencyChange = (filterByCurrency: string) => {
     switch (filterByCurrency) {
       case CurrencyId.ACA: {
-        const filteredByACA = _.filter(allTxs, {currencyId: 'ACA'});
+        const filteredByACA = _.filter(allTxs, tx => tx.currency.symbol === 'ACA');
         setDefaultTxs(filteredByACA);
         break;
       }
 
       case CurrencyId.DOT: {
-        const filteredByDOT = _.filter(allTxs, {currencyId: 'DOT'});
+        const filteredByDOT = _.filter(allTxs, tx => tx.currency.symbol === 'DOT');
         setDefaultTxs(filteredByDOT);
         break;
       }
 
       case CurrencyId.AUSD: {
-        const filteredByAUSD = _.filter(allTxs, {currencyId: 'AUSD'});
+        const filteredByAUSD = _.filter(allTxs, tx => tx.currency.symbol === 'AUSD');
         setDefaultTxs(filteredByAUSD);
         break;
       }
 
       case CurrencyId.MYRIA: {
-        const filteredByMYRIA = _.filter(allTxs, {currencyId: 'MYRIA'});
+        const filteredByMYRIA = _.filter(allTxs, tx => tx.currency.symbol === 'MYRIA');
         setDefaultTxs(filteredByMYRIA);
         break;
       }
@@ -254,12 +246,12 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                           <div>
                             {tx.toWallet?.userId === userId && (
                               <Typography variant="h5" className={classes.textAmountReceived}>
-                                {parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
+                                {parseScientificNotatedNumber(tx.amount)} {tx.currency.name}
                               </Typography>
                             )}
                             {tx.fromWallet?.userId === userId && (
                               <Typography variant="h5" className={classes.textAmountSent}>
-                                {parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
+                                {parseScientificNotatedNumber(tx.amount)} {tx.currency.name}
                               </Typography>
                             )}
                             <Typography variant="caption" color="textSecondary">
@@ -268,9 +260,9 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                           </div>
                           <div>
                             <Avatar
-                              name={tx.currency.id}
+                              name={tx.currency.name}
                               size={AvatarSize.TINY}
-                              alt={tx.currency.id}
+                              alt={tx.currency.name}
                               src={tx.currency.image}
                             />
                           </div>

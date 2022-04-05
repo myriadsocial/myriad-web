@@ -26,14 +26,18 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
   const {title, options, selected, onChange, disabled = false} = props;
   const styles = useStyles();
 
-  const [current, setCurrent] = useState<string>(options[0].id);
+  const [current, setCurrent] = useState<string>();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   useEffect(() => {
+    if (options.length) {
+      setCurrent(options[0].id);
+    }
+
     if (selected) {
       setCurrent(selected);
     }
-  }, [selected]);
+  }, [options, selected]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);

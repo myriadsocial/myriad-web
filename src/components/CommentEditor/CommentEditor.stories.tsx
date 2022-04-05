@@ -4,8 +4,6 @@ import React from 'react';
 
 import {CommentEditor as CommentEditorComponent} from './CommentEditor';
 
-import {CurrencyId} from 'src/interfaces/currency';
-
 export default {
   title: 'UI Revamp v2.0/atoms/Comment Editor',
   component: CommentEditorComponent,
@@ -19,7 +17,6 @@ export const CommentEditor = Template.bind({});
 CommentEditor.args = {
   onSubmit: console.log,
   user: {
-    defaultCurrency: CurrencyId.AUSD,
     id: '0x76e85125c8a6997e5e40e5e1f0a64a8154b5c69308e54b426ad3a34af1545b1d',
     name: 'Nomaden',
     profilePictureURL:

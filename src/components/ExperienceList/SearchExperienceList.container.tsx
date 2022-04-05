@@ -23,7 +23,7 @@ export const SearchExperienceListContainer: React.FC<SearchExperienceListContain
 
     if (loading && experiences.length === 0)
       return (
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <Skeleton />
           <Skeleton />
           <Skeleton />
