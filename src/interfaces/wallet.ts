@@ -11,3 +11,9 @@ export interface WalletDetail {
   referenceId: string;
   referenceType: WalletReferenceType;
 }
+
+export enum WalletType {
+  ETH = 'eth',
+  NEAR = 'near',
+  POLKADOT = 'polkadot',
+}
