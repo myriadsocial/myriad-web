@@ -20,7 +20,7 @@ export const UsersListContainer: React.FC<UsersListContainerProps> = props => {
 
   if (loading && users.length === 0)
     return (
-      <Grid container justify="center">
+      <Grid container justifyContent="center">
         <Skeleton />
         <Skeleton />
         <Skeleton />

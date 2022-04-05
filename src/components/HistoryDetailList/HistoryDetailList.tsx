@@ -53,7 +53,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   useEffect(() => {
     const newArray = allTxs.map(tx => ({
       id: tx.currency.id,
-      title: tx.currency.id,
+      title: tx.currency.name,
     }));
     const updatedSortOptions = getUniqueListBy(newArray, 'id');
 
@@ -254,12 +254,12 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                           <div>
                             {tx.toWallet?.userId === userId && (
                               <Typography variant="h5" className={classes.textAmountReceived}>
-                                {parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
+                                {parseScientificNotatedNumber(tx.amount)} {tx.currency.name}
                               </Typography>
                             )}
                             {tx.fromWallet?.userId === userId && (
                               <Typography variant="h5" className={classes.textAmountSent}>
-                                {parseScientificNotatedNumber(tx.amount)} {tx.currency.id}
+                                {parseScientificNotatedNumber(tx.amount)} {tx.currency.name}
                               </Typography>
                             )}
                             <Typography variant="caption" color="textSecondary">
@@ -268,9 +268,9 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                           </div>
                           <div>
                             <Avatar
-                              name={tx.currency.id}
+                              name={tx.currency.name}
                               size={AvatarSize.TINY}
-                              alt={tx.currency.id}
+                              alt={tx.currency.name}
                               src={tx.currency.image}
                             />
                           </div>

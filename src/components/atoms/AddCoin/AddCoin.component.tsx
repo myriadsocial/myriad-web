@@ -102,7 +102,7 @@ export const AddCoin: React.FC<Props> = props => {
 
   const LoadingComponent = () => {
     return (
-      <Grid container justify="center">
+      <Grid container justifyContent="center">
         <CircularProgress />
       </Grid>
     );

@@ -41,20 +41,20 @@ type BalanceDetailListProps = {
 
 export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   const {balanceDetails, isLoading} = props;
+
   const [checked, setChecked] = React.useState(true);
   const [isSearch, setIsSearch] = React.useState(false);
+  const [isOnPrimaryCoinMenu, setIsOnPrimaryCoinMenu] = useState(false);
+  const [defaultBalanceDetails, setDefaultBalanceDetails] = useState<BalanceDetail[]>([]);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const {loading, exchangeRates} = useExchangeRate();
 
   // Make sure balance is showing, does not return empty JSX
   useEffect(() => {
     setDefaultBalanceDetails(balanceDetails);
     handleHideZeroBalances();
   }, [balanceDetails, checked]);
-
-  const [isOnPrimaryCoinMenu, setIsOnPrimaryCoinMenu] = useState(false);
-  const [defaultBalanceDetails, setDefaultBalanceDetails] = useState<BalanceDetail[]>([]);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  const {loading, exchangeRates} = useExchangeRate();
 
   const getConversion = (currencyId: string) => {
     if (loading) {
@@ -188,7 +188,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
 
       <ShowIf condition={!defaultBalanceDetails.length && !isLoading && !isSearch}>
         <Empty
-          title="You don’t have any crypto assets "
+          title="You don't have any crypto assets"
           subtitle="You can add crypto assets by depositing money in your wallet."
         />
       </ShowIf>

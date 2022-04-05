@@ -64,9 +64,9 @@ export const getTransactions = async (
     params: {
       pageNumber: page,
       pageLimit: PAGINATION_LIMIT,
+      currencyId: where?.to,
       filter: {
         order: `createdAt DESC`,
-        where,
         include,
       },
     },
@@ -114,15 +114,17 @@ export const getTransactionsIncludingCurrency = async (
     where.or = [{to: options.to}, {from: options.from}];
   }
 
+  console.log('where?.from', where?.to);
+
   const {data} = await MyriadAPI.request<TransactionList>({
     url: '/transactions',
     method: 'GET',
     params: {
       pageNumber: page,
       pageLimit: limit,
+      currencyId: where?.to,
       filter: {
         order: [`${orderField} ${sort}`],
-        where,
         include,
       },
     },

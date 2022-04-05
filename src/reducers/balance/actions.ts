@@ -1,5 +1,3 @@
-import getConfig from 'next/config';
-
 import {Actions as BaseAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
@@ -127,7 +125,6 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
       };
 
       for (const currency of currencies) {
-        const {publicRuntimeConfig} = getConfig();
         const {originBalance, freeBalance, previousNonce} = await retrieveBalance(currency);
 
         const currencyWallet = {
@@ -137,24 +134,13 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
           previousNonce: previousNonce,
         };
 
-        //TODO: make all of this property fetch from backend
-        if (currentWallet?.type === NetworkTypeEnum.NEAR) {
-          currencyWallet.id = CurrencyId.NEAR;
-          currencyWallet.network.explorerURL = publicRuntimeConfig.nearExplorerUrl;
-          currencyWallet.network.rpcURL = publicRuntimeConfig.nearNodeUrl;
-          currencyWallet.image =
-            'https://pbs.twimg.com/profile_images/1441304555841597440/YPwdd6cd_400x400.jpg';
-        }
-
         tokenBalances.push({
           ...currencyWallet,
         });
       }
 
-      const defaultCurrencies = tokenBalances.filter(
-        balance => balance.id === user.defaultCurrency,
-      );
-      const otherCurrencies = tokenBalances.filter(balance => balance.id !== user.defaultCurrency);
+      const defaultCurrencies = tokenBalances.filter(balance => balance.id === currentWallet?.id);
+      const otherCurrencies = tokenBalances.filter(balance => balance.id !== currentWallet?.id);
 
       dispatch({
         type: constants.FETCH_BALANCES,
