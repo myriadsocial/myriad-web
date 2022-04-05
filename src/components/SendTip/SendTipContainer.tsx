@@ -20,7 +20,9 @@ export const SendTipContainer: React.FC = () => {
     state => state.walletState,
   );
 
-  const defaultCurrencyId: CurrencyId | null = user?.defaultCurrency ?? null;
+  // TODO: get default currency
+  console.log('user', user?.id);
+  const defaultCurrencyId: CurrencyId | null = null;
 
   // TODO: sort balance when updating balanceDetails on BalanceState
   const putDefaultFirst = (balanceDetails: BalanceDetail[]) => {

@@ -38,7 +38,8 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
         data[currenciesId.indexOf(coin.id)] = coin;
       });
     } else {
-      return putDefaultFirst(balanceDetails, user.defaultCurrency);
+      // TODO: check default wallet
+      // return putDefaultFirst(balanceDetails, currentWallet.id);
     }
 
     return data;

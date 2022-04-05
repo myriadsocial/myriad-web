@@ -3,7 +3,6 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 import React from 'react';
 
 import {HeaderComponent} from '.';
-import {CurrencyId} from '../../../interfaces/currency';
 import {PostVisibility} from '../../../interfaces/post';
 import {SocialsEnum} from '../../../interfaces/social';
 
@@ -50,7 +49,6 @@ MyriadPost.args = {
     updatedAt: new Date('Fri Aug 27 2021 13:39:48 GMT+0000 (Coordinated Universal Time)'),
     createdBy: '0x76e85125c8a6997e5e40e5e1f0a64a8154b5c69308e54b426ad3a34af1545b1d',
     user: {
-      defaultCurrency: CurrencyId.ACA,
       id: '0x76e85125c8a6997e5e40e5e1f0a64a8154b5c69308e54b426ad3a34af1545b1d',
       name: 'Nomaden',
       profilePictureURL:
@@ -102,7 +100,6 @@ OtherPost.args = {
     createdBy: '0x48c145fb4a5aeb32075023a576180107ecc1e5470ab2ebdd1965b71a33dad363',
     peopleId: '60efac8c565ab8004ed28ba6',
     user: {
-      defaultCurrency: CurrencyId.ACA,
       id: '0x48c145fb4a5aeb32075023a576180107ecc1e5470ab2ebdd1965b71a33dad363',
       name: 'Myriad',
       bannerImageUrl: undefined,
