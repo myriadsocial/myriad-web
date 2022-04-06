@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {signIn, signOut} from 'next-auth/client';
@@ -26,7 +27,7 @@ type UserNonceProps = {
   nonce: number;
 };
 
-interface NearPayload {
+export interface NearPayload {
   publicAddress: string;
   nearAddress: string;
   pubKey: string;
@@ -38,6 +39,7 @@ export const useAuthHook = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
+  const [loading, setLoading] = useState(false);
 
   const createSignaturePolkadotExt = async (
     account: InjectedAccountWithMeta,
@@ -274,44 +276,65 @@ export const useAuthHook = () => {
   };
 
   const switchNetwork = async (
-    account?: InjectedAccountWithMeta,
-    nearAccount?: NearPayload,
+    account: InjectedAccountWithMeta | NearPayload,
+    networkType: NetworkTypeEnum,
+    walletType: WalletTypeEnum,
     callback?: () => void,
   ) => {
     if (!user) return;
 
+    setLoading(true);
+
     try {
       const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
-      if (account) {
-        const address = toHexPublicKey(account);
-        const signature = await createSignaturePolkadotExt(account, nonce);
-        const payload: WalletAPI.ConnectNetwork = {
-          publicAddress: address,
-          nonce,
-          signature,
-          networkType: NetworkTypeEnum.POLKADOT,
-          walletType: WalletTypeEnum.POLKADOT,
-        };
 
-        await WalletAPI.switchNetwork(payload, user.id);
-      }
-      if (nearAccount) {
-        const payload: WalletAPI.ConnectNetwork = {
-          publicAddress: nearAccount.publicAddress,
-          nonce,
-          signature: nearAccount.signature,
-          networkType: NetworkTypeEnum.NEAR,
-          walletType: WalletTypeEnum.NEAR,
-        };
+      let payload: WalletAPI.ConnectNetwork;
+      let currentAddress: string;
 
-        await WalletAPI.switchNetwork(payload, user.id);
+      switch (walletType) {
+        case WalletTypeEnum.POLKADOT: {
+          const polkadotAccount = account as InjectedAccountWithMeta;
+          const signature = await createSignaturePolkadotExt(polkadotAccount, nonce);
+
+          currentAddress = toHexPublicKey(polkadotAccount);
+          payload = {
+            publicAddress: currentAddress,
+            nonce,
+            signature,
+            networkType: networkType,
+            walletType: walletType,
+          };
+
+          break;
+        }
+
+        case WalletTypeEnum.NEAR: {
+          const nearAccount = account as NearPayload;
+          currentAddress = nearAccount.nearAddress;
+          payload = {
+            publicAddress: nearAccount.publicAddress,
+            nonce,
+            signature: nearAccount.signature,
+            networkType: networkType,
+            walletType: walletType,
+          };
+
+          break;
+        }
+
+        default:
+          throw new Error('Wallet not exists');
       }
+
+      await WalletAPI.switchNetwork(payload, user.id);
 
       dispatch(fetchUserWallets());
       dispatch(fetchCurrentUserWallets());
       callback && callback();
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -334,6 +357,7 @@ export const useAuthHook = () => {
   };
 
   return {
+    loading,
     anonymous,
     logout,
     getUserByAccounts,

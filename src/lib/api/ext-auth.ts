@@ -15,6 +15,8 @@ export enum NetworkTypeEnum {
   BINANCE = 'binance',
   POLYGON = 'polygon',
   NEAR = 'near',
+  MYRIAD = 'myriad',
+  KUSAMA = 'kusama',
 }
 
 type LoginProps = {

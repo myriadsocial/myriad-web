@@ -26,6 +26,7 @@ import {
 } from 'src/components/atoms/Icons';
 import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import {useAuthHook} from 'src/hooks/auth.hook';
+import {NearPayload} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {UserWallet} from 'src/interfaces/user';
@@ -37,22 +38,30 @@ export type NetworkOptionProps = {
   wallets?: UserWallet[];
 };
 
-const networkOptions: MenuOptions<string>[] = [
+type NetworkMenuOption = MenuOptions<string> & {
+  walletType: string;
+};
+
+const networkOptions: NetworkMenuOption[] = [
   {
     id: 'polkadot',
     title: 'Polkadot',
+    walletType: WalletTypeEnum.POLKADOT,
   },
   {
     id: 'kusama',
     title: 'Kusama',
+    walletType: WalletTypeEnum.POLKADOT,
   },
   {
     id: 'near',
     title: 'NEAR',
+    walletType: WalletTypeEnum.NEAR,
   },
   {
     id: 'myriad',
     title: 'Myriad',
+    walletType: WalletTypeEnum.POLKADOT,
   },
 ];
 
@@ -72,6 +81,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
   const [showAccountList, setShowAccountList] = React.useState(false);
   const [extensionInstalled, setExtensionInstalled] = React.useState(false);
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
+  const [network, setNetwork] = React.useState<NetworkTypeEnum | null>(null);
 
   const icons = React.useMemo(
     () => ({
@@ -103,39 +113,66 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
     router.push(`/wallet?type=manage`);
   };
 
-  const handleSelected = (option: string) => {
-    if (option === current) handleClose();
-    else if (wallets?.map(wallet => wallet.network).find(network => network === option)) {
-      if (option === NetworkTypeEnum.POLKADOT) {
-        checkExtensionInstalled();
+  const handleSelected = async (walletType: string, networkType: NetworkTypeEnum) => {
+    if (networkType === current) handleClose();
+    else {
+      const wallet = wallets?.find(wallet => wallet.type === walletType);
+
+      switch (wallet?.type) {
+        case WalletTypeEnum.POLKADOT: {
+          checkExtensionInstalled(networkType);
+          break;
+        }
+
+        case WalletTypeEnum.NEAR: {
+          const {publicAddress, signature} = await connectToNear();
+          const payload: NearPayload = {
+            publicAddress,
+            nearAddress: publicAddress.split('/')[1],
+            pubKey: publicAddress.split('/')[0],
+            signature,
+          };
+          handleSwitch(wallet.type, networkType, payload);
+          break;
+        }
+
+        default:
+          handleOpenPrompt(walletType);
       }
-      if (option === NetworkTypeEnum.NEAR) {
-        handleSwitch(option);
-      }
-    } else handleOpenPrompt(option);
+    }
     handleClose();
   };
 
-  const handleSwitch = async (option: string, account?: InjectedAccountWithMeta) => {
-    if (option === WalletTypeEnum.POLKADOT) {
-      switchNetwork(account, undefined, () => {
-        setCurrent(option as string);
-        closeAccountList();
-      });
-    }
-    if (option === WalletTypeEnum.NEAR) {
-      // TODO SWITCH NEAR WITH CONNECTED NEAR ACCOUNT
-      const {publicAddress, signature} = await connectToNear();
-      const payload = {
-        publicAddress,
-        nearAddress: publicAddress.split('/')[1],
-        pubKey: publicAddress.split('/')[0],
-        signature,
-      };
+  const handleSwitch = async (
+    walletType: string,
+    network: NetworkTypeEnum,
+    account: InjectedAccountWithMeta | NearPayload,
+  ) => {
+    switch (walletType) {
+      case WalletTypeEnum.POLKADOT: {
+        switchNetwork(account, network, walletType, () => {
+          setCurrent(walletType as string);
+          setNetwork(null);
+          closeAccountList();
+        });
+        break;
+      }
 
-      switchNetwork(undefined, payload, () => {
-        setCurrent(option as string);
-      });
+      case WalletTypeEnum.NEAR: {
+        // TODO SWITCH NEAR WITH CONNECTED NEAR ACCOUNT
+        const {publicAddress, signature} = await connectToNear();
+        const payload: NearPayload = {
+          publicAddress,
+          nearAddress: publicAddress.split('/')[1],
+          pubKey: publicAddress.split('/')[0],
+          signature,
+        };
+
+        switchNetwork(payload, NetworkTypeEnum.NEAR, walletType, () => {
+          setCurrent(walletType as string);
+        });
+        break;
+      }
     }
   };
 
@@ -152,28 +189,30 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
   };
 
   // POLKADOT
-  const checkExtensionInstalled = async () => {
+  const checkExtensionInstalled = async (network: NetworkTypeEnum) => {
     const installed = await enablePolkadotExtension();
 
     setShowAccountList(true);
     setExtensionInstalled(installed);
 
-    getAvailableAccounts();
+    getAvailableAccounts(network);
   };
 
-  const getAvailableAccounts = async () => {
-    const accounts = await getRegisteredAccounts();
-    setAccounts(
-      accounts.filter(
-        account =>
-          toHexPublicKey(account) ==
-          wallets?.filter(wallet => wallet.type === NetworkTypeEnum.POLKADOT)[0].id,
-      ),
+  const getAvailableAccounts = async (network: NetworkTypeEnum) => {
+    const accounts = (await getRegisteredAccounts()).filter(
+      account =>
+        toHexPublicKey(account) ===
+        wallets?.filter(wallet => wallet.type === WalletTypeEnum.POLKADOT)[0].id,
     );
+
+    setAccounts(accounts);
+    setNetwork(network);
   };
 
   const handleSelectPolkadotAccount = (account: InjectedAccountWithMeta) => {
-    handleSwitch('polkadot', account);
+    if (network) {
+      handleSwitch(WalletTypeEnum.POLKADOT, network, account);
+    }
   };
 
   const closeAccountList = () => {
@@ -216,7 +255,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
         {networkOptions.map(option => (
           <MenuItem
             key={option.id}
-            onClick={() => handleSelected(option.id)}
+            onClick={() => handleSelected(option.walletType, option.id as NetworkTypeEnum)}
             className={option.id === current ? styles.menu : ''}>
             <ListItemIcon>{icons[option.id as keyof typeof icons]}</ListItemIcon>
             <ListItemText>{option.title}</ListItemText>
