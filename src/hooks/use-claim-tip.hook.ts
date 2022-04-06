@@ -2,12 +2,15 @@ import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
 import {Network} from 'src/interfaces/wallet';
-import {getClaimTip, TipResult} from 'src/lib/services/polkadot-js';
+import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {getClaimTip, TipResult, claimMyria} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const useClaimTip = () => {
-  const {user, networks} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, networks, currentWallet} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [tipsEachNetwork, setTipsEachNetwork] = useState<Network[]>(networks);
@@ -28,14 +31,15 @@ export const useClaimTip = () => {
     };
 
     try {
-      const selectedNetwork = networks.find(option => option.id == 'myriad');
+      const selectedNetwork = networks.find(option => option.id == NetworkTypeEnum.MYRIAD);
       if (!selectedNetwork) return;
 
+      // GET MYRIA TIP
       const data = await getClaimTip(tipBalanceInfo, selectedNetwork?.rpcURL);
       if (data !== null) {
         const result: TipResult = {
           accountId: data.accountId,
-          amount: (parseInt(data.amount, 16) / 10 ** 18).toFixed(3).toString(),
+          amount: (parseFloat(data.amount.replace(/,/g, '')) / 10 ** 18).toFixed(3).toString(),
           tipsBalanceInfo: {
             ftIdentifier: data.tipsBalanceInfo.ftIdentifier,
             referenceId: data.tipsBalanceInfo.ftIdentifier,
@@ -46,7 +50,7 @@ export const useClaimTip = () => {
 
         setTipsEachNetwork(
           tipsEachNetwork.map(option => {
-            if (option.id == 'myriad') {
+            if (option.id == NetworkTypeEnum.MYRIAD) {
               option.tips = [result];
             }
             return option;
@@ -61,35 +65,61 @@ export const useClaimTip = () => {
     }
   };
 
-  // const claimTipMyria = async () => {
-  //   if (!user) return;
-  //   setLoading(true);
+  const claimTipMyria = async (networkId: string, ftIdentifier: string, callback?: () => void) => {
+    if (!user) return;
+    if (!currentWallet) return;
+    setLoading(true);
 
-  //   const tipBalanceInfo = {
-  //     serverId: '0x75cf5fd717c518edd73ed7128373f219b1954569a71a86741d69eb9d851e91a9',
-  //     referenceType: 'user',
-  //     referenceId: user.id,
-  //     ftIdentifier: 'native',
-  //   };
+    try {
+      const tipBalanceInfo = {
+        serverId: '0x75cf5fd717c518edd73ed7128373f219b1954569a71a86741d69eb9d851e91a9',
+        referenceType: 'user',
+        referenceId: user.id,
+        ftIdentifier: ftIdentifier,
+      };
+      if (networkId == NetworkTypeEnum.MYRIAD) {
+        const selectedNetwork = networks.find(option => option.id == NetworkTypeEnum.MYRIAD);
+        if (!selectedNetwork) return;
 
-  //   try {
-  //     const selectedNetwork = networks.find(option => option.id == 'myriad');
-  //     if (!selectedNetwork) return;
+        await claimMyria(tipBalanceInfo, selectedNetwork?.rpcURL, currentWallet);
+        await getTip();
+      }
+      callback && callback();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  //     const data = await claimMyria(tipBalanceInfo, selectedNetwork?.rpcURL);
-  //     console.log(data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const claimAll = async (networkId: string, callback?: () => void) => {
+    if (!user) return;
+    setLoading(true);
+
+    try {
+      switch (networkId) {
+        case NetworkTypeEnum.MYRIAD:
+          await Promise.all([claimTipMyria(networkId, 'native')]);
+          break;
+
+        default:
+          break;
+      }
+
+      callback && callback();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
     tipsEachNetwork,
     error,
     loading,
     getTip,
-    // claimTipMyria,
+    claimTipMyria,
+    claimAll,
   };
 };

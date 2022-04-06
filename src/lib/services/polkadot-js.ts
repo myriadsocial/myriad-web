@@ -14,6 +14,7 @@ import {NoAccountException} from './errors/NoAccountException';
 
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
+import {UserWallet} from 'src/interfaces/user';
 
 interface signAndSendExtrinsicProps {
   from: string;
@@ -368,27 +369,39 @@ export const getClaimTip = async (
 
     if (result.toJSON() == null) return null;
 
-    return result.toJSON() as AnyObject as TipResult;
+    return result.toHuman() as AnyObject as TipResult;
   } catch (error) {
     console.log({error});
     return null;
   }
 };
 
-// export const claimMyria = async (payload: TipBalanceInfo, rpcURL: string) => {
-//   try {
-//     const api = await connectToBlockchain(rpcURL);
-//     const keyring = new Keyring();
-//     const sender = keyring.getPair('ALICE');
-//     const extrinsic = api.tx.tipping.claimTip(payload);
+export const claimMyria = async (
+  payload: TipBalanceInfo,
+  rpcURL: string,
+  currentWallet: UserWallet,
+): Promise<void> => {
+  const {enableExtension} = await import('src/helpers/extension');
+  const {web3FromSource} = await import('@polkadot/extension-dapp');
 
-//     return extrinsic.signAndSend(sender); // injector.
-//     // {
-//     //   signer: injector.signer,
-//     //   // make sure nonce does not stuck
-//     //   nonce: -1,
-//     // }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+  try {
+    const allAccounts = await enableExtension();
+    if (!allAccounts || allAccounts.length === 0)
+      throw new NoAccountException('Please import your account first!');
+
+    const keyring = new Keyring();
+    const baseAddress = keyring.encodeAddress(currentWallet.id);
+    const account = allAccounts.find(account => account.address === baseAddress);
+
+    if (!account) throw new NoAccountException('Account not registered on Polkadot.js extension');
+
+    const injector = await web3FromSource(account.meta.source);
+    const api = await connectToBlockchain(rpcURL);
+    const extrinsic = api.tx.tipping.claimTip(payload);
+
+    extrinsic.signAndSend(currentWallet.id, {nonce: -1, signer: injector.signer});
+    console.log(extrinsic, 9876);
+  } catch (error) {
+    console.log(error);
+  }
+};

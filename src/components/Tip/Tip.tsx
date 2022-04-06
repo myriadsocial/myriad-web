@@ -16,11 +16,16 @@ import {
   PolkadotNetworkIcon,
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
+import ShowIf from 'src/components/common/show-if.component';
+import {UserWallet} from 'src/interfaces/user';
 import {TipResult} from 'src/lib/services/polkadot-js';
 
 type TipProps = {
   tips: TipResult[];
   network: string;
+  currentWallet?: UserWallet;
+  onClaim: (networkId: string, ftIdentifier: string) => void;
+  onClaimAll: (networkId: string) => void;
 };
 
 const networkOptions: MenuOptions<string>[] = [
@@ -42,7 +47,7 @@ const networkOptions: MenuOptions<string>[] = [
   },
 ];
 
-export const Tip: React.FC<TipProps> = ({tips, network}) => {
+export const Tip: React.FC<TipProps> = ({tips, network, onClaim, onClaimAll, currentWallet}) => {
   const style = useStyles();
 
   const icons = React.useMemo(
@@ -55,8 +60,13 @@ export const Tip: React.FC<TipProps> = ({tips, network}) => {
     [],
   );
 
-  const handleClaim = () => {
+  const handleClaim = (networkId: string, ftIdentifier: string) => {
     // PUT CODE HERE
+    onClaim(networkId, ftIdentifier);
+  };
+
+  const handleClaimAll = () => {
+    onClaimAll(network);
   };
 
   const formatNetworkName = () => {
@@ -74,14 +84,19 @@ export const Tip: React.FC<TipProps> = ({tips, network}) => {
           </Typography>
         </ListItemText>
         <div className={style.secondaryAction}>
-          <Button
-            className={style.button}
-            size="small"
-            color="primary"
-            variant="text"
-            onClick={handleClaim}>
-            Claim all
-          </Button>
+          <ShowIf condition={!!currentWallet && currentWallet.network !== network}>
+            <Typography>Switch network to claim</Typography>
+          </ShowIf>
+          <ShowIf condition={!!currentWallet && currentWallet.network == network}>
+            <Button
+              className={style.button}
+              size="small"
+              color="primary"
+              variant="text"
+              onClick={handleClaimAll}>
+              Claim all
+            </Button>
+          </ShowIf>
         </div>
       </ListItem>
       <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
@@ -92,10 +107,14 @@ export const Tip: React.FC<TipProps> = ({tips, network}) => {
                 <div>
                   <MyriadCircleIcon width={'32px'} height={'32px'} />
                   <Typography component="p" variant="h5">
-                    {'MYRIA'}
+                    {tip.tipsBalanceInfo.ftIdentifier == 'native'
+                      ? 'MYRIA'
+                      : tip.tipsBalanceInfo.ftIdentifier}
                   </Typography>
                 </div>
                 <Button
+                  disabled={currentWallet && currentWallet.network !== network}
+                  onClick={() => handleClaim(network, tip.tipsBalanceInfo.ftIdentifier)}
                   size="small"
                   className={style.buttonClaim}
                   color="primary"
