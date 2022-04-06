@@ -181,9 +181,10 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
   };
 
   const showConfirmDialog = (selected: string) => {
+    const selectedWallet = networkOptions.find(option => option.id == selected);
     confirm({
-      title: `You did’nt connect your ${selected}!`,
-      description: `This account is not connected with ${selected}. Please connect to ${selected} in wallet manage tab. Do you want to connect your account?`,
+      title: `You did’nt connect your ${selectedWallet?.title}!`,
+      description: `This account is not connected with ${selectedWallet?.title}. Please connect to ${selectedWallet?.title} in wallet manage tab. Do you want to connect your account?`,
       icon: 'warning',
       confirmationText: 'Yes',
       cancellationText: 'Cancel',
