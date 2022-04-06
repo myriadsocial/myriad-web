@@ -9,24 +9,68 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './tip.style';
 
-import {NearNetworkIcon24, MyriadCircleIcon} from 'src/components/atoms/Icons';
+import {MenuOptions} from 'src/components/atoms/DropdownMenu';
+import {
+  NearNetworkIcon24,
+  MyriadCircleIcon,
+  PolkadotNetworkIcon,
+  KusamaNetworkIcon,
+} from 'src/components/atoms/Icons';
+import {TipResult} from 'src/lib/services/polkadot-js';
 
-export const Tip: React.FC = () => {
+type TipProps = {
+  tips: TipResult[];
+  network: string;
+};
+
+const networkOptions: MenuOptions<string>[] = [
+  {
+    id: 'polkadot',
+    title: 'Polkadot',
+  },
+  {
+    id: 'kusama',
+    title: 'Kusama',
+  },
+  {
+    id: 'near',
+    title: 'NEAR',
+  },
+  {
+    id: 'myriad',
+    title: 'Myriad',
+  },
+];
+
+export const Tip: React.FC<TipProps> = ({tips, network}) => {
   const style = useStyles();
+
+  const icons = React.useMemo(
+    () => ({
+      polkadot: <PolkadotNetworkIcon width={'24px'} height={'24px'} />,
+      kusama: <KusamaNetworkIcon width={'24px'} height={'24px'} />,
+      near: <NearNetworkIcon24 width={'24px'} height={'24px'} />,
+      myriad: <MyriadCircleIcon width={'24px'} height={'24px'} />,
+    }),
+    [],
+  );
 
   const handleClaim = () => {
     // PUT CODE HERE
   };
 
+  const formatNetworkName = () => {
+    const result = networkOptions.find(option => option.id == network);
+    return result?.title;
+  };
+
   return (
     <>
       <ListItem alignItems="center" className={style.listItem}>
-        <ListItemAvatar>
-          <NearNetworkIcon24 width={'24px'} height={'24px'} />
-        </ListItemAvatar>
+        <ListItemAvatar>{icons[network as keyof typeof icons]}</ListItemAvatar>
         <ListItemText>
           <Typography variant="h6" component="span" color="textPrimary">
-            {'NEAR'}
+            {formatNetworkName()}
           </Typography>
         </ListItemText>
         <div className={style.secondaryAction}>
@@ -41,89 +85,35 @@ export const Tip: React.FC = () => {
         </div>
       </ListItem>
       <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
-        {/* MAPING ARRAY OF DATA CLAIM */}
-        <Grid item xs={6}>
-          <div className={style.content}>
-            <div className={style.flex}>
-              <div>
-                <MyriadCircleIcon width={'32px'} height={'32px'} />
-                <Typography component="p" variant="h5">
-                  {'MYRIA'}
+        {tips.map((tip, i) => (
+          <Grid item xs={6} key={i}>
+            <div className={style.content}>
+              <div className={style.flex}>
+                <div>
+                  <MyriadCircleIcon width={'32px'} height={'32px'} />
+                  <Typography component="p" variant="h5">
+                    {'MYRIA'}
+                  </Typography>
+                </div>
+                <Button
+                  size="small"
+                  className={style.buttonClaim}
+                  color="primary"
+                  variant="contained">
+                  Claim
+                </Button>
+              </div>
+              <div className={style.text}>
+                <Typography variant="h5" component="p" color="textPrimary">
+                  {tip.amount}
+                </Typography>
+                <Typography variant="subtitle2" component="p" color="textSecondary">
+                  USD {'~'}
                 </Typography>
               </div>
-              <Button
-                size="small"
-                className={style.buttonClaim}
-                color="primary"
-                variant="contained">
-                Claim
-              </Button>
             </div>
-            <div className={style.text}>
-              <Typography variant="h5" component="p" color="textPrimary">
-                {'120.12345678'}
-              </Typography>
-              <Typography variant="subtitle2" component="p" color="textSecondary">
-                USD {'150.24'}
-              </Typography>
-            </div>
-          </div>
-        </Grid>
-        <Grid item xs={6}>
-          <div className={style.content}>
-            <div className={style.flex}>
-              <div>
-                <MyriadCircleIcon width={'32px'} height={'32px'} />
-                <Typography component="p" variant="h5">
-                  MYRIA
-                </Typography>
-              </div>
-              <Button
-                size="small"
-                className={style.buttonClaim}
-                color="primary"
-                variant="contained">
-                Claim
-              </Button>
-            </div>
-            <div className={style.text}>
-              <Typography variant="h5" component="p" color="textPrimary">
-                120.12345678
-              </Typography>
-              <Typography variant="subtitle2" component="p" color="textSecondary">
-                USD 150.24
-              </Typography>
-            </div>
-          </div>
-        </Grid>
-        <Grid item xs={6}>
-          <div className={style.content}>
-            <div className={style.flex}>
-              <div>
-                <MyriadCircleIcon width={'32px'} height={'32px'} />
-
-                <Typography component="p" variant="h5">
-                  MYRIA
-                </Typography>
-              </div>
-              <Button
-                size="small"
-                className={style.buttonClaim}
-                color="primary"
-                variant="contained">
-                Claim
-              </Button>
-            </div>
-            <div className={style.text}>
-              <Typography variant="h5" component="p" color="textPrimary">
-                120.12345678
-              </Typography>
-              <Typography variant="subtitle2" component="p" color="textSecondary">
-                USD 150.24
-              </Typography>
-            </div>
-          </div>
-        </Grid>
+          </Grid>
+        ))}
       </Grid>
     </>
   );

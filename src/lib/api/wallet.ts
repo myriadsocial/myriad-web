@@ -2,8 +2,10 @@ import MyriadAPI from './base';
 import {BaseList} from './interfaces/base-list.interface';
 
 import {ActivityLogType, BlockedProps, User, UserWallet} from 'src/interfaces/user';
+import {Network} from 'src/interfaces/wallet';
 
 type WalletList = BaseList<UserWallet>;
+type Networks = BaseList<Network>;
 
 type UserNonceProps = {
   nonce: number;
@@ -114,4 +116,25 @@ export const switchNetwork = async (payload: ConnectNetwork, id: string): Promis
     method: 'PATCH',
     data: payload,
   });
+};
+
+export const getNetworks = async (): Promise<Networks> => {
+  const {data} = await MyriadAPI.request({
+    url: `/networks`,
+    method: 'GET',
+    params: {
+      filter: {
+        include: [
+          {
+            relation: 'currencies',
+            scope: {
+              order: 'priority ASC',
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  return data;
 };

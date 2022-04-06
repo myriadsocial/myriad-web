@@ -1,6 +1,7 @@
 import {options} from '@acala-network/api';
 import {Balance, OrmlAccountData} from '@open-web3/orml-types/interfaces';
 import * as Sentry from '@sentry/nextjs';
+import {AnyObject} from '@udecode/plate';
 
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
@@ -338,3 +339,56 @@ const listenToTokenBalanceChange = async (
     },
   );
 };
+
+interface TipBalanceInfo {
+  serverId: string;
+  referenceType: string;
+  referenceId: string;
+  ftIdentifier: string;
+}
+
+export interface TipResult {
+  tipsBalanceInfo: TipBalanceInfo;
+  accountId: string;
+  amount: string;
+}
+
+export const getClaimTip = async (
+  {serverId, referenceType, referenceId, ftIdentifier}: TipBalanceInfo,
+  rpcURL: string,
+): Promise<TipResult | null> => {
+  try {
+    const api = await connectToBlockchain(rpcURL);
+    const result = await api.query.tipping.tipsBalanceByReference(
+      serverId,
+      referenceType,
+      referenceId,
+      ftIdentifier,
+    );
+
+    if (result.toJSON() == null) return null;
+
+    return result.toJSON() as AnyObject as TipResult;
+  } catch (error) {
+    console.log({error});
+    return null;
+  }
+};
+
+// export const claimMyria = async (payload: TipBalanceInfo, rpcURL: string) => {
+//   try {
+//     const api = await connectToBlockchain(rpcURL);
+//     const keyring = new Keyring();
+//     const sender = keyring.getPair('ALICE');
+//     const extrinsic = api.tx.tipping.claimTip(payload);
+
+//     return extrinsic.signAndSend(sender); // injector.
+//     // {
+//     //   signer: injector.signer,
+//     //   // make sure nonce does not stuck
+//     //   nonce: -1,
+//     // }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
