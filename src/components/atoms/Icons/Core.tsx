@@ -41,7 +41,7 @@ export const MyriadFullIcon: React.FC<IconProps> = props => {
 export const MyriadFullBlackIcon: React.FC<IconProps> = props => (
   <SvgIcon
     component={MyriadFullBlack}
-    viewBox="inherit"
+    viewBox="0 0 142 36"
     style={{width: 'auto', height: 'auto'}}
     {...props}
   />
@@ -57,7 +57,7 @@ export const MyriadGreyIcon: React.FC<IconProps> = props => (
 );
 
 export const NotificationIcon: React.FC<IconProps> = props => (
-  <SvgIcon component={Notification} viewBox="inherit" {...props} />
+  <SvgIcon component={Notification} viewBox="0 0 24 24" {...props} />
 );
 
 export const OfficialBadgeIcon: React.FC<IconProps> = props => (
@@ -67,7 +67,7 @@ export const OfficialBadgeIcon: React.FC<IconProps> = props => (
 export const UploadIcon: React.FC<IconProps> = props => (
   <SvgIcon
     component={Upload}
-    viewBox="inherit"
+    viewBox="0 0 56 56"
     style={{fill: 'none', width: 'auto', height: 'auto'}}
     {...props}
   />

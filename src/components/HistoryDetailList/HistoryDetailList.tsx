@@ -44,21 +44,25 @@ type HistoryDetailListProps = {
 
 export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const {allTxs, meta, inboundTxs, outboundTxs, userId, nextPage} = props;
+
+  const classes = useStyles();
   const {loading, exchangeRates} = useExchangeRate();
 
   const [sortOptions, setSortOptions] = useState<MenuOptions<string>[]>([]);
   const [defaultTxs, setDefaultTxs] = useState<Transaction[]>([]);
+  const namePlaceholder = 'Unknown Myrian';
 
   useEffect(() => {
-    const transactionCurrency = allTxs.map(tx => ({
+    const validTxs = allTxs.filter(tx => Boolean(tx.currency));
+
+    const transactionCurrency = validTxs.map(tx => ({
       id: tx.currency.id,
       title: tx.currency.symbol,
     }));
-
     const filterOptions = getUniqueListBy(transactionCurrency, 'id');
 
     setSortOptions(filterOptions);
-    setDefaultTxs(allTxs);
+    setDefaultTxs(validTxs);
   }, [allTxs]);
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -160,10 +164,6 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     }
   };
 
-  const classes = useStyles();
-
-  const namePlaceholder = 'Unknown Myrian';
-
   return (
     <>
       <div className={classes.headerActionWrapper}>
@@ -246,12 +246,12 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                           <div>
                             {tx.toWallet?.userId === userId && (
                               <Typography variant="h5" className={classes.textAmountReceived}>
-                                {parseScientificNotatedNumber(tx.amount)} {tx.currency.name}
+                                {parseScientificNotatedNumber(+tx.amount)} {tx.currency.name}
                               </Typography>
                             )}
                             {tx.fromWallet?.userId === userId && (
                               <Typography variant="h5" className={classes.textAmountSent}>
-                                {parseScientificNotatedNumber(tx.amount)} {tx.currency.name}
+                                {parseScientificNotatedNumber(+tx.amount)} {tx.currency.name}
                               </Typography>
                             )}
                             <Typography variant="caption" color="textSecondary">
