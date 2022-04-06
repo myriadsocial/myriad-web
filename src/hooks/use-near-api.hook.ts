@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {
   nearInitialize,
   connectToNearWallet,
@@ -27,7 +27,7 @@ export const useNearApi = () => {
       !anonymous &&
       currencies.length > 0 &&
       balanceDetails.length === 0 &&
-      currentWallet?.type === NetworkTypeEnum.NEAR
+      currentWallet?.type === WalletTypeEnum.NEAR
     ) {
       dispatch(fetchBalances());
     }

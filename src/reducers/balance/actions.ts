@@ -6,7 +6,7 @@ import {Action} from 'redux';
 import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
-import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import * as TokenAPI from 'src/lib/api/token';
 import {nearInitialize, getNearBalance} from 'src/lib/services/near-api-js';
 import {checkAccountBalance} from 'src/lib/services/polkadot-js';
@@ -102,7 +102,7 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
         let freeBalance = 0;
         let previousNonce = 0;
         //TODO: make a separated switch case for each network type
-        if (currentWallet?.type === NetworkTypeEnum.POLKADOT) {
+        if (currentWallet?.type === WalletTypeEnum.POLKADOT) {
           const {free, nonce} = await checkAccountBalance(address, currency, change => {
             const amount = formatNumber(+change.toString(), currency.decimal);
             if (amount > 0) {
@@ -115,7 +115,7 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
           originBalance = formatNumber(+free.toString(), currency.decimal);
           freeBalance = formatNumber(+free.toString(), currency.decimal);
           previousNonce = nonce ? +nonce.toString() : 0;
-        } else if (currentWallet?.type === NetworkTypeEnum.NEAR) {
+        } else if (currentWallet?.type === WalletTypeEnum.NEAR) {
           const {near, wallet} = await nearInitialize();
           const {balance} = await getNearBalance(near, wallet.getAccountId());
           freeBalance = parseFloat(balance);

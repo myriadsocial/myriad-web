@@ -14,7 +14,7 @@ import {formatBalance} from 'src/helpers/balance';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
-import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {storeTransaction} from 'src/lib/api/transaction';
 import {estimateFee, signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
@@ -46,7 +46,7 @@ export const usePolkadotApi = () => {
       !anonymous &&
       currencies.length > 0 &&
       balanceDetails.length === 0 &&
-      currentWallet?.type === NetworkTypeEnum.POLKADOT
+      currentWallet?.type === WalletTypeEnum.POLKADOT
     ) {
       dispatch(fetchBalances());
     }

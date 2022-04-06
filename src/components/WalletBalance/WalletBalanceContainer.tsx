@@ -9,7 +9,7 @@ import {BoxComponent} from '../atoms/Box';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
@@ -29,7 +29,7 @@ export const WalletBalancesContainer: React.FC = () => {
 
   const handleFilterCurrencies = (): void => {
     if (currenciesId.length) {
-      if (currentWallet?.type === NetworkTypeEnum.POLKADOT) {
+      if (currentWallet?.type === WalletTypeEnum.POLKADOT) {
         const data: BalanceDetail[] = [];
 
         polkadotBalance.forEach(coin => {
@@ -37,14 +37,14 @@ export const WalletBalancesContainer: React.FC = () => {
         });
 
         setFilteredBalanced(data);
-      } else if (currentWallet?.type === NetworkTypeEnum.NEAR) {
+      } else if (currentWallet?.type === WalletTypeEnum.NEAR) {
         //TODO need to filtered by currenciesId from backend
         setFilteredBalanced(nearBalance);
       }
     } else {
-      if (currentWallet?.type === NetworkTypeEnum.POLKADOT) {
+      if (currentWallet?.type === WalletTypeEnum.POLKADOT) {
         setFilteredBalanced(polkadotBalance);
-      } else if (currentWallet?.type === NetworkTypeEnum.NEAR) {
+      } else if (currentWallet?.type === WalletTypeEnum.NEAR) {
         setFilteredBalanced(nearBalance);
       }
     }
