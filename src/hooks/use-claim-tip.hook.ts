@@ -1,6 +1,8 @@
 import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
+import getConfig from 'next/config';
+
 import {Network} from 'src/interfaces/wallet';
 import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import {getClaimTip, TipResult, claimMyria} from 'src/lib/services/polkadot-js';
@@ -8,6 +10,7 @@ import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const useClaimTip = () => {
+  const {publicRuntimeConfig} = getConfig();
   const {user, networks, currentWallet} = useSelector<RootState, UserState>(
     state => state.userState,
   );
@@ -24,7 +27,7 @@ export const useClaimTip = () => {
     setLoading(true);
 
     const tipBalanceInfo = {
-      serverId: '0x75cf5fd717c518edd73ed7128373f219b1954569a71a86741d69eb9d851e91a9',
+      serverId: publicRuntimeConfig.myriadServerId,
       referenceType: 'user',
       referenceId: user.id,
       ftIdentifier: 'native',
@@ -72,7 +75,7 @@ export const useClaimTip = () => {
 
     try {
       const tipBalanceInfo = {
-        serverId: '0x75cf5fd717c518edd73ed7128373f219b1954569a71a86741d69eb9d851e91a9',
+        serverId: publicRuntimeConfig.myriadServerId,
         referenceType: 'user',
         referenceId: user.id,
         ftIdentifier: ftIdentifier,
