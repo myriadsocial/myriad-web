@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {useSession} from 'next-auth/client';
+
 import {UserSettings} from './UserSettings';
 
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
@@ -10,9 +12,10 @@ type UserSettingsContainerProps = {
 };
 
 export const UserSettingsContainer: React.FC<UserSettingsContainerProps> = props => {
-  const {user} = props;
-
+  const [session] = useSession();
   const {openToasterSnack} = useToasterSnackHook();
+
+  const address = session?.user.address as string;
 
   const handlePublicKeyCopied = () => {
     openToasterSnack({
@@ -23,7 +26,7 @@ export const UserSettingsContainer: React.FC<UserSettingsContainerProps> = props
 
   return (
     <>
-      <UserSettings user={user} onPublicKeyCopied={handlePublicKeyCopied} />
+      <UserSettings publicKey={address} onPublicKeyCopied={handlePublicKeyCopied} />
     </>
   );
 };
