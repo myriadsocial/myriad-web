@@ -75,7 +75,7 @@ export const TipHistoryContainer: React.FC<TipHistoryContainerProps> = props => 
       hasMore={hasMore}
       currencies={currencies}
       tippingDisabled={tippingDisabled}
-      tips={transactions}
+      tips={transactions.filter(tx => Boolean(tx.currency))}
       sendTip={handleSendTip}
       onClose={closeTipHistory}
       onSort={handleSortTransaction}

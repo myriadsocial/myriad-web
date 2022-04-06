@@ -212,7 +212,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                     <div className={styles.tip}>
                       <div>
                         <Typography variant="h5">
-                          {parseScientificNotatedNumber(tip.amount)} {tip.currency.symbol}
+                          {parseScientificNotatedNumber(+tip.amount)} {tip.currency.symbol}
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
                           {`~${formatUsd(tip.amount, getConversion(tip.currencyId))} USD`}
