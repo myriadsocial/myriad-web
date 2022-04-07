@@ -22,7 +22,8 @@ import {nearInitialize} from 'src/lib/services/near-api-js';
 import {createNearSignature} from 'src/lib/services/near-api-js';
 import {signWithExtension} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
-import {fetchUserWallets, fetchCurrentUserWallets} from 'src/reducers/user/actions';
+import {fetchBalances, getUserCurrencies} from 'src/reducers/balance/actions';
+import {fetchUserWallets, fetchCurrentUserWallets, fetchUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
@@ -335,7 +336,10 @@ export const useAuthHook = () => {
       }
 
       await WalletAPI.switchNetwork(payload, user.id);
+      await dispatch(fetchUser(currentAddress));
 
+      dispatch(getUserCurrencies());
+      dispatch(fetchBalances());
       dispatch(fetchUserWallets());
       dispatch(fetchCurrentUserWallets());
       callback && callback();
