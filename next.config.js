@@ -35,9 +35,6 @@ const moduleExports = {
     appAuthURL: process.env.NEXTAUTH_URL ?? 'http://localhost:3000',
     myriadWebsiteURL: process.env.NEXT_PUBLIC_MYRIAD_WEBSITE_URL ?? 'https://www.myriad.social',
     myriadSupportMail: process.env.NEXT_PUBLIC_MYRIAD_SUPPORT_MAIL ?? 'support@myriad.social',
-    myriadServerId:
-      process.env.MYRIAD_SERVER_ID ??
-      '0x75cf5fd717c518edd73ed7128373f219b1954569a71a86741d69eb9d851e91a9',
     firebaseProjectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
     firebaseAPIKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     firebaseMessagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,

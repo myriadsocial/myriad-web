@@ -8,6 +8,7 @@ import {Empty} from 'src/components/atoms/Empty';
 import ShowIf from 'src/components/common/show-if.component';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import {Network} from 'src/interfaces/wallet';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -35,6 +36,10 @@ export const TipContainer: React.FC = () => {
     });
   };
 
+  const tipWithBalances = (network: Network) => {
+    return network.tips.filter(tip => tip.amount !== '0');
+  };
+
   return (
     <>
       {tipsEachNetwork.map(network => (
@@ -44,7 +49,7 @@ export const TipContainer: React.FC = () => {
               <Empty title="loading" subtitle="loading" />
             </div>
           </ShowIf>
-          <ShowIf condition={!loading && !network.tips.length}>
+          <ShowIf condition={!loading && !tipWithBalances(network).length}>
             <div style={{marginTop: 20}}>
               <Empty
                 title="You have no tip"
@@ -52,10 +57,10 @@ export const TipContainer: React.FC = () => {
               />
             </div>
           </ShowIf>
-          <ShowIf condition={!loading && !!network.tips.length}>
+          <ShowIf condition={!loading && !!tipWithBalances(network).length}>
             <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
               <Tip
-                tips={network.tips}
+                tips={tipWithBalances(network)}
                 network={network.id}
                 currentWallet={currentWallet}
                 onClaim={handleClaimTip}
