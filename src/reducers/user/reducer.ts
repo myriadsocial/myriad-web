@@ -9,6 +9,7 @@ import {Currency} from 'src/interfaces/currency';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail, UserWallet} from 'src/interfaces/user';
+import {Network} from 'src/interfaces/wallet';
 
 export interface UserState extends BaseState {
   user?: User;
@@ -21,6 +22,7 @@ export interface UserState extends BaseState {
   verifying: boolean;
   currentWallet?: UserWallet;
   wallets: UserWallet[];
+  networks: Network[];
 }
 
 const initalState: UserState = {
@@ -30,6 +32,7 @@ const initalState: UserState = {
   socials: [],
   experiences: [],
   wallets: [],
+  networks: [],
   transactionDetail: {
     sent: [],
     received: [],
@@ -114,6 +117,13 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       return {
         ...state,
         wallets: action.payload,
+      };
+    }
+
+    case constants.FETCH_NETWORK: {
+      return {
+        ...state,
+        networks: action.payload,
       };
     }
 
