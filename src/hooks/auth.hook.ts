@@ -131,7 +131,6 @@ export const useAuthHook = () => {
     }
 
     if (nearAddress && nearAddress.length > 0) {
-      console.log('SIGNIN NEAR');
       const data = await createNearSignature(nearAddress, nonce);
 
       if (data && !data.signature) return null;
@@ -197,7 +196,6 @@ export const useAuthHook = () => {
         if (data) nonce = data.nonce;
 
         if (nonce && nonce > 0 && id) {
-          console.log('SIGNUP NEAR');
           return signInWithExternalAuth(nonce, undefined, id);
         } else {
           return null;
@@ -228,7 +226,6 @@ export const useAuthHook = () => {
     const {nonce} = await WalletAPI.getUserNonce(address);
 
     if (nonce > 0) {
-      console.log('SWITCH ACCOUNT');
       await signInWithExternalAuth(nonce, account);
     } else {
       await firebaseCloudMessaging.removeToken();

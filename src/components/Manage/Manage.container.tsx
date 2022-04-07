@@ -15,7 +15,7 @@ import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
-import {clearNearAccount, getWalletDetail} from 'src/lib/services/near-api-js';
+import {clearNearAccount} from 'src/lib/services/near-api-js';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -63,18 +63,7 @@ export const ManageCointainer: React.FC = () => {
       if (account) {
         await connectNetwork(account);
       } else {
-        const callbackUrl =
-          publicRuntimeConfig.appAuthURL + router.route + '?type=manage&connect=true';
-
-        const {publicAddress, signature} = await connectToNear(callbackUrl);
-        const payload = {
-          publicAddress,
-          nearAddress: publicAddress.split('/')[1],
-          pubKey: publicAddress.split('/')[0],
-          signature,
-        };
-
-        await connectNetwork(undefined, payload);
+        await connectNearAccount();
       }
     } catch (error) {
       if (error instanceof AccountRegisteredError) {
@@ -89,17 +78,18 @@ export const ManageCointainer: React.FC = () => {
   };
 
   const connectNearAccount = async (): Promise<void> => {
+    const callbackUrl = publicRuntimeConfig.appAuthURL + router.route + '?type=manage&connect=true';
+
     try {
-      const {address, publicKey, signature} = await getWalletDetail();
+      const {publicAddress, signature} = await connectToNear(callbackUrl);
 
       const payload = {
-        publicAddress: publicKey + '/' + address,
-        nearAddress: address,
-        pubKey: publicKey,
+        publicAddress,
+        nearAddress: publicAddress.split('/')[1],
+        pubKey: publicAddress.split('/')[0],
         signature,
       };
 
-      console.log('payload', payload);
       await connectNetwork(undefined, payload);
     } catch (error) {
       if (error instanceof AccountRegisteredError) {
