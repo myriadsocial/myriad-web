@@ -1,6 +1,7 @@
 import {options} from '@acala-network/api';
 import {Balance, OrmlAccountData} from '@open-web3/orml-types/interfaces';
 import * as Sentry from '@sentry/nextjs';
+import {AnyObject} from '@udecode/plate';
 
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
@@ -13,6 +14,7 @@ import {NoAccountException} from './errors/NoAccountException';
 
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
+import {UserWallet} from 'src/interfaces/user';
 
 interface signAndSendExtrinsicProps {
   from: string;
@@ -337,4 +339,69 @@ const listenToTokenBalanceChange = async (
       }
     },
   );
+};
+
+interface TipBalanceInfo {
+  serverId: string;
+  referenceType: string;
+  referenceId: string;
+  ftIdentifier: string;
+}
+
+export interface TipResult {
+  tipsBalanceInfo: TipBalanceInfo;
+  accountId: string;
+  amount: string;
+}
+
+export const getClaimTip = async (
+  {serverId, referenceType, referenceId, ftIdentifier}: TipBalanceInfo,
+  rpcURL: string,
+): Promise<TipResult | null> => {
+  try {
+    const api = await connectToBlockchain(rpcURL);
+    const result = await api.query.tipping.tipsBalanceByReference(
+      serverId,
+      referenceType,
+      referenceId,
+      ftIdentifier,
+    );
+
+    if (result.toJSON() == null) return null;
+
+    return result.toHuman() as AnyObject as TipResult;
+  } catch (error) {
+    console.log({error});
+    return null;
+  }
+};
+
+export const claimMyria = async (
+  payload: TipBalanceInfo,
+  rpcURL: string,
+  currentWallet: UserWallet,
+): Promise<void> => {
+  const {enableExtension} = await import('src/helpers/extension');
+  const {web3FromSource} = await import('@polkadot/extension-dapp');
+
+  try {
+    const allAccounts = await enableExtension();
+    if (!allAccounts || allAccounts.length === 0)
+      throw new NoAccountException('Please import your account first!');
+
+    const keyring = new Keyring();
+    const baseAddress = keyring.encodeAddress(currentWallet.id);
+    const account = allAccounts.find(account => account.address === baseAddress);
+
+    if (!account) throw new NoAccountException('Account not registered on Polkadot.js extension');
+
+    const injector = await web3FromSource(account.meta.source);
+    const api = await connectToBlockchain(rpcURL);
+    const extrinsic = api.tx.tipping.claimTip(payload);
+
+    extrinsic.signAndSend(currentWallet.id, {nonce: -1, signer: injector.signer});
+    console.log(extrinsic, 9876);
+  } catch (error) {
+    console.log(error);
+  }
 };
