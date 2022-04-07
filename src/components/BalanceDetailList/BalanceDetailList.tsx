@@ -213,7 +213,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
                         size={AvatarSize.MEDIUM}
                       />
                       <Typography variant="h5" color="textPrimary">
-                        {balanceDetail.id}
+                        {balanceDetail.symbol}
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
