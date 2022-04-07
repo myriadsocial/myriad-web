@@ -208,7 +208,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
                   <TableRow key={balanceDetail.id} className={classes.tableRow}>
                     <TableCell component="th" scope="row" className={classes.tableCell}>
                       <Avatar
-                        name={balanceDetail.id}
+                        name={balanceDetail.symbol}
                         src={balanceDetail.image}
                         size={AvatarSize.MEDIUM}
                       />

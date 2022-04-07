@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/nextjs';
+
 import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -9,6 +11,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {UserWallet} from 'src/interfaces/user';
 import {User} from 'src/interfaces/user';
+import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
 import * as AuthAPI from 'src/lib/api/ext-auth';
 import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import * as UserAPI from 'src/lib/api/user';
@@ -238,6 +241,7 @@ export const useAuthHook = () => {
 
     try {
       const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
+
       if (account) {
         const address = toHexPublicKey(account);
         const signature = await createSignaturePolkadotExt(account, nonce);
@@ -271,7 +275,11 @@ export const useAuthHook = () => {
       dispatch(fetchUserWallets());
       dispatch(fetchCurrentUserWallets());
     } catch (error) {
-      console.log(error);
+      if (error instanceof AccountRegisteredError) {
+        throw error;
+      } else {
+        Sentry.captureException(error);
+      }
     }
   };
 
