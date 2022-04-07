@@ -17,6 +17,8 @@ import {Summary} from './render/Summary';
 import {Button, ButtonVariant} from 'src/components/atoms/Button';
 import {CurrencyOptionComponent} from 'src/components/atoms/CurrencyOption';
 import {ListItemComponent} from 'src/components/atoms/ListItem';
+import {toBigNumber} from 'src/helpers/string';
+import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
@@ -30,6 +32,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
   const classes = useStyles();
   const {isSignerLoading, simplerSendTip, getEstimatedFee} = usePolkadotApi();
+  const {getEstimatedFee: getEstimatedFeeNear, sendAmount} = useNearApi();
 
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
   const [transactionFee, setTransactionFee] = useState<BN>(INITIAL_AMOUNT);
@@ -83,12 +86,25 @@ export const Tipping: React.FC<SendTipProps> = props => {
     if (!receiverAddress || !senderAddress) return;
 
     setLoadingFee(true);
-    const fee = await getEstimatedFee(senderAddress, receiverAddress, selected);
-    setLoadingFee(false);
+    let fee: BN = BN_ZERO;
 
-    if (fee) {
-      setTransactionFee(fee);
+    //TODO: move to switch case
+    if (currency.network.id === 'polkadot') {
+      const gasPrice = await getEstimatedFee(senderAddress, receiverAddress, selected);
+      if (gasPrice) {
+        fee = gasPrice;
+      }
     }
+
+    if (currency.network.id === 'near') {
+      const {gasPrice} = await getEstimatedFeeNear();
+      if (gasPrice) {
+        fee = toBigNumber(gasPrice, currency.decimal);
+      }
+    }
+
+    setLoadingFee(false);
+    setTransactionFee(fee);
   };
 
   const handleChangeCurrency = async (selected: BalanceDetail) => {
@@ -135,12 +151,24 @@ export const Tipping: React.FC<SendTipProps> = props => {
       });
     }
 
-    simplerSendTip(attributes, hash => {
-      onSuccess(currency, hash, attributes.amount);
+    if (currency.network.id === 'polkadot') {
+      simplerSendTip(attributes, hash => {
+        onSuccess(currency, hash, attributes.amount);
 
-      setAmount(INITIAL_AMOUNT);
-      setTransactionFee(INITIAL_AMOUNT);
-    });
+        setAmount(INITIAL_AMOUNT);
+        setTransactionFee(INITIAL_AMOUNT);
+      });
+    }
+
+    if (currency.network.id === 'near') {
+      console.log('send tip near');
+      sendAmount(hash => {
+        onSuccess(currency, hash, attributes.amount);
+
+        setAmount(INITIAL_AMOUNT);
+        setTransactionFee(INITIAL_AMOUNT);
+      });
+    }
   };
 
   return (
@@ -157,7 +185,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
         <ListItemComponent
           avatar={currency.image}
-          title={currency.id}
+          title={currency.symbol}
           subtitle={currency.freeBalance === 0 ? '0' : parseFloat(currency.freeBalance.toFixed(4))}
           action={
             <CurrencyOptionComponent

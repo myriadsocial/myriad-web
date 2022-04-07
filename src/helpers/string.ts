@@ -1,5 +1,8 @@
 import {SyntheticEvent} from 'react';
 
+import {BN_TEN} from '@polkadot/util';
+
+import BN from 'bn.js';
 import parse from 'html-react-parser';
 
 export const acronym = (value: string): string => {
@@ -50,4 +53,24 @@ export const isHashtag = (value: string): boolean => {
   const hashtagRule = /([#|＃][^\s]+)/g;
 
   return hashtagRule.test(value);
+};
+
+export const toBigNumber = (value: string, decimal: number) => {
+  let result: BN;
+
+  const isDecimalValue = value.match(/^(\d+)\.(\d+)$/);
+
+  if (isDecimalValue) {
+    const div = new BN(value.replace(/\.\d*$/, ''));
+    const modString = value.replace(/^\d+\./, '').substr(0, decimal);
+    const mod = new BN(modString);
+
+    result = div
+      .mul(BN_TEN.pow(new BN(decimal)))
+      .add(mod.mul(BN_TEN.pow(new BN(decimal - modString.length))));
+  } else {
+    result = new BN(value).mul(BN_TEN.pow(new BN(decimal)));
+  }
+
+  return result;
 };
