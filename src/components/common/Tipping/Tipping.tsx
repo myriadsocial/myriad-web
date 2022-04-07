@@ -161,8 +161,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
     }
 
     if (currency.network.id === 'near') {
-      console.log('send tip near');
-      sendAmount(hash => {
+      sendAmount(receiverAddress, amount, hash => {
         onSuccess(currency, hash, attributes.amount);
 
         setAmount(INITIAL_AMOUNT);
