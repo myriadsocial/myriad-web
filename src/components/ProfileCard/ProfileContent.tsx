@@ -17,6 +17,7 @@ import {
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
 import {Modal} from 'src/components/atoms/Modal';
+import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
 
 export const ProfileContent: React.FC<ProfileCardProps> = props => {
   const {
@@ -48,9 +49,23 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
       case 'near':
         return 'NEAR';
       default:
-        break;
+        return '';
     }
-    return '';
+  };
+
+  const formatNetwork = (network?: string) => {
+    switch (network) {
+      case 'polkadot':
+        return 'Polkadot';
+      case 'myriad':
+        return 'Myriad';
+      case 'kusama':
+        return 'Kusama';
+      case 'near':
+        return 'NEAR';
+      default:
+        return '';
+    }
   };
 
   const [open, setOpen] = React.useState(false);
@@ -59,9 +74,17 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
     setOpen(!open);
   };
 
-  const getSelectedIcon = () => {
+  const getSelectedIcon = (isWallet?: boolean) => {
     const match = currentWallet?.network;
+    if (isWallet) {
+      switch (match) {
+        case NetworkTypeEnum.NEAR:
+          return icons[WalletTypeEnum.NEAR];
 
+        default:
+          return icons[WalletTypeEnum.POLKADOT];
+      }
+    }
     return match && icons[match as keyof typeof icons];
   };
 
@@ -121,13 +144,13 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
             <div className={classes.column}>
               <Typography component="span">Network</Typography>
               <Typography component="span" className={classes.flex}>
-                {getSelectedIcon()} {formatWallet(currentWallet?.network)}
+                {getSelectedIcon()} {formatNetwork(currentWallet?.network)}
               </Typography>
             </div>
             <div className={classes.column}>
               <Typography component="span">Wallet</Typography>
               <Typography component="span" className={classes.flex}>
-                {getSelectedIcon()}
+                {getSelectedIcon(true)}
                 {formatWallet(currentWallet?.type)} Wallet
               </Typography>
             </div>

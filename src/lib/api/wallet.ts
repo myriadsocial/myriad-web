@@ -24,6 +24,10 @@ export type ConnectNetwork = {
   };
 };
 
+export interface ServerId {
+  serverId: string;
+}
+
 export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
   const {data} = await MyriadAPI.request({
     url: `wallets/${id}/nonce`,
@@ -155,4 +159,13 @@ export const getNetworks = async (): Promise<Networks> => {
   });
 
   return data;
+};
+
+export const getServerId = async (): Promise<string> => {
+  const {data} = await MyriadAPI.request<ServerId>({
+    url: `/server`,
+    method: 'GET',
+  });
+
+  return data.serverId;
 };
