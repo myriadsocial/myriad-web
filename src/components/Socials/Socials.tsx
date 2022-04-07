@@ -28,7 +28,7 @@ import {User} from 'src/interfaces/user';
 type SocialsProps = {
   user?: User;
   socials: SocialMedia[];
-  publicKey: string;
+  address: string;
   anonymous?: boolean;
   verifying?: boolean;
   onVerifySocialMedia: (social: SocialsEnum, profileUrl: string) => void;
@@ -40,7 +40,7 @@ export const Socials: React.FC<SocialsProps> = props => {
   const {
     socials,
     user,
-    publicKey,
+    address,
     verifying = false,
     onDisconnectSocial,
     onVerifySocialMedia,
@@ -202,7 +202,7 @@ export const Socials: React.FC<SocialsProps> = props => {
           <AddSocialMedia
             open={addSocial}
             social={selectedSocial}
-            publicKey={publicKey}
+            address={address}
             onClose={toggleAddSocialMedia}
             verifying={verifying}
             verify={verifySocialMedia}

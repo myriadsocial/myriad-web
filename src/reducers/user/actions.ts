@@ -282,7 +282,7 @@ export const fetchUserWallets: ThunkActionCreator<Actions, RootState> =
   };
 
 export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> =
-  (platform: SocialsEnum, socialName: string, publicKey: string, callback?: () => void) =>
+  (platform: SocialsEnum, socialName: string, address: string, callback?: () => void) =>
   async (dispatch, getState) => {
     const {
       userState: {user},
@@ -293,7 +293,7 @@ export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> 
     dispatch(setVerifyingSocial());
 
     try {
-      await SocialAPI.verifySocialAccount(socialName, platform, publicKey);
+      await SocialAPI.verifySocialAccount(socialName, platform, address);
 
       dispatch(fetchConnectedSocials());
 
