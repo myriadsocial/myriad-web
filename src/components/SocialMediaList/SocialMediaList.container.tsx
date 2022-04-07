@@ -25,7 +25,7 @@ export const SocialMediaListContainer: React.FC = () => {
   const {openToasterSnack} = useToasterSnackHook();
 
   const [selectedSocial, setSelectedSocial] = useState<SocialsEnum | null>(null);
-  const publicKey = session?.user.address as string;
+  const address = session?.user.address as string;
 
   const handleOpenSocialPage = () => {
     router.push(`/socials`);
@@ -40,7 +40,7 @@ export const SocialMediaListContainer: React.FC = () => {
   };
 
   const verifySocialMedia = (social: SocialsEnum, profileUrl: string) => {
-    verifyPublicKeyShared(social, profileUrl, publicKey, () => {
+    verifyPublicKeyShared(social, profileUrl, address, () => {
       setSelectedSocial(null);
 
       openToasterSnack({
@@ -94,7 +94,7 @@ export const SocialMediaListContainer: React.FC = () => {
           <AddSocialMedia
             open={Boolean(selectedSocial)}
             social={selectedSocial}
-            publicKey={publicKey}
+            address={address}
             onClose={closeAddSocialMedia}
             verifying={isVerifying}
             verify={verifySocialMedia}

@@ -26,7 +26,7 @@ import {SocialsEnum} from 'src/interfaces/social';
 
 type AddSocialMediaProps = Pick<ModalProps, 'onClose' | 'open'> & {
   social: SocialsEnum;
-  publicKey?: string;
+  address?: string;
   verifying?: boolean;
   verify: (social: SocialsEnum, profileUrl: string) => void;
 };
@@ -44,7 +44,7 @@ const prefix: Record<SocialsEnum, string> = {
 };
 
 export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
-  const {social, publicKey, open, verifying = false, onClose, verify} = props;
+  const {social, address, open, verifying = false, onClose, verify} = props;
 
   const styles = useStyles();
 
@@ -55,7 +55,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
   const {publicRuntimeConfig} = getConfig();
 
   const APP_URL = publicRuntimeConfig.appAuthURL ?? '';
-  const message = `I'm part of the @myriad_social ${publicKey}\n\n${publicRuntimeConfig.myriadWebsiteURL}`;
+  const message = `I'm part of the @myriad_social ${address}\n\n${publicRuntimeConfig.myriadWebsiteURL}`;
 
   useEffect(() => {
     return clear();

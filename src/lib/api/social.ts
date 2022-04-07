@@ -38,7 +38,7 @@ export const updateSocialAsPrimary = async (userSocialId: string): Promise<void>
 export const verifySocialAccount = async (
   username: string,
   platform: string,
-  publicKey: string,
+  address: string,
 ): Promise<void> => {
   await MyriadAPI.request({
     method: 'POST',
@@ -46,7 +46,7 @@ export const verifySocialAccount = async (
     data: {
       username,
       platform,
-      publicKey,
+      address,
     },
   });
 };
