@@ -1,7 +1,9 @@
 import MyriadAPI from './base';
+import {AccountRegisteredError} from './errors/account-registered.error';
 import {BaseList} from './interfaces/base-list.interface';
 
-import {ActivityLogType, BlockedProps, User, UserWallet} from 'src/interfaces/user';
+import axios from 'axios';
+import {ActivityLogType, BlockedProps, User, UserWallet, Wallet} from 'src/interfaces/user';
 import {Network} from 'src/interfaces/wallet';
 
 type WalletList = BaseList<UserWallet>;
@@ -102,12 +104,28 @@ export const getUserNonceByUserId = async (id: string): Promise<UserNonceProps> 
   return data ? data : {nonce: 0};
 };
 
-export const connectNetwork = async (payload: ConnectNetwork, id: string): Promise<void> => {
-  await MyriadAPI.request({
-    url: `users/${id}/wallets`,
-    method: 'POST',
-    data: payload,
-  });
+export const connectNetwork = async (
+  payload: ConnectNetwork,
+  id: string,
+): Promise<Wallet | null> => {
+  try {
+    const {data} = await MyriadAPI.request<Wallet>({
+      url: `users/${id}/wallets`,
+      method: 'POST',
+      data: payload,
+    });
+
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const data = error.response?.data;
+      if (data?.error?.name === 'UnprocessableEntityError') {
+        throw new AccountRegisteredError('Wallet already used');
+      }
+    }
+
+    return null;
+  }
 };
 
 export const switchNetwork = async (payload: ConnectNetwork, id: string): Promise<void> => {

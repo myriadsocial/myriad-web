@@ -1,5 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
+
+import getConfig from 'next/config';
+import {useRouter} from 'next/router';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
@@ -10,6 +13,9 @@ import {Manage} from './Manage';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
+import {getWalletDetail} from 'src/lib/services/near-api-js';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -19,10 +25,21 @@ export const ManageCointainer: React.FC = () => {
   const {getRegisteredAccounts} = useAuthHook();
   const {connectNetwork} = useAuthHook();
   const {connectToNear} = useNearApi();
+  const router = useRouter();
+  const {publicRuntimeConfig} = getConfig();
+  const {openToasterSnack} = useToasterSnackHook();
 
   const [showAccountList, setShowAccountList] = React.useState(false);
   const [extensionInstalled, setExtensionInstalled] = React.useState(false);
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
+
+  useEffect(() => {
+    const query = router.query;
+
+    if (query.connect) {
+      connectNearAccount();
+    }
+  }, [router.query]);
 
   const closeAccountList = () => {
     setShowAccountList(false);
@@ -44,17 +61,52 @@ export const ManageCointainer: React.FC = () => {
   };
 
   const handleConnect = async (account?: InjectedAccountWithMeta) => {
-    if (account) connectNetwork(account);
-    else {
-      const {publicAddress, signature} = await connectToNear();
+    try {
+      if (account) {
+        await connectNetwork(account);
+      } else {
+        const callbackUrl =
+          publicRuntimeConfig.appAuthURL + router.route + '?type=manage&connect=true';
+
+        const {publicAddress, signature} = await connectToNear(callbackUrl);
+        const payload = {
+          publicAddress,
+          nearAddress: publicAddress.split('/')[1],
+          pubKey: publicAddress.split('/')[0],
+          signature,
+        };
+
+        await connectNetwork(undefined, payload);
+      }
+    } catch (error) {
+      if (error instanceof AccountRegisteredError) {
+        openToasterSnack({
+          message: error.message,
+          variant: 'error',
+        });
+      }
+    }
+  };
+
+  const connectNearAccount = async (): Promise<void> => {
+    try {
+      const {address, publicKey, signature} = await getWalletDetail();
       const payload = {
-        publicAddress,
-        nearAddress: publicAddress.split('/')[1],
-        pubKey: publicAddress.split('/')[0],
+        publicAddress: publicKey + '/' + address,
+        nearAddress: address,
+        pubKey: publicKey,
         signature,
       };
-
-      connectNetwork(undefined, payload);
+      await connectNetwork(undefined, payload);
+    } catch (error) {
+      if (error instanceof AccountRegisteredError) {
+        openToasterSnack({
+          message: error.message,
+          variant: 'error',
+        });
+      }
+    } finally {
+      router.replace(router.route, undefined, {shallow: true});
     }
   };
 

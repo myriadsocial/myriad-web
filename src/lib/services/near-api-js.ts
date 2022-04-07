@@ -59,9 +59,34 @@ export const nearInitialize = async (): Promise<NearInitializeProps> => {
   }
 };
 
+export const getWalletDetail = async (): Promise<{
+  nonce: number;
+  address: any;
+  publicKey: any;
+  signature: any;
+}> => {
+  const {publicRuntimeConfig} = getConfig();
+  const {wallet} = await nearInitialize();
+  const {keyStores} = nearAPI;
+
+  const address = wallet.getAccountId();
+  const {nonce} = await WalletAPI.getUserNonce(address);
+  const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+  const keyPair = await keyStore.getKey(publicRuntimeConfig.nearNetworkId, address);
+  const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
+
+  return {
+    nonce,
+    address,
+    publicKey: u8aToHex(userSignature.publicKey.data),
+    signature: u8aToHex(userSignature.signature),
+  };
+};
+
 export const connectToNearWallet = async (
   near: nearAPI.Near,
   wallet: nearAPI.WalletConnection,
+  callbackUrl?: string,
 ): Promise<NearConnectResponseProps> => {
   try {
     const {publicRuntimeConfig} = getConfig();
@@ -73,7 +98,9 @@ export const connectToNearWallet = async (
     const keyStore = new keyStores.BrowserLocalStorageKeyStore();
 
     if (!wallet.isSignedIn()) {
-      await wallet.requestSignIn({successUrl: `${publicRuntimeConfig.appAuthURL}/?auth=near`});
+      await wallet.requestSignIn({
+        successUrl: callbackUrl ?? `${publicRuntimeConfig.appAuthURL}/?auth=near`,
+      });
     }
     const address = wallet.getAccountId();
 
@@ -139,9 +166,11 @@ export const createNearSignature = async (
 
     // parse to wallet.near format
     const parsedNearAddress = nearAddress.split('/')[1];
+    console.log('PARSED NEAR ADDRESS', parsedNearAddress);
+    console.log('nearNetworkId', publicRuntimeConfig.nearNetworkId);
 
     const keyPair = await keyStore.getKey(publicRuntimeConfig.nearNetworkId, parsedNearAddress);
-
+    console.log('keyPair', keyPair);
     const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
 
     const publicKey = u8aToHex(userSignature.publicKey.data);
@@ -151,7 +180,7 @@ export const createNearSignature = async (
 
     return {signature: userSignatureHex, publicAddress};
   } catch (error) {
-    console.log({error});
+    console.log(error);
     return null;
   }
 };
