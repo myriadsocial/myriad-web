@@ -1,16 +1,14 @@
 import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
-import getConfig from 'next/config';
-
 import {Network} from 'src/interfaces/wallet';
 import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import * as WalletAPI from 'src/lib/api/wallet';
 import {getClaimTip, TipResult, claimMyria} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const useClaimTip = () => {
-  const {publicRuntimeConfig} = getConfig();
   const {user, networks, currentWallet} = useSelector<RootState, UserState>(
     state => state.userState,
   );
@@ -26,14 +24,14 @@ export const useClaimTip = () => {
     if (!user) return;
     setLoading(true);
 
-    const tipBalanceInfo = {
-      serverId: publicRuntimeConfig.myriadServerId,
-      referenceType: 'user',
-      referenceId: user.id,
-      ftIdentifier: 'native',
-    };
-
     try {
+      const serverId = await WalletAPI.getServerId();
+      const tipBalanceInfo = {
+        serverId: serverId,
+        referenceType: 'user',
+        referenceId: user.id,
+        ftIdentifier: 'native',
+      };
       const selectedNetwork = networks.find(option => option.id == NetworkTypeEnum.MYRIAD);
       if (!selectedNetwork) return;
 
@@ -42,7 +40,10 @@ export const useClaimTip = () => {
       if (data !== null) {
         const result: TipResult = {
           accountId: data.accountId,
-          amount: (parseFloat(data.amount.replace(/,/g, '')) / 10 ** 18).toFixed(3).toString(),
+          amount:
+            data.amount == '0'
+              ? data.amount
+              : (parseFloat(data.amount.replace(/,/g, '')) / 10 ** 18).toFixed(3).toString(),
           tipsBalanceInfo: {
             ftIdentifier: data.tipsBalanceInfo.ftIdentifier,
             referenceId: data.tipsBalanceInfo.ftIdentifier,
@@ -74,8 +75,9 @@ export const useClaimTip = () => {
     setLoading(true);
 
     try {
+      const serverId = await WalletAPI.getServerId();
       const tipBalanceInfo = {
-        serverId: publicRuntimeConfig.myriadServerId,
+        serverId: serverId,
         referenceType: 'user',
         referenceId: user.id,
         ftIdentifier: ftIdentifier,
