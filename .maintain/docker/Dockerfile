@@ -17,7 +17,6 @@ RUN yarn build && \
 # Production image, copy all the files and run
 FROM node:14.17.5-buster-slim AS runner
 ARG VCS_REF
-ARG NODE_ENV=production
 LABEL social.myriad.image.authors="myriad.dev@blocksphere.id"
 # Create user and set ownership and permissions as required
 RUN useradd -m -u 1001 -U -s /bin/sh -d /home/myriad myriad
@@ -32,6 +31,6 @@ COPY --from=builder /app/package.json ./package.json
 # Set to a non-root built-in user
 USER myriad
 # Set environment variable
-ENV BUILD_ID=${VCS_REF} NODE_ENV=${NODE_ENV} HOST=0.0.0.0 PORT=3000
+ENV BUILD_ID=${VCS_REF} NODE_ENV=production HOST=0.0.0.0 PORT=3000
 EXPOSE ${PORT}
 ENTRYPOINT ["yarn", "start:docker"]
