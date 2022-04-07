@@ -59,6 +59,17 @@ export const nearInitialize = async (): Promise<NearInitializeProps> => {
   }
 };
 
+export const clearNearAccount = async () => {
+  const {wallet} = await nearInitialize();
+  const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
+
+  keyStore.clear();
+
+  if (wallet.isSignedIn()) {
+    wallet.signOut();
+  }
+};
+
 export const getWalletDetail = async (): Promise<{
   nonce: number;
   address: any;
@@ -67,11 +78,18 @@ export const getWalletDetail = async (): Promise<{
 }> => {
   const {publicRuntimeConfig} = getConfig();
   const {wallet} = await nearInitialize();
-  const {keyStores} = nearAPI;
 
+  const signer = new nearAPI.InMemorySigner(wallet._keyStore);
   const address = wallet.getAccountId();
+
   const {nonce} = await WalletAPI.getUserNonce(address);
-  const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+  const hasPublicKey = await signer.getPublicKey(address, publicRuntimeConfig.nearNetworkId);
+
+  if (!hasPublicKey) {
+    await signer.createKey(address, publicRuntimeConfig.nearNetworkId);
+  }
+
+  const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
   const keyPair = await keyStore.getKey(publicRuntimeConfig.nearNetworkId, address);
   const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
 

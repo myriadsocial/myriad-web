@@ -15,28 +15,26 @@ import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
-import {getWalletDetail} from 'src/lib/services/near-api-js';
+import {clearNearAccount, getWalletDetail} from 'src/lib/services/near-api-js';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const ManageCointainer: React.FC = () => {
-  const {currentWallet, wallets} = useSelector<RootState, UserState>(state => state.userState);
   const {enablePolkadotExtension} = usePolkadotExtension();
-  const {getRegisteredAccounts} = useAuthHook();
-  const {connectNetwork} = useAuthHook();
+  const {getRegisteredAccounts, connectNetwork} = useAuthHook();
   const {connectToNear} = useNearApi();
   const router = useRouter();
   const {publicRuntimeConfig} = getConfig();
   const {openToasterSnack} = useToasterSnackHook();
 
+  const {currentWallet, wallets} = useSelector<RootState, UserState>(state => state.userState);
   const [showAccountList, setShowAccountList] = React.useState(false);
   const [extensionInstalled, setExtensionInstalled] = React.useState(false);
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
 
   useEffect(() => {
     const query = router.query;
-
-    if (query.connect) {
+    if (query.connect && query.account_id) {
       connectNearAccount();
     }
   }, [router.query]);
@@ -85,18 +83,23 @@ export const ManageCointainer: React.FC = () => {
           variant: 'error',
         });
       }
+
+      clearNearAccount();
     }
   };
 
   const connectNearAccount = async (): Promise<void> => {
     try {
       const {address, publicKey, signature} = await getWalletDetail();
+
       const payload = {
         publicAddress: publicKey + '/' + address,
         nearAddress: address,
         pubKey: publicKey,
         signature,
       };
+
+      console.log('payload', payload);
       await connectNetwork(undefined, payload);
     } catch (error) {
       if (error instanceof AccountRegisteredError) {
@@ -105,6 +108,8 @@ export const ManageCointainer: React.FC = () => {
           variant: 'error',
         });
       }
+
+      clearNearAccount();
     } finally {
       router.replace(router.route, undefined, {shallow: true});
     }

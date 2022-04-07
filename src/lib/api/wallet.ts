@@ -120,7 +120,7 @@ export const connectNetwork = async (
     if (axios.isAxiosError(error)) {
       const data = error.response?.data;
       if (data?.error?.name === 'UnprocessableEntityError') {
-        throw new AccountRegisteredError('Wallet already used');
+        throw new AccountRegisteredError(data?.error?.message ?? 'Failed to connect wallet');
       }
     }
 
