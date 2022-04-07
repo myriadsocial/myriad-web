@@ -166,11 +166,7 @@ export const createNearSignature = async (
 
     // parse to wallet.near format
     const parsedNearAddress = nearAddress.split('/')[1];
-    console.log('PARSED NEAR ADDRESS', parsedNearAddress);
-    console.log('nearNetworkId', publicRuntimeConfig.nearNetworkId);
-
     const keyPair = await keyStore.getKey(publicRuntimeConfig.nearNetworkId, parsedNearAddress);
-    console.log('keyPair', keyPair);
     const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
 
     const publicKey = u8aToHex(userSignature.publicKey.data);
