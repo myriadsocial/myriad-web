@@ -19,6 +19,6 @@ export const AddSocialMedia = Template.bind({});
 AddSocialMedia.args = {
   open: true,
   social: SocialsEnum.FACEBOOK,
-  publicKey: '5Di8z8iqwkg1uEz2zqEyJopif8HdVvPT3DCxmyJt8SkBQeFS',
+  address: '5Di8z8iqwkg1uEz2zqEyJopif8HdVvPT3DCxmyJt8SkBQeFS',
   onClose: console.log,
 };

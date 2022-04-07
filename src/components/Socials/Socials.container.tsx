@@ -20,14 +20,14 @@ export const SocialsContainer: React.FC = () => {
   const {openToasterSnack} = useToasterSnackHook();
 
   const {user, socials, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const publicKey = session?.user.address as string;
+  const address = session?.user.address as string;
 
   const handleDisconnectSocial = (people: SocialMedia) => {
     dispatch(deleteSocial(people.id));
   };
 
   const handleVerifySocial = (social: SocialsEnum, profileUrl: string) => {
-    verifyPublicKeyShared(social, profileUrl, publicKey, () => {
+    verifyPublicKeyShared(social, profileUrl, address, () => {
       resetVerification();
 
       openToasterSnack({
@@ -45,7 +45,7 @@ export const SocialsContainer: React.FC = () => {
     <SocialsComponent
       user={user}
       socials={socials}
-      publicKey={publicKey}
+      address={address}
       anonymous={anonymous}
       verifying={isVerifying}
       onVerifySocialMedia={handleVerifySocial}
