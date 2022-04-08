@@ -16,5 +16,5 @@ const Template: ComponentStory<typeof LoginLayoutComponent> = args => (
 
 export const Default = Template.bind({});
 Default.args = {
-  children: <Login />,
+  children: <Login redirectAuth={null} />,
 };
