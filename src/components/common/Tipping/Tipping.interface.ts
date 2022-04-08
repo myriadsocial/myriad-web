@@ -37,5 +37,6 @@ export type SendTipProps = {
   referenceType: ReferenceType;
   defaultCurrency: BalanceDetail;
   balances: BalanceDetail[];
+  currentNetwork: NetworkTypeEnum;
   onSuccess: (currency: BalanceDetail, transactionHash: string, amount: BN) => Promise<void> | void;
 };

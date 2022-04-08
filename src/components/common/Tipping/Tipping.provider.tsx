@@ -84,7 +84,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
     <>
       <SendTipContext.Provider value={{enabled, send: tipping}}>{children}</SendTipContext.Provider>
 
-      {!!options && !!sender && !!defaultCurrency && (
+      {!!options && !!sender && !!defaultCurrency && currentNetwork && (
         <Modal
           gutter="none"
           open={tipFormOpened}
@@ -94,6 +94,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
           subtitle="Finding this post is insightful? Send a tip!">
           <Tipping
             defaultCurrency={defaultCurrency}
+            currentNetwork={currentNetwork}
             balances={balances}
             sender={sender}
             onSuccess={handleSuccessTipping}
