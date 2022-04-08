@@ -30,14 +30,14 @@ export const useWalletList = (wallets: Wallet[]): WalletListHook => {
       {
         id: 'near',
         title: 'NEAR Wallet',
-        icons: <NearNetworkIcon24 width={'40px'} height={'40px'} />,
+        icons: <NearNetworkIcon24 width={40} height={40} />,
         isConnect: Boolean(wallets.find(i => i.type === 'near')),
         walletId: findWalletId('near') ?? 'nearId.near',
       },
       {
         id: 'polkadot',
         title: 'polkadot{.js}',
-        icons: <PolkadotNetworkIcon width={'40px'} height={'40px'} />,
+        icons: <PolkadotNetworkIcon width={40} height={40} />,
         isConnect: Boolean(wallets.find(i => i.type === 'polkadot')),
         walletId: findWalletId('polkadot') ?? 'polkadotId',
       },
