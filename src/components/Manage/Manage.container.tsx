@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import getConfig from 'next/config';
 import {useRouter} from 'next/router';
@@ -17,6 +17,7 @@ import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
 import {clearNearAccount} from 'src/lib/services/near-api-js';
 import {RootState} from 'src/reducers';
+import {fetchUserWallets} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const ManageCointainer: React.FC = () => {
@@ -24,6 +25,7 @@ export const ManageCointainer: React.FC = () => {
   const {getRegisteredAccounts, connectNetwork} = useAuthHook();
   const {connectToNear} = useNearApi();
   const router = useRouter();
+  const dispatch = useDispatch();
   const {publicRuntimeConfig} = getConfig();
   const {openToasterSnack} = useToasterSnackHook();
 
@@ -62,6 +64,8 @@ export const ManageCointainer: React.FC = () => {
     try {
       if (account) {
         await connectNetwork(account);
+
+        dispatch(fetchUserWallets());
       } else {
         await connectNearAccount();
       }
@@ -91,6 +95,8 @@ export const ManageCointainer: React.FC = () => {
       };
 
       await connectNetwork(undefined, payload);
+
+      dispatch(fetchUserWallets());
     } catch (error) {
       if (error instanceof AccountRegisteredError) {
         openToasterSnack({
