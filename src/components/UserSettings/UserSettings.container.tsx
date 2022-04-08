@@ -1,32 +1,37 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 
-import {useSession} from 'next-auth/client';
-
+import {useWalletList} from '../Manage/use-wallet-list.hook';
 import {UserSettings} from './UserSettings';
 
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {User} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
+import {ProfileState} from 'src/reducers/profile/reducer';
 
 type UserSettingsContainerProps = {
-  user: User | undefined;
+  user?: User;
 };
 
 export const UserSettingsContainer: React.FC<UserSettingsContainerProps> = props => {
-  const [session] = useSession();
   const {openToasterSnack} = useToasterSnackHook();
 
-  const address = session?.user.address as string;
+  const {detail} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const {walletList} = useWalletList(detail?.wallets ?? []);
 
   const handlePublicKeyCopied = () => {
     openToasterSnack({
-      message: 'Public key copied!',
+      message: 'Wallet address copied!',
       variant: 'success',
     });
   };
 
   return (
     <>
-      <UserSettings publicKey={address} onPublicKeyCopied={handlePublicKeyCopied} />
+      <UserSettings
+        wallets={walletList.filter(wallet => wallet.isConnect)}
+        onPublicKeyCopied={handlePublicKeyCopied}
+      />
     </>
   );
 };
