@@ -11,6 +11,7 @@ import AlertComponent from 'src/components/atoms/Alert/Alert.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {LoginLayout} from 'src/components/template/Login';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 
@@ -28,12 +29,15 @@ const {publicRuntimeConfig} = getConfig();
 
 const description = i18n.t('Login.Description');
 
-type OnBoardingProps = {
+type IndexPageProps = {
   mobile: boolean;
+  redirectAuth: WalletTypeEnum | null;
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function Index({mobile}: OnBoardingProps) {
+export default function Index(props: IndexPageProps) {
+  const {mobile, redirectAuth} = props;
+
   const {query} = useRouter();
 
   const {showAlert} = useAlertHook();
@@ -59,7 +63,7 @@ export default function Index({mobile}: OnBoardingProps) {
 
       <ShowIf condition={!mobile}>
         <LoginLayout>
-          <Login />
+          <Login redirectAuth={redirectAuth} />
           <AlertComponent />
         </LoginLayout>
       </ShowIf>
@@ -72,9 +76,15 @@ export default function Index({mobile}: OnBoardingProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const {req} = context;
+  const {req, query} = context;
   const {headers} = req;
+
   let mobile = false;
+  let redirectAuth: string | null = null;
+
+  if (query.auth) {
+    redirectAuth = Array.isArray(query.auth) ? query.auth[0] : query.auth;
+  }
 
   if (typeof window === 'undefined' && headers['user-agent']) {
     const UAParser = eval('require("ua-parser-js")');
@@ -111,6 +121,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
   return {
     props: {
       mobile,
+      redirectAuth,
     },
   };
 };

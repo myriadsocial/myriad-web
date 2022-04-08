@@ -85,7 +85,7 @@ export const connectToNearWallet = async (
 
     if (!wallet.isSignedIn()) {
       await wallet.requestSignIn({
-        successUrl: callbackUrl ?? `${publicRuntimeConfig.appAuthURL}/?auth=near`,
+        successUrl: callbackUrl ?? `${publicRuntimeConfig.appAuthURL}/?auth=${WalletTypeEnum.NEAR}`,
       });
     }
     const address = wallet.getAccountId();

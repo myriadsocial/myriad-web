@@ -12,45 +12,56 @@ import {Login as LoginComponent} from './render/Login';
 import {Options} from './render/Options';
 import {Profile} from './render/Profile';
 
+import {last} from 'lodash';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
-import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 
-export const Login: React.FC = () => {
+type LoginProps = {
+  redirectAuth: WalletTypeEnum | null;
+};
+
+export const Login: React.FC<LoginProps> = props => {
+  const {redirectAuth} = props;
+
   const styles = useStyles();
 
   const {anonymous, fetchUserNonce, fetchNearUserNonce, signInWithExternalAuth} = useAuthHook();
   const {checkUsernameAvailable} = useProfileHook();
-
   const {connectToNear} = useNearApi();
 
-  const {query} = useQueryParams();
-
-  const isRedirectedFromNear = query.auth === 'near' ? true : false;
-
-  const [walletType, setWalletType] = useState<WalletTypeEnum | null>(null);
-
+  const [walletType, setWalletType] = useState<WalletTypeEnum | null>(redirectAuth);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
   const [nearWallet, setNearWallet] = useState('');
   const [selectedAccount, setSelectedAccount] = useState<InjectedAccountWithMeta | null>(null);
   const [signatureCancelled, setSignatureCancelled] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [walletLoading, setWalletLoading] = useState(Boolean(redirectAuth));
+  const [initialEntries, setInitialEntries] = useState<string[]>(
+    redirectAuth ? ['/wallet'] : ['/'],
+  );
 
-  const getNearWallet = async () => {
+  useEffect(() => {
+    if (redirectAuth === WalletTypeEnum.NEAR) {
+      checkWalletRegistered();
+    }
+  }, [redirectAuth]);
+
+  const checkWalletRegistered = useCallback(async () => {
     const {publicAddress} = await connectToNear();
 
     setNearWallet(publicAddress);
-  };
 
-  useEffect(() => {
-    if (query.auth === 'near') {
-      setWalletType(WalletTypeEnum.NEAR);
-
-      getNearWallet();
-    }
-  }, [query]);
+    checkAccountRegistered(
+      () => {
+        setInitialEntries(['/profile']);
+        setWalletLoading(false);
+      },
+      undefined,
+      publicAddress,
+    );
+  }, []);
 
   const handleOnconnect = (accounts: InjectedAccountWithMeta[]) => {
     setAccounts(accounts);
@@ -105,8 +116,19 @@ export const Login: React.FC = () => {
 
         case WalletTypeEnum.NEAR: {
           if (nearId) {
-            const {nonce} = await fetchNearUserNonce(nearId);
+            const address = last(nearId.split('/'));
+
+            if (!address) {
+              setLoading(false);
+              callback();
+
+              return;
+            }
+
+            const {nonce} = await fetchNearUserNonce(address);
+
             if (nonce > 0) {
+              setWalletLoading(false);
               const success = await signInWithExternalAuth(nonce, undefined, nearId);
 
               if (!success) {
@@ -129,21 +151,26 @@ export const Login: React.FC = () => {
     [selectedAccount, walletType],
   );
 
+  if (walletLoading) return null;
+
   return (
     <div className={styles.root}>
-      <Router
-        initialEntries={['/', '/wallet', '/account', '/profile']}
-        initialIndex={isRedirectedFromNear ? 3 : 0}>
+      <Router initialEntries={initialEntries} initialIndex={0}>
         <Routes>
           <Route
+            index={false}
             path="/"
             element={<LoginComponent anonymousLogin={anonymous} switchAccount={switchAccount} />}
           />
+
           <Route
+            index={false}
             path="/wallet"
             element={<Options onConnect={handleOnconnect} onConnectNear={handleOnConnectNear} />}
           />
+
           <Route
+            index={false}
             path="/account"
             element={
               <Accounts
@@ -155,6 +182,7 @@ export const Login: React.FC = () => {
             }
           />
           <Route
+            index={false}
             path="/profile"
             element={
               <Profile
