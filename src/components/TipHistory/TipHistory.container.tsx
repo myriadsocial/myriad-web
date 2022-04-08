@@ -1,5 +1,6 @@
 import React from 'react';
 
+import useConfirm from '../common/Confirm/use-confirm.hook';
 import useTipping from '../common/Tipping/use-tipping.hook';
 import {TipHistory} from './TipHistory';
 
@@ -18,6 +19,8 @@ export const TipHistoryContainer: React.FC<TipHistoryContainerProps> = props => 
   const {referenceType} = props;
 
   const tipping = useTipping();
+  const confirm = useConfirm();
+
   const {
     isTipHistoryOpen,
     hasMore,
@@ -50,10 +53,20 @@ export const TipHistoryContainer: React.FC<TipHistoryContainerProps> = props => 
     if ('platform' in reference) {
       // if imported
       if (reference.people) {
-        const {referenceId, referenceType} = await PostAPI.getWalletAddress(reference.id);
+        try {
+          const {referenceId, referenceType} = await PostAPI.getWalletAddress(reference.id);
 
-        if (referenceType === WalletReferenceType.WALLET_ADDRESS) {
-          receiver = {...reference.people, walletAddress: referenceId};
+          if (referenceType === WalletReferenceType.WALLET_ADDRESS) {
+            receiver = {...reference.people, walletAddress: referenceId};
+          }
+        } catch {
+          confirm({
+            title: 'Send tip on imported post is unavailable',
+            description:
+              'Currently, send tip on imported post is under repair. Please try again later',
+            icon: 'warning',
+            confirmationText: 'close',
+          });
         }
       } else {
         receiver = reference.user;
