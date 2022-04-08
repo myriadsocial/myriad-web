@@ -49,14 +49,17 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
 
           if (referenceType === WalletReferenceType.WALLET_ADDRESS) {
             receiver = {...reference.people, walletAddress: referenceId};
+          } else {
+            throw new Error('Tipping disabled');
           }
-        } catch {
+        } catch (error) {
           confirm({
             title: 'Send tip on imported post is unavailable',
             description:
               'Currently, send tip on imported post in under repair. Please try again later',
             icon: 'warning',
             confirmationText: 'close',
+            hideCancel: true,
           });
         }
       } else {
