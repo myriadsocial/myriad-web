@@ -72,7 +72,7 @@ export const ManageCointainer: React.FC = () => {
     } catch (error) {
       if (error instanceof AccountRegisteredError) {
         openToasterSnack({
-          message: error.message,
+          message: 'Failed! ' + error.message,
           variant: 'error',
         });
       }
@@ -100,7 +100,7 @@ export const ManageCointainer: React.FC = () => {
     } catch (error) {
       if (error instanceof AccountRegisteredError) {
         openToasterSnack({
-          message: error.message,
+          message: 'Failed! ' + error.message,
           variant: 'error',
         });
       }

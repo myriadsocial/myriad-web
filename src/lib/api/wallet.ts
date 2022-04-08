@@ -123,8 +123,9 @@ export const connectNetwork = async (
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const data = error.response?.data;
+
       if (data?.error?.name === 'UnprocessableEntityError') {
-        throw new AccountRegisteredError(data?.error?.message ?? 'Failed to connect wallet');
+        throw new AccountRegisteredError();
       }
     }
 
