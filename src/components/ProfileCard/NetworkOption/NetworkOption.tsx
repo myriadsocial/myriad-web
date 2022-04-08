@@ -128,8 +128,9 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
     networkType: NetworkTypeEnum,
     refresh = false,
   ) => {
-    if (networkType === current) handleClose();
-    else {
+    handleClose();
+
+    if (networkType !== current) {
       const wallet = wallets?.find(wallet => wallet.type === walletType);
 
       switch (wallet?.type) {
@@ -152,7 +153,6 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
             };
 
             await handleSwitch(wallet.type, networkType, payload);
-
             router.replace(router.route, undefined, {shallow: true});
           } else {
             console.log('redirection to near auth page');
@@ -164,7 +164,6 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
           handleOpenPrompt(walletType);
       }
     }
-    handleClose();
   };
 
   const handleSwitch = async (

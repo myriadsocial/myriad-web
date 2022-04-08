@@ -358,13 +358,13 @@ export const useAuthHook = () => {
 
       await WalletAPI.switchNetwork(payload, user.id);
       await dispatch(fetchUser(currentAddress));
-
       await Promise.all([
         dispatch(getUserCurrencies()),
-        dispatch(fetchBalances()),
         dispatch(fetchUserWallets()),
         dispatch(fetchCurrentUserWallets()),
       ]);
+
+      await dispatch(fetchBalances());
 
       callback && callback();
     } catch (error) {
