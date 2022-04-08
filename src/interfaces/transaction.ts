@@ -5,7 +5,7 @@ import {BaseModel} from './base.interface';
 
 import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {Post} from 'src/interfaces/post';
-import {UserOnTransaction, WalletWithUser} from 'src/interfaces/user';
+import {UserOnTransaction, UserWallet} from 'src/interfaces/user';
 
 export type TransactionProps = {
   hash: string;
@@ -28,8 +28,8 @@ export type SimpleSendTipProps = {
 
 // TODO: to be refactored, changed into TransactionHistoryDetail
 export interface Transaction extends TransactionProps, BaseModel {
-  fromWallet?: WalletWithUser;
-  toWallet?: WalletWithUser;
+  fromWallet?: UserWallet;
+  toWallet?: UserWallet;
   post?: Post;
   currency: Currency;
 }
