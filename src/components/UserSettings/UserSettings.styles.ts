@@ -14,11 +14,18 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     account: {
       display: 'flex',
-      justifyContent: 'space-between',
+      flexDirection: 'column',
     },
     box: {
       [theme.breakpoints.down('xs')]: {
         padding: '0px 20px',
+      },
+    },
+    input: {
+      marginTop: theme.spacing(1),
+      marginBottom: '0px',
+      '& .MuiOutlinedInput-input': {
+        padding: '12px 16px',
       },
     },
   }),

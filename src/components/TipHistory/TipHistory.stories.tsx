@@ -39,6 +39,8 @@ TipHistory.args = {
         network: NetworkTypeEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
+        createdAt: new Date('2021-08-11T16:28:12.000Z'),
+        updatedAt: new Date('2021-09-02T03:11:28.000Z'),
         user: {
           id: '6232d3a5dbe01066471dca12',
           name: 'NutrisariJerukManisBgt',
@@ -67,6 +69,8 @@ TipHistory.args = {
         network: NetworkTypeEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
+        createdAt: new Date('2021-08-11T16:28:12.000Z'),
+        updatedAt: new Date('2021-09-02T03:11:28.000Z'),
         user: {
           id: '6232eaa8dbe01066471dd305',
           name: 'Mojito',
@@ -134,6 +138,8 @@ TipHistory.args = {
         network: NetworkTypeEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
+        createdAt: new Date('2021-08-11T16:28:12.000Z'),
+        updatedAt: new Date('2021-09-02T03:11:28.000Z'),
         user: {
           id: '6232d3a5dbe01066471dca12',
           name: 'NutrisariJerukManisBgt',
@@ -162,6 +168,8 @@ TipHistory.args = {
         network: NetworkTypeEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
+        createdAt: new Date('2021-08-11T16:28:12.000Z'),
+        updatedAt: new Date('2021-09-02T03:11:28.000Z'),
         user: {
           id: '6232eaa8dbe01066471dd305',
           name: 'Mojito',

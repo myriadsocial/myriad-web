@@ -49,7 +49,7 @@ export const Manage: React.FC<ManageProps> = ({wallets, onConnect}) => {
             <ListItemAvatar>{option.icons}</ListItemAvatar>
             <ListItemText>
               <Typography variant="h5" component="span" color="textPrimary">
-                {option.title} Wallet
+                {option.title}
               </Typography>
               <ShowIf condition={option.isConnect}>
                 <TextField
