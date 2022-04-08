@@ -36,7 +36,7 @@ export const ManageCointainer: React.FC = () => {
 
   useEffect(() => {
     const query = router.query;
-    if (query.connect && query.account_id) {
+    if (!Array.isArray(query.action) && query.action === 'connect' && query.account_id) {
       connectNearAccount();
     }
   }, [router.query]);
@@ -82,21 +82,26 @@ export const ManageCointainer: React.FC = () => {
   };
 
   const connectNearAccount = async (): Promise<void> => {
-    const callbackUrl = publicRuntimeConfig.appAuthURL + router.route + '?type=manage&connect=true';
+    const callbackUrl =
+      publicRuntimeConfig.appAuthURL + router.route + '?type=manage&action=connect';
 
     try {
-      const {publicAddress, signature} = await connectToNear(callbackUrl);
+      const data = await connectToNear(callbackUrl);
 
-      const payload = {
-        publicAddress,
-        nearAddress: publicAddress.split('/')[1],
-        pubKey: publicAddress.split('/')[0],
-        signature,
-      };
+      if (data) {
+        const payload = {
+          publicAddress: data.publicAddress,
+          nearAddress: data.publicAddress.split('/')[1],
+          pubKey: data.publicAddress.split('/')[0],
+          signature: data.signature,
+        };
 
-      await connectNetwork(undefined, payload);
+        await connectNetwork(undefined, payload);
 
-      dispatch(fetchUserWallets());
+        dispatch(fetchUserWallets());
+      } else {
+        console.log('redirection to near auth page');
+      }
     } catch (error) {
       if (error instanceof AccountRegisteredError) {
         openToasterSnack({

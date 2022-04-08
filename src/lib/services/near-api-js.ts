@@ -41,7 +41,7 @@ export const nearInitialize = async (): Promise<NearInitializeProps> => {
 
     // set config for near network
     const config: ConnectConfig = {
-      networkId: network.chainId ?? '',
+      networkId: network.chainId ?? 'testnet',
       keyStore,
       nodeUrl: network.rpcURL,
       walletUrl: network.walletURL,
@@ -51,7 +51,6 @@ export const nearInitialize = async (): Promise<NearInitializeProps> => {
 
     const near = await connect(assign({deps: {keyStore}}, config));
     const wallet = new WalletConnection(near, 'myriad-social');
-
     return {near, wallet};
   } catch (error) {
     console.log({error});
@@ -74,7 +73,7 @@ export const connectToNearWallet = async (
   near: nearAPI.Near,
   wallet: nearAPI.WalletConnection,
   callbackUrl?: string,
-): Promise<NearConnectResponseProps> => {
+): Promise<NearConnectResponseProps | null> => {
   try {
     const {publicRuntimeConfig} = getConfig();
 
@@ -88,27 +87,27 @@ export const connectToNearWallet = async (
       await wallet.requestSignIn({
         successUrl: callbackUrl ?? `${publicRuntimeConfig.appAuthURL}/?auth=${WalletTypeEnum.NEAR}`,
       });
+
+      return null;
+    } else {
+      const address = wallet.getAccountId();
+      console.log('ADDRESS', address);
+      const signer = new nearAPI.InMemorySigner(wallet._keyStore);
+      const hasPublicKey = await signer.getPublicKey(address, wallet._networkId);
+
+      if (!hasPublicKey) await signer.createKey(address, wallet._networkId);
+      const keyPair = await keyStore.getKey(wallet._networkId, address);
+
+      const {nonce} = await WalletAPI.getUserNonce(address);
+      const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
+      const publicKey = u8aToHex(userSignature.publicKey.data);
+      const userSignatureHex = u8aToHex(userSignature.signature);
+
+      const publicAddress = `${publicKey}/${address}`;
+      const signature = userSignatureHex;
+
+      return {nonce, publicAddress, signature};
     }
-    const address = wallet.getAccountId();
-
-    const signer = new nearAPI.InMemorySigner(wallet._keyStore);
-    const hasPublicKey = await signer.getPublicKey(address, wallet._networkId);
-
-    if (!hasPublicKey) await signer.createKey(address, wallet._networkId);
-    const keyPair = await keyStore.getKey(wallet._networkId, address);
-
-    const {nonce} = await WalletAPI.getUserNonce(address);
-    const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
-    const publicKey = u8aToHex(userSignature.publicKey.data);
-    const userSignatureHex = u8aToHex(userSignature.signature);
-    const payload = {
-      publicAddress: `${publicKey}/${address}`,
-      nonce,
-      signature: userSignatureHex,
-      walletType: WalletTypeEnum.NEAR,
-    };
-
-    return {nonce, publicAddress: payload.publicAddress, signature: payload.signature};
   } catch (error) {
     console.log({error});
 

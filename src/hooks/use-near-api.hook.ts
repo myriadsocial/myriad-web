@@ -35,12 +35,10 @@ export const useNearApi = () => {
     }
   }, [anonymous, currencies, balanceDetails, currentWallet]);
 
-  const connectToNear = async (callbackUrl?: string): Promise<NearConnectResponseProps> => {
+  const connectToNear = async (callbackUrl?: string): Promise<NearConnectResponseProps | null> => {
     const {near, wallet} = await nearInitialize();
 
-    const data = await connectToNearWallet(near, wallet, callbackUrl);
-
-    return data;
+    return connectToNearWallet(near, wallet, callbackUrl);
   };
 
   const getNearBalanceDetail = async (): Promise<NearBalanceProps> => {

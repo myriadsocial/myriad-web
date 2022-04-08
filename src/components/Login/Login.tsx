@@ -49,9 +49,11 @@ export const Login: React.FC<LoginProps> = props => {
   }, [redirectAuth]);
 
   const checkWalletRegistered = useCallback(async () => {
-    const {publicAddress} = await connectToNear();
+    const data = await connectToNear();
 
-    setNearWallet(publicAddress);
+    if (!data) return;
+
+    setNearWallet(data.publicAddress);
 
     checkAccountRegistered(
       () => {
@@ -59,7 +61,7 @@ export const Login: React.FC<LoginProps> = props => {
         setWalletLoading(false);
       },
       undefined,
-      publicAddress,
+      data.publicAddress,
     );
   }, []);
 

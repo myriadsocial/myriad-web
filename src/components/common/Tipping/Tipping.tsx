@@ -24,6 +24,7 @@ import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
+import {WalletType} from 'src/interfaces/wallet';
 
 const INITIAL_AMOUNT = new BN(-1);
 
@@ -89,14 +90,14 @@ export const Tipping: React.FC<SendTipProps> = props => {
     let fee: BN = BN_ZERO;
 
     //TODO: move to switch case
-    if (currency.network.id === 'polkadot') {
+    if (currency.network.walletType === WalletType.POLKADOT) {
       const gasPrice = await getEstimatedFee(senderAddress, receiverAddress, selected);
       if (gasPrice) {
         fee = gasPrice;
       }
     }
 
-    if (currency.network.id === 'near') {
+    if (currency.network.walletType === WalletType.NEAR) {
       const {gasPrice} = await getEstimatedFeeNear();
       if (gasPrice) {
         fee = toBigNumber(gasPrice, currency.decimal);
@@ -151,7 +152,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
       });
     }
 
-    if (currency.network.id === 'polkadot') {
+    if (currency.network.walletType === WalletType.POLKADOT) {
       simplerSendTip(attributes, hash => {
         onSuccess(currency, hash, attributes.amount);
 
@@ -160,7 +161,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
       });
     }
 
-    if (currency.network.id === 'near') {
+    if (currency.network.walletType === WalletType.NEAR) {
       sendAmount(receiverAddress, amount, hash => {
         onSuccess(currency, hash, attributes.amount);
 
