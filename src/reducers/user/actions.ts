@@ -68,6 +68,11 @@ export interface FetchNetwork extends PaginationAction {
   payload: Network[];
 }
 
+export interface AddUserWallet extends Action {
+  type: constants.ADD_USER_WALLET;
+  payload: UserWallet;
+}
+
 export interface FetchUserWallets extends PaginationAction {
   type: constants.FETCH_USER_WALLETS;
   payload: UserWallet[];
@@ -100,6 +105,7 @@ export type Actions =
   | FetchConnectedSocials
   | FetchUserExperience
   | FetchCurrentUserWallet
+  | AddUserWallet
   | FetchUserWallets
   | FetchNetwork
   | AddUserToken
@@ -279,6 +285,14 @@ export const fetchUserWallets: ThunkActionCreator<Actions, RootState> =
     } finally {
       dispatch(setLoading(false));
     }
+  };
+
+export const addNewWallet: ThunkActionCreator<Actions, RootState> =
+  (newWallet: UserWallet) => async dispatch => {
+    dispatch({
+      type: constants.ADD_USER_WALLET,
+      payload: newWallet,
+    });
   };
 
 export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> =
