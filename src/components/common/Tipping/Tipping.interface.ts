@@ -6,6 +6,7 @@ import {ReferenceType} from 'src/interfaces/interaction';
 import {People} from 'src/interfaces/people';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
+import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
 
 export type TippingOptions = {
   receiver: User | People;
@@ -17,6 +18,8 @@ export interface TippingProviderProps {
   anonymous: boolean;
   sender?: User;
   balances: BalanceDetail[];
+  currentWallet?: WalletTypeEnum;
+  currentNetwork?: NetworkTypeEnum;
 }
 
 export type SendTipProps = {

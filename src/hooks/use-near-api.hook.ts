@@ -1,6 +1,8 @@
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import BN from 'bn.js';
+import * as nearAPI from 'near-api-js';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {
   nearInitialize,
@@ -47,9 +49,31 @@ export const useNearApi = () => {
     return balance;
   };
 
+  const getEstimatedFee = async (): Promise<{gasPrice: string}> => {
+    const {near} = await nearInitialize();
+    const blockStatus = await near.connection.provider.status();
+    const gas = await near.connection.provider.gasPrice(blockStatus.sync_info.latest_block_hash);
+    const gasPrice = nearAPI.utils.format.formatNearAmount(gas.gas_price);
+    return {gasPrice};
+  };
+
+  const sendAmount = async (
+    receiver: string,
+    amount: BN,
+    callback?: (hash: string) => void,
+  ): Promise<void> => {
+    const {wallet} = await nearInitialize();
+    const account = wallet.account();
+    await account.sendMoney(receiver, amount);
+
+    callback && callback('test');
+  };
+
   return {
     connectToNear,
     getNearBalanceDetail,
+    getEstimatedFee,
+    sendAmount,
     balanceDetails,
   };
 };

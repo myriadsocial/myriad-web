@@ -3,11 +3,12 @@ import React, {useEffect, useState} from 'react';
 import {TextField} from '@material-ui/core';
 import type {InputProps} from '@material-ui/core';
 
-import {BN, BN_TEN, BN_ZERO, isBn} from '@polkadot/util';
+import {BN, BN_ZERO, isBn} from '@polkadot/util';
 
 import {useStyles} from './InputAmount.style';
 
 import {formatBalance} from 'src/helpers/balance';
+import {toBigNumber} from 'src/helpers/string';
 import {CurrencyId} from 'src/interfaces/currency';
 
 type InputAmountProps = Omit<InputProps, 'onChange'> & {
@@ -77,29 +78,9 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     target.blur();
   };
 
-  const toBigNumber = (value: string) => {
-    let result: BN;
-
-    const isDecimalValue = value.match(/^(\d+)\.(\d+)$/);
-
-    if (isDecimalValue) {
-      const div = new BN(value.replace(/\.\d*$/, ''));
-      const modString = value.replace(/^\d+\./, '').substr(0, decimal);
-      const mod = new BN(modString);
-
-      result = div
-        .mul(BN_TEN.pow(new BN(decimal)))
-        .add(mod.mul(BN_TEN.pow(new BN(decimal - modString.length))));
-    } else {
-      result = new BN(value).mul(BN_TEN.pow(new BN(decimal)));
-    }
-
-    return result;
-  };
-
   const validateInput = (amount: string): [BN, boolean, string?] => {
-    const value = toBigNumber(amount);
-    const balance = isBn(maxValue) ? maxValue : toBigNumber(maxValue.toString());
+    const value = toBigNumber(amount, decimal);
+    const balance = isBn(maxValue) ? maxValue : toBigNumber(maxValue.toString(), decimal);
     const maxTip = balance.sub(fee);
 
     if (length && amount.length > length) {

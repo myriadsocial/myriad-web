@@ -26,11 +26,14 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   anonymous,
   sender,
   balances,
+  currentWallet,
+  currentNetwork,
 }) => {
   const [tipFormOpened, setOpenTipForm] = useState(false);
   const [tipInfoOpened, setTipInfoOpened] = useState(false);
   const [options, setOptions] = useState<TippingOptions>();
   const [enabled, setTippingEnabled] = useState(false);
+  const [promptFailedTip, setPromptFailedTip] = useState(false);
   const [defaultCurrency, setDefaultCurrency] = useState<BalanceDetail>();
   const [currencyTipped, setTippingCurrency] = useState<BalanceDetail>();
   const [transactionUrl, setTransactionUrl] = useState<string>();
@@ -51,10 +54,25 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
       if (anonymous) {
         setTipInfoOpened(true);
       } else {
-        setOpenTipForm(true);
+        let walletFound = false;
+        if (!('originUserId' in options.receiver)) {
+          walletFound = options.receiver.wallets.filter(ar => ar.type === currentWallet).length > 0;
+          const indexNetwork =
+            currentNetwork &&
+            options.receiver.wallets.map(ar => ar.network).indexOf(currentNetwork);
+          if (indexNetwork && indexNetwork > 0) {
+            options.receiver.wallets.unshift(options.receiver.wallets.splice(indexNetwork, 1)[0]);
+            setOptions(options);
+          }
+        }
+        if (walletFound) {
+          setOpenTipForm(true);
+        } else {
+          setPromptFailedTip(true);
+        }
       }
     },
-    [anonymous],
+    [anonymous, currentWallet],
   );
 
   const handleCloseTipForm = useCallback(() => {
@@ -147,6 +165,33 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
             </Button>
           )}
         </Grid>
+      </PromptComponent>
+      <PromptComponent
+        icon="danger"
+        open={promptFailedTip}
+        onCancel={resetTippingStatus}
+        title="Send tip could not be processed"
+        subtitle={
+          <Typography component="div">
+            {`This user doesn't have ${currentWallet?.toUpperCase()} wallet account to receive the tips`}
+          </Typography>
+        }>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={() => {
+              setPromptFailedTip(false);
+            }}>
+            OK
+          </Button>
+        </div>
       </PromptComponent>
     </>
   );
