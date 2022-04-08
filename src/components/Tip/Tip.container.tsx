@@ -2,6 +2,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {BoxComponent} from '../atoms/Box';
+import {ShimerComponent} from './Shimer';
 import {Tip} from './Tip';
 
 import {Empty} from 'src/components/atoms/Empty';
@@ -45,9 +46,9 @@ export const TipContainer: React.FC = () => {
       {tipsEachNetwork.map(network => (
         <>
           <ShowIf condition={loading}>
-            <div style={{marginTop: 20}}>
-              <Empty title="loading" subtitle="loading" />
-            </div>
+            <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
+              <ShimerComponent />
+            </BoxComponent>
           </ShowIf>
           <ShowIf condition={!loading && !tipWithBalances(network).length}>
             <div style={{marginTop: 20}}>
