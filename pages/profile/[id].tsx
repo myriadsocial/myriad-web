@@ -11,6 +11,7 @@ import {useRouter} from 'next/router';
 import {ProfileTimeline} from 'src/components/Profile/Profile';
 import {SectionTitle, TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {ResourceDeleted} from 'src/components/common/ResourceDeleted';
+import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import ShowIf from 'src/components/common/show-if.component';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
@@ -72,6 +73,7 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
         <TopNavbarComponent description={'Profile Detail'} sectionTitle={SectionTitle.PROFILE} />
         <ResourceDeleted />
       </ShowIf>
+      <TippingSuccess />
     </DefaultLayout>
   );
 };

@@ -12,6 +12,7 @@ import {RichTextContainer} from 'src/components/Richtext/RichTextContainer';
 import {TimelineContainer} from 'src/components/Timeline/TimelineContainer';
 import Banner from 'src/components/atoms/BannerStatus/BannerStatus';
 import {SearchBoxContainer} from 'src/components/atoms/Search/SearchBoxContainer';
+import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -86,6 +87,7 @@ const Home: React.FC = () => {
         open={dialogBanned.open}
         onClose={() => setDialogBanned({...dialogBanned, open: false})}
       />
+      <TippingSuccess />
     </DefaultLayout>
   );
 };

@@ -12,6 +12,7 @@ import axios from 'axios';
 import {PostDetailContainer} from 'src/components/PostDetail';
 import {deserialize, formatToString} from 'src/components/PostEditor';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import ShowIf from 'src/components/common/show-if.component';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
@@ -86,6 +87,7 @@ const PostPage: React.FC<PostPageProps> = props => {
       <ShowIf condition={!removed}>
         <PostDetailContainer />
       </ShowIf>
+      <TippingSuccess />
     </DefaultLayout>
   );
 };
