@@ -12,6 +12,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 700,
       marginBottom: 12,
     },
+    name: {
+      marginBottom: 12,
+      marginTop: 12,
+    },
     account: {
       display: 'flex',
       flexDirection: 'column',
