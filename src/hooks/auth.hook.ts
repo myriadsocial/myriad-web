@@ -23,7 +23,12 @@ import {createNearSignature} from 'src/lib/services/near-api-js';
 import {signWithExtension} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {fetchBalances, getUserCurrencies} from 'src/reducers/balance/actions';
-import {fetchUserWallets, fetchCurrentUserWallets, fetchUser} from 'src/reducers/user/actions';
+import {
+  fetchUserWallets,
+  fetchCurrentUserWallets,
+  fetchUser,
+  addNewWallet,
+} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
@@ -242,11 +247,14 @@ export const useAuthHook = () => {
 
     try {
       const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
+      let payload = null;
+      let currentAddress = null;
 
       if (account) {
         const address = toHexPublicKey(account);
         const signature = await createSignaturePolkadotExt(account, nonce);
-        const payload: WalletAPI.ConnectNetwork = {
+        currentAddress = address;
+        payload = {
           publicAddress: address,
           nonce,
           signature,
@@ -259,7 +267,9 @@ export const useAuthHook = () => {
 
         await WalletAPI.connectNetwork(payload, user.id);
       } else if (nearAccount) {
-        const payload: WalletAPI.ConnectNetwork = {
+        const result = await createNearSignature(`/${nearAccount.nearAddress}`, nonce);
+        currentAddress = nearAccount.nearAddress;
+        payload = {
           publicAddress: nearAccount.pubKey,
           nonce,
           signature: nearAccount.signature,
@@ -270,11 +280,22 @@ export const useAuthHook = () => {
           },
         };
 
+        if (result) payload.signature = result.signature;
+
         await WalletAPI.connectNetwork(payload, user.id);
       }
 
-      dispatch(fetchUserWallets());
-      dispatch(fetchCurrentUserWallets());
+      if (payload && currentAddress) {
+        dispatch(
+          addNewWallet({
+            id: currentAddress,
+            type: payload.walletType,
+            network: payload.networkType,
+            primary: false,
+            userId: user.id,
+          }),
+        );
+      }
     } catch (error) {
       if (error instanceof AccountRegisteredError) {
         throw error;
