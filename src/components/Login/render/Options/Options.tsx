@@ -116,9 +116,7 @@ export const Options: React.FC<OptionProps> = props => {
     const accounts: InjectedAccountWithMeta[] = [];
 
     let tempNonce = 0;
-
     let tempId = '';
-
     let tempNearWallet = '';
 
     switch (wallet) {
@@ -130,12 +128,16 @@ export const Options: React.FC<OptionProps> = props => {
         break;
 
       case WalletTypeEnum.NEAR: {
-        const {nonce, publicAddress} = await connectToNear();
-        tempId = publicAddress;
+        const data = await connectToNear();
 
-        if (publicAddress.includes('/')) tempNearWallet = publicAddress.split('/')[1];
+        if (data) {
+          tempId = data.publicAddress;
+          if (data.publicAddress.includes('/')) tempNearWallet = data.publicAddress.split('/')[1];
+          tempNonce = data.nonce;
+        } else {
+          console.log('redirection to near auth page');
+        }
 
-        tempNonce = nonce;
         break;
       }
 

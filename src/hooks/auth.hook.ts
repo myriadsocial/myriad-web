@@ -359,10 +359,13 @@ export const useAuthHook = () => {
       await WalletAPI.switchNetwork(payload, user.id);
       await dispatch(fetchUser(currentAddress));
 
-      dispatch(getUserCurrencies());
-      dispatch(fetchBalances());
-      dispatch(fetchUserWallets());
-      dispatch(fetchCurrentUserWallets());
+      await Promise.all([
+        dispatch(getUserCurrencies()),
+        dispatch(fetchBalances()),
+        dispatch(fetchUserWallets()),
+        dispatch(fetchCurrentUserWallets()),
+      ]);
+
       callback && callback();
     } catch (error) {
       console.log(error);
@@ -377,8 +380,6 @@ export const useAuthHook = () => {
 
       if (wallet.isSignedIn()) {
         wallet.signOut();
-      } else {
-        console.log('no signed in NEAR wallet found!');
       }
     }
 

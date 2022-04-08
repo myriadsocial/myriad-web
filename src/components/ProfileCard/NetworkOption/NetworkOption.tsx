@@ -1,7 +1,8 @@
 import {ChevronDownIcon} from '@heroicons/react/outline';
 
-import React from 'react';
+import React, {useEffect} from 'react';
 
+import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
 import Button from '@material-ui/core/Button';
@@ -73,6 +74,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
   const {switchNetwork, getRegisteredAccounts} = useAuthHook();
   const {connectToNear} = useNearApi();
   const confirm = useConfirm();
+  const {publicRuntimeConfig} = getConfig();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [current, setCurrent] = React.useState<string>(
@@ -93,9 +95,17 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
     [],
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     currentWallet && setCurrent(currentWallet?.network);
   }, [currentWallet]);
+
+  useEffect(() => {
+    const query = router.query;
+
+    if (!Array.isArray(query.action) && query.action === 'switch' && query.account_id) {
+      handleSelected(WalletTypeEnum.NEAR, NetworkTypeEnum.NEAR, true);
+    }
+  }, [router.query]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -113,7 +123,11 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
     router.push(`/wallet?type=manage`);
   };
 
-  const handleSelected = async (walletType: string, networkType: NetworkTypeEnum) => {
+  const handleSelected = async (
+    walletType: string,
+    networkType: NetworkTypeEnum,
+    refresh = false,
+  ) => {
     if (networkType === current) handleClose();
     else {
       const wallet = wallets?.find(wallet => wallet.type === walletType);
@@ -125,14 +139,24 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
         }
 
         case WalletTypeEnum.NEAR: {
-          const {publicAddress, signature} = await connectToNear();
-          const payload: NearPayload = {
-            publicAddress,
-            nearAddress: publicAddress.split('/')[1],
-            pubKey: publicAddress.split('/')[0],
-            signature,
-          };
-          handleSwitch(wallet.type, networkType, payload);
+          const callback = publicRuntimeConfig.appAuthURL + router.route + '?action=switch';
+
+          const data = await connectToNear(callback);
+
+          if (data) {
+            const payload: NearPayload = {
+              publicAddress: data.publicAddress,
+              nearAddress: data.publicAddress.split('/')[1],
+              pubKey: data.publicAddress.split('/')[0],
+              signature: data.signature,
+            };
+
+            await handleSwitch(wallet.type, networkType, payload);
+
+            router.replace(router.route, undefined, {shallow: true});
+          } else {
+            console.log('redirection to near auth page');
+          }
           break;
         }
 
@@ -159,18 +183,23 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
       }
 
       case WalletTypeEnum.NEAR: {
-        // TODO SWITCH NEAR WITH CONNECTED NEAR ACCOUNT
-        const {publicAddress, signature} = await connectToNear();
-        const payload: NearPayload = {
-          publicAddress,
-          nearAddress: publicAddress.split('/')[1],
-          pubKey: publicAddress.split('/')[0],
-          signature,
-        };
+        const data = await connectToNear();
 
-        switchNetwork(payload, NetworkTypeEnum.NEAR, walletType, () => {
-          setCurrent(walletType as string);
-        });
+        if (data) {
+          const payload: NearPayload = {
+            publicAddress: data.publicAddress,
+            nearAddress: data.publicAddress.split('/')[1],
+            pubKey: data.publicAddress.split('/')[0],
+            signature: data.signature,
+          };
+
+          switchNetwork(payload, NetworkTypeEnum.NEAR, walletType, () => {
+            setCurrent(walletType as string);
+          });
+        } else {
+          console.log('redirection to near auth page');
+        }
+
         break;
       }
     }
