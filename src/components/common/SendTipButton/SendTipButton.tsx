@@ -5,6 +5,7 @@ import React from 'react';
 import {Button, CircularProgress, IconButton, SvgIcon} from '@material-ui/core';
 import Hidden from '@material-ui/core/Hidden';
 
+import useConfirm from '../Confirm/use-confirm.hook';
 import useTipping from '../Tipping/use-tipping.hook';
 
 import {Comment} from 'src/interfaces/comment';
@@ -24,6 +25,7 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
   const {reference, referenceType} = props;
 
   const tipping = useTipping();
+  const confirm = useConfirm();
 
   const handleSendTip = async () => {
     let receiver: User | People | null = null;
@@ -42,10 +44,20 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
     if ('platform' in reference) {
       // if imported
       if (reference.people) {
-        const {referenceId, referenceType} = await PostAPI.getWalletAddress(reference.id);
+        try {
+          const {referenceId, referenceType} = await PostAPI.getWalletAddress(reference.id);
 
-        if (referenceType === WalletReferenceType.WALLET_ADDRESS) {
-          receiver = {...reference.people, walletAddress: referenceId};
+          if (referenceType === WalletReferenceType.WALLET_ADDRESS) {
+            receiver = {...reference.people, walletAddress: referenceId};
+          }
+        } catch {
+          confirm({
+            title: 'Send tip on imported post is unavailable',
+            description:
+              'Currently, send tip on imported post in under repair. Please try again later',
+            icon: 'warning',
+            confirmationText: 'close',
+          });
         }
       } else {
         receiver = reference.user;
