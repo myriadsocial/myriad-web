@@ -1,4 +1,3 @@
-import {signIn} from 'next-auth/client';
 import getConfig from 'next/config';
 
 import {u8aToHex, numberToHex} from '@polkadot/util';
@@ -7,7 +6,7 @@ import {assign} from 'lodash';
 import * as nearAPI from 'near-api-js';
 import {ConnectConfig} from 'near-api-js';
 import {Signature} from 'near-api-js/lib/utils/key_pair';
-import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import * as WalletAPI from 'src/lib/api/wallet';
 
 export type NearInitializeProps = {
@@ -117,19 +116,6 @@ export const connectToNearWallet = async (
       walletType: WalletTypeEnum.NEAR,
     };
 
-    if (nonce > 0) {
-      signIn('credentials', {
-        name: address,
-        address: address,
-        publicAddress: payload.publicAddress,
-        anonymous: false,
-        callbackUrl: publicRuntimeConfig.appAuthURL,
-        signature: payload.signature,
-        nonce: payload.nonce,
-        walletType: payload.walletType,
-        networkType: NetworkTypeEnum.NEAR,
-      });
-    }
     return {nonce, publicAddress: payload.publicAddress, signature: payload.signature};
   } catch (error) {
     console.log({error});
