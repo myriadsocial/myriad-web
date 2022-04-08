@@ -15,6 +15,7 @@ export enum WalletReferenceType {
 export interface WalletDetail {
   referenceId: string;
   referenceType: WalletReferenceType;
+  serverId?: string;
 }
 
 export enum WalletType {
