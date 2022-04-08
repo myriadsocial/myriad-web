@@ -139,12 +139,9 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
         });
       }
 
-      const defaultCurrencies = tokenBalances.filter(balance => balance.id === currentWallet?.id);
-      const otherCurrencies = tokenBalances.filter(balance => balance.id !== currentWallet?.id);
-
       dispatch({
         type: constants.FETCH_BALANCES,
-        balanceDetails: defaultCurrencies.concat(otherCurrencies),
+        balanceDetails: tokenBalances,
       });
     } catch (error) {
       dispatch(
