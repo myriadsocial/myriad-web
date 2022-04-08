@@ -36,7 +36,11 @@ export const UserSettings: React.FC<UserSettingsProps> = props => {
             <ListItem alignItems={option.isConnect ? 'flex-start' : 'center'} key={option.id}>
               <ListItemAvatar>{option.icons}</ListItemAvatar>
               <ListItemText>
-                <Typography variant="h5" component="span" color="textPrimary">
+                <Typography
+                  variant="h5"
+                  component="div"
+                  color="textPrimary"
+                  className={styles.name}>
                   {option.title}
                 </Typography>
                 <ShowIf condition={option.isConnect}>
