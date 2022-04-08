@@ -52,7 +52,9 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const [cookies] = useCookies([COOKIE_CONSENT_NAME]);
   const {updateUserFcmToken} = useUserHook();
 
-  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, anonymous, currentWallet} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
 
   const [showNotification, setShowNotification] = useState(false);
@@ -110,7 +112,12 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   };
 
   return (
-    <TippingProvider anonymous={anonymous} balances={balanceDetails} sender={user}>
+    <TippingProvider
+      anonymous={anonymous}
+      balances={balanceDetails}
+      sender={user}
+      currentWallet={currentWallet?.type}
+      currentNetwork={currentWallet?.network}>
       <Container maxWidth="lg" disableGutters>
         <div className={classes.root}>
           <div className={classes.firstCol}>
