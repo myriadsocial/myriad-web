@@ -113,6 +113,13 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       };
     }
 
+    case constants.ADD_USER_WALLET: {
+      return {
+        ...state,
+        wallets: [...state.wallets, action.payload],
+      };
+    }
+
     case constants.FETCH_USER_WALLETS: {
       return {
         ...state,

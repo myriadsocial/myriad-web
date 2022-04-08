@@ -24,15 +24,14 @@ export type UserOnTransaction = BaseUser & {
   id: string;
 };
 
-export type Wallet = {
-  id: string;
+export interface Wallet extends BaseModel {
   type: WalletTypeEnum;
   network: NetworkTypeEnum;
   primary: boolean;
   userId: string;
-};
+}
 
-export type WalletWithUser = Wallet & {
+export type UserWallet = Wallet & {
   user: User;
 };
 
@@ -91,12 +90,4 @@ export enum ActivityLogType {
   USERNAME = 'username',
   PROFILE = 'profile',
   SKIP = 'skip_new_user_username',
-}
-
-export interface UserWallet extends BaseModel {
-  type: WalletTypeEnum;
-  network: NetworkTypeEnum;
-  primary: boolean;
-  userId: string;
-  user?: User;
 }

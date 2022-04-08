@@ -71,7 +71,7 @@ export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] 
     if (user) {
       items.push({
         id: 'setting',
-        title: `Public Key`,
+        title: `Wallet Address`,
         component: <UserSettingsContainer user={profileUser} />,
         background: 'white',
       });

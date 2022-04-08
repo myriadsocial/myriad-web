@@ -11,6 +11,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     text: {
       textAlign: 'right',
     },
+    name: {
+      marginBottom: 12,
+      marginTop: 12,
+    },
     input: {
       marginTop: theme.spacing(1),
       marginBottom: '0px',
