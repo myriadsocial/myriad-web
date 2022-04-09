@@ -91,7 +91,6 @@ export const connectToNearWallet = async (
       return null;
     } else {
       const address = wallet.getAccountId();
-      console.log('ADDRESS', address);
       const signer = new nearAPI.InMemorySigner(wallet._keyStore);
       const hasPublicKey = await signer.getPublicKey(address, wallet._networkId);
 
