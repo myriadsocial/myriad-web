@@ -68,30 +68,20 @@ export const Tipping: React.FC<SendTipProps> = props => {
     return user.wallets.length ? user.wallets[0].id : null;
   };
 
-  const getReceiverAddress = (): string | null => {
-    if ('originUserId' in receiver) {
-      return receiver.walletAddress ?? null;
-    } else {
-      return getAddressByUser(receiver);
-    }
-  };
-
   const handleChangeAgreement = (accepted: boolean) => {
     setAgreementChecked(accepted);
   };
 
   const calculateTransactionFee = async (selected: BalanceDetail) => {
-    const receiverAddress = getReceiverAddress();
     const senderAddress = getAddressByUser(sender);
 
-    if (!receiverAddress || !senderAddress) return;
+    if (!receiver.walletDetail || !senderAddress) return;
 
     setLoadingFee(true);
     let fee: BN = BN_ZERO;
-
     //TODO: move to switch case
     if (currency.network.walletType === WalletType.POLKADOT) {
-      const gasPrice = await getEstimatedFee(senderAddress, receiverAddress, selected);
+      const gasPrice = await getEstimatedFee(senderAddress, receiver.walletDetail, selected);
       if (gasPrice) {
         fee = gasPrice;
       }
@@ -132,16 +122,17 @@ export const Tipping: React.FC<SendTipProps> = props => {
   const signTransaction = () => {
     if (amount.lte(BN_ZERO)) return;
 
-    const receiverAddress = getReceiverAddress();
     const senderAddress = getAddressByUser(sender);
 
-    if (!receiverAddress || !senderAddress) return;
+    if (!receiver.walletDetail || !senderAddress) return;
+    if (currency.native) receiver.walletDetail.ftIdentifier = 'native';
+    else receiver.walletDetail.ftIdentifier = currency.referenceId;
 
     const attributes = {
       from: senderAddress,
-      to: receiverAddress,
       amount,
       currency,
+      walletDetail: receiver.walletDetail,
     };
 
     // not direct tipping
@@ -162,7 +153,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
     }
 
     if (currency.network.walletType === WalletType.NEAR) {
-      sendAmount(receiverAddress, amount, hash => {
+      sendAmount(receiver.walletDetail.referenceId, amount, hash => {
         onSuccess(currency, hash, attributes.amount);
 
         setAmount(INITIAL_AMOUNT);

@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {ProfileHeaderComponent} from '.';
+import useConfirm from '../common/Confirm/use-confirm.hook';
 import useTipping from '../common/Tipping/use-tipping.hook';
 
 import {debounce} from 'lodash';
@@ -14,6 +15,7 @@ import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {ReportProps} from 'src/interfaces/report';
 import {User} from 'src/interfaces/user';
+import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
 import {blockFromFriend} from 'src/reducers/friend/actions';
 import {fetchProfileDetail, fetchProfileExperience} from 'src/reducers/profile/actions';
@@ -32,6 +34,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
 
   const dispatch = useDispatch();
   const tipping = useTipping();
+  const confirm = useConfirm();
 
   const {requestFriend, removeFriendRequest, toggleRequest, reloadFriendStatus} =
     useFriendRequest();
@@ -68,14 +71,27 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     removeFriendRequest(friendStatus);
   }, 300);
 
-  const handleSendTip = () => {
+  const handleSendTip = async () => {
     if (!profile) return;
 
-    tipping.send({
-      reference: profile as User,
-      receiver: profile as User,
-      referenceType: ReferenceType.USER,
-    });
+    try {
+      const walletDetail = await UserAPI.getWalletAddress(profile.id);
+      const receiver = {...profile, walletDetail};
+
+      tipping.send({
+        receiver,
+        reference: profile as User,
+        referenceType: ReferenceType.USER,
+      });
+    } catch {
+      confirm({
+        title: 'Wallet account not found',
+        description: 'This comment wallet address is unavailable',
+        icon: 'warning',
+        confirmationText: 'close',
+        hideCancel: true,
+      });
+    }
   };
 
   const handleSubmitReport = (payload: ReportProps) => {
