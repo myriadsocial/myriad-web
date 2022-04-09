@@ -63,7 +63,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
       reference.people &&
       !('userSocialMedia' in reference.people)
     ) {
-      const enabledCurrency = balances.find(balance => balance.id === CurrencyId.MYRIA);
+      const enabledCurrency = balances.find(balance => balance.symbol === CurrencyId.MYRIA);
 
       if (enabledCurrency) {
         setCurrency(enabledCurrency);

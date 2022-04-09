@@ -122,30 +122,16 @@ export const usePolkadotApi = () => {
             : undefined;
 
         // Record the transaction
-        if (type) {
-          // sending tip from Post/Comment
-          await storeTransaction({
-            // TODO: should add the extrinsicURL: explorerURL + txHash
-            hash: txHash,
-            amount: finalAmount,
-            from,
-            to,
-            currencyId: currency.id,
-            // Optionals for Post or Comment
-            type,
-            referenceId,
-          });
-        } else {
-          // sending direct tip
-          await storeTransaction({
-            hash: txHash,
-            amount: finalAmount,
-            from,
-            to,
-            currencyId: currency.id,
-            referenceId,
-          });
-        }
+        await storeTransaction({
+          // TODO: should add the extrinsicURL: explorerURL + txHash
+          hash: txHash,
+          amount: finalAmount,
+          from,
+          to,
+          currencyId: currency.id,
+          type,
+          referenceId,
+        });
 
         dispatch(setIsTipSent(true));
 
