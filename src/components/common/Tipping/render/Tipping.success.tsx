@@ -7,6 +7,7 @@ import {Box, Button, Grid, Typography} from '@material-ui/core';
 import localforage from 'localforage';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {formatBalance} from 'src/helpers/balance';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Currency} from 'src/interfaces/currency';
 import {ReferenceType} from 'src/interfaces/interaction';
@@ -33,6 +34,7 @@ export const TIPPING_STORAGE_KEY = '@Tipping_Storage_Key';
 
 export const TippingSuccess = () => {
   const router = useRouter();
+  const {openToasterSnack} = useToasterSnackHook();
   const [trxHash, setTrxHash] = useState<string>();
   const [options, setOptions] = useState<TippingStorageProps>();
   const [openPrompt, setOpenPrompt] = useState(false);
@@ -45,6 +47,16 @@ export const TippingSuccess = () => {
         router.replace(router.pathname, undefined, {shallow: true});
         setOpenPrompt(true);
         processTips(transactionHashes);
+      }
+
+      const errorCode = router.query.errorCode as string | null;
+      const errorMessage = router.query.errorMessage as string | null;
+      if (errorCode && errorMessage) {
+        openToasterSnack({
+          variant: 'warning',
+          message: 'Transaction rejected by user',
+        });
+        router.replace(router.pathname, undefined, {shallow: true});
       }
     }
   }, [router.query]);
