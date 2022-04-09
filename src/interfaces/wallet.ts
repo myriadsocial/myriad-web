@@ -9,6 +9,8 @@ export enum ContentType {
 }
 
 export enum WalletReferenceType {
+  USER = 'user',
+  PEOPLE = 'people',
   WALLET_ADDRESS = 'walletAddress',
 }
 
@@ -16,6 +18,7 @@ export interface WalletDetail {
   referenceId: string;
   referenceType: WalletReferenceType;
   serverId?: string;
+  ftIdentifier?: string;
 }
 
 export enum WalletType {
