@@ -13,10 +13,13 @@ import {useStyles} from './Tipping.style';
 import {TippingInfo} from './render/Info';
 import {InputAmount} from './render/InputAmount';
 import {Summary} from './render/Summary';
+import {TIPPING_STORAGE_KEY} from './render/Tipping.success';
 
+import localforage from 'localforage';
 import {Button, ButtonVariant} from 'src/components/atoms/Button';
 import {CurrencyOptionComponent} from 'src/components/atoms/CurrencyOption';
 import {ListItemComponent} from 'src/components/atoms/ListItem';
+import {formatBalance} from 'src/helpers/balance';
 import {toBigNumber} from 'src/helpers/string';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
@@ -29,7 +32,16 @@ import {WalletType} from 'src/interfaces/wallet';
 const INITIAL_AMOUNT = new BN(-1);
 
 export const Tipping: React.FC<SendTipProps> = props => {
-  const {sender, receiver, reference, referenceType, balances, defaultCurrency, onSuccess} = props;
+  const {
+    sender,
+    receiver,
+    reference,
+    referenceType,
+    balances,
+    defaultCurrency,
+    currentNetwork,
+    onSuccess,
+  } = props;
 
   const classes = useStyles();
   const {isSignerLoading, simplerSendTip, getEstimatedFee} = usePolkadotApi();
@@ -65,7 +77,13 @@ export const Tipping: React.FC<SendTipProps> = props => {
   }, []);
 
   const getAddressByUser = (user: User) => {
-    return user.wallets.length ? user.wallets[0].id : null;
+    if (!user.wallets.length) {
+      return null;
+    }
+
+    const wallet = user.wallets.find(ar => ar.network === currentNetwork);
+
+    return wallet?.id ?? null;
   };
 
   const handleChangeAgreement = (accepted: boolean) => {
@@ -119,7 +137,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
     setTippingAmountValid(valid);
   };
 
-  const signTransaction = () => {
+  const signTransaction = async () => {
     if (amount.lte(BN_ZERO)) return;
 
     const senderAddress = getAddressByUser(sender);
@@ -143,6 +161,14 @@ export const Tipping: React.FC<SendTipProps> = props => {
       });
     }
 
+    const storageAttribute = {
+      attributes,
+      receiver,
+      reference,
+      referenceType,
+      amount: formatBalance(amount, currency.decimal),
+    };
+    await localforage.setItem(TIPPING_STORAGE_KEY, storageAttribute);
     if (currency.network.walletType === WalletType.POLKADOT) {
       simplerSendTip(attributes, hash => {
         onSuccess(currency, hash, attributes.amount);
