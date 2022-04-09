@@ -19,6 +19,7 @@ import localforage from 'localforage';
 import {Button, ButtonVariant} from 'src/components/atoms/Button';
 import {CurrencyOptionComponent} from 'src/components/atoms/CurrencyOption';
 import {ListItemComponent} from 'src/components/atoms/ListItem';
+import {formatBalance} from 'src/helpers/balance';
 import {toBigNumber} from 'src/helpers/string';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
@@ -165,6 +166,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
       receiver,
       reference,
       referenceType,
+      amount: formatBalance(amount, currency.decimal),
     };
     await localforage.setItem(TIPPING_STORAGE_KEY, storageAttribute);
     if (currency.network.walletType === WalletType.POLKADOT) {

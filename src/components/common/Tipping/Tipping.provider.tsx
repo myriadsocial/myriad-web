@@ -27,6 +27,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   sender,
   balances,
   currentWallet,
+  currentNetwork,
 }) => {
   const [tipFormOpened, setOpenTipForm] = useState(false);
   const [tipInfoOpened, setTipInfoOpened] = useState(false);

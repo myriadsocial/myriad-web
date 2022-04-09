@@ -6,7 +6,6 @@ import {Box, Button, Grid, Typography} from '@material-ui/core';
 
 import localforage from 'localforage';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
-import {formatBalance} from 'src/helpers/balance';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Currency} from 'src/interfaces/currency';
@@ -28,6 +27,7 @@ export type TippingStorageProps = {
   receiver: User | People;
   reference: Post | Comment | User;
   referenceType: ReferenceType;
+  amount: number;
 };
 
 export const TIPPING_STORAGE_KEY = '@Tipping_Storage_Key';
@@ -71,11 +71,10 @@ export const TippingSuccess = () => {
       if ('currency' in attributesOptions.attributes) {
         simpleSendTip = attributesOptions?.attributes;
         if (simpleSendTip) {
-          const finalAmount = formatBalance(simpleSendTip.amount, simpleSendTip.currency.decimal);
           await storeTransaction({
             from: attributesOptions.attributes.from,
-            to: attributesOptions.attributes.to,
-            amount: finalAmount,
+            to: simpleSendTip.walletDetail.referenceId,
+            amount: attributesOptions.amount,
             currencyId: simpleSendTip.currency.id,
             hash: transactionHashes,
           });
