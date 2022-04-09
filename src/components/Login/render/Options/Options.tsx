@@ -115,25 +115,32 @@ export const Options: React.FC<OptionProps> = props => {
   const handleConnect = async () => {
     const accounts: InjectedAccountWithMeta[] = [];
 
-    let tempNonce = 0;
-    let tempId = '';
-    let tempNearWallet = '';
-
     switch (wallet) {
       case WalletTypeEnum.POLKADOT:
         // eslint-disable-next-line no-case-declarations
         const polkadotAccounts = await getPolkadotAccounts();
 
         accounts.push(...polkadotAccounts);
+
+        if (accounts.length > 0) {
+          setAccounts(accounts);
+          onConnect && onConnect(accounts);
+
+          navigate('/account');
+        } else {
+          setWallet(null);
+        }
+
         break;
 
       case WalletTypeEnum.NEAR: {
         const data = await connectToNear();
 
         if (data) {
-          tempId = data.publicAddress;
-          if (data.publicAddress.includes('/')) tempNearWallet = data.publicAddress.split('/')[1];
-          tempNonce = data.nonce;
+          onConnectNear &&
+            onConnectNear(data.publicAddress, () => {
+              navigate('/profile');
+            });
         } else {
           console.log('redirection to near auth page');
         }
@@ -142,26 +149,11 @@ export const Options: React.FC<OptionProps> = props => {
       }
 
       default:
+        setWallet(null);
         break;
     }
 
     setConnectAttempted(true);
-
-    if (accounts.length > 0) {
-      setAccounts(accounts);
-      onConnect && onConnect(accounts);
-
-      navigate('/account');
-    } else if (!tempNonce) {
-      if (tempId.length > 0) {
-        onConnectNear &&
-          onConnectNear(tempNearWallet, () => {
-            navigate('/profile');
-          });
-      }
-    } else {
-      setWallet(null);
-    }
   };
 
   return (
