@@ -47,7 +47,7 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
   const {tippedContent} = useSelector<RootState, TimelineState>(state => state.timelineState);
   const {fee} = useSelector<RootState, WalletState>(state => state.walletState);
 
-  const {getEstimatedFee, isFetchingFee, isSignerLoading} = usePolkadotApi();
+  const {isFetchingFee, isSignerLoading} = usePolkadotApi();
 
   const [tipAmount, setTipAmount] = useState('');
   const [verifiedTipAmount, setVerifiedTipAmount] = useState('');
@@ -74,7 +74,8 @@ export const SendTip: React.FC<SendTipProps> = ({balanceDetails, tippedUser, tip
   useEffect(() => {
     if (tippedUserId.length > 0) {
       if (user && user.wallets && user.wallets.length >= 0) {
-        getEstimatedFee(user.wallets[0].id, tippedUserId, selectedCurrency);
+        // TODO: get wallet detail
+        // getEstimatedFee(user.wallets[0].id, tippedUserId, selectedCurrency);
       }
     }
   }, [selectedCurrency, tippedUserId]);

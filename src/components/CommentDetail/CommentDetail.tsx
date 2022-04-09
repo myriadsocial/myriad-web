@@ -28,6 +28,9 @@ import {Comment} from 'src/interfaces/comment';
 import {CommentProps} from 'src/interfaces/comment';
 import {ReferenceType, Vote} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
+import {WalletDetail} from 'src/interfaces/wallet';
+import * as CommentAPI from 'src/lib/api/comment';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {
@@ -37,6 +40,10 @@ import {
   setDownvoting,
   resetDownvoting,
 } from 'src/reducers/timeline/actions';
+
+interface UserWithWalletDetail extends User {
+  walletDetail?: WalletDetail;
+}
 
 export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((props, ref) => {
   const {
@@ -100,12 +107,26 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     setIsReplying(!isReplying);
   };
 
-  const handleSendTip = () => {
-    tipping.send({
-      receiver: comment.user,
-      reference: comment,
-      referenceType: ReferenceType.COMMENT,
-    });
+  // TODO: Recheck API
+  const handleSendTip = async () => {
+    try {
+      const receiver: UserWithWalletDetail = comment.user;
+      const walletDetail = await CommentAPI.getWalletAddress(comment.id);
+
+      tipping.send({
+        receiver: {...receiver, walletDetail},
+        reference: comment,
+        referenceType: ReferenceType.COMMENT,
+      });
+    } catch {
+      confirm({
+        title: 'Wallet account not found',
+        description: 'This comment wallet address is unavailable',
+        icon: 'warning',
+        confirmationText: 'close',
+        hideCancel: true,
+      });
+    }
   };
 
   const handleSubmitComment = (attributes: Partial<CommentProps>) => {

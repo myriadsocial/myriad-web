@@ -14,6 +14,7 @@ import {formatBalance} from 'src/helpers/balance';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
+import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {storeTransaction} from 'src/lib/api/transaction';
 import {estimateFee, signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
@@ -54,13 +55,13 @@ export const usePolkadotApi = () => {
 
   const getEstimatedFee = async (
     from: string,
-    to: string,
+    walletDetail: WalletDetail,
     currency: BalanceDetail,
   ): Promise<BN | null> => {
     setIsFetchingFee(true);
 
     try {
-      let {partialFee: estimatedFee} = await estimateFee(from, to, currency);
+      let {partialFee: estimatedFee} = await estimateFee(from, walletDetail, currency);
 
       if (estimatedFee) {
         dispatch(setFee(estimatedFee.toString()));
@@ -79,7 +80,7 @@ export const usePolkadotApi = () => {
   };
 
   const simplerSendTip = async (
-    {from, to, amount, currency, type, referenceId}: SimpleSendTipProps,
+    {from, amount, currency, type, referenceId, walletDetail}: SimpleSendTipProps,
     callback?: (hash: string) => void,
   ) => {
     setLoading(true);
@@ -93,12 +94,12 @@ export const usePolkadotApi = () => {
       const txHash = await signAndSendExtrinsic(
         {
           from,
-          to,
           value: amount,
           currencyId: currency.id,
           wsAddress: currency.network.rpcURL,
           native: currency.native,
           decimal: currency.decimal,
+          walletDetail,
         },
         params => {
           if (params.signerOpened) {
@@ -115,6 +116,10 @@ export const usePolkadotApi = () => {
 
       if (txHash) {
         const finalAmount = formatBalance(amount, currency.decimal);
+        const to =
+          walletDetail.referenceType === WalletReferenceType.WALLET_ADDRESS
+            ? walletDetail.referenceId
+            : undefined;
 
         // Record the transaction
         if (type) {

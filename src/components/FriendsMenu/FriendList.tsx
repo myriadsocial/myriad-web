@@ -32,6 +32,7 @@ import {Friend} from 'src/interfaces/friend';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
+import * as UserAPI from 'src/lib/api/user';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {blockFromFriend, removeFromFriend} from 'src/reducers/friend/actions';
@@ -92,14 +93,28 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     setAnchorEl(null);
   };
 
-  const handleSendTip = () => {
+  const handleSendTip = async () => {
     handleCloseFriendSetting();
 
-    tipping.send({
-      receiver: currentFriend as User,
-      reference: currentFriend as User,
-      referenceType: ReferenceType.USER,
-    });
+    try {
+      const user = currentFriend as User;
+      const walletDetail = await UserAPI.getWalletAddress(user.id);
+      const receiver = {...user, walletDetail};
+
+      tipping.send({
+        receiver,
+        reference: user as User,
+        referenceType: ReferenceType.USER,
+      });
+    } catch {
+      confirm({
+        title: 'Wallet account not found',
+        description: 'This comment wallet address is unavailable',
+        icon: 'warning',
+        confirmationText: 'close',
+        hideCancel: true,
+      });
+    }
   };
 
   const handleVisitProfile = () => {

@@ -13,13 +13,21 @@ import {ReferenceType} from 'src/interfaces/interaction';
 import {People} from 'src/interfaces/people';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
-import {WalletReferenceType} from 'src/interfaces/wallet';
+import {WalletDetail} from 'src/interfaces/wallet';
 import * as PostAPI from 'src/lib/api/post';
 
 type SendTipButtonProps = {
   reference: Post | Comment | User;
   referenceType: ReferenceType;
 };
+
+interface UserWithWalletDetail extends User {
+  walletDetail?: WalletDetail;
+}
+
+interface PeopleWithWalletDetail extends People {
+  walletDetail?: WalletDetail;
+}
 
 export const SendTipButton: React.FC<SendTipButtonProps> = props => {
   const {reference, referenceType} = props;
@@ -28,52 +36,46 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
   const confirm = useConfirm();
 
   const handleSendTip = async () => {
-    let receiver: User | People | null = null;
+    try {
+      let receiver: UserWithWalletDetail | PeopleWithWalletDetail | null = null;
 
-    // if tipping to User
-    if ('username' in reference) {
-      receiver = reference;
-    }
+      const walletDetail = await PostAPI.getWalletAddress(reference.id);
 
-    // if tipping to Comment
-    if ('section' in reference) {
-      receiver = reference.user;
-    }
-
-    // if tipping to Post
-    if ('platform' in reference) {
-      // if imported
-      if (reference.people) {
-        try {
-          const {referenceId, referenceType} = await PostAPI.getWalletAddress(reference.id);
-
-          if (referenceType === WalletReferenceType.WALLET_ADDRESS) {
-            receiver = {...reference.people, walletAddress: referenceId};
-          } else {
-            throw new Error('Tipping disabled');
-          }
-        } catch (error) {
-          confirm({
-            title: 'Send tip on imported post is unavailable',
-            description:
-              'Currently, send tip on imported post in under repair. Please try again later',
-            icon: 'warning',
-            confirmationText: 'close',
-            hideCancel: true,
-          });
-        }
-      } else {
-        receiver = reference.user;
+      // if tipping to User
+      if ('username' in reference) {
+        receiver = {...reference, walletDetail};
       }
+
+      // if tipping to Comment
+      if ('section' in reference) {
+        receiver = {...reference.user, walletDetail};
+      }
+
+      // if tipping to Post
+      if ('platform' in reference) {
+        if (reference.people) {
+          receiver = {...reference.people, walletDetail};
+        } else {
+          receiver = {...reference.user, walletDetail};
+        }
+      }
+
+      if (!receiver) throw new Error('Not Found');
+
+      tipping.send({
+        receiver,
+        reference,
+        referenceType,
+      });
+    } catch {
+      confirm({
+        title: 'Wallet account not found',
+        description: 'This post wallet address is unavailable',
+        icon: 'warning',
+        confirmationText: 'close',
+        hideCancel: true,
+      });
     }
-
-    if (!receiver) return;
-
-    tipping.send({
-      receiver,
-      reference,
-      referenceType,
-    });
   };
 
   return (

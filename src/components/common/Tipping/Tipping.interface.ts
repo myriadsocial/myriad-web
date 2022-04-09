@@ -6,14 +6,22 @@ import {ReferenceType} from 'src/interfaces/interaction';
 import {People} from 'src/interfaces/people';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
+import {WalletDetail} from 'src/interfaces/wallet';
 import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
 
+interface UserWithWalletDetail extends User {
+  walletDetail?: WalletDetail;
+}
+
+interface PeopleWithWalletDetail extends People {
+  walletDetail?: WalletDetail;
+}
+
 export type TippingOptions = {
-  receiver: User | People;
+  receiver: UserWithWalletDetail | PeopleWithWalletDetail;
   reference: Post | Comment | User;
   referenceType: ReferenceType;
 };
-
 export interface TippingProviderProps {
   anonymous: boolean;
   sender?: User;
@@ -24,7 +32,7 @@ export interface TippingProviderProps {
 
 export type SendTipProps = {
   sender: User;
-  receiver: User | People;
+  receiver: UserWithWalletDetail | PeopleWithWalletDetail;
   reference: Post | Comment | User;
   referenceType: ReferenceType;
   defaultCurrency: BalanceDetail;

@@ -6,6 +6,7 @@ import {BaseModel} from './base.interface';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {Post} from 'src/interfaces/post';
 import {UserOnTransaction, UserWallet} from 'src/interfaces/user';
+import {WalletDetail} from 'src/interfaces/wallet';
 
 export type TransactionProps = {
   hash: string;
@@ -13,17 +14,18 @@ export type TransactionProps = {
   type?: string;
   referenceId?: string;
   from: string;
-  to: string;
+  to?: string;
   currencyId: string;
 };
 
 export type SimpleSendTipProps = {
   from: string;
-  to: string;
+  to?: string;
   type?: string;
   referenceId?: string;
   amount: BN;
   currency: BalanceDetail;
+  walletDetail: WalletDetail;
 };
 
 // TODO: to be refactored, changed into TransactionHistoryDetail

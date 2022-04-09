@@ -27,7 +27,6 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   sender,
   balances,
   currentWallet,
-  currentNetwork,
 }) => {
   const [tipFormOpened, setOpenTipForm] = useState(false);
   const [tipInfoOpened, setTipInfoOpened] = useState(false);
@@ -51,26 +50,8 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
     options => {
       setOptions(options);
 
-      if (anonymous) {
-        setTipInfoOpened(true);
-      } else {
-        let walletFound = false;
-        if (!('originUserId' in options.receiver)) {
-          walletFound = options.receiver.wallets.filter(ar => ar.type === currentWallet).length > 0;
-          const indexNetwork =
-            currentNetwork &&
-            options.receiver.wallets.map(ar => ar.network).indexOf(currentNetwork);
-          if (indexNetwork && indexNetwork > 0) {
-            options.receiver.wallets.unshift(options.receiver.wallets.splice(indexNetwork, 1)[0]);
-            setOptions(options);
-          }
-        }
-        if (walletFound) {
-          setOpenTipForm(true);
-        } else {
-          setPromptFailedTip(true);
-        }
-      }
+      if (anonymous) setTipInfoOpened(true);
+      else setOpenTipForm(true);
     },
     [anonymous, currentWallet],
   );
