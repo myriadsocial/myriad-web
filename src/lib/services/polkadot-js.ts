@@ -15,15 +15,17 @@ import {NoAccountException} from './errors/NoAccountException';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {UserWallet} from 'src/interfaces/user';
+import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 
 interface signAndSendExtrinsicProps {
   from: string;
-  to: string;
+  to?: string;
   value: BN;
   currencyId: string;
   wsAddress: string;
   native: boolean;
   decimal: number;
+  walletDetail: WalletDetail;
 }
 
 interface SignTransactionCallbackProps {
@@ -74,7 +76,7 @@ export const convertAcaBasedTxFee = async (
 
 export const estimateFee = async (
   from: string,
-  to: string,
+  walletDetail: WalletDetail,
   selectedCurrency: BalanceDetail,
 ): Promise<EstimateFeeResponseProps> => {
   try {
@@ -111,20 +113,31 @@ export const estimateFee = async (
 
         if (api) {
           const RAND_AMOUNT = 123;
+          const {referenceType, referenceId: to} = walletDetail;
 
-          const {partialFee} = selectedCurrency.native
-            ? await api.tx.balances.transfer(to, RAND_AMOUNT).paymentInfo(from)
-            : await api.tx.currencies
-                .transfer(to, {TOKEN: selectedCurrency.id}, RAND_AMOUNT)
-                .paymentInfo(from);
+          if (referenceType === WalletReferenceType.WALLET_ADDRESS) {
+            const {partialFee} = selectedCurrency.native
+              ? await api.tx.balances.transfer(to, RAND_AMOUNT).paymentInfo(from)
+              : await api.tx.currencies
+                  .transfer(to, {TOKEN: selectedCurrency.symbol}, RAND_AMOUNT)
+                  .paymentInfo(from);
 
-          if (selectedCurrency.id === CurrencyId.AUSD) {
-            const tokenPerAca = await convertAcaBasedTxFee(api, selectedCurrency);
+            if (selectedCurrency.id === CurrencyId.AUSD) {
+              const tokenPerAca = await convertAcaBasedTxFee(api, selectedCurrency);
 
-            if (tokenPerAca) {
-              finalPartialFee = partialFee.div(BN_TEN.pow(new BN(13))).mul(new BN(tokenPerAca));
+              if (tokenPerAca) {
+                finalPartialFee = partialFee.div(BN_TEN.pow(new BN(13))).mul(new BN(tokenPerAca));
+              }
+            } else {
+              finalPartialFee = partialFee.toBn();
             }
           } else {
+            if (selectedCurrency.native) walletDetail.ftIdentifier = 'native';
+            else walletDetail.ftIdentifier = selectedCurrency.referenceId;
+            const {partialFee} = await api.tx.tipping
+              .sendTip(walletDetail, RAND_AMOUNT)
+              .paymentInfo(from);
+
             finalPartialFee = partialFee.toBn();
           }
 
@@ -171,7 +184,7 @@ export const signWithExtension = async (
 };
 
 export const signAndSendExtrinsic = async (
-  {from, to, value, currencyId, wsAddress, native, decimal}: signAndSendExtrinsicProps,
+  {from, value, currencyId, wsAddress, native, walletDetail}: signAndSendExtrinsicProps,
   callback?: (param: SignTransactionCallbackProps) => void,
 ): Promise<string | null> => {
   try {
@@ -216,9 +229,12 @@ export const signAndSendExtrinsic = async (
       });
 
     // here we use the api to create a balance transfer to some account of a value of 12345678
-    const transferExtrinsic = native
-      ? api.tx.balances.transfer(to, value)
-      : api.tx.currencies.transfer(to, {TOKEN: currencyId}, value);
+    const transferExtrinsic =
+      walletDetail.referenceType === WalletReferenceType.WALLET_ADDRESS
+        ? native
+          ? api.tx.balances.transfer(walletDetail.referenceId, value)
+          : api.tx.currencies.transfer(walletDetail.referenceId, {TOKEN: currencyId}, value)
+        : api.tx.tipping.sendTip(walletDetail, value);
 
     let txHash: string | null = null;
 
