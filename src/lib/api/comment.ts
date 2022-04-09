@@ -5,6 +5,7 @@ import {FilterParams, PaginationParams} from './interfaces/pagination-params.int
 
 import {Comment, CommentProps} from 'src/interfaces/comment';
 import {SectionType} from 'src/interfaces/interaction';
+import {WalletDetail} from 'src/interfaces/wallet';
 
 type CommentList = BaseList<Comment>;
 
@@ -124,6 +125,15 @@ export const loadUserComments = async (
       pageNumber: page,
       pageLimit: limit,
     },
+  });
+
+  return data;
+};
+
+export const getWalletAddress = async (commentId: string): Promise<WalletDetail> => {
+  const {data} = await MyriadAPI.request<WalletDetail>({
+    url: `/comments/${commentId}/walletaddress`,
+    method: 'GET',
   });
 
   return data;

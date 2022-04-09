@@ -9,6 +9,7 @@ import {
   BlockedProps,
   ActivityLogType,
 } from 'src/interfaces/user';
+import {WalletDetail} from 'src/interfaces/wallet';
 
 type UserList = BaseList<User>;
 type ActivityList = BaseList<ActivityLog>;
@@ -180,6 +181,15 @@ export const checkUsername = async (userId: string): Promise<ActivityList> => {
 export const getUsername = async (username: string): Promise<boolean> => {
   const {data} = await MyriadAPI.request({
     url: `/username/${username}`,
+    method: 'GET',
+  });
+
+  return data;
+};
+
+export const getWalletAddress = async (userId: string): Promise<WalletDetail> => {
+  const {data} = await MyriadAPI.request<WalletDetail>({
+    url: `/users/${userId}/walletaddress`,
     method: 'GET',
   });
 
