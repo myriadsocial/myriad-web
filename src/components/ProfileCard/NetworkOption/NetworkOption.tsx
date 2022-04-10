@@ -167,41 +167,15 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
   };
 
   const handleSwitch = async (
-    walletType: string,
+    walletType: WalletTypeEnum,
     network: NetworkTypeEnum,
     account: InjectedAccountWithMeta | NearPayload,
   ) => {
-    switch (walletType) {
-      case WalletTypeEnum.POLKADOT: {
-        switchNetwork(account, network, walletType, () => {
-          setCurrent(walletType as string);
-          setNetwork(null);
-          closeAccountList();
-        });
-        break;
-      }
-
-      case WalletTypeEnum.NEAR: {
-        const data = await connectToNear();
-
-        if (data) {
-          const payload: NearPayload = {
-            publicAddress: data.publicAddress,
-            nearAddress: data.publicAddress.split('/')[1],
-            pubKey: data.publicAddress.split('/')[0],
-            signature: data.signature,
-          };
-
-          switchNetwork(payload, NetworkTypeEnum.NEAR, walletType, () => {
-            setCurrent(walletType as string);
-          });
-        } else {
-          console.log('redirection to near auth page');
-        }
-
-        break;
-      }
-    }
+    switchNetwork(account, network, walletType, () => {
+      setCurrent(network);
+      setNetwork(null);
+      closeAccountList();
+    });
   };
 
   const getSelectedText = (): string => {

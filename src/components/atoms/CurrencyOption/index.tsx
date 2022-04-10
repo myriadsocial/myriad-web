@@ -103,7 +103,7 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
             <MenuItem
               classes={{root: style.hover}}
               key={item.id}
-              disabled={isOtherTippingCurrencyDisabled && item.id !== CurrencyId.MYRIA}
+              disabled={isOtherTippingCurrencyDisabled && item.symbol !== CurrencyId.MYRIA}
               onClick={() => handleSelect(item)}>
               <div className={style.flex}>
                 <div className={style.tokenColumn}>
