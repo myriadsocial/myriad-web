@@ -10,6 +10,7 @@ import {NotificationIcon} from '../atoms/Icons';
 import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './profileContent.style';
 
+import {capitalize} from 'lodash';
 import {
   NearNetworkIcon24,
   MyriadCircleIcon,
@@ -42,27 +43,23 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
     [],
   );
 
-  const formatWallet = (network?: string) => {
-    switch (network) {
-      case 'polkadot':
-        return 'Polkadot';
-      case 'near':
-        return 'NEAR';
+  const formatWallet = (walletType?: string) => {
+    switch (walletType) {
+      case WalletTypeEnum.POLKADOT:
+        return capitalize(WalletTypeEnum.POLKADOT);
+      case WalletTypeEnum.NEAR:
+        return WalletTypeEnum.NEAR.toUpperCase();
       default:
         return '';
     }
   };
 
-  const formatNetwork = (network?: string) => {
-    switch (network) {
-      case 'polkadot':
-        return 'Polkadot';
-      case 'myriad':
-        return 'Myriad';
-      case 'kusama':
-        return 'Kusama';
-      case 'near':
-        return 'NEAR';
+  const formatNetwork = (walletType?: string, network?: string) => {
+    switch (walletType) {
+      case WalletTypeEnum.POLKADOT:
+        return capitalize(network);
+      case WalletTypeEnum.NEAR:
+        return network?.toUpperCase();
       default:
         return '';
     }
@@ -144,7 +141,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
             <div className={classes.column}>
               <Typography component="span">Network</Typography>
               <Typography component="span" className={classes.flex}>
-                {getSelectedIcon()} {formatNetwork(currentWallet?.network)}
+                {getSelectedIcon()} {formatNetwork(currentWallet?.type, currentWallet?.network)}
               </Typography>
             </div>
             <div className={classes.column}>
