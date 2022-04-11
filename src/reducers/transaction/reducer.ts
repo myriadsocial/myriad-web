@@ -1,21 +1,21 @@
 import {PaginationState as BasePaginationState} from '../base/state';
-import {Actions} from './actions';
+import {Actions, TransactionFilterProps} from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
 import {Transaction} from 'src/interfaces/transaction';
+import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interface';
 
 export interface TransactionState extends BasePaginationState {
   transactions: Transaction[];
-  inboundTxs: Transaction[];
-  outboundTxs: Transaction[];
+  filter: TransactionFilterProps;
+  pagination?: PaginationParams;
 }
 
 const initalState: TransactionState = {
   loading: false,
   transactions: [],
-  inboundTxs: [],
-  outboundTxs: [],
+  filter: {},
   meta: {
     currentPage: 1,
     itemsPerPage: 10,
@@ -36,9 +36,30 @@ export const TransactionReducer: Redux.Reducer<TransactionState, Actions> = (
           action.meta.currentPage === 1
             ? action.transactions
             : [...state.transactions, ...action.transactions],
-        inboundTxs: action.inboundTxs,
-        outboundTxs: action.outboundTxs,
         meta: action.meta,
+      };
+    }
+
+    case constants.SET_TRANSACTION_FILTER: {
+      return {
+        ...state,
+        filter: {
+          ...state.filter,
+          from: action.filter.from,
+          to: action.filter.to,
+          currencyId: action.filter.currencyId,
+        },
+      };
+    }
+
+    case constants.SET_TRANSACTION_SORT: {
+      return {
+        ...state,
+        pagination: {
+          ...state.pagination,
+          orderField: action.orderField,
+          sort: action.sort,
+        },
       };
     }
 

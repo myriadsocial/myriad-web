@@ -2,9 +2,17 @@ import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../
 import {RootState} from '../index';
 import * as constants from './constants';
 
-import {Transaction} from 'src/interfaces/transaction';
+import {Action} from 'redux';
+import {Transaction, TransactionOrderType} from 'src/interfaces/transaction';
+import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import * as TransactionAPI from 'src/lib/api/transaction';
 import {ThunkActionCreator} from 'src/types/thunk';
+
+export type TransactionFilterProps = {
+  from?: string;
+  to?: string;
+  currencyId?: string;
+};
 
 /**
  * Action Types
@@ -13,82 +21,65 @@ import {ThunkActionCreator} from 'src/types/thunk';
 export interface FetchTransactions extends PaginationAction {
   type: constants.FETCH_TRANSACTIONS;
   transactions: Transaction[];
-  outboundTxs: Transaction[];
-  inboundTxs: Transaction[];
+}
+
+export interface SetTransactionFilter extends Action {
+  type: constants.SET_TRANSACTION_FILTER;
+  filter: TransactionFilterProps;
+}
+
+export interface SetTransactionSort extends Action {
+  type: constants.SET_TRANSACTION_SORT;
+  orderField: string;
+  sort?: SortType;
 }
 
 /**
  * Union Action Types
  */
 
-export type Actions = FetchTransactions | BaseAction;
+export type Actions = FetchTransactions | SetTransactionFilter | SetTransactionSort | BaseAction;
 
 /**
  *
  * Actions
  */
+export const setTransactionFilter = (filter: TransactionFilterProps): SetTransactionFilter => ({
+  type: constants.SET_TRANSACTION_FILTER,
+  filter,
+});
 
 /**
  * Action Creator
  */
-export const fetchTransactions: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
-    dispatch(setLoading(true));
+export const setTransactionSort: ThunkActionCreator<Actions, RootState> =
+  (order: TransactionOrderType) => async dispatch => {
+    let orderField = 'createdAt';
+    let sort: SortType = 'DESC';
 
-    try {
-      const {
-        userState: {user, currentWallet},
-      } = getState();
-
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      if (!currentWallet) {
-        throw new Error('Current wallet not found');
-      }
-
-      const options = {
-        to: currentWallet.id,
-        from: currentWallet.id,
-      };
-
-      const {data: transactions, meta} = await TransactionAPI.getTransactions(options);
-
-      if (transactions.length > 0) {
-        //Get only transaction related to logged-in user
-        const tempData = transactions.filter(function (datum: any) {
-          return datum.from === user.id || datum.to === user.id;
-        });
-
-        const sortedTempData = tempData.slice().sort((a: any, b: any) => b.createdAt - a.createdAt);
-        const inboundTxs = sortedTempData.filter(transaction => {
-          return transaction.to === user.id;
-        });
-        const outboundTxs = sortedTempData.filter(transaction => {
-          return transaction.from === user.id;
-        });
-
-        dispatch({
-          type: constants.FETCH_TRANSACTIONS,
-          transactions,
-          inboundTxs,
-          outboundTxs,
-          meta,
-        });
-      }
-    } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
-    } finally {
-      dispatch(setLoading(false));
+    switch (order) {
+      case TransactionOrderType.HIGHEST:
+        orderField = 'amount';
+        sort = 'DESC';
+        break;
+      case TransactionOrderType.LOWEST:
+        orderField = 'amount';
+        sort = 'ASC';
+        break;
+      default:
+        orderField = 'createdAt';
+        sort = 'DESC';
+        break;
     }
+
+    dispatch({
+      type: constants.SET_TRANSACTION_SORT,
+      sort,
+      orderField,
+    });
   };
 
-export const fetchTransactionsIncludingCurrency: ThunkActionCreator<Actions, RootState> =
+export const fetchTransactions: ThunkActionCreator<Actions, RootState> =
   (page = 1) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
@@ -96,6 +87,7 @@ export const fetchTransactionsIncludingCurrency: ThunkActionCreator<Actions, Roo
     try {
       const {
         userState: {user, currentWallet},
+        transactionState: {filter, pagination},
       } = getState();
 
       if (!user) {
@@ -106,38 +98,16 @@ export const fetchTransactionsIncludingCurrency: ThunkActionCreator<Actions, Roo
         throw new Error('current wallet not found');
       }
 
-      const options = {
-        to: currentWallet.id,
-        from: currentWallet.id,
-      };
-
-      const {data: transactions, meta} = await TransactionAPI.getTransactionsIncludingCurrency(
-        options,
+      const {data: transactions, meta} = await TransactionAPI.getTransactions(filter, {
+        ...pagination,
         page,
-      );
+      });
 
-      if (transactions.length > 0) {
-        //Get only transaction related to logged-in user
-        const tempData = transactions.filter(function (datum: any) {
-          return datum.from === user.id || datum.to === user.id;
-        });
-
-        const sortedTempData = tempData.slice().sort((a: any, b: any) => b.createdAt - a.createdAt);
-        const inboundTxs = sortedTempData.filter(transaction => {
-          return transaction.to === user.id;
-        });
-        const outboundTxs = sortedTempData.filter(transaction => {
-          return transaction.from === user.id;
-        });
-
-        dispatch({
-          type: constants.FETCH_TRANSACTIONS,
-          transactions,
-          inboundTxs,
-          outboundTxs,
-          meta,
-        });
-      }
+      dispatch({
+        type: constants.FETCH_TRANSACTIONS,
+        transactions,
+        meta,
+      });
     } catch (error) {
       dispatch(
         setError({

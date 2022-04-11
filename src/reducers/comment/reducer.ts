@@ -32,7 +32,6 @@ export const CommentReducer: Redux.Reducer<CommentState, Actions> = (
 ) => {
   switch (action.type) {
     case constants.FETCH_COMMENT: {
-      console.log('action.meta', action.meta);
       if (!action.meta.currentPage || action.meta.currentPage === 1) {
         return {
           ...state,

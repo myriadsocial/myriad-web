@@ -125,7 +125,7 @@ export const fetchTransactionHistory: ThunkActionCreator<Actions, RootState> =
       };
       const orderField = sort === 'highest' ? 'amount' : 'createdAt';
 
-      const {data, meta} = await TransactionAPI.getTransactionsIncludingCurrency(filter, {
+      const {data, meta} = await TransactionAPI.getTransactions(filter, {
         page,
         orderField,
       });
@@ -193,7 +193,7 @@ export const fetchTransactionHistoryForComment: ThunkActionCreator<Actions, Root
         throw new Error('Comment not found');
       }
 
-      const {data, meta} = await TransactionAPI.getTransactionsIncludingCurrency(
+      const {data, meta} = await TransactionAPI.getTransactions(
         {
           type: 'comment',
           referenceId: comment.id,
