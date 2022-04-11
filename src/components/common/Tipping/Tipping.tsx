@@ -179,12 +179,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
     }
 
     if (currency.network.walletType === WalletType.NEAR) {
-      sendAmount(receiver.walletDetail.referenceId, amount, hash => {
-        onSuccess(currency, hash, attributes.amount);
-
-        setAmount(INITIAL_AMOUNT);
-        setTransactionFee(INITIAL_AMOUNT);
-      });
+      sendAmount(receiver.walletDetail.referenceId, amount, currency.referenceId);
     }
   };
 

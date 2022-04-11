@@ -32,9 +32,29 @@ export type NearBalanceProps = {
   balance: string;
 };
 
+export type ContractBalanceProps = {
+  account_id: string;
+};
+
+export type ContractReceiverProps = {
+  receiver_id: string;
+  amount: string;
+};
+
+export type ContractStorageBalanceProps = {
+  available: string;
+  total: string;
+};
+
 export type ContractProps = {
-  ft_balance_of: (accountId: string) => string;
-  ft_transfer: () => void;
+  ft_balance_of: (props: ContractBalanceProps) => string;
+  ft_transfer: (
+    contractReceiver: ContractReceiverProps,
+    attachedGas: string,
+    attachedAmount: string,
+  ) => void;
+  storage_balance_of: (props: ContractBalanceProps) => null | ContractStorageBalanceProps;
+  storage_deposit: (props: ContractBalanceProps) => void;
 };
 
 export const nearInitialize = async (): Promise<NearInitializeProps> => {
@@ -160,7 +180,7 @@ export const getNearBalance = async (
     const account = await near.account(nearAddress);
     if (contractId && decimal) {
       const contract = await contractInitialize(contractId);
-      const contractBalance = await contract.ft_balance_of(nearAddress);
+      const contractBalance = await contract.ft_balance_of({account_id: nearAddress});
       return {balance: formatBalance(new BN(contractBalance), decimal).toString()};
     }
     const balance = await account.getAccountBalance();
@@ -175,8 +195,8 @@ export const contractInitialize = async (contractId: string): Promise<ContractPr
   try {
     const {wallet} = await nearInitialize();
     const contract = new nearAPI.Contract(wallet.account(), contractId, {
-      viewMethods: ['ft_balance_of'],
-      changeMethods: ['ft_transfer'],
+      viewMethods: ['ft_balance_of', 'storage_balance_of'],
+      changeMethods: ['ft_transfer', 'storage_deposit'],
     });
     //TODO: fix type for return all of the contract
     return contract as unknown as ContractProps;
