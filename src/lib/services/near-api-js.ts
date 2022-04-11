@@ -2,10 +2,12 @@ import getConfig from 'next/config';
 
 import {u8aToHex, numberToHex} from '@polkadot/util';
 
+import BN from 'bn.js';
 import {assign} from 'lodash';
 import * as nearAPI from 'near-api-js';
 import {ConnectConfig} from 'near-api-js';
 import {Signature} from 'near-api-js/lib/utils/key_pair';
+import {formatBalance} from 'src/helpers/balance';
 import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import * as NetworkAPI from 'src/lib/api/network';
 import * as WalletAPI from 'src/lib/api/wallet';
@@ -28,6 +30,11 @@ export type NearSignatureProps = {
 
 export type NearBalanceProps = {
   balance: string;
+};
+
+export type ContractProps = {
+  ft_balance_of: (accountId: string) => string;
+  ft_transfer: () => void;
 };
 
 export const nearInitialize = async (): Promise<NearInitializeProps> => {
@@ -146,11 +153,33 @@ export const createNearSignature = async (
 export const getNearBalance = async (
   near: nearAPI.Near,
   nearAddress: string,
+  contractId?: string,
+  decimal?: number,
 ): Promise<NearBalanceProps> => {
   try {
     const account = await near.account(nearAddress);
+    if (contractId && decimal) {
+      const contract = await contractInitialize(contractId);
+      const contractBalance = await contract.ft_balance_of(nearAddress);
+      return {balance: formatBalance(new BN(contractBalance), decimal).toString()};
+    }
     const balance = await account.getAccountBalance();
     return {balance: nearAPI.utils.format.formatNearAmount(balance.available)};
+  } catch (error) {
+    console.log({error});
+    throw error;
+  }
+};
+
+export const contractInitialize = async (contractId: string): Promise<ContractProps> => {
+  try {
+    const {wallet} = await nearInitialize();
+    const contract = new nearAPI.Contract(wallet.account(), contractId, {
+      viewMethods: ['ft_balance_of'],
+      changeMethods: ['ft_transfer'],
+    });
+    //TODO: fix type for return all of the contract
+    return contract as unknown as ContractProps;
   } catch (error) {
     console.log({error});
     throw error;

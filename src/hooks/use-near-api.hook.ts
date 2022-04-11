@@ -7,9 +7,7 @@ import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {
   nearInitialize,
   connectToNearWallet,
-  getNearBalance,
   NearConnectResponseProps,
-  NearBalanceProps,
 } from 'src/lib/services/near-api-js';
 import {RootState} from 'src/reducers';
 import {fetchBalances} from 'src/reducers/balance/actions';
@@ -41,12 +39,6 @@ export const useNearApi = () => {
     return connectToNearWallet(near, wallet, callbackUrl);
   };
 
-  const getNearBalanceDetail = async (): Promise<NearBalanceProps> => {
-    const {near, wallet} = await nearInitialize();
-    const balance = getNearBalance(near, wallet.getAccountId());
-    return balance;
-  };
-
   const getEstimatedFee = async (): Promise<{gasPrice: string}> => {
     const {near} = await nearInitialize();
     const blockStatus = await near.connection.provider.status();
@@ -69,7 +61,6 @@ export const useNearApi = () => {
 
   return {
     connectToNear,
-    getNearBalanceDetail,
     getEstimatedFee,
     sendAmount,
     balanceDetails,
