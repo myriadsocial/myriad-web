@@ -85,7 +85,12 @@ export const getTransactionsIncludingCurrency = async (
 
   const where: LoopbackWhere<TransactionProps> = {};
   const include: Array<any> = [
-    'currency',
+    {
+      relation: 'currency',
+      scope: {
+        include: [{relation: 'network'}],
+      },
+    },
     {
       relation: 'fromWallet',
       scope: {

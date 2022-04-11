@@ -24,6 +24,7 @@ import {parseScientificNotatedNumber} from 'src/helpers/number';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
 import {CurrencyId} from 'src/interfaces/currency';
 import {Transaction} from 'src/interfaces/transaction';
+import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
 
 type metaTrxProps = {
   currentPage: number;
@@ -197,78 +198,90 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                 className={classes.infiniteScroll}>
                 {defaultTxs.length > 0 &&
                   defaultTxs.map(tx => (
-                    <TableRow key={tx.id} className={classes.tableRow}>
-                      <TableCell component="th" scope="row" className={classes.tableCell}>
-                        <Avatar
-                          size={AvatarSize.MEDIUM}
-                          alt={
-                            tx.toWallet?.userId === userId
-                              ? tx.fromWallet?.userId
-                              : tx.toWallet?.userId
-                          }
-                          src={
-                            tx.toWallet?.userId === userId
-                              ? tx.fromWallet?.user.profilePictureURL ?? namePlaceholder
-                              : tx.toWallet?.user.profilePictureURL ?? namePlaceholder
-                          }
-                          name={
-                            tx.toWallet?.userId === userId
-                              ? tx.fromWallet?.user.name ?? namePlaceholder
-                              : tx.toWallet?.user.name ?? namePlaceholder
-                          }
-                        />
+                    <a
+                      key={tx.id}
+                      style={{textDecoration: 'none'}}
+                      //TODO: moved parsing for href to BE
+                      href={
+                        tx.currency.network.id === NetworkTypeEnum.NEAR
+                          ? `${tx.currency.network.explorerURL}/transactions/${tx.hash}`
+                          : `${tx.currency.network.explorerURL}/${tx.hash}`
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      <TableRow key={tx.id} className={classes.tableRow}>
+                        <TableCell component="th" scope="row" className={classes.tableCell}>
+                          <Avatar
+                            size={AvatarSize.MEDIUM}
+                            alt={
+                              tx.toWallet?.userId === userId
+                                ? tx.fromWallet?.userId
+                                : tx.toWallet?.userId
+                            }
+                            src={
+                              tx.toWallet?.userId === userId
+                                ? tx.fromWallet?.user.profilePictureURL ?? namePlaceholder
+                                : tx.toWallet?.user.profilePictureURL ?? namePlaceholder
+                            }
+                            name={
+                              tx.toWallet?.userId === userId
+                                ? tx.fromWallet?.user.name ?? namePlaceholder
+                                : tx.toWallet?.user.name ?? namePlaceholder
+                            }
+                          />
 
-                        <div>
-                          <Typography variant="body1">
-                            {tx.toWallet?.userId === userId
-                              ? tx.fromWallet?.user.name ?? namePlaceholder
-                              : tx.toWallet?.user.name ?? namePlaceholder}
-                          </Typography>
-                          <Typography variant="caption" color="textSecondary">
-                            {timeAgo(tx.createdAt)}
-                          </Typography>
-                        </div>
-                      </TableCell>
-                      <TableCell align="center">
-                        {tx.toWallet?.userId === userId && (
-                          <div className={classes.received}>
-                            <Typography variant="caption">Received</Typography>
-                          </div>
-                        )}
-                        {tx.fromWallet?.userId === userId && (
-                          <div className={classes.sent}>
-                            <Typography variant="caption">Sent</Typography>
-                          </div>
-                        )}
-                      </TableCell>
-                      <TableCell align="right">
-                        <div className={classes.currencyDetailWrapper}>
                           <div>
-                            {tx.toWallet?.userId === userId && (
-                              <Typography variant="h5" className={classes.textAmountReceived}>
-                                {parseScientificNotatedNumber(+tx.amount)} {tx.currency.name}
-                              </Typography>
-                            )}
-                            {tx.fromWallet?.userId === userId && (
-                              <Typography variant="h5" className={classes.textAmountSent}>
-                                {parseScientificNotatedNumber(+tx.amount)} {tx.currency.name}
-                              </Typography>
-                            )}
+                            <Typography variant="body1">
+                              {tx.toWallet?.userId === userId
+                                ? tx.fromWallet?.user.name ?? namePlaceholder
+                                : tx.toWallet?.user.name ?? namePlaceholder}
+                            </Typography>
                             <Typography variant="caption" color="textSecondary">
-                              {`~${formatUsd(tx.amount, getConversion(tx.currencyId))} USD`}
+                              {timeAgo(tx.createdAt)}
                             </Typography>
                           </div>
-                          <div>
-                            <Avatar
-                              name={tx.currency.name}
-                              size={AvatarSize.TINY}
-                              alt={tx.currency.name}
-                              src={tx.currency.image}
-                            />
+                        </TableCell>
+                        <TableCell align="center">
+                          {tx.toWallet?.userId === userId && (
+                            <div className={classes.received}>
+                              <Typography variant="caption">Received</Typography>
+                            </div>
+                          )}
+                          {tx.fromWallet?.userId === userId && (
+                            <div className={classes.sent}>
+                              <Typography variant="caption">Sent</Typography>
+                            </div>
+                          )}
+                        </TableCell>
+                        <TableCell align="right">
+                          <div className={classes.currencyDetailWrapper}>
+                            <div>
+                              {tx.toWallet?.userId === userId && (
+                                <Typography variant="h5" className={classes.textAmountReceived}>
+                                  {parseScientificNotatedNumber(+tx.amount)} {tx.currency.name}
+                                </Typography>
+                              )}
+                              {tx.fromWallet?.userId === userId && (
+                                <Typography variant="h5" className={classes.textAmountSent}>
+                                  {parseScientificNotatedNumber(+tx.amount)} {tx.currency.name}
+                                </Typography>
+                              )}
+                              <Typography variant="caption" color="textSecondary">
+                                {`~${formatUsd(tx.amount, getConversion(tx.currencyId))} USD`}
+                              </Typography>
+                            </div>
+                            <div>
+                              <Avatar
+                                name={tx.currency.name}
+                                size={AvatarSize.TINY}
+                                alt={tx.currency.name}
+                                src={tx.currency.image}
+                              />
+                            </div>
                           </div>
-                        </div>
-                      </TableCell>
-                    </TableRow>
+                        </TableCell>
+                      </TableRow>
+                    </a>
                   ))}
               </InfiniteScroll>
             )}

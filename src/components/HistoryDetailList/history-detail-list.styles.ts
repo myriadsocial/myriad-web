@@ -1,4 +1,4 @@
-import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
+import {createStyles, Theme, makeStyles, alpha} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,6 +15,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         borderBottom: 'none',
         paddingRight: 0,
         width: '100%',
+      },
+      '&:hover': {
+        backgroundColor: alpha('#FFC857', 0.15),
       },
       display: 'flex',
       alignItems: 'center',
