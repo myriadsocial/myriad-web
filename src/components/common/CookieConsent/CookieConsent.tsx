@@ -17,7 +17,6 @@ export const CookieConsent: React.FC<CookieConsentProps> = props => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    console.log('cookies', cookies);
     if (!cookies[COOKIE_CONSENT_NAME]) {
       setOpen(true);
     }

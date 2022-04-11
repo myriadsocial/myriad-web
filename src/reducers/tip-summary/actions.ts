@@ -4,7 +4,6 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {Comment} from 'src/interfaces/comment';
-import {CurrencyId} from 'src/interfaces/currency';
 import {Post} from 'src/interfaces/post';
 import {Transaction, TransactionDetail, TransactionSort} from 'src/interfaces/transaction';
 import MyriadAPI from 'src/lib/api/base';
@@ -51,7 +50,7 @@ export interface LoadTransactionSummaryForComment extends Action {
 
 export interface SetTransactionCurrency extends Action {
   type: constants.SET_TRANSACTION_CURRENCY;
-  currency: CurrencyId;
+  currency: string;
 }
 
 export interface SetTransactionSort extends Action {
@@ -93,7 +92,7 @@ export const clearTippedContent = (): ClearTippedContent => ({
   type: constants.CLEAR_TIPPED_CONTENT,
 });
 
-export const setTransactionCurrency = (currency: CurrencyId): SetTransactionCurrency => ({
+export const setTransactionCurrency = (currency: string): SetTransactionCurrency => ({
   type: constants.SET_TRANSACTION_CURRENCY,
   currency,
 });
@@ -125,7 +124,7 @@ export const fetchTransactionHistory: ThunkActionCreator<Actions, RootState> =
       };
       const orderField = sort === 'highest' ? 'amount' : 'createdAt';
 
-      const {data, meta} = await TransactionAPI.getTransactionsIncludingCurrency(filter, {
+      const {data, meta} = await TransactionAPI.getTransactions(filter, {
         page,
         orderField,
       });
@@ -193,7 +192,7 @@ export const fetchTransactionHistoryForComment: ThunkActionCreator<Actions, Root
         throw new Error('Comment not found');
       }
 
-      const {data, meta} = await TransactionAPI.getTransactionsIncludingCurrency(
+      const {data, meta} = await TransactionAPI.getTransactions(
         {
           type: 'comment',
           referenceId: comment.id,

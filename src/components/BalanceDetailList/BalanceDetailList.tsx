@@ -79,7 +79,8 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
 
   const handleSearch = (query: string) => {
     const regex = new RegExp(`^${query.toLowerCase()}`, 'i');
-    const result = balanceDetails.filter(balance => balance.id.toLowerCase().match(regex));
+
+    const result = balanceDetails.filter(balance => balance.name.toLowerCase().match(regex));
 
     if (!query) setDefaultBalanceDetails(balanceDetails);
     else setDefaultBalanceDetails(result);

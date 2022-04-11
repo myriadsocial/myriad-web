@@ -55,7 +55,6 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
 
   const getSelectedText = (): string => {
     const match = options.find(option => option.id === current);
-
     return match?.title ?? '';
   };
 

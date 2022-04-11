@@ -52,3 +52,9 @@ export type TransactionHistoryDetail = {
 };
 
 export type TransactionSort = 'highest' | 'latest';
+
+export enum TransactionOrderType {
+  HIGHEST = 'highest',
+  LOWEST = 'lowest',
+  LATEST = 'latest',
+}

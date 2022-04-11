@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -10,67 +10,67 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
-import {historyAmountSortOptions, historyTransactionSortOptions} from '../Timeline/default';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {MenuOptions} from '../atoms/DropdownMenu';
 import {DropdownMenu} from '../atoms/DropdownMenu';
-import {useStyles} from './history-detail-list.styles';
+import {useStyles} from './HistoryDetailList.styles';
+import {transactionSortOptions, transactionStatusOptions} from './default';
 
-import _ from 'lodash';
 import {Loading} from 'src/components/atoms/Loading';
 import {formatUsd} from 'src/helpers/balance';
 import {timeAgo} from 'src/helpers/date';
 import {parseScientificNotatedNumber} from 'src/helpers/number';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
-import {CurrencyId} from 'src/interfaces/currency';
-import {Transaction} from 'src/interfaces/transaction';
-import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
-
-type metaTrxProps = {
-  currentPage: number;
-  itemsPerPage: number;
-  nextPage?: number;
-  totalPageCount: number;
-};
+import {Currency} from 'src/interfaces/currency';
+import {NetworkTypeEnum} from 'src/interfaces/network';
+import {Transaction, TransactionOrderType} from 'src/interfaces/transaction';
+import {UserWallet} from 'src/interfaces/user';
+import {TransactionFilterProps} from 'src/reducers/transaction/actions';
 
 type HistoryDetailListProps = {
-  allTxs: Transaction[];
-  outboundTxs: Transaction[];
-  inboundTxs: Transaction[];
+  transactions: Transaction[];
+  filter: TransactionFilterProps;
+  hasMore: boolean;
+  currencies: Currency[];
+  wallet: UserWallet;
   isLoading: boolean;
   userId: string;
-  meta: metaTrxProps;
   nextPage: () => void;
+  filterTransaction: (filter: TransactionFilterProps) => void;
+  sortTransaction: (sort: TransactionOrderType) => void;
 };
 
+const DEFAULT_NAME = 'Unknown Myrian';
+
 export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
-  const {allTxs, meta, inboundTxs, outboundTxs, userId, nextPage} = props;
+  const {
+    transactions,
+    wallet,
+    currencies,
+    filter,
+    hasMore,
+    userId,
+    nextPage,
+    filterTransaction,
+    sortTransaction,
+  } = props;
 
   const classes = useStyles();
   const {loading, exchangeRates} = useExchangeRate();
 
-  const [sortOptions, setSortOptions] = useState<MenuOptions<string>[]>([]);
-  const [defaultTxs, setDefaultTxs] = useState<Transaction[]>([]);
-  const namePlaceholder = 'Unknown Myrian';
+  const [selectedSort, setSelectedSort] = useState(TransactionOrderType.LATEST);
+  const [selectedCurrency, setSelectedCurrency] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
 
-  useEffect(() => {
-    const validTxs = allTxs.filter(tx => Boolean(tx.currency));
+  const currencyOptions: MenuOptions<string>[] = [
+    {id: 'all', title: 'All'},
+    ...currencies.map(item => ({
+      id: item.id,
+      title: item.symbol,
+    })),
+  ];
 
-    const transactionCurrency = validTxs.map(tx => ({
-      id: tx.currency.id,
-      title: tx.currency.symbol,
-    }));
-    const filterOptions = getUniqueListBy(transactionCurrency, 'id');
-
-    setSortOptions(filterOptions);
-    setDefaultTxs(validTxs);
-  }, [allTxs]);
-
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const getUniqueListBy = (arr: Array<any>, key: string) => {
-    return [...new Map(arr.map(item => [item[key], item])).values()];
-  };
-
+  //TODO: create new component with conversion
   const getConversion = (currencyId: string) => {
     if (loading) {
       return 0;
@@ -82,86 +82,59 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     return 0;
   };
 
-  const handleSortChange = (sort: string) => {
-    switch (sort) {
-      case 'highest': {
-        const sortedHighest = _.orderBy(defaultTxs, 'amount', 'desc');
-        setDefaultTxs(sortedHighest);
-        break;
-      }
+  const handleSortTransaction = (sort: string) => {
+    const selectedSort = sort as TransactionOrderType;
 
-      case 'latest': {
-        const sortedLatest = _.orderBy(defaultTxs, 'createdAt', 'desc');
-        setDefaultTxs(sortedLatest);
-        break;
-      }
-
-      case 'lowest': {
-        const sortedLatest = _.orderBy(defaultTxs, 'amount', 'asc');
-        setDefaultTxs(sortedLatest);
-        break;
-      }
-
-      default: {
-        break;
-      }
-    }
+    setSelectedSort(selectedSort);
+    sortTransaction(selectedSort);
   };
 
-  const handleTransactionChange = (filterByTransactionDirection: string) => {
-    switch (filterByTransactionDirection) {
+  const handleFilterTransactionStatus = (status: string) => {
+    setSelectedStatus(status);
+
+    switch (status) {
       case 'received': {
-        setDefaultTxs(inboundTxs);
+        filterTransaction({
+          ...filter,
+          to: wallet.id,
+          from: undefined,
+        });
         break;
       }
 
       case 'sent': {
-        setDefaultTxs(outboundTxs);
-        break;
-      }
-
-      case 'failed': {
-        setDefaultTxs(outboundTxs);
+        filterTransaction({
+          ...filter,
+          from: wallet.id,
+          to: undefined,
+        });
         break;
       }
 
       default: {
-        setDefaultTxs(allTxs);
+        filterTransaction({
+          ...filter,
+          from: undefined,
+          to: undefined,
+        });
         break;
       }
     }
   };
 
-  const handleCurrencyChange = (filterByCurrency: string) => {
-    switch (filterByCurrency) {
-      case CurrencyId.ACA: {
-        const filteredByACA = _.filter(allTxs, tx => tx.currency.symbol === 'ACA');
-        setDefaultTxs(filteredByACA);
-        break;
-      }
+  const handleCurrencyChange = (currencyId: string) => {
+    setSelectedCurrency(currencyId);
 
-      case CurrencyId.DOT: {
-        const filteredByDOT = _.filter(allTxs, tx => tx.currency.symbol === 'DOT');
-        setDefaultTxs(filteredByDOT);
-        break;
-      }
-
-      case CurrencyId.AUSD: {
-        const filteredByAUSD = _.filter(allTxs, tx => tx.currency.symbol === 'AUSD');
-        setDefaultTxs(filteredByAUSD);
-        break;
-      }
-
-      case CurrencyId.MYRIA: {
-        const filteredByMYRIA = _.filter(allTxs, tx => tx.currency.symbol === 'MYRIA');
-        setDefaultTxs(filteredByMYRIA);
-        break;
-      }
-
-      default: {
-        setDefaultTxs(allTxs);
-        break;
-      }
+    if (currencyId === 'all') {
+      filterTransaction({
+        ...filter,
+        currencyId: undefined,
+      });
+    } else {
+      filterTransaction({
+        ...filter,
+        currencyId,
+      });
     }
   };
 
@@ -170,34 +143,39 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
       <div className={classes.headerActionWrapper}>
         <DropdownMenu
           title={'Sort'}
-          options={historyAmountSortOptions}
-          onChange={handleSortChange}
+          selected={selectedSort}
+          options={transactionSortOptions}
+          onChange={handleSortTransaction}
         />
-        <div className={classes.sortCoin}>
-          <DropdownMenu title={'Coin'} options={sortOptions} onChange={handleCurrencyChange} />
-        </div>
+        <DropdownMenu
+          title={'Coin'}
+          selected={selectedCurrency}
+          options={currencyOptions}
+          onChange={handleCurrencyChange}
+        />
         <DropdownMenu
           title={'Transaction'}
-          options={historyTransactionSortOptions}
-          onChange={handleTransactionChange}
+          selected={selectedStatus}
+          options={transactionStatusOptions}
+          onChange={handleFilterTransactionStatus}
         />
       </div>
       <TableContainer component={List}>
         <Table className={classes.root} aria-label="history details table">
           <TableBody>
-            {defaultTxs.length === 0 ? (
+            {transactions.length === 0 ? (
               <TableRow className={classes.loading}>
                 <CircularProgress />
               </TableRow>
             ) : (
               <InfiniteScroll
-                dataLength={allTxs.length}
-                hasMore={meta.currentPage < meta.totalPageCount}
+                dataLength={transactions.length}
+                hasMore={hasMore}
                 next={nextPage}
                 loader={<Loading />}
                 className={classes.infiniteScroll}>
-                {defaultTxs.length > 0 &&
-                  defaultTxs.map(tx => (
+                {transactions.length > 0 &&
+                  transactions.map(tx => (
                     <a
                       key={tx.id}
                       style={{textDecoration: 'none'}}
@@ -220,21 +198,21 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                             }
                             src={
                               tx.toWallet?.userId === userId
-                                ? tx.fromWallet?.user.profilePictureURL ?? namePlaceholder
-                                : tx.toWallet?.user.profilePictureURL ?? namePlaceholder
+                                ? tx.fromWallet?.user.profilePictureURL ?? DEFAULT_NAME
+                                : tx.toWallet?.user.profilePictureURL ?? DEFAULT_NAME
                             }
                             name={
                               tx.toWallet?.userId === userId
-                                ? tx.fromWallet?.user.name ?? namePlaceholder
-                                : tx.toWallet?.user.name ?? namePlaceholder
+                                ? tx.fromWallet?.user.name ?? DEFAULT_NAME
+                                : tx.toWallet?.user.name ?? DEFAULT_NAME
                             }
                           />
 
                           <div>
                             <Typography variant="body1">
                               {tx.toWallet?.userId === userId
-                                ? tx.fromWallet?.user.name ?? namePlaceholder
-                                : tx.toWallet?.user.name ?? namePlaceholder}
+                                ? tx.fromWallet?.user.name ?? DEFAULT_NAME
+                                : tx.toWallet?.user.name ?? DEFAULT_NAME}
                             </Typography>
                             <Typography variant="caption" color="textSecondary">
                               {timeAgo(tx.createdAt)}
