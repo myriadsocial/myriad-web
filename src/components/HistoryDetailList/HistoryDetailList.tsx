@@ -24,6 +24,7 @@ import {parseScientificNotatedNumber} from 'src/helpers/number';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
 import {CurrencyId} from 'src/interfaces/currency';
 import {Transaction} from 'src/interfaces/transaction';
+import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
 
 type metaTrxProps = {
   currentPage: number;
@@ -200,7 +201,12 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                     <a
                       key={tx.id}
                       style={{textDecoration: 'none'}}
-                      href={'https://polkadot.network'}
+                      //TODO: moved parsing for href to BE
+                      href={
+                        tx.currency.network.id === NetworkTypeEnum.NEAR
+                          ? `${tx.currency.network.explorerURL}/transactions/${tx.hash}`
+                          : `${tx.currency.network.explorerURL}/${tx.hash}`
+                      }
                       target="_blank"
                       rel="noopener noreferrer">
                       <TableRow key={tx.id} className={classes.tableRow}>
