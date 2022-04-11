@@ -44,8 +44,18 @@ export const ButtonNotify: React.FC<ButtonNotifyProps> = ({
     return username.people?.name;
   };
 
+  const getLink = () => {
+    const username = getUsername(SocialsEnum.REDDIT);
+    const path = `submit?title=${'You’ve been tipped on Myriad!'}&text=${textShare}`;
+
+    if (username) {
+      return `https://www.reddit.com/user/${username}/${path}`;
+    }
+    return `https://www.reddit.com/${path}`;
+  };
+
   const textShare =
-    `Hey @${receiver.username}, I just sent you ${finalAmount} ${currency?.id} on @myriad_social!` +
+    `Hey @${receiver.username}, I just sent you ${finalAmount} ${currency?.symbol} on @myriad_social!` +
     `\nMyriad.Social is a web3 layer on top of web2 social media decentralize and federated.` +
     `\nYou can claim it by joining app.myriad.social and connecting your ${reference.platform} account.`;
 
@@ -66,12 +76,7 @@ export const ButtonNotify: React.FC<ButtonNotifyProps> = ({
 
   const RedditButton = () => {
     return (
-      <Link
-        className={styles.root}
-        href={`https://www.reddit.com/user/${getUsername(
-          SocialsEnum.REDDIT,
-        )}/submit?title=${'You’ve been tipped on Myriad!'}&text=${textShare}`}
-        target="_blank">
+      <Link className={styles.root} href={getLink()} target="_blank">
         <Button
           component="div"
           variant="outlined"
