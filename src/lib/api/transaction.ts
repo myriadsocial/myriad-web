@@ -1,7 +1,6 @@
 import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
-import {LoopbackWhere} from './interfaces/loopback-query.interface';
 import {PaginationParams} from './interfaces/pagination-params.interface';
 
 import {Transaction, TransactionProps} from 'src/interfaces/transaction';
@@ -23,8 +22,8 @@ export const getTransactions = async (
   pagination: PaginationParams,
 ): Promise<TransactionList> => {
   const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
-  console.log('OPTIONS', options);
-  const where: LoopbackWhere<TransactionProps> = {};
+
+  let status: string | null = null;
   const include: Array<any> = [
     {
       relation: 'currency',
@@ -46,20 +45,12 @@ export const getTransactions = async (
     },
   ];
 
-  if (options.referenceId) {
-    where.referenceId = {eq: options.referenceId};
-  }
-
   if (options.to && options.to !== options.from) {
-    where.to = {eq: options.to};
+    status = 'received';
   }
 
   if (options.from && options.from !== options.to) {
-    where.from = {eq: options.from};
-  }
-
-  if (options.to === options.from) {
-    where.or = [{to: options.to}, {from: options.from}];
+    status = 'sent';
   }
 
   const {data} = await MyriadAPI.request<TransactionList>({
@@ -71,6 +62,7 @@ export const getTransactions = async (
       referenceType: options.type,
       referenceId: options.referenceId,
       currencyId: options.currencyId,
+      status,
       filter: {
         order: [`${orderField} ${sort}`],
         include,
