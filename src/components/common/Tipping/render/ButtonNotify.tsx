@@ -1,6 +1,8 @@
 import React from 'react';
-import {RedditShareButton, TwitterShareButton} from 'react-share';
+import {useSelector} from 'react-redux';
+import {TwitterShareButton} from 'react-share';
 
+import {Link} from '@material-ui/core';
 import {Button} from '@material-ui/core';
 
 import {BN, formatBalance} from '@polkadot/util';
@@ -13,6 +15,8 @@ import {People} from 'src/interfaces/people';
 import {Post} from 'src/interfaces/post';
 import {SocialsEnum} from 'src/interfaces/social';
 import {User} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 export type ButtonNotifyProps = {
   reference: Post;
@@ -27,11 +31,19 @@ export const ButtonNotify: React.FC<ButtonNotifyProps> = ({
   amount,
   receiver,
 }) => {
+  const {socials: account} = useSelector<RootState, UserState>(state => state.userState);
   const styles = useStyles();
 
   const finalAmount = parseFloat(
     formatBalance(amount, {decimals: currency.decimal, forceUnit: '-', withSi: false}),
   );
+
+  const getUsername = (platform: string) => {
+    const username = account.find(social => social.platform === platform);
+    if (!username) return '';
+    return username.people?.name;
+  };
+
   const textShare =
     `Hey @${receiver.username}, I just sent you ${finalAmount} ${currency?.id} on @myriad_social!` +
     `\nMyriad.Social is a web3 layer on top of web2 social media decentralize and federated.` +
@@ -54,7 +66,12 @@ export const ButtonNotify: React.FC<ButtonNotifyProps> = ({
 
   const RedditButton = () => {
     return (
-      <RedditShareButton url={' '} title={textShare} className={styles.root}>
+      <Link
+        className={styles.root}
+        href={`https://www.reddit.com/user/${getUsername(
+          SocialsEnum.REDDIT,
+        )}/submit?title=${'You’ve been tipped on Myriad!'}&text=${textShare}`}
+        target="_blank">
         <Button
           component="div"
           variant="outlined"
@@ -63,7 +80,7 @@ export const ButtonNotify: React.FC<ButtonNotifyProps> = ({
           className={styles.reddit}>
           Notify on {reference.platform}
         </Button>
-      </RedditShareButton>
+      </Link>
     );
   };
 
