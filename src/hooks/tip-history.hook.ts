@@ -1,7 +1,6 @@
 import {useDispatch, useSelector} from 'react-redux';
 
 import {Comment} from 'src/interfaces/comment';
-import {CurrencyId} from 'src/interfaces/currency';
 import {Post} from 'src/interfaces/post';
 import {TransactionSort} from 'src/interfaces/transaction';
 import {RootState} from 'src/reducers';
@@ -53,7 +52,7 @@ export const useTipHistory = () => {
     }
   };
 
-  const handleFilterTransaction = (currency: CurrencyId) => {
+  const handleFilterTransaction = (currency: string) => {
     dispatch(setTransactionCurrency(currency));
 
     if (reference) {

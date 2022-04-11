@@ -23,7 +23,7 @@ export const getTransactions = async (
   pagination: PaginationParams,
 ): Promise<TransactionList> => {
   const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
-
+  console.log('OPTIONS', options);
   const where: LoopbackWhere<TransactionProps> = {};
   const include: Array<any> = [
     {

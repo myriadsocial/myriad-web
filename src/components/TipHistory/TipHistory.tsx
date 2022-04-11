@@ -19,7 +19,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Menu from '@material-ui/core/Menu';
 
 import {formatUsd} from '../../helpers/balance';
-import {Currency, CurrencyId} from '../../interfaces/currency';
+import {Currency} from '../../interfaces/currency';
 import {Transaction, TransactionSort} from '../../interfaces/transaction';
 import {AvatarSize} from '../atoms/Avatar';
 import {DropdownMenu} from '../atoms/DropdownMenu';
@@ -45,7 +45,7 @@ type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
   tippingDisabled: boolean;
   sendTip: () => void;
   onSort: (sort: TransactionSort) => void;
-  onFilter: (currency: CurrencyId) => void;
+  onFilter: (currency: string) => void;
   nextPage: () => void;
 };
 
@@ -88,7 +88,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
 
   const handleFilter = (currency: Currency) => () => {
     setSelected(currency.symbol);
-    onFilter(currency.symbol);
+    onFilter(currency.id);
     handleClose();
   };
 

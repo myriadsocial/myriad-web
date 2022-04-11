@@ -6,7 +6,6 @@ import * as constants from './constants';
 
 import * as Redux from 'redux';
 import {Comment} from 'src/interfaces/comment';
-import {CurrencyId} from 'src/interfaces/currency';
 import {Post} from 'src/interfaces/post';
 import {Transaction, TransactionDetail, TransactionSort} from 'src/interfaces/transaction';
 
@@ -18,7 +17,7 @@ export interface TipSummaryState extends BasePaginationState {
   transactions: Transaction[];
   summary: TransactionDetail[];
   sort: TransactionSort;
-  currency?: CurrencyId;
+  currency?: string;
 }
 
 const initialState: TipSummaryState = {
