@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {
   List,
@@ -16,7 +16,7 @@ import {accountPrivacyOptions} from './default';
 import {useAccountSetting} from './hooks/use-account-setting.hook';
 import {SettingsOption} from './hooks/use-setting-list.hook';
 
-import {PrivacySettings, PrivacySettingType} from 'src/interfaces/setting';
+import {PrivacySettings, PrivacySettingType, PrivacyType} from 'src/interfaces/setting';
 
 type AccountSettingsProps = {
   value: PrivacySettings;
@@ -25,21 +25,20 @@ type AccountSettingsProps = {
 
 export const AccountSettings: React.FC<AccountSettingsProps> = props => {
   const {value, onSaveSetting} = props;
-  const [privacy, setPrivacy] = React.useState({
-    accountPrivacy: value.accountPrivacy,
-    socialMediaPrivacy: value.socialMediaPrivacy,
-  });
 
-  React.useEffect(() => {
+  const [privacy, setPrivacy] = useState<PrivacySettings>(value);
+
+  useEffect(() => {
     setPrivacy(value);
   }, [value]);
 
   const styles = useStyles();
   const settings = useAccountSetting();
 
-  const changePrivacySetting = (item: SettingsOption<PrivacySettingType>) => (selected: string) => {
-    setPrivacy({...privacy, [item.id]: selected});
-  };
+  const changePrivacySetting =
+    (item: SettingsOption<PrivacySettingType>) => (selected: PrivacyType) => {
+      setPrivacy({...privacy, [item.id]: selected});
+    };
 
   const savePrivacySetting = () => {
     onSaveSetting(privacy);
@@ -60,7 +59,7 @@ export const AccountSettings: React.FC<AccountSettingsProps> = props => {
                 </Typography>
               </ListItemText>
               <ListItemSecondaryAction>
-                <DropdownMenu
+                <DropdownMenu<PrivacyType>
                   title=""
                   selected={privacy[item.id]}
                   options={accountPrivacyOptions}

@@ -40,7 +40,7 @@ TextTabs.args = {
       component: 'Second Tab Content',
     },
   ],
-  active: 'first',
+  selected: 'first',
 };
 
 export const IconTabs = Template.bind({});
@@ -63,7 +63,7 @@ IconTabs.args = {
     },
   ],
   position: 'left',
-  active: 'first',
+  selected: 'first',
   size: 'small',
   mark: 'cover',
 };

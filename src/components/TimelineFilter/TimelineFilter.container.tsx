@@ -25,7 +25,7 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
   const {filters} = props;
 
   const dispatch = useDispatch();
-  const {filterByOrigin, sortTimeline} = useTimelineFilter(filters);
+  const {originType, filterByOrigin, sortTimeline} = useTimelineFilter(filters);
   const {query, push, replace} = useQueryParams();
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
@@ -77,6 +77,7 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
         user={user}
         type={timelineType}
         order={timelineOrder}
+        originType={originType}
         sortTimeline={handleSortimeline}
         orderTimeline={handleOrderTimeline}
         filterTimeline={handleFilterTimeline}

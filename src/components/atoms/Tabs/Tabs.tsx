@@ -7,9 +7,9 @@ import {TabPanel} from '../TabPanel';
 import {useStyles} from './Tabs.styles';
 import {TabItems} from './Tabs.types';
 
-type TabsComponentProps = TabsProps & {
-  tabs: TabItems<string>[];
-  active: string;
+type TabsComponentProps<T> = TabsProps & {
+  tabs: TabItems<T>[];
+  selected: T;
   position?: TabPosition;
   mark?: TabMark;
   size?: TabSize;
@@ -17,13 +17,13 @@ type TabsComponentProps = TabsProps & {
   padding?: number;
   paddingLeft?: number;
   paddingRight?: number;
-  onChangeTab: (currentTab: string) => void;
+  onChangeTab: (currentTab: T) => void;
 };
 
-export const TabsComponent: React.FC<TabsComponentProps> = props => {
+export const TabsComponent = <T extends unknown>(props: TabsComponentProps<T>): JSX.Element => {
   const {
     tabs,
-    active: defaultActive,
+    selected,
     position = 'space-evenly',
     mark = 'underline',
     size = 'medium',
@@ -35,14 +35,14 @@ export const TabsComponent: React.FC<TabsComponentProps> = props => {
 
   const styles = useStyles({position, mark, size});
 
-  const [activeTab, setActiveTab] = useState(defaultActive);
+  const [selectedTab, setSelectedTab] = useState<T>(selected);
 
   useEffect(() => {
-    setActiveTab(defaultActive);
-  }, [defaultActive]);
+    setSelectedTab(selected);
+  }, [selected]);
 
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab);
+  const handleTabChange = (tab: T) => {
+    setSelectedTab(tab);
     onChangeTab(tab);
   };
 
@@ -51,10 +51,10 @@ export const TabsComponent: React.FC<TabsComponentProps> = props => {
       <TabList {...props} onChangeTab={handleTabChange} className={styles.tabs} />
 
       {tabs.map(tab => {
-        return tab.id === activeTab ? (
+        return tab.id === selectedTab ? (
           <TabPanel
             key={`tab-panel-${tab.id}`}
-            value={activeTab}
+            value={selectedTab}
             index={tab.id}
             padding={padding}
             paddingLeft={paddingLeft}

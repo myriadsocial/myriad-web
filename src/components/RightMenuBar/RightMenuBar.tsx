@@ -42,7 +42,7 @@ export const RightMenuBar: React.FC = () => {
   return (
     <div className={classes.root}>
       <TabsComponent
-        active={activeTab}
+        selected={activeTab}
         tabs={iconTabs}
         position={'left'}
         mark="cover"

@@ -2,6 +2,7 @@ import {MenuOptions} from '../atoms/DropdownMenu';
 
 import {ExperienceType} from 'src/interfaces/experience';
 
+export type BalanceSortType = 'aToZ' | 'highest' | 'lowest' | 'all';
 // TODO: move this to experience tab
 export const experienceFilterOptions: MenuOptions<ExperienceType>[] = [
   {id: 'all', title: 'All Experience'},
@@ -10,7 +11,7 @@ export const experienceFilterOptions: MenuOptions<ExperienceType>[] = [
 ];
 
 // TODO: move this to balance detail list
-export const balanceSortOptions: MenuOptions<string>[] = [
+export const balanceSortOptions: MenuOptions<BalanceSortType>[] = [
   {
     id: 'all',
     title: 'All',

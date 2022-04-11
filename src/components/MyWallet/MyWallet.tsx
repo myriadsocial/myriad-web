@@ -69,7 +69,7 @@ export const MyWallet: React.FC<MyWalletProps> = () => {
     <>
       <div className={style.tabsComponent}>
         <TabsComponent
-          active={activeTabId}
+          selected={activeTabId}
           tabs={tabTexts}
           position={'left'}
           mark="underline"

@@ -27,18 +27,14 @@ export const CommentHistoryList: React.FC<CommentHistoryListProps> = props => {
 
   const styles = useStyles();
 
-  const handleSort = (sort: string) => {
-    onSort(sort as SortType);
-  };
-
   return (
     <div className={styles.root}>
       <Grid container justifyContent="flex-end">
-        <DropdownMenu
+        <DropdownMenu<SortType>
           title={'Sort by'}
           options={sortOptions}
           selected={sort}
-          onChange={handleSort}
+          onChange={onSort}
         />
       </Grid>
 
