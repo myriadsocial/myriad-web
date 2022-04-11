@@ -117,7 +117,12 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
           previousNonce = nonce ? +nonce.toString() : 0;
         } else if (currentWallet?.type === WalletTypeEnum.NEAR) {
           const {near, wallet} = await nearInitialize();
-          const {balance} = await getNearBalance(near, wallet.getAccountId());
+          const {balance} = await getNearBalance(
+            near,
+            wallet.getAccountId(),
+            currency.referenceId,
+            currency.decimal,
+          );
           freeBalance = parseFloat(balance);
         }
 
