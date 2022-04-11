@@ -103,7 +103,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   const handleSortChanged = (sort: string) => {
     switch (sort) {
       case 'aToZ': {
-        const sortedAtoZBalances = _.sortBy(defaultBalanceDetails, 'id');
+        const sortedAtoZBalances = _.sortBy(defaultBalanceDetails, 'name');
         setDefaultBalanceDetails(sortedAtoZBalances);
         break;
       }

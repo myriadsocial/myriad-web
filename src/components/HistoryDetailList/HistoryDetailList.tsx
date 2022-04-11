@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {MenuOptions} from '../atoms/DropdownMenu';
 import {DropdownMenu} from '../atoms/DropdownMenu';
+import {Empty} from '../atoms/Empty';
 import {useStyles} from './HistoryDetailList.styles';
 import {transactionSortOptions, transactionStatusOptions} from './default';
 
@@ -137,6 +138,12 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
       });
     }
   };
+
+  if (transactions.length === 0) {
+    return (
+      <Empty title="You don't have any transaction" subtitle="Start to send tips in a post!" />
+    );
+  }
 
   return (
     <>
