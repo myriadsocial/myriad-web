@@ -7,7 +7,6 @@ import Head from 'next/head';
 import NFTContainer from 'src/components/NFT/NFT.container';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
-import {healthcheck} from 'src/lib/api/healthcheck';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {
@@ -36,18 +35,6 @@ const NFTComponent: React.FC = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const dispatch = store.dispatch as ThunkDispatchAction;
-
-  const available = await healthcheck();
-
-  if (!available) {
-    return {
-      redirect: {
-        destination: '/maintenance',
-        permanent: false,
-      },
-    };
-  }
-
   const session = await getSession(context);
 
   if (!session) {

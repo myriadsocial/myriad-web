@@ -16,7 +16,6 @@ import ShowIf from 'src/components/common/show-if.component';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
 import {setHeaders} from 'src/lib/api/base';
-import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -82,18 +81,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const {params, req} = context;
 
   const dispatch = store.dispatch as ThunkDispatchAction;
-
-  const available = await healthcheck();
-
-  if (!available) {
-    return {
-      redirect: {
-        destination: '/maintenance',
-        permanent: false,
-      },
-    };
-  }
-
   const session = await getSession(context);
 
   setHeaders({cookie: req.headers.cookie as string});

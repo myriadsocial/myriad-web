@@ -8,7 +8,6 @@ import {PostDetailContainer} from 'src/components/PostDetail';
 import {formatToString} from 'src/components/PostEditor';
 import {generateAnonymousUser} from 'src/helpers/auth';
 import {PostVisibility} from 'src/interfaces/post';
-import {healthcheck} from 'src/lib/api/healthcheck';
 import * as PostAPI from 'src/lib/api/post';
 import {setPost} from 'src/reducers/timeline/actions';
 import {setAnonymous} from 'src/reducers/user/actions';
@@ -67,17 +66,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   if (!['post', 'profile'].includes(type)) {
     return {
       notFound: true,
-    };
-  }
-
-  const available = await healthcheck();
-
-  if (!available) {
-    return {
-      redirect: {
-        destination: '/maintenance',
-        permanent: false,
-      },
     };
   }
 

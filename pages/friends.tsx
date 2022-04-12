@@ -10,7 +10,6 @@ import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {UserMetric} from 'src/interfaces/user';
 import {setHeaders} from 'src/lib/api/base';
-import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
@@ -58,18 +57,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const {req} = context;
 
   const dispatch = store.dispatch as ThunkDispatchAction;
-
-  const available = await healthcheck();
-
-  if (!available) {
-    return {
-      redirect: {
-        destination: '/maintenance',
-        permanent: false,
-      },
-    };
-  }
-
   const session = await getSession(context);
 
   setHeaders({cookie: req.headers.cookie as string});
