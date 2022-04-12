@@ -57,7 +57,7 @@ export const useTransaction = () => {
     meta,
     hasMore: meta.currentPage < meta.totalPageCount,
     filter,
-    transactions,
+    transactions: transactions.filter(tx => !!tx.currency),
     loadTransactions,
     filterTransaction,
     sortTransaction,
