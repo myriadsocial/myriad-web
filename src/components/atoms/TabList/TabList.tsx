@@ -55,8 +55,6 @@ export const TabList: React.FC<TabListProps> = props => {
         className: styles.indicatorColor,
         children: <span className={styles.indicator} />,
       }}
-      textColor={textColor}
-      onChange={handleTabChange}
       classes={{root: styles.tabs}}>
       {tabs.map(tab => {
         if (tab.tooltip) {

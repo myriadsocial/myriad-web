@@ -33,5 +33,5 @@ export interface Network extends BaseModel {
   explorerURL: string;
   walletType: string;
   currencies?: Currency[];
-  tips: TipResult[] | [];
+  tips: TipResult[];
 }
