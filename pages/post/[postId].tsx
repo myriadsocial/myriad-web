@@ -21,7 +21,6 @@ import {Post, PostVisibility} from 'src/interfaces/post';
 import {Privacy} from 'src/interfaces/setting';
 import {setHeaders} from 'src/lib/api/base';
 import * as FriendAPI from 'src/lib/api/friends';
-import {healthcheck} from 'src/lib/api/healthcheck';
 import * as PostAPI from 'src/lib/api/post';
 import * as SettingAPI from 'src/lib/api/setting';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
@@ -99,17 +98,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const dispatch = store.dispatch as ThunkDispatchAction;
   const params = context.params as PostPageParams;
   let showAsDeleted = false;
-
-  const available = await healthcheck();
-
-  if (!available) {
-    return {
-      redirect: {
-        destination: '/maintenance',
-        permanent: false,
-      },
-    };
-  }
 
   const session = await getSession(context);
 
