@@ -1,4 +1,4 @@
-import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
+import {Actions as BaseAction, PaginationAction, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 
@@ -34,11 +34,21 @@ export interface SetTransactionSort extends Action {
   sort?: SortType;
 }
 
+export interface TransactionLoading extends Action {
+  type: constants.SET_TRANSACTION_LOADING;
+  loading: boolean;
+}
+
 /**
  * Union Action Types
  */
 
-export type Actions = FetchTransactions | SetTransactionFilter | SetTransactionSort | BaseAction;
+export type Actions =
+  | FetchTransactions
+  | SetTransactionFilter
+  | SetTransactionSort
+  | TransactionLoading
+  | BaseAction;
 
 /**
  *
@@ -47,6 +57,11 @@ export type Actions = FetchTransactions | SetTransactionFilter | SetTransactionS
 export const setTransactionFilter = (filter: TransactionFilterProps): SetTransactionFilter => ({
   type: constants.SET_TRANSACTION_FILTER,
   filter,
+});
+
+export const setTransactionLoading = (loading: boolean): TransactionLoading => ({
+  type: constants.SET_TRANSACTION_LOADING,
+  loading,
 });
 
 /**
@@ -82,7 +97,7 @@ export const setTransactionSort: ThunkActionCreator<Actions, RootState> =
 export const fetchTransactions: ThunkActionCreator<Actions, RootState> =
   (page = 1) =>
   async (dispatch, getState) => {
-    dispatch(setLoading(true));
+    dispatch(setTransactionLoading(true));
 
     try {
       const {
@@ -115,6 +130,6 @@ export const fetchTransactions: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setTransactionLoading(false));
     }
   };

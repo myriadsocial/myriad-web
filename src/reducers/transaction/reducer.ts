@@ -2,6 +2,7 @@ import {PaginationState as BasePaginationState} from '../base/state';
 import {Actions, TransactionFilterProps} from './actions';
 import * as constants from './constants';
 
+import update from 'immutability-helper';
 import * as Redux from 'redux';
 import {Transaction} from 'src/interfaces/transaction';
 import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interface';
@@ -13,7 +14,7 @@ export interface TransactionState extends BasePaginationState {
 }
 
 const initalState: TransactionState = {
-  loading: false,
+  loading: true,
   transactions: [],
   filter: {},
   meta: {
@@ -33,7 +34,7 @@ export const TransactionReducer: Redux.Reducer<TransactionState, Actions> = (
       return {
         ...state,
         transactions:
-          action.meta.currentPage === 1
+          !action.meta.currentPage || action.meta.currentPage === 1
             ? action.transactions
             : [...state.transactions, ...action.transactions],
         meta: action.meta,
@@ -61,6 +62,12 @@ export const TransactionReducer: Redux.Reducer<TransactionState, Actions> = (
           sort: action.sort,
         },
       };
+    }
+
+    case constants.SET_TRANSACTION_LOADING: {
+      return update(state, {
+        loading: {$set: action.loading},
+      });
     }
 
     default: {
