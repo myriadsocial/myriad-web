@@ -14,6 +14,7 @@ import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {MenuOptions} from '../atoms/DropdownMenu';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {Empty} from '../atoms/Empty';
+import ShowIf from '../common/show-if.component';
 import {useStyles} from './HistoryDetailList.styles';
 import {transactionSortOptions, transactionStatusOptions} from './default';
 
@@ -45,6 +46,7 @@ const DEFAULT_NAME = 'Unknown Myrian';
 
 export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const {
+    isLoading,
     transactions,
     wallet,
     currencies,
@@ -139,12 +141,6 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     }
   };
 
-  if (transactions.length === 0) {
-    return (
-      <Empty title="You don't have any transaction" subtitle="Start to send tips in a post!" />
-    );
-  }
-
   return (
     <>
       <div className={classes.headerActionWrapper}>
@@ -167,10 +163,15 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
           onChange={handleFilterTransactionStatus}
         />
       </div>
+
+      <ShowIf condition={transactions.length === 0 && !isLoading}>
+        <Empty title="You don't have any transaction" subtitle="Start to send tips in a post!" />
+      </ShowIf>
+
       <TableContainer component={List}>
         <Table className={classes.root} aria-label="history details table">
           <TableBody>
-            {transactions.length === 0 ? (
+            {transactions.length === 0 && isLoading ? (
               <TableRow className={classes.loading}>
                 <CircularProgress />
               </TableRow>

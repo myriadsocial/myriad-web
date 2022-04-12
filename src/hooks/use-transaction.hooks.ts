@@ -14,29 +14,26 @@ import {UserState} from 'src/reducers/user/reducer';
 
 export const useTransaction = () => {
   const dispatch = useDispatch();
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {transactions, meta, filter} = useSelector<RootState, TransactionState>(
+  const {user, currentWallet} = useSelector<RootState, UserState>(state => state.userState);
+  const {transactions, meta, filter, loading} = useSelector<RootState, TransactionState>(
     state => state.transactionState,
   );
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    loadTransactions();
-  }, []);
+    currentWallet && loadTransactions();
+  }, [currentWallet]);
 
   const loadTransactions = async (page?: number) => {
     const currentPage = page ? page : 1;
-    if (!user) return;
 
-    setLoading(true);
+    if (!user) return;
 
     try {
       dispatch(fetchTransactions(currentPage));
     } catch (error) {
       setError(error);
     }
-    setLoading(false);
   };
 
   const filterTransaction = async (filter: TransactionFilterProps) => {
