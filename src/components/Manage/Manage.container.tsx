@@ -61,6 +61,8 @@ export const ManageCointainer: React.FC = () => {
   };
 
   const handleConnect = async (account?: InjectedAccountWithMeta) => {
+    closeAccountList();
+
     try {
       if (account) {
         await connectNetwork(account);
