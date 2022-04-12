@@ -30,8 +30,4 @@ export const transactionStatusOptions: MenuOptions<string>[] = [
     id: 'sent',
     title: 'Sent',
   },
-  {
-    id: 'failed',
-    title: 'Failed',
-  },
 ];
