@@ -7,7 +7,6 @@ import Head from 'next/head';
 import SocialTokenContainer from 'src/components/SocialToken/SocialToken.container';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
-import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -45,18 +44,6 @@ const SocialToken: React.FC = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const dispatch = store.dispatch as ThunkDispatchAction;
-
-  const available = await healthcheck();
-
-  if (!available) {
-    return {
-      redirect: {
-        destination: '/maintenance',
-        permanent: false,
-      },
-    };
-  }
-
   const session = await getSession(context);
 
   if (!session) {

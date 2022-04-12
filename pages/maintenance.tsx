@@ -1,6 +1,5 @@
 import React from 'react';
 
-import {GetServerSideProps} from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 
@@ -10,7 +9,6 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {MyriadFullIcon} from 'src/components/atoms/Icons';
 import Illustration from 'src/images/illustration/undraw_Fall_is_coming_yl0x_1.svg';
-import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -90,26 +88,6 @@ const Maintenance: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async context => {
-  const {req} = context;
-
-  const available = await healthcheck();
-
-  if (available) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-        headers: req.headers,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
 };
 
 export default Maintenance;

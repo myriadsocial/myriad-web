@@ -1,17 +1,6 @@
-import getConfig from 'next/config';
-
-import axios from 'axios';
-
 export const healthcheck = async (): Promise<boolean> => {
-  const {serverRuntimeConfig} = getConfig();
-
-  const API = axios.create({
-    baseURL: serverRuntimeConfig.myriadAPIURL,
-  });
-
   try {
-    await API.request({
-      url: `/health`,
+    await fetch(`${process.env.MYRIAD_API_URL}/health`, {
       method: 'GET',
     });
 

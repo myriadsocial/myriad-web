@@ -12,7 +12,6 @@ import {LoginLayout} from 'src/components/template/Login';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {initialize} from 'src/lib/api/base';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
-import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 import {fetchNetwork} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
@@ -98,17 +97,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     if (device.type === 'mobile') {
       mobile = true;
     }
-  }
-
-  const available = await healthcheck();
-
-  if (!available) {
-    return {
-      redirect: {
-        destination: '/maintenance',
-        permanent: false,
-      },
-    };
   }
 
   const session = await getSession(context);

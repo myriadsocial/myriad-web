@@ -14,7 +14,6 @@ import {Experience} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
 import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
-import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -75,17 +74,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   if (!['experience', 'hashtag'].includes(query.type as string)) {
     return {
       notFound: true,
-    };
-  }
-
-  const available = await healthcheck();
-
-  if (!available) {
-    return {
-      redirect: {
-        destination: '/maintenance',
-        permanent: false,
-      },
     };
   }
 
