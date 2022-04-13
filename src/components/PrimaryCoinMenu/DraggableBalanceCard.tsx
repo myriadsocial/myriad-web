@@ -46,11 +46,11 @@ export const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props =
           <div className={classes.leftJustifiedWrapper}>
             <Avatar
               size={AvatarSize.MEDIUM}
-              alt={balanceDetail.id ?? 'Coin'}
+              alt={balanceDetail.name ?? 'Coin'}
               src={balanceDetail.image}
             />
             <Typography variant="body1" style={{fontWeight: 'bold'}}>
-              {balanceDetail.id}
+              {balanceDetail.name.toUpperCase()}
             </Typography>
           </div>
 
