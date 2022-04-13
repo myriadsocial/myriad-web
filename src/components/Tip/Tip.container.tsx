@@ -25,7 +25,6 @@ export const TipContainer: React.FC = () => {
         variant: 'success',
       });
     });
-    console.log(networkId, ftIdentifier);
   };
 
   const handleClaimTipAll = (networkId: string) => {
@@ -41,6 +40,11 @@ export const TipContainer: React.FC = () => {
     return network.tips.filter(tip => tip.amount !== '0');
   };
 
+  const isShow = (network: Network) => {
+    if (network.id === currentWallet?.network) return true;
+    return false;
+  };
+
   return (
     <>
       {tipsEachNetwork.map(network => (
@@ -50,7 +54,7 @@ export const TipContainer: React.FC = () => {
               <ShimerComponent />
             </BoxComponent>
           </ShowIf>
-          <ShowIf condition={!loading && !tipWithBalances(network).length}>
+          <ShowIf condition={!loading && !tipWithBalances(network).length && isShow(network)}>
             <div style={{marginTop: 20}}>
               <Empty
                 title="You have no tip"
