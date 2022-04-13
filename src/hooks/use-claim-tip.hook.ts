@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
+import _ from 'lodash';
 import {Network} from 'src/interfaces/wallet';
 import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import * as WalletAPI from 'src/lib/api/wallet';
@@ -19,6 +20,16 @@ export const useClaimTip = () => {
   useEffect(() => {
     getTip();
   }, [networks]);
+
+  const sortNetwork = (networks: Network[], selectedNetwork?: string) => {
+    const newDefaultNetworks = [...networks];
+    const defaultNetworks = _.remove(newDefaultNetworks, function (n) {
+      return n.id === selectedNetwork;
+    });
+    const resultDefaultCoins = [...defaultNetworks, ...newDefaultNetworks];
+
+    return resultDefaultCoins;
+  };
 
   const getTip = async () => {
     if (!user) return;
@@ -53,12 +64,15 @@ export const useClaimTip = () => {
         };
 
         setTipsEachNetwork(
-          tipsEachNetwork.map(option => {
-            if (option.id == NetworkTypeEnum.MYRIAD) {
-              option.tips = [result];
-            }
-            return option;
-          }),
+          sortNetwork(
+            tipsEachNetwork.map(option => {
+              if (option.id == NetworkTypeEnum.MYRIAD) {
+                option.tips = [result];
+              }
+              return option;
+            }),
+            currentWallet?.network,
+          ),
         );
       }
     } catch (error) {
