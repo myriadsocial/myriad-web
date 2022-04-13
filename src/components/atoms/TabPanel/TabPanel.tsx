@@ -3,16 +3,21 @@ import React from 'react';
 import Box from '@material-ui/core/Box';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-type TabPanelProps = {
-  value: string | number;
-  index: string | number;
+type TabPanelProps<T> = {
+  value: T;
+  index: T;
   children: React.ReactNode;
   padding?: number;
   paddingLeft?: number;
   paddingRight?: number;
 };
 
-const useStyles = makeStyles<Theme, TabPanelProps>(theme =>
+type TabPanelStyleProps = {
+  paddingLeft?: number;
+  paddingRight?: number;
+};
+
+const useStyles = makeStyles<Theme, TabPanelStyleProps>(theme =>
   createStyles({
     root: {
       paddingLeft: props => props.paddingLeft,
@@ -24,7 +29,7 @@ const useStyles = makeStyles<Theme, TabPanelProps>(theme =>
   }),
 );
 
-export const TabPanel: React.FC<TabPanelProps> = props => {
+export const TabPanel = <T extends unknown>(props: TabPanelProps<T>): JSX.Element => {
   const {children, value, index, padding = 3, paddingLeft = 0, paddingRight = 0} = props;
   const styles = useStyles({...props, paddingLeft, paddingRight});
 

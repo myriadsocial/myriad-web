@@ -9,6 +9,8 @@ export enum TimelineType {
 
 export type PostOrigin = 'facebook' | 'twitter' | 'reddit' | 'myriad';
 
+export type PostOriginType = 'all' | 'myriad' | 'imported';
+
 export enum TimelineOrderType {
   UPVOTE = 'upvote',
   COMMENT = 'comment',

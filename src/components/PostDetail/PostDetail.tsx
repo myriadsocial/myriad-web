@@ -108,8 +108,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     }
   };
 
-  const handleChangeTab = (tab: string) => {
-    setSelectedCommentTab(tab as SectionType);
+  const handleChangeTab = (tab: SectionType) => {
+    setSelectedCommentTab(tab);
 
     toggleDownvoting(null);
   };
@@ -241,7 +241,11 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
       </Grid>
 
       <ShowIf condition={shoWcomment}>
-        <TabsComponent tabs={tabs} active={selectedCommentTab} onChangeTab={handleChangeTab} />
+        <TabsComponent<SectionType>
+          tabs={tabs}
+          selected={selectedCommentTab}
+          onChangeTab={handleChangeTab}
+        />
       </ShowIf>
     </Paper>
   );

@@ -89,11 +89,9 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     return 0;
   };
 
-  const handleSortTransaction = (sort: string) => {
-    const selectedSort = sort as TransactionOrderType;
-
-    setSelectedSort(selectedSort);
-    sortTransaction(selectedSort);
+  const handleSortTransaction = (sort: TransactionOrderType) => {
+    setSelectedSort(sort);
+    sortTransaction(sort);
   };
 
   const handleFilterTransactionStatus = (status: string) => {
@@ -148,7 +146,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   return (
     <>
       <div className={classes.headerActionWrapper}>
-        <DropdownMenu
+        <DropdownMenu<TransactionOrderType>
           title={'Sort'}
           selected={selectedSort}
           options={transactionSortOptions}

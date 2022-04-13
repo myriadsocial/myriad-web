@@ -8,23 +8,22 @@ import Typography from '@material-ui/core/Typography';
 import {useStyles} from './TabList.styles';
 import {TabListItem, TabPosition, TabMark, TabSize} from './TabList.types';
 
-type TabListProps = TabsProps & {
-  tabs: TabListItem<string>[];
-  active: string;
+type TabListProps<T> = TabsProps & {
+  tabs: TabListItem<T>[];
+  selected: T;
   position?: TabPosition;
   mark?: TabMark;
   size?: TabSize;
   background?: string;
-  onChangeTab: (currentTab: string) => void;
+  onChangeTab: (currentTab: T) => void;
 };
 
-export const TabList: React.FC<TabListProps> = props => {
+export const TabList = <T extends unknown>(props: TabListProps<T>): JSX.Element => {
   const {
     tabs,
-    active: defaultActive,
+    selected,
     position = 'space-evenly',
     mark = 'underline',
-    indicatorColor = 'secondary',
     textColor = 'primary',
     size = 'medium',
     background,
@@ -33,29 +32,28 @@ export const TabList: React.FC<TabListProps> = props => {
 
   const styles = useStyles({position, mark, size, background});
 
-  const [activeTab, setActiveTab] = useState(defaultActive);
+  const [selectedTab, setSelectedTab] = useState<T>(selected);
 
   useEffect(() => {
-    setActiveTab(defaultActive);
-  }, [defaultActive]);
+    setSelectedTab(selected);
+  }, [selected]);
 
   // eslint-disable-next-line @typescript-eslint/ban-types
-  const handleTabChange = (event: React.ChangeEvent<{}>, tab: string) => {
-    setActiveTab(tab);
+  const handleTabChange = (event: React.ChangeEvent<{}>, tab: T) => {
+    setSelectedTab(tab);
     onChangeTab(tab);
   };
 
   return (
     <Tabs
-      value={activeTab}
-      indicatorColor={indicatorColor}
+      value={selectedTab}
+      textColor={textColor}
       TabIndicatorProps={{
-        color: 'transparent',
+        className: styles.indicatorColor,
         children: <span className={styles.indicator} />,
       }}
-      textColor={textColor}
-      onChange={handleTabChange}
-      classes={{root: styles.tabs}}>
+      classes={{root: styles.tabs}}
+      onChange={handleTabChange}>
       {tabs.map(tab => {
         if (tab.tooltip) {
           return (
