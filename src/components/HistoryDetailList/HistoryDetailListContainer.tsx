@@ -16,6 +16,7 @@ export const HistoryDetailListContainer: React.FC = () => {
     loading,
     transactions,
     filter,
+    orderType,
     hasMore,
     meta,
     loadTransactions,
@@ -39,6 +40,7 @@ export const HistoryDetailListContainer: React.FC = () => {
         transactions={transactions}
         hasMore={hasMore}
         filter={filter}
+        orderType={orderType}
         nextPage={handleNextPage}
         filterTransaction={filterTransaction}
         sortTransaction={sortTransaction}
