@@ -63,7 +63,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
 
   useEffect(() => {
     loadAllBlockedUsers();
-    loadUsers();
+    dispatch(loadUsers());
   }, []);
 
   useEffect(() => {
@@ -72,29 +72,27 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
 
   const handleSubmitComment = (comment: Partial<CommentProps>) => {
     if (user) {
-      reply(
-        user,
-        {
-          ...comment,
-          postId: referenceId,
-          referenceId: comment.referenceId ?? referenceId,
-          type: comment.type ?? ReferenceType.POST,
-          userId: user.id,
-          section: comment.section ?? section,
-        } as CommentProps,
-        () => {
-          if (downvoting) {
-            dispatch(
-              downvote(downvoting, section, (vote: Vote) => {
-                // update vote count if reference is a comment
-                if ('section' in downvoting) {
-                  updateDownvote(downvoting.id, downvoting.metric.downvotes + 1, vote);
-                }
-              }),
-            );
-          }
-        },
-      );
+      const attributes: CommentProps = {
+        ...comment,
+        postId: referenceId,
+        referenceId: comment.referenceId ?? referenceId,
+        type: comment.type ?? ReferenceType.POST,
+        userId: user.id,
+        section: comment.section ?? section,
+      } as CommentProps;
+
+      reply(user, attributes, () => {
+        if (downvoting) {
+          dispatch(
+            downvote(downvoting, section, (vote: Vote) => {
+              // update vote count if reference is a comment
+              if ('section' in downvoting) {
+                updateDownvote(downvoting.id, downvoting.metric.downvotes + 1, vote);
+              }
+            }),
+          );
+        }
+      });
     }
   };
 

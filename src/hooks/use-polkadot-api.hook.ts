@@ -6,14 +6,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import {BN, BN_ONE, BN_TWO, BN_TEN} from '@polkadot/util';
 
 import {SimpleSendTipProps} from '../interfaces/transaction';
-import {setIsTipSent, setFee} from '../reducers/wallet/actions';
-import {WalletState} from '../reducers/wallet/reducer';
 
 import _ from 'lodash';
 import {formatBalance} from 'src/helpers/balance';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {CurrencyId} from 'src/interfaces/currency';
 import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {storeTransaction} from 'src/lib/api/transaction';
@@ -22,7 +19,6 @@ import {RootState} from 'src/reducers';
 import {fetchBalances} from 'src/reducers/balance/actions';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
-import {setExplorerURL} from 'src/reducers/wallet/actions';
 
 export const usePolkadotApi = () => {
   const dispatch = useDispatch();
@@ -33,7 +29,6 @@ export const usePolkadotApi = () => {
   const {balanceDetails, loading: loadingBalance} = useSelector<RootState, BalanceState>(
     state => state.balanceState,
   );
-  const {isTipSent} = useSelector<RootState, WalletState>(state => state.walletState);
 
   const {openToasterSnack} = useToasterSnackHook();
 
@@ -63,9 +58,7 @@ export const usePolkadotApi = () => {
     try {
       let {partialFee: estimatedFee} = await estimateFee(from, walletDetail, currency);
 
-      if (estimatedFee) {
-        dispatch(setFee(estimatedFee.toString()));
-      } else {
+      if (!estimatedFee) {
         // equal 0.01
         estimatedFee = BN_ONE.mul(BN_TEN.pow(new BN(currency.decimal))).div(BN_TEN.pow(BN_TWO));
       }
@@ -85,10 +78,6 @@ export const usePolkadotApi = () => {
   ) => {
     setLoading(true);
     setError(null);
-
-    if (isTipSent) {
-      dispatch(setIsTipSent(false));
-    }
 
     try {
       const txHash = await signAndSendExtrinsic(
@@ -132,15 +121,6 @@ export const usePolkadotApi = () => {
           type,
           referenceId,
         });
-
-        dispatch(setIsTipSent(true));
-
-        if (currency.id === CurrencyId.AUSD) {
-          const {network} = currency;
-          dispatch(setExplorerURL(`${network.explorerURL}extrinsic/${txHash}`));
-        } else {
-          dispatch(setExplorerURL(`${currency.network.explorerURL}/${txHash}`));
-        }
 
         callback && callback(txHash);
       }
