@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {MenuOptions} from '../atoms/DropdownMenu';
 import {DropdownMenu} from '../atoms/DropdownMenu';
+import {Empty} from '../atoms/Empty';
+import ShowIf from '../common/show-if.component';
 import {useStyles} from './HistoryDetailList.styles';
 import {transactionSortOptions, transactionStatusOptions} from './default';
 
@@ -30,6 +32,7 @@ import {TransactionFilterProps} from 'src/reducers/transaction/actions';
 type HistoryDetailListProps = {
   transactions: Transaction[];
   filter: TransactionFilterProps;
+  orderType: TransactionOrderType;
   hasMore: boolean;
   currencies: Currency[];
   wallet: UserWallet;
@@ -44,10 +47,12 @@ const DEFAULT_NAME = 'Unknown Myrian';
 
 export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const {
+    isLoading,
     transactions,
     wallet,
     currencies,
     filter,
+    orderType,
     hasMore,
     userId,
     nextPage,
@@ -58,9 +63,11 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const classes = useStyles();
   const {loading, exchangeRates} = useExchangeRate();
 
-  const [selectedSort, setSelectedSort] = useState(TransactionOrderType.LATEST);
-  const [selectedCurrency, setSelectedCurrency] = useState<string>('all');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [selectedSort, setSelectedSort] = useState(orderType);
+  const [selectedCurrency, setSelectedCurrency] = useState<string>(filter.currencyId ?? 'all');
+  const [selectedStatus, setSelectedStatus] = useState<string>(
+    filter?.from ? 'sent' : filter.to ? 'received' : 'all',
+  );
 
   const currencyOptions: MenuOptions<string>[] = [
     {id: 'all', title: 'All'},
@@ -158,10 +165,15 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
           onChange={handleFilterTransactionStatus}
         />
       </div>
+
+      <ShowIf condition={transactions.length === 0 && !isLoading}>
+        <Empty title="You don't have any transaction" subtitle="Start to send tips in a post!" />
+      </ShowIf>
+
       <TableContainer component={List}>
         <Table className={classes.root} aria-label="history details table">
           <TableBody>
-            {transactions.length === 0 ? (
+            {transactions.length === 0 && isLoading ? (
               <TableRow className={classes.loading}>
                 <CircularProgress />
               </TableRow>

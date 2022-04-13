@@ -11,7 +11,7 @@ export enum ContentType {
 export enum WalletReferenceType {
   USER = 'user',
   PEOPLE = 'people',
-  WALLET_ADDRESS = 'walletAddress',
+  WALLET_ADDRESS = 'wallet_address',
 }
 
 export interface WalletDetail {
