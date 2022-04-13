@@ -39,8 +39,6 @@ export const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props =
     onClick(index);
   };
 
-  console.log({balanceDetail});
-
   return (
     <Card className={classes.cardRoot}>
       <CardContent>
