@@ -79,11 +79,12 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {
     const {
       userState: {currencies, user, anonymous, currentWallet},
+      balanceState: {loading},
     } = getState();
 
     let address = '';
 
-    if (anonymous || !user) return;
+    if (anonymous || !user || loading) return;
 
     // Only parse address to fetch balance when wallets are successfully fetched
     if ('wallets' in user && user?.wallets?.length) {
