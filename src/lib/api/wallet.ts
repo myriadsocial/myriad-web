@@ -134,11 +134,23 @@ export const connectNetwork = async (
 };
 
 export const switchNetwork = async (payload: ConnectNetwork, id: string): Promise<void> => {
-  await MyriadAPI.request({
-    url: `users/${id}/networks`,
-    method: 'PATCH',
-    data: payload,
-  });
+  try {
+    await MyriadAPI.request({
+      url: `users/${id}/networks`,
+      method: 'PATCH',
+      data: payload,
+    });
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const data = error.response?.data;
+
+      if (data?.error?.name === 'UnprocessableEntityError') {
+        throw new AccountRegisteredError();
+      }
+    } else {
+      throw error;
+    }
+  }
 };
 
 export const getNetworks = async (): Promise<Networks> => {
