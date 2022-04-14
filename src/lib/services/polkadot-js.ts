@@ -412,8 +412,7 @@ export const claimMyria = async (
     const api = await connectToBlockchain(rpcURL);
     const extrinsic = api.tx.tipping.claimTip(payload);
 
-    extrinsic.signAndSend(currentWallet.id, {nonce: -1, signer: injector.signer});
-    console.log(extrinsic, 9876);
+    await extrinsic.signAndSend(currentWallet.id, {nonce: -1, signer: injector.signer});
   } catch (error) {
     console.log(error);
   }
