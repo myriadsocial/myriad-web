@@ -3,7 +3,7 @@ import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 import {PaginationParams} from './interfaces/pagination-params.interface';
 
-import {Transaction, TransactionProps} from 'src/interfaces/transaction';
+import {Transaction, TransactionProps, TransactionInfo} from 'src/interfaces/transaction';
 
 type TransactionList = BaseList<Transaction>;
 
@@ -77,5 +77,13 @@ export const removeTransaction = async (transactionId: string): Promise<void> =>
   await MyriadAPI.request({
     url: `/transactions/${transactionId}`,
     method: 'DELETE',
+  });
+};
+
+export const updateTransaction = async (transactionInfo: TransactionInfo): Promise<void> => {
+  await MyriadAPI.request({
+    url: `/transactions`,
+    method: 'PATCH',
+    data: transactionInfo,
   });
 };

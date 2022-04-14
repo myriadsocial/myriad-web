@@ -113,8 +113,8 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleSortChange = (sort: string) => {
-    onSort(sort as TransactionSort);
+  const handleSortChange = (sort: TransactionSort) => {
+    onSort(sort);
   };
 
   const limitChar = (string = '', limit = 0): string => {
@@ -125,7 +125,11 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
     <Modal title="Tip History" open={open} onClose={onClose}>
       <div className={styles.root}>
         <div className={styles.options}>
-          <DropdownMenu title="Sort by" options={sortOptions} onChange={handleSortChange} />
+          <DropdownMenu<TransactionSort>
+            title="Sort by"
+            options={sortOptions}
+            onChange={handleSortChange}
+          />
 
           <div>
             <Typography component="span">Coin:&nbsp;</Typography>

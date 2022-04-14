@@ -8,7 +8,7 @@ import ShowIf from '../common/show-if.component';
 import {useStyles} from './TimelineFilter.styles';
 import {useFilterOption} from './hooks/use-filter-option.hook';
 
-import {TimelineType, TimelineOrderType} from 'src/interfaces/timeline';
+import {TimelineType, TimelineOrderType, PostOriginType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 
@@ -18,16 +18,18 @@ export type TimelineFilterProps = {
   selectionType?: 'order' | 'sort';
   type: TimelineType;
   order: TimelineOrderType;
+  originType: PostOriginType;
   sortTimeline: (sort: SortType) => void;
   orderTimeline: (order: TimelineOrderType) => void;
   filterTimeline?: (type: TimelineType) => void;
-  filterOrigin?: (origin: string) => void;
+  filterOrigin?: (origin: PostOriginType) => void;
 };
 
 export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
   const {
     type,
     order,
+    originType,
     filterType,
     selectionType,
     sortTimeline,
@@ -39,28 +41,20 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
 
   const {sortOptions, orderOptions, originFilterOptions, typeFilterOptions} = useFilterOption();
 
-  const handleSort = (sort: string) => {
-    sortTimeline(sort as SortType);
+  const handleFilter = (variant: TimelineType) => {
+    filterTimeline && filterTimeline(variant);
   };
 
-  const handleOrder = (order: string) => {
-    orderTimeline(order as TimelineOrderType);
-  };
-
-  const handleFilter = (variant: string) => {
-    filterTimeline && filterTimeline(variant as TimelineType);
-  };
-
-  const handleFilterOrigin = (origin: string) => {
+  const handleFilterOrigin = (origin: PostOriginType) => {
     filterOrigin && filterOrigin(origin);
   };
 
   return (
     <Grid container alignItems="center" className={styles.root}>
       <ShowIf condition={filterType === 'type'}>
-        <TabList
+        <TabList<TimelineType>
           tabs={typeFilterOptions}
-          active={type}
+          selected={type}
           mark="underline"
           size="small"
           position={'left'}
@@ -70,9 +64,9 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
 
       <ShowIf condition={filterType === 'origin'}>
         <div className={styles.mobile}>
-          <DropdownMenu
+          <DropdownMenu<PostOriginType>
             title="Filter by"
-            selected={type}
+            selected={originType}
             options={originFilterOptions}
             onChange={handleFilterOrigin}
           />
@@ -80,16 +74,16 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
       </ShowIf>
 
       <ShowIf condition={selectionType === 'order'}>
-        <DropdownMenu
+        <DropdownMenu<TimelineOrderType>
           title="Sort by"
           selected={order}
           options={orderOptions}
-          onChange={handleOrder}
+          onChange={orderTimeline}
         />
       </ShowIf>
 
       <ShowIf condition={selectionType === 'sort'}>
-        <DropdownMenu title="Sort by" options={sortOptions} onChange={handleSort} />
+        <DropdownMenu<SortType> title="Sort by" options={sortOptions} onChange={sortTimeline} />
       </ShowIf>
     </Grid>
   );

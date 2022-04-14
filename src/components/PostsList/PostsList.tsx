@@ -55,18 +55,14 @@ export const PostsList: React.FC<PostsListProps> = props => {
   const style = useStyles();
   const {orderOptions} = useFilterOption();
 
-  const handleSort = (sort: string) => {
-    onSort(sort as TimelineOrderType);
-  };
-
   return (
     <Paper className={style.root}>
       <div className={style.sort}>
-        <DropdownMenu
+        <DropdownMenu<TimelineOrderType>
           title="Sort by"
           selected={order}
           options={orderOptions}
-          onChange={handleSort}
+          onChange={onSort}
         />
       </div>
 

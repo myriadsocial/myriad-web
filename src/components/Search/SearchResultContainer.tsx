@@ -126,7 +126,7 @@ export const SearchResultContainer: React.FC = () => {
 
         <TabsComponent
           id="scrollable-users-list"
-          active={selectedTab}
+          selected={selectedTab}
           tabs={searchResultTabTexts}
           mark="underline"
           position="left"

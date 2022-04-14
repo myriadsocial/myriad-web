@@ -32,6 +32,7 @@ import {TransactionFilterProps} from 'src/reducers/transaction/actions';
 type HistoryDetailListProps = {
   transactions: Transaction[];
   filter: TransactionFilterProps;
+  orderType: TransactionOrderType;
   hasMore: boolean;
   currencies: Currency[];
   wallet: UserWallet;
@@ -51,6 +52,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     wallet,
     currencies,
     filter,
+    orderType,
     hasMore,
     userId,
     nextPage,
@@ -61,9 +63,11 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const classes = useStyles();
   const {loading, exchangeRates} = useExchangeRate();
 
-  const [selectedSort, setSelectedSort] = useState(TransactionOrderType.LATEST);
-  const [selectedCurrency, setSelectedCurrency] = useState<string>('all');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [selectedSort, setSelectedSort] = useState(orderType);
+  const [selectedCurrency, setSelectedCurrency] = useState<string>(filter.currencyId ?? 'all');
+  const [selectedStatus, setSelectedStatus] = useState<string>(
+    filter?.from ? 'sent' : filter.to ? 'received' : 'all',
+  );
 
   const currencyOptions: MenuOptions<string>[] = [
     {id: 'all', title: 'All'},
@@ -85,11 +89,9 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     return 0;
   };
 
-  const handleSortTransaction = (sort: string) => {
-    const selectedSort = sort as TransactionOrderType;
-
-    setSelectedSort(selectedSort);
-    sortTransaction(selectedSort);
+  const handleSortTransaction = (sort: TransactionOrderType) => {
+    setSelectedSort(sort);
+    sortTransaction(sort);
   };
 
   const handleFilterTransactionStatus = (status: string) => {
@@ -144,7 +146,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   return (
     <>
       <div className={classes.headerActionWrapper}>
-        <DropdownMenu
+        <DropdownMenu<TransactionOrderType>
           title={'Sort'}
           selected={selectedSort}
           options={transactionSortOptions}

@@ -14,20 +14,20 @@ import {MenuOptions} from './DropdownMenu.types';
 
 import {SortIcon} from 'src/components/atoms/Icons';
 
-type DropdownMenuProps = {
+type DropdownMenuProps<T> = {
   title: string;
-  options: MenuOptions<string>[];
-  selected?: string;
+  options: MenuOptions<T>[];
+  selected?: T;
   disabled?: boolean;
-  onChange: (selected: string) => void;
+  onChange: (selected: T) => void;
 };
 
-export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
+export const DropdownMenu = <T extends unknown>(props: DropdownMenuProps<T>): JSX.Element => {
   const {title, options, selected, onChange, disabled = false} = props;
   const styles = useStyles();
 
-  const [current, setCurrent] = useState<string>();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [current, setCurrent] = useState<T>();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
     if (options.length) {
@@ -47,7 +47,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
     setAnchorEl(null);
   };
 
-  const handleSelected = (option: string) => {
+  const handleSelected = (option: T) => {
     setCurrent(option);
     onChange(option);
     handleClose();
@@ -98,7 +98,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
         open={Boolean(anchorEl)}
         onClose={handleClose}>
         {options.map(option => (
-          <MenuItem key={option.id} onClick={() => handleSelected(option.id)}>
+          <MenuItem key={option.title} onClick={() => handleSelected(option.id)}>
             {option.title}
           </MenuItem>
         ))}

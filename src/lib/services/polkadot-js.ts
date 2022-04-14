@@ -291,7 +291,7 @@ export const checkAccountBalance = async (
     free = result.data.free;
     nonce = result.nonce;
 
-    listenToSystemBalanceChange(account, currency, free as u128, callback);
+    listenToSystemBalanceChange(api, account, free as u128, callback);
   } else {
     const result = await api.query.tokens.accounts<OrmlAccountData>(account, {
       TOKEN: currency.id,
@@ -299,7 +299,7 @@ export const checkAccountBalance = async (
 
     free = result.free;
 
-    listenToTokenBalanceChange(account, currency, result.free, callback);
+    listenToTokenBalanceChange(api, account, currency, result.free, callback);
   }
 
   return {
@@ -309,13 +309,11 @@ export const checkAccountBalance = async (
 };
 
 const listenToSystemBalanceChange = async (
+  api: ApiPromise,
   account: string,
-  currency: Currency,
   previousFree: u128,
   callback: (change: BN) => void,
 ) => {
-  const api = await connectToBlockchain(currency.network.rpcURL);
-
   api.query.system.account(account, ({data: {free}, nonce}) => {
     // Calculate the delta
     const change = free.sub(previousFree);
@@ -331,13 +329,12 @@ const listenToSystemBalanceChange = async (
 };
 
 const listenToTokenBalanceChange = async (
+  api: ApiPromise,
   account: string,
   currency: Currency,
   previousFree: Balance,
   callback: (change: BN) => void,
 ) => {
-  const api = await connectToBlockchain(currency.network.rpcURL);
-
   api.query.tokens.accounts(
     account,
     {
@@ -416,8 +413,7 @@ export const claimMyria = async (
     const api = await connectToBlockchain(rpcURL);
     const extrinsic = api.tx.tipping.claimTip(payload);
 
-    extrinsic.signAndSend(currentWallet.id, {nonce: -1, signer: injector.signer});
-    console.log(extrinsic, 9876);
+    await extrinsic.signAndSend(currentWallet.id, {nonce: -1, signer: injector.signer});
   } catch (error) {
     console.log(error);
   }

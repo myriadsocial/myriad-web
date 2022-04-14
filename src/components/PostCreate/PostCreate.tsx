@@ -97,8 +97,8 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     setPost(prevPost => ({...prevPost, isNSFW: tags.length > 0, NSFWTag: tags.join(',')}));
   };
 
-  const handleVisibilityChange = (visibility: string) => {
-    setPost(prevPost => ({...prevPost, visibility: visibility as PostVisibility}));
+  const handleVisibilityChange = (visibility: PostVisibility) => {
+    setPost(prevPost => ({...prevPost, visibility}));
   };
 
   const handleSubmit = () => {
@@ -164,7 +164,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
       <div className={styles.action}>
         <div className={styles.option}>
-          <DropdownMenu
+          <DropdownMenu<PostVisibility>
             title="Visibility"
             options={menuOptions}
             onChange={handleVisibilityChange}

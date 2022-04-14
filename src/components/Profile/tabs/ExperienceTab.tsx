@@ -62,10 +62,10 @@ export const ProfileExperienceTab: React.FC<ProfileExperienceTabProps> = props =
     dispatch(fetchProfileExperience());
   }, [user]);
 
-  const handleFilterSelected = (selected: string) => {
-    dispatch(fetchProfileExperience(selected as ExperienceType));
+  const handleFilterSelected = (selected: ExperienceType) => {
+    dispatch(fetchProfileExperience(selected));
 
-    setSelectedExperienceType(selected as ExperienceType);
+    setSelectedExperienceType(selected);
     setExperienceFiltered(true);
   };
 
@@ -99,7 +99,7 @@ export const ProfileExperienceTab: React.FC<ProfileExperienceTabProps> = props =
   return (
     <div className={style.mobile}>
       <Grid container alignItems="center" className={style.root}>
-        <DropdownMenu
+        <DropdownMenu<ExperienceType>
           title="Filter by"
           options={experienceFilterOptions}
           onChange={handleFilterSelected}

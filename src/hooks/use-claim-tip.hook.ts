@@ -1,8 +1,10 @@
 import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
+import _ from 'lodash';
 import {Network} from 'src/interfaces/wallet';
 import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {updateTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {getClaimTip, TipResult, claimMyria} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
@@ -19,6 +21,16 @@ export const useClaimTip = () => {
   useEffect(() => {
     getTip();
   }, [networks]);
+
+  const sortNetwork = (networks: Network[], selectedNetwork?: string) => {
+    const newDefaultNetworks = [...networks];
+    const defaultNetworks = _.remove(newDefaultNetworks, function (n) {
+      return n.id === selectedNetwork;
+    });
+    const resultDefaultCoins = [...defaultNetworks, ...newDefaultNetworks];
+
+    return resultDefaultCoins;
+  };
 
   const getTip = async () => {
     if (!user) return;
@@ -53,12 +65,15 @@ export const useClaimTip = () => {
         };
 
         setTipsEachNetwork(
-          tipsEachNetwork.map(option => {
-            if (option.id == NetworkTypeEnum.MYRIAD) {
-              option.tips = [result];
-            }
-            return option;
-          }),
+          sortNetwork(
+            tipsEachNetwork.map(option => {
+              if (option.id == NetworkTypeEnum.MYRIAD) {
+                option.tips = [result];
+              }
+              return option;
+            }),
+            currentWallet?.network,
+          ),
         );
       }
     } catch (error) {
@@ -87,6 +102,17 @@ export const useClaimTip = () => {
         if (!selectedNetwork) return;
 
         await claimMyria(tipBalanceInfo, selectedNetwork?.rpcURL, currentWallet);
+
+        const currency = selectedNetwork.currencies?.find(currency => currency.native === true);
+
+        if (currency) {
+          await updateTransaction({
+            userId: currentWallet.userId,
+            walletId: currentWallet.id,
+            currencyId: currency.id,
+          });
+        }
+
         await getTip();
       }
       callback && callback();
