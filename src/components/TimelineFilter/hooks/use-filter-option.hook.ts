@@ -2,7 +2,7 @@ import {useSelector} from 'react-redux';
 
 import {MenuOptions} from 'src/components/atoms/DropdownMenu';
 import {TabListItem} from 'src/components/atoms/TabList';
-import {TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
+import {TimelineOrderType, TimelineType, PostOriginType} from 'src/interfaces/timeline';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import {RootState} from 'src/reducers';
 import {ProfileState} from 'src/reducers/profile/reducer';
@@ -13,7 +13,7 @@ export const useFilterOption = () => {
   const {detail: people} = useSelector<RootState, ProfileState>(state => state.profileState);
 
   // Filter options
-  const originFilterOptions: MenuOptions<string>[] = [
+  const originFilterOptions: MenuOptions<PostOriginType>[] = [
     {
       id: 'all',
       title: 'All Posts',

@@ -27,20 +27,16 @@ export const UserMenu: React.FC<UserMenuProps> = props => {
 
   const [activeTab, setActiveTab] = useState<UserMenuTabs>(selected);
 
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab as UserMenuTabs);
-  };
-
   useEffect(() => {
     setActiveTab(selected);
   }, [profileDetail?.id]);
 
   return (
     <Paper square className={styles.root}>
-      <TabsComponent
+      <TabsComponent<UserMenuTabs>
         tabs={tabs}
-        active={activeTab}
-        onChangeTab={handleTabChange}
+        selected={activeTab}
+        onChangeTab={setActiveTab}
         size="small"
         background={'#FFFFFF'}
       />

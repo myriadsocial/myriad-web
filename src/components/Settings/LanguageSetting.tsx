@@ -32,10 +32,6 @@ export const LanguageSetting: React.FC<LanguageSettingsProps> = props => {
 
   const styles = useStyles();
 
-  const changeLanguageSetting = (selected: string) => {
-    setLanguage(selected as LanguageSettingType);
-  };
-
   const saveLanguageSetting = () => {
     if (language) {
       onSaveSetting(language);
@@ -56,11 +52,11 @@ export const LanguageSetting: React.FC<LanguageSettingsProps> = props => {
             </Typography>
           </ListItemText>
           <ListItemSecondaryAction>
-            <DropdownMenu
+            <DropdownMenu<LanguageSettingType>
               title=""
               selected={language}
               options={settingLanguageOptions}
-              onChange={changeLanguageSetting}
+              onChange={setLanguage}
             />
           </ListItemSecondaryAction>
         </ListItem>

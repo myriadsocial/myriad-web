@@ -53,7 +53,7 @@ export const FriendMenuComponent: React.FC = () => {
         <div className={style.tabs}>
           <TabsComponent
             tabs={tabs}
-            active={activeTab}
+            selected={activeTab}
             size={'small'}
             onChangeTab={handleChangeTab}
           />

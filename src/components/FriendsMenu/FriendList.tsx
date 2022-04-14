@@ -163,10 +163,6 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     }
   };
 
-  const handleFilterSelected = (selected: string) => {
-    onFilter(selected as FriendType);
-  };
-
   const handleRemoveFriend = () => {
     if (!currentFriend) {
       router.push('/404');
@@ -206,10 +202,6 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     }
   };
 
-  const handleSort = (sort: string) => {
-    onSort(sort as SortType);
-  };
-
   if (friends.length === 0 && !isFiltered) {
     return (
       <Empty title="Friend list is empty" subtitle="Find or invite your friends to Myriad 😉" />
@@ -222,15 +214,15 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         <Grid container alignItems="center" className={style.filterBox}>
           <ShowIf condition={!disableFilter}>
             <div className={style.filter}>
-              <DropdownMenu
+              <DropdownMenu<FriendType>
                 title="Filter by"
                 options={friendFilterOptions}
-                onChange={handleFilterSelected}
+                onChange={onFilter}
               />
             </div>
           </ShowIf>
           <ShowIf condition={!disableSort}>
-            <DropdownMenu title={'Sort by'} options={sortOptions} onChange={handleSort} />
+            <DropdownMenu<SortType> title={'Sort by'} options={sortOptions} onChange={onSort} />
           </ShowIf>
         </Grid>
       </ShowIf>

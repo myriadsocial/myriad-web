@@ -20,7 +20,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles, ShimerComponent} from '.';
 import {PrimaryCoinMenuContainer} from '../PrimaryCoinMenu/PrimaryCoinMenuContainer';
-import {balanceSortOptions} from '../Timeline/default';
+import {balanceSortOptions, BalanceSortType} from '../Timeline/default';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import SearchComponent from '../atoms/Search/SearchBox';
@@ -100,7 +100,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
     handleCloseManageAssets();
   };
 
-  const handleSortChanged = (sort: string) => {
+  const handleSortChanged = (sort: BalanceSortType) => {
     switch (sort) {
       case 'aToZ': {
         const sortedAtoZBalances = _.sortBy(defaultBalanceDetails, 'name');
@@ -153,7 +153,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
         </IconButton>
       </div>
       <div className={classes.headerActionWrapper}>
-        <DropdownMenu
+        <DropdownMenu<BalanceSortType>
           title={'Sort'}
           options={balanceSortOptions}
           onChange={handleSortChanged}
@@ -165,7 +165,6 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
             classes={{root: classes.formControl}}
             control={
               <Checkbox
-                defaultChecked
                 checked={checked}
                 color="primary"
                 onChange={handleChange}

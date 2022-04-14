@@ -69,5 +69,8 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       display: 'block',
       background: '#FFC857',
     },
+    indicatorColor: {
+      backgroundColor: 'transparent',
+    },
   }),
 );

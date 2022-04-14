@@ -11,9 +11,9 @@ import {getThumbnailUrl} from 'src/helpers/image';
 import {acronym} from 'src/helpers/string';
 
 export const Avatar: React.FC<AvatarProps> = props => {
-  const {src, name, variant = 'circular', ...restProps} = props;
+  const {src, name, variant = 'circular', banned = false, ...restProps} = props;
 
-  const styles = useStyles(restProps);
+  const styles = useStyles({...restProps, banned});
 
   const url = src ? getThumbnailUrl(src) : src;
 
