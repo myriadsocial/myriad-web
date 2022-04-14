@@ -40,7 +40,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
 
   useEffect(() => {
-    setTippingEnabled(balances.length > 0);
+    setTippingEnabled(balances.length > 0 || anonymous);
 
     if (balances.length > 0) {
       setDefaultCurrency(balances[0]);
