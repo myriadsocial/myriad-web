@@ -14,13 +14,13 @@ export type TransactionProps = {
   type?: string;
   referenceId?: string;
   from: string;
-  to?: string;
+  to: string;
   currencyId: string;
 };
 
 export type SimpleSendTipProps = {
   from: string;
-  to?: string;
+  to: string;
   type?: string;
   referenceId?: string;
   amount: BN;
@@ -58,3 +58,9 @@ export enum TransactionOrderType {
   LOWEST = 'lowest',
   LATEST = 'latest',
 }
+
+export type TransactionInfo = {
+  userId: string;
+  walletId: string;
+  currencyId: string;
+};

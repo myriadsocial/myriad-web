@@ -148,6 +148,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
     const attributes = {
       from: senderAddress,
+      to: receiver.id,
       amount,
       currency,
       walletDetail: receiver.walletDetail,
