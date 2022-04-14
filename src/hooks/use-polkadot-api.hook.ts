@@ -80,7 +80,7 @@ export const usePolkadotApi = () => {
   };
 
   const simplerSendTip = async (
-    {from, amount, currency, type, referenceId, walletDetail}: SimpleSendTipProps,
+    {from, amount, currency, type, referenceId, walletDetail, to: toId}: SimpleSendTipProps,
     callback?: (hash: string) => void,
   ) => {
     setLoading(true);
@@ -119,7 +119,7 @@ export const usePolkadotApi = () => {
         const to =
           walletDetail.referenceType === WalletReferenceType.WALLET_ADDRESS
             ? walletDetail.referenceId
-            : undefined;
+            : toId;
 
         // Record the transaction
         await storeTransaction({
