@@ -53,7 +53,7 @@ export const login = async (values: LoginProps): Promise<LoginResponseProps | nu
 
     return data;
   } catch (error) {
-    console.log({error});
+    console.log('[login][error]', {error});
     return null;
   }
 };
