@@ -3,7 +3,7 @@ import React, {useState, useRef} from 'react';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
-import {Grid} from '@material-ui/core';
+import {useMediaQuery, useTheme} from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 
 import {PostRender} from '../PostEditor/PostRender';
@@ -63,6 +63,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   const styles = useStyles();
   const router = useRouter();
+  const theme = useTheme();
+  const mobile = useMediaQuery(theme.breakpoints.down('xs'));
   const ref = useRef<HTMLDivElement>(null);
 
   const {
@@ -212,33 +214,31 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           !post.deletedAt && <LinkPreview embed={post.embeddedURL} />}
       </div>
 
-      <Grid
-        container
-        wrap="nowrap"
-        justifyContent="space-between"
-        alignItems="center"
-        className={styles.action}>
-        <Grid item className={styles.metric}>
-          <PostActionComponent
-            metrics={post.metric}
-            upvoted={post.isUpvoted}
-            downvoted={post.isDownVoted}
-            onUpvote={handleUpvote}
-            onDownVote={handleDownVote}
-            onShowComments={toggleShowComments}
-            embedUrl={`${urlLink()}/embed?id=${post.id}&type=post`}
-            postUrl={`${urlLink()}/post/${post.id}`}
-            onShared={handleShareLink}
-            disableAction={type === 'share'}
-          />
-        </Grid>
-
-        <ShowIf condition={isImportedPost && !isOwnSocialPost && type !== 'share'}>
-          <Grid item>
-            <SendTipButton reference={post} referenceType={ReferenceType.POST} />
-          </Grid>
-        </ShowIf>
-      </Grid>
+      <div className={styles.action}>
+        <PostActionComponent
+          metrics={post.metric}
+          upvoted={post.isUpvoted}
+          downvoted={post.isDownVoted}
+          onUpvote={handleUpvote}
+          onDownVote={handleDownVote}
+          onShowComments={toggleShowComments}
+          embedUrl={`${urlLink()}/embed?id=${post.id}&type=post`}
+          postUrl={`${urlLink()}/post/${post.id}`}
+          onShared={handleShareLink}
+          disableAction={type === 'share'}>
+          <ShowIf condition={isImportedPost && !isOwnSocialPost && type !== 'share'}>
+            <SendTipButton
+              reference={post}
+              referenceType={ReferenceType.POST}
+              showIcon={mobile}
+              mobile={mobile}
+              variant="outlined"
+              color="secondary"
+              size="small"
+            />
+          </ShowIf>
+        </PostActionComponent>
+      </div>
 
       <ShowIf condition={shoWcomment}>
         <TabsComponent<SectionType>

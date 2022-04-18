@@ -35,14 +35,14 @@ export const CommentRender: React.FC<CommentRenderProps> = props => {
     const render: any[] = [];
 
     for (let i = 0; i < nodes.length; i++) {
-      render.push(renderElement(nodes[i]));
+      render.push(renderElement(nodes[i], i));
     }
 
     return render;
   };
 
   const renderElement = useCallback(
-    node => {
+    (node, i) => {
       if (node.text) {
         if (Object.keys(node).length === 1) {
           const splitNewLine = node.text.split('\n');
@@ -51,7 +51,7 @@ export const CommentRender: React.FC<CommentRenderProps> = props => {
             <Typography
               variant="body1"
               component="span"
-              key={key}
+              key={`${i}--${key}`}
               style={{wordBreak: 'break-word'}}>
               {item}
               {key !== splitNewLine.length - 1 && <br />}
@@ -63,6 +63,7 @@ export const CommentRender: React.FC<CommentRenderProps> = props => {
           <Typography
             component="span"
             variant="body1"
+            key={i}
             style={{
               fontWeight: node.bold ? 600 : 400,
               fontStyle: node.italic ? 'italic' : 'none',
@@ -78,7 +79,9 @@ export const CommentRender: React.FC<CommentRenderProps> = props => {
         );
       }
 
-      const children = node?.children ? node.children.map((node: any) => renderElement(node)) : '';
+      const children = node?.children
+        ? node.children.map((node: any, j: number) => renderElement(node, `${i}-${j}`))
+        : '';
 
       switch (node.type) {
         case ELEMENT_BLOCKQUOTE:

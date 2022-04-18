@@ -1,9 +1,8 @@
-import {ChevronDownIcon, CurrencyDollarIcon, UserAddIcon, UserIcon} from '@heroicons/react/outline';
+import {ChevronDownIcon, UserAddIcon, UserIcon} from '@heroicons/react/outline';
 import {DotsVerticalIcon} from '@heroicons/react/solid';
 
 import React from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import {useSelector} from 'react-redux';
 
 import {Grid} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
@@ -18,6 +17,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {Metric} from '../Metric';
 import useConfirm from '../common/Confirm/use-confirm.hook';
+import {SendTipButton} from '../common/SendTipButton/SendTipButton';
 import {useFriendOptions} from './hooks/use-friend-options.hook';
 import {useStyles} from './profile-header.style';
 import {Website} from './render/Website';
@@ -28,10 +28,9 @@ import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Friend} from 'src/interfaces/friend';
+import {ReferenceType} from 'src/interfaces/interaction';
 import {ReportProps} from 'src/interfaces/report';
 import {User} from 'src/interfaces/user';
-import {RootState} from 'src/reducers';
-import {BalanceState} from 'src/reducers/balance/reducer';
 
 export type Props = {
   person: User;
@@ -42,7 +41,6 @@ export type Props = {
   onUnblockFriend: (friend: Friend) => void;
   onDeclineRequest: () => void;
   onRemoveFriend: () => void;
-  onSendTip: () => void;
   onEdit?: () => void;
   linkUrl: string;
   onSubmitReport: (payload: ReportProps) => void;
@@ -62,7 +60,6 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     onUnblockFriend,
     onDeclineRequest,
     onRemoveFriend,
-    onSendTip,
     linkUrl,
     onSubmitReport,
     onBlock,
@@ -75,8 +72,6 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     status,
   );
   const {openToasterSnack} = useToasterSnackHook();
-
-  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorElFriend, setAnchorElFriend] = React.useState<null | HTMLElement>(null);
@@ -327,22 +322,15 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               </ShowIf>
 
               <ShowIf condition={!isBlocked}>
-                <Button
-                  disabled={balanceDetails.length === 0}
-                  onClick={onSendTip}
-                  startIcon={
-                    <SvgIcon
-                      classes={{root: style.fill}}
-                      component={CurrencyDollarIcon}
-                      viewBox="2 2 21 21"
-                    />
-                  }
+                <SendTipButton
+                  reference={person}
+                  referenceType={ReferenceType.USER}
                   classes={{root: style.button}}
+                  showIcon
                   variant="contained"
                   color="primary"
-                  size="small">
-                  Send Tip
-                </Button>
+                  size="small"
+                />
               </ShowIf>
             </ShowIf>
           </div>

@@ -18,7 +18,6 @@ import {TipSummaryReducer} from './tip-summary/reducer';
 import {ToasterSnackReducer} from './toaster-snack/reducer';
 import {TransactionReducer} from './transaction/reducer';
 import {UserReducer} from './user/reducer';
-import {WalletReducer} from './wallet/reducer';
 
 import {combineReducers} from 'redux';
 
@@ -35,7 +34,6 @@ const reducers = {
   userState: UserReducer,
   tipSummaryState: TipSummaryReducer,
   balanceState: BalanceReducer,
-  walletState: WalletReducer,
   transactionState: TransactionReducer,
   experienceState: ExperienceReducer,
   peopleState: PeopleReducer,

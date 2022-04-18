@@ -11,7 +11,6 @@ import {
   clearTimeline,
 } from 'src/reducers/timeline/actions';
 import {TimelineState} from 'src/reducers/timeline/reducer';
-import {fetchTippedUserId} from 'src/reducers/wallet/actions';
 
 export const useTimelineHook = () => {
   const timelineState = useSelector<RootState, TimelineState>(state => state.timelineState);
@@ -31,10 +30,6 @@ export const useTimelineHook = () => {
   const orderTimeline = async (sort: TimelineOrderType) => {
     // shallow push, without rerender page
     router.push(`?order=${sort}`, undefined, {shallow: true});
-  };
-
-  const getTippedUserId = async (postId: string) => {
-    dispatch(fetchTippedUserId(postId));
   };
 
   const getPostDetail = (postId: string | string[]) => {
@@ -58,11 +53,9 @@ export const useTimelineHook = () => {
     posts: timelineState.posts,
     order: timelineState.order,
     searchPosts,
-    tippedContent: timelineState.tippedContent,
     initTimeline,
     nextPage,
     orderTimeline,
-    getTippedUserId,
     getPostDetail,
     clearPosts: clear,
     post: timelineState.post,

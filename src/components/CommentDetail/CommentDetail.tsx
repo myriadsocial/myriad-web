@@ -16,8 +16,8 @@ import {CommentList} from '../CommentList';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {VotingComponent} from '../atoms/Voting';
 import useConfirm from '../common/Confirm/use-confirm.hook';
+import {SendTipButton} from '../common/SendTipButton/SendTipButton';
 import {TimeAgo} from '../common/TimeAgo.component';
-import useTipping from '../common/Tipping/use-tipping.hook';
 import {CommentDetailProps} from './CommentDetail.interface';
 import {useStyles} from './CommentDetail.styles';
 import {CommentRender} from './CommentRender';
@@ -28,11 +28,7 @@ import {Comment} from 'src/interfaces/comment';
 import {CommentProps} from 'src/interfaces/comment';
 import {ReferenceType, Vote} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
-import {WalletDetail} from 'src/interfaces/wallet';
-import * as CommentAPI from 'src/lib/api/comment';
 import {RootState} from 'src/reducers';
-import {BalanceState} from 'src/reducers/balance/reducer';
 import {
   upvote,
   downvote,
@@ -40,10 +36,6 @@ import {
   setDownvoting,
   resetDownvoting,
 } from 'src/reducers/timeline/actions';
-
-interface UserWithWalletDetail extends User {
-  walletDetail?: WalletDetail;
-}
 
 export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((props, ref) => {
   const {
@@ -76,12 +68,10 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   } = useRepliesHook(comment.id, deep);
 
   const dispatch = useDispatch();
-  const tipping = useTipping();
   const style = useStyles({...props, deep});
   const router = useRouter();
   const confirm = useConfirm();
 
-  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
   const downvoting = useSelector<RootState, Post | Comment | null>(
     state => state.timelineState.interaction.downvoting,
   );
@@ -105,28 +95,6 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     if (!user) return;
 
     setIsReplying(!isReplying);
-  };
-
-  // TODO: Recheck API
-  const handleSendTip = async () => {
-    try {
-      const receiver: UserWithWalletDetail = comment.user;
-      const walletDetail = await CommentAPI.getWalletAddress(comment.id);
-
-      tipping.send({
-        receiver: {...receiver, walletDetail},
-        reference: comment,
-        referenceType: ReferenceType.COMMENT,
-      });
-    } catch {
-      confirm({
-        title: 'Wallet account not found',
-        description: 'This comment wallet address is unavailable',
-        icon: 'warning',
-        confirmationText: 'close',
-        hideCancel: true,
-      });
-    }
   };
 
   const handleSubmitComment = (attributes: Partial<CommentProps>) => {
@@ -329,15 +297,14 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                 </Button>
 
                 <ShowIf condition={!isOwnComment}>
-                  <Button
-                    className={style.hidden}
-                    classes={{root: style.button}}
-                    disabled={balanceDetails.length === 0}
+                  <SendTipButton
+                    reference={comment}
+                    referenceType={ReferenceType.COMMENT}
                     size="small"
                     variant="text"
-                    onClick={handleSendTip}>
-                    Send tip
-                  </Button>
+                    classes={{root: style.button}}
+                    className={style.hidden}
+                  />
                 </ShowIf>
 
                 <Button
