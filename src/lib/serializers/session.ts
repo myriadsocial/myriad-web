@@ -1,11 +1,11 @@
 import {UserSession, SignInCredential} from 'src/interfaces/session';
 import {ActivityLogType, User} from 'src/interfaces/user';
 
-export const userToSession = (user: User): UserSession => {
+export const userToSession = (user: User, address: string): UserSession => {
   const session: UserSession = {
     anonymous: false,
     name: user.name,
-    address: user.id,
+    address,
     publicAddress: user.publicAddress ?? '',
     profilePictureURL: user.profilePictureURL || '',
     welcome: user.activityLogs
