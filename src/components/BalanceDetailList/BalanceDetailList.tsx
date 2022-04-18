@@ -102,12 +102,6 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
 
   const handleSortChanged = (sort: BalanceSortType) => {
     switch (sort) {
-      case 'aToZ': {
-        const sortedAtoZBalances = _.sortBy(defaultBalanceDetails, 'name');
-        setDefaultBalanceDetails(sortedAtoZBalances);
-        break;
-      }
-
       case 'highest': {
         const sortedHighestBalances = _.orderBy(defaultBalanceDetails, 'freeBalance', 'desc');
         setDefaultBalanceDetails(sortedHighestBalances);
