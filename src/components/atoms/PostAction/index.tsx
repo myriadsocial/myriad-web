@@ -27,6 +27,7 @@ type PostActionProps = {
   onShowComments: () => void;
   onShared: () => void;
   disableAction?: boolean;
+  children?: React.ReactNode;
 };
 
 export const PostActionComponent: React.FC<PostActionProps> = props => {
@@ -38,6 +39,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
     upvoted = false,
     postUrl,
     embedUrl,
+    children,
     onUpvote,
     onDownVote,
     onShowComments,
@@ -112,69 +114,71 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
             </Typography>
           </IconButton>
         </div>
-
-        <Modal
-          align="left"
-          title="Copy post link"
-          className={style.modal}
-          open={Boolean(linkAnchorEl)}
-          onClose={handleCloseCopyLink}>
-          <div className={style.copy}>
-            <Typography component="p" className={style.subtitle} color="primary" variant="h4">
-              Post URL
-            </Typography>
-            <TextField
-              label="Post URL"
-              id="copy-post-url"
-              value={postUrl}
-              variant="outlined"
-              disabled
-              fullWidth
-              margin="none"
-              className={style.input}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <CopyToClipboard text={postUrl} onCopy={handleLinkCopied}>
-                      <IconButton aria-label="copy-post-link" style={{padding: 0}}>
-                        <SvgIcon component={DuplicateIcon} color="primary" />
-                      </IconButton>
-                    </CopyToClipboard>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <div className={style.divider} />
-            <Typography component="p" className={style.subtitle} color="primary" variant="h4">
-              Embed Link
-            </Typography>
-            <TextField
-              label="Copy and paste this code into your website or blog"
-              id="copy-post-embed"
-              value={`<iframe width="700" height="525" src="${embedUrl}></iframe>`}
-              variant="outlined"
-              disabled
-              fullWidth
-              multiline
-              margin="none"
-              className={style.multiline}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <CopyToClipboard
-                      text={`<iframe src="${embedUrl}"></iframe>`}
-                      onCopy={handleLinkCopied}>
-                      <IconButton aria-label="copy-post-embed" style={{padding: 0}}>
-                        <SvgIcon component={DuplicateIcon} color="primary" />
-                      </IconButton>
-                    </CopyToClipboard>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </div>
-        </Modal>
       </ShowIf>
+
+      {children}
+
+      <Modal
+        align="left"
+        title="Copy post link"
+        className={style.modal}
+        open={Boolean(linkAnchorEl)}
+        onClose={handleCloseCopyLink}>
+        <div className={style.copy}>
+          <Typography component="p" className={style.subtitle} color="primary" variant="h4">
+            Post URL
+          </Typography>
+          <TextField
+            label="Post URL"
+            id="copy-post-url"
+            value={postUrl}
+            variant="outlined"
+            disabled
+            fullWidth
+            margin="none"
+            className={style.input}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <CopyToClipboard text={postUrl} onCopy={handleLinkCopied}>
+                    <IconButton aria-label="copy-post-link" style={{padding: 0}}>
+                      <SvgIcon component={DuplicateIcon} color="primary" />
+                    </IconButton>
+                  </CopyToClipboard>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <div className={style.divider} />
+          <Typography component="p" className={style.subtitle} color="primary" variant="h4">
+            Embed Link
+          </Typography>
+          <TextField
+            label="Copy and paste this code into your website or blog"
+            id="copy-post-embed"
+            value={`<iframe width="700" height="525" src="${embedUrl}></iframe>`}
+            variant="outlined"
+            disabled
+            fullWidth
+            multiline
+            margin="none"
+            className={style.multiline}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <CopyToClipboard
+                    text={`<iframe src="${embedUrl}"></iframe>`}
+                    onCopy={handleLinkCopied}>
+                    <IconButton aria-label="copy-post-embed" style={{padding: 0}}>
+                      <SvgIcon component={DuplicateIcon} color="primary" />
+                    </IconButton>
+                  </CopyToClipboard>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </div>
+      </Modal>
     </div>
   );
 };

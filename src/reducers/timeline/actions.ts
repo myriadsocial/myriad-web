@@ -96,13 +96,6 @@ export interface RemoveVotePost extends Action {
   vote: Vote;
 }
 
-export interface SetTippedContent extends Action {
-  type: constants.SET_TIPPED_CONTENT;
-  contentType: string;
-  referenceId: string;
-  disableOtherTippingCurrencies: boolean;
-}
-
 export interface IncreaseCommentCount extends Action {
   type: constants.INCREASE_COMMENT_COUNT;
   postId: string;
@@ -155,7 +148,6 @@ export type Actions =
   | SetDownvoting
   | DownvotePost
   | RemoveVotePost
-  | SetTippedContent
   | IncreaseCommentCount
   | DecreaseCommentCount
   | UpdatePostMetric
@@ -173,17 +165,6 @@ export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
 
 export const clearTimeline = (): ClearTimeline => ({
   type: constants.CLEAR_TIMELINE,
-});
-
-export const setTippedContent = (
-  contentType: string,
-  referenceId: string,
-  disableOtherTippingCurrencies: boolean,
-): SetTippedContent => ({
-  type: constants.SET_TIPPED_CONTENT,
-  contentType,
-  referenceId,
-  disableOtherTippingCurrencies,
 });
 
 /**

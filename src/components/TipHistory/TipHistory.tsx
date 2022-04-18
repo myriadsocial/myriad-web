@@ -3,11 +3,9 @@ import {SearchIcon} from '@heroicons/react/solid';
 
 import React, {useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import {useSelector} from 'react-redux';
 
 import {
   Avatar,
-  Button,
   IconButton,
   InputBase,
   List,
@@ -15,7 +13,6 @@ import {
   SvgIcon,
   Typography,
 } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Menu from '@material-ui/core/Menu';
 
 import {formatUsd} from '../../helpers/balance';
@@ -25,6 +22,7 @@ import {AvatarSize} from '../atoms/Avatar';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {ListItemComponent} from '../atoms/ListItem';
 import {Modal, ModalProps} from '../atoms/Modal';
+import {SendTipButton} from '../common/SendTipButton/SendTipButton';
 import {useStyles} from './TipHistory.styles';
 import {sortOptions} from './default';
 
@@ -35,15 +33,18 @@ import ShowIf from 'src/components/common/show-if.component';
 import {timeAgo} from 'src/helpers/date';
 import {parseScientificNotatedNumber} from 'src/helpers/number';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
-import {RootState} from 'src/reducers';
-import {BalanceState} from 'src/reducers/balance/reducer';
+import {Comment} from 'src/interfaces/comment';
+import {ReferenceType} from 'src/interfaces/interaction';
+import {Post} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
 
 type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
+  reference: Post | Comment | User;
+  referenceType: ReferenceType;
   hasMore: boolean;
   tips: Transaction[];
   currencies: Currency[];
   tippingDisabled: boolean;
-  sendTip: () => void;
   onSort: (sort: TransactionSort) => void;
   onFilter: (currency: string) => void;
   nextPage: () => void;
@@ -51,20 +52,19 @@ type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
 
 export const TipHistory: React.FC<TipHistoryProps> = props => {
   const {
+    reference,
+    referenceType,
     tips,
     hasMore,
     currencies,
     tippingDisabled,
     open,
     onClose,
-    sendTip,
     onSort,
     onFilter,
     nextPage,
   } = props;
   const {loading, exchangeRates} = useExchangeRate();
-
-  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
 
   const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -233,23 +233,16 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
       </div>
 
       <div className={styles.action}>
-        {tippingDisabled ? (
-          <></>
-        ) : (
-          <Button
-            disabled={balanceDetails.length === 0 || tippingDisabled}
+        <ShowIf condition={!tippingDisabled}>
+          <SendTipButton
+            label="I want to send tip too"
+            reference={reference}
+            referenceType={referenceType}
             variant="contained"
             color="primary"
-            disableElevation
             fullWidth
-            onClick={sendTip}>
-            {balanceDetails.length === 0 ? (
-              <CircularProgress size={14} color="primary" />
-            ) : (
-              'I want to send tip too'
-            )}
-          </Button>
-        )}
+          />
+        </ShowIf>
       </div>
     </Modal>
   );
