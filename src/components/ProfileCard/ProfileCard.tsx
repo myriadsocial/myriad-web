@@ -7,6 +7,8 @@ import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './ProfileCard.style';
 import {ProfileContent} from './index';
 
+import {convertToPolkadotAddress} from 'src/helpers/extension';
+
 export const ProfileCard: React.FC<ProfileCardProps> = props => {
   const {
     user,
@@ -24,8 +26,11 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
 
   const formatAddress = (address?: string) => {
     if (address && address.length > 14) {
+      const validAddress = convertToPolkadotAddress(address);
       return (
-        address.substring(0, 4) + '...' + address.substring(address.length - 4, address.length)
+        validAddress.substring(0, 4) +
+        '...' +
+        validAddress.substring(validAddress.length - 4, validAddress.length)
       );
     }
     return address;
