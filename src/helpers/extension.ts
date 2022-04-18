@@ -1,5 +1,8 @@
 import getConfig from 'next/config';
 
+import {decodeAddress, encodeAddress} from '@polkadot/keyring';
+import {hexToU8a, isHex} from '@polkadot/util';
+
 const {publicRuntimeConfig} = getConfig();
 
 export const enableExtension = async () => {
@@ -38,4 +41,12 @@ export const unsubscribeFromAccounts = async () => {
   } else {
     return;
   }
+};
+
+export const convertToPolkadotAddress = (address: string) => {
+  if (isHex(address)) {
+    return encodeAddress(hexToU8a(address));
+  }
+
+  return address;
 };
