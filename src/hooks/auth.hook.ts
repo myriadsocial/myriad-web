@@ -18,7 +18,7 @@ import * as UserAPI from 'src/lib/api/user';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
-import {nearInitialize} from 'src/lib/services/near-api-js';
+import {clearNearAccount} from 'src/lib/services/near-api-js';
 import {createNearSignature} from 'src/lib/services/near-api-js';
 import {signWithExtension} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
@@ -368,7 +368,11 @@ export const useAuthHook = () => {
 
       callback && callback();
     } catch (error) {
-      console.log(error);
+      if (error instanceof AccountRegisteredError) {
+        throw error;
+      } else {
+        console.log(error);
+      }
     } finally {
       setLoading(false);
     }
@@ -376,11 +380,7 @@ export const useAuthHook = () => {
 
   const logout = async (currentWallet?: UserWallet) => {
     if (currentWallet?.network === NetworkTypeEnum.NEAR) {
-      const {wallet} = await nearInitialize();
-
-      if (wallet.isSignedIn()) {
-        wallet.signOut();
-      }
+      await clearNearAccount();
     }
 
     await firebaseCloudMessaging.removeToken();

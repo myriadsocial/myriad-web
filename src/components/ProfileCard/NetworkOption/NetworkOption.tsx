@@ -30,9 +30,12 @@ import {useAuthHook} from 'src/hooks/auth.hook';
 import {NearPayload} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {UserWallet} from 'src/interfaces/user';
+import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
 import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {toHexPublicKey} from 'src/lib/crypto';
+import {clearNearAccount} from 'src/lib/services/near-api-js';
 
 export type NetworkOptionProps = {
   currentWallet?: UserWallet;
@@ -74,6 +77,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
   const {switchNetwork, getRegisteredAccounts} = useAuthHook();
   const {connectToNear} = useNearApi();
   const confirm = useConfirm();
+  const {openToasterSnack} = useToasterSnackHook();
   const {publicRuntimeConfig} = getConfig();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -153,6 +157,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
             };
 
             await handleSwitch(wallet.type, networkType, payload);
+
             router.replace(router.route, undefined, {shallow: true});
           } else {
             console.log('redirection to near auth page');
@@ -171,11 +176,21 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
     network: NetworkTypeEnum,
     account: InjectedAccountWithMeta | NearPayload,
   ) => {
-    switchNetwork(account, network, walletType, () => {
-      setCurrent(network);
-      setNetwork(null);
-      closeAccountList();
-    });
+    try {
+      await switchNetwork(account, network, walletType, () => {
+        setCurrent(network);
+        setNetwork(null);
+        closeAccountList();
+      });
+    } catch (error) {
+      if (error instanceof AccountRegisteredError) {
+        await clearNearAccount();
+        openToasterSnack({
+          message: 'Failed! ' + error.message,
+          variant: 'error',
+        });
+      }
+    }
   };
 
   const getSelectedText = (): string => {

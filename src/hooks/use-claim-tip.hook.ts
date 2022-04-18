@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import _ from 'lodash';
 import {Network} from 'src/interfaces/wallet';
 import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {updateTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {getClaimTip, TipResult, claimMyria} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
@@ -101,6 +102,17 @@ export const useClaimTip = () => {
         if (!selectedNetwork) return;
 
         await claimMyria(tipBalanceInfo, selectedNetwork?.rpcURL, currentWallet);
+
+        const currency = selectedNetwork.currencies?.find(currency => currency.native === true);
+
+        if (currency) {
+          await updateTransaction({
+            userId: currentWallet.userId,
+            walletId: currentWallet.id,
+            currencyId: currency.id,
+          });
+        }
+
         await getTip();
       }
       callback && callback();

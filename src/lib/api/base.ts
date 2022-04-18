@@ -41,6 +41,8 @@ export const initialize = (params?: AuthorizationParams): AxiosInstance => {
 };
 
 export const setHeaders = (headers: {cookie: string}): void => {
+  if (!headers?.cookie) return;
+
   if (API) {
     API.interceptors.request.use(config => {
       config.headers = {
