@@ -185,7 +185,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
             href={`/experience/[experienceId]/edit`}
             as={`/experience/${experienceId}/edit`}
             passHref>
-            <MenuItem>Edit experience</MenuItem>
+            <MenuItem onClick={handleCloseSettings}>Edit experience</MenuItem>
           </Link>
         </ShowIf>
 
