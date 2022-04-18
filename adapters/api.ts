@@ -27,13 +27,13 @@ function Adapter() {
       return null;
     }
 
-    async function getUser(id: string) {
+    async function getUser(address: string) {
       try {
-        const user = await WalletAPI.getUserByWalletAddress(id);
+        const user = await WalletAPI.getUserByWalletAddress(address);
 
-        _debug('getUser', id, user);
+        _debug('getUser', address, user);
 
-        return userToSession(user);
+        return userToSession(user, address);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           _debug('getUser error', error.response?.data);
