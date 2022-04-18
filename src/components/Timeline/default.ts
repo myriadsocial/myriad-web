@@ -13,19 +13,11 @@ export const experienceFilterOptions: MenuOptions<ExperienceType>[] = [
 // TODO: move this to balance detail list
 export const balanceSortOptions: MenuOptions<BalanceSortType>[] = [
   {
-    id: 'all',
-    title: 'All',
-  },
-  {
-    id: 'aToZ',
-    title: 'A-Z',
-  },
-  {
     id: 'highest',
-    title: 'Highest Asset',
+    title: 'Highest',
   },
   {
     id: 'lowest',
-    title: 'Lowest Asset',
+    title: 'Lowest',
   },
 ];
