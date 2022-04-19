@@ -3,6 +3,8 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      width: 424,
+      paddingRight: 60,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -10,11 +12,13 @@ export const useStyles = makeStyles((theme: Theme) =>
         marginRight: 20,
       },
 
+      [theme.breakpoints.between('sm', 'md')]: {
+        width: 370,
+      },
+
       [theme.breakpoints.down('xs')]: {
-        justifyContent: 'space-between',
-        '& > div': {
-          marginRight: 0,
-        },
+        width: 224,
+        paddingRight: 30,
       },
     },
     section: {
@@ -23,6 +27,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     action: {
       marginRight: theme.spacing(1),
       padding: 0,
+      color: theme.palette.primary.main,
     },
     mr1: {
       marginRight: theme.spacing(0.5),
@@ -32,6 +37,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 18,
       height: 18,
       color: '#404040',
+
+      [theme.breakpoints.down('xs')]: {
+        color: theme.palette.primary.main,
+      },
     },
     modal: {
       paddingBottom: 10,

@@ -80,6 +80,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const isPostOwner = post.createdBy === user?.id;
   const isOwnSocialPost = user?.people?.find(person => person.id === post.peopleId) ? true : false;
   const isImportedPost = post.platform !== 'myriad' || post.createdBy !== user?.id ? true : false;
+  const showTipButton = isImportedPost && !isOwnSocialPost && type !== 'share';
 
   const onHashtagClicked = async (hashtag: string) => {
     await router.push(`/topic/hashtag?tag=${hashtag.replace('#', '')}`, undefined, {
@@ -154,6 +155,10 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     onOpenTipHistory(post);
   };
 
+  const showAll = () => {
+    setMaxLength(undefined);
+  };
+
   const urlLink = () => {
     if (typeof window !== 'undefined') {
       return window.location.origin;
@@ -182,7 +187,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
         <ShowIf condition={viewContent}>
           <ShowIf condition={['myriad'].includes(post.platform)}>
-            <PostRender post={post} max={maxLength} onShowAll={() => setMaxLength(undefined)} />
+            <PostRender post={post} max={maxLength} onShowAll={showAll} />
           </ShowIf>
 
           <ShowIf condition={['twitter'].includes(post.platform)}>
@@ -195,7 +200,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
               text={post.text}
               maxLength={maxLength}
               onHashtagClicked={onHashtagClicked}
-              onShowMore={() => setMaxLength(undefined)}
+              onShowMore={showAll}
             />
           </ShowIf>
 
@@ -225,19 +230,20 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           embedUrl={`${urlLink()}/embed?id=${post.id}&type=post`}
           postUrl={`${urlLink()}/post/${post.id}`}
           onShared={handleShareLink}
-          disableAction={type === 'share'}>
-          <ShowIf condition={isImportedPost && !isOwnSocialPost && type !== 'share'}>
-            <SendTipButton
-              reference={post}
-              referenceType={ReferenceType.POST}
-              showIcon={mobile}
-              mobile={mobile}
-              variant="outlined"
-              color="secondary"
-              size="small"
-            />
-          </ShowIf>
-        </PostActionComponent>
+          disableAction={type === 'share'}
+        />
+
+        <ShowIf condition={showTipButton}>
+          <SendTipButton
+            reference={post}
+            referenceType={ReferenceType.POST}
+            showIcon={mobile}
+            mobile={mobile}
+            variant="outlined"
+            color="secondary"
+            size="small"
+          />
+        </ShowIf>
       </div>
 
       <ShowIf condition={shoWcomment}>
