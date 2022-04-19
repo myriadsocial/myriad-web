@@ -122,7 +122,6 @@ export const usePolkadotApi = () => {
           referenceId,
         });
 
-        dispatch(fetchBalances());
         callback && callback(txHash);
       }
     } catch (error) {
