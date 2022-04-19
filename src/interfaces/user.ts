@@ -3,6 +3,7 @@ import {Currency} from './currency';
 import {FriendStatus} from './friend';
 import {People} from './people';
 import {TransactionDetail} from './transaction';
+import {Network} from './wallet';
 
 import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
 
@@ -26,7 +27,8 @@ export type UserOnTransaction = BaseUser & {
 
 export interface Wallet extends BaseModel {
   type: WalletTypeEnum;
-  network: NetworkTypeEnum;
+  network: Network;
+  networkId: NetworkTypeEnum;
   primary: boolean;
   userId: string;
 }

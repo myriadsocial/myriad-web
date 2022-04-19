@@ -18,6 +18,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
     onSwitchAccount,
     onShowNotificationList,
     currentWallet,
+    networks,
   } = props;
   const classes = useStyles();
 
@@ -37,6 +38,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
           user={user}
           currentWallet={currentWallet}
           alias={alias}
+          networks={networks}
           notificationCount={notificationCount}
           onShowNotificationList={onShowNotificationList}
           onViewProfile={onViewProfile}
@@ -44,7 +46,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
           onSwitchAccount={onSwitchAccount}
         />
         <div className={classes.wallet}>
-          <NetworkOption currentWallet={currentWallet} wallets={wallets} />
+          <NetworkOption currentWallet={currentWallet} wallets={wallets} networks={networks} />
 
           <Typography component="div" className={classes.address}>
             {formatAddress(currentWallet?.id)}
