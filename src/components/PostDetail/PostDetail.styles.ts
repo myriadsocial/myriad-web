@@ -25,6 +25,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     action: {
       marginTop: 10,
       padding: '0 20px 20px',
+      display: 'flex',
+      justifyContent: 'space-between',
     },
   }),
 );
