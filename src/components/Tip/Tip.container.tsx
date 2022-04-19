@@ -57,7 +57,7 @@ export const TipContainer: React.FC = () => {
   };
 
   const isShow = (network: Network) => {
-    if (network.id === currentWallet?.network) return true;
+    if (network.id === currentWallet?.networkId) return true;
     return false;
   };
 

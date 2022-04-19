@@ -27,7 +27,7 @@ export type UserOnTransaction = BaseUser & {
 
 export interface Wallet extends BaseModel {
   type: WalletTypeEnum;
-  network: Network;
+  network?: Network;
   networkId: NetworkTypeEnum;
   primary: boolean;
   userId: string;

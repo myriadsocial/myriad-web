@@ -117,7 +117,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
       balances={balanceDetails}
       sender={user}
       currentWallet={currentWallet?.type}
-      currentNetwork={currentWallet?.network}>
+      currentNetwork={currentWallet?.networkId}>
       <Container maxWidth="lg" disableGutters>
         <div className={classes.root}>
           <div className={classes.firstCol}>

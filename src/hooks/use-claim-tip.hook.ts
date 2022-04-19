@@ -72,7 +72,7 @@ export const useClaimTip = () => {
               }
               return option;
             }),
-            currentWallet?.network,
+            currentWallet?.networkId,
           ),
         );
       }
