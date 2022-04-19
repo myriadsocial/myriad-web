@@ -46,11 +46,11 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
   const formatWallet = (walletType?: string) => {
     switch (walletType) {
       case WalletTypeEnum.POLKADOT:
-        return capitalize(WalletTypeEnum.POLKADOT);
+        return 'Polkadot{.js}';
       case WalletTypeEnum.NEAR:
-        return WalletTypeEnum.NEAR.toUpperCase();
+        return 'NEAR Wallet';
       default:
-        return '';
+        return walletType;
     }
   };
 
@@ -72,7 +72,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
   };
 
   const getSelectedIcon = (isWallet?: boolean) => {
-    const match = currentWallet?.network;
+    const match = currentWallet?.networkId;
     if (isWallet) {
       switch (match) {
         case NetworkTypeEnum.NEAR:
@@ -141,14 +141,14 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
             <div className={classes.column}>
               <Typography component="span">Network</Typography>
               <Typography component="span" className={classes.flex}>
-                {getSelectedIcon()} {formatNetwork(currentWallet?.type, currentWallet?.network)}
+                {getSelectedIcon()} {formatNetwork(currentWallet?.type, currentWallet?.networkId)}
               </Typography>
             </div>
             <div className={classes.column}>
               <Typography component="span">Wallet</Typography>
               <Typography component="span" className={classes.flex}>
                 {getSelectedIcon(true)}
-                {formatWallet(currentWallet?.type)} Wallet
+                {formatWallet(currentWallet?.type)}
               </Typography>
             </div>
           </div>
