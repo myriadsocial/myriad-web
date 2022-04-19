@@ -8,6 +8,7 @@ import {useStyles} from './ProfileCard.style';
 import {ProfileContent} from './index';
 
 import {convertToPolkadotAddress} from 'src/helpers/extension';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 
 export const ProfileCard: React.FC<ProfileCardProps> = props => {
   const {
@@ -26,7 +27,12 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
 
   const formatAddress = (address?: string) => {
     if (address && address.length > 14) {
-      const validAddress = convertToPolkadotAddress(address, currentWallet);
+      let validAddress = '';
+
+      if (currentWallet?.type === WalletTypeEnum.POLKADOT) {
+        validAddress = convertToPolkadotAddress(address, currentWallet);
+      }
+
       return (
         validAddress.substring(0, 4) +
         '...' +
