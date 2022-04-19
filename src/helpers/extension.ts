@@ -4,7 +4,6 @@ import {encodeAddress} from '@polkadot/keyring';
 import {hexToU8a, isHex} from '@polkadot/util';
 
 import {NetworkTypeEnum} from 'src/interfaces/network';
-import {UserWallet} from 'src/interfaces/wallet';
 
 const {publicRuntimeConfig} = getConfig();
 
@@ -49,10 +48,6 @@ export const unsubscribeFromAccounts = async () => {
 export const convertToPolkadotAddress = (address: string, currentWallet: UserWallet): string => {
   if (isHex(address)) {
     switch (currentWallet.network) {
-      case NetworkTypeEnum.NEAR: {
-        return address;
-      }
-
       case NetworkTypeEnum.MYRIAD: {
         return encodeAddress(hexToU8a(address), 42);
       }
