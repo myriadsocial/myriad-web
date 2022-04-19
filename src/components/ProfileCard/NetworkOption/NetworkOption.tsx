@@ -18,7 +18,6 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {PolkadotAccountList} from '../../PolkadotAccountList';
 import {useStyles} from './networkOption.style';
 
-import {MenuOptions} from 'src/components/atoms/DropdownMenu';
 import {
   NearNetworkIcon24,
   MyriadCircleIcon,
@@ -32,6 +31,7 @@ import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {UserWallet} from 'src/interfaces/user';
+import {Network} from 'src/interfaces/wallet';
 import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
 import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {toHexPublicKey} from 'src/lib/crypto';
@@ -40,36 +40,10 @@ import {clearNearAccount} from 'src/lib/services/near-api-js';
 export type NetworkOptionProps = {
   currentWallet?: UserWallet;
   wallets?: UserWallet[];
+  networks: Network[];
 };
 
-type NetworkMenuOption = MenuOptions<string> & {
-  walletType: string;
-};
-
-const networkOptions: NetworkMenuOption[] = [
-  {
-    id: 'polkadot',
-    title: 'Polkadot',
-    walletType: WalletTypeEnum.POLKADOT,
-  },
-  {
-    id: 'kusama',
-    title: 'Kusama',
-    walletType: WalletTypeEnum.POLKADOT,
-  },
-  {
-    id: 'near',
-    title: 'NEAR',
-    walletType: WalletTypeEnum.NEAR,
-  },
-  {
-    id: 'myriad',
-    title: 'Myriad',
-    walletType: WalletTypeEnum.POLKADOT,
-  },
-];
-
-export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wallets}) => {
+export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wallets, networks}) => {
   const router = useRouter();
   const styles = useStyles();
 
@@ -82,7 +56,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [current, setCurrent] = React.useState<string>(
-    currentWallet?.network ? currentWallet?.network : networkOptions[0].id,
+    currentWallet?.networkId ? currentWallet?.networkId : networks[0].id,
   );
   const [showAccountList, setShowAccountList] = React.useState(false);
   const [extensionInstalled, setExtensionInstalled] = React.useState(false);
@@ -100,7 +74,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
   );
 
   useEffect(() => {
-    currentWallet && setCurrent(currentWallet?.network);
+    currentWallet && setCurrent(currentWallet?.networkId);
   }, [currentWallet]);
 
   useEffect(() => {
@@ -194,13 +168,12 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
   };
 
   const getSelectedText = (): string => {
-    const match = networkOptions.find(option => option.id === current);
-
-    return match?.title ?? '';
+    const selectedNetwork = networks.find(option => option.id === current);
+    return formatTitle(selectedNetwork?.id) ?? currentWallet?.networkId ?? '';
   };
 
   const getSelectedIcon = () => {
-    const match = networkOptions.find(option => option.id === current);
+    const match = networks.find(option => option.id === current);
 
     return match?.id && icons[match.id as keyof typeof icons];
   };
@@ -237,10 +210,16 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
   };
 
   const showConfirmDialog = (selected: string) => {
-    const selectedWallet = networkOptions.find(option => option.id == selected);
+    const selectedWallet = networks.find(option => option.id == selected);
     confirm({
-      title: `You did’nt connect your ${selectedWallet?.title}!`,
-      description: `This account is not connected with ${selectedWallet?.title}. Please connect to ${selectedWallet?.title} in wallet manage tab. Do you want to connect your account?`,
+      title: `You didn’t connect your ${formatTitle(selectedWallet?.id)}!`,
+      description: `This account is not connected with ${formatTitle(
+        selectedWallet?.walletType,
+        true,
+      )}. Please connect to ${formatTitle(
+        selectedWallet?.walletType,
+        true,
+      )} in wallet manage tab. Do you want to connect your account?`,
       icon: 'warning',
       confirmationText: 'Yes',
       cancellationText: 'Cancel',
@@ -248,6 +227,31 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
         handleConnectWallet();
       },
     });
+  };
+
+  const formatTitle = (id?: string, wallet?: boolean) => {
+    if (wallet)
+      switch (id) {
+        case WalletTypeEnum.POLKADOT:
+          return 'Polkadot{.js}';
+        case WalletTypeEnum.NEAR:
+          return 'NEAR Wallet';
+        default:
+          return id;
+      }
+
+    switch (id) {
+      case NetworkTypeEnum.POLKADOT:
+        return 'Polkadot';
+      case NetworkTypeEnum.NEAR:
+        return 'NEAR';
+      case NetworkTypeEnum.KUSAMA:
+        return 'Kusama';
+      case NetworkTypeEnum.MYRIAD:
+        return 'Myriad';
+      default:
+        return id;
+    }
   };
 
   return (
@@ -269,13 +273,13 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
         transformOrigin={{vertical: 'top', horizontal: 'left'}}
         open={Boolean(anchorEl)}
         onClose={handleClose}>
-        {networkOptions.map(option => (
+        {networks.map(option => (
           <MenuItem
             key={option.id}
             onClick={() => handleSelected(option.walletType, option.id as NetworkTypeEnum)}
             className={option.id === current ? styles.menu : ''}>
             <ListItemIcon>{icons[option.id as keyof typeof icons]}</ListItemIcon>
-            <ListItemText>{option.title}</ListItemText>
+            <ListItemText>{formatTitle(option.id)}</ListItemText>
           </MenuItem>
         ))}
       </Menu>
