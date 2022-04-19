@@ -26,7 +26,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
 
   const formatAddress = (address?: string) => {
     if (address && address.length > 14) {
-      const validAddress = convertToPolkadotAddress(address);
+      const validAddress = convertToPolkadotAddress(address, currentWallet);
       return (
         validAddress.substring(0, 4) +
         '...' +
