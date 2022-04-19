@@ -36,7 +36,7 @@ TipHistory.args = {
       fromWallet: {
         id: '0x76709daddc7f97dede94a4ab9bc168fd4f5b5a96bf15adfdb247d6f0d2276d39',
         type: WalletTypeEnum.POLKADOT,
-        network: NetworkTypeEnum.POLKADOT,
+        networkId: NetworkTypeEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
         createdAt: new Date('2021-08-11T16:28:12.000Z'),
@@ -66,7 +66,7 @@ TipHistory.args = {
       toWallet: {
         id: '0xd6a98971eb249a031daebf0856c693ef73018cc4a77a703061f44794abc1931a',
         type: WalletTypeEnum.POLKADOT,
-        network: NetworkTypeEnum.POLKADOT,
+        networkId: NetworkTypeEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
         createdAt: new Date('2021-08-11T16:28:12.000Z'),
@@ -135,7 +135,7 @@ TipHistory.args = {
       fromWallet: {
         id: '0x76709daddc7f97dede94a4ab9bc168fd4f5b5a96bf15adfdb247d6f0d2276d39',
         type: WalletTypeEnum.POLKADOT,
-        network: NetworkTypeEnum.POLKADOT,
+        networkId: NetworkTypeEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
         createdAt: new Date('2021-08-11T16:28:12.000Z'),
@@ -165,7 +165,7 @@ TipHistory.args = {
       toWallet: {
         id: '0xd6a98971eb249a031daebf0856c693ef73018cc4a77a703061f44794abc1931a',
         type: WalletTypeEnum.POLKADOT,
-        network: NetworkTypeEnum.POLKADOT,
+        networkId: NetworkTypeEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
         createdAt: new Date('2021-08-11T16:28:12.000Z'),

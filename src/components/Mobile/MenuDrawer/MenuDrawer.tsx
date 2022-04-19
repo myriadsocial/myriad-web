@@ -27,7 +27,9 @@ import {clearUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const MenuDrawerComponent: React.FC = () => {
-  const {user, alias, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, alias, anonymous, networks} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const [selected, setSelected] = React.useState<MenuId>('home');
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = React.useState(false);
@@ -129,6 +131,7 @@ export const MenuDrawerComponent: React.FC = () => {
               <ProfileContent
                 user={user}
                 alias={alias}
+                networks={networks}
                 notificationCount={0}
                 onShowNotificationList={console.log}
                 onViewProfile={console.log}

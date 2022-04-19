@@ -379,7 +379,7 @@ export const useAuthHook = () => {
   };
 
   const logout = async (currentWallet?: UserWallet) => {
-    if (currentWallet?.network === NetworkTypeEnum.NEAR) {
+    if (currentWallet?.networkId === NetworkTypeEnum.NEAR) {
       await clearNearAccount();
     }
 

@@ -84,10 +84,10 @@ export const Tip: React.FC<TipProps> = ({tips, network, onClaim, onClaimAll, cur
           </Typography>
         </ListItemText>
         <div className={style.secondaryAction}>
-          <ShowIf condition={!!currentWallet && currentWallet.network !== network}>
+          <ShowIf condition={!!currentWallet && currentWallet.networkId !== network}>
             <Typography>Switch network to claim</Typography>
           </ShowIf>
-          <ShowIf condition={!!currentWallet && currentWallet.network == network}>
+          <ShowIf condition={!!currentWallet && currentWallet.networkId == network}>
             <Button
               className={style.button}
               size="small"
@@ -113,7 +113,7 @@ export const Tip: React.FC<TipProps> = ({tips, network, onClaim, onClaimAll, cur
                   </Typography>
                 </div>
                 <Button
-                  disabled={currentWallet && currentWallet.network !== network}
+                  disabled={currentWallet && currentWallet.networkId !== network}
                   onClick={() => handleClaim(network, tip.tipsBalanceInfo.ftIdentifier)}
                   size="small"
                   className={style.buttonClaim}
