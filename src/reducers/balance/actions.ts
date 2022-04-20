@@ -78,7 +78,25 @@ export type RetrieveBalanceProps = {
 export const fetchBalances: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {
     const {
-      userState: {currencies, user, anonymous, currentWallet},
+      userState: {user, anonymous, currentWallet},
+      balanceState: {loading},
+    } = getState();
+
+    if (anonymous || !user || loading) return;
+
+    if (currentWallet?.type === WalletTypeEnum.POLKADOT) {
+      dispatch(fetchBalancesPolkadot());
+    }
+
+    if (currentWallet?.type === WalletTypeEnum.NEAR) {
+      dispatch(fetchBalancesNear());
+    }
+  };
+
+export const fetchBalancesPolkadot: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    const {
+      userState: {currencies, user, anonymous},
       balanceState: {loading},
     } = getState();
 
@@ -102,30 +120,79 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
         let originBalance = 0;
         let freeBalance = 0;
         let previousNonce = 0;
-        //TODO: make a separated switch case for each network type
-        if (currentWallet?.type === WalletTypeEnum.POLKADOT) {
-          const {free, nonce} = await checkAccountBalance(address, currency, change => {
-            const amount = formatNumber(+change.toString(), currency.decimal);
-            if (amount > 0) {
-              dispatch(increaseBalance(currency.symbol, amount));
-            } else {
-              dispatch(decreaseBalance(currency.symbol, Math.abs(amount)));
-            }
-          });
+        const {free, nonce} = await checkAccountBalance(address, currency, change => {
+          const amount = formatNumber(+change.toString(), currency.decimal);
+          if (amount > 0) {
+            dispatch(increaseBalance(currency.symbol, amount));
+          } else {
+            dispatch(decreaseBalance(currency.symbol, Math.abs(amount)));
+          }
+        });
 
-          originBalance = formatNumber(+free.toString(), currency.decimal);
-          freeBalance = formatNumber(+free.toString(), currency.decimal);
-          previousNonce = nonce ? +nonce.toString() : 0;
-        } else if (currentWallet?.type === WalletTypeEnum.NEAR) {
-          const {near, wallet} = await nearInitialize();
-          const {balance} = await getNearBalance(
-            near,
-            wallet.getAccountId(),
-            currency.referenceId,
-            currency.decimal,
-          );
-          freeBalance = parseFloat(balance);
-        }
+        originBalance = formatNumber(+free.toString(), currency.decimal);
+        freeBalance = formatNumber(+free.toString(), currency.decimal);
+        previousNonce = nonce ? +nonce.toString() : 0;
+
+        return {originBalance, freeBalance, previousNonce};
+      };
+
+      for (const currency of currencies) {
+        const {originBalance, freeBalance, previousNonce} = await retrieveBalance(currency);
+
+        const currencyWallet = {
+          ...currency,
+          originBalance: originBalance,
+          freeBalance: freeBalance,
+          previousNonce: previousNonce,
+        };
+
+        tokenBalances.push({
+          ...currencyWallet,
+        });
+      }
+
+      dispatch({
+        type: constants.FETCH_BALANCES,
+        balanceDetails: tokenBalances,
+      });
+    } catch (error) {
+      dispatch(
+        setError({
+          title: 'something is wrong',
+          message: 'There are some issues when connecting to RPC',
+        }),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    const {
+      userState: {currencies, user, anonymous},
+      balanceState: {loading},
+    } = getState();
+
+    if (anonymous || !user || loading) return;
+
+    const tokenBalances: BalanceDetail[] = [];
+
+    dispatch(setLoading(true));
+
+    try {
+      const retrieveBalance = async (currency: Currency): Promise<RetrieveBalanceProps> => {
+        const originBalance = 0;
+        let freeBalance = 0;
+        const previousNonce = 0;
+        const {near, wallet} = await nearInitialize();
+        const {balance} = await getNearBalance(
+          near,
+          wallet.getAccountId(),
+          currency.referenceId,
+          currency.decimal,
+        );
+        freeBalance = parseFloat(balance);
 
         return {originBalance, freeBalance, previousNonce};
       };
