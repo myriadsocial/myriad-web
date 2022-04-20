@@ -98,18 +98,11 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
 
       if (!receiver) throw new Error('Not Found');
 
-      if (
-        walletReceiver.length > 0 &&
-        walletReceiver.filter(wallet => wallet.type === tipping.currentWallet).length > 0
-      ) {
-        tipping.send({
-          receiver,
-          reference,
-          referenceType,
-        });
-      } else {
-        setPromptFailedTip(true);
-      }
+      tipping.send({
+        receiver,
+        reference,
+        referenceType,
+      });
     } catch (error) {
       if (
         walletReceiver.length > 0 &&
