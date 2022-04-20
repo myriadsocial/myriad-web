@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 
 import {
@@ -6,7 +7,6 @@ import {
   Checkbox,
   FormControlLabel,
   Grid,
-  List,
   ListItem,
   Typography,
   Tooltip,
@@ -21,35 +21,31 @@ import {
   PolkadotNetworkIcon,
   NearNetworkIcon,
   PolygonNetworkDisabledIcon,
-  PolkadotWalletIcon,
   SenderWalletDisabledIcon,
   CoinbaseWalletisabledIcon,
   MetamaskWalletDisabledIcon,
   TrustWalletDisabledIcon,
+  KusamaNetworkIcon,
+  MyriadCircleIcon,
 } from 'src/components/atoms/Icons';
 import {PromptComponent as Prompt} from 'src/components/atoms/Prompt/prompt.component';
 import {PolkadotLink} from 'src/components/common/PolkadotLink.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
+import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
 import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 type OptionProps = {
   network?: string;
-  onConnect?: (accounts: InjectedAccountWithMeta[]) => void;
-  onConnectNear?: (nearId: string, callback: () => void) => void;
+  onConnect?: (accounts: InjectedAccountWithMeta[], network: NetworkTypeEnum) => void;
+  onConnectNear?: (nearId: string, callback: () => void, network: NetworkTypeEnum) => void;
 };
 
-enum NetworkTypeEnum {
-  ETHEREUM = 'ethereum',
-  POLKADOT = 'polkadot',
-  BINANCE = 'binance',
-  POLYGON = 'polygon',
-  NEAR = 'near',
-}
-
 export const Options: React.FC<OptionProps> = props => {
+  const {networks} = useSelector<RootState, UserState>(state => state.userState);
   const styles = useStyles();
 
   const {onConnect, onConnectNear} = props;
@@ -67,15 +63,60 @@ export const Options: React.FC<OptionProps> = props => {
   const [extensionEnabled, setExtensionEnabled] = useState(false);
   const [connectAttempted, setConnectAttempted] = useState(false);
 
+  const icons = React.useMemo(
+    () => ({
+      polkadot: <PolkadotNetworkIcon className={styles.icon} />,
+      kusama: <KusamaNetworkIcon className={styles.icon} />,
+      near: <NearNetworkIcon className={styles.icon} />,
+      myriad: <MyriadCircleIcon className={styles.icon} />,
+    }),
+    [],
+  );
+
+  const formatTitle = (id?: string, wallet?: boolean) => {
+    if (wallet)
+      switch (id) {
+        case WalletTypeEnum.POLKADOT:
+          return 'Polkadot{.js}';
+        case WalletTypeEnum.NEAR:
+          return 'NEAR Wallet';
+        default:
+          return id;
+      }
+
+    switch (id) {
+      case NetworkTypeEnum.POLKADOT:
+        return 'Polkadot';
+      case NetworkTypeEnum.NEAR:
+        return 'NEAR';
+      case NetworkTypeEnum.KUSAMA:
+        return 'Kusama';
+      case NetworkTypeEnum.MYRIAD:
+        return 'Myriad';
+      default:
+        return id;
+    }
+  };
+
   const setSelectedNetwork = (value: NetworkTypeEnum) => () => {
     setNetwork(value);
 
-    if (value === NetworkTypeEnum.POLKADOT) {
-      setSelectedWallet(WalletTypeEnum.POLKADOT)();
-    } else if (value === NetworkTypeEnum.NEAR) {
-      setSelectedWallet(WalletTypeEnum.NEAR)();
-    } else {
-      setWallet(null);
+    switch (value) {
+      case NetworkTypeEnum.POLKADOT:
+        setSelectedWallet(WalletTypeEnum.POLKADOT)();
+        break;
+      case NetworkTypeEnum.MYRIAD:
+        setSelectedWallet(WalletTypeEnum.POLKADOT)();
+        break;
+      case NetworkTypeEnum.KUSAMA:
+        setSelectedWallet(WalletTypeEnum.POLKADOT)();
+        break;
+      case NetworkTypeEnum.NEAR:
+        setSelectedWallet(WalletTypeEnum.NEAR)();
+        break;
+      default:
+        setWallet(null);
+        break;
     }
   };
 
@@ -124,7 +165,7 @@ export const Options: React.FC<OptionProps> = props => {
 
         if (accounts.length > 0) {
           setAccounts(accounts);
-          onConnect && onConnect(accounts);
+          onConnect && onConnect(accounts, network as NetworkTypeEnum);
 
           navigate('/account');
         } else {
@@ -138,9 +179,13 @@ export const Options: React.FC<OptionProps> = props => {
 
         if (data) {
           onConnectNear &&
-            onConnectNear(data.publicAddress, () => {
-              navigate('/profile');
-            });
+            onConnectNear(
+              data.publicAddress,
+              () => {
+                navigate('/profile');
+              },
+              network as NetworkTypeEnum,
+            );
         } else {
           console.log('redirection to near auth page');
         }
@@ -162,125 +207,147 @@ export const Options: React.FC<OptionProps> = props => {
         <div className={styles.title}>
           <Typography variant="h5">{i18n.t('Login.Options.Network')}</Typography>
         </div>
-        <List disablePadding classes={{root: styles.list}}>
-          <ListItem
-            disableGutters
-            selected={network === NetworkTypeEnum.POLKADOT}
-            onClick={setSelectedNetwork(NetworkTypeEnum.POLKADOT)}>
-            <div className={styles.card}>
-              <PolkadotNetworkIcon className={styles.icon} />
-              <Typography>Polkadot</Typography>
-            </div>
-          </ListItem>
-          <ListItem
-            disableGutters
-            selected={network === NetworkTypeEnum.NEAR}
-            onClick={setSelectedNetwork(NetworkTypeEnum.NEAR)}>
-            <div className={styles.card}>
-              <NearNetworkIcon className={styles.icon} />
-              <Typography>NEAR</Typography>
-            </div>
-          </ListItem>
-          <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
-            <ListItem
-              disableGutters
-              disabled
-              onClick={setSelectedNetwork(NetworkTypeEnum.ETHEREUM)}>
-              <div className={styles.card}>
-                <EthereumNetworkIcon className={styles.icon} />
-                <Typography>Ethereum</Typography>
-              </div>
-            </ListItem>
-          </Tooltip>
-          <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
-            <ListItem disableGutters disabled onClick={setSelectedNetwork(NetworkTypeEnum.POLYGON)}>
-              <div className={styles.card}>
-                <PolygonNetworkDisabledIcon className={styles.icon} />
-                <Typography>Polygon</Typography>
-              </div>
-            </ListItem>
-          </Tooltip>
-        </List>
+        <Grid
+          container
+          justifyContent="flex-start"
+          alignContent="center"
+          classes={{root: styles.list}}>
+          {networks.map(option => (
+            <Grid item xs={3} key={option.id}>
+              <ListItem
+                disableGutters
+                selected={network === option.id}
+                onClick={setSelectedNetwork(option.id as NetworkTypeEnum)}>
+                <div className={styles.card}>
+                  {icons[option.id as keyof typeof icons]}
+                  <Typography>{formatTitle(option.id)}</Typography>
+                </div>
+              </ListItem>
+            </Grid>
+          ))}
+          <Grid item xs={3}>
+            <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
+              <ListItem disableGutters disabled>
+                <div className={styles.card}>
+                  <EthereumNetworkIcon className={styles.icon} />
+                  <Typography>Ethereum</Typography>
+                </div>
+              </ListItem>
+            </Tooltip>
+          </Grid>
+          <Grid item xs={3}>
+            <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
+              <ListItem disableGutters disabled>
+                <div className={styles.card}>
+                  <PolygonNetworkDisabledIcon className={styles.icon} />
+                  <Typography>Polygon</Typography>
+                </div>
+              </ListItem>
+            </Tooltip>
+          </Grid>
+        </Grid>
       </div>
 
+      {/* WALLET LIST */}
       <div className={styles.wrapper}>
         <div className={styles.title}>
           <Typography variant="h5">{i18n.t('Login.Options.Wallet')}</Typography>
         </div>
-
-        <List disablePadding classes={{root: styles.list}}>
-          <ShowIf condition={network === null || network === NetworkTypeEnum.POLKADOT}>
-            <ListItem
-              component={'button'}
-              disableGutters
-              disabled={network === null || network !== NetworkTypeEnum.POLKADOT}
-              selected={wallet === WalletTypeEnum.POLKADOT}
-              onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}
-              className={network !== NetworkTypeEnum.POLKADOT ? styles.walletCardDisabled : ''}>
-              <div className={styles.walletCard}>
-                <PolkadotWalletIcon className={styles.icon} />
-                <Typography>Polkadot.js</Typography>
-              </div>
-            </ListItem>
-          </ShowIf>
-
-          <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
-            <ListItem
-              component={'button'}
-              disableGutters
-              disabled={network === null || network !== NetworkTypeEnum.NEAR}
-              selected={wallet === WalletTypeEnum.NEAR}
-              onClick={setSelectedWallet(WalletTypeEnum.NEAR)}
-              className={network !== NetworkTypeEnum.NEAR ? styles.walletCardDisabled : ''}>
-              <div className={styles.card}>
-                <NearNetworkIcon className={styles.icon} />
-                <Typography>NEAR</Typography>
-              </div>
-            </ListItem>
-          </ShowIf>
-
-          <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
-            <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
-              <ListItem disableGutters disabled onClick={setSelectedWallet(WalletTypeEnum.SENDER)}>
+        <Grid
+          container
+          justifyContent="flex-start"
+          alignContent="center"
+          classes={{root: styles.list}}>
+          <ShowIf
+            condition={
+              network === null ||
+              network === NetworkTypeEnum.POLKADOT ||
+              network === NetworkTypeEnum.KUSAMA ||
+              network === NetworkTypeEnum.MYRIAD
+            }>
+            <Grid item xs={3}>
+              <ListItem
+                component={'button'}
+                disableGutters
+                disabled={network === null}
+                selected={wallet === WalletTypeEnum.POLKADOT}
+                onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}
+                className={network !== NetworkTypeEnum.POLKADOT ? styles.walletCardDisabled : ''}>
                 <div className={styles.walletCard}>
-                  <SenderWalletDisabledIcon className={styles.icon} />
-                  <Typography style={{display: 'inline-block'}}>Sender Wallet</Typography>
+                  <PolkadotNetworkIcon className={styles.icon} />
+                  <Typography>Polkadot.js</Typography>
                 </div>
               </ListItem>
-            </Tooltip>
+            </Grid>
           </ShowIf>
-
-          <ListItem
-            style={{visibility: 'hidden'}}
-            disableGutters
-            disabled
-            onClick={setSelectedWallet(WalletTypeEnum.COINBASE)}>
-            <div className={styles.card}>
-              <CoinbaseWalletisabledIcon className={styles.icon} />
-              <Typography>Coinbase</Typography>
-            </div>
-          </ListItem>
-          <ListItem
-            style={{visibility: 'hidden'}}
-            disableGutters
-            disabled
-            onClick={setSelectedWallet(WalletTypeEnum.METAMASK)}>
-            <div className={styles.card}>
-              <MetamaskWalletDisabledIcon className={styles.icon} />
-              <Typography>Metamask</Typography>
-            </div>
-          </ListItem>
-          <ListItem
-            style={{visibility: 'hidden'}}
-            disableGutters
-            disabled
-            onClick={setSelectedWallet(WalletTypeEnum.TRUST)}>
-            <div className={styles.card}>
-              <TrustWalletDisabledIcon className={styles.icon} />
-              <Typography>Trust Wallet</Typography>
-            </div>
-          </ListItem>
-        </List>
+          <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
+            <Grid item xs={3}>
+              <ListItem
+                component={'button'}
+                disableGutters
+                disabled={network === null || network !== NetworkTypeEnum.NEAR}
+                selected={wallet === WalletTypeEnum.NEAR}
+                onClick={setSelectedWallet(WalletTypeEnum.NEAR)}
+                className={network !== NetworkTypeEnum.NEAR ? styles.walletCardDisabled : ''}>
+                <div className={styles.card}>
+                  <NearNetworkIcon className={styles.icon} />
+                  <Typography>NEAR</Typography>
+                </div>
+              </ListItem>
+            </Grid>
+          </ShowIf>
+          <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
+            <Grid item xs={3}>
+              <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
+                <ListItem
+                  disableGutters
+                  disabled
+                  onClick={setSelectedWallet(WalletTypeEnum.SENDER)}>
+                  <div className={styles.walletCard}>
+                    <SenderWalletDisabledIcon className={styles.icon} />
+                    <Typography style={{fontSize: 13}}>Sender Wallet</Typography>
+                  </div>
+                </ListItem>
+              </Tooltip>
+            </Grid>
+          </ShowIf>
+          <Grid item xs={3}>
+            <ListItem
+              style={{display: 'none'}}
+              disableGutters
+              disabled
+              onClick={setSelectedWallet(WalletTypeEnum.COINBASE)}>
+              <div className={styles.card}>
+                <CoinbaseWalletisabledIcon className={styles.icon} />
+                <Typography>Coinbase</Typography>
+              </div>
+            </ListItem>
+          </Grid>
+          <Grid item xs={3}>
+            <ListItem
+              style={{display: 'none'}}
+              disableGutters
+              disabled
+              onClick={setSelectedWallet(WalletTypeEnum.METAMASK)}>
+              <div className={styles.card}>
+                <MetamaskWalletDisabledIcon className={styles.icon} />
+                <Typography>Metamask</Typography>
+              </div>
+            </ListItem>
+          </Grid>
+          <Grid item xs={3}>
+            <ListItem
+              style={{display: 'none'}}
+              disableGutters
+              disabled
+              onClick={setSelectedWallet(WalletTypeEnum.TRUST)}>
+              <div className={styles.card}>
+                <TrustWalletDisabledIcon className={styles.icon} />
+                <Typography>Trust Wallet</Typography>
+              </div>
+            </ListItem>
+          </Grid>
+        </Grid>
       </div>
 
       <Grid container direction="column" className={styles.condition}>
