@@ -33,7 +33,6 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   const [tipInfoOpened, setTipInfoOpened] = useState(false);
   const [options, setOptions] = useState<TippingOptions>();
   const [enabled, setTippingEnabled] = useState(false);
-  const [promptFailedTip, setPromptFailedTip] = useState(false);
   const [defaultCurrency, setDefaultCurrency] = useState<BalanceDetail>();
   const [currencyTipped, setTippingCurrency] = useState<BalanceDetail>();
   const [transactionUrl, setTransactionUrl] = useState<string>();
@@ -83,7 +82,9 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
 
   return (
     <>
-      <SendTipContext.Provider value={{enabled, send: tipping}}>{children}</SendTipContext.Provider>
+      <SendTipContext.Provider value={{currentWallet, enabled, send: tipping}}>
+        {children}
+      </SendTipContext.Provider>
 
       {!!options && !!sender && !!defaultCurrency && currentNetwork && (
         <Modal
@@ -135,46 +136,22 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
             color="secondary">
             Transaction details
           </Button>
-          {options && 'platform' in options.reference && currencyTipped ? (
-            <ButtonNotify
-              reference={options.reference}
-              currency={currencyTipped}
-              amount={amount}
-              receiver={options.receiver}
-            />
-          ) : (
-            <Button size="small" variant="contained" color="primary" onClick={resetTippingStatus}>
-              Return
-            </Button>
-          )}
+          {currencyTipped &&
+            (options &&
+            'platform' in options.reference &&
+            ['twitter', 'reddit'].includes(options.reference.platform) ? (
+              <ButtonNotify
+                reference={options.reference}
+                currency={currencyTipped}
+                amount={amount}
+                receiver={options.receiver}
+              />
+            ) : (
+              <Button size="small" variant="contained" color="primary" onClick={resetTippingStatus}>
+                Return
+              </Button>
+            ))}
         </Grid>
-      </PromptComponent>
-      <PromptComponent
-        icon="danger"
-        open={promptFailedTip}
-        onCancel={resetTippingStatus}
-        title="Send tip could not be processed"
-        subtitle={
-          <Typography component="div">
-            {`This user doesn't have ${currentWallet?.toUpperCase()} wallet account to receive the tips`}
-          </Typography>
-        }>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}>
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={() => {
-              setPromptFailedTip(false);
-            }}>
-            OK
-          </Button>
-        </div>
       </PromptComponent>
     </>
   );
