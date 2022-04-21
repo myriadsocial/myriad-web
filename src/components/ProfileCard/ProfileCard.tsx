@@ -18,7 +18,6 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
     notificationCount,
     handleSignOut,
     onViewProfile,
-    onSwitchAccount,
     onShowNotificationList,
     currentWallet,
     networks,
@@ -55,7 +54,6 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
           onShowNotificationList={onShowNotificationList}
           onViewProfile={onViewProfile}
           handleSignOut={handleSignOut}
-          onSwitchAccount={onSwitchAccount}
           userWalletAddress={userWalletAddress}
         />
         <div className={classes.wallet}>
