@@ -20,12 +20,12 @@ export const ExperienceCloneContainer: React.FC = () => {
 
   useEffect(() => {
     if (experienceId) getExperienceDetail(experienceId);
-  }, []);
+  }, [[router.query]]);
 
   const onImageUpload = async (files: File[]) => {
     const url = await uploadImage(files[0]);
-    if (url) return url;
-    return '';
+
+    return url ?? '';
   };
 
   const handleCloneExperience = (newExperience: Partial<Experience>, newTags: string[]) => {
@@ -50,16 +50,18 @@ export const ExperienceCloneContainer: React.FC = () => {
         reverse
       />
 
-      <ExperienceEditor
-        type={'Clone'}
-        experience={experience}
-        tags={tags}
-        people={people}
-        onSearchTags={handleSearchTags}
-        onImageUpload={onImageUpload}
-        onSearchPeople={handleSearchPeople}
-        onSave={handleCloneExperience}
-      />
+      {experience && (
+        <ExperienceEditor
+          type={'Clone'}
+          experience={experience}
+          tags={tags}
+          people={people}
+          onSearchTags={handleSearchTags}
+          onImageUpload={onImageUpload}
+          onSearchPeople={handleSearchPeople}
+          onSave={handleCloneExperience}
+        />
+      )}
     </>
   );
 };

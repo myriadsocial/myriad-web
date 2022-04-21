@@ -19,7 +19,7 @@ import {
   AutocompleteRenderOptionState,
 } from '@material-ui/lab';
 
-import {Experience, Tag} from '../../interfaces/experience';
+import {Experience, ExperienceProps, Tag} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
 import {Dropzone} from '../atoms/Dropzone';
 import {ListItemPeopleComponent} from '../atoms/ListItem/ListItemPeople';
@@ -27,12 +27,11 @@ import ShowIf from '../common/show-if.component';
 import {useStyles} from './Experience.styles';
 
 import {debounce} from 'lodash';
-import {SocialsEnum} from 'src/interfaces/social';
 
 type ExperienceEditorProps = {
   type?: string;
   isEdit?: boolean;
-  experience?: Experience | null;
+  experience: Experience;
   tags: Tag[];
   people: People[];
   onSearchTags: (query: string) => void;
@@ -62,61 +61,20 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     onSearchTags,
     onSearchPeople,
   } = props;
+  const {allowedTags, prohibitedTags = [], experienceImageURL} = experience;
   const styles = useStyles();
 
-  const [newExperience, setNewExperience] = useState<Partial<Experience>>({
-    people: [
-      {
-        id: '',
-        name: '',
-        originUserId: '',
-        platform: SocialsEnum.TWITTER,
-        profilePictureURL: '',
-        username: '',
-      },
-    ],
-  });
-  const [newAllowedTags, setNewAllowedTags] = useState<string[]>([]);
-  const [newProhibitedTags, setNewProhibitedTags] = useState<string[]>([]);
-  const [image, setImage] = useState<string>();
+  const [newExperience, setNewExperience] = useState<Partial<Experience>>(experience);
+  const [newAllowedTags, setNewAllowedTags] = useState<string[]>(allowedTags);
+  const [newProhibitedTags, setNewProhibitedTags] = useState<string[]>(prohibitedTags);
+  const [image, setImage] = useState<string | undefined>(experienceImageURL);
   const [disable, setDisable] = useState<boolean>(true);
   const [isLoading, setIsloading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (experience) {
-      setNewExperience(experience);
-
-      if (experience?.allowedTags) {
-        const formatAllowedTags = experience?.allowedTags as unknown;
-        const allowedTagsExperience = formatAllowedTags as string[];
-        setNewAllowedTags(allowedTagsExperience);
-      }
-
-      if (experience?.prohibitedTags) {
-        const formatProhibitedTags = experience?.prohibitedTags as unknown;
-        const prohibitedTagsExperience = formatProhibitedTags as string[];
-        setNewProhibitedTags(prohibitedTagsExperience);
-      }
-
-      if (experience.experienceImageURL) {
-        setImage(experience.experienceImageURL);
-      }
-    }
-  }, [experience]);
-
-  useEffect(() => {
-    const name = newExperience?.name;
-    const experienceImageURL = newExperience?.experienceImageURL;
-    const people = newExperience?.people && newExperience?.people?.length > 1;
-    const tags = newAllowedTags.length;
-
-    setDisable(!name || !experienceImageURL || !people || !tags);
-  }, [newExperience, newAllowedTags]);
-
-  useEffect(() => {
     if (type?.toLowerCase() == 'clone') {
-      const people = JSON.stringify(newExperience?.people) == JSON.stringify(experience?.people);
-      const tags = JSON.stringify(newAllowedTags) == JSON.stringify(experience?.allowedTags);
+      const people = JSON.stringify(newExperience?.people) == JSON.stringify(experience.people);
+      const tags = JSON.stringify(newAllowedTags) == JSON.stringify(experience.allowedTags);
 
       setDisable(people && tags);
     }
@@ -157,17 +115,23 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     } else {
       setNewExperience({...newExperience, experienceImageURL: undefined});
     }
+
+    setDisable(false);
   };
 
-  const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewExperience(prevExperience => ({
-      ...prevExperience,
-      [field]: event.target.value.trimStart(),
-    }));
-  };
+  const handleChange =
+    (field: keyof ExperienceProps) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value.trimStart();
+
+      setNewExperience(prevExperience => ({
+        ...prevExperience,
+        [field]: value,
+      }));
+
+      setDisable(experience[field] === value);
+    };
 
   const handleTagsInputChange = (
-    // eslint-disable-next-line @typescript-eslint/ban-types
     event: React.ChangeEvent<{}>,
     newValue: string,
     type: TagsProps,
@@ -191,10 +155,6 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     }
   };
 
-  const checkDuplicateData = (data: string[]) => {
-    return new Set(data).size !== data.length;
-  };
-
   const handleTagsChange = (
     // eslint-disable-next-line @typescript-eslint/ban-types
     event: React.ChangeEvent<{}>,
@@ -202,12 +162,20 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     reason: AutocompleteChangeReason,
     type: TagsProps,
   ) => {
-    const data = Array.isArray(value) ? value : [value];
-    if (checkDuplicateData(data.map(item => item.replace('#', '')))) {
-      data.pop();
-    }
+    const data = [...new Set(value.map(tag => tag.replace('#', '')))];
+    const prohibitedTagsChanged =
+      type === TagsProps.PROHIBITED &&
+      data.filter(tag => !experience?.prohibitedTags || !experience?.prohibitedTags.includes(tag))
+        .length > 0;
+    const allowedTagsChanged =
+      type === TagsProps.ALLOWED &&
+      data.filter(tag => !experience?.allowedTags.includes(tag)).length > 0;
+
+    setDisable(!prohibitedTagsChanged && !allowedTagsChanged);
 
     if (reason === 'remove-option') {
+      setDisable(false);
+
       if (type === TagsProps.ALLOWED) {
         setNewAllowedTags(data);
       } else if (type === TagsProps.PROHIBITED) {
@@ -217,9 +185,9 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
     if (reason === 'create-option') {
       if (type === TagsProps.ALLOWED) {
-        setNewAllowedTags(data.map(item => item.replace('#', '')));
+        setNewAllowedTags(data);
       } else if (type === TagsProps.PROHIBITED) {
-        setNewProhibitedTags(data.map(item => item.replace('#', '')));
+        setNewProhibitedTags(data);
       }
     }
 
@@ -246,6 +214,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       }));
       clearSearchedPeople();
     }
+
+    setDisable(false);
   };
 
   const removeSelectedPeople = (selected: People) => () => {
@@ -255,6 +225,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         ? prevExperience?.people.filter(people => people.id != selected.id)
         : [],
     }));
+
+    setDisable(false);
   };
 
   const saveExperience = () => {
@@ -316,7 +288,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         </ShowIf>
       </FormControl>
 
-      <Autocomplete<string, true, true, true>
+      <Autocomplete
         id="experience-tags-include"
         freeSolo
         multiple

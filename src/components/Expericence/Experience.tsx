@@ -102,7 +102,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
         "Are you sure you want to delete this experience? You can't undo this in the future.",
       icon: 'danger',
       confirmationText: 'Yes, proceed to delete',
-      cancellationText: 'Delete',
+      cancellationText: 'Cancel',
       onConfirm: () => {
         if (onDelete && userExperienceId) {
           onDelete(userExperienceId);
@@ -185,7 +185,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
             href={`/experience/[experienceId]/edit`}
             as={`/experience/${experienceId}/edit`}
             passHref>
-            <MenuItem>Edit experience</MenuItem>
+            <MenuItem onClick={handleCloseSettings}>Edit experience</MenuItem>
           </Link>
         </ShowIf>
 

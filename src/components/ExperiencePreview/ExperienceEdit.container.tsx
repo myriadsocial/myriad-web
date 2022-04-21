@@ -27,12 +27,12 @@ export const ExperienceEditContainer: React.FC = () => {
 
   useEffect(() => {
     if (experienceId) getExperienceDetail(experienceId);
-  }, []);
+  }, [router.query]);
 
   const onImageUpload = async (files: File[]) => {
     const url = await uploadImage(files[0]);
-    if (url) return url;
-    return '';
+
+    return url ?? '';
   };
 
   const onSave = (
@@ -61,16 +61,18 @@ export const ExperienceEditContainer: React.FC = () => {
         reverse
       />
 
-      <ExperienceEditor
-        type={'Edit'}
-        experience={experience}
-        tags={tags}
-        people={people}
-        onSearchTags={handleSearchTags}
-        onImageUpload={onImageUpload}
-        onSearchPeople={handleSearchPeople}
-        onSave={onSave}
-      />
+      {experience && (
+        <ExperienceEditor
+          type={'Edit'}
+          experience={experience}
+          tags={tags}
+          people={people}
+          onSearchTags={handleSearchTags}
+          onImageUpload={onImageUpload}
+          onSearchPeople={handleSearchPeople}
+          onSave={onSave}
+        />
+      )}
     </>
   );
 };
