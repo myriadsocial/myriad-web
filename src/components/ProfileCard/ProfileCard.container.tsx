@@ -51,7 +51,7 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
   }, []);
 
   useEffect(() => {
-    if (currentWallet && currentWallet.network.id) dispatch(fetchUserWalletAddress());
+    if (currentWallet && currentWallet.network?.id) dispatch(fetchUserWalletAddress());
   }, [currentWallet]);
 
   const checkExtensionInstalled = async () => {

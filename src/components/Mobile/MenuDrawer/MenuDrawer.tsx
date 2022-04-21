@@ -22,6 +22,7 @@ import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {ProfileContent} from 'src/components/ProfileCard';
 import {ListItemComponent} from 'src/components/atoms/ListItem';
 import {useAuthHook} from 'src/hooks/auth.hook';
+import {useUserHook} from 'src/hooks/use-user.hook';
 import {RootState} from 'src/reducers';
 import {clearUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
@@ -35,6 +36,8 @@ export const MenuDrawerComponent: React.FC = () => {
   const [openPromptDrawer, setOpenPromptDrawer] = React.useState(false);
 
   const {logout} = useAuthHook();
+  const {userWalletAddress} = useUserHook();
+
   const router = useRouter();
   const dispatch = useDispatch();
   const [session] = useSession();
@@ -136,6 +139,7 @@ export const MenuDrawerComponent: React.FC = () => {
                 onShowNotificationList={console.log}
                 onViewProfile={console.log}
                 isMobile={true}
+                userWalletAddress={userWalletAddress}
               />
               {/* metric */}
               <Metric official={false} data={user?.metric} anonymous={anonymous} />

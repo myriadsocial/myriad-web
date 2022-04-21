@@ -26,7 +26,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
   } = props;
   const classes = useStyles();
 
-  const formatAddress = (address?: string) => {
+  const formatAddress = (address: null | string) => {
     if (address && address.length > 14) {
       let validAddress = '';
 

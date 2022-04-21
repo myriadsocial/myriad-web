@@ -258,6 +258,8 @@ export const fetchUserWalletAddress: ThunkActionCreator<Actions, RootState> =
 
     if (currentWallet === undefined) return;
 
+    if (currentWallet.network === undefined) return;
+
     try {
       const data = await getMetadata(currentWallet.network.rpcURL);
 
