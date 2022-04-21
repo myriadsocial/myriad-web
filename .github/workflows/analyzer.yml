@@ -7,6 +7,14 @@ on:
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - '.maintain/**'
+      - 'docs/**'
+      - '.dockerignore'
+      - '.env-template'
+      - 'LICENSE'
   schedule:
     - cron: '20 12 * * 0'
 
