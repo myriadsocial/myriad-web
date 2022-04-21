@@ -7,6 +7,9 @@ import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './ProfileCard.style';
 import {ProfileContent} from './index';
 
+import {convertToPolkadotAddress} from 'src/helpers/extension';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
+
 export const ProfileCard: React.FC<ProfileCardProps> = props => {
   const {
     user,
@@ -19,13 +22,22 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
     onShowNotificationList,
     currentWallet,
     networks,
+    userWalletAddress,
   } = props;
   const classes = useStyles();
 
-  const formatAddress = (address?: string) => {
+  const formatAddress = (address: null | string) => {
     if (address && address.length > 14) {
+      let validAddress = '';
+
+      if (currentWallet?.type === WalletTypeEnum.POLKADOT) {
+        validAddress = convertToPolkadotAddress(address, currentWallet);
+      }
+
       return (
-        address.substring(0, 4) + '...' + address.substring(address.length - 4, address.length)
+        validAddress.substring(0, 4) +
+        '...' +
+        validAddress.substring(validAddress.length - 4, validAddress.length)
       );
     }
     return address;
@@ -44,12 +56,13 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
           onViewProfile={onViewProfile}
           handleSignOut={handleSignOut}
           onSwitchAccount={onSwitchAccount}
+          userWalletAddress={userWalletAddress}
         />
         <div className={classes.wallet}>
           <NetworkOption currentWallet={currentWallet} wallets={wallets} networks={networks} />
 
           <Typography component="div" className={classes.address}>
-            {formatAddress(currentWallet?.id)}
+            {formatAddress(userWalletAddress)}
           </Typography>
         </div>
       </div>

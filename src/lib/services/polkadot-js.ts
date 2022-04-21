@@ -51,6 +51,25 @@ export const connectToBlockchain = async (wsProvider: string): Promise<ApiPromis
   return api;
 };
 
+export const getMetadata = async (rpcUrl: string): Promise<number | null> => {
+  try {
+    const api = await connectToBlockchain(rpcUrl);
+    // note: prefix can be 0 (prefix for Polkadot)
+    const data = api.consts.system.ss58Prefix;
+
+    if (data === null) {
+      return null;
+    } else {
+      const prefix = data.toNumber();
+
+      return prefix;
+    }
+  } catch (error) {
+    console.log({error});
+    return null;
+  }
+};
+
 export const convertAcaBasedTxFee = async (
   api: ApiPromise,
   selectedCurrency: BalanceDetail,

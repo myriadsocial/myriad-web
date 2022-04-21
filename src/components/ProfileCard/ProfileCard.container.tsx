@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {useSession} from 'next-auth/client';
@@ -14,11 +14,12 @@ import {ProfileCard} from './ProfileCard';
 
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
+import {useUserHook} from 'src/hooks/use-user.hook';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {RootState} from 'src/reducers';
 import {NotificationState} from 'src/reducers/notification/reducer';
 import {clearUser} from 'src/reducers/user/actions';
-import {fetchCurrentUserWallets} from 'src/reducers/user/actions';
+import {fetchUserWalletAddress, fetchCurrentUserWallets} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {Prompt} from 'src/stories/Prompt.stories';
 
@@ -39,14 +40,19 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
 
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {logout, switchAccount, getRegisteredAccounts} = useAuthHook();
+  const {userWalletAddress} = useUserHook();
 
   const [showAccountList, setShowAccountList] = useState(false);
   const [extensionInstalled, setExtensionInstalled] = useState(false);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(fetchCurrentUserWallets());
   }, []);
+
+  useEffect(() => {
+    if (currentWallet && currentWallet.network?.id) dispatch(fetchUserWalletAddress());
+  }, [currentWallet]);
 
   const checkExtensionInstalled = async () => {
     const installed = await enablePolkadotExtension();
@@ -94,6 +100,7 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
     <>
       <ProfileCard
         user={user}
+        userWalletAddress={userWalletAddress}
         currentWallet={currentWallet}
         wallets={wallets}
         networks={networks}
