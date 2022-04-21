@@ -14,4 +14,5 @@ export type ProfileCardProps = {
   onViewProfile: () => void;
   onSwitchAccount?: () => void;
   onShowNotificationList: () => void;
+  userWalletAddress: null | string;
 };
