@@ -29,8 +29,8 @@ export const ExperienceContainer: React.FC = () => {
 
   const onImageUpload = async (files: File[]) => {
     const url = await uploadImage(files[0]);
-    if (url) return url;
-    return '';
+
+    return url ?? '';
   };
 
   const onSave = (
@@ -61,16 +61,19 @@ export const ExperienceContainer: React.FC = () => {
           reverse
         />
       </div>
-      <ExperienceEditor
-        isEdit={false}
-        experience={selectedExperience}
-        tags={tags}
-        people={people}
-        onSearchTags={handleSearchTags}
-        onImageUpload={onImageUpload}
-        onSearchPeople={handleSearchPeople}
-        onSave={onSave}
-      />
+
+      {selectedExperience && (
+        <ExperienceEditor
+          isEdit={false}
+          experience={selectedExperience}
+          tags={tags}
+          people={people}
+          onSearchTags={handleSearchTags}
+          onImageUpload={onImageUpload}
+          onSearchPeople={handleSearchPeople}
+          onSave={onSave}
+        />
+      )}
     </>
   );
 };
