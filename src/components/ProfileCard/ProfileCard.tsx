@@ -22,6 +22,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
     onShowNotificationList,
     currentWallet,
     networks,
+    userWalletAddress,
   } = props;
   const classes = useStyles();
 
@@ -55,12 +56,13 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
           onViewProfile={onViewProfile}
           handleSignOut={handleSignOut}
           onSwitchAccount={onSwitchAccount}
+          userWalletAddress={userWalletAddress}
         />
         <div className={classes.wallet}>
           <NetworkOption currentWallet={currentWallet} wallets={wallets} networks={networks} />
 
           <Typography component="div" className={classes.address}>
-            {formatAddress(currentWallet?.id)}
+            {formatAddress(userWalletAddress)}
           </Typography>
         </div>
       </div>
