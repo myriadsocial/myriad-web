@@ -12,6 +12,7 @@ type UserHookProps = {
   disconnectSocial: (social: SocialsEnum) => void;
   updateUserFcmToken: () => void;
   updateUser: (values: Partial<User>) => void;
+  userWalletAddress: null | string;
 };
 
 export const useUserHook = (): UserHookProps => {
@@ -19,7 +20,9 @@ export const useUserHook = (): UserHookProps => {
 
   const {openToasterSnack} = useToasterSnackHook();
 
-  const {user, socials} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, socials, userWalletAddress} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
 
   const disconnectSocial = async (social: SocialsEnum): Promise<void> => {
     if (!user) return;
@@ -59,5 +62,6 @@ export const useUserHook = (): UserHookProps => {
     disconnectSocial,
     updateUserFcmToken,
     updateUser: updateUserDetail,
+    userWalletAddress,
   };
 };
