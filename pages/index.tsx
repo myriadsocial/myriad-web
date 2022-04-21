@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 
-// import {GetServerSideProps} from 'next';
 import {getSession} from 'next-auth/client';
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
@@ -78,7 +77,6 @@ export default function Index(props: IndexPageProps) {
   );
 }
 
-// export const getServerSideProps: GetServerSideProps = async context => {
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {req, query} = context;
   const {headers} = req;
