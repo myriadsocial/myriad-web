@@ -23,6 +23,7 @@ export interface UserState extends BaseState {
   currentWallet?: UserWallet;
   wallets: UserWallet[];
   networks: Network[];
+  userWalletAddress: string | null;
 }
 
 const initalState: UserState = {
@@ -33,6 +34,7 @@ const initalState: UserState = {
   experiences: [],
   wallets: [],
   networks: [],
+  userWalletAddress: null,
   transactionDetail: {
     sent: [],
     received: [],
@@ -124,6 +126,13 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       return {
         ...state,
         wallets: action.payload,
+      };
+    }
+
+    case constants.FETCH_USER_WALLET_ADDRESS: {
+      return {
+        ...state,
+        userWalletAddress: action.payload,
       };
     }
 

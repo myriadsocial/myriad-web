@@ -1,3 +1,6 @@
+import {encodeAddress} from '@polkadot/keyring';
+import {hexToU8a} from '@polkadot/util';
+
 import {sortBalances} from '../balance/actions';
 import {Actions as BaseAction, setLoading, setError, PaginationAction} from '../base/actions';
 import {RootState} from '../index';
@@ -18,6 +21,7 @@ import * as SocialAPI from 'src/lib/api/social';
 import * as TokenAPI from 'src/lib/api/token';
 import * as UserAPI from 'src/lib/api/user';
 import * as WalletAPI from 'src/lib/api/wallet';
+import {getMetadata} from 'src/lib/services/polkadot-js';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -68,6 +72,11 @@ export interface FetchNetwork extends PaginationAction {
   payload: Network[];
 }
 
+export interface FetchUserWalletAddress extends Action {
+  type: constants.FETCH_USER_WALLET_ADDRESS;
+  payload: string | null;
+}
+
 export interface AddUserWallet extends Action {
   type: constants.ADD_USER_WALLET;
   payload: UserWallet;
@@ -108,6 +117,7 @@ export type Actions =
   | AddUserWallet
   | FetchUserWallets
   | FetchNetwork
+  | FetchUserWalletAddress
   | AddUserToken
   | SetDefaultCurrency
   | SetUserAsAnonymous
@@ -233,6 +243,36 @@ export const fetchUserExperience: ThunkActionCreator<Actions, RootState> =
           message: error.message,
         }),
       );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const fetchUserWalletAddress: ThunkActionCreator<Actions, RootState> =
+  () => async (dispatch, getState) => {
+    dispatch(setLoading(true));
+
+    const {
+      userState: {currentWallet},
+    } = getState();
+
+    if (currentWallet === undefined) return;
+
+    try {
+      const data = await getMetadata(currentWallet.network.rpcURL);
+
+      let walletAddress = '';
+
+      if (data !== null) {
+        walletAddress = encodeAddress(hexToU8a(currentWallet.id), data);
+        dispatch({
+          type: constants.FETCH_USER_WALLET_ADDRESS,
+          payload: walletAddress,
+        });
+      }
+    } catch (error) {
+      console.log({error});
+      dispatch(setError(error.message));
     } finally {
       dispatch(setLoading(false));
     }
