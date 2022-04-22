@@ -46,6 +46,9 @@ export const usePolkadotApi = () => {
     ) {
       dispatch(fetchBalances());
     }
+    console.log('[currentWallet]', currentWallet);
+    console.log('[currencies]', currencies);
+    console.log('[balanceDetails]', balanceDetails);
   }, [anonymous, currencies, balanceDetails, currentWallet]);
 
   const getEstimatedFee = async (
