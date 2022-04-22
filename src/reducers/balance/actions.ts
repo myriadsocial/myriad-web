@@ -83,10 +83,9 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
     } = getState();
 
     console.log('[fetchBalance currentWallet]', currentWallet);
+    console.log('[fetchBalance not anonymous and not loading]', user, anonymous, loading);
 
     if (anonymous || !user || loading) return;
-
-    console.log('[fetchBalance not anonymous and not loading]', user, anonymous, loading);
 
     if (currentWallet?.type === WalletTypeEnum.POLKADOT) {
       dispatch(fetchBalancesPolkadot());
