@@ -12,7 +12,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(2),
       color: theme.palette.text.secondary,
       backgroundColor: '#F6F7FC',
-      paddingTop: 80,
     },
     flex: {
       display: 'flex',

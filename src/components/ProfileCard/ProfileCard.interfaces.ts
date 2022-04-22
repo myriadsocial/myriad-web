@@ -12,7 +12,6 @@ export type ProfileCardProps = {
   notificationCount: number;
   handleSignOut?: () => void;
   onViewProfile: () => void;
-  onSwitchAccount?: () => void;
   onShowNotificationList: () => void;
   userWalletAddress: null | string;
 };

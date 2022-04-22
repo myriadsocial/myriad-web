@@ -112,6 +112,7 @@ export const useAuthHook = () => {
   };
 
   const signInWithExternalAuth = async (
+    networkType: NetworkTypeEnum,
     nonce: number,
     account?: InjectedAccountWithMeta,
     nearAddress?: string,
@@ -127,7 +128,7 @@ export const useAuthHook = () => {
         publicAddress: toHexPublicKey(account),
         signature,
         walletType: WalletTypeEnum.POLKADOT,
-        networkType: NetworkTypeEnum.POLKADOT,
+        networkType: networkType,
         nonce,
         anonymous: false,
         callbackUrl: publicRuntimeConfig.appAuthURL,
@@ -166,6 +167,7 @@ export const useAuthHook = () => {
     name: string,
     username: string,
     walletType: WalletTypeEnum,
+    networkType: NetworkTypeEnum,
     account?: InjectedAccountWithMeta,
   ): Promise<boolean | null> => {
     let nonce = null;
@@ -177,13 +179,13 @@ export const useAuthHook = () => {
           name,
           username,
           type: WalletTypeEnum.POLKADOT,
-          network: NetworkTypeEnum.POLKADOT,
+          network: networkType,
         });
 
         if (data) nonce = data.nonce;
 
         if (nonce && nonce > 0 && account) {
-          return signInWithExternalAuth(nonce, account);
+          return signInWithExternalAuth(networkType, nonce, account);
         } else {
           return null;
         }
@@ -202,7 +204,7 @@ export const useAuthHook = () => {
         if (data) nonce = data.nonce;
 
         if (nonce && nonce > 0 && id) {
-          return signInWithExternalAuth(nonce, undefined, id);
+          return signInWithExternalAuth(networkType, nonce, undefined, id);
         } else {
           return null;
         }
@@ -225,21 +227,6 @@ export const useAuthHook = () => {
       anonymous: true,
       callbackUrl: publicRuntimeConfig.appAuthURL,
     });
-  };
-
-  const switchAccount = async (account: InjectedAccountWithMeta) => {
-    const address = toHexPublicKey(account);
-    const {nonce} = await WalletAPI.getUserNonce(address);
-
-    if (nonce > 0) {
-      await signInWithExternalAuth(nonce, account);
-    } else {
-      await firebaseCloudMessaging.removeToken();
-      await signOut({
-        callbackUrl: `${publicRuntimeConfig.appAuthURL}?address=${address}`,
-        redirect: true,
-      });
-    }
   };
 
   const connectNetwork = async (account?: InjectedAccountWithMeta, nearAccount?: NearPayload) => {
@@ -400,7 +387,6 @@ export const useAuthHook = () => {
     fetchNearUserNonce,
     signInWithExternalAuth,
     signUpWithExternalAuth,
-    switchAccount,
     connectNetwork,
     switchNetwork,
   };

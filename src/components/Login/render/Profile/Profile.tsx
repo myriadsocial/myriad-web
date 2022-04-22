@@ -9,7 +9,7 @@ import {useStyles} from './Profile.style';
 
 import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import {useAuthHook} from 'src/hooks/auth.hook';
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
+import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {nearInitialize} from 'src/lib/services/near-api-js';
 import i18n from 'src/locale';
@@ -17,6 +17,7 @@ import i18n from 'src/locale';
 type ProfileProps = {
   checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
   walletType: WalletTypeEnum | null;
+  networkType: NetworkTypeEnum | null;
   account?: InjectedAccountWithMeta | null;
   publicAddress?: string;
 };
@@ -33,7 +34,7 @@ const USERNAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Username', {
 });
 
 export const Profile: React.FC<ProfileProps> = props => {
-  const {walletType, checkUsernameAvailability, account, publicAddress} = props;
+  const {walletType, checkUsernameAvailability, account, publicAddress, networkType} = props;
 
   const styles = useStyles();
   const confirm = useConfirm();
@@ -226,6 +227,7 @@ export const Profile: React.FC<ProfileProps> = props => {
             profile.name.value,
             profile.username.value,
             walletType,
+            networkType as NetworkTypeEnum,
             account,
           );
 
@@ -243,6 +245,7 @@ export const Profile: React.FC<ProfileProps> = props => {
             profile.name.value,
             profile.username.value,
             walletType,
+            networkType as NetworkTypeEnum,
           );
 
           if (!registered) {
