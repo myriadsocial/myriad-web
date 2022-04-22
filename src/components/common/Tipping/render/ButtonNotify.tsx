@@ -56,7 +56,7 @@ export const ButtonNotify: React.FC<ButtonNotifyProps> = ({
 
   const textShare =
     `Hey @${receiver.username}, I just sent you ${finalAmount} ${currency?.symbol} on @myriad_social!` +
-    `\nMyriad.Social is a web3 layer on top of web2 social media decentralize and federated.` +
+    `\nMyriad.Social is a web3 layer on top of web2 social media, decentralized and federated.` +
     `\nYou can claim it by joining app.myriad.social and connecting your ${reference.platform} account.`;
 
   const TwitterButton = () => {

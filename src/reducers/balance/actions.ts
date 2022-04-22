@@ -82,6 +82,9 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
       balanceState: {loading},
     } = getState();
 
+    console.log('[fetchBalance currentWallet]', currentWallet);
+    console.log('[fetchBalance not anonymous and not loading]', user, anonymous, loading);
+
     if (anonymous || !user || loading) return;
 
     if (currentWallet?.type === WalletTypeEnum.POLKADOT) {
