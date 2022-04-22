@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 
-import {GetServerSideProps} from 'next';
 import {getSession} from 'next-auth/client';
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
@@ -14,6 +13,9 @@ import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
+import {fetchNetwork} from 'src/reducers/user/actions';
+import {wrapper} from 'src/store';
+import {ThunkDispatchAction} from 'src/types/thunk';
 
 const Login = dynamic(() => import('src/components/Login/Login'), {
   ssr: false,
@@ -75,9 +77,10 @@ export default function Index(props: IndexPageProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {req, query} = context;
   const {headers} = req;
+  const dispatch = store.dispatch as ThunkDispatchAction;
 
   let mobile = false;
   let redirectAuth: string | null = null;
@@ -118,10 +121,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
   }
 
+  await dispatch(fetchNetwork());
+
   return {
     props: {
       mobile,
       redirectAuth,
     },
   };
-};
+});

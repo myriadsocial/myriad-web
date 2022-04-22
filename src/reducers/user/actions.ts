@@ -568,12 +568,6 @@ export const fetchNetwork: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
-    const {
-      userState: {user},
-    } = getState();
-
-    if (!user) return;
-
     try {
       const {data: networks, meta} = await WalletAPI.getNetworks();
 
