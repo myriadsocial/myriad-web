@@ -62,7 +62,6 @@ ExperienceList.args = {
             },
           ],
         },
-        tags: ['#cool'],
         allowedTags: ['crypto'],
         people: [
           {

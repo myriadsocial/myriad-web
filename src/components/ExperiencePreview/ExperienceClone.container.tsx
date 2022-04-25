@@ -8,7 +8,7 @@ import {debounce} from 'lodash';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {useUpload} from 'src/hooks/use-upload.hook';
-import {Experience} from 'src/interfaces/experience';
+import {ExperienceProps} from 'src/interfaces/experience';
 
 export const ExperienceCloneContainer: React.FC = () => {
   // TODO: separate hook for tag, people and experience
@@ -20,7 +20,7 @@ export const ExperienceCloneContainer: React.FC = () => {
 
   useEffect(() => {
     if (experienceId) getExperienceDetail(experienceId);
-  }, [[router.query]]);
+  }, [router.query]);
 
   const onImageUpload = async (files: File[]) => {
     const url = await uploadImage(files[0]);
@@ -28,8 +28,8 @@ export const ExperienceCloneContainer: React.FC = () => {
     return url ?? '';
   };
 
-  const handleCloneExperience = (newExperience: Partial<Experience>, newTags: string[]) => {
-    cloneExperience(newExperience, newTags, (experienceId: string) => {
+  const handleCloneExperience = (attributes: ExperienceProps) => {
+    cloneExperience(attributes, (experienceId: string) => {
       router.push(`/experience/${experienceId}/preview`);
     });
   };
@@ -52,7 +52,7 @@ export const ExperienceCloneContainer: React.FC = () => {
 
       {experience && (
         <ExperienceEditor
-          type={'Clone'}
+          type={'clone'}
           experience={experience}
           tags={tags}
           people={people}

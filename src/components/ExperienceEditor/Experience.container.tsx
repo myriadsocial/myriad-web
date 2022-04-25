@@ -9,7 +9,7 @@ import {debounce} from 'lodash';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {useUpload} from 'src/hooks/use-upload.hook';
-import {Experience} from 'src/interfaces/experience';
+import {ExperienceProps} from 'src/interfaces/experience';
 
 export const ExperienceContainer: React.FC = () => {
   // TODO: separate hook for tag, people and experience
@@ -33,13 +33,10 @@ export const ExperienceContainer: React.FC = () => {
     return url ?? '';
   };
 
-  const onSave = (
-    newExperience: Partial<Experience>,
-    newAllowedTags: string[],
-    newProhibitedTags: string[],
-  ) => {
-    saveExperience(newExperience, newAllowedTags, newProhibitedTags, (experienceId: string) => {
+  const onSave = (attributes: ExperienceProps) => {
+    saveExperience(attributes, (experienceId: string) => {
       router.push(`/experience/${experienceId}/preview`);
+
       loadExperience();
     });
   };
@@ -62,18 +59,16 @@ export const ExperienceContainer: React.FC = () => {
         />
       </div>
 
-      {selectedExperience && (
-        <ExperienceEditor
-          isEdit={false}
-          experience={selectedExperience}
-          tags={tags}
-          people={people}
-          onSearchTags={handleSearchTags}
-          onImageUpload={onImageUpload}
-          onSearchPeople={handleSearchPeople}
-          onSave={onSave}
-        />
-      )}
+      <ExperienceEditor
+        isEdit={false}
+        experience={selectedExperience}
+        tags={tags}
+        people={people}
+        onSearchTags={handleSearchTags}
+        onImageUpload={onImageUpload}
+        onSearchPeople={handleSearchPeople}
+        onSave={onSave}
+      />
     </>
   );
 };

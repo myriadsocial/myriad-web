@@ -83,7 +83,9 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
 
       const expFilter: TimelineFilter = {
         ...filter,
-        tags: userExperience.experience.tags ? (userExperience.experience.tags as string[]) : [],
+        tags: userExperience.experience.allowedTags
+          ? (userExperience.experience.allowedTags as string[])
+          : [],
         people: userExperience.experience.people
           .filter((person: People) => !person.hide)
           .map((person: People) => person.id),
