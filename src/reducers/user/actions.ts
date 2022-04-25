@@ -16,6 +16,7 @@ import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail, UserWallet} from 'src/interfaces/user';
 import {Network} from 'src/interfaces/wallet';
 import * as ExperienceAPI from 'src/lib/api/experience';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {BaseErrorResponse} from 'src/lib/api/interfaces/error-response.interface';
 import * as SocialAPI from 'src/lib/api/social';
 import * as TokenAPI from 'src/lib/api/token';
@@ -252,23 +253,38 @@ export const fetchUserWalletAddress: ThunkActionCreator<Actions, RootState> =
 
     if (currentWallet.network === undefined) return;
 
-    try {
-      const data = await getMetadata(currentWallet.network.rpcURL);
+    switch (currentWallet.type) {
+      case WalletTypeEnum.POLKADOT:
+        try {
+          const data = await getMetadata(currentWallet.network.rpcURL);
 
-      let walletAddress = '';
+          let walletAddress = '';
 
-      if (data !== null) {
-        walletAddress = encodeAddress(hexToU8a(currentWallet.id), data);
+          if (data !== null) {
+            walletAddress = encodeAddress(hexToU8a(currentWallet.id), data);
+            dispatch({
+              type: constants.FETCH_USER_WALLET_ADDRESS,
+              payload: walletAddress,
+            });
+          }
+        } catch (error) {
+          console.log({error});
+          dispatch(setError(error.message));
+        } finally {
+          dispatch(setLoading(false));
+        }
+        break;
+
+      case WalletTypeEnum.NEAR:
         dispatch({
           type: constants.FETCH_USER_WALLET_ADDRESS,
-          payload: walletAddress,
+          payload: currentWallet.id,
         });
-      }
-    } catch (error) {
-      console.log({error});
-      dispatch(setError(error.message));
-    } finally {
-      dispatch(setLoading(false));
+        break;
+
+      //TODO: handle another wallet type
+      default:
+        break;
     }
   };
 
