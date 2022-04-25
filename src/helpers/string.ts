@@ -55,7 +55,7 @@ export const isHashtag = (value: string): boolean => {
   return hashtagRule.test(value);
 };
 
-export const toBigNumber = (value: string, decimal: number) => {
+export const toBigNumber = (value: string, decimal: number): BN => {
   let result: BN;
 
   const isDecimalValue = value.match(/^(\d+)\.(\d+)$/);

@@ -29,9 +29,17 @@ export const removeMyriad = (balanceDetails: BalanceDetail[]): BalanceDetail[] =
 };
 
 export const formatBalance = (value: BN, decimal: number, length = 10): number => {
+  const MAX_DECIMAL = 16;
+
   if (value.lten(0)) return 0;
 
-  const balance = (+value.toString() / 10 ** decimal).toFixed(decimal).replace(/\.?0+$/, '');
+  let balance = (+value.toString() / 10 ** decimal)
+    .toFixed(Math.max(MAX_DECIMAL, length))
+    .replace(/\.?0+$/, '');
+
+  if (length > MAX_DECIMAL) {
+    balance += '0'.repeat(length - MAX_DECIMAL);
+  }
 
   const isDecimalValue = balance.match(/^(\d+)\.(\d+)$/);
 
