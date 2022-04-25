@@ -28,6 +28,7 @@ import {
   fetchUser,
   fetchUserExperience,
   fetchUserWallets,
+  fetchNetwork,
 } from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
@@ -107,6 +108,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(getUserCurrencies()),
       dispatch(fetchFriend()),
       dispatch(fetchUserWallets()),
+      dispatch(fetchNetwork()),
     ]);
   }
 
@@ -129,7 +131,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
       await dispatch(
         updateFilter({
-          tags: experience.tags ? (experience.tags as string[]) : [],
+          tags: experience.allowedTags ? (experience.allowedTags as string[]) : [],
           people: experience.people
             .filter((person: People) => !person.hide)
             .map((person: People) => person.id),

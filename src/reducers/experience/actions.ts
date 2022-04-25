@@ -153,7 +153,7 @@ export const cloneExperience: ThunkActionCreator<Actions, RootState> =
       await dispatch(
         showToasterSnack({
           variant: 'success',
-          message: 'Experience succesfully cloned!',
+          message: 'Experience successfully cloned!',
         }),
       );
     } catch (error) {
@@ -213,8 +213,7 @@ export const searchTags: ThunkActionCreator<Actions, RootState> =
   };
 
 export const createExperience: ThunkActionCreator<Actions, RootState> =
-  (experience: Experience, newTags: string[], callback?: (id: string) => void) =>
-  async (dispatch, getState) => {
+  (experience: Experience, callback?: (id: string) => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
       const {

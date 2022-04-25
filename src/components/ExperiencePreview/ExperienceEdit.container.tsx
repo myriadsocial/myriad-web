@@ -8,7 +8,7 @@ import {debounce} from 'lodash';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {useUpload} from 'src/hooks/use-upload.hook';
-import {Experience} from 'src/interfaces/experience';
+import {ExperienceProps} from 'src/interfaces/experience';
 
 export const ExperienceEditContainer: React.FC = () => {
   // TODO: separate hook for tag, people and experience
@@ -23,9 +23,10 @@ export const ExperienceEditContainer: React.FC = () => {
   } = useExperienceHook();
   const {uploadImage} = useUpload();
   const router = useRouter();
-  const {experienceId} = router.query;
 
   useEffect(() => {
+    const {experienceId} = router.query;
+
     if (experienceId) getExperienceDetail(experienceId);
   }, [router.query]);
 
@@ -35,13 +36,11 @@ export const ExperienceEditContainer: React.FC = () => {
     return url ?? '';
   };
 
-  const onSave = (
-    newExperience: Partial<Experience>,
-    newAllowedTags: string[],
-    newProhibitedTags: string[],
-  ) => {
-    updateExperience(newExperience, newAllowedTags, newProhibitedTags, (experienceId: string) => {
-      router.push(`/experience/${experienceId}/preview`);
+  const onSave = (attributes: ExperienceProps) => {
+    if (!experience) return;
+
+    updateExperience(experience.id, attributes, () => {
+      router.push(`/experience/${experience.id}/preview`);
     });
   };
 
@@ -63,7 +62,7 @@ export const ExperienceEditContainer: React.FC = () => {
 
       {experience && (
         <ExperienceEditor
-          type={'Edit'}
+          type={'edit'}
           experience={experience}
           tags={tags}
           people={people}

@@ -20,5 +20,10 @@ export const useStyles = makeStyles<Theme, SendTipButtonProps>(theme =>
         color: props => (props.mobile ? '#FFD24D' : '#404040'),
       },
     },
+    loading: {
+      position: 'absolute',
+      top: 'calc(50% - 7px)',
+      right: 30,
+    },
   }),
 );
