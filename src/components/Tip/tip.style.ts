@@ -48,5 +48,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(2),
       textAlign: 'left',
     },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
+    },
   }),
 );

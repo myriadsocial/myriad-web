@@ -431,7 +431,30 @@ export const claimMyria = async (
     const api = await connectToBlockchain(rpcURL);
     const extrinsic = api.tx.tipping.claimTip(payload);
 
-    await extrinsic.signAndSend(currentWallet.id, {nonce: -1, signer: injector.signer});
+    let txHash: string | null = null;
+
+    const txInfo = await extrinsic.signAsync(currentWallet.id, {
+      signer: injector.signer,
+      // make sure nonce does not stuck
+      nonce: -1,
+    });
+
+    await new Promise((resolve, reject) => {
+      txInfo.send(result => {
+        if (result.status.isInBlock) {
+          console.log(`\tBlock hash    : ${txHash}`);
+        } else if (result.status.isFinalized) {
+          txHash = result.status.asFinalized.toHex();
+          console.log(`\tFinalized     : ${txHash}`);
+          api.disconnect();
+          resolve(txHash);
+        } else if (result.isError) {
+          console.log(`\tFinalized     : null`);
+          api.disconnect();
+          reject();
+        }
+      });
+    });
   } catch (error) {
     console.log(error);
   }

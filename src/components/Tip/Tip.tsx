@@ -1,6 +1,8 @@
 import React from 'react';
 
+import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -23,6 +25,7 @@ import {TipResult} from 'src/lib/services/polkadot-js';
 type TipProps = {
   tips: TipResult[];
   network: string;
+  loading: boolean;
   currentWallet?: UserWallet;
   onClaim: (networkId: string, ftIdentifier: string) => void;
   onClaimAll: (networkId: string) => void;
@@ -47,7 +50,8 @@ const networkOptions: MenuOptions<string>[] = [
   },
 ];
 
-export const Tip: React.FC<TipProps> = ({tips, network, onClaim, onClaimAll, currentWallet}) => {
+export const Tip: React.FC<TipProps> = props => {
+  const {tips, network, onClaim, onClaimAll, currentWallet, loading} = props;
   const style = useStyles();
 
   const icons = React.useMemo(
@@ -113,7 +117,7 @@ export const Tip: React.FC<TipProps> = ({tips, network, onClaim, onClaimAll, cur
                   </Typography>
                 </div>
                 <Button
-                  disabled={currentWallet && currentWallet.networkId !== network}
+                  disabled={(currentWallet && currentWallet.networkId !== network) || loading}
                   onClick={() => handleClaim(network, tip.tipsBalanceInfo.ftIdentifier)}
                   size="small"
                   className={style.buttonClaim}
@@ -134,6 +138,9 @@ export const Tip: React.FC<TipProps> = ({tips, network, onClaim, onClaimAll, cur
           </Grid>
         ))}
       </Grid>
+      <Backdrop className={style.backdrop} open={loading}>
+        <CircularProgress color="primary" />
+      </Backdrop>
     </>
   );
 };
