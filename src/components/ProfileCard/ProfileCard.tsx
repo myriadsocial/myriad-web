@@ -31,6 +31,8 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
 
       if (currentWallet?.type === WalletTypeEnum.POLKADOT) {
         validAddress = convertToPolkadotAddress(address, currentWallet);
+      } else {
+        validAddress = address;
       }
 
       return (
