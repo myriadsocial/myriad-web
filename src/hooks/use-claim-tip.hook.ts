@@ -15,6 +15,7 @@ export const useClaimTip = () => {
     state => state.userState,
   );
   const [loading, setLoading] = useState(false);
+  const [claiming, setClaiming] = useState(false);
   const [error, setError] = useState(null);
   const [tipsEachNetwork, setTipsEachNetwork] = useState<Network[]>(networks);
 
@@ -87,7 +88,7 @@ export const useClaimTip = () => {
   const claimTipMyria = async (networkId: string, ftIdentifier: string, callback?: () => void) => {
     if (!user) return;
     if (!currentWallet) return;
-    setLoading(true);
+    setClaiming(true);
 
     try {
       const serverId = await WalletAPI.getServerId();
@@ -112,14 +113,13 @@ export const useClaimTip = () => {
             currencyId: currency.id,
           });
         }
-
         await getTip();
       }
       callback && callback();
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false);
+      setClaiming(false);
     }
   };
 
@@ -149,6 +149,7 @@ export const useClaimTip = () => {
     tipsEachNetwork,
     error,
     loading,
+    claiming,
     getTip,
     claimTipMyria,
     claimAll,
