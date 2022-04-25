@@ -1,6 +1,6 @@
 import {SearchIcon, XCircleIcon, PlusCircleIcon} from '@heroicons/react/solid';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 
 import {
   Button,
@@ -19,28 +19,24 @@ import {
   AutocompleteRenderOptionState,
 } from '@material-ui/lab';
 
-import {Experience, ExperienceProps, Tag} from '../../interfaces/experience';
+import {ExperienceProps, Tag} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
 import {Dropzone} from '../atoms/Dropzone';
 import {ListItemPeopleComponent} from '../atoms/ListItem/ListItemPeople';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './Experience.styles';
 
-import {debounce} from 'lodash';
+import {debounce, isEmpty} from 'lodash';
 
 type ExperienceEditorProps = {
-  type?: string;
+  type?: 'clone' | 'edit';
   isEdit?: boolean;
-  experience: Experience;
+  experience?: ExperienceProps;
   tags: Tag[];
   people: People[];
   onSearchTags: (query: string) => void;
   onSearchPeople: (query: string) => void;
-  onSave: (
-    experience: Partial<Experience>,
-    allowedTags: string[],
-    prohibitedTags: string[],
-  ) => void;
+  onSave: (experience: ExperienceProps) => void;
   onImageUpload: (files: File[]) => Promise<string>;
 };
 
@@ -49,11 +45,18 @@ enum TagsProps {
   PROHIBITED = 'prohibited',
 }
 
+const DEFAULT_EXPERIENCE: ExperienceProps = {
+  name: '',
+  allowedTags: [],
+  people: [],
+  prohibitedTags: [],
+};
+
 export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const {
     type,
     isEdit,
-    experience,
+    experience = DEFAULT_EXPERIENCE,
     people,
     tags,
     onSave,
@@ -61,24 +64,12 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     onSearchTags,
     onSearchPeople,
   } = props;
-  const {allowedTags, prohibitedTags = [], experienceImageURL} = experience;
   const styles = useStyles();
 
-  const [newExperience, setNewExperience] = useState<Partial<Experience>>(experience);
-  const [newAllowedTags, setNewAllowedTags] = useState<string[]>(allowedTags);
-  const [newProhibitedTags, setNewProhibitedTags] = useState<string[]>(prohibitedTags);
-  const [image, setImage] = useState<string | undefined>(experienceImageURL);
-  const [disable, setDisable] = useState<boolean>(true);
+  const [newExperience, setNewExperience] = useState<ExperienceProps>(experience);
+  const [image, setImage] = useState<string | undefined>(experience.experienceImageURL);
+  const [isDetailChanged, setDetailChanged] = useState<boolean>(false);
   const [isLoading, setIsloading] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (type?.toLowerCase() == 'clone') {
-      const people = JSON.stringify(newExperience?.people) == JSON.stringify(experience.people);
-      const tags = JSON.stringify(newAllowedTags) == JSON.stringify(experience.allowedTags);
-
-      setDisable(people && tags);
-    }
-  }, [newExperience, newAllowedTags]);
 
   const handleSearchTags = (event: React.ChangeEvent<HTMLInputElement>) => {
     const debounceSubmit = debounce(() => {
@@ -116,7 +107,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       setNewExperience({...newExperience, experienceImageURL: undefined});
     }
 
-    setDisable(false);
+    setDetailChanged(true);
   };
 
   const handleChange =
@@ -128,7 +119,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         [field]: value,
       }));
 
-      setDisable(experience[field] === value);
+      setDetailChanged(experience[field] !== value);
     };
 
   const handleTagsInputChange = (
@@ -140,9 +131,9 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
     let tmpTags: string[] = [];
     if (type === TagsProps.ALLOWED) {
-      tmpTags = [...newAllowedTags];
+      tmpTags = newExperience.allowedTags;
     } else if (type === TagsProps.PROHIBITED) {
-      tmpTags = [...newProhibitedTags];
+      tmpTags = newExperience.prohibitedTags ?? [];
     }
 
     const fieldValue = tmpTags
@@ -165,37 +156,55 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     const data = [...new Set(value.map(tag => tag.replace('#', '')))];
     const prohibitedTagsChanged =
       type === TagsProps.PROHIBITED &&
-      data.filter(tag => !experience?.prohibitedTags || !experience?.prohibitedTags.includes(tag))
-        .length > 0;
+      (data.filter(tag => !experience?.prohibitedTags || !experience.prohibitedTags.includes(tag))
+        .length > 0 ||
+        experience?.prohibitedTags?.length !== data.length);
     const allowedTagsChanged =
       type === TagsProps.ALLOWED &&
-      data.filter(tag => !experience?.allowedTags.includes(tag)).length > 0;
+      (data.filter(tag => !experience.allowedTags.includes(tag)).length > 0 ||
+        data.length !== experience.allowedTags.length);
 
-    setDisable(!prohibitedTagsChanged && !allowedTagsChanged);
+    setDetailChanged(prohibitedTagsChanged || allowedTagsChanged);
 
     if (reason === 'remove-option') {
-      setDisable(false);
-
       if (type === TagsProps.ALLOWED) {
-        setNewAllowedTags(data);
+        setNewExperience(prevExperience => ({
+          ...prevExperience,
+          allowedTags: data,
+        }));
       } else if (type === TagsProps.PROHIBITED) {
-        setNewProhibitedTags(data);
+        setNewExperience(prevExperience => ({
+          ...prevExperience,
+          prohibitedTags: data,
+        }));
       }
     }
 
     if (reason === 'create-option') {
       if (type === TagsProps.ALLOWED) {
-        setNewAllowedTags(data);
+        setNewExperience(prevExperience => ({
+          ...prevExperience,
+          allowedTags: data,
+        }));
       } else if (type === TagsProps.PROHIBITED) {
-        setNewProhibitedTags(data);
+        setNewExperience(prevExperience => ({
+          ...prevExperience,
+          prohibitedTags: data,
+        }));
       }
     }
 
     if (reason === 'select-option') {
       if (type === TagsProps.ALLOWED) {
-        setNewAllowedTags(data);
+        setNewExperience(prevExperience => ({
+          ...prevExperience,
+          allowedTags: data,
+        }));
       } else if (type === TagsProps.PROHIBITED) {
-        setNewProhibitedTags(data);
+        setNewExperience(prevExperience => ({
+          ...prevExperience,
+          prohibitedTags: data,
+        }));
       }
     }
   };
@@ -215,7 +224,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       clearSearchedPeople();
     }
 
-    setDisable(false);
+    setDetailChanged(true);
   };
 
   const removeSelectedPeople = (selected: People) => () => {
@@ -226,18 +235,30 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         : [],
     }));
 
-    setDisable(false);
+    setDetailChanged(true);
+  };
+
+  const isValidExperience = (): boolean => {
+    if (newExperience.name.length === 0) return false;
+
+    if (!newExperience.experienceImageURL) return false;
+
+    if (newExperience.allowedTags.length === 0) return false;
+
+    if (newExperience.people.filter(people => !isEmpty(people.id)).length === 0) return false;
+
+    return true;
   };
 
   const saveExperience = () => {
-    if (newExperience) {
-      onSave(newExperience, newAllowedTags, newProhibitedTags);
-    }
+    if (!isValidExperience()) return;
+
+    onSave(newExperience);
   };
 
   const renderLabelButton = () => {
-    if (type === 'Edit') return 'Save changes';
-    else if (type === 'Clone') return 'Clone Experience';
+    if (type === 'edit') return 'Save changes';
+    else if (type === 'clone') return 'Clone Experience';
     else return 'Create Experience';
   };
 
@@ -292,8 +313,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         id="experience-tags-include"
         freeSolo
         multiple
-        value={newAllowedTags || ''}
-        options={tags.map(tag => tag.id)}
+        value={newExperience.allowedTags ?? []}
+        options={tags.map(tag => tag.id).filter(tag => !newExperience.allowedTags.includes(tag))}
         disableClearable
         onChange={(event, value, reason) => {
           handleTagsChange(event, value, reason, TagsProps.ALLOWED);
@@ -307,7 +328,9 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             {...params}
             label="Included tags"
             variant="outlined"
-            placeholder={newAllowedTags.length === 0 ? 'topic you want to follow' : undefined}
+            placeholder={
+              newExperience.allowedTags.length === 0 ? 'topic you want to follow' : undefined
+            }
             onChange={handleSearchTags}
             InputProps={{
               ...params.InputProps,
@@ -321,8 +344,10 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         id="experience-tags-exclude"
         freeSolo
         multiple
-        value={newProhibitedTags || ''}
-        options={tags.map(tag => tag.id)}
+        value={newExperience?.prohibitedTags ?? []}
+        options={tags
+          .map(tag => tag.id)
+          .filter(tag => !newExperience.prohibitedTags?.includes(tag))}
         disableClearable
         onChange={(event, value, reason) => {
           handleTagsChange(event, value, reason, TagsProps.PROHIBITED);
@@ -336,7 +361,9 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             {...params}
             label="Excluded tags"
             variant="outlined"
-            placeholder={newProhibitedTags.length === 0 ? 'topic you want to exclude' : undefined}
+            placeholder={
+              newExperience.prohibitedTags?.length === 0 ? 'topic you want to exclude' : undefined
+            }
             onChange={handleSearchTags}
             InputProps={{
               ...params.InputProps,
@@ -399,10 +426,9 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       />
 
       <div className={styles.preview}>
-        {newExperience?.people?.map(people =>
-          people.id === '' ? (
-            <></>
-          ) : (
+        {newExperience.people
+          .filter(people => !isEmpty(people.id))
+          .map(people => (
             <ListItemPeopleComponent
               id="selected-experience-list-item"
               key={people.id}
@@ -416,12 +442,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                 </IconButton>
               }
             />
-          ),
-        )}
+          ))}
       </div>
       <FormControl fullWidth variant="outlined">
         <Button
-          disabled={disable}
+          disabled={!isDetailChanged || !isValidExperience()}
           variant="contained"
           color="primary"
           disableElevation

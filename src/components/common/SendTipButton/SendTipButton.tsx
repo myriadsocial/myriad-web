@@ -124,6 +124,7 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
   return (
     <>
       <Button
+        disabled={!tipping.enabled}
         classes={{root: styles.button}}
         onClick={handleSendTip}
         startIcon={showIcon ? icon : null}
@@ -131,7 +132,9 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
         {...restProps}>
         {label}
         <ShowIf condition={!tipping.enabled && !mobile}>
-          <CircularProgress size={14} color={props.color as CircularProgressProps['color']} />
+          <div className={styles.loading}>
+            <CircularProgress size={14} color={props.color as CircularProgressProps['color']} />
+          </div>
         </ShowIf>
       </Button>
 

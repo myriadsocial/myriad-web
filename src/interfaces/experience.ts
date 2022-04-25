@@ -30,19 +30,17 @@ export interface ExperienceSetting {
 
 export interface ExperienceProps extends Searchable {
   name: string;
-  tags: string[];
+  description?: string;
+  experienceImageURL?: string;
   allowedTags: string[];
   prohibitedTags?: string[];
   people: People[];
-  description?: string;
-  layout?: LayoutType;
-  createdBy: string;
-  subscribedCount?: number;
-  clonedCount?: number;
-  experienceImageURL?: string;
 }
 
 export interface Experience extends ExperienceProps, BaseModel {
+  subscribedCount?: number;
+  clonedCount?: number;
+  createdBy: string;
   user: User;
   friend?: boolean;
   private?: boolean;

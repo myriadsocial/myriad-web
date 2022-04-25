@@ -9,21 +9,19 @@ import {People} from 'src/interfaces/people';
 
 export interface ExperienceState extends BasePaginationState {
   experiences: Experience[];
-  selectedExperience: Experience | null;
+  selectedExperience?: Experience;
   searchPeople: People[];
   searchTags: Tag[];
   hasMore: boolean;
   filter?: string;
-  detail: Experience | null;
+  detail?: Experience;
 }
 
 const initialState: ExperienceState = {
   loading: false,
   experiences: [],
-  selectedExperience: null,
   searchPeople: [],
   searchTags: [],
-  detail: null,
   hasMore: false,
   meta: {
     currentPage: 1,

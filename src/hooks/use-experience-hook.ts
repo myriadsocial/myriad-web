@@ -1,8 +1,9 @@
 import {useSelector, useDispatch} from 'react-redux';
 
-import {Experience, WrappedExperience} from '../interfaces/experience';
+import {WrappedExperience, ExperienceProps} from '../interfaces/experience';
 import {RootState} from '../reducers';
 
+import {pick} from 'lodash';
 import {
   searchExperiences,
   searchPeople,
@@ -75,48 +76,38 @@ export const useExperienceHook = () => {
     dispatch(searchTags(query));
   };
 
-  const followExperience = (
-    newExperience: Partial<Experience>,
-    newTags: string[],
-    callback?: (id: string) => void,
-  ) => {
-    const experience: Partial<Experience> = {
-      name: newExperience.name,
-      tags: newTags,
-      people: newExperience.people,
-      description: newExperience.description,
-      experienceImageURL: newExperience.experienceImageURL,
-    };
+  const followExperience = (newExperience: ExperienceProps, callback?: (id: string) => void) => {
+    const attributes = pick(newExperience, [
+      'name',
+      'description',
+      'allowedTags',
+      'experienceImageURL',
+      'prohibitedTags',
+      'people',
+    ]);
 
-    dispatch(cloneExperience(experience, callback));
+    dispatch(cloneExperience(attributes, callback));
   };
 
   const editExperience = (
-    newExperience: Partial<Experience>,
-    newAllowedTags: string[],
-    newProhibitedTags: string[],
+    experienceId: string,
+    newExperience: ExperienceProps,
     callback?: (id: string) => void,
   ) => {
-    const experience: Partial<Experience> = {
-      name: newExperience.name,
-      allowedTags: newAllowedTags,
-      prohibitedTags: newProhibitedTags,
-      people: newExperience.people,
-      description: newExperience.description,
-      experienceImageURL: newExperience.experienceImageURL,
-    };
+    const attributes = pick(newExperience, [
+      'name',
+      'description',
+      'allowedTags',
+      'experienceImageURL',
+      'prohibitedTags',
+      'people',
+    ]);
 
-    dispatch(updateExperience(newExperience.id, experience, callback));
+    dispatch(updateExperience(experienceId, attributes, callback));
   };
 
-  const saveExperience = (
-    newExperience: Partial<Experience>,
-    newTags: string[],
-    newProhibitedTags: string[],
-    callback?: (id: string) => void,
-  ) => {
-    const experience = {...newExperience, allowedTags: newTags, prohibitedTags: newProhibitedTags};
-    dispatch(createExperience(experience, newTags, callback));
+  const saveExperience = (newExperience: ExperienceProps, callback?: (id: string) => void) => {
+    dispatch(createExperience(newExperience, callback));
   };
 
   const beSubscribeExperience = (experienceId: string, callback?: () => void) => {
