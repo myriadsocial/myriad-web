@@ -17,7 +17,7 @@ import {UserState} from 'src/reducers/user/reducer';
 export const TipContainer: React.FC = () => {
   const {currentWallet} = useSelector<RootState, UserState>(state => state.userState);
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
-  const {loading, tipsEachNetwork, claimTipMyria, claimAll} = useClaimTip();
+  const {loading, claiming, tipsEachNetwork, claimTipMyria, claimAll} = useClaimTip();
   const {openToasterSnack} = useToasterSnackHook();
 
   const handleClaimTip = (networkId: string, ftIdentifier: string) => {
@@ -81,6 +81,7 @@ export const TipContainer: React.FC = () => {
           <ShowIf condition={!loading && !!tipWithBalances(network).length}>
             <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
               <Tip
+                loading={claiming}
                 tips={tipWithBalances(network)}
                 network={network.id}
                 currentWallet={currentWallet}
