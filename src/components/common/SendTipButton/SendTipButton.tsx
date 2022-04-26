@@ -11,7 +11,6 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import useConfirm from '../Confirm/use-confirm.hook';
 import useTipping from '../Tipping/use-tipping.hook';
 import ShowIf from '../show-if.component';
 import {useStyles} from './SendTipButton.style';
@@ -21,7 +20,7 @@ import {Comment} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {People} from 'src/interfaces/people';
 import {Post} from 'src/interfaces/post';
-import {User, Wallet} from 'src/interfaces/user';
+import {User} from 'src/interfaces/user';
 import {WalletDetail} from 'src/interfaces/wallet';
 import * as CommentAPI from 'src/lib/api/comment';
 import * as PostAPI from 'src/lib/api/post';
@@ -56,7 +55,6 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
 
   const styles = useStyles({mobile, color: props.color});
   const tipping = useTipping();
-  const confirm = useConfirm();
 
   const [promptFailedTip, setPromptFailedTip] = useState(false);
 
@@ -64,12 +62,10 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
 
   const handleSendTip = async () => {
     let receiver: UserWithWalletDetail | PeopleWithWalletDetail | null = null;
-    let walletReceiver: Wallet[] = [];
     try {
       // if tipping to User
       if ('username' in reference) {
         receiver = reference;
-        walletReceiver = reference.wallets;
         const walletDetail = await UserAPI.getWalletAddress(reference.id);
 
         receiver = {...reference, walletDetail};
@@ -86,7 +82,6 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
       // if tipping to Post
       if ('platform' in reference) {
         receiver = reference.people ?? reference.user;
-        walletReceiver = reference?.user?.wallets;
         const walletDetail = await PostAPI.getWalletAddress(reference.id);
 
         if (reference.people) {
@@ -104,20 +99,7 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
         referenceType,
       });
     } catch (error) {
-      if (
-        walletReceiver.length > 0 &&
-        walletReceiver.filter(wallet => wallet.type === tipping.currentWallet).length === 0
-      ) {
-        setPromptFailedTip(true);
-      } else {
-        confirm({
-          title: 'Wallet account not found',
-          description: 'This post wallet address is unavailable',
-          icon: 'warning',
-          confirmationText: 'close',
-          hideCancel: true,
-        });
-      }
+      setPromptFailedTip(true);
     }
   };
 
