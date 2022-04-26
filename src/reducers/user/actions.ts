@@ -16,7 +16,7 @@ import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail, UserWallet} from 'src/interfaces/user';
 import {Network} from 'src/interfaces/wallet';
 import * as ExperienceAPI from 'src/lib/api/experience';
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
+import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import {BaseErrorResponse} from 'src/lib/api/interfaces/error-response.interface';
 import * as SocialAPI from 'src/lib/api/social';
 import * as TokenAPI from 'src/lib/api/token';
@@ -587,9 +587,17 @@ export const fetchNetwork: ThunkActionCreator<Actions, RootState> =
     try {
       const {data: networks, meta} = await WalletAPI.getNetworks();
 
+      let filterNetwork: Network[] = [];
+      const myriadNetwork = networks.find(option => option.id === NetworkTypeEnum.MYRIAD);
+
+      if (myriadNetwork) {
+        const otherNetworks = networks.filter(network => network.id !== NetworkTypeEnum.MYRIAD);
+        filterNetwork = [myriadNetwork, ...otherNetworks];
+      }
+
       dispatch({
         type: constants.FETCH_NETWORK,
-        payload: networks.map(network => {
+        payload: (filterNetwork.length ? filterNetwork : networks).map(network => {
           network.tips = [];
           return network;
         }),
