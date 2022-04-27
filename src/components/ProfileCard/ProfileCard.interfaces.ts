@@ -4,6 +4,7 @@ import {Network} from 'src/interfaces/wallet';
 
 export type ProfileCardProps = {
   user?: User;
+  anonymous?: boolean;
   currentWallet?: UserWallet;
   wallets?: UserWallet[];
   networks: Network[];

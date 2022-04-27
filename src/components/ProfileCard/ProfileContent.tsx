@@ -23,6 +23,7 @@ import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
 export const ProfileContent: React.FC<ProfileCardProps> = props => {
   const {
     user,
+    anonymous,
     alias,
     notificationCount,
     onViewProfile,
@@ -31,7 +32,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
     handleSignOut,
     currentWallet,
   } = props;
-  const classes = useStyles();
+  const classes = useStyles({...props});
 
   const icons = React.useMemo(
     () => ({
@@ -68,7 +69,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
   const [open, setOpen] = React.useState(false);
 
   const handleOpenProfile = () => {
-    setOpen(!open);
+    !anonymous && setOpen(!open);
   };
 
   const getSelectedIcon = (isWallet?: boolean) => {

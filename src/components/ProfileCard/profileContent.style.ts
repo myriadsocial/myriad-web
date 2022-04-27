@@ -1,6 +1,8 @@
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+import {ProfileCardProps} from './ProfileCard.interfaces';
+
+export const useStyles = makeStyles<Theme, ProfileCardProps>(theme =>
   createStyles({
     avatar: {
       width: 48,
@@ -12,7 +14,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     hover: {
       '&:hover': {
-        cursor: 'pointer',
+        cursor: props => {
+          if (!props.anonymous) return 'pointer';
+          return '';
+        },
       },
     },
     identity: {

@@ -102,10 +102,10 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(countNewNotification()),
       dispatch(getUserCurrencies()),
       dispatch(fetchUserWallets()),
-      dispatch(fetchNetwork()),
     ]);
   }
 
+  await dispatch(fetchNetwork());
   await dispatch(fetchExchangeRates());
   await dispatch(fetchUserExperience());
 
