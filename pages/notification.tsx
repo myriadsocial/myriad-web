@@ -80,9 +80,10 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(countNewNotification()),
       dispatch(fetchUserExperience()),
       dispatch(fetchUserWallets()),
-      dispatch(fetchNetwork()),
     ]);
   }
+
+  await dispatch(fetchNetwork());
 
   return {
     props: {
