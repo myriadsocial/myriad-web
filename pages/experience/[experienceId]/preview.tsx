@@ -5,13 +5,13 @@ import React from 'react';
 import {getSession} from 'next-auth/client';
 import getConfig from 'next/config';
 import Head from 'next/head';
+import {useRouter} from 'next/router';
 
 import {ExperiencePreviewContainer} from 'src/components/ExperiencePreview/ExperiencePreview.container';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {setHeaders} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
-import i18n from 'src/locale';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
@@ -29,11 +29,30 @@ import {ThunkDispatchAction} from 'src/types/thunk';
 
 const {publicRuntimeConfig} = getConfig();
 
-const PreviewExperience: React.FC = () => {
+type ExperiencePageProps = {
+  title: string;
+  description?: string;
+  image?: string;
+};
+
+const PreviewExperience: React.FC<ExperiencePageProps> = props => {
+  const {title, image, description} = props;
+
+  const router = useRouter();
+
   return (
     <DefaultLayout isOnProfilePage={false}>
       <Head>
-        <title>{i18n.t('Experience.Preview.Title', {appname: publicRuntimeConfig.appName})}</title>
+        <title>{title}</title>
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
+        <meta property="og:description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:image" content={image} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={image} />
+        <meta name="twitter:card" content="summary" />
       </Head>
       <ExperiencePreviewContainer />
     </DefaultLayout>
@@ -94,10 +113,13 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   await dispatch(fetchUserExperience());
 
   try {
-    await ExperienceAPI.getExperienceDetail(experienceId);
+    const experience = await ExperienceAPI.getExperienceDetail(experienceId);
     return {
       props: {
         session,
+        title: experience.name,
+        description: experience.description,
+        image: experience.experienceImageURL,
       },
     };
   } catch (error) {
