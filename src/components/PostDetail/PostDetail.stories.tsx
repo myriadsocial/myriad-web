@@ -77,14 +77,10 @@ MyriadPost.args = {
         section: SectionType.DISCUSSION,
         mentions: [],
         metric: {
-          likes: 0,
-          dislikes: 0,
           comments: 0,
-          shares: 0,
+          deletedComments: 0,
           upvotes: 0,
           downvotes: 0,
-          discussions: 0,
-          debates: 0,
         },
 
         createdAt: new Date('2021-07-15T03:40:23.000Z'),
