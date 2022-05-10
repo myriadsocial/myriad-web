@@ -36,7 +36,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
 
   const icons = React.useMemo(
     () => ({
-      polkadot: <PolkadotNetworkIcon />,
+      'polkadot{.js}': <PolkadotNetworkIcon />,
       kusama: <KusamaNetworkIcon />,
       near: <NearNetworkIcon24 />,
       myriad: <MyriadCircleIcon />,
@@ -44,23 +44,23 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
     [],
   );
 
-  const formatWallet = (walletType?: string) => {
-    switch (walletType) {
-      case WalletTypeEnum.POLKADOT:
+  const formatWallet = (blockchainPlatform?: string, a?: object) => {
+    switch (blockchainPlatform) {
+      case 'substrate':
         return 'Polkadot{.js}';
-      case WalletTypeEnum.NEAR:
+      case 'near':
         return 'NEAR Wallet';
       default:
-        return walletType;
+        return 'Unknown wallet';
     }
   };
 
-  const formatNetwork = (walletType?: string, network?: string) => {
-    switch (walletType) {
-      case WalletTypeEnum.POLKADOT:
-        return capitalize(network);
-      case WalletTypeEnum.NEAR:
-        return network?.toUpperCase();
+  const formatNetwork = (blockchainPlatform?: string, networkId?: string) => {
+    switch (blockchainPlatform) {
+      case 'substrate':
+        return capitalize(networkId);
+      case 'near':
+        return networkId?.toUpperCase();
       default:
         return '';
     }
@@ -142,14 +142,18 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
             <div className={classes.column}>
               <Typography component="span">Network</Typography>
               <Typography component="span" className={classes.flex}>
-                {getSelectedIcon()} {formatNetwork(currentWallet?.type, currentWallet?.networkId)}
+                {getSelectedIcon()}{' '}
+                {formatNetwork(
+                  currentWallet?.network?.blockchainPlatform,
+                  currentWallet?.networkId,
+                )}
               </Typography>
             </div>
             <div className={classes.column}>
               <Typography component="span">Wallet</Typography>
               <Typography component="span" className={classes.flex}>
                 {getSelectedIcon(true)}
-                {formatWallet(currentWallet?.type)}
+                {formatWallet(currentWallet?.network?.blockchainPlatform, currentWallet)}
               </Typography>
             </div>
           </div>

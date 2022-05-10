@@ -4,9 +4,9 @@ import React from 'react';
 
 import {TipHistory as TipHistoryComponent} from '.';
 import {CurrencyId} from '../../interfaces/currency';
-import {ContentType, WalletType} from '../../interfaces/wallet';
+import {ContentType} from '../../interfaces/wallet';
 
-import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
+import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
 
 export default {
   title: 'UI Revamp v2.0/components/Tip History',
@@ -35,7 +35,6 @@ TipHistory.args = {
       type: ContentType.POST,
       fromWallet: {
         id: '0x76709daddc7f97dede94a4ab9bc168fd4f5b5a96bf15adfdb247d6f0d2276d39',
-        type: WalletTypeEnum.POLKADOT,
         networkId: NetworkTypeEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
@@ -45,7 +44,7 @@ TipHistory.args = {
           id: '6232d3a5dbe01066471dca12',
           name: 'NutrisariJerukManisBgt',
           username: 'nutrisarijeruk',
-          bannerImageUrl: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
+          bannerImageURL: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
           metric: {
             totalPosts: 16,
             totalExperiences: 0,
@@ -65,7 +64,6 @@ TipHistory.args = {
       },
       toWallet: {
         id: '0xd6a98971eb249a031daebf0856c693ef73018cc4a77a703061f44794abc1931a',
-        type: WalletTypeEnum.POLKADOT,
         networkId: NetworkTypeEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
@@ -75,7 +73,7 @@ TipHistory.args = {
           id: '6232eaa8dbe01066471dd305',
           name: 'Mojito',
           username: 'mojito',
-          bannerImageUrl: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
+          bannerImageURL: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
           bio: 'nospacnoeefbahfjabhfbahbhasbhbahjbhcjaschjbashbahbsabchabshcbshbhcsbhcbshbchsbchsbchbsjcbahbchabhcbashchahcahcbhasasbchbashbchabshbchsbhcbshchshcscabjbshbhacbsh',
           websiteURL:
             'asjabhjfbahsbhasbhjfabhbashbhabshbashbhsabhbshbchsbjcnsjcksakocaoidiqwuhqwbdhjwbfhsbnvbsndbvhsdbvdhvbhdbvhsdjknskldvksdnjvnsdjkvsdhvhsbdvhbdshvsdhvjsnjdbjhdjnvjdbhvbdshvbdhsbvhdsbhvbhdsbvhdbvhbdshvbsdivsyighfuehfiusfjhskdfnjkshdfheiufhdjsfkjsdbhfbshdfhsdgfihsgfsdhfhsdbfhsdbfhsgdfhshdfjsjfioahuifgewygygwygyfggyegfyegyfgeyfbsjnjkhdjhdgsygdygysdbhbdsnjshjdfhueguifhiowhejfnjwenfaiohfuagyehbbhsbfhsbdhfgsdufhsudfhsodhfoishoeishjefbshbdfgsufhjskndjfnsjkdbfusgeufhuisheufhsnefjksndjkfhsuhdfuihsuehfseugfushufhushuehfhsbfbhsbehfbshebjhfsbhejbfhsbehfbshefusheuhfusheuofhsoef',
@@ -114,7 +112,7 @@ TipHistory.args = {
           rpcURL: 'wss://rpc.polkadot.io',
           explorerURL:
             'https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.polkadot.io#/explorer/query',
-          walletType: WalletType.POLKADOT,
+          blockchainPlatform: 'substrate',
           createdAt: new Date(),
           updatedAt: new Date(),
           currencies: [],
@@ -134,7 +132,6 @@ TipHistory.args = {
       currencyId: 'AUSD',
       fromWallet: {
         id: '0x76709daddc7f97dede94a4ab9bc168fd4f5b5a96bf15adfdb247d6f0d2276d39',
-        type: WalletTypeEnum.POLKADOT,
         networkId: NetworkTypeEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
@@ -144,7 +141,7 @@ TipHistory.args = {
           id: '6232d3a5dbe01066471dca12',
           name: 'NutrisariJerukManisBgt',
           username: 'nutrisarijeruk',
-          bannerImageUrl: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
+          bannerImageURL: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
           metric: {
             totalPosts: 16,
             totalExperiences: 0,
@@ -164,7 +161,6 @@ TipHistory.args = {
       },
       toWallet: {
         id: '0xd6a98971eb249a031daebf0856c693ef73018cc4a77a703061f44794abc1931a',
-        type: WalletTypeEnum.POLKADOT,
         networkId: NetworkTypeEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
@@ -174,7 +170,7 @@ TipHistory.args = {
           id: '6232eaa8dbe01066471dd305',
           name: 'Mojito',
           username: 'mojito',
-          bannerImageUrl: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
+          bannerImageURL: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
           bio: 'nospacnoeefbahfjabhfbahbhasbhbahjbhcjaschjbashbahbsabchabshcbshbhcsbhcbshbchsbchsbchbsjcbahbchabhcbashchahcahcbhasasbchbashbchabshbchsbhcbshchshcscabjbshbhacbsh',
           websiteURL:
             'asjabhjfbahsbhasbhjfabhbashbhabshbashbhsabhbshbchsbjcnsjcksakocaoidiqwuhqwbdhjwbfhsbnvbsndbvhsdbvdhvbhdbvhsdjknskldvksdnjvnsdjkvsdhvhsbdvhbdshvsdhvjsnjdbjhdjnvjdbhvbdshvbdhsbvhdsbhvbhdsbvhdbvhbdshvbsdivsyighfuehfiusfjhskdfnjkshdfheiufhdjsfkjsdbhfbshdfhsdgfihsgfsdhfhsdbfhsdbfhsgdfhshdfjsjfioahuifgewygygwygyfggyegfyegyfgeyfbsjnjkhdjhdgsygdygysdbhbdsnjshjdfhueguifhiowhejfnjwenfaiohfuagyehbbhsbfhsbdhfgsdufhsudfhsodhfoishoeishjefbshbdfgsufhjskndjfnsjkdbfusgeufhuisheufhsnefjksndjkfhsuhdfuihsuehfseugfushufhushuehfhsbfbhsbehfbshebjhfsbhejbfhsbehfbshefusheuhfusheuofhsoef',
@@ -213,7 +209,7 @@ TipHistory.args = {
           rpcURL: 'wss://rpc.polkadot.io',
           explorerURL:
             'https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.polkadot.io#/explorer/query',
-          walletType: WalletType.POLKADOT,
+          blockchainPlatform: 'substrate',
           createdAt: new Date(),
           updatedAt: new Date(),
           currencies: [],
@@ -239,7 +235,7 @@ TipHistory.args = {
         rpcURL: 'wss://rpc.polkadot.io',
         explorerURL:
           'https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.polkadot.io#/explorer/query',
-        walletType: WalletType.POLKADOT,
+        blockchainPlatform: 'substrate',
         createdAt: new Date(),
         updatedAt: new Date(),
         currencies: [],

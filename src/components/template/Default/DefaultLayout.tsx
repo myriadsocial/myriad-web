@@ -18,6 +18,7 @@ import {TippingProvider} from 'src/components/common/Tipping/Tipping.provider';
 import ShowIf from 'src/components/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {NotificationProps} from 'src/interfaces/notification';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {firebaseApp, firebaseAnalytics, firebaseCloudMessaging} from 'src/lib/firebase';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
@@ -111,12 +112,25 @@ const Default: React.FC<DefaultLayoutProps> = props => {
     setShowNotification(!showNotification);
   };
 
+  const getWallet = (blockchainPlatform?: string) => {
+    switch (blockchainPlatform) {
+      case 'substrate':
+        return WalletTypeEnum.POLKADOT;
+
+      case 'near':
+        return WalletTypeEnum.NEAR;
+
+      default:
+        return;
+    }
+  };
+
   return (
     <TippingProvider
       anonymous={anonymous}
       balances={balanceDetails}
       sender={user}
-      currentWallet={currentWallet?.type}
+      currentWallet={getWallet(currentWallet?.network?.blockchainPlatform)}
       currentNetwork={currentWallet?.networkId}>
       <Container maxWidth="lg" disableGutters>
         <div className={classes.root}>

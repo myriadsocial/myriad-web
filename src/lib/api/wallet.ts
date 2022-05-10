@@ -94,6 +94,11 @@ export const getUserWallets = async (userId: string): Promise<WalletList> => {
   const {data} = await MyriadAPI.request({
     url: `/users/${userId}/wallets`,
     method: 'GET',
+    params: {
+      filter: {
+        include: ['network'],
+      },
+    },
   });
 
   return data;

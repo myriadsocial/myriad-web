@@ -21,17 +21,11 @@ export interface WalletDetail {
   ftIdentifier?: string;
 }
 
-export enum WalletType {
-  ETH = 'eth',
-  NEAR = 'near',
-  POLKADOT = 'polkadot',
-}
-
 export interface Network extends BaseModel {
   image: string;
   rpcURL: string;
   explorerURL: string;
-  walletType: string;
+  blockchainPlatform: string;
   currencies?: Currency[];
   tips: TipResult[] | [];
 }

@@ -1,6 +1,5 @@
 import {BaseModel} from './base.interface';
 import {Currency} from './currency';
-import {WalletType} from './wallet';
 
 export enum NetworkTypeEnum {
   ETHEREUM = 'ethereum',
@@ -17,7 +16,7 @@ export type NetworkProps = {
   image: string;
   rpcURL: string;
   explorerURL: string;
-  walletType: WalletType;
+  blockchainPlatform: string;
   walletURL?: string;
   helperURL?: string;
 };
