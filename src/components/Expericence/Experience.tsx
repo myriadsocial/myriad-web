@@ -211,6 +211,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
             Delete
           </MenuItem>
         </ShowIf>
+        <MenuItem disabled>Share</MenuItem>
       </Menu>
     </>
   );

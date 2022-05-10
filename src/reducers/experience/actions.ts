@@ -20,6 +20,11 @@ export interface LoadExperience extends PaginationAction {
   experiences: Experience[];
 }
 
+export interface FetchTrendingExperience extends PaginationAction {
+  type: constants.FETCH_TRENDING_EXPERIENCE;
+  experiences: Experience[];
+}
+
 export interface LoadDetailExperience extends Action {
   type: constants.FETCH_DETAIL_EXPERIENCE;
   experience: Experience;
@@ -54,6 +59,7 @@ export interface ClearExperiences extends Action {
 
 export type Actions =
   | LoadExperience
+  | FetchTrendingExperience
   | LoadDetailExperience
   | SearchExperience
   | SearchPeople
@@ -90,6 +96,30 @@ export const loadExperiences: ThunkActionCreator<Actions, RootState> =
 
       dispatch({
         type: constants.FETCH_EXPERIENCE,
+        experiences,
+        meta,
+      });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setExperienceLoading(false));
+    }
+  };
+
+export const fetchTrendingExperience: ThunkActionCreator<Actions, RootState> =
+  (page = 1) =>
+  async dispatch => {
+    dispatch(setExperienceLoading(true));
+
+    try {
+      const {data: experiences, meta} = await ExperienceAPI.getExperiences({page}, true);
+
+      dispatch({
+        type: constants.FETCH_TRENDING_EXPERIENCE,
         experiences,
         meta,
       });

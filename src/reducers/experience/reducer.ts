@@ -9,6 +9,7 @@ import {People} from 'src/interfaces/people';
 
 export interface ExperienceState extends BasePaginationState {
   experiences: Experience[];
+  trendingExperiences: Experience[];
   selectedExperience?: Experience;
   searchPeople: People[];
   searchTags: Tag[];
@@ -20,6 +21,7 @@ export interface ExperienceState extends BasePaginationState {
 const initialState: ExperienceState = {
   loading: false,
   experiences: [],
+  trendingExperiences: [],
   searchPeople: [],
   searchTags: [],
   hasMore: false,
@@ -56,6 +58,13 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
           hasMore: action.meta.currentPage < action.meta.totalPageCount,
         };
       }
+    }
+
+    case constants.FETCH_TRENDING_EXPERIENCE: {
+      return {
+        ...state,
+        trendingExperiences: action.experiences,
+      };
     }
 
     case constants.FETCH_DETAIL_EXPERIENCE: {

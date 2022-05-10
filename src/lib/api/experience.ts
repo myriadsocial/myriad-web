@@ -8,8 +8,14 @@ import {Experience, UserExperience, ExperienceType} from 'src/interfaces/experie
 type ExperienceList = BaseList<Experience>;
 type UserExperienceList = BaseList<UserExperience>;
 
-export const getExperiences = async (params: PaginationParams): Promise<ExperienceList> => {
+export const getExperiences = async (
+  params: PaginationParams,
+  isTrending?: boolean,
+): Promise<ExperienceList> => {
   const {orderField = 'createdAt', sort = 'DESC'} = params;
+
+  let order: string | string[] = `${orderField} ${sort}`;
+  if (isTrending) order = ['trendCount DESC'];
 
   const {data} = await MyriadAPI.request<ExperienceList>({
     url: `/experiences`,
@@ -17,7 +23,7 @@ export const getExperiences = async (params: PaginationParams): Promise<Experien
     params: {
       pageLimit: params.limit ?? PAGINATION_LIMIT,
       filter: {
-        order: `${orderField} ${sort}`,
+        order,
         include: ['user'],
       },
     },
