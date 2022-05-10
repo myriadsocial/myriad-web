@@ -18,7 +18,7 @@ type TabListProps<T> = TabsProps & {
   onChangeTab: (currentTab: T) => void;
 };
 
-export const TabList = <T extends unknown>(props: TabListProps<T>): JSX.Element => {
+export const TabList = <T,>(props: TabListProps<T>): JSX.Element => {
   const {
     tabs,
     selected,
