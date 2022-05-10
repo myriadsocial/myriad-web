@@ -1,4 +1,4 @@
-import {ChatAlt2Icon, HashtagIcon, VariableIcon} from '@heroicons/react/outline';
+import {ChatAlt2Icon, HashtagIcon, VariableIcon, TrendingUpIcon} from '@heroicons/react/outline';
 
 import React, {useState} from 'react';
 
@@ -9,9 +9,15 @@ import {useStyles} from './RightMenuBar.styles';
 
 const ExperienceTab = dynamic(() => import('./tabs/ExperienceTab'));
 const TrendingTab = dynamic(() => import('./tabs/TrendingTab'));
+const TrendingExperienceTab = dynamic(() => import('./tabs/TrendingExperienceTab'));
 
 export const RightMenuBar: React.FC = () => {
   const iconTabs = [
+    {
+      id: 'trendingExperienceTabPanel',
+      icon: <TrendingUpIcon />,
+      component: <TrendingExperienceTab />,
+    },
     {
       id: 'experienceTabMenu',
       icon: <VariableIcon />,
@@ -33,7 +39,7 @@ export const RightMenuBar: React.FC = () => {
 
   const classes = useStyles();
 
-  const [activeTab, setActiveTab] = useState('experienceTabMenu');
+  const [activeTab, setActiveTab] = useState('trendingExperienceTabPanel');
 
   const handleChangeTab = (tab: string) => {
     setActiveTab(tab);

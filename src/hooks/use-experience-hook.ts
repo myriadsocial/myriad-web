@@ -17,6 +17,7 @@ import {
   deleteExperience,
   unsubscribeExperience,
   clearExperiences,
+  fetchTrendingExperience,
 } from 'src/reducers/experience/actions';
 import {ExperienceState} from 'src/reducers/experience/reducer';
 import {fetchUserExperience} from 'src/reducers/user/actions';
@@ -25,6 +26,7 @@ export enum ExperienceOwner {
   ALL = 'all',
   CURRENT_USER = 'current_user',
   PROFILE = 'profile',
+  TRENDING = 'trending',
 }
 
 //TODO: isn't it better to rename this to something more general like, useSearchHook?
@@ -34,6 +36,7 @@ export const useExperienceHook = () => {
 
   const {
     experiences,
+    trendingExperiences,
     selectedExperience,
     searchTags: tags,
     searchPeople: people,
@@ -51,6 +54,10 @@ export const useExperienceHook = () => {
 
   const loadExperience = () => {
     dispatch(loadExperiences());
+  };
+
+  const loadTrendingExperience = () => {
+    dispatch(fetchTrendingExperience());
   };
 
   const nextPage = async () => {
@@ -147,6 +154,7 @@ export const useExperienceHook = () => {
     page: meta.currentPage,
     hasMore,
     experiences,
+    trendingExperiences,
     userExperiences,
     profileExperiences,
     experience,
@@ -166,5 +174,6 @@ export const useExperienceHook = () => {
     removeExperience,
     unsubscribeExperience: beUnsubscribeExperience,
     clearExperiences: clear,
+    loadTrendingExperience,
   };
 };
