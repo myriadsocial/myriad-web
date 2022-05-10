@@ -86,7 +86,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   const isOwnComment = comment.userId === user?.id;
 
   useEffect(() => {
-    if (comment.metric.comments > 0) {
+    if (comment.metric.comments > 0 || comment.metric.deletedComments > 0) {
       loadReplies();
     }
   }, [comment.metric.comments]);
