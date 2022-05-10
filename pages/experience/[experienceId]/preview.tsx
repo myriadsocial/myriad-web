@@ -9,6 +9,7 @@ import {useRouter} from 'next/router';
 
 import {ExperiencePreviewContainer} from 'src/components/ExperiencePreview/ExperiencePreview.container';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
+import {generateAnonymousUser} from 'src/helpers/auth';
 import {setHeaders} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -31,8 +32,8 @@ const {publicRuntimeConfig} = getConfig();
 
 type ExperiencePageProps = {
   title: string;
-  description?: string;
-  image?: string;
+  description: string | null;
+  image: string | null;
 };
 
 const PreviewExperience: React.FC<ExperiencePageProps> = props => {
@@ -46,12 +47,12 @@ const PreviewExperience: React.FC<ExperiencePageProps> = props => {
         <title>{title}</title>
         <meta property="og:type" content="article" />
         <meta property="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
-        <meta property="og:description" content={description} />
+        <meta property="og:description" content={description ?? ''} />
         <meta property="og:title" content={title} />
-        <meta property="og:image" content={image} />
+        <meta property="og:image" content={image ?? ''} />
         <meta name="twitter:title" content={title} />
-        <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={image} />
+        <meta name="twitter:description" content={description ?? ''} />
+        <meta name="twitter:image" content={image ?? ''} />
         <meta name="twitter:card" content="summary" />
       </Head>
       <ExperiencePreviewContainer />
@@ -80,25 +81,15 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   setHeaders({cookie: req.headers.cookie as string});
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-
   const anonymous = Boolean(session?.user.anonymous);
-  const userId = session?.user.address as string;
+  const userAddress = session?.user.address as string;
 
-  if (anonymous || !userId) {
-    const username = session?.user.name as string;
+  if (anonymous || !userAddress) {
+    const username = generateAnonymousUser();
 
     await dispatch(setAnonymous(username));
   } else {
-    await dispatch(fetchUser(userId));
-
+    await dispatch(fetchUser(userAddress));
     await Promise.all([
       dispatch(fetchConnectedSocials()),
       dispatch(fetchAvailableToken()),
@@ -114,9 +105,9 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   try {
     const experience = await ExperienceAPI.getExperienceDetail(experienceId);
+
     return {
       props: {
-        session,
         title: experience.name,
         description: experience.description,
         image: experience.experienceImageURL,
@@ -124,6 +115,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   } catch (error) {
     Sentry.captureException(error);
+
     return {
       notFound: true,
     };
