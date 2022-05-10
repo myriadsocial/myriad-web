@@ -22,7 +22,7 @@ type DropdownMenuProps<T> = {
   onChange: (selected: T) => void;
 };
 
-export const DropdownMenu = <T extends unknown>(props: DropdownMenuProps<T>): JSX.Element => {
+export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
   const {title, options, selected, onChange, disabled = false} = props;
   const styles = useStyles();
 

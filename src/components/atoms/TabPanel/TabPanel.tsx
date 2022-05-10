@@ -29,7 +29,7 @@ const useStyles = makeStyles<Theme, TabPanelStyleProps>(theme =>
   }),
 );
 
-export const TabPanel = <T extends unknown>(props: TabPanelProps<T>): JSX.Element => {
+export const TabPanel = <T,>(props: TabPanelProps<T>): JSX.Element => {
   const {children, value, index, padding = 3, paddingLeft = 0, paddingRight = 0} = props;
   const styles = useStyles({...props, paddingLeft, paddingRight});
 
