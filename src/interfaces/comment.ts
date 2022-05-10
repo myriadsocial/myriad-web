@@ -1,7 +1,14 @@
 import {BaseModel} from './base.interface';
 import {ReferenceType, SectionType, Vote} from './interaction';
-import {MentionUserProps, Post, PostMetric} from './post';
+import {MentionUserProps, Post} from './post';
 import {User} from './user';
+
+type CommentMetric = {
+  upvotes: number;
+  downvotes: number;
+  deletedComments: number;
+  comments: number;
+};
 
 export interface CommentProps {
   text: string;
@@ -17,7 +24,7 @@ export interface Comment extends CommentProps, BaseModel {
   deleteByUser?: boolean;
   user: User;
   post?: Post;
-  metric: PostMetric;
+  metric: CommentMetric;
   votes?: Vote[];
   replies?: Comment[];
   isUpvoted?: boolean;
