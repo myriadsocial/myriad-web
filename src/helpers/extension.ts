@@ -28,7 +28,7 @@ export const enableExtension = async () => {
 export const unsubscribeFromAccounts = async () => {
   const {web3AccountsSubscribe} = await import('@polkadot/extension-dapp');
 
-  const allAccounts = enableExtension();
+  const allAccounts = await enableExtension();
 
   if (allAccounts) {
     //// we subscribe to any account change and log the new list.

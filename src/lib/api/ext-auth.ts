@@ -1,7 +1,7 @@
 import MyriadAPI from './base';
 
 export enum WalletTypeEnum {
-  POLKADOT = 'polkadot',
+  POLKADOT = 'polkadot{.js}',
   TRUST = 'trust',
   METAMASK = 'metamask',
   COINBASE = 'coinbase',

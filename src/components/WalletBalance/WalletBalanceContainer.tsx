@@ -9,7 +9,6 @@ import {BoxComponent} from '../atoms/Box';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
@@ -29,7 +28,7 @@ export const WalletBalancesContainer: React.FC = () => {
 
   const handleFilterCurrencies = (): void => {
     if (currenciesId.length) {
-      if (currentWallet?.type === WalletTypeEnum.POLKADOT) {
+      if (currentWallet?.network?.blockchainPlatform === 'substrate') {
         const data: BalanceDetail[] = [];
 
         polkadotBalance.forEach(coin => {
@@ -37,14 +36,14 @@ export const WalletBalancesContainer: React.FC = () => {
         });
 
         setFilteredBalanced(data);
-      } else if (currentWallet?.type === WalletTypeEnum.NEAR) {
+      } else if (currentWallet?.network?.blockchainPlatform === 'near') {
         //TODO need to filtered by currenciesId from backend
         setFilteredBalanced(nearBalance);
       }
     } else {
-      if (currentWallet?.type === WalletTypeEnum.POLKADOT) {
+      if (currentWallet?.network?.blockchainPlatform === 'substrate') {
         setFilteredBalanced(polkadotBalance);
-      } else if (currentWallet?.type === WalletTypeEnum.NEAR) {
+      } else if (currentWallet?.network?.blockchainPlatform === 'near') {
         setFilteredBalanced(nearBalance);
       }
     }

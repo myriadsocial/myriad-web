@@ -16,7 +16,7 @@ import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail, UserWallet} from 'src/interfaces/user';
 import {Network} from 'src/interfaces/wallet';
 import * as ExperienceAPI from 'src/lib/api/experience';
-import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import {BaseErrorResponse} from 'src/lib/api/interfaces/error-response.interface';
 import * as SocialAPI from 'src/lib/api/social';
 import * as TokenAPI from 'src/lib/api/token';
@@ -261,8 +261,8 @@ export const fetchUserWalletAddress: ThunkActionCreator<Actions, RootState> =
 
     if (currentWallet.network === undefined) return;
 
-    switch (currentWallet.type) {
-      case WalletTypeEnum.POLKADOT:
+    switch (currentWallet?.network?.blockchainPlatform) {
+      case 'substrate':
         try {
           const data = await getMetadata(currentWallet.network.rpcURL);
 
@@ -283,7 +283,7 @@ export const fetchUserWalletAddress: ThunkActionCreator<Actions, RootState> =
         }
         break;
 
-      case WalletTypeEnum.NEAR:
+      case 'near':
         dispatch({
           type: constants.FETCH_USER_WALLET_ADDRESS,
           payload: currentWallet.id,
