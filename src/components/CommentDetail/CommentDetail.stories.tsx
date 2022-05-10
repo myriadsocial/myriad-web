@@ -42,7 +42,7 @@ const comment: Comment = {
     name: 'Storybook User',
     profilePictureURL:
       'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
-    bannerImageUrl: '',
+    bannerImageURL: '',
     createdAt: new Date('2021-07-15T03:40:23.000Z'),
     updatedAt: new Date('2021-07-15T03:40:23.000Z'),
     currencies: [],
@@ -76,7 +76,7 @@ const comment: Comment = {
         name: 'Reply one',
         profilePictureURL:
           'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
-        bannerImageUrl: '',
+        bannerImageURL: '',
         createdAt: new Date('2021-07-15T03:40:23.000Z'),
         updatedAt: new Date('2021-07-15T03:40:23.000Z'),
         currencies: [],
@@ -110,7 +110,7 @@ const comment: Comment = {
             name: 'Reply two',
             profilePictureURL:
               'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
-            bannerImageUrl: '',
+            bannerImageURL: '',
             createdAt: new Date('2021-07-15T03:40:23.000Z'),
             updatedAt: new Date('2021-07-15T03:40:23.000Z'),
             currencies: [],
@@ -145,7 +145,7 @@ const comment: Comment = {
         name: 'Reply one',
         profilePictureURL:
           'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
-        bannerImageUrl: '',
+        bannerImageURL: '',
         createdAt: new Date('2021-07-15T03:40:23.000Z'),
         updatedAt: new Date('2021-07-15T03:40:23.000Z'),
         currencies: [],

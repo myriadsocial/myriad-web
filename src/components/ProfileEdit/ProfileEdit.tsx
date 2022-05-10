@@ -202,7 +202,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
               imageBanner
                 ? imageBanner instanceof File
                   ? URL.createObjectURL(imageBanner)
-                  : user.bannerImageUrl
+                  : user.bannerImageURL
                 : ''
             }
             title={user.name}

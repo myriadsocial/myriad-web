@@ -27,7 +27,6 @@ import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
-import {WalletType} from 'src/interfaces/wallet';
 
 const INITIAL_AMOUNT = new BN(-1);
 
@@ -98,14 +97,14 @@ export const Tipping: React.FC<SendTipProps> = props => {
     setLoadingFee(true);
     let fee: BN = BN_ZERO;
     //TODO: move to switch case
-    if (currency.network.walletType === WalletType.POLKADOT) {
+    if (currency.network.blockchainPlatform === 'substrate') {
       const gasPrice = await getEstimatedFee(senderAddress, receiver.walletDetail, selected);
       if (gasPrice) {
         fee = gasPrice;
       }
     }
 
-    if (currency.network.walletType === WalletType.NEAR) {
+    if (currency.network.blockchainPlatform === 'near') {
       const {gasPrice} = await getEstimatedFeeNear();
       if (gasPrice) {
         fee = toBigNumber(gasPrice, currency.decimal);
@@ -170,7 +169,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
       amount: formatBalance(amount, currency.decimal),
     };
     await localforage.setItem(TIPPING_STORAGE_KEY, storageAttribute);
-    if (currency.network.walletType === WalletType.POLKADOT) {
+    if (currency.network.blockchainPlatform === 'substrate') {
       simplerSendTip(attributes, hash => {
         onSuccess(currency, hash, attributes.amount);
 
@@ -179,7 +178,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
       });
     }
 
-    if (currency.network.walletType === WalletType.NEAR) {
+    if (currency.network.blockchainPlatform === 'near') {
       sendAmount(receiver.walletDetail.referenceId, amount, currency.referenceId);
     }
   };

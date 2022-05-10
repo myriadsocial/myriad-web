@@ -6,8 +6,6 @@ import {CurrencyId} from '../../interfaces/currency';
 import {SocialsEnum} from '../../interfaces/social';
 import SimpleList from './ExperienceList';
 
-import {WalletType} from 'src/interfaces/wallet';
-
 export default {
   title: 'UI Revamp v2.0/components/ExperienceList',
   component: SimpleList,
@@ -29,7 +27,7 @@ ExperienceList.args = {
           username: 'myriadenthusiast.h4revxhzk',
           profilePictureURL:
             'https://res.cloudinary.com/dsget80gs/image/upload/v1633668205/qkqi87d7hydcwgjjn5dn.jpg',
-          bannerImageUrl:
+          bannerImageURL:
             'https://res.cloudinary.com/dsget80gs/image/upload/v1633668278/au2ajqyk1uc6lrgple8o.png',
           bio: 'Hello, my name is Myriad enthusiast!',
           onTimeline: '61274967e2f91569384ee93d',
@@ -54,7 +52,7 @@ ExperienceList.args = {
                 rpcURL: 'wss://rpc.polkadot.io',
                 explorerURL:
                   'https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.polkadot.io#/explorer/query',
-                walletType: WalletType.POLKADOT,
+                blockchainPlatform: 'substrate',
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 currencies: [],

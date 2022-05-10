@@ -24,7 +24,7 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
   const [profilePic, setProfilePic] = React.useState<File | undefined | string>(
     user?.profilePictureURL,
   );
-  const [bannerPic, setBannerPic] = React.useState<File | undefined | string>(user?.bannerImageUrl);
+  const [bannerPic, setBannerPic] = React.useState<File | undefined | string>(user?.bannerImageURL);
   const {
     updateProfile,
     loadingUpdate,
@@ -70,7 +70,7 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
       if (bannerPic instanceof File) {
         const newUrlBannerPic = await updateProfileBanner(bannerPic);
         if (typeof newUrlBannerPic === 'string') {
-          newUser.bannerImageUrl = newUrlBannerPic;
+          newUser.bannerImageURL = newUrlBannerPic;
         }
       }
 

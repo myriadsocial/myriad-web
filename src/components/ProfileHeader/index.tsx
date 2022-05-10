@@ -157,7 +157,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
       <div className={style.root}>
         <CardMedia
           className={style.media}
-          image={person.bannerImageUrl || background}
+          image={person.bannerImageURL || background}
           title={person.name}
         />
         <div className={style.screen} />
