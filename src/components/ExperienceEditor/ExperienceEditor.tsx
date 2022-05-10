@@ -154,13 +154,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     reason: AutocompleteChangeReason,
     type: TagsProps,
   ) => {
-    let data: string[] = [];
-    if (Array.isArray(value)) {
-      const filtered = new Set(value.map(tag => tag.replace('#', '')));
-      data = Array.from(filtered);
-    } else {
-      data = [value.replace('#', '')];
-    }
+    const data = [...new Set(value.map(tag => tag.replace('#', '')))];
 
     const prohibitedTagsChanged =
       type === TagsProps.PROHIBITED &&
