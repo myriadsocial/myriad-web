@@ -83,7 +83,11 @@ export const useExperienceHook = () => {
     dispatch(searchTags(query));
   };
 
-  const followExperience = (newExperience: ExperienceProps, callback?: (id: string) => void) => {
+  const followExperience = (
+    experienceId: string,
+    newExperience: ExperienceProps,
+    callback?: (id: string) => void,
+  ) => {
     const attributes = pick(newExperience, [
       'name',
       'description',
@@ -93,7 +97,7 @@ export const useExperienceHook = () => {
       'people',
     ]);
 
-    dispatch(cloneExperience(attributes, callback));
+    dispatch(cloneExperience(experienceId, attributes, callback));
   };
 
   const editExperience = (
