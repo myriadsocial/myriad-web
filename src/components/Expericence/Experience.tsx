@@ -1,7 +1,9 @@
 import {DotsVerticalIcon} from '@heroicons/react/outline';
 
 import React from 'react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
+import getConfig from 'next/config';
 import Link from 'next/link';
 
 import {Grid} from '@material-ui/core';
@@ -19,6 +21,7 @@ import useConfirm from '../common/Confirm/use-confirm.hook';
 import {useStyles} from './Experience.style';
 
 import ShowIf from 'src/components/common/show-if.component';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
 
@@ -38,6 +41,8 @@ type ExperienceProps = {
 const DEFAULT_IMAGE =
   'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg';
 
+const {publicRuntimeConfig} = getConfig();
+
 export const Experience: React.FC<ExperienceProps> = props => {
   const {
     userExperience,
@@ -53,12 +58,14 @@ export const Experience: React.FC<ExperienceProps> = props => {
 
   const styles = useStyles(props);
   const confirm = useConfirm();
+  const {openToasterSnack} = useToasterSnackHook();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const isOwnExperience = userExperience.experience.user.id === user?.id;
   const experienceId = userExperience.experience.id;
   const userExperienceId = userExperience.id;
+  const link = publicRuntimeConfig.appAuthURL + `/experience/${experienceId}/preview`;
 
   const handleClickExperience = () => {
     handleCloseSettings();
@@ -124,6 +131,15 @@ export const Experience: React.FC<ExperienceProps> = props => {
           onUnsubscribe(userExperienceId);
         }
       },
+    });
+  };
+
+  const handleExperienceLinkCopied = () => {
+    handleCloseSettings();
+
+    openToasterSnack({
+      message: 'Experience link copied to clipboard!',
+      variant: 'success',
     });
   };
 
@@ -211,7 +227,11 @@ export const Experience: React.FC<ExperienceProps> = props => {
             Delete
           </MenuItem>
         </ShowIf>
-        <MenuItem disabled>Share</MenuItem>
+        <MenuItem>
+          <CopyToClipboard text={link} onCopy={handleExperienceLinkCopied}>
+            <span>Share</span>
+          </CopyToClipboard>
+        </MenuItem>
       </Menu>
     </>
   );

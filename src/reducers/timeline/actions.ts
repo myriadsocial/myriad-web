@@ -203,6 +203,12 @@ export const decreaseCommentCount = (
   section,
 });
 
+export const updateMetric = (postId: string, metric: PostMetric): UpdatePostMetric => ({
+  type: constants.UPDATE_POST_METRIC,
+  postId,
+  metric,
+});
+
 export const setTimelineSort = (order: TimelineOrderType, sort?: SortType): SetTimelineSort => ({
   type: constants.SET_TIMELINE_SORT,
   order,
@@ -689,11 +695,7 @@ export const updatePostMetric: ThunkActionCreator<Actions, RootState> =
 
       const post = await PostAPI.getPostDetail(postId, user?.id);
 
-      dispatch({
-        type: constants.UPDATE_POST_METRIC,
-        postId,
-        metric: post.metric,
-      });
+      dispatch(updateMetric(postId, post.metric));
     } catch (error) {
       dispatch(
         setError({

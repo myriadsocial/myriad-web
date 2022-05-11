@@ -29,7 +29,9 @@ export const ExperienceCloneContainer: React.FC = () => {
   };
 
   const handleCloneExperience = (attributes: ExperienceProps) => {
-    cloneExperience(attributes, (experienceId: string) => {
+    if (!experience) return;
+
+    cloneExperience(experience.id, attributes, (experienceId: string) => {
       router.push(`/experience/${experienceId}/preview`);
     });
   };
