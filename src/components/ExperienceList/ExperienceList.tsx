@@ -41,24 +41,24 @@ export const ExperienceList: React.FC<ExperienceListProps> = props => {
   const router = useRouter();
 
   const {getIdByType} = useQueryParams();
-  const [selectedUserExperienceId, setSelectedUserExperienceId] = useState<string>();
+  const [selectedExperienceId, setSelectedExperienceId] = useState<string>();
 
   useEffect(() => {
-    const userExperienceId = getIdByType('experience');
-    const exists = experiences.find(item => item.id === userExperienceId);
+    const experienceId = getIdByType('experience');
+    const exists = experiences.find(item => item.experience.id === experienceId);
 
-    if (userExperienceId && exists) {
-      setSelectedUserExperienceId(userExperienceId);
+    if (experienceId && exists) {
+      setSelectedExperienceId(experienceId);
     } else {
-      setSelectedUserExperienceId(undefined);
+      setSelectedExperienceId(undefined);
     }
   }, [router, experiences]);
 
   //TODO: still unable to only select one experience card
   const handleSelectExperience = (userExperience: WrappedExperience) => () => {
-    if (userExperience) setSelectedUserExperienceId(userExperience.id);
-    if (userExperience.id && userExperience.id === selectedUserExperienceId) {
-      setSelectedUserExperienceId(undefined);
+    if (userExperience) setSelectedExperienceId(userExperience.experience.id);
+    if (userExperience.experience.id && userExperience.experience.id === selectedExperienceId) {
+      setSelectedExperienceId(undefined);
     }
 
     viewPostList(TimelineType.EXPERIENCE, userExperience);
@@ -72,7 +72,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = props => {
             user={user}
             anonymous={anonymous}
             userExperience={item}
-            selected={Boolean(selectedUserExperienceId) && selectedUserExperienceId === item.id}
+            selected={Boolean(selectedExperienceId) && selectedExperienceId === item.experience.id}
             selectable={selectable}
             onSelect={handleSelectExperience(item)}
             onDelete={onDelete}

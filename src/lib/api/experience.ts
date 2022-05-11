@@ -20,7 +20,7 @@ export const getExperiences = async (
   const {orderField = 'createdAt', sort = 'DESC'} = params;
 
   let order: string | string[] = `${orderField} ${sort}`;
-  if (isTrending) order = ['trendCount DESC'];
+  if (isTrending) order = ['trendCount DESC', `${orderField} ${sort}`];
 
   const {data} = await MyriadAPI.request<ExperienceList>({
     url: `/experiences`,
