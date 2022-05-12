@@ -141,7 +141,7 @@ export const useNotificationList = (
             ),
             createdAt: notification.createdAt,
             href: notification.additionalReferenceId
-              ? `/post/${notification.additionalReferenceId?.comment?.postId}?comment=${notification.additionalReferenceId?.comment?.id}`
+              ? `/post/${notification.additionalReferenceId?.comment?.postId}?comment=${notification.additionalReferenceId?.comment?.id}&section=${notification.additionalReferenceId?.comment?.section}`
               : `/404`,
           };
 
@@ -165,7 +165,7 @@ export const useNotificationList = (
             ),
             createdAt: notification.createdAt,
             href: notification.additionalReferenceId
-              ? `/post/${notification.additionalReferenceId?.comment?.postId}?comment=${notification.additionalReferenceId?.comment?.id}`
+              ? `/post/${notification.additionalReferenceId?.comment?.postId}?comment=${notification.additionalReferenceId?.comment?.id}&section=${notification.additionalReferenceId?.comment?.section}`
               : `/404`,
           };
 
@@ -189,6 +189,30 @@ export const useNotificationList = (
             ),
             createdAt: notification.createdAt,
             href: notification.referenceId ? `/post/${notification.referenceId}` : `/404`,
+          };
+
+        case NotificationType.COMMENT_MENTION:
+          return {
+            id: notification.id,
+            type: NotificationType.COMMENT_MENTION,
+            read: notification.read,
+            userId: notification.fromUserId.id,
+            user: notification.fromUserId.name,
+            avatar: notification.fromUserId.profilePictureURL,
+            description: 'Mentioned you in a comment',
+            badge: (
+              <div className={style.circle}>
+                <SvgIcon
+                  component={AtSymbolIcon}
+                  viewBox="-4 -4 34 34"
+                  style={{fill: 'currentColor', color: '#FFF'}}
+                />
+              </div>
+            ),
+            createdAt: notification.createdAt,
+            href: notification.referenceId
+              ? `/post/${notification.additionalReferenceId?.comment?.postId}?comment=${notification.additionalReferenceId?.comment?.id}&section=${notification.additionalReferenceId?.comment?.section}`
+              : `/404`,
           };
 
         case NotificationType.POST_VOTE:
