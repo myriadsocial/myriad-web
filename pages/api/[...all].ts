@@ -37,7 +37,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     console.log(
-      'PROXY',
       JSON.stringify({
         headers,
         url: req.url,
