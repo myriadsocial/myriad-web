@@ -13,7 +13,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
 
       [theme.breakpoints.between('sm', 'md')]: {
-        width: 370,
+        width: 380,
       },
 
       [theme.breakpoints.down('xs')]: {
