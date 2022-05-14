@@ -3,7 +3,6 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import BN from 'bn.js';
 import * as nearAPI from 'near-api-js';
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {
   nearInitialize,
   connectToNearWallet,
@@ -28,7 +27,7 @@ export const useNearApi = () => {
       !anonymous &&
       currencies.length > 0 &&
       balanceDetails.length === 0 &&
-      currentWallet?.type === WalletTypeEnum.NEAR
+      currentWallet?.network?.blockchainPlatform === 'near'
     ) {
       dispatch(fetchBalances());
     }

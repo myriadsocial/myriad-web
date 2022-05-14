@@ -203,15 +203,13 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
       }),
     );
 
-    if (deletedComment.post) {
-      delay(
-        deletedComment => {
-          dispatch(updatePostMetric(deletedComment.postId, deletedComment.post.metric));
-        },
-        1000,
-        deletedComment,
-      );
-    }
+    delay(
+      deletedComment => {
+        dispatch(updatePostMetric(deletedComment.postId));
+      },
+      500,
+      deletedComment,
+    );
   };
 
   return {

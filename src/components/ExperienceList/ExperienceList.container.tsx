@@ -48,9 +48,11 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
 
   const handleViewPostList = (type: TimelineType, userExperience: WrappedExperience) => {
     if (filterTimeline) {
-      router.push(`/home?type=experience&id=${userExperience.id}`);
+      router.push(`/home?type=experience&id=${userExperience.experience.id}`, undefined, {
+        shallow: true,
+      });
     } else {
-      router.push(`/topic/experience?id=${userExperience.id}`);
+      router.push(`/topic/experience?id=${userExperience.experience.id}`);
     }
   };
 

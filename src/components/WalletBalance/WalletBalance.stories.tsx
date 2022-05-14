@@ -5,7 +5,6 @@ import React from 'react';
 import {WalletBalances as WalletBalancesComponent} from '.';
 
 import {CurrencyId} from 'src/interfaces/currency';
-import {WalletType} from 'src/interfaces/wallet';
 
 export default {
   title: 'UI Revamp v2.0/components/Wallet Balances',
@@ -40,7 +39,7 @@ WalletBalances.args = {
         rpcURL: 'wss://rpc.polkadot.io',
         explorerURL:
           'https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.polkadot.io#/explorer/query',
-        walletType: WalletType.POLKADOT,
+        blockchainPlatform: 'substrate',
         createdAt: new Date(),
         updatedAt: new Date(),
         currencies: [],

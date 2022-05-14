@@ -1,10 +1,14 @@
 import {DotsVerticalIcon} from '@heroicons/react/outline';
+import {DuplicateIcon} from '@heroicons/react/outline';
 
-import React from 'react';
+import React, {useState} from 'react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
+import getConfig from 'next/config';
 import Link from 'next/link';
 
 import {Grid} from '@material-ui/core';
+import {TextField, InputAdornment} from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -18,7 +22,9 @@ import Typography from '@material-ui/core/Typography';
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {useStyles} from './Experience.style';
 
+import {Modal} from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
 
@@ -38,6 +44,8 @@ type ExperienceProps = {
 const DEFAULT_IMAGE =
   'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg';
 
+const {publicRuntimeConfig} = getConfig();
+
 export const Experience: React.FC<ExperienceProps> = props => {
   const {
     userExperience,
@@ -53,12 +61,15 @@ export const Experience: React.FC<ExperienceProps> = props => {
 
   const styles = useStyles(props);
   const confirm = useConfirm();
+  const {openToasterSnack} = useToasterSnackHook();
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [menuAnchorElement, setMenuAnchorElement] = useState<null | HTMLElement>(null);
+  const [shareAnchorElement, setShareAnchorElement] = useState<null | HTMLElement>(null);
 
   const isOwnExperience = userExperience.experience.user.id === user?.id;
   const experienceId = userExperience.experience.id;
   const userExperienceId = userExperience.id;
+  const link = publicRuntimeConfig.appAuthURL + `/experience/${experienceId}/preview`;
 
   const handleClickExperience = () => {
     handleCloseSettings();
@@ -86,11 +97,11 @@ export const Experience: React.FC<ExperienceProps> = props => {
 
   const handleClickSettings = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setAnchorEl(e.currentTarget);
+    setMenuAnchorElement(e.currentTarget);
   };
 
   const handleCloseSettings = () => {
-    setAnchorEl(null);
+    setMenuAnchorElement(null);
   };
 
   const confirmDeleteExperience = () => {
@@ -124,6 +135,23 @@ export const Experience: React.FC<ExperienceProps> = props => {
           onUnsubscribe(userExperienceId);
         }
       },
+    });
+  };
+
+  const openShareExperience = (event: React.MouseEvent<HTMLLIElement>) => {
+    handleCloseSettings();
+
+    setShareAnchorElement(event.currentTarget);
+  };
+
+  const closeShareExperience = () => {
+    setShareAnchorElement(null);
+  };
+
+  const handleExperienceLinkCopied = () => {
+    openToasterSnack({
+      message: 'Experience link copied to clipboard!',
+      variant: 'success',
     });
   };
 
@@ -167,11 +195,11 @@ export const Experience: React.FC<ExperienceProps> = props => {
         classes={{
           paper: styles.menu,
         }}
-        anchorEl={anchorEl}
+        anchorEl={menuAnchorElement}
         getContentAnchorEl={null}
         anchorOrigin={{vertical: 'top', horizontal: 'center'}}
         transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
-        open={Boolean(anchorEl)}
+        open={Boolean(menuAnchorElement)}
         onClose={handleCloseSettings}>
         <Link
           href={`/experience/[experienceId]/preview`}
@@ -211,7 +239,40 @@ export const Experience: React.FC<ExperienceProps> = props => {
             Delete
           </MenuItem>
         </ShowIf>
+        <MenuItem onClick={openShareExperience}>Share</MenuItem>
       </Menu>
+
+      <Modal
+        title="Share"
+        subtitle="Let others know about this Experience on Myriad.Social"
+        maxWidth="sm"
+        className={styles.modal}
+        open={Boolean(shareAnchorElement)}
+        onClose={closeShareExperience}>
+        <div className={styles.copy}>
+          <TextField
+            id="copy-post-url"
+            label="URL"
+            value={link}
+            variant="outlined"
+            disabled
+            fullWidth
+            margin="none"
+            className={styles.input}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <CopyToClipboard text={link} onCopy={handleExperienceLinkCopied}>
+                    <IconButton aria-label="copy-post-link" style={{padding: 0}}>
+                      <SvgIcon component={DuplicateIcon} color="primary" />
+                    </IconButton>
+                  </CopyToClipboard>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </div>
+      </Modal>
     </>
   );
 };

@@ -8,7 +8,7 @@ export type TabItems<T> = TabListItem<T> & {
 };
 
 export type TabHookProps<T> = {
-  selected: T;
+  selected?: T;
   setSelected: (tab: T) => void;
   tabs: TabItems<T>[];
 };

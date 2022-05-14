@@ -20,7 +20,7 @@ export const useWalletList = (wallets: Wallet[]): WalletListHook => {
     const findWalletId = (optionId: string) => {
       let walletId;
       wallets.forEach(wallet => {
-        if (wallet.type === optionId) walletId = wallet.id;
+        if (wallet?.network?.blockchainPlatform === optionId) walletId = wallet.id;
       });
 
       return walletId;
@@ -31,15 +31,15 @@ export const useWalletList = (wallets: Wallet[]): WalletListHook => {
         id: 'near',
         title: 'NEAR Wallet',
         icons: <NearNetworkIcon24 width={40} height={40} />,
-        isConnect: Boolean(wallets.find(i => i.type === 'near')),
+        isConnect: Boolean(wallets.find(i => i?.network?.blockchainPlatform === 'near')),
         walletId: findWalletId('near') ?? 'nearId.near',
       },
       {
         id: 'polkadot',
         title: 'polkadot{.js}',
         icons: <PolkadotNetworkIcon width={40} height={40} />,
-        isConnect: Boolean(wallets.find(i => i.type === 'polkadot')),
-        walletId: findWalletId('polkadot') ?? 'polkadotId',
+        isConnect: Boolean(wallets.find(i => i?.network?.blockchainPlatform === 'substrate')),
+        walletId: findWalletId('substrate') ?? 'polkadotId',
       },
     ];
   }, [wallets]);

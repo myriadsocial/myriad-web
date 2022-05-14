@@ -87,5 +87,17 @@ export const useStyles = makeStyles<Theme, ExperienceStyleProps>(theme =>
         color: theme.palette.text.primary,
       },
     },
+    modal: {
+      paddingBottom: 10,
+    },
+    input: {
+      width: 560,
+      marginBottom: 0,
+      marginTop: 10,
+
+      '& .MuiInputLabel-root, .MuiInputBase-root': {
+        color: '#616161',
+      },
+    },
   }),
 );

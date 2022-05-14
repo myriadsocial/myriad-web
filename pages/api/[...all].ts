@@ -37,6 +37,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       };
     }
 
+    console.log(
+      JSON.stringify({
+        headers,
+        url: req.url,
+      }),
+    );
+
     return httpProxyMiddleware(req, res, {
       // You can use the `http-proxy` option
       target: serverRuntimeConfig.myriadAPIURL,

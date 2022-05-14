@@ -18,6 +18,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {PolkadotAccountList} from '../../PolkadotAccountList';
 import {useStyles} from './networkOption.style';
 
+import {capitalize} from 'lodash';
 import {
   NearNetworkIcon24,
   MyriadCircleIcon,
@@ -33,7 +34,7 @@ import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {UserWallet} from 'src/interfaces/user';
 import {Network} from 'src/interfaces/wallet';
 import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
-import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
+import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {clearNearAccount} from 'src/lib/services/near-api-js';
 
@@ -81,7 +82,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
     const query = router.query;
 
     if (!Array.isArray(query.action) && query.action === 'switch' && query.account_id) {
-      handleSelected(WalletTypeEnum.NEAR, NetworkTypeEnum.NEAR, true);
+      handleSelected('near', NetworkTypeEnum.NEAR, true);
     }
   }, [router.query]);
 
@@ -102,23 +103,25 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
   };
 
   const handleSelected = async (
-    walletType: string,
+    blockchainPlatform: string,
     networkType: NetworkTypeEnum,
     refresh = false,
   ) => {
     handleClose();
 
     if (networkType !== current) {
-      const wallet = wallets?.find(wallet => wallet.type === walletType);
+      const wallet = wallets?.find(
+        wallet => wallet?.network?.blockchainPlatform === blockchainPlatform,
+      );
 
-      switch (wallet?.type) {
-        case WalletTypeEnum.POLKADOT: {
+      switch (wallet?.network?.blockchainPlatform) {
+        case 'substrate': {
           checkExtensionInstalled(networkType);
           break;
         }
 
-        case WalletTypeEnum.NEAR: {
-          const callback = publicRuntimeConfig.appAuthURL + router.route + '?action=switch';
+        case 'near': {
+          const callback = publicRuntimeConfig.appAuthURL + router.asPath + '&action=switch';
 
           const data = await connectToNear(callback);
 
@@ -130,9 +133,12 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
               signature: data.signature,
             };
 
-            await handleSwitch(wallet.type, networkType, payload);
+            await handleSwitch('near', networkType, payload);
 
-            router.replace(router.route, undefined, {shallow: true});
+            const updatedRouter = (router.query.q as string)
+              ? `${router.route}?q=${router.query.q}`
+              : router.route;
+            router.replace(updatedRouter, undefined, {shallow: true});
           } else {
             console.log('redirection to near auth page');
           }
@@ -140,18 +146,18 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
         }
 
         default:
-          handleOpenPrompt(walletType);
+          handleOpenPrompt(networkType);
       }
     }
   };
 
   const handleSwitch = async (
-    walletType: WalletTypeEnum,
+    blockchainPlatform: string,
     network: NetworkTypeEnum,
     account: InjectedAccountWithMeta | NearPayload,
   ) => {
     try {
-      await switchNetwork(account, network, walletType, () => {
+      await switchNetwork(account, network, blockchainPlatform, () => {
         setCurrent(network);
         setNetwork(null);
         closeAccountList();
@@ -192,7 +198,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
     const accounts = (await getRegisteredAccounts()).filter(
       account =>
         toHexPublicKey(account) ===
-        wallets?.filter(wallet => wallet.type === WalletTypeEnum.POLKADOT)[0].id,
+        wallets?.filter(wallet => wallet?.network?.blockchainPlatform === 'substrate')[0].id,
     );
 
     setAccounts(accounts);
@@ -201,7 +207,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
 
   const handleSelectPolkadotAccount = (account: InjectedAccountWithMeta) => {
     if (network) {
-      handleSwitch(WalletTypeEnum.POLKADOT, network, account);
+      handleSwitch('substrate', network, account);
     }
   };
 
@@ -210,14 +216,14 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
   };
 
   const showConfirmDialog = (selected: string) => {
-    const selectedWallet = networks.find(option => option.id == selected);
+    const selectedNetwork = networks.find(option => option.id == selected);
     confirm({
-      title: `You didn’t connect your ${formatTitle(selectedWallet?.id)}!`,
+      title: `You didn’t connect your ${formatTitle(selectedNetwork?.id)}!`,
       description: `This account is not connected with ${formatTitle(
-        selectedWallet?.walletType,
+        selectedNetwork?.blockchainPlatform,
         true,
       )}. Please connect to ${formatTitle(
-        selectedWallet?.walletType,
+        selectedNetwork?.blockchainPlatform,
         true,
       )} in wallet manage tab. Do you want to connect your account?`,
       icon: 'warning',
@@ -232,25 +238,19 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
   const formatTitle = (id?: string, wallet?: boolean) => {
     if (wallet)
       switch (id) {
-        case WalletTypeEnum.POLKADOT:
+        case 'substrate':
           return 'Polkadot{.js}';
-        case WalletTypeEnum.NEAR:
+        case 'near':
           return 'NEAR Wallet';
         default:
           return id;
       }
 
     switch (id) {
-      case NetworkTypeEnum.POLKADOT:
-        return 'Polkadot';
       case NetworkTypeEnum.NEAR:
-        return 'NEAR';
-      case NetworkTypeEnum.KUSAMA:
-        return 'Kusama';
-      case NetworkTypeEnum.MYRIAD:
-        return 'Myriad';
+        return id.toUpperCase();
       default:
-        return id;
+        return capitalize(id ?? 'unknown');
     }
   };
 
@@ -276,7 +276,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
         {networks.map(option => (
           <MenuItem
             key={option.id}
-            onClick={() => handleSelected(option.walletType, option.id as NetworkTypeEnum)}
+            onClick={() => handleSelected(option.blockchainPlatform, option.id as NetworkTypeEnum)}
             className={option.id === current ? styles.menu : ''}>
             <ListItemIcon>{icons[option.id as keyof typeof icons]}</ListItemIcon>
             <ListItemText>{formatTitle(option.id)}</ListItemText>

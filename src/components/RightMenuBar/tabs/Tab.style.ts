@@ -49,5 +49,17 @@ export const useStyles = makeStyles((theme: Theme) =>
         display: 'none',
       },
     },
+    flex: {
+      display: 'flex',
+      gap: '8px',
+      alignItems: 'center',
+      marginBottom: theme.spacing(1.5),
+    },
+    info: {
+      padding: 0,
+      '& .MuiSvgIcon-root': {
+        fill: 'none',
+      },
+    },
   }),
 );

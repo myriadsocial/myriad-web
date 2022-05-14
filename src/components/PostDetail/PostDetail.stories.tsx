@@ -56,7 +56,7 @@ MyriadPost.args = {
       name: 'Nomaden',
       profilePictureURL:
         'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
-      bannerImageUrl: undefined,
+      bannerImageURL: undefined,
       bio: 'Nomaden? No Home',
       fcmTokens: [
         'f2kjvc37-ZEcocQGIk5WrF:APA91bH3wV6D8B4NrsCd9fo7nIJ0OFT942FdNiawJw3JML0bj2IZWbyLsDwaLuW2k3ayafKj8xAwCdOXEIvPssn1bPtIkZKLeKTYDATg2DjLG80D-fmF4i-xxvIewLcNDtHidefctIQG',
@@ -77,14 +77,10 @@ MyriadPost.args = {
         section: SectionType.DISCUSSION,
         mentions: [],
         metric: {
-          likes: 0,
-          dislikes: 0,
           comments: 0,
-          shares: 0,
+          deletedComments: 0,
           upvotes: 0,
           downvotes: 0,
-          discussions: 0,
-          debates: 0,
         },
 
         createdAt: new Date('2021-07-15T03:40:23.000Z'),
@@ -92,7 +88,7 @@ MyriadPost.args = {
         user: {
           id: '6123614bf6c45c2728e43aca',
           name: 'Storybook User',
-          bannerImageUrl: '',
+          bannerImageURL: '',
           createdAt: new Date('2021-07-15T03:40:23.000Z'),
           updatedAt: new Date('2021-07-15T03:40:23.000Z'),
           currencies: [],
@@ -125,7 +121,7 @@ TwitterPost.args = {
         name: 'Cintailah Usus Mu',
         profilePictureURL:
           'https://res.cloudinary.com/dsget80gs/image/upload/v1630078148/obliq1oabyggyn6ryiwi.jpg',
-        bannerImageUrl:
+        bannerImageURL:
           'https://res.cloudinary.com/dsget80gs/image/upload/v1630078156/ii9gfses5qanz9fbqhiw.jpg',
         bio: 'Minum makanan bergizi',
         createdAt: new Date('2021-07-22T09:00:47.000Z'),
@@ -154,7 +150,7 @@ TwitterPost.args = {
       name: 'Cintailah Usus Mu',
       profilePictureURL:
         'https://res.cloudinary.com/dsget80gs/image/upload/v1630078148/obliq1oabyggyn6ryiwi.jpg',
-      bannerImageUrl:
+      bannerImageURL:
         'https://res.cloudinary.com/dsget80gs/image/upload/v1630078156/ii9gfses5qanz9fbqhiw.jpg',
       bio: 'Minum makanan bergizi',
       createdAt: new Date('2021-07-22T09:00:47.000Z'),
@@ -212,7 +208,7 @@ RedditPost.args = {
       name: 'Ms. Sara Bellum',
       profilePictureURL:
         'https://res.cloudinary.com/dsget80gs/image/upload/v1629910582/dnpyoli9d0jiyqejokqo.png',
-      bannerImageUrl:
+      bannerImageURL:
         'https://res.cloudinary.com/dsget80gs/image/upload/v1630031967/lfygmfzthrvh5ea8uqef.jpg',
       bio: 'Hello :D',
       fcmTokens: [

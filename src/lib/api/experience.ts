@@ -3,13 +3,24 @@ import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 import {PaginationParams} from './interfaces/pagination-params.interface';
 
-import {Experience, UserExperience, ExperienceType} from 'src/interfaces/experience';
+import {
+  Experience,
+  ExperienceProps,
+  UserExperience,
+  ExperienceType,
+} from 'src/interfaces/experience';
 
 type ExperienceList = BaseList<Experience>;
 type UserExperienceList = BaseList<UserExperience>;
 
-export const getExperiences = async (params: PaginationParams): Promise<ExperienceList> => {
+export const getExperiences = async (
+  params: PaginationParams,
+  isTrending?: boolean,
+): Promise<ExperienceList> => {
   const {orderField = 'createdAt', sort = 'DESC'} = params;
+
+  let order: string | string[] = `${orderField} ${sort}`;
+  if (isTrending) order = ['trendCount DESC', `${orderField} ${sort}`];
 
   const {data} = await MyriadAPI.request<ExperienceList>({
     url: `/experiences`,
@@ -17,7 +28,7 @@ export const getExperiences = async (params: PaginationParams): Promise<Experien
     params: {
       pageLimit: params.limit ?? PAGINATION_LIMIT,
       filter: {
-        order: `${orderField} ${sort}`,
+        order,
         include: ['user'],
       },
     },
@@ -128,19 +139,6 @@ export const getUserExperiences = async (
   return data;
 };
 
-export const cloneExperience = async (
-  userId: string,
-  experienceId: string,
-  experience: Experience,
-): Promise<UserExperience> => {
-  const {data} = await MyriadAPI.request<UserExperience>({
-    url: `/users/${userId}/clone/${experienceId}`,
-    method: 'POST',
-    data: experience,
-  });
-  return data;
-};
-
 export const subscribeExperience = async (userId: string, experienceId: string): Promise<void> => {
   await MyriadAPI.request<Experience>({
     url: `/users/${userId}/subscribe/${experienceId}`,
@@ -169,12 +167,20 @@ export const updateExperience = async (
 
 export const createExperience = async (
   userId: string,
-  experience: Experience,
+  experience: ExperienceProps,
+  experienceId?: string, // parse experience id to mark as cloned
 ): Promise<Experience> => {
+  const params: Record<string, string> = {};
+
+  if (experienceId) {
+    params.experienceId = experienceId;
+  }
+
   const {data} = await MyriadAPI.request<Experience>({
     url: `/users/${userId}/experiences`,
     method: 'POST',
     data: experience,
+    params,
   });
 
   return data;

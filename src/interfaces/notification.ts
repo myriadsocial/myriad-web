@@ -33,6 +33,7 @@ export type CommentReference = {
   id: string;
   postId: string;
   user: UserReference;
+  section: string;
 };
 
 export type PostReference = {

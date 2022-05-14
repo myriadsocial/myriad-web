@@ -21,7 +21,7 @@ CommentEditor.args = {
     name: 'Nomaden',
     profilePictureURL:
       'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
-    bannerImageUrl: undefined,
+    bannerImageURL: undefined,
     bio: 'Nomaden? No Home',
     fcmTokens: [
       'f2kjvc37-ZEcocQGIk5WrF:APA91bH3wV6D8B4NrsCd9fo7nIJ0OFT942FdNiawJw3JML0bj2IZWbyLsDwaLuW2k3ayafKj8xAwCdOXEIvPssn1bPtIkZKLeKTYDATg2DjLG80D-fmF4i-xxvIewLcNDtHidefctIQG',

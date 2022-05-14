@@ -6,7 +6,6 @@ import {Action} from 'redux';
 import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import * as TokenAPI from 'src/lib/api/token';
 import {nearInitialize, getNearBalance} from 'src/lib/services/near-api-js';
 import {checkAccountBalance} from 'src/lib/services/polkadot-js';
@@ -83,12 +82,11 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
     } = getState();
 
     if (anonymous || !user || loading) return;
-
-    if (currentWallet?.type === WalletTypeEnum.POLKADOT) {
+    if (currentWallet?.network?.blockchainPlatform === 'substrate') {
       dispatch(fetchBalancesPolkadot());
     }
 
-    if (currentWallet?.type === WalletTypeEnum.NEAR) {
+    if (currentWallet?.network?.blockchainPlatform === 'near') {
       dispatch(fetchBalancesNear());
     }
   };
@@ -192,7 +190,7 @@ export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
           currency.referenceId,
           currency.decimal,
         );
-        freeBalance = parseFloat(balance);
+        freeBalance = parseFloat(balance.replace(/,/g, ''));
 
         return {originBalance, freeBalance, previousNonce};
       };

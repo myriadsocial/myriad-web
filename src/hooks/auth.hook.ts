@@ -14,6 +14,7 @@ import {User} from 'src/interfaces/user';
 import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
 import * as AuthAPI from 'src/lib/api/ext-auth';
 import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import * as NetworkAPI from 'src/lib/api/network';
 import * as UserAPI from 'src/lib/api/user';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
@@ -120,7 +121,7 @@ export const useAuthHook = () => {
     if (account) {
       const signature = await createSignaturePolkadotExt(account, nonce);
 
-      if (!signature) return null;
+      if (!signature) return false;
 
       signIn('credentials', {
         name: account.meta.name,
@@ -140,7 +141,7 @@ export const useAuthHook = () => {
     if (nearAddress && nearAddress.length > 0) {
       const data = await createNearSignature(nearAddress, nonce);
 
-      if (data && !data.signature) return null;
+      if (data && !data.signature) return false;
 
       if (data) {
         const parsedNearAddress = nearAddress.split('/')[1];
@@ -159,60 +160,29 @@ export const useAuthHook = () => {
       }
     }
 
-    return null;
+    return false;
   };
 
   const signUpWithExternalAuth = async (
     id: string,
     name: string,
     username: string,
-    walletType: WalletTypeEnum,
     networkType: NetworkTypeEnum,
     account?: InjectedAccountWithMeta,
-  ): Promise<boolean | null> => {
+  ): Promise<boolean> => {
     let nonce = null;
 
-    switch (walletType) {
-      case WalletTypeEnum.POLKADOT: {
-        const data = await AuthAPI.signUp({
-          address: id,
-          name,
-          username,
-          type: WalletTypeEnum.POLKADOT,
-          network: networkType,
-        });
+    const [address, nearAddress] = id.split('/');
+    const data = await AuthAPI.signUp({
+      address: nearAddress ?? address,
+      name,
+      username,
+      network: networkType,
+    });
 
-        if (data) nonce = data.nonce;
-
-        if (nonce && nonce > 0 && account) {
-          return signInWithExternalAuth(networkType, nonce, account);
-        } else {
-          return null;
-        }
-      }
-
-      case WalletTypeEnum.NEAR: {
-        const nearAddress = id.includes('/') ? id.split('/')[1] : id;
-        const data = await AuthAPI.signUp({
-          address: nearAddress,
-          name,
-          username,
-          type: WalletTypeEnum.NEAR,
-          network: NetworkTypeEnum.NEAR,
-        });
-
-        if (data) nonce = data.nonce;
-
-        if (nonce && nonce > 0 && id) {
-          return signInWithExternalAuth(networkType, nonce, undefined, id);
-        } else {
-          return null;
-        }
-      }
-
-      default:
-        return null;
-    }
+    if (data) nonce = data.nonce;
+    if (!nonce) return false;
+    return signInWithExternalAuth(networkType, nonce, account, id);
   };
 
   const anonymous = async (): Promise<void> => {
@@ -273,13 +243,15 @@ export const useAuthHook = () => {
       }
 
       if (payload && currentAddress) {
+        const network = await NetworkAPI.getNetwork(payload.networkType);
         dispatch(
           addNewWallet({
             id: currentAddress,
             type: payload.walletType,
-            network: payload.networkType,
+            networkId: payload.networkType,
             primary: false,
             userId: user.id,
+            network: network,
           }),
         );
       }
@@ -295,7 +267,7 @@ export const useAuthHook = () => {
   const switchNetwork = async (
     account: InjectedAccountWithMeta | NearPayload,
     networkType: NetworkTypeEnum,
-    walletType: WalletTypeEnum,
+    blockchainPlatform: string,
     callback?: () => void,
   ) => {
     if (!user) return;
@@ -308,8 +280,8 @@ export const useAuthHook = () => {
       let payload: WalletAPI.ConnectNetwork;
       let currentAddress: string;
 
-      switch (walletType) {
-        case WalletTypeEnum.POLKADOT: {
+      switch (blockchainPlatform) {
+        case 'substrate': {
           const polkadotAccount = account as InjectedAccountWithMeta;
           const signature = await createSignaturePolkadotExt(polkadotAccount, nonce);
 
@@ -319,13 +291,13 @@ export const useAuthHook = () => {
             nonce,
             signature,
             networkType: networkType,
-            walletType: walletType,
+            walletType: WalletTypeEnum.POLKADOT,
           };
 
           break;
         }
 
-        case WalletTypeEnum.NEAR: {
+        case 'near': {
           const nearAccount = account as NearPayload;
           currentAddress = nearAccount.nearAddress;
           payload = {
@@ -333,14 +305,14 @@ export const useAuthHook = () => {
             nonce,
             signature: nearAccount.signature,
             networkType: networkType,
-            walletType: walletType,
+            walletType: WalletTypeEnum.NEAR,
           };
 
           break;
         }
 
         default:
-          throw new Error('Wallet not exists');
+          throw new Error('Network not exists');
       }
 
       await WalletAPI.switchNetwork(payload, user.id);

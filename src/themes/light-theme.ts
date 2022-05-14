@@ -219,6 +219,7 @@ const theme = createTheme({
     },
     h4: {
       fontSize: textLg,
+      fontWeight: 600,
 
       [breakpoints.down(breakpointsValue.lg)]: {
         fontSize: textMd,

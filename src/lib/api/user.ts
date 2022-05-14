@@ -23,6 +23,13 @@ export const getUserDetail = async (id: string, userId?: string): Promise<User &
         },
         {
           relation: 'wallets',
+          scope: {
+            include: [
+              {
+                relation: 'network',
+              },
+            ],
+          },
         },
         {
           relation: 'activityLogs',
@@ -105,22 +112,11 @@ export const searchUsers = async (page = 1, query?: string): Promise<UserList> =
   };
 
   if (query) {
+    params.name = query;
+    params.sortBy = 'name';
+    params.order = 'ASC';
     params.filter = {
       where: {
-        or: [
-          {
-            username: {
-              like: `.*${query}`,
-              options: 'i',
-            },
-          },
-          {
-            name: {
-              like: `.*${query}`,
-              options: 'i',
-            },
-          },
-        ],
         deletedAt: {
           $exists: false,
         },

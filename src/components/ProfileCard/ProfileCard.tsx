@@ -10,7 +10,6 @@ import {ProfileContent} from './index';
 
 import ShowIf from 'src/components/common/show-if.component';
 import {convertToPolkadotAddress} from 'src/helpers/extension';
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 
 export const ProfileCard: React.FC<ProfileCardProps> = props => {
   const {
@@ -32,7 +31,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
     if (address && address.length > 14) {
       let validAddress = '';
 
-      if (currentWallet?.type === WalletTypeEnum.POLKADOT) {
+      if (currentWallet?.network?.blockchainPlatform === 'substrate') {
         validAddress = convertToPolkadotAddress(address, currentWallet);
       } else {
         validAddress = address;

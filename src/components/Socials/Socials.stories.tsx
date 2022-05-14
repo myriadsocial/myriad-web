@@ -20,7 +20,7 @@ Socials.args = {
     name: 'Ms. Sara Bellum',
     profilePictureURL:
       'https://res.cloudinary.com/dsget80gs/image/upload/v1629910582/dnpyoli9d0jiyqejokqo.png',
-    bannerImageUrl:
+    bannerImageURL:
       'https://res.cloudinary.com/dsget80gs/image/upload/v1630031967/lfygmfzthrvh5ea8uqef.jpg',
     bio: 'Hello :D',
     fcmTokens: [

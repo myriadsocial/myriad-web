@@ -40,7 +40,7 @@ export const initialize = (params?: AuthorizationParams): AxiosInstance => {
   return API;
 };
 
-export const setHeaders = (headers: {cookie: string}): void => {
+export const setHeaders = (headers: {cookie?: string}): void => {
   if (!headers?.cookie) return;
 
   if (API) {
