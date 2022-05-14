@@ -23,6 +23,13 @@ export const getUserDetail = async (id: string, userId?: string): Promise<User &
         },
         {
           relation: 'wallets',
+          scope: {
+            include: [
+              {
+                relation: 'network',
+              },
+            ],
+          },
         },
         {
           relation: 'activityLogs',

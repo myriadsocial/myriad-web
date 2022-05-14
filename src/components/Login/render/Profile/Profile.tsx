@@ -1,6 +1,8 @@
 import React, {useCallback, useState} from 'react';
 import {useNavigate} from 'react-router';
 
+import {useRouter} from 'next/router';
+
 import {Button, Grid, TextField, Typography} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
@@ -39,6 +41,7 @@ export const Profile: React.FC<ProfileProps> = props => {
   const styles = useStyles();
   const confirm = useConfirm();
   const navigate = useNavigate();
+  const router = useRouter();
 
   const {signUpWithExternalAuth} = useAuthHook();
 
@@ -180,9 +183,9 @@ export const Profile: React.FC<ProfileProps> = props => {
   const handleChangeWallet = async () => {
     if (walletType === WalletTypeEnum.NEAR) {
       const {wallet} = await nearInitialize();
-
       if (wallet.isSignedIn()) {
         wallet.signOut();
+        router.replace(router.route, undefined, {shallow: true});
       } else {
         console.log('no signed in NEAR wallet found!');
       }
@@ -219,45 +222,26 @@ export const Profile: React.FC<ProfileProps> = props => {
   }, [account, profile]);
 
   const handleSubmit = async () => {
-    switch (walletType) {
-      case WalletTypeEnum.POLKADOT: {
-        if (account) {
-          const registered = await signUpWithExternalAuth(
-            toHexPublicKey(account),
-            profile.name.value,
-            profile.username.value,
-            walletType,
-            networkType as NetworkTypeEnum,
-            account,
-          );
+    let substrateAccount: InjectedAccountWithMeta | undefined;
+    let address = publicAddress;
 
-          if (!registered) {
-            navigate('/wallet');
-          }
-        }
-        break;
-      }
+    if (walletType === WalletTypeEnum.POLKADOT) {
+      if (!account) return;
+      address = toHexPublicKey(account);
+      substrateAccount = account;
+    }
 
-      case WalletTypeEnum.NEAR: {
-        if (publicAddress) {
-          const registered = await signUpWithExternalAuth(
-            publicAddress,
-            profile.name.value,
-            profile.username.value,
-            walletType,
-            networkType as NetworkTypeEnum,
-          );
+    if (!address) return;
+    const registered = await signUpWithExternalAuth(
+      address,
+      profile.name.value,
+      profile.username.value,
+      networkType as NetworkTypeEnum,
+      substrateAccount,
+    );
 
-          if (!registered) {
-            navigate('/wallet');
-          }
-        }
-        break;
-      }
-
-      default: {
-        break;
-      }
+    if (!registered) {
+      navigate('/wallet');
     }
   };
 

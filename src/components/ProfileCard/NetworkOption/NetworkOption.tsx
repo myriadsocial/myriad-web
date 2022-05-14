@@ -18,6 +18,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {PolkadotAccountList} from '../../PolkadotAccountList';
 import {useStyles} from './networkOption.style';
 
+import {capitalize} from 'lodash';
 import {
   NearNetworkIcon24,
   MyriadCircleIcon,
@@ -120,7 +121,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
         }
 
         case 'near': {
-          const callback = publicRuntimeConfig.appAuthURL + router.route + '?action=switch';
+          const callback = publicRuntimeConfig.appAuthURL + router.asPath + '&action=switch';
 
           const data = await connectToNear(callback);
 
@@ -134,7 +135,10 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
 
             await handleSwitch('near', networkType, payload);
 
-            router.replace(router.route, undefined, {shallow: true});
+            const updatedRouter = (router.query.q as string)
+              ? `${router.route}?q=${router.query.q}`
+              : router.route;
+            router.replace(updatedRouter, undefined, {shallow: true});
           } else {
             console.log('redirection to near auth page');
           }
@@ -142,7 +146,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
         }
 
         default:
-          handleOpenPrompt(blockchainPlatform);
+          handleOpenPrompt(networkType);
       }
     }
   };
@@ -212,14 +216,14 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
   };
 
   const showConfirmDialog = (selected: string) => {
-    const selectedWallet = networks.find(option => option.id == selected);
+    const selectedNetwork = networks.find(option => option.id == selected);
     confirm({
-      title: `You didn’t connect your ${formatTitle(selectedWallet?.id)}!`,
+      title: `You didn’t connect your ${formatTitle(selectedNetwork?.id)}!`,
       description: `This account is not connected with ${formatTitle(
-        selectedWallet?.blockchainPlatform,
+        selectedNetwork?.blockchainPlatform,
         true,
       )}. Please connect to ${formatTitle(
-        selectedWallet?.blockchainPlatform,
+        selectedNetwork?.blockchainPlatform,
         true,
       )} in wallet manage tab. Do you want to connect your account?`,
       icon: 'warning',
@@ -243,16 +247,10 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
       }
 
     switch (id) {
-      case NetworkTypeEnum.POLKADOT:
-        return 'Polkadot';
       case NetworkTypeEnum.NEAR:
-        return 'NEAR';
-      case NetworkTypeEnum.KUSAMA:
-        return 'Kusama';
-      case NetworkTypeEnum.MYRIAD:
-        return 'Myriad';
+        return id.toUpperCase();
       default:
-        return id;
+        return capitalize(id ?? 'unknown');
     }
   };
 

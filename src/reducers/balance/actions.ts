@@ -82,7 +82,6 @@ export const fetchBalances: ThunkActionCreator<Actions, RootState> =
     } = getState();
 
     if (anonymous || !user || loading) return;
-
     if (currentWallet?.network?.blockchainPlatform === 'substrate') {
       dispatch(fetchBalancesPolkadot());
     }

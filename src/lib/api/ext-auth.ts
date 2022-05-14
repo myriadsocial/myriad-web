@@ -31,7 +31,6 @@ type SignUpProps = {
   name: string;
   username: string;
   address: string;
-  type: WalletTypeEnum;
   network: NetworkTypeEnum;
 };
 
