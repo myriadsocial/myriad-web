@@ -59,6 +59,7 @@ export const Login: React.FC<LoginProps> = props => {
     checkAccountRegistered(
       () => {
         setInitialEntries(['/profile']);
+        setNetworkType(NetworkTypeEnum.NEAR);
         setWalletLoading(false);
       },
       undefined,

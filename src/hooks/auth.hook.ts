@@ -121,7 +121,7 @@ export const useAuthHook = () => {
     if (account) {
       const signature = await createSignaturePolkadotExt(account, nonce);
 
-      if (!signature) return null;
+      if (!signature) return false;
 
       signIn('credentials', {
         name: account.meta.name,
@@ -141,7 +141,7 @@ export const useAuthHook = () => {
     if (nearAddress && nearAddress.length > 0) {
       const data = await createNearSignature(nearAddress, nonce);
 
-      if (data && !data.signature) return null;
+      if (data && !data.signature) return false;
 
       if (data) {
         const parsedNearAddress = nearAddress.split('/')[1];
@@ -160,60 +160,29 @@ export const useAuthHook = () => {
       }
     }
 
-    return null;
+    return false;
   };
 
   const signUpWithExternalAuth = async (
     id: string,
     name: string,
     username: string,
-    walletType: WalletTypeEnum,
     networkType: NetworkTypeEnum,
     account?: InjectedAccountWithMeta,
-  ): Promise<true | null> => {
+  ): Promise<boolean> => {
     let nonce = null;
 
-    switch (walletType) {
-      case WalletTypeEnum.POLKADOT: {
-        const data = await AuthAPI.signUp({
-          address: id,
-          name,
-          username,
-          type: WalletTypeEnum.POLKADOT,
-          network: networkType,
-        });
+    const [address, nearAddress] = id.split('/');
+    const data = await AuthAPI.signUp({
+      address: nearAddress ?? address,
+      name,
+      username,
+      network: networkType,
+    });
 
-        if (data) nonce = data.nonce;
-
-        if (nonce && nonce > 0 && account) {
-          return signInWithExternalAuth(networkType, nonce, account);
-        } else {
-          return null;
-        }
-      }
-
-      case WalletTypeEnum.NEAR: {
-        const nearAddress = id.includes('/') ? id.split('/')[1] : id;
-        const data = await AuthAPI.signUp({
-          address: nearAddress,
-          name,
-          username,
-          type: WalletTypeEnum.NEAR,
-          network: NetworkTypeEnum.NEAR,
-        });
-
-        if (data) nonce = data.nonce;
-
-        if (nonce && nonce > 0 && id) {
-          return signInWithExternalAuth(networkType, nonce, undefined, id);
-        } else {
-          return null;
-        }
-      }
-
-      default:
-        return null;
-    }
+    if (data) nonce = data.nonce;
+    if (!nonce) return false;
+    return signInWithExternalAuth(networkType, nonce, account, id);
   };
 
   const anonymous = async (): Promise<void> => {

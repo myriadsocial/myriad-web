@@ -24,8 +24,17 @@ export type ConnectNetwork = {
   };
 };
 
-export interface ServerId {
-  serverId: string;
+export interface ServerMetric {
+  totalPosts: number;
+  totalUser: number;
+}
+
+export interface Server {
+  id: string;
+  name: string;
+  description: string;
+  metric: ServerMetric;
+  categories: string[];
 }
 
 export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
@@ -180,10 +189,10 @@ export const getNetworks = async (): Promise<Networks> => {
 };
 
 export const getServerId = async (): Promise<string> => {
-  const {data} = await MyriadAPI.request<ServerId>({
+  const {data} = await MyriadAPI.request<Server>({
     url: `/server`,
     method: 'GET',
   });
 
-  return data.serverId;
+  return data.id;
 };
