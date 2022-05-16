@@ -20,6 +20,11 @@ export interface LoadExperience extends PaginationAction {
   experiences: Experience[];
 }
 
+export interface LoadExperiencePostList extends PaginationAction {
+  type: constants.FETCH_POST_EXPERIENCE;
+  experiences: Experience[];
+}
+
 export interface FetchTrendingExperience extends PaginationAction {
   type: constants.FETCH_TRENDING_EXPERIENCE;
   experiences: Experience[];
@@ -59,6 +64,7 @@ export interface ClearExperiences extends Action {
 
 export type Actions =
   | LoadExperience
+  | LoadExperiencePostList
   | FetchTrendingExperience
   | LoadDetailExperience
   | SearchExperience
@@ -99,6 +105,60 @@ export const loadExperiences: ThunkActionCreator<Actions, RootState> =
         experiences,
         meta,
       });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setExperienceLoading(false));
+    }
+  };
+
+export const loadExperiencesPostList: ThunkActionCreator<Actions, RootState> =
+  (postId: string, callback: (postsExperiences: Experience[]) => void) =>
+  async (dispatch, getState) => {
+    try {
+      const {
+        userState: {user},
+      } = getState();
+      dispatch(setExperienceLoading(true));
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const {data: experiences, meta} = await ExperienceAPI.getExperiences(
+        {page: 1},
+        false,
+        user.id,
+        postId,
+      );
+
+      dispatch({
+        type: constants.FETCH_POST_EXPERIENCE,
+        experiences,
+        meta,
+      });
+
+      callback(experiences);
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setExperienceLoading(false));
+    }
+  };
+
+export const addPostsExperience: ThunkActionCreator<Actions, RootState> =
+  (postId: string, listExperiences: string[], callback: () => void) => async dispatch => {
+    try {
+      await ExperienceAPI.addPostsExperience(postId, listExperiences);
+      callback();
     } catch (error) {
       dispatch(
         setError({
