@@ -1,5 +1,6 @@
 import {BaseModel} from './base.interface';
 import {People} from './people';
+import {Post} from './post';
 import {User} from './user';
 
 export type LayoutType = 'timeline' | 'photo';
@@ -44,6 +45,7 @@ export interface Experience extends ExperienceProps, BaseModel {
   user: User;
   friend?: boolean;
   private?: boolean;
+  posts?: Post[];
 }
 
 export interface UserExperience extends BaseModel {
