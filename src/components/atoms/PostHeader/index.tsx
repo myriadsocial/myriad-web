@@ -14,6 +14,7 @@ import {PostHeaderProps} from './postHeader.interface';
 import {useStyles} from './postHeader.style';
 import {PostSubHeader} from './subHeader/post-sub-header.component';
 
+import useModalAddToPost from 'src/components/Expericence/ModalAddToPost/useModalAddToPost.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {SocialsEnum} from 'src/interfaces/social';
 
@@ -32,6 +33,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
 
   const style = useStyles();
   const router = useRouter();
+  const addPostToExperience = useModalAddToPost();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -101,6 +103,14 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
   const handleOpenTipHistory = () => {
     onOpenTipHistory();
     handleClosePostSetting();
+  };
+
+  const handleOpenAddPostToExperience = () => {
+    handleClosePostSetting();
+    const propsAddToPost = {
+      post: post,
+    };
+    addPostToExperience(propsAddToPost);
   };
 
   const openPost = () => {
@@ -206,14 +216,18 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
           <MenuItem onClick={openUserProfile}>Visit Profile</MenuItem>
         </ShowIf>
 
+        <ShowIf condition={owner && !post.deletedAt}>
+          <MenuItem onClick={handlePostVisibility}>Post Visibility</MenuItem>
+        </ShowIf>
+
+        <ShowIf condition={!!user}>
+          <MenuItem onClick={handleOpenAddPostToExperience}>Add post to experience</MenuItem>
+        </ShowIf>
+
         <ShowIf condition={!owner && !!user}>
           <MenuItem onClick={handleReport} className={style.danger}>
             Report
           </MenuItem>
-        </ShowIf>
-
-        <ShowIf condition={owner && !post.deletedAt}>
-          <MenuItem onClick={handlePostVisibility}>Post Visibility</MenuItem>
         </ShowIf>
 
         <ShowIf condition={owner && !post.deletedAt}>

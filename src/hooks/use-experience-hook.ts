@@ -1,6 +1,6 @@
 import {useSelector, useDispatch} from 'react-redux';
 
-import {WrappedExperience, ExperienceProps} from '../interfaces/experience';
+import {WrappedExperience, ExperienceProps, Experience} from '../interfaces/experience';
 import {RootState} from '../reducers';
 
 import {pick} from 'lodash';
@@ -10,6 +10,8 @@ import {
   searchTags,
   cloneExperience,
   loadExperiences,
+  loadExperiencesPostList,
+  addPostsExperience,
   createExperience,
   fetchDetailExperience,
   subscribeExperience,
@@ -54,6 +56,21 @@ export const useExperienceHook = () => {
 
   const loadExperience = () => {
     dispatch(loadExperiences());
+  };
+
+  const loadExperiencePostList = (
+    postId: string,
+    callback: (postsExperiences: Experience[]) => void,
+  ) => {
+    dispatch(loadExperiencesPostList(postId, callback));
+  };
+
+  const addPostsToExperience = (
+    postId: string,
+    listExperiences: string[],
+    callback: () => void,
+  ) => {
+    dispatch(addPostsExperience(postId, listExperiences, callback));
   };
 
   const loadTrendingExperience = () => {
@@ -166,6 +183,8 @@ export const useExperienceHook = () => {
     tags,
     people,
     loadExperience,
+    loadExperiencePostList,
+    addPostsToExperience,
     nextPage,
     searchExperience: findExperience,
     searchPeople: findPeople,
