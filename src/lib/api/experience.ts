@@ -240,7 +240,7 @@ export const getExperiencePost = async (
       pageNumber: page,
       pageLimit: PAGINATION_LIMIT,
       filter: {
-        include: [{relation: 'user'}],
+        include: [{relation: 'user'}, {relation: 'people'}],
       },
     },
   });
