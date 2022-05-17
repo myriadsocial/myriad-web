@@ -7,6 +7,7 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 
 import {SearchResultContainer} from 'src/components/Search/SearchResultContainer';
+import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -47,6 +48,8 @@ const Search: React.FC<SearchProps> = () => {
       </Head>
 
       <SearchResultContainer />
+
+      <TippingSuccess />
     </DefaultLayout>
   );
 };
