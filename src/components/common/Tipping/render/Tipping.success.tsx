@@ -119,6 +119,10 @@ export const TippingSuccess = () => {
               color="secondary">
               Transaction details
             </Button>
+            {/* TODO: add button notify to notify on social media when tipping with NEAR */}
+            <Button size="small" variant="contained" color="primary" onClick={onClosePrompt}>
+              Return
+            </Button>
           </Grid>
         </PromptComponent>
       )}
