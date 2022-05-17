@@ -4,6 +4,8 @@ import {useRouter} from 'next/router';
 
 import {Box, Button, Grid, Typography} from '@material-ui/core';
 
+import {ButtonNotify} from './ButtonNotify';
+
 import localforage from 'localforage';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
@@ -119,10 +121,21 @@ export const TippingSuccess = () => {
               color="secondary">
               Transaction details
             </Button>
-            {/* TODO: add button notify to notify on social media when tipping with NEAR */}
-            <Button size="small" variant="contained" color="primary" onClick={onClosePrompt}>
-              Return
-            </Button>
+            {options &&
+            'platform' in options.reference &&
+            'currency' in options.attributes &&
+            ['twitter', 'reddit'].includes(options.reference.platform) ? (
+              <ButtonNotify
+                reference={options.reference}
+                currency={options.attributes.currency}
+                amount={options.attributes.amount}
+                receiver={options.receiver}
+              />
+            ) : (
+              <Button size="small" variant="contained" color="primary" onClick={onClosePrompt}>
+                Return
+              </Button>
+            )}
           </Grid>
         </PromptComponent>
       )}
