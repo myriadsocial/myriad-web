@@ -12,8 +12,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 
 import {PostDetailExperience} from '../PostDetailExperience/PostDetailExperience';
-import {EmptyResult} from '../Search/EmptyResult';
-import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
 import {Loading} from '../atoms/Loading';
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {useStyles} from './experience.style';
@@ -21,10 +19,8 @@ import {useStyles} from './experience.style';
 import {ListItemPeopleComponent} from 'src/components/atoms/ListItem/ListItemPeople';
 import {acronym} from 'src/helpers/string';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Experience, WrappedExperience} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
-import {Post} from 'src/interfaces/post';
 import {SocialsEnum} from 'src/interfaces/social';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -53,15 +49,8 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const router = useRouter();
   const confirm = useConfirm();
 
-  const {
-    experiencePosts,
-    hasMore,
-    loadPostExperience,
-    loadNextPostExperience,
-    loadExperiencePostList,
-    addPostsToExperience,
-  } = useExperienceHook();
-  const {openToasterSnack} = useToasterSnackHook();
+  const {experiencePosts, hasMore, loadPostExperience, loadNextPostExperience} =
+    useExperienceHook();
 
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
   const [promptSignin, setPromptSignin] = React.useState(false);
@@ -170,28 +159,6 @@ export const ExperiencePreview: React.FC<Props> = props => {
 
   const handleNextPagePosts = () => {
     loadNextPostExperience(experience.id);
-  };
-
-  const handleRemoveFromExperience = async (post: Post) => {
-    loadExperiencePostList(post.id, postsExperiences => {
-      const tmpListExperience: string[] = [];
-      postsExperiences.map(item => {
-        if (item.posts) {
-          tmpListExperience.push(item.id);
-        }
-      });
-      const indexExperience = tmpListExperience.indexOf(experience.id);
-      if (indexExperience > -1) {
-        tmpListExperience.splice(indexExperience, 1);
-      }
-      addPostsToExperience(post.id, tmpListExperience, () => {
-        openToasterSnack({
-          message: 'Post removed from experience!',
-          variant: 'success',
-        });
-        loadPostExperience(experience.id);
-      });
-    });
   };
 
   return (
@@ -317,7 +284,13 @@ export const ExperiencePreview: React.FC<Props> = props => {
           next={handleNextPagePosts}
           loader={<Loading />}>
           {experiencePosts.length === 0 ? (
-            <EmptyResult emptyContent={EmptyContentEnum.POST} />
+            <div className={style.postTextContainer}>
+              <Typography className={style.textPost}>Post</Typography>
+              <Typography className={style.textPostDetail}>
+                Added posts will appear here. You can add a post to experience by select "add post
+                to experience" on more option.
+              </Typography>
+            </div>
           ) : (
             experiencePosts.map(post => (
               <PostDetailExperience
@@ -326,7 +299,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
                 post={post}
                 anonymous={anonymous}
                 onImporters={() => null}
-                onRemoveFromExperience={() => handleRemoveFromExperience(post)}
+                type={'preview'}
               />
             ))
           )}

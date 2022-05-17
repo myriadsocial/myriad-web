@@ -25,9 +25,9 @@ type PostDetailProps = {
   post: Post;
   anonymous: boolean;
   onImporters: (post: Post) => void;
-  onRemoveFromExperience: () => void;
+  onRemoveFromExperience?: () => void;
   expanded?: boolean;
-  type?: 'share' | 'default';
+  type?: 'preview' | 'default';
 };
 
 export const PostDetailExperience: React.FC<PostDetailProps> = props => {
@@ -64,7 +64,7 @@ export const PostDetailExperience: React.FC<PostDetailProps> = props => {
         post={post}
         onImporters={handleImporters}
         onRemoveFromExperience={onRemoveFromExperience}
-        disableAction={type === 'share'}
+        disableAction={type === 'preview'}
       />
 
       <div className={styles.content}>

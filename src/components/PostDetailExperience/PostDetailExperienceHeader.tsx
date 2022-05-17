@@ -19,7 +19,7 @@ import {SocialsEnum} from 'src/interfaces/social';
 export type PostHeaderExperienceProps = {
   post: Post;
   onImporters: () => void;
-  onRemoveFromExperience: () => void;
+  onRemoveFromExperience?: () => void;
   disableAction?: boolean;
 };
 
@@ -80,7 +80,7 @@ export const HeaderComponentExperience: React.FC<PostHeaderExperienceProps> = pr
   };
 
   const handleRemoveFromExperience = () => {
-    onRemoveFromExperience();
+    onRemoveFromExperience && onRemoveFromExperience();
     handleClosePostSetting();
   };
 

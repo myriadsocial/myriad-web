@@ -149,5 +149,24 @@ export const useStyles = makeStyles((theme: Theme) =>
     chevron: {
       padding: 0,
     },
+    postTextContainer: {
+      border: '1px solid #E5E5E5',
+      width: '100%',
+      padding: '20px',
+      borderRadius: '5px',
+      justifyContent: 'center',
+      alignItems: 'center',
+      textAlign: 'center',
+      marginBottom: 36,
+    },
+    textPost: {
+      fontWeight: 600,
+      fontSize: 18,
+    },
+    textPostDetail: {
+      fontWeight: 400,
+      fontSize: 14,
+      marginTop: 9,
+    },
   }),
 );
