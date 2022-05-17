@@ -1,18 +1,26 @@
+import {ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/outline';
+
 import React from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import {useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
-import {Typography} from '@material-ui/core';
+import {IconButton, SvgIcon, Typography} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 
+import {PostDetailExperience} from '../PostDetailExperience/PostDetailExperience';
+import {EmptyResult} from '../Search/EmptyResult';
+import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
+import {Loading} from '../atoms/Loading';
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {useStyles} from './experience.style';
 
 import {ListItemPeopleComponent} from 'src/components/atoms/ListItem/ListItemPeople';
 import {acronym} from 'src/helpers/string';
+import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {Experience, WrappedExperience} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
 import {SocialsEnum} from 'src/interfaces/social';
@@ -43,8 +51,17 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const router = useRouter();
   const confirm = useConfirm();
 
+  const {experiencePosts, hasMore, loadPostExperience, loadNextPostExperience} =
+    useExperienceHook();
+
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
   const [promptSignin, setPromptSignin] = React.useState(false);
+  const [isExpandPeople, setIsExpandPeople] = React.useState(false);
+  const [isExpandPost, setIsExpandPost] = React.useState(false);
+
+  React.useEffect(() => {
+    loadPostExperience(experience.id);
+  }, []);
 
   const parsingTags = (type: TagsProps) => {
     let listTags: string[] = [];
@@ -134,6 +151,18 @@ export const ExperiencePreview: React.FC<Props> = props => {
     return false;
   };
 
+  const handleExpandPeople = () => {
+    setIsExpandPeople(!isExpandPeople);
+  };
+
+  const handleExpandPosts = () => {
+    setIsExpandPost(!isExpandPost);
+  };
+
+  const handleNextPagePosts = () => {
+    loadNextPostExperience(experience.id);
+  };
+
   return (
     <div className={style.root}>
       <div className={style.experienceTopSummary}>
@@ -213,9 +242,18 @@ export const ExperiencePreview: React.FC<Props> = props => {
         <Typography className={style.tagSection}>{'Excluded tag'}</Typography>
         <Typography>{parsingTags(TagsProps.PROHIBITED)}</Typography>
       </div>
-      <div>
+      <div className={style.subtitleContainer}>
         <Typography className={style.subtitle}>{'People'}</Typography>
-        {experience.people
+        <IconButton onClick={handleExpandPeople} color="primary" aria-label="expand">
+          <SvgIcon
+            component={isExpandPeople ? ChevronUpIcon : ChevronDownIcon}
+            fontSize="small"
+            color={'primary'}
+          />
+        </IconButton>
+      </div>
+      {isExpandPeople &&
+        experience.people
           .filter(ar => Boolean(ar.deletedAt) === false)
           .filter(ar => ar.id !== null && ar.id !== '')
           .map(person => (
@@ -229,7 +267,40 @@ export const ExperiencePreview: React.FC<Props> = props => {
               platform={person.platform}
             />
           ))}
+
+      <div className={style.subtitleContainer}>
+        <Typography className={style.subtitle}>{'Post'}</Typography>
+        <IconButton onClick={handleExpandPosts} color="primary" aria-label="expand">
+          <SvgIcon
+            component={isExpandPost ? ChevronUpIcon : ChevronDownIcon}
+            fontSize="small"
+            color={'primary'}
+          />
+        </IconButton>
       </div>
+      {isExpandPost && (
+        <InfiniteScroll
+          scrollableTarget="scrollable-searched-posts"
+          dataLength={experiencePosts.length}
+          hasMore={hasMore}
+          next={handleNextPagePosts}
+          loader={<Loading />}>
+          {experiencePosts.length === 0 ? (
+            <EmptyResult emptyContent={EmptyContentEnum.POST} />
+          ) : (
+            experiencePosts.map(post => (
+              <PostDetailExperience
+                user={user}
+                key={`post-${post.id}`}
+                post={post}
+                anonymous={anonymous}
+                onImporters={() => null}
+                onRemoveFromExperience={() => null}
+              />
+            ))
+          )}
+        </InfiniteScroll>
+      )}
 
       <ExperienceSignInDialog open={promptSignin} onClose={() => setPromptSignin(false)} />
     </div>

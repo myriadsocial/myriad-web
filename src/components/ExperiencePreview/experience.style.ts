@@ -50,6 +50,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 400,
       color: '#757575',
     },
+    subtitleContainer: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
     subtitle: {
       fontSize: '16px',
       fontWeight: 600,
@@ -140,6 +145,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('xs')]: {
         padding: '0px 20px',
       },
+    },
+    chevron: {
+      padding: 0,
     },
   }),
 );
