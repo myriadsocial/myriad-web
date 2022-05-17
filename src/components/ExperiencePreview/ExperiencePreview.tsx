@@ -21,8 +21,10 @@ import {useStyles} from './experience.style';
 import {ListItemPeopleComponent} from 'src/components/atoms/ListItem/ListItemPeople';
 import {acronym} from 'src/helpers/string';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Experience, WrappedExperience} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
+import {Post} from 'src/interfaces/post';
 import {SocialsEnum} from 'src/interfaces/social';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -51,8 +53,15 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const router = useRouter();
   const confirm = useConfirm();
 
-  const {experiencePosts, hasMore, loadPostExperience, loadNextPostExperience} =
-    useExperienceHook();
+  const {
+    experiencePosts,
+    hasMore,
+    loadPostExperience,
+    loadNextPostExperience,
+    loadExperiencePostList,
+    addPostsToExperience,
+  } = useExperienceHook();
+  const {openToasterSnack} = useToasterSnackHook();
 
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
   const [promptSignin, setPromptSignin] = React.useState(false);
@@ -161,6 +170,28 @@ export const ExperiencePreview: React.FC<Props> = props => {
 
   const handleNextPagePosts = () => {
     loadNextPostExperience(experience.id);
+  };
+
+  const handleRemoveFromExperience = async (post: Post) => {
+    loadExperiencePostList(post.id, postsExperiences => {
+      const tmpListExperience: string[] = [];
+      postsExperiences.map(item => {
+        if (item.posts) {
+          tmpListExperience.push(item.id);
+        }
+      });
+      const indexExperience = tmpListExperience.indexOf(experience.id);
+      if (indexExperience > -1) {
+        tmpListExperience.splice(indexExperience, 1);
+      }
+      addPostsToExperience(post.id, tmpListExperience, () => {
+        openToasterSnack({
+          message: 'Post removed from experience!',
+          variant: 'success',
+        });
+        loadPostExperience(experience.id);
+      });
+    });
   };
 
   return (
@@ -295,7 +326,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
                 post={post}
                 anonymous={anonymous}
                 onImporters={() => null}
-                onRemoveFromExperience={() => null}
+                onRemoveFromExperience={() => handleRemoveFromExperience(post)}
               />
             ))
           )}
