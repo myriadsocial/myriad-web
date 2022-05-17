@@ -1,6 +1,10 @@
 import {SearchIcon, XCircleIcon, PlusCircleIcon} from '@heroicons/react/solid';
 
 import React, {useState} from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import {useSelector} from 'react-redux';
+
+import {useRouter} from 'next/router';
 
 import {
   Button,
@@ -21,12 +25,18 @@ import {
 
 import {ExperienceProps, Tag} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
+import {PostDetailExperience} from '../PostDetailExperience/PostDetailExperience';
 import {Dropzone} from '../atoms/Dropzone';
 import {ListItemPeopleComponent} from '../atoms/ListItem/ListItemPeople';
+import {Loading} from '../atoms/Loading';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './Experience.styles';
 
 import {debounce, isEmpty} from 'lodash';
+import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import {Post} from 'src/interfaces/post';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 type ExperienceEditorProps = {
   type?: 'clone' | 'edit';
@@ -66,10 +76,30 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   } = props;
   const styles = useStyles();
 
+  const {
+    experiencePosts,
+    hasMore,
+    loadPostExperience,
+    loadNextPostExperience,
+    loadExperiencePostList,
+    addPostsToExperience,
+  } = useExperienceHook();
+  const router = useRouter();
+
+  const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
+  const [experienceId, setExperienceId] = useState<string | undefined>();
   const [newExperience, setNewExperience] = useState<ExperienceProps>(experience);
   const [image, setImage] = useState<string | undefined>(experience.experienceImageURL);
   const [isDetailChanged, setDetailChanged] = useState<boolean>(false);
   const [isLoading, setIsloading] = useState<boolean>(false);
+
+  React.useEffect(() => {
+    const experienceId = router.query.experienceId as string | null;
+    if (experienceId) {
+      setExperienceId(experienceId);
+      loadPostExperience(experienceId);
+    }
+  }, []);
 
   const handleSearchTags = (event: React.ChangeEvent<HTMLInputElement>) => {
     const debounceSubmit = debounce(() => {
@@ -262,6 +292,32 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     else return 'Create Experience';
   };
 
+  const handleNextPagePosts = () => {
+    if (experienceId) {
+      loadNextPostExperience(experienceId);
+    }
+  };
+
+  const handleRemoveFromExperience = (post: Post) => {
+    loadExperiencePostList(post.id, postsExperiences => {
+      const tmpListExperience: string[] = [];
+      postsExperiences.map(item => {
+        if (item.posts) {
+          tmpListExperience.push(item.id);
+        }
+      });
+      if (experienceId) {
+        const indexExperience = tmpListExperience.indexOf(experienceId);
+        if (indexExperience > -1) {
+          tmpListExperience.splice(indexExperience, 1);
+        }
+        addPostsToExperience(post.id, tmpListExperience, () => {
+          loadPostExperience(experienceId);
+        });
+      }
+    });
+  };
+
   return (
     <div className={styles.root}>
       <Typography className={styles.title}>{type ? type : 'Create new'} Experience</Typography>
@@ -444,6 +500,38 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             />
           ))}
       </div>
+
+      <InfiniteScroll
+        scrollableTarget="scrollable-searched-posts"
+        dataLength={experiencePosts.length}
+        hasMore={hasMore}
+        next={handleNextPagePosts}
+        loader={<Loading />}>
+        {experiencePosts.length === 0 ? (
+          <div className={styles.postTextContainer}>
+            <Typography className={styles.textPost}>Post</Typography>
+            <Typography className={styles.textPostDetail}>
+              Added posts will appear here. You can add a post to experience by select "add post to
+              experience" on more option.
+            </Typography>
+          </div>
+        ) : (
+          <>
+            <Typography className={styles.textPost}>Post</Typography>
+            {experiencePosts.map(post => (
+              <PostDetailExperience
+                user={user}
+                key={`post-${post.id}`}
+                post={post}
+                anonymous={anonymous}
+                onImporters={() => null}
+                type={'default'}
+                onRemoveFromExperience={() => handleRemoveFromExperience(post)}
+              />
+            ))}
+          </>
+        )}
+      </InfiniteScroll>
       <FormControl fullWidth variant="outlined">
         <Button
           disabled={!isDetailChanged || !isValidExperience()}

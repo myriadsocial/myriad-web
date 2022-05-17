@@ -50,6 +50,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 400,
       color: '#757575',
     },
+    subtitleContainer: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
     subtitle: {
       fontSize: '16px',
       fontWeight: 600,
@@ -140,6 +145,28 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('xs')]: {
         padding: '0px 20px',
       },
+    },
+    chevron: {
+      padding: 0,
+    },
+    postTextContainer: {
+      border: '1px solid #E5E5E5',
+      width: '100%',
+      padding: '20px',
+      borderRadius: '5px',
+      justifyContent: 'center',
+      alignItems: 'center',
+      textAlign: 'center',
+      marginBottom: 36,
+    },
+    textPost: {
+      fontWeight: 600,
+      fontSize: 18,
+    },
+    textPostDetail: {
+      fontWeight: 400,
+      fontSize: 14,
+      marginTop: 9,
     },
   }),
 );

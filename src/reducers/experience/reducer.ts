@@ -6,9 +6,11 @@ import update from 'immutability-helper';
 import * as Redux from 'redux';
 import {Experience, Tag} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
+import {Post} from 'src/interfaces/post';
 
 export interface ExperienceState extends BasePaginationState {
   experiences: Experience[];
+  experiencePosts: Post[];
   trendingExperiences: Experience[];
   selectedExperience?: Experience;
   searchPeople: People[];
@@ -21,6 +23,7 @@ export interface ExperienceState extends BasePaginationState {
 const initialState: ExperienceState = {
   loading: false,
   experiences: [],
+  experiencePosts: [],
   trendingExperiences: [],
   searchPeople: [],
   searchTags: [],
@@ -54,6 +57,24 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
         return {
           ...state,
           friends: [...state.experiences, ...action.experiences],
+          meta: action.meta,
+          hasMore: action.meta.currentPage < action.meta.totalPageCount,
+        };
+      }
+    }
+
+    case constants.FETCH_EXPERIENCE_POST: {
+      if (!action.meta.currentPage || action.meta.currentPage === 1) {
+        return {
+          ...state,
+          experiencePosts: action.posts,
+          meta: action.meta,
+          hasMore: action.meta.currentPage < action.meta.totalPageCount,
+        };
+      } else {
+        return {
+          ...state,
+          experiencePosts: [...state.experiencePosts, ...action.posts],
           meta: action.meta,
           hasMore: action.meta.currentPage < action.meta.totalPageCount,
         };

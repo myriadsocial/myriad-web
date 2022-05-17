@@ -7,6 +7,7 @@ import * as constants from './constants';
 import {Action} from 'redux';
 import {Experience, ExperienceProps, Tag} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
+import {Post} from 'src/interfaces/post';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import * as PeopleAPI from 'src/lib/api/people';
 import * as TagAPI from 'src/lib/api/tag';
@@ -18,6 +19,11 @@ import {ThunkActionCreator} from 'src/types/thunk';
 export interface LoadExperience extends PaginationAction {
   type: constants.FETCH_EXPERIENCE;
   experiences: Experience[];
+}
+
+export interface LoadExperiencePost extends PaginationAction {
+  type: constants.FETCH_EXPERIENCE_POST;
+  posts: Post[];
 }
 
 export interface FetchTrendingExperience extends PaginationAction {
@@ -59,6 +65,7 @@ export interface ClearExperiences extends Action {
 
 export type Actions =
   | LoadExperience
+  | LoadExperiencePost
   | FetchTrendingExperience
   | LoadDetailExperience
   | SearchExperience
@@ -99,6 +106,54 @@ export const loadExperiences: ThunkActionCreator<Actions, RootState> =
         experiences,
         meta,
       });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setExperienceLoading(false));
+    }
+  };
+
+export const loadExperiencesPostList: ThunkActionCreator<Actions, RootState> =
+  (postId: string, callback: (postsExperiences: Experience[]) => void) =>
+  async (dispatch, getState) => {
+    try {
+      const {
+        userState: {user},
+      } = getState();
+      dispatch(setExperienceLoading(true));
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const {data: experiences} = await ExperienceAPI.getExperiences(
+        {page: 1},
+        false,
+        user.id,
+        postId,
+      );
+
+      callback(experiences);
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setExperienceLoading(false));
+    }
+  };
+
+export const addPostsExperience: ThunkActionCreator<Actions, RootState> =
+  (postId: string, listExperiences: string[], callback: () => void) => async dispatch => {
+    try {
+      await ExperienceAPI.addPostsExperience(postId, listExperiences);
+      callback();
     } catch (error) {
       dispatch(
         setError({
@@ -175,6 +230,28 @@ export const fetchDetailExperience: ThunkActionCreator<Actions, RootState> =
       );
     } finally {
       dispatch(setLoading(false));
+    }
+  };
+
+export const fetchPostsExperience: ThunkActionCreator<Actions, RootState> =
+  (experienceId: string, page = 1) =>
+  async dispatch => {
+    dispatch(setExperienceLoading(true));
+    try {
+      const {data, meta} = await ExperienceAPI.getExperiencePost(experienceId, page);
+      dispatch({
+        type: constants.FETCH_EXPERIENCE_POST,
+        posts: data,
+        meta,
+      });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setExperienceLoading(false));
     }
   };
 

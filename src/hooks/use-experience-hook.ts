@@ -1,6 +1,6 @@
 import {useSelector, useDispatch} from 'react-redux';
 
-import {WrappedExperience, ExperienceProps} from '../interfaces/experience';
+import {WrappedExperience, ExperienceProps, Experience} from '../interfaces/experience';
 import {RootState} from '../reducers';
 
 import {pick} from 'lodash';
@@ -10,6 +10,9 @@ import {
   searchTags,
   cloneExperience,
   loadExperiences,
+  loadExperiencesPostList,
+  fetchPostsExperience,
+  addPostsExperience,
   createExperience,
   fetchDetailExperience,
   subscribeExperience,
@@ -36,6 +39,7 @@ export const useExperienceHook = () => {
 
   const {
     experiences,
+    experiencePosts,
     trendingExperiences,
     selectedExperience,
     searchTags: tags,
@@ -54,6 +58,30 @@ export const useExperienceHook = () => {
 
   const loadExperience = () => {
     dispatch(loadExperiences());
+  };
+
+  const loadExperiencePostList = (
+    postId: string,
+    callback: (postsExperiences: Experience[]) => void,
+  ) => {
+    dispatch(loadExperiencesPostList(postId, callback));
+  };
+
+  const addPostsToExperience = (
+    postId: string,
+    listExperiences: string[],
+    callback: () => void,
+  ) => {
+    dispatch(addPostsExperience(postId, listExperiences, callback));
+  };
+
+  const loadPostExperience = (experienceId: string) => {
+    dispatch(fetchPostsExperience(experienceId));
+  };
+
+  const loadNextPostExperience = (experienceId: string) => {
+    const page = meta.currentPage + 1;
+    dispatch(fetchPostsExperience(experienceId, page));
   };
 
   const loadTrendingExperience = () => {
@@ -158,6 +186,7 @@ export const useExperienceHook = () => {
     page: meta.currentPage,
     hasMore,
     experiences,
+    experiencePosts,
     trendingExperiences,
     userExperiences,
     profileExperiences,
@@ -166,6 +195,10 @@ export const useExperienceHook = () => {
     tags,
     people,
     loadExperience,
+    loadExperiencePostList,
+    addPostsToExperience,
+    loadPostExperience,
+    loadNextPostExperience,
     nextPage,
     searchExperience: findExperience,
     searchPeople: findPeople,

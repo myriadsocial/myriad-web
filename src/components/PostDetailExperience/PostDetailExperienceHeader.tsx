@@ -4,36 +4,30 @@ import React from 'react';
 
 import {useRouter} from 'next/router';
 
-import {capitalize, Menu, MenuItem, Typography} from '@material-ui/core';
+import {Menu, MenuItem, Typography} from '@material-ui/core';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import PostAvatarComponent from './avatar/post-avatar.component';
-import {PostHeaderProps} from './postHeader.interface';
-import {useStyles} from './postHeader.style';
-import {PostSubHeader} from './subHeader/post-sub-header.component';
+import PostAvatarComponent from '../atoms/PostHeader/avatar/post-avatar.component';
+import {useStyles} from '../atoms/PostHeader/postHeader.style';
+import {PostSubHeader} from '../atoms/PostHeader/subHeader/post-sub-header.component';
 
-import useModalAddToPost from 'src/components/Expericence/ModalAddToPost/useModalAddToPost.hook';
-import ShowIf from 'src/components/common/show-if.component';
+import {Post} from 'src/interfaces/post';
 import {SocialsEnum} from 'src/interfaces/social';
 
-export const HeaderComponent: React.FC<PostHeaderProps> = props => {
-  const {
-    user,
-    post,
-    owner,
-    disableAction = false,
-    onDelete,
-    onOpenTipHistory,
-    onReport,
-    onVisibility,
-    onImporters,
-  } = props;
+export type PostHeaderExperienceProps = {
+  post: Post;
+  onImporters: () => void;
+  onRemoveFromExperience?: () => void;
+  disableAction?: boolean;
+};
+
+export const HeaderComponentExperience: React.FC<PostHeaderExperienceProps> = props => {
+  const {post, disableAction = false, onRemoveFromExperience, onImporters} = props;
 
   const style = useStyles();
   const router = useRouter();
-  const addPostToExperience = useModalAddToPost();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -81,65 +75,12 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
     return url;
   };
 
-  const handleDelete = () => {
-    onDelete();
-    handleClosePostSetting();
-  };
-
-  const handlePostVisibility = () => {
-    handleClosePostSetting();
-    onVisibility();
-  };
-
-  const handleReport = () => {
-    onReport();
-    handleClosePostSetting();
-  };
-
   const handleImporter = () => {
     onImporters();
   };
 
-  const handleOpenTipHistory = () => {
-    onOpenTipHistory();
-    handleClosePostSetting();
-  };
-
-  const handleOpenAddPostToExperience = () => {
-    handleClosePostSetting();
-    const propsAddToPost = {
-      post: post,
-    };
-    addPostToExperience(propsAddToPost);
-  };
-
-  const openPost = () => {
-    router.push(`/post/${post.id}`);
-
-    handleClosePostSetting();
-  };
-
-  const openUserProfile = () => {
-    if (post.user) {
-      router.push(`/profile/${post.user.id}`);
-    }
-
-    handleClosePostSetting();
-  };
-
-  const openSourcePost = () => {
-    window.open(post.url, '_blank');
-
-    handleClosePostSetting();
-  };
-
-  const openSourceAccount = () => {
-    if (post.people) {
-      const url = getPlataformProfileUrl();
-
-      window.open(url, '_blank');
-    }
-
+  const handleRemoveFromExperience = () => {
+    onRemoveFromExperience && onRemoveFromExperience();
     handleClosePostSetting();
   };
 
@@ -200,41 +141,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClosePostSetting}>
-        <MenuItem onClick={handleOpenTipHistory}>Tip History</MenuItem>
-
-        <ShowIf condition={!owner}>
-          <MenuItem onClick={openPost}>View Post</MenuItem>
-        </ShowIf>
-
-        <ShowIf condition={!owner && post.platform !== 'myriad'}>
-          <MenuItem onClick={openSourcePost}>View Source Post</MenuItem>
-          <MenuItem onClick={openUserProfile}>Visit Myriad Profile</MenuItem>
-          <MenuItem onClick={openSourceAccount}>Visit {capitalize(post.platform)} Account</MenuItem>
-        </ShowIf>
-
-        <ShowIf condition={!owner && post.platform === 'myriad'}>
-          <MenuItem onClick={openUserProfile}>Visit Profile</MenuItem>
-        </ShowIf>
-
-        <ShowIf condition={owner && !post.deletedAt}>
-          <MenuItem onClick={handlePostVisibility}>Post Visibility</MenuItem>
-        </ShowIf>
-
-        <ShowIf condition={!!user}>
-          <MenuItem onClick={handleOpenAddPostToExperience}>Add post to experience</MenuItem>
-        </ShowIf>
-
-        <ShowIf condition={!owner && !!user}>
-          <MenuItem onClick={handleReport} className={style.danger}>
-            Report
-          </MenuItem>
-        </ShowIf>
-
-        <ShowIf condition={owner && !post.deletedAt}>
-          <MenuItem onClick={handleDelete} className={style.danger} color="danger">
-            Delete Post
-          </MenuItem>
-        </ShowIf>
+        <MenuItem onClick={handleRemoveFromExperience}>Remove from experience</MenuItem>
       </Menu>
     </>
   );
